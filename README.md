@@ -14,6 +14,7 @@ To get the frontend running locally:
 - CRU* users (sign up & settings page - no deleting)
 
 ## TO-DO
+- [ ] Add server (API) URL using webpack environment variables 
 - [ ] Add create user page along with roles
 - [ ] Implement reset password functionality
 - [ ] Improve the Authorization HOC
