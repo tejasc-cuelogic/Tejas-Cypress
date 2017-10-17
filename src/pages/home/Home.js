@@ -1,5 +1,5 @@
-import Banner from '../components/Home/Banner';
-import MainView from '../components/Home/MainView';
+import Banner from './components/Banner';
+import MainView from './components/MainView';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';

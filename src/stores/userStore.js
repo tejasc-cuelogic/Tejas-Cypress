@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import agent from '../agent';
+import api from '../ns-api';
 
 export class UserStore {
 
@@ -10,14 +10,14 @@ export class UserStore {
 
   @action pullUser() {
     this.loadingUser = true;
-    return agent.Auth.current()
+    return api.Auth.current()
       .then(action(( user ) => { this.currentUser = user; }))
       .finally(action(() => { this.loadingUser = false; }))
   }
 
   @action updateUser(newUser) {
     this.updatingUser = true;
-    return agent.User.update(newUser)
+    return api.User.update(newUser)
       .then(action(({ user }) => { this.currentUser = user; }))
       .finally(action(() => { this.updatingUser = false; }))
   }

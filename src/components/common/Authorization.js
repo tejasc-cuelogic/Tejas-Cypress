@@ -10,7 +10,7 @@ const Authorization = (allowedRoles, UnauthorizedComponent) =>
             }
 
             render() {
-                console.log(context)
+                console.log(context);
 
                 // Check if current user exists i.e. used is logged in
                 if(context.userStore.currentUser){

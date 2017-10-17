@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import agent from '../agent';
+import api from '../ns-api';
 import userStore from './userStore';
 import commonStore from './commonStore';
 
@@ -40,7 +40,7 @@ export class AuthStore {
   @action login() {
     this.inProgress = true;
     this.errors = undefined;
-    return agent.Auth.login(this.values.email, this.values.password)
+    return api.Auth.login(this.values.email, this.values.password)
     .then(({ user }) => commonStore.setToken(user.token))
     .then(() => userStore.pullUser())
       .catch(action((err) => {
@@ -53,7 +53,7 @@ export class AuthStore {
   @action register() {
     this.inProgress = true;
     this.errors = undefined;
-    return agent.Auth.register(this.values.username, this.values.email, this.values.password, this.values.verify)
+    return api.Auth.register(this.values.username, this.values.email, this.values.password, this.values.verify)
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
         throw err;

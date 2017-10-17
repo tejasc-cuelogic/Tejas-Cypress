@@ -1,23 +1,23 @@
 import { Link } from 'react-router-dom';
-import ListErrors from '../components/Common/ListErrors';
+import ListErrors from '../../components/common/ListErrors';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 
 @inject('authStore')
+@withRouter
 @observer
-export default class Register extends React.Component {
+export default class Login extends React.Component {
 
   componentWillUnmount() {
     this.props.authStore.reset();
   }
 
-  handleUsernameChange = e => this.props.authStore.setUsername(e.target.value);
   handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
-  handleVerifyChange = e => this.props.authStore.setVerify(e.target.value);
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.authStore.register()
+    this.props.authStore.login()
       .then(() => this.props.history.replace('/'));
   };
 
@@ -30,10 +30,10 @@ export default class Register extends React.Component {
           <div className="row">
 
             <div className="col-md-6 offset-md-3 col-xs-12">
-              <h1 className="text-xs-center">Sign Up</h1>
+              <h1 className="text-xs-center">Sign In</h1>
               <p className="text-xs-center">
-                <Link to="login">
-                  Have an account?
+                <Link to="register">
+                  Need an account?
                 </Link>
               </p>
 
@@ -41,16 +41,6 @@ export default class Register extends React.Component {
 
               <form onSubmit={this.handleSubmitForm}>
                 <fieldset>
-
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="text"
-                      placeholder="Username"
-                      value={values.username}
-                      onChange={this.handleUsernameChange}
-                    />
-                  </fieldset>
 
                   <fieldset className="form-group">
                     <input
@@ -72,22 +62,12 @@ export default class Register extends React.Component {
                     />
                   </fieldset>
 
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="password"
-                      placeholder="Verify Password"
-                      value={values.verify}
-                      onChange={this.handleVerifyChange}
-                    />
-                  </fieldset>
-
                   <button
                     className="btn btn-lg btn-primary pull-xs-right"
                     type="submit"
                     disabled={inProgress}
                   >
-                    Sign up
+                    Sign in
                   </button>
 
                 </fieldset>

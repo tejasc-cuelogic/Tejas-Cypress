@@ -1,9 +1,9 @@
-import Home from './views/Home';
-import Profile from './views/Profile';
-import Register from './views/Register';
-import Settings from './views/Settings';
-import Login from './views/Login';
-import Authorization from './components/Common/Authorization';
+import Home from './home/Home';
+import Profile from './profile/Profile';
+import Register from './register/Register';
+import Settings from './settings/Settings';
+import Login from './login/Login';
+import Authorization from '../components/common/Authorization';
 
 
 const UserAuthorization = Authorization(['user'], Home)
@@ -20,16 +20,13 @@ export default [
   },
   {
     path: '/settings',
-    component: Settings
+    component: Settings,
+    auth: AdminAuthorization
   },
   {
     path: '/@:username',
     component: Profile,
     auth: UserAuthorization
-  },
-  {
-    path: '/@:username/favorites',
-    component: Profile
   },
   {
     path: '/',

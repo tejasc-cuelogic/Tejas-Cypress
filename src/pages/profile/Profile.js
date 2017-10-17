@@ -1,7 +1,7 @@
 import React from 'react';
-import LoadingSpinner from '../components/Common/LoadingSpinner';
-import RedError from '../components/Common/RedError';
-import EditProfileSettings from '../components/Profile/EditProfileSettings'
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import RedError from '../../components/common/RedError';
+import EditProfileSettings from './components/EditProfileSettings'
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 

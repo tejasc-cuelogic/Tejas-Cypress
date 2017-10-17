@@ -1,5 +1,5 @@
-import ListErrors from '../components/Common/ListErrors';
-import SettingsForm from '../components/Settings/SettingsForm'
+import ListErrors from '../../components/common/ListErrors';
+import SettingsForm from './components/SettingsForm'
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';

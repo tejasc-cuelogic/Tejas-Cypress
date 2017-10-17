@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import agent from '../agent';
+import api from '../ns-api';
 
 export class ProfileStore {
 
@@ -8,7 +8,7 @@ export class ProfileStore {
 
   @action loadProfile(username) {
     this.isLoadingProfile = true;
-    agent.User.get(username)
+    api.User.get(username)
       .then(action((profile) => { this.profile = profile; }))
       .finally(action(() => { this.isLoadingProfile = false; }))
   }
