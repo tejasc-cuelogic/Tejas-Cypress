@@ -9,6 +9,7 @@ import { inject, observer } from 'mobx-react';
 import Header from './components/common/Header';
 import pages from './pages/pages';
 import * as stores from './stores/stores';
+import 'semantic-ui-css/semantic.min.css';
 
 /**
  * Main react component

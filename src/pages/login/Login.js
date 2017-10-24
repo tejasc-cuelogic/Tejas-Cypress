@@ -3,6 +3,7 @@ import ListErrors from '../../components/common/ListErrors';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { Button } from 'semantic-ui-react'
 
 @inject('authStore')
 @withRouter
@@ -62,13 +63,12 @@ export default class Login extends React.Component {
                     />
                   </fieldset>
 
-                  <button
-                    className="btn btn-lg btn-primary pull-xs-right"
-                    type="submit"
+                  <Button
+                    primary
                     disabled={inProgress}
                   >
                     Sign in
-                  </button>
+                  </Button>
 
                 </fieldset>
               </form>
