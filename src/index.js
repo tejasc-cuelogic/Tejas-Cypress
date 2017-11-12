@@ -1,15 +1,15 @@
 import ReactDOM from 'react-dom';
 import promiseFinally from 'promise.prototype.finally';
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { useStrict } from 'mobx';
-import { Provider } from 'mobx-react';
-import { Switch, Route, withRouter } from 'react-router-dom';
-import { inject, observer } from 'mobx-react';
+import { Provider, inject, observer } from 'mobx-react';
+import { Switch, Route, withRouter, BrowserRouter } from 'react-router-dom';
+import 'semantic-ui-css/semantic.min.css';
+
 import Header from './components/common/Header';
 import pages from './pages/pages';
 import * as stores from './stores/stores';
-import 'semantic-ui-css/semantic.min.css';
+
 
 /**
  * Main react component
@@ -18,7 +18,6 @@ import 'semantic-ui-css/semantic.min.css';
 @withRouter
 @observer
 class App extends React.Component {
-
   componentWillMount() {
     if (this.props.commonStore.token) {
       this.props.userStore.pullUser()
@@ -37,12 +36,14 @@ class App extends React.Component {
             currentUser={this.props.currentUser}
           />
           <Switch>
-            {pages.map((route, i) => {
-                return <Route key={i} path={route.path} component={
+            {pages.map((route, i) => (<Route
+              key={i}
+              path={route.path}
+              component={
                   (route.auth)
                   ? route.auth(route.component, this.props)
-                  : route.component}/>
-                }) 
+                  : route.component}
+            />))
             }
           </Switch>
         </div>
@@ -56,7 +57,7 @@ class App extends React.Component {
 
 
 // For easier debugging
-window._____APP_STATE_____ = stores;
+window.APP_STATE = stores;
 
 promiseFinally.shim();
 useStrict(true);

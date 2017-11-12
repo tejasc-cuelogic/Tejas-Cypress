@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import ListErrors from '../../components/common/ListErrors';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import ListErrors from '../../components/common/ListErrors';
+
 
 @inject('authStore')
 @observer
 export default class Register extends React.Component {
-
   componentWillUnmount() {
     this.props.authStore.reset();
   }

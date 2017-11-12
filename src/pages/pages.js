@@ -6,30 +6,30 @@ import Login from './login/Login';
 import Authorization from '../components/common/Authorization';
 
 
-const UserAuthorization = Authorization(['user'], Home)
-const AdminAuthorization = Authorization(['user', 'manager', 'admin'], Home)
+const UserAuthorization = Authorization(['user'], Home);
+const AdminAuthorization = Authorization(['user', 'manager', 'admin'], Home);
 
 export default [
   {
-    path:'/login',
-    component: Login
+    path: '/login',
+    component: Login,
   },
   {
     path: '/register',
-    component: Register
+    component: Register,
   },
   {
     path: '/settings',
     component: Settings,
-    auth: AdminAuthorization
+    auth: AdminAuthorization,
   },
   {
     path: '/@:username',
     component: Profile,
-    auth: UserAuthorization
+    auth: UserAuthorization,
   },
   {
     path: '/',
-    component: Home
-  }
+    component: Home,
+  },
 ];
