@@ -26,6 +26,10 @@ export class UserStore {
     this.currentUser = undefined;
   }
 
+  @action setCurrentUser(user) {
+    this.currentUser = user;
+  }
+
 }
 
 export default new UserStore();

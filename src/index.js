@@ -14,14 +14,13 @@ import * as stores from './stores/stores';
 /**
  * Main react component
  */
-@inject('userStore', 'commonStore')
+@inject('userStore', 'commonStore', 'authStore')
 @withRouter
 @observer
 class App extends React.Component {
   componentWillMount() {
     if (this.props.commonStore.token) {
-      this.props.userStore.pullUser()
-        .finally(() => this.props.commonStore.setAppLoaded());
+      this.props.authStore.verifySession();
     } else {
       this.props.commonStore.setAppLoaded();
     }

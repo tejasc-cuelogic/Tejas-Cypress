@@ -3,6 +3,7 @@ import Profile from './profile/Profile';
 import Register from './register/Register';
 import Settings from './settings/Settings';
 import Login from './login/Login';
+import Confirm from "./account/Confirm";
 import Authorization from '../components/common/Authorization';
 
 
@@ -17,6 +18,10 @@ export default [
   {
     path: '/register',
     component: Register,
+  },
+  {
+    path: '/confirm',
+    component: Confirm,
   },
   {
     path: '/settings',
