@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "env": {                                                                          
+  "env": {
     "browser": true,
     "node": true,
     "jest": true
@@ -11,6 +11,15 @@
     "import/prefer-default-export": "off",
     "no-bitwise": "off",
     "react/prop-types": "off",
-    "react/prefer-stateless-function": "off"
+    "react/prefer-stateless-function": "off",
+    "jsx-a11y/anchor-is-valid": [
+      "off",
+      {
+        "components": ["Link"],
+        "specialLink": ["hrefLeft", "hrefRight"],
+        "aspects": ["noHref", "invalidHref", "preferButton"]
+      }
+    ],
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }]
   }
 }

@@ -3,7 +3,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import ListErrors from '../../components/common/ListErrors';
 
-
 @inject('authStore')
 @observer
 export default class Register extends React.Component {
@@ -29,20 +28,16 @@ export default class Register extends React.Component {
       <div className="auth-page">
         <div className="container page">
           <div className="row">
-
             <div className="col-md-6 offset-md-3 col-xs-12">
               <h1 className="text-xs-center">Sign Up</h1>
               <p className="text-xs-center">
-                <Link to="login">
-                  Have an account?
-                </Link>
+                <Link to="login">Have an account?</Link>
               </p>
 
               <ListErrors errors={errors} />
 
               <form onSubmit={this.handleSubmitForm}>
                 <fieldset>
-
                   <fieldset className="form-group">
                     <input
                       className="form-control form-control-lg"
@@ -90,11 +85,9 @@ export default class Register extends React.Component {
                   >
                     Sign up
                   </button>
-
                 </fieldset>
               </form>
             </div>
-
           </div>
         </div>
       </div>

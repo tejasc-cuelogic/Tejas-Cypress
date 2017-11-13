@@ -1,9 +1,9 @@
 import React from 'react';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import RedError from '../../components/common/RedError';
-import EditProfileSettings from './components/EditProfileSettings'
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import RedError from '../../components/common/RedError';
+import EditProfileSettings from './components/EditProfileSettings';
 
 @inject('profileStore', 'userStore')
 @withRouter
@@ -31,18 +31,15 @@ export default class Profile extends React.Component {
 
     return (
       <div className="profile-page">
-
         <div className="user-info">
           <div className="container">
             <div className="row">
               <div className="col-xs-12 col-md-10 offset-md-1">
-
                 <img src={profile.image} className="user-img" alt="" />
                 <h4>{profile.username}</h4>
                 <p>{profile.bio}</p>
 
                 <EditProfileSettings isUser={isUser} />
-
               </div>
             </div>
           </div>
@@ -50,17 +47,10 @@ export default class Profile extends React.Component {
 
         <div className="container">
           <div className="row">
-
-            <div className="col-xs-12 col-md-10 offset-md-1">
-
-            </div>
-
+            <div className="col-xs-12 col-md-10 offset-md-1" />
           </div>
         </div>
-
       </div>
     );
   }
 }
-
-export { Profile };

@@ -35,8 +35,7 @@ class App extends React.Component {
             currentUser={this.props.currentUser}
           />
           <Switch>
-            {pages.map((route, i) => (<Route
-              key={i}
+            {pages.map(route => (<Route
               path={route.path}
               component={
                   (route.auth)
@@ -61,10 +60,12 @@ window.APP_STATE = stores;
 promiseFinally.shim();
 useStrict(true);
 
-ReactDOM.render((
-  <Provider {...stores}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>
-), document.getElementById('root'));
+ReactDOM.render(
+  (
+    <Provider {...stores}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  ), document.getElementById('root'),
+);

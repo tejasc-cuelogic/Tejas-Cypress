@@ -1,12 +1,11 @@
 import { observable, action } from 'mobx';
 import * as AWSCognito from 'amazon-cognito-identity-js';
-import api from '../ns-api';
 import userStore from './userStore';
 import commonStore from './commonStore';
 
 const userPool = new AWSCognito.CognitoUserPool({
   UserPoolId: process.env.REACT_APP_AWS_COGNITO_USER_POOL_ID,
-  ClientId: process.env.REACT_APP_AWS_COGNITO_CLIENT_ID
+  ClientId: process.env.REACT_APP_AWS_COGNITO_CLIENT_ID,
 });
 let cognitoUser = null;
 
@@ -14,11 +13,12 @@ export class AuthStore {
   @observable inProgress = false;
   @observable errors = undefined;
 
-  @observable values = {
+  @observable
+  values = {
     username: '',
     email: '',
     password: '',
-    verify: ''
+    verify: '',
   };
 
   @observable message = null;
@@ -26,236 +26,206 @@ export class AuthStore {
   @observable newPassword = '';
   @observable deleteButton = false;
 
-
-  @action setUsername(username) {
+  @action
+  setUsername(username) {
     this.values.username = username;
   }
 
-  @action setEmail(email) {
+  @action
+  setEmail(email) {
     this.values.email = email;
   }
 
-  @action setPassword(password) {
+  @action
+  setPassword(password) {
     this.values.password = password;
   }
 
-  @action setVerify(verify) {
+  @action
+  setVerify(verify) {
     this.values.verify = verify;
   }
 
-  @action setCode(code) {
+  @action
+  setCode(code) {
     this.values.code = code;
   }
 
-  @action setMessage(message) {
+  @action
+  setMessage(message) {
     this.message = message;
   }
 
-  @action reset() {
+  @action
+  reset() {
     this.values.username = '';
     this.values.email = '';
     this.values.password = '';
     this.values.verify = '';
   }
 
-  @action verifySession() {
+  @action
+  verifySession = () => {
     let hasSession = false;
-    Object.keys(localStorage).every(key => {
+    Object.keys(localStorage).every((key) => {
       if (key.match('CognitoIdentityServiceProvider')) {
         hasSession = true;
       }
       return key;
     });
+
     return (
       new Promise((res, rej) => {
         if (hasSession) {
           cognitoUser = userPool.getCurrentUser();
           return cognitoUser !== null ? res() : rej();
-        } else {
-          return rej();
         }
+        return rej();
       })
-      .then(() => {
-        return new Promise((res, rej) => {
-          cognitoUser.getSession((err, session) => {
-            return err ? rej(err) : res();
-          });
-        });
-      })
-      .then(() => {
-        return new Promise((res, rej) => {
+        .then(() => new Promise((res, rej) => {
+          cognitoUser.getSession((err, session) => (err ? rej(err) : res(session)));
+        }))
+        .then(() => new Promise((res, rej) => {
           cognitoUser.getUserAttributes((err, attributes) => {
             if (err) {
               return rej(err);
             }
-            res(attributes);
+            return res(attributes);
           });
-        });
-      })
-      .then(attributes => {
-        return new Promise((res, rej) => {
-          attributes.map(key => {
+        }))
+        .then(attributes => new Promise((res) => {
+          attributes.map((key) => {
             if (key.Name === 'email') {
               userStore.setCurrentUser({
                 username: cognitoUser.username,
-                email: key.Value
+                email: key.Value,
               });
             }
             return key;
           });
           res();
-        });
-      })
-      // Empty method needed to avoid warning.
-      .catch(() => {})
-      .finally(() => {
-        commonStore.setAppLoaded();
-      })
+        }))
+        // Empty method needed to avoid warning.
+        .catch(() => {})
+        .finally(() => {
+          commonStore.setAppLoaded();
+        })
     );
   }
 
-  @action login() {
+  @action
+  login() {
     this.inProgress = true;
     this.errors = undefined;
-    const username = this.values.username;
+    const { username } = this.values;
 
-    let authenticationDetails = new AWSCognito.AuthenticationDetails({
+    const authenticationDetails = new AWSCognito.AuthenticationDetails({
       Username: username,
-      Password: this.values.password
+      Password: this.values.password,
     });
 
     cognitoUser = new AWSCognito.CognitoUser({
       Username: this.values.username,
-      Pool: userPool
+      Pool: userPool,
     });
 
     return new Promise((res, rej) => {
-        cognitoUser.authenticateUser(authenticationDetails, {
-          onSuccess: result => {
-            return res(result);
-          },
-          onFailure: err => {
-            return rej(err);
-          }
-        });
-      })
+      cognitoUser.authenticateUser(authenticationDetails, {
+        onSuccess: result => res(result),
+        onFailure: err => rej(err),
+      });
+    })
       .then((data) => {
         // Extract JWT from token
-        commonStore.setToken(data.idToken.jwtToken)
+        commonStore.setToken(data.idToken.jwtToken);
         userStore.setCurrentUser({
           username,
-          email: data.idToken.email
+          email: data.idToken.email,
         });
       })
-      .catch(
-        action(err => {
-          this.errors = this.simpleErr(err);
-          throw err;
-        })
-      )
-      .finally(
-        action(() => {
-          this.inProgress = false;
-        })
-      );
+      .catch(action((err) => {
+        this.errors = this.simpleErr(err);
+        throw err;
+      }))
+      .finally(action(() => {
+        this.inProgress = false;
+      }));
   }
 
-  // @action register() {
-  //   this.inProgress = true;
-  //   this.errors = undefined;
-  //   return api.Auth.register(this.values.username, this.values.email, this.values.password, this.values.verify)
-  //     .catch(action((err) => {
-  //       this.errors = err.response && err.response.body && err.response.body.errors;
-  //       throw err;
-  //     }))
-  //     .finally(action(() => { this.inProgress = false; }));
-  // }
-
-  @action register() {
+  @action
+  register() {
     this.inProgress = true;
     this.errors = undefined;
 
     return new Promise((res, rej) => {
-        // Set email attribute
-        let attributeEmail = new AWSCognito.CognitoUserAttribute({
-          Name: 'email',
-          Value: this.values.email
-        });
-        let attributeList = [];
-        attributeList.push(attributeEmail);
+      // Set email attribute
+      const attributeEmail = new AWSCognito.CognitoUserAttribute({
+        Name: 'email',
+        Value: this.values.email,
+      });
+      const attributeList = [];
+      attributeList.push(attributeEmail);
 
-        userPool.signUp(
-          this.values.username,
-          this.values.password,
-          attributeList,
-          null,
-          (err, result) => {
-            if (err) {
-              return rej(err);
-            }
-            cognitoUser = result;
-            res();
+      userPool.signUp(
+        this.values.username,
+        this.values.password,
+        attributeList,
+        null,
+        (err, result) => {
+          if (err) {
+            return rej(err);
           }
-        );
-      })
-      .catch(
-        action(err => {
-          this.errors = this.simpleErr(err);
-          throw err;
-        })
-      )
-      .finally(
-        action(() => {
-          this.inProgress = false;
-        })
+          cognitoUser = result;
+          return res();
+        },
       );
+    })
+      .catch(action((err) => {
+        this.errors = this.simpleErr(err);
+        throw err;
+      }))
+      .finally(action(() => {
+        this.inProgress = false;
+      }));
   }
 
-  @action confirmCode() {
+  @action
+  confirmCode() {
     this.inProgress = true;
     this.errors = undefined;
 
     cognitoUser = new AWSCognito.CognitoUser({
       Username: this.values.username,
-      Pool: userPool
+      Pool: userPool,
     });
 
     return new Promise((res, rej) => {
-        cognitoUser.confirmRegistration(this.values.code, true, err => {
-          return err ? rej(err) : res();
-        });
-      })
-      .then(
-        action(() => {
-          this.setMessage(`You're confirmed! Please login...`);
-        })
-      )
-      .catch(
-        action(err => {
-          this.errors = this.simpleErr(err);
-          throw err;
-        })
-      )
-      .finally(
-        action(() => {
-          this.inProgress = false;
-        })
-      );
+      cognitoUser.confirmRegistration(this.values.code, true, err => (err ? rej(err) : res()));
+    })
+      .then(action(() => {
+        this.setMessage('You\'re confirmed! Please login...');
+      }))
+      .catch(action((err) => {
+        this.errors = this.simpleErr(err);
+        throw err;
+      }))
+      .finally(action(() => {
+        this.inProgress = false;
+      }));
   }
 
-  @action logout() {
+  @action
+  logout = () => {
     commonStore.setToken(undefined);
     userStore.forgetUser();
     return new Promise(res => res());
   }
 
-  simpleErr(err) {
-    return {
-      statusCode: err.statusCode,
-      code: err.code,
-      message: err.message
-    };
-  }
+  simpleErr = err => ({
+    statusCode: err.statusCode,
+    code: err.code,
+    message: err.message,
+  })
 }
 
 export default new AuthStore();

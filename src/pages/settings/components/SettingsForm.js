@@ -12,16 +12,16 @@ class SettingsForm extends React.Component {
       username: '',
       bio: '',
       email: '',
-      password: ''
+      password: '',
     };
 
-    this.updateState = field => ev => {
-      const state = this.state;
+    this.updateState = field => (ev) => {
+      const { state } = this;
       const newState = Object.assign({}, state, { [field]: ev.target.value });
       this.setState(newState);
     };
 
-    this.submitForm = ev => {
+    this.submitForm = (ev) => {
       ev.preventDefault();
 
       const user = Object.assign({}, this.state);
@@ -40,7 +40,7 @@ class SettingsForm extends React.Component {
         image: this.props.userStore.currentUser.image || '',
         username: this.props.userStore.currentUser.username,
         bio: this.props.userStore.currentUser.bio || '',
-        email: this.props.userStore.currentUser.email
+        email: this.props.userStore.currentUser.email,
       });
     }
   }
@@ -77,8 +77,7 @@ class SettingsForm extends React.Component {
               placeholder="Short bio about you"
               value={this.state.bio}
               onChange={this.updateState('bio')}
-            >
-            </textarea>
+            />
           </fieldset>
 
           <fieldset className="form-group">

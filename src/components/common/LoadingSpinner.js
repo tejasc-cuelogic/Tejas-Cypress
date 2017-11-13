@@ -1,6 +1,6 @@
 import React from 'react';
 
-const style  = {
+const style = {
   borderRadius: '50%',
   width: '40px',
   height: '40px',
@@ -19,7 +19,7 @@ export default class LoadingSpinner extends React.Component {
     return (
       <div className="loading-spinner" style={style}>
         <style>
-        {`
+          {`
         @keyframes loading-spinner {
           0% { transform : rotate(0deg); }
           100% { transform : rotate(360deg); }
