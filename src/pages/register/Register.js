@@ -15,11 +15,11 @@ export default class Register extends React.Component {
   handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
   handleVerifyChange = e => this.props.authStore.setVerify(e.target.value);
-  handleSubmitForm = e => {
+  handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.authStore
       .register()
-      .then(() => this.props.history.replace("/confirm"));
+      .then(() => this.props.history.replace('/confirm'));
   };
 
   render() {
