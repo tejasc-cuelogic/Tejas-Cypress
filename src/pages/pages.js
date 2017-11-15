@@ -4,6 +4,8 @@ import Register from './register/Register';
 import Settings from './settings/Settings';
 import Login from './login/Login';
 import Confirm from './account/Confirm';
+import Offerings from './offerings/Offerings';
+import Offering from './offerings/Offering';
 import Authorization from '../components/common/Authorization';
 
 
@@ -22,6 +24,14 @@ export default [
   {
     path: '/confirm',
     component: Confirm,
+  },
+  {
+    path: '/offerings/:id',
+    component: Offering,
+  },
+  {
+    path: '/offerings',
+    component: Offerings,
   },
   {
     path: '/settings',

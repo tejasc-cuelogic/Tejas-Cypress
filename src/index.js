@@ -35,8 +35,10 @@ class App extends React.Component {
             currentUser={this.props.currentUser}
           />
           <Switch>
-            {pages.map(route => (<Route
+            {/* eslint-disable react/no-array-index-key */}
+            {pages.map((route, index) => (<Route
               path={route.path}
+              key={index}
               component={
                   (route.auth)
                   ? route.auth(route.component, this.props)
