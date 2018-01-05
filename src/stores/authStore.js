@@ -82,36 +82,39 @@ export class AuthStore {
         }
         return rej();
       })
-        .then(() => new Promise((res, rej) => {
-          cognitoUser.getSession((err, session) => (err ? rej(err) : res(session)));
-        }))
-        .then(() => new Promise((res, rej) => {
-          cognitoUser.getUserAttributes((err, attributes) => {
-            if (err) {
-              return rej(err);
-            }
-            return res(attributes);
-          });
-        }))
-        .then(attributes => new Promise((res) => {
-          attributes.map((key) => {
-            if (key.Name === 'email') {
-              userStore.setCurrentUser({
-                username: cognitoUser.username,
-                email: key.Value,
-              });
-            }
-            return key;
-          });
-          res();
-        }))
+        .then(() =>
+          new Promise((res, rej) => {
+            cognitoUser.getSession((err, session) => (err ? rej(err) : res(session)));
+          }))
+        .then(() =>
+          new Promise((res, rej) => {
+            cognitoUser.getUserAttributes((err, attributes) => {
+              if (err) {
+                return rej(err);
+              }
+              return res(attributes);
+            });
+          }))
+        .then(attributes =>
+          new Promise((res) => {
+            attributes.map((key) => {
+              if (key.Name === 'email') {
+                userStore.setCurrentUser({
+                  username: cognitoUser.username,
+                  email: key.Value,
+                });
+              }
+              return key;
+            });
+            res();
+          }))
         // Empty method needed to avoid warning.
         .catch(() => {})
         .finally(() => {
           commonStore.setAppLoaded();
         })
     );
-  }
+  };
 
   @action
   login() {
@@ -200,10 +203,14 @@ export class AuthStore {
     });
 
     return new Promise((res, rej) => {
-      cognitoUser.confirmRegistration(this.values.code, true, err => (err ? rej(err) : res()));
+      cognitoUser.confirmRegistration(
+        this.values.code,
+        true,
+        err => (err ? rej(err) : res()),
+      );
     })
       .then(action(() => {
-        this.setMessage('You\'re confirmed! Please login...');
+        this.setMessage("You're confirmed! Please login...");
       }))
       .catch(action((err) => {
         this.errors = this.simpleErr(err);
@@ -219,13 +226,13 @@ export class AuthStore {
     commonStore.setToken(undefined);
     userStore.forgetUser();
     return new Promise(res => res());
-  }
+  };
 
   simpleErr = err => ({
     statusCode: err.statusCode,
     code: err.code,
     message: err.message,
-  })
+  });
 }
 
 export default new AuthStore();

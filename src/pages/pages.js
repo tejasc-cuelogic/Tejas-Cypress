@@ -10,7 +10,7 @@ import Authorization from '../components/common/Authorization';
 
 
 const UserAuthorization = Authorization(['user'], Home);
-const AdminAuthorization = Authorization(['user', 'manager', 'admin'], Home);
+// const AdminAuthorization = Authorization(['user', 'manager', 'admin'], Home);
 
 export default [
   {
@@ -36,7 +36,6 @@ export default [
   {
     path: '/settings',
     component: Settings,
-    auth: AdminAuthorization,
   },
   {
     path: '/@:username',
