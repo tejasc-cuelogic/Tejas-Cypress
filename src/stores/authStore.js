@@ -19,6 +19,7 @@ export class AuthStore {
     email: '',
     password: '',
     verify: '',
+    code: '',
   };
 
   @observable message = null;
@@ -166,6 +167,7 @@ export class AuthStore {
         Name: 'email',
         Value: this.values.email,
       });
+
       const attributeList = [];
       attributeList.push(attributeEmail);
 
@@ -182,6 +184,56 @@ export class AuthStore {
           return res();
         },
       );
+    })
+      .catch(action((err) => {
+        this.errors = this.simpleErr(err);
+        throw err;
+      }))
+      .finally(action(() => {
+        this.inProgress = false;
+      }));
+  }
+
+  @action
+  resetPassword() {
+    this.inProgress = true;
+    this.errors = undefined;
+
+    const userData = {
+      Username: this.values.username,
+      Pool: userPool,
+    };
+
+    return new Promise((res, rej) => {
+      cognitoUser = new AWSCognito.CognitoUser(userData);
+      cognitoUser.forgotPassword({
+        onSuccess: data => res(data),
+        onFailure: err => rej(err),
+      });
+    })
+      .catch(action((err) => {
+        this.errors = this.simpleErr(err);
+        throw err;
+      }))
+      .finally(action(() => {
+        this.inProgress = false;
+      }));
+  }
+
+  @action
+  setNewPassword() {
+    this.inProgress = true;
+    this.errors = undefined;
+
+    return new Promise((res, rej) => {
+      cognitoUser = new AWSCognito.CognitoUser({
+        Username: this.values.username,
+        Pool: userPool,
+      });
+      cognitoUser.confirmPassword(this.values.code, this.values.password, {
+        onSuccess: data => res(data),
+        onFailure: err => rej(err),
+      });
     })
       .catch(action((err) => {
         this.errors = this.simpleErr(err);

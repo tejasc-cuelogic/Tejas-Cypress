@@ -7,6 +7,8 @@ import Confirm from './account/Confirm';
 import Offerings from './offerings/Offerings';
 import Offering from './offerings/Offering';
 import Authorization from '../components/common/Authorization';
+import ForgotPassword from './password/ForgotPassword';
+import ResetPassword from './password/ResetPassword';
 
 
 const UserAuthorization = Authorization(['user'], Home);
@@ -41,6 +43,14 @@ export default [
     path: '/@:username',
     component: Profile,
     auth: UserAuthorization,
+  },
+  {
+    path: '/forgot_password',
+    component: ForgotPassword,
+  },
+  {
+    path: '/reset_password',
+    component: ResetPassword,
   },
   {
     path: '/',
