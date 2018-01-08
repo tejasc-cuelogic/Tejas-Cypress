@@ -10,7 +10,7 @@ export default class ForgotPassword extends React.Component {
   handleUsernameChange = event => this.props.authStore.setUsername(event.target.value);
   handleSubmitForm = (event) => {
     event.preventDefault();
-    this.props.authStore.resetPassword().then(() => this.props.history.replace('/reset_password'));
+    this.props.authStore.resetPassword().then(() => this.props.history.push('/reset-password'));
   }
 
   render() {

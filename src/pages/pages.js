@@ -45,11 +45,11 @@ export default [
     auth: UserAuthorization,
   },
   {
-    path: '/forgot_password',
+    path: '/forgot-password',
     component: ForgotPassword,
   },
   {
-    path: '/reset_password',
+    path: '/reset-password',
     component: ResetPassword,
   },
   {

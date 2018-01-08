@@ -12,7 +12,7 @@ export default class ResetPassword extends React.Component {
   handleCodeChange = event => this.props.authStore.setCode(event.target.value);
   handleSubmitForm = (event) => {
     event.preventDefault();
-    this.props.authStore.setNewPassword().then(() => this.props.history.replace('/login'));
+    this.props.authStore.setNewPassword().then(() => this.props.history.push('/login'));
   }
 
   render() {

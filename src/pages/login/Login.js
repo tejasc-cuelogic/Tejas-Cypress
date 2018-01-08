@@ -60,7 +60,7 @@ export default class Login extends React.Component {
                   <Button primary disabled={inProgress}>
                     Sign in
                   </Button>
-                  <Link to="forgot_password">Forgot Password?</Link>
+                  <Link to="forgot-password">Forgot Password?</Link>
                 </fieldset>
               </form>
             </div>
