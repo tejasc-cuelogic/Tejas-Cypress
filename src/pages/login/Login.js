@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react';
 import ListErrors from '../../components/common/ListErrors';
 
 
-@inject('authStore')
+@inject('authStore', 'userStore')
 @withRouter
 @observer
 export default class Login extends React.Component {
@@ -17,7 +17,13 @@ export default class Login extends React.Component {
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.authStore.login().then(() => this.props.history.replace('/'));
+    this.props.authStore.login().then(() => {
+      if (this.props.userStore.currentUser.roles.admin) {
+        this.props.history.push('/admin/users-list');
+      } else {
+        this.props.history.replace('/');
+      }
+    });
   };
 
   render() {

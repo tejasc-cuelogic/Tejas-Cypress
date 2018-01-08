@@ -9,10 +9,10 @@ import Offering from './offerings/Offering';
 import Authorization from '../components/common/Authorization';
 import ForgotPassword from './password/ForgotPassword';
 import ResetPassword from './password/ResetPassword';
-
+import UsersList from './admin/UsersList';
 
 const UserAuthorization = Authorization(['user'], Home);
-// const AdminAuthorization = Authorization(['user', 'manager', 'admin'], Home);
+const AdminAuthorization = Authorization(['investor', 'bowner', 'admin'], Home);
 
 export default [
   {
@@ -51,6 +51,11 @@ export default [
   {
     path: '/reset-password',
     component: ResetPassword,
+  },
+  {
+    path: '/admin/users-list',
+    component: UsersList,
+    auth: AdminAuthorization,
   },
   {
     path: '/',

@@ -58,6 +58,11 @@ export class AuthStore {
   }
 
   @action
+  clearErrors() {
+    this.errors = null;
+  }
+
+  @action
   reset() {
     this.values.username = '';
     this.values.email = '';
@@ -145,7 +150,9 @@ export class AuthStore {
         userStore.setCurrentUser({
           username,
           email: data.idToken.email,
+          roles: {},
         });
+        userStore.setRoles(data.idToken.payload['cognito:groups']);
       })
       .catch(action((err) => {
         this.errors = this.simpleErr(err);
@@ -277,6 +284,7 @@ export class AuthStore {
   logout = () => {
     commonStore.setToken(undefined);
     userStore.forgetUser();
+    userStore.resetRoles();
     return new Promise(res => res());
   };
 

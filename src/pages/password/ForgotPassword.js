@@ -7,6 +7,12 @@ import ListErrors from '../../components/common/ListErrors';
 @inject('authStore')
 @observer
 export default class ForgotPassword extends React.Component {
+  componentWillMount() {
+    if (this.props.authStore.errors) {
+      this.props.authStore.clearErrors();
+    }
+  }
+
   handleUsernameChange = event => this.props.authStore.setUsername(event.target.value);
   handleSubmitForm = (event) => {
     event.preventDefault();

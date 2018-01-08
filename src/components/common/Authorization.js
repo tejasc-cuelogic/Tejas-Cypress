@@ -17,7 +17,7 @@ const Authorization = (allowedRoles, UnauthorizedComponent) => (
 
     // Check if current user exists i.e. used is logged in
     if (context.userStore.currentUser) {
-      const allowed = context.userStore.currentUser.roles.some(role =>
+      const allowed = Object.keys(context.userStore.currentUser.roles).map(role =>
         allowedRoles.includes(role));
 
       if (allowed) {
