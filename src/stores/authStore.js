@@ -152,6 +152,9 @@ export class AuthStore {
           email: data.idToken.email,
           roles: {},
         });
+        return data;
+      })
+      .then((data) => {
         userStore.setRoles(data.idToken.payload['cognito:groups']);
       })
       .catch(action((err) => {
