@@ -16,7 +16,6 @@ export class AuthStore {
 
   @observable
   values = {
-    username: '',
     email: '',
     password: '',
     verify: '',
@@ -27,11 +26,6 @@ export class AuthStore {
   @observable oldPassword = '';
   @observable newPassword = '';
   @observable deleteButton = false;
-
-  @action
-  setUsername(username) {
-    this.values.username = username;
-  }
 
   @action
   setEmail(email) {
@@ -133,15 +127,15 @@ export class AuthStore {
   login() {
     this.inProgress = true;
     this.errors = undefined;
-    const { username } = this.values;
+    const { email, password } = this.values;
 
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: username,
-      Password: this.values.password,
+      Username: email,
+      Password: password,
     });
 
     cognitoUser = new AWSCognito.CognitoUser({
-      Username: this.values.username,
+      Username: email,
       Pool: userPool,
     });
 
@@ -155,8 +149,7 @@ export class AuthStore {
         // Extract JWT from token
         commonStore.setToken(data.idToken.jwtToken);
         userStore.setCurrentUser({
-          username,
-          email: data.idToken.email,
+          email,
           roles: JSON.parse(data.idToken.payload['custom:roles']),
         });
       })
@@ -175,23 +168,16 @@ export class AuthStore {
     this.errors = undefined;
 
     return new Promise((res, rej) => {
-      // Set email attribute
-      const attributeEmail = new AWSCognito.CognitoUserAttribute({
-        Name: 'email',
-        Value: this.values.email,
-      });
-
       const attributeRoles = new AWSCognito.CognitoUserAttribute({
         Name: 'custom:roles',
         Value: JSON.stringify([this.role]),
       });
 
       const attributeList = [];
-      attributeList.push(attributeEmail);
       attributeList.push(attributeRoles);
 
       userPool.signUp(
-        this.values.username,
+        this.values.email,
         this.values.password,
         attributeList,
         null,

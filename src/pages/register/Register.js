@@ -10,7 +10,6 @@ export default class Register extends React.Component {
     this.props.authStore.reset();
   }
 
-  handleUsernameChange = e => this.props.authStore.setUsername(e.target.value);
   handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
   handleVerifyChange = e => this.props.authStore.setVerify(e.target.value);
@@ -40,23 +39,6 @@ export default class Register extends React.Component {
               <form onSubmit={this.handleSubmitForm}>
                 <fieldset>
                   <fieldset className="form-group">
-                    <select className="ui dropdown" onChange={this.handleRoleChange}>
-                      <option value="">Role</option>
-                      <option value="bowner">Business Owner</option>
-                      <option value="investor">Investor</option>
-                    </select>
-                  </fieldset>
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="text"
-                      placeholder="Username"
-                      value={values.username}
-                      onChange={this.handleUsernameChange}
-                    />
-                  </fieldset>
-
-                  <fieldset className="form-group">
                     <input
                       className="form-control form-control-lg"
                       type="email"
@@ -84,6 +66,13 @@ export default class Register extends React.Component {
                       value={values.verify}
                       onChange={this.handleVerifyChange}
                     />
+                  </fieldset>
+                  <fieldset className="form-group">
+                    <select className="ui dropdown" onChange={this.handleRoleChange}>
+                      <option value="">Role</option>
+                      <option value="bowner">Business Owner</option>
+                      <option value="investor">Investor</option>
+                    </select>
                   </fieldset>
 
                   <button
