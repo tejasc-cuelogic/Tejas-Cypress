@@ -10,9 +10,14 @@ import Authorization from '../components/common/Authorization';
 import ForgotPassword from './password/ForgotPassword';
 import ResetPassword from './password/ResetPassword';
 import UsersList from './admin/UsersList';
+import NotFound from '../components/common/NotFound';
+import InvestorHome from './investor/InvestorHome';
+import BusinessOwnerHome from './bowner/BusinessOwnerHome';
 
-const UserAuthorization = Authorization(['user'], Home);
-const AdminAuthorization = Authorization(['investor', 'bowner', 'admin'], Home);
+const UserAuthorization = Authorization(['user'], NotFound);
+const AdminAuthorization = Authorization(['investor', 'bowner', 'admin'], NotFound);
+const BOwnerAuthorization = Authorization(['bowner', 'admin'], NotFound);
+const InvestorAuthorization = Authorization(['investor', 'admin'], NotFound);
 
 export default [
   {
@@ -56,6 +61,16 @@ export default [
     path: '/admin/users-list',
     component: UsersList,
     auth: AdminAuthorization,
+  },
+  {
+    path: '/bowner',
+    component: BusinessOwnerHome,
+    auth: BOwnerAuthorization,
+  },
+  {
+    path: '/investor',
+    component: InvestorHome,
+    auth: InvestorAuthorization,
   },
   {
     path: '/',

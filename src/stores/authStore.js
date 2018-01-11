@@ -157,7 +157,7 @@ export class AuthStore {
         userStore.setCurrentUser({
           username,
           email: data.idToken.email,
-          roles: JSON.parse(data.idToken.payload['custom:role']),
+          roles: JSON.parse(data.idToken.payload['custom:roles']),
         });
       })
       .catch(action((err) => {
@@ -182,7 +182,7 @@ export class AuthStore {
       });
 
       const attributeRoles = new AWSCognito.CognitoUserAttribute({
-        Name: 'custom:role',
+        Name: 'custom:roles',
         Value: JSON.stringify([this.role]),
       });
 
