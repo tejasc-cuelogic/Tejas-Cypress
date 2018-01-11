@@ -18,7 +18,7 @@ export default class Login extends React.Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.authStore.login().then(() => {
-      if (this.props.userStore.currentUser.roles.admin) {
+      if (this.props.userStore.currentUser.roles.includes('admin')) {
         this.props.history.push('/admin/users-list');
       } else {
         this.props.history.replace('/');

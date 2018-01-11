@@ -150,12 +150,8 @@ export class AuthStore {
         userStore.setCurrentUser({
           username,
           email: data.idToken.email,
-          roles: {},
+          roles: JSON.parse(data.idToken.payload['custom:role']),
         });
-        return data;
-      })
-      .then((data) => {
-        userStore.setRoles(data.idToken.payload['cognito:groups']);
       })
       .catch(action((err) => {
         this.errors = this.simpleErr(err);
@@ -178,8 +174,14 @@ export class AuthStore {
         Value: this.values.email,
       });
 
+      const attributeRoles = new AWSCognito.CognitoUserAttribute({
+        Name: 'custom:role',
+        Value: JSON.stringify(['admin']),
+      });
+
       const attributeList = [];
       attributeList.push(attributeEmail);
+      attributeList.push(attributeRoles);
 
       userPool.signUp(
         this.values.username,
@@ -287,7 +289,6 @@ export class AuthStore {
   logout = () => {
     commonStore.setToken(undefined);
     userStore.forgetUser();
-    userStore.resetRoles();
     return new Promise(res => res());
   };
 

@@ -6,29 +6,6 @@ export class UserStore {
   @observable loadingUser;
   @observable updatingUser;
   @observable updatingUserErrors;
-  @observable
-  roles = {
-    admin: false,
-    investor: false,
-    bowner: false,
-  };
-
-  @action
-  setRoles(userRoles) {
-    userRoles.map((role) => {
-      this.currentUser.roles[role] = true;
-      return role;
-    });
-  }
-
-  @action
-  resetRoles() {
-    if (this.currentUser) {
-      this.currentUser.roles.admin = false;
-      this.currentUser.roles.bowner = false;
-      this.currentUser.roles.investor = false;
-    }
-  }
 
   @action pullUser() {
     this.loadingUser = true;
