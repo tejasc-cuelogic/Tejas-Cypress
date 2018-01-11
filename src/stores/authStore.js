@@ -205,7 +205,7 @@ export class AuthStore {
     this.errors = undefined;
 
     const userData = {
-      Username: this.values.username,
+      Username: this.values.email,
       Pool: userPool,
     };
 
@@ -232,7 +232,7 @@ export class AuthStore {
 
     return new Promise((res, rej) => {
       cognitoUser = new AWSCognito.CognitoUser({
-        Username: this.values.username,
+        Username: this.values.email,
         Pool: userPool,
       });
       cognitoUser.confirmPassword(this.values.code, this.values.password, {
@@ -255,7 +255,7 @@ export class AuthStore {
     this.errors = undefined;
 
     cognitoUser = new AWSCognito.CognitoUser({
-      Username: this.values.username,
+      Username: this.values.email,
       Pool: userPool,
     });
 

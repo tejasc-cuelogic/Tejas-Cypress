@@ -8,7 +8,7 @@ import ListErrors from '../../components/common/ListErrors';
 @observer
 export default class Confirm extends React.Component {
   handleCodeChange = e => this.props.authStore.setCode(e.target.value);
-  handleUsernameChange = e => this.props.authStore.setUsername(e.target.value);
+  handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.authStore
@@ -37,9 +37,9 @@ export default class Confirm extends React.Component {
                     <input
                       className="form-control form-control-lg"
                       type="text"
-                      placeholder="Username"
+                      placeholder="Email"
                       value={values.username}
-                      onChange={this.handleUsernameChange}
+                      onChange={this.handleEmailChange}
                     />
                   </fieldset>
 

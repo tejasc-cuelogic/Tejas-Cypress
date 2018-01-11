@@ -13,7 +13,7 @@ export default class ForgotPassword extends React.Component {
     }
   }
 
-  handleUsernameChange = event => this.props.authStore.setUsername(event.target.value);
+  handleEmailChange = event => this.props.authStore.setEmail(event.target.value);
   handleSubmitForm = (event) => {
     event.preventDefault();
     this.props.authStore.resetPassword().then(() => this.props.history.push('/reset-password'));
@@ -36,9 +36,9 @@ export default class ForgotPassword extends React.Component {
                     <fieldset className="form-group">
                       <input
                         type="text"
-                        placeholder="Username..."
-                        value={values.username}
-                        onChange={this.handleUsernameChange}
+                        placeholder="Email"
+                        value={values.email}
+                        onChange={this.handleEmailChange}
                       />
                     </fieldset>
                     <Button primary disabled={inProgress}>
