@@ -16,8 +16,8 @@ import BusinessOwnerHome from './bowner/BusinessOwnerHome';
 
 const UserAuthorization = Authorization(['user'], NotFound);
 const AdminAuthorization = Authorization(['investor', 'bowner', 'admin'], NotFound);
-const BOwnerAuthorization = Authorization(['bowner', 'admin'], NotFound);
-const InvestorAuthorization = Authorization(['investor', 'admin'], NotFound);
+const BOwnerAuthorization = Authorization(['bowner'], NotFound);
+const InvestorAuthorization = Authorization(['investor'], NotFound);
 
 export default [
   {

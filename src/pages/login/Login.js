@@ -20,6 +20,10 @@ export default class Login extends React.Component {
     this.props.authStore.login().then(() => {
       if (this.props.userStore.currentUser.roles.includes('admin')) {
         this.props.history.push('/admin/users-list');
+      } else if (this.props.userStore.currentUser.roles.includes('bwoner')) {
+        this.props.history.push('/bowner');
+      } else if (this.props.userStore.currentUser.roles.includes('investor')) {
+        this.props.history.push('/investor');
       } else {
         this.props.history.replace('/');
       }
