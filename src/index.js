@@ -19,11 +19,7 @@ import * as stores from './stores/stores';
 @observer
 class App extends React.Component {
   componentWillMount() {
-    if (this.props.commonStore.token) {
-      this.props.authStore.verifySession();
-    } else {
-      this.props.commonStore.setAppLoaded();
-    }
+    this.props.authStore.verifySession();
   }
 
   render() {
@@ -40,7 +36,7 @@ class App extends React.Component {
               path={route.path}
               key={index}
               component={
-                  (route.auth)
+                (route.auth)
                   ? route.auth(route.component, this.props)
                   : route.component}
             />))

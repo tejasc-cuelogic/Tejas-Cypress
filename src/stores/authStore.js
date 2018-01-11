@@ -118,15 +118,13 @@ export class AuthStore {
           }))
         .then(attributes =>
           new Promise((res) => {
-            attributes.map((key) => {
-              if (key.Name === 'email') {
-                userStore.setCurrentUser({
-                  username: cognitoUser.username,
-                  email: key.Value,
-                });
-              }
-              return key;
-            });
+            const mappedUser = attributes.reduce((obj, item) => {
+              const key = item.Name.replace(/^custom:/, '');
+              const newObj = obj;
+              newObj[key] = item.Value;
+              return newObj;
+            }, {});
+            userStore.setCurrentUser(mappedUser);
             res();
           }))
         // Empty method needed to avoid warning.
