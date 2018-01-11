@@ -14,6 +14,7 @@ export default class Register extends React.Component {
   handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
   handleVerifyChange = e => this.props.authStore.setVerify(e.target.value);
+  handleRoleChange = e => this.props.authStore.setRole(e.target.value);
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.authStore
@@ -38,6 +39,13 @@ export default class Register extends React.Component {
 
               <form onSubmit={this.handleSubmitForm}>
                 <fieldset>
+                  <fieldset className="form-group">
+                    <select className="ui dropdown" onChange={this.handleRoleChange}>
+                      <option value="">Role</option>
+                      <option value="bowner">Business Owner</option>
+                      <option value="investor">Investor</option>
+                    </select>
+                  </fieldset>
                   <fieldset className="form-group">
                     <input
                       className="form-control form-control-lg"

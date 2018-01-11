@@ -12,6 +12,7 @@ let cognitoUser = null;
 export class AuthStore {
   @observable inProgress = false;
   @observable errors = undefined;
+  @observable role = 'investor';
 
   @observable
   values = {
@@ -58,6 +59,11 @@ export class AuthStore {
   }
 
   @action
+  setRole(role) {
+    this.role = role;
+  }
+
+  @action
   clearErrors() {
     this.errors = null;
   }
@@ -68,6 +74,7 @@ export class AuthStore {
     this.values.email = '';
     this.values.password = '';
     this.values.verify = '';
+    this.role = 'investor';
   }
 
   @action
@@ -176,7 +183,7 @@ export class AuthStore {
 
       const attributeRoles = new AWSCognito.CognitoUserAttribute({
         Name: 'custom:role',
-        Value: JSON.stringify(['admin']),
+        Value: JSON.stringify([this.role]),
       });
 
       const attributeList = [];
