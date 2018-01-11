@@ -16,8 +16,8 @@ export class AuthStore {
 
   @observable
   values = {
-    fname: '',
-    lname: '',
+    givenName: '',
+    familyName: '',
     email: '',
     password: '',
     verify: '',
@@ -30,13 +30,13 @@ export class AuthStore {
   @observable deleteButton = false;
 
   @action
-  setFirstName(fname) {
-    this.values.fname = fname;
+  setFirstName(givenName) {
+    this.values.givenName = givenName;
   }
 
   @action
-  setLastName(lname) {
-    this.values.lname = lname;
+  setLastName(familyName) {
+    this.values.familyName = familyName;
   }
 
   @action
@@ -76,8 +76,8 @@ export class AuthStore {
 
   @action
   reset() {
-    this.values.fname = '';
-    this.values.lname = '';
+    this.values.givenName = '';
+    this.values.familyName = '';
     this.values.email = '';
     this.values.password = '';
     this.values.verify = '';
@@ -118,13 +118,7 @@ export class AuthStore {
           }))
         .then(attributes =>
           new Promise((res) => {
-            const mappedUser = attributes.reduce((obj, item) => {
-              const key = item.Name.replace(/^custom:/, '');
-              const newObj = obj;
-              newObj[key] = item.Value;
-              return newObj;
-            }, {});
-            userStore.setCurrentUser(mappedUser);
+            userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(attributes)));
             res();
           }))
         // Empty method needed to avoid warning.
@@ -160,10 +154,7 @@ export class AuthStore {
       .then((data) => {
         // Extract JWT from token
         commonStore.setToken(data.idToken.jwtToken);
-        userStore.setCurrentUser({
-          email,
-          roles: JSON.parse(data.idToken.payload['custom:roles']),
-        });
+        userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
       })
       .catch(action((err) => {
         this.errors = this.simpleErr(err);
@@ -187,12 +178,12 @@ export class AuthStore {
 
       const attributeFirstName = new AWSCognito.CognitoUserAttribute({
         Name: 'given_name',
-        Value: this.values.fname,
+        Value: this.values.givenName,
       });
 
       const attributeLastName = new AWSCognito.CognitoUserAttribute({
         Name: 'family_name',
-        Value: this.values.lname,
+        Value: this.values.familyName,
       });
 
       const attributeList = [];
@@ -314,6 +305,29 @@ export class AuthStore {
     code: err.code,
     message: err.message,
   });
+
+  mapCognitoToken = (data) => {
+    const mappedUser = data.reduce((obj, item) => {
+      const key = item.Name.replace(/^custom:/, '');
+      const newObj = obj;
+      newObj[key] = item.Value;
+      return newObj;
+    }, {});
+    return mappedUser;
+  };
+
+  adjustRoles = (data) => {
+    const newData = data;
+    newData.roles = data['custom:roles'];
+    delete newData['custom:roles'];
+    return newData;
+  }
+
+  parseRoles = (data) => {
+    const newData = data;
+    newData.roles = JSON.parse(data.roles);
+    return newData;
+  }
 }
 
 export default new AuthStore();
