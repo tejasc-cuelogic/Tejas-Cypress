@@ -10,6 +10,8 @@ export default class Register extends React.Component {
     this.props.authStore.reset();
   }
 
+  handleFirstNameChange = e => this.props.authStore.setFirstName(e.target.value);
+  handleLastNameChange = e => this.props.authStore.setLastName(e.target.value);
   handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
   handleVerifyChange = e => this.props.authStore.setVerify(e.target.value);
@@ -38,6 +40,26 @@ export default class Register extends React.Component {
 
               <form onSubmit={this.handleSubmitForm}>
                 <fieldset>
+                  <fieldset className="form-group">
+                    <input
+                      className="form-control form-control-lg"
+                      type="text"
+                      placeholder="First Name"
+                      value={values.fname}
+                      onChange={this.handleFirstNameChange}
+                    />
+                  </fieldset>
+
+                  <fieldset className="form-group">
+                    <input
+                      className="form-control form-control-lg"
+                      type="text"
+                      placeholder="Last Name"
+                      value={values.lname}
+                      onChange={this.handleLastNameChange}
+                    />
+                  </fieldset>
+
                   <fieldset className="form-group">
                     <input
                       className="form-control form-control-lg"

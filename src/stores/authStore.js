@@ -16,6 +16,8 @@ export class AuthStore {
 
   @observable
   values = {
+    fname: '',
+    lname: '',
     email: '',
     password: '',
     verify: '',
@@ -26,6 +28,16 @@ export class AuthStore {
   @observable oldPassword = '';
   @observable newPassword = '';
   @observable deleteButton = false;
+
+  @action
+  setFirstName(fname) {
+    this.values.fname = fname;
+  }
+
+  @action
+  setLastName(lname) {
+    this.values.lname = lname;
+  }
 
   @action
   setEmail(email) {
@@ -64,10 +76,12 @@ export class AuthStore {
 
   @action
   reset() {
-    this.values.username = '';
+    this.values.fname = '';
+    this.values.lname = '';
     this.values.email = '';
     this.values.password = '';
     this.values.verify = '';
+    this.values.code = '';
     this.role = 'investor';
   }
 
@@ -173,8 +187,20 @@ export class AuthStore {
         Value: JSON.stringify([this.role]),
       });
 
+      const attributeFirstName = new AWSCognito.CognitoUserAttribute({
+        Name: 'given_name',
+        Value: this.values.fname,
+      });
+
+      const attributeLastName = new AWSCognito.CognitoUserAttribute({
+        Name: 'family_name',
+        Value: this.values.lname,
+      });
+
       const attributeList = [];
       attributeList.push(attributeRoles);
+      attributeList.push(attributeFirstName);
+      attributeList.push(attributeLastName);
 
       userPool.signUp(
         this.values.email,

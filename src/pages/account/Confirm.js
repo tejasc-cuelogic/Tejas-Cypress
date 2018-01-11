@@ -38,7 +38,7 @@ export default class Confirm extends React.Component {
                       className="form-control form-control-lg"
                       type="text"
                       placeholder="Email"
-                      value={values.username}
+                      value={values.email}
                       onChange={this.handleEmailChange}
                     />
                   </fieldset>
