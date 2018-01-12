@@ -9,10 +9,10 @@ import Offering from './offerings/Offering';
 import Authorization from '../components/common/Authorization';
 import ForgotPassword from './password/ForgotPassword';
 import ResetPassword from './password/ResetPassword';
-import UsersList from './admin/UsersList';
+import Admin from './admin/Admin';
 import NotFound from '../components/common/NotFound';
-import InvestorHome from './investor/InvestorHome';
-import BusinessOwnerHome from './bowner/BusinessOwnerHome';
+import Investor from './investor/Investor';
+import Business from './business/Business';
 
 const UserAuthorization = Authorization(['user'], NotFound);
 const AdminAuthorization = Authorization(['investor', 'bowner', 'admin'], NotFound);
@@ -58,18 +58,18 @@ export default [
     component: ResetPassword,
   },
   {
-    path: '/admin/users-list',
-    component: UsersList,
+    path: '/admin',
+    component: Admin,
     auth: AdminAuthorization,
   },
   {
-    path: '/bowner',
-    component: BusinessOwnerHome,
+    path: '/business',
+    component: Business,
     auth: BOwnerAuthorization,
   },
   {
     path: '/investor',
-    component: InvestorHome,
+    component: Investor,
     auth: InvestorAuthorization,
   },
   {

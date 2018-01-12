@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class InvestorHome extends React.Component {
+export default class Investor extends React.Component {
   render() {
     return (
       <div>

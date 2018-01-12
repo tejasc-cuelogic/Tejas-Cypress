@@ -1,12 +1,9 @@
 import React from 'react';
-import { observer, inject } from 'mobx-react';
 
-import UserRow from './components/UserRow';
+import UserRow from './UserRow';
 
-@inject('adminStore')
-@observer
-export default class UsersList extends React.Component {
-  render() {
+const UsersList = (props) => {
+  if (props.usersList) {
     return (
       <table>
         <tr>
@@ -15,10 +12,17 @@ export default class UsersList extends React.Component {
           <th>Username</th>
           <th>Action</th>
         </tr>
-        {this.props.adminStore.usersList.map(user => (
+        {props.usersList.map(user => (
           <UserRow fname={user.fname} lname={user.lname} username={user.username} />
         ))}
       </table>
     );
   }
-}
+  return (
+    <div>
+      <p>No Users Found</p>
+    </div>
+  );
+};
+
+export default UsersList;
