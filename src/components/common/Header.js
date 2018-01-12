@@ -2,6 +2,49 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
+const getAdminLink = () => (
+  <div className="nav-item">
+    <Link to="/admin" className="nav-link">
+      Admin
+    </Link>
+  </div>
+);
+
+const getBusinessLink = () => (
+  <div className="nav-item">
+    <Link to="/business" className="nav-link">
+      Business
+    </Link>
+  </div>
+);
+
+
+const getInvestorLink = () => (
+  <div className="nav-item">
+    <Link to="/investor" className="nav-link">
+      Investor
+    </Link>
+  </div>
+);
+
+const getNavLinks = (roles) => {
+  const links = [];
+  if (roles.includes('admin')) {
+    links.push(getAdminLink());
+  }
+  if (roles.includes('bowner') || roles.includes('admin')) {
+    links.push(getBusinessLink());
+  }
+  if (roles.includes('investor') || roles.includes('admin')) {
+    links.push(getInvestorLink());
+  }
+  return (
+    <div className="nav-item">
+      { links.map(link => link) }
+    </div>
+  );
+};
+
 const LoggedOutView = (props) => {
   if (!props.currentUser) {
     return (
@@ -34,27 +77,23 @@ const LoggedOutView = (props) => {
 const LoggedInView = (props) => {
   if (props.currentUser) {
     return (
-      <ul className="nav navbar-nav pull-xs-right">
+      <div className="nav navbar-nav pull-xs-right">
 
-        <li className="nav-item">
+        <div className="nav-item">
           <Link to="/" className="nav-link">
             Home
           </Link>
-        </li>
+        </div>
 
-        <li className="nav-item">
-          <Link to="/bowner" className="nav-link">
-            Business
-          </Link>
-        </li>
+        { getNavLinks(props.currentUser.roles) }
 
-        <li className="nav-item">
+        <div className="nav-item">
           <Link to="/settings" className="nav-link">
             <i className="ion-gear-a" />&nbsp;Settings
           </Link>
-        </li>
+        </div>
 
-        <li className="nav-item">
+        <div className="nav-item">
           <Link
             to={`/@${props.currentUser._id}`}
             className="nav-link"
@@ -62,9 +101,9 @@ const LoggedInView = (props) => {
             <img src={props.currentUser.image} className="user-pic" alt="" />
             {props.currentUser.email}
           </Link>
-        </li>
+        </div>
 
-      </ul>
+      </div>
     );
   }
 

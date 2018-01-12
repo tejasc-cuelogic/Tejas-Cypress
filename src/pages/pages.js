@@ -15,9 +15,9 @@ import Investor from './investor/Investor';
 import Business from './business/Business';
 
 const UserAuthorization = Authorization(['user'], NotFound);
-const AdminAuthorization = Authorization(['investor', 'bowner', 'admin'], NotFound);
-const BOwnerAuthorization = Authorization(['bowner'], NotFound);
-const InvestorAuthorization = Authorization(['investor'], NotFound);
+const AdminAuthorization = Authorization(['admin'], NotFound);
+const BusinessAuthorization = Authorization(['bowner', 'admin'], NotFound);
+const InvestorAuthorization = Authorization(['investor', 'admin'], NotFound);
 
 export default [
   {
@@ -65,7 +65,7 @@ export default [
   {
     path: '/business',
     component: Business,
-    auth: BOwnerAuthorization,
+    auth: BusinessAuthorization,
   },
   {
     path: '/investor',
