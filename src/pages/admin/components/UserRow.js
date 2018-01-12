@@ -1,15 +1,17 @@
 import React from 'react';
+import { Button } from 'semantic-ui-react';
 
-const UserRow = (props) => {
-  console.log('tt');
-  return (
-    <tr>
-      <td>{ props.fname }</td>
-      <td>{ props.lname }</td>
-      <td>{ props.username }</td>
-      <td>Disable</td>
-    </tr>
-  );
-};
+const UserRow = props => (
+  <tr key={`${props.key}_tablerow`}>
+    <td>{ props.fname }</td>
+    <td>{ props.lname }</td>
+    <td>{ props.username }</td>
+    <td>
+      <Button className="ui secondary">
+        Disable
+      </Button>
+    </td>
+  </tr>
+);
 
 export default UserRow;

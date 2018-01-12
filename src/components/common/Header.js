@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 const getAdminLink = () => (
-  <div className="nav-item">
+  <div className="nav-item" key="adminLink">
     <Link to="/admin" className="nav-link">
       Admin
     </Link>
@@ -11,7 +11,7 @@ const getAdminLink = () => (
 );
 
 const getBusinessLink = () => (
-  <div className="nav-item">
+  <div className="nav-item" key="businessLink">
     <Link to="/business" className="nav-link">
       Business
     </Link>
@@ -20,7 +20,7 @@ const getBusinessLink = () => (
 
 
 const getInvestorLink = () => (
-  <div className="nav-item">
+  <div className="nav-item" key="investorLink">
     <Link to="/investor" className="nav-link">
       Investor
     </Link>
