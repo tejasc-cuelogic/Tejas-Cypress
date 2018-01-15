@@ -1,8 +1,5 @@
-import Authorization from '../../components/common/Authorization';
-import NotFound from '../../components/common/NotFound';
 import UsersList from './containers/UsersList';
-
-const AdminAuthorization = Authorization(['admin'], NotFound);
+import { AdminAuthorization } from './../../components/common/Authorization';
 
 export default [
   {

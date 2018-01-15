@@ -1,13 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default class Sidebar extends React.Component {
   render() {
     return (
       <div className="ui left demo visible vertical inverted sidebar labeled icon menu">
-        <a className="item">
+        <Link to="/admin/users-list" className="item">
           <i className="home icon" />
-          Home
-        </a>
+          Users
+        </Link>
         <a className="item">
           <i className="block layout icon" />
           Topics

@@ -4,6 +4,8 @@ import React from 'react';
 // TODO: Figure out how to route back the user if he is unauthorized i.e.
 // Send to UnauthorisedComponent and clear the route
 
+import NotFound from './NotFound';
+
 const Authorization = (allowedRoles, UnauthorizedComponent) => (
   WrappedComponent,
   context,
@@ -29,4 +31,6 @@ const Authorization = (allowedRoles, UnauthorizedComponent) => (
   }
 };
 
-export default Authorization;
+export const AdminAuthorization = Authorization(['admin', 'business', 'investor'], NotFound);
+export const BusinessAuthorization = Authorization(['admin', 'business'], NotFound);
+export const InvestorAuthorization = Authorization(['admin', 'investor'], NotFound);
