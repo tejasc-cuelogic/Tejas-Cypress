@@ -1,7 +1,5 @@
 import Home from './home/Home';
-// import Profile from './profile/Profile';
 import Register from './register/Register';
-// import Settings from './settings/Settings';
 import Login from './login/Login';
 import Confirm from './account/Confirm';
 // import Offerings from './offerings/Offerings';

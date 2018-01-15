@@ -1,21 +1,19 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 
-import Sidebar from '../../components/common/Sidebar';
-import routes from './routes';
+import publicRoutes from './routes';
 
-@inject('adminStore', 'userStore')
+@inject('commonStore', 'userStore')
 @withRouter
 @observer
-export default class Admin extends React.Component {
+export default class PublicApp extends React.Component {
   render() {
     return (
       <div>
-        <Sidebar />
         <Switch>
           {/* eslint-disable react/no-array-index-key */}
-          {routes.map((route, index) => (
+          {publicRoutes.map((route, index) => (
             <Route
               path={route.path}
               component={(route.auth) ? route.auth(route.component, this.props) : route.component}

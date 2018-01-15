@@ -5,12 +5,8 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 import Admin from './admin/Admin';
 import Business from './business/Business';
 import Investor from './investor/Investor';
-import Authorization from '../components/common/Authorization';
-import NotFound from '../components/common/NotFound';
 
-const AdminAuthorization = Authorization(['admin'], NotFound);
-const BusinessAuthorization = Authorization(['admin', 'business'], NotFound);
-const InvestorAuthorization = Authorization(['admin', 'investor'], NotFound);
+import { AdminAuthorization, BusinessAuthorization, InvestorAuthorization } from './../../components/common/Authorization';
 
 @inject('adminStore', 'commonStore', 'userStore')
 @withRouter
