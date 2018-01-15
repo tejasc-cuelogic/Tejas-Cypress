@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 
-import UserRow from './components/UserRow';
+import UserRow from '../components/UserRow';
 
 @inject('adminStore', 'userStore')
 @observer

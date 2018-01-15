@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route, withRouter } from 'react-router-dom';
 
-import { publicRoutes } from './pages';
+import publicRoutes from './pages';
 
 @inject('commonStore', 'userStore')
 @withRouter
