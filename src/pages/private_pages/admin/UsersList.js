@@ -9,23 +9,25 @@ export default class UsersList extends React.Component {
   render() {
     if (this.props.adminStore.usersList) {
       return (
-        <table className="ui celled table table-centered">
-          <tbody>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Username</th>
-              <th>Action</th>
-            </tr>
-            {this.props.adminStore.usersList.map(user => (
-              <UserRow
-                fname={user.fname}
-                lname={user.lname}
-                username={user.username}
-              />
-            ))}
-          </tbody>
-        </table>
+        <div className="table-user">
+          <table className="ui basic right alligned table">
+            <tbody>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Action</th>
+              </tr>
+              {this.props.adminStore.usersList.map(user => (
+                <UserRow
+                  fname={user.fname}
+                  lname={user.lname}
+                  username={user.username}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
       );
     }
     return (
