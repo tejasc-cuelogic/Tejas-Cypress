@@ -79,12 +79,6 @@ const LoggedInView = (props) => {
     return (
       <div className="nav navbar-nav pull-xs-right">
 
-        <div className="nav-item">
-          <Link to="/" className="nav-link">
-            Home
-          </Link>
-        </div>
-
         <NavLinks roles={props.currentUser.roles} />
 
         <div className="nav-item">
