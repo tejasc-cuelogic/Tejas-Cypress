@@ -3,11 +3,12 @@ import promiseFinally from 'promise.prototype.finally';
 import React from 'react';
 import { useStrict } from 'mobx';
 import { Provider, inject, observer } from 'mobx-react';
-import { Switch, Route, withRouter, BrowserRouter } from 'react-router-dom';
+import { withRouter, BrowserRouter } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
 
 import Header from './components/common/Header';
-import pages from './pages/pages';
+import PrivateApp from './pages/PrivateApp';
+import PublicApp from './pages/PublicApp';
 import * as stores from './stores/stores';
 
 
@@ -23,30 +24,25 @@ class App extends React.Component {
   }
 
   render() {
-    if (this.props.commonStore.appLoaded) {
+    if (this.props.commonStore.appLoaded && this.props.userStore.currentUser) {
       return (
         <div>
           <Header
             appName={this.props.appName}
             currentUser={this.props.currentUser}
           />
-          <Switch>
-            {/* eslint-disable react/no-array-index-key */}
-            {pages.map((route, index) => (<Route
-              path={route.path}
-              key={index}
-              component={
-                (route.auth)
-                  ? route.auth(route.component, this.props)
-                  : route.component}
-            />))
-            }
-          </Switch>
+          <PrivateApp />
         </div>
       );
     }
     return (
-      <Header />
+      <div>
+        <Header
+          appName={this.props.appName}
+          currentUser={this.props.currentUser}
+        />
+        <PublicApp />
+      </div>
     );
   }
 }

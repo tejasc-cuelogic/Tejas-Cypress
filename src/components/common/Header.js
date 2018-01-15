@@ -27,15 +27,15 @@ const getInvestorLink = () => (
   </div>
 );
 
-const getNavLinks = (roles) => {
+const NavLinks = (props) => {
   const links = [];
-  if (roles.includes('admin')) {
+  if (props.roles.includes('admin')) {
     links.push(getAdminLink());
   }
-  if (roles.includes('bowner') || roles.includes('admin')) {
+  if (props.roles.includes('bowner') || props.roles.includes('admin')) {
     links.push(getBusinessLink());
   }
-  if (roles.includes('investor') || roles.includes('admin')) {
+  if (props.roles.includes('investor') || props.roles.includes('admin')) {
     links.push(getInvestorLink());
   }
   return (
@@ -85,7 +85,7 @@ const LoggedInView = (props) => {
           </Link>
         </div>
 
-        { getNavLinks(props.currentUser.roles) }
+        <NavLinks roles={props.currentUser.roles} />
 
         <div className="nav-item">
           <Link to="/settings" className="nav-link">
