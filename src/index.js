@@ -7,8 +7,8 @@ import { withRouter, BrowserRouter } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
 
 import Header from './components/common/Header';
-import PrivateApp from './pages/private_pages/PrivateApp';
-import PublicApp from './pages/public_pages/PublicApp';
+import PrivateApp from './pages/private/PrivateApp';
+import PublicApp from './pages/public/PublicApp';
 import * as stores from './stores/stores';
 
 
