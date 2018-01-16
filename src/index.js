@@ -6,7 +6,7 @@ import { Provider, inject, observer } from 'mobx-react';
 import { withRouter, BrowserRouter } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
 
-import Header from './components/common/Header';
+import NavBar from './components/common/NavBar';
 import PrivateApp from './pages/private/PrivateApp';
 import PublicApp from './pages/public/PublicApp';
 import * as stores from './stores/stores';
@@ -26,7 +26,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header
+        <NavBar
           appName={this.props.appName}
           currentUser={this.props.currentUser}
         />

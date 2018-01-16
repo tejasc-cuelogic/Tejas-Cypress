@@ -1,11 +1,11 @@
 import Home from './home/Home';
-import Register from './register/Register';
-import Login from './login/Login';
-import Confirm from './account/Confirm';
+import Register from './auth/Register';
+import Login from './auth/Login';
+import Confirm from './auth/Confirm';
 // import Offerings from './offerings/Offerings';
 // import Offering from './offerings/Offering';
-import ForgotPassword from './password/ForgotPassword';
-import ResetPassword from './password/ResetPassword';
+import ForgotPassword from './auth/ForgotPassword';
+import ResetPassword from './auth/ResetPassword';
 
 export default [
   {

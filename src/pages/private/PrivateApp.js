@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Switch, Route, withRouter } from 'react-router-dom';
-
+import { Switch, Route, withRouter, Link } from 'react-router-dom';
+import { Sidebar, Menu } from 'semantic-ui-react';
 import routes from './routes';
 
 @inject('adminStore', 'authStore', 'userStore')
@@ -17,6 +17,9 @@ export default class PrivateApp extends React.Component {
     return (
       <div>
         <Switch>
+          <Sidebar as={Menu} visible>
+            <Menu.Item as={Link} to="/investor">Investor</Menu.Item>
+          </Sidebar>
           {/* eslint-disable react/no-array-index-key */}
           {routes.map((route, index) => (
             <Route

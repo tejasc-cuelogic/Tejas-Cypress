@@ -64,14 +64,7 @@ const LoggedOutView = (props) => {
 const LoggedInView = (props) => {
   if (props.currentUser) {
     return (
-      <Menu fixed="top">
-        <Menu.Item className="navbar-brand">
-          NextSeed
-        </Menu.Item>
-        <Menu.Menu position="right">
-          <NavLinks roles={props.currentUser.roles} />
-        </Menu.Menu>
-      </Menu>
+      <NavLinks roles={props.currentUser.roles} />
     );
   }
 
@@ -80,7 +73,7 @@ const LoggedInView = (props) => {
 
 @inject('userStore', 'commonStore')
 @observer
-class Header extends React.Component {
+class NavBar extends React.Component {
   render() {
     return (
       <Menu fixed="top">
@@ -96,4 +89,4 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+export default NavBar;
