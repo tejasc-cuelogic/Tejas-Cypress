@@ -7,8 +7,8 @@ import { withRouter, BrowserRouter } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
 
 import NavBar from './components/common/NavBar';
-import PrivateApp from './pages/private/PrivateApp';
-import PublicApp from './pages/public/PublicApp';
+import PrivateApp from './app/private/PrivateApp';
+import PublicApp from './app/public/PublicApp';
 import * as stores from './stores/stores';
 
 
