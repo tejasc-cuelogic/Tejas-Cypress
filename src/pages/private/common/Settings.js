@@ -1,8 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import ListErrors from '../../../components/common/ListErrors';
-import SettingsForm from './components/SettingsForm';
+import ListErrors from './../../../components/common/ListErrors';
+import SettingsForm from './SettingsForm';
 
 @inject('userStore', 'authStore')
 @withRouter

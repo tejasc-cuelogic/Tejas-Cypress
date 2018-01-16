@@ -1,30 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { Menu } from 'semantic-ui-react';
 
 const getAdminLink = () => (
-  <div className="nav-item" key="adminLink">
-    <Link to="/admin" className="nav-link">
-      Admin
-    </Link>
-  </div>
+  <Menu.Item as={Link} to="/admin">Admin</Menu.Item>
 );
 
 const getBusinessLink = () => (
-  <div className="nav-item" key="businessLink">
-    <Link to="/business" className="nav-link">
-      Business
-    </Link>
-  </div>
+  <Menu.Item as={Link} to="/business">Business</Menu.Item>
 );
 
 
 const getInvestorLink = () => (
-  <div className="nav-item" key="investorLink">
-    <Link to="/investor" className="nav-link">
-      Investor
-    </Link>
-  </div>
+  <Menu.Item as={Link} to="/investor">Investor</Menu.Item>
 );
 
 const NavLinks = (props) => {
@@ -39,9 +28,7 @@ const NavLinks = (props) => {
     links.push(getInvestorLink());
   }
   return (
-    <div className="nav-item">
-      { links.map(link => link) }
-    </div>
+    links.map(link => link)
   );
 };
 
@@ -77,27 +64,14 @@ const LoggedOutView = (props) => {
 const LoggedInView = (props) => {
   if (props.currentUser) {
     return (
-      <div className="nav navbar-nav pull-xs-right">
-
-        <NavLinks roles={props.currentUser.roles} />
-
-        <div className="nav-item">
-          <Link to="/settings" className="nav-link">
-            <i className="ion-gear-a" />&nbsp;Settings
-          </Link>
-        </div>
-
-        <div className="nav-item">
-          <Link
-            to={`/@${props.currentUser._id}`}
-            className="nav-link"
-          >
-            <img src={props.currentUser.image} className="user-pic" alt="" />
-            {props.currentUser.email}
-          </Link>
-        </div>
-
-      </div>
+      <Menu fixed="top">
+        <Menu.Item className="navbar-brand">
+          NextSeed
+        </Menu.Item>
+        <Menu.Menu position="right">
+          <NavLinks roles={props.currentUser.roles} />
+        </Menu.Menu>
+      </Menu>
     );
   }
 
@@ -109,18 +83,15 @@ const LoggedInView = (props) => {
 class Header extends React.Component {
   render() {
     return (
-      <nav className="navbar navbar-light">
-        <div className="container">
-
-          <Link to="/" className="navbar-brand">
-            {this.props.commonStore.appName.toLowerCase()}
-          </Link>
-
+      <Menu fixed="top">
+        <Menu.Item className="navbar-brand">
+          NextSeed
+        </Menu.Item>
+        <Menu.Menu position="right">
           <LoggedOutView currentUser={this.props.userStore.currentUser} />
-
           <LoggedInView currentUser={this.props.userStore.currentUser} />
-        </div>
-      </nav>
+        </Menu.Menu>
+      </Menu>
     );
   }
 }

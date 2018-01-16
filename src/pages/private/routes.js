@@ -1,8 +1,8 @@
 import Admin from './admin/Admin';
-import UsersList from './admin/UsersList';
+import Users from './admin/containers/Users';
 import Business from './business/Business';
 import Investor from './investor/Investor';
-import Settings from './settings/Settings';
+import Settings from './common/Settings';
 
 import {
   AdminAuthorization,
@@ -12,13 +12,13 @@ import {
 
 export default [
   {
-    path: '/admin',
-    component: Admin,
+    path: '/admin/users',
+    component: Users,
     auth: AdminAuthorization,
   },
   {
-    path: '/admin/users-list',
-    component: UsersList,
+    path: '/admin',
+    component: Admin,
     auth: AdminAuthorization,
   },
   {

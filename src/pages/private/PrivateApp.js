@@ -4,10 +4,15 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 
 import routes from './routes';
 
-@inject('adminStore', 'commonStore', 'userStore')
+@inject('adminStore', 'authStore', 'userStore')
 @withRouter
 @observer
 export default class PrivateApp extends React.Component {
+  componentWillMount() {
+    console.log(this.props.userStore.currentUser);
+    this.props.authStore.verifySession();
+  }
+
   render() {
     return (
       <div>
@@ -16,7 +21,11 @@ export default class PrivateApp extends React.Component {
           {routes.map((route, index) => (
             <Route
               path={route.path}
-              component={route.component}
+              component={
+                (route.auth) ?
+                  route.auth(route.component, this.props) :
+                  route.component
+              }
               key={index}
             />
           ))}

@@ -1,9 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import RedError from '../../components/common/RedError';
-import EditProfileSettings from './components/EditProfileSettings';
+import LoadingSpinner from './../../../components/common/LoadingSpinner';
+import RedError from './../../../components/common/RedError';
+import EditProfileSettings from './EditProfileSettings';
 
 @inject('profileStore', 'userStore')
 @withRouter

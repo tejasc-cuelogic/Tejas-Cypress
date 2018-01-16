@@ -20,27 +20,17 @@ import * as stores from './stores/stores';
 @observer
 class App extends React.Component {
   componentWillMount() {
-    this.props.authStore.verifySession();
+    console.log('Loading App Component...');
   }
 
   render() {
-    if (this.props.commonStore.appLoaded && this.props.userStore.currentUser) {
-      return (
-        <div>
-          <Header
-            appName={this.props.appName}
-            currentUser={this.props.currentUser}
-          />
-          <PrivateApp />
-        </div>
-      );
-    }
     return (
       <div>
         <Header
           appName={this.props.appName}
           currentUser={this.props.currentUser}
         />
+        <PrivateApp />
         <PublicApp />
       </div>
     );
