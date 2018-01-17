@@ -8,6 +8,9 @@ import publicRoutes from './routes';
 @withRouter
 @observer
 export default class PublicApp extends React.Component {
+  componentWillMount() {
+    console.log('Loading Public Container');
+  }
   render() {
     return (
       <div>
