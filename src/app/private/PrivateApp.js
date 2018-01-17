@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import routes from './routes';
 
-@inject('adminStore', 'authStore', 'userStore', 'commonStore')
+@inject('adminStore', 'authStore', 'commonStore', 'userStore')
 @withRouter
 @observer
 export default class PrivateApp extends React.Component {
@@ -12,7 +12,7 @@ export default class PrivateApp extends React.Component {
   }
 
   render() {
-    if (this.props.commonStore.appLoaded) {
+    if (this.props.commonStore.appLoaded && this.props.userStore.currentUser) {
       return (
         <div>
           <Switch>
