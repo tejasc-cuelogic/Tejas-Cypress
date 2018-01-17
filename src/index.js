@@ -4,6 +4,7 @@ import React from 'react';
 import { useStrict } from 'mobx';
 import { Provider, inject, observer } from 'mobx-react';
 import { withRouter, BrowserRouter } from 'react-router-dom';
+import { Container, Segment } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
 import NavBar from './components/common/NavBar';
@@ -25,16 +26,18 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <NavBar
-          appName={this.props.appName}
-          currentUser={this.props.currentUser}
-        />
-        <div className="users-list">
+      <Segment textAlign="center" vertical>
+        <Container>
+          <NavBar
+            appName={this.props.appName}
+            currentUser={this.props.currentUser}
+          />
+        </Container>
+        <Container text>
           <PrivateApp />
-        </div>
+        </Container>
         <PublicApp />
-      </div>
+      </Segment>
     );
   }
 }

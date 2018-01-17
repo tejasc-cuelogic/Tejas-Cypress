@@ -2,22 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Menu } from 'semantic-ui-react';
+import shortid from 'shortid';
 
 const getAdminLink = () => (
-  <Menu.Item as={Link} to="/admin">Admin</Menu.Item>
+  <Menu.Item as={Link} to="/admin" key={shortid.generate()}>Admin</Menu.Item>
 );
 
 const getBusinessLink = () => (
-  <Menu.Item as={Link} to="/business">Business</Menu.Item>
+  <Menu.Item as={Link} to="/business" key={shortid.generate()}>Business</Menu.Item>
 );
 
 
 const getInvestorLink = () => (
-  <Menu.Item as={Link} to="/investor">Investor</Menu.Item>
-);
-
-const getSettingsLink = () => (
-  <Menu.Item as={Link} to="/settings">Settings</Menu.Item>
+  <Menu.Item as={Link} to="/investor" key={shortid.generate()}>Investor</Menu.Item>
 );
 
 const NavLinks = (props) => {
@@ -31,7 +28,6 @@ const NavLinks = (props) => {
   if (props.roles.includes('investor') || props.roles.includes('admin')) {
     links.push(getInvestorLink());
   }
-  links.push(getSettingsLink());
   return (
     links.map(link => link)
   );
@@ -55,6 +51,7 @@ const LoggedInView = (props) => {
     return (
       <Menu.Menu position="right">
         <NavLinks roles={props.currentUser.roles} />
+        <Menu.Item as={Link} to="/settings">Settings</Menu.Item>
       </Menu.Menu>
     );
   }
@@ -67,7 +64,7 @@ const LoggedInView = (props) => {
 class NavBar extends React.Component {
   render() {
     return (
-      <Menu fixed="top">
+      <Menu pointing secondary size="large">
         <Menu.Item className="navbar-brand">
           NextSeed
         </Menu.Item>

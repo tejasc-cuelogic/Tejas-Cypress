@@ -23,6 +23,7 @@ export default class UsersList extends React.Component {
                   fname={user.fname}
                   lname={user.lname}
                   username={user.username}
+                  key={`key_${user.username}`}
                 />
               ))}
             </tbody>
