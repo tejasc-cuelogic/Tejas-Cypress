@@ -97,7 +97,7 @@ export class AuthStore {
 
     return (
       new Promise((res, rej) => {
-        if (hasSession && commonStore.token) {
+        if (hasSession) {
           cognitoUser = userPool.getCurrentUser();
           return cognitoUser !== null ? res() : rej();
         }
