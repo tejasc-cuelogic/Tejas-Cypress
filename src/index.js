@@ -11,7 +11,7 @@ import PrivateApp from './app/private/PrivateApp';
 import PublicApp from './app/public/PublicApp';
 import * as stores from './stores/stores';
 
-
+import './assets/main.css';
 /**
  * Main react component
  */
