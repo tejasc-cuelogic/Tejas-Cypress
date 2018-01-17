@@ -16,6 +16,10 @@ const getInvestorLink = () => (
   <Menu.Item as={Link} to="/investor">Investor</Menu.Item>
 );
 
+const getSettingsLink = () => (
+  <Menu.Item as={Link} to="/settings">Settings</Menu.Item>
+);
+
 const NavLinks = (props) => {
   const links = [];
   if (props.roles.includes('admin')) {
@@ -27,6 +31,7 @@ const NavLinks = (props) => {
   if (props.roles.includes('investor') || props.roles.includes('admin')) {
     links.push(getInvestorLink());
   }
+  links.push(getSettingsLink());
   return (
     links.map(link => link)
   );
@@ -35,27 +40,11 @@ const NavLinks = (props) => {
 const LoggedOutView = (props) => {
   if (!props.currentUser) {
     return (
-      <ul className="nav navbar-nav pull-xs-right">
-
-        <li className="nav-item">
-          <Link to="/" className="nav-link">
-            Home
-          </Link>
-        </li>
-
-        <li className="nav-item">
-          <Link to="/login" className="nav-link">
-            Sign in
-          </Link>
-        </li>
-
-        <li className="nav-item">
-          <Link to="/register" className="nav-link">
-            Sign up
-          </Link>
-        </li>
-
-      </ul>
+      <Menu.Menu position="right">
+        <Menu.Item as={Link} to="/">Home</Menu.Item>
+        <Menu.Item as={Link} to="/login">Sign In</Menu.Item>
+        <Menu.Item as={Link} to="/register">Sign Up</Menu.Item>
+      </Menu.Menu>
     );
   }
   return null;
@@ -64,7 +53,9 @@ const LoggedOutView = (props) => {
 const LoggedInView = (props) => {
   if (props.currentUser) {
     return (
-      <NavLinks roles={props.currentUser.roles} />
+      <Menu.Menu position="right">
+        <NavLinks roles={props.currentUser.roles} />
+      </Menu.Menu>
     );
   }
 
@@ -80,10 +71,8 @@ class NavBar extends React.Component {
         <Menu.Item className="navbar-brand">
           NextSeed
         </Menu.Item>
-        <Menu.Menu position="right">
-          <LoggedOutView currentUser={this.props.userStore.currentUser} />
-          <LoggedInView currentUser={this.props.userStore.currentUser} />
-        </Menu.Menu>
+        <LoggedOutView currentUser={this.props.userStore.currentUser} />
+        <LoggedInView currentUser={this.props.userStore.currentUser} />
       </Menu>
     );
   }

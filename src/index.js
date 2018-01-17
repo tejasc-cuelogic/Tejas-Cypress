@@ -30,7 +30,9 @@ class App extends React.Component {
           appName={this.props.appName}
           currentUser={this.props.currentUser}
         />
-        <PrivateApp />
+        <div className="users-list">
+          <PrivateApp />
+        </div>
         <PublicApp />
       </div>
     );
