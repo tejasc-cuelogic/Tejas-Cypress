@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'semantic-ui-react';
 
 const UserRow = props => (
-  <tr key={`${props.key}_tablerow`}>
+  <tr>
     <td>{ props.fname }</td>
     <td>{ props.lname }</td>
     <td>{ props.username }</td>

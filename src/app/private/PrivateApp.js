@@ -8,11 +8,15 @@ import routes from './routes';
 @observer
 export default class PrivateApp extends React.Component {
   componentWillMount() {
-    this.props.authStore.verifySession();
+    if (this.props.commonStore.token) {
+      this.props.authStore.verifySession();
+    } else {
+      this.props.commonStore.setAppLoaded();
+    }
   }
 
   render() {
-    if (this.props.commonStore.appLoaded && this.props.userStore.currentUser) {
+    if (this.props.userStore.currentUser) {
       return (
         <div>
           <Switch>

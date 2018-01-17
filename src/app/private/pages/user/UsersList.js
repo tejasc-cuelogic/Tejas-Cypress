@@ -9,7 +9,7 @@ export default class UsersList extends React.Component {
   render() {
     if (this.props.adminStore.usersList) {
       return (
-        <div className="table-user">
+        <div>
           <table className="ui basic right alligned table">
             <tbody>
               <tr>
@@ -23,6 +23,7 @@ export default class UsersList extends React.Component {
                   fname={user.fname}
                   lname={user.lname}
                   username={user.username}
+                  key={`key_${user.username}`}
                 />
               ))}
             </tbody>

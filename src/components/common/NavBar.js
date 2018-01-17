@@ -2,18 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Menu } from 'semantic-ui-react';
+import shortid from 'shortid';
 
 const getAdminLink = () => (
-  <Menu.Item as={Link} to="/admin">Admin</Menu.Item>
+  <Menu.Item as={Link} to="/admin" key={shortid.generate()}>Admin</Menu.Item>
 );
 
 const getBusinessLink = () => (
-  <Menu.Item as={Link} to="/business">Business</Menu.Item>
+  <Menu.Item as={Link} to="/business" key={shortid.generate()}>Business</Menu.Item>
 );
 
 
 const getInvestorLink = () => (
-  <Menu.Item as={Link} to="/investor">Investor</Menu.Item>
+  <Menu.Item as={Link} to="/investor" key={shortid.generate()}>Investor</Menu.Item>
 );
 
 const NavLinks = (props) => {
@@ -35,27 +36,11 @@ const NavLinks = (props) => {
 const LoggedOutView = (props) => {
   if (!props.currentUser) {
     return (
-      <ul className="nav navbar-nav pull-xs-right">
-
-        <li className="nav-item">
-          <Link to="/" className="nav-link">
-            Home
-          </Link>
-        </li>
-
-        <li className="nav-item">
-          <Link to="/login" className="nav-link">
-            Sign in
-          </Link>
-        </li>
-
-        <li className="nav-item">
-          <Link to="/register" className="nav-link">
-            Sign up
-          </Link>
-        </li>
-
-      </ul>
+      <Menu.Menu position="right">
+        <Menu.Item as={Link} to="/">Home</Menu.Item>
+        <Menu.Item as={Link} to="/login">Sign In</Menu.Item>
+        <Menu.Item as={Link} to="/register">Sign Up</Menu.Item>
+      </Menu.Menu>
     );
   }
   return null;
@@ -64,7 +49,10 @@ const LoggedOutView = (props) => {
 const LoggedInView = (props) => {
   if (props.currentUser) {
     return (
-      <NavLinks roles={props.currentUser.roles} />
+      <Menu.Menu position="right">
+        <NavLinks roles={props.currentUser.roles} />
+        <Menu.Item as={Link} to="/settings">Settings</Menu.Item>
+      </Menu.Menu>
     );
   }
 
@@ -76,14 +64,12 @@ const LoggedInView = (props) => {
 class NavBar extends React.Component {
   render() {
     return (
-      <Menu fixed="top">
+      <Menu pointing secondary size="large">
         <Menu.Item className="navbar-brand">
           NextSeed
         </Menu.Item>
-        <Menu.Menu position="right">
-          <LoggedOutView currentUser={this.props.userStore.currentUser} />
-          <LoggedInView currentUser={this.props.userStore.currentUser} />
-        </Menu.Menu>
+        <LoggedOutView currentUser={this.props.userStore.currentUser} />
+        <LoggedInView currentUser={this.props.userStore.currentUser} />
       </Menu>
     );
   }
