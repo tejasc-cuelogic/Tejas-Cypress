@@ -19,8 +19,8 @@ export class AuthStore {
   values = {
     givenName: '',
     familyName: '',
-    email: '',
-    password: '',
+    email: 'terence1@yopmail.com',
+    password: 'test@123',
     verify: '',
     code: '',
   };

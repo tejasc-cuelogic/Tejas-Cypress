@@ -4,33 +4,60 @@ import { Form, Button } from 'semantic-ui-react';
 import shortid from 'shortid';
 
 import { FORM_VALUES } from './../../../../constants/business';
+import businessActions from './../../../../actions/business';
 
-const FormInput = props => (
+const FormBusinessInput = props => (
   <Form.Input
     placeholder={props.htmlPlaceholder}
     name={props.htmlName}
+    onChange={props.handleInputChange}
+  />
+);
+
+const FormDocPreferences = props => (
+  <Form.Field
+    type="checkbox"
+    control="input"
+    label={props.label}
+    name={props.name}
+    checked={props.checked}
     onChange={props.handleOnChange}
-    key={shortid.generate()}
   />
 );
 
 @inject('businessStore')
 @observer
 export default class BusinessForm extends React.Component {
-  handleOnChange = e => (
+  handleInputChange = e => (
     this.props.businessStore.setTemplateVariable(e.target.name, e.target.value)
-  )
+  );
+
+  handleCheckboxChange = e => (
+    this.props.businessStore.toggleRequiredFiles(e.target.name)
+  );
+
   render() {
     return (
       <Form>
         {FORM_VALUES.map(data => (
-          <FormInput
+          <FormBusinessInput
             htmlName={data.name}
             htmlPlaceholder={data.placeholder}
-            handleOnChange={this.handleOnChange}
+            handleInputChange={this.handleInputChange}
           />))
         }
-        <Button>Generate Docx</Button>
+        <Form.Group grouped>
+          {Object.keys(this.props.businessStore.documentList).map(doctype => (
+            <FormDocPreferences
+              label={doctype}
+              name={doctype}
+              checked={this.props.businessStore.documentList[doctype]}
+              handleOnChange={this.handleCheckboxChange}
+              key={shortid.generate()}
+            />))
+          }
+        </Form.Group>
+        <Button onClick={businessActions.generateDocxFile}>Generate Docx</Button>
       </Form>
     );
   }

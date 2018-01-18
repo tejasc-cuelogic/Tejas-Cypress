@@ -1,5 +1,7 @@
 import { observable, action } from 'mobx';
 
+import { DOCFILE_TYPES } from './../constants/business';
+
 export class BusinessStore {
   @observable
   templateVeriables = {
@@ -18,11 +20,16 @@ export class BusinessStore {
   };
 
   @observable
-  documentList = [];
+  documentList = { ...DOCFILE_TYPES };
 
   @action
   setTemplateVariable(key, value) {
     this.templateVeriables[key] = value;
+  }
+
+  @action
+  toggleRequiredFiles(key) {
+    this.documentList[key] = !this.documentList[key];
   }
 }
 
