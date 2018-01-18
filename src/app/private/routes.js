@@ -1,7 +1,11 @@
 import UsersList from './pages/user/UsersList';
 import Settings from './pages/Settings';
+import BusinessForm from './pages/business/BusinessForm';
 
-import { AdminAuthorization } from './../../components/common/Authorization';
+import {
+  AdminAuthorization,
+  BusinessAuthorization,
+} from './../../components/common/Authorization';
 
 export default [
   {
@@ -13,5 +17,10 @@ export default [
     path: '/settings',
     component: Settings,
     auth: AdminAuthorization,
+  },
+  {
+    path: '/business',
+    component: BusinessForm,
+    auth: BusinessAuthorization,
   },
 ];
