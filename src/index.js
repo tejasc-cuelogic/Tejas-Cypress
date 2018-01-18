@@ -29,8 +29,8 @@ class App extends React.Component {
       <Segment textAlign="center" vertical>
         <Container>
           <NavBar
-            appName={this.props.appName}
-            currentUser={this.props.currentUser}
+            appName={this.props.commonStore.appName}
+            currentUser={this.props.userStore.currentUser}
           />
         </Container>
         <Container text>
