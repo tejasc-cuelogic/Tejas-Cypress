@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { Form, Button, Grid } from 'semantic-ui-react';
 import shortid from 'shortid';
 
-import { FORM_VALUES } from './../../../../constants/business';
 import businessActions from './../../../../actions/business';
 
 const FormBusinessInput = props => (
@@ -39,21 +38,23 @@ export default class BusinessForm extends React.Component {
   );
 
   render() {
+    const { formValues, documentList } = this.props.businessStore;
     return (
       <Form as={Grid}>
-        {FORM_VALUES.map(data => (
+        {formValues.map(data => (
           <FormBusinessInput
             htmlName={data.name}
             htmlPlaceholder={data.placeholder}
             handleInputChange={this.handleInputChange}
+            key={shortid.generate()}
           />))
         }
         <Form.Group grouped>
-          {Object.keys(this.props.businessStore.documentList).map(doctype => (
+          {Object.keys(documentList).map(doctype => (
             <FormDocPreferences
               label={doctype}
               name={doctype}
-              checked={this.props.businessStore.documentList[doctype]}
+              checked={documentList[doctype]}
               handleOnChange={this.handleCheckboxChange}
               key={shortid.generate()}
             />))

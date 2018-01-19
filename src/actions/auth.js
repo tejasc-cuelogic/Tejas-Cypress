@@ -109,6 +109,7 @@ export class Auth {
         });
       })
       .then(() => {
+        // TODO: Remove hard coded user ID
         const params = {
           UserPoolId: USER_POOL_ID /* required */,
           Username: '2980057b-441c-411e-9774-63cd0d8f67e2', /* required */

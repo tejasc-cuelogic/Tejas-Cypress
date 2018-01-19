@@ -8,11 +8,7 @@ import routes from './routes';
 @observer
 export default class PrivateApp extends React.Component {
   componentWillMount() {
-    if (this.props.commonStore.token) {
-      this.props.authStore.verifySession();
-    } else {
-      this.props.commonStore.setAppLoaded();
-    }
+    this.props.authStore.verifySession();
   }
 
   render() {
@@ -25,9 +21,9 @@ export default class PrivateApp extends React.Component {
               <Route
                 path={route.path}
                 component={
-                  (route.auth) ?
-                    route.auth(route.component, this.props) :
-                    route.component
+                  route.auth
+                    ? route.auth(route.component, this.props)
+                    : route.component
                 }
                 key={index}
               />
@@ -36,6 +32,6 @@ export default class PrivateApp extends React.Component {
         </div>
       );
     }
-    return (null);
+    return null;
   }
 }

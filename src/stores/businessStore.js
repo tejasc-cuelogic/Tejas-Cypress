@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 
-import { DOCFILE_TYPES } from './../constants/business';
+import { DOCFILE_TYPES, FORM_VALUES } from './../constants/business';
 
 export class BusinessStore {
   @observable
@@ -21,6 +21,9 @@ export class BusinessStore {
 
   @observable
   documentList = { ...DOCFILE_TYPES };
+
+  @observable
+  formValues = [...FORM_VALUES];
 
   @action
   setTemplateVariable(key, value) {

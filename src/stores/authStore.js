@@ -19,8 +19,8 @@ export class AuthStore {
   values = {
     givenName: '',
     familyName: '',
-    email: 'terence1@yopmail.com',
-    password: 'test@123',
+    email: '',
+    password: '',
     verify: '',
     code: '',
   };
@@ -139,73 +139,6 @@ export class AuthStore {
         })
     );
   };
-
-  // @action
-  // login() {
-  //   this.inProgress = true;
-  //   this.errors = undefined;
-  //   const { email, password } = this.values;
-
-  //   const authenticationDetails = new AWSCognito.AuthenticationDetails({
-  //     Username: email,
-  //     Password: password,
-  //   });
-
-  //   cognitoUser = new AWSCognito.CognitoUser({
-  //     Username: email,
-  //     Pool: userPool,
-  //   });
-
-  //   return new Promise((res, rej) => {
-  //     cognitoUser.authenticateUser(authenticationDetails, {
-  //       onSuccess: result => res(result),
-  //       onFailure: err => rej(err),
-  //     });
-  //   })
-  //     .then((data) => {
-  //       // Extract JWT from token
-  //       commonStore.setToken(data.idToken.jwtToken);
-  //       userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-
-  //       AWS.config.region = process.env.REACT_APP_AWS_REGION;
-  //       // Create a object for the Identity pool and pass the appropriate paramenters to it
-  //       const identityPoolDetails = {
-  //         IdentityPoolId: process.env.REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID,
-  //         Logins: {},
-  //       };
-  //       identityPoolDetails.Logins[`cognito-idp.${process.env.REACT_APP_AWS_REGION}
-  //       .amazonaws.com/${process.env.REACT_APP_AWS_COGNITO_USER_POOL_ID}`] =
-  //       data.idToken.jwtToken;
-
-  //       AWS.config.credentials = new AWS.CognitoIdentityCredentials(identityPoolDetails);
-
-  //       return AWS.config.credentials.refresh((error) => {
-  //         if (error) {
-  //           console.error(error);
-  //         } else {
-  //           console.log('Successfully logged!');
-  //         }
-  //       });
-  //     })
-  //     .then(() => {
-  //       const params = {
-  //         UserPoolId: process.env.REACT_APP_AWS_COGNITO_USER_POOL_ID, /* required */
-  //         Username: '2980057b-441c-411e-9774-63cd0d8f67e2', /* required */
-  //       };
-  //       const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
-  //       return cognitoidentityserviceprovider.adminGetUser(params, (err, data) => {
-  //         if (err) console.log(err, err.stack); // an error occurred
-  //         else console.log(data); // successful response
-  //       });
-  //     })
-  //     .catch(action((err) => {
-  //       this.errors = this.simpleErr(err);
-  //       throw err;
-  //     }))
-  //     .finally(action(() => {
-  //       this.inProgress = false;
-  //     }));
-  // }
 
   @action
   register() {
