@@ -26,13 +26,11 @@ class App extends React.Component {
 
   render() {
     return (
-      <Segment textAlign="center" vertical>
-        <Container>
-          <NavBar
-            appName={this.props.commonStore.appName}
-            currentUser={this.props.userStore.currentUser}
-          />
-        </Container>
+      <Segment vertical>
+        <NavBar
+          appName={this.props.commonStore.appName}
+          currentUser={this.props.userStore.currentUser}
+        />
         <Container text>
           <PrivateApp />
         </Container>

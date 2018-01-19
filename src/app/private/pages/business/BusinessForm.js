@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Button } from 'semantic-ui-react';
+import { Form, Button, Grid } from 'semantic-ui-react';
 import shortid from 'shortid';
 
 import { FORM_VALUES } from './../../../../constants/business';
@@ -9,8 +9,10 @@ import businessActions from './../../../../actions/business';
 const FormBusinessInput = props => (
   <Form.Input
     placeholder={props.htmlPlaceholder}
+    label={props.htmlPlaceholder}
     name={props.htmlName}
     onChange={props.handleInputChange}
+    width={4}
   />
 );
 
@@ -38,7 +40,7 @@ export default class BusinessForm extends React.Component {
 
   render() {
     return (
-      <Form>
+      <Form as={Grid}>
         {FORM_VALUES.map(data => (
           <FormBusinessInput
             htmlName={data.name}
