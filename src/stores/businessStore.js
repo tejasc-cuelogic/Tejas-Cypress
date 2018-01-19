@@ -3,6 +3,8 @@ import { observable, action } from 'mobx';
 import { DOCFILE_TYPES, FORM_VALUES } from './../constants/business';
 
 export class BusinessStore {
+  formValues = [...FORM_VALUES];
+
   @observable
   templateVeriables = {
     name_of_business: '',
@@ -22,8 +24,6 @@ export class BusinessStore {
   @observable
   documentList = { ...DOCFILE_TYPES };
 
-  @observable
-  formValues = [...FORM_VALUES];
 
   @action
   setTemplateVariable(key, value) {
