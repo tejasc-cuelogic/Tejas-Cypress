@@ -266,6 +266,8 @@ export class Auth {
   logout = () => {
     commonStore.setToken(undefined);
     userStore.forgetUser();
+    // Clear all AWS credentials
+    AWS.config.clear();
     return new Promise(res => res());
   };
 
