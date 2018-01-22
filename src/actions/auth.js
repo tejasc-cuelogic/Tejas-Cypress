@@ -56,7 +56,7 @@ export class Auth {
           new Promise((res) => {
             userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(attributes)));
             if (userStore.isCurrentUserWithRole('admin')) {
-              this.setAWSAdminAccess();
+              this.setAWSAdminAccess(window.localStorage.getItem('jwt'));
             }
             res();
           }))

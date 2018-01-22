@@ -19,8 +19,8 @@ export class AuthStore {
   values = {
     givenName: '',
     familyName: '',
-    email: '',
-    password: '',
+    email: 'admin1@yopmail.com',
+    password: 'test@123',
     verify: '',
     code: '',
   };
@@ -130,6 +130,9 @@ export class AuthStore {
         .then(attributes =>
           new Promise((res) => {
             userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(attributes)));
+            if (userStore.isCurrentUserWithRole('admin')) {
+              this.setAWSAdminAccess(window.localStorage.getItem('jwt'));
+            }
             res();
           }))
         // Empty method needed to avoid warning.

@@ -23,20 +23,10 @@ export class AdminStore {
     },
   ];
 
-  // @action
-  // fetchUsers() {
-  //   this.inProgress = true;
-  //   return new Promise((res, rej) {
-
-  //   })
-  //     .then(() => 'test')
-  //     .catch(() => 'test')
-  //     .finally(() => {
-  //       this.inProgress = false;
-  //     })
-  //   ;
-  //   this.usersList = { username: { fname: 'test' } };
-  // }
+  @action
+  setUsersList(list) {
+    this.usersList = list;
+  }
 
   @action
   disableUser(username) {
