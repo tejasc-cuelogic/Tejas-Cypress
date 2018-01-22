@@ -5,7 +5,7 @@ import {
   COGNITO_CLIENT_ID,
   AWS_REGION,
   COGNITO_IDENTITY_POOL_ID,
-} from './../constants/auth';
+} from './../constants/aws';
 import userStore from './../stores/userStore';
 import authStore from './../stores/authStore';
 import commonStore from './../stores/commonStore';
