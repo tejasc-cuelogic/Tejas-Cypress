@@ -65,6 +65,27 @@ export class Auth {
     );
   };
 
+  setAWSAdminAccess = (jwtToken) => {
+    AWS.config.region = AWS_REGION;
+    // Create a object for the Identity pool and pass the appropriate paramenters to it
+    const identityPoolDetails = {
+      IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
+      Logins: {},
+    };
+    identityPoolDetails.Logins[`cognito-idp.${AWS_REGION}.amazonaws.com/${USER_POOL_ID}`] =
+    jwtToken;
+
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials(identityPoolDetails);
+
+    return AWS.config.credentials.refresh((error) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log('Granted Admin access!');
+      }
+    });
+  }
+
   login(values) {
     const { email, password } = values;
 
@@ -88,25 +109,10 @@ export class Auth {
         // Extract JWT from token
         commonStore.setToken(data.idToken.jwtToken);
         userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-
-        AWS.config.region = AWS_REGION;
-        // Create a object for the Identity pool and pass the appropriate paramenters to it
-        const identityPoolDetails = {
-          IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
-          Logins: {},
-        };
-        identityPoolDetails.Logins[`cognito-idp.${AWS_REGION}.amazonaws.com/${USER_POOL_ID}`] =
-        data.idToken.jwtToken;
-
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials(identityPoolDetails);
-
-        return AWS.config.credentials.refresh((error) => {
-          if (error) {
-            console.error(error);
-          } else {
-            console.log('Successfully logged!');
-          }
-        });
+        // Check if currentUser has admin role, if user has admin role set admin access to user
+        if (userStore.isCurrentUserWithRole('admin')) {
+          this.setAWSAdminAccess(data.idToken.jwtToken);
+        }
       })
       .then(() => {
         // TODO: Remove hard coded user ID

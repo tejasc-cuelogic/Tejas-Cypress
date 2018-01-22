@@ -28,6 +28,10 @@ export class UserStore {
   @action setCurrentUser(user) {
     this.currentUser = user;
   }
+
+  isCurrentUserWithRole(role) {
+    return this.currentUser.roles.includes(role);
+  }
 }
 
 export default new UserStore();
