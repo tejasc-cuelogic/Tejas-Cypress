@@ -9,6 +9,7 @@ import {
 import userStore from './../stores/userStore';
 import authStore from './../stores/authStore';
 import commonStore from './../stores/commonStore';
+import adminActions from './adminActions';
 
 export class Auth {
   defaultRole = 'investor';
@@ -81,6 +82,7 @@ export class Auth {
       if (error) {
         console.error(error);
       } else {
+        console.log(adminActions);
         console.log('Granted Admin access!');
       }
     });
