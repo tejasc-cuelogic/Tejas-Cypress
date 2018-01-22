@@ -9,7 +9,6 @@ import {
 import userStore from './../stores/userStore';
 import authStore from './../stores/authStore';
 import commonStore from './../stores/commonStore';
-import adminActions from './adminActions';
 
 export class Auth {
   defaultRole = 'investor';
@@ -56,8 +55,14 @@ export class Auth {
         .then(attributes =>
           new Promise((res) => {
             userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(attributes)));
+            if (userStore.isCurrentUserWithRole('admin')) {
+              this.setAWSAdminAccess();
+            }
             res();
           }))
+        .then(() => {
+
+        })
         // Empty method needed to avoid warning.
         .catch(() => {})
         .finally(() => {
@@ -82,7 +87,6 @@ export class Auth {
       if (error) {
         console.error(error);
       } else {
-        console.log(adminActions);
         console.log('Granted Admin access!');
       }
     });
@@ -115,22 +119,6 @@ export class Auth {
         if (userStore.isCurrentUserWithRole('admin')) {
           this.setAWSAdminAccess(data.idToken.jwtToken);
         }
-      })
-      .then(() => {
-        // TODO: Remove hard coded user ID
-        const params = {
-          UserPoolId: USER_POOL_ID /* required */,
-          Username: '2980057b-441c-411e-9774-63cd0d8f67e2', /* required */
-        };
-        const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
-        return cognitoidentityserviceprovider.adminGetUser(
-          params,
-          (err, data) => {
-            if (err) {
-              console.log(err, err.stack);
-            } else console.log(data); // an error occurred // successful response
-          },
-        );
       })
       .catch((err) => {
         authStore.setErrors(this.simpleErr(err));
