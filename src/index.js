@@ -26,12 +26,12 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="Site">
+      <div className="site">
         <NavBar
           appName={this.props.commonStore.appName}
           currentUser={this.props.userStore.currentUser}
         />
-        <Container text className="Site-content">
+        <Container text className="site-content">
           <PrivateApp />
           <PublicApp />
         </Container>
