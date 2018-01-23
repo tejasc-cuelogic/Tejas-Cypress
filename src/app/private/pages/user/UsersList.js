@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button } from 'semantic-ui-react';
+import { Button, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import UserRow from './components/UserRow';
@@ -22,7 +22,7 @@ export default class UsersList extends React.Component {
       return (
         <div>
           <Button as={Link} to="/admin/user/new">Add New User</Button>
-          <table className="ui basic right alligned table">
+          <table className="ui basic right alligned table" as={Grid}>
             <tbody>
               <tr>
                 <th>First Name</th>

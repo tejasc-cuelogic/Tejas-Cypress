@@ -13,7 +13,13 @@ export default class ChangePassword extends React.Component {
 
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
   handleVerifyChange = e => this.props.authStore.setVerify(e.target.value);
-  handleClick = () => authActions.changePassword();
+  handleClick = (e) => {
+    e.preventDefault();
+    authActions.changePassword()
+      .then(() => {
+        this.props.history.push('/login');
+      });
+  }
   render() {
     return (
       <div>
@@ -21,10 +27,12 @@ export default class ChangePassword extends React.Component {
         <Form>
           <Form.Input
             label="New Password"
+            type="password"
             onChange={this.handlePasswordChange}
           />
           <Form.Input
             label="Confirm Password"
+            type="password"
             onChange={this.handleVerifyChange}
           />
           <Button onClick={this.handleClick}>Change Password</Button>

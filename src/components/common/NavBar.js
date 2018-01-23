@@ -77,7 +77,7 @@ class NavBar extends React.Component {
     return (
       <Menu color="green" inverted fixed="top">
         <Container>
-          <Menu.Item as="a" header>
+          <Menu.Item as={Link} to="/" header>
             NextSeed
           </Menu.Item>
           <LoggedOutView currentUser={this.props.userStore.currentUser} />

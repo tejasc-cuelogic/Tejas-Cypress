@@ -236,7 +236,7 @@ export class Auth {
   }
 
   changePassword() {
-    authStore.setProgress = false;
+    authStore.setProgress(true);
     this.cognitoUser = new AWSCognito.CognitoUser({
       Username: authStore.values.email,
       Pool: this.userPool,
@@ -250,7 +250,11 @@ export class Auth {
         onFailure: err => rej(err),
       });
     })
-      .then(data => console.log('Successfully chnaged new users password', data));
+      .then((data) => {
+        console.log('Successfully chnaged new users password', data);
+        authStore.setProgress(false);
+        authStore.unsetNewPasswordRequired();
+      });
   }
 
   confirmCode() {

@@ -18,6 +18,13 @@ export default class UserNew extends React.Component {
       this.props.userStore.removeRole(e.target.value);
     }
   }
+  handleClick = (e) => {
+    e.preventDefault();
+    adminActions.createNewUser()
+      .then(() => {
+        this.props.history.push('/admin/users');
+      });
+  }
 
   render() {
     return (
@@ -75,7 +82,7 @@ export default class UserNew extends React.Component {
           />
           <Button
             disabled={!this.props.userStore.canSubmit}
-            onClick={adminActions.createNewUser}
+            onClick={this.handleClick}
           >
             Submit
           </Button>
