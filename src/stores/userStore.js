@@ -1,11 +1,54 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
+import shortid from 'shortid';
+import _ from 'lodash';
+
 import api from '../ns-api';
 
 export class UserStore {
   @observable currentUser;
-  @observable loadingUser;
+  @observable loadingUser = false;
   @observable updatingUser;
   @observable updatingUserErrors;
+  @observable
+  newUser = {
+    email: '',
+    familyName: '',
+    givenName: '',
+    password: shortid.generate(),
+    roles: [],
+  }
+  @computed get canSubmit() {
+    return _.every(this.newUser, val => !_.isEmpty(val));
+  }
+
+  @action
+  setEmail(email) {
+    this.newUser.email = email;
+  }
+
+  @action
+  setGivenName(name) {
+    this.newUser.givenName = name;
+  }
+  @action
+  setFamilyName(name) {
+    this.newUser.familyName = name;
+  }
+
+  @action
+  setPassword(password) {
+    this.newUser.password = password;
+  }
+
+  @action
+  addRole(role) {
+    this.newUser.roles.push(role);
+  }
+
+  @action
+  removeRole(role) {
+    this.newUser.roles = _.reject(this.newUser.roles, rol => rol === role);
+  }
 
   @action pullUser() {
     this.loadingUser = true;

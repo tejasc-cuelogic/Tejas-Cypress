@@ -4,24 +4,7 @@ import { observable, action } from 'mobx';
 export class AdminStore {
   @observable inProgress = false;
   @observable errors = null;
-  @observable
-  usersList = [
-    {
-      fname: 'test',
-      lname: 'test',
-      username: 'test1',
-    },
-    {
-      fname: 'test',
-      lname: 'test',
-      username: 'test2',
-    },
-    {
-      fname: 'test',
-      lname: 'test',
-      username: 'test3',
-    },
-  ];
+  @observable usersList = [];
 
   @action
   setUsersList(list) {
@@ -31,6 +14,11 @@ export class AdminStore {
   @action
   disableUser(username) {
     return this.usersList[username];
+  }
+
+  @action
+  setErrors(errors) {
+    this.errors = errors;
   }
 }
 

@@ -1,5 +1,6 @@
 import * as AWS from 'aws-sdk';
 // import _ from 'lodash';
+import shortid from 'shortid';
 
 import { API_VERSION, USER_POOL_ID, LIST_LIMIT } from './../constants/aws';
 import adminStore from './../stores/adminStore';
@@ -19,9 +20,9 @@ export class AdminActions {
       new Promise((res, rej) => {
         test.listUsers(params, (err, data) => {
           if (err) {
-            return rej(err);
+            rej(err);
           }
-          return res(data);
+          res(data);
         });
       })
         .then((data) => {
@@ -60,7 +61,15 @@ export class AdminActions {
     // );
   }
 
-
+  createNewUser = (options) => {
+    const params = {
+      UserPoolId: USER_POOL_ID,
+      TemporaryPassword: shortid.generate(),
+      username: options.username,
+      UserAttributes: options.userAttributes,
+    };
+    console.log(params);
+  }
   // Private method starts here
 
   /*
