@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Button } from 'semantic-ui-react';
 
+// import adminActions from './../../../../actions/adminActions';
 @inject('adminStore', 'userStore')
 @observer
 export default class UserNew extends React.Component {
@@ -21,7 +22,7 @@ export default class UserNew extends React.Component {
     return (
       <div>
         <h2>Create New User</h2>
-        <Form>
+        <Form onSubmit={console.log('form submitted')}>
           <Form.Input
             placeholder="First Name"
             label="First Name"
@@ -52,6 +53,7 @@ export default class UserNew extends React.Component {
             control="input"
             label="Admin"
             value="admin"
+            width={3}
             onChange={this.handleCheckboxChange}
           />
           <Form.Field
@@ -59,6 +61,7 @@ export default class UserNew extends React.Component {
             control="input"
             label="Business Owner"
             value="bowner"
+            width={3}
             onChange={this.handleCheckboxChange}
           />
           <Form.Field
@@ -66,9 +69,14 @@ export default class UserNew extends React.Component {
             control="input"
             label="Investor"
             value="investor"
+            width={3}
             onChange={this.handleCheckboxChange}
           />
-          <Button>Submit</Button>
+          <Button
+            disabled={!this.props.userStore.canSubmit}
+          >
+            Submit
+          </Button>
         </Form>
       </div>
     );

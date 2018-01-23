@@ -17,6 +17,7 @@ export class UserStore {
     password: shortid.generate(),
     roles: [],
   }
+
   @computed get canSubmit() {
     return _.every(this.newUser, val => !_.isEmpty(val));
   }
