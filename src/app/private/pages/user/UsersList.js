@@ -4,7 +4,7 @@ import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import UserRow from './components/UserRow';
-import adminActions from './../../../../actions/adminActions';
+import adminActions from './../../../../actions/admin';
 
 @inject('adminStore', 'userStore')
 @observer

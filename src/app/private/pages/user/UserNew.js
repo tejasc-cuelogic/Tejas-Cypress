@@ -2,7 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Button } from 'semantic-ui-react';
 
-// import adminActions from './../../../../actions/adminActions';
+import adminActions from '../../../../actions/admin';
+
 @inject('adminStore', 'userStore')
 @observer
 export default class UserNew extends React.Component {
@@ -22,7 +23,7 @@ export default class UserNew extends React.Component {
     return (
       <div>
         <h2>Create New User</h2>
-        <Form onSubmit={console.log('form submitted')}>
+        <Form>
           <Form.Input
             placeholder="First Name"
             label="First Name"
@@ -74,6 +75,7 @@ export default class UserNew extends React.Component {
           />
           <Button
             disabled={!this.props.userStore.canSubmit}
+            onClick={adminActions.createNewUser}
           >
             Submit
           </Button>

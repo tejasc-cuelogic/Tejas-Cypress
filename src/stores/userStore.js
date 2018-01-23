@@ -9,6 +9,7 @@ export class UserStore {
   @observable loadingUser = false;
   @observable updatingUser;
   @observable updatingUserErrors;
+  // TODO: add validation for all values
   @observable
   newUser = {
     email: '',

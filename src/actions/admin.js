@@ -1,12 +1,12 @@
 import * as AWS from 'aws-sdk';
-// import _ from 'lodash';
-import shortid from 'shortid';
 
 import { API_VERSION, USER_POOL_ID, LIST_LIMIT } from './../constants/aws';
 import adminStore from './../stores/adminStore';
+import userStore from './../stores/userStore';
+import authStore from '../stores/authStore';
 
-export class AdminActions {
-  AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION })
+export class Admin {
+  AWSCognitoISP = null;
 
   // List all user from admin side
   // TODO: Pass pagination token and other params as require
@@ -15,10 +15,10 @@ export class AdminActions {
       UserPoolId: USER_POOL_ID,
       Limit: LIST_LIMIT,
     };
-    const test = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return (
       new Promise((res, rej) => {
-        test.listUsers(params, (err, data) => {
+        this.AWSCognitoISP.listUsers(params, (err, data) => {
           if (err) {
             rej(err);
           }
@@ -35,40 +35,33 @@ export class AdminActions {
     );
   }
 
-  // Disable User from user pool
-  // Pass Username as a identifier
-  disableUser = (username) => {
+  // Creates new user on congnito user pool
+  createNewUser = () => {
     const params = {
       UserPoolId: USER_POOL_ID,
-      Username: username,
+      TemporaryPassword: userStore.newUser.password,
+      Username: userStore.newUser.email,
+      UserAttributes: this.newUserAttributes(),
     };
-    console.log(params);
-    // return (
-    //   new Promise((res, rej) => {
-    //     this.AWSCognitoISP.disableUser(params, (err, data) => {
-    //       if (err) {
-    //         return rej(err);
-    //       }
-    //       return res(data);
-    //     });
-    //   })
-    //     .then((data) => {
-    //       console.log(data);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     })
-    // );
-  }
-
-  createNewUser = (options) => {
-    const params = {
-      UserPoolId: USER_POOL_ID,
-      TemporaryPassword: shortid.generate(),
-      username: options.username,
-      UserAttributes: options.userAttributes,
-    };
-    console.log(params);
+    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    return (
+      new Promise((res, rej) => {
+        this.AWSCognitoISP.adminCreateUser(params, (err, data) => {
+          if (err) {
+            rej(err);
+          }
+          res(data);
+        });
+      })
+        .then((data) => {
+          // TODO: Redirect to the admin home page once user is created successfully with msg
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+          authStore.setErrors(err);
+        })
+    );
   }
   // Private method starts here
 
@@ -116,7 +109,18 @@ export class AdminActions {
     });
     return formatedUserData;
   }
+
+  /* Returns user attributes in format required to submit to AWS Cognito */
+  newUserAttributes = () => (
+    [
+      { Name: 'given_name', Value: userStore.newUser.givenName },
+      { Name: 'family_name', Value: userStore.newUser.familyName },
+      { Name: 'email', Value: userStore.newUser.email },
+      { Name: 'custom:roles', Value: JSON.stringify(userStore.newUser.roles) },
+      { Name: 'email_verified', Value: 'true' },
+    ]
+  )
   // Private method ends here
 }
 
-export default new AdminActions();
+export default new Admin();

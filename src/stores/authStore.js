@@ -29,6 +29,8 @@ export class AuthStore {
   @observable oldPassword = '';
   @observable newPassword = '';
   @observable deleteButton = false;
+  @observable newPasswordRequired = false;
+  @observable cognitoUserSession = null;
 
   @action
   setFirstName(givenName) {
@@ -94,6 +96,21 @@ export class AuthStore {
   @action
   setErrors(error) {
     this.errors = error;
+  }
+
+  @action
+  setNewPasswordRequired() {
+    this.newPasswordRequired = true;
+  }
+
+  @action
+  unsetNewPasswordRequired() {
+    this.newPasswordRequired = false;
+  }
+
+  @action
+  setCognitoUserSession(session) {
+    this.cognitoUserSession = session;
   }
 
   @action

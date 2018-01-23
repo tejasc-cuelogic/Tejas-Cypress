@@ -87,7 +87,7 @@ export class Auth {
       if (error) {
         console.error(error);
       } else {
-        console.log('Granted Admin access!');
+        console.log('Granted Admin access!', AWS.config.credentials);
       }
     });
   }
@@ -107,17 +107,27 @@ export class Auth {
 
     return new Promise((res, rej) => {
       this.cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: result => res(result),
+        onSuccess: result => res({ data: result }),
+        newPasswordRequired: (result) => {
+          res({ data: result, action: 'newPassword' });
+        },
         onFailure: err => rej(err),
       });
     })
-      .then((data) => {
-        // Extract JWT from token
-        commonStore.setToken(data.idToken.jwtToken);
-        userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-        // Check if currentUser has admin role, if user has admin role set admin access to user
-        if (userStore.isCurrentUserWithRole('admin')) {
-          this.setAWSAdminAccess(data.idToken.jwtToken);
+      .then((result) => {
+        if (result.action && result.action === 'newPassword') {
+          authStore.setEmail(result.data.email);
+          authStore.setCognitoUserSession(this.cognitoUser.Session);
+          authStore.setNewPasswordRequired();
+        } else {
+          const { data } = result;
+          // Extract JWT from token
+          commonStore.setToken(data.idToken.jwtToken);
+          userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+          // Check if currentUser has admin role, if user has admin role set admin access to user
+          if (userStore.isCurrentUserWithRole('admin')) {
+            this.setAWSAdminAccess(data.idToken.jwtToken);
+          }
         }
       })
       .catch((err) => {
@@ -223,6 +233,24 @@ export class Auth {
       .finally(() => {
         authStore.setProgress(false);
       });
+  }
+
+  changePassword() {
+    authStore.setProgress = false;
+    this.cognitoUser = new AWSCognito.CognitoUser({
+      Username: authStore.values.email,
+      Pool: this.userPool,
+    });
+    console.log(authStore.cognitoUserSession);
+    this.cognitoUser.Session = authStore.cognitoUserSession;
+    console.log(this.cognitoUser);
+    return new Promise((res, rej) => {
+      this.cognitoUser.completeNewPasswordChallenge(authStore.values.password, this.values, {
+        onSuccess: data => res(data),
+        onFailure: err => rej(err),
+      });
+    })
+      .then(data => console.log('Successfully chnaged new users password', data));
   }
 
   confirmCode() {

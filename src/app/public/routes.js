@@ -6,6 +6,7 @@ import Confirm from './auth/Confirm';
 // import Offering from './offerings/Offering';
 import ForgotPassword from './auth/ForgotPassword';
 import ResetPassword from './auth/ResetPassword';
+import ChangePassword from './auth/ChangePassword';
 
 export default [
   {
@@ -27,6 +28,14 @@ export default [
   {
     path: '/reset-password',
     component: ResetPassword,
+  },
+  {
+    path: '/reset-password',
+    component: ResetPassword,
+  },
+  {
+    path: '/change-password',
+    component: ChangePassword,
   },
   {
     path: '/',

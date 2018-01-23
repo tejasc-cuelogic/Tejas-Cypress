@@ -40,6 +40,7 @@ export default class BusinessForm extends React.Component {
               name={type}
               checked={value}
               onChange={this.handleCheckboxChange}
+              key={shortid.generate()}
             />))
         }
         <Button onClick={businessActions.generateDocxFile}>Generate Docx</Button>
