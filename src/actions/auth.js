@@ -43,20 +43,20 @@ export class Auth {
           new Promise((res, rej) => {
             this.cognitoUser.getSession((err, session) => (err ? rej(err) : res(session)));
           }))
-        .then(() =>
+        .then(session =>
           new Promise((res, rej) => {
             this.cognitoUser.getUserAttributes((err, attributes) => {
               if (err) {
                 return rej(err);
               }
-              return res(attributes);
+              return res({ attributes, session });
             });
           }))
-        .then(attributes =>
+        .then(data =>
           new Promise((res) => {
-            userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(attributes)));
+            userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(data.attributes)));
             if (userStore.isCurrentUserWithRole('admin')) {
-              this.setAWSAdminAccess(window.localStorage.getItem('jwt'));
+              this.setAWSAdminAccess(data.session.idToken.jwtToken);
             }
             res();
           }))

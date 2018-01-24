@@ -114,53 +114,6 @@ export class AuthStore {
   }
 
   @action
-  verifySession = () => {
-    let hasSession = false;
-    Object.keys(localStorage).every((key) => {
-      if (key.match('CognitoIdentityServiceProvider')) {
-        hasSession = true;
-      }
-      return key;
-    });
-
-    return (
-      new Promise((res, rej) => {
-        if (hasSession) {
-          cognitoUser = userPool.getCurrentUser();
-          return cognitoUser !== null ? res() : rej();
-        }
-        return rej();
-      })
-        .then(() =>
-          new Promise((res, rej) => {
-            cognitoUser.getSession((err, session) => (err ? rej(err) : res(session)));
-          }))
-        .then(() =>
-          new Promise((res, rej) => {
-            cognitoUser.getUserAttributes((err, attributes) => {
-              if (err) {
-                return rej(err);
-              }
-              return res(attributes);
-            });
-          }))
-        .then(attributes =>
-          new Promise((res) => {
-            userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(attributes)));
-            if (userStore.isCurrentUserWithRole('admin')) {
-              this.setAWSAdminAccess(window.localStorage.getItem('jwt'));
-            }
-            res();
-          }))
-        // Empty method needed to avoid warning.
-        .catch(() => {})
-        .finally(() => {
-          commonStore.setAppLoaded();
-        })
-    );
-  };
-
-  @action
   register() {
     this.inProgress = true;
     this.errors = undefined;

@@ -1,14 +1,16 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route, withRouter } from 'react-router-dom';
+
 import routes from './routes';
+import authActions from './../../actions/auth';
 
 @inject('adminStore', 'authStore', 'commonStore', 'userStore')
 @withRouter
 @observer
 export default class PrivateApp extends React.Component {
   componentWillMount() {
-    this.props.authStore.verifySession();
+    authActions.verifySession();
   }
 
   render() {
