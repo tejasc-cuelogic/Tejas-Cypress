@@ -63,6 +63,27 @@ export class Admin {
         })
     );
   }
+
+  // Disable the user first and then delete user from user pool.
+  deleteUser = (username) => {
+    const params = {
+      UserPoolId: USER_POOL_ID,
+      Username: username,
+    };
+    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    return new Promise((res, rej) => {
+      this.AWSCognitoISP.adminDeleteUser(params, (err, data) => {
+        if (err) {
+          rej(err);
+        }
+        res(data);
+      });
+    })
+      .then(() => {
+        adminStore.changeUserStatus(username, 'DELETED');
+      })
+      .catch(() => {});
+  }
   // Private method starts here
 
   /*
@@ -93,7 +114,7 @@ export class Admin {
       ]
   */
   getFormatedUserData = (userList) => {
-    const formatedUserData = [];
+    const formatedUserData = {};
 
     userList.map((user) => {
       const userHash = {};
@@ -104,7 +125,7 @@ export class Admin {
       userHash.username = user.Username;
       userHash.enabled = user.Enabled;
       userHash.status = user.UserStatus;
-      formatedUserData.push(userHash);
+      formatedUserData[user.Username] = userHash;
       return null;
     });
     return formatedUserData;

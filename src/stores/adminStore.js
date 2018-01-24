@@ -4,7 +4,7 @@ import { observable, action } from 'mobx';
 export class AdminStore {
   @observable inProgress = false;
   @observable errors = null;
-  @observable usersList = [];
+  @observable usersList = {};
 
   @action
   setUsersList(list) {
@@ -19,6 +19,11 @@ export class AdminStore {
   @action
   setErrors(errors) {
     this.errors = errors;
+  }
+
+  @action
+  changeUserStatus(username, status) {
+    this.usersList[username].status = status;
   }
 }
 

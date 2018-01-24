@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Table } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 import UserRow from './components/UserRow';
 import adminActions from './../../../../actions/admin';
@@ -13,8 +14,8 @@ export default class UsersList extends React.Component {
     adminActions.listUsers();
   }
 
-  handleDisableClick = (e) => {
-    adminActions.disableUser(e.target.dataUsername);
+  handleDeleteClick = (username) => {
+    adminActions.deleteUser(username);
   }
 
   render() {
@@ -33,10 +34,10 @@ export default class UsersList extends React.Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {this.props.adminStore.usersList.map(user => (
+              {_.map(this.props.adminStore.usersList, user => (
                 <UserRow
                   {...user}
-                  handleDisableClick={this.handleDisableClick}
+                  handleDeleteClick={this.handleDeleteClick}
                   key={`key_${user.username}`}
                 />
               ))}

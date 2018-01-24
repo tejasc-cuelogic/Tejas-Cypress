@@ -1,9 +1,20 @@
 import React from 'react';
-import { Button, Table } from 'semantic-ui-react';
+import { Button, Table, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 const UserLink = props => (
   <Link to={`/admin/user/${props.username}`}>{ `${props.username.substr(0, 8)}...` }</Link>
+);
+
+const DeleteButton = props => (
+  <Button
+    icon
+    color="red"
+    disabled={props.disabled}
+    onClick={() => props.handleDeleteClick(props.username)}
+  >
+    <Icon name="remove user" />
+  </Button>
 );
 
 const UserRow = props => (
@@ -13,12 +24,11 @@ const UserRow = props => (
     <Table.Cell>{ props.email}</Table.Cell>
     <Table.Cell>{ props.status }</Table.Cell>
     <Table.Cell>
-      <Button
-        className="ui secondary"
-        onClick={props.handleDisableClick}
-      >
-        Disable
-      </Button>
+      <DeleteButton
+        handleDeleteClick={props.handleDeleteClick}
+        username={props.username}
+        disabled={props.status === 'DELETED'}
+      />
     </Table.Cell>
   </Table.Row>
 );
