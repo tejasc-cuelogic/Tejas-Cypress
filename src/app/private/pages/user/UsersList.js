@@ -5,19 +5,21 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 
 import UserRow from './components/UserRow';
+import UserSearch from './components/UserSearch';
 import adminActions from './../../../../actions/admin';
 
 @inject('adminStore', 'userStore')
 @observer
 export default class UsersList extends React.Component {
   componentWillMount() {
-    if (this.props.userStore.adminCredsUpdated) {
-      adminActions.listUsers();
-    }
+    adminActions.listUsers({ filter: '' });
   }
 
-  handleDeleteClick = (username) => {
-    adminActions.deleteUser(username);
+  handleDeleteClick = username => adminActions.deleteUser(username)
+  handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      adminActions.searchUser(e.target.value);
+    }
   }
 
   render() {
@@ -25,6 +27,9 @@ export default class UsersList extends React.Component {
       return (
         <div>
           <Button as={Link} to="/admin/user/new">Add New User</Button>
+          <UserSearch
+            handleSearch={this.handleSearch}
+          />
           <Table celled width={10}>
             <Table.Header>
               <Table.Row>

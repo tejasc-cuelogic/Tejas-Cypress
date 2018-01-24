@@ -10,10 +10,11 @@ export class Admin {
 
   // List all user from admin side
   // TODO: Pass pagination token and other params as require
-  listUsers = () => {
+  listUsers = (options) => {
     const params = {
       UserPoolId: USER_POOL_ID,
       Limit: LIST_LIMIT,
+      Filter: options.filter,
     };
     this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return (
@@ -26,7 +27,6 @@ export class Admin {
         });
       })
         .then((data) => {
-          console.log(data);
           adminStore.setUsersList(this.getFormatedUserData(data.Users));
         })
         .catch((err) => {
@@ -84,6 +84,15 @@ export class Admin {
       })
       .catch(() => {});
   }
+
+  // Search User
+  searchUser = (queryString) => {
+    let filterString = '';
+    if (queryString.length !== 0) {
+      filterString = `email ^= "${queryString}"`;
+    }
+    this.listUsers({ filter: filterString });
+  }
   // Private method starts here
 
   /*
@@ -103,15 +112,15 @@ export class Admin {
         {...}
       ]
     and method flattens out this structure for ease of use as following
-      [
-        {
-          given_name: 'test',
-          enabled: true,
-          confirmed: true/false
-        },
-        {...},
-        {...}
-      ]
+      {
+        #username: {
+                      given_name: 'test',
+                      enabled: true,
+                      confirmed: true/false
+                    },
+        #username: {...},
+        #username: {...}
+      }
   */
   getFormatedUserData = (userList) => {
     const formatedUserData = {};
