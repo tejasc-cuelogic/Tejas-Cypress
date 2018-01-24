@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, Grid } from 'semantic-ui-react';
+import { Button, Table } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import UserRow from './components/UserRow';
@@ -22,14 +22,17 @@ export default class UsersList extends React.Component {
       return (
         <div>
           <Button as={Link} to="/admin/user/new">Add New User</Button>
-          <table className="ui basic right alligned table" as={Grid}>
-            <tbody>
-              <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-                <th colSpan="3">Action</th>
-              </tr>
+          <Table celled width={10}>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>User ID</Table.HeaderCell>
+                <Table.HeaderCell width={4}>Name</Table.HeaderCell>
+                <Table.HeaderCell>Email</Table.HeaderCell>
+                <Table.HeaderCell>Status</Table.HeaderCell>
+                <Table.HeaderCell>Actions</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
               {this.props.adminStore.usersList.map(user => (
                 <UserRow
                   {...user}
@@ -37,8 +40,8 @@ export default class UsersList extends React.Component {
                   key={`key_${user.username}`}
                 />
               ))}
-            </tbody>
-          </table>
+            </Table.Body>
+          </Table>
         </div>
       );
     }

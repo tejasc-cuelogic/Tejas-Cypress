@@ -103,7 +103,7 @@ export class Admin {
       });
       userHash.username = user.Username;
       userHash.enabled = user.Enabled;
-      userHash.confirmed = user.UserStatus === 'CONFIRMED';
+      userHash.status = user.UserStatus;
       formatedUserData.push(userHash);
       return null;
     });

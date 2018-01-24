@@ -1,29 +1,26 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Table } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
-const ConfirmButton = props => (
-  <Button>
-    {props.confirmed ? 'Confirmed' : 'Confirm!'}
-  </Button>
+const UserLink = props => (
+  <Link to={`/admin/user/${props.username}`}>{ `${props.username.substr(0, 8)}...` }</Link>
 );
 
 const UserRow = props => (
-  <tr>
-    <td>{ props.given_name }</td>
-    <td>{ props.family_name }</td>
-    <td>{ `${props.username.substr(0, 8)}...` }</td>
-    <td>
+  <Table.Row>
+    <Table.Cell><UserLink username={props.username} /></Table.Cell>
+    <Table.Cell width={4}>{ `${props.given_name} ${props.family_name}` }</Table.Cell>
+    <Table.Cell>{ props.email}</Table.Cell>
+    <Table.Cell>{ props.status }</Table.Cell>
+    <Table.Cell>
       <Button
         className="ui secondary"
         onClick={props.handleDisableClick}
       >
         Disable
       </Button>
-    </td>
-    <td>
-      <ConfirmButton confirmed={props.confirmed} />
-    </td>
-  </tr>
+    </Table.Cell>
+  </Table.Row>
 );
 
 export default UserRow;
