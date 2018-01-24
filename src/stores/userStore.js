@@ -9,6 +9,7 @@ export class UserStore {
   @observable loadingUser = false;
   @observable updatingUser;
   @observable updatingUserErrors;
+  @observable adminCredsUpdated = false;
   // TODO: add validation for all values
   @observable
   newUser = {
@@ -50,6 +51,11 @@ export class UserStore {
   @action
   removeRole(role) {
     this.newUser.roles = _.reject(this.newUser.roles, rol => rol === role);
+  }
+
+  @action
+  updatedAdminCreds(status) {
+    this.adminCredsUpdated = status;
   }
 
   @action pullUser() {

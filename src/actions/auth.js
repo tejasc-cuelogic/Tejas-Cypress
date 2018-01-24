@@ -9,6 +9,7 @@ import {
 import userStore from './../stores/userStore';
 import authStore from './../stores/authStore';
 import commonStore from './../stores/commonStore';
+import adminStore from '../stores/adminStore';
 
 export class Auth {
   defaultRole = 'investor';
@@ -60,9 +61,7 @@ export class Auth {
             }
             res();
           }))
-        .then(() => {
-
-        })
+        .then(() => adminStore.setAdminCredsLoaded(true))
         // Empty method needed to avoid warning.
         .catch(() => {})
         .finally(() => {

@@ -10,8 +10,10 @@ import adminActions from './../../../../actions/admin';
 @inject('adminStore', 'userStore')
 @observer
 export default class UsersList extends React.Component {
-  componentDidMount() {
-    adminActions.listUsers();
+  componentWillMount() {
+    if (this.props.userStore.adminCredsUpdated) {
+      adminActions.listUsers();
+    }
   }
 
   handleDeleteClick = (username) => {
