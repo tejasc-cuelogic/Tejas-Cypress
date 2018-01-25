@@ -6,7 +6,7 @@ import adminActions from '../../../../actions/admin';
 
 @inject('adminStore', 'userStore')
 @observer
-export default class UserNew extends React.Component {
+export default class New extends React.Component {
   componentWillUnmount() {
     this.props.userStore.resetUserAttributes();
   }

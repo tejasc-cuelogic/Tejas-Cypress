@@ -1,8 +1,8 @@
-import UsersList from './pages/user/UsersList';
-import Settings from './pages/Settings';
+import UserList from './pages/user/UserList';
+import Settings from './pages/settings/Settings';
 import BusinessForm from './pages/business/BusinessForm';
-import UserNew from './pages/user/UserNew';
-import UserProfile from './pages/user/UserProfile';
+import New from './pages/user/New';
+import Profile from './pages/user/Profile';
 
 import {
   AdminAuthorization,
@@ -11,18 +11,18 @@ import {
 
 export default [
   {
-    path: '/admin/user/New',
-    component: UserNew,
+    path: '/admin/users/new',
+    component: New,
     auth: AdminAuthorization,
   },
   {
-    path: '/admin/user/:userId',
-    component: UserProfile,
+    path: '/admin/users/:userId',
+    component: Profile,
     auth: AdminAuthorization,
   },
   {
     path: '/admin/users',
-    component: UsersList,
+    component: UserList,
     auth: AdminAuthorization,
   },
   {

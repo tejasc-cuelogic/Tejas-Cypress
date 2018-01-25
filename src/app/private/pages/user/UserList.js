@@ -10,7 +10,7 @@ import adminActions from './../../../../actions/admin';
 
 @inject('adminStore', 'userStore')
 @observer
-export default class UsersList extends React.Component {
+export default class UserList extends React.Component {
   componentWillMount() {
     adminActions.listUsers({ filter: '' });
   }
@@ -30,7 +30,7 @@ export default class UsersList extends React.Component {
       return (
         <div>
           <div style={{ float: 'left' }}>
-            <Button as={Link} to="/admin/user/new">Add New User</Button>
+            <Button as={Link} to="/admin/users/new">Add New User</Button>
           </div>
           <div style={{ float: 'right' }}>
             <UserSearch

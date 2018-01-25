@@ -3,7 +3,7 @@ import { Button, Table, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 const UserLink = props => (
-  <Link to={`/admin/user/${props.username}`}>{ `${props.username.substr(0, 8)}...` }</Link>
+  <Link to={`/admin/users/${props.username}`}>{ `${props.username.substr(0, 8)}...` }</Link>
 );
 
 const DeleteButton = props => (

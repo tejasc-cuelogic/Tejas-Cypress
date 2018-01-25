@@ -1,14 +1,14 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Button } from 'semantic-ui-react';
-import { shortid } from 'shortid';
+import shortid from 'shortid';
 
 import { USER_ROLES } from './../../../../constants/user';
 import adminActions from './../../../../actions/admin';
 
 @inject('adminStore', 'userStore')
 @observer
-export default class UserProfile extends React.Component {
+export default class Profile extends React.Component {
   componentWillMount() {
     const userAttr = this.props.adminStore.usersList[this.props.match.params.userId];
     if (userAttr) {
@@ -60,7 +60,6 @@ export default class UserProfile extends React.Component {
               name="familyName"
               value={userAttributes.familyName}
               onChange={this.handleChange}
-              key={shortid.generate()}
             />
           </Form.Group>
           <Form.Group>
@@ -75,6 +74,7 @@ export default class UserProfile extends React.Component {
                   label={role}
                   value={role}
                   checked={userAttributes.roles.includes(role)}
+                  key={shortid.generate()}
                   onChange={this.handleRoleChange}
                 />
               ))

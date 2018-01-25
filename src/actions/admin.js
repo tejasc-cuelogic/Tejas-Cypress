@@ -6,7 +6,7 @@ import userStore from './../stores/userStore';
 import authStore from '../stores/authStore';
 
 export class Admin {
-  AWSCognitoISP = null;
+  awsCognitoISP = null;
 
   // List all user from admin side
   // TODO: Pass pagination token and other params as require
@@ -16,10 +16,10 @@ export class Admin {
       Limit: LIST_LIMIT,
       Filter: options.filter,
     };
-    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return (
       new Promise((res, rej) => {
-        this.AWSCognitoISP.listUsers(params, (err, data) => {
+        this.awsCognitoISP.listUsers(params, (err, data) => {
           if (err) {
             rej(err);
           }
@@ -43,10 +43,10 @@ export class Admin {
       Username: userStore.userAttributes.email,
       UserAttributes: this.mappedUserAttributes(),
     };
-    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return (
       new Promise((res, rej) => {
-        this.AWSCognitoISP.adminCreateUser(params, (err, data) => {
+        this.awsCognitoISP.adminCreateUser(params, (err, data) => {
           if (err) {
             rej(err);
           }
@@ -70,9 +70,9 @@ export class Admin {
       UserPoolId: USER_POOL_ID,
       Username: username,
     };
-    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return new Promise((res, rej) => {
-      this.AWSCognitoISP.adminDeleteUser(params, (err, data) => {
+      this.awsCognitoISP.adminDeleteUser(params, (err, data) => {
         if (err) {
           rej(err);
         }
@@ -92,9 +92,9 @@ export class Admin {
       UserPoolId: USER_POOL_ID,
       Username: userStore.userAttributes.username,
     };
-    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return new Promise((res, rej) => {
-      this.AWSCognitoISP.adminUpdateUserAttributes(params, (err, data) => {
+      this.awsCognitoISP.adminUpdateUserAttributes(params, (err, data) => {
         if (err) {
           rej(err);
         }
