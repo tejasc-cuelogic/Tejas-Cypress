@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Button } from 'semantic-ui-react';
+import { shortid } from 'shortid';
 
 import { USER_ROLES } from './../../../../constants/user';
 import adminActions from './../../../../actions/admin';
@@ -59,6 +60,7 @@ export default class UserProfile extends React.Component {
               name="familyName"
               value={userAttributes.familyName}
               onChange={this.handleChange}
+              key={shortid.generate()}
             />
           </Form.Group>
           <Form.Group>
