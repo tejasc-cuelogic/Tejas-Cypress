@@ -16,7 +16,7 @@ export default [
     auth: AdminAuthorization,
   },
   {
-    path: '/admin/user/:user_id',
+    path: '/admin/user/:userId',
     component: UserProfile,
     auth: AdminAuthorization,
   },

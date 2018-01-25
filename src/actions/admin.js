@@ -39,9 +39,9 @@ export class Admin {
   createNewUser = () => {
     const params = {
       UserPoolId: USER_POOL_ID,
-      TemporaryPassword: userStore.newUser.password,
-      Username: userStore.newUser.email,
-      UserAttributes: this.newUserAttributes(),
+      TemporaryPassword: userStore.userAttributes.password,
+      Username: userStore.userAttributes.email,
+      UserAttributes: this.mappedUserAttributes(),
     };
     this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return (
@@ -64,7 +64,7 @@ export class Admin {
     );
   }
 
-  // Disable the user first and then delete user from user pool.
+  // Deletes user from user pool. THIS ACTION IS NOT REVERSIBLE
   deleteUser = (username) => {
     const params = {
       UserPoolId: USER_POOL_ID,
@@ -82,7 +82,27 @@ export class Admin {
       .then(() => {
         adminStore.changeUserStatus(username, 'DELETED');
       })
-      .catch(() => {});
+      .catch(() => { });
+  }
+
+  // Admin can change non mandatory attributes of user.
+  updateUserAttributes = () => {
+    const params = {
+      UserAttributes: this.mappedUserAttributes(false),
+      UserPoolId: USER_POOL_ID,
+      Username: userStore.userAttributes.username,
+    };
+    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    return new Promise((res, rej) => {
+      this.AWSCognitoISP.adminUpdateUserAttributes(params, (err, data) => {
+        if (err) {
+          rej(err);
+        }
+        res(data);
+      });
+    })
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
   }
 
   // Search User
@@ -141,15 +161,18 @@ export class Admin {
   }
 
   /* Returns user attributes in format required to submit to AWS Cognito */
-  newUserAttributes = () => (
-    [
-      { Name: 'given_name', Value: userStore.newUser.givenName },
-      { Name: 'family_name', Value: userStore.newUser.familyName },
-      { Name: 'email', Value: userStore.newUser.email },
-      { Name: 'custom:roles', Value: JSON.stringify(userStore.newUser.roles) },
-      { Name: 'email_verified', Value: 'true' },
-    ]
-  )
+  mappedUserAttributes = (newUser = true) => {
+    const userData = [
+      { Name: 'given_name', Value: userStore.userAttributes.givenName },
+      { Name: 'family_name', Value: userStore.userAttributes.familyName },
+      { Name: 'custom:roles', Value: JSON.stringify(userStore.userAttributes.roles) },
+    ];
+    if (newUser) {
+      userData.push({ Name: 'email', Value: userStore.userAttributes.email });
+      userData.push({ Name: 'email_verified', Value: 'true' });
+    }
+    return userData;
+  }
   // Private method ends here
 }
 

@@ -7,6 +7,10 @@ import adminActions from '../../../../actions/admin';
 @inject('adminStore', 'userStore')
 @observer
 export default class UserNew extends React.Component {
+  componentWillUnmount() {
+    this.props.userStore.resetUserAttributes();
+  }
+
   handleGivenNameChange = e => this.props.userStore.setGivenName(e.target.value);
   handleFamilyNameChange = e => this.props.userStore.setFamilyName(e.target.value);
   handleEmailChange = e => this.props.userStore.setEmail(e.target.value);
@@ -52,7 +56,7 @@ export default class UserNew extends React.Component {
           <Form.Input
             placeholder="Temporary Passowrd"
             label="Temporary Passowrd"
-            value={this.props.userStore.newUser.password}
+            value={this.props.userStore.userAttributes.password}
             onChange={this.handlePasswordChange}
             width={10}
           />
