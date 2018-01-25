@@ -10,6 +10,7 @@ export class UserStore {
   @observable updatingUser;
   @observable updatingUserErrors;
   @observable adminCredsUpdated = false;
+  @observable userFilter = 'email';
   // TODO: add validation for all values
   @observable
   newUser = {
@@ -56,6 +57,11 @@ export class UserStore {
   @action
   updatedAdminCreds(status) {
     this.adminCredsUpdated = status;
+  }
+
+  @action
+  setUserFilter(filter) {
+    this.userFilter = filter;
   }
 
   @action pullUser() {

@@ -89,7 +89,7 @@ export class Admin {
   searchUser = (queryString) => {
     let filterString = '';
     if (queryString.length !== 0) {
-      filterString = `email ^= "${queryString}"`;
+      filterString = `${userStore.userFilter} ^= "${queryString}"`;
     }
     this.listUsers({ filter: filterString });
   }

@@ -16,6 +16,9 @@ export default class UsersList extends React.Component {
   }
 
   handleDeleteClick = username => adminActions.deleteUser(username)
+  handleFilterChange = (e, data) => {
+    this.props.userStore.setUserFilter(data.value);
+  }
   handleSearch = (e) => {
     if (e.key === 'Enter') {
       adminActions.searchUser(e.target.value);
@@ -26,10 +29,16 @@ export default class UsersList extends React.Component {
     if (this.props.adminStore.usersList) {
       return (
         <div>
-          <Button as={Link} to="/admin/user/new">Add New User</Button>
-          <UserSearch
-            handleSearch={this.handleSearch}
-          />
+          <div style={{ float: 'left' }}>
+            <Button as={Link} to="/admin/user/new">Add New User</Button>
+          </div>
+          <div style={{ float: 'right' }}>
+            <UserSearch
+              userFilter={this.props.userStore.userFilter}
+              handleSearch={this.handleSearch}
+              handleFilterChange={this.handleFilterChange}
+            />
+          </div>
           <Table celled width={10}>
             <Table.Header>
               <Table.Row>
