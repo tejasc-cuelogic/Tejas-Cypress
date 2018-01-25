@@ -160,7 +160,10 @@ export class Admin {
     return formatedUserData;
   }
 
-  /* Returns user attributes in format required to submit to AWS Cognito */
+  /* Returns user attributes in format required to submit to AWS Cognito
+      If newUser parameter is set to true it will add two more attributes which are required
+    while creating new user.
+  */
   mappedUserAttributes = (newUser = true) => {
     const userData = [
       { Name: 'given_name', Value: userStore.userAttributes.givenName },
