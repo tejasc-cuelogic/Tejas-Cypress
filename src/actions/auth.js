@@ -247,8 +247,7 @@ export class Auth {
         onFailure: err => rej(err),
       });
     })
-      .then((data) => {
-        window.localStorage.setItem('jwt', data.idToken.jwtToken);
+      .then(() => {
         authStore.setProgress(false);
         authStore.unsetNewPasswordRequired();
       });
@@ -285,7 +284,7 @@ export class Auth {
   logout = () => {
     commonStore.setToken(undefined);
     userStore.forgetUser();
-    window.localStorage.clear();
+    this.cognitoUser.signOut();
     // Clear all AWS credentials
     AWS.config.clear();
     return new Promise(res => res());
