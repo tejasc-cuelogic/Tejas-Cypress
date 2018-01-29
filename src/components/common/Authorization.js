@@ -6,7 +6,7 @@ import React from 'react';
 
 import NotFound from './NotFound';
 
-const Authorization = (allowedRoles, UnauthorizedComponent) => (
+const Authorization = (allowedRoles, UnauthorizedComponent, adminOnly = false) => (
   WrappedComponent,
   context,
 ) => class WithAuthorization extends React.Component {
@@ -22,7 +22,7 @@ const Authorization = (allowedRoles, UnauthorizedComponent) => (
       const allowed = context.userStore.currentUser.roles.some(role =>
         allowedRoles.includes(role));
 
-      if (allowed) {
+      if (allowed && adminOnly && context.userStore.currentUser.roles.includes('admin')) {
         return <WrappedComponent {...this.props} />;
       }
       return <UnauthorizedComponent {...this.props} />;
@@ -31,6 +31,6 @@ const Authorization = (allowedRoles, UnauthorizedComponent) => (
   }
 };
 
-export const AdminAuthorization = Authorization(['admin', 'bowner', 'investor'], NotFound);
+export const AdminAuthorization = Authorization(['admin', 'bowner', 'investor'], NotFound, true);
 export const BusinessAuthorization = Authorization(['admin', 'bowner'], NotFound);
 export const InvestorAuthorization = Authorization(['admin', 'investor'], NotFound);
