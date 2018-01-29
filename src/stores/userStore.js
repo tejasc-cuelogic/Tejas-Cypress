@@ -19,8 +19,7 @@ export class UserStore {
     givenName: '',
     password: shortid.generate(),
     roles: [],
-    status: '',
-    emailVerified: false,
+    // emailVerified: false,
   }
 
   @computed get canSubmit() {
@@ -72,8 +71,6 @@ export class UserStore {
     this.userAttributes.givenName = '';
     this.userAttributes.familyName = '';
     this.userAttributes.roles = [];
-    this.userAttributes.status = '';
-    this.userAttributes.emailVerified = false;
   }
 
   @action

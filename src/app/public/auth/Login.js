@@ -17,7 +17,6 @@ export default class Login extends React.Component {
     authActions.login(this.props.authStore.values)
       .then(() => {
         if (this.props.authStore.newPasswordRequired) {
-          console.log(this.props.authStore.values);
           this.props.history.push('/change-password');
         } else if (this.props.userStore.currentUser.roles.includes('admin')) {
           this.props.history.push('/admin/users');

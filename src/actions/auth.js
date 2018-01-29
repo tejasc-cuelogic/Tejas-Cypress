@@ -240,9 +240,7 @@ export class Auth {
       Username: authStore.values.email,
       Pool: this.userPool,
     });
-    console.log(authStore.cognitoUserSession);
     this.cognitoUser.Session = authStore.cognitoUserSession;
-    console.log(this.cognitoUser);
     return new Promise((res, rej) => {
       this.cognitoUser.completeNewPasswordChallenge(authStore.values.password, this.values, {
         onSuccess: data => res(data),
@@ -250,7 +248,7 @@ export class Auth {
       });
     })
       .then((data) => {
-        console.log('Successfully chnaged new users password', data);
+        window.localStorage.setItem('jwt', data.idToken.jwtToken);
         authStore.setProgress(false);
         authStore.unsetNewPasswordRequired();
       });
@@ -287,6 +285,7 @@ export class Auth {
   logout = () => {
     commonStore.setToken(undefined);
     userStore.forgetUser();
+    window.localStorage.clear();
     // Clear all AWS credentials
     AWS.config.clear();
     return new Promise(res => res());

@@ -17,7 +17,7 @@ export default class ChangePassword extends React.Component {
     e.preventDefault();
     authActions.changePassword()
       .then(() => {
-        this.props.history.push('/login');
+        this.props.history.push('/');
       });
   }
   render() {
