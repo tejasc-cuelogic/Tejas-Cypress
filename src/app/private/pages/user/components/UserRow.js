@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Table, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { STATUSES } from '../../../../../constants/aws';
 
 const UserLink = props => (
   <Link to={`/admin/users/${props.username}`}>{ `${props.username.substr(0, 8)}...` }</Link>
@@ -27,7 +28,7 @@ const UserRow = props => (
       <DeleteButton
         handleDeleteClick={props.handleDeleteClick}
         username={props.username}
-        disabled={props.status === 'DELETED'}
+        disabled={props.status === STATUSES.deleted}
       />
     </Table.Cell>
   </Table.Row>

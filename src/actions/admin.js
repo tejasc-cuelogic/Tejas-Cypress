@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk';
 
-import { API_VERSION, USER_POOL_ID, LIST_LIMIT } from './../constants/aws';
+import { API_VERSION, USER_POOL_ID, LIST_LIMIT, STATUSES } from './../constants/aws';
 import adminStore from './../stores/adminStore';
 import userStore from './../stores/userStore';
 import authStore from '../stores/authStore';
@@ -80,7 +80,7 @@ export class Admin {
       });
     })
       .then(() => {
-        adminStore.changeUserStatus(username, 'DELETED');
+        adminStore.changeUserStatus(username, STATUSES.deleted);
       })
       .catch(() => { });
   }
