@@ -7,6 +7,7 @@ import Profile from './pages/user/Profile';
 import {
   AdminAuthorization,
   BusinessAuthorization,
+  UserAuthorization,
 } from './../../components/common/Authorization';
 
 export default [
@@ -28,7 +29,7 @@ export default [
   {
     path: '/settings',
     component: Settings,
-    auth: AdminAuthorization,
+    auth: UserAuthorization,
   },
   {
     path: '/business',
