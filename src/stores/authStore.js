@@ -3,6 +3,7 @@ import * as AWSCognito from 'amazon-cognito-identity-js';
 // import * as AWS from 'aws-sdk';
 import userStore from './userStore';
 import commonStore from './commonStore';
+import uiStore from './uiStore';
 
 const userPool = new AWSCognito.CognitoUserPool({
   UserPoolId: process.env.REACT_APP_AWS_COGNITO_USER_POOL_ID,
@@ -11,9 +12,13 @@ const userPool = new AWSCognito.CognitoUserPool({
 let cognitoUser = null;
 
 export class AuthStore {
-  @observable inProgress = false;
-  @observable errors = undefined;
   @observable role = 'investor';
+  @observable message = null;
+  @observable oldPassword = '';
+  @observable newPassword = '';
+  @observable deleteButton = false;
+  @observable newPasswordRequired = false;
+  @observable cognitoUserSession = null;
 
   @observable
   values = {
@@ -24,13 +29,6 @@ export class AuthStore {
     verify: '',
     code: '',
   };
-
-  @observable message = null;
-  @observable oldPassword = '';
-  @observable newPassword = '';
-  @observable deleteButton = false;
-  @observable newPasswordRequired = false;
-  @observable cognitoUserSession = null;
 
   @action
   setFirstName(givenName) {
@@ -73,11 +71,6 @@ export class AuthStore {
   }
 
   @action
-  clearErrors() {
-    this.errors = null;
-  }
-
-  @action
   reset() {
     this.values.givenName = '';
     this.values.familyName = '';
@@ -86,16 +79,6 @@ export class AuthStore {
     this.values.verify = '';
     this.values.code = '';
     this.role = 'investor';
-  }
-
-  @action
-  setProgress(status) {
-    this.inProgress = status;
-  }
-
-  @action
-  setErrors(error) {
-    this.errors = error;
   }
 
   @action
@@ -115,8 +98,8 @@ export class AuthStore {
 
   @action
   register() {
-    this.inProgress = true;
-    this.errors = undefined;
+    uiStore.setProgress(true);
+    uiStore.clearErrors();
 
     return new Promise((res, rej) => {
       const attributeRoles = new AWSCognito.CognitoUserAttribute({
@@ -154,18 +137,18 @@ export class AuthStore {
       );
     })
       .catch(action((err) => {
-        this.errors = this.simpleErr(err);
+        uiStore.clearErrors(err);
         throw err;
       }))
       .finally(action(() => {
-        this.inProgress = false;
+        uiStore.setProgress(false);
       }));
   }
 
   @action
   resetPassword() {
-    this.inProgress = true;
-    this.errors = undefined;
+    uiStore.setProgress(true);
+    uiStore.clearErrors();
 
     const userData = {
       Username: this.values.email,
@@ -180,18 +163,18 @@ export class AuthStore {
       });
     })
       .catch(action((err) => {
-        this.errors = this.simpleErr(err);
+        uiStore.setErrors(err);
         throw err;
       }))
       .finally(action(() => {
-        this.inProgress = false;
+        uiStore.setProgress(false);
       }));
   }
 
   @action
   setNewPassword() {
-    this.inProgress = true;
-    this.errors = undefined;
+    uiStore.setProgress(true);
+    uiStore.clearErrors();
 
     return new Promise((res, rej) => {
       cognitoUser = new AWSCognito.CognitoUser({
@@ -204,18 +187,18 @@ export class AuthStore {
       });
     })
       .catch(action((err) => {
-        this.errors = this.simpleErr(err);
+        uiStore.setErrors(err);
         throw err;
       }))
       .finally(action(() => {
-        this.inProgress = false;
+        uiStore.setProgress(false);
       }));
   }
 
   @action
   confirmCode() {
-    this.inProgress = true;
-    this.errors = undefined;
+    uiStore.setProgress(true);
+    uiStore.clearErrors();
 
     cognitoUser = new AWSCognito.CognitoUser({
       Username: this.values.email,
@@ -233,11 +216,11 @@ export class AuthStore {
         this.setMessage("You're confirmed! Please login...");
       }))
       .catch(action((err) => {
-        this.errors = this.simpleErr(err);
+        uiStore.setErrors(err);
         throw err;
       }))
       .finally(action(() => {
-        this.inProgress = false;
+        uiStore.setProgress(false);
       }));
   }
 

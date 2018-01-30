@@ -3,6 +3,7 @@ import shortid from 'shortid';
 import _ from 'lodash';
 
 import api from '../ns-api';
+import uiStore from './uiStore';
 
 export class UserStore {
   @observable currentUser;
@@ -84,17 +85,17 @@ export class UserStore {
   }
 
   @action pullUser() {
-    this.loadingUser = true;
+    uiStore.setProgress(true);
     return api.Auth.current()
       .then(action((user) => { this.currentUser = user; }))
-      .finally(action(() => { this.loadingUser = false; }));
+      .finally(action(() => { uiStore.setProgress(false); }));
   }
 
   @action updateUser(userAttributes) {
-    this.updatingUser = true;
+    uiStore.setProgress(true);
     return api.User.update(userAttributes)
       .then(action(({ user }) => { this.currentUser = user; }))
-      .finally(action(() => { this.updatingUser = false; }));
+      .finally(action(() => { uiStore.setProgress(false); }));
   }
 
   @action forgetUser() {

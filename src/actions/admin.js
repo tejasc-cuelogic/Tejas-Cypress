@@ -3,7 +3,7 @@ import * as AWS from 'aws-sdk';
 import { API_VERSION, USER_POOL_ID, LIST_LIMIT, STATUSES } from './../constants/aws';
 import adminStore from './../stores/adminStore';
 import userStore from './../stores/userStore';
-import authStore from '../stores/authStore';
+import uiStore from '../stores/uiStore';
 
 export class Admin {
   awsCognitoISP = null;
@@ -11,6 +11,10 @@ export class Admin {
   // List all user from admin side
   // TODO: Pass pagination token and other params as require
   listUsers = (options) => {
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching user data');
+
     const params = {
       UserPoolId: USER_POOL_ID,
       Limit: LIST_LIMIT,
@@ -30,13 +34,22 @@ export class Admin {
           adminStore.setUsersList(this.getFormatedUserData(data.Users));
         })
         .catch((err) => {
-          console.log(err);
+          uiStore.setErrors(err);
+          throw err;
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
         })
     );
   }
 
   // Creates new user on congnito user pool
   createNewUser = () => {
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Creating new user');
+
     const params = {
       UserPoolId: USER_POOL_ID,
       TemporaryPassword: userStore.userAttributes.password,
@@ -54,18 +67,26 @@ export class Admin {
         });
       })
         .then((data) => {
-          // TODO: Redirect to the admin home page once user is created successfully with msg
+          uiStore.setSuccess('User created successfully');
           console.log(data);
         })
         .catch((err) => {
-          console.log(err);
-          authStore.setErrors(err);
+          uiStore.setErrors(err);
+          throw err;
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
         })
     );
   }
 
   // Deletes user from user pool. THIS ACTION IS NOT REVERSIBLE
   deleteUser = (username) => {
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Deleting user from user pool');
+
     const params = {
       UserPoolId: USER_POOL_ID,
       Username: username,
@@ -81,12 +102,24 @@ export class Admin {
     })
       .then(() => {
         adminStore.changeUserStatus(username, STATUSES.deleted);
+        uiStore.setSuccess('User has been successfully deleted from pool');
       })
-      .catch(() => { });
+      .catch((err) => {
+        uiStore.setErrors(err);
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
   }
 
   // Admin can change non mandatory attributes of user.
   updateUserAttributes = () => {
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Updating user');
+
     const params = {
       UserAttributes: this.mappedUserAttributes(false),
       UserPoolId: USER_POOL_ID,
@@ -101,8 +134,18 @@ export class Admin {
         res(data);
       });
     })
-      .then(data => console.log(data))
-      .catch(err => console.log(err));
+      .then((data) => {
+        uiStore.setSuccess('Updated user data');
+        console.log(data);
+      })
+      .catch((err) => {
+        uiStore.setErrors(err);
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
   }
 
   // Search User
@@ -113,6 +156,8 @@ export class Admin {
     }
     this.listUsers({ filter: filterString });
   }
+
+
   // Private method starts here
 
   /*

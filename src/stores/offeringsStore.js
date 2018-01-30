@@ -1,9 +1,10 @@
 import { observable, action } from 'mobx';
 
+import uiStore from './uiStore';
+
 export class OfferingsStore {
   @observable offerings = [];
   @observable selectedOffering = null;
-  @observable isLoadingOffering = false;
   mockOfferings = [{
     id: 1,
     title: 'Pitch 25',
@@ -27,9 +28,9 @@ export class OfferingsStore {
 
   @action
   selectOffering(id) {
-    this.isLoadingProfile = true;
+    uiStore.setProgress(true);
     this.selectedOffering = this.mockOfferings.find(offering => offering.id === parseInt(id, 10));
-    this.isLoadingProfile = false;
+    uiStore.setProgress(false);
   }
 }
 

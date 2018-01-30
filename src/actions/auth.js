@@ -10,6 +10,7 @@ import userStore from './../stores/userStore';
 import authStore from './../stores/authStore';
 import commonStore from './../stores/commonStore';
 import adminStore from '../stores/adminStore';
+import uiStore from '../stores/uiStore';
 
 export class Auth {
   defaultRole = 'investor';
@@ -63,7 +64,7 @@ export class Auth {
           }))
         .then(() => adminStore.setAdminCredsLoaded(true))
         // Empty method needed to avoid warning.
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => {
           commonStore.setAppLoaded();
         })
@@ -78,20 +79,22 @@ export class Auth {
       Logins: {},
     };
     identityPoolDetails.Logins[`cognito-idp.${AWS_REGION}.amazonaws.com/${USER_POOL_ID}`] =
-    jwtToken;
+      jwtToken;
 
     AWS.config.credentials = new AWS.CognitoIdentityCredentials(identityPoolDetails);
 
     return AWS.config.credentials.refresh((error) => {
       if (error) {
-        console.error(error);
-      } else {
-        console.log('Granted Admin access!', AWS.config.credentials);
+        uiStore.setErrors(this.simpleErr(error));
+        throw error;
       }
     });
   }
 
   login(values) {
+    uiStore.reset();
+    uiStore.setProgress();
+
     const { email, password } = values;
 
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
@@ -114,6 +117,7 @@ export class Auth {
       });
     })
       .then((result) => {
+        uiStore.setSuccess('Successfully logged in');
         if (result.action && result.action === 'newPassword') {
           authStore.setEmail(result.data.email);
           authStore.setCognitoUserSession(this.cognitoUser.Session);
@@ -130,17 +134,18 @@ export class Auth {
         }
       })
       .catch((err) => {
-        authStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        authStore.setProgress(false);
+        uiStore.setProgress(false);
       });
   }
 
   register(values) {
-    authStore.setProgress(true);
-    authStore.setErrors(undefined);
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Signing you up');
 
     return new Promise((res, rej) => {
       const attributeRoles = new AWSCognito.CognitoUserAttribute({
@@ -177,18 +182,23 @@ export class Auth {
         },
       );
     })
+      .then(() => {
+        uiStore.setSuccess('Sign up successfull');
+      })
       .catch((err) => {
-        authStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        authStore.setProgress(false);
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
   resetPassword(values) {
-    authStore.setProgress(true);
-    authStore.setErrors(undefined);
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Changing password');
 
     const userData = {
       Username: values.email,
@@ -202,18 +212,22 @@ export class Auth {
         onFailure: err => rej(err),
       });
     })
+      .then(() => {
+        uiStore.setSuccess('Changed Password');
+      })
       .catch((err) => {
-        authStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        authStore.setProgress(false);
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
   setNewPassword() {
-    authStore.setProgress(true);
-    authStore.setErrors(undefined);
+    uiStore.reset();
+    uiStore.setProgress();
 
     return new Promise((res, rej) => {
       this.cognitoUser = new AWSCognito.CognitoUser({
@@ -225,17 +239,23 @@ export class Auth {
         onFailure: err => rej(err),
       });
     })
+      .then(() => {
+        uiStore.setSuccess('Password changed successfully');
+      })
       .catch((err) => {
-        authStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        authStore.setProgress(false);
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
   changePassword() {
-    authStore.setProgress(true);
+    uiStore.reset();
+    uiStore.setProgress();
+
     this.cognitoUser = new AWSCognito.CognitoUser({
       Username: authStore.values.email,
       Pool: this.userPool,
@@ -248,14 +268,22 @@ export class Auth {
       });
     })
       .then(() => {
-        authStore.setProgress(false);
+        uiStore.setSuccess('Successfully changed password');
         authStore.unsetNewPasswordRequired();
+      })
+      .catch((err) => {
+        uiStore.setErrors(this.simpleErr(err));
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
   confirmCode() {
-    authStore.setProgress(true);
-    authStore.setErrors(undefined);
+    uiStore.reset();
+    uiStore.setProgress();
 
     this.cognitoUser = new AWSCognito.CognitoUser({
       Username: this.values.email,
@@ -270,14 +298,15 @@ export class Auth {
       );
     })
       .then(() => {
-        console.log("You're confirmed! Please login...");
+        uiStore.setSuccess('Successfully done confirmation');
       })
       .catch((err) => {
-        authStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        authStore.setProgress(false);
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
