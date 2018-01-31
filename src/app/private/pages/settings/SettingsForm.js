@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Button } from 'semantic-ui-react';
 
-import PersonalDetails from './../common/personalDetails';
+import ProfileDetails from './../common/ProfileDetails';
 
 @inject('userStore')
 @observer
@@ -12,12 +12,12 @@ class SettingsForm extends React.Component {
   render() {
     return (
       <Form>
-        <PersonalDetails
+        <ProfileDetails
           userData={this.props.userStore.currentUser}
           handleChange={this.handleChange}
         />
         <Button onClick={this.handleClick}>
-          Update Settings
+          Update Profile
         </Button>
       </Form>
     );

@@ -5,7 +5,7 @@ import shortid from 'shortid';
 
 import { USER_ROLES } from './../../../../constants/user';
 import adminActions from './../../../../actions/admin';
-import PersonalDetails from './../common/personalDetails';
+import ProfileDetails from './../common/ProfileDetails';
 
 @inject('adminStore', 'userStore')
 @observer
@@ -44,7 +44,7 @@ export default class Profile extends React.Component {
     return (
       <div>
         <Form>
-          <PersonalDetails
+          <ProfileDetails
             userData={userAttributes}
             handleChange={this.handleChange}
           />

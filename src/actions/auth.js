@@ -1,5 +1,8 @@
 import * as AWSCognito from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk';
+import camel from 'to-camel-case';
+import _ from 'lodash';
+
 import {
   USER_POOL_ID,
   COGNITO_CLIENT_ID,
@@ -327,7 +330,7 @@ export class Auth {
 
   mapCognitoToken = (data) => {
     const mappedUser = data.reduce((obj, item) => {
-      const key = this.toCamelCase(item.Name.replace(/^custom:/, ''));
+      const key = camel(item.Name.replace(/^custom:/, ''));
       const newObj = obj;
       newObj[key] = item.Value;
       return newObj;
@@ -336,7 +339,8 @@ export class Auth {
   };
 
   adjustRoles = (data) => {
-    const newData = data;
+    const newData = {};
+    _.map(data, (val, key) => { (newData[camel(key)] = val); });
     newData.roles = data['custom:roles'];
     delete newData['custom:roles'];
     return newData;
@@ -347,15 +351,6 @@ export class Auth {
     newData.roles = JSON.parse(data.roles);
     return newData;
   };
-
-  toCamelCase = str => (
-    str.split('_').map((word, index) => {
-      if (index === 0) {
-        return word.toLowerCase();
-      }
-      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    }).join('')
-  );
 }
 
 export default new Auth();

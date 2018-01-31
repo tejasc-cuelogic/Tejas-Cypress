@@ -1,18 +1,18 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
 
-const PersonalDetails = (props) => {
+const ProfileDetails = (props) => {
   const { userData } = props;
   return (
     <div>
-      <Form.Field label={`User ID : ${userData.username}`} />
+      <Form.Field label={`User ID : ${userData.username || userData.sub}`} />
       <Form.Group>
         <Form.Input
           type="text"
           label="First Name"
           placeholder="First Name"
           name="givenName"
-          value={userData.givenName}
+          defaultValue={userData.givenName || userData.given_name}
           onChange={props.handleChange}
         />
         <Form.Input
@@ -20,7 +20,7 @@ const PersonalDetails = (props) => {
           label="Last Name"
           placeholder="Last Name"
           name="familyName"
-          value={userData.familyName}
+          defaultValue={userData.familyName || userData.family_name}
           onChange={props.handleChange}
         />
       </Form.Group>
@@ -31,4 +31,4 @@ const PersonalDetails = (props) => {
   );
 };
 
-export default PersonalDetails;
+export default ProfileDetails;
