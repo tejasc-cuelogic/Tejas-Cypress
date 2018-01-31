@@ -26,4 +26,4 @@ export const DOCFILE_TYPES = {
   'Resolution - Borrowing Authority (Form).docx': true,
 };
 
-export const EDGAR_URL = 'https://dr0gozinfk.execute-api.us-east-2.amazonaws.com/dev/edgar/docs';
+export const EDGAR_URL = 'https://6fqagvjv78.execute-api.us-east-1.amazonaws.com/dev/edgar/publish';
