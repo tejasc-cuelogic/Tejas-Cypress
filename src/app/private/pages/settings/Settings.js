@@ -1,12 +1,11 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import PropTypes from 'prop-types';
 
 import ListErrors from './../../../../components/common/ListErrors';
 import SettingsForm from './SettingsForm';
 import authActions from './../../../../actions/auth';
-// import authActions from './../../../actions/auth';
+// import userActions from './../../../../actions/user';
 
 @inject('userStore', 'authStore')
 @withRouter
@@ -45,9 +44,5 @@ class Settings extends React.Component {
     );
   }
 }
-
-Settings.propTypes = {
-  userStore: PropTypes.shape.isRequired,
-};
 
 export default Settings;

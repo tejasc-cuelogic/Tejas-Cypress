@@ -327,7 +327,7 @@ export class Auth {
 
   mapCognitoToken = (data) => {
     const mappedUser = data.reduce((obj, item) => {
-      const key = item.Name.replace(/^custom:/, '');
+      const key = this.toCamelCase(item.Name.replace(/^custom:/, ''));
       const newObj = obj;
       newObj[key] = item.Value;
       return newObj;
@@ -347,6 +347,15 @@ export class Auth {
     newData.roles = JSON.parse(data.roles);
     return newData;
   };
+
+  toCamelCase = str => (
+    str.split('_').map((word, index) => {
+      if (index === 0) {
+        return word.toLowerCase();
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join('')
+  );
 }
 
 export default new Auth();

@@ -1,7 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 import routes from './routes';
 import authActions from './../../actions/auth';
@@ -38,8 +37,3 @@ export default class PrivateApp extends React.Component {
     return null;
   }
 }
-
-PrivateApp.propTypes = {
-  userStore: PropTypes.element.isRequired,
-  // userStore: PropTypes.object,
-};

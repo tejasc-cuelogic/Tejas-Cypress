@@ -67,6 +67,11 @@ export class UserStore {
   }
 
   @action
+  setCurrentUserAttribute(key, value) {
+    this.currentUser[key] = value;
+  }
+
+  @action
   resetUserAttributes() {
     this.userAttributes.email = '';
     this.userAttributes.givenName = '';
