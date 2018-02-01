@@ -4,7 +4,7 @@ import upperFirst from 'lodash/upperFirst';
 
 class About extends Component {
   render() {
-    const loadSection = upperFirst(this.props.match.params.section) || 'Team';
+    const loadSection = upperFirst(this.props.match.params.section) || 'Terms-of-use';
     const LoadableAbout = Loadable({
       loader: () => import(`../components/${loadSection}`),
       loading() {

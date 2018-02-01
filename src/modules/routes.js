@@ -10,8 +10,13 @@ import ChangePassword from '../modules/auth/ChangePassword';
 import Business from './business/containers/Business';
 import Blog from './blog/containers/Blog';
 import About from './about/containers/About';
+import Agreements from './agreements/containers/Agreements';
 
 export default [
+  {
+    path: '/agreements/:section',
+    component: Agreements,
+  },
   {
     path: '/about/:section',
     component: About,
