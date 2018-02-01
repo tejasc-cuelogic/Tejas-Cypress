@@ -6,6 +6,7 @@ import Login from '../modules/auth/Login';
 import Register from '../modules/auth/Register';
 import ForgotPassword from '../modules/auth/ForgotPassword';
 import ResetPassword from '../modules/auth/ResetPassword';
+import ChangePassword from '../modules/auth/ChangePassword';
 
 export default [
   {
@@ -38,6 +39,10 @@ export default [
   {
     path: '/reset-password',
     component: ResetPassword,
+  },
+  {
+    path: '/change-password',
+    component: ChangePassword,
   },
   {
     path: '/',
