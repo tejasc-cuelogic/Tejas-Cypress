@@ -4,6 +4,8 @@ import Invest from './invest/containers/Invest';
 import Confirm from '../modules/auth/Confirm';
 import Login from '../modules/auth/Login';
 import Register from '../modules/auth/Register';
+import ForgotPassword from '../modules/auth/ForgotPassword';
+import ResetPassword from '../modules/auth/ResetPassword';
 
 export default [
   {
@@ -28,6 +30,14 @@ export default [
     path: '/register',
     component: Register,
     exact: true,
+  },
+  {
+    path: '/forgot-password',
+    component: ForgotPassword,
+  },
+  {
+    path: '/reset-password',
+    component: ResetPassword,
   },
   {
     path: '/',
