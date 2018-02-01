@@ -2,14 +2,18 @@ import * as AWSCognito from 'amazon-cognito-identity-js';
 
 import uiStore from '../stores/uiStore';
 import userStore from '../stores/userStore';
+import { USER_POOL_ID, COGNITO_CLIENT_ID } from './../constants/aws';
 
-const userPool = new AWSCognito.CognitoUserPool({
-  UserPoolId: process.env.REACT_APP_AWS_COGNITO_USER_POOL_ID,
-  ClientId: process.env.REACT_APP_AWS_COGNITO_CLIENT_ID,
-});
-
-let cognitoUser = null;
 export class User {
+  userPool = null;
+  cognitoUser = null;
+
+  constructor() {
+    this.userPool = new AWSCognito.CognitoUserPool({
+      UserPoolId: USER_POOL_ID,
+      ClientId: COGNITO_CLIENT_ID,
+    });
+  }
   updateProfile = () => {
     uiStore.reset();
     uiStore.setProgress();
@@ -29,13 +33,10 @@ export class User {
 
     attributeList.push(givenNameAttr);
     attributeList.push(familyNameAttr);
-
-    cognitoUser = new AWSCognito.CognitoUser({
-      Username: userStore.currentUser.email,
-      pool: userPool,
-    });
+    this.cognitoUser = this.userPool.getCurrentUser();
+    this.cognitoUser.getSession((err, session) => console.log(err, session));
     return new Promise((res, rej) => {
-      cognitoUser.updateAttributes(attributeList, (err, data) => {
+      this.cognitoUser.updateAttributes(attributeList, (err, data) => {
         if (err) {
           rej(err);
         }
