@@ -5,6 +5,7 @@ import shortid from 'shortid';
 
 import { USER_ROLES } from './../../../../constants/user';
 import adminActions from './../../../../actions/admin';
+import ProfileDetails from './../common/ProfileDetails';
 
 @inject('adminStore', 'userStore')
 @observer
@@ -43,28 +44,10 @@ export default class Profile extends React.Component {
     return (
       <div>
         <Form>
-          <Form.Field label={`User ID : ${userAttributes.username}`} />
-          <Form.Group>
-            <Form.Input
-              type="text"
-              label="First Name"
-              placeholder="First Name"
-              name="givenName"
-              value={userAttributes.givenName}
-              onChange={this.handleChange}
-            />
-            <Form.Input
-              type="text"
-              label="Last Name"
-              placeholder="Last Name"
-              name="familyName"
-              value={userAttributes.familyName}
-              onChange={this.handleChange}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Field label={`Email: ${userAttributes.email}`} />
-          </Form.Group>
+          <ProfileDetails
+            userData={userAttributes}
+            handleChange={this.handleChange}
+          />
           <Form.Group>
             {
               USER_ROLES.map(role => (
