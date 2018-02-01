@@ -22,7 +22,7 @@ const UserNavigation = (props) => {
       <Dropdown item simple text={props.currentUser.email}>
         <Dropdown.Menu>
           <Dropdown.Item as={Link} to="/settings">Settings</Dropdown.Item>
-          <Dropdown.Item>Log Out</Dropdown.Item>
+          <Dropdown.Item onClick={props.handleLogOut}>Log Out</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     );
@@ -55,7 +55,7 @@ const navigationItems = props => (
             <Dropdown.Item>FAQ</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <UserNavigation currentUser={props.currentUser} />
+        <UserNavigation {...props} />
       </Menu.Menu>
     </Container>
   </Menu>
