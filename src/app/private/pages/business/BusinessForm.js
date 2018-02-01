@@ -28,7 +28,7 @@ export default class BusinessForm extends React.Component {
             placeholder={data.placeholder}
             label={data.placeholder}
             name={data.name}
-            value={templateVariables[data.name]}
+            defaultValue={templateVariables[data.name]}
             onChange={this.handleInputChange}
             width={4}
             key={`${key}_${data.name}`}
