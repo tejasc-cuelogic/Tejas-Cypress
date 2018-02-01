@@ -7,8 +7,23 @@ import Register from '../modules/auth/Register';
 import ForgotPassword from '../modules/auth/ForgotPassword';
 import ResetPassword from '../modules/auth/ResetPassword';
 import ChangePassword from '../modules/auth/ChangePassword';
+import Business from './business/containers/Business';
+import Blog from './blog/containers/Blog';
+import About from './about/containers/About';
 
 export default [
+  {
+    path: '/about/:section',
+    component: About,
+  },
+  {
+    path: '/blog',
+    component: Blog,
+  },
+  {
+    path: '/business',
+    component: Business,
+  },
   {
     path: '/invest',
     component: Invest,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   // Button,
   Container,
@@ -20,7 +21,7 @@ const footer = () => (
         <Grid.Row>
           <Grid.Column width={3}>
             <Header inverted as="h4" content="Team" />
-            <Header inverted as="h4" content="Blog" />
+            <Header inverted as={Link} to="/blog" content="Blog" />
             <Header inverted as="h4" content="FAQ" />
             <Header inverted as="h4" content="Browse" />
           </Grid.Column>
