@@ -2,8 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
-import authActions from './../../../actions/auth';
-import ListErrors from '../../../components/common/ListErrors';
+import authActions from './../../actions/auth';
+import ListErrors from '../../components/common/ListErrors';
 
 
 @inject('authStore', 'userStore')
@@ -17,7 +17,6 @@ export default class Login extends React.Component {
     authActions.login(this.props.authStore.values)
       .then(() => {
         if (this.props.authStore.newPasswordRequired) {
-          console.log(this.props.authStore.values);
           this.props.history.push('/change-password');
         } else if (this.props.userStore.currentUser.roles.includes('admin')) {
           this.props.history.push('/admin/users');

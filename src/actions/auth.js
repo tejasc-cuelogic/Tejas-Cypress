@@ -1,5 +1,8 @@
 import * as AWSCognito from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk';
+import camel from 'to-camel-case';
+import _ from 'lodash';
+
 import {
   USER_POOL_ID,
   COGNITO_CLIENT_ID,
@@ -10,6 +13,7 @@ import userStore from './../stores/userStore';
 import authStore from './../stores/authStore';
 import commonStore from './../stores/commonStore';
 import adminStore from '../stores/adminStore';
+import uiStore from '../stores/uiStore';
 
 export class Auth {
   defaultRole = 'investor';
@@ -56,6 +60,7 @@ export class Auth {
         .then(data =>
           new Promise((res) => {
             userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(data.attributes)));
+            AWS.config.region = AWS_REGION;
             if (userStore.isCurrentUserWithRole('admin')) {
               this.setAWSAdminAccess(data.session.idToken.jwtToken);
             }
@@ -63,7 +68,7 @@ export class Auth {
           }))
         .then(() => adminStore.setAdminCredsLoaded(true))
         // Empty method needed to avoid warning.
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => {
           commonStore.setAppLoaded();
         })
@@ -71,27 +76,28 @@ export class Auth {
   };
 
   setAWSAdminAccess = (jwtToken) => {
-    AWS.config.region = AWS_REGION;
     // Create a object for the Identity pool and pass the appropriate paramenters to it
     const identityPoolDetails = {
       IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
       Logins: {},
     };
     identityPoolDetails.Logins[`cognito-idp.${AWS_REGION}.amazonaws.com/${USER_POOL_ID}`] =
-    jwtToken;
+      jwtToken;
 
     AWS.config.credentials = new AWS.CognitoIdentityCredentials(identityPoolDetails);
 
     return AWS.config.credentials.refresh((error) => {
       if (error) {
-        console.error(error);
-      } else {
-        console.log('Granted Admin access!', AWS.config.credentials);
+        uiStore.setErrors(this.simpleErr(error));
+        throw error;
       }
     });
   }
 
   login(values) {
+    uiStore.reset();
+    uiStore.setProgress();
+
     const { email, password } = values;
 
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
@@ -114,6 +120,7 @@ export class Auth {
       });
     })
       .then((result) => {
+        uiStore.setSuccess('Successfully logged in');
         if (result.action && result.action === 'newPassword') {
           authStore.setEmail(result.data.email);
           authStore.setCognitoUserSession(this.cognitoUser.Session);
@@ -123,6 +130,7 @@ export class Auth {
           // Extract JWT from token
           commonStore.setToken(data.idToken.jwtToken);
           userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+          AWS.config.region = AWS_REGION;
           // Check if currentUser has admin role, if user has admin role set admin access to user
           if (userStore.isCurrentUserWithRole('admin')) {
             this.setAWSAdminAccess(data.idToken.jwtToken);
@@ -130,17 +138,18 @@ export class Auth {
         }
       })
       .catch((err) => {
-        authStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        authStore.setProgress(false);
+        uiStore.setProgress(false);
       });
   }
 
   register(values) {
-    authStore.setProgress(true);
-    authStore.setErrors(undefined);
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Signing you up');
 
     return new Promise((res, rej) => {
       const attributeRoles = new AWSCognito.CognitoUserAttribute({
@@ -177,18 +186,23 @@ export class Auth {
         },
       );
     })
+      .then(() => {
+        uiStore.setSuccess('Sign up successfull');
+      })
       .catch((err) => {
-        authStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        authStore.setProgress(false);
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
   resetPassword(values) {
-    authStore.setProgress(true);
-    authStore.setErrors(undefined);
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Changing password');
 
     const userData = {
       Username: values.email,
@@ -202,18 +216,22 @@ export class Auth {
         onFailure: err => rej(err),
       });
     })
+      .then(() => {
+        uiStore.setSuccess('Changed Password');
+      })
       .catch((err) => {
-        authStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        authStore.setProgress(false);
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
   setNewPassword() {
-    authStore.setProgress(true);
-    authStore.setErrors(undefined);
+    uiStore.reset();
+    uiStore.setProgress();
 
     return new Promise((res, rej) => {
       this.cognitoUser = new AWSCognito.CognitoUser({
@@ -225,40 +243,51 @@ export class Auth {
         onFailure: err => rej(err),
       });
     })
+      .then(() => {
+        uiStore.setSuccess('Password changed successfully');
+      })
       .catch((err) => {
-        authStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        authStore.setProgress(false);
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
   changePassword() {
-    authStore.setProgress(true);
+    uiStore.reset();
+    uiStore.setProgress();
+
     this.cognitoUser = new AWSCognito.CognitoUser({
       Username: authStore.values.email,
       Pool: this.userPool,
     });
-    console.log(authStore.cognitoUserSession);
     this.cognitoUser.Session = authStore.cognitoUserSession;
-    console.log(this.cognitoUser);
     return new Promise((res, rej) => {
       this.cognitoUser.completeNewPasswordChallenge(authStore.values.password, this.values, {
         onSuccess: data => res(data),
         onFailure: err => rej(err),
       });
     })
-      .then((data) => {
-        console.log('Successfully chnaged new users password', data);
-        authStore.setProgress(false);
+      .then(() => {
+        uiStore.setSuccess('Successfully changed password');
         authStore.unsetNewPasswordRequired();
+      })
+      .catch((err) => {
+        uiStore.setErrors(this.simpleErr(err));
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
   confirmCode() {
-    authStore.setProgress(true);
-    authStore.setErrors(undefined);
+    uiStore.reset();
+    uiStore.setProgress();
 
     this.cognitoUser = new AWSCognito.CognitoUser({
       Username: this.values.email,
@@ -273,20 +302,22 @@ export class Auth {
       );
     })
       .then(() => {
-        console.log("You're confirmed! Please login...");
+        uiStore.setSuccess('Successfully done confirmation');
       })
       .catch((err) => {
-        authStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        authStore.setProgress(false);
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
   logout = () => {
     commonStore.setToken(undefined);
     userStore.forgetUser();
+    this.cognitoUser.signOut();
     // Clear all AWS credentials
     AWS.config.clear();
     return new Promise(res => res());
@@ -300,7 +331,7 @@ export class Auth {
 
   mapCognitoToken = (data) => {
     const mappedUser = data.reduce((obj, item) => {
-      const key = item.Name.replace(/^custom:/, '');
+      const key = camel(item.Name.replace(/^custom:/, ''));
       const newObj = obj;
       newObj[key] = item.Value;
       return newObj;
@@ -309,7 +340,8 @@ export class Auth {
   };
 
   adjustRoles = (data) => {
-    const newData = data;
+    const newData = {};
+    _.map(data, (val, key) => { (newData[camel(key)] = val); });
     newData.roles = data['custom:roles'];
     delete newData['custom:roles'];
     return newData;

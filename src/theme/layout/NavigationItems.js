@@ -16,7 +16,28 @@ import {
 } from 'semantic-ui-react';
 import Logo from '../../assets/images/nextseed_logo_color.svg';
 
-const navigationItems = () => (
+const UserNavigation = (props) => {
+  if (props.currentUser) {
+    return (
+      <Dropdown item simple text={props.currentUser.email}>
+        <Dropdown.Menu>
+          <Dropdown.Item as={Link} to="/settings">Settings</Dropdown.Item>
+          <Dropdown.Item onClick={props.handleLogOut}>Log Out</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    );
+  }
+  return (
+    <Dropdown item simple text="Log In or Sign Up">
+      <Dropdown.Menu>
+        <Dropdown.Item as={Link} to="/login">Log In</Dropdown.Item>
+        <Dropdown.Item as={Link} to="/register">Register</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
+
+const navigationItems = props => (
   <Menu fixed="top" size="large">
     <Container>
       <Menu.Item as={Link} to="/" header>
@@ -34,7 +55,7 @@ const navigationItems = () => (
             <Dropdown.Item>FAQ</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Menu.Item as="a">Log In or Sign Up</Menu.Item>
+        <UserNavigation {...props} />
       </Menu.Menu>
     </Container>
   </Menu>

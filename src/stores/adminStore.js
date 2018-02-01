@@ -1,6 +1,8 @@
 import { observable, action } from 'mobx';
-// import * as AWSCognito from 'amazon-cognito-identity-js';
 
+// TODO: Remove this store as this store is role based, remove ovservables from here
+// and move them to desired store
+// e.g. `usersList` should be in userStore
 export class AdminStore {
   @observable inProgress = false;
   @observable errors = null;

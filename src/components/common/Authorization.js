@@ -31,6 +31,7 @@ const Authorization = (allowedRoles, UnauthorizedComponent) => (
   }
 };
 
-export const AdminAuthorization = Authorization(['admin', 'bowner', 'investor'], NotFound);
+export const AdminAuthorization = Authorization(['admin'], NotFound);
 export const BusinessAuthorization = Authorization(['admin', 'bowner'], NotFound);
 export const InvestorAuthorization = Authorization(['admin', 'investor'], NotFound);
+export const UserAuthorization = Authorization(['admin', 'bowner', 'investor'], NotFound);

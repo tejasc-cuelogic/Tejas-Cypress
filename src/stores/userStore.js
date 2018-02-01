@@ -3,6 +3,7 @@ import shortid from 'shortid';
 import _ from 'lodash';
 
 import api from '../ns-api';
+import uiStore from './uiStore';
 
 export class UserStore {
   @observable currentUser;
@@ -13,45 +14,69 @@ export class UserStore {
   @observable userFilter = 'email';
   // TODO: add validation for all values
   @observable
-  newUser = {
+  userAttributes = {
     email: '',
     familyName: '',
     givenName: '',
     password: shortid.generate(),
     roles: [],
+    // emailVerified: false,
   }
 
   @computed get canSubmit() {
-    return _.every(this.newUser, val => !_.isEmpty(val));
+    return _.every(this.userAttributes, val => !_.isEmpty(val));
   }
 
   @action
   setEmail(email) {
-    this.newUser.email = email;
+    this.userAttributes.email = email;
   }
 
   @action
   setGivenName(name) {
-    this.newUser.givenName = name;
+    this.userAttributes.givenName = name;
   }
   @action
   setFamilyName(name) {
-    this.newUser.familyName = name;
+    this.userAttributes.familyName = name;
   }
 
   @action
   setPassword(password) {
-    this.newUser.password = password;
+    this.userAttributes.password = password;
   }
 
   @action
   addRole(role) {
-    this.newUser.roles.push(role);
+    this.userAttributes.roles.push(role);
   }
 
   @action
   removeRole(role) {
-    this.newUser.roles = _.reject(this.newUser.roles, rol => rol === role);
+    this.userAttributes.roles = _.reject(this.userAttributes.roles, rol => rol === role);
+  }
+
+  @action
+  setUser(user) {
+    this.userAttributes = user;
+  }
+
+  @action
+  setUserAttribute(key, value) {
+    this.userAttributes[key] = value;
+  }
+
+  @action
+  setCurrentUserAttribute(key, value) {
+    this.currentUser[key] = value;
+  }
+
+  @action
+  resetUserAttributes() {
+    this.userAttributes.email = '';
+    this.userAttributes.givenName = '';
+    this.userAttributes.familyName = '';
+    this.userAttributes.roles = [];
   }
 
   @action
@@ -65,17 +90,17 @@ export class UserStore {
   }
 
   @action pullUser() {
-    this.loadingUser = true;
+    uiStore.setProgress(true);
     return api.Auth.current()
       .then(action((user) => { this.currentUser = user; }))
-      .finally(action(() => { this.loadingUser = false; }));
+      .finally(action(() => { uiStore.setProgress(false); }));
   }
 
-  @action updateUser(newUser) {
-    this.updatingUser = true;
-    return api.User.update(newUser)
+  @action updateUser(userAttributes) {
+    uiStore.setProgress(true);
+    return api.User.update(userAttributes)
       .then(action(({ user }) => { this.currentUser = user; }))
-      .finally(action(() => { this.updatingUser = false; }));
+      .finally(action(() => { uiStore.setProgress(false); }));
   }
 
   @action forgetUser() {

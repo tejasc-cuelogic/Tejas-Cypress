@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Button } from 'semantic-ui-react';
 
-import authActions from './../../../actions/auth';
+import authActions from './../../actions/auth';
 
 @inject('authStore')
 @observer
@@ -17,7 +17,7 @@ export default class ChangePassword extends React.Component {
     e.preventDefault();
     authActions.changePassword()
       .then(() => {
-        this.props.history.push('/login');
+        this.props.history.push('/');
       });
   }
   render() {

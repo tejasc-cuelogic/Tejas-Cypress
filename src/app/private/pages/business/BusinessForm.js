@@ -6,6 +6,8 @@ import _ from 'lodash';
 
 import businessActions from './../../../../actions/business';
 
+const key = shortid.generate();
+
 @inject('businessStore')
 @observer
 export default class BusinessForm extends React.Component {
@@ -18,7 +20,7 @@ export default class BusinessForm extends React.Component {
   );
 
   render() {
-    const { formValues, documentList } = this.props.businessStore;
+    const { formValues, documentList, templateVariables } = this.props.businessStore;
     return (
       <Form as={Grid}>
         {formValues.map(data => (
@@ -26,9 +28,10 @@ export default class BusinessForm extends React.Component {
             placeholder={data.placeholder}
             label={data.placeholder}
             name={data.name}
+            defaultValue={templateVariables[data.name]}
             onChange={this.handleInputChange}
             width={4}
-            key={shortid.generate()}
+            key={`${key}_${data.name}`}
           />))
         }
         {
@@ -40,10 +43,10 @@ export default class BusinessForm extends React.Component {
               name={type}
               checked={value}
               onChange={this.handleCheckboxChange}
-              key={shortid.generate()}
+              key={`${key}_${type}`}
             />))
         }
-        <Button onClick={businessActions.generateDocxFile}>Generate Docx</Button>
+        <Button onClick={businessActions.generateDocxFile2}>Generate Docx</Button>
       </Form>
     );
   }

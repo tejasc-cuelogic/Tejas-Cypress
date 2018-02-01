@@ -6,7 +6,7 @@ export class BusinessStore {
   formValues = [...FORM_VALUES];
 
   @observable
-  templateVeriables = {
+  templateVariables = {
     name_of_business: '',
     shorthand_name: '',
     investment_multiple: '',
@@ -27,7 +27,7 @@ export class BusinessStore {
 
   @action
   setTemplateVariable(key, value) {
-    this.templateVeriables[key] = value;
+    this.templateVariables[key] = value;
   }
 
   @action

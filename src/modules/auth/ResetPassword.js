@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 
 import { Button } from 'semantic-ui-react';
-import ListErrors from '../../../components/common/ListErrors';
+import ListErrors from '../../components/common/ListErrors';
 
 @inject('authStore')
 @observer

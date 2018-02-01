@@ -1,16 +1,18 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import ListErrors from './../../../components/common/ListErrors';
+
+import ListErrors from './../../../../components/common/ListErrors';
 import SettingsForm from './SettingsForm';
-// import authActions from './../../../actions/auth';
+import authActions from './../../../../actions/auth';
+// import userActions from './../../../../actions/user';
 
 @inject('userStore', 'authStore')
 @withRouter
 @observer
 class Settings extends React.Component {
   handleClickLogout = () =>
-    this.props.authStore.logout().then(() => this.props.history.replace('/'));
+    authActions.logout().then(() => this.props.history.replace('/'));
 
   render() {
     return (

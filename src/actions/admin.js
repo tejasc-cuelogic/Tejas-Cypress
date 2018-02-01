@@ -1,25 +1,29 @@
 import * as AWS from 'aws-sdk';
 
-import { API_VERSION, USER_POOL_ID, LIST_LIMIT } from './../constants/aws';
+import { API_VERSION, USER_POOL_ID, LIST_LIMIT, STATUSES } from './../constants/aws';
 import adminStore from './../stores/adminStore';
 import userStore from './../stores/userStore';
-import authStore from '../stores/authStore';
+import uiStore from '../stores/uiStore';
 
 export class Admin {
-  AWSCognitoISP = null;
+  awsCognitoISP = null;
 
   // List all user from admin side
   // TODO: Pass pagination token and other params as require
   listUsers = (options) => {
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching user data');
+
     const params = {
       UserPoolId: USER_POOL_ID,
       Limit: LIST_LIMIT,
       Filter: options.filter,
     };
-    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return (
       new Promise((res, rej) => {
-        this.AWSCognitoISP.listUsers(params, (err, data) => {
+        this.awsCognitoISP.listUsers(params, (err, data) => {
           if (err) {
             rej(err);
           }
@@ -30,23 +34,32 @@ export class Admin {
           adminStore.setUsersList(this.getFormatedUserData(data.Users));
         })
         .catch((err) => {
-          console.log(err);
+          uiStore.setErrors(err);
+          throw err;
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
         })
     );
   }
 
   // Creates new user on congnito user pool
   createNewUser = () => {
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Creating new user');
+
     const params = {
       UserPoolId: USER_POOL_ID,
-      TemporaryPassword: userStore.newUser.password,
-      Username: userStore.newUser.email,
-      UserAttributes: this.newUserAttributes(),
+      TemporaryPassword: userStore.userAttributes.password,
+      Username: userStore.userAttributes.email,
+      UserAttributes: this.mappedUserAttributes(),
     };
-    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return (
       new Promise((res, rej) => {
-        this.AWSCognitoISP.adminCreateUser(params, (err, data) => {
+        this.awsCognitoISP.adminCreateUser(params, (err, data) => {
           if (err) {
             rej(err);
           }
@@ -54,25 +67,33 @@ export class Admin {
         });
       })
         .then((data) => {
-          // TODO: Redirect to the admin home page once user is created successfully with msg
+          uiStore.setSuccess('User created successfully');
           console.log(data);
         })
         .catch((err) => {
-          console.log(err);
-          authStore.setErrors(err);
+          uiStore.setErrors(err);
+          throw err;
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
         })
     );
   }
 
-  // Disable the user first and then delete user from user pool.
+  // Deletes user from user pool. THIS ACTION IS NOT REVERSIBLE
   deleteUser = (username) => {
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Deleting user from user pool');
+
     const params = {
       UserPoolId: USER_POOL_ID,
       Username: username,
     };
-    this.AWSCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return new Promise((res, rej) => {
-      this.AWSCognitoISP.adminDeleteUser(params, (err, data) => {
+      this.awsCognitoISP.adminDeleteUser(params, (err, data) => {
         if (err) {
           rej(err);
         }
@@ -80,9 +101,51 @@ export class Admin {
       });
     })
       .then(() => {
-        adminStore.changeUserStatus(username, 'DELETED');
+        adminStore.changeUserStatus(username, STATUSES.deleted);
+        uiStore.setSuccess('User has been successfully deleted from pool');
       })
-      .catch(() => {});
+      .catch((err) => {
+        uiStore.setErrors(err);
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
+  // Admin can change non mandatory attributes of user.
+  updateUserAttributes = () => {
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Updating user');
+
+    const params = {
+      UserAttributes: this.mappedUserAttributes(false),
+      UserPoolId: USER_POOL_ID,
+      Username: userStore.userAttributes.username,
+    };
+    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    return new Promise((res, rej) => {
+      this.awsCognitoISP.adminUpdateUserAttributes(params, (err, data) => {
+        if (err) {
+          rej(err);
+        }
+        res(data);
+      });
+    })
+      .then((data) => {
+        uiStore.setSuccess('Updated user data');
+        console.log(data);
+      })
+      .catch((err) => {
+        uiStore.setErrors(err);
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
   }
 
   // Search User
@@ -93,6 +156,8 @@ export class Admin {
     }
     this.listUsers({ filter: filterString });
   }
+
+
   // Private method starts here
 
   /*
@@ -140,16 +205,22 @@ export class Admin {
     return formatedUserData;
   }
 
-  /* Returns user attributes in format required to submit to AWS Cognito */
-  newUserAttributes = () => (
-    [
-      { Name: 'given_name', Value: userStore.newUser.givenName },
-      { Name: 'family_name', Value: userStore.newUser.familyName },
-      { Name: 'email', Value: userStore.newUser.email },
-      { Name: 'custom:roles', Value: JSON.stringify(userStore.newUser.roles) },
-      { Name: 'email_verified', Value: 'true' },
-    ]
-  )
+  /* Returns user attributes in format required to submit to AWS Cognito
+      If newUser parameter is set to true it will add two more attributes which are required
+    while creating new user.
+  */
+  mappedUserAttributes = (newUser = true) => {
+    const userData = [
+      { Name: 'given_name', Value: userStore.userAttributes.givenName },
+      { Name: 'family_name', Value: userStore.userAttributes.familyName },
+      { Name: 'custom:roles', Value: JSON.stringify(userStore.userAttributes.roles) },
+    ];
+    if (newUser) {
+      userData.push({ Name: 'email', Value: userStore.userAttributes.email });
+      userData.push({ Name: 'email_verified', Value: 'true' });
+    }
+    return userData;
+  }
   // Private method ends here
 }
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import NavigationItems from './NavigationItems';
 
-const header = () => (
+const header = props => (
   <div>
-    <NavigationItems />
+    <NavigationItems {...props} />
   </div>
 );
 
