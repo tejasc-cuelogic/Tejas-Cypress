@@ -60,6 +60,7 @@ export class Auth {
         .then(data =>
           new Promise((res) => {
             userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(data.attributes)));
+            AWS.config.region = AWS_REGION;
             if (userStore.isCurrentUserWithRole('admin')) {
               this.setAWSAdminAccess(data.session.idToken.jwtToken);
             }
@@ -75,7 +76,6 @@ export class Auth {
   };
 
   setAWSAdminAccess = (jwtToken) => {
-    AWS.config.region = AWS_REGION;
     // Create a object for the Identity pool and pass the appropriate paramenters to it
     const identityPoolDetails = {
       IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
@@ -130,6 +130,7 @@ export class Auth {
           // Extract JWT from token
           commonStore.setToken(data.idToken.jwtToken);
           userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+          AWS.config.region = AWS_REGION;
           // Check if currentUser has admin role, if user has admin role set admin access to user
           if (userStore.isCurrentUserWithRole('admin')) {
             this.setAWSAdminAccess(data.idToken.jwtToken);
