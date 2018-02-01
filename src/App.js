@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { withRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { withRouter, Switch, Route } from 'react-router-dom'; // Redirect
 import { inject, observer } from 'mobx-react';
 import 'semantic-ui-css/semantic.min.css';
 import Layout from './theme/layout/Layout';
-import Home from './modules/home/containers/Home';
+import Routes from './modules/routes';
 
 /**
  * Main App
@@ -15,8 +15,14 @@ class App extends Component {
   render() {
     const routes = (
       <Switch>
-        <Route path="/" exact component={Home} />
-        <Redirect to="/" />
+        {Routes.map(route => (
+          <Route
+            exact={route.exact ? route.exact : false}
+            path={route.path}
+            component={(route.auth) ? route.auth(route.component, this.props) : route.component}
+            key={route.path}
+          />
+        ))}
       </Switch>
     );
 

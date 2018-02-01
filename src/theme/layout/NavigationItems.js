@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   // Button,
   Container,
@@ -18,11 +19,11 @@ import Logo from '../../assets/images/nextseed_logo_color.svg';
 const navigationItems = () => (
   <Menu fixed="top" size="large">
     <Container>
-      <Menu.Item as="a" header>
+      <Menu.Item as={Link} to="/" header>
         <Image className="small" src={Logo} alt="NextSeed.com" style={{ marginRight: '1.5em' }} />
       </Menu.Item>
       <Menu.Menu position="right">
-        <Menu.Item as="a" active>Browse Deals</Menu.Item>
+        <Menu.Item as={Link} to="/offerings" >Browse Deals</Menu.Item>
         <Menu.Item as="a">For Investers</Menu.Item>
         <Menu.Item as="a">For Businesses</Menu.Item>
         <Dropdown item simple text="Learn">
