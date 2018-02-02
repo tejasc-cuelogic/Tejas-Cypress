@@ -10,6 +10,10 @@ import ListErrors from '../../components/common/ListErrors';
 @withRouter
 @observer
 export default class Login extends React.Component {
+  componentWillUnmount() {
+    this.props.authStore.reset();
+  }
+
   handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
   handleSubmitForm = (e) => {

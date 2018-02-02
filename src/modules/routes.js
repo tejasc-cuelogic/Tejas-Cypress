@@ -1,7 +1,6 @@
 import About from './about/containers/About';
 import Agreements from './agreements/containers/Agreements';
 import Blog from './blog/containers/Blog';
-import Business from './business/containers/Business';
 import ChangePassword from '../modules/auth/ChangePassword';
 import Confirm from '../modules/auth/Confirm';
 import EdgarForm from '../modules/business/EdgarForm';
@@ -27,10 +26,6 @@ export default [
   {
     path: '/blog',
     component: Blog,
-  },
-  {
-    path: '/business',
-    component: Business,
   },
   {
     path: '/invest',
