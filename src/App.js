@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import 'semantic-ui-css/semantic.min.css';
 import Layout from './theme/layout/Layout';
 import Routes from './modules/routes';
-
+import authActions from './actions/auth';
 /**
  * Main App
  */
@@ -12,7 +12,12 @@ import Routes from './modules/routes';
 @withRouter
 @observer
 class App extends Component {
+  componentWillMount() {
+    authActions.verifySession();
+  }
+
   render() {
+    console.log(this.props.userStore.currentUser);
     return (
       <div>
         <Layout>
