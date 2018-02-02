@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-
+import SidebarLeftOverlay from './SidebarLeftOverlay';
 import Header from './Header';
 import Footer from './Footer';
 import authActions from '../../actions/auth';
@@ -11,6 +11,10 @@ import authActions from '../../actions/auth';
 @withRouter
 @observer
 class Layout extends Component {
+  state = {
+    sidebar: 'collapse',
+  };
+
   handleLogOut = () => {
     authActions.logout()
       .then(() => {
@@ -21,6 +25,11 @@ class Layout extends Component {
   render() {
     return (
       <div>
+        {(this.props.userStore.currentUser) ?
+          <SidebarLeftOverlay
+            sidebar={this.state.sidebar}
+            sidebarAction={this.toggleState}
+          /> : null }
         <Header
           currentUser={this.props.userStore.currentUser}
           handleLogOut={this.handleLogOut}
@@ -35,7 +44,7 @@ class Layout extends Component {
         >
           {this.props.children}
         </div>
-        <Footer />
+        {(!this.props.userStore.currentUser) ? <Footer /> : null }
       </div>
     );
   }

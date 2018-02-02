@@ -1,41 +1,27 @@
-import React, { Component } from 'react';
-import { Sidebar, Segment, Button, Menu, Image, Icon, Header } from 'semantic-ui-react';
+import React from 'react';
 
-class SidebarLeftOverlay extends Component {
-  state = { visible: true }
+const sidebarLeftOverlay = () => {
+  const sidebarClasses = 'ui left demo vertical inverted sidebar labeled icon menu uncover  ';
+  return (
+    <div style={{ top: '58px' }} className={sidebarClasses}>
+      <a className="item">
+        <i className="home icon" />
+        <span>Home</span>
+      </a>
+      <a className="item">
+        <i className="block layout icon" />
+        <span>Topics</span>
+      </a>
+      <a className="item">
+        <i className="smile icon" />
+        <span>Friends</span>
+      </a>
+      <a className="item collapseIcon" role="presentation" >
+        <i className="angle double left icon" />
+        <span>collapse</span>
+      </a>
+    </div>
+  );
+};
 
-  toggleVisibility = () => this.setState({ visible: !this.state.visible })
-
-  render() {
-    const { visible } = this.state;
-    return (
-      <div>
-        <Button onClick={this.toggleVisibility}>Toggle Visibility</Button>
-        <Sidebar.Pushable as={Segment}>
-          <Sidebar as={Menu} animation="overlay" width="thin" visible={visible} icon="labeled" vertical inverted>
-            <Menu.Item name="home">
-              <Icon name="home" />
-              Home
-            </Menu.Item>
-            <Menu.Item name="gamepad">
-              <Icon name="gamepad" />
-              Games
-            </Menu.Item>
-            <Menu.Item name="camera">
-              <Icon name="camera" />
-              Channels
-            </Menu.Item>
-          </Sidebar>
-          <Sidebar.Pusher>
-            <Segment basic>
-              <Header as="h3">Application Content</Header>
-              <Image src="/assets/images/wireframe/paragraph.png" />
-            </Segment>
-          </Sidebar.Pusher>
-        </Sidebar.Pushable>
-      </div>
-    );
-  }
-}
-
-export default SidebarLeftOverlay;
+export default sidebarLeftOverlay;

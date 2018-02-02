@@ -77,6 +77,28 @@
         color: #4c4a4a;
         margin-top: 30px;
       }
+      .ui.vertical.icon.menu.collapse{
+        width: 230px;
+      }
+      .ui.labeled.icon.menu.inverted .item span{
+        display: none;
+      }
+      .ui.labeled.icon.menu.collapse .item span{
+        display: inline-block;
+        margin-left: 15px;
+      }
+      .ui.labeled.icon.menu.collapse .item{
+        text-align: left;
+      }
+      .ui.labeled.icon.menu.collapse .item>.icon:not(.dropdown){
+        display: inline-block;
+      }
+      .ui.vertical.menu .item.collapseIcon{
+        position: absolute;
+        bottom: 95px;
+        width: 100%;
+        border-top: 1px solid rgba(255,255,255,.08);
+      }
     </style>
   </head>
   <body>
