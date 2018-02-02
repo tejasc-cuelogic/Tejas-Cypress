@@ -5,7 +5,7 @@ class Invest extends Component {
     return (
       <div className="ui one column grid">
         <div
-          className="column"
+          className="column nsContent"
           style={{
             fontSize: '30px',
             color: '#666',

@@ -55,7 +55,14 @@ export default class EdgarForm extends React.Component {
             }
           </Grid>
           <Divider section />
-          <div className="form-footer">
+          <div
+            className="form-footer"
+            style={{
+            paddingBottom: '40px',
+            paddingLeft: '1rem',
+            // textAlign: 'center',
+            }}
+          >
             <Button onClick={businessActions.generateDocxFile} primary>Generate Docx</Button>
           </div>
         </Form>

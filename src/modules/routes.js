@@ -12,7 +12,7 @@ import Login from '../modules/auth/Login';
 import Offering from './offering/containers/Offering';
 import Register from '../modules/auth/Register';
 import ResetPassword from '../modules/auth/ResetPassword';
-
+import CaseStudies from './caseStudies/containers/CaseStudies';
 import { BusinessAuthorization } from '../components/common/Authorization';
 
 export default [
@@ -31,6 +31,18 @@ export default [
   {
     path: '/invest',
     component: Invest,
+  },
+  {
+    path: '/case-studies/:caseStudyId',
+    component: CaseStudies,
+  },
+  {
+    path: '/case-studies',
+    component: CaseStudies,
+  },
+  {
+    path: '/offerings/:offerId',
+    component: Offering,
   },
   {
     path: '/offerings',

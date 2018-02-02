@@ -16,7 +16,7 @@ class Business extends Component {
           <Button onClick={this.handleEdgarFormClick} floated="right">New Business</Button>
         </div>
         <div
-          className="column"
+          className="column nsContent"
           style={{
             fontSize: '30px',
             color: '#666',
