@@ -6,6 +6,7 @@ export class UiStore {
   @observable loaderMessage = '';
   @observable errors = undefined;
   @observable success = undefined;
+  @observable redirectURL = undefined;
 
   @action
   setProgress(progress = true) {
@@ -40,6 +41,15 @@ export class UiStore {
   @action
   clearSuccess() {
     this.success = undefined;
+  }
+  @action
+  setRedirectURL(url) {
+    this.redirectURL = url;
+  }
+
+  @action
+  clearRedirectURL() {
+    this.redirectURL = undefined;
   }
 
   @action

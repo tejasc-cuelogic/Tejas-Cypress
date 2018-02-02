@@ -28,9 +28,9 @@ class Layout extends Component {
         <div
           className="ui container"
           style={{
-            marginTop: '7em',
+            marginTop: '10em',
             minHeight: '300px',
-            textAlign: 'center',
+            // textAlign: 'center',
           }}
         >
           {this.props.children}
