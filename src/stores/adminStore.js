@@ -4,8 +4,6 @@ import { observable, action } from 'mobx';
 // and move them to desired store
 // e.g. `usersList` should be in userStore
 export class AdminStore {
-  @observable inProgress = false;
-  @observable errors = null;
   @observable usersList = {};
 
   @action
@@ -16,11 +14,6 @@ export class AdminStore {
   @action
   disableUser(username) {
     return this.usersList[username];
-  }
-
-  @action
-  setErrors(errors) {
-    this.errors = errors;
   }
 
   @action

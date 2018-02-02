@@ -1,6 +1,7 @@
 import About from './about/containers/About';
 import Agreements from './agreements/containers/Agreements';
 import Blog from './blog/containers/Blog';
+import Business from '../modules/business/containers/Business';
 import ChangePassword from '../modules/auth/ChangePassword';
 import Confirm from '../modules/auth/Confirm';
 import EdgarForm from '../modules/business/containers/EdgarForm';
@@ -66,9 +67,13 @@ export default [
     exact: true,
   },
   {
-    path: '/business',
+    path: '/business/edgar',
     component: EdgarForm,
-    exact: true,
+    auth: BusinessAuthorization,
+  },
+  {
+    path: '/business',
+    component: Business,
     auth: BusinessAuthorization,
   },
   {
