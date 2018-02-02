@@ -3,7 +3,7 @@ import Agreements from './agreements/containers/Agreements';
 import Blog from './blog/containers/Blog';
 import ChangePassword from '../modules/auth/ChangePassword';
 import Confirm from '../modules/auth/Confirm';
-import EdgarForm from '../modules/business/EdgarForm';
+import EdgarForm from '../modules/business/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
 import Home from './home/containers/Home';
 import Invest from './invest/containers/Invest';
