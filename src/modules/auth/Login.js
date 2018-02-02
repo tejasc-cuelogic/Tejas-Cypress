@@ -6,7 +6,7 @@ import authActions from './../../actions/auth';
 import ListErrors from '../../components/common/ListErrors';
 
 
-@inject('authStore', 'userStore')
+@inject('authStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class Login extends React.Component {
@@ -35,7 +35,8 @@ export default class Login extends React.Component {
   };
 
   render() {
-    const { values, errors, inProgress } = this.props.authStore;
+    const { values, inProgress } = this.props.authStore;
+    const { errors } = this.props.uiStore;
 
     return (
       <div className="auth-page">
@@ -47,7 +48,7 @@ export default class Login extends React.Component {
                 <Link to="register">Need an account?</Link>
               </p>
 
-              <ListErrors errors={errors} />
+              <ListErrors errors={errors ? [errors.message] : []} />
 
               <form onSubmit={this.handleSubmitForm}>
                 <fieldset>
