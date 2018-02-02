@@ -11,13 +11,13 @@ const key = shortid.generate();
 @inject('businessStore')
 @observer
 export default class EdgarForm extends React.Component {
-  handleInputChange = e => (
-    this.props.businessStore.setTemplateVariable(e.target.name, e.target.value)
-  );
+  handleInputChange = (e) => {
+    this.props.businessStore.setTemplateVariable(e.target.name, e.target.value);
+  };
 
-  handleCheckboxChange = e => (
-    this.props.businessStore.toggleRequiredFiles(e.target.name)
-  );
+  handleCheckboxChange = (e) => {
+    this.props.businessStore.toggleRequiredFiles(e.target.textContent);
+  };
 
   render() {
     const { formValues, documentList, templateVariables } = this.props.businessStore;
@@ -42,13 +42,12 @@ export default class EdgarForm extends React.Component {
           <Grid container stackable columns={2}>
             {
               _.map(documentList, (value, type) => (
-                <GridColumn>
+                <GridColumn key={`${key}_${type}`}>
                   <Checkbox
                     label={type}
                     name={type}
                     checked={value}
                     onChange={this.handleCheckboxChange}
-                    key={`${key}_${type}`}
                   />
                 </GridColumn>
               ))
@@ -56,7 +55,7 @@ export default class EdgarForm extends React.Component {
           </Grid>
           <Divider section />
           <div className="form-footer">
-            <Button onClick={businessActions.generateDocxFile2} primary>Generate Docx</Button>
+            <Button onClick={businessActions.generateDocxFile} primary>Generate Docx</Button>
           </div>
         </Form>
       </Grid>
