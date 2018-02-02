@@ -14,7 +14,7 @@ class About extends Component {
 
     return (
       <div className="ui one column grid">
-        <div className="column" style={{ fontSize: '30px', color: '#666', top: '25px' }} >
+        <div className="column nsContent">
           <LoadableAbout />
         </div>
       </div>

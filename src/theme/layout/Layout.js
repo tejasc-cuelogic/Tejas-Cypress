@@ -19,7 +19,7 @@ class Layout extends Component {
           handleLogOut={this.handleLogOut}
         />
         <div
-          className="ui text container"
+          className="ui container"
           style={{
             marginTop: '7em',
             minHeight: '300px',

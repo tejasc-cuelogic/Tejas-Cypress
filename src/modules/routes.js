@@ -11,6 +11,7 @@ import Business from './business/containers/Business';
 import Blog from './blog/containers/Blog';
 import About from './about/containers/About';
 import Agreements from './agreements/containers/Agreements';
+import CaseStudies from './caseStudies/containers/CaseStudies';
 
 export default [
   {
@@ -32,6 +33,18 @@ export default [
   {
     path: '/invest',
     component: Invest,
+  },
+  {
+    path: '/case-studies/:caseStudyId',
+    component: CaseStudies,
+  },
+  {
+    path: '/case-studies',
+    component: CaseStudies,
+  },
+  {
+    path: '/offerings/:offerId',
+    component: Offering,
   },
   {
     path: '/offerings',

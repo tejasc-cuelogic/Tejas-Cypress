@@ -10,9 +10,12 @@ const team = () => (
       Last updated January 2018
     </span>
     <Divider inverted section />
+    {/* eslint-disable max-len */}
     <p className="pageContent">
-      {/* eslint-disable max-len */}
-      The Next Seed, Inc. (NextSeed) operates a public website at www.nextseed.com, and also offer an online intermediary platform through its subsidiary NextSeed US LLC for investment crowdfunding in accordance with Regulation Crowdfunding. You may browse the public content on the website without establishing a user account, but you must establish a user account to view and use non-public content on the site and to use the platform. NextSeed is committed to maintaining the confidentiality, integrity, and security of your personal information. This Privacy Policy covers NextSeed’s privacy policies for both its public site visitors and its platform users, and describes:
+      NextSeed US LLC (together with its affiliates, “NextSeed”) offers its website and services on the terms stated in these Terms of Use (the “Terms”). The NextSeed Privacy Policy includes additional information about NextSeed’s use of information you submit using the website and services. Please read the Terms and the Privacy Policy carefully and let us know if you have any questions at all. You may reach NextSeed at info@nextseed.co. If you do not agree to the Terms or Privacy Policy you may not use the website or service. By using the website or services, you accept these Terms and the Privacy Policy. If you are using the website or services on behalf of any entity, you represent and warrant that you are authorized to accept these Terms and the Privacy Policy on that entity’s behalf.
+    </p>
+    <p className="pageContent">
+      Certain words used in these Terms have specific meanings as stated in the section where they are first used or in the section below captioned Definitions. For example, the words “NextSeed Content” and “User Content” have specific definitions that you must read and understand to have a full understanding these Terms.
     </p>
   </div>
 );
