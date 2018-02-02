@@ -8,3 +8,17 @@
   flex: 1;
   margin-top: 7em;
 }
+
+.edgar-form .ui.form .field{
+  margin: 0 0 2em;
+}
+.edgar-form .ui.form .field>label{
+  margin: 0 0 1rem;
+}
+.edgar-form .ui.checkbox{
+  margin-bottom: .1rem;
+}
+.edgar-form .form-footer{
+  text-align: center;
+  padding-bottom:20px;
+}

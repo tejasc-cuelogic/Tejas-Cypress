@@ -314,14 +314,16 @@ export class Auth {
       });
   }
 
-  logout = () => {
-    commonStore.setToken(undefined);
-    userStore.forgetUser();
-    this.cognitoUser.signOut();
+  logout = () => (
+    new Promise((res) => {
+      commonStore.setToken(undefined);
+      userStore.forgetUser();
+      this.cognitoUser.signOut();
+      AWS.config.clear();
+      res();
+    })
     // Clear all AWS credentials
-    AWS.config.clear();
-    return new Promise(res => res());
-  };
+  );
 
   simpleErr = err => ({
     statusCode: err.statusCode,
