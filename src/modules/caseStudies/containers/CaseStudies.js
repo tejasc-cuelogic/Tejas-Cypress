@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import GridListing from '../../../theme/ui/GridListing';
-import OfferDetails from '../components/OfferDetails';
+import CStudyDetails from '../components/CStudyDetails';
 
-class Offering extends Component {
-  offerings = [
+class CaseStudies extends Component {
+  caseStudies = [
     {
       title: 'Restaurant',
       description: 'A bar-style, fast casual restaurant bringing a unique and pot dining experience.',
+    },
+    {
+      title: 'GastroLounge',
+      description: 'GastroLounge and high end event space in up-and-coming East Downtown Houstan.',
     },
     {
       title: 'Chef Hall',
@@ -16,25 +20,21 @@ class Offering extends Component {
       title: 'BREW Pub',
       description: 'Houstan Bravery is launching new Buffbrew and over 40 beers on tap.',
     },
-    {
-      title: 'GastroLounge',
-      description: 'GastroLounge and high end event space in up-and-coming East Downtown Houstan.',
-    },
   ];
 
   render() {
     let pageContent = null;
-    if (this.props.match.params.offerId) {
-      pageContent = <OfferDetails offerId={this.props.match.params.offerId} />;
+    if (this.props.match.params.caseStudyId) {
+      pageContent = <CStudyDetails offerId={this.props.match.params.offerId} />;
     } else {
-      pageContent = <GridListing listItems={this.offerings} details="offerings/details" />;
+      pageContent = <GridListing listItems={this.caseStudies} details="case-studies/details" />;
     }
 
     return (
       <div className="ui one column grid">
         <div className="column nsContent">
-          <span className="title">NextSeed Offerings</span>
-          <span className="infotext">Invest in growing local businesses</span>
+          <span className="title">NextSeed Case Studies</span>
+          <span className="infotext">Have a look at our Case Studies</span>
           {pageContent}
         </div>
       </div>
@@ -42,4 +42,4 @@ class Offering extends Component {
   }
 }
 
-export default Offering;
+export default CaseStudies;
