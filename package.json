@@ -4,7 +4,7 @@
   "private": true,
   "description": "NS-Client",
   "devDependencies": {
-    "eslint": "^4.9.0",
+    "eslint": "4.13.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",

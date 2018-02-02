@@ -30,7 +30,6 @@ class Layout extends Component {
           style={{
             marginTop: '7em',
             minHeight: '300px',
-            textAlign: 'center',
           }}
         >
           {this.props.children}
