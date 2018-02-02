@@ -1,16 +1,37 @@
-import Home from './home/containers/Home';
-import Offering from './offering/containers/Offering';
-import Invest from './invest/containers/Invest';
-import Confirm from '../modules/auth/Confirm';
-import Login from '../modules/auth/Login';
-import Register from '../modules/auth/Register';
-import ForgotPassword from '../modules/auth/ForgotPassword';
-import ResetPassword from '../modules/auth/ResetPassword';
+import About from './about/containers/About';
+import Agreements from './agreements/containers/Agreements';
+import Blog from './blog/containers/Blog';
+import Business from './business/containers/Business';
 import ChangePassword from '../modules/auth/ChangePassword';
+import Confirm from '../modules/auth/Confirm';
 import EdgarForm from '../modules/business/EdgarForm';
+import ForgotPassword from '../modules/auth/ForgotPassword';
+import Home from './home/containers/Home';
+import Invest from './invest/containers/Invest';
+import Login from '../modules/auth/Login';
+import Offering from './offering/containers/Offering';
+import Register from '../modules/auth/Register';
+import ResetPassword from '../modules/auth/ResetPassword';
+
 import { BusinessAuthorization } from '../components/common/Authorization';
 
 export default [
+  {
+    path: '/agreements/:section',
+    component: Agreements,
+  },
+  {
+    path: '/about/:section',
+    component: About,
+  },
+  {
+    path: '/blog',
+    component: Blog,
+  },
+  {
+    path: '/business',
+    component: Business,
+  },
   {
     path: '/invest',
     component: Invest,

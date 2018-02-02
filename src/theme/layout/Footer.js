@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   // Button,
   Container,
@@ -18,17 +19,17 @@ const footer = () => (
     <Container>
       <Grid divided inverted stackable>
         <Grid.Row>
-          <Grid.Column width={3}>
-            <Header inverted as="h4" content="Team" />
-            <Header inverted as="h4" content="Blog" />
-            <Header inverted as="h4" content="FAQ" />
-            <Header inverted as="h4" content="Browse" />
+          <Grid.Column className="footerLinks" width={3}>
+            <Header inverted as={Link} to="/about/team" content="Team" />
+            <Header inverted as={Link} to="/blog" content="Blog" />
+            <Header inverted as={Link} to="/about/faq" content="FAQ" />
+            <Header inverted as={Link} to="/offerings" content="Browse" />
           </Grid.Column>
-          <Grid.Column width={3}>
+          <Grid.Column className="footerLinks" width={3}>
             <Header inverted as="h4" content="info@nextseed.com" />
             <Header inverted as="h4" content="800-705-4220" />
-            <Header inverted as="h4" content="Terms of Use" />
-            <Header inverted as="h4" content="Privacy Policy" />
+            <Header inverted as={Link} to="/agreements/terms-of-use" content="Terms of Use" />
+            <Header inverted as={Link} to="/agreements/privacy-policy" content="Privacy Policy" />
           </Grid.Column>
           <Grid.Column width={10}>
             <p>

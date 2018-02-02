@@ -46,13 +46,13 @@ const navigationItems = props => (
       <Menu.Menu position="right">
         <Menu.Item as={Link} to="/offerings" >Browse Deals</Menu.Item>
         <Menu.Item as={Link} to="/invest">For Investers</Menu.Item>
-        <Menu.Item as="a">For Businesses</Menu.Item>
+        <Menu.Item as={Link} to="/business">For Businesses</Menu.Item>
         <Dropdown item simple text="Learn">
           <Dropdown.Menu>
-            <Dropdown.Item>Team</Dropdown.Item>
-            <Dropdown.Item>Ambassadors</Dropdown.Item>
-            <Dropdown.Item>Blog</Dropdown.Item>
-            <Dropdown.Item>FAQ</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/about/team" >Team</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/about/ambassadors" >Ambassadors</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/blog" >Blog</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/about/faq" >FAQ</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <UserNavigation {...props} />
