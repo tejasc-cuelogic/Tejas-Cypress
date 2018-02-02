@@ -4,13 +4,13 @@ import { Form, Button, Grid } from 'semantic-ui-react';
 import shortid from 'shortid';
 import _ from 'lodash';
 
-import businessActions from './../../../../actions/business';
+import businessActions from '../../actions/business';
 
 const key = shortid.generate();
 
 @inject('businessStore')
 @observer
-export default class BusinessForm extends React.Component {
+export default class EdgarForm extends React.Component {
   handleInputChange = e => (
     this.props.businessStore.setTemplateVariable(e.target.name, e.target.value)
   );
@@ -30,7 +30,7 @@ export default class BusinessForm extends React.Component {
             name={data.name}
             defaultValue={templateVariables[data.name]}
             onChange={this.handleInputChange}
-            width={2}
+            width={4}
             key={`${key}_${data.name}`}
           />))
         }
@@ -46,7 +46,7 @@ export default class BusinessForm extends React.Component {
               key={`${key}_${type}`}
             />))
         }
-        <Button onClick={businessActions.generateDocxFile2}>Generate Docx</Button>
+        <Button onClick={businessActions.generateDocxFile}>Generate Docx</Button>
       </Form>
     );
   }

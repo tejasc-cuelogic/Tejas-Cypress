@@ -9,7 +9,7 @@ export class Business {
   )
 
   generateDocxFile = () => {
-    const { templateVeriables, documentList } = businessStore;
+    const { templateVariables, documentList } = businessStore;
 
     // TODO: Move the call to the service layer
     request
@@ -17,7 +17,7 @@ export class Business {
       .set('Content-Type', 'application/json')
       .set('Access-Control-Request-Headers', '*')
       .send({
-        templateVariables: templateVeriables,
+        templateVariables,
         documentList: this.getDocumentList(documentList),
       })
       .end((err, res) => {

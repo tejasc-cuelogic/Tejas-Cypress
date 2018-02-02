@@ -13,23 +13,19 @@ import Routes from './modules/routes';
 @observer
 class App extends Component {
   render() {
-    const routes = (
-      <Switch>
-        {Routes.map(route => (
-          <Route
-            exact={route.exact ? route.exact : false}
-            path={route.path}
-            component={(route.auth) ? route.auth(route.component, this.props) : route.component}
-            key={route.path}
-          />
-        ))}
-      </Switch>
-    );
-
     return (
       <div>
         <Layout>
-          {routes}
+          <Switch>
+            {Routes.map(route => (
+              <Route
+                exact={route.exact ? route.exact : false}
+                path={route.path}
+                component={(route.auth) ? route.auth(route.component, this.props) : route.component}
+                key={route.path}
+              />
+            ))}
+          </Switch>
         </Layout>
       </div>
     );

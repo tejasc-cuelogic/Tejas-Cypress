@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -7,9 +8,15 @@ import authActions from '../../actions/auth';
 // import Spinner from '../ui/Spinner';
 
 @inject('userStore')
+@withRouter
 @observer
 class Layout extends Component {
-  handleLogOut = () => authActions.logout();
+  handleLogOut = () => {
+    authActions.logout()
+      .then(() => {
+        this.props.history.push('/');
+      });
+  }
 
   render() {
     return (
