@@ -21,7 +21,7 @@ class Layout extends Component {
   render() {
     return (
       <div>
-        {(true) ?
+        {(false) ?
           <SidebarLeftOverlay
             sidebarAction={this.toggleState}
           /> : null }
