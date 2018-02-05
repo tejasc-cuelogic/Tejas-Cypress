@@ -15,7 +15,7 @@ import ResetPassword from '../modules/auth/ResetPassword';
 import CaseStudies from './caseStudies/containers/CaseStudies';
 import { BusinessAuthorization } from '../components/common/Authorization';
 
-export default [
+export const publicRoutes = [
   {
     path: '/agreements/:section',
     component: Agreements,
@@ -79,6 +79,14 @@ export default [
     exact: true,
   },
   {
+    path: '/',
+    component: Home,
+    exact: true,
+  },
+];
+
+export const privateRoutes = [
+  {
     path: '/business/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
@@ -87,10 +95,5 @@ export default [
     path: '/business',
     component: Business,
     auth: BusinessAuthorization,
-  },
-  {
-    path: '/',
-    component: Home,
-    exact: true,
   },
 ];
