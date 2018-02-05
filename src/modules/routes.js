@@ -20,7 +20,7 @@ import Settings from './settings/containers/Settings';
 import Dashboard from './dashboard/containers/Dashboard';
 import { BusinessAuthorization } from '../components/common/Authorization';
 
-export default [
+export const publicRoutes = [
   {
     path: '/agreements/:section',
     component: Agreements,
@@ -63,11 +63,6 @@ export default [
     exact: true,
   },
   {
-    path: '/dashboard',
-    component: Dashboard,
-    exact: true,
-  },
-  {
     path: '/login',
     component: Login,
     exact: true,
@@ -93,6 +88,14 @@ export default [
     exact: true,
   },
   {
+    path: '/',
+    component: Home,
+    exact: true,
+  },
+];
+
+export const privateRoutes = [
+  {
     path: '/business/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
@@ -117,6 +120,11 @@ export default [
   {
     path: '/banking',
     component: Banking,
+  },
+  {
+    path: '/dashboard',
+    component: Dashboard,
+    exact: true,
   },
   {
     path: '/',
