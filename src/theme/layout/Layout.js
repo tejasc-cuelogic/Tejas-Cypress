@@ -30,15 +30,10 @@ class Layout extends Component {
           currentUser={this.props.userStore.currentUser}
           handleLogOut={this.handleLogOut}
         />
-        <div
-          className="ui container"
-          style={{
-            marginTop: '10em',
-            minHeight: '300px',
-            // textAlign: 'center',
-          }}
-        >
-          {this.props.children}
+        <div className="ui vertical segment">
+          <div className="ui container content">
+            {this.props.children}
+          </div>
         </div>
         {(true) ? <Footer /> : null }
       </div>

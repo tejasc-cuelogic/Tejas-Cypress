@@ -3,7 +3,7 @@ import React from 'react';
 import NavigationItems from './NavigationItems';
 
 const header = props => (
-  <div>
+  <div className="header-wrap">
     <NavigationItems {...props} />
     {props.showSecondaryHeader &&
       <div className="ui container fluid secondaryHeader">
