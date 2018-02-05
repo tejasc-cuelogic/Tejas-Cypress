@@ -39,7 +39,7 @@ const UserNavigation = (props) => {
 
 const navigationItems = props => (
   <Menu borderless fixed="top" size="large">
-    <Container>
+    <Container fluid>
       <Menu.Item as={Link} to="/" header>
         <Image className="small" src={Logo} alt="NextSeed.com" style={{ marginRight: '1.5em' }} />
       </Menu.Item>
@@ -52,10 +52,10 @@ const navigationItems = props => (
             <Dropdown.Item as={Link} to="/about/team" >Team</Dropdown.Item>
             <Dropdown.Item as={Link} to="/about/ambassadors" >Ambassadors</Dropdown.Item>
             <Dropdown.Item as={Link} to="/blog" >Blog</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/case-studies" >Case Studies</Dropdown.Item>
             <Dropdown.Item as={Link} to="/about/faq" >FAQ</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Menu.Item as={Link} to="/case-studies">Case Studies</Menu.Item>
         <UserNavigation {...props} />
       </Menu.Menu>
     </Container>
