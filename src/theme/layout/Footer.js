@@ -45,7 +45,7 @@ const footer = () => (
       </Grid>
     </Container>
     <Divider inverted section />
-    <Container style={{ textAlign: 'right' }}>&copy; 2018 NextSeed US LLC</Container>
+    <Container style={{ textAlign: 'center' }}>&copy; 2018 NextSeed US LLC</Container>
   </Segment>
 );
 

@@ -60,6 +60,7 @@ export class Auth {
         .then(data =>
           new Promise((res) => {
             userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(data.attributes)));
+            authStore.setUserLoggedIn(true);
             AWS.config.region = AWS_REGION;
             if (userStore.isCurrentUserWithRole('admin')) {
               this.setAWSAdminAccess(data.session.idToken.jwtToken);
@@ -121,6 +122,7 @@ export class Auth {
     })
       .then((result) => {
         uiStore.setSuccess('Successfully logged in');
+        authStore.setUserLoggedIn(true);
         if (result.action && result.action === 'newPassword') {
           authStore.setEmail(result.data.email);
           authStore.setCognitoUserSession(this.cognitoUser.Session);
@@ -320,6 +322,7 @@ export class Auth {
       userStore.forgetUser();
       this.cognitoUser.signOut();
       AWS.config.clear();
+      authStore.setUserLoggedIn(false);
       res();
     })
     // Clear all AWS credentials

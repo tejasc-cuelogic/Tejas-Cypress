@@ -4,7 +4,7 @@ import { Button } from 'semantic-ui-react';
 
 import ListErrors from '../../components/common/ListErrors';
 
-@inject('authStore')
+@inject('authStore', 'uiStore')
 @observer
 export default class ForgotPassword extends React.Component {
   componentWillMount() {
@@ -20,8 +20,8 @@ export default class ForgotPassword extends React.Component {
   }
 
   render() {
-    const { values, errors, inProgress } = this.props.authStore;
-
+    const { values, inProgress } = this.props.authStore;
+    const { errors } = this.props.uiStore;
     return (
       <div className="auth-page">
         <div className="container page">
@@ -29,7 +29,7 @@ export default class ForgotPassword extends React.Component {
             <div className="col-md-6 offset-md-3 col-xs-12">
               <div className="ui input focus">
 
-                <ListErrors errors={errors} />
+                <ListErrors errors={errors ? [errors.message] : []} />
 
                 <form onSubmit={this.handleSubmitForm}>
                   <fieldset>

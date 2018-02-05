@@ -19,6 +19,7 @@ export class AuthStore {
   @observable deleteButton = false;
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
+  @observable isUserLoggedIn = false;
 
   @observable
   values = {
@@ -94,6 +95,11 @@ export class AuthStore {
   @action
   setCognitoUserSession(session) {
     this.cognitoUserSession = session;
+  }
+
+  @action
+  setUserLoggedIn(status) {
+    this.isUserLoggedIn = status;
   }
 
   @action

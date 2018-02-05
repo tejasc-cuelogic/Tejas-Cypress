@@ -15,7 +15,15 @@ class Business extends Component {
         <div>
           <Button onClick={this.handleEdgarFormClick} floated="right">New Business</Button>
         </div>
-        <div className="column nsContent" >
+        <div
+          className="column nsContent"
+          style={{
+            fontSize: '30px',
+            color: '#666',
+            top: '25px',
+            textAlign: 'center',
+          }}
+        >
           <span className="title">NextSeed for Businesses</span>
           <span className="infotext">Let your community invest in your success</span>
         </div>

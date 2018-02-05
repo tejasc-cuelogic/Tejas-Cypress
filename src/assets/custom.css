@@ -9,6 +9,10 @@
   margin-top: 7em;
 }
 
+.edgar-form .ui.form{
+  padding-top:50px;
+  padding-bottom:50px;
+}
 .edgar-form .ui.form .field{
   margin: 0 0 2em;
 }
