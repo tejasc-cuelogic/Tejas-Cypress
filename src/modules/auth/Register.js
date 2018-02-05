@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { Button } from 'semantic-ui-react';
 import ListErrors from '../../components/common/ListErrors';
 
 @inject('authStore')
@@ -90,20 +91,22 @@ export default class Register extends React.Component {
                     />
                   </fieldset>
                   <fieldset className="form-group">
-                    <select className="ui dropdown" onChange={this.handleRoleChange}>
+                    <select className="ui dropdown form-control form-control-lg" size="1" onChange={this.handleRoleChange}>
                       <option value="">Role</option>
                       <option value="bowner">Business Owner</option>
                       <option value="investor">Investor</option>
                     </select>
                   </fieldset>
 
-                  <button
-                    className="btn btn-lg btn-primary pull-xs-right"
-                    type="submit"
-                    disabled={inProgress}
-                  >
-                    Sign up
-                  </button>
+                  <fieldset className="form-group">
+                    <Button
+                      color="green"
+                      type="submit"
+                      disabled={inProgress}
+                    >
+                      Sign up
+                    </Button>
+                  </fieldset>
                 </fieldset>
               </form>
             </div>

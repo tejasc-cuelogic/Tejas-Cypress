@@ -12,7 +12,7 @@ class Business extends Component {
   render() {
     return (
       <div className="ui one column grid">
-        <div>
+        <div className="column">
           <Button onClick={this.handleEdgarFormClick} floated="right">New Business</Button>
         </div>
         <div

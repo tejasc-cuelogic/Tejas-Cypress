@@ -72,10 +72,16 @@ export default class Login extends React.Component {
                     />
                   </fieldset>
 
-                  <Button primary disabled={inProgress}>
-                    Sign in
-                  </Button>
-                  <Link to="forgot-password">Forgot Password?</Link>
+                  <fieldset className="form-group">
+                    <Button
+                      color="green"
+                      type="submit"
+                      disabled={inProgress}
+                    >
+                      Sign in
+                    </Button>
+                    <Link to="forgot-password" className="btn btn-link pull-xs-right">Forgot Password?</Link>
+                  </fieldset>
                 </fieldset>
               </form>
             </div>

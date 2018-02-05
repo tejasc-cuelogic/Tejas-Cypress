@@ -27,26 +27,27 @@ export default class ForgotPassword extends React.Component {
         <div className="container page">
           <div className="row">
             <div className="col-md-6 offset-md-3 col-xs-12">
-              <div className="ui input focus">
+              <h1 className="text-xs-center">Reset your Password</h1>
+              <ListErrors errors={errors ? [errors.message] : []} />
 
-                <ListErrors errors={errors ? [errors.message] : []} />
-
-                <form onSubmit={this.handleSubmitForm}>
-                  <fieldset>
-                    <fieldset className="form-group">
-                      <input
-                        type="text"
-                        placeholder="Email"
-                        value={values.email}
-                        onChange={this.handleEmailChange}
-                      />
-                    </fieldset>
-                    <Button primary disabled={inProgress}>
+              <form onSubmit={this.handleSubmitForm}>
+                <fieldset>
+                  <fieldset className="form-group">
+                    <input
+                      className="form-control form-control-lg"
+                      type="text"
+                      placeholder="Email"
+                      value={values.email}
+                      onChange={this.handleEmailChange}
+                    />
+                  </fieldset>
+                  <fieldset className="form-group">
+                    <Button color="green" disabled={inProgress}>
                       Proceed
                     </Button>
                   </fieldset>
-                </form>
-              </div>
+                </fieldset>
+              </form>
             </div>
           </div>
         </div>
