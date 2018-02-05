@@ -63,6 +63,7 @@ export default class EdgarForm extends React.Component {
             }}
           >
             <Button
+              color="green"
               disabled={!this.props.businessStore.canSubmitEdgarForm}
               onClick={businessActions.generateDocxFile}
               primary

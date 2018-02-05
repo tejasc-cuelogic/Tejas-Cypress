@@ -27,7 +27,11 @@ html{
 	background-color:#85b02b;
 }
 .ui.green.button:hover,
-.ui.green.buttons .button:hover{
+.ui.green.buttons .button:hover,
+.ui.green.button:active,
+.ui.green.buttons .button:active,
+.ui.green.button:focus,
+.ui.green.buttons .button:focus{
 	background-color:#79a321;
 }
 
