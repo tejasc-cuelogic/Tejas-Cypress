@@ -12,13 +12,13 @@ import Login from '../modules/auth/Login';
 import Offering from './offering/containers/Offering';
 import Register from '../modules/auth/Register';
 import ResetPassword from '../modules/auth/ResetPassword';
+import Settings from './../modules/settings/containers/Settings';
 import CaseStudies from './caseStudies/containers/CaseStudies';
 import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
 import Banking from './banking/containers/Banking';
 import Messages from './messages/containers/Messages';
-import Settings from './settings/containers/Settings';
 import Dashboard from './dashboard/containers/Dashboard';
-import { BusinessAuthorization } from '../components/common/Authorization';
+import { BusinessAuthorization, UserAuthorization } from '../components/common/Authorization';
 
 export const publicRoutes = [
   {
@@ -108,27 +108,27 @@ export const privateRoutes = [
   {
     path: '/settings',
     component: Settings,
+    auth: UserAuthorization,
   },
   {
     path: '/messages',
     component: Messages,
+    auth: UserAuthorization,
   },
   {
     path: '/bonus-reward-fulfillment',
     component: BonusRewardFulfillment,
+    auth: UserAuthorization,
   },
   {
     path: '/banking',
     component: Banking,
+    auth: UserAuthorization,
   },
   {
     path: '/dashboard',
     component: Dashboard,
     exact: true,
-  },
-  {
-    path: '/',
-    component: Home,
-    exact: true,
+    auth: UserAuthorization,
   },
 ];
