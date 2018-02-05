@@ -63,7 +63,7 @@ export default class EdgarForm extends React.Component {
             // textAlign: 'center',
             }}
           >
-            <Button onClick={businessActions.generateDocxFile} primary>Generate Docx</Button>
+            <Button onClick={businessActions.generateDocxFile} primary className="green">Generate Docx</Button>
           </div>
         </Form>
       </Grid>
