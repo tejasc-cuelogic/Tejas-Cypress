@@ -38,10 +38,10 @@ class sidebarLeftOverlay extends Component {
             </Menu.Item>
           ))
         }
-        <a onClick={() => this.sideDrawerToggleHandler(this.state.showsidedrawer)} className="item collapseIcon" role="presentation" >
+        <button onClick={this.sideDrawerToggleHandler} className="item collapseIcon" >
           <i className={`angle double ${(this.state.showsidedrawer) ? 'left' : 'right'} icon`} />
           <span>Collapse menu</span>
-        </a>
+        </button>
       </Sidebar>
     );
   }
