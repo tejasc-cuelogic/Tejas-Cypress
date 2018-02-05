@@ -21,18 +21,18 @@ class sidebarLeftOverlay extends Component {
   render() {
     const sidebarItems = [
       { icon: 'block layout', displayName: 'Home', to: 'dashboard' },
-      { icon: 'gift', displayName: 'Bonus Rewards Fulfillment', to: 'dashboard' },
-      { icon: 'users', displayName: 'User Management', to: 'dashboard' },
-      { icon: 'mail', displayName: 'Messages', to: 'dashboard' },
-      { icon: 'money', displayName: 'Banking', to: 'dashboard' },
-      { icon: 'settings', displayName: 'Settings', to: 'dashboard' },
+      { icon: 'gift', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },
+      { icon: 'users', displayName: 'User Management', to: 'users' },
+      { icon: 'mail', displayName: 'Messages', to: 'messages' },
+      { icon: 'money', displayName: 'Banking', to: 'banking' },
+      { icon: 'settings', displayName: 'Settings', to: 'settings' },
     ];
 
     return (
       <Sidebar style={{ top: '58px' }} as={Menu} animation="overlay" className={`${(this.state.showsidedrawer) ? 'collapse' : ''}`} width="thin" visible icon="labeled" vertical inverted>
         {
           sidebarItems.map(item => (
-            <Menu.Item name="home" as={Link} to={`/${item.to}`}>
+            <Menu.Item key={item.to} name="home" as={Link} to={`/${item.to}`}>
               <Icon name={item.icon} />
               <span>{item.displayName}</span>
             </Menu.Item>

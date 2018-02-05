@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Invest extends Component {
+class BonusRewardFulfillment extends Component {
   render() {
     return (
       <div className="ui one column grid">
@@ -13,12 +13,12 @@ class Invest extends Component {
             textAlign: 'center',
           }}
         >
-          <span className="title">NextSeed Dashboard</span>
-          <span className="infotext">Explore your account...</span>
+          <span className="title">NextSeed Bonus Reward Fulfillment</span>
+          <span className="infotext">Explore Bonus Reward Fulfillment...</span>
         </div>
       </div>
     );
   }
 }
 
-export default Invest;
+export default BonusRewardFulfillment;

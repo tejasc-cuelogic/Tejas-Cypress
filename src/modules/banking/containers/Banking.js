@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Invest extends Component {
+class Banking extends Component {
   render() {
     return (
       <div className="ui one column grid">
@@ -13,7 +13,7 @@ class Invest extends Component {
             textAlign: 'center',
           }}
         >
-          <span className="title">NextSeed Dashboard</span>
+          <span className="title">NextSeed Banking</span>
           <span className="infotext">Explore your account...</span>
         </div>
       </div>
@@ -21,4 +21,4 @@ class Invest extends Component {
   }
 }
 
-export default Invest;
+export default Banking;

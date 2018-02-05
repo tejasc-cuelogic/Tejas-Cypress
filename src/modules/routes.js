@@ -13,6 +13,10 @@ import Offering from './offering/containers/Offering';
 import Register from '../modules/auth/Register';
 import ResetPassword from '../modules/auth/ResetPassword';
 import CaseStudies from './caseStudies/containers/CaseStudies';
+import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
+import Banking from './banking/containers/Banking';
+import Messages from './messages/containers/Messages';
+import Settings from './settings/containers/Settings';
 import Dashboard from './dashboard/containers/Dashboard';
 import { BusinessAuthorization } from '../components/common/Authorization';
 
@@ -97,6 +101,22 @@ export default [
     path: '/business',
     component: Business,
     auth: BusinessAuthorization,
+  },
+  {
+    path: '/settings',
+    component: Settings,
+  },
+  {
+    path: '/messages',
+    component: Messages,
+  },
+  {
+    path: '/bonus-reward-fulfillment',
+    component: BonusRewardFulfillment,
+  },
+  {
+    path: '/banking',
+    component: Banking,
   },
   {
     path: '/',
