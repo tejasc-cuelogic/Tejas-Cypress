@@ -3,14 +3,14 @@ export const FORM_VALUES = [
   { name: 'shorthand_name', placeholder: 'Shorthand Name' },
   { name: 'type_of_business', placeholder: 'Business Type' },
   { name: 'state_of_formation', placeholder: 'State of Formation' },
-  { name: 'investment_multiple', placeholder: 'Investment Multiple' },
-  { name: 'revenue_share_percentage', placeholder: 'Percent Share in revenue' },
-  { name: 'minimum_offering_amount', placeholder: 'Minimum offering amount' },
-  { name: 'offering_amount', placeholder: 'Offering Amount' },
-  { name: 'maturity_date', placeholder: 'Maturity Date' },
-  { name: 'termination_date', placeholder: 'Termination Date' },
-  { name: 'offer_date', placeholder: 'Offer Date' },
-  { name: 'interest_rate', placeholder: 'Interest Rate' },
+  { name: 'investment_multiple', placeholder: 'Investment Multiple', width: 4 },
+  { name: 'revenue_share_percentage', placeholder: 'Percent Share in revenue', width: 4 },
+  { name: 'minimum_offering_amount', placeholder: 'Minimum offering amount', width: 4 },
+  { name: 'offering_amount', placeholder: 'Offering Amount', width: 4 },
+  { name: 'interest_rate', placeholder: 'Interest Rate', width: 4 },
+  { name: 'maturity_date', placeholder: 'Maturity Date', width: 4 },
+  { name: 'termination_date', placeholder: 'Termination Date', width: 4 },
+  { name: 'offer_date', placeholder: 'Offer Date', width: 4 },
 ];
 
 export const DOCFILE_TYPES = {
