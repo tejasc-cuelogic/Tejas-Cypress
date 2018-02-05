@@ -13,6 +13,7 @@ import Offering from './offering/containers/Offering';
 import Register from '../modules/auth/Register';
 import ResetPassword from '../modules/auth/ResetPassword';
 import CaseStudies from './caseStudies/containers/CaseStudies';
+import Dashboard from './dashboard/containers/Dashboard';
 import { BusinessAuthorization } from '../components/common/Authorization';
 
 export default [
@@ -23,6 +24,10 @@ export default [
   {
     path: '/about/:section',
     component: About,
+  },
+  {
+    path: '/blog/:postId',
+    component: Blog,
   },
   {
     path: '/blog',
@@ -51,6 +56,11 @@ export default [
   {
     path: '/confirm',
     component: Confirm,
+    exact: true,
+  },
+  {
+    path: '/dashboard',
+    component: Dashboard,
     exact: true,
   },
   {

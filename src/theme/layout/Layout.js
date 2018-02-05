@@ -11,10 +11,6 @@ import authActions from '../../actions/auth';
 @withRouter
 @observer
 class Layout extends Component {
-  state = {
-    sidebar: 'collapse',
-  };
-
   handleLogOut = () => {
     authActions.logout()
       .then(() => {
@@ -25,12 +21,13 @@ class Layout extends Component {
   render() {
     return (
       <div>
-        {(this.props.userStore.currentUser) ?
+        {(false) ?
           <SidebarLeftOverlay
             sidebar={this.state.sidebar}
             sidebarAction={this.toggleState}
           /> : null }
         <Header
+          showSecondaryHeader={false}
           currentUser={this.props.userStore.currentUser}
           handleLogOut={this.handleLogOut}
         />
@@ -44,7 +41,7 @@ class Layout extends Component {
         >
           {this.props.children}
         </div>
-        {(!this.props.userStore.currentUser) ? <Footer /> : null }
+        {(true) ? <Footer /> : null }
       </div>
     );
   }
