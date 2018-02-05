@@ -13,7 +13,7 @@ class Business extends Component {
     return (
       <div className="ui one column grid">
         <div className="column">
-          <Button onClick={this.handleEdgarFormClick} floated="right">New Business</Button>
+          <Button color="green" onClick={this.handleEdgarFormClick} floated="right">New Business</Button>
         </div>
         <div
           className="column nsContent"
