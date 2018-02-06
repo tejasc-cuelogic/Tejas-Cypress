@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Aux from 'react-aux';
 import {
   // Button,
   Container,
   // Divider,
   // Grid,
   // Header,
-  // Icon,
+  Icon,
   Image,
   // List,
   Menu,
@@ -19,12 +20,15 @@ import Logo from '../../assets/images/nextseed_logo_color.svg';
 const UserNavigation = (props) => {
   if (props.currentUser) {
     return (
-      <Dropdown item simple text={props.currentUser.email}>
-        <Dropdown.Menu>
-          <Dropdown.Item as={Link} to="/settings">Settings</Dropdown.Item>
-          <Dropdown.Item onClick={props.handleLogOut}>Log Out</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <Aux>
+        <Dropdown item simple text={props.currentUser.email}>
+          <Dropdown.Menu>
+            <Dropdown.Item as={Link} to="/settings">Settings</Dropdown.Item>
+            <Dropdown.Item onClick={props.handleLogOut}>Log Out</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <Menu.Item as={Link} to="/business"> <Icon name="bell" size="medium" className="nsgreen" /></Menu.Item>
+      </Aux>
     );
   }
   return (
@@ -52,10 +56,10 @@ const navigationItems = props => (
             <Dropdown.Item as={Link} to="/about/team" >Team</Dropdown.Item>
             <Dropdown.Item as={Link} to="/about/ambassadors" >Ambassadors</Dropdown.Item>
             <Dropdown.Item as={Link} to="/blog" >Blog</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/case-studies" >Case Studies</Dropdown.Item>
             <Dropdown.Item as={Link} to="/about/faq" >FAQ</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Menu.Item as={Link} to="/case-studies">Case Studies</Menu.Item>
         <UserNavigation {...props} />
       </Menu.Menu>
     </Container>

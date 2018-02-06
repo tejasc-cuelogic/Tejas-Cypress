@@ -1,41 +1,50 @@
 import React, { Component } from 'react';
-import { Sidebar, Segment, Button, Menu, Image, Icon, Header } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Sidebar, Menu, Icon } from 'semantic-ui-react';
 
-class SidebarLeftOverlay extends Component {
-  state = { visible: true }
+class sidebarLeftOverlay extends Component {
+  state = {
+    showsidedrawer: false,
+  }
 
-  toggleVisibility = () => this.setState({ visible: !this.state.visible })
+  sideDrawerClosedHandler = () => {
+    this.setState({ showsidedrawer: false });
+  }
+
+  sideDrawerToggleHandler = () => {
+    this.setState((prevState) => {
+      console.log('hey');
+      return { showsidedrawer: !prevState.showsidedrawer };
+    });
+  }
 
   render() {
-    const { visible } = this.state;
+    const sidebarItems = [
+      { icon: 'block layout', displayName: 'Home', to: 'dashboard' },
+      { icon: 'gift', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },
+      { icon: 'users', displayName: 'User Management', to: 'users' },
+      { icon: 'mail', displayName: 'Messages', to: 'messages' },
+      { icon: 'money', displayName: 'Banking', to: 'banking' },
+      { icon: 'settings', displayName: 'Settings', to: 'settings' },
+    ];
+
     return (
-      <div>
-        <Button onClick={this.toggleVisibility}>Toggle Visibility</Button>
-        <Sidebar.Pushable as={Segment}>
-          <Sidebar as={Menu} animation="overlay" width="thin" visible={visible} icon="labeled" vertical inverted>
-            <Menu.Item name="home">
-              <Icon name="home" />
-              Home
+      <Sidebar style={{ top: '58px' }} as={Menu} animation="overlay" className={`${(this.state.showsidedrawer) ? 'collapse' : ''}`} width="thin" visible icon="labeled" vertical inverted>
+        {
+          sidebarItems.map(item => (
+            <Menu.Item key={item.to} name="home" as={Link} to={`/${item.to}`}>
+              <Icon name={item.icon} />
+              <span>{item.displayName}</span>
             </Menu.Item>
-            <Menu.Item name="gamepad">
-              <Icon name="gamepad" />
-              Games
-            </Menu.Item>
-            <Menu.Item name="camera">
-              <Icon name="camera" />
-              Channels
-            </Menu.Item>
-          </Sidebar>
-          <Sidebar.Pusher>
-            <Segment basic>
-              <Header as="h3">Application Content</Header>
-              <Image src="/assets/images/wireframe/paragraph.png" />
-            </Segment>
-          </Sidebar.Pusher>
-        </Sidebar.Pushable>
-      </div>
+          ))
+        }
+        <button onClick={this.sideDrawerToggleHandler} className="item collapseIcon" >
+          <i className={`angle double ${(this.state.showsidedrawer) ? 'left' : 'right'} icon`} />
+          <span>Collapse menu</span>
+        </button>
+      </Sidebar>
     );
   }
 }
 
-export default SidebarLeftOverlay;
+export default sidebarLeftOverlay;

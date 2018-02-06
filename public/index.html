@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <!-- <link rel="stylesheet" href="//demo.productionready.io/main.css"> -->
-    <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Titillium+Web:700|Source+Serif+Pro:400,700|Merriweather+Sans:400,700|Source+Sans+Pro:400,300,600,700,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css">
     <!--
       Notice the use of %PUBLIC_URL% in the tag above.
@@ -76,6 +76,52 @@
         line-height: 30px;
         color: #4c4a4a;
         margin-top: 30px;
+      }
+      .ui.vertical.icon.menu:not(.collapse){
+        width: 69px;
+      }
+      /*.ui.vertical.icon.menu:not(.collapse) */
+      .ui.labeled.icon.menu .item {
+        min-width: auto !important;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .ui.vertical.icon.menu.collapse{
+        width: 210px;
+      }
+      .ui.labeled.icon.menu.inverted .item span{
+        display: none;
+      }
+      .ui.labeled.icon.menu.collapse .item span{
+        display: inline-block;
+        margin-left: 15px;
+        max-width: 115px;
+      }
+      .ui.labeled.icon.menu.collapse .item{
+        text-align: left;
+      }
+      .ui.labeled.icon.menu.collapse .item>.icon:not(.dropdown){
+        display: inline-block;
+      }
+      .ui.vertical.menu .item.collapseIcon{
+        position: absolute;
+        bottom: 95px;
+        width: 100%;
+        border-top: 1px solid rgba(255,255,255,.08);
+      }
+
+      .ui.secondaryHeader {
+        height: 100px;
+        background-color: #84b02b;
+        margin-top: 72px;
+      }
+
+      .ui.secondaryHeader div h2 {
+        font-size: 1.7em;
+        color: white;
+        padding: 28px;
+        padding-left: 136px;
       }
     </style>
   </head>

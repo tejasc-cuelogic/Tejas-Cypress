@@ -20,6 +20,9 @@ html{
 	min-height:calc(100vh - 392px);
 }
 
+.nsgreen {
+	color: #85b02b;
+}
 
 /*	Button Styles 	*/
 .ui.green.button,
@@ -27,7 +30,11 @@ html{
 	background-color:#85b02b;
 }
 .ui.green.button:hover,
-.ui.green.buttons .button:hover{
+.ui.green.buttons .button:hover,
+.ui.green.button:active,
+.ui.green.buttons .button:active,
+.ui.green.button:focus,
+.ui.green.buttons .button:focus{
 	background-color:#79a321;
 }
 

@@ -33,8 +33,7 @@ export default class EdgarForm extends React.Component {
                 name={data.name}
                 defaultValue={templateVariables[data.name]}
                 onChange={this.handleInputChange}
-                width={8}
-                columns={2}
+                width={data.width || 8}
                 key={`${key}_${data.name}`}
               />))
             }
@@ -63,7 +62,14 @@ export default class EdgarForm extends React.Component {
             // textAlign: 'center',
             }}
           >
-            <Button onClick={businessActions.generateDocxFile} primary>Generate Docx</Button>
+            <Button
+              color="green"
+              disabled={!this.props.businessStore.canSubmitEdgarForm}
+              onClick={businessActions.generateDocxFile}
+              primary
+            >
+              Generate Docx
+            </Button>
           </div>
         </Form>
       </Grid>

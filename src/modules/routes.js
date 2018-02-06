@@ -12,10 +12,15 @@ import Login from '../modules/auth/Login';
 import Offering from './offering/containers/Offering';
 import Register from '../modules/auth/Register';
 import ResetPassword from '../modules/auth/ResetPassword';
+import Settings from './../modules/settings/containers/Settings';
 import CaseStudies from './caseStudies/containers/CaseStudies';
-import { BusinessAuthorization } from '../components/common/Authorization';
+import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
+import Banking from './banking/containers/Banking';
+import Messages from './messages/containers/Messages';
+import Dashboard from './dashboard/containers/Dashboard';
+import { BusinessAuthorization, UserAuthorization } from '../components/common/Authorization';
 
-export default [
+export const publicRoutes = [
   {
     path: '/agreements/:section',
     component: Agreements,
@@ -23,6 +28,10 @@ export default [
   {
     path: '/about/:section',
     component: About,
+  },
+  {
+    path: '/blog/:postId',
+    component: Blog,
   },
   {
     path: '/blog',
@@ -79,6 +88,14 @@ export default [
     exact: true,
   },
   {
+    path: '/',
+    component: Home,
+    exact: true,
+  },
+];
+
+export const privateRoutes = [
+  {
     path: '/business/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
@@ -89,8 +106,29 @@ export default [
     auth: BusinessAuthorization,
   },
   {
-    path: '/',
-    component: Home,
+    path: '/settings',
+    component: Settings,
+    auth: UserAuthorization,
+  },
+  {
+    path: '/messages',
+    component: Messages,
+    auth: UserAuthorization,
+  },
+  {
+    path: '/bonus-reward-fulfillment',
+    component: BonusRewardFulfillment,
+    auth: UserAuthorization,
+  },
+  {
+    path: '/banking',
+    component: Banking,
+    auth: UserAuthorization,
+  },
+  {
+    path: '/dashboard',
+    component: Dashboard,
     exact: true,
+    auth: UserAuthorization,
   },
 ];

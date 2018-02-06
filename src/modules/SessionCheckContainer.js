@@ -1,8 +1,10 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 
-@inject('authStore', 'uiStore')
+import { privateRoutes } from '../modules/routes';
+
+@inject('authStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class SessionCheckContainer extends React.Component {
@@ -15,7 +17,19 @@ export default class SessionCheckContainer extends React.Component {
 
   render() {
     if (this.props.authStore.isUserLoggedIn) {
-      return this.props.children;
+      return (
+        <Switch>
+          {privateRoutes.map(route => (
+            <Route
+              exact={route.exact ? route.exact : false}
+              path={route.path}
+              component={(route.auth) ?
+                route.auth(route.component, this.props) : route.component}
+              key={route.path}
+            />
+          ))}
+        </Switch>
+      );
     }
     return null;
   }
