@@ -1,4 +1,4 @@
-.site {
+/*.site {
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
@@ -7,7 +7,7 @@
 .site-content {
 	flex: 1;
 	margin-top: 7em;
-}
+}*/
 
 /*  Layout Styles */
 html{
