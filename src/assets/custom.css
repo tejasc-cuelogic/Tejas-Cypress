@@ -20,6 +20,9 @@ html{
 	min-height:calc(100vh - 392px);
 }
 
+.nsgreen {
+	color: #85b02b;
+}
 
 /*	Button Styles 	*/
 .ui.green.button,

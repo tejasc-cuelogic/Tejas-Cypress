@@ -5,6 +5,7 @@ import 'semantic-ui-css/semantic.min.css';
 import Layout from './theme/layout/Layout';
 import { publicRoutes } from './modules/routes';
 import SessionCheckContainer from './modules/SessionCheckContainer';
+import authActions from './actions/auth';
 /**
  * Main App
  */
@@ -12,6 +13,16 @@ import SessionCheckContainer from './modules/SessionCheckContainer';
 @withRouter
 @observer
 class App extends Component {
+  componentWillMount() {
+    authActions.verifySession()
+      .then(() => {
+        if (this.props.uiStore.redirectURL) {
+          this.props.history.push(this.props.uiStore.redirectURL);
+        }
+      })
+      .then(() => this.props.uiStore.clearRedirectURL());
+  }
+
   componentDidUpdate(prevProps) {
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
