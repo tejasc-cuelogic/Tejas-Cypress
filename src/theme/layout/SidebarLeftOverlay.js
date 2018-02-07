@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Sidebar, Menu, Icon } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react';
 
-class sidebarLeftOverlay extends Component {
-  state = {
-    showsidedrawer: false,
-  }
+// class sidebarLeftOverlay extends Component {
+//   state = {
+//     showsidedrawer: false,
+//   }
 
-  sideDrawerClosedHandler = () => {
-    this.setState({ showsidedrawer: false });
-  }
+// sideDrawerClosedHandler = () => {
+//   this.setState({ showsidedrawer: false });
+// }
 
-  sideDrawerToggleHandler = () => {
-    this.setState((prevState) => {
-      console.log('hey');
-      return { showsidedrawer: !prevState.showsidedrawer };
-    });
-  }
+// sideDrawerToggleHandler = () => {
+//   this.setState((prevState) => {
+//     console.log('hey');
+//     return { showsidedrawer: !prevState.showsidedrawer };
+//   });
+// }
+class SidebarLeftPush extends Component {
+  state = { visible: false }
+
+  toggleVisibility = () => this.setState({ visible: !this.state.visible })
 
   render() {
+    const { visible } = this.state;
     const sidebarItems = [
       { icon: 'block layout', displayName: 'Home', to: 'dashboard' },
       { icon: 'gift', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },
@@ -29,7 +34,7 @@ class sidebarLeftOverlay extends Component {
     ];
 
     return (
-      <Sidebar style={{ top: '58px' }} as={Menu} animation="overlay" className={`${(this.state.showsidedrawer) ? 'collapse' : ''}`} width="thin" visible icon="labeled" vertical inverted>
+      <Sidebar as={Menu} animation="push" className={`${(this.state.showsidedrawer) ? 'collapse' : ''}`} width="thin" visible={visible} icon="labeled" vertical inverted>
         {
           sidebarItems.map(item => (
             <Menu.Item key={item.to} name="home" as={Link} to={`/${item.to}`}>
@@ -38,13 +43,13 @@ class sidebarLeftOverlay extends Component {
             </Menu.Item>
           ))
         }
-        <button onClick={this.sideDrawerToggleHandler} className="item collapseIcon" >
-          <i className={`angle double ${(this.state.showsidedrawer) ? 'left' : 'right'} icon`} />
+        <Button onClick={this.toggleVisibility} className="item collapseIcon">
+          <i className={`angle double ${(this.state.visible) ? 'left' : 'right'} icon`} />
           <span>Collapse menu</span>
-        </button>
+        </Button>
       </Sidebar>
     );
   }
 }
 
-export default sidebarLeftOverlay;
+export default SidebarLeftPush;
