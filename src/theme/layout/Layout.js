@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Sidebar } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import SidebarLeftOverlay from './SidebarLeftOverlay';
@@ -21,21 +22,25 @@ class Layout extends Component {
   render() {
     return (
       <div>
-        {(false) ?
-          <SidebarLeftOverlay
-            sidebarAction={this.toggleState}
-          /> : null }
         <Header
           showSecondaryHeader={false}
           currentUser={this.props.userStore.currentUser}
           handleLogOut={this.handleLogOut}
         />
-        <div className="ui vertical segment">
-          <div className="ui container content">
-            {this.props.children}
-          </div>
-        </div>
-        {(true) ? <Footer /> : null }
+        <Sidebar.Pushable>
+          {(true) ?
+            <SidebarLeftOverlay
+              sidebarAction={this.toggleState}
+            /> : null }
+          <Sidebar.Pusher>
+            <div className="ui vertical segment content">
+              <div className="ui container fluid">
+                {this.props.children}
+              </div>
+            </div>
+            {(true) ? <Footer /> : null }
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>
       </div>
     );
   }

@@ -3,18 +3,14 @@ import React, { Component } from 'react';
 class Invest extends Component {
   render() {
     return (
-      <div className="ui one column grid">
-        <div
-          className="column nsContent"
-          style={{
-            fontSize: '30px',
-            color: '#666',
-            top: '25px',
-            textAlign: 'center',
-          }}
-        >
-          <span className="title">NextSeed Dashboard</span>
-          <span className="infotext">Explore your account...</span>
+      <div className="header-section">
+        <div className="ui grid">
+          <div className="four wide column">
+            <h1>Manage Users</h1>
+          </div>
+          <div className="four wide column">
+            <h1>Manage Users</h1>
+          </div>
         </div>
       </div>
     );

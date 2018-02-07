@@ -29,6 +29,7 @@ export default class EdgarForm extends React.Component {
             {formValues.map(data => (
               <Form.Input
                 placeholder={data.placeholder}
+                className="column"
                 label={data.placeholder}
                 name={data.name}
                 defaultValue={templateVariables[data.name]}

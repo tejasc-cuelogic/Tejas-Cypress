@@ -16,9 +16,70 @@ html{
 .header-wrap{
 	height:58px;
 }
-.content{
-	min-height:calc(100vh - 392px);
+.content-wrapper{
+	min-height:calc(100vh - 58px);
 }
+/*.sidebar + .content-wrapper{
+	margin:0 0 0 68px;
+}*/
+.content{
+	min-height:calc(100vh - 342px);
+}
+.ui.inverted.menu{
+	background:#383838;
+}
+.pushable>.pusher{
+	padding-left:68px;
+	transition:all .5s ease;
+}
+.ui.visible.thin.left.sidebar~.fixed,
+.ui.visible.thin.left.sidebar~.pusher{
+	padding-left:220px;
+	transform:translate3D(0,0,0);
+}
+.ui.segment.pushable{
+	margin:0;
+}
+.ui.left.push.sidebar{
+	width:68px;
+	visibility:visible;
+	transform:translate3D(0,0,0);
+	transition:all .5s ease;
+}
+.ui.left.push.sidebar .item {
+	min-width: auto !important;
+	text-align: left;
+	overflow:hidden;
+}
+.ui.left.push.sidebar .item>.icon:not(.dropdown){
+	float:left;
+	margin:0 !important;
+}
+.ui.left.push.sidebar .item span{
+	opacity:0;
+	display:block;
+	line-height:24px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.ui.visible.push.sidebar{
+	width:220px;
+}
+.ui.visible.push.sidebar .item span{
+	opacity:1;
+	margin-left:35px;
+	max-width:153px;
+}
+
+
+
+
+
+
+
+
+
 
 .nsgreen {
 	color: #85b02b;
@@ -43,7 +104,7 @@ html{
 	padding-bottom:50px;
 }
 .edgar-form .ui.form .field{
-	margin: 0 0 2em;
+	margin:0em;
 }
 .edgar-form .ui.form .field>label{
 	margin: 0 0 1rem;
