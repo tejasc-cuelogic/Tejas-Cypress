@@ -1,9 +1,9 @@
 import React from 'react';
 import { Dimmer, Loader } from 'semantic-ui-react';
 
-const Spinner = () => (
+const Spinner = props => (
   <Dimmer active>
-    <Loader />
+    <Loader>{props.loaderMessage}</Loader>
   </Dimmer>
 );
 

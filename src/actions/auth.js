@@ -28,17 +28,20 @@ export class Auth {
   }
 
   verifySession = () => {
-    let hasSession = false;
+    uiStore.reset();
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Getting user data');
+
     Object.keys(localStorage).every((key) => {
       if (key.match('CognitoIdentityServiceProvider')) {
-        hasSession = true;
+        authStore.setHasSession(true);
       }
       return key;
     });
 
     return (
       new Promise((res, rej) => {
-        if (hasSession) {
+        if (authStore.hasSession) {
           this.cognitoUser = this.userPool.getCurrentUser();
           return this.cognitoUser !== null ? res() : rej();
         }
@@ -64,14 +67,19 @@ export class Auth {
             AWS.config.region = AWS_REGION;
             if (userStore.isCurrentUserWithRole('admin')) {
               this.setAWSAdminAccess(data.session.idToken.jwtToken);
+              adminStore.setAdminCredsLoaded(true);
             }
             res();
           }))
-        .then(() => adminStore.setAdminCredsLoaded(true))
+        .then(() => {
+          uiStore.setSuccess('Successfully loaded user data');
+        })
         // Empty method needed to avoid warning.
         .catch(() => { })
         .finally(() => {
           commonStore.setAppLoaded();
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
         })
     );
   };

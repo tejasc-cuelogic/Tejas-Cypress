@@ -6,6 +6,7 @@ import Layout from './theme/layout/Layout';
 import { publicRoutes } from './modules/routes';
 import SessionCheckContainer from './modules/SessionCheckContainer';
 import authActions from './actions/auth';
+import Spinner from './theme/ui/Spinner';
 /**
  * Main App
  */
@@ -36,6 +37,13 @@ class App extends Component {
   }
 
   render() {
+    if (this.props.authStore.hasSession && this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     return (
       <div>
         <Layout>
