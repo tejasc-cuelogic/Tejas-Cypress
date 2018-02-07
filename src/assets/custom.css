@@ -28,7 +28,7 @@ html{
 .ui.inverted.menu{
 	background:#383838;
 }
-.pushable>.pusher{
+.pushable>.sidebar ~ .pusher{
 	padding-left:68px;
 	transition:all .5s ease;
 }
