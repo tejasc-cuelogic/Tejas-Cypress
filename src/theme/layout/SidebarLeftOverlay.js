@@ -34,20 +34,29 @@ class SidebarLeftPush extends Component {
     ];
 
     return (
-      <Sidebar as={Menu} animation="push" className={`${(this.state.showsidedrawer) ? 'collapse' : ''}`} width="thin" visible={visible} icon="labeled" vertical inverted>
-        {
-          sidebarItems.map(item => (
-            <Menu.Item key={item.to} name="home" as={Link} to={`/${item.to}`}>
-              <Icon name={item.icon} />
-              <span>{item.displayName}</span>
-            </Menu.Item>
-          ))
-        }
-        <Button onClick={this.toggleVisibility} className="item collapseIcon">
-          <i className={`angle double ${(this.state.visible) ? 'left' : 'right'} icon`} />
-          <span>Collapse menu</span>
-        </Button>
-      </Sidebar>
+      <Sidebar.Pushable>
+        <Sidebar as={Menu} animation="push" className={`${(this.state.showsidedrawer) ? 'collapse' : ''}`} width="thin" visible={visible} icon="labeled" vertical inverted>
+          {
+            sidebarItems.map(item => (
+              <Menu.Item key={item.to} name="home" as={Link} to={`/${item.to}`}>
+                <Icon name={item.icon} />
+                <span>{item.displayName}</span>
+              </Menu.Item>
+            ))
+          }
+          <Button onClick={this.toggleVisibility} className="item collapseIcon">
+            <i className={`angle double ${(this.state.visible) ? 'left' : 'right'} icon`} />
+            <span>Collapse menu</span>
+          </Button>
+        </Sidebar>
+        <Sidebar.Pusher>
+          <div className="ui vertical segment content">
+            <div className="ui container fluid">
+              {this.props.children}
+            </div>
+          </div>
+        </Sidebar.Pusher>
+      </Sidebar.Pushable>
     );
   }
 }

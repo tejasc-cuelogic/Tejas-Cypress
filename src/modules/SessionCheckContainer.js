@@ -20,18 +20,19 @@ export default class SessionCheckContainer extends React.Component {
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <div>
-          <SidebarLeftOverlay />
-          <Switch>
-            {privateRoutes.map(route => (
-              <Route
-                exact={route.exact ? route.exact : false}
-                path={route.path}
-                component={(route.auth) ?
-                  route.auth(route.component, this.props) : route.component}
-                key={route.path}
-              />
-            ))}
-          </Switch>
+          <SidebarLeftOverlay>
+            <Switch>
+              {privateRoutes.map(route => (
+                <Route
+                  exact={route.exact ? route.exact : false}
+                  path={route.path}
+                  component={(route.auth) ?
+                    route.auth(route.component, this.props) : route.component}
+                  key={route.path}
+                />
+              ))}
+            </Switch>
+          </SidebarLeftOverlay>
         </div>
       );
     }
