@@ -20,6 +20,7 @@ export class AuthStore {
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
   @observable isUserLoggedIn = false;
+  @observable hasSession = false;
 
   @observable
   values = {
@@ -100,6 +101,11 @@ export class AuthStore {
   @action
   setUserLoggedIn(status) {
     this.isUserLoggedIn = status;
+  }
+
+  @action
+  setHasSession(status) {
+    this.hasSession = status;
   }
 
   @action
