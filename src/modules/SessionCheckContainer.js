@@ -4,6 +4,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 
 import { privateRoutes } from '../modules/routes';
 import SidebarLeftOverlay from './../theme/layout/SidebarLeftOverlay';
+
 @inject('authStore', 'uiStore', 'userStore')
 @withRouter
 @observer
