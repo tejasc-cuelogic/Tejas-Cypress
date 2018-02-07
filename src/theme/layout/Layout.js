@@ -28,7 +28,7 @@ class Layout extends Component {
           handleLogOut={this.handleLogOut}
         />
         <Sidebar.Pushable>
-          {(true) ?
+          {(false) ?
             <SidebarLeftOverlay
               sidebarAction={this.toggleState}
             /> : null }
