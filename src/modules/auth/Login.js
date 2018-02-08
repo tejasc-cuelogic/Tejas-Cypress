@@ -22,14 +22,8 @@ export default class Login extends React.Component {
       .then(() => {
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/change-password');
-        } else if (this.props.userStore.currentUser.roles.includes('admin')) {
-          this.props.history.push('/admin/users');
-        } else if (this.props.userStore.currentUser.roles.includes('bowner')) {
-          this.props.history.push('/business');
-        } else if (this.props.userStore.currentUser.roles.includes('investor')) {
-          this.props.history.push('/investor');
         } else {
-          this.props.history.replace('/');
+          this.props.history.replace('/dashboard');
         }
       });
   };
