@@ -8,17 +8,21 @@ export default class Public extends React.Component {
   render() {
     return (
       <div>
-        <Switch>
-          {publicRoutes.map(route => (
-            <Route
-              exact={route.exact ? route.exact : false}
-              path={route.path}
-              component={route.auth ?
-                route.auth(route.component, this.props) : route.component}
-              key={route.path}
-            />
-          ))}
-        </Switch>
+        <div className="ui vertical segment content">
+          <div className="ui container fluid">
+            <Switch>
+              {publicRoutes.map(route => (
+                <Route
+                  exact={route.exact ? route.exact : false}
+                  path={route.path}
+                  component={route.auth ?
+                    route.auth(route.component, this.props) : route.component}
+                  key={route.path}
+                />
+              ))}
+            </Switch>
+          </div>
+        </div>
         <Footer />
       </div>
     );

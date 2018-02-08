@@ -8,13 +8,17 @@
 .content{
 	min-height:calc(100vh - 342px);
 }
-
+.content-spacer{
+	padding:45px 60px;
+}
 // 	Sidebar pushable CSS
 .pushable{
 	>.sidebar{
 		~ .pusher{
 			padding-left:68px;
 			transition:all .5s ease;
+			height:calc(100vh - 58px);
+			overflow-y:auto;
 		}
 	}
 }
@@ -52,6 +56,13 @@
 						text-overflow: ellipsis;
 						white-space: nowrap;
 						overflow: hidden;
+					}
+					&.collapseIcon{
+						bottom:0;
+						margin:0;
+						&:before{
+							display:none;
+						}
 					}
 				}
 			}

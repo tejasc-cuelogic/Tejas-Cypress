@@ -23,57 +23,59 @@ export default class EdgarForm extends React.Component {
   render() {
     const { formValues, documentList, templateVariables } = this.props.businessStore;
     return (
-      <Grid stackable className="edgar-form">
-        <Form>
-          <Grid>
-            {formValues.map(data => (
-              <Form.Input
-                placeholder={data.placeholder}
-                className="column"
-                label={data.placeholder}
-                name={data.name}
-                defaultValue={templateVariables[data.name]}
-                onChange={this.handleInputChange}
-                width={data.width || 8}
-                key={`${key}_${data.name}`}
-              />))
-            }
-          </Grid>
-          <Divider section />
-          <Grid stackable columns={2}>
-            {
-              _.map(documentList, (value, type) => (
-                <GridColumn key={`${key}_${type}`}>
-                  <Checkbox
-                    label={type}
-                    name={type}
-                    checked={value}
-                    onChange={this.handleCheckboxChange}
-                  />
-                </GridColumn>
-              ))
-            }
-          </Grid>
-          <Divider section />
-          <div
-            className="form-footer"
-            style={{
-            paddingBottom: '40px',
-            paddingLeft: '1rem',
-            // textAlign: 'center',
-            }}
-          >
-            <Button
-              color="green"
-              disabled={!this.props.businessStore.canSubmitEdgarForm}
-              onClick={businessActions.generateDocxFile}
-              primary
+      <div className="content-spacer">
+        <Grid stackable className="edgar-form">
+          <Form>
+            <Grid>
+              {formValues.map(data => (
+                <Form.Input
+                  placeholder={data.placeholder}
+                  className="column"
+                  label={data.placeholder}
+                  name={data.name}
+                  defaultValue={templateVariables[data.name]}
+                  onChange={this.handleInputChange}
+                  width={data.width || 8}
+                  key={`${key}_${data.name}`}
+                />))
+              }
+            </Grid>
+            <Divider section />
+            <Grid stackable columns={2}>
+              {
+                _.map(documentList, (value, type) => (
+                  <GridColumn key={`${key}_${type}`}>
+                    <Checkbox
+                      label={type}
+                      name={type}
+                      checked={value}
+                      onChange={this.handleCheckboxChange}
+                    />
+                  </GridColumn>
+                ))
+              }
+            </Grid>
+            <Divider section />
+            <div
+              className="form-footer"
+              style={{
+              paddingBottom: '40px',
+              paddingLeft: '1rem',
+              // textAlign: 'center',
+              }}
             >
-              Generate Docx
-            </Button>
-          </div>
-        </Form>
-      </Grid>
+              <Button
+                color="green"
+                disabled={!this.props.businessStore.canSubmitEdgarForm}
+                onClick={businessActions.generateDocxFile}
+                primary
+              >
+                Generate Docx
+              </Button>
+            </div>
+          </Form>
+        </Grid>
+      </div>
     );
   }
 }

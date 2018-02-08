@@ -35,7 +35,7 @@ class SidebarLeftPush extends Component {
 
     return (
       <Sidebar.Pushable>
-        <Sidebar as={Menu} animation="push" className={`${(this.state.showsidedrawer) ? 'collapse' : ''}`} width="thin" visible={visible} icon="labeled" vertical inverted>
+        <Sidebar as={Menu} animation="push" width="thin" visible={visible} icon="labeled" vertical inverted>
           {
             sidebarItems.map(item => (
               <Menu.Item key={item.to} name="home" as={Link} to={`/${item.to}`}>
