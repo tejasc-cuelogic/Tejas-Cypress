@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 
 @inject('businessStore', 'userStore')
 @observer
 @withRouter
 class Business extends Component {
-  handleEdgarFormClick = () => this.props.history.push('/business/edgar')
-
   render() {
     return (
       <div className="ui one column grid">
         <div className="column">
-          <Button color="green" onClick={this.handleEdgarFormClick} floated="right">New Business</Button>
+          <Button color="green" as={Link} to="/app/business/edgar" floated="right">New Business</Button>
         </div>
         <div
           className="column nsContent"

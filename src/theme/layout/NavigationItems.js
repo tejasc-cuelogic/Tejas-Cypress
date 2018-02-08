@@ -27,7 +27,7 @@ const UserNavigation = (props) => {
             <Dropdown.Item onClick={props.handleLogOut}>Log Out</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Menu.Item as={Link} to="/business"> <Icon name="bell" size="medium" className="nsgreen" /></Menu.Item>
+        <Menu.Item as={Link} to="/app/business"> <Icon name="bell" className="nsgreen" /></Menu.Item>
       </Aux>
     );
   }
@@ -50,7 +50,7 @@ const navigationItems = props => (
       <Menu.Menu position="right">
         <Menu.Item as={Link} to="/offerings" >Browse Deals</Menu.Item>
         <Menu.Item as={Link} to="/invest">For Investers</Menu.Item>
-        <Menu.Item as={Link} to="/business">For Businesses</Menu.Item>
+        <Menu.Item as={Link} to="/app/business">For Businesses</Menu.Item>
         <Dropdown item simple text="Learn">
           <Dropdown.Menu>
             <Dropdown.Item as={Link} to="/about/team" >Team</Dropdown.Item>

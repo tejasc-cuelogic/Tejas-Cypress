@@ -22,6 +22,11 @@ import { BusinessAuthorization, UserAuthorization } from '../components/common/A
 
 export const publicRoutes = [
   {
+    path: '/',
+    component: Home,
+    exact: true,
+  },
+  {
     path: '/agreements/:section',
     component: Agreements,
   },
@@ -87,46 +92,42 @@ export const publicRoutes = [
     component: ChangePassword,
     exact: true,
   },
-  {
-    path: '/',
-    component: Home,
-    exact: true,
-  },
 ];
 
 export const privateRoutes = [
   {
-    path: '/business/edgar',
+    path: '/app/business/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/business',
+    path: '/app/business',
     component: Business,
     auth: BusinessAuthorization,
+    exact: true,
   },
   {
-    path: '/settings',
+    path: '/app/settings',
     component: Settings,
     auth: UserAuthorization,
   },
   {
-    path: '/messages',
+    path: '/app/messages',
     component: Messages,
     auth: UserAuthorization,
   },
   {
-    path: '/bonus-reward-fulfillment',
+    path: '/app/bonus-reward-fulfillment',
     component: BonusRewardFulfillment,
     auth: UserAuthorization,
   },
   {
-    path: '/banking',
+    path: '/app/banking',
     component: Banking,
     auth: UserAuthorization,
   },
   {
-    path: '/dashboard',
+    path: '/app/dashboard',
     component: Dashboard,
     exact: true,
     auth: UserAuthorization,

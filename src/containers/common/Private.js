@@ -2,13 +2,13 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
-import { privateRoutes } from '../modules/routes';
-import SidebarLeftOverlay from './../theme/layout/SidebarLeftOverlay';
+import { privateRoutes } from '../../modules/routes';
+import SidebarLeftOverlay from './../../theme/layout/SidebarLeftOverlay';
 
 @inject('authStore', 'uiStore', 'userStore')
 @withRouter
 @observer
-export default class SessionCheckContainer extends React.Component {
+export default class Private extends React.Component {
   componentDidMount() {
     if (!this.props.authStore.isUserLoggedIn) {
       this.props.uiStore.setRedirectURL(this.props.history.location);
