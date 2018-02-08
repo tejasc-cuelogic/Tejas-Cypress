@@ -9,7 +9,7 @@ export default class Public extends React.Component {
     return (
       <div>
         <div className="ui vertical segment content">
-          <div className="ui container fluid">
+          <div className="ui container">
             <Switch>
               {publicRoutes.map(route => (
                 <Route

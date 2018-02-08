@@ -117,10 +117,10 @@ html{
 	padding-bottom:20px;
 }
 
-.header-section {
+/* .header-section {
 	background: #424242;
 	min-height: 80px;
-}
+} */
 
 .header-section .ui.grid {
 	padding-left: 20px;

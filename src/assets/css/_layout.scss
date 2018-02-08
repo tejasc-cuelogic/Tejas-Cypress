@@ -11,6 +11,9 @@
 .content-spacer{
 	padding:45px 60px;
 }
+.webcontent-spacer{
+	padding:2em !important;
+}
 // 	Sidebar pushable CSS
 .pushable{
 	>.sidebar{
@@ -76,5 +79,10 @@
 			}
 		}
 	}
+}
+
+.header-section{
+	min-height:80px;
+	background-color:$dark-header;
 }
 
