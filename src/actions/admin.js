@@ -12,7 +12,7 @@ export class Admin {
   // TODO: Pass pagination token and other params as require
   listUsers = (options) => {
     uiStore.reset();
-    uiStore.setProgress();
+    // uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching user data');
 
     const params = {
