@@ -11,7 +11,7 @@ const userModuleSubheader = () => (
         search panel
       </div>
       <div className="four wide column">
-        <Link to="/users/new">Add new user</Link>
+        <Link to="/app/users/new">Add new user</Link>
       </div>
     </div>
     <div className="ui grid">

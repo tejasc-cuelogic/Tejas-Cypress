@@ -19,7 +19,7 @@ const userListing = props => (
         <Table.Cell>R</Table.Cell>
         <Table.Cell>2 days ago</Table.Cell>
         <Table.Cell>13 months ago</Table.Cell>
-        <Table.Cell><Link to="/users/1/details">view profile</Link></Table.Cell>
+        <Table.Cell><Link to="/app/users/1/details">view profile</Link></Table.Cell>
       </Table.Row>
       <Table.Row>
         <Table.Cell>profilepic</Table.Cell>
@@ -29,7 +29,7 @@ const userListing = props => (
         <Table.Cell>R</Table.Cell>
         <Table.Cell>2 days ago</Table.Cell>
         <Table.Cell>13 months ago</Table.Cell>
-        <Table.Cell><Link to="/users/2/details">view profile</Link></Table.Cell>
+        <Table.Cell><Link to="/app/users/2/details">view profile</Link></Table.Cell>
       </Table.Row>
       <Table.Row>
         <Table.Cell>profilepic</Table.Cell>
@@ -39,7 +39,7 @@ const userListing = props => (
         <Table.Cell>R</Table.Cell>
         <Table.Cell>2 days ago</Table.Cell>
         <Table.Cell>13 months ago</Table.Cell>
-        <Table.Cell><Link to="/users/3/details">view profile</Link></Table.Cell>
+        <Table.Cell><Link to="/app/users/3/details">view profile</Link></Table.Cell>
       </Table.Row>
     </Table.Body>
     {props.hasPagination &&
