@@ -1,0 +1,10 @@
+//  Buttons style CSS
+.ui.green{
+    &.button, &.buttons .button{
+        background-color:$primary-color;
+        &:hover, &:focus, &:active{
+            background-color:darken($primary-color, 4%);
+        }
+    }
+}
+

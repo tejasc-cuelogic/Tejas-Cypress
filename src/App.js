@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Switch, Route } from 'react-router-dom'; // Redirect
 import { inject, observer } from 'mobx-react';
 import 'semantic-ui-css/semantic.min.css';
+import './assets/app.css';
 import Layout from './theme/layout/Layout';
 import { publicRoutes } from './modules/routes';
 import SessionCheckContainer from './modules/SessionCheckContainer';

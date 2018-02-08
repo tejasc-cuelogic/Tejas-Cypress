@@ -13,22 +13,22 @@
 html{
 	padding:0;
 }
-.header-wrap{
+/* .header-wrap{
 	height:58px;
 }
 .content-wrapper{
 	min-height:calc(100vh - 58px);
-}
+} */
 /*.sidebar + .content-wrapper{
 	margin:0 0 0 68px;
 }*/
-.content{
+/*.content{
 	min-height:calc(100vh - 342px);
 }
 .ui.inverted.menu{
 	background:#383838;
-}
-.pushable>.sidebar ~ .pusher{
+}*/
+/* .pushable>.sidebar ~ .pusher{
 	padding-left:68px;
 	transition:all .5s ease;
 }
@@ -70,7 +70,7 @@ html{
 	opacity:1;
 	margin-left:35px;
 	max-width:153px;
-}
+} */
 
 
 
@@ -86,7 +86,7 @@ html{
 }
 
 /*	Button Styles 	*/
-.ui.green.button,
+/* .ui.green.button,
 .ui.green.buttons .button{
 	background-color:#85b02b;
 }
@@ -97,7 +97,7 @@ html{
 .ui.green.button:focus,
 .ui.green.buttons .button:focus{
 	background-color:#79a321;
-}
+} */
 
 .edgar-form .ui.form{
 	padding-top:50px;
