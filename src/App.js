@@ -4,9 +4,10 @@ import { inject, observer } from 'mobx-react';
 import 'semantic-ui-css/semantic.min.css';
 import './assets/app.css';
 import Layout from './theme/layout/Layout';
-import { publicRoutes } from './modules/routes';
-import SessionCheckContainer from './modules/SessionCheckContainer';
+import Private from './containers/common/Private';
+import Public from './containers/common/Public';
 import authActions from './actions/auth';
+import Spinner from './theme/ui/Spinner';
 /**
  * Main App
  */
@@ -37,20 +38,19 @@ class App extends Component {
   }
 
   render() {
+    if (this.props.authStore.hasSession && this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     return (
       <div>
         <Layout>
           <Switch>
-            {publicRoutes.map(route => (
-              <Route
-                exact={route.exact ? route.exact : false}
-                path={route.path}
-                component={route.auth ?
-                  route.auth(route.component, this.props) : route.component}
-                key={route.path}
-              />
-            ))}
-            <Route component={SessionCheckContainer} />
+            <Route exact path="/app/*" component={Private} />
+            <Route path="/" component={Public} />
           </Switch>
         </Layout>
       </div>
