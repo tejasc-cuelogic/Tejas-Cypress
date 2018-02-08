@@ -23,7 +23,7 @@ const UserNavigation = (props) => {
       <Aux>
         <Dropdown item simple text={props.currentUser.email}>
           <Dropdown.Menu>
-            <Dropdown.Item as={Link} to="/settings">Settings</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/app/settings">Settings</Dropdown.Item>
             <Dropdown.Item onClick={props.handleLogOut}>Log Out</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>

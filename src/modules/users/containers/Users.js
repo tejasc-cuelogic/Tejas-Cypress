@@ -1,30 +1,20 @@
-/* eslint react/no-unused-state: 0 */
-/* eslint no-unused-vars: 0 */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import Loadable from 'react-loadable';
+import { inject, observer } from 'mobx-react';
 import UserListing from './../components/UserListing';
 import CreateNew from './../components/CreateNew';
 import UserDetails from './../components/UserDetails';
 import UserModuleSubheader from './../components/UserModuleSubheader';
 import adminActions from './../../../actions/admin';
 
+@inject('adminStore', 'userStore')
+@observer
 class Users extends Component {
-  state = {
-    users: [],
-  }
-
   componentDidMount() {
-    // fetch data from server and update ...this.setState({users: updatedUsers});
-    if (!this.props.adminStore) {
-      console.log('im in', typeof this.props.adminStore);
-      const params = null;
-      // this.searchUsers(params);
-    }
+    this.searchUsers();
   }
 
-  searchUsers = (params) => {
-    // fetch data from server and update ...this.setState({users: updatedUsers});
+  searchUsers = () => {
     adminActions.listUsers({ filter: '' });
   }
 
@@ -55,11 +45,15 @@ class Users extends Component {
           <UserDetails />
         </Aux>
       );
-    } else if (true) {
+    } else if (this.props.adminStore && this.props.adminStore.usersList) {
       content = (
         <Aux>
           <UserModuleSubheader />
-          <UserListing header={this.headerMeta} hasPagination />
+          <UserListing
+            header={this.headerMeta}
+            listData={this.props.adminStore.usersList}
+            hasPagination
+          />
         </Aux>
       );
     } else {
