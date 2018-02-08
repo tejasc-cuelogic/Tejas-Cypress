@@ -18,6 +18,7 @@ import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRew
 import Banking from './banking/containers/Banking';
 import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
+import Users from './users/containers/Users';
 import { BusinessAuthorization, UserAuthorization } from '../components/common/Authorization';
 
 export const publicRoutes = [
@@ -98,6 +99,21 @@ export const privateRoutes = [
   {
     path: '/app/business/edgar',
     component: EdgarForm,
+    auth: BusinessAuthorization,
+  },
+  {
+    path: '/app/users/:userId/:section',
+    component: Users,
+    auth: BusinessAuthorization,
+  },
+  {
+    path: '/app/users/new',
+    component: Users,
+    auth: BusinessAuthorization,
+  },
+  {
+    path: '/app/users',
+    component: Users,
     auth: BusinessAuthorization,
   },
   {

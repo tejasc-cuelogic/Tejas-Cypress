@@ -116,3 +116,30 @@ html{
 	text-align: center;
 	padding-bottom:20px;
 }
+
+.header-section {
+	background: #424242;
+	min-height: 80px;
+}
+
+.header-section .ui.grid {
+	padding-left: 20px;
+	padding-top: 5px;
+}
+
+.header-section .ui.grid .userDetailsLinks a{
+	color: #7D7D7D;
+	text-transform: uppercase;
+	margin-right: 29px;
+    font-size: 0.8em;
+}
+
+.header-section .ui.grid .userDetailsLinks a:hover, .header-section .ui.grid .userDetailsLinks a.active{
+	color: #FFF;
+}
+
+.header-section h3{
+	color: #FFFFFF;
+	font-size: 1.4em;
+    font-weight: bold;
+}

@@ -38,7 +38,7 @@ class SidebarLeftPush extends Component {
         <Sidebar as={Menu} animation="push" width="thin" visible={visible} icon="labeled" vertical inverted>
           {
             sidebarItems.map(item => (
-              <Menu.Item key={item.to} name="home" as={Link} to={`/${item.to}`}>
+              <Menu.Item key={item.to} name="home" as={Link} to={`/app/${item.to}`}>
                 <Icon name={item.icon} />
                 <span>{item.displayName}</span>
               </Menu.Item>
