@@ -1,22 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react';
 
-// class sidebarLeftOverlay extends Component {
-//   state = {
-//     showsidedrawer: false,
-//   }
-
-// sideDrawerClosedHandler = () => {
-//   this.setState({ showsidedrawer: false });
-// }
-
-// sideDrawerToggleHandler = () => {
-//   this.setState((prevState) => {
-//     console.log('hey');
-//     return { showsidedrawer: !prevState.showsidedrawer };
-//   });
-// }
 class SidebarLeftPush extends Component {
   state = { visible: false }
 
@@ -38,15 +23,15 @@ class SidebarLeftPush extends Component {
         <Sidebar as={Menu} animation="push" width="thin" visible={visible} icon="labeled" vertical inverted>
           {
             sidebarItems.map(item => (
-              <Menu.Item key={item.to} name="home" as={Link} to={`/app/${item.to}`}>
+              <Menu.Item key={item.to} name="home" as={NavLink} to={`/app/${item.to}`}>
                 <Icon name={item.icon} />
                 <span>{item.displayName}</span>
               </Menu.Item>
             ))
           }
           <Button onClick={this.toggleVisibility} className="item collapseIcon">
-            <i className={`angle double ${(this.state.visible) ? 'left' : 'right'} icon`} />
-            <span>Collapse menu</span>
+            <i className={`angle ${(this.state.visible) ? 'left' : 'right'} icon`} />
+            <span>Collapse</span>
           </Button>
         </Sidebar>
         <Sidebar.Pusher>
