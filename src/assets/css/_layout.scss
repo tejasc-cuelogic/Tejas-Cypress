@@ -6,7 +6,7 @@
 		&.large{
 			font-size:1rem;
 		}
-		.item{
+		.menu .item{
 			font-weight:700;
 			color:$text-primary;
 			padding:0.92857143em 2.285714285714286em;
@@ -30,13 +30,17 @@
 }
 .content{
 	min-height:calc(100vh - 342px);
-	padding:50px 0 !important;
+}
+.ui.segment.vertical{
+	&.content{
+		padding:50px 0;
+	}
 }
 .content-spacer{
 	padding:3.21em 4.28em;
 }
 .webcontent-spacer{
-	padding:2em !important;
+	padding:2.428571em 5em 0 !important;
 }
 
 div.login-form {
@@ -59,10 +63,15 @@ div.login-form {
 .pushable{
 	>.sidebar{
 		~ .pusher{
-			padding-left:68px;
+			padding-left:64px;
 			transition:all .5s ease;
 			height:calc(100vh - 58px);
 			overflow-y:auto;
+			.ui.vertical.segment{
+				&.content{
+					padding:0;
+				}
+			}
 		}
 	}
 }
@@ -81,22 +90,32 @@ div.login-form {
 				}
 			}
 			&.push{
-				width:68px;
+				width:64px;
 				visibility:visible;
 				transform:translate3D(0,0,0);
-				transition:all .5s ease;
+				transition:width .5s ease;
 				.item {
 					min-width: auto !important;
 					text-align: left;
 					overflow:hidden;
+					padding:1em 1.5em;
+					color:$light-header;
+					&:first-child:before, &:before{
+						display:none;
+						background:none;
+					}
 					>.icon:not(.dropdown){
 						float:left;
+						height:auto;
 						margin:0 !important;
+						font-size:1.14285714em !important;
+						line-height:22px;
+						position:relative;
 					}
 					span{
 						opacity:0;
 						display:block;
-						line-height:24px;
+						line-height:22px;
 						text-overflow: ellipsis;
 						white-space: nowrap;
 						overflow: hidden;
@@ -106,6 +125,22 @@ div.login-form {
 						margin:0;
 						&:before{
 							display:none;
+						}
+					}
+					&.active{
+						background:transparent;
+						color:$active-primary-link !important;
+						> i.icon:after{
+							content:"";
+							width:6px;
+							height:6px;
+							border-radius:3px;
+							display:block;
+							background:$active-primary-link;
+							position:absolute;
+							left:50%;
+							margin-left:-2px;
+							bottom:-9px;
 						}
 					}
 				}
@@ -124,8 +159,22 @@ div.login-form {
 
 //	Admin Page Content Styles
 .page-header-section{
-	min-height:80px;
+	min-height:132px;
 	background-color:$dark-header;
+	h3{
+		color:$text-secondary;
+		font-size: 2.142857em;
+		font-weight: bold;
+	}
+	.ui.grid .userDetailsLinks a{
+		color: #7D7D7D;
+		text-transform: uppercase;
+		margin-right: 29px;
+		font-size: 0.8em;
+		&:hover, &.active{
+			color:$text-secondary;
+		}
+	}
 }
 
 //	Web Footer Style
@@ -136,6 +185,11 @@ div.login-form {
 			padding:2em;
 			background-color:$dark-sidebar;
 		}
+	}
+}
+.footer{
+	.ui.header{
+		font-weight:400;
 	}
 }
 

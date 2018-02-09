@@ -127,19 +127,19 @@ html{
 	padding-top: 5px;
 }
 
-.header-section .ui.grid .userDetailsLinks a{
+/* .header-section .ui.grid .userDetailsLinks a{
 	color: #7D7D7D;
 	text-transform: uppercase;
 	margin-right: 29px;
     font-size: 0.8em;
-}
+} */
 
-.header-section .ui.grid .userDetailsLinks a:hover, .header-section .ui.grid .userDetailsLinks a.active{
+/* .header-section .ui.grid .userDetailsLinks a:hover, .header-section .ui.grid .userDetailsLinks a.active{
 	color: #FFF;
-}
+} */
 
-.header-section h3{
+/* .header-section h3{
 	color: #FFFFFF;
 	font-size: 1.4em;
     font-weight: bold;
-}
+} */

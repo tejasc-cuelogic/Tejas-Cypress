@@ -38,7 +38,7 @@ class Offering extends Component {
             fontSize: '30px',
             color: '#666',
             textAlign: 'center',
-            top: '25px',
+            // top: '25px',
           }}
         >
           <span className="title">NextSeed Offerings</span>
