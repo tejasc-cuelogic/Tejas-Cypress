@@ -27,6 +27,7 @@ export class Admin {
           if (err) {
             rej(err);
           }
+          console.log(data);
           res(data);
         });
       })
@@ -198,6 +199,7 @@ export class Admin {
       });
       userHash.username = user.Username;
       userHash.enabled = user.Enabled;
+      userHash.UserCreateDate = user.UserCreateDate.toString();
       userHash.status = user.UserStatus;
       formatedUserData[user.Username] = userHash;
       return null;
