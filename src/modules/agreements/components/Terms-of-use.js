@@ -5,7 +5,7 @@ import {
 
 const ambassadors = () => (
   <div>
-    <span className="title">TERMS OF USE</span>
+    <span className="title">Terms of Use</span>
     <Divider inverted section />
     <p className="pageContent">
       {/* eslint-disable max-len */}

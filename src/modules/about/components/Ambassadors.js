@@ -5,7 +5,7 @@ import {
 
 const ambassadors = () => (
   <div>
-    <span className="title">NEXTSEED AMBASSADORS</span>
+    <span className="title">NextSeed Ambassadors</span>
     <span className="infotext">
       Champions of local growth
     </span>

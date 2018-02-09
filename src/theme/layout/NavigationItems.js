@@ -1,20 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Aux from 'react-aux';
-import {
-  // Button,
-  Container,
-  // Divider,
-  // Grid,
-  // Header,
-  Icon,
-  Image,
-  // List,
-  Menu,
-  Dropdown,
-  // Segment,
-  // Visibility,
-} from 'semantic-ui-react';
+import { Container, Icon, Image, Menu, Dropdown } from 'semantic-ui-react';
 import Logo from '../../assets/images/nextseed_logo_color.svg';
 
 const UserNavigation = (props) => {
@@ -23,7 +10,7 @@ const UserNavigation = (props) => {
       <Aux>
         <Dropdown item simple text={props.currentUser.email}>
           <Dropdown.Menu>
-            <Dropdown.Item as={Link} to="/app/settings">Settings</Dropdown.Item>
+            <Dropdown.Item as={NavLink} to="/app/settings">Settings</Dropdown.Item>
             <Dropdown.Item onClick={props.handleLogOut}>Log Out</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -34,8 +21,8 @@ const UserNavigation = (props) => {
   return (
     <Dropdown item simple text="Log In or Sign Up">
       <Dropdown.Menu>
-        <Dropdown.Item as={Link} to="/login">Log In</Dropdown.Item>
-        <Dropdown.Item as={Link} to="/register">Register</Dropdown.Item>
+        <Dropdown.Item as={NavLink} to="/login">Log In</Dropdown.Item>
+        <Dropdown.Item as={NavLink} to="/register">Register</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );
@@ -48,16 +35,16 @@ const navigationItems = props => (
         <Image className="small" src={Logo} alt="NextSeed.com" style={{ marginRight: '1.5em' }} />
       </Menu.Item>
       <Menu.Menu position="right">
-        <Menu.Item as={Link} to="/offerings" >Browse Deals</Menu.Item>
-        <Menu.Item as={Link} to="/invest">For Investers</Menu.Item>
-        <Menu.Item as={Link} to="/app/business">For Businesses</Menu.Item>
+        <Menu.Item as={NavLink} to="/offerings" activeClassName="active" >Browse Deals</Menu.Item>
+        <Menu.Item as={NavLink} to="/invest">For Investers</Menu.Item>
+        <Menu.Item as={NavLink} to="/app/business">For Businesses</Menu.Item>
         <Dropdown item simple text="Learn">
           <Dropdown.Menu>
-            <Dropdown.Item as={Link} to="/about/team" >Team</Dropdown.Item>
-            <Dropdown.Item as={Link} to="/about/ambassadors" >Ambassadors</Dropdown.Item>
-            <Dropdown.Item as={Link} to="/blog" >Blog</Dropdown.Item>
-            <Dropdown.Item as={Link} to="/case-studies" >Case Studies</Dropdown.Item>
-            <Dropdown.Item as={Link} to="/about/faq" >FAQ</Dropdown.Item>
+            <Dropdown.Item as={NavLink} to="/about/team" >Team</Dropdown.Item>
+            <Dropdown.Item as={NavLink} to="/about/ambassadors" >Ambassadors</Dropdown.Item>
+            <Dropdown.Item as={NavLink} to="/blog" >Blog</Dropdown.Item>
+            <Dropdown.Item as={NavLink} to="/case-studies" >Case Studies</Dropdown.Item>
+            <Dropdown.Item as={NavLink} to="/about/faq" >FAQ</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <UserNavigation {...props} />
@@ -66,10 +53,4 @@ const navigationItems = props => (
   </Menu>
 );
 
-// <Menu.Item className="item">
-//           <Button as="a">Log in</Button>
-//         </Menu.Item>
-//         <Menu.Item>
-//           <Button as="a" primary>Sign Up</Button>
-//         </Menu.Item>
 export default navigationItems;
