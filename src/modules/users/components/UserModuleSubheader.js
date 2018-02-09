@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const userModuleSubheader = () => (
-  <div className="header-section">
+  <div className="page-header-section">
     <div className="ui grid">
       <div className="four wide column">
         <h3>James Wright</h3>
