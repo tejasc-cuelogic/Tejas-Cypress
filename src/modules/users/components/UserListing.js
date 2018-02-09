@@ -4,6 +4,16 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import Pagination from './../../../theme/table/Pagination';
 
+const paginateOptions = {
+  activePage: 5,
+  boundaryRange: 1,
+  siblingRange: 1,
+  showEllipsis: true,
+  showFirstAndLastNav: true,
+  showPreviousAndNextNav: true,
+  totalPages: 50,
+};
+
 const userListing = props => (
   <Table striped sortable>
     <Table.Header>
@@ -31,7 +41,7 @@ const userListing = props => (
       }
     </Table.Body>
     {props.hasPagination &&
-      <Pagination colspan={props.header.length} />
+      <Pagination paginateOptions={paginateOptions} colspan={props.header.length} />
     }
   </Table>
 );
