@@ -1,6 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Button, Form, Grid, Header, Message, Divider } from 'semantic-ui-react';
 
 import ListErrors from '../../components/common/ListErrors';
 
@@ -23,34 +24,44 @@ export default class ForgotPassword extends React.Component {
     const { values, inProgress } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
-      <div className="auth-page">
-        <div className="container page">
-          <div className="row">
-            <div className="col-md-6 offset-md-3 col-xs-12">
-              <h1 className="text-xs-center">Reset your Password</h1>
-              <ListErrors errors={errors ? [errors.message] : []} />
-
-              <form onSubmit={this.handleSubmitForm}>
-                <fieldset>
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="text"
-                      placeholder="Email"
-                      value={values.email}
-                      onChange={this.handleEmailChange}
-                    />
-                  </fieldset>
-                  <fieldset className="form-group">
-                    <Button color="green" disabled={inProgress}>
-                      Proceed
-                    </Button>
-                  </fieldset>
-                </fieldset>
-              </form>
-            </div>
-          </div>
-        </div>
+      <div className="login-form">
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+        >
+          <Grid.Column>
+            <Header as="h1" textAlign="center">Need a link to reset your password?</Header>
+            <Form size="large" error onSubmit={this.handleSubmitForm}>
+              <div stacked>
+                <Form.Input
+                  fluid
+                  icon="envelope"
+                  iconPosition="left"
+                  placeholder="E-mail address"
+                  value={values.email}
+                  onChange={this.handleEmailChange}
+                />
+                {errors &&
+                  <Message error textAlign="left">
+                    <ListErrors errors={errors ? [errors.message] : []} />
+                  </Message>
+                }
+                <Button
+                  fluid
+                  color="green"
+                  size="large"
+                  disabled={inProgress}
+                >
+                  Reset Password
+                </Button>
+              </div>
+            </Form>
+            <Divider section />
+            <Message>
+              <p><Link to="login">Just kidding, I remembered</Link></p>
+            </Message>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button } from 'semantic-ui-react';
+import { Button, Grid, Header, Form, Message, Divider } from 'semantic-ui-react';
 import ListErrors from '../../components/common/ListErrors';
 
 @inject('authStore')
@@ -26,92 +26,85 @@ export default class Register extends React.Component {
 
   render() {
     const { values, errors, inProgress } = this.props.authStore;
+    const options = [
+      { key: 'o', text: 'Business Owner', value: 'business owner' },
+      { key: 'i', text: 'Investor', value: 'investor' },
+    ];
 
     return (
-      <div className="auth-page">
-        <div className="container page">
-          <div className="row">
-            <div className="col-md-6 offset-md-3 col-xs-12">
-              <h1 className="text-xs-center">Sign Up</h1>
-              <p className="text-xs-center">
-                <Link to="login">Have an account?</Link>
-              </p>
-
-              <ListErrors errors={errors} />
-
-              <form onSubmit={this.handleSubmitForm}>
-                <fieldset>
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="text"
-                      placeholder="First Name"
-                      value={values.fname}
-                      onChange={this.handleFirstNameChange}
-                    />
-                  </fieldset>
-
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="text"
-                      placeholder="Last Name"
-                      value={values.lname}
-                      onChange={this.handleLastNameChange}
-                    />
-                  </fieldset>
-
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="email"
-                      placeholder="Email"
-                      value={values.email}
-                      onChange={this.handleEmailChange}
-                    />
-                  </fieldset>
-
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="password"
-                      placeholder="Password"
-                      value={values.password}
-                      onChange={this.handlePasswordChange}
-                    />
-                  </fieldset>
-
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="password"
-                      placeholder="Verify Password"
-                      value={values.verify}
-                      onChange={this.handleVerifyChange}
-                    />
-                  </fieldset>
-                  <fieldset className="form-group">
-                    <select className="ui dropdown form-control form-control-lg" size="1" onChange={this.handleRoleChange}>
-                      <option value="">Role</option>
-                      <option value="bowner">Business Owner</option>
-                      <option value="investor">Investor</option>
-                    </select>
-                  </fieldset>
-
-                  <fieldset className="form-group">
-                    <Button
-                      color="green"
-                      type="submit"
-                      disabled={inProgress}
-                    >
-                      Sign up
-                    </Button>
-                  </fieldset>
-                </fieldset>
-              </form>
-            </div>
-          </div>
-        </div>
+      <div className="login-form">
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+        >
+          <Grid.Column>
+            <Header as="h1" textAlign="center">Sign Up</Header>
+            <Form size="large" error onSubmit={this.handleSubmitForm}>
+              <div stacked>
+                <Form.Input
+                  fluid
+                  icon="user"
+                  iconPosition="left"
+                  placeholder="First Name"
+                  value={values.fname}
+                  onChange={this.handleFirstNameChange}
+                />
+                <Form.Input
+                  fluid
+                  icon="user"
+                  iconPosition="left"
+                  placeholder="Last Name"
+                  value={values.lname}
+                  onChange={this.handleLastNameChange}
+                />
+                <Form.Input
+                  fluid
+                  icon="envelope"
+                  iconPosition="left"
+                  placeholder="Email"
+                  value={values.email}
+                  onChange={this.handleEmailChange}
+                />
+                <Form.Input
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  type="password"
+                  placeholder="Password"
+                  value={values.password}
+                  onChange={this.handlePasswordChange}
+                />
+                <Form.Input
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  type="password"
+                  placeholder="Verify Password"
+                  value={values.verify}
+                  onChange={this.handleVerifyChange}
+                />
+                <Form.Select fluid options={options} placeholder="Role" />
+                {errors &&
+                  <Message error textAlign="left">
+                    <ListErrors errors={errors ? [errors.message] : []} />
+                  </Message>
+                }
+                <Button
+                  fluid
+                  color="green"
+                  size="large"
+                  disabled={inProgress}
+                >
+                  Sign Up
+                </Button>
+              </div>
+            </Form>
+            <Divider section />
+            <Message>
+              <p><Link to="login">Have an account?</Link></p>
+            </Message>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }

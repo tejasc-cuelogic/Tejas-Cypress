@@ -39,6 +39,20 @@
 	padding:2em !important;
 }
 
+div.login-form {
+	height: 100%;
+	.column{
+		max-width:450px;
+	}
+	h1.header{
+		margin-bottom:1.5em;
+	}
+	ul.error-messages{
+		list-style-type:none;
+		padding:0;
+		text-align:left;
+	}
+}
 
 
 // 	Sidebar pushable CSS
