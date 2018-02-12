@@ -38,7 +38,7 @@ class App extends Component {
   }
 
   render() {
-    if (this.props.authStore.hasSession && this.props.uiStore.inProgress) {
+    if (this.props.authStore.hasSession && this.props.uiStore.appLoader) {
       return (
         <div>
           <Spinner loaderMessage={this.props.uiStore.loaderMessage} />

@@ -1,5 +1,6 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import * as AWSCognito from 'amazon-cognito-identity-js';
+// import _ from 'lodash';
 // import * as AWS from 'aws-sdk';
 import userStore from './userStore';
 import commonStore from './commonStore';
@@ -31,6 +32,17 @@ export class AuthStore {
     verify: '',
     code: '',
   };
+
+  @computed get canRegister() {
+    const {
+      givenName,
+      familyName,
+      email,
+      password,
+      verify,
+    } = this.values;
+    return ![givenName, familyName, email, password, verify].includes('');
+  }
 
   @action
   setFirstName(givenName) {
@@ -109,81 +121,6 @@ export class AuthStore {
   }
 
   @action
-  register() {
-    uiStore.setProgress(true);
-    uiStore.clearErrors();
-
-    return new Promise((res, rej) => {
-      const attributeRoles = new AWSCognito.CognitoUserAttribute({
-        Name: 'custom:roles',
-        Value: JSON.stringify([this.role]),
-      });
-
-      const attributeFirstName = new AWSCognito.CognitoUserAttribute({
-        Name: 'given_name',
-        Value: this.values.givenName,
-      });
-
-      const attributeLastName = new AWSCognito.CognitoUserAttribute({
-        Name: 'family_name',
-        Value: this.values.familyName,
-      });
-
-      const attributeList = [];
-      attributeList.push(attributeRoles);
-      attributeList.push(attributeFirstName);
-      attributeList.push(attributeLastName);
-
-      userPool.signUp(
-        this.values.email,
-        this.values.password,
-        attributeList,
-        null,
-        (err, result) => {
-          if (err) {
-            return rej(err);
-          }
-          cognitoUser = result;
-          return res();
-        },
-      );
-    })
-      .catch(action((err) => {
-        uiStore.clearErrors(err);
-        throw err;
-      }))
-      .finally(action(() => {
-        uiStore.setProgress(false);
-      }));
-  }
-
-  @action
-  resetPassword() {
-    uiStore.setProgress(true);
-    uiStore.clearErrors();
-
-    const userData = {
-      Username: this.values.email,
-      Pool: userPool,
-    };
-
-    return new Promise((res, rej) => {
-      cognitoUser = new AWSCognito.CognitoUser(userData);
-      cognitoUser.forgotPassword({
-        onSuccess: data => res(data),
-        onFailure: err => rej(err),
-      });
-    })
-      .catch(action((err) => {
-        uiStore.setErrors(err);
-        throw err;
-      }))
-      .finally(action(() => {
-        uiStore.setProgress(false);
-      }));
-  }
-
-  @action
   setNewPassword() {
     uiStore.setProgress(true);
     uiStore.clearErrors();
@@ -198,35 +135,6 @@ export class AuthStore {
         onFailure: err => rej(err),
       });
     })
-      .catch(action((err) => {
-        uiStore.setErrors(err);
-        throw err;
-      }))
-      .finally(action(() => {
-        uiStore.setProgress(false);
-      }));
-  }
-
-  @action
-  confirmCode() {
-    uiStore.setProgress(true);
-    uiStore.clearErrors();
-
-    cognitoUser = new AWSCognito.CognitoUser({
-      Username: this.values.email,
-      Pool: userPool,
-    });
-
-    return new Promise((res, rej) => {
-      cognitoUser.confirmRegistration(
-        this.values.code,
-        true,
-        err => (err ? rej(err) : res()),
-      );
-    })
-      .then(action(() => {
-        this.setMessage("You're confirmed! Please login...");
-      }))
       .catch(action((err) => {
         uiStore.setErrors(err);
         throw err;

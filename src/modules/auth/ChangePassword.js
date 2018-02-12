@@ -1,14 +1,16 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Button } from 'semantic-ui-react';
+import { Form, Button, Message } from 'semantic-ui-react';
 
 import authActions from './../../actions/auth';
+import ListErrors from '../../components/common/ListErrors';
 
-@inject('authStore')
+@inject('authStore', 'uiStore')
 @observer
 export default class ChangePassword extends React.Component {
   componentWillUnmount() {
     this.props.authStore.reset();
+    this.props.uiStore.clearErrors();
   }
 
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
@@ -21,6 +23,7 @@ export default class ChangePassword extends React.Component {
       });
   }
   render() {
+    const { errors } = this.props.uiStore;
     return (
       <div>
         <h2>Change Password for</h2><p>{this.props.authStore.values.email}</p>
@@ -36,6 +39,11 @@ export default class ChangePassword extends React.Component {
             onChange={this.handleVerifyChange}
           />
           <Button onClick={this.handleClick}>Change Password</Button>
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
         </Form>
       </div>
     );

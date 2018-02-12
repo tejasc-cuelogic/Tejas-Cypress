@@ -2,22 +2,24 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Button, Form, Grid, Header, Message, Divider } from 'semantic-ui-react';
+import authActions from '../../actions/auth';
 
 import ListErrors from '../../components/common/ListErrors';
 
 @inject('authStore', 'uiStore')
 @observer
 export default class ForgotPassword extends React.Component {
-  componentWillMount() {
-    if (this.props.authStore.errors) {
-      this.props.authStore.clearErrors();
-    }
+  componentWillUnmount() {
+    // Do not reset authStore values from here as some of those are required while changing password
+    // this.props.authStore.reset();
+    // authStore will reset after flow gets completed with success or error
+    this.props.uiStore.reset();
   }
 
   handleEmailChange = event => this.props.authStore.setEmail(event.target.value);
   handleSubmitForm = (event) => {
     event.preventDefault();
-    this.props.authStore.resetPassword().then(() => this.props.history.push('/reset-password'));
+    authActions.resetPassword(this.props.authStore.values).then(() => this.props.history.push('/reset-password'));
   }
 
   render() {
@@ -41,11 +43,6 @@ export default class ForgotPassword extends React.Component {
                   value={values.email}
                   onChange={this.handleEmailChange}
                 />
-                {errors &&
-                  <Message error textAlign="left">
-                    <ListErrors errors={errors ? [errors.message] : []} />
-                  </Message>
-                }
                 <Button
                   fluid
                   color="green"
@@ -54,11 +51,16 @@ export default class ForgotPassword extends React.Component {
                 >
                   Reset Password
                 </Button>
+                {errors &&
+                  <Message error textAlign="left">
+                    <ListErrors errors={errors ? [errors.message] : []} />
+                  </Message>
+                }
               </div>
             </Form>
             <Divider section />
             <Message>
-              <p><Link to="login">Just kidding, I remembered</Link></p>
+              <p><Link to="login">Return to log In</Link></p>
             </Message>
           </Grid.Column>
         </Grid>

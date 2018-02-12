@@ -2,15 +2,16 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, Grid, Header, Form, Message, Divider } from 'semantic-ui-react';
+
+import authActions from '../../actions/auth';
 import ListErrors from '../../components/common/ListErrors';
 
-@inject('authStore')
+@inject('authStore', 'uiStore')
 @observer
 export default class Register extends React.Component {
   componentWillUnmount() {
-    this.props.authStore.reset();
+    this.props.uiStore.clearErrors();
   }
-
   handleFirstNameChange = e => this.props.authStore.setFirstName(e.target.value);
   handleLastNameChange = e => this.props.authStore.setLastName(e.target.value);
   handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
@@ -19,13 +20,13 @@ export default class Register extends React.Component {
   handleRoleChange = e => this.props.authStore.setRole(e.target.value);
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.authStore
-      .register()
+    authActions.register(this.props.authStore.values)
       .then(() => this.props.history.replace('/confirm'));
   };
 
   render() {
-    const { values, errors, inProgress } = this.props.authStore;
+    const { values } = this.props.authStore;
+    const { errors } = this.props.uiStore;
     const options = [
       { key: 'o', text: 'Business Owner', value: 'business owner' },
       { key: 'i', text: 'Investor', value: 'investor' },
@@ -40,7 +41,7 @@ export default class Register extends React.Component {
           <Grid.Column>
             <Header as="h1" textAlign="center">Sign Up</Header>
             <Form size="large" error onSubmit={this.handleSubmitForm}>
-              <div stacked>
+              <div stacked="true">
                 <Form.Input
                   fluid
                   icon="user"
@@ -84,19 +85,19 @@ export default class Register extends React.Component {
                   onChange={this.handleVerifyChange}
                 />
                 <Form.Select fluid options={options} placeholder="Role" />
-                {errors &&
-                  <Message error textAlign="left">
-                    <ListErrors errors={errors ? [errors.message] : []} />
-                  </Message>
-                }
                 <Button
                   fluid
                   color="green"
                   size="large"
-                  disabled={inProgress}
+                  disabled={!this.props.authStore.canRegister}
                 >
                   Sign Up
                 </Button>
+                {errors &&
+                  <Message error textAlign="left">
+                    <ListErrors errors={[errors.message]} />
+                  </Message>
+                }
               </div>
             </Form>
             <Divider section />
