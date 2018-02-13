@@ -1,12 +1,16 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
+import { Button, Message } from 'semantic-ui-react';
 
-import { Button } from 'semantic-ui-react';
 import ListErrors from '../../components/common/ListErrors';
 
 @inject('authStore')
 @observer
 export default class ResetPassword extends React.Component {
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
+  }
+
   handlePasswordChange = event => this.props.authStore.setPassword(event.target.value);
   handleVerifyChange = event => this.props.authStore.setVerify(event.target.value);
   handleCodeChange = event => this.props.authStore.setCode(event.target.value);
@@ -25,7 +29,6 @@ export default class ResetPassword extends React.Component {
             <div className="col-md-6 offset-md-3 col-xs-12">
               <h1 className="text-xs-center">Reset Password</h1>
               <p>The verification code has been sent to your registered email address</p>
-              <ListErrors errors={errors} />
 
               <form onSubmit={this.handleSubmitForm}>
                 <fieldset>
@@ -62,6 +65,11 @@ export default class ResetPassword extends React.Component {
                   <Button primary disabled={inProgress}>
                     Reset Password
                   </Button>
+                  {errors &&
+                    <Message error textAlign="left">
+                      <ListErrors errors={[errors.message]} />
+                    </Message>
+                  }
                 </fieldset>
               </form>
             </div>

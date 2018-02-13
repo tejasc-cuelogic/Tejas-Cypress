@@ -1,7 +1,7 @@
 import { action, observable } from 'mobx';
 
-
 export class UiStore {
+  appLoader = false;
   @observable inProgress = false;
   @observable loaderMessage = '';
   @observable errors = undefined;
@@ -50,6 +50,11 @@ export class UiStore {
   @action
   clearRedirectURL() {
     this.redirectURL = undefined;
+  }
+
+  @action
+  setAppLoader(value) {
+    this.appLoader = value;
   }
 
   @action

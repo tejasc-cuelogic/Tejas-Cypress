@@ -29,7 +29,7 @@ export class Auth {
 
   verifySession = () => {
     uiStore.reset();
-    uiStore.setProgress();
+    uiStore.setAppLoader(true);
     uiStore.setLoaderMessage('Getting user data');
 
     Object.keys(localStorage).every((key) => {
@@ -78,7 +78,7 @@ export class Auth {
         .catch(() => { })
         .finally(() => {
           commonStore.setAppLoaded();
-          uiStore.setProgress(false);
+          uiStore.setAppLoader(false);
           uiStore.clearLoaderMessage();
         })
     );
@@ -300,13 +300,13 @@ export class Auth {
     uiStore.setProgress();
 
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: this.values.email,
+      Username: authStore.values.email,
       Pool: this.userPool,
     });
 
     return new Promise((res, rej) => {
       this.cognitoUser.confirmRegistration(
-        this.values.code,
+        authStore.values.code,
         true,
         err => (err ? rej(err) : res()),
       );

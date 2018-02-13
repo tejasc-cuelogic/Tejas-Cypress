@@ -1,24 +1,29 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
-import ListErrors from '../../components/common/ListErrors';
+import { Message } from 'semantic-ui-react';
 
-@inject('authStore')
+import ListErrors from '../../components/common/ListErrors';
+import authActions from './../../actions/auth';
+
+@inject('authStore', 'uiStore')
 @withRouter
 @observer
 export default class Confirm extends React.Component {
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
+  }
+
   handleCodeChange = e => this.props.authStore.setCode(e.target.value);
-  handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.authStore
-      .confirmCode()
+    authActions.confirmCode()
       .then(() => this.props.history.replace('/login'));
   };
 
   render() {
-    const { values, errors, inProgress } = this.props.authStore;
-
+    const { inProgress } = this.props.authStore;
+    const { errors } = this.props.uiStore;
     return (
       <div className="auth-page">
         <div className="container page">
@@ -28,21 +33,8 @@ export default class Confirm extends React.Component {
               <p className="text-xs-center">
                 <Link to="login">Have an account?</Link>
               </p>
-
-              <ListErrors errors={errors} />
-
               <form onSubmit={this.handleSubmitForm}>
                 <fieldset>
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="text"
-                      placeholder="Email"
-                      value={values.email}
-                      onChange={this.handleEmailChange}
-                    />
-                  </fieldset>
-
                   <fieldset className="form-group">
                     <input
                       className="form-control form-control-lg"
@@ -58,6 +50,11 @@ export default class Confirm extends React.Component {
                   >
                     Confirm
                   </button>
+                  {errors &&
+                    <Message error textAlign="left">
+                      <ListErrors errors={[errors.message]} />
+                    </Message>
+                  }
                 </fieldset>
               </form>
             </div>

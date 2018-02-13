@@ -11,7 +11,7 @@ import ListErrors from '../../components/common/ListErrors';
 @observer
 export default class Login extends React.Component {
   componentWillUnmount() {
-    this.props.authStore.reset();
+    this.props.uiStore.clearErrors();
   }
 
   handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
@@ -23,6 +23,7 @@ export default class Login extends React.Component {
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/change-password');
         } else {
+          this.props.authStore.reset();
           this.props.history.replace('/app/dashboard');
         }
       });
@@ -41,7 +42,7 @@ export default class Login extends React.Component {
           <Grid.Column>
             <Header as="h1" textAlign="center">Sign in to invest today or access your business application</Header>
             <Form size="large">
-              <div stacked>
+              <div stacked="true">
                 <Button color="facebook" size="large" fluid>
                   <Icon name="facebook" /> LOG IN WITH FACEBOOK
                 </Button>
@@ -77,7 +78,7 @@ export default class Login extends React.Component {
                 </Button>
                 {errors &&
                   <Message error textAlign="left">
-                    <ListErrors errors={errors ? [errors.message] : []} />
+                    <ListErrors errors={[errors.message]} />
                   </Message>
                 }
               </div>
