@@ -50,6 +50,7 @@ export default class Register extends React.Component {
                   name="givenName"
                   value={values.givenName.value}
                   onChange={this.handleInputChange}
+                  error={values.givenName.error}
                 />
                 <FieldError error={values.givenName.error} />
                 <Form.Input
@@ -60,6 +61,7 @@ export default class Register extends React.Component {
                   name="familyName"
                   value={values.familyName.value}
                   onChange={this.handleInputChange}
+                  error={values.familyName.error}
                 />
                 <FieldError error={values.familyName.error} />
                 <Form.Input
@@ -70,6 +72,7 @@ export default class Register extends React.Component {
                   name="email"
                   value={values.email.value}
                   onChange={this.handleInputChange}
+                  error={values.email.error}
                 />
                 <FieldError error={values.email.error} />
                 <Form.Input
@@ -81,6 +84,7 @@ export default class Register extends React.Component {
                   name="password"
                   value={values.password.value}
                   onChange={this.handleInputChange}
+                  error={values.password.error}
                 />
                 <FieldError error={values.password.error} />
                 <Form.Input
@@ -92,6 +96,7 @@ export default class Register extends React.Component {
                   name="verify"
                   value={values.verify.value}
                   onChange={this.handleInputChange}
+                  error={values.verify.error}
                 />
                 <FieldError error={values.verify.error} />
                 <Form.Select
@@ -100,6 +105,7 @@ export default class Register extends React.Component {
                   placeholder="Role"
                   name="role"
                   onChange={this.handleInputChange}
+                  error={values.role.error}
                 />
                 <FieldError error={values.role.error} />
                 <Button

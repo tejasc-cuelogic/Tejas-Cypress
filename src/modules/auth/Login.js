@@ -56,7 +56,7 @@ export default class Login extends React.Component {
                   icon="envelope"
                   iconPosition="left"
                   placeholder="E-mail address"
-                  value={values.email}
+                  value={values.email.value}
                   onChange={this.handleEmailChange}
                 />
                 <Form.Input
@@ -65,7 +65,7 @@ export default class Login extends React.Component {
                   iconPosition="left"
                   placeholder="Password"
                   type="password"
-                  value={values.password}
+                  value={values.password.value}
                   onChange={this.handlePasswordChange}
                 />
                 <Button

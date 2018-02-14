@@ -40,7 +40,7 @@ export default class ForgotPassword extends React.Component {
                   icon="envelope"
                   iconPosition="left"
                   placeholder="E-mail address"
-                  value={values.email}
+                  value={values.email.value}
                   onChange={this.handleEmailChange}
                 />
                 <Button
