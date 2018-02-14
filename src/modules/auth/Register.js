@@ -5,6 +5,8 @@ import { Button, Grid, Header, Form, Message, Divider } from 'semantic-ui-react'
 
 import authActions from '../../actions/auth';
 import ListErrors from '../../components/common/ListErrors';
+import FieldError from '../../components/common/FieldError';
+import Validation from '../../services/validations';
 
 @inject('authStore', 'uiStore')
 @observer
@@ -12,16 +14,14 @@ export default class Register extends React.Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
-  handleFirstNameChange = e => this.props.authStore.setFirstName(e.target.value);
-  handleLastNameChange = e => this.props.authStore.setLastName(e.target.value);
-  handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
-  handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
-  handleVerifyChange = e => this.props.authStore.setVerify(e.target.value);
-  handleRoleChange = e => this.props.authStore.setRole(e.target.value);
+
+  handleInputChange = (e, { value, name }) => Validation.saveAndValidate(name, value);
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.register(this.props.authStore.values)
-      .then(() => this.props.history.replace('/confirm'));
+      .then(() => this.props.history.replace('/confirm'))
+      .catch(() => {});
   };
 
   render() {
@@ -47,44 +47,61 @@ export default class Register extends React.Component {
                   icon="user"
                   iconPosition="left"
                   placeholder="First Name"
-                  value={values.fname}
-                  onChange={this.handleFirstNameChange}
+                  name="givenName"
+                  value={values.givenName.value}
+                  onChange={this.handleInputChange}
                 />
+                <FieldError error={values.givenName.error} />
                 <Form.Input
                   fluid
                   icon="user"
                   iconPosition="left"
                   placeholder="Last Name"
-                  value={values.lname}
-                  onChange={this.handleLastNameChange}
+                  name="familyName"
+                  value={values.familyName.value}
+                  onChange={this.handleInputChange}
                 />
+                <FieldError error={values.familyName.error} />
                 <Form.Input
                   fluid
                   icon="envelope"
                   iconPosition="left"
                   placeholder="Email"
-                  value={values.email}
-                  onChange={this.handleEmailChange}
+                  name="email"
+                  value={values.email.value}
+                  onChange={this.handleInputChange}
                 />
+                <FieldError error={values.email.error} />
                 <Form.Input
                   fluid
                   icon="lock"
                   iconPosition="left"
                   type="password"
                   placeholder="Password"
-                  value={values.password}
-                  onChange={this.handlePasswordChange}
+                  name="password"
+                  value={values.password.value}
+                  onChange={this.handleInputChange}
                 />
+                <FieldError error={values.password.error} />
                 <Form.Input
                   fluid
                   icon="lock"
                   iconPosition="left"
                   type="password"
                   placeholder="Verify Password"
-                  value={values.verify}
-                  onChange={this.handleVerifyChange}
+                  name="verify"
+                  value={values.verify.value}
+                  onChange={this.handleInputChange}
                 />
-                <Form.Select fluid options={options} placeholder="Role" />
+                <FieldError error={values.verify.error} />
+                <Form.Select
+                  fluid
+                  options={options}
+                  placeholder="Role"
+                  name="role"
+                  onChange={this.handleInputChange}
+                />
+                <FieldError error={values.role.error} />
                 <Button
                   fluid
                   color="green"

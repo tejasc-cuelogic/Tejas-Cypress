@@ -25,12 +25,45 @@ export class AuthStore {
 
   @observable
   values = {
-    givenName: '',
-    familyName: '',
-    email: '',
-    password: '',
-    verify: '',
-    code: '',
+    givenName: {
+      value: '',
+      error: undefined,
+      rule: 'required',
+    },
+    familyName: {
+      value: '',
+      error: undefined,
+      rule: 'required',
+    },
+    email: {
+      value: '',
+      error: undefined,
+      rule: 'required|email',
+    },
+    password: {
+      value: '',
+      error: undefined,
+      rule: 'required|min:8|max:15',
+    },
+    verify: {
+      value: '',
+      error: undefined,
+      rule: 'required|same:password',
+    },
+    code: {
+      value: '',
+      error: undefined,
+      rule: 'required',
+    },
+    role: {
+      value: undefined,
+      error: undefined,
+      rule: 'required',
+    },
+    meta: {
+      isValid: false,
+      error: undefined,
+    },
   };
 
   @computed get canRegister() {
@@ -42,6 +75,26 @@ export class AuthStore {
       verify,
     } = this.values;
     return ![givenName, familyName, email, password, verify].includes('');
+  }
+
+  @action
+  setValue(field, value) {
+    this.values[field].value = value;
+  }
+
+  @action
+  setError(field, error) {
+    this.values[field].error = error;
+  }
+
+  @action
+  setMetaValidation(valid) {
+    this.values.meta.isValid = valid;
+  }
+
+  @action
+  setMetaErrors(error) {
+    this.values.meta.error = error;
   }
 
   @action
