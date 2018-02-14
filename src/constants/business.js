@@ -15,7 +15,7 @@ export const FORM_VALUES = [
 
 export const DOCFILE_TYPES = {
   'Form C Issuer Certificate.docx': true,
-  'Form Security Agreement.doc': true,
+  'Form Security Agreement.docx': true,
   'Form of Note Purchase Agreement - Revenue Share.docx': true,
   'Form of Note Purchase Agreement - Term Note.docx': true,
   'Goldstar Escrow Agreement (Form).docx': true,
