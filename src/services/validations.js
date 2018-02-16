@@ -1,37 +1,42 @@
 import Validator from 'validatorjs';
-import authStore from './../stores/authStore';
+// import { REGISTRATION } from './../constants/validations';
 
 export class Validations {
-  constructor() {
-    this.field = null;
-    this.value = null;
+  validate = (data, rule) => {
+    const validation = new Validator(data, rule);
+    if (validation.fails()) {
+      return validation.errors;
+    }
+    return undefined;
   }
 
-  saveAndValidate = (field, value) => {
-    this.field = field;
-    this.value = value;
-    authStore.setValue(field, value);
-    const validations = new Validator(this.getData(), this.getRules());
-    if (!validations.passes()) {
-      authStore.setError(field, validations.errors.first(`${field}`));
-    } else {
-      authStore.setError(field, undefined);
-    }
-  }
+  // validateForm = (values) => {
+  //   const data = {};
+  //   const rule = {};
+  //   /* eslint-disable no-return-assign */
+  //   REGISTRATION.map(field => data[field] = values[field].value);
+  //   //  eslint-disable no-return-assign
+  //   REGISTRATION.map(field => rule[field] = values[field].rule);
+  //   const validation = new Validator(data, rule);
+  //   if (validation.fails()) {
+  //     return validation.errors;
+  //   }
+  //   return {};
+  // }
 
   // Private - starts here
-  getData = () => {
+  getData = (field, value) => {
     const data = {};
-    data[this.field] = this.value;
-    if (this.field === 'verify') {
-      data.password = authStore.values.password.value;
-    }
+    data[field] = value;
+    // if (field === 'verify') {
+    //   data.password = values.password.value;
+    // }
     return data;
   }
 
-  getRules = () => {
+  getRules = (field, rule) => {
     const rules = {};
-    rules[this.field] = authStore.values[this.field].rule;
+    rules[field] = rule;
     return rules;
   }
   // Private - ends here

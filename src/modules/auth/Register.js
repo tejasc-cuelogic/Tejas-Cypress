@@ -7,6 +7,7 @@ import authActions from '../../actions/auth';
 import ListErrors from '../../components/common/ListErrors';
 import FieldError from '../../components/common/FieldError';
 import Validation from '../../services/validations';
+import validationActions from '../../actions/validation';
 
 @inject('authStore', 'uiStore')
 @observer
@@ -15,10 +16,17 @@ export default class Register extends React.Component {
     this.props.uiStore.clearErrors();
   }
 
-  handleInputChange = (e, { value, name }) => Validation.saveAndValidate(name, value);
+  // handleInputChange = (e, { value, name }) => {
+  //   this.props.authStore.setValue(name, value);
+  //   const { rule } = this.props.authStore.values[name];
+  //   this.props.authStore.setError(name, Validation.validateField(name, value, rule));
+  // }
+
+  handleInputChange = (e, { name, value }) => validationActions.validateAndSave(name, value);
 
   handleSubmitForm = (e) => {
     e.preventDefault();
+    console.log(Validation.validateForm(this.props.authStore.values));
     authActions.register(this.props.authStore.values)
       .then(() => this.props.history.replace('/confirm'))
       .catch(() => {});
