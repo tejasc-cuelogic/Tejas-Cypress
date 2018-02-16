@@ -4,15 +4,16 @@
   "private": true,
   "description": "NS-Client",
   "devDependencies": {
-    "eslint": "4.13.1",
+    "eslint": "^4.13.1",
     "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.4.0",
     "eslint-config-react-app": "^2.0.0",
     "eslint-loader": "1.9.0",
     "eslint-plugin-flowtype": "2.35.0",
-    "gh-pages": "^1.0.0"
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
+    "gh-pages": "^1.0.0",
+    "semantic-ui": "^2.2.14"
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^1.23.0",
@@ -80,12 +81,8 @@
     "whatwg-fetch": "2.0.3"
   },
   "scripts": {
-    "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
-    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
-    "start-js": "node scripts/start.js",
-    "start": "npm-run-all -p watch-css start-js",
-    "build-js": "node scripts/build.js",
-    "build": "npm-run-all build-css build-js",
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
