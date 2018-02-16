@@ -11,7 +11,9 @@ export class Validation {
       data.password = authStore.values.password.value;
     }
     rules[field] = authStore.values[field].rule;
-    console.log(validation.validate(data, rules).errors[field]);
+    // console.log(validation.validate(data, rules).errors[field]);
+    const { errors } = validation.validate(data, rules);
+    authStore.setError(field, errors && errors[field][0]);
   }
 
   // validateNewUserFormField = (field, value) => {

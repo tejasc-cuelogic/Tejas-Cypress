@@ -7,7 +7,7 @@ export class Validations {
     if (validation.fails()) {
       return validation.errors;
     }
-    return undefined;
+    return {};
   }
 
   // validateForm = (values) => {
