@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Button, Image } from 'semantic-ui-react';
+import Userimage from '../../assets/images/james-wright.png';
 
 class SidebarLeftPush extends Component {
   state = { visible: false }
@@ -21,6 +22,11 @@ class SidebarLeftPush extends Component {
     return (
       <Sidebar.Pushable>
         <Sidebar as={Menu} animation="push" width="thin" visible={visible} icon="labeled" vertical inverted>
+          <div className="user-picture">
+            <Image src={Userimage} size="small" circular />
+            <h2>James Wright</h2>
+            <h3>Regular User</h3>
+          </div>
           {
             sidebarItems.map(item => (
               <Menu.Item key={item.to} name="home" as={NavLink} to={`/app/${item.to}`}>

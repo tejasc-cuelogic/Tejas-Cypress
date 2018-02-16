@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
-import { Message } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Message, Divider } from 'semantic-ui-react';
 
 import ListErrors from '../../components/common/ListErrors';
 import authActions from './../../actions/auth';
@@ -22,44 +22,53 @@ export default class Confirm extends React.Component {
   };
 
   render() {
-    const { inProgress } = this.props.authStore;
-    const { errors } = this.props.uiStore;
+    const { values, errors, inProgress } = this.props.authStore;
+
     return (
-      <div className="auth-page">
-        <div className="container page">
-          <div className="row">
-            <div className="col-md-6 offset-md-3 col-xs-12">
-              <h1 className="text-xs-center">Confirm verification code</h1>
-              <p className="text-xs-center">
-                <Link to="login">Have an account?</Link>
-              </p>
-              <form onSubmit={this.handleSubmitForm}>
-                <fieldset>
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="text"
-                      placeholder="Code"
-                      onChange={this.handleCodeChange}
-                    />
-                  </fieldset>
-                  <button
-                    className="btn btn-lg btn-primary pull-xs-right"
-                    type="submit"
-                    disabled={inProgress}
-                  >
-                    Confirm
-                  </button>
-                  {errors &&
-                    <Message error textAlign="left">
-                      <ListErrors errors={[errors.message]} />
-                    </Message>
-                  }
-                </fieldset>
-              </form>
-            </div>
-          </div>
-        </div>
+      <div className="login-form">
+        <Header as="h1" textAlign="center">Confirm verification code</Header>
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+        >
+          <Grid.Column>
+            <Form error onSubmit={this.handleSubmitForm}>
+              <div stacked>
+                <Form.Input
+                  fluid
+                  icon="envelope"
+                  iconPosition="left"
+                  placeholder="E-mail address"
+                  value={values.email}
+                  onChange={this.handleEmailChange}
+                />
+                <Form.Input
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  placeholder="Code"
+                  onChange={this.handleCodeChange}
+                />
+                {errors &&
+                  <Message error textAlign="left">
+                    <ListErrors errors={errors} />
+                  </Message>
+                }
+                <Button
+                  fluid
+                  color="green"
+                  disabled={inProgress}
+                >
+                  Confirm
+                </Button>
+              </div>
+            </Form>
+            <Divider section />
+            <Message>
+              <p><Link to="login">Have an account?</Link></p>
+            </Message>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }

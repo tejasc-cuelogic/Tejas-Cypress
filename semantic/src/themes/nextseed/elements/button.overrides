@@ -1,3 +1,12 @@
 /*******************************
          Theme Overrides
 *******************************/
+//  Buttons style CSS
+.ui.green{
+    &.button, &.buttons .button{
+        background-color:@theme-primary;
+        &:hover, &:focus, &:active{
+            background-color:darken(@theme-primary, 4%);
+        }
+    }
+}

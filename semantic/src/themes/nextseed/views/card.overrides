@@ -1,3 +1,9 @@
 /*******************************
          Theme Overrides
 *******************************/
+.form-card{
+    border-radius:10px;
+    padding:2.285714em;
+    background-color:@lighter-bg-color;
+    box-shadow:0 0 10px fade(@fullBlack, 8%);
+}

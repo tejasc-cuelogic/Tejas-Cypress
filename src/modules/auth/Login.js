@@ -35,21 +35,21 @@ export default class Login extends React.Component {
 
     return (
       <div className="login-form">
+        <Header as="h1" textAlign="center">Sign in to invest today or access your business application</Header>
         <Grid
           textAlign="center"
           verticalAlign="middle"
         >
           <Grid.Column>
-            <Header as="h1" textAlign="center">Sign in to invest today or access your business application</Header>
-            <Form size="large">
+            <Form>
               <div stacked="true">
-                <Button color="facebook" size="large" fluid>
-                  <Icon name="facebook" /> LOG IN WITH FACEBOOK
+                <Button color="facebook" fluid>
+                  <Icon name="facebook" /> Log in with Facebook
                 </Button>
               </div>
             </Form>
             <Divider horizontal>Or</Divider>
-            <Form size="large" error onSubmit={this.handleSubmitForm}>
+            <Form error onSubmit={this.handleSubmitForm}>
               <div stacked>
                 <Form.Input
                   fluid
@@ -71,10 +71,9 @@ export default class Login extends React.Component {
                 <Button
                   fluid
                   color="green"
-                  size="large"
                   disabled={inProgress}
                 >
-                  LOG IN WITH EMAIL
+                  Log in with Email
                 </Button>
                 {errors &&
                   <Message error textAlign="left">

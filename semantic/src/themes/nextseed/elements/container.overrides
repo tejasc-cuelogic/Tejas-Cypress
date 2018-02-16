@@ -1,3 +1,118 @@
 /*******************************
          Theme Overrides
 *******************************/
+
+.content-wrapper{
+	min-height:~"calc(100vh - 58px)";
+}
+.content{
+	min-height:~"calc(100vh - 342px)";
+}
+.ui.segment.vertical{
+	&.content{
+		padding:50px 0;
+	}
+}
+.content-spacer{
+	padding:3.714285em 4.285714em;
+}
+.webcontent-spacer{
+	padding:2.428571em 4.285714em 1em !important;
+}
+
+div.login-form {
+	height: 100%;
+	.column{
+		max-width:380px;
+	}
+	h1.header{
+		margin-bottom:1.5em;
+		>span{
+			font-size:18px;
+			color:@tertiary-text;
+		}
+	}
+	.note{
+		text-align:center;
+		color:@tertiary-text;
+	}
+	ul.error-messages{
+		list-style-type:none;
+		padding:0;
+		text-align:left;
+	}
+}
+.pull-left{
+	float:left !important;
+}
+.pull-right{
+	float:right !important;
+}
+
+//	Admin Page Content Styles	//
+
+//	Page Header Styles
+.page-header-section{
+	min-height:132px;
+	background-color:@dark-bg-color;
+	h3{
+		// @include fontBold;
+		color:@inverse-text;
+		font-size: 2.142857em;
+		// font-weight: bold;
+	}
+	.ui.grid .userDetailsLinks a{
+		color: #7D7D7D;
+		text-transform: uppercase;
+		margin-right: 29px;
+		font-size: 0.8em;
+		&:hover, &.active{
+			color:@inverse-text;
+		}
+	}
+}
+
+//	Card Form Styles
+.cards-form{
+	h3{
+		font-size:18px;
+		margin-bottom:1.5rem;
+	}
+	h4{
+		font-size:14px;
+		color:@secondary-text;
+		.checkbox label{
+			font-weight:normal;
+		}
+	}
+	.card{
+		.grid.divided{
+			.column{
+				padding:0 3.285714rem;
+				&:first-child{
+					padding-left:1rem;
+				}
+				&:last-child{
+					padding-right:1rem;
+				}
+			}
+		}
+	}
+}
+
+//	Web Footer Style
+.ui.segment,
+.ui.primary.segment{
+	&.inverted{
+		&.footer{
+			padding:2em;
+			background-color:@darken-bg-color;
+		}
+	}
+}
+.footer{
+	.ui.header{
+		font-weight:400;
+	}
+}
+

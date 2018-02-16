@@ -756,6 +756,10 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
         Global Overrides
 *******************************/
 
+/*-------------------
+       Fonts
+--------------------*/
+
 /*******************************
          Site Overrides
 *******************************/
@@ -4945,6 +4949,20 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
          Theme Overrides
 *******************************/
 
+.ui.green.button,
+.ui.green.buttons .button {
+  background-color: #A9D943;
+}
+
+.ui.green.button:hover,
+.ui.green.buttons .button:hover,
+.ui.green.button:focus,
+.ui.green.buttons .button:focus,
+.ui.green.button:active,
+.ui.green.buttons .button:active {
+  background-color: #a1d632;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -5105,6 +5123,120 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 /*******************************
          Theme Overrides
 *******************************/
+
+.content-wrapper {
+  min-height: calc(100vh - 58px);
+}
+
+.content {
+  min-height: calc(100vh - 342px);
+}
+
+.ui.segment.vertical.content {
+  padding: 50px 0;
+}
+
+.content-spacer {
+  padding: 3.714285em 4.285714em;
+}
+
+.webcontent-spacer {
+  padding: 2.428571em 4.285714em 1em !important;
+}
+
+div.login-form {
+  height: 100%;
+}
+
+div.login-form .column {
+  max-width: 380px;
+}
+
+div.login-form h1.header {
+  margin-bottom: 1.5em;
+}
+
+div.login-form h1.header > span {
+  font-size: 18px;
+  color: #828282;
+}
+
+div.login-form .note {
+  text-align: center;
+  color: #828282;
+}
+
+div.login-form ul.error-messages {
+  list-style-type: none;
+  padding: 0;
+  text-align: left;
+}
+
+.pull-left {
+  float: left !important;
+}
+
+.pull-right {
+  float: right !important;
+}
+
+.page-header-section {
+  min-height: 132px;
+  background-color: #424242;
+}
+
+.page-header-section h3 {
+  color: #FFFFFF;
+  font-size: 2.142857em;
+}
+
+.page-header-section .ui.grid .userDetailsLinks a {
+  color: #7D7D7D;
+  text-transform: uppercase;
+  margin-right: 29px;
+  font-size: 0.8em;
+}
+
+.page-header-section .ui.grid .userDetailsLinks a:hover,
+.page-header-section .ui.grid .userDetailsLinks a.active {
+  color: #FFFFFF;
+}
+
+.cards-form h3 {
+  font-size: 18px;
+  margin-bottom: 1.5rem;
+}
+
+.cards-form h4 {
+  font-size: 14px;
+  color: #4f4f4f;
+}
+
+.cards-form h4 .checkbox label {
+  font-weight: normal;
+}
+
+.cards-form .card .grid.divided .column {
+  padding: 0 3.285714rem;
+}
+
+.cards-form .card .grid.divided .column:first-child {
+  padding-left: 1rem;
+}
+
+.cards-form .card .grid.divided .column:last-child {
+  padding-right: 1rem;
+}
+
+.ui.segment.inverted.footer,
+.ui.primary.segment.inverted.footer {
+  padding: 2em;
+  background-color: #383838;
+}
+
+.footer .ui.header {
+  font-weight: 400;
+}
 
 /*******************************
          Site Overrides
@@ -7475,6 +7607,34 @@ a.ui.inverted.grey.header:hover {
 /*******************************
          Theme Overrides
 *******************************/
+
+.header-wrap {
+  height: 58px;
+}
+
+.header-wrap .ui.menu {
+  -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08);
+}
+
+.header-wrap .ui.menu.large {
+  font-size: 1rem;
+}
+
+.header-wrap .ui.menu .menu .item {
+  color: #303030;
+  padding: 0.92857143em 2.285714285714286em;
+}
+
+.header-wrap .ui.menu .menu .item.active {
+  color: #FFFFFF;
+  background-color: #A9D943;
+}
+
+.header-wrap .ui.menu .ui.dropdown .menu > .item {
+  font-weight: 700 !important;
+  padding: 0.78571429em 2.285714285714286em !important;
+}
 
 /*******************************
          Site Overrides
@@ -26768,6 +26928,14 @@ a.ui.card:hover,
          Theme Overrides
 *******************************/
 
+.form-card {
+  border-radius: 10px;
+  padding: 2.285714em;
+  background-color: #ffffff;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
 /*******************************
     User Variable Overrides
 *******************************/
@@ -35272,6 +35440,157 @@ body.pushable > .pusher {
 /*******************************
          Theme Overrides
 *******************************/
+
+.pushable > .sidebar ~ .pusher {
+  padding-left: 64px;
+  -webkit-transition: all .5s ease;
+  transition: all .5s ease;
+  height: calc(100vh - 58px);
+  overflow-y: auto;
+  background-color: #fafafa;
+}
+
+.pushable > .sidebar ~ .pusher .ui.vertical.segment.content {
+  padding: 0;
+}
+
+.sidebar .user-picture {
+  margin: 1.714285em 0;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.sidebar .user-picture > img,
+.sidebar .user-picture h2,
+.sidebar .user-picture h3 {
+  -webkit-transition: all .5s ease;
+  transition: all .5s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar.visible .user-picture > img {
+  max-width: 90px;
+  margin: 0 auto 10px;
+}
+
+.sidebar.visible .user-picture h2 {
+  font-size: 16px;
+  margin: 0 0 5px;
+  font-weight: normal;
+}
+
+.sidebar.visible .user-picture h3 {
+  font-size: 14px;
+  margin: 0;
+  font-weight: normal;
+  color: #828282;
+}
+
+.sidebar:not(.visible) .user-picture {
+  margin: 1.714285em 0 .5em;
+}
+
+.sidebar:not(.visible) .user-picture > img {
+  max-width: 30px;
+  margin: 0 auto;
+}
+
+.sidebar:not(.visible) .user-picture h2,
+.sidebar:not(.visible) .user-picture h3 {
+  font-size: 0;
+  line-height: 0;
+  margin: 0;
+}
+
+.ui.inverted.menu {
+  background: #383838;
+}
+
+.ui.sidebar.left.visible.thin ~ .fixed,
+.ui.sidebar.left.visible.thin ~ .pusher {
+  padding-left: 220px;
+  -webkit-transform: translate3D(0, 0, 0);
+  transform: translate3D(0, 0, 0);
+}
+
+.ui.sidebar.left.push {
+  width: 64px;
+  visibility: visible;
+  -webkit-transform: translate3D(0, 0, 0);
+  transform: translate3D(0, 0, 0);
+  -webkit-transition: width .5s ease;
+  transition: width .5s ease;
+}
+
+.ui.sidebar.left.push .item {
+  min-width: auto !important;
+  text-align: left;
+  overflow: hidden;
+  padding: 1em 1.5em;
+  color: #828282;
+}
+
+.ui.sidebar.left.push .item:first-child:before,
+.ui.sidebar.left.push .item:before {
+  display: none;
+  background: none;
+}
+
+.ui.sidebar.left.push .item > .icon:not(.dropdown) {
+  float: left;
+  height: auto;
+  margin: 0 !important;
+  font-size: 1.14285714em !important;
+  line-height: 22px;
+  position: relative;
+}
+
+.ui.sidebar.left.push .item span {
+  opacity: 0;
+  display: block;
+  line-height: 22px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ui.sidebar.left.push .item.collapseIcon {
+  bottom: 0;
+  margin: 0;
+}
+
+.ui.sidebar.left.push .item.collapseIcon:before {
+  display: none;
+}
+
+.ui.sidebar.left.push .item.active {
+  background: transparent;
+  color: #A9D943 !important;
+}
+
+.ui.sidebar.left.push .item.active > i.icon:after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  display: block;
+  background: #A9D943;
+  position: absolute;
+  left: 50%;
+  margin-left: -2px;
+  bottom: -9px;
+}
+
+.ui.sidebar.visible.push {
+  width: 220px;
+}
+
+.ui.sidebar.visible.push .item span {
+  opacity: 1;
+  margin-left: 35px;
+  max-width: 153px;
+}
 
 /*******************************
          Site Overrides

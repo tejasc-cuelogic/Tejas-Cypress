@@ -31,7 +31,7 @@ class Users extends Component {
 
   render() {
     let content = null;
-    if (this.props.location.pathname === '/users/new') {
+    if (this.props.location.pathname === '/app/users/new') {
       content = (
         <Aux>
           <UserModuleSubheader />

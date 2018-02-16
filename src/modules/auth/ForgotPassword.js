@@ -27,13 +27,13 @@ export default class ForgotPassword extends React.Component {
     const { errors } = this.props.uiStore;
     return (
       <div className="login-form">
+        <Header as="h1" textAlign="center">Need a link to reset your password?</Header>
         <Grid
           textAlign="center"
           verticalAlign="middle"
         >
           <Grid.Column>
-            <Header as="h1" textAlign="center">Need a link to reset your password?</Header>
-            <Form size="large" error onSubmit={this.handleSubmitForm}>
+            <Form error onSubmit={this.handleSubmitForm}>
               <div stacked>
                 <Form.Input
                   fluid
@@ -46,7 +46,6 @@ export default class ForgotPassword extends React.Component {
                 <Button
                   fluid
                   color="green"
-                  size="large"
                   disabled={inProgress}
                 >
                   Reset Password
