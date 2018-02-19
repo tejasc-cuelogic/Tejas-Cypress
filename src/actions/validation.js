@@ -1,24 +1,34 @@
+import _ from 'lodash';
+
 import validation from './../services/validations';
 import authStore from './../stores/authStore';
+import userStore from './../stores/userStore';
+// import { REGISTRATION } from './../constants/validation';
 
 export class Validation {
-  validateAndSave = (field, value) => {
-    const data = {};
-    const rules = {};
+  validateRegisterField = (field, value) => {
     authStore.setValue(field, value);
-    data[field] = value;
-    if (field === 'verify') {
-      data.password = authStore.values.password.value;
-    }
-    rules[field] = authStore.values[field].rule;
-    // console.log(validation.validate(data, rules).errors[field]);
-    const { errors } = validation.validate(data, rules);
+    const { errors } = validation.validate(
+      field,
+      authStore.values[field],
+      authStore.values.password,
+    );
     authStore.setError(field, errors && errors[field][0]);
   }
 
-  // validateNewUserFormField = (field, value) => {
+  validateRegisterForm = () => {
+    _.every(authStore.values)
+  }
 
-  // }
+  validateNewUserField = (field, value) => {
+    userStore.setValue(field, value);
+    const { errors } = validation.validate(field, userStore.values[field]);
+    userStore.setError(field, errors && errors[field][0]);
+  }
+
+  validateNewUserForm = () => {
+
+  }
 }
 
 export default new Validation();

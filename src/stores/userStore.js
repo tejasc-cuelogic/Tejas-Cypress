@@ -33,6 +33,11 @@ export class UserStore {
   }
 
   @action
+  setError(field, error) {
+    this.values[field] = error;
+  }
+
+  @action
   setEmail(email) {
     this.values.email = email;
   }

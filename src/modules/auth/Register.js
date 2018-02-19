@@ -6,7 +6,6 @@ import { Button, Grid, Header, Form, Message, Divider } from 'semantic-ui-react'
 import authActions from '../../actions/auth';
 import ListErrors from '../../components/common/ListErrors';
 import FieldError from '../../components/common/FieldError';
-import Validation from '../../services/validations';
 import validationActions from '../../actions/validation';
 
 @inject('authStore', 'uiStore')
@@ -22,11 +21,10 @@ export default class Register extends React.Component {
   //   this.props.authStore.setError(name, Validation.validateField(name, value, rule));
   // }
 
-  handleInputChange = (e, { name, value }) => validationActions.validateAndSave(name, value);
+  handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    console.log(Validation.validateForm(this.props.authStore.values));
     authActions.register(this.props.authStore.values)
       .then(() => this.props.history.replace('/confirm'))
       .catch(() => {});
