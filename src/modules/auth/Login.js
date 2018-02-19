@@ -14,8 +14,7 @@ export default class Login extends React.Component {
     this.props.uiStore.clearErrors();
   }
 
-  handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
-  handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
+  handleInputChange = (e, { name, value }) => this.props.authStore.setValue(name, value);
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.login(this.props.authStore.values)
@@ -56,8 +55,9 @@ export default class Login extends React.Component {
                   icon="envelope"
                   iconPosition="left"
                   placeholder="E-mail address"
+                  name="email"
                   value={values.email.value}
-                  onChange={this.handleEmailChange}
+                  onChange={this.handleInputChange}
                 />
                 <Form.Input
                   fluid
@@ -65,8 +65,9 @@ export default class Login extends React.Component {
                   iconPosition="left"
                   placeholder="Password"
                   type="password"
+                  name="password"
                   value={values.password.value}
-                  onChange={this.handlePasswordChange}
+                  onChange={this.handleInputChange}
                 />
                 <Button
                   fluid

@@ -110,12 +110,12 @@ export class Auth {
     const { email, password } = values;
 
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: email,
-      Password: password,
+      Username: email.value,
+      Password: password.value,
     });
 
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email,
+      Username: email.value,
       Pool: this.userPool,
     });
 
