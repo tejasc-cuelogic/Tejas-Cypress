@@ -2,10 +2,10 @@ import Validator from 'validatorjs';
 // import { REGISTRATION } from './../constants/validations';
 
 export class Validations {
-  validate = (field, metaData, confirmationData = undefined) => {
+  validate = (metaData, confirmationData = undefined) => {
     const validation = new Validator(
-      this.getData(field, metaData, confirmationData),
-      this.getRules(field, metaData),
+      this.getData(metaData, confirmationData),
+      this.getRules(metaData),
     );
     if (validation.fails()) {
       return validation.errors;
@@ -14,18 +14,18 @@ export class Validations {
   }
 
   // Private actions starts here
-  getData = (field, metaData, confirmationData) => {
+  getData = (metaData, confirmationData) => {
     const data = {};
-    data[field] = metaData.value;
-    if (field === 'verify') {
+    data[metaData.key] = metaData.value;
+    if (metaData.key === 'verify') {
       data.password = confirmationData.value;
     }
     return data;
   }
 
-  getRules = (field, metaData) => {
+  getRules = (metaData) => {
     const rules = {};
-    rules[field] = metaData.rule;
+    rules[metaData.key] = metaData.rule;
     return rules;
   }
 

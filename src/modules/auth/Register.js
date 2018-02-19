@@ -15,19 +15,16 @@ export default class Register extends React.Component {
     this.props.uiStore.clearErrors();
   }
 
-  // handleInputChange = (e, { value, name }) => {
-  //   this.props.authStore.setValue(name, value);
-  //   const { rule } = this.props.authStore.values[name];
-  //   this.props.authStore.setError(name, Validation.validateField(name, value, rule));
-  // }
-
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    authActions.register(this.props.authStore.values)
-      .then(() => this.props.history.replace('/confirm'))
-      .catch(() => {});
+    validationActions.validateRegisterForm();
+    if (this.props.authStore.canRegister) {
+      authActions.register(this.props.authStore.values)
+        .then(() => this.props.history.replace('/confirm'))
+        .catch(() => {});
+    }
   };
 
   render() {

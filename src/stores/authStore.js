@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import * as AWSCognito from 'amazon-cognito-identity-js';
-// import _ from 'lodash';
+import _ from 'lodash';
 // import * as AWS from 'aws-sdk';
 import userStore from './userStore';
 import commonStore from './commonStore';
@@ -26,36 +26,43 @@ export class AuthStore {
   @observable
   values = {
     givenName: {
+      key: 'givenName',
       value: '',
       error: undefined,
       rule: 'required',
     },
     familyName: {
+      key: 'familyName',
       value: '',
       error: undefined,
       rule: 'required',
     },
     email: {
+      key: 'email',
       value: '',
       error: undefined,
       rule: 'required|email',
     },
     password: {
+      key: 'password',
       value: '',
       error: undefined,
       rule: 'required|min:8|max:15',
     },
     verify: {
+      key: 'verify',
       value: '',
       error: undefined,
       rule: 'required|same:password',
     },
     code: {
+      key: 'code',
       value: '',
       error: undefined,
       rule: 'required',
     },
     role: {
+      key: 'role',
       value: undefined,
       error: undefined,
       rule: 'required',
@@ -67,14 +74,7 @@ export class AuthStore {
   };
 
   @computed get canRegister() {
-    const {
-      givenName,
-      familyName,
-      email,
-      password,
-      verify,
-    } = this.values;
-    return ![givenName, familyName, email, password, verify].includes('');
+    return _.isEmpty(_.filter(this.values, field => field.error));
   }
 
   @action
