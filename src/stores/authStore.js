@@ -26,46 +26,46 @@ export class AuthStore {
   @observable
   values = {
     givenName: {
-      key: 'givenName',
       value: '',
       error: undefined,
       rule: 'required',
+      key: 'givenName',
     },
     familyName: {
-      key: 'familyName',
       value: '',
       error: undefined,
       rule: 'required',
+      key: 'familyName',
     },
     email: {
-      key: 'email',
       value: '',
       error: undefined,
       rule: 'required|email',
+      key: 'email',
     },
     password: {
-      key: 'password',
       value: '',
       error: undefined,
       rule: 'required|min:8|max:15',
+      key: 'password',
     },
     verify: {
-      key: 'verify',
       value: '',
       error: undefined,
       rule: 'required|same:password',
+      key: 'verify',
     },
     code: {
-      key: 'code',
       value: '',
       error: undefined,
       rule: 'required',
+      key: 'code',
     },
     role: {
-      key: 'role',
       value: undefined,
       error: undefined,
       rule: 'required',
+      key: 'role',
     },
     meta: {
       isValid: false,
