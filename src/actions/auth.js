@@ -243,12 +243,14 @@ export class Auth {
     uiStore.reset();
     uiStore.setProgress();
 
+    const { values } = authStore;
+
     return new Promise((res, rej) => {
       this.cognitoUser = new AWSCognito.CognitoUser({
-        Username: this.values.email,
+        Username: values.email.value,
         Pool: this.userPool,
       });
-      this.cognitoUser.confirmPassword(this.values.code, this.values.password, {
+      this.cognitoUser.confirmPassword(values.code.value, values.password.value, {
         onSuccess: data => res(data),
         onFailure: err => rej(err),
       });
