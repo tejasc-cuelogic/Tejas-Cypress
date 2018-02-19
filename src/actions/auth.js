@@ -169,12 +169,12 @@ export class Auth {
 
       const attributeFirstName = new AWSCognito.CognitoUserAttribute({
         Name: 'given_name',
-        Value: values.givenName,
+        Value: values.givenName.value,
       });
 
       const attributeLastName = new AWSCognito.CognitoUserAttribute({
         Name: 'family_name',
-        Value: values.familyName,
+        Value: values.familyName.value,
       });
 
       const attributeList = [];
@@ -183,8 +183,8 @@ export class Auth {
       attributeList.push(attributeLastName);
 
       this.userPool.signUp(
-        values.email,
-        values.password,
+        values.email.value,
+        values.password.value,
         attributeList,
         null,
         (err, result) => {
@@ -215,7 +215,7 @@ export class Auth {
     uiStore.setLoaderMessage('Changing password');
 
     const userData = {
-      Username: values.email,
+      Username: values.email.value,
       Pool: this.userPool,
     };
 
@@ -271,7 +271,7 @@ export class Auth {
     uiStore.setProgress();
 
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: authStore.values.email,
+      Username: authStore.values.email.value,
       Pool: this.userPool,
     });
     this.cognitoUser.Session = authStore.cognitoUserSession;
@@ -300,13 +300,13 @@ export class Auth {
     uiStore.setProgress();
 
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: authStore.values.email,
+      Username: authStore.values.email.value,
       Pool: this.userPool,
     });
 
     return new Promise((res, rej) => {
       this.cognitoUser.confirmRegistration(
-        authStore.values.code,
+        authStore.values.code.value,
         true,
         err => (err ? rej(err) : res()),
       );

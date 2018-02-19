@@ -1,10 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link, withRouter } from 'react-router-dom';
-import { Message } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import { Message, Form, Button, Grid, Header } from 'semantic-ui-react';
 
 import ListErrors from '../../components/common/ListErrors';
+import FieldError from '../../components/common/FieldError';
 import authActions from './../../actions/auth';
+import validationActions from './../../actions/validation';
 
 @inject('authStore', 'uiStore')
 @withRouter
@@ -14,7 +16,7 @@ export default class Confirm extends React.Component {
     this.props.uiStore.clearErrors();
   }
 
-  handleCodeChange = e => this.props.authStore.setCode(e.target.value);
+  handleCodeChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.confirmCode()
@@ -22,44 +24,42 @@ export default class Confirm extends React.Component {
   };
 
   render() {
-    const { inProgress } = this.props.authStore;
+    const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
-      <div className="auth-page">
-        <div className="container page">
-          <div className="row">
-            <div className="col-md-6 offset-md-3 col-xs-12">
-              <h1 className="text-xs-center">Confirm verification code</h1>
-              <p className="text-xs-center">
-                <Link to="login">Have an account?</Link>
-              </p>
-              <form onSubmit={this.handleSubmitForm}>
-                <fieldset>
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="text"
-                      placeholder="Code"
-                      onChange={this.handleCodeChange}
-                    />
-                  </fieldset>
-                  <button
-                    className="btn btn-lg btn-primary pull-xs-right"
-                    type="submit"
-                    disabled={inProgress}
-                  >
-                    Confirm
-                  </button>
-                  {errors &&
-                    <Message error textAlign="left">
-                      <ListErrors errors={[errors.message]} />
-                    </Message>
-                  }
-                </fieldset>
-              </form>
-            </div>
-          </div>
-        </div>
+      <div className="login-form">
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+        >
+          <Grid.Column>
+            <Header as="h1" textAlign="center">Confirm Account</Header>
+            <Form size="large" error onSubmit={this.handleSubmitForm}>
+              <Form.Input
+                fluid
+                placeholder="Verification Code"
+                name="code"
+                value={values.code.value}
+                onChange={this.handleCodeChange}
+                error={!!values.code.error}
+              />
+              <FieldError error={values.code.error} />
+              <Button
+                fluid
+                color="green"
+                size="large"
+                disabled={this.props.authStore.canConfirm}
+              >
+                Confirm!
+              </Button>
+              {errors &&
+                <Message error textAlign="left">
+                  <ListErrors errors={[errors.message]} />
+                </Message>
+              }
+            </Form>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }

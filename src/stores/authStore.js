@@ -58,7 +58,7 @@ export class AuthStore {
     code: {
       value: '',
       error: undefined,
-      rule: 'required',
+      rule: 'required|numeric|digits:6',
       key: 'code',
     },
     role: {
@@ -75,6 +75,10 @@ export class AuthStore {
 
   @computed get canRegister() {
     return _.isEmpty(_.filter(this.values, field => field.error));
+  }
+
+  @computed get canConfirm() {
+    return _.isEmpty(this.values.code.value) || !!this.values.code.error;
   }
 
   @action
