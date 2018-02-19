@@ -41,7 +41,7 @@ export default class Login extends React.Component {
           <Grid.Column>
             <Header as="h1" textAlign="center">Sign in to invest today or access your business application</Header>
             <Form size="large">
-              <div stacked="true">
+              <div stacked>
                 <Button color="facebook" size="large" fluid>
                   <Icon name="facebook" /> LOG IN WITH FACEBOOK
                 </Button>
