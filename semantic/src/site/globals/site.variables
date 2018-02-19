@@ -4,7 +4,6 @@
 /*-------------------
        Fonts
 --------------------*/
-
 @fontName          : 'Roboto';
 @fontSmoothing     : antialiased;
 
@@ -19,3 +18,8 @@
 @googleProtocol    : 'https://';
 @googleFontRequest : '@{googleFontName}:@{googleFontSizes}&subset=@{googleSubset}';
 
+
+/*--------------
+  Page Heading
+---------------*/
+@headerFontWeight : 500;

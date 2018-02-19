@@ -31,18 +31,15 @@ const createNew = () => (
             </div>
           </Grid.Column>
         </Grid.Row>
-      </Grid>
-
-      <Grid columns={2}>
         <Grid.Row>
-          <Grid.Column>
+          <Grid.Column width={8}>
             <div className="form-card">
               <h3>DOB & SSN</h3>
               <Form.Input placeholder="DD-MM-YYYY" />
               <Form.Input placeholder="XXX-XX-XXXX" />
             </div>
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column width={8}>
             <div className="form-card">
               <h3>Email & Password</h3>
               <Form.Input type="email" placeholder="E-mail Address" />
@@ -50,9 +47,6 @@ const createNew = () => (
             </div>
           </Grid.Column>
         </Grid.Row>
-      </Grid>
-
-      <Grid columns={1}>
         <Grid.Row>
           <Grid.Column>
             <div className="form-card">
@@ -83,9 +77,6 @@ const createNew = () => (
             </div>
           </Grid.Column>
         </Grid.Row>
-      </Grid>
-
-      <Grid columns={1}>
         <Grid.Row>
           <Grid.Column>
             <div className="form-card">
@@ -104,9 +95,6 @@ const createNew = () => (
             </div>
           </Grid.Column>
         </Grid.Row>
-      </Grid>
-
-      <Grid columns={1}>
         <Grid.Row>
           <Grid.Column>
             <Button color="green" primary>Create User</Button>
