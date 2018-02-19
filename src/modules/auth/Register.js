@@ -31,7 +31,7 @@ export default class Register extends React.Component {
     const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     const options = [
-      { key: 'o', text: 'Business Owner', value: 'business owner' },
+      { key: 'o', text: 'Business Owner', value: 'bowner' },
       { key: 'i', text: 'Investor', value: 'investor' },
     ];
 

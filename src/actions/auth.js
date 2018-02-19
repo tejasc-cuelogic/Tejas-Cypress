@@ -164,7 +164,7 @@ export class Auth {
     return new Promise((res, rej) => {
       const attributeRoles = new AWSCognito.CognitoUserAttribute({
         Name: 'custom:roles',
-        Value: JSON.stringify([this.defaultRole]),
+        Value: JSON.stringify([authStore.values.role.value]),
       });
 
       const attributeFirstName = new AWSCognito.CognitoUserAttribute({
