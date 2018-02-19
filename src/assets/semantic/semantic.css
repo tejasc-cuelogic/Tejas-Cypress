@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/MIT
  *
  */
-@import url('https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&subset=latin');
 /*!
  * # Semantic UI 2.2.14 - Reset
  * http://github.com/semantic-org/semantic-ui/
@@ -569,7 +569,7 @@ body {
   overflow-x: hidden;
   min-width: 320px;
   background: #FFFFFF;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.4285em;
   color: rgba(0, 0, 0, 0.87);
@@ -585,7 +585,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   font-weight: bold;
@@ -756,10 +756,6 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
         Global Overrides
 *******************************/
 
-/*-------------------
-       Fonts
---------------------*/
-
 /*******************************
          Site Overrides
 *******************************/
@@ -786,7 +782,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   vertical-align: baseline;
   background: #E0E1E2 none;
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0em 0.25em 0em 0em;
   padding: 0.78571429em 1.5em 0.78571429em;
   text-transform: none;
@@ -4949,23 +4945,35 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
          Theme Overrides
 *******************************/
 
-.ui.green.button,
-.ui.green.buttons .button {
-  background-color: #A9D943;
-}
-
-.ui.green.button:hover,
-.ui.green.buttons .button:hover,
-.ui.green.button:focus,
-.ui.green.buttons .button:focus,
-.ui.green.button:active,
-.ui.green.buttons .button:active {
-  background-color: #a1d632;
-}
-
 /*******************************
          Site Overrides
 *******************************/
+
+.ui.button,
+.ui.buttons .button {
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.ui.button.rounded,
+.ui.buttons .button.rounded {
+  border-radius: 20px;
+}
+
+.ui.button.green,
+.ui.buttons .button.green {
+  background-color: #A9D943;
+}
+
+.ui.button.green:hover,
+.ui.buttons .button.green:hover,
+.ui.button.green:focus,
+.ui.buttons .button.green:focus,
+.ui.button.green:active,
+.ui.buttons .button.green:active {
+  background-color: #97ca29;
+}
 /*!
  * # Semantic UI 2.2.14 - Container
  * http://github.com/semantic-org/semantic-ui/
@@ -5082,7 +5090,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 /* Text Container */
 
 .ui.text.container {
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   max-width: 700px !important;
   line-height: 1.5;
 }
@@ -5122,6 +5130,10 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 /*******************************
          Theme Overrides
+*******************************/
+
+/*******************************
+         Site Overrides
 *******************************/
 
 .content-wrapper {
@@ -5190,18 +5202,6 @@ div.login-form ul.error-messages {
   font-size: 2.142857em;
 }
 
-.page-header-section .ui.grid .userDetailsLinks a {
-  color: #7D7D7D;
-  text-transform: uppercase;
-  margin-right: 29px;
-  font-size: 0.8em;
-}
-
-.page-header-section .ui.grid .userDetailsLinks a:hover,
-.page-header-section .ui.grid .userDetailsLinks a.active {
-  color: #FFFFFF;
-}
-
 .cards-form h3 {
   font-size: 18px;
   margin-bottom: 1.5rem;
@@ -5216,15 +5216,15 @@ div.login-form ul.error-messages {
   font-weight: normal;
 }
 
-.cards-form .card .grid.divided .column {
+.cards-form .form-card .grid.divided .column {
   padding: 0 3.285714rem;
 }
 
-.cards-form .card .grid.divided .column:first-child {
+.cards-form .form-card .grid.divided .column:first-child {
   padding-left: 1rem;
 }
 
-.cards-form .card .grid.divided .column:last-child {
+.cards-form .form-card .grid.divided .column:last-child {
   padding-right: 1rem;
 }
 
@@ -5237,10 +5237,6 @@ div.login-form ul.error-messages {
 .footer .ui.header {
   font-weight: 400;
 }
-
-/*******************************
-         Site Overrides
-*******************************/
 /*!
  * # Semantic UI 2.2.14 - Divider
  * http://github.com/semantic-org/semantic-ui/
@@ -6804,7 +6800,7 @@ i.flag.zimbabwe:before {
   border: none;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   padding: 0em 0em;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   line-height: 1.28571429em;
   text-transform: none;
@@ -7608,6 +7604,10 @@ a.ui.inverted.grey.header:hover {
          Theme Overrides
 *******************************/
 
+/*******************************
+         Site Overrides
+*******************************/
+
 .header-wrap {
   height: 58px;
 }
@@ -7622,6 +7622,7 @@ a.ui.inverted.grey.header:hover {
 }
 
 .header-wrap .ui.menu .menu .item {
+  font-weight: 500;
   color: #303030;
   padding: 0.92857143em 2.285714285714286em;
 }
@@ -7632,13 +7633,9 @@ a.ui.inverted.grey.header:hover {
 }
 
 .header-wrap .ui.menu .ui.dropdown .menu > .item {
-  font-weight: 700 !important;
+  font-weight: 500;
   padding: 0.78571429em 2.285714285714286em !important;
 }
-
-/*******************************
-         Site Overrides
-*******************************/
 /*!
  * # Semantic UI 2.2.14 - Icon
  * http://github.com/semantic-org/semantic-ui/
@@ -12276,7 +12273,7 @@ img.ui.bordered.image {
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   text-align: left;
   line-height: 1.21428571em;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding: 0.67857143em 1em;
   background: #FFFFFF;
   border: 1px solid rgba(34, 36, 38, 0.15);
@@ -14418,7 +14415,7 @@ ol.ui.list ol li,
 .ui.list > .item .header {
   display: block;
   margin: 0em;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
 }
@@ -15318,6 +15315,19 @@ ol.ui.horizontal.list li:before,
 /*******************************
     User Variable Overrides
 *******************************/
+
+.ui.horizontal.link.list > a.item {
+  font-size: 0.857142rem;
+  text-transform: uppercase;
+  margin-left: 2rem;
+  color: #7d7d7d;
+}
+
+.ui.horizontal.link.list > a.item:hover,
+.ui.horizontal.link.list > a.item:focus,
+.ui.horizontal.link.list > a.item.active {
+  color: #A9D943;
+}
 /*!
  * # Semantic UI 2.2.14 - Loader
  * http://github.com/semantic-org/semantic-ui/
@@ -17213,7 +17223,7 @@ ol.ui.horizontal.list li:before,
 /* Title */
 
 .ui.steps .step .title {
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   font-weight: bold;
 }
@@ -17996,7 +18006,7 @@ ol.ui.horizontal.list li:before,
 .ui.form input[type="text"],
 .ui.form input[type="file"],
 .ui.form input[type="url"] {
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0em;
   outline: none;
   -webkit-appearance: none;
@@ -21405,7 +21415,7 @@ ol.ui.horizontal.list li:before,
   display: -ms-flexbox;
   display: flex;
   margin: 1rem 0em;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   font-weight: normal;
   border: 1px solid rgba(34, 36, 38, 0.15);
@@ -23723,7 +23733,7 @@ Floated Menu / Item
 
 .ui.message .header {
   display: block;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   margin: -0.14285714em 0em 0rem 0em;
 }
@@ -26006,7 +26016,7 @@ Floated Menu / Item
 .ui.card > .content > .header {
   display: block;
   margin: '';
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: rgba(0, 0, 0, 0.85);
 }
 
@@ -26928,6 +26938,10 @@ a.ui.card:hover,
          Theme Overrides
 *******************************/
 
+/*******************************
+    User Variable Overrides
+*******************************/
+
 .form-card {
   border-radius: 10px;
   padding: 2.285714em;
@@ -26935,10 +26949,6 @@ a.ui.card:hover,
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
 }
-
-/*******************************
-    User Variable Overrides
-*******************************/
 /*!
  * # Semantic UI 2.2.14 - Comment
  * http://github.com/semantic-org/semantic-ui/
@@ -27688,7 +27698,7 @@ a.ui.card:hover,
 .ui.items > .item > .content > .header {
   display: inline-block;
   margin: -0.21425em 0em 0em;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.85);
 }
@@ -28167,7 +28177,7 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .value,
 .ui.statistic > .value {
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 4rem;
   font-weight: normal;
   line-height: 1em;
@@ -28182,7 +28192,7 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .label,
 .ui.statistic > .label {
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
@@ -28730,7 +28740,7 @@ a.ui.card:hover,
 
 .ui.accordion .title:not(.ui) {
   padding: 0.5em 0em;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   color: rgba(0, 0, 0, 0.87);
 }
@@ -31749,7 +31759,7 @@ select.ui.dropdown {
 
 .ui.modal > .header {
   display: block;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   margin: 0em;
   padding: 1.25rem 1.5rem;
@@ -32508,7 +32518,7 @@ a.ui.nag {
 
 .ui.popup > .header {
   padding: 0em;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   line-height: 1.2;
   font-weight: bold;
@@ -34286,7 +34296,7 @@ a.ui.nag {
 
 .ui.search > .results .result .title {
   margin: -0.14285714em 0em 0em;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
   color: rgba(0, 0, 0, 0.85);
@@ -34312,7 +34322,7 @@ a.ui.nag {
 }
 
 .ui.search > .results > .message .header {
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1rem;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
@@ -34525,7 +34535,7 @@ a.ui.nag {
 .ui.category.search > .results .category > .name {
   width: 100px;
   background: transparent;
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   float: 1em;
   float: left;
@@ -35441,6 +35451,10 @@ body.pushable > .pusher {
          Theme Overrides
 *******************************/
 
+/*******************************
+         Site Overrides
+*******************************/
+
 .pushable > .sidebar ~ .pusher {
   padding-left: 64px;
   -webkit-transition: all .5s ease;
@@ -35591,10 +35605,6 @@ body.pushable > .pusher {
   margin-left: 35px;
   max-width: 153px;
 }
-
-/*******************************
-         Site Overrides
-*******************************/
 /*!
  * # Semantic UI 2.2.14 - Sticky
  * http://github.com/semantic-org/semantic-ui/

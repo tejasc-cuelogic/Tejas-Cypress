@@ -1,3 +1,17 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+.ui.horizontal.link{
+    &.list{
+        > a.item{
+            font-size:0.857142rem;
+            text-transform:uppercase;
+            margin-left:2rem;
+            color:@inverse-secondary-text;
+            &:hover, &:focus, &.active{
+                color:@theme-primary;
+            }
+        }
+    }
+}

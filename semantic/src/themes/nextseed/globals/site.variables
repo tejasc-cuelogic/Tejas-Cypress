@@ -961,7 +961,6 @@
 @darkWhiteActive       : darken(@darkWhite, 5);
 
 
-
 /*-----------------------------
         Custom variables
 -------------------------------*/
@@ -988,6 +987,7 @@
 @tertiary-text:lighten(@primary-text, 32%);										//	#828282				(when base = 303030)
 @quaternary-text:lighten(@primary-text, 41%);									//	#999999 ~ 989898	(when base = 303030)
 @inverse-text:#FFFFFF;
+@inverse-secondary-text:darken(@inverse-text, 51%);                              //  #7D7D7D				(when base = 303030)
 
 //	HIGHLIGHT COLORS
 @highlight-primary:#EB5757;														//	Red
