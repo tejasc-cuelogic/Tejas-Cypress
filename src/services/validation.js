@@ -1,16 +1,19 @@
 import Validator from 'validatorjs';
-// import { REGISTRATION } from './../constants/validations';
 
 export class Validations {
-  // Validates data and returns an error
-  // Accepts metaData input parameter as
-  // {
-  //    value: 'abc',
-  //    error: undefined,
-  //    rule: 'required',
-  //    key: 'email',
-  // }
-  // and confirmationData only used while checking password and verifyPassword fields
+  /**
+  * @desc Validates data and returns an error
+  * @param Object $metaData - a rule and data to be validated
+  *   {
+  *     value: 'abc',
+  *     error: undefined,
+  *     rule: 'required',
+  *     key: 'email',
+  *   }
+  * @required validator.js
+  * @param Object $confirmationData - a rule and data for comparison
+  * @return Object - Error object or empty object
+  */
   validate = (metaData, confirmationData = undefined) => {
     const validation = new Validator(
       this.getData(metaData, confirmationData),
@@ -24,9 +27,19 @@ export class Validations {
 
   // Private actions starts here
 
-  // Builds data as required for validation by `validator.js`
-  // desired output format is
-  // data: {email: 'abc'}
+  /**
+  * @desc Builds data as required for validation by `validator.js`
+  * @param Object $metaData - a rule and data to be validated
+  *   {
+  *     value: 'abc',
+  *     error: undefined,
+  *     rule: 'required',
+  *     key: 'email',
+  *   }
+  * @param Object $confirmationData - a rule and data for comparison
+  * @return Object - desired data format
+  * { email: 'abd' }
+  */
   getData = (metaData, confirmationData) => {
     const data = {};
     data[metaData.key] = metaData.value;
@@ -36,9 +49,18 @@ export class Validations {
     return data;
   }
 
-  // Builds rule as required for validation by 'validator.js'
-  // desired output format is
-  // rule: {email: 'required'}
+  /**
+  * @desc Builds rule as required for validation by 'validator.js'
+  * @param Object $metaData - a rule a data to be validated
+  *   {
+  *     value: 'abc',
+  *     error: undefined,
+  *     rule: 'required',
+  *     key: 'email',
+  *   }
+  * @return Object - desired rule format
+  * { email: 'required' }
+  */
   getRules = (metaData) => {
     const rules = {};
     rules[metaData.key] = metaData.rule;

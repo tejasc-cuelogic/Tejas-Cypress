@@ -7,9 +7,12 @@ import { REGISTRATION } from './../constants/validation';
 
 // TODO: make class in such way that methods should not be dependent on any stores...
 export class Validation {
-  // Validates single field on registration form
-  // Input parameters are field name which needs to be validated and value which has been set to
-  // that field.
+  /**
+  * @desc Validates single field on registration form
+  * @param string $field - field name to be validated
+  * @param string $value - value that needs to be assigned to the field
+  * @returns null
+  */
   validateRegisterField = (field, value) => {
     // First set value to authStore
     authStore.setValue(field, value);
@@ -23,8 +26,10 @@ export class Validation {
     authStore.setError(field, errors && errors[field][0]);
   }
 
-  // Validated complete Registration form after clicking submit button
-  // Stores all error in authStore
+  /**
+  * @desc Validated complete Registration form after clicking submit button
+  * @return null
+  */
   validateRegisterForm = () => {
     _.map(authStore.values, (value) => {
       const { key } = value;
@@ -40,9 +45,12 @@ export class Validation {
     });
   }
 
-  // Validates fields on new user creation form in admin panel
-  // Method required two parameters i.e. field which needs to be validated and
-  // value that admin has set to that field
+  /**
+  * @desc Validates fields on new user creation form in admin panel
+  * @param string $field - field on form that need to be validated
+  * @param string $value - value that need to be set to field
+  * @return null
+  */
   validateNewUserField = (field, value) => {
     // Set field value in store
     userStore.setValue(field, value);
