@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import validation from './../services/validation';
+import validationService from './../services/validation';
 import authStore from './../stores/authStore';
 import userStore from './../stores/userStore';
 import { REGISTRATION } from './../constants/validation';
@@ -8,7 +8,7 @@ import { REGISTRATION } from './../constants/validation';
 export class Validation {
   validateRegisterField = (field, value) => {
     authStore.setValue(field, value);
-    const { errors } = validation.validate(
+    const { errors } = validationService.validate(
       authStore.values[field],
       authStore.values.password,
     );
@@ -19,7 +19,7 @@ export class Validation {
     _.map(authStore.values, (value) => {
       const { key } = value;
       if (REGISTRATION.includes(key)) {
-        const { errors } = validation.validate(
+        const { errors } = validationService.validate(
           value,
           authStore.values.password,
         );
@@ -30,7 +30,7 @@ export class Validation {
 
   validateNewUserField = (field, value) => {
     userStore.setValue(field, value);
-    const { errors } = validation.validate(field, userStore.values[field]);
+    const { errors } = validationService.validate(field, userStore.values[field]);
     userStore.setError(field, errors && errors[field][0]);
   }
 
