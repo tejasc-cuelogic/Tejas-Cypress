@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import * as AWSCognito from 'amazon-cognito-identity-js';
-// import _ from 'lodash';
+import _ from 'lodash';
 // import * as AWS from 'aws-sdk';
 import userStore from './userStore';
 import commonStore from './commonStore';
@@ -25,23 +25,76 @@ export class AuthStore {
 
   @observable
   values = {
-    givenName: '',
-    familyName: '',
-    email: '',
-    password: '',
-    verify: '',
-    code: '',
+    givenName: {
+      value: '',
+      error: undefined,
+      rule: 'required',
+      key: 'givenName',
+    },
+    familyName: {
+      value: '',
+      error: undefined,
+      rule: 'required',
+      key: 'familyName',
+    },
+    email: {
+      value: '',
+      error: undefined,
+      rule: 'required|email',
+      key: 'email',
+    },
+    password: {
+      value: '',
+      error: undefined,
+      rule: 'required|min:8|max:15',
+      key: 'password',
+    },
+    verify: {
+      value: '',
+      error: undefined,
+      rule: 'required|same:password',
+      key: 'verify',
+    },
+    code: {
+      value: '',
+      error: undefined,
+      rule: 'required',
+      key: 'code',
+    },
+    role: {
+      value: undefined,
+      error: undefined,
+      rule: 'required',
+      key: 'role',
+    },
+    meta: {
+      isValid: false,
+      error: undefined,
+    },
   };
 
   @computed get canRegister() {
-    const {
-      givenName,
-      familyName,
-      email,
-      password,
-      verify,
-    } = this.values;
-    return ![givenName, familyName, email, password, verify].includes('');
+    return _.isEmpty(_.filter(this.values, field => field.error));
+  }
+
+  @action
+  setValue(field, value) {
+    this.values[field].value = value;
+  }
+
+  @action
+  setError(field, error) {
+    this.values[field].error = error;
+  }
+
+  @action
+  setMetaValidation(valid) {
+    this.values.meta.isValid = valid;
+  }
+
+  @action
+  setMetaErrors(error) {
+    this.values.meta.error = error;
   }
 
   @action

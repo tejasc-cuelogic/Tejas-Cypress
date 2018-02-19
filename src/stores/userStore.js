@@ -14,7 +14,7 @@ export class UserStore {
   @observable userFilter = 'email';
   // TODO: add validation for all values
   @observable
-  userAttributes = {
+  values = {
     email: '',
     familyName: '',
     givenName: '',
@@ -24,46 +24,56 @@ export class UserStore {
   }
 
   @computed get canSubmit() {
-    return _.every(this.userAttributes, val => !_.isEmpty(val));
+    return _.every(this.values, val => !_.isEmpty(val));
+  }
+
+  @action
+  setValue(field, value) {
+    this.values[field] = value;
+  }
+
+  @action
+  setError(field, error) {
+    this.values[field] = error;
   }
 
   @action
   setEmail(email) {
-    this.userAttributes.email = email;
+    this.values.email = email;
   }
 
   @action
   setGivenName(name) {
-    this.userAttributes.givenName = name;
+    this.values.givenName = name;
   }
   @action
   setFamilyName(name) {
-    this.userAttributes.familyName = name;
+    this.values.familyName = name;
   }
 
   @action
   setPassword(password) {
-    this.userAttributes.password = password;
+    this.values.password = password;
   }
 
   @action
   addRole(role) {
-    this.userAttributes.roles.push(role);
+    this.values.roles.push(role);
   }
 
   @action
   removeRole(role) {
-    this.userAttributes.roles = _.reject(this.userAttributes.roles, rol => rol === role);
+    this.values.roles = _.reject(this.values.roles, rol => rol === role);
   }
 
   @action
   setUser(user) {
-    this.userAttributes = user;
+    this.values = user;
   }
 
   @action
   setUserAttribute(key, value) {
-    this.userAttributes[key] = value;
+    this.values[key] = value;
   }
 
   @action
@@ -72,11 +82,11 @@ export class UserStore {
   }
 
   @action
-  resetUserAttributes() {
-    this.userAttributes.email = '';
-    this.userAttributes.givenName = '';
-    this.userAttributes.familyName = '';
-    this.userAttributes.roles = [];
+  resetvalues() {
+    this.values.email = '';
+    this.values.givenName = '';
+    this.values.familyName = '';
+    this.values.roles = [];
   }
 
   @action

@@ -4,7 +4,7 @@ import { Button, Message } from 'semantic-ui-react';
 
 import ListErrors from '../../components/common/ListErrors';
 
-@inject('authStore')
+@inject('authStore', 'uiStore')
 @observer
 export default class ResetPassword extends React.Component {
   componentWillUnmount() {
