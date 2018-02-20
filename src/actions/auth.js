@@ -103,11 +103,11 @@ export class Auth {
     });
   }
 
-  login(values) {
+  login() {
     uiStore.reset();
     uiStore.setProgress();
 
-    const { email, password } = values;
+    const { email, password } = authStore.values;
 
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
       Username: email.value,
@@ -134,7 +134,7 @@ export class Auth {
         if (result.action && result.action === 'newPassword') {
           authStore.setEmail(result.data.email);
           authStore.setCognitoUserSession(this.cognitoUser.Session);
-          authStore.setNewPasswordRequired();
+          authStore.setNewPasswordRequired(true);
         } else {
           const { data } = result;
           // Extract JWT from token
@@ -156,7 +156,7 @@ export class Auth {
       });
   }
 
-  register(values) {
+  register() {
     uiStore.reset();
     uiStore.setProgress();
     uiStore.setLoaderMessage('Signing you up');
@@ -169,12 +169,12 @@ export class Auth {
 
       const attributeFirstName = new AWSCognito.CognitoUserAttribute({
         Name: 'given_name',
-        Value: values.givenName.value,
+        Value: authStore.values.givenName.value,
       });
 
       const attributeLastName = new AWSCognito.CognitoUserAttribute({
         Name: 'family_name',
-        Value: values.familyName.value,
+        Value: authStore.values.familyName.value,
       });
 
       const attributeList = [];
@@ -183,8 +183,8 @@ export class Auth {
       attributeList.push(attributeLastName);
 
       this.userPool.signUp(
-        values.email.value,
-        values.password.value,
+        authStore.values.email.value,
+        authStore.values.password.value,
         attributeList,
         null,
         (err, result) => {
@@ -209,13 +209,13 @@ export class Auth {
       });
   }
 
-  resetPassword(values) {
+  resetPassword() {
     uiStore.reset();
     uiStore.setProgress();
     uiStore.setLoaderMessage('Changing password');
-
+    const { email } = authStore.values;
     const userData = {
-      Username: values.email.value,
+      Username: email.value,
       Pool: this.userPool,
     };
 
@@ -243,14 +243,14 @@ export class Auth {
     uiStore.reset();
     uiStore.setProgress();
 
-    const { values } = authStore;
+    const { code, email, password } = authStore.values;
 
     return new Promise((res, rej) => {
       this.cognitoUser = new AWSCognito.CognitoUser({
-        Username: values.email.value,
+        Username: email.value,
         Pool: this.userPool,
       });
-      this.cognitoUser.confirmPassword(values.code.value, values.password.value, {
+      this.cognitoUser.confirmPassword(code.value, password.value, {
         onSuccess: data => res(data),
         onFailure: err => rej(err),
       });
@@ -271,21 +271,21 @@ export class Auth {
   changePassword() {
     uiStore.reset();
     uiStore.setProgress();
-
+    const { email, password } = authStore.values;
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: authStore.values.email.value,
+      Username: email.value,
       Pool: this.userPool,
     });
     this.cognitoUser.Session = authStore.cognitoUserSession;
     return new Promise((res, rej) => {
-      this.cognitoUser.completeNewPasswordChallenge(authStore.values.password, this.values, {
+      this.cognitoUser.completeNewPasswordChallenge(password.value, authStore.values, {
         onSuccess: data => res(data),
         onFailure: err => rej(err),
       });
     })
       .then(() => {
         uiStore.setSuccess('Successfully changed password');
-        authStore.unsetNewPasswordRequired();
+        authStore.setNewPasswordRequired(false);
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
@@ -300,15 +300,15 @@ export class Auth {
   confirmCode() {
     uiStore.reset();
     uiStore.setProgress();
-
+    const { code, email } = authStore.values;
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: authStore.values.email.value,
+      Username: email.value,
       Pool: this.userPool,
     });
 
     return new Promise((res, rej) => {
       this.cognitoUser.confirmRegistration(
-        authStore.values.code.value,
+        code.value,
         true,
         err => (err ? rej(err) : res()),
       );
