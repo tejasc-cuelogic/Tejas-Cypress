@@ -15,7 +15,6 @@ export class Business {
     request
       .post(EDGAR_URL)
       .set('Content-Type', 'application/json')
-      .set('Access-Control-Request-Headers', '*')
       .send({
         templateVariables,
         documentList: this.getDocumentList(documentList),
