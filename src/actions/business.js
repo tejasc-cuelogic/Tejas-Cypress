@@ -15,14 +15,14 @@ export class Business {
     request
       .post(EDGAR_URL)
       .set('Content-Type', 'application/json')
-      .set('Access-Control-Allow-Origin', '*')
+      .set('Access-Control-Request-Headers', '*')
       .send({
         templateVariables,
         documentList: this.getDocumentList(documentList),
       })
       .end((err, res) => {
         if (err) {
-          console.log(err);
+          return (err);
         }
         return res;
       });
