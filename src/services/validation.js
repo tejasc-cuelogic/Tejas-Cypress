@@ -18,6 +18,7 @@ export class Validations {
     const validation = new Validator(
       this.getData(metaData, confirmationData),
       this.getRules(metaData),
+      metaData.customErrors,
     );
     if (validation.fails()) {
       return validation.errors;

@@ -13,6 +13,7 @@ import validationActions from '../../actions/validation';
 export default class Register extends React.Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
+    this.props.authStore.reset();
   }
 
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
@@ -21,7 +22,7 @@ export default class Register extends React.Component {
     e.preventDefault();
     validationActions.validateRegisterForm();
     if (this.props.authStore.canRegister) {
-      authActions.register(this.props.authStore.values)
+      authActions.register()
         .then(() => this.props.history.replace('/confirm'))
         .catch(() => {});
     }
@@ -115,7 +116,6 @@ export default class Register extends React.Component {
                   fluid
                   color="green"
                   size="large"
-                  disabled={!this.props.authStore.canRegister}
                 >
                   Sign Up
                 </Button>

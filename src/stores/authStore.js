@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, createTransformer } from 'mobx';
 import * as AWSCognito from 'amazon-cognito-identity-js';
 import _ from 'lodash';
 // import * as AWS from 'aws-sdk';
@@ -30,12 +30,18 @@ export class AuthStore {
       error: undefined,
       rule: 'required',
       key: 'givenName',
+      customErrors: {
+        required: 'The First Name field is required',
+      },
     },
     familyName: {
       value: '',
       error: undefined,
       rule: 'required',
       key: 'familyName',
+      customErrors: {
+        required: 'The Last Name field is required',
+      },
     },
     email: {
       value: '',
@@ -62,14 +68,10 @@ export class AuthStore {
       key: 'code',
     },
     role: {
-      value: undefined,
+      value: '',
       error: undefined,
       rule: 'required',
       key: 'role',
-    },
-    meta: {
-      isValid: false,
-      error: undefined,
     },
   };
 
@@ -81,6 +83,12 @@ export class AuthStore {
     return _.isEmpty(this.values.code.value) || !!this.values.code.error;
   }
 
+  @computed get canSendMail() {
+    return _.isEmpty(this.values.email.value) || !!this.values.email.error;
+  }
+
+  isValid = createTransformer(field => (!_.isEmpty(field.value) || field.error));
+
   @action
   setValue(field, value) {
     this.values[field].value = value;
@@ -91,75 +99,45 @@ export class AuthStore {
     this.values[field].error = error;
   }
 
-  @action
-  setMetaValidation(valid) {
-    this.values.meta.isValid = valid;
-  }
-
-  @action
-  setMetaErrors(error) {
-    this.values.meta.error = error;
-  }
-
-  @action
-  setFirstName(givenName) {
-    this.values.givenName = givenName;
-  }
-
-  @action
-  setLastName(familyName) {
-    this.values.familyName = familyName;
-  }
-
+  // TODO: Remove this method
   @action
   setEmail(email) {
-    this.values.email = email;
+    this.values.email.value = email;
   }
 
+  // TODO: Remove this method
   @action
   setPassword(password) {
-    this.values.password = password;
+    this.values.password.value = password;
   }
 
+  // TODO: Remove this method
   @action
   setVerify(verify) {
-    this.values.verify = verify;
-  }
-
-  @action
-  setCode(code) {
-    this.values.code = code;
-  }
-
-  @action
-  setMessage(message) {
-    this.message = message;
-  }
-
-  @action
-  setRole(role) {
-    this.role = role;
+    this.values.verify.value = verify;
   }
 
   @action
   reset() {
-    this.values.givenName = '';
-    this.values.familyName = '';
-    this.values.email = '';
-    this.values.password = '';
-    this.values.verify = '';
-    this.values.code = '';
-    this.role = 'investor';
+    this.values.givenName.value = '';
+    this.values.givenName.error = undefined;
+    this.values.familyName.value = '';
+    this.values.familyName.error = undefined;
+    this.values.email.value = '';
+    this.values.email.error = undefined;
+    this.values.password.value = '';
+    this.values.password.error = undefined;
+    this.values.verify.value = '';
+    this.values.verify.error = undefined;
+    this.values.code.value = '';
+    this.values.code.error = undefined;
+    this.values.role.value = '';
+    this.values.role.error = undefined;
   }
 
   @action
-  setNewPasswordRequired() {
-    this.newPasswordRequired = true;
-  }
-
-  @action
-  unsetNewPasswordRequired() {
-    this.newPasswordRequired = false;
+  setNewPasswordRequired(value) {
+    this.newPasswordRequired = value;
   }
 
   @action

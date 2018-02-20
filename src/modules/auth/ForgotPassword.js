@@ -5,10 +5,16 @@ import { Button, Form, Grid, Header, Message, Divider } from 'semantic-ui-react'
 import authActions from '../../actions/auth';
 
 import ListErrors from '../../components/common/ListErrors';
+import FieldError from '../../components/common/FieldError';
+import validationActions from '../../actions/validation';
 
 @inject('authStore', 'uiStore')
 @observer
 export default class ForgotPassword extends React.Component {
+  componentWillMount() {
+    this.props.authStore.reset();
+  }
+
   componentWillUnmount() {
     // Do not reset authStore values from here as some of those are required while changing password
     // this.props.authStore.reset();
@@ -16,14 +22,15 @@ export default class ForgotPassword extends React.Component {
     this.props.uiStore.reset();
   }
 
-  handleEmailChange = event => this.props.authStore.setEmail(event.target.value);
+  handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleSubmitForm = (event) => {
     event.preventDefault();
-    authActions.resetPassword(this.props.authStore.values).then(() => this.props.history.push('/reset-password'));
+    authActions.resetPassword()
+      .then(() => this.props.history.push('/reset-password'));
   }
 
   render() {
-    const { values, inProgress } = this.props.authStore;
+    const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
       <div className="login-form">
@@ -40,16 +47,19 @@ export default class ForgotPassword extends React.Component {
                   icon="envelope"
                   iconPosition="left"
                   placeholder="E-mail address"
+                  name="email"
                   value={values.email.value}
-                  onChange={this.handleEmailChange}
+                  onChange={this.handleInputChange}
+                  error={!!values.email.error}
                 />
+                <FieldError error={values.email.error} />
                 <Button
                   fluid
                   color="green"
                   size="large"
-                  disabled={inProgress}
+                  disabled={this.props.authStore.canSendMail}
                 >
-                  Reset Password
+                  Continue
                 </Button>
                 {errors &&
                   <Message error textAlign="left">

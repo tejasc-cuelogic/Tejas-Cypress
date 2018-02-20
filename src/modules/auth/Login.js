@@ -17,7 +17,7 @@ export default class Login extends React.Component {
   handleInputChange = (e, { name, value }) => this.props.authStore.setValue(name, value);
   handleSubmitForm = (e) => {
     e.preventDefault();
-    authActions.login(this.props.authStore.values)
+    authActions.login()
       .then(() => {
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/change-password');
@@ -29,7 +29,7 @@ export default class Login extends React.Component {
   };
 
   render() {
-    const { values, inProgress } = this.props.authStore;
+    const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
 
     return (
@@ -73,7 +73,6 @@ export default class Login extends React.Component {
                   fluid
                   color="green"
                   size="large"
-                  disabled={inProgress}
                 >
                   LOG IN WITH EMAIL
                 </Button>
