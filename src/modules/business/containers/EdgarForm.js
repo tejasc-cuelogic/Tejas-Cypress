@@ -1,8 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Button, Grid, Checkbox, Divider, GridColumn } from 'semantic-ui-react';
+import { Form, Button, Grid, Divider } from 'semantic-ui-react';
 import shortid from 'shortid';
-import _ from 'lodash';
 import '../../../assets/custom.css';
 
 import businessActions from '../../../actions/business';
@@ -21,7 +20,7 @@ export default class EdgarForm extends React.Component {
   };
 
   render() {
-    const { formValues, documentList, templateVariables } = this.props.businessStore;
+    const { formValues, templateVariables } = this.props.businessStore;
     return (
       <div className="content-spacer">
         <Grid stackable className="edgar-form">
@@ -38,21 +37,6 @@ export default class EdgarForm extends React.Component {
                   width={data.width || 8}
                   key={`${key}_${data.name}`}
                 />))
-              }
-            </Grid>
-            <Divider section />
-            <Grid stackable columns={2}>
-              {
-                _.map(documentList, (value, type) => (
-                  <GridColumn key={`${key}_${type}`}>
-                    <Checkbox
-                      label={type}
-                      name={type}
-                      checked={value}
-                      onChange={this.handleCheckboxChange}
-                    />
-                  </GridColumn>
-                ))
               }
             </Grid>
             <Divider section />

@@ -17,7 +17,7 @@ export class Business {
       .set('Content-Type', 'application/json')
       .send({
         templateVariables,
-        documentList: this.getDocumentList(documentList),
+        documentList,
       })
       .end((err, res) => {
         if (err) {
