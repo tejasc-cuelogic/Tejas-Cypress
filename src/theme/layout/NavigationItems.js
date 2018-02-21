@@ -2,9 +2,12 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Container, Icon, Image, Menu, Dropdown } from 'semantic-ui-react';
+import uiStore from '../../stores/uiStore';
 import Logo from '../../assets/images/nextseed_logo_color.svg';
 
 const UserNavigation = (props) => {
+  const toggleNotification = () => uiStore.updateLayoutState('notificationPanel');
+
   if (props.currentUser) {
     return (
       <Aux>
@@ -14,7 +17,7 @@ const UserNavigation = (props) => {
             <Dropdown.Item onClick={props.handleLogOut}>Log Out</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Menu.Item as={Link} to="/app/business"> <Icon name="bell" className="nsgreen" /></Menu.Item>
+        <Menu.Item as={Link} onClick={toggleNotification} to="/app/business"> <Icon name="bell" className="nsgreen" /></Menu.Item>
       </Aux>
     );
   }
