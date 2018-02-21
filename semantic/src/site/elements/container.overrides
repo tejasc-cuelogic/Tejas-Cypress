@@ -75,6 +75,41 @@ div.login-form {
 	}
 }
 
+//	Notification panel
+.notification-panel{
+	width:295px;
+    height:~"calc(100vh - 58px)";
+	padding:1.5em 0 1.5em 1em;
+	background:@darken-bg-color;
+	color:@inverse-text;
+	overflow:auto;
+    position:fixed;
+    right:0;
+    top:0;
+	z-index:2;
+	h3{
+		margin-bottom:1rem;
+		letter-spacing:1px;
+	}
+	p.title{
+		font-size:0.928571em;
+		color:@inverse-secondary-text;
+	}
+}
+.notification-box{
+	padding:1em;
+	border-radius:5px 0 0 5px;
+	background-color:@dark-bg-color;
+	box-shadow:0 0 20px fade(@fullBlack, 32%);
+	.timestamp{
+		font-size:0.928571em;
+		color:@inverse-secondary-text;
+	}
+	.dropdown .icon{
+		font-size:1.5em;
+	}
+}
+
 //	Web Footer Style
 .ui.segment,
 .ui.primary.segment{

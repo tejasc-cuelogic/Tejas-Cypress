@@ -5217,6 +5217,46 @@ div.login-form ul.error-messages {
   font-size: 2.142857em;
 }
 
+.notification-panel {
+  width: 295px;
+  height: calc(100vh - 58px);
+  padding: 1.5em 0 1.5em 1em;
+  background: #383838;
+  color: #FFFFFF;
+  overflow: auto;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+
+.notification-panel h3 {
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.notification-panel p.title {
+  font-size: 0.928571em;
+  color: #7d7d7d;
+}
+
+.notification-box {
+  padding: 1em;
+  border-radius: 5px 0 0 5px;
+  background-color: #424242;
+  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
+}
+
+.notification-box .timestamp {
+  font-size: 0.928571em;
+  color: #7d7d7d;
+}
+
+.notification-box .dropdown .icon {
+  font-size: 1.5em;
+}
+
 .ui.segment.inverted.footer,
 .ui.primary.segment.inverted.footer {
   padding: 2em;

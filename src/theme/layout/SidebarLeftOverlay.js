@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Sidebar, Menu, Icon, Button, Image } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Button, Image, Dropdown, Accordion } from 'semantic-ui-react';
 import Userimage from '../../assets/images/james-wright.png';
 
 class SidebarLeftPush extends Component {
   state = { visible: false }
+
+  // state = { activeIndex: 0 }
+
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? -1 : index;
+
+    this.setState({ activeIndex: newIndex });
+  }
 
   toggleVisibility = () => this.setState({ visible: !this.state.visible })
 
@@ -18,6 +28,7 @@ class SidebarLeftPush extends Component {
       { icon: 'money', displayName: 'Banking', to: 'banking' },
       { icon: 'settings', displayName: 'Settings', to: 'settings' },
     ];
+    const { activeIndex } = this.state;
 
     return (
       <Sidebar.Pushable>
@@ -47,6 +58,35 @@ class SidebarLeftPush extends Component {
             </div>
           </div>
         </Sidebar.Pusher>
+        <div className="notification-panel">
+          <h3>Notification center</h3>
+          <p className="title">Set up your account</p>
+          <div className="notification-box">
+            <span className="timestamp">2 days ago</span>
+            <Dropdown icon="ellipsis horizontal" pointing="right" className="icon pull-right">
+              {/* <Icon name="ellipsis horizontal" size="huge" /> */}
+              <Dropdown.Menu>
+                <Dropdown.Header icon="tags" content="Filter by tag" />
+                <Dropdown.Divider />
+                <Dropdown.Item icon="attention" text="Important" />
+                <Dropdown.Item icon="comment" text="Announcement" />
+                <Dropdown.Item icon="conversation" text="Discussion" />
+              </Dropdown.Menu>
+            </Dropdown>
+            <Accordion inverted>
+              <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
+                Connect your <strong>Bank Account</strong>
+                <Icon name="dropdown" />
+              </Accordion.Title>
+              <Accordion.Content active={activeIndex === 0}>
+                <p>A dog is a type of domesticated animal. Known for its loyalty and faithfulness,
+                  {' '}it can be found as a
+                  {' '}welcome guest in many households across the world.
+                </p>
+              </Accordion.Content>
+            </Accordion>
+          </div>
+        </div>
       </Sidebar.Pushable>
     );
   }
