@@ -5,7 +5,6 @@ import { Button, Form, Grid, Header, Message, Icon, Divider } from 'semantic-ui-
 import authActions from './../../actions/auth';
 import ListErrors from '../../components/common/ListErrors';
 
-
 @inject('authStore', 'uiStore', 'userStore')
 @withRouter
 @observer

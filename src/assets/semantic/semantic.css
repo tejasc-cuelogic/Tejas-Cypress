@@ -5140,16 +5140,31 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   min-height: calc(100vh - 58px);
 }
 
-.content {
+.ui.segment.vertical.content {
+  padding: 50px 0;
   min-height: calc(100vh - 342px);
 }
 
-.ui.segment.vertical.content {
-  padding: 50px 0;
+.content-spacer {
+  position: relative;
+  padding: 3.714285em 4.285714em;
 }
 
-.content-spacer {
-  padding: 3.714285em 4.285714em;
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(48, 48, 48, 0.3);
+  -webkit-transform: scale(0);
+  transform: scale(0);
+}
+
+.overlay.editing {
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  z-index: 1;
 }
 
 .webcontent-spacer {
@@ -5200,32 +5215,6 @@ div.login-form ul.error-messages {
 .page-header-section h3 {
   color: #FFFFFF;
   font-size: 2.142857em;
-}
-
-.cards-form h3 {
-  font-size: 18px;
-  margin-bottom: 1.5rem;
-}
-
-.cards-form h4 {
-  font-size: 14px;
-  color: #4f4f4f;
-}
-
-.cards-form h4 .checkbox label {
-  font-weight: normal;
-}
-
-.cards-form .form-card .grid.divided .column {
-  padding: 0 3.285714rem;
-}
-
-.cards-form .form-card .grid.divided .column:first-child {
-  padding-left: 1rem;
-}
-
-.cards-form .form-card .grid.divided .column:last-child {
-  padding-right: 1rem;
 }
 
 .ui.segment.inverted.footer,
@@ -15316,17 +15305,45 @@ ol.ui.horizontal.list li:before,
     User Variable Overrides
 *******************************/
 
-.ui.horizontal.link.list > a.item {
+/* Header */
+
+.page-header-section .ui.horizontal.link.list > a.item {
   font-size: 0.857142rem;
   text-transform: uppercase;
   margin-left: 2rem;
   color: #7d7d7d;
 }
 
-.ui.horizontal.link.list > a.item:hover,
-.ui.horizontal.link.list > a.item:focus,
-.ui.horizontal.link.list > a.item.active {
+.page-header-section .ui.horizontal.link.list > a.item:hover,
+.page-header-section .ui.horizontal.link.list > a.item:focus,
+.page-header-section .ui.horizontal.link.list > a.item.active {
   color: #A9D943;
+}
+
+.ui.list.list-as-table {
+  margin: 0;
+  list-style: none;
+}
+
+.ui.list.list-as-table .item {
+  padding: 1em;
+}
+
+.ui.list.list-as-table .item:nth-child(odd) {
+  background-color: #F7F7F7;
+}
+
+.ui.list.list-as-table .item .content .header {
+  width: 50%;
+  font-weight: 400;
+  color: #999999;
+  display: inline-block;
+}
+
+.ui.list.list-as-table .item .content .description {
+  font-weight: 500;
+  color: #303030;
+  display: inline-block;
 }
 /*!
  * # Semantic UI 2.2.14 - Loader
@@ -19082,6 +19099,91 @@ ol.ui.horizontal.list li:before,
 /*******************************
          Site Overrides
 *******************************/
+
+.form-card.editable {
+  position: relative;
+}
+
+.form-card.editable.editing {
+  z-index: 2;
+}
+
+.form-card.editable .actions {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+}
+
+.form-card.editable .actions a {
+  margin: 0 1rem;
+  font-size: 0.928571em;
+  line-height: 1.428571rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #A9D943;
+}
+
+.form-card.editable .actions a:last-child {
+  margin-right: 0;
+}
+
+.form-card.editable .actions a:hover,
+.form-card.editable .actions a:focus,
+.form-card.editable .actions a:active {
+  color: #97ca29;
+}
+
+.form-card.editable .actions a.negative {
+  color: #999999;
+}
+
+.form-card.editable .actions a.negative:hover,
+.form-card.editable .actions a.negative:focus,
+.form-card.editable .actions a.negative:active {
+  color: #848484;
+}
+
+.form-card.editable .ui.form .fields {
+  margin: 0em;
+  padding: 1em 0;
+}
+
+.form-card.editable .ui.form .fields:nth-child(odd) {
+  background-color: #F7F7F7;
+}
+
+.form-card.editable .ui.form .fields .field {
+  padding: 0 1em;
+}
+
+.form-card.editable .ui.form .ui.label {
+  font-size: 0.928571em;
+  font-weight: 400;
+  line-height: 1.428571rem;
+  color: #999999;
+  padding: 0;
+  background-color: transparent;
+}
+
+.form-card.editable .ui.form input:not([type]),
+.form-card.editable .ui.form input[type=date],
+.form-card.editable .ui.form input[type=datetime-local],
+.form-card.editable .ui.form input[type=email],
+.form-card.editable .ui.form input[type=file],
+.form-card.editable .ui.form input[type=number],
+.form-card.editable .ui.form input[type=password],
+.form-card.editable .ui.form input[type=search],
+.form-card.editable .ui.form input[type=tel],
+.form-card.editable .ui.form input[type=text],
+.form-card.editable .ui.form input[type=time],
+.form-card.editable .ui.form input[type=url] {
+  font-weight: 500;
+  line-height: 1.428571rem;
+  color: #303030;
+  padding: 0 1em;
+  border-width: 0;
+  background-color: transparent;
+}
 /*!
  * # Semantic UI 2.2.14 - Grid
  * http://github.com/semantic-org/semantic-ui/
@@ -26948,6 +27050,32 @@ a.ui.card:hover,
   background-color: #ffffff;
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+.form-card h3 {
+  font-size: 18px;
+  margin-bottom: 1.5rem;
+}
+
+.form-card h4 {
+  font-size: 14px;
+  color: #4f4f4f;
+}
+
+.form-card h4 .checkbox label {
+  font-weight: normal;
+}
+
+.form-card .grid.divided .column {
+  padding: 0 3.285714rem;
+}
+
+.form-card .grid.divided .column:first-child {
+  padding-left: 1rem;
+}
+
+.form-card .grid.divided .column:last-child {
+  padding-right: 1rem;
 }
 /*!
  * # Semantic UI 2.2.14 - Comment
@@ -35466,6 +35594,7 @@ body.pushable > .pusher {
 
 .pushable > .sidebar ~ .pusher .ui.vertical.segment.content {
   padding: 0;
+  min-height: calc(100vh - 58px);
 }
 
 .sidebar .user-picture {

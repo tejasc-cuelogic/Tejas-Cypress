@@ -9,7 +9,7 @@ const createNew = () => (
           <Grid.Column>
             <div className="form-card">
               <h3>Names</h3>
-              <Grid columns={2} divided>
+              <Grid stackable columns={2} divided>
                 <Grid.Row>
                   <Grid.Column>
                     <h4>

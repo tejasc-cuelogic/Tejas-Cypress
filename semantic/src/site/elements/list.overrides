@@ -1,16 +1,47 @@
 /*******************************
     User Variable Overrides
 *******************************/
+/* Header */
+@itemHeaderFontWeight: 500;
+@itemHeaderColor: @quaternary-text;
 
-.ui.horizontal.link{
-    &.list{
-        > a.item{
-            font-size:0.857142rem;
-            text-transform:uppercase;
-            margin-left:2rem;
-            color:@inverse-secondary-text;
-            &:hover, &:focus, &.active{
-                color:@theme-primary;
+
+.page-header-section{
+    .ui.horizontal.link{
+        &.list{
+            > a.item{
+                font-size:0.857142rem;
+                text-transform:uppercase;
+                margin-left:2rem;
+                color:@inverse-secondary-text;
+                &:hover, &:focus, &.active{
+                    color:@theme-primary;
+                }
+            }
+        }
+    }
+}
+.ui.list{
+    &.list-as-table{
+        margin:0;
+        list-style:none;
+        .item{
+            padding:1em;
+            &:nth-child(odd){
+                background-color:@light-bg-color;
+            }
+            .content{
+                .header{
+                    width:50%;
+                    font-weight:400;
+                    color:@quaternary-text;
+                    display:inline-block;
+                }
+                .description{
+                    font-weight:500;
+                    color:@primary-text;
+                    display:inline-block;
+                }
             }
         }
     }

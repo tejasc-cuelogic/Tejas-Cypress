@@ -5,16 +5,28 @@
 .content-wrapper{
 	min-height:~"calc(100vh - 58px)";
 }
-.content{
-	min-height:~"calc(100vh - 342px)";
-}
 .ui.segment.vertical{
-	&.content{
-		padding:50px 0;
+    &.content{
+        padding:50px 0;
+        min-height:~"calc(100vh - 342px)";
 	}
 }
 .content-spacer{
+	position:relative;
 	padding:3.714285em 4.285714em;
+}
+.overlay{
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	background-color:fade(@primary-text, 30%);
+	transform:scale(0);
+	&.editing{
+		transform:scale(1);
+		z-index:1;
+	}
 }
 .webcontent-spacer{
 	padding:2.428571em 4.285714em 1em !important;
@@ -60,34 +72,6 @@ div.login-form {
 		color:@inverse-text;
 		font-size: 2.142857em;
 		// font-weight: bold;
-	}
-}
-
-//	Card Form Styles
-.cards-form{
-	h3{
-		font-size:18px;
-		margin-bottom:1.5rem;
-	}
-	h4{
-		font-size:14px;
-		color:@secondary-text;
-		.checkbox label{
-			font-weight:normal;
-		}
-	}
-	.form-card{
-		.grid.divided{
-			.column{
-				padding:0 3.285714rem;
-				&:first-child{
-					padding-left:1rem;
-				}
-				&:last-child{
-					padding-right:1rem;
-				}
-			}
-		}
 	}
 }
 
