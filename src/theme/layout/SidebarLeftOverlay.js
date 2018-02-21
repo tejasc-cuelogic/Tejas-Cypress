@@ -11,7 +11,6 @@ class SidebarLeftPush extends Component {
   toggleVisibility = () => uiStore.updateLayoutState('leftPanel');
 
   render() {
-    // const { visible } = uiStore.notificationPanel;
     const sidebarItems = [
       { icon: 'block layout', displayName: 'Home', to: 'dashboard' },
       { icon: 'gift', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },

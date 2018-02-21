@@ -64,7 +64,6 @@ export class UiStore {
   @action
   updateLayoutState(prop) {
     this.layoutState = { ...{ [prop]: !this.layoutState[prop] } };
-    console.log('toggle:', this.layoutState, prop, this.layoutState[prop]);
   }
 
   @action
