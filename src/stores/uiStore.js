@@ -2,6 +2,10 @@ import { action, observable } from 'mobx';
 
 export class UiStore {
   appLoader = false;
+  @observable layoutState = {
+    leftPanel: false,
+    notificationPanel: false,
+  };
   @observable inProgress = false;
   @observable loaderMessage = '';
   @observable errors = undefined;
@@ -55,6 +59,11 @@ export class UiStore {
   @action
   setAppLoader(value) {
     this.appLoader = value;
+  }
+
+  @action
+  updateLayoutState(prop) {
+    this.layoutState = { ...{ [prop]: !this.layoutState[prop] } };
   }
 
   @action
