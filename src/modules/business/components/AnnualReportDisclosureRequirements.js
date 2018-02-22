@@ -28,6 +28,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
                   placeholder="State"
                   options={COUNTRIES2}
                   onChange={this.props.handleSelectChange}
+                  key={field.key}
                 />
               );
             }
@@ -37,6 +38,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
                 name={field.key}
                 defaultValue={field.value}
                 onChange={this.props.handleInputChange}
+                key={field.key}
               />
             );
           })}

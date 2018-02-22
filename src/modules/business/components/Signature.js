@@ -22,6 +22,7 @@ export default class Signature extends React.Component {
               name={field.key}
               defaultValue={field.value}
               onChange={this.props.handleInputChange}
+              key={field.key}
             />
           ))}
         </Grid.Column>
