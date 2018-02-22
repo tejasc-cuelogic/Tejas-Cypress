@@ -5,6 +5,7 @@ import UserListing from './../components/UserListing';
 import CreateNew from './../components/CreateNew';
 import UserDetails from './../components/UserDetails';
 import UserModuleSubheader from './../components/UserModuleSubheader';
+import UserListingSubheader from './../components/UserListingSubheader';
 import adminActions from './../../../actions/admin';
 
 @inject('adminStore', 'userStore')
@@ -48,7 +49,7 @@ class Users extends Component {
     } else if (this.props.adminStore && this.props.adminStore.usersList) {
       content = (
         <Aux>
-          <UserModuleSubheader />
+          <UserListingSubheader />
           <UserListing
             header={this.headerMeta}
             listData={this.props.adminStore.usersList}

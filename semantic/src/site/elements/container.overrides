@@ -13,7 +13,7 @@
 }
 .content-spacer{
 	position:relative;
-	padding:3.714285em 4.285714em;
+	padding:3.714285em 5em;
 }
 .overlay{
 	position:absolute;
@@ -29,7 +29,7 @@
 	}
 }
 .webcontent-spacer{
-	padding:2.428571em 4.285714em 1em !important;
+	padding:2.428571em 5em 1em !important;
 }
 
 div.login-form {
@@ -72,6 +72,31 @@ div.login-form {
 		color:@inverse-text;
 		font-size: 2.142857em;
 		// font-weight: bold;
+		a.back-link{
+			position:absolute;
+			left:-35px;
+			color:@theme-primary;
+			> i.icon, i.icons{
+				font-size:0.8em;
+			}
+			&:hover, &:active, &:focus{
+				color:darken(@theme-primary, 8%);
+			}
+		}
+	}
+	span.filter-count{
+		height:19px;
+		min-width:19px;
+		padding:0 4px;
+		margin-right:1rem;
+		background:@theme-primary;
+		display:inline-block;
+		font-size:11px;
+		line-height:19px;
+		font-weight:500;
+		color:@dark-bg-color;
+		text-align:center;
+		border-radius:3px;
 	}
 }
 

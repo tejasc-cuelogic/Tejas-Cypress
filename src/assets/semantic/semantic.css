@@ -5202,7 +5202,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 .content-spacer {
   position: relative;
-  padding: 3.714285em 4.285714em;
+  padding: 3.714285em 5em;
 }
 
 .overlay {
@@ -5223,7 +5223,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 }
 
 .webcontent-spacer {
-  padding: 2.428571em 4.285714em 1em !important;
+  padding: 2.428571em 5em 1em !important;
 }
 
 div.login-form {
@@ -5270,6 +5270,38 @@ div.login-form ul.error-messages {
 .page-header-section h3 {
   color: #FFFFFF;
   font-size: 2.142857em;
+}
+
+.page-header-section h3 a.back-link {
+  position: absolute;
+  left: -35px;
+  color: #A9D943;
+}
+
+.page-header-section h3 a.back-link > i.icon,
+.page-header-section h3 a.back-link i.icons {
+  font-size: 0.8em;
+}
+
+.page-header-section h3 a.back-link:hover,
+.page-header-section h3 a.back-link:active,
+.page-header-section h3 a.back-link:focus {
+  color: #97ca29;
+}
+
+.page-header-section span.filter-count {
+  height: 19px;
+  min-width: 19px;
+  padding: 0 4px;
+  margin-right: 1rem;
+  background: #A9D943;
+  display: inline-block;
+  font-size: 11px;
+  line-height: 19px;
+  font-weight: 500;
+  color: #424242;
+  text-align: center;
+  border-radius: 3px;
 }
 
 .notification-panel {
@@ -15416,9 +15448,10 @@ ol.ui.horizontal.list li:before,
 /* Header */
 
 .page-header-section .ui.horizontal.link.list > a.item {
-  font-size: 0.857142rem;
-  text-transform: uppercase;
   margin-left: 2rem;
+  font-size: 0.857142rem;
+  font-weight: 500;
+  text-transform: uppercase;
   color: #7d7d7d;
 }
 
@@ -19290,6 +19323,11 @@ ol.ui.horizontal.list li:before,
   color: #999999;
   background-color: transparent;
   border-color: transparent transparent #828282;
+}
+
+.page-header-section .ui.input.inverted .icon {
+  color: #FFFFFF;
+  opacity: 1;
 }
 
 .notification-box .ui.form.inverted input:not([type]),
