@@ -5275,14 +5275,20 @@ div.login-form ul.error-messages {
 .notification-panel {
   width: 330px;
   height: calc(100vh - 58px);
-  padding: 1.5em 0 1.5em 1.5em;
+  padding: 1.5em 0 0.5em 1.5em;
   background: #383838;
   color: #FFFFFF;
   overflow: auto;
   position: fixed;
-  right: 0;
+  right: -350px;
   top: 0;
   z-index: 2;
+  -webkit-transition: all 500ms ease-in-out;
+  transition: all 500ms ease-in-out;
+}
+
+.notification-panel.slide-in {
+  right: 0px;
 }
 
 .notification-panel h3 {

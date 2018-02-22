@@ -49,7 +49,7 @@ class SidebarLeftPush extends Component {
             </div>
           </div>
         </Sidebar.Pusher>
-        <div className={`notification-panel ${(uiStore.layoutState.notificationPanel) ? 'slide-in' : ''} icon`}>
+        <div className={`notification-panel ${(uiStore.layoutState.notificationPanel) ? 'slide-in animating' : ''}`}>
           <h3>Notification center</h3>
           <p className="title">Set up your account</p>
           <div className="notification-box">
