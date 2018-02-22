@@ -73,3 +73,49 @@
         }
     }
 }
+
+/*  Inverted Form  */
+.ui.form{
+    &.inverted{
+        label{
+            font-weight:400;
+            color:@inverse-text;
+        }
+        input:not([type]),
+        input[type=date],
+        input[type=datetime-local],
+        input[type=email],
+        input[type=file],
+        input[type=number],
+        input[type=password],
+        input[type=search],
+        input[type=tel],
+        input[type=text],
+        input[type=time],
+        input[type=url]{
+            border-radius:0;
+            color:@quaternary-text;
+            background-color:transparent;
+            border-color:transparent transparent @tertiary-text;
+        }
+    }
+}
+.notification-box{
+    .ui.form.inverted{
+        input:not([type]),
+        input[type=date],
+        input[type=datetime-local],
+        input[type=email],
+        input[type=file],
+        input[type=number],
+        input[type=password],
+        input[type=search],
+        input[type=tel],
+        input[type=text],
+        input[type=time],
+        input[type=url]{
+            padding-left:0;
+            padding-right:0;
+        }
+    }
+}

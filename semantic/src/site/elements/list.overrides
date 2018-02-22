@@ -21,28 +21,28 @@
         }
     }
 }
-.ui.list{
-    &.list-as-table{
-        margin:0;
-        list-style:none;
-        .item{
-            padding:1em;
-            &:nth-child(odd){
-                background-color:@light-bg-color;
-            }
-            .content{
-                .header{
-                    width:50%;
-                    font-weight:400;
-                    color:@quaternary-text;
-                    display:inline-block;
-                }
-                .description{
-                    font-weight:500;
-                    color:@primary-text;
-                    display:inline-block;
-                }
-            }
-        }
-    }
-}
+// .ui.list{
+//     &.list-as-table{
+//         margin:0;
+//         list-style:none;
+//         .item{
+//             padding:1em;
+//             &:nth-child(odd){
+//                 background-color:@light-bg-color;
+//             }
+//             .content{
+//                 .header{
+//                     width:50%;
+//                     font-weight:400;
+//                     color:@quaternary-text;
+//                     display:inline-block;
+//                 }
+//                 .description{
+//                     font-weight:500;
+//                     color:@primary-text;
+//                     display:inline-block;
+//                 }
+//             }
+//         }
+//     }
+// }

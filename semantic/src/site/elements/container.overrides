@@ -77,9 +77,9 @@ div.login-form {
 
 //	Notification panel
 .notification-panel{
-	width:295px;
+	width:330px;
     height:~"calc(100vh - 58px)";
-	padding:1.5em 0 1.5em 1em;
+	padding:1.5em 0 1.5em 1.5em;
 	background:@darken-bg-color;
 	color:@inverse-text;
 	overflow:auto;
@@ -98,6 +98,7 @@ div.login-form {
 }
 .notification-box{
 	padding:1em;
+	margin-bottom:1.285714rem;
 	border-radius:5px 0 0 5px;
 	background-color:@dark-bg-color;
 	box-shadow:0 0 20px fade(@fullBlack, 32%);
@@ -105,8 +106,10 @@ div.login-form {
 		font-size:0.928571em;
 		color:@inverse-secondary-text;
 	}
-	.dropdown .icon{
-		font-size:1.5em;
+	h4.amount{
+		font-size:1.428571em;
+		font-weight:900;
+		color:@theme-primary;
 	}
 }
 

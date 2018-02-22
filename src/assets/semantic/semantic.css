@@ -4956,6 +4956,11 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   text-transform: uppercase;
 }
 
+.ui.button.basic,
+.ui.buttons .button.basic {
+  font-weight: 500;
+}
+
 .ui.button.rounded,
 .ui.buttons .button.rounded {
   border-radius: 20px;
@@ -4973,6 +4978,56 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 .ui.button.green:active,
 .ui.buttons .button.green:active {
   background-color: #97ca29;
+}
+
+.ui.inverted.button,
+.ui.inverted.buttons .button {
+  text-transform: none;
+}
+
+.ui.inverted.button.link-button,
+.ui.inverted.buttons .button.link-button {
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 1em;
+}
+
+.ui.inverted.button.link-button.green,
+.ui.inverted.buttons .button.link-button.green,
+.ui.inverted.button.link-button.basic,
+.ui.inverted.buttons .button.link-button.basic {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.ui.inverted.button.link-button.basic,
+.ui.inverted.buttons .button.link-button.basic {
+  color: #999999 !important;
+}
+
+.ui.inverted.button.link-button.basic:hover,
+.ui.inverted.buttons .button.link-button.basic:hover,
+.ui.inverted.button.link-button.basic:focus,
+.ui.inverted.buttons .button.link-button.basic:focus,
+.ui.inverted.button.link-button.basic:active,
+.ui.inverted.buttons .button.link-button.basic:active {
+  color: #bababa !important;
+  background-color: transparent;
+}
+
+.ui.inverted.button.link-button.green,
+.ui.inverted.buttons .button.link-button.green {
+  color: #A9D943;
+}
+
+.ui.inverted.button.link-button.green:hover,
+.ui.inverted.buttons .button.link-button.green:hover,
+.ui.inverted.button.link-button.green:focus,
+.ui.inverted.buttons .button.link-button.green:focus,
+.ui.inverted.button.link-button.green:active,
+.ui.inverted.buttons .button.link-button.green:active {
+  color: #97ca29;
+  background-color: transparent;
 }
 /*!
  * # Semantic UI 2.2.14 - Container
@@ -5218,9 +5273,9 @@ div.login-form ul.error-messages {
 }
 
 .notification-panel {
-  width: 295px;
+  width: 330px;
   height: calc(100vh - 58px);
-  padding: 1.5em 0 1.5em 1em;
+  padding: 1.5em 0 1.5em 1.5em;
   background: #383838;
   color: #FFFFFF;
   overflow: auto;
@@ -5242,6 +5297,7 @@ div.login-form ul.error-messages {
 
 .notification-box {
   padding: 1em;
+  margin-bottom: 1.285714rem;
   border-radius: 5px 0 0 5px;
   background-color: #424242;
   -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
@@ -5253,8 +5309,10 @@ div.login-form ul.error-messages {
   color: #7d7d7d;
 }
 
-.notification-box .dropdown .icon {
-  font-size: 1.5em;
+.notification-box h4.amount {
+  font-size: 1.428571em;
+  font-weight: 900;
+  color: #A9D943;
 }
 
 .ui.segment.inverted.footer,
@@ -5533,6 +5591,10 @@ div.login-form ul.error-messages {
 /*******************************
          Site Overrides
 *******************************/
+
+.notification-box .ui.clearing.hidden.divider {
+  margin: 0.5rem 0;
+}
 /*!
  * # Semantic UI 2.2.14 - Flag
  * http://github.com/semantic-org/semantic-ui/
@@ -15359,32 +15421,6 @@ ol.ui.horizontal.list li:before,
 .page-header-section .ui.horizontal.link.list > a.item.active {
   color: #A9D943;
 }
-
-.ui.list.list-as-table {
-  margin: 0;
-  list-style: none;
-}
-
-.ui.list.list-as-table .item {
-  padding: 1em;
-}
-
-.ui.list.list-as-table .item:nth-child(odd) {
-  background-color: #F7F7F7;
-}
-
-.ui.list.list-as-table .item .content .header {
-  width: 50%;
-  font-weight: 400;
-  color: #999999;
-  display: inline-block;
-}
-
-.ui.list.list-as-table .item .content .description {
-  font-weight: 500;
-  color: #303030;
-  display: inline-block;
-}
 /*!
  * # Semantic UI 2.2.14 - Loader
  * http://github.com/semantic-org/semantic-ui/
@@ -19223,6 +19259,47 @@ ol.ui.horizontal.list li:before,
   padding: 0 1em;
   border-width: 0;
   background-color: transparent;
+}
+
+/*  Inverted Form  */
+
+.ui.form.inverted label {
+  font-weight: 400;
+  color: #FFFFFF;
+}
+
+.ui.form.inverted input:not([type]),
+.ui.form.inverted input[type=date],
+.ui.form.inverted input[type=datetime-local],
+.ui.form.inverted input[type=email],
+.ui.form.inverted input[type=file],
+.ui.form.inverted input[type=number],
+.ui.form.inverted input[type=password],
+.ui.form.inverted input[type=search],
+.ui.form.inverted input[type=tel],
+.ui.form.inverted input[type=text],
+.ui.form.inverted input[type=time],
+.ui.form.inverted input[type=url] {
+  border-radius: 0;
+  color: #999999;
+  background-color: transparent;
+  border-color: transparent transparent #828282;
+}
+
+.notification-box .ui.form.inverted input:not([type]),
+.notification-box .ui.form.inverted input[type=date],
+.notification-box .ui.form.inverted input[type=datetime-local],
+.notification-box .ui.form.inverted input[type=email],
+.notification-box .ui.form.inverted input[type=file],
+.notification-box .ui.form.inverted input[type=number],
+.notification-box .ui.form.inverted input[type=password],
+.notification-box .ui.form.inverted input[type=search],
+.notification-box .ui.form.inverted input[type=tel],
+.notification-box .ui.form.inverted input[type=text],
+.notification-box .ui.form.inverted input[type=time],
+.notification-box .ui.form.inverted input[type=url] {
+  padding-left: 0;
+  padding-right: 0;
 }
 /*!
  * # Semantic UI 2.2.14 - Grid
@@ -29136,6 +29213,33 @@ a.ui.card:hover,
 /*******************************
         User Overrides
 *******************************/
+
+/* Accordion Title */
+
+.ui.accordion .title:not(.ui) {
+  position: relative;
+  padding-right: 30px;
+}
+
+/* Dropdown Icon */
+
+.ui.accordion .title .angle.icon,
+.ui.accordion .accordion .title .angle.icon {
+  margin: 0;
+  height: 19px;
+  font-size: 1.6em;
+  color: #A9D943;
+  line-height: 1.357114rem;
+  position: absolute;
+  right: 0;
+  top: 7px;
+}
+
+.ui.accordion .title.active .angle.icon,
+.ui.accordion .accordion .title.active .angle.icon {
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
 /*!
  * # Semantic UI 2.2.14 - Checkbox
  * http://github.com/semantic-org/semantic-ui/
@@ -31684,6 +31788,18 @@ select.ui.dropdown {
 /*******************************
         User Overrides
 *******************************/
+
+.notification-box .ui.dropdown .icon.dropdown {
+  margin: 0 5px 0 0;
+}
+
+.notification-box .ui.dropdown .icon.dropdown:before {
+  content: "\00B7\00B7\00B7";
+  font-size: 27px;
+  letter-spacing: -3px;
+  line-height: 10px;
+  color: #999999;
+}
 /*!
  * # Semantic UI 2.2.14 - Video
  * http://github.com/semantic-org/semantic-ui/
