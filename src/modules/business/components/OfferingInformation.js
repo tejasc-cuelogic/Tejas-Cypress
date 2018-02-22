@@ -18,69 +18,67 @@ const OfferingInformation = props => (
     <Grid.Column>
       <Header as="h1" textAlign="left">Offering Information</Header>
       <Divider section />
-      <Form size="large">
-        <Form.TextArea
-          label={LABEL}
-          name="compensationAmount"
-          defaultValue={props.compensationAmount}
-          onChange={props.handleInputChange}
-        />
-        <Form.TextArea
-          label={LABEL1}
-          name="financialInterest"
-          defaultValue={props.financialInterest}
-          onChange={props.handleInputChange}
-        />
-        <Form.Input
-          label="Type of Security Offered"
-          name="securityOfferedType"
-          defaultValue={props.securityOfferedType}
-          onChange={props.handleInputChange}
-        />
-        <Form.Input
-          label="Price (or Method for Determining Price)"
-          name="priceDeterminationMethod"
-          defaultValue={props.priceDeterminationMethod}
-          onChange={props.handleInputChange}
-        />
-        <Form.Input
-          label="Target Offering Amount"
-          name="offeringAmount"
-          defaultValue={props.offeringAmount}
-          onChange={props.handleInputChange}
-        />
-        <Form.Input
-          label="Maximum Offering Amount (if different from Target Offering Amount)"
-          name="priceDeterminationMethod"
-          defaultValue={props.priceDeterminationMethod}
-          onChange={props.handleInputChange}
-        />
-        <Form.Input
-          label="Oversubscriptions Accepted"
-          name="overSubscriptionAccepted"
-          defaultValue={props.overSubscriptionAccepted}
-          onChange={props.handleInputChange}
-        />
+      <Form.TextArea
+        label={LABEL}
+        name="compensationAmount"
+        defaultValue={props.compensationAmount}
+        onChange={props.handleInputChange}
+      />
+      <Form.TextArea
+        label={LABEL1}
+        name="financialInterest"
+        defaultValue={props.financialInterest}
+        onChange={props.handleInputChange}
+      />
+      <Form.Input
+        label="Type of Security Offered"
+        name="securityOfferedType"
+        defaultValue={props.securityOfferedType}
+        onChange={props.handleInputChange}
+      />
+      <Form.Input
+        label="Price (or Method for Determining Price)"
+        name="priceDeterminationMethod"
+        defaultValue={props.priceDeterminationMethod}
+        onChange={props.handleInputChange}
+      />
+      <Form.Input
+        label="Target Offering Amount"
+        name="offeringAmount"
+        defaultValue={props.offeringAmount}
+        onChange={props.handleInputChange}
+      />
+      <Form.Input
+        label="Maximum Offering Amount (if different from Target Offering Amount)"
+        name="priceDeterminationMethod"
+        defaultValue={props.priceDeterminationMethod}
+        onChange={props.handleInputChange}
+      />
+      <Form.Input
+        label="Oversubscriptions Accepted"
+        name="overSubscriptionAccepted"
+        defaultValue={props.overSubscriptionAccepted}
+        onChange={props.handleInputChange}
+      />
 
-        <Form.Input
-          label="If yes, disclose how oversubscriptions will be allocated"
-          name="overSubscriptionAllocationType"
-          defaultValue={props.overSubscriptionAllocationType}
-          onChange={props.handleInputChange}
-        />
-        <Form.Input
-          label="Deadline to reach the Target Offering Amount"
-          name="maximumOfferingAmount"
-          defaultValue={props.maximumOfferingAmount}
-          onChange={props.handleInputChange}
-        />
-        <Form.Input
-          label="Deadline Date"
-          name="deadlineDate"
-          defaultValue={props.deadlineDate}
-          onChange={props.handleInputChange}
-        />
-      </Form>
+      <Form.Input
+        label="If yes, disclose how oversubscriptions will be allocated"
+        name="overSubscriptionAllocationType"
+        defaultValue={props.overSubscriptionAllocationType}
+        onChange={props.handleInputChange}
+      />
+      <Form.Input
+        label="Deadline to reach the Target Offering Amount"
+        name="maximumOfferingAmount"
+        defaultValue={props.maximumOfferingAmount}
+        onChange={props.handleInputChange}
+      />
+      <Form.Input
+        label="Deadline Date"
+        name="deadlineDate"
+        defaultValue={props.deadlineDate}
+        onChange={props.handleInputChange}
+      />
     </Grid.Column>
   </Grid>
 );

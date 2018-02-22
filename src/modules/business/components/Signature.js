@@ -11,16 +11,14 @@ const Signature = props => (
     <Grid.Column>
       <Header as="h1" textAlign="left">Signature</Header>
       <Divider section />
-      <Form size="large">
-        {_.map(props.signature, field => (
-          <Form.Input
-            label={field.label}
-            name={field.key}
-            defaultValue={field.value}
-            onChange={props.handleInputChange}
-          />
-        ))}
-      </Form>
+      {_.map(props.signature, field => (
+        <Form.Input
+          label={field.label}
+          name={field.key}
+          defaultValue={field.value}
+          onChange={props.handleInputChange}
+        />
+      ))}
     </Grid.Column>
   </Grid>
 );

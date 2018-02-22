@@ -86,6 +86,11 @@ export class BusinessStore {
   setSignatureInfo(field, value) {
     this.signature[field].value = value;
   }
+
+  @action
+  setCountry(value) {
+    this.annualReportDisclosureRequirements.issueJurisdictionSecuritiesOffering.value = value;
+  }
 }
 
 export default new BusinessStore();
