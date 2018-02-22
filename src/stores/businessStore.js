@@ -1,7 +1,15 @@
 import { observable, action, computed } from 'mobx';
 import _ from 'lodash';
 
-import { DOCFILE_TYPES, FORM_VALUES } from './../constants/business';
+import {
+  DOCFILE_TYPES,
+  FORM_VALUES,
+  FILER_INFORMATION,
+  ISSUER_INFORMATION,
+  OFFERING_INFORMATION,
+  ANNUAL_REPORT_DISCLOSURE_REQUIREMENTS,
+  SIGNATURE,
+} from './../constants/business';
 
 export class BusinessStore {
   formValues = [...FORM_VALUES];
@@ -23,6 +31,21 @@ export class BusinessStore {
   };
 
   @observable
+  filerInformation = { ...FILER_INFORMATION }
+
+  @observable
+  issuerInformation = { ...ISSUER_INFORMATION }
+
+  @observable
+  offeringInformation = { ...OFFERING_INFORMATION }
+
+  @observable
+  annualReportDisclosureRequirements = { ...ANNUAL_REPORT_DISCLOSURE_REQUIREMENTS }
+
+  @observable
+  signature = { ...SIGNATURE }
+
+  @observable
   documentList = { ...DOCFILE_TYPES };
 
   @computed get canSubmitEdgarForm() {
@@ -37,6 +60,31 @@ export class BusinessStore {
   @action
   toggleRequiredFiles(key) {
     this.documentList[key] = !this.documentList[key];
+  }
+
+  @action
+  setFilerInfo(field, value) {
+    this.filerInformation[field].value = value;
+  }
+
+  @action
+  setIssuerInfo(field, value) {
+    this.issuerInformation[field].value = value;
+  }
+
+  @action
+  setOfferingInfo(field, value) {
+    this.offeringInformation[field].value = value;
+  }
+
+  @action
+  setAnnualReportInfo(field, value) {
+    this.annualReportDisclosureRequirements[field].value = value;
+  }
+
+  @action
+  setSignatureInfo(field, value) {
+    this.signature[field].value = value;
   }
 }
 

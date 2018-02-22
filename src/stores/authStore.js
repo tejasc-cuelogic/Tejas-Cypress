@@ -13,6 +13,7 @@ const userPool = new AWSCognito.CognitoUserPool({
 let cognitoUser = null;
 
 export class AuthStore {
+  hasSession = false;
   @observable role = 'investor';
   @observable message = null;
   @observable oldPassword = '';
@@ -21,7 +22,6 @@ export class AuthStore {
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
   @observable isUserLoggedIn = false;
-  @observable hasSession = false;
 
   @observable
   values = {
