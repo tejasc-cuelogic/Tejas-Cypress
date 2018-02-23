@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Divider, Grid, Header, Form, Dropdown } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-import { COUNTRIES2 } from '../../../constants/business';
+import { COUNTRIES } from '../../../constants/business';
 
 @inject('businessStore')
 @observer
@@ -17,7 +17,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
         <Grid.Column>
           <Header as="h1" textAlign="left">Annual Report Disclosure Requirements</Header>
           <Divider section />
-          {_.map(this.props.businessStore.annualReportDisclosureRequirements, (field) => {
+          {_.map(this.props.businessStore.annualReportRequirements, (field) => {
             if (field.key === 'issueJurisdictionSecuritiesOffering') {
               return (
                 <Dropdown
@@ -26,7 +26,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
                   search
                   selection
                   placeholder="State"
-                  options={COUNTRIES2}
+                  options={COUNTRIES}
                   onChange={this.props.handleSelectChange}
                   key={field.key}
                 />

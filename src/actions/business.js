@@ -74,7 +74,7 @@ export class Business {
   xmlFormSubmitted = () => {
     const {
       offeringId,
-      annualReportDisclosureRequirements,
+      annualReportRequirements,
       filerInformation,
       issuerInformation,
       offeringInformation,
@@ -87,11 +87,11 @@ export class Business {
       .set('Content-Type', 'application/json')
       .send({
         offeringId,
-        filerInformation,
-        issuerInformation,
-        offeringInformation,
-        annualReportDisclosureRequirements,
-        signature,
+        filerInformation: this.getFormattedInformation(filerInformation),
+        issuerInformation: this.getFormattedInformation(issuerInformation),
+        offeringInformation: this.getFormattedInformation(offeringInformation),
+        annualReportDisclosureRequirements: this.getFormattedInformation(annualReportRequirements),
+        signature: this.getFormattedInformation(signature),
         documentList: _.filter(_.keys(documentList), key => documentList[key]),
       })
       .end((err, res) => {

@@ -7,7 +7,7 @@ import {
   FILER_INFORMATION,
   ISSUER_INFORMATION,
   OFFERING_INFORMATION,
-  ANNUAL_REPORT_DISCLOSURE_REQUIREMENTS,
+  ANNUAL_REPORT_REQUIREMENTS,
   SIGNATURE,
 } from './../constants/business';
 
@@ -43,7 +43,7 @@ export class BusinessStore {
   offeringInformation = { ...OFFERING_INFORMATION }
 
   @observable
-  annualReportDisclosureRequirements = { ...ANNUAL_REPORT_DISCLOSURE_REQUIREMENTS }
+  annualReportRequirements = { ...ANNUAL_REPORT_REQUIREMENTS }
 
   @observable
   signature = { ...SIGNATURE }
@@ -82,7 +82,7 @@ export class BusinessStore {
 
   @action
   setAnnualReportInfo(field, value) {
-    this.annualReportDisclosureRequirements[field].value = value;
+    this.annualReportRequirements[field].value = value;
   }
 
   @action
@@ -92,7 +92,7 @@ export class BusinessStore {
 
   @action
   setCountry(value) {
-    this.annualReportDisclosureRequirements.issueJurisdictionSecuritiesOffering.value = value;
+    this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
   }
 }
 
