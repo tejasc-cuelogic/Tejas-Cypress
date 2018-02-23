@@ -23,7 +23,7 @@ export class BusinessStore {
   };
 
   @observable
-  documentList = [...DOCFILE_TYPES];
+  documentList = { ...DOCFILE_TYPES };
 
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));

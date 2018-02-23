@@ -13,7 +13,7 @@ export const FORM_VALUES = [
   { name: 'interest_rate', placeholder: 'Interest Rate' },
 ];
 
-export const DOCFILE_TYPES = [
+export const DOCFILE_TYPES = {
   'Form C Issuer Certificate.docx': false,
   'Form Security Agreement.docx': false,
   'Form of Note Purchase Agreement - Revenue Share.docx': false,
@@ -24,6 +24,6 @@ export const DOCFILE_TYPES = [
   'National Portal - Form of Crowdfunding Portal Agreement (Rev Share).docx': false,
   'National Portal - Form of Crowdfunding Portal Agreement (Term).docx': false,
   'Resolution - Borrowing Authority (Form).docx': false,
-];
+};
 
 export const EDGAR_URL = 'https://6fqagvjv78.execute-api.us-east-1.amazonaws.com/dev/edgar/publish';
