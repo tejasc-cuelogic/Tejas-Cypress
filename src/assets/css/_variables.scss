@@ -1,0 +1,17 @@
+$primary-color:#85b02b;
+$secondary-color:#5c6b87;
+
+$active-primary-link:lighten($primary-color, 5%);                                   //  #96C535
+
+$primary-dark:#262626;
+$dark-sidebar:lighten($primary-dark, 7%);											//  #383838
+$dark-header:lighten($primary-dark, 11%);											//  #424242
+$light-header:lighten($primary-dark, 51%);                                          //  #828282
+$lighter-header:lighten($primary-dark, 16%);										//  #4F4F4F
+
+$text-primary:#000000;
+$lighten-text-primary:lighten($text-primary, 19%);									//  #303030
+
+$text-secondary:#FFFFFF;
+$darken-text-secondary:darken($text-secondary, 51%);								//  #7D7D7D
+

@@ -1,6 +1,5 @@
 import UserList from './pages/user/UserList';
 import Settings from './pages/settings/Settings';
-import BusinessForm from './pages/business/BusinessForm';
 import New from './pages/user/New';
 import Profile from './pages/user/Profile';
 
@@ -30,10 +29,5 @@ export default [
     path: '/settings',
     component: Settings,
     auth: UserAuthorization,
-  },
-  {
-    path: '/business',
-    component: BusinessForm,
-    auth: BusinessAuthorization,
   },
 ];

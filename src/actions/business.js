@@ -9,20 +9,19 @@ export class Business {
   )
 
   generateDocxFile = () => {
-    const { templateVeriables, documentList } = businessStore;
+    const { templateVariables, documentList } = businessStore;
 
     // TODO: Move the call to the service layer
     request
       .post(EDGAR_URL)
       .set('Content-Type', 'application/json')
-      .set('Access-Control-Request-Headers', '*')
       .send({
-        templateVariables: templateVeriables,
-        documentList: this.getDocumentList(documentList),
+        templateVariables,
+        documentList,
       })
       .end((err, res) => {
         if (err) {
-          console.log(err);
+          return (err);
         }
         return res;
       });

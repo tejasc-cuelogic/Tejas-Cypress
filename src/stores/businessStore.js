@@ -1,4 +1,5 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
+import _ from 'lodash';
 
 import { DOCFILE_TYPES, FORM_VALUES } from './../constants/business';
 
@@ -22,8 +23,11 @@ export class BusinessStore {
   };
 
   @observable
-  documentList = { ...DOCFILE_TYPES };
+  documentList = [...DOCFILE_TYPES];
 
+  @computed get canSubmitEdgarForm() {
+    return (_.every(this.templateVariables, val => !_.isEmpty(val)));
+  }
 
   @action
   setTemplateVariable(key, value) {
