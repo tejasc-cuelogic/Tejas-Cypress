@@ -15,6 +15,9 @@ export class BusinessStore {
   formValues = [...FORM_VALUES];
 
   @observable
+  offeringId = '';
+
+  @observable
   templateVariables = {
     name_of_business: '',
     shorthand_name: '',

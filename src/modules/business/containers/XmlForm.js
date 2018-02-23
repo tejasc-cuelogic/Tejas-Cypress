@@ -31,7 +31,6 @@ export default class XmlForm extends React.Component {
   }
 
   render() {
-    console.log(this.props.businessStore.annualReportDisclosureRequirements);
     return (
       <div className="content-spacer">
         <Grid stackable className="edgar-form">
