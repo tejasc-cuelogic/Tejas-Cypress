@@ -13,6 +13,9 @@ import businessActions from '../../../actions/business';
 @inject('businessStore')
 @observer
 export default class XmlForm extends React.Component {
+  handleUrlChange = (e, { value }) => {
+    this.props.businessStore.setOfferingUrl(value);
+  }
   handleFilerInputChange = (e, { name, value }) => {
     this.props.businessStore.setFilerInfo(name, value);
   }
@@ -44,6 +47,11 @@ export default class XmlForm extends React.Component {
       <div className="content-spacer">
         <Grid stackable className="edgar-form">
           <Form size="large" onSubmit={this.handleFormSubmit}>
+            <Form.Input
+              label="Website URL"
+              defaultValue={this.props.businessStore.offeringUrl}
+              onChange={this.handleUrlChange}
+            />
             <FilerInformation
               handleInputChange={this.handleFilerInputChange}
             />

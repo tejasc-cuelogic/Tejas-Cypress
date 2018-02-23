@@ -18,6 +18,9 @@ export class BusinessStore {
   offeringId = '';
 
   @observable
+  offeringUrl = '';
+
+  @observable
   templateVariables = {
     name_of_business: '',
     shorthand_name: '',
@@ -63,6 +66,11 @@ export class BusinessStore {
   @action
   toggleRequiredFiles(key) {
     this.documentList[key] = !this.documentList[key];
+  }
+
+  @action
+  setOfferingUrl(url) {
+    this.offeringUrl = url;
   }
 
   @action

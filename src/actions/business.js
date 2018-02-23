@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
-import { EDGAR_URL } from './../constants/business';
+import { EDGAR_URL, XML_URL } from './../constants/business';
 
 export class Business {
   getFormattedInformation = (info) => {
@@ -43,6 +43,7 @@ export class Business {
   xmlFormSubmitted = () => {
     const {
       offeringId,
+      offeringUrl,
       annualReportRequirements,
       filerInformation,
       issuerInformation,
@@ -51,55 +52,30 @@ export class Business {
       documentList,
     } = businessStore;
 
-    request
-      .post('http://localhost:3000')
-      .set('Content-Type', 'application/json')
-      .send({
-        offeringId,
-        filerInformation: this.getFormattedInformation(filerInformation),
-        issuerInformation: this.getFormattedInformation(issuerInformation),
-        offeringInformation: this.getFormattedInformation(offeringInformation),
-        annualReportDisclosureRequirements: this.getFormattedInformation(annualReportRequirements),
-        signature: this.getFormattedInformation(signature),
-        documentList: _.filter(_.keys(documentList), key => documentList[key]),
-      })
-      .end((err, res) => {
-        if (err) {
-          return (err);
-        }
-        return res;
-      });
-  }
-
-  xmlFormSubmitted = () => {
-    const {
-      offeringId,
-      annualReportRequirements,
-      filerInformation,
-      issuerInformation,
-      offeringInformation,
-      signature,
-      documentList,
-    } = businessStore;
-
-    request
-      .post('http://localhost:3000')
-      .set('Content-Type', 'application/json')
-      .send({
-        offeringId,
-        filerInformation: this.getFormattedInformation(filerInformation),
-        issuerInformation: this.getFormattedInformation(issuerInformation),
-        offeringInformation: this.getFormattedInformation(offeringInformation),
-        annualReportDisclosureRequirements: this.getFormattedInformation(annualReportRequirements),
-        signature: this.getFormattedInformation(signature),
-        documentList: _.filter(_.keys(documentList), key => documentList[key]),
-      })
-      .end((err, res) => {
-        if (err) {
-          return (err);
-        }
-        return res;
-      });
+    new Promise((res, rej) => {
+      request
+        .post(XML_URL)
+        .set('Content-Type', 'application/json')
+        .send({
+          offeringId,
+          offeringUrl,
+          filerInformation: this.getFormattedInformation(filerInformation),
+          issuerInformation: this.getFormattedInformation(issuerInformation),
+          offeringInformation: this.getFormattedInformation(offeringInformation),
+          annualReportDisclosureRequirements:
+            this.getFormattedInformation(annualReportRequirements),
+          signature: this.getFormattedInformation(signature),
+          documentList: _.filter(_.keys(documentList), key => documentList[key]),
+        })
+        .end((err, data) => {
+          if (err) {
+            rej(err);
+          }
+          res(data);
+        });
+    })
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
   }
 }
 

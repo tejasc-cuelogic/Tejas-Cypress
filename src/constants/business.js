@@ -439,3 +439,5 @@ export const COUNTRIES = [
 ];
 
 export const EDGAR_URL = 'https://6fqagvjv78.execute-api.us-east-1.amazonaws.com/dev/edgar/publish';
+
+export const XML_URL = 'https://6fqagvjv78.execute-api.us-east-1.amazonaws.com/dev/edgar/primary-data';
