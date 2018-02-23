@@ -2,6 +2,7 @@ import { action, observable } from 'mobx';
 
 export class UiStore {
   appLoader = false;
+  @observable submitButtonDisabled = false;
   @observable inProgress = false;
   @observable loaderMessage = '';
   @observable errors = undefined;
@@ -58,11 +59,23 @@ export class UiStore {
   }
 
   @action
+  setSubmitButtonDisability(status) {
+    this.submitButtonDisabled = status;
+  }
+
+  @action
+  toggleSubmitButton() {
+    this.submitButtonDisabled = !this.submitButtonDisabled;
+  }
+
+  @action
   reset() {
     this.inProgress = false;
     this.errors = undefined;
     this.success = undefined;
     this.loaderMessage = '';
+    this.appLoader = false;
+    this.submitButtonDisabled = false;
   }
 }
 

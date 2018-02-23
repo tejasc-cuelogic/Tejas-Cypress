@@ -8,7 +8,7 @@ import businessActions from '../../../actions/business';
 
 const key = shortid.generate();
 
-@inject('businessStore')
+@inject('businessStore', 'uiStore')
 @observer
 export default class EdgarForm extends React.Component {
   handleInputChange = (e) => {
@@ -50,7 +50,10 @@ export default class EdgarForm extends React.Component {
             >
               <Button
                 color="green"
-                disabled={!this.props.businessStore.canSubmitEdgarForm}
+                disabled={
+                  !this.props.businessStore.canSubmitEdgarForm ||
+                    this.props.uiStore.submitButtonDisabled
+                }
                 onClick={businessActions.generateDocxFile}
                 primary
               >
