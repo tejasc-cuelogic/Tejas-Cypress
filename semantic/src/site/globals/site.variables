@@ -1,25 +1,101 @@
 /*******************************
      User Global Variables
 *******************************/
+
 /*-------------------
        Fonts
 --------------------*/
-@fontName          : 'Roboto';
+// @fontName          : 'Roboto';
 @fontSmoothing     : antialiased;
 
-@headerFont        : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@pageFont          : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+// @headerFont        : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+// @pageFont          : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
-@googleFontName    : @fontName;
-@importGoogleFonts : true;
-@googleFontSizes   : '300,400,500,700,900';
-@googleSubset      : 'latin';
+// @googleFontName    : @fontName;
+// @importGoogleFonts : true;
+// @googleFontSizes   : '300,400,500,700,900';
+// @googleSubset      : 'latin';
 
-@googleProtocol    : 'https://';
-@googleFontRequest : '@{googleFontName}:@{googleFontSizes}&subset=@{googleSubset}';
+// @googleProtocol    : 'https://';
+// @googleFontRequest : '@{googleFontName}:@{googleFontSizes}&subset=@{googleSubset}';
 
+@fontPath  : "../../themes/nextseed/assets/fonts";
 
-/*--------------
-  Page Heading
----------------*/
-@headerFontWeight : 500;
+@fontName: 'SFProDisplay';
+@fallbackSRC: url("@{fontPath}/@{fontName}.eot");
+@srcRegular:
+	url("@{fontPath}/@{fontName}-Regular.eot?#iefix") format('embedded-opentype'),
+	url("@{fontPath}/@{fontName}-Regular.woff2") format('woff2'),
+	url("@{fontPath}/@{fontName}-Regular.woff") format('woff'),
+	url("@{fontPath}/@{fontName}-Regular.ttf") format('truetype'),
+	url("@{fontPath}/@{fontName}-Regular.svg#SFProDisplay-Regular") format('svg')
+;
+@srcMedium:
+	url("@{fontPath}/@{fontName}-Medium.eot?#iefix") format('embedded-opentype'),
+	url("@{fontPath}/@{fontName}-Medium.woff2") format('woff2'),
+	url("@{fontPath}/@{fontName}-Medium.woff") format('woff'),
+	url("@{fontPath}/@{fontName}-Medium.ttf") format('truetype'),
+	url("@{fontPath}/@{fontName}-Medium.svg#SFProDisplay-Medium") format('svg')
+;
+@srcBold:
+	url("@{fontPath}/@{fontName}-Bold.eot?#iefix") format('embedded-opentype'),
+	url("@{fontPath}/@{fontName}-Bold.woff2") format('woff2'),
+	url("@{fontPath}/@{fontName}-Bold.woff") format('woff'),
+	url("@{fontPath}/@{fontName}-Bold.ttf") format('truetype'),
+	url("@{fontPath}/@{fontName}-Bold.svg#SFProDisplay-Bold") format('svg')
+;
+@srcHeavy:
+	url("@{fontPath}/@{fontName}-Heavy.eot?#iefix") format('embedded-opentype'),
+	url("@{fontPath}/@{fontName}-Heavy.woff2") format('woff2'),
+	url("@{fontPath}/@{fontName}-Heavy.woff") format('woff'),
+	url("@{fontPath}/@{fontName}-Heavy.ttf") format('truetype'),
+	url("@{fontPath}/@{fontName}-Heavy.svg#SFProDisplay-Heavy") format('svg')
+;
+
+@font-face {
+	font-family: 'SFProDisplay-Regular';
+	// src: @fallbackSRC;
+	src: @srcRegular;
+	font-style: normal;
+	font-weight: 400;
+}
+@font-face {
+	font-family: 'SFProDisplay-Medium';
+	// src: @fallbackSRC;
+	src: @srcMedium;
+	font-style: normal;
+	font-weight: 500;
+}
+@font-face {
+	font-family: 'SFProDisplay-Bold';
+	// src: @fallbackSRC;
+	src: @srcBold;
+	font-style: normal;
+	font-weight: 700;
+}
+@font-face {
+	font-family: 'SFProDisplay-Heavy';
+	// src: @fallbackSRC;
+	src: @srcHeavy;
+	font-style: normal;
+	font-weight: 900;
+}
+
+@fontRegular		:'SFProDisplay-Regular';
+@fontMedium			:'SFProDisplay-Medium';
+@fontBold			:'SFProDisplay-Bold';
+@fontHeavy			:'SFProDisplay-Heavy';
+
+@headerFont			:@fontHeavy, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont			:@fontMedium, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+/*-------------------
+      Base Sizes
+--------------------*/
+
+/* This is the single variable that controls them all */
+// @emSize   : 12px;
+
+// /* The size of page text  */
+// @fontSize : 12px;
+

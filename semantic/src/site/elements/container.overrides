@@ -29,7 +29,7 @@
 	}
 }
 .webcontent-spacer{
-	padding:2.428571em 5em 1em !important;
+	padding:2.428571em 5em 1em;
 }
 
 div.login-form {
@@ -93,10 +93,22 @@ div.login-form {
 		display:inline-block;
 		font-size:11px;
 		line-height:19px;
-		font-weight:500;
+		font-weight:700;
 		color:@dark-bg-color;
 		text-align:center;
 		border-radius:3px;
+	}
+	.search-filters{
+		background-color:@secondary-text;
+		&.webcontent-spacer{
+			padding:1em 5em;
+		}
+		h5{
+			font-size:0.857142em;
+			font-weight:500;
+			color:@quaternary-text;
+			margin:0.714285rem 0 0.5rem;
+		}
 	}
 }
 

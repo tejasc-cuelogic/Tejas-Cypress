@@ -17,7 +17,7 @@ const UserNavigation = (props) => {
             <Dropdown.Item onClick={props.handleLogOut}>Log Out</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Menu.Item as={Link} onClick={toggleNotification} to="/app/business"> <Icon name="bell" className="nsgreen" /></Menu.Item>
+        <a className="item" href="#" onClick={toggleNotification}> <Icon name="bell" className="nsgreen" /></a>
       </Aux>
     );
   }
