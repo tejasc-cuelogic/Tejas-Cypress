@@ -70,6 +70,37 @@ export class Business {
         return res;
       });
   }
+
+  xmlFormSubmitted = () => {
+    const {
+      offeringId,
+      annualReportDisclosureRequirements,
+      filerInformation,
+      issuerInformation,
+      offeringInformation,
+      signature,
+      documentList,
+    } = businessStore;
+
+    request
+      .post('http://localhost:3000')
+      .set('Content-Type', 'application/json')
+      .send({
+        offeringId,
+        filerInformation,
+        issuerInformation,
+        offeringInformation,
+        annualReportDisclosureRequirements,
+        signature,
+        documentList: _.filter(_.keys(documentList), key => documentList[key]),
+      })
+      .end((err, res) => {
+        if (err) {
+          return (err);
+        }
+        return res;
+      });
+  }
 }
 
 export default new Business();

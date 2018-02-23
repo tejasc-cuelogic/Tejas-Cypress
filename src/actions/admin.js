@@ -27,7 +27,6 @@ export class Admin {
           if (err) {
             rej(err);
           }
-          console.log(data);
           res(data);
         });
       })

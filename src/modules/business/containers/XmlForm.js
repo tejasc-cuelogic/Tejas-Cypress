@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Form } from 'semantic-ui-react';
+import { Grid, Form, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from '../components/FilerInformation';
@@ -7,6 +7,8 @@ import IssuerInformation from '../components/IssuerInformation';
 import OfferingInformation from '../components/OfferingInformation';
 import AnnualReportDisclosureRequirements from '../components/AnnualReportDisclosureRequirements';
 import Signature from '../components/Signature';
+import FileSelector from '../components/FileSelector';
+import businessActions from '../../../actions/business';
 
 @inject('businessStore')
 @observer
@@ -29,12 +31,19 @@ export default class XmlForm extends React.Component {
   handleSelectChange = (e, { value }) => {
     this.props.businessStore.setCountry(value);
   }
+  handleCheckboxChange = (e) => {
+    this.props.businessStore.toggleRequiredFiles(e.target.textContent);
+  };
+  handleFormSubmit = (e) => {
+    e.preventDefault();
+    businessActions.xmlFormSubmitted();
+  };
 
   render() {
     return (
       <div className="content-spacer">
         <Grid stackable className="edgar-form">
-          <Form size="large">
+          <Form size="large" onSubmit={this.handleFormSubmit}>
             <FilerInformation
               handleInputChange={this.handleFilerInputChange}
             />
@@ -54,6 +63,17 @@ export default class XmlForm extends React.Component {
               handleInputChange={this.handleSignatureInputChange}
               signature={this.props.businessStore.signature}
             />
+            <FileSelector
+              handleCheckboxChange={this.handleCheckboxChange}
+            />
+            <Button
+              fluid
+              color="green"
+              size="large"
+            >
+              Sign Up
+            </Button>
+            <Divider section />
           </Form>
         </Grid>
       </div>
