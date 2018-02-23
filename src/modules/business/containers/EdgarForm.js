@@ -5,12 +5,18 @@ import shortid from 'shortid';
 import '../../../assets/custom.css';
 
 import businessActions from '../../../actions/business';
+import ListErrors from '../../../components/common/ListErrors';
+import SuccessMessage from '../../../components/common/SuccessMessage';
 
 const key = shortid.generate();
 
 @inject('businessStore', 'uiStore')
 @observer
 export default class EdgarForm extends React.Component {
+  componentWillUnmount() {
+    this.props.uiStore.reset();
+  }
+
   handleInputChange = (e) => {
     this.props.businessStore.setTemplateVariable(e.target.name, e.target.value);
   };
@@ -40,6 +46,8 @@ export default class EdgarForm extends React.Component {
               }
             </Grid>
             <Divider section />
+            <ListErrors errors={this.props.uiStore.errors} />
+            <SuccessMessage success={this.props.uiStore.success} />
             <div
               className="form-footer"
               style={{
