@@ -14,16 +14,16 @@ export const FORM_VALUES = [
 ];
 
 export const DOCFILE_TYPES = [
-  'Form C Issuer Certificate.docx',
-  'Form Security Agreement.docx',
-  'Form of Note Purchase Agreement - Revenue Share.docx',
-  'Form of Note Purchase Agreement - Term Note.docx',
-  'Goldstar Escrow Agreement (Form).docx',
-  'National - Template Disclosure Statement (Rev).docx',
-  'National - Template Disclosure Statement (Term).docx',
-  'National Portal - Form of Crowdfunding Portal Agreement (Rev Share).docx',
-  'National Portal - Form of Crowdfunding Portal Agreement (Term).docx',
-  'Resolution - Borrowing Authority (Form).docx',
+  'Form C Issuer Certificate.docx': false,
+  'Form Security Agreement.docx': false,
+  'Form of Note Purchase Agreement - Revenue Share.docx': false,
+  'Form of Note Purchase Agreement - Term Note.docx': false,
+  'Goldstar Escrow Agreement (Form).docx': false,
+  'National - Template Disclosure Statement (Rev).docx': false,
+  'National - Template Disclosure Statement (Term).docx': false,
+  'National Portal - Form of Crowdfunding Portal Agreement (Rev Share).docx': false,
+  'National Portal - Form of Crowdfunding Portal Agreement (Term).docx': false,
+  'Resolution - Borrowing Authority (Form).docx': false,
 ];
 
 export const EDGAR_URL = 'https://6fqagvjv78.execute-api.us-east-1.amazonaws.com/dev/edgar/publish';
