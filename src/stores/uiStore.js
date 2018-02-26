@@ -63,7 +63,8 @@ export class UiStore {
 
   @action
   updateLayoutState(prop) {
-    this.layoutState = { ...{ [prop]: !this.layoutState[prop] } };
+    this.layoutState[prop] = !this.layoutState[prop];
+    console.log(this.layoutState);
   }
 
   @action

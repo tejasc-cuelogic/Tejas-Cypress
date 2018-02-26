@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/MIT
  *
  */
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&subset=latin');
+@import url('https://fonts.googleapis.com/css?family=SF Pro Display:400,700,400italic,700italic&subset=latin');
 /*!
  * # Semantic UI 2.2.14 - Reset
  * http://github.com/semantic-org/semantic-ui/
@@ -569,8 +569,8 @@ body {
   overflow-x: hidden;
   min-width: 320px;
   background: #FFFFFF;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 12px;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 14px;
   line-height: 1.4285em;
   color: rgba(0, 0, 0, 0.87);
   font-smoothing: antialiased;
@@ -585,7 +585,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   font-weight: bold;
@@ -756,6 +756,14 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
         Global Overrides
 *******************************/
 
+@font-face {
+  font-family: 'SF Pro Display';
+  src: url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.eot");
+  src: url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.eot?#iefix") format('embedded-opentype'), url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.woff2") format('woff2'), url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.woff") format('woff'), url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.ttf") format('truetype'), url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.svg#SFProDisplay-Regular") format('svg');
+  font-style: normal;
+  font-weight: 400;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -782,7 +790,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   vertical-align: baseline;
   background: #E0E1E2 none;
   color: rgba(0, 0, 0, 0.6);
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0em 0.25em 0em 0em;
   padding: 0.78571429em 1.5em 0.78571429em;
   text-transform: none;
@@ -4479,7 +4487,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 .ui.primary.buttons .button,
 .ui.primary.button {
-  background-color: #2185D0;
+  background-color: #DB2828;
   color: #FFFFFF;
   text-shadow: none;
   background-image: none;
@@ -4492,21 +4500,21 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 .ui.primary.buttons .button:hover,
 .ui.primary.button:hover {
-  background-color: #1678c2;
+  background-color: #d01919;
   color: #FFFFFF;
   text-shadow: none;
 }
 
 .ui.primary.buttons .button:focus,
 .ui.primary.button:focus {
-  background-color: #0d71bb;
+  background-color: #ca1010;
   color: #FFFFFF;
   text-shadow: none;
 }
 
 .ui.primary.buttons .button:active,
 .ui.primary.button:active {
-  background-color: #1a69a4;
+  background-color: #b21e1e;
   color: #FFFFFF;
   text-shadow: none;
 }
@@ -4515,7 +4523,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 .ui.primary.buttons .active.button:active,
 .ui.primary.active.button,
 .ui.primary.button .active.button:active {
-  background-color: #1279c6;
+  background-color: #d41515;
   color: #FFFFFF;
   text-shadow: none;
 }
@@ -4524,40 +4532,40 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 .ui.basic.primary.buttons .button,
 .ui.basic.primary.button {
-  -webkit-box-shadow: 0px 0px 0px 1px #2185D0 inset !important;
-  box-shadow: 0px 0px 0px 1px #2185D0 inset !important;
-  color: #2185D0 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #DB2828 inset !important;
+  box-shadow: 0px 0px 0px 1px #DB2828 inset !important;
+  color: #DB2828 !important;
 }
 
 .ui.basic.primary.buttons .button:hover,
 .ui.basic.primary.button:hover {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #1678c2 inset !important;
-  box-shadow: 0px 0px 0px 1px #1678c2 inset !important;
-  color: #1678c2 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #d01919 inset !important;
+  box-shadow: 0px 0px 0px 1px #d01919 inset !important;
+  color: #d01919 !important;
 }
 
 .ui.basic.primary.buttons .button:focus,
 .ui.basic.primary.button:focus {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #0d71bb inset !important;
-  box-shadow: 0px 0px 0px 1px #0d71bb inset !important;
-  color: #1678c2 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #ca1010 inset !important;
+  box-shadow: 0px 0px 0px 1px #ca1010 inset !important;
+  color: #d01919 !important;
 }
 
 .ui.basic.primary.buttons .active.button,
 .ui.basic.primary.active.button {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #1279c6 inset !important;
-  box-shadow: 0px 0px 0px 1px #1279c6 inset !important;
-  color: #1a69a4 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #d41515 inset !important;
+  box-shadow: 0px 0px 0px 1px #d41515 inset !important;
+  color: #b21e1e !important;
 }
 
 .ui.basic.primary.buttons .button:active,
 .ui.basic.primary.button:active {
-  -webkit-box-shadow: 0px 0px 0px 1px #1a69a4 inset !important;
-  box-shadow: 0px 0px 0px 1px #1a69a4 inset !important;
-  color: #1a69a4 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #b21e1e inset !important;
+  box-shadow: 0px 0px 0px 1px #b21e1e inset !important;
+  color: #b21e1e !important;
 }
 
 .ui.buttons:not(.vertical) > .basic.primary.button:not(:first-child) {
@@ -4948,80 +4956,6 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 /*******************************
          Site Overrides
 *******************************/
-
-.ui.button,
-.ui.buttons .button {
-  text-transform: uppercase;
-}
-
-.ui.button.rounded,
-.ui.buttons .button.rounded {
-  border-radius: 20px;
-}
-
-.ui.button.green,
-.ui.buttons .button.green {
-  background-color: #A9D943;
-}
-
-.ui.button.green:hover,
-.ui.buttons .button.green:hover,
-.ui.button.green:focus,
-.ui.buttons .button.green:focus,
-.ui.button.green:active,
-.ui.buttons .button.green:active {
-  background-color: #97ca29;
-}
-
-.ui.inverted.button,
-.ui.inverted.buttons .button {
-  text-transform: none;
-}
-
-.ui.inverted.button.link-button,
-.ui.inverted.buttons .button.link-button {
-  padding-left: 0;
-  padding-right: 0;
-  margin-right: 1em;
-}
-
-.ui.inverted.button.link-button.green,
-.ui.inverted.buttons .button.link-button.green,
-.ui.inverted.button.link-button.basic,
-.ui.inverted.buttons .button.link-button.basic {
-  -webkit-box-shadow: none !important;
-  box-shadow: none !important;
-}
-
-.ui.inverted.button.link-button.basic,
-.ui.inverted.buttons .button.link-button.basic {
-  color: #999999 !important;
-}
-
-.ui.inverted.button.link-button.basic:hover,
-.ui.inverted.buttons .button.link-button.basic:hover,
-.ui.inverted.button.link-button.basic:focus,
-.ui.inverted.buttons .button.link-button.basic:focus,
-.ui.inverted.button.link-button.basic:active,
-.ui.inverted.buttons .button.link-button.basic:active {
-  color: #bababa !important;
-  background-color: transparent;
-}
-
-.ui.inverted.button.link-button.green,
-.ui.inverted.buttons .button.link-button.green {
-  color: #A9D943;
-}
-
-.ui.inverted.button.link-button.green:hover,
-.ui.inverted.buttons .button.link-button.green:hover,
-.ui.inverted.button.link-button.green:focus,
-.ui.inverted.buttons .button.link-button.green:focus,
-.ui.inverted.button.link-button.green:active,
-.ui.inverted.buttons .button.link-button.green:active {
-  color: #97ca29;
-  background-color: transparent;
-}
 /*!
  * # Semantic UI 2.2.14 - Container
  * http://github.com/semantic-org/semantic-ui/
@@ -5138,7 +5072,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 /* Text Container */
 
 .ui.text.container {
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   max-width: 700px !important;
   line-height: 1.5;
 }
@@ -5183,193 +5117,6 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 /*******************************
          Site Overrides
 *******************************/
-
-.content-wrapper {
-  min-height: calc(100vh - 58px);
-}
-
-.ui.segment.vertical.content {
-  padding: 50px 0;
-  min-height: calc(100vh - 342px);
-}
-
-.content-spacer {
-  position: relative;
-  padding: 3.714285em 5em;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(48, 48, 48, 0.3);
-  -webkit-transform: scale(0);
-  transform: scale(0);
-}
-
-.overlay.editing {
-  -webkit-transform: scale(1);
-  transform: scale(1);
-  z-index: 1;
-}
-
-.webcontent-spacer {
-  padding: 2.428571em 5em 1em;
-}
-
-div.login-form {
-  height: 100%;
-}
-
-div.login-form .column {
-  max-width: 380px;
-}
-
-div.login-form h1.header {
-  margin-bottom: 1.5em;
-}
-
-div.login-form h1.header > span {
-  font-size: 18px;
-  color: #828282;
-}
-
-div.login-form .note {
-  text-align: center;
-  color: #828282;
-}
-
-div.login-form ul.error-messages {
-  list-style-type: none;
-  padding: 0;
-  text-align: left;
-}
-
-.pull-left {
-  float: left !important;
-}
-
-.pull-right {
-  float: right !important;
-}
-
-.page-header-section {
-  min-height: 132px;
-  background-color: #424242;
-}
-
-.page-header-section h3 {
-  color: #FFFFFF;
-  font-size: 2.142857em;
-}
-
-.page-header-section h3 a.back-link {
-  position: absolute;
-  left: -35px;
-  color: #A9D943;
-}
-
-.page-header-section h3 a.back-link > i.icon,
-.page-header-section h3 a.back-link i.icons {
-  font-size: 0.8em;
-}
-
-.page-header-section h3 a.back-link:hover,
-.page-header-section h3 a.back-link:active,
-.page-header-section h3 a.back-link:focus {
-  color: #97ca29;
-}
-
-.page-header-section span.filter-count {
-  height: 19px;
-  min-width: 19px;
-  padding: 0 4px;
-  margin-right: 1rem;
-  background: #A9D943;
-  display: inline-block;
-  font-size: 11px;
-  line-height: 19px;
-  font-weight: 700;
-  color: #424242;
-  text-align: center;
-  border-radius: 3px;
-}
-
-.page-header-section .search-filters {
-  background-color: #4f4f4f;
-}
-
-.page-header-section .search-filters.webcontent-spacer {
-  padding: 1em 5em;
-}
-
-.page-header-section .search-filters h5 {
-  font-size: 0.857142em;
-  font-weight: 500;
-  color: #999999;
-  margin: 0.714285rem 0 0.5rem;
-}
-
-.notification-panel {
-  width: 330px;
-  height: calc(100vh - 58px);
-  padding: 1.5em 0 0.5em 1.5em;
-  background: #383838;
-  color: #FFFFFF;
-  overflow: auto;
-  position: fixed;
-  right: -350px;
-  top: 0;
-  z-index: 2;
-  -webkit-transition: all 500ms ease-in-out;
-  transition: all 500ms ease-in-out;
-}
-
-.notification-panel.slide-in {
-  right: 0px;
-}
-
-.notification-panel h3 {
-  margin-bottom: 1rem;
-  letter-spacing: 1px;
-}
-
-.notification-panel p.title {
-  font-size: 0.928571em;
-  color: #7d7d7d;
-}
-
-.notification-box {
-  padding: 1em;
-  margin-bottom: 1.285714rem;
-  border-radius: 5px 0 0 5px;
-  background-color: #424242;
-  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
-}
-
-.notification-box .timestamp {
-  font-size: 0.928571em;
-  color: #7d7d7d;
-}
-
-.notification-box h4.amount {
-  font-size: 1.428571em;
-  font-weight: 900;
-  color: #A9D943;
-}
-
-.ui.segment.inverted.footer,
-.ui.primary.segment.inverted.footer {
-  padding: 2em;
-  background-color: #383838;
-}
-
-.footer .ui.header {
-  font-weight: 400;
-}
 /*!
  * # Semantic UI 2.2.14 - Divider
  * http://github.com/semantic-org/semantic-ui/
@@ -5637,10 +5384,6 @@ div.login-form ul.error-messages {
 /*******************************
          Site Overrides
 *******************************/
-
-.notification-box .ui.clearing.hidden.divider {
-  margin: 0.5rem 0;
-}
 /*!
  * # Semantic UI 2.2.14 - Flag
  * http://github.com/semantic-org/semantic-ui/
@@ -5674,7 +5417,7 @@ i.flag:not(.icon) {
 i.flag:not(.icon):before {
   display: inline-block;
   content: '';
-  background: url("./themes/default/assets/images/flags.png") no-repeat -108px -1976px;
+  background: url("./themes/nextseed/assets/images/flags.png") no-repeat -108px -1976px;
   width: 16px;
   height: 11px;
 }
@@ -6937,7 +6680,7 @@ i.flag.zimbabwe:before {
   border: none;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   padding: 0em 0em;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   line-height: 1.28571429em;
   text-transform: none;
@@ -7744,35 +7487,6 @@ a.ui.inverted.grey.header:hover {
 /*******************************
          Site Overrides
 *******************************/
-
-.header-wrap {
-  height: 58px;
-}
-
-.header-wrap .ui.menu {
-  -webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08);
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08);
-}
-
-.header-wrap .ui.menu.large {
-  font-size: 1rem;
-}
-
-.header-wrap .ui.menu .menu .item {
-  font-weight: 500;
-  color: #303030;
-  padding: 0.92857143em 2.285714285714286em;
-}
-
-.header-wrap .ui.menu .menu .item.active {
-  color: #FFFFFF;
-  background-color: #A9D943;
-}
-
-.header-wrap .ui.menu .ui.dropdown .menu > .item {
-  font-weight: 500 !important;
-  padding: 0.78571429em 2.285714285714286em !important;
-}
 /*!
  * # Semantic UI 2.2.14 - Icon
  * http://github.com/semantic-org/semantic-ui/
@@ -7789,8 +7503,8 @@ a.ui.inverted.grey.header:hover {
 
 @font-face {
   font-family: 'Icons';
-  src: url("./themes/default/assets/fonts/icons.eot");
-  src: url("./themes/default/assets/fonts/icons.eot?#iefix") format('embedded-opentype'), url("./themes/default/assets/fonts/icons.woff2") format('woff2'), url("./themes/default/assets/fonts/icons.woff") format('woff'), url("./themes/default/assets/fonts/icons.ttf") format('truetype'), url("./themes/default/assets/fonts/icons.svg#icons") format('svg');
+  src: url("./themes/nextseed/assets/fonts/icons.eot");
+  src: url("./themes/nextseed/assets/fonts/icons.eot?#iefix") format('embedded-opentype'), url("./themes/nextseed/assets/fonts/icons.woff2") format('woff2'), url("./themes/nextseed/assets/fonts/icons.woff") format('woff'), url("./themes/nextseed/assets/fonts/icons.ttf") format('truetype'), url("./themes/nextseed/assets/fonts/icons.svg#icons") format('svg');
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -12410,7 +12124,7 @@ img.ui.bordered.image {
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   text-align: left;
   line-height: 1.21428571em;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding: 0.67857143em 1em;
   background: #FFFFFF;
   border: 1px solid rgba(34, 36, 38, 0.15);
@@ -14552,9 +14266,9 @@ ol.ui.list ol li,
 .ui.list > .item .header {
   display: block;
   margin: 0em;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-weight: 500;
-  color: #999999;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 /* Description */
@@ -15452,37 +15166,6 @@ ol.ui.horizontal.list li:before,
 /*******************************
     User Variable Overrides
 *******************************/
-
-.page-header-section .ui.horizontal.list .item {
-  font-size: 0.857142rem;
-  font-weight: 400;
-  letter-spacing: 1px;
-  color: #FFFFFF;
-}
-
-.page-header-section .ui.horizontal.list a.item {
-  color: #7d7d7d;
-}
-
-.page-header-section .ui.horizontal.list a.item:hover,
-.page-header-section .ui.horizontal.list a.item:focus,
-.page-header-section .ui.horizontal.list a.item.active {
-  color: #A9D943;
-}
-
-.page-header-section .ui.horizontal.list.link > a.item {
-  font-size: 0.857142rem;
-  font-weight: 500;
-  margin-left: 2rem;
-  text-transform: uppercase;
-  color: #7d7d7d;
-}
-
-.page-header-section .ui.horizontal.list.link > a.item:hover,
-.page-header-section .ui.horizontal.list.link > a.item:focus,
-.page-header-section .ui.horizontal.list.link > a.item.active {
-  color: #A9D943;
-}
 /*!
  * # Semantic UI 2.2.14 - Loader
  * http://github.com/semantic-org/semantic-ui/
@@ -17378,7 +17061,7 @@ ol.ui.horizontal.list li:before,
 /* Title */
 
 .ui.steps .step .title {
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   font-weight: bold;
 }
@@ -18161,7 +17844,7 @@ ol.ui.horizontal.list li:before,
 .ui.form input[type="text"],
 .ui.form input[type="file"],
 .ui.form input[type="url"] {
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0em;
   outline: none;
   -webkit-appearance: none;
@@ -19237,137 +18920,6 @@ ol.ui.horizontal.list li:before,
 /*******************************
          Site Overrides
 *******************************/
-
-.form-card.editable {
-  position: relative;
-}
-
-.form-card.editable.editing {
-  z-index: 2;
-}
-
-.form-card.editable .actions {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-}
-
-.form-card.editable .actions a {
-  margin: 0 1rem;
-  font-size: 0.928571em;
-  line-height: 1.428571rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  color: #A9D943;
-}
-
-.form-card.editable .actions a:last-child {
-  margin-right: 0;
-}
-
-.form-card.editable .actions a:hover,
-.form-card.editable .actions a:focus,
-.form-card.editable .actions a:active {
-  color: #97ca29;
-}
-
-.form-card.editable .actions a.negative {
-  color: #999999;
-}
-
-.form-card.editable .actions a.negative:hover,
-.form-card.editable .actions a.negative:focus,
-.form-card.editable .actions a.negative:active {
-  color: #848484;
-}
-
-.form-card.editable .ui.form .fields {
-  margin: 0em;
-  padding: 1em 0;
-}
-
-.form-card.editable .ui.form .fields:nth-child(odd) {
-  background-color: #F7F7F7;
-}
-
-.form-card.editable .ui.form .fields .field {
-  padding: 0 1em;
-}
-
-.form-card.editable .ui.form .ui.label {
-  font-size: 0.928571em;
-  font-weight: 400;
-  line-height: 1.428571rem;
-  color: #999999;
-  padding: 0;
-  background-color: transparent;
-}
-
-.form-card.editable .ui.form input:not([type]),
-.form-card.editable .ui.form input[type=date],
-.form-card.editable .ui.form input[type=datetime-local],
-.form-card.editable .ui.form input[type=email],
-.form-card.editable .ui.form input[type=file],
-.form-card.editable .ui.form input[type=number],
-.form-card.editable .ui.form input[type=password],
-.form-card.editable .ui.form input[type=search],
-.form-card.editable .ui.form input[type=tel],
-.form-card.editable .ui.form input[type=text],
-.form-card.editable .ui.form input[type=time],
-.form-card.editable .ui.form input[type=url] {
-  font-weight: 500;
-  line-height: 1.428571rem;
-  color: #303030;
-  padding: 0 1em;
-  border-width: 0;
-  background-color: transparent;
-}
-
-/*  Inverted Form  */
-
-.ui.form.inverted label {
-  font-weight: 400;
-  color: #FFFFFF;
-}
-
-.ui.form.inverted input:not([type]),
-.ui.form.inverted input[type=date],
-.ui.form.inverted input[type=datetime-local],
-.ui.form.inverted input[type=email],
-.ui.form.inverted input[type=file],
-.ui.form.inverted input[type=number],
-.ui.form.inverted input[type=password],
-.ui.form.inverted input[type=search],
-.ui.form.inverted input[type=tel],
-.ui.form.inverted input[type=text],
-.ui.form.inverted input[type=time],
-.ui.form.inverted input[type=url] {
-  border-radius: 0;
-  color: #999999;
-  background-color: transparent;
-  border-color: transparent transparent #828282;
-}
-
-.page-header-section .ui.input.inverted .icon {
-  color: #FFFFFF;
-  opacity: 1;
-}
-
-.notification-box .ui.form.inverted input:not([type]),
-.notification-box .ui.form.inverted input[type=date],
-.notification-box .ui.form.inverted input[type=datetime-local],
-.notification-box .ui.form.inverted input[type=email],
-.notification-box .ui.form.inverted input[type=file],
-.notification-box .ui.form.inverted input[type=number],
-.notification-box .ui.form.inverted input[type=password],
-.notification-box .ui.form.inverted input[type=search],
-.notification-box .ui.form.inverted input[type=tel],
-.notification-box .ui.form.inverted input[type=text],
-.notification-box .ui.form.inverted input[type=time],
-.notification-box .ui.form.inverted input[type=url] {
-  padding-left: 0;
-  padding-right: 0;
-}
 /*!
  * # Semantic UI 2.2.14 - Grid
  * http://github.com/semantic-org/semantic-ui/
@@ -21701,7 +21253,7 @@ ol.ui.horizontal.list li:before,
   display: -ms-flexbox;
   display: flex;
   margin: 1rem 0em;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   font-weight: normal;
   border: 1px solid rgba(34, 36, 38, 0.15);
@@ -24019,7 +23571,7 @@ Floated Menu / Item
 
 .ui.message .header {
   display: block;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   margin: -0.14285714em 0em 0rem 0em;
 }
@@ -26302,7 +25854,7 @@ Floated Menu / Item
 .ui.card > .content > .header {
   display: block;
   margin: '';
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: rgba(0, 0, 0, 0.85);
 }
 
@@ -27227,40 +26779,6 @@ a.ui.card:hover,
 /*******************************
     User Variable Overrides
 *******************************/
-
-.form-card {
-  border-radius: 10px;
-  padding: 2.285714em;
-  background-color: #ffffff;
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
-}
-
-.form-card h3 {
-  font-size: 18px;
-  margin-bottom: 1.5rem;
-}
-
-.form-card h4 {
-  font-size: 14px;
-  color: #4f4f4f;
-}
-
-.form-card h4 .checkbox label {
-  font-weight: normal;
-}
-
-.form-card .grid.divided .column {
-  padding: 0 3.285714rem;
-}
-
-.form-card .grid.divided .column:first-child {
-  padding-left: 1rem;
-}
-
-.form-card .grid.divided .column:last-child {
-  padding-right: 1rem;
-}
 /*!
  * # Semantic UI 2.2.14 - Comment
  * http://github.com/semantic-org/semantic-ui/
@@ -28010,7 +27528,7 @@ a.ui.card:hover,
 .ui.items > .item > .content > .header {
   display: inline-block;
   margin: -0.21425em 0em 0em;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.85);
 }
@@ -28489,7 +28007,7 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .value,
 .ui.statistic > .value {
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 4rem;
   font-weight: normal;
   line-height: 1em;
@@ -28504,7 +28022,7 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .label,
 .ui.statistic > .label {
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
@@ -29052,7 +28570,7 @@ a.ui.card:hover,
 
 .ui.accordion .title:not(.ui) {
   padding: 0.5em 0em;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   color: rgba(0, 0, 0, 0.87);
 }
@@ -29280,33 +28798,6 @@ a.ui.card:hover,
 /*******************************
         User Overrides
 *******************************/
-
-/* Accordion Title */
-
-.ui.accordion .title:not(.ui) {
-  position: relative;
-  padding-right: 30px;
-}
-
-/* Dropdown Icon */
-
-.ui.accordion .title .angle.icon,
-.ui.accordion .accordion .title .angle.icon {
-  margin: 0;
-  height: 19px;
-  font-size: 1.6em;
-  color: #A9D943;
-  line-height: 1.357114rem;
-  position: absolute;
-  right: 0;
-  top: 7px;
-}
-
-.ui.accordion .title.active .angle.icon,
-.ui.accordion .accordion .title.active .angle.icon {
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
 /*!
  * # Semantic UI 2.2.14 - Checkbox
  * http://github.com/semantic-org/semantic-ui/
@@ -31855,18 +31346,6 @@ select.ui.dropdown {
 /*******************************
         User Overrides
 *******************************/
-
-.notification-box .ui.dropdown .icon.dropdown {
-  margin: 0 5px 0 0;
-}
-
-.notification-box .ui.dropdown .icon.dropdown:before {
-  content: "\00B7\00B7\00B7";
-  font-size: 27px;
-  letter-spacing: -3px;
-  line-height: 10px;
-  color: #999999;
-}
 /*!
  * # Semantic UI 2.2.14 - Video
  * http://github.com/semantic-org/semantic-ui/
@@ -32110,7 +31589,7 @@ select.ui.dropdown {
 
 .ui.modal > .header {
   display: block;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   margin: 0em;
   padding: 1.25rem 1.5rem;
@@ -32869,7 +32348,7 @@ a.ui.nag {
 
 .ui.popup > .header {
   padding: 0em;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   line-height: 1.2;
   font-weight: bold;
@@ -34647,7 +34126,7 @@ a.ui.nag {
 
 .ui.search > .results .result .title {
   margin: -0.14285714em 0em 0em;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
   color: rgba(0, 0, 0, 0.85);
@@ -34673,7 +34152,7 @@ a.ui.nag {
 }
 
 .ui.search > .results > .message .header {
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1rem;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.87);
@@ -34886,7 +34365,7 @@ a.ui.nag {
 .ui.category.search > .results .category > .name {
   width: 100px;
   background: transparent;
-  font-family: 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   float: 1em;
   float: left;
@@ -35805,158 +35284,6 @@ body.pushable > .pusher {
 /*******************************
          Site Overrides
 *******************************/
-
-.pushable > .sidebar ~ .pusher {
-  padding-left: 64px;
-  -webkit-transition: all .5s ease;
-  transition: all .5s ease;
-  height: calc(100vh - 58px);
-  overflow-y: auto;
-  background-color: #fafafa;
-}
-
-.pushable > .sidebar ~ .pusher .ui.vertical.segment.content {
-  padding: 0;
-  min-height: calc(100vh - 58px);
-}
-
-.sidebar .user-picture {
-  margin: 1.714285em 0;
-  text-align: center;
-  color: #FFFFFF;
-}
-
-.sidebar .user-picture > img,
-.sidebar .user-picture h2,
-.sidebar .user-picture h3 {
-  -webkit-transition: all .5s ease;
-  transition: all .5s ease;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.sidebar.visible .user-picture > img {
-  max-width: 90px;
-  margin: 0 auto 10px;
-}
-
-.sidebar.visible .user-picture h2 {
-  font-size: 16px;
-  margin: 0 0 5px;
-  font-weight: normal;
-}
-
-.sidebar.visible .user-picture h3 {
-  font-size: 14px;
-  margin: 0;
-  font-weight: normal;
-  color: #828282;
-}
-
-.sidebar:not(.visible) .user-picture {
-  margin: 1.714285em 0 .5em;
-}
-
-.sidebar:not(.visible) .user-picture > img {
-  max-width: 30px;
-  margin: 0 auto;
-}
-
-.sidebar:not(.visible) .user-picture h2,
-.sidebar:not(.visible) .user-picture h3 {
-  font-size: 0;
-  line-height: 0;
-  margin: 0;
-}
-
-.ui.inverted.menu {
-  background: #383838;
-}
-
-.ui.sidebar.left.visible.thin ~ .fixed,
-.ui.sidebar.left.visible.thin ~ .pusher {
-  padding-left: 220px;
-  -webkit-transform: translate3D(0, 0, 0);
-  transform: translate3D(0, 0, 0);
-}
-
-.ui.sidebar.left.push {
-  width: 64px;
-  visibility: visible;
-  -webkit-transform: translate3D(0, 0, 0);
-  transform: translate3D(0, 0, 0);
-  -webkit-transition: width .5s ease;
-  transition: width .5s ease;
-}
-
-.ui.sidebar.left.push .item {
-  min-width: auto !important;
-  text-align: left;
-  overflow: hidden;
-  padding: 1em 1.5em;
-  color: #828282;
-}
-
-.ui.sidebar.left.push .item:first-child:before,
-.ui.sidebar.left.push .item:before {
-  display: none;
-  background: none;
-}
-
-.ui.sidebar.left.push .item > .icon:not(.dropdown) {
-  float: left;
-  height: auto;
-  margin: 0 !important;
-  font-size: 1.14285714em !important;
-  line-height: 22px;
-  position: relative;
-}
-
-.ui.sidebar.left.push .item span {
-  opacity: 0;
-  display: block;
-  line-height: 22px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.ui.sidebar.left.push .item.collapseIcon {
-  bottom: 0;
-  margin: 0;
-}
-
-.ui.sidebar.left.push .item.collapseIcon:before {
-  display: none;
-}
-
-.ui.sidebar.left.push .item.active {
-  background: transparent;
-  color: #A9D943 !important;
-}
-
-.ui.sidebar.left.push .item.active > i.icon:after {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 3px;
-  display: block;
-  background: #A9D943;
-  position: absolute;
-  left: 50%;
-  margin-left: -2px;
-  bottom: -9px;
-}
-
-.ui.sidebar.visible.push {
-  width: 220px;
-}
-
-.ui.sidebar.visible.push .item span {
-  opacity: 1;
-  margin-left: 35px;
-  max-width: 153px;
-}
 /*!
  * # Semantic UI 2.2.14 - Sticky
  * http://github.com/semantic-org/semantic-ui/
