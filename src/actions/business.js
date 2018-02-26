@@ -1,9 +1,9 @@
-import request from 'superagent';
 import _ from 'lodash';
 
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
 import { EDGAR_URL, XML_URL } from './../constants/business';
+import ApiService from '../services/api';
 
 export class Business {
   getFormattedInformation = (info) => {
@@ -17,22 +17,9 @@ export class Business {
   generateDocxFile = () => {
     const { templateVariables, documentList } = businessStore;
     uiStore.toggleSubmitButton();
-    // TODO: Move the call to the service layer
-    new Promise((res, rej) => {
-      request
-        .post(EDGAR_URL)
-        .set('Content-Type', 'application/json')
-        .send({ templateVariables, documentList: _.keys(documentList) })
-        .end((err, data) => {
-          if (err) {
-            rej(err);
-          }
-          res(data);
-        });
-    })
+    ApiService.post(EDGAR_URL, { templateVariables, documentList: _.keys(documentList) })
       .then((data) => {
-        const offeringId = data.body.requestId;
-        uiStore.setSuccess(`Successfully created docx files with id ${offeringId}`);
+        uiStore.setSuccess(`Successfully created docx files with id ${data.body.requestId}`);
       })
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
@@ -52,28 +39,18 @@ export class Business {
       documentList,
     } = businessStore;
 
-    new Promise((res, rej) => {
-      request
-        .post(XML_URL)
-        .set('Content-Type', 'application/json')
-        .send({
-          offeringId,
-          offeringUrl,
-          filerInformation: this.getFormattedInformation(filerInformation),
-          issuerInformation: this.getFormattedInformation(issuerInformation),
-          offeringInformation: this.getFormattedInformation(offeringInformation),
-          annualReportDisclosureRequirements:
-            this.getFormattedInformation(annualReportRequirements),
-          signature: this.getFormattedInformation(signature),
-          documentList: _.filter(_.keys(documentList), key => documentList[key]),
-        })
-        .end((err, data) => {
-          if (err) {
-            rej(err);
-          }
-          res(data);
-        });
-    })
+    const payload = {
+      offeringId,
+      offeringUrl,
+      filerInformation: this.getFormattedInformation(filerInformation),
+      issuerInformation: this.getFormattedInformation(issuerInformation),
+      offeringInformation: this.getFormattedInformation(offeringInformation),
+      annualReportDisclosureRequirements: this.getFormattedInformation(annualReportRequirements),
+      signature: this.getFormattedInformation(signature),
+      documentList: _.filter(_.keys(documentList), key => documentList[key]),
+    };
+
+    ApiService.post(XML_URL, payload)
       .then(data => console.log(data))
       .catch(err => console.log(err));
   }

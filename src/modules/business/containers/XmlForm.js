@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Form, Divider, Button } from 'semantic-ui-react';
+import { Grid, Form, Divider, Button, Dropdown } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
@@ -27,6 +27,13 @@ export default class XmlForm extends React.Component {
       <div className="content-spacer">
         <Grid stackable className="edgar-form">
           <Form size="large" onSubmit={this.handleFormSubmit}>
+            <Dropdown
+              fluid
+              search
+              selection
+              placeholder="Select Business Filing"
+              onChange={this.handleSelectChange}
+            />
             <Form.Input
               label="Website URL"
               defaultValue={this.props.businessStore.offeringUrl}

@@ -6,6 +6,10 @@ import { Divider, Grid, Header, Form } from 'semantic-ui-react';
 @inject('businessStore')
 @observer
 export default class Signature extends React.Component {
+  componentWillMount() {
+    // TODO: Call Business filing list api from here
+  }
+
   handleChange = (e, { name, value }) => {
     this.props.businessStore.setSignatureInfo(name, value);
   }
