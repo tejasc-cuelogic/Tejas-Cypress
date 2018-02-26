@@ -26,3 +26,35 @@
 .ui.accordion .accordion .title .dropdown.icon:before {
   content: '\f0da'/*rtl:'\f0d9'*/;
 }
+
+
+//    Custom for NS V.2 
+/* Accordion Title */
+.ui.accordion{
+	.title:not(.ui){
+		position:relative;
+		padding-right:30px;
+	}
+}
+
+/* Dropdown Icon */
+.ui.accordion,
+.ui.accordion .accordion{
+	.title{
+		.angle.icon {
+			margin:0;
+			height:19px;
+			font-size:1.6em;
+			color:@theme-primary;
+			line-height:1.357114rem;
+			position:absolute;
+			right:0;
+			top:7px;
+		}
+		&.active{
+			.angle.icon{
+				transform:rotate(180deg);
+			}
+		}
+	}
+}

@@ -18,7 +18,7 @@
 ;
 @background: @white;
 @color: @textColor;
-@borderWidth: 1px;
+@borderWidth: 0;
 @border: @borderWidth solid @borderColor;
 @boxShadow: none;
 @textAlign: left;
@@ -28,17 +28,17 @@
 ---------------*/
 
 /* Table Row */
-@rowBorder: 1px solid @internalBorderColor;
+@rowBorder: 0px solid @internalBorderColor;
 
 /* Table Cell */
 @cellVerticalPadding: @relativeMini;
 @cellHorizontalPadding: @relativeMini;
 @cellVerticalAlign: inherit;
 @cellTextAlign: inherit;
-@cellBorder: 1px solid @internalBorderColor;
+@cellBorder: 0px solid @internalBorderColor;
 
 /* Table Header */
-@headerBorder: 1px solid @internalBorderColor;
+@headerBorder: 0px solid @internalBorderColor;
 @headerDivider: none;
 @headerBackground: @offWhite;
 @headerAlign: inherit;
@@ -173,7 +173,7 @@
 @sortableBackground: '';
 @sortableColor: @textColor;
 
-@sortableBorder: 1px solid @borderColor;
+@sortableBorder: 0px solid @borderColor;
 @sortableIconWidth: auto;
 @sortableIconDistance: 0.5em;
 @sortableIconOpacity: 0.8;

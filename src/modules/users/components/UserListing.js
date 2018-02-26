@@ -19,7 +19,7 @@ const paginateOptions = {
 
 const userListing = props => (
   <Aux>
-    <Table striped sortable>
+    <Table striped sortable className="user-list">
       <Table.Header>
         <Table.Row>
           { props.header.map(item => <Table.HeaderCell key={item[0]}>{item[1]}</Table.HeaderCell>)}
@@ -28,14 +28,12 @@ const userListing = props => (
       <Table.Body>
         {_.map(props.listData, user => (
           <Table.Row key={user.Username}>
-            <Table.Cell>
+            <Table.Cell collapsing>
               <Image src={Userimage} size="mini" avatar circular />
             </Table.Cell>
             <Table.Cell>
-              {`${user.given_name} ${user.family_name}`}
-              {user.email &&
-                <span className="email">{user.email}</span>
-              }
+              <span className="user-name">{`${user.given_name} ${user.family_name}`}</span>
+              {user.email}
             </Table.Cell>
             <Table.Cell>Detroit, MI (80331)</Table.Cell>
             <Table.Cell>617 434-1551</Table.Cell>

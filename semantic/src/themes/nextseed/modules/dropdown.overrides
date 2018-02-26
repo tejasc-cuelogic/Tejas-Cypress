@@ -60,3 +60,19 @@
   content: "\f0da";
 }
 */
+
+//    Custom for NS V.2 
+.notification-box{
+	.ui.dropdown{
+		.icon.dropdown{
+			margin:0 5px 0 0;
+			&:before{
+				content:"\00B7\00B7\00B7";
+				font-size:27px;
+				letter-spacing:-3px;
+				line-height:10px;
+				color:@quaternary-text;
+			}
+		}
+	}
+}

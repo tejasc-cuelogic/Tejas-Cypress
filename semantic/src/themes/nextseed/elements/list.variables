@@ -52,8 +52,8 @@
 
 /* Header */
 @itemHeaderFontFamily: @headerFont;
-@itemHeaderFontWeight: bold;
-@itemHeaderColor: @textColor;
+@itemHeaderFontWeight: 500;
+@itemHeaderColor: @quaternary-text;
 
 /* Description */
 @itemDescriptionColor: rgba(0, 0, 0, 0.7);

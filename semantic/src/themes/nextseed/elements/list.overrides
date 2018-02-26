@@ -1,3 +1,32 @@
 /*******************************
          Theme Overrides
 *******************************/
+
+.page-header-section{
+    .ui.horizontal.list{
+        .item{
+            // font-size:0.857142rem;
+            font-weight:400;
+            // letter-spacing:1px;
+            color:@inverse-text;
+        }
+        a.item{
+            color:@inverse-secondary-text;
+            &:hover, &:focus, &.active{
+                color:@theme-primary;
+            }
+        }
+        &.link{
+            > a.item{
+                // font-size:0.857142rem;
+                font-weight:500;
+                margin-left:2rem;
+                text-transform:uppercase;
+                color:@inverse-secondary-text;
+                &:hover, &:focus, &.active{
+                    color:@theme-primary;
+                }
+            }
+        }
+    }
+}

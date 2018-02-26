@@ -1,7 +1,3 @@
 /*******************************
     User Variable Overrides
 *******************************/
-/* Header */
-@itemHeaderFontWeight: 500;
-@itemHeaderColor: @quaternary-text;
-
