@@ -1,3 +1,11 @@
 /*******************************
         Global Overrides
 *******************************/
+
+@font-face {
+ font-family: 'SF Pro Display';
+ src: @fallbackSRCRegular;
+ src: @srcRegular;
+ font-style: normal;
+ font-weight: 400;
+}
