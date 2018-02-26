@@ -6,6 +6,10 @@ import { inject, observer } from 'mobx-react';
 @inject('businessStore')
 @observer
 export default class FileSelector extends React.Component {
+  handleChange = (e) => {
+    this.props.businessStore.toggleRequiredFiles(e.target.textContent);
+  };
+
   render() {
     return (
       <div>
@@ -17,7 +21,7 @@ export default class FileSelector extends React.Component {
                   label={type}
                   name={type}
                   checked={value}
-                  onChange={this.props.handleCheckboxChange}
+                  onChange={this.handleChange}
                 />
               </GridColumn>
             ))

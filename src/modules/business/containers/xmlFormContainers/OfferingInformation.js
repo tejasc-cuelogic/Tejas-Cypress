@@ -14,6 +14,10 @@ const LABEL1 = 'Any other financial interest in the issuer held by the intermedi
 @inject('businessStore')
 @observer
 export default class OfferingInformation extends React.Component {
+  handleChange = (e, { name, value }) => {
+    this.props.businessStore.setOfferingInfo(name, value);
+  }
+
   render() {
     const { offeringInformation } = this.props.businessStore;
     return (
@@ -28,62 +32,62 @@ export default class OfferingInformation extends React.Component {
             label={LABEL}
             name="compensationAmount"
             defaultValue={offeringInformation.compensationAmount.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
           />
           <Form.TextArea
             label={LABEL1}
             name="financialInterest"
             defaultValue={offeringInformation.financialInterest.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
           />
           <Form.Input
             label="Type of Security Offered"
             name="securityOfferedType"
             defaultValue={offeringInformation.securityOfferedType.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
           />
           <Form.Input
             label="Price (or Method for Determining Price)"
             name="priceDeterminationMethod"
             defaultValue={offeringInformation.priceDeterminationMethod.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
           />
           <Form.Input
             label="Target Offering Amount"
             name="offeringAmount"
             defaultValue={offeringInformation.offeringAmount.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
           />
           <Form.Input
             label="Maximum Offering Amount (if different from Target Offering Amount)"
             name="priceDeterminationMethod"
             defaultValue={offeringInformation.priceDeterminationMethod.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
           />
           <Form.Input
             label="Oversubscriptions Accepted"
             name="overSubscriptionAccepted"
             defaultValue={offeringInformation.overSubscriptionAccepted.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
           />
 
           <Form.Input
             label="If yes, disclose how oversubscriptions will be allocated"
             name="overSubscriptionAllocationType"
             defaultValue={offeringInformation.overSubscriptionAllocationType.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
           />
           <Form.Input
             label="Deadline to reach the Target Offering Amount"
             name="maximumOfferingAmount"
             defaultValue={offeringInformation.maximumOfferingAmount.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
           />
           <Form.Input
             label="Deadline Date"
             name="deadlineDate"
             defaultValue={offeringInformation.deadlineDate.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
           />
         </Grid.Column>
       </Grid>

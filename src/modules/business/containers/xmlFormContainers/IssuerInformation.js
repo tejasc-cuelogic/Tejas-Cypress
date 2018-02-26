@@ -5,6 +5,14 @@ import { inject, observer } from 'mobx-react';
 @inject('businessStore')
 @observer
 export default class IssuerInformation extends React.Component {
+  handleChange = (e, { name, value }) => {
+    this.props.businessStore.setIssuerInfo(name, value);
+  }
+
+  handleSelectChange = (e, { value }) => {
+    this.props.businessStore.setCountry(value);
+  }
+
   render() {
     const { issuerInformation } = this.props.businessStore;
     return (
@@ -20,7 +28,7 @@ export default class IssuerInformation extends React.Component {
             label="Name of Issuer"
             name="nameOfIssuer"
             defaultValue={issuerInformation.nameOfIssuer.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <p>Legal Status of Issuer</p>
@@ -29,7 +37,7 @@ export default class IssuerInformation extends React.Component {
             label="Form"
             name="legalStatusForm"
             defaultValue={issuerInformation.legalStatusForm.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Input
@@ -37,7 +45,7 @@ export default class IssuerInformation extends React.Component {
             label="Jurisdiction of Incorporation/Organization"
             name="jurisdictionOrganization"
             defaultValue={issuerInformation.jurisdictionOrganization.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Input
@@ -45,7 +53,7 @@ export default class IssuerInformation extends React.Component {
             label="Date of Incorporation/Organization"
             name="dateIncorporation"
             defaultValue={issuerInformation.dateIncorporation.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <p>Physical Address of issuer</p>
@@ -54,7 +62,7 @@ export default class IssuerInformation extends React.Component {
             label="Address Line 1"
             name="street1"
             defaultValue={issuerInformation.street1.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Input
@@ -62,7 +70,7 @@ export default class IssuerInformation extends React.Component {
             label="City"
             name="city"
             defaultValue={issuerInformation.city.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Input
@@ -70,7 +78,7 @@ export default class IssuerInformation extends React.Component {
             label="State/Country"
             name="stateOrCountry"
             defaultValue={issuerInformation.stateOrCountry.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Input
@@ -78,7 +86,7 @@ export default class IssuerInformation extends React.Component {
             label="Mailing Zip/ Zip Code"
             name="zipCode"
             defaultValue={issuerInformation.zipCode.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Input
@@ -86,7 +94,7 @@ export default class IssuerInformation extends React.Component {
             label="Website of Issuer"
             name="issuerWebsite"
             defaultValue={issuerInformation.issuerWebsite.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <p>Intermediary through which the Offering will be Conducted</p>
@@ -95,7 +103,7 @@ export default class IssuerInformation extends React.Component {
             label="CIK"
             name="commissionCik"
             defaultValue={issuerInformation.commissionCik.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Input
@@ -103,7 +111,7 @@ export default class IssuerInformation extends React.Component {
             label="Company Name"
             name="companyName"
             defaultValue={issuerInformation.companyName.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Input
@@ -111,7 +119,7 @@ export default class IssuerInformation extends React.Component {
             label="Commission File Numbe"
             name="commissionFileNumber"
             defaultValue={issuerInformation.commissionFileNumber.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Input
@@ -119,7 +127,7 @@ export default class IssuerInformation extends React.Component {
             label="CRD Number"
             name="cardNumber"
             defaultValue={issuerInformation.cardNumber.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
         </Grid.Column>

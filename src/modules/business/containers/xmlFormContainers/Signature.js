@@ -6,6 +6,10 @@ import { Divider, Grid, Header, Form } from 'semantic-ui-react';
 @inject('businessStore')
 @observer
 export default class Signature extends React.Component {
+  handleChange = (e, { name, value }) => {
+    this.props.businessStore.setSignatureInfo(name, value);
+  }
+
   render() {
     const { signature } = this.props.businessStore;
     return (
@@ -21,7 +25,7 @@ export default class Signature extends React.Component {
               label={field.label}
               name={field.key}
               defaultValue={field.value}
-              onChange={this.props.handleInputChange}
+              onChange={this.handleChange}
               key={field.key}
             />
           ))}

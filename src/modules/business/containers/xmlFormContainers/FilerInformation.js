@@ -5,6 +5,10 @@ import { inject, observer } from 'mobx-react';
 @inject('businessStore')
 @observer
 export default class FilerInformation extends React.Component {
+  handleChange = (e, { name, value }) => {
+    this.props.businessStore.setFilerInfo(name, value);
+  }
+
   render() {
     const { filerInformation } = this.props.businessStore;
     return (
@@ -20,7 +24,7 @@ export default class FilerInformation extends React.Component {
             label="Filer CIK"
             name="filerCik"
             defaultValue={filerInformation.filerCik.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Input
@@ -28,7 +32,7 @@ export default class FilerInformation extends React.Component {
             label="Filer CCC"
             name="filerCcc"
             defaultValue={filerInformation.filerCcc.value}
-            onChange={this.props.handleInputChange}
+            onChange={this.handleChange}
             width={8}
           />
           <Form.Group>
@@ -36,14 +40,14 @@ export default class FilerInformation extends React.Component {
               label="Live"
               value="LIVE"
               name="liveTestFlag"
-              onChange={this.props.handleInputChange}
+              onChange={this.handleChange}
               width={8}
             />
             <Form.Radio
               label="Test"
               value="TEST"
               name="liveTestFlag"
-              onChange={this.props.handleInputChange}
+              onChange={this.handleChange}
               width={8}
             />
           </Form.Group>
