@@ -10,16 +10,20 @@ import Signature from './xmlFormContainers/Signature';
 import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 
-@inject('businessStore')
+@inject('businessStore', 'uiStore')
 @observer
 export default class XmlForm extends React.Component {
+  componentWillMount() {
+    businessActions.listOfferings();
+  }
   handleUrlChange = (e, { value }) => {
     this.props.businessStore.setOfferingUrl(value);
   }
+  handleSelectChange = (e, { value }) => this.props.businessStore.setOfferingId(value);
 
   handleFormSubmit = (e) => {
     e.preventDefault();
-    businessActions.xmlFormSubmitted();
+    businessActions.generateXml();
   };
 
   render() {
@@ -31,6 +35,8 @@ export default class XmlForm extends React.Component {
               fluid
               search
               selection
+              loading={this.props.uiStore.dropdownLoader}
+              options={this.props.businessStore.offeringList}
               placeholder="Select Business Filing"
               onChange={this.handleSelectChange}
             />

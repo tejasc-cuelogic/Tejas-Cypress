@@ -438,6 +438,8 @@ export const COUNTRIES = [
   { key: '1V', value: '1V', text: 'NORTHERN MARIANA ISLANDS' },
 ];
 
-export const EDGAR_URL = '/publish';
+export const EDGAR_URL = '/edgar/publish';
 
-export const XML_URL = '/primary-data';
+export const XML_URL = '/edgar/primary-data';
+
+export const GRAPHQL = '/graphql';

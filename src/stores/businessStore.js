@@ -54,6 +54,9 @@ export class BusinessStore {
   @observable
   documentList = { ...DOCFILE_TYPES };
 
+  @observable
+  offeringList = [];
+
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
   }
@@ -66,6 +69,11 @@ export class BusinessStore {
   @action
   toggleRequiredFiles(key) {
     this.documentList[key] = !this.documentList[key];
+  }
+
+  @action
+  setOfferingId(id) {
+    this.offeringId = id;
   }
 
   @action
@@ -101,6 +109,11 @@ export class BusinessStore {
   @action
   setCountry(value) {
     this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
+  }
+
+  @action
+  setOfferingList(list) {
+    this.offeringList = list;
   }
 }
 
