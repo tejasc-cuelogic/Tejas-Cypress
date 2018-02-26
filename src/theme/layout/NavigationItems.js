@@ -17,7 +17,10 @@ const UserNavigation = (props) => {
             <Dropdown.Item onClick={props.handleLogOut}>Log Out</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <a className="item" href="#" onClick={toggleNotification}> <Icon name="bell" className="nsgreen" /></a>
+        <a className="item notification" href="#" onClick={toggleNotification}>
+          <Icon name="bell" />
+          <span className="unread-count">3</span>
+        </a>
       </Aux>
     );
   }

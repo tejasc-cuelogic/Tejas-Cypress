@@ -14,7 +14,7 @@
        Fonts
 --------------------*/
 
-@fontName: 'SF Pro Display';
+@fontName: 'SF Pro Display Regular';
 @fontFileName: 'SFProDisplay';
 @fallbackSRCRegular: url("@{fontPath}/@{fontFileName}-Regular.eot");
 @srcRegular:
@@ -25,18 +25,55 @@
  url("@{fontPath}/@{fontFileName}-Regular.svg#SFProDisplay-Regular") format('svg')
 ;
 
-@headerFont   :"SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@pageFont   :"SF Pro Display", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@fontName: 'SF Pro Display Medium';
+@fontFileName: 'SFProDisplay';
+@fallbackSRCMedium: url("@{fontPath}/@{fontFileName}-Medium.eot");
+@srcMedium:
+ url("@{fontPath}/@{fontFileName}-Medium.eot?#iefix") format('embedded-opentype'),
+ url("@{fontPath}/@{fontFileName}-Medium.woff2") format('woff2'),
+ url("@{fontPath}/@{fontFileName}-Medium.woff") format('woff'),
+ url("@{fontPath}/@{fontFileName}-Medium.ttf") format('truetype'),
+ url("@{fontPath}/@{fontFileName}-Medium.svg#SFProDisplay-Medium") format('svg')
+;
+
+@fontName: 'SF Pro Display Bold';
+@fontFileName: 'SFProDisplay';
+@fallbackSRCBold: url("@{fontPath}/@{fontFileName}-Bold.eot");
+@srcBold:
+ url("@{fontPath}/@{fontFileName}-Bold.eot?#iefix") format('embedded-opentype'),
+ url("@{fontPath}/@{fontFileName}-Bold.woff2") format('woff2'),
+ url("@{fontPath}/@{fontFileName}-Bold.woff") format('woff'),
+ url("@{fontPath}/@{fontFileName}-Bold.ttf") format('truetype'),
+ url("@{fontPath}/@{fontFileName}-Bold.svg#SFProDisplay-Bold") format('svg')
+;
+
+@fontName: 'SF Pro Display Heavy';
+@fontFileName: 'SFProDisplay';
+@fallbackSRCHeavy: url("@{fontPath}/@{fontFileName}-Heavy.eot");
+@srcHeavy:
+ url("@{fontPath}/@{fontFileName}-Heavy.eot?#iefix") format('embedded-opentype'),
+ url("@{fontPath}/@{fontFileName}-Heavy.woff2") format('woff2'),
+ url("@{fontPath}/@{fontFileName}-Heavy.woff") format('woff'),
+ url("@{fontPath}/@{fontFileName}-Heavy.ttf") format('truetype'),
+ url("@{fontPath}/@{fontFileName}-Heavy.svg#SFProDisplay-Heavy") format('svg')
+;
+
+@headerFont 	:"SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont   	:"SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+@regularFont	:"SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@boldFont		:"SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@heavyFont		:"SF Pro Display Heavy", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
 /*-------------------
       Base Sizes
 --------------------*/
 
 /* This is the single variable that controls them all */
-@emSize   : 12px;
+@emSize   : 14px;
 
 /* The size of page text  */
-@fontSize : 12px;
+@fontSize : 14px;
 
 
 /*-------------------
@@ -65,7 +102,7 @@
   Page Heading
 ---------------*/
 
-@headerFontWeight : bold;
+@headerFontWeight : 500;
 @headerLineHeight : unit((18 / 14), em);
 
 @h1 : unit((28 / 14), rem);

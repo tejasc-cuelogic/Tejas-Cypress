@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { Grid } from 'semantic-ui-react';
 
 import ListErrors from './../../../components/common/ListErrors';
 import SettingsForm from './../components/SettingsForm';
@@ -16,29 +17,37 @@ class Settings extends React.Component {
 
   render() {
     return (
-      <div className="settings-page">
-        <div className="container page">
-          <div className="row">
-            <div className="col-md-6 offset-md-3 col-xs-12">
-              <h1 className="text-xs-center">Your Settings</h1>
-
+      <div>
+        <div className="page-header-section webcontent-spacer">
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={16}>
+                <h3>Your Settings</h3>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </div>
+        <div className="login-form content-spacer">
+          {/* <Header as="h1" textAlign="center">Your Settings</Header> */}
+          <Grid
+            textAlign="center"
+            verticalAlign="middle"
+          >
+            <Grid.Column>
               <ListErrors errors={this.props.userStore.updatingUserErrors} />
-
               <SettingsForm
                 currentUser={this.props.userStore.currentUser}
                 onSubmitForm={user => this.props.userStore.updateUser(user)}
               />
-
-              <hr />
-
-              <button
+              {/* <hr /> */}
+              {/* <button
                 className="btn btn-outline-danger"
                 onClick={this.handleClickLogout}
               >
                 Or click here to logout.
-              </button>
-            </div>
-          </div>
+              </button> */}
+            </Grid.Column>
+          </Grid>
         </div>
       </div>
     );
