@@ -965,8 +965,8 @@
         Custom variables
 -------------------------------*/
 
-@font-name: "San Francisco Display Medium";
-@font-family: @font-name, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+// @font-name: "San Francisco Display Medium";
+// @font-family: @font-name, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
 //	THEME BASE COLORS
 @theme-primary:#A9D943;
