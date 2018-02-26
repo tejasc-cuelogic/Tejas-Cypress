@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Sidebar, Menu, Icon, Button, Image, Dropdown, Accordion, Form, Divider, Grid } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Button, Image } from 'semantic-ui-react';
+import NotificationPanel from './NotificationPanel';
 import uiStore from '../../stores/uiStore';
 import Userimage from '../../assets/images/james-wright.png';
 
@@ -19,7 +20,6 @@ class SidebarLeftPush extends Component {
       { icon: 'money', displayName: 'Banking', to: 'banking' },
       { icon: 'settings', displayName: 'Settings', to: 'settings' },
     ];
-    const { activeIndex } = 0;
 
     return (
       <Sidebar.Pushable>
@@ -49,182 +49,7 @@ class SidebarLeftPush extends Component {
             </div>
           </div>
         </Sidebar.Pusher>
-        <div className={`notification-panel ${(uiStore.layoutState.notificationPanel) ? 'slide-in animating' : ''}`}>
-          <h3>Notification center</h3>
-          <p className="title">Set up your account</p>
-          <div className="notification-box">
-            <span className="timestamp">2 mins ago</span>
-            <Dropdown icon="dropdown" pointing="right" className="icon pull-right">
-              <Dropdown.Menu>
-                <Dropdown.Item text="Remind me later" />
-                <Dropdown.Item text="Dismiss" />
-              </Dropdown.Menu>
-            </Dropdown>
-            <Accordion inverted>
-              <Accordion.Title active={activeIndex === 0} index={0}>
-                Connect your <strong>Bank Account</strong>
-                <Icon name="angle down" />
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex === 0}>
-                <Form inverted size="small">
-                  <div stacked>
-                    <Form.Input
-                      fluid
-                      label="Bank Account number"
-                      placeholder="XXX-XX-XXXX"
-                    />
-                    <Button inverted size="small" color="green" className="link-button">Submit number</Button>
-                    <Button inverted size="small" basic className="link-button">Remind me later</Button>
-                  </div>
-                </Form>
-              </Accordion.Content>
-            </Accordion>
-          </div>
-          <div className="notification-box">
-            <span className="timestamp">1 days ago</span>
-            <Dropdown icon="dropdown" pointing="right" className="icon pull-right">
-              <Dropdown.Menu>
-                <Dropdown.Item text="Remind me later" />
-                <Dropdown.Item text="Dismiss" />
-              </Dropdown.Menu>
-            </Dropdown>
-            <Accordion inverted>
-              <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
-                Complete your <strong>SSN number</strong>
-                <Icon name="angle down" />
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex === 0}>
-                <Form inverted size="small">
-                  <div stacked>
-                    <Form.Input
-                      fluid
-                      label="SSN number"
-                      placeholder="XXX-XX-XXXX"
-                    />
-                    <Button inverted size="small" color="green" className="link-button">Submit number</Button>
-                    <Button inverted size="small" basic className="link-button">Remind me later</Button>
-                  </div>
-                </Form>
-              </Accordion.Content>
-            </Accordion>
-          </div>
-          <Divider inverted section />
-          <p className="title">New account activity</p>
-          <div className="notification-box">
-            <span className="timestamp">2 mins ago</span>
-            <Dropdown icon="dropdown" pointing="right" className="icon pull-right">
-              <Dropdown.Menu>
-                <Dropdown.Item text="Remind me later" />
-                <Dropdown.Item text="Dismiss" />
-              </Dropdown.Menu>
-            </Dropdown>
-            <Divider clearing hidden />
-            <Grid>
-              <Grid.Row>
-                <Grid.Column width={9}>
-                  <p><strong>Bravery</strong> has sent <strong>a new repayment</strong></p>
-                </Grid.Column>
-                <Grid.Column width={7} textAlign="right">
-                  <h4 className="amount">$234.30</h4>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-            <Button inverted size="small" color="green" className="link-button"><Icon name="line graph" />See full portfolio stats</Button>
-          </div>
-          <div className="notification-box">
-            <span className="timestamp">15 mins ago</span>
-            <Dropdown icon="dropdown" pointing="right" className="icon pull-right">
-              <Dropdown.Menu>
-                <Dropdown.Item text="Remind me later" />
-                <Dropdown.Item text="Dismiss" />
-              </Dropdown.Menu>
-            </Dropdown>
-            <Accordion inverted>
-              <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
-                <strong>Pokeology</strong> has achieved <strong>minimum raise</strong>
-                <Icon name="angle down" />
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex === 0}>
-                <p>Lorem ipsum doller sit amit, Pokeology has achieved minimum raise</p>
-              </Accordion.Content>
-            </Accordion>
-          </div>
-          <div className="notification-box">
-            <span className="timestamp">15 mins ago</span>
-            <Dropdown icon="dropdown" pointing="right" className="icon pull-right">
-              <Dropdown.Menu>
-                <Dropdown.Item text="Remind me later" />
-                <Dropdown.Item text="Dismiss" />
-              </Dropdown.Menu>
-            </Dropdown>
-            <Accordion inverted>
-              <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
-                <strong>Pokeology</strong> has added <strong>New Update</strong>
-                <Icon name="angle down" />
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex === 0}>
-                <p>Lorem ipsum doller sit amit, slightly domed and divided by arches sections.</p>
-              </Accordion.Content>
-            </Accordion>
-          </div>
-          <div className="notification-box">
-            <span className="timestamp">2 mins ago</span>
-            <Dropdown icon="dropdown" pointing="right" className="icon pull-right">
-              <Dropdown.Menu>
-                <Dropdown.Item text="Remind me later" />
-                <Dropdown.Item text="Dismiss" />
-              </Dropdown.Menu>
-            </Dropdown>
-            <Divider clearing hidden />
-            <Grid>
-              <Grid.Row>
-                <Grid.Column width={9}>
-                  <p><strong>Bravery</strong> has sent <strong>a new repayment</strong></p>
-                </Grid.Column>
-                <Grid.Column width={7} textAlign="right">
-                  <h4 className="amount">$8459.78</h4>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-            <Button inverted size="small" color="green" className="link-button"><Icon name="line graph" />See full portfolio stats</Button>
-          </div>
-          <div className="notification-box">
-            <span className="timestamp">15 mins ago</span>
-            <Dropdown icon="dropdown" pointing="right" className="icon pull-right">
-              <Dropdown.Menu>
-                <Dropdown.Item text="Remind me later" />
-                <Dropdown.Item text="Dismiss" />
-              </Dropdown.Menu>
-            </Dropdown>
-            <Accordion inverted>
-              <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
-                <strong>Pokeology</strong> has achieved <strong>minimum raise</strong>
-                <Icon name="angle down" />
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex === 0}>
-                <p>Lorem ipsum doller sit amit, Pokeology has achieved minimum raise</p>
-              </Accordion.Content>
-            </Accordion>
-          </div>
-          <div className="notification-box">
-            <span className="timestamp">15 mins ago</span>
-            <Dropdown icon="dropdown" pointing="right" className="icon pull-right">
-              <Dropdown.Menu>
-                <Dropdown.Item text="Remind me later" />
-                <Dropdown.Item text="Dismiss" />
-              </Dropdown.Menu>
-            </Dropdown>
-            <Accordion inverted>
-              <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
-                <strong>Pokeology</strong> has added <strong>New Update</strong>
-                <Icon name="angle down" />
-              </Accordion.Title>
-              <Accordion.Content active={activeIndex === 0}>
-                <p>Lorem ipsum doller sit amit, slightly domed and divided by arches sections.</p>
-              </Accordion.Content>
-            </Accordion>
-          </div>
-        </div>
+        <NotificationPanel status={uiStore.layoutState.notificationPanel} />
       </Sidebar.Pushable>
     );
   }
