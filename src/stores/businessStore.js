@@ -1,10 +1,24 @@
 import { observable, action, computed } from 'mobx';
 import _ from 'lodash';
 
-import { DOCFILE_TYPES, FORM_VALUES } from './../constants/business';
+import {
+  DOCFILE_TYPES,
+  FORM_VALUES,
+  FILER_INFORMATION,
+  ISSUER_INFORMATION,
+  OFFERING_INFORMATION,
+  ANNUAL_REPORT_REQUIREMENTS,
+  SIGNATURE,
+} from './../constants/business';
 
 export class BusinessStore {
   formValues = [...FORM_VALUES];
+
+  @observable
+  offeringId = '';
+
+  @observable
+  offeringUrl = '';
 
   @observable
   templateVariables = {
@@ -23,7 +37,25 @@ export class BusinessStore {
   };
 
   @observable
+  filerInformation = { ...FILER_INFORMATION }
+
+  @observable
+  issuerInformation = { ...ISSUER_INFORMATION }
+
+  @observable
+  offeringInformation = { ...OFFERING_INFORMATION }
+
+  @observable
+  annualReportRequirements = { ...ANNUAL_REPORT_REQUIREMENTS }
+
+  @observable
+  signature = { ...SIGNATURE }
+
+  @observable
   documentList = { ...DOCFILE_TYPES };
+
+  @observable
+  offeringList = [];
 
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
@@ -37,6 +69,51 @@ export class BusinessStore {
   @action
   toggleRequiredFiles(key) {
     this.documentList[key] = !this.documentList[key];
+  }
+
+  @action
+  setOfferingId(id) {
+    this.offeringId = id;
+  }
+
+  @action
+  setOfferingUrl(url) {
+    this.offeringUrl = url;
+  }
+
+  @action
+  setFilerInfo(field, value) {
+    this.filerInformation[field].value = value;
+  }
+
+  @action
+  setIssuerInfo(field, value) {
+    this.issuerInformation[field].value = value;
+  }
+
+  @action
+  setOfferingInfo(field, value) {
+    this.offeringInformation[field].value = value;
+  }
+
+  @action
+  setAnnualReportInfo(field, value) {
+    this.annualReportRequirements[field].value = value;
+  }
+
+  @action
+  setSignatureInfo(field, value) {
+    this.signature[field].value = value;
+  }
+
+  @action
+  setCountry(value) {
+    this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
+  }
+
+  @action
+  setOfferingList(list) {
+    this.offeringList = list;
   }
 }
 

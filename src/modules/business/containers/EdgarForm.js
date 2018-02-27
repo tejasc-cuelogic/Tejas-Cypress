@@ -21,10 +21,6 @@ export default class EdgarForm extends React.Component {
     this.props.businessStore.setTemplateVariable(e.target.name, e.target.value);
   };
 
-  handleCheckboxChange = (e) => {
-    this.props.businessStore.toggleRequiredFiles(e.target.textContent);
-  };
-
   render() {
     const { formValues, templateVariables } = this.props.businessStore;
     return (

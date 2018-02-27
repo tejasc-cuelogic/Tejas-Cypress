@@ -8,6 +8,7 @@ export class UiStore {
   @observable errors = undefined;
   @observable success = undefined;
   @observable redirectURL = undefined;
+  @observable dropdownLoader = false;
 
   @action
   setProgress(progress = true) {
@@ -66,6 +67,11 @@ export class UiStore {
   @action
   toggleSubmitButton() {
     this.submitButtonDisabled = !this.submitButtonDisabled;
+  }
+
+  @action
+  toggleDropdownLoader() {
+    this.dropdownLoader = !this.dropdownLoader;
   }
 
   @action

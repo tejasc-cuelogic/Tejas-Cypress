@@ -11,6 +11,7 @@ class Business extends Component {
     return (
       <div className="ui one column grid">
         <div className="column">
+          <Button color="green" as={Link} to="/app/business/xml" floated="right">New XML</Button>
           <Button color="green" as={Link} to="/app/business/edgar" floated="right">New Business</Button>
         </div>
         <div
