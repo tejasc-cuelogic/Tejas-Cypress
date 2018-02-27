@@ -166,7 +166,7 @@
 @pageOverflowX       : hidden;
 
 @lineHeight          : 1.666667em;
-@textColor           : rgba(0, 0, 0, 0.87);
+@textColor           : @primary-text;
 
 /*-------------------
       Paragraph

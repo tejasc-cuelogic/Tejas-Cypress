@@ -40,7 +40,7 @@
 /* Table Header */
 @headerBorder: 0px solid @internalBorderColor;
 @headerDivider: none;
-@headerBackground: @offWhite;
+@headerBackground: @inverse-text;
 @headerAlign: inherit;
 @headerVerticalAlign: inherit;
 @headerColor: @textColor;
