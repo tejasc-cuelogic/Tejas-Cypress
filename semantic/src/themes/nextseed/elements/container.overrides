@@ -105,7 +105,7 @@ div.login-form {
 		}
 		h5{
 			// font-size:0.857142em;
-			font-weight:500;
+			font-family:@pageFont;
 			color:@quaternary-text;
 			margin:0.714285rem 0 0.5rem;
 		}

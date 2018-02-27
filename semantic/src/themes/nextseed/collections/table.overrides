@@ -2,13 +2,14 @@
          Theme Overrides
 *******************************/
 .ui.table{
-    margin:0;
-    color:@primary-text;
+    // margin:0;
+    // color:@primary-text;
+    font-family:@regularFont;
     thead th{
         padding:1.666667em;
-        font-weight:400;
+        // font-weight:400;
         text-transform:uppercase;
-        background:@inverse-text;
+        // background:@inverse-text;
     }
     td{
         padding:0.833334em 1.666667em;
@@ -30,25 +31,94 @@
         }
     }
     &.user-list{
-        .user-name{
-            display:block;
-            font-size:1.166667em;
-            font-weight:500;
-            // line-height:1.5;
+        tr.locked{
+            .user-image:after{
+                content:"\F023";
+                font-family:"Icons";
+                font-size:20px;
+                color:@highlight-primary;
+                text-shadow:0px 0px 8px @inverse-text;
+                position:absolute;
+                bottom:-4px;
+                right:-4px;
+                z-index:1;
+            }
+            .user-status{
+                color:@highlight-primary;
+            }
         }
-        .userType{
+        .user-image{
+            position:relative;
+            .ui.avatar.image{
+                margin-right:0;
+            }
+        }
+        .user-name{
+            font-family:@boldFont;
+            display:block;
+        }
+        .accountType{
             width:24px;
             height:24px;
             display:inline-block;
-            font-size:0.928571em;
-            font-weight:500;
+            font-family:@pageFont;
+            font-size:1.071428em;
             text-align:center;
-            line-height:1;
-            border:1px solid red;
+            line-height:1.6;
+            border:1px solid;
             border-radius:3px;
-            + .userType{
+            position:relative;
+            + .accountType{
                 margin-left:0.416667rem;
             }
+            &.accredited:after{
+                content:"A";
+                width:13px;
+                height:13px;
+                display:block;
+                border-radius:7px;
+                font-size:0.533334em;
+                text-align:center;
+                color:@inverse-text;
+                position:absolute;
+                top:-6px;
+                right:-6px;
+            }
+            &.admin{
+                color:@fullBlack;
+                border-color:@fullBlack;
+                &.accredited:after{
+                    background-color:@fullBlack;
+                }
+            }
+            &.full{
+                color:@highlight-tertiary;
+                border-color:@highlight-tertiary;
+                &.accredited:after{
+                    background-color:@highlight-tertiary;
+                }
+            }
+            &.partial{
+                color:@highlight-secondary;
+                border-color:@highlight-secondary;
+                &.accredited:after{
+                    background-color:@highlight-secondary;
+                }
+            }
+            &.locked{
+                color:@highlight-primary;
+                border-color:@highlight-primary;
+                &.accredited:after{
+                    background-color:@highlight-primary;
+                }
+            }
         }
+    }
+    a{
+        font-family:@pageFont;
+        font-size:0.857142em;
+        // color:@theme-primary;
+        // text-decoration:none;
+        text-transform:uppercase;
     }
 }

@@ -197,7 +197,7 @@ strong {
 
 b,
 strong {
-  font-weight: bolder;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 /**
@@ -571,7 +571,7 @@ body {
   background: #FFFFFF;
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 14px;
-  line-height: 1.666667em;
+  line-height: 1.571428em;
   color: #303030;
   font-smoothing: antialiased;
 }
@@ -585,7 +585,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   font-weight: 500;
@@ -635,7 +635,7 @@ h5:last-child {
 
 p {
   margin: 0em 0em 1em;
-  line-height: 1.666667em;
+  line-height: 1.571428em;
 }
 
 p:first-child {
@@ -651,12 +651,12 @@ p:last-child {
 --------------------*/
 
 a {
-  color: #4183C4;
+  color: #A9D943;
   text-decoration: none;
 }
 
 a:hover {
-  color: #1e70bf;
+  color: #9ee110;
   text-decoration: none;
 }
 
@@ -5334,7 +5334,7 @@ div.login-form ul.error-messages {
 }
 
 .page-header-section .search-filters h5 {
-  font-weight: 500;
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #999999;
   margin: 0.714285rem 0 0.5rem;
 }
@@ -6968,7 +6968,7 @@ i.flag.zimbabwe:before {
   border: none;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   padding: 0em 0em;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
   line-height: 1.28571429em;
   text-transform: none;
@@ -14162,7 +14162,7 @@ a.ui.basic.black.label:hover {
 a.ui.basic.label:hover {
   text-decoration: none;
   background: none #FFFFFF;
-  color: #1e70bf;
+  color: #9ee110;
   -webkit-box-shadow: 1px solid rgba(34, 36, 38, 0.15);
   box-shadow: 1px solid rgba(34, 36, 38, 0.15);
   -webkit-box-shadow: none;
@@ -14607,7 +14607,7 @@ ol.ui.list ol li,
 .ui.list > .item .header {
   display: block;
   margin: 0em;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
   color: #999999;
 }
@@ -14632,12 +14632,12 @@ ol.ui.list ol li,
 .ui.list .list > a.item,
 .ui.list > a.item {
   cursor: pointer;
-  color: #4183C4;
+  color: #A9D943;
 }
 
 .ui.list .list > a.item:hover,
 .ui.list > a.item:hover {
-  color: #1e70bf;
+  color: #9ee110;
 }
 
 /* Linked Item Icons */
@@ -14652,12 +14652,12 @@ ol.ui.list ol li,
 .ui.list .list > .item a.header,
 .ui.list > .item a.header {
   cursor: pointer;
-  color: #4183C4 !important;
+  color: #A9D943 !important;
 }
 
 .ui.list .list > .item a.header:hover,
 .ui.list > .item a.header:hover {
-  color: #1e70bf !important;
+  color: #9ee110 !important;
 }
 
 /* Floated Content */
@@ -14833,7 +14833,7 @@ ol.ui.list ol li,
 
 .ui.inverted.list .list > a.item:hover,
 .ui.inverted.list > a.item:hover {
-  color: #1e70bf;
+  color: #9ee110;
 }
 
 /* Linking Content */
@@ -14843,7 +14843,7 @@ ol.ui.list ol li,
 }
 
 .ui.inverted.list .item a:not(.ui):hover {
-  color: #1e70bf !important;
+  color: #9ee110 !important;
 }
 
 /*-------------------
@@ -17432,7 +17432,7 @@ ol.ui.horizontal.list li:before,
 /* Title */
 
 .ui.steps .step .title {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   font-weight: bold;
 }
@@ -17686,7 +17686,7 @@ ol.ui.horizontal.list li:before,
 }
 
 .ui.steps .step.active .title {
-  color: #4183C4;
+  color: #A9D943;
 }
 
 .ui.ordered.steps .step.active:before,
@@ -18028,11 +18028,11 @@ ol.ui.horizontal.list li:before,
 /* Link */
 
 .ui.breadcrumb a {
-  color: #4183C4;
+  color: #A9D943;
 }
 
 .ui.breadcrumb a:hover {
-  color: #1e70bf;
+  color: #9ee110;
 }
 
 /* Icon Divider */
@@ -24023,6 +24023,10 @@ Floated Menu / Item
          Theme Overrides
 *******************************/
 
+.ui.menu.pagination.right.floated {
+  margin: 1rem;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -24046,7 +24050,7 @@ Floated Menu / Item
   margin: 1em 0em;
   background: #F8F8F9;
   padding: 1em 1.5em;
-  line-height: 1.666667em;
+  line-height: 1.571428em;
   color: #303030;
   -webkit-transition: opacity 0.1s ease, color 0.1s ease, background 0.1s ease, -webkit-box-shadow 0.1s ease;
   transition: opacity 0.1s ease, color 0.1s ease, background 0.1s ease, -webkit-box-shadow 0.1s ease;
@@ -24073,7 +24077,7 @@ Floated Menu / Item
 
 .ui.message .header {
   display: block;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   margin: -0.14285714em 0em 0rem 0em;
 }
@@ -24152,7 +24156,7 @@ Floated Menu / Item
   cursor: pointer;
   position: absolute;
   margin: 0em;
-  top: 0.6666665em;
+  top: 0.714286em;
   right: 0.5em;
   opacity: 0.7;
   -webkit-transition: opacity 0.1s ease;
@@ -24615,7 +24619,7 @@ Floated Menu / Item
 .ui.table {
   width: 100%;
   background: #FFFFFF;
-  margin: 1em 0em;
+  margin: 0em 0em;
   border: 0 solid rgba(34, 36, 38, 0.15);
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -24661,7 +24665,7 @@ Floated Menu / Item
   padding: 0.92857143em 0.78571429em;
   vertical-align: inherit;
   font-style: none;
-  font-weight: bold;
+  font-weight: 500;
   text-transform: none;
   border-bottom: 0px solid rgba(34, 36, 38, 0.1);
   border-left: none;
@@ -24699,7 +24703,7 @@ Floated Menu / Item
   padding: 0.78571429em 0.78571429em;
   vertical-align: middle;
   font-style: normal;
-  font-weight: normal;
+  font-weight: 500;
   text-transform: none;
 }
 
@@ -25887,15 +25891,12 @@ Floated Menu / Item
 *******************************/
 
 .ui.table {
-  margin: 0;
-  color: #303030;
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .ui.table thead th {
   padding: 1.666667em;
-  font-weight: 400;
   text-transform: uppercase;
-  background: #FFFFFF;
 }
 
 .ui.table td {
@@ -25918,26 +25919,106 @@ Floated Menu / Item
   background: #FFFFFF;
 }
 
-.ui.table.user-list .user-name {
-  display: block;
-  font-size: 1.166667em;
-  font-weight: 500;
+.ui.table.user-list tr.locked .user-image:after {
+  content: "\F023";
+  font-family: "Icons";
+  font-size: 20px;
+  color: #EB5757;
+  text-shadow: 0px 0px 8px #FFFFFF;
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  z-index: 1;
 }
 
-.ui.table.user-list .userType {
+.ui.table.user-list tr.locked .user-status {
+  color: #EB5757;
+}
+
+.ui.table.user-list .user-image {
+  position: relative;
+}
+
+.ui.table.user-list .user-image .ui.avatar.image {
+  margin-right: 0;
+}
+
+.ui.table.user-list .user-name {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  display: block;
+}
+
+.ui.table.user-list .accountType {
   width: 24px;
   height: 24px;
   display: inline-block;
-  font-size: 0.928571em;
-  font-weight: 500;
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 1.071428em;
   text-align: center;
-  line-height: 1;
-  border: 1px solid red;
+  line-height: 1.6;
+  border: 1px solid;
   border-radius: 3px;
+  position: relative;
 }
 
-.ui.table.user-list .userType + .userType {
+.ui.table.user-list .accountType + .accountType {
   margin-left: 0.416667rem;
+}
+
+.ui.table.user-list .accountType.accredited:after {
+  content: "A";
+  width: 13px;
+  height: 13px;
+  display: block;
+  border-radius: 7px;
+  font-size: 0.533334em;
+  text-align: center;
+  color: #FFFFFF;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+}
+
+.ui.table.user-list .accountType.admin {
+  color: #000000;
+  border-color: #000000;
+}
+
+.ui.table.user-list .accountType.admin.accredited:after {
+  background-color: #000000;
+}
+
+.ui.table.user-list .accountType.full {
+  color: #27AE60;
+  border-color: #27AE60;
+}
+
+.ui.table.user-list .accountType.full.accredited:after {
+  background-color: #27AE60;
+}
+
+.ui.table.user-list .accountType.partial {
+  color: #F2994A;
+  border-color: #F2994A;
+}
+
+.ui.table.user-list .accountType.partial.accredited:after {
+  background-color: #F2994A;
+}
+
+.ui.table.user-list .accountType.locked {
+  color: #EB5757;
+  border-color: #EB5757;
+}
+
+.ui.table.user-list .accountType.locked.accredited:after {
+  background-color: #EB5757;
+}
+
+.ui.table a {
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 0.857142em;
+  text-transform: uppercase;
 }
 
 /*******************************
@@ -26414,7 +26495,7 @@ Floated Menu / Item
 .ui.card > .content > .header {
   display: block;
   margin: '';
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: rgba(0, 0, 0, 0.85);
 }
 
@@ -26424,7 +26505,7 @@ Floated Menu / Item
 .ui.card > .content > .header:not(.ui) {
   font-weight: bold;
   font-size: 1.28571429em;
-  margin-top: -0.3333335em;
+  margin-top: -0.285714em;
   line-height: 1.28571429em;
 }
 
@@ -26565,7 +26646,7 @@ Floated Menu / Item
 
 .ui.cards > .card > .content > a.header:hover,
 .ui.card > .content > a.header:hover {
-  color: #1e70bf;
+  color: #9ee110;
 }
 
 /* Meta */
@@ -26685,7 +26766,7 @@ Floated Menu / Item
 
 .ui.cards > .card > .extra a:not(.ui):hover,
 .ui.card > .extra a:not(.ui):hover {
-  color: #1e70bf;
+  color: #9ee110;
 }
 
 /*******************************
@@ -27494,7 +27575,7 @@ a.ui.card:hover,
 }
 
 .ui.comments .comment a.author:hover {
-  color: #1e70bf;
+  color: #9ee110;
 }
 
 /*--------------
@@ -27873,7 +27954,7 @@ a.ui.card:hover,
   border-left: none;
   font-size: 1em;
   max-width: 500px;
-  line-height: 1.666667em;
+  line-height: 1.571428em;
 }
 
 /*--------------
@@ -28121,8 +28202,8 @@ a.ui.card:hover,
 
 .ui.items > .item > .content > .header {
   display: inline-block;
-  margin: -0.3333335em 0em 0em;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  margin: -0.285714em 0em 0em;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.85);
 }
@@ -28170,7 +28251,7 @@ a.ui.card:hover,
   margin-top: 0.6em;
   max-width: auto;
   font-size: 1em;
-  line-height: 1.666667em;
+  line-height: 1.571428em;
   color: #303030;
 }
 
@@ -28233,7 +28314,7 @@ a.ui.card:hover,
 }
 
 .ui.items > .item > .content > a.header:hover {
-  color: #1e70bf;
+  color: #9ee110;
 }
 
 /* Meta */
@@ -28464,7 +28545,7 @@ a.ui.card:hover,
 
 .ui.items a.item:hover .content .header,
 .ui.link.items > .item:hover .content .header {
-  color: #1e70bf;
+  color: #9ee110;
 }
 
 /*--------------
@@ -28616,7 +28697,7 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .label,
 .ui.statistic > .label {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   font-weight: bold;
   color: #303030;
@@ -29164,7 +29245,7 @@ a.ui.card:hover,
 
 .ui.accordion .title:not(.ui) {
   padding: 0.5em 0em;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   color: #303030;
 }
@@ -29222,7 +29303,7 @@ a.ui.card:hover,
 
 .ui.accordion.menu .item .title > .dropdown.icon {
   float: right;
-  margin: 0.3333335em 0em 0em 1em;
+  margin: 0.285714em 0em 0em 1em;
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
@@ -32222,7 +32303,7 @@ select.ui.dropdown {
 
 .ui.modal > .header {
   display: block;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   margin: 0em;
   padding: 1.25rem 1.5rem;
@@ -32384,7 +32465,7 @@ select.ui.dropdown {
   }
 
   .ui.modal > .close {
-    top: 1.291667rem;
+    top: 1.196428rem;
     right: 1rem;
     color: #303030;
   }
@@ -32606,7 +32687,7 @@ select.ui.dropdown {
 }
 
 .ui.fullscreen.modal > .close {
-  top: 1.291667rem;
+  top: 1.196428rem;
   right: 1rem;
   color: #303030;
 }
@@ -32967,7 +33048,7 @@ a.ui.nag {
   min-width: min-content;
   z-index: 1900;
   border: 1px solid #D4D4D5;
-  line-height: 1.666667em;
+  line-height: 1.571428em;
   max-width: 250px;
   background: #FFFFFF;
   padding: 0.833em 1em;
@@ -32981,7 +33062,7 @@ a.ui.nag {
 
 .ui.popup > .header {
   padding: 0em;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   line-height: 1.2;
   font-weight: bold;
@@ -33046,7 +33127,7 @@ a.ui.nag {
   white-space: nowrap;
   font-size: 1rem;
   border: 1px solid #D4D4D5;
-  line-height: 1.666667em;
+  line-height: 1.571428em;
   max-width: none;
   background: #FFFFFF;
   padding: 0.833em 1em;
@@ -34759,7 +34840,7 @@ a.ui.nag {
 
 .ui.search > .results .result .title {
   margin: -0.14285714em 0em 0em;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
   color: rgba(0, 0, 0, 0.85);
@@ -34785,7 +34866,7 @@ a.ui.nag {
 }
 
 .ui.search > .results > .message .header {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1rem;
   font-weight: bold;
   color: #303030;

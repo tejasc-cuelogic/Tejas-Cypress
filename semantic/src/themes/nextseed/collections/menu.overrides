@@ -1,3 +1,10 @@
 /*******************************
          Theme Overrides
 *******************************/
+.ui.menu{
+    &.pagination{
+        &.right.floated{
+            margin:1rem;
+        }
+    }
+}

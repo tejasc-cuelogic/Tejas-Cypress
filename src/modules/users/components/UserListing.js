@@ -3,7 +3,7 @@ import { Table, Image } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import DateTimeFormat from './../../../components/common/DateTimeFormat';
+// import DateTimeFormat from './../../../components/common/DateTimeFormat';
 import Pagination from './../../../theme/table/Pagination';
 import Userimage from '../../../assets/images/james-wright.png';
 
@@ -27,19 +27,24 @@ const userListing = props => (
       </Table.Header>
       <Table.Body>
         {_.map(props.listData, user => (
-          <Table.Row key={user.Username}>
+          <Table.Row key={user.Username} className="">
             <Table.Cell collapsing>
-              <Image src={Userimage} size="mini" avatar circular />
+              <div className="user-image">
+                <Image src={Userimage} size="mini" avatar circular />
+              </div>
             </Table.Cell>
-            <Table.Cell>
+            <Table.Cell className="user-status">
               <span className="user-name">{`${user.given_name} ${user.family_name}`}</span>
               {user.email}
             </Table.Cell>
             <Table.Cell>Detroit, MI (80331)</Table.Cell>
             <Table.Cell>617 434-1551</Table.Cell>
-            <Table.Cell><span className="userType R">R</span></Table.Cell>
+            <Table.Cell>
+              <div className="accountType accredited">R</div>
+            </Table.Cell>
             <Table.Cell>2 days ago</Table.Cell>
-            <Table.Cell><DateTimeFormat datetime={user.UserCreateDate} /></Table.Cell>
+            <Table.Cell>13 months ago</Table.Cell>
+            {/* <Table.Cell><DateTimeFormat datetime={user.UserCreateDate} /></Table.Cell> */}
             <Table.Cell><Link to="/app/users/1/details">view profile</Link></Table.Cell>
           </Table.Row>
         ))}

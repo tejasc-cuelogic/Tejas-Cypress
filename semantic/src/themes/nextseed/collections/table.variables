@@ -8,7 +8,7 @@
 
 @verticalMargin: 1em;
 @horizontalMargin: 0em;
-@margin: @verticalMargin @horizontalMargin;
+@margin: @horizontalMargin @horizontalMargin;
 @borderCollapse: separate;
 @borderSpacing: 0px;
 @borderRadius: @defaultBorderRadius;
@@ -47,7 +47,7 @@
 @headerVerticalPadding: @relativeSmall;
 @headerHorizontalPadding: @cellHorizontalPadding;
 @headerFontStyle: none;
-@headerFontWeight: bold;
+@headerFontWeight: 500;
 @headerTextTransform: none;
 @headerBoxShadow: none;
 
@@ -62,7 +62,7 @@
 @footerVerticalPadding: @cellVerticalPadding;
 @footerHorizontalPadding: @cellHorizontalPadding;
 @footerFontStyle: normal;
-@footerFontWeight: normal;
+@footerFontWeight: 500;
 @footerTextTransform: none;
 
 /* Responsive Size */

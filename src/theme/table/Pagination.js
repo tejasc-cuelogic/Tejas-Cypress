@@ -6,9 +6,7 @@ const Pagination = props => (
     className="right floated"
     activePage={props.paginateOptions.activePage}
     onPageChange={this.handlePaginationChange}
-    size="mini"
-    pointing
-    secondary
+    size="small"
     totalPages={props.paginateOptions.totalPages}
   />
 );
