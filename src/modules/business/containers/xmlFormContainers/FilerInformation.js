@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Form, Header, Divider } from 'semantic-ui-react';
+import { Form, Header, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 @inject('businessStore')
@@ -12,19 +12,17 @@ export default class FilerInformation extends React.Component {
   render() {
     const { filerInformation } = this.props.businessStore;
     return (
-      <Grid
-        textAlign="left"
-        verticalAlign="top"
-      >
-        <Grid.Column>
-          <Header as="h1" textAlign="left">Filer Information</Header>
-          <Divider section />
+      <div>
+        <Divider section />
+        <Header as="h1">Filer Information</Header>
+        <Form.Group widths="equal">
           <Form.Input
             placeholder="Filer CIK"
             label="Filer CIK"
             name="filerCik"
             defaultValue={filerInformation.filerCik.value}
             onChange={this.handleChange}
+            className="column"
             width={8}
           />
           <Form.Input
@@ -33,24 +31,25 @@ export default class FilerInformation extends React.Component {
             name="filerCcc"
             defaultValue={filerInformation.filerCcc.value}
             onChange={this.handleChange}
+            className="column"
             width={8}
           />
-          <Form.Group>
-            <Form.Radio
-              label="Live"
-              value="LIVE"
-              name="liveTestFlag"
-              onChange={this.handleChange}
-              width={8}
-            />
-            <Form.Radio
-              label="Test"
-              value="TEST"
-              name="liveTestFlag"
-              onChange={this.handleChange}
-              width={8}
-            />
-          </Form.Group>
+        </Form.Group>
+        <Form.Group inline>
+          <Form.Radio
+            label="Live"
+            value="LIVE"
+            name="liveTestFlag"
+            onChange={this.handleChange}
+          />
+          <Form.Radio
+            label="Test"
+            value="TEST"
+            name="liveTestFlag"
+            onChange={this.handleChange}
+          />
+        </Form.Group>
+        <Form.Group inline>
           <Form.Checkbox
             label="Would you like a Return Copy?"
             name="returnCopyFlag"
@@ -66,8 +65,8 @@ export default class FilerInformation extends React.Component {
             name="returnCopyFlag"
             onChange={this.props.handleChange}
           />
-        </Grid.Column>
-      </Grid>
+        </Form.Group>
+      </div>
     );
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Divider, Grid, Header, Form } from 'semantic-ui-react';
+import { Divider, Header, Form } from 'semantic-ui-react';
 
 @inject('businessStore')
 @observer
@@ -13,13 +13,10 @@ export default class Signature extends React.Component {
   render() {
     const { signature } = this.props.businessStore;
     return (
-      <Grid
-        textAlign="left"
-        verticalAlign="middle"
-      >
-        <Grid.Column>
-          <Header as="h1" textAlign="left">Signature</Header>
-          <Divider section />
+      <div>
+        <Divider section />
+        <Header as="h1" textAlign="left">Signature</Header>
+        <Form.Group widths="3">
           {_.map(signature, field => (
             <Form.Input
               label={field.label}
@@ -29,8 +26,8 @@ export default class Signature extends React.Component {
               key={field.key}
             />
           ))}
-        </Grid.Column>
-      </Grid>
+        </Form.Group>
+      </div>
     );
   }
 }

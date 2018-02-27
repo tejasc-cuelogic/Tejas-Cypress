@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Form, Grid, Header } from 'semantic-ui-react';
+import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 const LABEL = 'Amount of compensation to be paid to the intermediary,' +
@@ -21,25 +21,22 @@ export default class OfferingInformation extends React.Component {
   render() {
     const { offeringInformation } = this.props.businessStore;
     return (
-      <Grid
-        textAlign="left"
-        verticalAlign="middle"
-      >
-        <Grid.Column>
-          <Header as="h1" textAlign="left">Offering Information</Header>
-          <Divider section />
-          <Form.TextArea
-            label={LABEL}
-            name="compensationAmount"
-            defaultValue={offeringInformation.compensationAmount.value}
-            onChange={this.handleChange}
-          />
-          <Form.TextArea
-            label={LABEL1}
-            name="financialInterest"
-            defaultValue={offeringInformation.financialInterest.value}
-            onChange={this.handleChange}
-          />
+      <div>
+        <Divider section />
+        <Header as="h1">Offering Information</Header>
+        <Form.TextArea
+          label={LABEL}
+          name="compensationAmount"
+          defaultValue={offeringInformation.compensationAmount.value}
+          onChange={this.handleChange}
+        />
+        <Form.TextArea
+          label={LABEL1}
+          name="financialInterest"
+          defaultValue={offeringInformation.financialInterest.value}
+          onChange={this.handleChange}
+        />
+        <Form.Group widths="equal">
           <Form.Input
             label="Type of Security Offered"
             name="securityOfferedType"
@@ -52,16 +49,12 @@ export default class OfferingInformation extends React.Component {
             defaultValue={offeringInformation.priceDeterminationMethod.value}
             onChange={this.handleChange}
           />
+        </Form.Group>
+        <Form.Group widths="equal">
           <Form.Input
             label="Target Offering Amount"
             name="offeringAmount"
             defaultValue={offeringInformation.offeringAmount.value}
-            onChange={this.handleChange}
-          />
-          <Form.Input
-            label="Maximum Offering Amount (if different from Target Offering Amount)"
-            name="priceDeterminationMethod"
-            defaultValue={offeringInformation.priceDeterminationMethod.value}
             onChange={this.handleChange}
           />
           <Form.Input
@@ -70,13 +63,22 @@ export default class OfferingInformation extends React.Component {
             defaultValue={offeringInformation.overSubscriptionAccepted.value}
             onChange={this.handleChange}
           />
-
+        </Form.Group>
+        <Form.Group widths="equal">
+          <Form.Input
+            label="Maximum Offering Amount (if different from Target Offering Amount)"
+            name="priceDeterminationMethod"
+            defaultValue={offeringInformation.priceDeterminationMethod.value}
+            onChange={this.handleChange}
+          />
           <Form.Input
             label="If yes, disclose how oversubscriptions will be allocated"
             name="overSubscriptionAllocationType"
             defaultValue={offeringInformation.overSubscriptionAllocationType.value}
             onChange={this.handleChange}
           />
+        </Form.Group>
+        <Form.Group widths="equal">
           <Form.Input
             label="Deadline to reach the Target Offering Amount"
             name="maximumOfferingAmount"
@@ -89,8 +91,8 @@ export default class OfferingInformation extends React.Component {
             defaultValue={offeringInformation.deadlineDate.value}
             onChange={this.handleChange}
           />
-        </Grid.Column>
-      </Grid>
+        </Form.Group>
+      </div>
     );
   }
 }

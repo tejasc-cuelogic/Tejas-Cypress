@@ -12,22 +12,24 @@ export default class FileSelector extends React.Component {
 
   render() {
     return (
-      <div>
-        <Grid stackable columns={2}>
-          {
-            _.map(this.props.businessStore.documentList, (value, type) => (
-              <GridColumn>
-                <Checkbox
-                  label={type}
-                  name={type}
-                  checked={value}
-                  onChange={this.handleChange}
-                />
-              </GridColumn>
-            ))
-          }
-        </Grid>
-      </div>
+      <Grid>
+        <Grid.Row>
+          <Grid stackable columns={2}>
+            {
+              _.map(this.props.businessStore.documentList, (value, type) => (
+                <GridColumn>
+                  <Checkbox
+                    label={type}
+                    name={type}
+                    checked={value}
+                    onChange={this.handleChange}
+                  />
+                </GridColumn>
+              ))
+            }
+          </Grid>
+        </Grid.Row>
+      </Grid>
     );
   }
 }

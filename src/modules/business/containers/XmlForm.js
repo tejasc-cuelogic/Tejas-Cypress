@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Form, Divider, Button, Dropdown } from 'semantic-ui-react';
+import { Form, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
@@ -29,9 +29,19 @@ export default class XmlForm extends React.Component {
   render() {
     return (
       <div className="content-spacer">
-        <Grid stackable className="edgar-form">
-          <Form size="large" onSubmit={this.handleFormSubmit}>
-            <Dropdown
+        <Form className="edgar-form" onSubmit={this.handleFormSubmit}>
+          <Form.Group widths="equal">
+            <Form.Select
+              fluid
+              label="Select Business Filing"
+              loading={this.props.uiStore.dropdownLoader}
+              options={this.props.businessStore.offeringList}
+              placeholder="Select Business Filing"
+              onChange={this.handleSelectChange}
+              className="column"
+              width={8}
+            />
+            {/* <Dropdown
               fluid
               search
               selection
@@ -39,24 +49,33 @@ export default class XmlForm extends React.Component {
               options={this.props.businessStore.offeringList}
               placeholder="Select Business Filing"
               onChange={this.handleSelectChange}
-            />
+            /> */}
             <Form.Input
               label="Website URL"
               defaultValue={this.props.businessStore.offeringUrl}
               onChange={this.handleUrlChange}
+              className="column"
+              width={8}
             />
-            <FilerInformation />
-            <IssuerInformation />
-            <OfferingInformation />
-            <AnnualReportDisclosureRequirements />
-            <Signature />
-            <FileSelector />
-            <Button fluid color="green" size="large">
+          </Form.Group>
+          <FilerInformation />
+          <IssuerInformation />
+          <OfferingInformation />
+          <AnnualReportDisclosureRequirements />
+          <Signature />
+          <FileSelector />
+          <Divider section />
+          <div
+            className="form-footer"
+            style={{
+            paddingBottom: '40px',
+            }}
+          >
+            <Button color="green" size="large">
               Sign Up
             </Button>
-            <Divider section />
-          </Form>
-        </Grid>
+          </div>
+        </Form>
       </div>
     );
   }

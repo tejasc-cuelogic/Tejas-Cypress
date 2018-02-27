@@ -20,27 +20,13 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
     const { annualReportRequirements } = this.props.businessStore;
 
     return (
-      <Grid
-        textAlign="left"
-        verticalAlign="middle"
-      >
-        <Grid.Column>
-          <Header as="h1" textAlign="left">Annual Report Disclosure Requirements</Header>
-          <Divider section />
+      <div>
+        <Divider section />
+        <Header as="h1" textAlign="left">Annual Report Disclosure Requirements</Header>
+        <Grid stackable>
           {_.map(annualReportRequirements, (field) => {
             if (field.key === 'issueJurisdictionSecuritiesOffering') {
-              return (
-                <Dropdown
-                  fluid
-                  multiple
-                  search
-                  selection
-                  placeholder="State"
-                  options={COUNTRIES}
-                  onChange={this.handleSelectChange}
-                  key={field.key}
-                />
-              );
+              return null;
             }
             return (
               <Form.Input
@@ -49,11 +35,24 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
                 defaultValue={field.value}
                 onChange={this.handleInputChange}
                 key={field.key}
+                className="column"
+                width={8}
               />
             );
           })}
-        </Grid.Column>
-      </Grid>
+        </Grid>
+        <Divider hidden />
+        <Dropdown
+          fluid
+          multiple
+          search
+          selection
+          placeholder="State"
+          options={COUNTRIES}
+          onChange={this.handleSelectChange}
+          key={annualReportRequirements.issueJurisdictionSecuritiesOffering.key}
+        />
+      </div>
     );
   }
 }

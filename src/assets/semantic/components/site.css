@@ -1,0 +1,232 @@
+/*!
+ * # Semantic UI 2.2.14 - Site
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
+
+/*******************************
+             Page
+*******************************/
+
+@import url('https://fonts.googleapis.com/css?family=SF Pro Display Heavy:400,700,400italic,700italic&subset=latin');
+html,
+body {
+  height: 100%;
+}
+html {
+  font-size: 14px;
+}
+body {
+  margin: 0px;
+  padding: 0px;
+  overflow-x: hidden;
+  min-width: 320px;
+  background: #FFFFFF;
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.571428em;
+  color: #303030;
+  font-smoothing: antialiased;
+}
+
+
+/*******************************
+             Headers
+*******************************/
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  line-height: 1.28571429em;
+  margin: calc(2rem -  0.14285714em ) 0em 1rem;
+  font-weight: 500;
+  padding: 0em;
+}
+h1 {
+  min-height: 1rem;
+  font-size: 2rem;
+}
+h2 {
+  font-size: 1.71428571rem;
+}
+h3 {
+  font-size: 1.28571429rem;
+}
+h4 {
+  font-size: 1.07142857rem;
+}
+h5 {
+  font-size: 1rem;
+}
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child {
+  margin-top: 0em;
+}
+h1:last-child,
+h2:last-child,
+h3:last-child,
+h4:last-child,
+h5:last-child {
+  margin-bottom: 0em;
+}
+
+
+/*******************************
+             Text
+*******************************/
+
+p {
+  margin: 0em 0em 1em;
+  line-height: 1.571428em;
+}
+p:first-child {
+  margin-top: 0em;
+}
+p:last-child {
+  margin-bottom: 0em;
+}
+
+/*-------------------
+        Links
+--------------------*/
+
+a {
+  color: #A9D943;
+  text-decoration: none;
+}
+a:hover {
+  color: #9ee110;
+  text-decoration: none;
+}
+
+
+/*******************************
+         Scrollbars
+*******************************/
+
+
+
+/*******************************
+          Highlighting
+*******************************/
+
+
+/* Site */
+::-webkit-selection {
+  background-color: #CCE2FF;
+  color: #303030;
+}
+::-moz-selection {
+  background-color: #CCE2FF;
+  color: #303030;
+}
+::selection {
+  background-color: #CCE2FF;
+  color: #303030;
+}
+
+/* Form */
+textarea::-webkit-selection,
+input::-webkit-selection {
+  background-color: rgba(100, 100, 100, 0.4);
+  color: #303030;
+}
+textarea::-moz-selection,
+input::-moz-selection {
+  background-color: rgba(100, 100, 100, 0.4);
+  color: #303030;
+}
+textarea::selection,
+input::selection {
+  background-color: rgba(100, 100, 100, 0.4);
+  color: #303030;
+}
+
+/* Force Simple Scrollbars */
+body ::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+}
+body ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 0px;
+}
+body ::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.25);
+  -webkit-transition: color 0.2s ease;
+  transition: color 0.2s ease;
+}
+body ::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(0, 0, 0, 0.15);
+}
+body ::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 135, 139, 0.8);
+}
+
+/* Inverted UI */
+body .ui.inverted::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+body .ui.inverted::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+}
+body .ui.inverted::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(255, 255, 255, 0.15);
+}
+body .ui.inverted::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+
+/*******************************
+        Global Overrides
+*******************************/
+
+@font-face {
+  font-family: 'SF Pro Display Regular';
+  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.eot");
+  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.eot?#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.woff2") format('woff2'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.woff") format('woff'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.ttf") format('truetype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.svg#SFProDisplay-Regular") format('svg');
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'SF Pro Display Medium';
+  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.eot");
+  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.eot?#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.woff2") format('woff2'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.woff") format('woff'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.ttf") format('truetype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.svg#SFProDisplay-Medium") format('svg');
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'SF Pro Display Bold';
+  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.eot");
+  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.eot?#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.woff2") format('woff2'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.woff") format('woff'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.ttf") format('truetype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.svg#SFProDisplay-Bold") format('svg');
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'SF Pro Display Heavy';
+  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.eot");
+  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.eot?#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.woff2") format('woff2'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.woff") format('woff'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.ttf") format('truetype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.svg#SFProDisplay-Heavy") format('svg');
+  font-style: normal;
+  font-weight: 900;
+}
+
+
+/*******************************
+         Site Overrides
+*******************************/
+
