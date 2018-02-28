@@ -1,11 +1,11 @@
 import React from 'react';
-import { Table, Image } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import DateTimeFormat from './../../../components/common/DateTimeFormat';
 import Pagination from './../../../theme/table/Pagination';
-import Userimage from '../../../assets/images/james-wright.png';
+import Randavatar from './../../../components/common/Randavatar';
 
 const paginateOptions = {
   activePage: 5,
@@ -27,9 +27,11 @@ const userListing = props => (
       </Table.Header>
       <Table.Body>
         {_.map(props.listData, user => (
-          <Table.Row key={user.Username}>
+          <Table.Row key={user.username}>
             <Table.Cell collapsing>
-              <Image src={Userimage} size="mini" avatar circular />
+              {!user.profilepic &&
+                <Randavatar avatarKey={user.username} name={user.given_name} size="mini" />
+              }
             </Table.Cell>
             <Table.Cell>
               <span className="user-name">{`${user.given_name} ${user.family_name}`}</span>
