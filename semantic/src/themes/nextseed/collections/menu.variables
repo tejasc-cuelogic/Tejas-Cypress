@@ -318,7 +318,7 @@
 
 @tabularHoveredTextColor: @hoveredTextColor;
 
-@tabularVerticalBackground: none @tabularBackgroundColor;
+@tabularVerticalBackground: none;
 
 @tabularFluidOffset: 1px;
 @tabularFluidWidth: ~"calc(100% + "(@tabularFluidOffset * 2)~")";

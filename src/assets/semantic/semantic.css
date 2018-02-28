@@ -21820,6 +21820,14 @@ ol.ui.horizontal.list li:before,
          Theme Overrides
 *******************************/
 
+.compact .ui.grid {
+  margin: 0;
+}
+
+.compact .ui.grid > .column:not(.row) {
+  padding: 0;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -22582,7 +22590,7 @@ Floated Menu / Item
 /* Vertical Tabular (Left) */
 
 .ui.vertical.tabular.menu {
-  background: none transparent;
+  background: none;
   border-radius: 0em;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
@@ -22609,7 +22617,7 @@ Floated Menu / Item
 /* Vertical Right Tabular */
 
 .ui.vertical.right.tabular.menu {
-  background: none transparent;
+  background: none;
   border-radius: 0em;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
@@ -36334,6 +36342,20 @@ body.pushable > .pusher {
 /*******************************
          Tab Overrides
 *******************************/
+
+.tabular-wrap .ui.vertical.right.tabular.menu {
+  border: none;
+  background: red;
+  min-height: calc(100vh - 205px);
+}
+
+.tabular-wrap .ui.attached.segment.tab {
+  width: 100%;
+  max-width: none;
+  background: green;
+  margin: 0;
+  border: none;
+}
 
 /*******************************
         User Overrides

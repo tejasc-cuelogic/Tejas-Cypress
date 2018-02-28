@@ -1,4 +1,11 @@
 /*******************************
          Theme Overrides
 *******************************/
-
+.compact{
+    .ui.grid{
+        margin:0;
+        >.column:not(.row){
+            padding:0;
+        }
+    }
+}
