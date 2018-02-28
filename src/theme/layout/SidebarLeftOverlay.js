@@ -21,8 +21,6 @@ class SidebarLeftPush extends Component {
       { icon: 'settings', displayName: 'Settings', to: 'settings' },
     ];
 
-    console.log(this.props.UserInfo);
-
     return (
       <Sidebar.Pushable>
         <Sidebar as={Menu} animation="push" width="thin" visible={uiStore.layoutState.leftPanel} icon="labeled" vertical inverted>
