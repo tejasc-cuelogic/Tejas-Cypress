@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import _ from 'lodash';
+import shortid from 'shortid';
 
 import {
   DOCFILE_TYPES,
@@ -9,10 +10,13 @@ import {
   OFFERING_INFORMATION,
   ANNUAL_REPORT_REQUIREMENTS,
   SIGNATURE,
+  PERSONAL_SIGNATURE,
 } from './../constants/business';
 
 export class BusinessStore {
   formValues = [...FORM_VALUES];
+
+  personalSignature = { ...PERSONAL_SIGNATURE };
 
   @observable
   offeringId = '';
@@ -107,8 +111,19 @@ export class BusinessStore {
   }
 
   @action
+  changePersonalSignature(field, id, value) {
+    _.filter(this.signature.signaturePerson, person => person.id === id)[0][field].value = value;
+  }
+
+  @action
   setCountry(value) {
     this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
+  }
+
+  @action
+  addNewPersonalSignature() {
+    this.personalSignature.id = shortid.generate();
+    this.signature.signaturePerson.push(this.personalSignature);
   }
 
   @action
