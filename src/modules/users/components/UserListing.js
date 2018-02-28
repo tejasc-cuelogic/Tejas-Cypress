@@ -40,7 +40,7 @@ const userListing = props => (
             <Table.Cell>Detroit, MI (80331)</Table.Cell>
             <Table.Cell>617 434-1551</Table.Cell>
             <Table.Cell>
-              <div className="accountType accredited">R</div>
+              <div className="account-type small full accredited">R</div>
             </Table.Cell>
             <Table.Cell>2 days ago</Table.Cell>
             <Table.Cell>13 months ago</Table.Cell>

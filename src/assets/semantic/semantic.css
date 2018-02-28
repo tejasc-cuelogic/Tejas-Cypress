@@ -5398,6 +5398,94 @@ div.login-form ul.error-messages {
   font-weight: 400;
 }
 
+.account-type {
+  display: inline-block;
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  text-align: center;
+  line-height: 1.6;
+  border-radius: 4px;
+  border-style: solid;
+  position: relative;
+}
+
+.account-type + .accountType {
+  margin-left: 0.416667rem;
+}
+
+.account-type.accredited:after {
+  content: "A";
+  display: block;
+  border-radius: 10px;
+  font-size: 0.533334em;
+  text-align: center;
+  color: #FFFFFF;
+  position: absolute;
+}
+
+.account-type.admin {
+  color: #000000;
+  border-color: #000000;
+}
+
+.account-type.admin.accredited:after {
+  background-color: #000000;
+}
+
+.account-type.full {
+  color: #27AE60;
+  border-color: #27AE60;
+}
+
+.account-type.full.accredited:after {
+  background-color: #27AE60;
+}
+
+.account-type.partial {
+  color: #F2994A;
+  border-color: #F2994A;
+}
+
+.account-type.partial.accredited:after {
+  background-color: #F2994A;
+}
+
+.account-type.locked {
+  color: #EB5757;
+  border-color: #EB5757;
+}
+
+.account-type.locked.accredited:after {
+  background-color: #EB5757;
+}
+
+.account-type.small {
+  width: 24px;
+  height: 24px;
+  font-size: 1.071428em;
+  border-width: 1px;
+}
+
+.account-type.small.accredited:after {
+  width: 13px;
+  height: 13px;
+  top: -6px;
+  right: -6px;
+}
+
+.account-type.medium {
+  width: 36px;
+  height: 36px;
+  font-size: 1.571428em;
+  border-width: 2px;
+}
+
+.account-type.medium.accredited:after {
+  width: 16px;
+  height: 16px;
+  top: -8px;
+  right: -8px;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -14427,6 +14515,10 @@ a.ui.basic.label:hover {
          Theme Overrides
 *******************************/
 
+.ui.label {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -18171,7 +18263,7 @@ ol.ui.horizontal.list li:before,
   margin: 0em 0em 0.28571429rem 0em;
   color: #303030;
   font-size: 0.92857143em;
-  font-weight: bold;
+  font-weight: 500;
   text-transform: none;
 }
 
@@ -18926,7 +19018,7 @@ ol.ui.horizontal.list li:before,
   margin: 0em 0em 0.28571429rem 0em;
   color: #303030;
   font-size: 0.92857143em;
-  font-weight: bold;
+  font-weight: 500;
   text-transform: none;
 }
 
@@ -19195,7 +19287,7 @@ ol.ui.horizontal.list li:before,
   margin-bottom: 0em;
   vertical-align: baseline;
   font-size: 0.92857143em;
-  font-weight: bold;
+  font-weight: 500;
   color: #303030;
   text-transform: none;
 }
@@ -25896,6 +25988,7 @@ Floated Menu / Item
 
 .ui.table thead th {
   padding: 1.666667em;
+  font-size: 0.857142em;
   text-transform: uppercase;
 }
 
@@ -25946,73 +26039,6 @@ Floated Menu / Item
 .ui.table.user-list .user-name {
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   display: block;
-}
-
-.ui.table.user-list .accountType {
-  width: 24px;
-  height: 24px;
-  display: inline-block;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 1.071428em;
-  text-align: center;
-  line-height: 1.6;
-  border: 1px solid;
-  border-radius: 3px;
-  position: relative;
-}
-
-.ui.table.user-list .accountType + .accountType {
-  margin-left: 0.416667rem;
-}
-
-.ui.table.user-list .accountType.accredited:after {
-  content: "A";
-  width: 13px;
-  height: 13px;
-  display: block;
-  border-radius: 7px;
-  font-size: 0.533334em;
-  text-align: center;
-  color: #FFFFFF;
-  position: absolute;
-  top: -6px;
-  right: -6px;
-}
-
-.ui.table.user-list .accountType.admin {
-  color: #000000;
-  border-color: #000000;
-}
-
-.ui.table.user-list .accountType.admin.accredited:after {
-  background-color: #000000;
-}
-
-.ui.table.user-list .accountType.full {
-  color: #27AE60;
-  border-color: #27AE60;
-}
-
-.ui.table.user-list .accountType.full.accredited:after {
-  background-color: #27AE60;
-}
-
-.ui.table.user-list .accountType.partial {
-  color: #F2994A;
-  border-color: #F2994A;
-}
-
-.ui.table.user-list .accountType.partial.accredited:after {
-  background-color: #F2994A;
-}
-
-.ui.table.user-list .accountType.locked {
-  color: #EB5757;
-  border-color: #EB5757;
-}
-
-.ui.table.user-list .accountType.locked.accredited:after {
-  background-color: #EB5757;
 }
 
 .ui.table a {
