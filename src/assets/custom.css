@@ -1,109 +1,10 @@
-/*.site {
-	display: flex;
-	min-height: 100vh;
-	flex-direction: column;
-}
-
-.site-content {
-	flex: 1;
-	margin-top: 7em;
-}*/
-
 /*  Layout Styles */
-html{
-	padding:0;
-}
-/* .header-wrap{
-	height:58px;
-}
-.content-wrapper{
-	min-height:calc(100vh - 58px);
-} */
-/*.sidebar + .content-wrapper{
-	margin:0 0 0 68px;
-}*/
-/*.content{
-	min-height:calc(100vh - 342px);
-}
-.ui.inverted.menu{
-	background:#383838;
-}*/
-/* .pushable>.sidebar ~ .pusher{
-	padding-left:68px;
-	transition:all .5s ease;
-}
-.ui.visible.thin.left.sidebar~.fixed,
-.ui.visible.thin.left.sidebar~.pusher{
-	padding-left:220px;
-	transform:translate3D(0,0,0);
-}
-.ui.segment.pushable{
-	margin:0;
-}
-.ui.left.push.sidebar{
-	width:68px;
-	visibility:visible;
-	transform:translate3D(0,0,0);
-	transition:all .5s ease;
-}
-.ui.left.push.sidebar .item {
-	min-width: auto !important;
-	text-align: left;
-	overflow:hidden;
-}
-.ui.left.push.sidebar .item>.icon:not(.dropdown){
-	float:left;
-	margin:0 !important;
-}
-.ui.left.push.sidebar .item span{
-	opacity:0;
-	display:block;
-	line-height:24px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
-}
-.ui.visible.push.sidebar{
-	width:220px;
-}
-.ui.visible.push.sidebar .item span{
-	opacity:1;
-	margin-left:35px;
-	max-width:153px;
-} */
-
-
-
-
-
-
-
-
-
 
 .nsgreen {
 	color: #85b02b;
 }
 
-/*	Button Styles 	*/
-/* .ui.green.button,
-.ui.green.buttons .button{
-	background-color:#85b02b;
-}
-.ui.green.button:hover,
-.ui.green.buttons .button:hover,
-.ui.green.button:active,
-.ui.green.buttons .button:active,
-.ui.green.button:focus,
-.ui.green.buttons .button:focus{
-	background-color:#79a321;
-} */
-
-/* .edgar-form .ui.form{
-	padding-top:50px;
-	padding-bottom:50px;
-} */
-.edgar-form .ui.form .field{
+/* .edgar-form .ui.form .field{
 	margin:0em;
 }
 .edgar-form .ui.form .field>label{
@@ -115,31 +16,9 @@ html{
 .edgar-form .form-footer{
 	text-align: center;
 	padding-bottom:20px;
-}
-
-/* .header-section {
-	background: #424242;
-	min-height: 80px;
 } */
 
-.header-section .ui.grid {
+/* .header-section .ui.grid {
 	padding-left: 20px;
 	padding-top: 5px;
-}
-
-/* .header-section .ui.grid .userDetailsLinks a{
-	color: #7D7D7D;
-	text-transform: uppercase;
-	margin-right: 29px;
-    font-size: 0.8em;
-} */
-
-/* .header-section .ui.grid .userDetailsLinks a:hover, .header-section .ui.grid .userDetailsLinks a.active{
-	color: #FFF;
-} */
-
-/* .header-section h3{
-	color: #FFFFFF;
-	font-size: 1.4em;
-    font-weight: bold;
 } */
