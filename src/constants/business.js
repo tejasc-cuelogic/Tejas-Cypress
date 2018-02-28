@@ -100,6 +100,11 @@ export const ISSUER_INFORMATION = {
     error: undefined,
     rule: 'required',
   },
+  street2: {
+    value: '',
+    error: undefined,
+    rule: 'required',
+  },
   city: {
     value: '',
     error: undefined,
