@@ -72,7 +72,7 @@ export default class XmlForm extends React.Component {
             }}
           >
             <Button color="green" size="large">
-              Sign Up
+              Submit
             </Button>
           </div>
         </Form>
