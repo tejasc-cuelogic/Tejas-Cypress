@@ -131,7 +131,8 @@ strong {
 
 b,
 strong {
-  font-weight: bolder;
+  // font-weight: bolder;
+  font-family:@boldFont;
 }
 
 /**

@@ -3,7 +3,7 @@ import { Table } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import DateTimeFormat from './../../../components/common/DateTimeFormat';
+// import DateTimeFormat from './../../../components/common/DateTimeFormat';
 import Pagination from './../../../theme/table/Pagination';
 import Randavatar from './../../../components/common/Randavatar';
 
@@ -33,16 +33,19 @@ const userListing = props => (
                 <Randavatar avatarKey={user.username} name={user.given_name} size="mini" />
               }
             </Table.Cell>
-            <Table.Cell>
+            <Table.Cell className="user-status">
               <span className="user-name">{`${user.given_name} ${user.family_name}`}</span>
               {user.email}
             </Table.Cell>
             <Table.Cell>Detroit, MI (80331)</Table.Cell>
             <Table.Cell>617 434-1551</Table.Cell>
-            <Table.Cell><span className="userType R">R</span></Table.Cell>
+            <Table.Cell>
+              <div className="account-type small full accredited">R</div>
+            </Table.Cell>
             <Table.Cell>2 days ago</Table.Cell>
-            <Table.Cell><DateTimeFormat datetime={user.UserCreateDate} /></Table.Cell>
-            <Table.Cell><Link to="/app/users/1/details">view profile</Link></Table.Cell>
+            <Table.Cell>13 months ago</Table.Cell>
+            {/* <Table.Cell><DateTimeFormat datetime={user.UserCreateDate} /></Table.Cell> */}
+            <Table.Cell><Link to="/app/users/1/UserDetails">view profile</Link></Table.Cell>
           </Table.Row>
         ))}
         {!props.listData &&

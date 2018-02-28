@@ -87,7 +87,6 @@ const userListingSubheader = () => (
               <List.Item>65 Individual</List.Item>
               <List.Item>65 Entity</List.Item>
               <List.Item>65 IRA</List.Item>
-              <List.Item>showcase metadata on all roles in the system</List.Item>
             </List>
           </Grid.Column>
         </Grid.Row>

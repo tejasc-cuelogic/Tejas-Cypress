@@ -16,14 +16,14 @@ const userModuleSubheader = () => (
       <Grid.Row>
         <Grid.Column width={16}>
           <List horizontal link>
-            <List.Item as="a" to="/app/users/1/details" className="active">Profile</List.Item>
-            <List.Item as="a" to="/users/new">Accounts</List.Item>
-            <List.Item as="a" to="/users/new">Activity</List.Item>
-            <List.Item as="a" to="/users/new">Investments</List.Item>
-            <List.Item as="a" to="/users/new">Transactions</List.Item>
-            <List.Item as="a" to="/users/new">Statements</List.Item>
-            <List.Item as="a" to="/users/new">Referrals</List.Item>
-            <List.Item as="a" to="/users/new">Messages</List.Item>
+            <List.Item as="a" href="/app/users/1/UserDetails" className="active">Profile</List.Item>
+            <List.Item as="a" href="/app/users/1/UserAccounts">Accounts</List.Item>
+            <List.Item as="a" href="/app/users/new">Activity</List.Item>
+            <List.Item as="a" href="/app/users/new">Investments</List.Item>
+            <List.Item as="a" href="/app/users/new">Transactions</List.Item>
+            <List.Item as="a" href="/app/users/new">Statements</List.Item>
+            <List.Item as="a" href="/app/users/new">Referrals</List.Item>
+            <List.Item as="a" href="/app/users/new">Messages</List.Item>
           </List>
         </Grid.Column>
       </Grid.Row>

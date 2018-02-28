@@ -184,7 +184,7 @@
 /* Active Dropdown */
 @dropdownActiveItemBackground: @subtleTransparentBlack;
 @dropdownActiveItemColor: @selectedTextColor;
-@dropdownActiveItemFontWeight: bold;
+@dropdownActiveItemFontWeight: 500;
 
 /* Active Sub Menu */
 @subMenuActiveBackground: transparent;

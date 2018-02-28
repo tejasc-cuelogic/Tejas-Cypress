@@ -5,8 +5,8 @@
 .page-header-section{
     .ui.horizontal.list{
         .item{
-            // font-size:0.857142rem;
-            font-weight:400;
+            font-size:0.857142rem;
+            font-weight:500;
             // letter-spacing:1px;
             color:@inverse-text;
         }
@@ -18,7 +18,7 @@
         }
         &.link{
             > a.item{
-                // font-size:0.857142rem;
+                font-size:0.857142rem;
                 font-weight:500;
                 margin-left:2rem;
                 text-transform:uppercase;

@@ -58,7 +58,7 @@
  url("@{fontPath}/@{fontFileName}-Heavy.svg#SFProDisplay-Heavy") format('svg')
 ;
 
-@headerFont 	:"SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@headerFont 	:"SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 @pageFont   	:"SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
 @regularFont	:"SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -165,8 +165,8 @@
 @pageBackground      : #FFFFFF;
 @pageOverflowX       : hidden;
 
-@lineHeight          : 1.666667em;
-@textColor           : rgba(0, 0, 0, 0.87);
+@lineHeight          : 1.571428em;
+@textColor           : @primary-text;
 
 /*-------------------
       Paragraph
@@ -179,7 +179,7 @@
        Links
 --------------------*/
 
-@linkColor           : #4183C4;
+@linkColor           : @theme-primary;
 @linkUnderline       : none;
 @linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
 @linkHoverUnderline  : @linkUnderline;

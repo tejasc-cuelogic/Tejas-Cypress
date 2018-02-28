@@ -2,13 +2,11 @@
          Theme Overrides
 *******************************/
 .ui.table{
-    margin:0;
-    color:@primary-text;
+    font-family:@regularFont;
     thead th{
         padding:1.666667em;
-        font-weight:400;
+        font-size:0.857142em;
         text-transform:uppercase;
-        background:@inverse-text;
     }
     td{
         padding:0.833334em 1.666667em;
@@ -30,25 +28,38 @@
         }
     }
     &.user-list{
-        .user-name{
-            display:block;
-            font-size:1.166667em;
-            font-weight:500;
-            // line-height:1.5;
-        }
-        .userType{
-            width:24px;
-            height:24px;
-            display:inline-block;
-            font-size:1.083334em;
-            font-weight:500;
-            text-align:center;
-            line-height:1.846153;
-            border:1px solid red;
-            border-radius:3px;
-            + .userType{
-                margin-left:0.416667rem;
+        tr.locked{
+            .user-image:after{
+                content:"\F023";
+                font-family:"Icons";
+                font-size:20px;
+                color:@highlight-primary;
+                text-shadow:0px 0px 8px @inverse-text;
+                position:absolute;
+                bottom:-4px;
+                right:-4px;
+                z-index:1;
+            }
+            .user-status{
+                color:@highlight-primary;
             }
         }
+        .user-image{
+            position:relative;
+            .ui.avatar.image{
+                margin-right:0;
+            }
+        }
+        .user-name{
+            font-family:@boldFont;
+            display:block;
+        }
+    }
+    a{
+        font-family:@pageFont;
+        font-size:0.857142em;
+        // color:@theme-primary;
+        // text-decoration:none;
+        text-transform:uppercase;
     }
 }
