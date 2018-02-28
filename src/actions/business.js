@@ -44,9 +44,10 @@ export class Business {
       issuerInformation: this.getFormattedInformation(issuerInformation),
       offeringInformation: this.getFormattedInformation(offeringInformation),
       annualReportDisclosureRequirements: this.getFormattedInformation(annualReportRequirements),
-      signature: this.getFormattedInformation(signature),
+      signature: this.getFormattedSignature(signature),
       documentList: _.filter(_.keys(documentList), key => documentList[key]),
     };
+
 
     ApiService.post(XML_URL, payload)
       // TODO: Decide what should happen after XML generation
@@ -102,6 +103,22 @@ export class Business {
     });
     return formattedData;
   }
+
+  getFormattedSignature = (signature) => {
+    const formattedData = {};
+    formattedData.issuer = signature.issuer.value;
+    formattedData.issuerSignature = signature.issuerSignature.value;
+    formattedData.issuerTitle = signature.issuerTitle.value;
+    formattedData.signaturePerson = [];
+    _.map(signature.signaturePerson, (person) => {
+      const personData = {};
+      personData.personSignature = person.personSignature.value;
+      personData.personTitle = person.personTitle.value;
+      personData.signatureDate = person.signatureDate.value;
+      formattedData.signaturePerson.push(personData);
+    });
+    return formattedData;
+  };
 
   /**
   * @desc Covnerts list fetched from DynamoDB to desired form
