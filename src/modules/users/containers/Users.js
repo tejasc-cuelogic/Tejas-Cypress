@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
+import upperFirst from 'lodash/upperFirst';
+import Loadable from 'react-loadable';
 import UserListing from './../components/UserListing';
 import CreateNew from './../components/CreateNew';
-import UserDetails from './../components/UserDetails';
+// import UserDetails from './../components/UserDetails';
+// import UserAccounts from './../components/UserAccounts';
 import UserModuleSubheader from './../components/UserModuleSubheader';
 import UserListingSubheader from './../components/UserListingSubheader';
 import adminActions from './../../../actions/admin';
@@ -40,10 +43,17 @@ class Users extends Component {
         </Aux>
       );
     } else if (this.props.match.params.userId) {
+      const loadSection = upperFirst(this.props.match.params.section) || 'UserDetails';
+      const UserSection = Loadable({
+        loader: () => import(`../components/${loadSection}`),
+        loading() {
+          return <div>Loading...</div>;
+        },
+      });
       content = (
         <Aux>
           <UserModuleSubheader />
-          <UserDetails />
+          <UserSection />
         </Aux>
       );
     } else if (this.props.adminStore && this.props.adminStore.usersList) {
