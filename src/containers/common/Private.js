@@ -17,10 +17,12 @@ export default class Private extends React.Component {
   }
 
   render() {
+    const User = { ...this.props.userStore.currentUser };
+    const UserInfo = { fullname: `${User.givenName} ${User.familyName}`, avatarKey: User.sub };
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <div>
-          <SidebarLeftOverlay>
+          <SidebarLeftOverlay UserInfo={UserInfo}>
             <Switch>
               {privateRoutes.map(route => (
                 <Route

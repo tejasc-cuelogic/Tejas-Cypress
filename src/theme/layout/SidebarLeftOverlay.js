@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Sidebar, Menu, Icon, Button, Image } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react';
 import NotificationPanel from './NotificationPanel';
 import uiStore from '../../stores/uiStore';
-import Userimage from '../../assets/images/james-wright.png';
+import Randavatar from './../../components/common/Randavatar';
 
 @inject('uiStore')
 @observer
@@ -25,8 +25,8 @@ class SidebarLeftPush extends Component {
       <Sidebar.Pushable>
         <Sidebar as={Menu} animation="push" width="thin" visible={uiStore.layoutState.leftPanel} icon="labeled" vertical inverted>
           <div className="user-picture">
-            <Image src={Userimage} size="small" circular />
-            <h2>James Wright</h2>
+            <Randavatar name={this.props.UserInfo.fullname} avatarKey={this.props.UserInfo.avatarKey} size="small" />
+            <h2>{this.props.UserInfo.fullname}</h2>
             <h3>Regular User</h3>
           </div>
           {
