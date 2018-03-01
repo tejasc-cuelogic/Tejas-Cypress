@@ -361,6 +361,11 @@ export const SIGNATURE = {
     key: 'issuerTitle',
     label: 'Title',
   },
+  signaturePerson: [],
+};
+
+export const PERSONAL_SIGNATURE = {
+  id: '',
   personSignature: {
     value: '',
     error: undefined,

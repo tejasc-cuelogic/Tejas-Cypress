@@ -29,7 +29,7 @@ export default class XmlForm extends React.Component {
   render() {
     return (
       <div className="content-spacer">
-        <Form className="edgar-form" onSubmit={this.handleFormSubmit}>
+        <Form className="edgar-form">
           <Form.Group widths="equal">
             <Form.Select
               fluid
@@ -71,7 +71,7 @@ export default class XmlForm extends React.Component {
             paddingBottom: '40px',
             }}
           >
-            <Button color="green" size="large">
+            <Button color="green" size="large" onClick={this.handleFormSubmit}>
               Submit
             </Button>
           </div>

@@ -1,11 +1,25 @@
 import _ from 'lodash';
+import shortid from 'shortid';
 
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
-import { EDGAR_URL, XML_URL, GRAPHQL } from './../constants/business';
+import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE } from './../constants/business';
 import ApiService from '../services/api';
 
 export class Business {
+  /**
+  * @desc Adds new field for PersonalSignatureArray
+  *       if previous value of `signaturePerson` prop is [{...}, {...}]
+  *       then calling method will add bank map to above array as [{...}, {...}, {...}]
+  */
+  addPersonalSignature = () => {
+    const personalSignature = { ...PERSONAL_SIGNATURE };
+    personalSignature.id = shortid.generate();
+    const signaturePerson = [...businessStore.signature.signaturePerson];
+    signaturePerson.push(personalSignature);
+    businessStore.addNewPersonalSignature(signaturePerson);
+  }
+
   /**
   * @desc Makes an API Call to server to generate Docx file from data entered
   */
@@ -44,9 +58,10 @@ export class Business {
       issuerInformation: this.getFormattedInformation(issuerInformation),
       offeringInformation: this.getFormattedInformation(offeringInformation),
       annualReportDisclosureRequirements: this.getFormattedInformation(annualReportRequirements),
-      signature: this.getFormattedInformation(signature),
+      signature: this.getFormattedSignature(signature),
       documentList: _.filter(_.keys(documentList), key => documentList[key]),
     };
+
 
     ApiService.post(XML_URL, payload)
       // TODO: Decide what should happen after XML generation
@@ -102,6 +117,22 @@ export class Business {
     });
     return formattedData;
   }
+
+  getFormattedSignature = (signature) => {
+    const formattedData = {};
+    formattedData.issuer = signature.issuer.value;
+    formattedData.issuerSignature = signature.issuerSignature.value;
+    formattedData.issuerTitle = signature.issuerTitle.value;
+    formattedData.signaturePerson = [];
+    _.map(signature.signaturePerson, (person) => {
+      const personData = {};
+      personData.personSignature = person.personSignature.value;
+      personData.personTitle = person.personTitle.value;
+      personData.signatureDate = person.signatureDate.value;
+      formattedData.signaturePerson.push(personData);
+    });
+    return formattedData;
+  };
 
   /**
   * @desc Covnerts list fetched from DynamoDB to desired form

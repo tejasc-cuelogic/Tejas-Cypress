@@ -106,9 +106,30 @@ export class BusinessStore {
     this.signature[field].value = value;
   }
 
+  /**
+  * @desc This action changes fields in personal signature form, Form can has multiple entries
+  *       Depending on unique ID we need to change value of particular entry only, hence we are
+  *       finding out and entry with and given ID and then modifying value in it...
+  */
+  @action
+  changePersonalSignature(field, id, value) {
+    _.filter(this.signature.signaturePerson, person => person.id === id)[0][field].value = value;
+  }
+
   @action
   setCountry(value) {
     this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
+  }
+
+  @action
+  addNewPersonalSignature(newSignatures) {
+    this.signature.signaturePerson = newSignatures;
+  }
+
+  @action
+  deletePersonalSignature(id) {
+    const { signaturePerson } = this.signature;
+    this.signature.signaturePerson = _.filter(signaturePerson, person => person.id !== id);
   }
 
   @action
