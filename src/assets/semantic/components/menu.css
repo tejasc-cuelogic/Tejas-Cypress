@@ -704,7 +704,7 @@ Floated Menu / Item
 
 /* Vertical Tabular (Left) */
 .ui.vertical.tabular.menu {
-  background: none transparent;
+  background: none;
   border-radius: 0em;
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
@@ -728,7 +728,7 @@ Floated Menu / Item
 
 /* Vertical Right Tabular */
 .ui.vertical.right.tabular.menu {
-  background: none transparent;
+  background: none;
   border-radius: 0em;
   -webkit-box-shadow: none !important;
           box-shadow: none !important;

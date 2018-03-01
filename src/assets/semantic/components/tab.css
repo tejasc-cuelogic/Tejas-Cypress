@@ -84,6 +84,16 @@
          Tab Overrides
 *******************************/
 
+.tabular-wrap .ui.vertical.right.tabular.menu {
+  border: none;
+  min-height: calc(100vh - 205px);
+}
+.tabular-wrap .ui.attached.segment.tab {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  border: none;
+}
 
 
 /*******************************
