@@ -19,7 +19,12 @@ import Banking from './banking/containers/Banking';
 import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './users/containers/Users';
-import { BusinessAuthorization, UserAuthorization } from '../components/common/Authorization';
+import XmlForm from './business/containers/XmlForm';
+import {
+  AdminAuthorization,
+  BusinessAuthorization,
+  UserAuthorization,
+} from '../components/common/Authorization';
 
 export const publicRoutes = [
   {
@@ -100,6 +105,11 @@ export const privateRoutes = [
     path: '/app/business/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
+  },
+  {
+    path: '/app/business/xml',
+    component: XmlForm,
+    auth: AdminAuthorization,
   },
   {
     path: '/app/users/:userId/:section',

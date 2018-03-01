@@ -1,27 +1,28 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Button, Grid, Checkbox, Divider, GridColumn } from 'semantic-ui-react';
+import { Form, Button, Grid, Divider } from 'semantic-ui-react';
 import shortid from 'shortid';
-import _ from 'lodash';
 import '../../../assets/custom.css';
 
 import businessActions from '../../../actions/business';
+import ListErrors from '../../../components/common/ListErrors';
+import SuccessMessage from '../../../components/common/SuccessMessage';
 
 const key = shortid.generate();
 
-@inject('businessStore')
+@inject('businessStore', 'uiStore')
 @observer
 export default class EdgarForm extends React.Component {
+  componentWillUnmount() {
+    this.props.uiStore.reset();
+  }
+
   handleInputChange = (e) => {
     this.props.businessStore.setTemplateVariable(e.target.name, e.target.value);
   };
 
-  handleCheckboxChange = (e) => {
-    this.props.businessStore.toggleRequiredFiles(e.target.textContent);
-  };
-
   render() {
-    const { formValues, documentList, templateVariables } = this.props.businessStore;
+    const { formValues, templateVariables } = this.props.businessStore;
     return (
       <div>
         <div className="page-header-section webcontent-spacer">
@@ -51,21 +52,8 @@ export default class EdgarForm extends React.Component {
                 }
               </Grid>
               <Divider section />
-              <Grid stackable columns={2}>
-                {
-                  _.map(documentList, (value, type) => (
-                    <GridColumn key={`${key}_${type}`}>
-                      <Checkbox
-                        label={type}
-                        name={type}
-                        checked={value}
-                        onChange={this.handleCheckboxChange}
-                      />
-                    </GridColumn>
-                  ))
-                }
-              </Grid>
-              <Divider section />
+              <ListErrors errors={this.props.uiStore.errors} />
+              <SuccessMessage success={this.props.uiStore.success} />
               <div
                 className="form-footer"
                 style={{
@@ -76,7 +64,10 @@ export default class EdgarForm extends React.Component {
               >
                 <Button
                   color="green"
-                  disabled={!this.props.businessStore.canSubmitEdgarForm}
+                  disabled={
+                    !this.props.businessStore.canSubmitEdgarForm ||
+                      this.props.uiStore.submitButtonDisabled
+                  }
                   onClick={businessActions.generateDocxFile}
                   primary
                 >

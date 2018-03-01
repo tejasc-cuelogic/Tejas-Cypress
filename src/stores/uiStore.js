@@ -6,11 +6,13 @@ export class UiStore {
     leftPanel: false,
     notificationPanel: false,
   };
+  @observable submitButtonDisabled = false;
   @observable inProgress = false;
   @observable loaderMessage = '';
   @observable errors = undefined;
   @observable success = undefined;
   @observable redirectURL = undefined;
+  @observable dropdownLoader = false;
 
   @action
   setProgress(progress = true) {
@@ -64,7 +66,19 @@ export class UiStore {
   @action
   updateLayoutState(prop) {
     this.layoutState[prop] = !this.layoutState[prop];
-    console.log(this.layoutState);
+  }
+  setSubmitButtonDisability(status) {
+    this.submitButtonDisabled = status;
+  }
+
+  @action
+  toggleSubmitButton() {
+    this.submitButtonDisabled = !this.submitButtonDisabled;
+  }
+
+  @action
+  toggleDropdownLoader() {
+    this.dropdownLoader = !this.dropdownLoader;
   }
 
   @action
@@ -73,6 +87,8 @@ export class UiStore {
     this.errors = undefined;
     this.success = undefined;
     this.loaderMessage = '';
+    this.appLoader = false;
+    this.submitButtonDisabled = false;
   }
 }
 

@@ -1,10 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link, withRouter } from 'react-router-dom';
-import { Button, Form, Grid, Header, Message, Divider } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import { Button, Form, Grid, Header, Message } from 'semantic-ui-react';
 
 import ListErrors from '../../components/common/ListErrors';
+import FieldError from '../../components/common/FieldError';
 import authActions from './../../actions/auth';
+import validationActions from './../../actions/validation';
 
 @inject('authStore', 'uiStore')
 @withRouter
@@ -14,7 +16,7 @@ export default class Confirm extends React.Component {
     this.props.uiStore.clearErrors();
   }
 
-  handleCodeChange = e => this.props.authStore.setCode(e.target.value);
+  handleCodeChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.confirmCode()
@@ -22,15 +24,12 @@ export default class Confirm extends React.Component {
   };
 
   render() {
-    const { values, errors, inProgress } = this.props.authStore;
-
+    const { values } = this.props.authStore;
+    const { errors } = this.props.uiStore;
     return (
       <div className="login-form">
-        <Header as="h1" textAlign="center">Confirm verification code</Header>
-        <Grid
-          textAlign="center"
-          verticalAlign="middle"
-        >
+        <Header as="h1" textAlign="center">Confirm Account</Header>
+        <Grid>
           <Grid.Column>
             <Form error onSubmit={this.handleSubmitForm}>
               <div stacked>
@@ -46,27 +45,27 @@ export default class Confirm extends React.Component {
                   fluid
                   icon="lock"
                   iconPosition="left"
-                  placeholder="Code"
+                  placeholder="Verification Code"
+                  name="code"
+                  value={values.code.value}
                   onChange={this.handleCodeChange}
+                  error={!!values.code.error}
                 />
-                {errors &&
-                  <Message error textAlign="left">
-                    <ListErrors errors={errors} />
-                  </Message>
-                }
+                <FieldError error={values.code.error} />
                 <Button
                   fluid
                   color="green"
-                  disabled={inProgress}
+                  disabled={this.props.authStore.canConfirm}
                 >
-                  Confirm
+                  Confirm!
                 </Button>
+                {errors &&
+                  <Message error textAlign="left">
+                    <ListErrors errors={[errors.message]} />
+                  </Message>
+                }
               </div>
             </Form>
-            <Divider section />
-            <Message>
-              <p><Link to="login">Have an account?</Link></p>
-            </Message>
           </Grid.Column>
         </Grid>
       </div>

@@ -5,40 +5,41 @@ import { Button, Grid, Header, Form, Message, Divider } from 'semantic-ui-react'
 
 import authActions from '../../actions/auth';
 import ListErrors from '../../components/common/ListErrors';
+import FieldError from '../../components/common/FieldError';
+import validationActions from '../../actions/validation';
 
 @inject('authStore', 'uiStore')
 @observer
 export default class Register extends React.Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
+    this.props.authStore.reset();
   }
-  handleFirstNameChange = e => this.props.authStore.setFirstName(e.target.value);
-  handleLastNameChange = e => this.props.authStore.setLastName(e.target.value);
-  handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
-  handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
-  handleVerifyChange = e => this.props.authStore.setVerify(e.target.value);
-  handleRoleChange = e => this.props.authStore.setRole(e.target.value);
+
+  handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
+
   handleSubmitForm = (e) => {
     e.preventDefault();
-    authActions.register(this.props.authStore.values)
-      .then(() => this.props.history.replace('/confirm'));
+    validationActions.validateRegisterForm();
+    if (this.props.authStore.canRegister) {
+      authActions.register()
+        .then(() => this.props.history.replace('/confirm'))
+        .catch(() => {});
+    }
   };
 
   render() {
     const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     const options = [
-      { key: 'o', text: 'Business Owner', value: 'business owner' },
+      { key: 'o', text: 'Business Owner', value: 'bowner' },
       { key: 'i', text: 'Investor', value: 'investor' },
     ];
 
     return (
       <div className="login-form">
         <Header as="h1" textAlign="center">Sign Up</Header>
-        <Grid
-          textAlign="center"
-          verticalAlign="middle"
-        >
+        <Grid>
           <Grid.Column>
             <Form error onSubmit={this.handleSubmitForm}>
               <div stacked="true">
@@ -47,48 +48,72 @@ export default class Register extends React.Component {
                   icon="user"
                   iconPosition="left"
                   placeholder="First Name"
-                  value={values.fname}
-                  onChange={this.handleFirstNameChange}
+                  name="givenName"
+                  value={values.givenName.value}
+                  onChange={this.handleInputChange}
+                  error={!!values.givenName.error}
                 />
+                <FieldError error={values.givenName.error} />
                 <Form.Input
                   fluid
                   icon="user"
                   iconPosition="left"
                   placeholder="Last Name"
-                  value={values.lname}
-                  onChange={this.handleLastNameChange}
+                  name="familyName"
+                  value={values.familyName.value}
+                  onChange={this.handleInputChange}
+                  error={!!values.familyName.error}
                 />
+                <FieldError error={values.familyName.error} />
                 <Form.Input
                   fluid
                   icon="envelope"
                   iconPosition="left"
                   placeholder="Email"
-                  value={values.email}
-                  onChange={this.handleEmailChange}
+                  name="email"
+                  value={values.email.value}
+                  onChange={this.handleInputChange}
+                  error={!!values.email.error}
                 />
+                <FieldError error={values.email.error} />
                 <Form.Input
                   fluid
                   icon="lock"
                   iconPosition="left"
                   type="password"
                   placeholder="Password"
-                  value={values.password}
-                  onChange={this.handlePasswordChange}
+                  name="password"
+                  value={values.password.value}
+                  onChange={this.handleInputChange}
+                  error={!!values.password.error}
                 />
+                <FieldError error={values.password.error} />
                 <Form.Input
                   fluid
                   icon="lock"
                   iconPosition="left"
                   type="password"
                   placeholder="Verify Password"
-                  value={values.verify}
-                  onChange={this.handleVerifyChange}
+                  name="verify"
+                  value={values.verify.value}
+                  onChange={this.handleInputChange}
+                  error={!!values.verify.error}
                 />
-                <Form.Select fluid options={options} placeholder="Role" />
+                <FieldError error={values.verify.error} />
+                <Form.Select
+                  fluid
+                  options={options}
+                  placeholder="Role"
+                  name="role"
+                  onChange={this.handleInputChange}
+                  error={!!values.role.error}
+                />
+                <FieldError error={values.role.error} />
                 <Button
                   fluid
                   color="green"
                   disabled={!this.props.authStore.canRegister}
+                  size="large"
                 >
                   Sign Up
                 </Button>

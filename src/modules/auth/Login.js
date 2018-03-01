@@ -13,11 +13,10 @@ export default class Login extends React.Component {
     this.props.uiStore.clearErrors();
   }
 
-  handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
-  handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
+  handleInputChange = (e, { name, value }) => this.props.authStore.setValue(name, value);
   handleSubmitForm = (e) => {
     e.preventDefault();
-    authActions.login(this.props.authStore.values)
+    authActions.login()
       .then(() => {
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/change-password');
@@ -29,21 +28,18 @@ export default class Login extends React.Component {
   };
 
   render() {
-    const { values, inProgress } = this.props.authStore;
+    const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
 
     return (
       <div className="login-form">
         <Header as="h1" textAlign="center">Sign in to invest today or access your business application</Header>
-        <Grid
-          textAlign="center"
-          verticalAlign="middle"
-        >
+        <Grid>
           <Grid.Column>
             <Form>
-              <div stacked="true">
+              <div stacked>
                 <Button color="facebook" fluid>
-                  <Icon name="facebook" /> Log in with Facebook
+                  <Icon name="facebook" /> LOG IN WITH FACEBOOK
                 </Button>
               </div>
             </Form>
@@ -55,8 +51,9 @@ export default class Login extends React.Component {
                   icon="envelope"
                   iconPosition="left"
                   placeholder="E-mail address"
-                  value={values.email}
-                  onChange={this.handleEmailChange}
+                  name="email"
+                  value={values.email.value}
+                  onChange={this.handleInputChange}
                 />
                 <Form.Input
                   fluid
@@ -64,13 +61,14 @@ export default class Login extends React.Component {
                   iconPosition="left"
                   placeholder="Password"
                   type="password"
-                  value={values.password}
-                  onChange={this.handlePasswordChange}
+                  name="password"
+                  value={values.password.value}
+                  onChange={this.handleInputChange}
                 />
                 <Button
                   fluid
                   color="green"
-                  disabled={inProgress}
+                  size="large"
                 >
                   Log in with Email
                 </Button>

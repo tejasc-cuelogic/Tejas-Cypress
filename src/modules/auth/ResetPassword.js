@@ -1,10 +1,15 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { Button, Form, Grid, Header, Message } from 'semantic-ui-react';
+import { Button, Message, Form, Grid, Header, Divider } from 'semantic-ui-react';
+import { Link, withRouter } from 'react-router-dom';
 
 import ListErrors from '../../components/common/ListErrors';
+import FieldError from '../../components/common/FieldError';
+import authActions from '../../actions/auth';
+import validationActions from '../../actions/validation';
 
-@inject('authStore')
+@inject('authStore', 'uiStore')
+@withRouter
 @observer
 export default class ResetPassword extends React.Component {
   componentWillUnmount() {
@@ -13,25 +18,21 @@ export default class ResetPassword extends React.Component {
     }
   }
 
-  handlePasswordChange = event => this.props.authStore.setPassword(event.target.value);
-  handleVerifyChange = event => this.props.authStore.setVerify(event.target.value);
-  handleCodeChange = event => this.props.authStore.setCode(event.target.value);
+  handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleSubmitForm = (event) => {
     event.preventDefault();
-    this.props.authStore.setNewPassword().then(() => this.props.history.push('/login'));
+    authActions.setNewPassword().then(() => this.props.history.push('/login'));
   }
 
   render() {
-    const { values, errors, inProgress } = this.props.authStore;
+    const { values } = this.props.authStore;
+    const { errors } = this.props.uiStore;
 
     return (
       <div className="login-form">
         <Header as="h1" textAlign="center">Reset Password</Header>
         <p className="note">The verification code has been sent to your registered email address</p>
-        <Grid
-          textAlign="center"
-          verticalAlign="middle"
-        >
+        <Grid>
           <Grid.Column>
             <Form error onSubmit={this.handleSubmitForm}>
               <div stacked>
@@ -39,42 +40,55 @@ export default class ResetPassword extends React.Component {
                   fluid
                   icon="lock"
                   iconPosition="left"
+                  placeholder="Password"
+                  name="password"
                   type="password"
-                  placeholder="New Password"
-                  value={values.password}
-                  onChange={this.handlePasswordChange}
+                  value={values.password.value}
+                  onChange={this.handleInputChange}
+                  error={!!values.password.error}
                 />
+                <FieldError error={values.password.error} />
                 <Form.Input
                   fluid
                   icon="lock"
                   iconPosition="left"
-                  type="password"
                   placeholder="Verify Password"
-                  value={values.verify}
-                  onChange={this.handleVerifyChange}
+                  name="verify"
+                  type="password"
+                  value={values.verify.value}
+                  onChange={this.handleInputChange}
+                  error={!!values.verify.error}
                 />
+                <FieldError error={values.verify.error} />
                 <Form.Input
                   fluid
                   icon="lock"
                   iconPosition="left"
                   placeholder="Verification Code"
-                  value={values.verificationCode}
-                  onChange={this.handleCodeChange}
+                  name="code"
+                  value={values.code.value}
+                  onChange={this.handleInputChange}
+                  error={!!values.code.error}
                 />
-                {errors &&
-                  <Message error textAlign="left">
-                    <ListErrors errors={errors} />
-                  </Message>
-                }
+                <FieldError error={values.code.error} />
                 <Button
                   fluid
                   color="green"
-                  disabled={inProgress}
+                  disabled={!this.props.authStore.canRegister}
                 >
                   Reset Password
                 </Button>
+                {errors &&
+                  <Message error textAlign="left">
+                    <ListErrors errors={[errors.message]} />
+                  </Message>
+                }
               </div>
             </Form>
+            <Divider section />
+            <Message>
+              <p><Link to="login">Remembered password?</Link></p>
+            </Message>
           </Grid.Column>
         </Grid>
       </div>
