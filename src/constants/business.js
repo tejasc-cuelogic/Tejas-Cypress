@@ -361,56 +361,7 @@ export const SIGNATURE = {
     key: 'issuerTitle',
     label: 'Title',
   },
-  signaturePerson: [
-    {
-      id: 'qwertf',
-      personSignature: {
-        value: '',
-        error: undefined,
-        rule: 'required',
-        key: 'personSignature',
-        label: 'Signature',
-      },
-      personTitle: {
-        value: '',
-        error: undefined,
-        rule: 'required',
-        key: 'personTitle',
-        label: 'Title',
-      },
-      signatureDate: {
-        value: '',
-        error: undefined,
-        rule: 'required',
-        key: 'signatureDate',
-        label: 'Date',
-      },
-    },
-    {
-      id: 'jhgirng',
-      personSignature: {
-        value: '',
-        error: undefined,
-        rule: 'required',
-        key: 'personSignature',
-        label: 'Signature',
-      },
-      personTitle: {
-        value: '',
-        error: undefined,
-        rule: 'required',
-        key: 'personTitle',
-        label: 'Title',
-      },
-      signatureDate: {
-        value: '',
-        error: undefined,
-        rule: 'required',
-        key: 'signatureDate',
-        label: 'Date',
-      },
-    },
-  ],
+  signaturePerson: [],
 };
 
 export const PERSONAL_SIGNATURE = {
