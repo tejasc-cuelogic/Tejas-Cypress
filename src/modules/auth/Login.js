@@ -34,7 +34,10 @@ export default class Login extends React.Component {
     return (
       <div className="login-form">
         <Header as="h1" textAlign="center">Sign in to invest today or access your business application</Header>
-        <Grid>
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+        >
           <Grid.Column>
             <Form>
               <div stacked>

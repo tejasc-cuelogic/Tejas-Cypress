@@ -32,7 +32,10 @@ export default class ResetPassword extends React.Component {
       <div className="login-form">
         <Header as="h1" textAlign="center">Reset Password</Header>
         <p className="note">The verification code has been sent to your registered email address</p>
-        <Grid>
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+        >
           <Grid.Column>
             <Form error onSubmit={this.handleSubmitForm}>
               <div stacked>

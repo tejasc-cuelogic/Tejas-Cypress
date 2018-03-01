@@ -39,7 +39,10 @@ export default class Register extends React.Component {
     return (
       <div className="login-form">
         <Header as="h1" textAlign="center">Sign Up</Header>
-        <Grid>
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+        >
           <Grid.Column>
             <Form error onSubmit={this.handleSubmitForm}>
               <div stacked="true">

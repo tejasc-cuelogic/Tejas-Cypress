@@ -59,7 +59,7 @@ export default class EdgarForm extends React.Component {
                 style={{
                 paddingBottom: '40px',
                 paddingLeft: '1rem',
-                // textAlign: 'center',
+                textAlign: 'center',
                 }}
               >
                 <Button

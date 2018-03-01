@@ -29,7 +29,10 @@ export default class Confirm extends React.Component {
     return (
       <div className="login-form">
         <Header as="h1" textAlign="center">Confirm Account</Header>
-        <Grid>
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+        >
           <Grid.Column>
             <Form error onSubmit={this.handleSubmitForm}>
               <div stacked>
