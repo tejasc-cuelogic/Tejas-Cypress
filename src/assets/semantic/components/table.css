@@ -1136,6 +1136,7 @@
 }
 .ui.table thead th {
   padding: 1.666667em;
+  font-size: 0.857142em;
   text-transform: uppercase;
 }
 .ui.table td {
@@ -1176,62 +1177,6 @@
 .ui.table.user-list .user-name {
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   display: block;
-}
-.ui.table.user-list .accountType {
-  width: 24px;
-  height: 24px;
-  display: inline-block;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 1.071428em;
-  text-align: center;
-  line-height: 1.6;
-  border: 1px solid;
-  border-radius: 3px;
-  position: relative;
-}
-.ui.table.user-list .accountType + .accountType {
-  margin-left: 0.416667rem;
-}
-.ui.table.user-list .accountType.accredited:after {
-  content: "A";
-  width: 13px;
-  height: 13px;
-  display: block;
-  border-radius: 7px;
-  font-size: 0.533334em;
-  text-align: center;
-  color: #FFFFFF;
-  position: absolute;
-  top: -6px;
-  right: -6px;
-}
-.ui.table.user-list .accountType.admin {
-  color: #000000;
-  border-color: #000000;
-}
-.ui.table.user-list .accountType.admin.accredited:after {
-  background-color: #000000;
-}
-.ui.table.user-list .accountType.full {
-  color: #27AE60;
-  border-color: #27AE60;
-}
-.ui.table.user-list .accountType.full.accredited:after {
-  background-color: #27AE60;
-}
-.ui.table.user-list .accountType.partial {
-  color: #F2994A;
-  border-color: #F2994A;
-}
-.ui.table.user-list .accountType.partial.accredited:after {
-  background-color: #F2994A;
-}
-.ui.table.user-list .accountType.locked {
-  color: #EB5757;
-  border-color: #EB5757;
-}
-.ui.table.user-list .accountType.locked.accredited:after {
-  background-color: #EB5757;
 }
 .ui.table a {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;

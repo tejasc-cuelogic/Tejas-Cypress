@@ -2031,6 +2031,12 @@
          Theme Overrides
 *******************************/
 
+.compact .ui.grid {
+  margin: 0;
+}
+.compact .ui.grid > .column:not(.row) {
+  padding: 0;
+}
 
 
 /*******************************

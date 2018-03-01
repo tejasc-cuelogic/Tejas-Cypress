@@ -36345,14 +36345,12 @@ body.pushable > .pusher {
 
 .tabular-wrap .ui.vertical.right.tabular.menu {
   border: none;
-  background: red;
   min-height: calc(100vh - 205px);
 }
 
 .tabular-wrap .ui.attached.segment.tab {
   width: 100%;
   max-width: none;
-  background: green;
   margin: 0;
   border: none;
 }
