@@ -18,7 +18,7 @@ class SettingsForm extends React.Component {
           userData={this.props.userStore.currentUser}
           handleChange={this.handleChange}
         />
-        <Button onClick={this.handleClick}>
+        <Button onClick={this.handleClick} color="green">
           Update Profile
         </Button>
       </Form>

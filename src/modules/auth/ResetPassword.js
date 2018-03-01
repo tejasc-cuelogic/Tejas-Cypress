@@ -13,7 +13,9 @@ import validationActions from '../../actions/validation';
 @observer
 export default class ResetPassword extends React.Component {
   componentWillUnmount() {
-    this.props.uiStore.clearErrors();
+    if (this.props.uiStore) {
+      this.props.uiStore.clearErrors();
+    }
   }
 
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
@@ -28,14 +30,15 @@ export default class ResetPassword extends React.Component {
 
     return (
       <div className="login-form">
+        <Header as="h1" textAlign="center">Reset Password</Header>
+        <p className="note">The verification code has been sent to your registered email address</p>
         <Grid
           textAlign="center"
           verticalAlign="middle"
         >
           <Grid.Column>
-            <Header as="h1" textAlign="center">Sign Up</Header>
-            <Form size="large" error onSubmit={this.handleSubmitForm}>
-              <div stacked="true">
+            <Form error onSubmit={this.handleSubmitForm}>
+              <div stacked>
                 <Form.Input
                   fluid
                   icon="lock"
@@ -62,6 +65,8 @@ export default class ResetPassword extends React.Component {
                 <FieldError error={values.verify.error} />
                 <Form.Input
                   fluid
+                  icon="lock"
+                  iconPosition="left"
                   placeholder="Verification Code"
                   name="code"
                   value={values.code.value}
@@ -72,10 +77,9 @@ export default class ResetPassword extends React.Component {
                 <Button
                   fluid
                   color="green"
-                  size="large"
                   disabled={!this.props.authStore.canRegister}
                 >
-                  Sign Up
+                  Reset Password
                 </Button>
                 {errors &&
                   <Message error textAlign="left">

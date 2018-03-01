@@ -1,0 +1,54 @@
+/*******************************
+         Theme Overrides
+*******************************/
+
+.header-wrap{
+	height:58px;
+    .ui.menu{
+        box-shadow:0px 0px 5px fade(@fullBlack, 8%);
+        &.large{
+            height:58px;
+            font-size:1rem;
+        }
+        .menu .item{
+            // font-weight:700;
+            color:@primary-text;
+            padding:0.92857143em 2.285714285714286em;
+            &.active{
+                color:@inverse-text;
+                background-color:@theme-primary;
+            }
+            &.notification{
+                position:relative;
+                .icon{
+                    font-size:1.571428em;
+                    color:@tertiary-text;
+                }
+                span.unread-count{
+                    height:18px;
+                    min-width:18px;
+                    padding:0 5px;
+                    border-radius:10px;
+                    font-size:0.857142em;
+                    // font-weight:500;
+                    color:@inverse-text;
+                    line-height:18px;
+                    display:block;
+                    text-align:center;
+                    background:@highlight-primary;
+                    position:absolute;
+                    left:46px;
+                    bottom:15px;
+                }
+            }
+        }
+        .ui.dropdown{
+            .menu{
+                >.item{
+                    // font-weight:700 !important;
+                    padding:0.78571429em 2.285714285714286em !important;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,65 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.ui.table{
+    font-family:@regularFont;
+    thead th{
+        padding:1.666667em;
+        font-size:0.857142em;
+        text-transform:uppercase;
+    }
+    td{
+        padding:0.833334em 1.666667em;
+    }
+    &.sortable{
+        thead th{
+            color:@quaternary-text;
+        }
+    }
+    &.striped{
+        thead th:hover{
+            background:transparent;
+        }
+        tbody{
+            background:@light-bg-color;
+            tr:nth-child(2n){
+                background:@inverse-text;
+            }
+        }
+    }
+    &.user-list{
+        tr.locked{
+            .user-image:after{
+                content:"\F023";
+                font-family:"Icons";
+                font-size:20px;
+                color:@highlight-primary;
+                text-shadow:0px 0px 8px @inverse-text;
+                position:absolute;
+                bottom:-4px;
+                right:-4px;
+                z-index:1;
+            }
+            .user-status{
+                color:@highlight-primary;
+            }
+        }
+        .user-image{
+            position:relative;
+            .ui.avatar.image{
+                margin-right:0;
+            }
+        }
+        .user-name{
+            font-family:@boldFont;
+            display:block;
+        }
+    }
+    a{
+        font-family:@pageFont;
+        font-size:0.857142em;
+        // color:@theme-primary;
+        // text-decoration:none;
+        text-transform:uppercase;
+    }
+}

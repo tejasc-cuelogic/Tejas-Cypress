@@ -24,48 +24,59 @@ export default class EdgarForm extends React.Component {
   render() {
     const { formValues, templateVariables } = this.props.businessStore;
     return (
-      <div className="content-spacer">
-        <Grid stackable className="edgar-form">
-          <Form>
-            <Grid>
-              {formValues.map(data => (
-                <Form.Input
-                  placeholder={data.placeholder}
-                  className="column"
-                  label={data.placeholder}
-                  name={data.name}
-                  defaultValue={templateVariables[data.name]}
-                  onChange={this.handleInputChange}
-                  width={data.width || 8}
-                  key={`${key}_${data.name}`}
-                />))
-              }
-            </Grid>
-            <Divider section />
-            <ListErrors errors={this.props.uiStore.errors} />
-            <SuccessMessage success={this.props.uiStore.success} />
-            <div
-              className="form-footer"
-              style={{
-              paddingBottom: '40px',
-              paddingLeft: '1rem',
-              // textAlign: 'center',
-              }}
-            >
-              <Button
-                color="green"
-                disabled={
-                  !this.props.businessStore.canSubmitEdgarForm ||
-                    this.props.uiStore.submitButtonDisabled
+      <div>
+        <div className="page-header-section webcontent-spacer">
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={16}>
+                <h3>Edgar Form</h3>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </div>
+        <div className="content-spacer">
+          <Grid stackable className="edgar-form">
+            <Form>
+              <Grid>
+                {formValues.map(data => (
+                  <Form.Input
+                    placeholder={data.placeholder}
+                    className="column"
+                    label={data.placeholder}
+                    name={data.name}
+                    defaultValue={templateVariables[data.name]}
+                    onChange={this.handleInputChange}
+                    width={data.width || 8}
+                    key={`${key}_${data.name}`}
+                  />))
                 }
-                onClick={businessActions.generateDocxFile}
-                primary
+              </Grid>
+              <Divider section />
+              <ListErrors errors={this.props.uiStore.errors} />
+              <SuccessMessage success={this.props.uiStore.success} />
+              <div
+                className="form-footer"
+                style={{
+                paddingBottom: '40px',
+                paddingLeft: '1rem',
+                textAlign: 'center',
+                }}
               >
-                Generate Docx
-              </Button>
-            </div>
-          </Form>
-        </Grid>
+                <Button
+                  color="green"
+                  disabled={
+                    !this.props.businessStore.canSubmitEdgarForm ||
+                      this.props.uiStore.submitButtonDisabled
+                  }
+                  onClick={businessActions.generateDocxFile}
+                  primary
+                >
+                  Generate Docx
+                </Button>
+              </div>
+            </Form>
+          </Grid>
+        </div>
       </div>
     );
   }

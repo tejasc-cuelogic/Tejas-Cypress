@@ -38,13 +38,13 @@ export default class Register extends React.Component {
 
     return (
       <div className="login-form">
+        <Header as="h1" textAlign="center">Sign Up</Header>
         <Grid
           textAlign="center"
           verticalAlign="middle"
         >
           <Grid.Column>
-            <Header as="h1" textAlign="center">Sign Up</Header>
-            <Form size="large" error onSubmit={this.handleSubmitForm}>
+            <Form error onSubmit={this.handleSubmitForm}>
               <div stacked="true">
                 <Form.Input
                   fluid
@@ -115,6 +115,7 @@ export default class Register extends React.Component {
                 <Button
                   fluid
                   color="green"
+                  disabled={!this.props.authStore.canRegister}
                   size="large"
                 >
                   Sign Up

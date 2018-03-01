@@ -1,0 +1,151 @@
+/*******************************
+         Theme Overrides
+*******************************/
+
+// 	Sidebar pushable CSS
+.pushable{
+	>.sidebar{
+		~ .pusher{
+			padding-left:64px;
+			transition:all .5s ease;
+			height:~"calc(100vh - 58px)";
+			overflow-y:auto;
+			background-color:@lighten-bg-color;
+			.ui.vertical.segment{
+				&.content{
+					padding:0;
+					min-height:~"calc(100vh - 58px)";
+				}
+			}
+		}
+	}
+}
+.sidebar{
+	.user-picture{
+		margin:1.714285em 0;
+		text-align:center;
+		color:@inverse-text;
+		> img, h2, h3{
+			transition:all .5s ease;
+			white-space:nowrap;
+			overflow:hidden;
+		}
+	}
+	&.visible{
+		.user-picture{
+			> img{
+				max-width:90px;
+				margin:0 auto 10px;
+			}
+			h2{
+				// @include fontMedium;
+				font-size:16px;
+				margin:0 0 5px;
+				font-weight:normal;
+			}
+			h3{
+				// @include fontMedium;
+				font-size:14px;
+				margin:0;
+				font-weight:normal;
+				color:@tertiary-text;
+			}
+		}
+	}
+	&:not(.visible){
+		.user-picture{
+			margin:1.714285em 0 .5em;
+			> img{
+				max-width:30px;
+				margin:0 auto;
+			}
+			h2, h3{
+				font-size:0;
+				line-height:0;
+				margin:0;
+			}
+		}
+	}
+}
+.ui{
+	&.inverted{
+		&.menu{
+			background:#383838;
+		}
+	}
+	&.sidebar{
+		&.left{
+			&.visible.thin{
+				~.fixed, ~.pusher{
+					padding-left:220px;
+					transform:translate3D(0,0,0);
+				}
+			}
+			&.push{
+				width:64px;
+				visibility:visible;
+				transform:translate3D(0,0,0);
+				transition:width .5s ease;
+				.item {
+					min-width: auto !important;
+					text-align: left;
+					overflow:hidden;
+					padding:1em 1.5em;
+					color:@tertiary-text;
+					&:first-child:before, &:before{
+						display:none;
+						background:none;
+					}
+					>.icon:not(.dropdown){
+						float:left;
+						height:auto;
+						margin:0 !important;
+						font-size:1.14285714em !important;
+						line-height:22px;
+						position:relative;
+					}
+					span{
+						opacity:0;
+						display:block;
+						line-height:22px;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						overflow: hidden;
+					}
+					&.collapseIcon{
+						bottom:0;
+						margin:0;
+						&:before{
+							display:none;
+						}
+					}
+					&.active{
+						background:transparent;
+						color:@theme-primary !important;
+						> i.icon:after{
+							content:"";
+							width:6px;
+							height:6px;
+							border-radius:3px;
+							display:block;
+							background:@theme-primary;
+							position:absolute;
+							left:50%;
+							margin-left:-2px;
+							bottom:-9px;
+						}
+					}
+				}
+			}
+		}
+		&.visible.push{
+			width:220px;
+			.item span{
+				opacity:1;
+				margin-left:35px;
+				max-width:153px;
+			}
+		}
+	}
+}
+

@@ -1,0 +1,246 @@
+/*******************************
+         Theme Overrides
+*******************************/
+
+.content-wrapper{
+	min-height:~"calc(100vh - 58px)";
+}
+.ui.segment.vertical{
+    &.content{
+        padding:50px 0;
+        min-height:~"calc(100vh - 342px)";
+	}
+}
+.content-spacer{
+	position:relative;
+	padding:3.714285em 5em;
+}
+.overlay{
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	background-color:fade(@primary-text, 30%);
+	transform:scale(0);
+	&.editing{
+		transform:scale(1);
+		z-index:1;
+	}
+}
+.webcontent-spacer{
+	padding:2.428571em 5em 1em;
+}
+
+div.login-form {
+	height: 100%;
+	.column{
+		max-width:380px;
+	}
+	h1.header{
+		margin-bottom:1.5em;
+		>span{
+			font-size:18px;
+			color:@tertiary-text;
+		}
+	}
+	.note{
+		text-align:center;
+		color:@tertiary-text;
+	}
+	ul.error-messages{
+		list-style-type:none;
+		padding:0;
+		text-align:left;
+	}
+}
+.pull-left{
+	float:left !important;
+}
+.pull-right{
+	float:right !important;
+}
+
+//	Admin Page Content Styles	//
+
+//	Page Header Styles
+.page-header-section{
+	min-height:132px;
+	background-color:@dark-bg-color;
+	h3{
+		// @include fontBold;
+		color:@inverse-text;
+		font-size: 2.5em;
+		// font-weight: bold;
+		a.back-link{
+			position:absolute;
+			left:-35px;
+			color:@theme-primary;
+			> i.icon, i.icons{
+				font-size:0.8em;
+			}
+			&:hover, &:active, &:focus{
+				color:darken(@theme-primary, 8%);
+			}
+		}
+	}
+	span.filter-count{
+		height:19px;
+		min-width:19px;
+		padding:0 4px;
+		margin-right:1rem;
+		background:@theme-primary;
+		display:inline-block;
+		font-size:11px;
+		line-height:19px;
+		font-weight:700;
+		color:@dark-bg-color;
+		text-align:center;
+		border-radius:3px;
+	}
+	.search-filters{
+		background-color:@secondary-text;
+		&.webcontent-spacer{
+			padding:1em 5em;
+		}
+		h5{
+			// font-size:0.857142em;
+			font-family:@pageFont;
+			color:@quaternary-text;
+			margin:0.714285rem 0 0.5rem;
+		}
+	}
+}
+
+//	Notification panel
+.notification-panel{
+	width:330px;
+    height:~"calc(100vh - 58px)";
+	padding:1.5em 0 0.5em 1.5em;
+	background:@darken-bg-color;
+	color:@inverse-text;
+	overflow:auto;
+    position:fixed;
+    right:-350px;
+    top:0;
+	z-index:2;
+	transition:all 500ms ease-in-out;
+	&.slide-in{
+		right:0px;
+	}
+	h3{
+		margin-bottom:1rem;
+		letter-spacing:1px;
+	}
+	p.title{
+		font-size:0.928571em;
+		color:@inverse-secondary-text;
+	}
+}
+.notification-box{
+	padding:1em;
+	margin-bottom:1.285714rem;
+	border-radius:5px 0 0 5px;
+	background-color:@dark-bg-color;
+	box-shadow:0 0 20px fade(@fullBlack, 32%);
+	.timestamp{
+		font-size:0.928571em;
+		color:@inverse-secondary-text;
+	}
+	h4.amount{
+		font-size:1.428571em;
+		font-weight:900;
+		color:@theme-primary;
+	}
+}
+
+//	Web Footer Style
+.ui.segment,
+.ui.primary.segment{
+	&.inverted{
+		&.footer{
+			padding:2em;
+			background-color:@darken-bg-color;
+		}
+	}
+}
+.footer{
+	.ui.header{
+		font-weight:400;
+	}
+}
+
+//	Account type symbols
+.account-type{
+	display:inline-block;
+	font-family:@pageFont;
+	text-align:center;
+	line-height:1.6;
+	border-radius:4px;
+	border-style:solid;
+	position:relative;
+	+ .accountType{
+		margin-left:0.416667rem;
+	}
+	&.accredited:after{
+		content:"A";
+		display:block;
+		border-radius:10px;
+		font-size:0.533334em;
+		text-align:center;
+		color:@inverse-text;
+		position:absolute;
+	}
+	&.admin{
+		color:@fullBlack;
+		border-color:@fullBlack;
+		&.accredited:after{
+			background-color:@fullBlack;
+		}
+	}
+	&.full{
+		color:@highlight-tertiary;
+		border-color:@highlight-tertiary;
+		&.accredited:after{
+			background-color:@highlight-tertiary;
+		}
+	}
+	&.partial{
+		color:@highlight-secondary;
+		border-color:@highlight-secondary;
+		&.accredited:after{
+			background-color:@highlight-secondary;
+		}
+	}
+	&.locked{
+		color:@highlight-primary;
+		border-color:@highlight-primary;
+		&.accredited:after{
+			background-color:@highlight-primary;
+		}
+	}
+	&.small{
+		width:24px;
+		height:24px;
+		font-size:1.071428em;
+		border-width:1px;
+		&.accredited:after{
+			width:13px;
+			height:13px;
+			top:-6px;
+			right:-6px;
+		}
+	}
+	&.medium{
+		width:36px;
+		height:36px;
+		font-size:1.571428em;
+		border-width:2px;
+		&.accredited:after{
+			width:16px;
+			height:16px;
+			top:-8px;
+			right:-8px;
+		}
+	}
+}

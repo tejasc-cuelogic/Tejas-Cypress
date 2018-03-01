@@ -1,0 +1,130 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.form-card{
+    &.editable{
+        position:relative;
+        &.editing{
+            z-index:2;
+        }
+        .actions{
+            position:absolute;
+            top:20px;
+            right:30px;
+            a{
+                margin:0 1rem;
+                font-size:0.928571em;
+                line-height:1.428571rem;
+                font-weight:500;
+                text-transform:uppercase;
+                color:@theme-primary;
+                &:last-child{
+                    margin-right:0;
+                }
+                &:hover, &:focus, &:active{
+                    color:darken(@theme-primary, 8%);
+                }
+                &.negative{
+                    color:@quaternary-text;
+                    &:hover, &:focus, &:active{
+                        color:darken(@quaternary-text, 8%);
+                    }
+                }
+            }
+        }
+        .ui.form{
+            .fields{
+                margin:0em;
+                padding:1em 0;
+                &:nth-child(odd){
+                    background-color:@light-bg-color;
+                }
+                .field{
+                    padding:0 @gutterWidth;
+                }
+            }
+            .ui.label{
+                font-size:0.928571em;
+                font-weight:400;
+                line-height:1.428571rem;
+                color:@quaternary-text;
+                padding:0;
+                background-color:transparent;
+            }
+            input:not([type]),
+            input[type=date],
+            input[type=datetime-local],
+            input[type=email],
+            input[type=file],
+            input[type=number],
+            input[type=password],
+            input[type=search],
+            input[type=tel],
+            input[type=text],
+            input[type=time],
+            input[type=url]{
+                font-weight:500;
+                line-height:1.428571rem;
+                color:@primary-text;
+                padding:0 @gutterWidth;
+                border-width:0;
+                background-color:transparent;
+            }
+        }
+    }
+}
+
+/*  Inverted Form  */
+.ui.form{
+    &.inverted{
+        label{
+            font-weight:400;
+            color:@inverse-text;
+        }
+        input:not([type]),
+        input[type=date],
+        input[type=datetime-local],
+        input[type=email],
+        input[type=file],
+        input[type=number],
+        input[type=password],
+        input[type=search],
+        input[type=tel],
+        input[type=text],
+        input[type=time],
+        input[type=url]{
+            border-radius:0;
+            color:@quaternary-text;
+            background-color:transparent;
+            border-color:transparent transparent @tertiary-text;
+        }
+    }
+}
+.page-header-section{
+    .ui.input.inverted{
+        .icon{
+            color:@inverse-text;
+            opacity:1;
+        }
+    }
+}
+
+.notification-box{
+    .ui.form.inverted{
+        input:not([type]),
+        input[type=date],
+        input[type=datetime-local],
+        input[type=email],
+        input[type=file],
+        input[type=number],
+        input[type=password],
+        input[type=search],
+        input[type=tel],
+        input[type=text],
+        input[type=time],
+        input[type=url]{
+            padding-left:0;
+            padding-right:0;
+        }
+    }
+}

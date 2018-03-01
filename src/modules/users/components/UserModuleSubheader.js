@@ -1,29 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Grid, List, Icon } from 'semantic-ui-react';
 
 const userModuleSubheader = () => (
   <div className="page-header-section webcontent-spacer">
-    <div className="ui grid">
-      <div className="four wide column">
-        <h3>James Wright</h3>
-      </div>
-      <div className="four wide column">
-        search panel
-      </div>
-      <div className="four wide column">
-        <Link to="/app/users/new">Add new user</Link>
-      </div>
-    </div>
-    <div className="ui grid">
-      <div className="twelve wide column userDetailsLinks">
-        <Link to="/users/new">Account data</Link>
-        <Link to="/users/new">Activity</Link>
-        <Link to="/users/new">Investments</Link>
-        <Link to="/users/new">Forms</Link>
-        <Link to="/users/new">Referrals</Link>
-        <Link to="/users/new">Messages</Link>
-      </div>
-    </div>
+    <Grid>
+      <Grid.Row>
+        <Grid.Column width={16}>
+          <h3>
+            <Link to="/app/users" className="back-link"><Icon name="long arrow left" /></Link>
+            James Wright
+          </h3>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column width={16}>
+          <List horizontal link>
+            <List.Item as="a" href="/app/users/1/UserDetails" className="active">Profile</List.Item>
+            <List.Item as="a" href="/app/users/1/UserAccounts">Accounts</List.Item>
+            <List.Item as="a" href="/app/users/new">Activity</List.Item>
+            <List.Item as="a" href="/app/users/new">Investments</List.Item>
+            <List.Item as="a" href="/app/users/new">Transactions</List.Item>
+            <List.Item as="a" href="/app/users/new">Statements</List.Item>
+            <List.Item as="a" href="/app/users/new">Referrals</List.Item>
+            <List.Item as="a" href="/app/users/new">Messages</List.Item>
+          </List>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   </div>
 );
 

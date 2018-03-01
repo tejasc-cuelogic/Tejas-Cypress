@@ -1,9 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Button, Message } from 'semantic-ui-react';
+import { Form, Grid, Header, Button } from 'semantic-ui-react';
 
 import authActions from './../../actions/auth';
-import ListErrors from '../../components/common/ListErrors';
 
 @inject('authStore', 'uiStore')
 @observer
@@ -23,28 +22,46 @@ export default class ChangePassword extends React.Component {
       });
   }
   render() {
-    const { errors } = this.props.uiStore;
     return (
-      <div>
-        <h2>Change Password for</h2><p>{this.props.authStore.values.email}</p>
-        <Form>
-          <Form.Input
-            label="New Password"
-            type="password"
-            onChange={this.handlePasswordChange}
-          />
-          <Form.Input
-            label="Confirm Password"
-            type="password"
-            onChange={this.handleVerifyChange}
-          />
-          <Button onClick={this.handleClick}>Change Password</Button>
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
-        </Form>
+      <div className="login-form">
+        <Header as="h1" textAlign="center">
+          Change Password for
+          <span> {this.props.authStore.values.email}</span>
+        </Header>
+        <Grid
+          textAlign="center"
+          verticalAlign="middle"
+        >
+          <Grid.Column>
+            <Form>
+              <div stacked>
+                <Form.Input
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  type="password"
+                  placeholder="New Password"
+                  onChange={this.handlePasswordChange}
+                />
+                <Form.Input
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  type="password"
+                  placeholder="Confirm Password"
+                  onChange={this.handleVerifyChange}
+                />
+                <Button
+                  fluid
+                  color="green"
+                  onClick={this.handleClick}
+                >
+                  Change Password
+                </Button>
+              </div>
+            </Form>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }

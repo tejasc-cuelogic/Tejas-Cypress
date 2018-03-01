@@ -2,6 +2,10 @@ import { action, observable } from 'mobx';
 
 export class UiStore {
   appLoader = false;
+  @observable layoutState = {
+    leftPanel: false,
+    notificationPanel: false,
+  };
   @observable submitButtonDisabled = false;
   @observable inProgress = false;
   @observable loaderMessage = '';
@@ -60,6 +64,9 @@ export class UiStore {
   }
 
   @action
+  updateLayoutState(prop) {
+    this.layoutState[prop] = !this.layoutState[prop];
+  }
   setSubmitButtonDisability(status) {
     this.submitButtonDisabled = status;
   }

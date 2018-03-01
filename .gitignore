@@ -15,3 +15,8 @@ npm-debug.log
 .idea
 
 src/assets/app.css
+
+# semantic ui based theme (less)
+src/assets/semantic/components
+src/assets/semantic/themes/basic
+src/assets/semantic/themes/default
