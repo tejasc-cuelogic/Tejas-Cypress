@@ -1,11 +1,25 @@
 import _ from 'lodash';
+import shortid from 'shortid';
 
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
-import { EDGAR_URL, XML_URL, GRAPHQL } from './../constants/business';
+import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE } from './../constants/business';
 import ApiService from '../services/api';
 
 export class Business {
+  /**
+  * @desc Adds new field for PersonalSignatureArray
+  *       if previous value of `signaturePerson` prop is [{...}, {...}]
+  *       then calling method will add bank map to above array as [{...}, {...}, {...}]
+  */
+  addPersonalSignature = () => {
+    const personalSignature = { ...PERSONAL_SIGNATURE };
+    personalSignature.id = shortid.generate();
+    const signaturePerson = [...businessStore.signature.signaturePerson];
+    signaturePerson.push(personalSignature);
+    businessStore.addNewPersonalSignature(signaturePerson);
+  }
+
   /**
   * @desc Makes an API Call to server to generate Docx file from data entered
   */

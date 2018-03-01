@@ -1,45 +1,46 @@
 import React from 'react';
-import { Form } from 'semantic-ui-react';
+import { Form, Button, Icon } from 'semantic-ui-react';
+import { observer } from 'mobx-react';
 
-const PersonalSignature = props => (
+const PersonalSignature = observer(props => (
   <div>
     <div>
       {props.signaturePerson.map(personData => (
         <div>
-          <div>
+          <Button icon dataId={personData.id} onClick={props.handleDeleteClick}>
+            <Icon name="remove" size="mini" />
+          </Button>
+          <Form.Group widths="3">
             <Form.Input
               dataId={personData.id}
               label={personData.personSignature.label}
               placeholder={personData.personSignature.label}
               name={personData.personSignature.key}
-              defaultValue={personData.personSignature.value}
+              value={personData.personSignature.value}
               onChange={props.handleChange}
             />
-          </div>
-          <div>
             <Form.Input
               dataId={personData.id}
               label={personData.personTitle.label}
               placeholder={personData.personTitle.label}
               name={personData.personTitle.key}
-              defaultValue={personData.personTitle.value}
+              value={personData.personTitle.value}
               onChange={props.handleChange}
             />
-          </div>
-          <div>
             <Form.Input
               dataId={personData.id}
               label={personData.signatureDate.label}
               placeholder={personData.signatureDate.label}
               name={personData.signatureDate.key}
-              defaultValue={personData.signatureDate.value}
-              onChange={props.handleChange}
+              value={personData.signatureDate.value}
+              onChange={props.handleAddChange}
             />
-          </div>
+          </Form.Group>
         </div>
       ))}
+      <Button onClick={props.handleAddClick}>Add</Button>
     </div>
   </div>
-);
+));
 
 export default PersonalSignature;

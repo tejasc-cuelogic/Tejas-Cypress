@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Divider, Header, Form } from 'semantic-ui-react';
 
 import PersonalSignature from '../../components/PersonalSignature';
+import businessActions from '../../../../actions/business';
 
 @inject('businessStore')
 @observer
@@ -13,11 +14,13 @@ export default class Signature extends React.Component {
   handlePersonalSignatureChange = (e, { name, value, dataId }) => {
     this.props.businessStore.changePersonalSignature(name, dataId, value);
   }
-  handleAdd = () => this.props.businessStore.addNewPersonalSignature();
+  handleAdd = () => {
+    businessActions.addPersonalSignature();
+  }
+  handleDelete = (e, { dataId }) => this.props.businessStore.deletePersonalSignature(dataId);
 
   render() {
     const { signature } = this.props.businessStore;
-
     return (
       <div>
         <Divider section />
@@ -41,11 +44,13 @@ export default class Signature extends React.Component {
             defaultValue={signature.issuerTitle.value}
             onChange={this.handleChange}
           />
-          <PersonalSignature
-            signaturePerson={signature.signaturePerson}
-            handleChange={this.handlePersonalSignatureChange}
-          />
         </Form.Group>
+        <PersonalSignature
+          signaturePerson={signature.signaturePerson}
+          handleChange={this.handlePersonalSignatureChange}
+          handleAddClick={this.handleAdd}
+          handleDeleteClick={this.handleDelete}
+        />
       </div>
     );
   }
