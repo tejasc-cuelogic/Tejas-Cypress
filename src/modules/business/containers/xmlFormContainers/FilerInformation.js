@@ -60,12 +60,33 @@ export default class FilerInformation extends React.Component {
             name="returnCopyFlag"
             onChange={this.props.handleChange}
           />
-          <Form.Checkbox
-            label="Would you like a Return Copy?"
-            name="returnCopyFlag"
-            onChange={this.props.handleChange}
-          />
         </Form.Group>
+        <Form.Input
+          placeholder="Name"
+          label="Name"
+          name="contactName"
+          defaultValue={filerInformation.contactName.value}
+          onChange={this.handleChange}
+        />
+        <Form.Input
+          placeholder="Phone Number"
+          label="Phone Number"
+          name="contactPhone"
+          defaultValue={filerInformation.contactPhone.value}
+          onChange={this.handleChange}
+        />
+        <Form.Input
+          placeholder="Email"
+          label="Email"
+          name="contactEmail"
+          defaultValue={filerInformation.contactEmail.value}
+          onChange={this.handleChange}
+        />
+        <Form.Checkbox
+          label="Would you like a Return Copy?"
+          name="returnCopyFlag"
+          onChange={this.props.handleChange}
+        />
       </div>
     );
   }
