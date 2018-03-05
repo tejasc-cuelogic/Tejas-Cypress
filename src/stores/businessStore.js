@@ -87,6 +87,11 @@ export class BusinessStore {
   }
 
   @action
+  togglefilerCheckbox(name) {
+    this.filerInformation[name].value = !this.filerInformation[name].value;
+  }
+
+  @action
   setIssuerInfo(field, value) {
     this.issuerInformation[field].value = value;
   }

@@ -43,17 +43,17 @@ export const FILER_INFORMATION = {
     rule: 'required',
   },
   confirmingCopyFlag: {
-    value: '',
+    value: false,
     error: undefined,
     rule: 'required',
   },
   returnCopyFlag: {
-    value: '',
+    value: false,
     error: undefined,
     rule: 'required',
   },
   overrideInternetFlag: {
-    value: '',
+    value: false,
     error: undefined,
     rule: 'required',
   },

@@ -9,13 +9,17 @@ export default class FilerInformation extends React.Component {
     this.props.businessStore.setFilerInfo(name, value);
   }
 
+  handleCheckboxChange = (e, { name }) => {
+    this.props.businessStore.togglefilerCheckbox(name);
+  }
+
   render() {
     const { filerInformation } = this.props.businessStore;
     return (
       <div>
         <Divider section />
         <Header as="h1">Filer Information</Header>
-        <Form.Group widths="equal">
+        <Form.Group>
           <Form.Input
             placeholder="Filer CIK"
             label="Filer CIK"
@@ -53,12 +57,14 @@ export default class FilerInformation extends React.Component {
           <Form.Checkbox
             label="Would you like a Return Copy?"
             name="returnCopyFlag"
-            onChange={this.props.handleChange}
+            checked={filerInformation.returnCopyFlag.value}
+            onChange={this.handleCheckboxChange}
           />
           <Form.Checkbox
-            label="Would you like a Return Copy?"
-            name="returnCopyFlag"
-            onChange={this.props.handleChange}
+            label="Is this an electronic copy of an official filing submitted in paper format in connection with a hardship exemption?"
+            name="overrideInternetFlag"
+            checked={filerInformation.overrideInternetFlag.value}
+            onChange={this.handleCheckboxChange}
           />
         </Form.Group>
         <Form.Input
@@ -83,9 +89,10 @@ export default class FilerInformation extends React.Component {
           onChange={this.handleChange}
         />
         <Form.Checkbox
-          label="Would you like a Return Copy?"
-          name="returnCopyFlag"
-          onChange={this.props.handleChange}
+          label="Notify via Filing Website only?"
+          name="confirmingCopyFlag"
+          value={filerInformation.confirmingCopyFlag.value}
+          onChange={this.handleCheckboxChange}
         />
       </div>
     );
