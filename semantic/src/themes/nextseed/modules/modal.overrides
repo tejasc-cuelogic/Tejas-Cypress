@@ -1,3 +1,21 @@
 /*******************************
          Theme Overrides
 *******************************/
+.ui.modal{
+    .content.login-modal{
+        width:320px;
+        margin:0 auto;
+        .ui{
+            &.button, &.buttons .button{
+                letter-spacing:1px;
+                &.large{
+                    font-size:1rem;
+                }
+            }
+        }
+    }
+    .ui.header{
+        margin:.2rem 0 2rem;
+    }
+}
+

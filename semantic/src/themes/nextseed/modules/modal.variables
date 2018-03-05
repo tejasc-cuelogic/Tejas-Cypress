@@ -5,7 +5,7 @@
 @background: @white;
 @border: none;
 @zIndex: 1001;
-@borderRadius: @defaultBorderRadius;
+@borderRadius: @defaultBorderRadius * 2.5;
 @transformOrigin: 50% 25%;
 @boxShadow:
   1px 3px 3px 0px rgba(0, 0, 0, 0.2),
@@ -54,8 +54,8 @@
 @descriptionVerticalAlign: top;
 
 /* Modal Actions */
-@actionBorder: 1px solid @borderColor;
-@actionBackground: @offWhite;
+@actionBorder: none;
+@actionBackground: @inverse-text;
 @actionPadding: 1rem 1rem;
 @actionAlign: right;
 

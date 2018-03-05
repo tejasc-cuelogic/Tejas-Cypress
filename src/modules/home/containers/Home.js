@@ -9,7 +9,6 @@ class Home extends Component {
           style={{
             fontSize: '30px',
             color: '#666',
-            top: '25px',
             textAlign: 'center',
           }}
         >

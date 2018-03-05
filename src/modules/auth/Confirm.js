@@ -27,50 +27,54 @@ export default class Confirm extends React.Component {
     const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
-      <div className="login-form">
-        <Header as="h1" textAlign="center">Confirm Account</Header>
-        <Grid
-          textAlign="center"
-          verticalAlign="middle"
-        >
-          <Grid.Column>
-            <Form error onSubmit={this.handleSubmitForm}>
-              <div stacked>
-                <Form.Input
-                  fluid
-                  icon="envelope"
-                  iconPosition="left"
-                  placeholder="E-mail address"
-                  value={values.email}
-                  onChange={this.handleEmailChange}
-                />
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Verification Code"
-                  name="code"
-                  value={values.code.value}
-                  onChange={this.handleCodeChange}
-                  error={!!values.code.error}
-                />
-                <FieldError error={values.code.error} />
-                <Button
-                  fluid
-                  color="green"
-                  disabled={this.props.authStore.canConfirm}
-                >
-                  Confirm!
-                </Button>
-                {errors &&
-                  <Message error textAlign="left">
-                    <ListErrors errors={[errors.message]} />
-                  </Message>
-                }
-              </div>
-            </Form>
-          </Grid.Column>
-        </Grid>
+      <div className="ui vertical segment content">
+        <div className="ui container">
+          <div className="login-form">
+            <Header as="h1" textAlign="center">Confirm Account</Header>
+            <Grid
+              textAlign="center"
+              verticalAlign="middle"
+            >
+              <Grid.Column>
+                <Form error onSubmit={this.handleSubmitForm}>
+                  <div stacked>
+                    <Form.Input
+                      fluid
+                      icon="envelope"
+                      iconPosition="left"
+                      placeholder="E-mail address"
+                      value={values.email}
+                      onChange={this.handleEmailChange}
+                    />
+                    <Form.Input
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      placeholder="Verification Code"
+                      name="code"
+                      value={values.code.value}
+                      onChange={this.handleCodeChange}
+                      error={!!values.code.error}
+                    />
+                    <FieldError error={values.code.error} />
+                    <Button
+                      fluid
+                      color="green"
+                      disabled={this.props.authStore.canConfirm}
+                    >
+                      Confirm!
+                    </Button>
+                    {errors &&
+                      <Message error textAlign="left">
+                        <ListErrors errors={[errors.message]} />
+                      </Message>
+                    }
+                  </div>
+                </Form>
+              </Grid.Column>
+            </Grid>
+          </div>
+        </div>
       </div>
     );
   }

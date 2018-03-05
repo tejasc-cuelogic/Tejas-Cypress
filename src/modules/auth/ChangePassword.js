@@ -23,45 +23,49 @@ export default class ChangePassword extends React.Component {
   }
   render() {
     return (
-      <div className="login-form">
-        <Header as="h1" textAlign="center">
-          Change Password for
-          <span> {this.props.authStore.values.email}</span>
-        </Header>
-        <Grid
-          textAlign="center"
-          verticalAlign="middle"
-        >
-          <Grid.Column>
-            <Form>
-              <div stacked>
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  type="password"
-                  placeholder="New Password"
-                  onChange={this.handlePasswordChange}
-                />
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  type="password"
-                  placeholder="Confirm Password"
-                  onChange={this.handleVerifyChange}
-                />
-                <Button
-                  fluid
-                  color="green"
-                  onClick={this.handleClick}
-                >
-                  Change Password
-                </Button>
-              </div>
-            </Form>
-          </Grid.Column>
-        </Grid>
+      <div className="ui vertical segment content">
+        <div className="ui container">
+          <div className="login-form">
+            <Header as="h1" textAlign="center">
+              Change Password for
+              <span> {this.props.authStore.values.email}</span>
+            </Header>
+            <Grid
+              textAlign="center"
+              verticalAlign="middle"
+            >
+              <Grid.Column>
+                <Form>
+                  <div stacked>
+                    <Form.Input
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      type="password"
+                      placeholder="New Password"
+                      onChange={this.handlePasswordChange}
+                    />
+                    <Form.Input
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      type="password"
+                      placeholder="Confirm Password"
+                      onChange={this.handleVerifyChange}
+                    />
+                    <Button
+                      fluid
+                      color="green"
+                      onClick={this.handleClick}
+                    >
+                      Change Password
+                    </Button>
+                  </div>
+                </Form>
+              </Grid.Column>
+            </Grid>
+          </div>
+        </div>
       </div>
     );
   }

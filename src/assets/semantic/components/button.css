@@ -3680,10 +3680,6 @@
          Theme Overrides
 *******************************/
 
-.ui.button,
-.ui.buttons .button {
-  text-transform: uppercase;
-}
 .ui.button.rounded,
 .ui.buttons .button.rounded {
   border-radius: 20px;
