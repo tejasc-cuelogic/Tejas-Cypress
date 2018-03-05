@@ -12,8 +12,8 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
     this.props.businessStore.setAnnualReportInfo(name, value);
   }
 
-  handleSelectChange = (e, { value }) => {
-    this.props.businessStore.setCountry(value);
+  handleSelectChange = (e, { dataIdentifier, name, value }) => {
+    this.props.businessStore.setCountry(dataIdentifier, name, value);
   }
 
   render() {
@@ -48,6 +48,8 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
           search
           selection
           placeholder="State"
+          dataIdentifier="annualReportRequirements"
+          name="issueJurisdictionSecuritiesOffering"
           options={COUNTRIES}
           onChange={this.handleSelectChange}
           key={annualReportRequirements.issueJurisdictionSecuritiesOffering.key}

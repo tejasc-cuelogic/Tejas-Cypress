@@ -122,8 +122,9 @@ export class BusinessStore {
   }
 
   @action
-  setCountry(value) {
-    this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
+  setCountry(identifier, name, value) {
+    // this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
+    this[identifier][name].value = value;
   }
 
   @action

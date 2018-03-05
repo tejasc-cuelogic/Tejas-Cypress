@@ -2,6 +2,11 @@ import React from 'react';
 import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
+import {
+  OFFERED_SECURITY,
+  OVER_SUBSCRIPTION_ALLOCATION_TYPE,
+} from '../../../../constants/business';
+
 const LABEL = 'Amount of compensation to be paid to the intermediary,' +
           'whether as a dollar amount or a percentage of the offering amount, ' +
           'or a good faith estimate if the exact amount is not available at the' +
@@ -14,12 +19,30 @@ const LABEL1 = 'Any other financial interest in the issuer held by the intermedi
 @inject('businessStore')
 @observer
 export default class OfferingInformation extends React.Component {
+  getSubscriptionType = () => {
+    if (this.offeringInformation.overSubscriptionAccepted.value === 'Yes') {
+      return (
+        <Form.Select
+          fluid
+          search
+          label="If yes, disclose how oversubscriptions will be allocated"
+          name="overSubscriptionAllocationType"
+          defaultValue={this.offeringInformation.overSubscriptionAllocationType.value}
+          options={OVER_SUBSCRIPTION_ALLOCATION_TYPE}
+          onChange={this.handleChange}
+        />
+      );
+    }
+    return null;
+  }
+
+  offeringInformation = this.props.businessStore.offeringInformation;
+
   handleChange = (e, { name, value }) => {
     this.props.businessStore.setOfferingInfo(name, value);
   }
 
   render() {
-    const { offeringInformation } = this.props.businessStore;
     return (
       <div>
         <Divider section />
@@ -27,26 +50,30 @@ export default class OfferingInformation extends React.Component {
         <Form.TextArea
           label={LABEL}
           name="compensationAmount"
-          defaultValue={offeringInformation.compensationAmount.value}
+          defaultValue={this.offeringInformation.compensationAmount.value}
           onChange={this.handleChange}
         />
         <Form.TextArea
           label={LABEL1}
           name="financialInterest"
-          defaultValue={offeringInformation.financialInterest.value}
+          defaultValue={this.offeringInformation.financialInterest.value}
           onChange={this.handleChange}
         />
         <Form.Group widths="equal">
-          <Form.Input
+          <Form.Select
+            fluid
+            search
+            placeholder="Type of Security Offered"
             label="Type of Security Offered"
             name="securityOfferedType"
-            defaultValue={offeringInformation.securityOfferedType.value}
+            defaultValue={this.offeringInformation.securityOfferedType.value}
+            options={OFFERED_SECURITY}
             onChange={this.handleChange}
           />
           <Form.Input
             label="Price (or Method for Determining Price)"
             name="priceDeterminationMethod"
-            defaultValue={offeringInformation.priceDeterminationMethod.value}
+            defaultValue={this.offeringInformation.priceDeterminationMethod.value}
             onChange={this.handleChange}
           />
         </Form.Group>
@@ -54,41 +81,46 @@ export default class OfferingInformation extends React.Component {
           <Form.Input
             label="Target Offering Amount"
             name="offeringAmount"
-            defaultValue={offeringInformation.offeringAmount.value}
+            defaultValue={this.offeringInformation.offeringAmount.value}
             onChange={this.handleChange}
           />
           <Form.Input
             label="Oversubscriptions Accepted"
             name="overSubscriptionAccepted"
-            defaultValue={offeringInformation.overSubscriptionAccepted.value}
+            defaultValue={this.offeringInformation.overSubscriptionAccepted.value}
             onChange={this.handleChange}
           />
         </Form.Group>
         <Form.Group widths="equal">
-          <Form.Input
-            label="Maximum Offering Amount (if different from Target Offering Amount)"
-            name="priceDeterminationMethod"
-            defaultValue={offeringInformation.priceDeterminationMethod.value}
-            onChange={this.handleChange}
-          />
-          <Form.Input
-            label="If yes, disclose how oversubscriptions will be allocated"
-            name="overSubscriptionAllocationType"
-            defaultValue={offeringInformation.overSubscriptionAllocationType.value}
-            onChange={this.handleChange}
-          />
+          <Form.Group inline>
+            <Form.Radio
+              label="Yes"
+              value="Yes"
+              name="overSubscriptionAccepted"
+              checked={this.offeringInformation.overSubscriptionAccepted.value === 'Yes'}
+              onChange={this.handleChange}
+            />
+            <Form.Radio
+              label="No"
+              value="No"
+              name="overSubscriptionAccepted"
+              checked={this.offeringInformation.overSubscriptionAccepted.value === 'No'}
+              onChange={this.handleChange}
+            />
+          </Form.Group>
+          {this.getSubscriptionType()}
         </Form.Group>
         <Form.Group widths="equal">
           <Form.Input
             label="Deadline to reach the Target Offering Amount"
             name="maximumOfferingAmount"
-            defaultValue={offeringInformation.maximumOfferingAmount.value}
+            defaultValue={this.offeringInformation.maximumOfferingAmount.value}
             onChange={this.handleChange}
           />
           <Form.Input
             label="Deadline Date"
             name="deadlineDate"
-            defaultValue={offeringInformation.deadlineDate.value}
+            defaultValue={this.offeringInformation.deadlineDate.value}
             onChange={this.handleChange}
           />
         </Form.Group>

@@ -33,6 +33,7 @@ export default class XmlForm extends React.Component {
           <Form.Group widths="equal">
             <Form.Select
               fluid
+              search
               label="Select Business Filing"
               loading={this.props.uiStore.dropdownLoader}
               options={this.props.businessStore.offeringList}
@@ -41,15 +42,6 @@ export default class XmlForm extends React.Component {
               className="column"
               width={8}
             />
-            {/* <Dropdown
-              fluid
-              search
-              selection
-              loading={this.props.uiStore.dropdownLoader}
-              options={this.props.businessStore.offeringList}
-              placeholder="Select Business Filing"
-              onChange={this.handleSelectChange}
-            /> */}
             <Form.Input
               label="Website URL"
               defaultValue={this.props.businessStore.offeringUrl}

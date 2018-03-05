@@ -2,6 +2,8 @@ import React from 'react';
 import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
+import { COUNTRIES } from '../../../../constants/business';
+
 @inject('businessStore')
 @observer
 export default class IssuerInformation extends React.Component {
@@ -9,8 +11,8 @@ export default class IssuerInformation extends React.Component {
     this.props.businessStore.setIssuerInfo(name, value);
   }
 
-  handleSelectChange = (e, { value }) => {
-    this.props.businessStore.setCountry(value);
+  handleSelectChange = (e, { dataIdentifier, name, value }) => {
+    this.props.businessStore.setCountry(dataIdentifier, name, value);
   }
 
   render() {
@@ -35,12 +37,17 @@ export default class IssuerInformation extends React.Component {
             defaultValue={issuerInformation.legalStatusForm.value}
             onChange={this.handleChange}
           />
-          <Form.Input
+          <Form.Select
+            fluid
+            search
             placeholder="Jurisdiction of Incorporation/Organization"
             label="Jurisdiction of Incorporation/Organization"
             name="jurisdictionOrganization"
+            dataIdentifier="issuerInformation"
+            options={COUNTRIES}
             defaultValue={issuerInformation.jurisdictionOrganization.value}
-            onChange={this.handleChange}
+            onChange={this.handleSelectChange}
+            width={8}
           />
           <Form.Input
             placeholder="Date of Incorporation/Organization"
@@ -78,12 +85,16 @@ export default class IssuerInformation extends React.Component {
             onChange={this.handleChange}
             width={8}
           />
-          <Form.Input
+          <Form.Select
+            fluid
+            search
             placeholder="State/Country"
             label="State/Country"
             name="stateOrCountry"
+            dataIdentifier="issuerInformation"
+            options={COUNTRIES}
             defaultValue={issuerInformation.stateOrCountry.value}
-            onChange={this.handleChange}
+            onChange={this.handleSelectChange}
             width={8}
           />
         </Form.Group>
