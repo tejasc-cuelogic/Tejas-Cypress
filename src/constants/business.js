@@ -85,6 +85,10 @@ export const ISSUER_INFORMATION = {
     error: undefined,
     rule: 'required',
   },
+  legalStatusOtherDesc: {
+    value: '',
+    error: undefined,
+  },
   jurisdictionOrganization: {
     value: '',
     error: undefined,
@@ -429,7 +433,7 @@ export const LEGAL_FORM_TYPES = [
   },
   { key: 'General Partnership', value: 'General Partnership', text: 'General Partnership' },
   { key: 'Business Trust', value: 'Business Trust', text: 'Business Trust' },
-  { key: 'Other (Specify)', value: 'Other (Specify)', text: 'Other (Specify)' },
+  { key: 'Other', value: 'Other', text: 'Other (Specify)' },
 ];
 
 export const COUNTRIES = [

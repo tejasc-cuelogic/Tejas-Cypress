@@ -7,12 +7,18 @@ import { COUNTRIES, LEGAL_FORM_TYPES } from '../../../../constants/business';
 @inject('businessStore')
 @observer
 export default class IssuerInformation extends React.Component {
+  getOtherDescriptionClass = () => (
+    this.issuerInformation.legalStatusForm.value === 'Other' ? '' : 'disabled'
+  )
+
+  issuerInformation = this.props.businessStore.issuerInformation;
+
   handleChange = (e, { name, value }) => {
     this.props.businessStore.setIssuerInfo(name, value);
   }
 
-  handleSelectChange = (e, { dataIdentifier, name, value }) => {
-    this.props.businessStore.setCountry(dataIdentifier, name, value);
+  handleSelectChange = (e, { dataidentifier, name, value }) => {
+    this.props.businessStore.setCountry(dataidentifier, name, value);
   }
 
   render() {
@@ -40,13 +46,21 @@ export default class IssuerInformation extends React.Component {
             onChange={this.handleChange}
             options={LEGAL_FORM_TYPES}
           />
+          <Form.Input
+            placeholder="Other Description"
+            label="Other Description"
+            name="legalStatusOtherDesc"
+            className={this.getOtherDescriptionClass()}
+            defaultValue={issuerInformation.legalStatusOtherDesc.value}
+            onChange={this.handleChange}
+          />
           <Form.Select
             fluid
             search
             placeholder="Jurisdiction of Incorporation/Organization"
             label="Jurisdiction of Incorporation/Organization"
             name="jurisdictionOrganization"
-            dataIdentifier="issuerInformation"
+            dataidentifier="issuerInformation"
             options={COUNTRIES}
             defaultValue={issuerInformation.jurisdictionOrganization.value}
             onChange={this.handleSelectChange}
@@ -94,7 +108,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="State/Country"
             label="State/Country"
             name="stateOrCountry"
-            dataIdentifier="issuerInformation"
+            dataidentifier="issuerInformation"
             options={COUNTRIES}
             defaultValue={issuerInformation.stateOrCountry.value}
             onChange={this.handleSelectChange}

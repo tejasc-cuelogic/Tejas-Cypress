@@ -93,7 +93,7 @@ export default class FilerInformation extends React.Component {
         <Form.Checkbox
           label="Notify via Filing Website only?"
           name="confirmingCopyFlag"
-          value={filerInformation.confirmingCopyFlag.value}
+          checked={filerInformation.confirmingCopyFlag.value}
           onChange={this.handleCheckboxChange}
         />
       </div>
