@@ -32449,7 +32449,7 @@ select.ui.dropdown {
 
 .ui.modal > .actions {
   background: #FFFFFF;
-  padding: 1rem 1rem;
+  padding: 1rem 1.5rem;
   border-top: none;
   text-align: right;
 }
@@ -32917,22 +32917,65 @@ select.ui.dropdown {
 *******************************/
 
 .ui.modal .content.login-modal {
-  width: 320px;
+  width: 362px;
   margin: 0 auto;
 }
 
-.ui.modal .content.login-modal .ui.button,
-.ui.modal .content.login-modal .ui.buttons .button {
+.ui.modal .content.signup-modal {
+  width: 502px;
+  margin: 0 auto;
+}
+
+.ui.modal .content.signup-modal .user-type {
+  padding: 1em;
+  border-radius: 0.42857143rem;
+  border: #e0e0e0 1px solid;
+  cursor: pointer;
+}
+
+.ui.modal .content.signup-modal .user-type h3 {
+  margin: 0.5rem 0;
+}
+
+.ui.modal .content.signup-modal .user-type p {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 0.928571em;
+  color: #000000;
+}
+
+.ui.modal .content.signup-modal .user-type:hover,
+.ui.modal .content.signup-modal .user-type:focus,
+.ui.modal .content.signup-modal .user-type.active {
+  border-color: #9acf2a;
+}
+
+.ui.modal .content.signup-modal .user-type:hover i.icon,
+.ui.modal .content.signup-modal .user-type:focus i.icon,
+.ui.modal .content.signup-modal .user-type.active i.icon {
+  color: #9acf2a;
+}
+
+.ui.modal .content .ui.button,
+.ui.modal .content .ui.buttons .button {
   letter-spacing: 1px;
 }
 
-.ui.modal .content.login-modal .ui.button.large,
-.ui.modal .content.login-modal .ui.buttons .button.large {
+.ui.modal .content .ui.button.large,
+.ui.modal .content .ui.buttons .button.large {
   font-size: 1rem;
 }
 
+.ui.modal .content .ui.button.circular,
+.ui.modal .content .ui.buttons .button.circular {
+  min-width: 160px;
+}
+
 .ui.modal .ui.header {
-  margin: 1rem 0 2rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.ui.modal .ui.header + p {
+  margin-bottom: 1rem;
 }
 
 .ui.modal .ui.divider {

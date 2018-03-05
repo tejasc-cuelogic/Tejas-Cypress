@@ -2,20 +2,52 @@
          Theme Overrides
 *******************************/
 .ui.modal{
-    .content.login-modal{
-        width:320px;
-        margin:0 auto;
+    .content{
+        &.login-modal{
+            width:362px;
+            margin:0 auto;
+        }
+        &.signup-modal{
+            width:502px;
+            margin:0 auto;
+            .user-type{
+                padding:1em;
+                border-radius:@defaultBorderRadius * 1.5;
+                border:darken(@light-bg-color, 9%) 1px solid;
+                cursor:pointer;
+                h3{
+                    margin:0.5rem 0;
+                }
+                p{
+                    font-family:@regularFont;
+                    font-size:0.928571em;
+                    color:@fullBlack;
+                }
+                &:hover, &:focus, &.active{
+                    border-color:darken(@theme-primary, 7%);
+                    i.icon{
+                        color:darken(@theme-primary, 7%);
+                    }
+                }
+            }
+        }
         .ui{
             &.button, &.buttons .button{
                 letter-spacing:1px;
                 &.large{
                     font-size:1rem;
                 }
+                &.circular{
+                    min-width:160px;
+                }
             }
         }
     }
     .ui.header{
-        margin:1rem 0 2rem;
+        margin:1rem 0 0.5rem;
+        + p{
+            margin-bottom:1rem;
+        }
     }
     .ui.divider{
         color:@quaternary-text;

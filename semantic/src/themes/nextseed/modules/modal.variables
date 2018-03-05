@@ -56,7 +56,7 @@
 /* Modal Actions */
 @actionBorder: none;
 @actionBackground: @inverse-text;
-@actionPadding: 1rem 1rem;
+@actionPadding: 1rem 1.5rem;
 @actionAlign: right;
 
 @buttonDistance: 0.75em;
