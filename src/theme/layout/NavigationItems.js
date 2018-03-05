@@ -28,7 +28,7 @@ const UserNavigation = (props) => {
     <Dropdown item simple text="Log In or Sign Up">
       <Dropdown.Menu>
         <Dropdown.Item as={NavLink} to="/login">Log In</Dropdown.Item>
-        <Dropdown.Item as={NavLink} to="/register">Register</Dropdown.Item>
+        <Dropdown.Item as={NavLink} to="/signup">Register</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );
