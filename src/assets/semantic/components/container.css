@@ -144,7 +144,11 @@
 }
 .ui.segment.vertical.content {
   padding: 50px 0;
-  min-height: calc(100vh - 342px);
+  min-height: calc(100vh - 344px);
+}
+.ui.segment.vertical.content.banner-img {
+  background: url('./../themes/nextseed/assets/images/banner_raise.jpg') center center no-repeat;
+  background-size: cover;
 }
 .content-spacer {
   position: relative;
@@ -195,6 +199,12 @@ div.login-form ul.error-messages {
 }
 .pull-right {
   float: right !important;
+}
+.left-align {
+  text-align: left !important;
+}
+.right-align {
+  text-align: right !important;
 }
 .page-header-section {
   min-height: 132px;

@@ -5213,7 +5213,12 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 .ui.segment.vertical.content {
   padding: 50px 0;
-  min-height: calc(100vh - 342px);
+  min-height: calc(100vh - 344px);
+}
+
+.ui.segment.vertical.content.banner-img {
+  background: url('./themes/nextseed/assets/images/banner_raise.jpg') center center no-repeat;
+  background-size: cover;
 }
 
 .content-spacer {
@@ -5276,6 +5281,14 @@ div.login-form ul.error-messages {
 
 .pull-right {
   float: right !important;
+}
+
+.left-align {
+  text-align: left !important;
+}
+
+.right-align {
+  text-align: right !important;
 }
 
 .page-header-section {
@@ -18256,7 +18269,7 @@ ol.ui.horizontal.list li:before,
 .ui.form .field > label {
   display: block;
   margin: 0em 0em 0.28571429rem 0em;
-  color: #303030;
+  color: #999999;
   font-size: 0.92857143em;
   font-weight: 500;
   text-transform: none;
@@ -19011,7 +19024,7 @@ ol.ui.horizontal.list li:before,
 
 .ui.form .grouped.fields > label {
   margin: 0em 0em 0.28571429rem 0em;
-  color: #303030;
+  color: #999999;
   font-size: 0.92857143em;
   font-weight: 500;
   text-transform: none;
@@ -19283,7 +19296,7 @@ ol.ui.horizontal.list li:before,
   vertical-align: baseline;
   font-size: 0.92857143em;
   font-weight: 500;
-  color: #303030;
+  color: #999999;
   text-transform: none;
 }
 
@@ -32919,7 +32932,29 @@ select.ui.dropdown {
 }
 
 .ui.modal .ui.header {
-  margin: .2rem 0 2rem;
+  margin: 1rem 0 2rem;
+}
+
+.ui.modal .ui.divider {
+  color: #999999;
+}
+
+.ui.modal .ui.divider:before,
+.ui.modal .ui.divider:after {
+  background: none;
+}
+
+.ui.modal .ui.form .field {
+  margin: 0 0 2rem;
+}
+
+.ui.modal .ui.form .field .ui.input input {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: #999999 1px solid;
 }
 
 /*******************************

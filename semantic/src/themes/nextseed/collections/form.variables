@@ -25,7 +25,7 @@
 @labelFontSize: @relativeSmall;
 @labelFontWeight: 500;
 @labelTextTransform: none;
-@labelColor: @textColor;
+@labelColor: @quaternary-text;
 
 /* Input */
 @inputFont: @pageFont;

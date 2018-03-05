@@ -594,7 +594,25 @@
   font-size: 1rem;
 }
 .ui.modal .ui.header {
-  margin: .2rem 0 2rem;
+  margin: 1rem 0 2rem;
+}
+.ui.modal .ui.divider {
+  color: #999999;
+}
+.ui.modal .ui.divider:before,
+.ui.modal .ui.divider:after {
+  background: none;
+}
+.ui.modal .ui.form .field {
+  margin: 0 0 2rem;
+}
+.ui.modal .ui.form .field .ui.input input {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: #999999 1px solid;
 }
 
 

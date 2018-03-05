@@ -15,7 +15,24 @@
         }
     }
     .ui.header{
-        margin:.2rem 0 2rem;
+        margin:1rem 0 2rem;
+    }
+    .ui.divider{
+        color:@quaternary-text;
+        &:before, &:after{
+            background:none;
+        }
+    }
+    .ui.form .field{
+        margin:0 0 2rem;
+        .ui.input input{
+            font-family:@boldFont;
+            padding-left:0;
+            padding-right:0;
+            border-radius:0;
+            border:none;
+            border-bottom:@quaternary-text 1px solid;
+        }
     }
 }
 
