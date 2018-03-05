@@ -163,6 +163,16 @@ export const OFFERING_INFORMATION = {
     error: undefined,
     rule: 'required',
   },
+  securityOfferedOtherDesc: {
+    value: '',
+    error: undefined,
+  },
+  noOfSecurityOffered: {
+    value: '',
+  },
+  price: {
+    value: '',
+  },
   priceDeterminationMethod: {
     value: '',
     error: undefined,
@@ -182,6 +192,9 @@ export const OFFERING_INFORMATION = {
     value: '',
     error: undefined,
     rule: 'required',
+  },
+  descOverSubscription: {
+    value: '',
   },
   maximumOfferingAmount: {
     value: '',
@@ -389,14 +402,14 @@ export const PERSONAL_SIGNATURE = {
   },
 };
 
-export const OFFERED_SECURITY = [
+export const OFFERED_SECURITIES = [
   { key: 'Common Stock', value: 'Common Stock', text: 'Common Stock' },
   { key: 'Preffered Stock', value: 'Preffered Stock', text: 'Preffered Stock' },
   { key: 'Debt', value: 'Debt', text: 'Debt' },
   { key: 'Other', value: 'Other', text: 'Other' },
 ];
 
-export const OVER_SUBSCRIPTION_ALLOCATION_TYPE = [
+export const OVER_SUBSCRIPTION_ALLOCATION_TYPES = [
   { key: 'Pro-rata basis', value: 'Pro-rata basis', text: 'Pro-rata basis' },
   {
     key: 'First-come, first-served basis',
@@ -404,6 +417,19 @@ export const OVER_SUBSCRIPTION_ALLOCATION_TYPE = [
     text: 'First-come, first-served basis',
   },
   { key: 'Other', value: 'Other', text: 'Other' },
+];
+
+export const LEGAL_FORM_TYPES = [
+  { key: 'Corporation', value: 'Corporation', text: 'Corporation' },
+  { key: 'Limited Partnership', value: 'Limited Partnership', text: 'Limited Partnership' },
+  {
+    key: 'Limited Liability Company',
+    value: 'Limited Liability Company',
+    text: 'Limited Liability Company',
+  },
+  { key: 'General Partnership', value: 'General Partnership', text: 'General Partnership' },
+  { key: 'Business Trust', value: 'Business Trust', text: 'Business Trust' },
+  { key: 'Other (Specify)', value: 'Other (Specify)', text: 'Other (Specify)' },
 ];
 
 export const COUNTRIES = [

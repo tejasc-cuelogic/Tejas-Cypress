@@ -2,7 +2,7 @@ import React from 'react';
 import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-import { COUNTRIES } from '../../../../constants/business';
+import { COUNTRIES, LEGAL_FORM_TYPES } from '../../../../constants/business';
 
 @inject('businessStore')
 @observer
@@ -30,12 +30,15 @@ export default class IssuerInformation extends React.Component {
         />
         <h4>Legal Status of Issuer</h4>
         <Form.Group widths="equal">
-          <Form.Input
+          <Form.Select
+            fluid
+            search
             placeholder="Form"
             label="Form"
             name="legalStatusForm"
             defaultValue={issuerInformation.legalStatusForm.value}
             onChange={this.handleChange}
+            options={LEGAL_FORM_TYPES}
           />
           <Form.Select
             fluid
