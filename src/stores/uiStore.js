@@ -13,6 +13,7 @@ export class UiStore {
   @observable success = undefined;
   @observable redirectURL = undefined;
   @observable dropdownLoader = false;
+  @observable authWizardStep = undefined;
 
   @action
   setProgress(progress = true) {
@@ -64,12 +65,18 @@ export class UiStore {
   }
 
   @action
+  setAuthWizardStep(step) {
+    this.authWizardStep = step;
+  }
+
+  @action
   updateLayoutState(prop) {
     this.layoutState[prop] = !this.layoutState[prop];
   }
-  setSubmitButtonDisability(status) {
-    this.submitButtonDisabled = status;
-  }
+
+  // setSubmitButtonDisability(status) {
+  //   this.submitButtonDisabled = status;
+  // }
 
   @action
   toggleSubmitButton() {

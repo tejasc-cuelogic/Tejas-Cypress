@@ -11,7 +11,6 @@ import Invest from './invest/containers/Invest';
 import Login from '../modules/auth/Login';
 import Offering from './offering/containers/Offering';
 import Register from '../modules/auth/Register';
-import Signup from '../modules/auth/containers/Signup';
 import ResetPassword from '../modules/auth/ResetPassword';
 import Settings from './../modules/settings/containers/Settings';
 import CaseStudies from './caseStudies/containers/CaseStudies';
@@ -82,11 +81,6 @@ export const publicRoutes = [
   {
     path: '/register',
     component: Register,
-    exact: true,
-  },
-  {
-    path: '/signup',
-    component: Signup,
     exact: true,
   },
   {

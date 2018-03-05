@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import Header from './Header';
+import AuthWizard from '../../modules/auth/containers/AuthWizard';
 import authActions from '../../actions/auth';
 // import Spinner from '../ui/Spinner';
 
-@inject('userStore')
+@inject('userStore', 'uiStore')
 @withRouter
 @observer
 class Layout extends Component {
@@ -14,6 +15,10 @@ class Layout extends Component {
       .then(() => {
         this.props.history.push('/');
       });
+  }
+
+  handleChange = (step) => {
+    this.props.uiStore.setAuthWizardStep(step);
   }
 
   render() {
@@ -25,6 +30,13 @@ class Layout extends Component {
           handleLogOut={this.handleLogOut}
         />
         {this.props.children}
+
+        {this.props.uiStore.authWizardStep &&
+          <AuthWizard
+            authWizardStep={this.props.uiStore.authWizardStep}
+            setAuthWizardStep={this.handleChange}
+          />
+        }
       </div>
     );
   }
