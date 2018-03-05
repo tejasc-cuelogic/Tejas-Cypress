@@ -44,12 +44,14 @@ export default class FilerInformation extends React.Component {
             label="Live"
             value="LIVE"
             name="liveTestFlag"
+            checked={filerInformation.liveTestFlag.value === 'LIVE'}
             onChange={this.handleChange}
           />
           <Form.Radio
             label="Test"
             value="TEST"
             name="liveTestFlag"
+            checked={filerInformation.liveTestFlag.value === 'TEST'}
             onChange={this.handleChange}
           />
         </Form.Group>
