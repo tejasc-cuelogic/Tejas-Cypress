@@ -17,3 +17,37 @@
         }
     }
 }
+
+.account-type-tab{
+    > .ui.item.menu.secondary{
+        margin: 0 -1rem 1rem !important;
+        width: auto !important;
+        a.item{
+            padding:0 1em !important;
+            .account-tab{
+                width:100%;
+                padding:1rem;
+                font-family:@boldFont;
+                font-size:1.142857em;
+                border:@borderColor 1px solid;
+                border-radius:@defaultBorderRadius * 1.5;
+                .account-type{
+                    margin-right:0.571428rem;
+                }
+            }
+            &.active{
+                .account-tab{
+                    border-color:@theme-primary;
+                    .account-type{
+                        color:@theme-primary;
+                        border-color:@theme-primary;
+                    }
+                }
+            }
+        }
+    }
+    .tab{
+        font-family:@regularFont;
+        font-size:1.142857em;
+    }
+}

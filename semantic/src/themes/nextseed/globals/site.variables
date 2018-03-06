@@ -181,7 +181,7 @@
 
 @linkColor           : @theme-primary;
 @linkUnderline       : none;
-@linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
+@linkHoverColor      : @theme-primary-darken;
 @linkHoverUnderline  : @linkUnderline;
 
 /*-------------------

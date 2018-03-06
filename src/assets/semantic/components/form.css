@@ -56,7 +56,7 @@
   display: block;
   margin: 0em 0em 0.28571429rem 0em;
   color: #999999;
-  font-size: 0.92857143em;
+  font-size: 1rem;
   font-weight: 500;
   text-transform: none;
 }
@@ -756,7 +756,7 @@
 .ui.form .grouped.fields > label {
   margin: 0em 0em 0.28571429rem 0em;
   color: #999999;
-  font-size: 0.92857143em;
+  font-size: 1rem;
   font-weight: 500;
   text-transform: none;
 }
@@ -990,7 +990,7 @@
   margin-top: 0em;
   margin-bottom: 0em;
   vertical-align: baseline;
-  font-size: 0.92857143em;
+  font-size: 1rem;
   font-weight: 500;
   color: #999999;
   text-transform: none;

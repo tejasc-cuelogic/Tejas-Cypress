@@ -79,11 +79,11 @@
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   margin: 0em;
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 3rem;
   -webkit-box-shadow: none;
           box-shadow: none;
   color: rgba(0, 0, 0, 0.85);
-  border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+  border-bottom: none;
 }
 .ui.modal > .header:not(.ui) {
   font-size: 1.42857143rem;
@@ -100,7 +100,7 @@
   width: 100%;
   font-size: 1em;
   line-height: 1.4;
-  padding: 1.5rem;
+  padding: 2.5rem 3rem;
   background: #FFFFFF;
 }
 .ui.modal > .image.content {
@@ -397,7 +397,7 @@
 
 /* Scrolling Content */
 .ui.modal .scrolling.content {
-  max-height: calc(70vh);
+  max-height: calc(64vh);
   overflow: auto;
 }
 
@@ -581,15 +581,39 @@
          Theme Overrides
 *******************************/
 
-.ui.modal .content.login-modal {
-  width: 362px;
-  margin: 0 auto;
+.ui.modal > .close {
+  top: 0.5rem;
+  right: 0.25rem;
+  opacity: 0.5;
+  color: #999999;
 }
-.ui.modal .content.signup-modal {
-  width: 502px;
+.ui.modal > .header:not(.ui) {
+  padding-top: 3rem;
+}
+.ui.modal > .header:not(.ui) .back-link {
+  font-size: 16px;
+  font-weight: 400;
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+}
+.ui.modal > .header:not(.ui) .ui.header {
+  margin: 0 0 0.5rem;
+}
+.ui.modal > .header:not(.ui) p {
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #424242;
+}
+.ui.modal .content {
+  padding-top: 1.5rem;
+}
+.ui.modal .content.login-modal {
   margin: 0 auto;
 }
 .ui.modal .content.signup-modal .user-type {
+  height: 100%;
   padding: 1em;
   border-radius: 0.42857143rem;
   border: #e0e0e0 1px solid;
@@ -606,16 +630,20 @@
 .ui.modal .content.signup-modal .user-type:hover,
 .ui.modal .content.signup-modal .user-type:focus,
 .ui.modal .content.signup-modal .user-type.active {
-  border-color: #9acf2a;
+  border-color: #81ad23;
 }
 .ui.modal .content.signup-modal .user-type:hover i.icon,
 .ui.modal .content.signup-modal .user-type:focus i.icon,
 .ui.modal .content.signup-modal .user-type.active i.icon {
-  color: #9acf2a;
+  color: #81ad23;
 }
 .ui.modal .content .ui.button,
 .ui.modal .content .ui.buttons .button {
   letter-spacing: 1px;
+}
+.ui.modal .content .ui.button:not(.circular),
+.ui.modal .content .ui.buttons .button:not(.circular) {
+  border-radius: 0;
 }
 .ui.modal .content .ui.button.large,
 .ui.modal .content .ui.buttons .button.large {
@@ -625,11 +653,13 @@
 .ui.modal .content .ui.buttons .button.circular {
   min-width: 160px;
 }
-.ui.modal .ui.header {
-  margin: 1rem 0 0.5rem;
-}
-.ui.modal .ui.header + p {
-  margin-bottom: 1rem;
+.ui.modal .content a.cancel-link {
+  margin: 1.5rem 0 0;
+  display: inline-block;
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #999999;
 }
 .ui.modal .ui.divider {
   color: #999999;
@@ -647,7 +677,10 @@
   padding-right: 0;
   border-radius: 0;
   border: none;
-  border-bottom: #999999 1px solid;
+  border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
+}
+.ui.modal .ui.form .field > label i.icon.help {
+  margin-left: 0.5rem;
 }
 
 

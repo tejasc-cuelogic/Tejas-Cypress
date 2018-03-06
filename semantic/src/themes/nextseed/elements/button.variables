@@ -15,7 +15,7 @@
 @lineHeight: 1em;
 
 /* Button defaults to using same height as input globally */
-@verticalPadding: @inputVerticalPadding;
+@verticalPadding:1em;
 @horizontalPadding: 1.5em;
 
 /* Text */

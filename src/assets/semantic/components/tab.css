@@ -94,6 +94,35 @@
   margin: 0;
   border: none;
 }
+.account-type-tab > .ui.item.menu.secondary {
+  margin: 0 -1rem 1rem !important;
+  width: auto !important;
+}
+.account-type-tab > .ui.item.menu.secondary a.item {
+  padding: 0 1em !important;
+}
+.account-type-tab > .ui.item.menu.secondary a.item .account-tab {
+  width: 100%;
+  padding: 1rem;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 1.142857em;
+  border: rgba(34, 36, 38, 0.15) 1px solid;
+  border-radius: 0.42857143rem;
+}
+.account-type-tab > .ui.item.menu.secondary a.item .account-tab .account-type {
+  margin-right: 0.571428rem;
+}
+.account-type-tab > .ui.item.menu.secondary a.item.active .account-tab {
+  border-color: #A9D943;
+}
+.account-type-tab > .ui.item.menu.secondary a.item.active .account-tab .account-type {
+  color: #A9D943;
+  border-color: #A9D943;
+}
+.account-type-tab .tab {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 1.142857em;
+}
 
 
 /*******************************
