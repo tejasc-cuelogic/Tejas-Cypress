@@ -87,6 +87,11 @@ export class BusinessStore {
   }
 
   @action
+  togglefilerCheckbox(name) {
+    this.filerInformation[name].value = !this.filerInformation[name].value;
+  }
+
+  @action
   setIssuerInfo(field, value) {
     this.issuerInformation[field].value = value;
   }
@@ -117,8 +122,9 @@ export class BusinessStore {
   }
 
   @action
-  setCountry(value) {
-    this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
+  setCountry(identifier, name, value) {
+    // this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
+    this[identifier][name].value = value;
   }
 
   @action

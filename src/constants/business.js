@@ -43,17 +43,17 @@ export const FILER_INFORMATION = {
     rule: 'required',
   },
   confirmingCopyFlag: {
-    value: '',
+    value: false,
     error: undefined,
     rule: 'required',
   },
   returnCopyFlag: {
-    value: '',
+    value: false,
     error: undefined,
     rule: 'required',
   },
   overrideInternetFlag: {
-    value: '',
+    value: false,
     error: undefined,
     rule: 'required',
   },
@@ -84,6 +84,10 @@ export const ISSUER_INFORMATION = {
     value: '',
     error: undefined,
     rule: 'required',
+  },
+  legalStatusOtherDesc: {
+    value: '',
+    error: undefined,
   },
   jurisdictionOrganization: {
     value: '',
@@ -163,6 +167,16 @@ export const OFFERING_INFORMATION = {
     error: undefined,
     rule: 'required',
   },
+  securityOfferedOtherDesc: {
+    value: '',
+    error: undefined,
+  },
+  noOfSecurityOffered: {
+    value: '',
+  },
+  price: {
+    value: '',
+  },
   priceDeterminationMethod: {
     value: '',
     error: undefined,
@@ -174,7 +188,7 @@ export const OFFERING_INFORMATION = {
     rule: 'required',
   },
   overSubscriptionAccepted: {
-    value: '',
+    value: 'Yes',
     error: undefined,
     rule: 'required',
   },
@@ -182,6 +196,9 @@ export const OFFERING_INFORMATION = {
     value: '',
     error: undefined,
     rule: 'required',
+  },
+  descOverSubscription: {
+    value: '',
   },
   maximumOfferingAmount: {
     value: '',
@@ -388,6 +405,36 @@ export const PERSONAL_SIGNATURE = {
     label: 'Date',
   },
 };
+
+export const OFFERED_SECURITIES = [
+  { key: 'Common Stock', value: 'Common Stock', text: 'Common Stock' },
+  { key: 'Preffered Stock', value: 'Preffered Stock', text: 'Preffered Stock' },
+  { key: 'Debt', value: 'Debt', text: 'Debt' },
+  { key: 'Other', value: 'Other', text: 'Other' },
+];
+
+export const OVER_SUBSCRIPTION_ALLOCATION_TYPES = [
+  { key: 'Pro-rata basis', value: 'Pro-rata basis', text: 'Pro-rata basis' },
+  {
+    key: 'First-come, first-served basis',
+    value: 'First-come, first-served basis',
+    text: 'First-come, first-served basis',
+  },
+  { key: 'Other', value: 'Other', text: 'Other' },
+];
+
+export const LEGAL_FORM_TYPES = [
+  { key: 'Corporation', value: 'Corporation', text: 'Corporation' },
+  { key: 'Limited Partnership', value: 'Limited Partnership', text: 'Limited Partnership' },
+  {
+    key: 'Limited Liability Company',
+    value: 'Limited Liability Company',
+    text: 'Limited Liability Company',
+  },
+  { key: 'General Partnership', value: 'General Partnership', text: 'General Partnership' },
+  { key: 'Business Trust', value: 'Business Trust', text: 'Business Trust' },
+  { key: 'Other', value: 'Other', text: 'Other (Specify)' },
+];
 
 export const COUNTRIES = [
   { key: 'AL', value: 'AL', text: 'ALABAMA' },

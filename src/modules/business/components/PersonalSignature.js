@@ -38,7 +38,6 @@ const PersonalSignature = observer(props => (
           </Form.Group>
         </div>
       ))}
-      <Button onClick={props.handleAddClick}>Add</Button>
     </div>
   </div>
 ));

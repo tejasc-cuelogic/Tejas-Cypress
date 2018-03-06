@@ -2,15 +2,23 @@ import React from 'react';
 import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
+import { COUNTRIES, LEGAL_FORM_TYPES } from '../../../../constants/business';
+
 @inject('businessStore')
 @observer
 export default class IssuerInformation extends React.Component {
+  getOtherDescriptionClass = () => (
+    this.issuerInformation.legalStatusForm.value === 'Other' ? '' : 'disabled'
+  )
+
+  issuerInformation = this.props.businessStore.issuerInformation;
+
   handleChange = (e, { name, value }) => {
     this.props.businessStore.setIssuerInfo(name, value);
   }
 
-  handleSelectChange = (e, { value }) => {
-    this.props.businessStore.setCountry(value);
+  handleSelectChange = (e, { dataidentifier, name, value }) => {
+    this.props.businessStore.setCountry(dataidentifier, name, value);
   }
 
   render() {
@@ -28,19 +36,35 @@ export default class IssuerInformation extends React.Component {
         />
         <h4>Legal Status of Issuer</h4>
         <Form.Group widths="equal">
-          <Form.Input
+          <Form.Select
+            fluid
+            search
             placeholder="Form"
             label="Form"
             name="legalStatusForm"
             defaultValue={issuerInformation.legalStatusForm.value}
             onChange={this.handleChange}
+            options={LEGAL_FORM_TYPES}
           />
           <Form.Input
+            placeholder="Other Description"
+            label="Other Description"
+            name="legalStatusOtherDesc"
+            className={this.getOtherDescriptionClass()}
+            defaultValue={issuerInformation.legalStatusOtherDesc.value}
+            onChange={this.handleChange}
+          />
+          <Form.Select
+            fluid
+            search
             placeholder="Jurisdiction of Incorporation/Organization"
             label="Jurisdiction of Incorporation/Organization"
             name="jurisdictionOrganization"
+            dataidentifier="issuerInformation"
+            options={COUNTRIES}
             defaultValue={issuerInformation.jurisdictionOrganization.value}
-            onChange={this.handleChange}
+            onChange={this.handleSelectChange}
+            width={8}
           />
           <Form.Input
             placeholder="Date of Incorporation/Organization"
@@ -78,12 +102,16 @@ export default class IssuerInformation extends React.Component {
             onChange={this.handleChange}
             width={8}
           />
-          <Form.Input
+          <Form.Select
+            fluid
+            search
             placeholder="State/Country"
             label="State/Country"
             name="stateOrCountry"
+            dataidentifier="issuerInformation"
+            options={COUNTRIES}
             defaultValue={issuerInformation.stateOrCountry.value}
-            onChange={this.handleChange}
+            onChange={this.handleSelectChange}
             width={8}
           />
         </Form.Group>
