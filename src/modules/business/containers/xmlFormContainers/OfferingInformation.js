@@ -1,6 +1,7 @@
 import React from 'react';
 import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import DatePicker from 'react-datepicker';
 
 import {
   OFFERED_SECURITIES,
@@ -41,6 +42,10 @@ export default class OfferingInformation extends React.Component {
 
   handleChange = (e, { name, value }) => {
     this.props.businessStore.setOfferingInfo(name, value);
+  }
+
+  handleDateChange = (date) => {
+    this.props.businessStore.setOfferingInfo('deadlineDate', date);
   }
 
   render() {
@@ -156,11 +161,11 @@ export default class OfferingInformation extends React.Component {
             defaultValue={this.offeringInformation.maximumOfferingAmount.value}
             onChange={this.handleChange}
           />
-          <Form.Input
-            label="Deadline Date"
-            name="deadlineDate"
-            defaultValue={this.offeringInformation.deadlineDate.value}
-            onChange={this.handleChange}
+          <DatePicker
+            placeholderText="Deadline Date"
+            dateFormat="MM/DD/YYYY"
+            selected={this.offeringInformation.deadlineDate.value}
+            onChange={this.handleDateChange}
           />
         </Form.Group>
       </div>

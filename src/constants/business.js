@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const FORM_VALUES = [
   { name: 'name_of_business', placeholder: 'Business Name' },
   { name: 'shorthand_name', placeholder: 'Shorthand Name' },
@@ -95,7 +97,7 @@ export const ISSUER_INFORMATION = {
     rule: '',
   },
   dateIncorporation: {
-    value: '',
+    value: moment(),
     error: undefined,
     rule: 'required',
   },
@@ -206,7 +208,7 @@ export const OFFERING_INFORMATION = {
     rule: 'required',
   },
   deadlineDate: {
-    value: '',
+    value: moment(),
     error: undefined,
     rule: 'required',
   },

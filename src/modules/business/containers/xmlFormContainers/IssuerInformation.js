@@ -1,6 +1,7 @@
 import React from 'react';
 import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import DatePicker from 'react-datepicker';
 
 import { COUNTRIES, LEGAL_FORM_TYPES } from '../../../../constants/business';
 
@@ -15,6 +16,11 @@ export default class IssuerInformation extends React.Component {
 
   handleChange = (e, { name, value }) => {
     this.props.businessStore.setIssuerInfo(name, value);
+  }
+
+  /* eslint-disable no-underscore-dangle */
+  handleDateChange = (date) => {
+    this.props.businessStore.setIssuerInfo('dateIncorporation', date);
   }
 
   handleSelectChange = (e, { dataidentifier, name, value }) => {
@@ -66,12 +72,11 @@ export default class IssuerInformation extends React.Component {
             onChange={this.handleSelectChange}
             width={8}
           />
-          <Form.Input
-            placeholder="Date of Incorporation/Organization"
-            label="Date of Incorporation/Organization"
-            name="dateIncorporation"
-            defaultValue={issuerInformation.dateIncorporation.value}
-            onChange={this.handleChange}
+          <DatePicker
+            placeholderText="Date of Incorporation/Organization"
+            dateFormat="MM/DD/YYYY"
+            selected={issuerInformation.dateIncorporation.value}
+            onChange={this.handleDateChange}
           />
         </Form.Group>
         <h4>Physical Address of issuer</h4>
