@@ -74,7 +74,7 @@ export default class IssuerInformation extends React.Component {
           />
           <DatePicker
             placeholderText="Date of Incorporation/Organization"
-            dateFormat="MM/DD/YYYY"
+            dateFormat="DD-MM-YYYY"
             selected={issuerInformation.dateIncorporation.value}
             onChange={this.handleDateChange}
           />
@@ -169,8 +169,8 @@ export default class IssuerInformation extends React.Component {
           <Form.Input
             placeholder="CRD Number"
             label="CRD Number"
-            name="cardNumber"
-            defaultValue={issuerInformation.cardNumber.value}
+            name="crdNumber"
+            defaultValue={issuerInformation.crdNumber.value}
             onChange={this.handleChange}
             width={8}
           />

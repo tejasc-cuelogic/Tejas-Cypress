@@ -47,7 +47,7 @@ export const FILER_INFORMATION = {
   confirmingCopyFlag: {
     value: false,
     error: undefined,
-    rule: 'required',
+    rule: 'required|boolean',
   },
   returnCopyFlag: {
     value: false,
@@ -146,7 +146,7 @@ export const ISSUER_INFORMATION = {
     error: undefined,
     rule: 'required',
   },
-  cardNumber: {
+  crdNumber: {
     value: '',
     error: undefined,
     rule: 'required',

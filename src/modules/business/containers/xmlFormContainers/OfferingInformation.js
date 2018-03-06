@@ -69,7 +69,7 @@ export default class OfferingInformation extends React.Component {
           <Form.Select
             fluid
             search
-            placeholder="Type of Security Offered"
+            placeholder="Security Type"
             label="Type of Security Offered"
             name="securityOfferedType"
             defaultValue={this.offeringInformation.securityOfferedType.value}
@@ -154,19 +154,25 @@ export default class OfferingInformation extends React.Component {
             className={this.getSubscriptionDescClass()}
           />
         </Form.Group>
-        <Form.Group widths="equal">
+        <Form.Group>
           <Form.Input
             label="Deadline to reach the Target Offering Amount"
             name="maximumOfferingAmount"
+            width="13"
             defaultValue={this.offeringInformation.maximumOfferingAmount.value}
             onChange={this.handleChange}
           />
-          <DatePicker
-            placeholderText="Deadline Date"
-            dateFormat="MM/DD/YYYY"
-            selected={this.offeringInformation.deadlineDate.value}
-            onChange={this.handleDateChange}
-          />
+          <div className="field three wide">
+            { /* eslint-disable jsx-a11y/label-has-for */ }
+            <label>Deadline Date</label>
+            <DatePicker
+              id="deadlinedate"
+              placeholderText="Deadline Date"
+              dateFormat="DD-MM-YYYY"
+              selected={this.offeringInformation.deadlineDate.value}
+              onChange={this.handleDateChange}
+            />
+          </div>
         </Form.Group>
       </div>
     );

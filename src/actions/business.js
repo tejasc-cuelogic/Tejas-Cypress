@@ -112,8 +112,15 @@ export class Business {
   */
   getFormattedInformation = (info) => {
     const formattedData = {};
+    const dateKeys = ['dateIncorporation', 'deadlineDate'];
     _.forEach(info, (data, key) => {
-      formattedData[key] = data.value;
+      if (dateKeys.includes(key)) {
+        // If value is date then it has Moment object and not string value, in order to send proper
+        // value to server we have to parse value as follows
+        formattedData[key] = data.value.format('DD-MM-YYYY');
+      } else {
+        formattedData[key] = data.value;
+      }
     });
     return formattedData;
   }
