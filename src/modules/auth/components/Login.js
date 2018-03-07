@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 
 const Login = props => (
-  <Modal size="mini" open>
+  <Modal size="tiny" open>
     <Modal.Header className="center-align">
       <Header as="h2">Log in to NextSeed</Header>
     </Modal.Header>

@@ -51,7 +51,7 @@ const panes = [
 const investmentChooseType = props => (
   <Modal open closeIcon>
     <Modal.Header className="center-align">
-      <Link to="" onClick={() => props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon name="arrow left" /></Link>
+      <Link to="" onClick={() => props.setAuthWizardStep('InvestorPersonalDetails')} className="back-link"><Icon name="arrow left" /></Link>
       <Header as="h2">What type of Investment Account would you like to start?</Header>
       <p>Choose an account type</p>
     </Modal.Header>
