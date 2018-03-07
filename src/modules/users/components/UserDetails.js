@@ -5,7 +5,7 @@ import { Grid, Icon, Form, Input, Label, Button } from 'semantic-ui-react';
 const userDetails = () => (
   <div className="content-spacer">
     <div className="overlay editing" />
-    <Grid columns={1}>
+    <Grid columns={1} stackable>
       <Grid.Row>
         <Grid.Column>
           <div className="form-card editable">
@@ -17,7 +17,7 @@ const userDetails = () => (
               <Link to="/edit"><Icon name="pencil" />Edit</Link>
             </div>
             <Form>
-              <Grid columns={2} divided>
+              <Grid columns={2} divided stackable>
                 <Grid.Row>
                   <Grid.Column>
                     <h4>Name</h4>
@@ -153,7 +153,7 @@ const userDetails = () => (
               <Link to="/edit"><Icon name="pencil" />Edit</Link>
             </div>
             <Form>
-              <Grid columns={2} divided>
+              <Grid columns={2} divided stackable>
                 <Grid.Row>
                   <Grid.Column>
                     <h4>Residence Address</h4>

@@ -118,7 +118,7 @@ const investorPersonalDetails = props => (
           onChange={this.handleInputChange}
         />
         <div className="center-align">
-          <Button circular color="green" size="large">Confirm</Button>
+          <Button circular color="green" size="large" onClick={() => props.setAuthWizardStep('InvestmentChooseType')}>Confirm</Button>
         </div>
         <div className="center-align">
           <Link to="" className="cancel-link">I’ll finish this later</Link>

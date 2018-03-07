@@ -9,7 +9,7 @@ const signupInitial = props => (
       <p>Do you want to invest or apply for funding?</p>
     </Modal.Header>
     <Modal.Content className="signup-modal">
-      <Grid textAlign="center">
+      <Grid stackable textAlign="center">
         <Grid.Row columns={2}>
           <Grid.Column>
             <div className="user-type">
