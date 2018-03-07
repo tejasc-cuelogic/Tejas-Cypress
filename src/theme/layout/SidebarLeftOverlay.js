@@ -43,11 +43,11 @@ class SidebarLeftPush extends Component {
           </Button>
         </Sidebar>
         <Sidebar.Pusher>
-          <div className="ui vertical segment content">
+          {this.props.children}
+          {/* <div className="ui vertical segment content">
             <div className="ui container fluid">
-              {this.props.children}
             </div>
-          </div>
+          </div> */}
         </Sidebar.Pusher>
         <NotificationPanel status={uiStore.layoutState.notificationPanel} />
       </Sidebar.Pushable>

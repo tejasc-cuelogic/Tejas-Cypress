@@ -49,7 +49,7 @@ const panes = [
 ];
 
 const investmentChooseType = props => (
-  <Modal size="tiny" open closeIcon>
+  <Modal open closeIcon>
     <Modal.Header className="center-align">
       <Link to="" onClick={() => props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon name="arrow left" /></Link>
       <Header as="h2">What type of Investment Account would you like to start?</Header>
@@ -64,6 +64,7 @@ const investmentChooseType = props => (
             pointing: true,
             className: 'item three',
             fluid: true,
+            stackable: true,
           }}
           panes={panes}
         />

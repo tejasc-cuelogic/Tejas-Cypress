@@ -4,7 +4,7 @@
 .ui.modal{
     >.close{
         top:0.5rem;
-        right:0.25rem;
+        right:0.5rem;
         opacity:0.5;
         color:@quaternary-text;
     }
@@ -14,8 +14,8 @@
             font-size:16px;
             font-weight:400;
             position:absolute;
-            top:1.5rem;
-            left:1.5rem;
+            top:0.85rem;
+            left:0.85rem;
         }
         .ui.header{
             margin:0 0 0.5rem;
@@ -87,21 +87,26 @@
             background:none;
         }
     }
-    .ui.form .field{
-        margin:0 0 2rem;
-        .ui.input input{
-            font-family:@boldFont;
-            padding-left:0;
-            padding-right:0;
-            border-radius:0;
-            border:none;
-            border-bottom:@borderColor 1px solid;
+    .ui.form{
+        .fields .field{
+            margin-bottom:1rem;
         }
-        > label{
-            i.icon.help{
-                margin-left:0.5rem;
+        .field{
+            margin:0 0 2rem;
+            .ui.input input{
+                font-family:@boldFont;
+                padding-left:0;
+                padding-right:0;
+                border-radius:0;
+                border:none;
+                border-bottom:@borderColor 1px solid;
+            }
+            > label{
+                i.icon.help{
+                    margin-left:0.5rem;
+                }
             }
         }
-}
+    }
 }
 

@@ -32930,7 +32930,7 @@ select.ui.dropdown {
 
 .ui.modal > .close {
   top: 0.5rem;
-  right: 0.25rem;
+  right: 0.5rem;
   opacity: 0.5;
   color: #999999;
 }
@@ -32943,8 +32943,8 @@ select.ui.dropdown {
   font-size: 16px;
   font-weight: 400;
   position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
+  top: 0.85rem;
+  left: 0.85rem;
 }
 
 .ui.modal > .header:not(.ui) .ui.header {
@@ -33032,6 +33032,10 @@ select.ui.dropdown {
 .ui.modal .ui.divider:before,
 .ui.modal .ui.divider:after {
   background: none;
+}
+
+.ui.modal .ui.form .fields .field {
+  margin-bottom: 1rem;
 }
 
 .ui.modal .ui.form .field {
@@ -36504,6 +36508,7 @@ body.pushable > .pusher {
 }
 
 .account-type-tab > .ui.item.menu.secondary a.item {
+  margin-top: 1rem;
   padding: 0 1em !important;
 }
 
