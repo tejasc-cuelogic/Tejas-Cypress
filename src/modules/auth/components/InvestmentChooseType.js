@@ -55,7 +55,7 @@ const investmentChooseType = props => (
       <Header as="h2">What type of Investment Account would you like to start?</Header>
       <p>Choose an account type</p>
     </Modal.Header>
-    <Modal.Content scrolling className="signup-modal">
+    <Modal.Content className="signup-modal">
       <Grid textAlign="center">
         <Tab
           className="account-type-tab"

@@ -8,7 +8,7 @@ const investorSignup = props => (
       <Link to="" onClick={() => props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon name="arrow left" /></Link>
       <Header as="h2">Sign Up as Investor</Header>
     </Modal.Header>
-    <Modal.Content scrolling className="signup-modal">
+    <Modal.Content className="signup-modal">
       <Form>
         <Button color="facebook" size="large" fluid>
           Sign up with Facebook

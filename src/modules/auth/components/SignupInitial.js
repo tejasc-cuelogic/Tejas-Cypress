@@ -8,7 +8,7 @@ const signupInitial = props => (
       <Header as="h2">How can NextSeed Help you?</Header>
       <p>Do you want to invest or apply for funding?</p>
     </Modal.Header>
-    <Modal.Content scrolling className="signup-modal">
+    <Modal.Content className="signup-modal">
       <Grid textAlign="center">
         <Grid.Row columns={2}>
           <Grid.Column>
