@@ -32718,7 +32718,7 @@ select.ui.dropdown {
 /* Scrolling Content */
 
 .ui.modal .scrolling.content {
-  max-height: calc(64vh);
+  max-height: calc(70vh);
   overflow: auto;
 }
 

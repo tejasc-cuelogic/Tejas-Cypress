@@ -13,7 +13,7 @@ const investorPersonalDetails = props => (
         to enable you to fully use your account
       </p>
     </Modal.Header>
-    <Modal.Content scrolling className="signup-modal">
+    <Modal.Content className="signup-modal">
       <Form error onSubmit={this.handleSubmitForm}>
         <Form.Group widths="equal">
           <Form.Field>

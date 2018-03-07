@@ -122,7 +122,7 @@
 @mobileScrollingMargin: 1rem;
 
 /* Scrolling Content */
-@scrollingContentMaxHeight: calc(80vh - 16em);
+@scrollingContentMaxHeight: calc(80vh - 10em);
 
 /*-------------------
       Variations
