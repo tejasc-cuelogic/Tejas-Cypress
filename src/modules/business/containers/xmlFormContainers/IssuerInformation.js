@@ -3,7 +3,7 @@ import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import DatePicker from 'react-datepicker';
 
-import { COUNTRIES, LEGAL_FORM_TYPES } from '../../../../constants/business';
+import { US_STATES, LEGAL_FORM_TYPES } from '../../../../constants/business';
 
 @inject('businessStore')
 @observer
@@ -67,14 +67,14 @@ export default class IssuerInformation extends React.Component {
             label="Jurisdiction of Incorporation/Organization"
             name="jurisdictionOrganization"
             dataidentifier="issuerInformation"
-            options={COUNTRIES}
+            options={US_STATES}
             defaultValue={issuerInformation.jurisdictionOrganization.value}
             onChange={this.handleSelectChange}
             width={8}
           />
           <DatePicker
             placeholderText="Date of Incorporation/Organization"
-            dateFormat="DD-MM-YYYY"
+            dateFormat="MM-DD-YYYY"
             selected={issuerInformation.dateIncorporation.value}
             onChange={this.handleDateChange}
           />
@@ -114,7 +114,7 @@ export default class IssuerInformation extends React.Component {
             label="State/Country"
             name="stateOrCountry"
             dataidentifier="issuerInformation"
-            options={COUNTRIES}
+            options={US_STATES}
             defaultValue={issuerInformation.stateOrCountry.value}
             onChange={this.handleSelectChange}
             width={8}

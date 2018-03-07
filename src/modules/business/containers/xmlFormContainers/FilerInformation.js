@@ -2,11 +2,17 @@ import React from 'react';
 import { Form, Header, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
+// import validationActions from '../../../../actions/validation';
+import validationService from '../../../../services/validation';
+
 @inject('businessStore')
 @observer
 export default class FilerInformation extends React.Component {
   handleChange = (e, { name, value }) => {
     this.props.businessStore.setFilerInfo(name, value);
+    const { errors } = validationService.validate(this.props.businessStore.filerInformation[name]);
+    // this.props.businessStore.setFilerError(name, errors && errors[name][0]);
+    console.log(errors && errors[name][0]);
   }
 
   handleCheckboxChange = (e, { name }) => {

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import validationService from './../services/validation';
 import authStore from './../stores/authStore';
 import userStore from './../stores/userStore';
+
 import { REGISTRATION } from './../constants/validation';
 
 // TODO: make class in such way that methods should not be dependent on any stores...
@@ -25,6 +26,14 @@ export class Validation {
     // Set errors if any to store or else `undefined` will get set to variable.
     authStore.setError(field, errors && errors[field][0]);
   }
+
+  // validateField = (field, value) => {
+  //   const { errors } = validationService.validate(
+  //     authStore.values[field],
+  //     authStore.values.password,
+  //   );
+  //   return errors;
+  // }
 
   /**
   * @desc Validated complete Registration form after clicking submit button

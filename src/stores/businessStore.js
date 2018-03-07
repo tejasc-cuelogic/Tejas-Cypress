@@ -118,7 +118,7 @@ export class BusinessStore {
   */
   @action
   changePersonalSignature(field, id, value) {
-    _.filter(this.signature.signaturePerson, person => person.id === id)[0][field].value = value;
+    _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].value = value;
   }
 
   @action
@@ -129,13 +129,13 @@ export class BusinessStore {
 
   @action
   addNewPersonalSignature(newSignatures) {
-    this.signature.signaturePerson = newSignatures;
+    this.signature.signaturePersons = newSignatures;
   }
 
   @action
   deletePersonalSignature(id) {
-    const { signaturePerson } = this.signature;
-    this.signature.signaturePerson = _.filter(signaturePerson, person => person.id !== id);
+    const { signaturePersons } = this.signature;
+    this.signature.signaturePersons = _.filter(signaturePersons, person => person.id !== id);
   }
 
   @action

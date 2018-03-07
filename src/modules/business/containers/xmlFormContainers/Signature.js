@@ -46,7 +46,7 @@ export default class Signature extends React.Component {
           />
         </Form.Group>
         <PersonalSignature
-          signaturePerson={signature.signaturePerson}
+          signaturePersons={signature.signaturePersons}
           handleChange={this.handlePersonalSignatureChange}
           handleAddClick={this.handleAdd}
           handleDeleteClick={this.handleDelete}

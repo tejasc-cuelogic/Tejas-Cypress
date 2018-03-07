@@ -22,11 +22,11 @@ const LABEL1 = 'Any other financial interest in the issuer held by the intermedi
 export default class OfferingInformation extends React.Component {
   getSubscriptionDescClass = () => (
     (this.offeringInformation.overSubscriptionAllocationType.value === 'Other' &&
-      this.offeringInformation.overSubscriptionAccepted.value === 'Yes') ? '' : 'disabled '
+      this.offeringInformation.overSubscriptionAccepted.value === 'Y') ? '' : 'disabled '
   )
 
   getSubscriptionTypeClass = () => (
-    this.offeringInformation.overSubscriptionAccepted.value === 'No' ? 'disabled' : ''
+    this.offeringInformation.overSubscriptionAccepted.value === 'N' ? 'disabled' : ''
   )
 
   getOtherSecurityClass = () => (
@@ -121,16 +121,16 @@ export default class OfferingInformation extends React.Component {
             <Form.Group inline>
               <Form.Radio
                 label="Yes"
-                value="Yes"
+                value="Y"
                 name="overSubscriptionAccepted"
-                checked={this.offeringInformation.overSubscriptionAccepted.value === 'Yes'}
+                checked={this.offeringInformation.overSubscriptionAccepted.value === 'Y'}
                 onChange={this.handleChange}
               />
               <Form.Radio
                 label="No"
-                value="No"
+                value="N"
                 name="overSubscriptionAccepted"
-                checked={this.offeringInformation.overSubscriptionAccepted.value === 'No'}
+                checked={this.offeringInformation.overSubscriptionAccepted.value === 'N'}
                 onChange={this.handleChange}
               />
             </Form.Group>
@@ -168,7 +168,7 @@ export default class OfferingInformation extends React.Component {
             <DatePicker
               id="deadlinedate"
               placeholderText="Deadline Date"
-              dateFormat="DD-MM-YYYY"
+              dateFormat="MM-DD-YYYY"
               selected={this.offeringInformation.deadlineDate.value}
               onChange={this.handleDateChange}
             />
