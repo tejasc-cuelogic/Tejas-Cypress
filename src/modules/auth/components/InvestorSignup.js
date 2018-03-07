@@ -20,14 +20,14 @@ const investorSignup = props => (
           <Form.Input
             fluid
             label="First Name"
-            placeholder="John"
+            placeholder="First Name"
             name="first-name"
             onChange={this.handleInputChange}
           />
           <Form.Input
             fluid
             label="Last Name"
-            placeholder="Smith"
+            placeholder="Last Name"
             name="last-name"
             onChange={this.handleInputChange}
           />
@@ -54,7 +54,7 @@ const investorSignup = props => (
     </Modal.Content>
     <Modal.Actions>
       {/* <p className="pull-left"><Link to="forgot-password">Forgot Password?</Link></p> */}
-      <p>Already have an account? <Link to="login">Log in</Link></p>
+      <p>Already have an account? <Link to="" onClick={() => props.setAuthWizardStep('Login')}>Log in</Link></p>
     </Modal.Actions>
   </Modal>
 );

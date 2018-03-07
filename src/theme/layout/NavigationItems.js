@@ -28,7 +28,7 @@ const UserNavigation = (props) => {
   return (
     <Dropdown item simple text="Log In or Sign Up">
       <Dropdown.Menu>
-        <Dropdown.Item as={NavLink} to="/login">Log In</Dropdown.Item>
+        <Dropdown.Item onClick={() => loadAuthModule('Login')}>Log In</Dropdown.Item>
         <Dropdown.Item onClick={() => loadAuthModule('SignupInitial')}>Register</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>

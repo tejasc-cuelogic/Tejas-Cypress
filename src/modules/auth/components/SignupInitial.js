@@ -34,7 +34,7 @@ const signupInitial = props => (
       </Grid>
     </Modal.Content>
     <Modal.Actions>
-      <p>Already have an account? <Link to="login">Log in</Link></p>
+      <p>Already have an account? <Link to="" onClick={() => props.setAuthWizardStep('Login')}>Log in</Link></p>
     </Modal.Actions>
   </Modal>
 );
