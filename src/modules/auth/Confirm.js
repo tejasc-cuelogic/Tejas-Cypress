@@ -17,6 +17,8 @@ export default class Confirm extends React.Component {
   }
 
   handleCodeChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
+  handleEmailChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.confirmCode()
@@ -41,7 +43,8 @@ export default class Confirm extends React.Component {
                   icon="envelope"
                   iconPosition="left"
                   placeholder="E-mail address"
-                  value={values.email}
+                  name="email"
+                  value={values.email.value}
                   onChange={this.handleEmailChange}
                 />
                 <Form.Input
