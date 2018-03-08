@@ -22,8 +22,8 @@ const LABEL1 = 'Any other financial interest in the issuer held by the intermedi
 @observer
 export default class OfferingInformation extends React.Component {
   getSubscriptionDescClass = () => (
-    this.offeringInformation.overSubscriptionAllocationType.value !== 'Other' &&
-      this.offeringInformation.overSubscriptionAccepted.value !== 'N'
+    this.offeringInformation.overSubscriptionAllocationType.value === 'Other' &&
+      this.offeringInformation.overSubscriptionAccepted.value === 'Y'
   )
 
   getSubscriptionTypeClass = () => this.offeringInformation.overSubscriptionAccepted.value === 'N'
@@ -153,7 +153,7 @@ export default class OfferingInformation extends React.Component {
             defaultValue={this.offeringInformation.descOverSubscription.value}
             error={!!this.offeringInformation.descOverSubscription.error}
             onChange={this.handleChange}
-            disabled={this.getSubscriptionDescClass()}
+            disabled={!this.getSubscriptionDescClass()}
           />
         </Form.Group>
         <Form.Group>
