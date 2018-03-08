@@ -7,6 +7,7 @@ import {
   OFFERED_SECURITIES,
   OVER_SUBSCRIPTION_ALLOCATION_TYPES,
 } from '../../../../constants/business';
+import validationActions from '../../../../actions/validation';
 
 const LABEL = 'Amount of compensation to be paid to the intermediary,' +
           'whether as a dollar amount or a percentage of the offering amount, ' +
@@ -21,31 +22,24 @@ const LABEL1 = 'Any other financial interest in the issuer held by the intermedi
 @observer
 export default class OfferingInformation extends React.Component {
   getSubscriptionDescClass = () => (
-    (this.offeringInformation.overSubscriptionAllocationType.value === 'Other' &&
-      this.offeringInformation.overSubscriptionAccepted.value === 'Y') ? '' : 'disabled '
+    this.offeringInformation.overSubscriptionAllocationType.value !== 'Other' &&
+      this.offeringInformation.overSubscriptionAccepted.value !== 'N'
   )
 
-  getSubscriptionTypeClass = () => (
-    this.offeringInformation.overSubscriptionAccepted.value === 'N' ? 'disabled' : ''
-  )
+  getSubscriptionTypeClass = () => this.offeringInformation.overSubscriptionAccepted.value === 'N'
 
-  getOtherSecurityClass = () => (
-    this.offeringInformation.securityOfferedType.value === 'Other' ? '' : 'disabled'
-  )
+  getOtherSecurityClass = () => this.offeringInformation.securityOfferedType.value !== 'Other'
 
-  getSecurityOfferedClass = () => {
-    const type = this.offeringInformation.securityOfferedType.value;
-    return (type === 'Other' || type === 'Common Stock' || type === 'Preffered Stock') ? '' : 'disabled';
-  }
+  getSecurityOfferedClass = () => this.offeringInformation.securityOfferedType.value === 'Debt'
 
   offeringInformation = this.props.businessStore.offeringInformation;
 
   handleChange = (e, { name, value }) => {
-    this.props.businessStore.setOfferingInfo(name, value);
+    validationActions.validateOfferingInfoField(name, value);
   }
 
   handleDateChange = (date) => {
-    this.props.businessStore.setOfferingInfo('deadlineDate', date);
+    validationActions.validateOfferingInfoField('deadlineDate', date);
   }
 
   render() {
@@ -57,12 +51,14 @@ export default class OfferingInformation extends React.Component {
           label={LABEL}
           name="compensationAmount"
           defaultValue={this.offeringInformation.compensationAmount.value}
+          error={!!this.offeringInformation.compensationAmount.error}
           onChange={this.handleChange}
         />
         <Form.TextArea
           label={LABEL1}
           name="financialInterest"
           defaultValue={this.offeringInformation.financialInterest.value}
+          error={!!this.offeringInformation.financialInterest.error}
           onChange={this.handleChange}
         />
         <Form.Group widths="equal">
@@ -81,38 +77,43 @@ export default class OfferingInformation extends React.Component {
             label="Other Description"
             name="securityOfferedOtherDesc"
             defaultValue={this.offeringInformation.securityOfferedOtherDesc.value}
+            error={!!this.offeringInformation.securityOfferedOtherDesc.error}
             onChange={this.handleChange}
-            className={this.getOtherSecurityClass()}
+            disabled={this.getOtherSecurityClass()}
           />
           <Form.Input
             placeholder="No. of securities offered"
             label="No. of securities offered"
             name="noOfSecurityOffered"
             defaultValue={this.offeringInformation.noOfSecurityOffered.value}
+            error={this.offeringInformation.noOfSecurityOffered.error}
             onChange={this.handleChange}
-            className={this.getSecurityOfferedClass()}
+            disabled={this.getSecurityOfferedClass()}
           />
           <Form.Input
             placeholder="Price"
             label="Price"
             name="price"
             defaultValue={this.offeringInformation.price.value}
+            error={this.offeringInformation.price.error}
             onChange={this.handleChange}
-            className={this.getSecurityOfferedClass()}
+            disabled={this.getSecurityOfferedClass()}
           />
           <Form.Input
             placeholder="Price"
             label="Price (or Method for Determining Price)"
             name="priceDeterminationMethod"
             defaultValue={this.offeringInformation.priceDeterminationMethod.value}
+            error={!!this.offeringInformation.priceDeterminationMethod.error}
             onChange={this.handleChange}
-            className={this.getSecurityOfferedClass()}
+            disabled={this.getSecurityOfferedClass()}
           />
         </Form.Group>
         <Form.Input
           label="Target Offering Amount"
           name="offeringAmount"
           defaultValue={this.offeringInformation.offeringAmount.value}
+          error={!!this.offeringInformation.offeringAmount.error}
           onChange={this.handleChange}
         />
         <Form.Group>
@@ -143,15 +144,16 @@ export default class OfferingInformation extends React.Component {
             defaultValue={this.offeringInformation.overSubscriptionAllocationType.value}
             options={OVER_SUBSCRIPTION_ALLOCATION_TYPES}
             onChange={this.handleChange}
-            className={this.getSubscriptionTypeClass()}
+            disabled={this.getSubscriptionTypeClass()}
           />
           <Form.Input
             label="Other Description"
             placeholder="Other Description"
             name="descOverSubscription"
             defaultValue={this.offeringInformation.descOverSubscription.value}
+            error={!!this.offeringInformation.descOverSubscription.error}
             onChange={this.handleChange}
-            className={this.getSubscriptionDescClass()}
+            disabled={this.getSubscriptionDescClass()}
           />
         </Form.Group>
         <Form.Group>
@@ -160,6 +162,7 @@ export default class OfferingInformation extends React.Component {
             name="maximumOfferingAmount"
             width="13"
             defaultValue={this.offeringInformation.maximumOfferingAmount.value}
+            error={!!this.offeringInformation.maximumOfferingAmount.error}
             onChange={this.handleChange}
           />
           <div className="field three wide">

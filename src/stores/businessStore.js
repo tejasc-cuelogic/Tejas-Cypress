@@ -87,6 +87,11 @@ export class BusinessStore {
   }
 
   @action
+  setFilerError(field, error) {
+    this.filerInformation[field].error = error;
+  }
+
+  @action
   togglefilerCheckbox(name) {
     this.filerInformation[name].value = !this.filerInformation[name].value;
   }
@@ -97,8 +102,18 @@ export class BusinessStore {
   }
 
   @action
+  setIssuerError(field, error) {
+    this.issuerInformation[field].error = error;
+  }
+
+  @action
   setOfferingInfo(field, value) {
     this.offeringInformation[field].value = value;
+  }
+
+  @action
+  setOfferingError(field, error) {
+    this.offeringInformation[field].error = error;
   }
 
   @action

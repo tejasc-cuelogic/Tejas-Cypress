@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import validationService from './../services/validation';
 import authStore from './../stores/authStore';
+import businessStore from './../stores/businessStore';
 import userStore from './../stores/userStore';
 
 import { REGISTRATION } from './../constants/validation';
@@ -27,13 +28,23 @@ export class Validation {
     authStore.setError(field, errors && errors[field][0]);
   }
 
-  // validateField = (field, value) => {
-  //   const { errors } = validationService.validate(
-  //     authStore.values[field],
-  //     authStore.values.password,
-  //   );
-  //   return errors;
-  // }
+  validateFilerInfoField = (field, value) => {
+    businessStore.setFilerInfo(field, value);
+    const { errors } = validationService.validate(businessStore.filerInformation[field]);
+    businessStore.setFilerError(field, errors && errors[field][0]);
+  }
+
+  validateIssuerInfoField = (field, value) => {
+    businessStore.setIssuerInfo(field, value);
+    const { errors } = validationService.validate(businessStore.issuerInformation[field]);
+    businessStore.setIssuerError(field, errors && errors[field][0]);
+  }
+
+  validateOfferingInfoField = (field, value) => {
+    businessStore.setOfferingInfo(field, value);
+    const { errors } = validationService.validate(businessStore.offeringInformation[field]);
+    businessStore.setOfferingError(field, errors && errors[field][0]);
+  }
 
   /**
   * @desc Validated complete Registration form after clicking submit button

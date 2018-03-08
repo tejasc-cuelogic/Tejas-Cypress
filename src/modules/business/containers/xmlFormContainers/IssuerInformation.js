@@ -4,23 +4,22 @@ import { inject, observer } from 'mobx-react';
 import DatePicker from 'react-datepicker';
 
 import { US_STATES, LEGAL_FORM_TYPES } from '../../../../constants/business';
+import validationActions from '../../../../actions/validation';
 
 @inject('businessStore')
 @observer
 export default class IssuerInformation extends React.Component {
-  getOtherDescriptionClass = () => (
-    this.issuerInformation.legalStatusForm.value === 'Other' ? '' : 'disabled'
-  )
+  getOtherDescriptionClass = () => this.issuerInformation.legalStatusForm.value !== 'Other'
 
   issuerInformation = this.props.businessStore.issuerInformation;
 
   handleChange = (e, { name, value }) => {
-    this.props.businessStore.setIssuerInfo(name, value);
+    validationActions.validateIssuerInfoField(name, value);
   }
 
   /* eslint-disable no-underscore-dangle */
   handleDateChange = (date) => {
-    this.props.businessStore.setIssuerInfo('dateIncorporation', date);
+    validationActions.validateIssuerInfoField('dateIncorporation', date);
   }
 
   handleSelectChange = (e, { dataidentifier, name, value }) => {
@@ -38,6 +37,7 @@ export default class IssuerInformation extends React.Component {
           label="Name of Issuer"
           name="nameOfIssuer"
           defaultValue={issuerInformation.nameOfIssuer.value}
+          error={!!issuerInformation.nameOfIssuer.error}
           onChange={this.handleChange}
         />
         <h4>Legal Status of Issuer</h4>
@@ -49,6 +49,7 @@ export default class IssuerInformation extends React.Component {
             label="Form"
             name="legalStatusForm"
             defaultValue={issuerInformation.legalStatusForm.value}
+            error={issuerInformation.legalStatusForm.error}
             onChange={this.handleChange}
             options={LEGAL_FORM_TYPES}
           />
@@ -56,7 +57,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="Other Description"
             label="Other Description"
             name="legalStatusOtherDesc"
-            className={this.getOtherDescriptionClass()}
+            disabled={this.getOtherDescriptionClass()}
             defaultValue={issuerInformation.legalStatusOtherDesc.value}
             onChange={this.handleChange}
           />
@@ -87,14 +88,16 @@ export default class IssuerInformation extends React.Component {
             name="street1"
             defaultValue={issuerInformation.street1.value}
             onChange={this.handleChange}
+            error={!!issuerInformation.street1.error}
             width={8}
           />
           <Form.Input
             placeholder="Address Line 2"
             label="Address Line 2"
             name="street2"
-            defaultValue={issuerInformation.street1.value}
+            defaultValue={issuerInformation.street2.value}
             onChange={this.handleChange}
+            error={!!issuerInformation.street2.error}
             width={8}
           />
         </Form.Group>
@@ -105,6 +108,7 @@ export default class IssuerInformation extends React.Component {
             name="city"
             defaultValue={issuerInformation.city.value}
             onChange={this.handleChange}
+            error={!!issuerInformation.city.error}
             width={8}
           />
           <Form.Select
@@ -126,6 +130,7 @@ export default class IssuerInformation extends React.Component {
             label="Mailing Zip/ Zip Code"
             name="zipCode"
             defaultValue={issuerInformation.zipCode.value}
+            error={!!issuerInformation.zipCode.error}
             onChange={this.handleChange}
             width={8}
           />
@@ -134,6 +139,7 @@ export default class IssuerInformation extends React.Component {
             label="Website of Issuer"
             name="issuerWebsite"
             defaultValue={issuerInformation.issuerWebsite.value}
+            error={!!issuerInformation.issuerWebsite.error}
             onChange={this.handleChange}
             width={8}
           />
@@ -145,6 +151,7 @@ export default class IssuerInformation extends React.Component {
             label="CIK"
             name="commissionCik"
             defaultValue={issuerInformation.commissionCik.value}
+            error={!!issuerInformation.commissionCik.error}
             onChange={this.handleChange}
             width={8}
           />
@@ -153,6 +160,7 @@ export default class IssuerInformation extends React.Component {
             label="Company Name"
             name="companyName"
             defaultValue={issuerInformation.companyName.value}
+            error={!!issuerInformation.companyName.error}
             onChange={this.handleChange}
             width={8}
           />
@@ -163,6 +171,7 @@ export default class IssuerInformation extends React.Component {
             label="Commission File Numbe"
             name="commissionFileNumber"
             defaultValue={issuerInformation.commissionFileNumber.value}
+            error={!!issuerInformation.companyName.error}
             onChange={this.handleChange}
             width={8}
           />
@@ -171,6 +180,7 @@ export default class IssuerInformation extends React.Component {
             label="CRD Number"
             name="crdNumber"
             defaultValue={issuerInformation.crdNumber.value}
+            error={!!issuerInformation.crdNumber.error}
             onChange={this.handleChange}
             width={8}
           />
