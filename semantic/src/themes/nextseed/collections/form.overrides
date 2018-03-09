@@ -1,7 +1,7 @@
 /*******************************
          Theme Overrides
 *******************************/
-.form-card{
+.card{
     &.editable{
         position:relative;
         &.editing{
@@ -11,6 +11,9 @@
             position:absolute;
             top:20px;
             right:30px;
+            .button{
+                text-transform:uppercase;
+            }
             a{
                 margin:0 1rem;
                 font-size:0.928571em;

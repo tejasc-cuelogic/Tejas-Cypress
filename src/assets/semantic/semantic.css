@@ -5414,7 +5414,7 @@ div.login-form ul.error-messages {
   display: inline-block;
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.5;
   border-radius: 4px;
   border-style: solid;
   border-color: #999999;
@@ -5475,7 +5475,7 @@ div.login-form ul.error-messages {
 .account-type.small {
   width: 24px;
   height: 24px;
-  font-size: 15px;
+  font-size: 1.071428rem;
   border-width: 1px;
 }
 
@@ -5489,7 +5489,7 @@ div.login-form ul.error-messages {
 .account-type.medium {
   width: 36px;
   height: 36px;
-  font-size: 1.571428em;
+  font-size: 1.571428rem;
   border-width: 2px;
 }
 
@@ -5498,6 +5498,30 @@ div.login-form ul.error-messages {
   height: 16px;
   top: -8px;
   right: -8px;
+}
+
+.meta-data {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 0.92857143rem;
+  font-weight: 400;
+  color: #999999;
+  margin-left: 3rem;
+}
+
+.meta-data > span + span {
+  margin-left: 3rem;
+}
+
+.full-account {
+  color: #27AE60;
+}
+
+.check-list .item i.icon {
+  color: #e0e0e0;
+}
+
+.check-list .item i.icon.check.circle {
+  color: #A9D943;
 }
 
 /*******************************
@@ -15610,34 +15634,49 @@ ol.ui.horizontal.list li:before,
          Theme Overrides
 *******************************/
 
-.page-header-section .ui.horizontal.list .item {
+.ui.horizontal.list .item {
   font-size: 0.857142rem;
-  font-weight: 500;
   color: #FFFFFF;
 }
 
-.page-header-section .ui.horizontal.list a.item {
+.ui.horizontal.list a.item {
   color: #7d7d7d;
 }
 
-.page-header-section .ui.horizontal.list a.item:hover,
-.page-header-section .ui.horizontal.list a.item:focus,
-.page-header-section .ui.horizontal.list a.item.active {
+.ui.horizontal.list a.item:hover,
+.ui.horizontal.list a.item:focus,
+.ui.horizontal.list a.item.active {
   color: #A9D943;
 }
 
-.page-header-section .ui.horizontal.list.link > a.item {
+.ui.horizontal.list.link > a.item {
   font-size: 0.857142rem;
-  font-weight: 500;
   margin-left: 2rem;
   text-transform: uppercase;
   color: #7d7d7d;
 }
 
-.page-header-section .ui.horizontal.list.link > a.item:hover,
-.page-header-section .ui.horizontal.list.link > a.item:focus,
-.page-header-section .ui.horizontal.list.link > a.item.active {
+.ui.horizontal.list.link > a.item:hover,
+.ui.horizontal.list.link > a.item:focus,
+.ui.horizontal.list.link > a.item.active {
   color: #A9D943;
+}
+
+.tabular-wrap .ui.segment .ui.horizontal.list.link {
+  margin-bottom: 2rem;
+}
+
+.tabular-wrap .ui.segment .ui.horizontal.list.link .item {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: #828282;
+  border-bottom: 2px solid transparent;
+}
+
+.tabular-wrap .ui.segment .ui.horizontal.list.link .item:hover,
+.tabular-wrap .ui.segment .ui.horizontal.list.link .item:focus,
+.tabular-wrap .ui.segment .ui.horizontal.list.link .item.active {
+  color: #303030;
+  border-color: #A9D943;
 }
 
 /*******************************
@@ -17394,10 +17433,14 @@ ol.ui.horizontal.list li:before,
          Theme Overrides
 *******************************/
 
+.ui.segment[class*="bottom attached"] {
+  border-radius: 0;
+}
+
 .account-type-tab .ui.attached.segment {
   padding-left: 0;
   padding-right: 0;
-  border-color: transparent;
+  border: none;
 }
 
 /*******************************
@@ -19400,21 +19443,25 @@ ol.ui.horizontal.list li:before,
          Theme Overrides
 *******************************/
 
-.form-card.editable {
+.card.editable {
   position: relative;
 }
 
-.form-card.editable.editing {
+.card.editable.editing {
   z-index: 2;
 }
 
-.form-card.editable .actions {
+.card.editable .actions {
   position: absolute;
   top: 20px;
   right: 30px;
 }
 
-.form-card.editable .actions a {
+.card.editable .actions .button {
+  text-transform: uppercase;
+}
+
+.card.editable .actions a {
   margin: 0 1rem;
   font-size: 0.928571em;
   line-height: 1.428571rem;
@@ -19423,40 +19470,40 @@ ol.ui.horizontal.list li:before,
   color: #A9D943;
 }
 
-.form-card.editable .actions a:last-child {
+.card.editable .actions a:last-child {
   margin-right: 0;
 }
 
-.form-card.editable .actions a:hover,
-.form-card.editable .actions a:focus,
-.form-card.editable .actions a:active {
+.card.editable .actions a:hover,
+.card.editable .actions a:focus,
+.card.editable .actions a:active {
   color: #97ca29;
 }
 
-.form-card.editable .actions a.negative {
+.card.editable .actions a.negative {
   color: #999999;
 }
 
-.form-card.editable .actions a.negative:hover,
-.form-card.editable .actions a.negative:focus,
-.form-card.editable .actions a.negative:active {
+.card.editable .actions a.negative:hover,
+.card.editable .actions a.negative:focus,
+.card.editable .actions a.negative:active {
   color: #848484;
 }
 
-.form-card.editable .ui.form .fields {
+.card.editable .ui.form .fields {
   margin: 0em;
   padding: 1em 0;
 }
 
-.form-card.editable .ui.form .fields:nth-child(odd) {
+.card.editable .ui.form .fields:nth-child(odd) {
   background-color: #F7F7F7;
 }
 
-.form-card.editable .ui.form .fields .field {
+.card.editable .ui.form .fields .field {
   padding: 0 1em;
 }
 
-.form-card.editable .ui.form .ui.label {
+.card.editable .ui.form .ui.label {
   font-size: 0.928571em;
   font-weight: 400;
   line-height: 1.428571rem;
@@ -19465,18 +19512,18 @@ ol.ui.horizontal.list li:before,
   background-color: transparent;
 }
 
-.form-card.editable .ui.form input:not([type]),
-.form-card.editable .ui.form input[type=date],
-.form-card.editable .ui.form input[type=datetime-local],
-.form-card.editable .ui.form input[type=email],
-.form-card.editable .ui.form input[type=file],
-.form-card.editable .ui.form input[type=number],
-.form-card.editable .ui.form input[type=password],
-.form-card.editable .ui.form input[type=search],
-.form-card.editable .ui.form input[type=tel],
-.form-card.editable .ui.form input[type=text],
-.form-card.editable .ui.form input[type=time],
-.form-card.editable .ui.form input[type=url] {
+.card.editable .ui.form input:not([type]),
+.card.editable .ui.form input[type=date],
+.card.editable .ui.form input[type=datetime-local],
+.card.editable .ui.form input[type=email],
+.card.editable .ui.form input[type=file],
+.card.editable .ui.form input[type=number],
+.card.editable .ui.form input[type=password],
+.card.editable .ui.form input[type=search],
+.card.editable .ui.form input[type=tel],
+.card.editable .ui.form input[type=text],
+.card.editable .ui.form input[type=time],
+.card.editable .ui.form input[type=url] {
   font-weight: 500;
   line-height: 1.428571rem;
   color: #303030;
@@ -21840,11 +21887,11 @@ ol.ui.horizontal.list li:before,
          Theme Overrides
 *******************************/
 
-.compact .ui.grid {
+.compact > .ui.grid {
   margin: 0;
 }
 
-.compact .ui.grid > .column:not(.row) {
+.compact > .ui.grid > .column:not(.row) {
   padding: 0;
 }
 
@@ -26075,6 +26122,12 @@ Floated Menu / Item
   text-transform: uppercase;
 }
 
+.ui.table.statment-tables td > i.icon {
+  color: #999999;
+  margin-left: 0.42857143rem;
+  vertical-align: middle;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -26401,9 +26454,9 @@ Floated Menu / Item
   background: #FFFFFF;
   padding: 0em;
   border: none;
-  border-radius: 0.28571429rem;
-  -webkit-box-shadow: 0px 1px 3px 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;
-  box-shadow: 0px 1px 3px 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;
+  border-radius: 0.42857143em;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   -webkit-transition: -webkit-box-shadow 0.1s ease, -webkit-transform 0.1s ease;
   transition: -webkit-box-shadow 0.1s ease, -webkit-transform 0.1s ease;
   transition: box-shadow 0.1s ease, transform 0.1s ease;
@@ -26412,7 +26465,7 @@ Floated Menu / Item
 }
 
 .ui.card {
-  margin: 1em 0em;
+  margin: 1.14285714rem 0em;
 }
 
 .ui.cards > .card a,
@@ -26473,18 +26526,18 @@ Floated Menu / Item
 
 .ui.cards > .card > :first-child,
 .ui.card > :first-child {
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em !important;
+  border-radius: 0.42857143em 0.42857143em 0em 0em !important;
   border-top: none !important;
 }
 
 .ui.cards > .card > :last-child,
 .ui.card > :last-child {
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem !important;
+  border-radius: 0em 0em 0.42857143em 0.42857143em !important;
 }
 
 .ui.cards > .card > :only-child,
 .ui.card > :only-child {
-  border-radius: 0.28571429rem !important;
+  border-radius: 0.42857143em !important;
 }
 
 /*--------------
@@ -26528,7 +26581,7 @@ Floated Menu / Item
   border-top: 1px solid rgba(34, 36, 38, 0.1);
   background: none;
   margin: 0em;
-  padding: 1em 1em;
+  padding: 1.5em 1.5em;
   -webkit-box-shadow: none;
   box-shadow: none;
   font-size: 1em;
@@ -26630,7 +26683,7 @@ Floated Menu / Item
 .ui.cards > .card > .content > .description,
 .ui.card > .content > .description {
   clear: both;
-  color: rgba(0, 0, 0, 0.68);
+  color: #303030;
 }
 
 /*--------------
@@ -26681,14 +26734,14 @@ Floated Menu / Item
 
 .ui.cards > .card > .content a:not(.ui),
 .ui.card > .content a:not(.ui) {
-  color: '';
+  color: #A9D943;
   -webkit-transition: color 0.1s ease;
   transition: color 0.1s ease;
 }
 
 .ui.cards > .card > .content a:not(.ui):hover,
 .ui.card > .content a:not(.ui):hover {
-  color: '';
+  color: #81ad23;
 }
 
 /* Header */
@@ -26833,8 +26886,8 @@ Floated Menu / Item
 
 .ui.raised.cards > .card,
 .ui.raised.card {
-  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
-  box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .ui.raised.cards a.card:hover,
@@ -26847,8 +26900,8 @@ a.ui.raised.card:hover,
 
 .ui.raised.cards > .card,
 .ui.raised.card {
-  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
-  box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /*-------------------
@@ -27471,38 +27524,59 @@ a.ui.card:hover,
          Theme Overrides
 *******************************/
 
-.form-card {
-  border-radius: 10px;
+.card.form-card {
+  border-radius: 0.71428571em;
   padding: 2.285714em;
   background-color: #ffffff;
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-card h3 {
+.card.form-card h3 {
   font-size: 18px;
   margin-bottom: 1.5rem;
 }
 
-.form-card h4 {
+.card.form-card h4 {
   font-size: 14px;
   color: #4f4f4f;
 }
 
-.form-card h4 .checkbox label {
+.card.form-card h4 .checkbox label {
   font-weight: normal;
 }
 
-.form-card .grid.divided .column {
+.card.form-card .grid.divided .column {
   padding: 0 3.285714rem;
 }
 
-.form-card .grid.divided .column:first-child {
+.card.form-card .grid.divided .column:first-child {
   padding-left: 1rem;
 }
 
-.form-card .grid.divided .column:last-child {
+.card.form-card .grid.divided .column:last-child {
   padding-right: 1rem;
+}
+
+.ui.card > .content:not(:first-child),
+.ui.cards > .card > .content:not(:first-child) {
+  padding-top: 0;
+  border-top: none;
+}
+
+.ui.card h5 {
+  color: #999999;
+  text-transform: uppercase;
+}
+
+.bank-details .item .meta {
+  font-size: 0.85714286rem;
+  color: #999999;
+  text-transform: uppercase;
+}
+
+.bank-details .item .description p {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 /*******************************
@@ -28736,13 +28810,13 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .value,
 .ui.statistic > .value {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 4rem;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 2.571428rem;
   font-weight: normal;
-  line-height: 1em;
-  color: #1B1C1D;
+  line-height: 1.2em;
+  color: #424242;
   text-transform: uppercase;
-  text-align: center;
+  text-align: left;
 }
 
 /*--------------
@@ -28751,12 +28825,12 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .label,
 .ui.statistic > .label {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
-  font-weight: bold;
-  color: #303030;
-  text-transform: uppercase;
-  text-align: center;
+  font-weight: 500;
+  color: #828282;
+  text-transform: none;
+  text-align: left;
 }
 
 /* Top Label */
@@ -29210,7 +29284,7 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .value,
 .ui.statistic > .value {
-  font-size: 4rem !important;
+  font-size: 2.571428rem !important;
 }
 
 .ui.horizontal.statistics .statistic > .value,
@@ -29260,6 +29334,27 @@ a.ui.card:hover,
 /*******************************
          Theme Overrides
 *******************************/
+
+.tabular-wrap .ui.statistic {
+  position: relative;
+  padding-left: 1em;
+}
+
+.tabular-wrap .ui.statistic:before {
+  content: "";
+  width: 3px;
+  height: 100%;
+  background: #A9D943;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(58%, #6fcf97), to(#96c92a));
+  background: -webkit-linear-gradient(top, #6fcf97 58%, #96c92a 100%);
+  background: linear-gradient(to bottom, #6fcf97 58%, #96c92a 100%);
+  position: absolute;
+  left: 0;
+}
+
+.tabular-wrap .ui.statistic i.icon {
+  margin-left: 1.5rem;
+}
 
 /*******************************
     User Variable Overrides
@@ -36490,16 +36585,79 @@ body.pushable > .pusher {
          Tab Overrides
 *******************************/
 
-.tabular-wrap .ui.vertical.right.tabular.menu {
-  border: none;
+.tabular-wrap {
   min-height: calc(100vh - 205px);
 }
 
-.tabular-wrap .ui.attached.segment.tab {
+.tabular-wrap .ui.vertical.tabular.menu {
+  height: 100%;
+  min-height: calc(100vh - 205px);
+  border: none;
+  background: #FFFFFF;
+}
+
+.tabular-wrap .ui.vertical.tabular.menu .item {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  padding: 1.285714em 1.428571em;
+  border-radius: 0 !important;
+  border-left: none;
+  border-top: none;
+  border-bottom: #e0e0e0 1px solid;
+}
+
+.tabular-wrap .ui.vertical.tabular.menu .item .account-type {
+  margin-right: 1.285714rem;
+}
+
+.tabular-wrap .ui.vertical.tabular.menu .item.active {
+  background: #fafafa;
+}
+
+.tabular-wrap .horizontal-spacer {
+  padding: 0 2.142857em;
+  position: relative;
+}
+
+.tabular-wrap .ui.segment {
+  background: transparent;
+  padding: 2.142857em 0;
+}
+
+.tabular-wrap .ui.segment.attached.tab {
   width: 100%;
   max-width: none;
   margin: 0;
   border: none;
+}
+
+.tabular-wrap .ui.segment h2 {
+  margin-bottom: 2rem;
+}
+
+.tabular-wrap .ui.segment h2 .account-type {
+  margin-right: 1rem;
+}
+
+.tabular-wrap .ui.segment .main.actions {
+  position: absolute;
+  right: 2.142857em;
+  top: 0;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+
+.tabular-wrap .ui.segment .main.actions > a {
+  color: #EB5757;
+}
+
+.tabular-wrap .ui.segment .main.actions > a i.icon {
+  vertical-align: bottom;
+}
+
+.tabular-wrap .ui.segment .main.actions > a:hover,
+.tabular-wrap .ui.segment .main.actions > a:focus,
+.tabular-wrap .ui.segment .main.actions > a:active {
+  color: #db1a1a;
 }
 
 .account-type-tab > .ui.item.menu.secondary {

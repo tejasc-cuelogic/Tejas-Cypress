@@ -2,12 +2,10 @@
          Theme Overrides
 *******************************/
 
-.page-header-section{
+// .page-header-section{
     .ui.horizontal.list{
         .item{
             font-size:0.857142rem;
-            font-weight:500;
-            // letter-spacing:1px;
             color:@inverse-text;
         }
         a.item{
@@ -19,13 +17,27 @@
         &.link{
             > a.item{
                 font-size:0.857142rem;
-                font-weight:500;
                 margin-left:2rem;
                 text-transform:uppercase;
                 color:@inverse-secondary-text;
                 &:hover, &:focus, &.active{
                     color:@theme-primary;
                 }
+            }
+        }
+    }
+// }
+
+.tabular-wrap .ui.segment{
+    .ui.horizontal.list.link{
+        margin-bottom:2rem;
+        .item{
+            font-family:@boldFont;
+            color:@tertiary-text;
+            border-bottom:2px solid transparent;
+            &:hover, &:focus, &.active{
+                color:@primary-text;
+                border-color:@theme-primary;
             }
         }
     }

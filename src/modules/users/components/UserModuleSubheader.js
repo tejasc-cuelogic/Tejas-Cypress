@@ -16,7 +16,7 @@ const userModuleSubheader = () => (
       <Grid.Row>
         <Grid.Column width={16}>
           <List horizontal link>
-            <List.Item as="a" href="/app/users/1/UserDetails" className="active">Profile</List.Item>
+            <List.Item as="a" href="/app/users/1/UserDetails" active>Profile</List.Item>
             <List.Item as="a" href="/app/users/1/UserAccounts">Accounts</List.Item>
             <List.Item as="a" href="/app/users/new">Activity</List.Item>
             <List.Item as="a" href="/app/users/new">Investments</List.Item>

@@ -943,30 +943,42 @@ ol.ui.horizontal.list li:before,
          Theme Overrides
 *******************************/
 
-.page-header-section .ui.horizontal.list .item {
+.ui.horizontal.list .item {
   font-size: 0.857142rem;
-  font-weight: 500;
   color: #FFFFFF;
 }
-.page-header-section .ui.horizontal.list a.item {
+.ui.horizontal.list a.item {
   color: #7d7d7d;
 }
-.page-header-section .ui.horizontal.list a.item:hover,
-.page-header-section .ui.horizontal.list a.item:focus,
-.page-header-section .ui.horizontal.list a.item.active {
+.ui.horizontal.list a.item:hover,
+.ui.horizontal.list a.item:focus,
+.ui.horizontal.list a.item.active {
   color: #A9D943;
 }
-.page-header-section .ui.horizontal.list.link > a.item {
+.ui.horizontal.list.link > a.item {
   font-size: 0.857142rem;
-  font-weight: 500;
   margin-left: 2rem;
   text-transform: uppercase;
   color: #7d7d7d;
 }
-.page-header-section .ui.horizontal.list.link > a.item:hover,
-.page-header-section .ui.horizontal.list.link > a.item:focus,
-.page-header-section .ui.horizontal.list.link > a.item.active {
+.ui.horizontal.list.link > a.item:hover,
+.ui.horizontal.list.link > a.item:focus,
+.ui.horizontal.list.link > a.item.active {
   color: #A9D943;
+}
+.tabular-wrap .ui.segment .ui.horizontal.list.link {
+  margin-bottom: 2rem;
+}
+.tabular-wrap .ui.segment .ui.horizontal.list.link .item {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: #828282;
+  border-bottom: 2px solid transparent;
+}
+.tabular-wrap .ui.segment .ui.horizontal.list.link .item:hover,
+.tabular-wrap .ui.segment .ui.horizontal.list.link .item:focus,
+.tabular-wrap .ui.segment .ui.horizontal.list.link .item.active {
+  color: #303030;
+  border-color: #A9D943;
 }
 
 

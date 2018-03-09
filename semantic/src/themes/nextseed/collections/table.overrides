@@ -58,8 +58,13 @@
     a{
         font-family:@pageFont;
         font-size:0.857142em;
-        // color:@theme-primary;
-        // text-decoration:none;
         text-transform:uppercase;
+    }
+    &.statment-tables{
+        td>i.icon{
+            color:@quaternary-text;
+            margin-left:@6px;
+            vertical-align:middle;
+        }
     }
 }

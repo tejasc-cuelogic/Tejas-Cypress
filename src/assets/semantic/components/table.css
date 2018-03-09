@@ -1183,6 +1183,11 @@
   font-size: 0.857142em;
   text-transform: uppercase;
 }
+.ui.table.statment-tables td > i.icon {
+  color: #999999;
+  margin-left: 0.42857143rem;
+  vertical-align: middle;
+}
 
 
 /*******************************

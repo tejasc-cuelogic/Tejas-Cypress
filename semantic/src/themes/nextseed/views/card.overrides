@@ -1,11 +1,11 @@
 /*******************************
          Theme Overrides
 *******************************/
-.form-card{
-    border-radius:10px;
+.card.form-card{
+    border-radius:@relative10px;
     padding:2.285714em;
     background-color:@lighter-bg-color;
-    box-shadow:0 0 10px fade(@fullBlack, 8%);
+    box-shadow:@boxShadow;
     h3{
         font-size:18px;
         margin-bottom:1.5rem;
@@ -26,6 +26,29 @@
             &:last-child{
                 padding-right:1rem;
             }
+        }
+    }
+}
+.ui.card>.content:not(:first-child),
+.ui.cards>.card>.content:not(:first-child){
+    padding-top:0;
+    border-top:none;
+}
+.ui.card{
+    h5{
+        color:@quaternary-text;
+        text-transform:uppercase;
+    }
+}
+.bank-details{
+    .item{
+        .meta{
+            font-size:@12px;
+            color:@quaternary-text;
+            text-transform:uppercase;
+        }
+        .description p{
+            font-family:@boldFont;
         }
     }
 }

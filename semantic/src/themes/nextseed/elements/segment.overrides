@@ -1,10 +1,16 @@
 /*******************************
          Theme Overrides
 *******************************/
+//  User Account details
+.ui.segment[class*="bottom attached"]{
+    border-radius:0;
+}
+
+//  Investor Account type selection dialog
 .account-type-tab{
     .ui.attached.segment{
         padding-left:0;
         padding-right:0;
-        border-color:transparent;
+        border:none;
     }
 }

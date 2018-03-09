@@ -34,9 +34,9 @@
   background: #FFFFFF;
   padding: 0em;
   border: none;
-  border-radius: 0.28571429rem;
-  -webkit-box-shadow: 0px 1px 3px 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;
-          box-shadow: 0px 1px 3px 0px #D4D4D5, 0px 0px 0px 1px #D4D4D5;
+  border-radius: 0.42857143em;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   -webkit-transition: -webkit-box-shadow 0.1s ease, -webkit-transform 0.1s ease;
   transition: -webkit-box-shadow 0.1s ease, -webkit-transform 0.1s ease;
   transition: box-shadow 0.1s ease, transform 0.1s ease;
@@ -44,7 +44,7 @@
   z-index: '';
 }
 .ui.card {
-  margin: 1em 0em;
+  margin: 1.14285714rem 0em;
 }
 .ui.cards > .card a,
 .ui.card a {
@@ -99,16 +99,16 @@
 
 .ui.cards > .card > :first-child,
 .ui.card > :first-child {
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em !important;
+  border-radius: 0.42857143em 0.42857143em 0em 0em !important;
   border-top: none !important;
 }
 .ui.cards > .card > :last-child,
 .ui.card > :last-child {
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem !important;
+  border-radius: 0em 0em 0.42857143em 0.42857143em !important;
 }
 .ui.cards > .card > :only-child,
 .ui.card > :only-child {
-  border-radius: 0.28571429rem !important;
+  border-radius: 0.42857143em !important;
 }
 
 /*--------------
@@ -150,7 +150,7 @@
   border-top: 1px solid rgba(34, 36, 38, 0.1);
   background: none;
   margin: 0em;
-  padding: 1em 1em;
+  padding: 1.5em 1.5em;
   -webkit-box-shadow: none;
           box-shadow: none;
   font-size: 1em;
@@ -244,7 +244,7 @@
 .ui.cards > .card > .content > .description,
 .ui.card > .content > .description {
   clear: both;
-  color: rgba(0, 0, 0, 0.68);
+  color: #303030;
 }
 
 /*--------------
@@ -291,13 +291,13 @@
 /* Generic */
 .ui.cards > .card > .content a:not(.ui),
 .ui.card > .content a:not(.ui) {
-  color: '';
+  color: #A9D943;
   -webkit-transition: color 0.1s ease;
   transition: color 0.1s ease;
 }
 .ui.cards > .card > .content a:not(.ui):hover,
 .ui.card > .content a:not(.ui):hover {
-  color: '';
+  color: #81ad23;
 }
 
 /* Header */
@@ -435,8 +435,8 @@
 
 .ui.raised.cards > .card,
 .ui.raised.card {
-  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
-          box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .ui.raised.cards a.card:hover,
 .ui.link.cards .raised.card:hover,
@@ -447,8 +447,8 @@ a.ui.raised.card:hover,
 }
 .ui.raised.cards > .card,
 .ui.raised.card {
-  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
-          box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 4px 0px rgba(34, 36, 38, 0.12), 0px 2px 10px 0px rgba(34, 36, 38, 0.15);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /*-------------------
@@ -989,32 +989,49 @@ a.ui.card:hover,
          Theme Overrides
 *******************************/
 
-.form-card {
-  border-radius: 10px;
+.card.form-card {
+  border-radius: 0.71428571em;
   padding: 2.285714em;
   background-color: #ffffff;
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.form-card h3 {
+.card.form-card h3 {
   font-size: 18px;
   margin-bottom: 1.5rem;
 }
-.form-card h4 {
+.card.form-card h4 {
   font-size: 14px;
   color: #4f4f4f;
 }
-.form-card h4 .checkbox label {
+.card.form-card h4 .checkbox label {
   font-weight: normal;
 }
-.form-card .grid.divided .column {
+.card.form-card .grid.divided .column {
   padding: 0 3.285714rem;
 }
-.form-card .grid.divided .column:first-child {
+.card.form-card .grid.divided .column:first-child {
   padding-left: 1rem;
 }
-.form-card .grid.divided .column:last-child {
+.card.form-card .grid.divided .column:last-child {
   padding-right: 1rem;
+}
+.ui.card > .content:not(:first-child),
+.ui.cards > .card > .content:not(:first-child) {
+  padding-top: 0;
+  border-top: none;
+}
+.ui.card h5 {
+  color: #999999;
+  text-transform: uppercase;
+}
+.bank-details .item .meta {
+  font-size: 0.85714286rem;
+  color: #999999;
+  text-transform: uppercase;
+}
+.bank-details .item .description p {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 
