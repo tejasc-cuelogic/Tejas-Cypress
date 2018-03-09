@@ -106,7 +106,6 @@ export default class OfferingInformation extends React.Component {
             defaultValue={this.offeringInformation.priceDeterminationMethod.value}
             error={!!this.offeringInformation.priceDeterminationMethod.error}
             onChange={this.handleChange}
-            disabled={this.getSecurityOfferedClass()}
           />
         </Form.Group>
         <Form.Input
@@ -155,16 +154,16 @@ export default class OfferingInformation extends React.Component {
             onChange={this.handleChange}
             disabled={!this.getSubscriptionDescClass()}
           />
-        </Form.Group>
-        <Form.Group>
           <Form.Input
             label="Deadline to reach the Target Offering Amount"
             name="maximumOfferingAmount"
-            width="13"
             defaultValue={this.offeringInformation.maximumOfferingAmount.value}
             error={!!this.offeringInformation.maximumOfferingAmount.error}
             onChange={this.handleChange}
+            disabled={this.getSubscriptionTypeClass()}
           />
+        </Form.Group>
+        <Form.Group>
           <div className="field three wide">
             { /* eslint-disable jsx-a11y/label-has-for */ }
             <label>Deadline Date</label>
