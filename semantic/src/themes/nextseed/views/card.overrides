@@ -3,12 +3,12 @@
 *******************************/
 .card.form-card{
     border-radius:@relative10px;
-    padding:2.285714em;
+    padding:@32px;
     background-color:@lighter-bg-color;
     box-shadow:@boxShadow;
     h3{
         font-size:18px;
-        margin-bottom:1.5rem;
+        margin-bottom:@22px;
     }
     h4{
         font-size:14px;
@@ -19,7 +19,7 @@
     }
     .grid.divided{
         .column{
-            padding:0 3.285714rem;
+            padding:0 @46px;
             &:first-child{
                 padding-left:1rem;
             }

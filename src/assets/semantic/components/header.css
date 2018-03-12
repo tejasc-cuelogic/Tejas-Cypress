@@ -732,7 +732,7 @@ a.ui.inverted.grey.header:hover {
 }
 .header-wrap .ui.menu .menu .item {
   color: #303030;
-  padding: 0.92857143em 2.285714285714286em;
+  padding: 0.92857143rem 2.14285714rem;
 }
 .header-wrap .ui.menu .menu .item.active {
   color: #FFFFFF;
@@ -742,7 +742,7 @@ a.ui.inverted.grey.header:hover {
   position: relative;
 }
 .header-wrap .ui.menu .menu .item.notification .icon {
-  font-size: 1.571428em;
+  font-size: 1.57142857rem;
   color: #828282;
 }
 .header-wrap .ui.menu .menu .item.notification span.unread-count {
@@ -750,9 +750,9 @@ a.ui.inverted.grey.header:hover {
   min-width: 18px;
   padding: 0 5px;
   border-radius: 10px;
-  font-size: 0.857142em;
+  font-size: 0.85714286rem;
   color: #FFFFFF;
-  line-height: 18px;
+  line-height: 1.28571429rem;
   display: block;
   text-align: center;
   background: #EB5757;
@@ -761,7 +761,7 @@ a.ui.inverted.grey.header:hover {
   bottom: 15px;
 }
 .header-wrap .ui.menu .ui.dropdown .menu > .item {
-  padding: 0.78571429em 2.285714285714286em !important;
+  padding: 0.78571429rem 2.14285714rem !important;
 }
 
 

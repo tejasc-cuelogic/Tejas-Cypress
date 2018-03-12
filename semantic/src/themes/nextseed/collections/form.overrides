@@ -16,8 +16,8 @@
             }
             a{
                 margin:0 1rem;
-                font-size:0.928571em;
-                line-height:1.428571rem;
+                font-size:@13px;
+                line-height:@20px;
                 font-weight:500;
                 text-transform:uppercase;
                 color:@theme-primary;
@@ -47,9 +47,9 @@
                 }
             }
             .ui.label{
-                font-size:0.928571em;
+                font-size:@13px;
                 font-weight:400;
-                line-height:1.428571rem;
+                line-height:@20px;
                 color:@quaternary-text;
                 padding:0;
                 background-color:transparent;
@@ -67,7 +67,7 @@
             input[type=time],
             input[type=url]{
                 font-weight:500;
-                line-height:1.428571rem;
+                line-height:@20px;
                 color:@primary-text;
                 padding:0 @gutterWidth;
                 border-width:0;

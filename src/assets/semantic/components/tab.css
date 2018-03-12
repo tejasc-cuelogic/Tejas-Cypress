@@ -95,25 +95,25 @@
 }
 .tabular-wrap .ui.vertical.tabular.menu .item {
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  padding: 1.285714em 1.428571em;
+  padding: 1.28571429rem 1.42857143rem;
   border-radius: 0 !important;
   border-left: none;
   border-top: none;
   border-bottom: #e0e0e0 1px solid;
 }
 .tabular-wrap .ui.vertical.tabular.menu .item .account-type {
-  margin-right: 1.285714rem;
+  margin-right: 1.28571429rem;
 }
 .tabular-wrap .ui.vertical.tabular.menu .item.active {
   background: #fafafa;
 }
 .tabular-wrap .horizontal-spacer {
-  padding: 0 2.142857em;
+  padding: 0 2.14285714rem;
   position: relative;
 }
 .tabular-wrap .ui.segment {
   background: transparent;
-  padding: 2.142857em 0;
+  padding: 2.14285714rem 0;
 }
 .tabular-wrap .ui.segment.attached.tab {
   width: 100%;
@@ -129,7 +129,7 @@
 }
 .tabular-wrap .ui.segment .main.actions {
   position: absolute;
-  right: 2.142857em;
+  right: 2.14285714rem;
   top: 0;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   text-transform: uppercase;
@@ -157,12 +157,12 @@
   width: 100%;
   padding: 1rem;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 1.142857em;
+  font-size: 1.14285714rem;
   border: rgba(34, 36, 38, 0.15) 1px solid;
   border-radius: 0.42857143rem;
 }
 .account-type-tab > .ui.item.menu.secondary a.item .account-tab .account-type {
-  margin-right: 0.571428rem;
+  margin-right: 0.57142857rem;
 }
 .account-type-tab > .ui.item.menu.secondary a.item.active .account-tab {
   border-color: #A9D943;
@@ -173,7 +173,7 @@
 }
 .account-type-tab .tab {
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 1.142857em;
+  font-size: 1.14285714rem;
 }
 
 

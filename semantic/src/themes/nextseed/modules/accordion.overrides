@@ -44,9 +44,9 @@
 		.angle.icon {
 			margin:0;
 			height:19px;
-			font-size:1.6em;
+			font-size:@22px;
 			color:@theme-primary;
-			line-height:1.357114rem;
+			line-height:@19px;
 			position:absolute;
 			right:0;
 			top:7px;

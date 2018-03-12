@@ -1088,8 +1088,8 @@
 }
 .card.editable .actions a {
   margin: 0 1rem;
-  font-size: 0.928571em;
-  line-height: 1.428571rem;
+  font-size: 0.92857143rem;
+  line-height: 1.42857143rem;
   font-weight: 500;
   text-transform: uppercase;
   color: #A9D943;
@@ -1121,9 +1121,9 @@
   padding: 0 1em;
 }
 .card.editable .ui.form .ui.label {
-  font-size: 0.928571em;
+  font-size: 0.92857143rem;
   font-weight: 400;
-  line-height: 1.428571rem;
+  line-height: 1.42857143rem;
   color: #999999;
   padding: 0;
   background-color: transparent;
@@ -1141,7 +1141,7 @@
 .card.editable .ui.form input[type=time],
 .card.editable .ui.form input[type=url] {
   font-weight: 500;
-  line-height: 1.428571rem;
+  line-height: 1.42857143rem;
   color: #303030;
   padding: 0 1em;
   border-width: 0;

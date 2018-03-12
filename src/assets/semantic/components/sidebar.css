@@ -633,7 +633,7 @@ body.pushable > .pusher {
   min-height: calc(100vh - 58px);
 }
 .sidebar .user-picture {
-  margin: 1.714285em 0;
+  margin: 1.71428571rem 0;
   text-align: center;
   color: #FFFFFF;
 }
@@ -661,7 +661,7 @@ body.pushable > .pusher {
   color: #828282;
 }
 .sidebar:not(.visible) .user-picture {
-  margin: 1.714285em 0 .5em;
+  margin: 1.71428571rem 0 0.5rem;
 }
 .sidebar:not(.visible) .user-picture > img {
   max-width: 30px;
@@ -694,7 +694,7 @@ body.pushable > .pusher {
   min-width: auto !important;
   text-align: left;
   overflow: hidden;
-  padding: 1em 1.5em;
+  padding: 1rem 1.42857143rem;
   color: #828282;
 }
 .ui.sidebar.left.push .item:first-child:before,
@@ -706,14 +706,14 @@ body.pushable > .pusher {
   float: left;
   height: auto;
   margin: 0 !important;
-  font-size: 1.14285714em !important;
-  line-height: 22px;
+  font-size: 1.14285714rem !important;
+  line-height: 1.57142857rem;
   position: relative;
 }
 .ui.sidebar.left.push .item span {
   opacity: 0;
   display: block;
-  line-height: 22px;
+  line-height: 1.57142857rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

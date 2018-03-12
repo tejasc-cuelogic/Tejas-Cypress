@@ -1135,12 +1135,12 @@
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 .ui.table thead th {
-  padding: 1.666667em;
-  font-size: 0.857142em;
+  padding: 1.42857143rem;
+  font-size: 0.85714286rem;
   text-transform: uppercase;
 }
 .ui.table td {
-  padding: 0.833334em 1.666667em;
+  padding: 0.85714286rem 1.71428571rem;
 }
 .ui.table.sortable thead th {
   color: #999999;
@@ -1180,7 +1180,7 @@
 }
 .ui.table a {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 0.857142em;
+  font-size: 0.85714286rem;
   text-transform: uppercase;
 }
 .ui.table.statment-tables td > i.icon {

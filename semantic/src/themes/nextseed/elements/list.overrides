@@ -5,7 +5,7 @@
 // .page-header-section{
     .ui.horizontal.list{
         .item{
-            font-size:0.857142rem;
+            font-size:@12px;
             color:@inverse-text;
         }
         a.item{
@@ -16,8 +16,8 @@
         }
         &.link{
             > a.item{
-                font-size:0.857142rem;
-                margin-left:2rem;
+                font-size:@12px;
+                margin-left:@28px;
                 text-transform:uppercase;
                 color:@inverse-secondary-text;
                 &:hover, &:focus, &.active{
@@ -30,7 +30,7 @@
 
 .tabular-wrap .ui.segment{
     .ui.horizontal.list.link{
-        margin-bottom:2rem;
+        margin-bottom:@28px;
         .item{
             font-family:@boldFont;
             color:@tertiary-text;

@@ -3,32 +3,32 @@
 *******************************/
 .ui.modal{
     >.close{
-        top:0.5rem;
-        right:0.5rem;
+        top:@7px;
+        right:@7px;
         opacity:0.5;
         color:@quaternary-text;
     }
     >.header:not(.ui){
-        padding-top:3rem;
+        padding-top:@42px;
         .back-link{
-            font-size:16px;
+            font-size:@16px;
             font-weight:400;
             position:absolute;
-            top:0.85rem;
-            left:0.85rem;
+            top:@12px;
+            left:@12px;
         }
         .ui.header{
-            margin:0 0 0.5rem;
+            margin:0 0 @7px;
         }
         p{
             font-family:@pageFont;
             font-weight:500;
-            font-size:1rem;
+            font-size:@14px;
             color:@dark-bg-color;
         }
     }
     .content{
-        padding-top:1.5rem;
+        padding-top:@20px;
         &.login-modal{
             // max-width:404px;
             margin:0 auto;
@@ -38,16 +38,16 @@
             // margin:0 auto;
             .user-type{
                 height:100%;
-                padding:1em;
+                padding:@14px;
                 border-radius:@defaultBorderRadius * 1.5;
                 border:darken(@light-bg-color, 9%) 1px solid;
                 cursor:pointer;
                 h3{
-                    margin:0.5rem 0;
+                    margin:@7px 0;
                 }
                 p{
                     font-family:@regularFont;
-                    font-size:0.928571em;
+                    font-size:@13px;
                     color:@fullBlack;
                 }
                 &:hover, &:focus, &.active{
@@ -65,7 +65,7 @@
                     border-radius:0;
                 }
                 &.large{
-                    font-size:1rem;
+                    font-size:@14px;
                 }
                 &.circular{
                     min-width:160px;
@@ -76,7 +76,7 @@
             margin:1.5rem 0 0;
             display:inline-block;
             font-family:@regularFont;
-            font-size:16px;
+            font-size:@16px;
             letter-spacing:1px;
             color:@quaternary-text;
         }
@@ -89,10 +89,10 @@
     }
     .ui.form{
         .fields .field{
-            margin-bottom:1rem;
+            margin-bottom:@14px;
         }
         .field{
-            margin:0 0 2rem;
+            margin:0 0 @28px;
             .ui.input input{
                 font-family:@boldFont;
                 padding-left:0;
@@ -103,7 +103,7 @@
             }
             > label{
                 i.icon.help{
-                    margin-left:0.5rem;
+                    margin-left:@7px;
                 }
             }
         }

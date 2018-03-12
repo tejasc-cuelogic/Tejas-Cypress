@@ -644,6 +644,7 @@
 @62px : unit( (62 / @emSize), rem);
 @63px : unit( (63 / @emSize), rem);
 @64px : unit( (64 / @emSize), rem);
+@70px : unit( (70 / @emSize), rem);
 
 @relative1px  : unit( (1 / @emSize), em);
 @relative2px  : unit( (2 / @emSize), em);

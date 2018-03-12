@@ -22,7 +22,7 @@
 }
 .sidebar{
 	.user-picture{
-		margin:1.714285em 0;
+		margin:@24px 0;
 		text-align:center;
 		color:@inverse-text;
 		> img, h2, h3{
@@ -54,7 +54,7 @@
 	}
 	&:not(.visible){
 		.user-picture{
-			margin:1.714285em 0 .5em;
+			margin:@24px 0 @7px;
 			> img{
 				max-width:30px;
 				margin:0 auto;
@@ -90,7 +90,7 @@
 					min-width: auto !important;
 					text-align: left;
 					overflow:hidden;
-					padding:1em 1.5em;
+					padding:@14px @20px;
 					color:@tertiary-text;
 					&:first-child:before, &:before{
 						display:none;
@@ -100,14 +100,14 @@
 						float:left;
 						height:auto;
 						margin:0 !important;
-						font-size:1.14285714em !important;
-						line-height:22px;
+						font-size:@16px !important;
+						line-height:@22px;
 						position:relative;
 					}
 					span{
 						opacity:0;
 						display:block;
-						line-height:22px;
+						line-height:@22px;
 						text-overflow: ellipsis;
 						white-space: nowrap;
 						overflow: hidden;

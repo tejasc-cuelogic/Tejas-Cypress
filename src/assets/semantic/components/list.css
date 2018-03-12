@@ -944,7 +944,7 @@ ol.ui.horizontal.list li:before,
 *******************************/
 
 .ui.horizontal.list .item {
-  font-size: 0.857142rem;
+  font-size: 0.85714286rem;
   color: #FFFFFF;
 }
 .ui.horizontal.list a.item {
@@ -956,7 +956,7 @@ ol.ui.horizontal.list li:before,
   color: #A9D943;
 }
 .ui.horizontal.list.link > a.item {
-  font-size: 0.857142rem;
+  font-size: 0.85714286rem;
   margin-left: 2rem;
   text-transform: uppercase;
   color: #7d7d7d;

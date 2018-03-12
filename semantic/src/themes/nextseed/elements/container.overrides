@@ -17,7 +17,7 @@
 }
 .content-spacer{
 	position:relative;
-	padding:3.714285em 5em;
+	padding:@52px @70px;
 }
 .overlay{
 	position:absolute;
@@ -33,7 +33,7 @@
 	}
 }
 .webcontent-spacer{
-	padding:2.428571em 5em 1em;
+	padding:@40px @70px @14px;
 }
 
 div.login-form {
@@ -42,9 +42,9 @@ div.login-form {
 		max-width:380px;
 	}
 	h1.header{
-		margin-bottom:1.5em;
+		margin-bottom:@20px;
 		>span{
-			font-size:18px;
+			font-size:@18px;
 			color:@tertiary-text;
 		}
 	}
@@ -83,14 +83,14 @@ div.login-form {
 	h3{
 		// @include fontBold;
 		color:@inverse-text;
-		font-size: 2.5em;
+		font-size:@35px;
 		// font-weight: bold;
 		a.back-link{
 			position:absolute;
 			left:-35px;
 			color:@theme-primary;
 			> i.icon, i.icons{
-				font-size:0.8em;
+				font-size:@28px;
 			}
 			&:hover, &:active, &:focus{
 				color:darken(@theme-primary, 8%);
@@ -104,8 +104,8 @@ div.login-form {
 		margin-right:1rem;
 		background:@theme-primary;
 		display:inline-block;
-		font-size:11px;
-		line-height:19px;
+		font-size:@11px;
+		line-height:@19px;
 		font-weight:700;
 		color:@dark-bg-color;
 		text-align:center;
@@ -114,13 +114,13 @@ div.login-form {
 	.search-filters{
 		background-color:@secondary-text;
 		&.webcontent-spacer{
-			padding:1em 5em;
+			padding:@14px @70px;
 		}
 		h5{
 			// font-size:0.857142em;
 			font-family:@pageFont;
 			color:@quaternary-text;
-			margin:0.714285rem 0 0.5rem;
+			margin:@10px 0 @7px;
 		}
 	}
 }
@@ -129,7 +129,7 @@ div.login-form {
 .notification-panel{
 	width:330px;
     height:~"calc(100vh - 58px)";
-	padding:1.5em 0 0.5em 1.5em;
+	padding:@20px 0 @7px @20px;
 	background:@darken-bg-color;
 	color:@inverse-text;
 	overflow:auto;
@@ -146,22 +146,22 @@ div.login-form {
 		letter-spacing:1px;
 	}
 	p.title{
-		font-size:0.928571em;
+		font-size:@13px;
 		color:@inverse-secondary-text;
 	}
 }
 .notification-box{
-	padding:1em;
-	margin-bottom:1.285714rem;
+	padding:@14px;
+	margin-bottom:@18px;
 	border-radius:5px 0 0 5px;
 	background-color:@dark-bg-color;
 	box-shadow:0 0 20px fade(@fullBlack, 32%);
 	.timestamp{
-		font-size:0.928571em;
+		font-size:@13px;
 		color:@inverse-secondary-text;
 	}
 	h4.amount{
-		font-size:1.428571em;
+		font-size:@20px;
 		font-weight:900;
 		color:@theme-primary;
 	}
@@ -172,7 +172,7 @@ div.login-form {
 .ui.primary.segment{
 	&.inverted{
 		&.footer{
-			padding:2em;
+			padding:@28px;
 			background-color:@darken-bg-color;
 		}
 	}
@@ -194,14 +194,14 @@ div.login-form {
 	border-color:@quaternary-text;
 	color:@quaternary-text;
 	position:relative;
-	+ .accountType{
-		margin-left:0.416667rem;
+	+ .account-type{
+		margin-left:@6px;
 	}
 	&.accredited:after{
 		content:"A";
 		display:block;
 		border-radius:10px;
-		font-size:0.533334em;
+		font-size:@8px;
 		text-align:center;
 		color:@inverse-text;
 		position:absolute;
@@ -237,7 +237,7 @@ div.login-form {
 	&.small{
 		width:24px;
 		height:24px;
-		font-size:1.071428rem;
+		font-size:@15px;
 		border-width:1px;
 		&.accredited:after{
 			width:13px;
@@ -249,7 +249,7 @@ div.login-form {
 	&.medium{
 		width:36px;
 		height:36px;
-		font-size:1.571428rem;
+		font-size:@22px;
 		border-width:2px;
 		&.accredited:after{
 			width:16px;
@@ -266,9 +266,9 @@ div.login-form {
 	font-size:@13px;
 	font-weight:400;
 	color:@quaternary-text;
-	margin-left:3rem;
+	margin-left:@40px;
 	> span + span{
-		margin-left:3rem;
+		margin-left:@40px;
 	}
 }
 .full-account{

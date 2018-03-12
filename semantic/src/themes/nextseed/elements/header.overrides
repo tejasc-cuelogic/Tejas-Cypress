@@ -13,7 +13,7 @@
         .menu .item{
             // font-weight:700;
             color:@primary-text;
-            padding:0.92857143em 2.285714285714286em;
+            padding:@13px @30px;
             &.active{
                 color:@inverse-text;
                 background-color:@theme-primary;
@@ -21,7 +21,7 @@
             &.notification{
                 position:relative;
                 .icon{
-                    font-size:1.571428em;
+                    font-size:@22px;
                     color:@tertiary-text;
                 }
                 span.unread-count{
@@ -29,10 +29,10 @@
                     min-width:18px;
                     padding:0 5px;
                     border-radius:10px;
-                    font-size:0.857142em;
+                    font-size:@12px;
                     // font-weight:500;
                     color:@inverse-text;
-                    line-height:18px;
+                    line-height:@18px;
                     display:block;
                     text-align:center;
                     background:@highlight-primary;
@@ -46,7 +46,7 @@
             .menu{
                 >.item{
                     // font-weight:700 !important;
-                    padding:0.78571429em 2.285714285714286em !important;
+                    padding:@11px @30px !important;
                 }
             }
         }

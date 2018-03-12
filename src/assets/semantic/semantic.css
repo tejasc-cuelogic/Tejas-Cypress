@@ -5223,7 +5223,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 .content-spacer {
   position: relative;
-  padding: 3.714285em 5em;
+  padding: 3.71428571rem 5rem;
 }
 
 .overlay {
@@ -5244,7 +5244,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 }
 
 .webcontent-spacer {
-  padding: 2.428571em 5em 1em;
+  padding: 2.85714286rem 5rem 1rem;
 }
 
 div.login-form {
@@ -5256,11 +5256,11 @@ div.login-form .column {
 }
 
 div.login-form h1.header {
-  margin-bottom: 1.5em;
+  margin-bottom: 1.42857143rem;
 }
 
 div.login-form h1.header > span {
-  font-size: 18px;
+  font-size: 1.28571429rem;
   color: #828282;
 }
 
@@ -5302,7 +5302,7 @@ div.login-form ul.error-messages {
 
 .page-header-section h3 {
   color: #FFFFFF;
-  font-size: 2.5em;
+  font-size: 2.5rem;
 }
 
 .page-header-section h3 a.back-link {
@@ -5313,7 +5313,7 @@ div.login-form ul.error-messages {
 
 .page-header-section h3 a.back-link > i.icon,
 .page-header-section h3 a.back-link i.icons {
-  font-size: 0.8em;
+  font-size: 2rem;
 }
 
 .page-header-section h3 a.back-link:hover,
@@ -5329,8 +5329,8 @@ div.login-form ul.error-messages {
   margin-right: 1rem;
   background: #A9D943;
   display: inline-block;
-  font-size: 11px;
-  line-height: 19px;
+  font-size: 0.78571429rem;
+  line-height: 1.35714286rem;
   font-weight: 700;
   color: #424242;
   text-align: center;
@@ -5342,19 +5342,19 @@ div.login-form ul.error-messages {
 }
 
 .page-header-section .search-filters.webcontent-spacer {
-  padding: 1em 5em;
+  padding: 1rem 5rem;
 }
 
 .page-header-section .search-filters h5 {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #999999;
-  margin: 0.714285rem 0 0.5rem;
+  margin: 0.71428571rem 0 0.5rem;
 }
 
 .notification-panel {
   width: 330px;
   height: calc(100vh - 58px);
-  padding: 1.5em 0 0.5em 1.5em;
+  padding: 1.42857143rem 0 0.5rem 1.42857143rem;
   background: #383838;
   color: #FFFFFF;
   overflow: auto;
@@ -5376,13 +5376,13 @@ div.login-form ul.error-messages {
 }
 
 .notification-panel p.title {
-  font-size: 0.928571em;
+  font-size: 0.92857143rem;
   color: #7d7d7d;
 }
 
 .notification-box {
-  padding: 1em;
-  margin-bottom: 1.285714rem;
+  padding: 1rem;
+  margin-bottom: 1.28571429rem;
   border-radius: 5px 0 0 5px;
   background-color: #424242;
   -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
@@ -5390,19 +5390,19 @@ div.login-form ul.error-messages {
 }
 
 .notification-box .timestamp {
-  font-size: 0.928571em;
+  font-size: 0.92857143rem;
   color: #7d7d7d;
 }
 
 .notification-box h4.amount {
-  font-size: 1.428571em;
+  font-size: 1.42857143rem;
   font-weight: 900;
   color: #A9D943;
 }
 
 .ui.segment.inverted.footer,
 .ui.primary.segment.inverted.footer {
-  padding: 2em;
+  padding: 2rem;
   background-color: #383838;
 }
 
@@ -5422,15 +5422,15 @@ div.login-form ul.error-messages {
   position: relative;
 }
 
-.account-type + .accountType {
-  margin-left: 0.416667rem;
+.account-type + .account-type {
+  margin-left: 0.42857143rem;
 }
 
 .account-type.accredited:after {
   content: "A";
   display: block;
   border-radius: 10px;
-  font-size: 0.533334em;
+  font-size: 0.57142857rem;
   text-align: center;
   color: #FFFFFF;
   position: absolute;
@@ -5475,7 +5475,7 @@ div.login-form ul.error-messages {
 .account-type.small {
   width: 24px;
   height: 24px;
-  font-size: 1.071428rem;
+  font-size: 1.07142857rem;
   border-width: 1px;
 }
 
@@ -5489,7 +5489,7 @@ div.login-form ul.error-messages {
 .account-type.medium {
   width: 36px;
   height: 36px;
-  font-size: 1.571428rem;
+  font-size: 1.57142857rem;
   border-width: 2px;
 }
 
@@ -5505,11 +5505,11 @@ div.login-form ul.error-messages {
   font-size: 0.92857143rem;
   font-weight: 400;
   color: #999999;
-  margin-left: 3rem;
+  margin-left: 2.85714286rem;
 }
 
 .meta-data > span + span {
-  margin-left: 3rem;
+  margin-left: 2.85714286rem;
 }
 
 .full-account {
@@ -7914,7 +7914,7 @@ a.ui.inverted.grey.header:hover {
 
 .header-wrap .ui.menu .menu .item {
   color: #303030;
-  padding: 0.92857143em 2.285714285714286em;
+  padding: 0.92857143rem 2.14285714rem;
 }
 
 .header-wrap .ui.menu .menu .item.active {
@@ -7927,7 +7927,7 @@ a.ui.inverted.grey.header:hover {
 }
 
 .header-wrap .ui.menu .menu .item.notification .icon {
-  font-size: 1.571428em;
+  font-size: 1.57142857rem;
   color: #828282;
 }
 
@@ -7936,9 +7936,9 @@ a.ui.inverted.grey.header:hover {
   min-width: 18px;
   padding: 0 5px;
   border-radius: 10px;
-  font-size: 0.857142em;
+  font-size: 0.85714286rem;
   color: #FFFFFF;
-  line-height: 18px;
+  line-height: 1.28571429rem;
   display: block;
   text-align: center;
   background: #EB5757;
@@ -7948,7 +7948,7 @@ a.ui.inverted.grey.header:hover {
 }
 
 .header-wrap .ui.menu .ui.dropdown .menu > .item {
-  padding: 0.78571429em 2.285714285714286em !important;
+  padding: 0.78571429rem 2.14285714rem !important;
 }
 
 /*******************************
@@ -15635,7 +15635,7 @@ ol.ui.horizontal.list li:before,
 *******************************/
 
 .ui.horizontal.list .item {
-  font-size: 0.857142rem;
+  font-size: 0.85714286rem;
   color: #FFFFFF;
 }
 
@@ -15650,7 +15650,7 @@ ol.ui.horizontal.list li:before,
 }
 
 .ui.horizontal.list.link > a.item {
-  font-size: 0.857142rem;
+  font-size: 0.85714286rem;
   margin-left: 2rem;
   text-transform: uppercase;
   color: #7d7d7d;
@@ -19463,8 +19463,8 @@ ol.ui.horizontal.list li:before,
 
 .card.editable .actions a {
   margin: 0 1rem;
-  font-size: 0.928571em;
-  line-height: 1.428571rem;
+  font-size: 0.92857143rem;
+  line-height: 1.42857143rem;
   font-weight: 500;
   text-transform: uppercase;
   color: #A9D943;
@@ -19504,9 +19504,9 @@ ol.ui.horizontal.list li:before,
 }
 
 .card.editable .ui.form .ui.label {
-  font-size: 0.928571em;
+  font-size: 0.92857143rem;
   font-weight: 400;
-  line-height: 1.428571rem;
+  line-height: 1.42857143rem;
   color: #999999;
   padding: 0;
   background-color: transparent;
@@ -19525,7 +19525,7 @@ ol.ui.horizontal.list li:before,
 .card.editable .ui.form input[type=time],
 .card.editable .ui.form input[type=url] {
   font-weight: 500;
-  line-height: 1.428571rem;
+  line-height: 1.42857143rem;
   color: #303030;
   padding: 0 1em;
   border-width: 0;
@@ -26062,13 +26062,13 @@ Floated Menu / Item
 }
 
 .ui.table thead th {
-  padding: 1.666667em;
-  font-size: 0.857142em;
+  padding: 1.42857143rem;
+  font-size: 0.85714286rem;
   text-transform: uppercase;
 }
 
 .ui.table td {
-  padding: 0.833334em 1.666667em;
+  padding: 0.85714286rem 1.71428571rem;
 }
 
 .ui.table.sortable thead th {
@@ -26118,7 +26118,7 @@ Floated Menu / Item
 
 .ui.table a {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 0.857142em;
+  font-size: 0.85714286rem;
   text-transform: uppercase;
 }
 
@@ -27526,7 +27526,7 @@ a.ui.card:hover,
 
 .card.form-card {
   border-radius: 0.71428571em;
-  padding: 2.285714em;
+  padding: 2.28571429rem;
   background-color: #ffffff;
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -27534,7 +27534,7 @@ a.ui.card:hover,
 
 .card.form-card h3 {
   font-size: 18px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.57142857rem;
 }
 
 .card.form-card h4 {
@@ -27547,7 +27547,7 @@ a.ui.card:hover,
 }
 
 .card.form-card .grid.divided .column {
-  padding: 0 3.285714rem;
+  padding: 0 3.28571429rem;
 }
 
 .card.form-card .grid.divided .column:first-child {
@@ -29353,7 +29353,7 @@ a.ui.card:hover,
 }
 
 .tabular-wrap .ui.statistic i.icon {
-  margin-left: 1.5rem;
+  margin-left: 1.57142857rem;
 }
 
 /*******************************
@@ -29632,9 +29632,9 @@ a.ui.card:hover,
 .ui.accordion .accordion .title .angle.icon {
   margin: 0;
   height: 19px;
-  font-size: 1.6em;
+  font-size: 1.57142857rem;
   color: #A9D943;
-  line-height: 1.357114rem;
+  line-height: 1.35714286rem;
   position: absolute;
   right: 0;
   top: 7px;
@@ -32200,9 +32200,9 @@ select.ui.dropdown {
 
 .notification-box .ui.dropdown .icon.dropdown:before {
   content: "\00B7\00B7\00B7";
-  font-size: 27px;
+  font-size: 1.92857143rem;
   letter-spacing: -3px;
-  line-height: 10px;
+  line-height: 0.71428571rem;
   color: #999999;
 }
 
@@ -33035,11 +33035,11 @@ select.ui.dropdown {
 }
 
 .ui.modal > .header:not(.ui) .back-link {
-  font-size: 16px;
+  font-size: 1.14285714rem;
   font-weight: 400;
   position: absolute;
-  top: 0.85rem;
-  left: 0.85rem;
+  top: 0.85714286rem;
+  left: 0.85714286rem;
 }
 
 .ui.modal > .header:not(.ui) .ui.header {
@@ -33054,7 +33054,7 @@ select.ui.dropdown {
 }
 
 .ui.modal .content {
-  padding-top: 1.5rem;
+  padding-top: 1.42857143rem;
 }
 
 .ui.modal .content.login-modal {
@@ -33063,7 +33063,7 @@ select.ui.dropdown {
 
 .ui.modal .content.signup-modal .user-type {
   height: 100%;
-  padding: 1em;
+  padding: 1rem;
   border-radius: 0.42857143rem;
   border: #e0e0e0 1px solid;
   cursor: pointer;
@@ -33075,7 +33075,7 @@ select.ui.dropdown {
 
 .ui.modal .content.signup-modal .user-type p {
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 0.928571em;
+  font-size: 0.92857143rem;
   color: #000000;
 }
 
@@ -33115,7 +33115,7 @@ select.ui.dropdown {
   margin: 1.5rem 0 0;
   display: inline-block;
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-size: 1.14285714rem;
   letter-spacing: 1px;
   color: #999999;
 }
@@ -36286,7 +36286,7 @@ body.pushable > .pusher {
 }
 
 .sidebar .user-picture {
-  margin: 1.714285em 0;
+  margin: 1.71428571rem 0;
   text-align: center;
   color: #FFFFFF;
 }
@@ -36319,7 +36319,7 @@ body.pushable > .pusher {
 }
 
 .sidebar:not(.visible) .user-picture {
-  margin: 1.714285em 0 .5em;
+  margin: 1.71428571rem 0 0.5rem;
 }
 
 .sidebar:not(.visible) .user-picture > img {
@@ -36358,7 +36358,7 @@ body.pushable > .pusher {
   min-width: auto !important;
   text-align: left;
   overflow: hidden;
-  padding: 1em 1.5em;
+  padding: 1rem 1.42857143rem;
   color: #828282;
 }
 
@@ -36372,15 +36372,15 @@ body.pushable > .pusher {
   float: left;
   height: auto;
   margin: 0 !important;
-  font-size: 1.14285714em !important;
-  line-height: 22px;
+  font-size: 1.14285714rem !important;
+  line-height: 1.57142857rem;
   position: relative;
 }
 
 .ui.sidebar.left.push .item span {
   opacity: 0;
   display: block;
-  line-height: 22px;
+  line-height: 1.57142857rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -36598,7 +36598,7 @@ body.pushable > .pusher {
 
 .tabular-wrap .ui.vertical.tabular.menu .item {
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  padding: 1.285714em 1.428571em;
+  padding: 1.28571429rem 1.42857143rem;
   border-radius: 0 !important;
   border-left: none;
   border-top: none;
@@ -36606,7 +36606,7 @@ body.pushable > .pusher {
 }
 
 .tabular-wrap .ui.vertical.tabular.menu .item .account-type {
-  margin-right: 1.285714rem;
+  margin-right: 1.28571429rem;
 }
 
 .tabular-wrap .ui.vertical.tabular.menu .item.active {
@@ -36614,13 +36614,13 @@ body.pushable > .pusher {
 }
 
 .tabular-wrap .horizontal-spacer {
-  padding: 0 2.142857em;
+  padding: 0 2.14285714rem;
   position: relative;
 }
 
 .tabular-wrap .ui.segment {
   background: transparent;
-  padding: 2.142857em 0;
+  padding: 2.14285714rem 0;
 }
 
 .tabular-wrap .ui.segment.attached.tab {
@@ -36640,7 +36640,7 @@ body.pushable > .pusher {
 
 .tabular-wrap .ui.segment .main.actions {
   position: absolute;
-  right: 2.142857em;
+  right: 2.14285714rem;
   top: 0;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   text-transform: uppercase;
@@ -36674,13 +36674,13 @@ body.pushable > .pusher {
   width: 100%;
   padding: 1rem;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 1.142857em;
+  font-size: 1.14285714rem;
   border: rgba(34, 36, 38, 0.15) 1px solid;
   border-radius: 0.42857143rem;
 }
 
 .account-type-tab > .ui.item.menu.secondary a.item .account-tab .account-type {
-  margin-right: 0.571428rem;
+  margin-right: 0.57142857rem;
 }
 
 .account-type-tab > .ui.item.menu.secondary a.item.active .account-tab {
@@ -36694,7 +36694,7 @@ body.pushable > .pusher {
 
 .account-type-tab .tab {
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 1.142857em;
+  font-size: 1.14285714rem;
 }
 
 /*******************************
