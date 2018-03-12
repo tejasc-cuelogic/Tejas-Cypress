@@ -16,13 +16,14 @@ export class Validation {
   * @returns null
   */
   validateRegisterField = (field, value) => {
+    const conditionalRequire = { verify: 'password' };
     // First set value to authStore
     authStore.setValue(field, value);
     // Vaidate whether field value is valid
     // Extra parameter for password needed to check verify password matched or not
     const { errors } = validationService.validate(
       authStore.values[field],
-      authStore.values.password,
+      authStore.values[conditionalRequire[field]],
     );
     // Set errors if any to store or else `undefined` will get set to variable.
     authStore.setError(field, errors && errors[field][0]);
@@ -35,15 +36,34 @@ export class Validation {
   }
 
   validateIssuerInfoField = (field, value) => {
+    const conditionalRequire = { legalStatusOtherDesc: 'legalStatusForm' };
     businessStore.setIssuerInfo(field, value);
-    const { errors } = validationService.validate(businessStore.issuerInformation[field]);
+    const { errors } = validationService.validate(
+      businessStore.issuerInformation[field],
+      businessStore.issuerInformation[conditionalRequire[field]],
+    );
     businessStore.setIssuerError(field, errors && errors[field][0]);
   }
 
   validateOfferingInfoField = (field, value) => {
+    const conditionalRequire = {
+      securityOfferedOtherDesc: 'securityOfferedType',
+      noOfSecurityOffered: 'securityOfferedType',
+      overSubscriptionAllocationType: 'overSubscriptionAccepted',
+      descOverSubscription: 'overSubscriptionAllocationType',
+    };
     businessStore.setOfferingInfo(field, value);
-    const { errors } = validationService.validate(businessStore.offeringInformation[field]);
+    const { errors } = validationService.validate(
+      businessStore.offeringInformation[field],
+      businessStore.offeringInformation[conditionalRequire[field]],
+    );
     businessStore.setOfferingError(field, errors && errors[field][0]);
+  }
+
+  validateAnnualReportField = (field, value) => {
+    businessStore.setAnnualReportInfo(field, value);
+    const { errors } = validationService.validate(businessStore.annualReportRequirements[field]);
+    businessStore.setAnnualReportError(field, errors && errors[field][0]);
   }
 
   /**

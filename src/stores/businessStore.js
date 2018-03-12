@@ -122,6 +122,11 @@ export class BusinessStore {
   }
 
   @action
+  setAnnualReportError(field, error) {
+    this.annualReportRequirements[field].error = error;
+  }
+
+  @action
   setSignatureInfo(field, value) {
     this.signature[field].value = value;
   }

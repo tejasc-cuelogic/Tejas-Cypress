@@ -44,8 +44,8 @@ export class Validations {
   getData = (metaData, confirmationData) => {
     const data = {};
     data[metaData.key] = metaData.value;
-    if (metaData.key === 'verify') {
-      data.password = confirmationData.value;
+    if (confirmationData) {
+      data[confirmationData.key] = confirmationData.value;
     }
     return data;
   }

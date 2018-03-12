@@ -2,6 +2,7 @@ import React from 'react';
 import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import DatePicker from 'react-datepicker';
+// import moment from 'moment';
 
 import { US_STATES, LEGAL_FORM_TYPES } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
@@ -49,7 +50,7 @@ export default class IssuerInformation extends React.Component {
             label="Form"
             name="legalStatusForm"
             defaultValue={issuerInformation.legalStatusForm.value}
-            error={issuerInformation.legalStatusForm.error}
+            error={!!issuerInformation.legalStatusForm.error}
             onChange={this.handleChange}
             options={LEGAL_FORM_TYPES}
           />
@@ -59,6 +60,7 @@ export default class IssuerInformation extends React.Component {
             name="legalStatusOtherDesc"
             disabled={this.getOtherDescriptionClass()}
             defaultValue={issuerInformation.legalStatusOtherDesc.value}
+            error={!!issuerInformation.legalStatusOtherDesc.error}
             onChange={this.handleChange}
           />
           <Form.Select
@@ -74,6 +76,7 @@ export default class IssuerInformation extends React.Component {
             width={8}
           />
           <DatePicker
+            disabledDays={{ after: new Date() }}
             placeholderText="Date of Incorporation/Organization"
             dateFormat="MM-DD-YYYY"
             selected={issuerInformation.dateIncorporation.value}

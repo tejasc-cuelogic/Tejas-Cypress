@@ -47,6 +47,7 @@ export default class FilerInformation extends React.Component {
             value="LIVE"
             name="liveTestFlag"
             checked={filerInformation.liveTestFlag.value === 'LIVE'}
+            error={!!filerInformation.liveTestFlag.error}
             onChange={this.handleChange}
           />
           <Form.Radio
@@ -54,6 +55,7 @@ export default class FilerInformation extends React.Component {
             value="TEST"
             name="liveTestFlag"
             checked={filerInformation.liveTestFlag.value === 'TEST'}
+            error={!!filerInformation.liveTestFlag.error}
             onChange={this.handleChange}
           />
         </Form.Group>

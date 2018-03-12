@@ -86,7 +86,7 @@ export default class OfferingInformation extends React.Component {
             label="No. of securities offered"
             name="noOfSecurityOffered"
             defaultValue={this.offeringInformation.noOfSecurityOffered.value}
-            error={this.offeringInformation.noOfSecurityOffered.error}
+            error={!!this.offeringInformation.noOfSecurityOffered.error}
             onChange={this.handleChange}
             disabled={this.getSecurityOfferedClass()}
           />
@@ -95,7 +95,7 @@ export default class OfferingInformation extends React.Component {
             label="Price"
             name="price"
             defaultValue={this.offeringInformation.price.value}
-            error={this.offeringInformation.price.error}
+            error={!!this.offeringInformation.price.error}
             onChange={this.handleChange}
             disabled={this.getSecurityOfferedClass()}
           />
@@ -144,6 +144,7 @@ export default class OfferingInformation extends React.Component {
             options={OVER_SUBSCRIPTION_ALLOCATION_TYPES}
             onChange={this.handleChange}
             disabled={this.getSubscriptionTypeClass()}
+            error={!!this.offeringInformation.overSubscriptionAllocationType.error}
           />
           <Form.Input
             label="Other Description"
