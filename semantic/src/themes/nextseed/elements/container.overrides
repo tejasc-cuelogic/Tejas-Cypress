@@ -80,6 +80,7 @@ div.login-form {
 .page-header-section{
 	min-height:132px;
 	background-color:@dark-bg-color;
+	position:relative;
 	h3{
 		// @include fontBold;
 		color:@inverse-text;
@@ -122,6 +123,13 @@ div.login-form {
 			color:@quaternary-text;
 			margin:@10px 0 @7px;
 		}
+	}
+	.sticky-notification{
+		position:fixed;
+		width:50%;
+		right:5rem;
+		top:3rem;
+		z-index:9;
 	}
 }
 

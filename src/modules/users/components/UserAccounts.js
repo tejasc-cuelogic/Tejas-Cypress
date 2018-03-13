@@ -81,32 +81,30 @@ const panes = [
               <Grid.Column>
                 <Card fluid raised className="editable">
                   <Card.Content>
+                    <div className="actions">
+                      <Link to=""><Icon name="pencil" />Edit</Link>
+                    </div>
                     <Card.Header>
                       Account status
                       <span className="meta-data">
                         <span className="full-account">Full</span>
                       </span>
                     </Card.Header>
-                    <div className="actions">
-                      <Link to=""><Icon name="pencil" />Edit</Link>
-                    </div>
                   </Card.Content>
                 </Card>
                 <Card fluid raised className="editable">
                   <Card.Content>
+                    <div className="actions">
+                      <Link to=""><Icon name="pencil" />Edit</Link>
+                    </div>
                     <Card.Header>
                       Accreditation
                       <span className="meta-data">
                         <span>Not accreditation</span>
                       </span>
                     </Card.Header>
-                    <div className="actions">
-                      <Link to=""><Icon name="pencil" />Edit</Link>
-                    </div>
-                  </Card.Content>
-                  <Card.Content>
                     <Card.Description>
-                      <h4>Steps required to aquire accreditation</h4>
+                      <Card.Meta>Steps required to aquire accreditation</Card.Meta>
                       <List relaxed className="check-list">
                         <List.Item>
                           <List.Icon name="check circle large" />
@@ -127,42 +125,42 @@ const panes = [
               </Grid.Column>
               <Grid.Column>
                 <Card fluid raised>
-                  <Card.Content>
-                    <Card.Header>Bank account connected</Card.Header>
-                  </Card.Content>
                   <Card.Content className="bank-details">
-                    <Grid columns="equal">
-                      <Grid.Column>
-                        <Item>
-                          <Item.Content>
-                            <Item.Meta>Bank Name</Item.Meta>
-                            <Item.Description>
-                              <p>Bank of America</p>
-                            </Item.Description>
-                          </Item.Content>
-                        </Item>
-                      </Grid.Column>
-                      <Grid.Column>
-                        <Item>
-                          <Item.Content>
-                            <Item.Meta>Card Ending</Item.Meta>
-                            <Item.Description>
-                              <p>...7598</p>
-                            </Item.Description>
-                          </Item.Content>
-                        </Item>
-                      </Grid.Column>
-                      <Grid.Column>
-                        <Item>
-                          <Item.Content>
-                            <Item.Meta>Date connected</Item.Meta>
-                            <Item.Description>
-                              <p>October 13, 2016</p>
-                            </Item.Description>
-                          </Item.Content>
-                        </Item>
-                      </Grid.Column>
-                    </Grid>
+                    <Card.Header>Bank account connected</Card.Header>
+                    <Card.Description>
+                      <Grid columns="equal">
+                        <Grid.Column>
+                          <Item>
+                            <Item.Content>
+                              <Item.Meta>Bank Name</Item.Meta>
+                              <Item.Description>
+                                <p>Bank of America</p>
+                              </Item.Description>
+                            </Item.Content>
+                          </Item>
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Item>
+                            <Item.Content>
+                              <Item.Meta>Card Ending</Item.Meta>
+                              <Item.Description>
+                                <p>...7598</p>
+                              </Item.Description>
+                            </Item.Content>
+                          </Item>
+                        </Grid.Column>
+                        <Grid.Column>
+                          <Item>
+                            <Item.Content>
+                              <Item.Meta>Date connected</Item.Meta>
+                              <Item.Description>
+                                <p>October 13, 2016</p>
+                              </Item.Description>
+                            </Item.Content>
+                          </Item>
+                        </Grid.Column>
+                      </Grid>
+                    </Card.Description>
                   </Card.Content>
                 </Card>
               </Grid.Column>
@@ -286,68 +284,64 @@ const panes = [
             <Card fluid raised>
               <Card.Content>
                 <Card.Header>Tax Statements</Card.Header>
-              </Card.Content>
-              <Card.Content>
-                <Table striped sortable className="statment-tables">
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>2016</Table.Cell>
-                      <Table.Cell>
-                        <strong>NextSeed TX</strong>
-                        <Icon name="file pdf outline large" />
-                      </Table.Cell>
-                      <Table.Cell collapsing>
-                        <Link to=""><Icon name="pencil large" /></Link>
-                      </Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>2017</Table.Cell>
-                      <Table.Cell>
-                        <strong>NextSeed</strong>
-                        <Icon name="file pdf outline large" />
-                      </Table.Cell>
-                      <Table.Cell collapsing>
-                        <Link to=""><Icon name="pencil large" /></Link>
-                      </Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
-              </Card.Content>
-              <Card.Content>
+                <Card.Description>
+                  <Table striped sortable className="statment-tables">
+                    <Table.Body>
+                      <Table.Row>
+                        <Table.Cell>2016</Table.Cell>
+                        <Table.Cell>
+                          <strong>NextSeed TX</strong>
+                          <Icon name="file pdf outline large" />
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                          <Link to=""><Icon name="pencil large" /></Link>
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.Cell>2017</Table.Cell>
+                        <Table.Cell>
+                          <strong>NextSeed</strong>
+                          <Icon name="file pdf outline large" />
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                          <Link to=""><Icon name="pencil large" /></Link>
+                        </Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                  </Table>
+                </Card.Description>
                 <Link to="">+ ADD NEW TAX STATEMENT</Link>
               </Card.Content>
             </Card>
             <Card fluid raised>
               <Card.Content>
                 <Card.Header>Account Statements</Card.Header>
-              </Card.Content>
-              <Card.Content>
-                <Table striped sortable className="statment-tables">
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>2016</Table.Cell>
-                      <Table.Cell>
-                        <strong>Lorem Ipsum</strong>
-                        <Icon name="file pdf outline large" />
-                      </Table.Cell>
-                      <Table.Cell collapsing>
-                        <Link to=""><Icon name="pencil large" /></Link>
-                      </Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>2017</Table.Cell>
-                      <Table.Cell>
-                        <strong>Dolleramit</strong>
-                        <Icon name="file pdf outline large" />
-                      </Table.Cell>
-                      <Table.Cell collapsing>
-                        <Link to=""><Icon name="pencil large" /></Link>
-                      </Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
-              </Card.Content>
-              <Card.Content>
+                <Card.Description>
+                  <Table striped sortable className="statment-tables">
+                    <Table.Body>
+                      <Table.Row>
+                        <Table.Cell>2016</Table.Cell>
+                        <Table.Cell>
+                          <strong>Lorem Ipsum</strong>
+                          <Icon name="file pdf outline large" />
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                          <Link to=""><Icon name="pencil large" /></Link>
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.Cell>2017</Table.Cell>
+                        <Table.Cell>
+                          <strong>Dolleramit</strong>
+                          <Icon name="file pdf outline large" />
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                          <Link to=""><Icon name="pencil large" /></Link>
+                        </Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                  </Table>
+                </Card.Description>
                 <Link to="">+ ADD NEW TAX STATEMENT</Link>
               </Card.Content>
             </Card>

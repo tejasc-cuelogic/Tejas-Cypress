@@ -17,7 +17,7 @@
 /* Standard */
 .ui.header {
   border: none;
-  margin: calc(2rem -  0.14285714em ) 0em 1rem;
+  margin: calc(2rem -  0.14285714em ) 0em 1.5rem;
   padding: 0em 0em;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
@@ -233,7 +233,7 @@ h5.ui.header .sub.header {
 .ui.icon.header {
   display: inline-block;
   text-align: center;
-  margin: 2rem 0em 1rem;
+  margin: 2rem 0em 1.5rem;
 }
 .ui.icon.header:after {
   content: '';

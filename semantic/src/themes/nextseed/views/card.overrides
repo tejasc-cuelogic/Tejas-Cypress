@@ -29,15 +29,55 @@
         }
     }
 }
+
+.ui.card, .ui.cards>.card{
+    &.welcome-card{
+        >.content{
+            i.icon.pull-left{
+                width:auto;
+                margin:0 0.5rem 0 0;
+            }
+            >.header:not(.ui){
+                font-family:@regularFont;
+                font-size:@24px;
+                font-weight:400;
+            }
+            >.meta{
+                font-family:@pageFont;
+                font-size:@14px;
+                text-transform:none;
+                color:@quaternary-text;
+                letter-spacing:1px;
+                margin:@10px 0 0;
+            }
+        }
+    }
+}
+
 .ui.card>.content:not(:first-child),
 .ui.cards>.card>.content:not(:first-child){
-    padding-top:0;
-    border-top:none;
+    // padding-top:0;
+    // border-top:none;
+    border-top-color:@border-light;
 }
 .ui.card{
-    h5{
+    .meta{
+        margin-bottom:1rem;
+        font-size:@14px;
         color:@quaternary-text;
         text-transform:uppercase;
+    }
+}
+.ui{
+    &.card, &.cards>.card{
+        >.content>.header+.description,
+        >.content>.meta+.description,
+        >.content>.header+.description,
+        >.content>.meta+.description{
+            &:not(:last-child){
+                margin-bottom:1.5em;
+            }
+        }
     }
 }
 .bank-details{
@@ -50,5 +90,11 @@
         .description p{
             font-family:@boldFont;
         }
+    }
+}
+.sticky-notification{
+    .ui.card .meta{
+        font-size:@13px;
+        text-transform:none;
     }
 }

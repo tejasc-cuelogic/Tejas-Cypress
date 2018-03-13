@@ -104,7 +104,7 @@
 @metaLinkHoverColor: @textColor;
 
 /* Description */
-@descriptionDistance: 0.5em;
+@descriptionDistance: 1.5em;
 @descriptionColor:@primary-text;
 
 /* Content Image */

@@ -1,7 +1,17 @@
 /*******************************
          Theme Overrides
 *******************************/
-.tabular-wrap{
+.ui.statistic{
+    &:before{
+        content:"";
+        width:3px;
+        height:100%;
+        background:@theme-primary;
+        position:absolute;
+        left:0;
+    }
+}
+.tabular-wrap, .sticky-notification{
     .ui.statistic{
         position:relative;
         padding-left:1em;
@@ -9,13 +19,27 @@
             content:"";
             width:3px;
             height:100%;
-            background:@theme-primary;
             background:@statGradient;
             position:absolute;
             left:0;
         }
         i.icon{
             margin-left:@20px;
+        }
+    }
+}
+.sticky-notification{
+    .ui.statistic{
+        margin:0;
+        &:before{
+            background:@theme-primary;
+        }
+        .value{
+            font-size:@16px !important;
+            text-transform:none;
+        }
+        .label{
+            font-size:@14px;
         }
     }
 }

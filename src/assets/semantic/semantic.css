@@ -587,7 +587,7 @@ h4,
 h5 {
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
-  margin: calc(2rem -  0.14285714em ) 0em 1rem;
+  margin: calc(2rem -  0.14285714em ) 0em 1.5rem;
   font-weight: 500;
   padding: 0em;
 }
@@ -5298,6 +5298,7 @@ div.login-form ul.error-messages {
 .page-header-section {
   min-height: 132px;
   background-color: #424242;
+  position: relative;
 }
 
 .page-header-section h3 {
@@ -5349,6 +5350,14 @@ div.login-form ul.error-messages {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #999999;
   margin: 0.71428571rem 0 0.5rem;
+}
+
+.page-header-section .sticky-notification {
+  position: fixed;
+  width: 50%;
+  right: 5rem;
+  top: 3rem;
+  z-index: 9;
 }
 
 .notification-panel {
@@ -7092,7 +7101,7 @@ i.flag.zimbabwe:before {
 
 .ui.header {
   border: none;
-  margin: calc(2rem -  0.14285714em ) 0em 1rem;
+  margin: calc(2rem -  0.14285714em ) 0em 1.5rem;
   padding: 0em 0em;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
@@ -7335,7 +7344,7 @@ h5.ui.header .sub.header {
 .ui.icon.header {
   display: inline-block;
   text-align: center;
-  margin: 2rem 0em 1rem;
+  margin: 2rem 0em 1.5rem;
 }
 
 .ui.icon.header:after {
@@ -26620,7 +26629,7 @@ Floated Menu / Item
 .ui.cards > .card > .content > .header + .description,
 .ui.card > .content > .meta + .description,
 .ui.card > .content > .header + .description {
-  margin-top: 0.5em;
+  margin-top: 1.5em;
 }
 
 /*----------------
@@ -27558,15 +27567,50 @@ a.ui.card:hover,
   padding-right: 1rem;
 }
 
-.ui.card > .content:not(:first-child),
-.ui.cards > .card > .content:not(:first-child) {
-  padding-top: 0;
-  border-top: none;
+.ui.card.welcome-card > .content i.icon.pull-left,
+.ui.cards > .card.welcome-card > .content i.icon.pull-left {
+  width: auto;
+  margin: 0 0.5rem 0 0;
 }
 
-.ui.card h5 {
+.ui.card.welcome-card > .content > .header:not(.ui),
+.ui.cards > .card.welcome-card > .content > .header:not(.ui) {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 1.71428571rem;
+  font-weight: 400;
+}
+
+.ui.card.welcome-card > .content > .meta,
+.ui.cards > .card.welcome-card > .content > .meta {
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  text-transform: none;
+  color: #999999;
+  letter-spacing: 1px;
+  margin: 0.71428571rem 0 0;
+}
+
+.ui.card > .content:not(:first-child),
+.ui.cards > .card > .content:not(:first-child) {
+  border-top-color: #f2f2f2;
+}
+
+.ui.card .meta {
+  margin-bottom: 1rem;
+  font-size: 1rem;
   color: #999999;
   text-transform: uppercase;
+}
+
+.ui.card > .content > .header + .description:not(:last-child),
+.ui.cards > .card > .content > .header + .description:not(:last-child),
+.ui.card > .content > .meta + .description:not(:last-child),
+.ui.cards > .card > .content > .meta + .description:not(:last-child),
+.ui.card > .content > .header + .description:not(:last-child),
+.ui.cards > .card > .content > .header + .description:not(:last-child),
+.ui.card > .content > .meta + .description:not(:last-child),
+.ui.cards > .card > .content > .meta + .description:not(:last-child) {
+  margin-bottom: 1.5em;
 }
 
 .bank-details .item .meta {
@@ -27577,6 +27621,11 @@ a.ui.card:hover,
 
 .bank-details .item .description p {
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.sticky-notification .ui.card .meta {
+  font-size: 0.92857143rem;
+  text-transform: none;
 }
 
 /*******************************
@@ -29335,16 +29384,26 @@ a.ui.card:hover,
          Theme Overrides
 *******************************/
 
-.tabular-wrap .ui.statistic {
-  position: relative;
-  padding-left: 1em;
-}
-
-.tabular-wrap .ui.statistic:before {
+.ui.statistic:before {
   content: "";
   width: 3px;
   height: 100%;
   background: #A9D943;
+  position: absolute;
+  left: 0;
+}
+
+.tabular-wrap .ui.statistic,
+.sticky-notification .ui.statistic {
+  position: relative;
+  padding-left: 1em;
+}
+
+.tabular-wrap .ui.statistic:before,
+.sticky-notification .ui.statistic:before {
+  content: "";
+  width: 3px;
+  height: 100%;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(58%, #6fcf97), to(#96c92a));
   background: -webkit-linear-gradient(top, #6fcf97 58%, #96c92a 100%);
   background: linear-gradient(to bottom, #6fcf97 58%, #96c92a 100%);
@@ -29352,8 +29411,26 @@ a.ui.card:hover,
   left: 0;
 }
 
-.tabular-wrap .ui.statistic i.icon {
-  margin-left: 1.57142857rem;
+.tabular-wrap .ui.statistic i.icon,
+.sticky-notification .ui.statistic i.icon {
+  margin-left: 1.42857143rem;
+}
+
+.sticky-notification .ui.statistic {
+  margin: 0;
+}
+
+.sticky-notification .ui.statistic:before {
+  background: #A9D943;
+}
+
+.sticky-notification .ui.statistic .value {
+  font-size: 1.14285714rem !important;
+  text-transform: none;
+}
+
+.sticky-notification .ui.statistic .label {
+  font-size: 1rem;
 }
 
 /*******************************

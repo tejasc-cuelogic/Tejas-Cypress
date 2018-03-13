@@ -561,23 +561,46 @@
          Theme Overrides
 *******************************/
 
-.tabular-wrap .ui.statistic {
-  position: relative;
-  padding-left: 1em;
-}
-.tabular-wrap .ui.statistic:before {
+.ui.statistic:before {
   content: "";
   width: 3px;
   height: 100%;
   background: #A9D943;
+  position: absolute;
+  left: 0;
+}
+.tabular-wrap .ui.statistic,
+.sticky-notification .ui.statistic {
+  position: relative;
+  padding-left: 1em;
+}
+.tabular-wrap .ui.statistic:before,
+.sticky-notification .ui.statistic:before {
+  content: "";
+  width: 3px;
+  height: 100%;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(58%, #6fcf97), to(#96c92a));
   background: -webkit-linear-gradient(top, #6fcf97 58%, #96c92a 100%);
   background: linear-gradient(to bottom, #6fcf97 58%, #96c92a 100%);
   position: absolute;
   left: 0;
 }
-.tabular-wrap .ui.statistic i.icon {
+.tabular-wrap .ui.statistic i.icon,
+.sticky-notification .ui.statistic i.icon {
   margin-left: 1.42857143rem;
+}
+.sticky-notification .ui.statistic {
+  margin: 0;
+}
+.sticky-notification .ui.statistic:before {
+  background: #A9D943;
+}
+.sticky-notification .ui.statistic .value {
+  font-size: 1.14285714rem !important;
+  text-transform: none;
+}
+.sticky-notification .ui.statistic .label {
+  font-size: 1rem;
 }
 
 

@@ -212,6 +212,7 @@ div.login-form ul.error-messages {
 .page-header-section {
   min-height: 132px;
   background-color: #424242;
+  position: relative;
 }
 .page-header-section h3 {
   color: #FFFFFF;
@@ -255,6 +256,13 @@ div.login-form ul.error-messages {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #999999;
   margin: 0.71428571rem 0 0.5rem;
+}
+.page-header-section .sticky-notification {
+  position: fixed;
+  width: 50%;
+  right: 5rem;
+  top: 3rem;
+  z-index: 9;
 }
 .notification-panel {
   width: 330px;
