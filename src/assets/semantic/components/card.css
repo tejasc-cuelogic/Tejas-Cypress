@@ -1034,7 +1034,7 @@ a.ui.card:hover,
   text-transform: none;
   color: #999999;
   letter-spacing: 1px;
-  margin: 0.71428571rem 0 0;
+  margin: 0.5rem 0 0;
 }
 .ui.card > .content:not(:first-child),
 .ui.cards > .card > .content:not(:first-child) {

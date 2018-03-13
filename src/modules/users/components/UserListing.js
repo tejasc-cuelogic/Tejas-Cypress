@@ -19,44 +19,46 @@ const paginateOptions = {
 
 const userListing = props => (
   <Aux>
-    <Table striped sortable className="user-list">
-      <Table.Header>
-        <Table.Row>
-          { props.header.map(item => <Table.HeaderCell key={item[0]}>{item[1]}</Table.HeaderCell>)}
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {_.map(props.listData, user => (
-          <Table.Row key={user.username}>
-            <Table.Cell collapsing>
-              {!user.profilepic &&
-                <div className="user-image">
-                  <Randavatar avatarKey={user.username} name={user.given_name} size="mini" />
-                </div>
-              }
-            </Table.Cell>
-            <Table.Cell className="user-status">
-              <span className="user-name">{`${user.given_name} ${user.family_name}`}</span>
-              {user.email}
-            </Table.Cell>
-            <Table.Cell>Detroit, MI (80331)</Table.Cell>
-            <Table.Cell>617 434-1551</Table.Cell>
-            <Table.Cell>
-              <div className="account-type small full accredited">R</div>
-            </Table.Cell>
-            <Table.Cell>2 days ago</Table.Cell>
-            <Table.Cell>13 months ago</Table.Cell>
-            {/* <Table.Cell><DateTimeFormat datetime={user.UserCreateDate} /></Table.Cell> */}
-            <Table.Cell><Link to="/app/users/1/UserDetails">view profile</Link></Table.Cell>
-          </Table.Row>
-        ))}
-        {!props.listData &&
+    <div className="table-wrapper">
+      <Table striped sortable singleLine className="user-list">
+        <Table.Header>
           <Table.Row>
-            <Table.Cell colSpan={props.header.length}>No record found</Table.Cell>
+            {props.header.map(item => <Table.HeaderCell key={item[0]}>{item[1]}</Table.HeaderCell>)}
           </Table.Row>
-        }
-      </Table.Body>
-    </Table>
+        </Table.Header>
+        <Table.Body>
+          {_.map(props.listData, user => (
+            <Table.Row key={user.username}>
+              <Table.Cell collapsing>
+                {!user.profilepic &&
+                  <div className="user-image">
+                    <Randavatar avatarKey={user.username} name={user.given_name} size="mini" />
+                  </div>
+                }
+              </Table.Cell>
+              <Table.Cell className="user-status">
+                <span className="user-name">{`${user.given_name} ${user.family_name}`}</span>
+                {user.email}
+              </Table.Cell>
+              <Table.Cell>Detroit, MI (80331)</Table.Cell>
+              <Table.Cell>617 434-1551</Table.Cell>
+              <Table.Cell>
+                <div className="account-type small full accredited">R</div>
+              </Table.Cell>
+              <Table.Cell>2 days ago</Table.Cell>
+              <Table.Cell>13 months ago</Table.Cell>
+              {/* <Table.Cell><DateTimeFormat datetime={user.UserCreateDate} /></Table.Cell> */}
+              <Table.Cell><Link to="/app/users/1/UserDetails">view profile</Link></Table.Cell>
+            </Table.Row>
+          ))}
+          {!props.listData &&
+            <Table.Row>
+              <Table.Cell colSpan={props.header.length}>No record found</Table.Cell>
+            </Table.Row>
+          }
+        </Table.Body>
+      </Table>
+    </div>
     {props.hasPagination &&
       <Pagination paginateOptions={paginateOptions} colspan={props.header.length} />
     }

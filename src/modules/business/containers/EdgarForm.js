@@ -29,7 +29,7 @@ export default class EdgarForm extends React.Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <h3>Edgar Form</h3>
+                <h1>Edgar Form</h1>
               </Grid.Column>
             </Grid.Row>
           </Grid>

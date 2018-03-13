@@ -271,7 +271,7 @@
   
 /* Let Buttons Stack */
   .ui.modal > .actions {
-    padding: 1rem 1rem 0rem !important;
+    padding: 1rem !important;
   }
   .ui.modal .actions > .buttons,
   .ui.modal .actions > .button {

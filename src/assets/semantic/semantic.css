@@ -5226,6 +5226,18 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   padding: 3.71428571rem 5rem;
 }
 
+@media only screen and (max-width: 991px) {
+  .content-spacer {
+    padding: 1.42857143rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .content-spacer {
+    padding: 1.42857143rem 0.71428571rem;
+  }
+}
+
 .overlay {
   position: absolute;
   top: 0;
@@ -5245,6 +5257,18 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 .webcontent-spacer {
   padding: 2.85714286rem 5rem 1rem;
+}
+
+@media only screen and (max-width: 991px) {
+  .webcontent-spacer {
+    padding: 1.42857143rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .webcontent-spacer {
+    padding: 1.42857143rem 0.71428571rem;
+  }
 }
 
 div.login-form {
@@ -5301,25 +5325,31 @@ div.login-form ul.error-messages {
   position: relative;
 }
 
-.page-header-section h3 {
+@media only screen and (max-width: 991px) {
+  .page-header-section {
+    min-height: auto;
+  }
+}
+
+.page-header-section h1 {
   color: #FFFFFF;
   font-size: 2.5rem;
 }
 
-.page-header-section h3 a.back-link {
+.page-header-section h1 a.back-link {
   position: absolute;
   left: -35px;
   color: #A9D943;
 }
 
-.page-header-section h3 a.back-link > i.icon,
-.page-header-section h3 a.back-link i.icons {
+.page-header-section h1 a.back-link > i.icon,
+.page-header-section h1 a.back-link i.icons {
   font-size: 2rem;
 }
 
-.page-header-section h3 a.back-link:hover,
-.page-header-section h3 a.back-link:active,
-.page-header-section h3 a.back-link:focus {
+.page-header-section h1 a.back-link:hover,
+.page-header-section h1 a.back-link:active,
+.page-header-section h1 a.back-link:focus {
   color: #97ca29;
 }
 
@@ -5346,10 +5376,22 @@ div.login-form ul.error-messages {
   padding: 1rem 5rem;
 }
 
+@media only screen and (max-width: 991px) {
+  .page-header-section .search-filters.webcontent-spacer {
+    padding: 0.5rem 1.42857143rem 1rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .page-header-section .search-filters.webcontent-spacer {
+    padding: 0.5rem 0.71428571rem 1rem;
+  }
+}
+
 .page-header-section .search-filters h5 {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #999999;
-  margin: 0.71428571rem 0 0.5rem;
+  margin: 0 0 0.5rem;
 }
 
 .page-header-section .sticky-notification {
@@ -19467,6 +19509,7 @@ ol.ui.horizontal.list li:before,
 }
 
 .card.editable .actions .button {
+  padding: 0.5rem 1.5rem 0.5rem;
   text-transform: uppercase;
 }
 
@@ -19509,7 +19552,7 @@ ol.ui.horizontal.list li:before,
 }
 
 .card.editable .ui.form .fields .field {
-  padding: 0 1em;
+  padding: 0.5em 1em;
 }
 
 .card.editable .ui.form .ui.label {
@@ -19517,7 +19560,7 @@ ol.ui.horizontal.list li:before,
   font-weight: 400;
   line-height: 1.42857143rem;
   color: #999999;
-  padding: 0;
+  padding: 0.5em 0;
   background-color: transparent;
 }
 
@@ -19536,7 +19579,7 @@ ol.ui.horizontal.list li:before,
   font-weight: 500;
   line-height: 1.42857143rem;
   color: #303030;
-  padding: 0 1em;
+  padding: 0.5em 1em;
   border-width: 0;
   background-color: transparent;
 }
@@ -24799,7 +24842,7 @@ Floated Menu / Item
   border: 0 solid rgba(34, 36, 38, 0.15);
   -webkit-box-shadow: none;
   box-shadow: none;
-  border-radius: 0.28571429rem;
+  border-radius: 0rem;
   text-align: left;
   color: #303030;
   border-collapse: separate;
@@ -24852,15 +24895,15 @@ Floated Menu / Item
 }
 
 .ui.table thead tr:first-child > th:first-child {
-  border-radius: 0.28571429rem 0em 0em 0em;
+  border-radius: 0rem 0em 0em 0em;
 }
 
 .ui.table thead tr:first-child > th:last-child {
-  border-radius: 0em 0.28571429rem 0em 0em;
+  border-radius: 0em 0rem 0em 0em;
 }
 
 .ui.table thead tr:first-child > th:only-child {
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  border-radius: 0rem 0rem 0em 0em;
 }
 
 /* Footer */
@@ -24888,15 +24931,15 @@ Floated Menu / Item
 }
 
 .ui.table tfoot tr:first-child > th:first-child {
-  border-radius: 0em 0em 0em 0.28571429rem;
+  border-radius: 0em 0em 0em 0rem;
 }
 
 .ui.table tfoot tr:first-child > th:last-child {
-  border-radius: 0em 0em 0.28571429rem 0em;
+  border-radius: 0em 0em 0rem 0em;
 }
 
 .ui.table tfoot tr:first-child > th:only-child {
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+  border-radius: 0em 0em 0rem 0rem;
 }
 
 /* Table Row */
@@ -25412,7 +25455,7 @@ Floated Menu / Item
   margin-bottom: 0em;
   top: 0px;
   margin-top: 1em;
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  border-radius: 0rem 0rem 0em 0em;
 }
 
 .ui.table[class*="top attached"]:first-child {
@@ -25428,7 +25471,7 @@ Floated Menu / Item
   margin-bottom: 1em;
   -webkit-box-shadow: none, none;
   box-shadow: none, none;
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+  border-radius: 0em 0em 0rem 0rem;
 }
 
 .ui[class*="bottom attached"].table:last-child {
@@ -26065,6 +26108,10 @@ Floated Menu / Item
 /*******************************
          Theme Overrides
 *******************************/
+
+.table-wrapper {
+  overflow: auto;
+}
 
 .ui.table {
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -27588,7 +27635,7 @@ a.ui.card:hover,
   text-transform: none;
   color: #999999;
   letter-spacing: 1px;
-  margin: 0.71428571rem 0 0;
+  margin: 0.5rem 0 0;
 }
 
 .ui.card > .content:not(:first-child),
@@ -32752,7 +32799,7 @@ select.ui.dropdown {
   /* Let Buttons Stack */
 
   .ui.modal > .actions {
-    padding: 1rem 1rem 0rem !important;
+    padding: 1rem !important;
   }
 
   .ui.modal .actions > .buttons,
@@ -36361,18 +36408,6 @@ body.pushable > .pusher {
 .pushable > .sidebar ~ .pusher .ui.vertical.segment.content {
   padding: 0;
   min-height: calc(100vh - 58px);
-}
-
-@media only screen and (max-width: 991px) {
-  .pushable > .sidebar ~ .pusher {
-    background-color: #f4a460;
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .pushable > .sidebar ~ .pusher {
-    background-color: #87ceeb;
-  }
 }
 
 .sidebar .user-picture {

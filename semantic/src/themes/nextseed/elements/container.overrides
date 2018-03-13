@@ -18,6 +18,12 @@
 .content-spacer{
 	position:relative;
 	padding:@52px @70px;
+	@media only screen and (max-width : (@computerBreakpoint - 1px)){
+		padding:@20px;
+	}
+	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+		padding:@20px @10px;
+	}
 }
 .overlay{
 	position:absolute;
@@ -34,6 +40,12 @@
 }
 .webcontent-spacer{
 	padding:@40px @70px @14px;
+	@media only screen and (max-width : (@computerBreakpoint - 1px)){
+		padding:@20px;
+	}
+	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+		padding:@20px @10px;
+	}
 }
 
 div.login-form {
@@ -81,7 +93,10 @@ div.login-form {
 	min-height:132px;
 	background-color:@dark-bg-color;
 	position:relative;
-	h3{
+	@media only screen and (max-width : (@computerBreakpoint - 1px)){
+		min-height:auto;
+	}
+	h1{
 		// @include fontBold;
 		color:@inverse-text;
 		font-size:@35px;
@@ -116,12 +131,18 @@ div.login-form {
 		background-color:@secondary-text;
 		&.webcontent-spacer{
 			padding:@14px @70px;
+			@media only screen and (max-width : (@computerBreakpoint - 1px)){
+				padding:@7px @20px @14px;
+			}
+			@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+				padding:@7px @10px @14px;
+			}
 		}
 		h5{
 			// font-size:0.857142em;
 			font-family:@pageFont;
 			color:@quaternary-text;
-			margin:@10px 0 @7px;
+			margin:0 0 @7px;
 		}
 	}
 	.sticky-notification{

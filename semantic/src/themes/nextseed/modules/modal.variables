@@ -72,7 +72,7 @@
 @mobileImagePadding: 0rem 0rem 1rem;
 @mobileDescriptionPadding: 1rem 0rem ;
 @mobileButtonDistance: 1rem;
-@mobileActionPadding: 1rem 1rem (1rem - @mobileButtonDistance);
+@mobileActionPadding: 1rem;
 @mobileImageIconSize: 5rem;
 @mobileCloseTop: 0.5rem;
 @mobileCloseRight: 0.5rem;

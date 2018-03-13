@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, List, Icon } from 'semantic-ui-react';
+import { Grid, List, Icon, Responsive } from 'semantic-ui-react';
 
 const userModuleSubheader = () => (
   <div className="page-header-section webcontent-spacer">
     <Grid>
       <Grid.Row>
         <Grid.Column width={16}>
-          <h3>
-            <Link to="/app/users" className="back-link"><Icon name="long arrow left" /></Link>
+          <h1>
+            <Responsive {...Responsive.onlyComputer}>
+              <Link to="/app/users" className="back-link"><Icon name="long arrow left" /></Link>
+            </Responsive>
             James Wright
-          </h3>
+          </h1>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>

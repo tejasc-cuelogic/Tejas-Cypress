@@ -1,6 +1,9 @@
 /*******************************
          Theme Overrides
 *******************************/
+.table-wrapper{
+    overflow:auto;
+}
 .ui.table{
     font-family:@regularFont;
     thead th{

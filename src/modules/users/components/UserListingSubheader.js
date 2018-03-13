@@ -62,7 +62,7 @@ const userListingSubheader = () => (
       <Grid stackable>
         <Grid.Row>
           <Grid.Column width={4}>
-            <h3>Manage Users</h3>
+            <h1>Manage Users</h1>
           </Grid.Column>
           <Grid.Column width={6}>
             <Form inverted>

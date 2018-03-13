@@ -11,7 +11,7 @@ class Invest extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={4}>
-                <h3>Dashboard</h3>
+                <h1>Dashboard</h1>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -57,7 +57,7 @@ class Invest extends Component {
                         </List.Item>
                         <List.Item>
                           <List.Icon name="circle thin large" />
-                          <List.Content verticalAlign="middle">Create your first NextSeed Account</List.Content>
+                          <List.Content verticalAlign="middle">Create your first NextSeed Account <Link as="a" to=""><strong>here</strong></Link></List.Content>
                         </List.Item>
                       </List>
                     </Card.Description>

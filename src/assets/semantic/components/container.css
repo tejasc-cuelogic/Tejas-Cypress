@@ -154,6 +154,16 @@
   position: relative;
   padding: 3.71428571rem 5rem;
 }
+@media only screen and (max-width: 991px) {
+  .content-spacer {
+    padding: 1.42857143rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .content-spacer {
+    padding: 1.42857143rem 0.71428571rem;
+  }
+}
 .overlay {
   position: absolute;
   top: 0;
@@ -171,6 +181,16 @@
 }
 .webcontent-spacer {
   padding: 2.85714286rem 5rem 1rem;
+}
+@media only screen and (max-width: 991px) {
+  .webcontent-spacer {
+    padding: 1.42857143rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .webcontent-spacer {
+    padding: 1.42857143rem 0.71428571rem;
+  }
 }
 div.login-form {
   height: 100%;
@@ -214,22 +234,27 @@ div.login-form ul.error-messages {
   background-color: #424242;
   position: relative;
 }
-.page-header-section h3 {
+@media only screen and (max-width: 991px) {
+  .page-header-section {
+    min-height: auto;
+  }
+}
+.page-header-section h1 {
   color: #FFFFFF;
   font-size: 2.5rem;
 }
-.page-header-section h3 a.back-link {
+.page-header-section h1 a.back-link {
   position: absolute;
   left: -35px;
   color: #A9D943;
 }
-.page-header-section h3 a.back-link > i.icon,
-.page-header-section h3 a.back-link i.icons {
+.page-header-section h1 a.back-link > i.icon,
+.page-header-section h1 a.back-link i.icons {
   font-size: 2rem;
 }
-.page-header-section h3 a.back-link:hover,
-.page-header-section h3 a.back-link:active,
-.page-header-section h3 a.back-link:focus {
+.page-header-section h1 a.back-link:hover,
+.page-header-section h1 a.back-link:active,
+.page-header-section h1 a.back-link:focus {
   color: #97ca29;
 }
 .page-header-section span.filter-count {
@@ -252,10 +277,20 @@ div.login-form ul.error-messages {
 .page-header-section .search-filters.webcontent-spacer {
   padding: 1rem 5rem;
 }
+@media only screen and (max-width: 991px) {
+  .page-header-section .search-filters.webcontent-spacer {
+    padding: 0.5rem 1.42857143rem 1rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .page-header-section .search-filters.webcontent-spacer {
+    padding: 0.5rem 0.71428571rem 1rem;
+  }
+}
 .page-header-section .search-filters h5 {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #999999;
-  margin: 0.71428571rem 0 0.5rem;
+  margin: 0 0 0.5rem;
 }
 .page-header-section .sticky-notification {
   position: fixed;
