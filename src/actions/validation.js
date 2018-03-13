@@ -66,6 +66,16 @@ export class Validation {
     businessStore.setAnnualReportError(field, errors && errors[field][0]);
   }
 
+  validateSignatureInfo = (field, value) => {
+    businessStore.setSignatureInfo(field, value);
+    const { errors } = validationService.validate(businessStore.signature[field]);
+    businessStore.setSignatureError(field, errors && errors[field][0]);
+  }
+
+  validatePersonalSignature = (field, id, value) => {
+    businessStore.changePersonalSignature(field, id, value);
+  }
+
   /**
   * @desc Validated complete Registration form after clicking submit button
   * @return null

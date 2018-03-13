@@ -131,6 +131,11 @@ export class BusinessStore {
     this.signature[field].value = value;
   }
 
+  @action
+  setSignatureError(field, error) {
+    this.signature[field].error = error;
+  }
+
   /**
   * @desc This action changes fields in personal signature form, Form can has multiple entries
   *       Depending on unique ID we need to change value of particular entry only, hence we are
@@ -139,6 +144,11 @@ export class BusinessStore {
   @action
   changePersonalSignature(field, id, value) {
     _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].value = value;
+  }
+
+  @action
+  setPersonalSignatureError(field, id, error) {
+    _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].error = error;
   }
 
   @action
