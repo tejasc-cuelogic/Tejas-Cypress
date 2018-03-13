@@ -2,12 +2,12 @@ import React from 'react';
 import { Form, Header, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
+import validationActions from '../../../../actions/validation';
+
 @inject('businessStore')
 @observer
 export default class FilerInformation extends React.Component {
-  handleChange = (e, { name, value }) => {
-    this.props.businessStore.setFilerInfo(name, value);
-  }
+  handleChange = (e, { name, value }) => validationActions.validateFilerInfoField(name, value)
 
   handleCheckboxChange = (e, { name }) => {
     this.props.businessStore.togglefilerCheckbox(name);
@@ -27,6 +27,7 @@ export default class FilerInformation extends React.Component {
             defaultValue={filerInformation.filerCik.value}
             onChange={this.handleChange}
             className="column"
+            error={!!filerInformation.filerCik.error}
             width={8}
           />
           <Form.Input
@@ -36,6 +37,7 @@ export default class FilerInformation extends React.Component {
             defaultValue={filerInformation.filerCcc.value}
             onChange={this.handleChange}
             className="column"
+            error={!!filerInformation.filerCcc.error}
             width={8}
           />
         </Form.Group>
@@ -45,6 +47,7 @@ export default class FilerInformation extends React.Component {
             value="LIVE"
             name="liveTestFlag"
             checked={filerInformation.liveTestFlag.value === 'LIVE'}
+            error={!!filerInformation.liveTestFlag.error}
             onChange={this.handleChange}
           />
           <Form.Radio
@@ -52,6 +55,7 @@ export default class FilerInformation extends React.Component {
             value="TEST"
             name="liveTestFlag"
             checked={filerInformation.liveTestFlag.value === 'TEST'}
+            error={!!filerInformation.liveTestFlag.error}
             onChange={this.handleChange}
           />
         </Form.Group>
@@ -64,8 +68,8 @@ export default class FilerInformation extends React.Component {
           />
           <Form.Checkbox
             label="Is this an electronic copy of an official filing submitted in paper format in connection with a hardship exemption?"
-            name="overrideInternetFlag"
-            checked={filerInformation.overrideInternetFlag.value}
+            name="confirmingCopyFlag"
+            checked={filerInformation.confirmingCopyFlag.value}
             onChange={this.handleCheckboxChange}
           />
         </Form.Group>
@@ -74,6 +78,7 @@ export default class FilerInformation extends React.Component {
           label="Name"
           name="contactName"
           defaultValue={filerInformation.contactName.value}
+          error={!!filerInformation.contactName.error}
           onChange={this.handleChange}
         />
         <Form.Input
@@ -81,6 +86,7 @@ export default class FilerInformation extends React.Component {
           label="Phone Number"
           name="contactPhone"
           defaultValue={filerInformation.contactPhone.value}
+          error={!!filerInformation.contactPhone.error}
           onChange={this.handleChange}
         />
         <Form.Input
@@ -88,12 +94,13 @@ export default class FilerInformation extends React.Component {
           label="Email"
           name="contactEmail"
           defaultValue={filerInformation.contactEmail.value}
+          error={!!filerInformation.contactEmail.error}
           onChange={this.handleChange}
         />
         <Form.Checkbox
           label="Notify via Filing Website only?"
-          name="confirmingCopyFlag"
-          checked={filerInformation.confirmingCopyFlag.value}
+          name="overrideInternetFlag"
+          checked={filerInformation.overrideInternetFlag.value}
           onChange={this.handleCheckboxChange}
         />
       </div>

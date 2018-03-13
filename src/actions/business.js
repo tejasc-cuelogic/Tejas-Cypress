@@ -9,15 +9,15 @@ import ApiService from '../services/api';
 export class Business {
   /**
   * @desc Adds new field for PersonalSignatureArray
-  *       if previous value of `signaturePerson` prop is [{...}, {...}]
+  *       if previous value of `signaturePersons` prop is [{...}, {...}]
   *       then calling method will add bank map to above array as [{...}, {...}, {...}]
   */
   addPersonalSignature = () => {
     const personalSignature = { ...PERSONAL_SIGNATURE };
     personalSignature.id = shortid.generate();
-    const signaturePerson = [...businessStore.signature.signaturePerson];
-    signaturePerson.push(personalSignature);
-    businessStore.addNewPersonalSignature(signaturePerson);
+    const signaturePersons = [...businessStore.signature.signaturePersons];
+    signaturePersons.push(personalSignature);
+    businessStore.addNewPersonalSignature(signaturePersons);
   }
 
   /**
@@ -61,13 +61,14 @@ export class Business {
       signature: this.getFormattedSignature(signature),
       documentList: _.filter(_.keys(documentList), key => documentList[key]),
     };
+    console.log(payload, XML_URL);
 
 
-    ApiService.post(XML_URL, payload)
-      // TODO: Decide what should happen after XML generation
-      .then(data => console.log(data))
-      // TODO: Decide what should happen after error in XML generation
-      .catch(err => console.log(err));
+    // ApiService.post(XML_URL, payload)
+    //   // TODO: Decide what should happen after XML generation
+    //   .then(data => console.log(data))
+    //   // TODO: Decide what should happen after error in XML generation
+    //   .catch(err => console.log(err));
   }
 
   /**
@@ -112,8 +113,15 @@ export class Business {
   */
   getFormattedInformation = (info) => {
     const formattedData = {};
+    const dateKeys = ['dateIncorporation', 'deadlineDate'];
     _.forEach(info, (data, key) => {
-      formattedData[key] = data.value;
+      if (dateKeys.includes(key)) {
+        // If value is date then it has Moment object and not string value, in order to send proper
+        // value to server we have to parse value as follows
+        formattedData[key] = data.value.format('MM-DD-YYYY');
+      } else {
+        formattedData[key] = data.value;
+      }
     });
     return formattedData;
   }
@@ -123,13 +131,13 @@ export class Business {
     formattedData.issuer = signature.issuer.value;
     formattedData.issuerSignature = signature.issuerSignature.value;
     formattedData.issuerTitle = signature.issuerTitle.value;
-    formattedData.signaturePerson = [];
-    _.map(signature.signaturePerson, (person) => {
+    formattedData.signaturePersons = [];
+    _.map(signature.signaturePersons, (person) => {
       const personData = {};
       personData.personSignature = person.personSignature.value;
       personData.personTitle = person.personTitle.value;
       personData.signatureDate = person.signatureDate.value;
-      formattedData.signaturePerson.push(personData);
+      formattedData.signaturePersons.push(personData);
     });
     return formattedData;
   };

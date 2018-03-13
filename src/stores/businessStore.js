@@ -87,6 +87,11 @@ export class BusinessStore {
   }
 
   @action
+  setFilerError(field, error) {
+    this.filerInformation[field].error = error;
+  }
+
+  @action
   togglefilerCheckbox(name) {
     this.filerInformation[name].value = !this.filerInformation[name].value;
   }
@@ -97,8 +102,18 @@ export class BusinessStore {
   }
 
   @action
+  setIssuerError(field, error) {
+    this.issuerInformation[field].error = error;
+  }
+
+  @action
   setOfferingInfo(field, value) {
     this.offeringInformation[field].value = value;
+  }
+
+  @action
+  setOfferingError(field, error) {
+    this.offeringInformation[field].error = error;
   }
 
   @action
@@ -107,8 +122,18 @@ export class BusinessStore {
   }
 
   @action
+  setAnnualReportError(field, error) {
+    this.annualReportRequirements[field].error = error;
+  }
+
+  @action
   setSignatureInfo(field, value) {
     this.signature[field].value = value;
+  }
+
+  @action
+  setSignatureError(field, error) {
+    this.signature[field].error = error;
   }
 
   /**
@@ -118,7 +143,12 @@ export class BusinessStore {
   */
   @action
   changePersonalSignature(field, id, value) {
-    _.filter(this.signature.signaturePerson, person => person.id === id)[0][field].value = value;
+    _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].value = value;
+  }
+
+  @action
+  setPersonalSignatureError(field, id, error) {
+    _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].error = error;
   }
 
   @action
@@ -129,13 +159,13 @@ export class BusinessStore {
 
   @action
   addNewPersonalSignature(newSignatures) {
-    this.signature.signaturePerson = newSignatures;
+    this.signature.signaturePersons = newSignatures;
   }
 
   @action
   deletePersonalSignature(id) {
-    const { signaturePerson } = this.signature;
-    this.signature.signaturePerson = _.filter(signaturePerson, person => person.id !== id);
+    const { signaturePersons } = this.signature;
+    this.signature.signaturePersons = _.filter(signaturePersons, person => person.id !== id);
   }
 
   @action

@@ -4,12 +4,13 @@ import { Divider, Header, Form, Button } from 'semantic-ui-react';
 
 import PersonalSignature from '../../components/PersonalSignature';
 import businessActions from '../../../../actions/business';
+import validationActions from '../../../../actions/validation';
 
 @inject('businessStore')
 @observer
 export default class Signature extends React.Component {
   handleChange = (e, { name, value }) => {
-    this.props.businessStore.setSignatureInfo(name, value);
+    validationActions.validateSignatureInfo(name, value);
   }
   handlePersonalSignatureChange = (e, { name, value, dataId }) => {
     this.props.businessStore.changePersonalSignature(name, dataId, value);
@@ -30,28 +31,31 @@ export default class Signature extends React.Component {
             label={signature.issuer.label}
             name={signature.issuer.key}
             defaultValue={signature.issuer.value}
+            error={!!signature.issuer.error}
             onChange={this.handleChange}
           />
           <Form.Input
             label={signature.issuerSignature.label}
             name={signature.issuerSignature.key}
             defaultValue={signature.issuerSignature.value}
+            error={!!signature.issuerSignature.error}
             onChange={this.handleChange}
           />
           <Form.Input
             label={signature.issuerTitle.label}
             name={signature.issuerTitle.key}
             defaultValue={signature.issuerTitle.value}
+            error={!!signature.issuerTitle.error}
             onChange={this.handleChange}
           />
         </Form.Group>
         <PersonalSignature
-          signaturePerson={signature.signaturePerson}
+          signaturePersons={signature.signaturePersons}
           handleChange={this.handlePersonalSignatureChange}
           handleAddClick={this.handleAdd}
           handleDeleteClick={this.handleDelete}
         />
-        <Button onClick={this.handleAddClick}>Add</Button>
+        <Button onClick={this.handleAdd}>Add</Button>
       </div>
     );
   }
