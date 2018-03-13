@@ -30,7 +30,9 @@ const userListing = props => (
           <Table.Row key={user.username}>
             <Table.Cell collapsing>
               {!user.profilepic &&
-                <Randavatar avatarKey={user.username} name={user.given_name} size="mini" />
+                <div className="user-image">
+                  <Randavatar avatarKey={user.username} name={user.given_name} size="mini" />
+                </div>
               }
             </Table.Cell>
             <Table.Cell className="user-status">

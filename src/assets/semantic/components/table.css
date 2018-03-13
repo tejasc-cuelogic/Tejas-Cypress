@@ -1173,6 +1173,7 @@
 }
 .ui.table.user-list .user-image .ui.avatar.image {
   margin-right: 0;
+  border: 1px solid #e0e0e0;
 }
 .ui.table.user-list .user-name {
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;

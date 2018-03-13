@@ -17,6 +17,12 @@
 					min-height:~"calc(100vh - 58px)";
 				}
 			}
+			@media only screen and (max-width : (@computerBreakpoint - 1px)){
+				background-color:#f4a460;
+			}
+			@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+				background-color:#87ceeb;
+			}
 		}
 	}
 }

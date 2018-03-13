@@ -632,6 +632,16 @@ body.pushable > .pusher {
   padding: 0;
   min-height: calc(100vh - 58px);
 }
+@media only screen and (max-width: 991px) {
+  .pushable > .sidebar ~ .pusher {
+    background-color: #f4a460;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .pushable > .sidebar ~ .pusher {
+    background-color: #87ceeb;
+  }
+}
 .sidebar .user-picture {
   margin: 1.71428571rem 0;
   text-align: center;

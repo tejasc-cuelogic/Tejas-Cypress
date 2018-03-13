@@ -26118,6 +26118,7 @@ Floated Menu / Item
 
 .ui.table.user-list .user-image .ui.avatar.image {
   margin-right: 0;
+  border: 1px solid #e0e0e0;
 }
 
 .ui.table.user-list .user-name {
@@ -36360,6 +36361,18 @@ body.pushable > .pusher {
 .pushable > .sidebar ~ .pusher .ui.vertical.segment.content {
   padding: 0;
   min-height: calc(100vh - 58px);
+}
+
+@media only screen and (max-width: 991px) {
+  .pushable > .sidebar ~ .pusher {
+    background-color: #f4a460;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .pushable > .sidebar ~ .pusher {
+    background-color: #87ceeb;
+  }
 }
 
 .sidebar .user-picture {
