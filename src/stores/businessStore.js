@@ -40,6 +40,43 @@ export class BusinessStore {
   businessList = [];
 
   @observable
+  business = {
+    id: 'asd-12345',
+    name: "DD's Cafe",
+    desc: 'food cafe and coffee bar',
+    fillings: [
+      {
+        id: '1234556',
+        created: new Date(),
+        xmlSubmissions: [
+          {
+            id: 'asd3r5rg',
+            created: new Date(),
+          },
+          {
+            id: 'adf982jkr',
+            created: new Date(),
+          },
+        ],
+      },
+      {
+        id: '1234556',
+        created: new Date(),
+        xmlSubmissions: [
+          {
+            id: 'asd3r5rg',
+            created: new Date(),
+          },
+          {
+            id: 'adf982jkr',
+            created: new Date(),
+          },
+        ],
+      },
+    ],
+  };
+
+  @observable
   filerInformation = { ...FILER_INFORMATION }
 
   @observable
@@ -179,6 +216,11 @@ export class BusinessStore {
   @action
   setBusinessList(list) {
     this.businessList = list;
+  }
+
+  @action
+  setBusiness(details) {
+    this.business = details;
   }
 }
 

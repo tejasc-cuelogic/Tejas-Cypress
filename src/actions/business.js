@@ -107,6 +107,22 @@ export class Business {
       });
   }
 
+  /**
+   * @desc This method gets the details of business and store it to store.
+   * @param $businessId - Id of business for which data will fetched
+  */
+  getBusinessDetails = (businessId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Getting business data');
+    ApiService.post(GRAPHQL, businessId)
+      .then(data => console.log(data))
+      .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
   // Private Methods starts here
   /**
   * @desc Converts store data in the format that should be sent in an API

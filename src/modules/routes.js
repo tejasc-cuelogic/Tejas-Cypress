@@ -20,8 +20,7 @@ import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './users/containers/Users';
 import XmlForm from './business/containers/XmlForm';
-import NewBusinessForm from './business/containers/NewBusinessForm';
-
+import BusinessDetails from './business/containers/BusinessDetails';
 import {
   AdminAuthorization,
   BusinessAuthorization,
@@ -114,14 +113,14 @@ export const privateRoutes = [
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/new',
-    component: NewBusinessForm,
-    auth: BusinessAuthorization,
-  },
-  {
     path: '/app/business/xml',
     component: XmlForm,
     auth: AdminAuthorization,
+  },
+  {
+    path: '/app/business/:businessId',
+    component: BusinessDetails,
+    auth: BusinessAuthorization,
   },
   {
     path: '/app/business',
