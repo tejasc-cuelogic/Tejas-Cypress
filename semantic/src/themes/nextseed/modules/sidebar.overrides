@@ -12,18 +12,16 @@
 		height:~"calc(100vh - 58px)";
 		overflow-y:auto;
 		background-color:@lighten-bg-color;
-		.ui.vertical.segment{
-			&.content{
-				padding:0;
-				min-height:~"calc(100vh - 58px)";
-			}
+		.ui.vertical.segment.content{
+			padding:0;
+			min-height:~"calc(100vh - 58px)";
 		}
-		@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
-			background-color:#f4a460;
-		}
-		@media only screen and (max-width : (@tabletBreakpoint - 1px)){
-			background-color:#87ceeb;
-		}
+		// @media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+		// 	background-color:#f4a460;
+		// }
+		// @media only screen and (max-width : (@tabletBreakpoint - 1px)){
+		// 	background-color:#87ceeb;
+		// }
 	}
 }
 .sidebar{
