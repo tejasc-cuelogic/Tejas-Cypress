@@ -37,6 +37,9 @@ export class BusinessStore {
   };
 
   @observable
+  businessList = [];
+
+  @observable
   filerInformation = { ...FILER_INFORMATION }
 
   @observable
@@ -171,6 +174,11 @@ export class BusinessStore {
   @action
   setOfferingList(list) {
     this.offeringList = list;
+  }
+
+  @action
+  setBusinessList(list) {
+    this.businessList = list;
   }
 }
 
