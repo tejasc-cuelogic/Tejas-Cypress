@@ -61,14 +61,12 @@ export class Business {
       signature: this.getFormattedSignature(signature),
       documentList: _.filter(_.keys(documentList), key => documentList[key]),
     };
-    console.log(payload, XML_URL);
 
-
-    // ApiService.post(XML_URL, payload)
-    //   // TODO: Decide what should happen after XML generation
-    //   .then(data => console.log(data))
-    //   // TODO: Decide what should happen after error in XML generation
-    //   .catch(err => console.log(err));
+    ApiService.post(XML_URL, payload)
+      // TODO: Decide what should happen after XML generation
+      .then(data => console.log(data))
+      // TODO: Decide what should happen after error in XML generation
+      .catch(err => console.log(err));
   }
 
   /**
@@ -86,6 +84,26 @@ export class Business {
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.toggleDropdownLoader();
+      });
+  }
+
+  /**
+   * @desc List all businesses that were filled to nextseed
+   * @todo Add Pagination to api
+  */
+  listBusinesses = () => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching business list');
+    const payload = {
+      query: 'query getOfferingFilings{offeringFilings{id created payload{' +
+        'templateVariables{ name_of_business } } } }',
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => this.setBusinessList(data.body.data.offeringFilings))
+      .catch(err => uiStore.setErrors(err))
+      .finally(() => {
+        uiStore.clearLoaderMessage();
+        uiStore.setProgress(false);
       });
   }
 
@@ -160,6 +178,17 @@ export class Business {
       return hash;
     });
     businessStore.setOfferingList(list);
+  }
+
+  setBusinessList = (data) => {
+    const list = _.map(data, (offering) => {
+      const hash = {};
+      hash.id = offering.id;
+      hash.name = offering.payload.templateVariables.name_of_business;
+      hash.created = offering.created;
+      return hash;
+    });
+    businessStore.setBusinessList(list);
   }
   // Private Methods ends here
 }
