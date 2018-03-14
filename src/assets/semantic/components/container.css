@@ -154,7 +154,7 @@
   position: relative;
   padding: 3.71428571rem 5rem;
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1199px) {
   .content-spacer {
     padding: 1.42857143rem;
   }
@@ -182,7 +182,7 @@
 .webcontent-spacer {
   padding: 2.85714286rem 5rem 1rem;
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1199px) {
   .webcontent-spacer {
     padding: 1.42857143rem;
   }
@@ -234,14 +234,14 @@ div.login-form ul.error-messages {
   background-color: #424242;
   position: relative;
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1199px) {
   .page-header-section {
     min-height: auto;
   }
 }
 .page-header-section h1 {
   color: #FFFFFF;
-  font-size: 2.5rem;
+  font-size: 2.14285714rem;
 }
 .page-header-section h1 a.back-link {
   position: absolute;
@@ -277,7 +277,7 @@ div.login-form ul.error-messages {
 .page-header-section .search-filters.webcontent-spacer {
   padding: 1rem 5rem;
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1199px) {
   .page-header-section .search-filters.webcontent-spacer {
     padding: 0.5rem 1.42857143rem 1rem;
   }

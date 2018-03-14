@@ -24,7 +24,7 @@
             left:0;
         }
         i.icon{
-            margin-left:@20px;
+            margin:0 0 0 @7px;
         }
     }
 }

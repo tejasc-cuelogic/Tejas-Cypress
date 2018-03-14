@@ -44,13 +44,53 @@ class SidebarLeftPush extends Component {
         </Sidebar>
         <Sidebar.Pusher>
           {this.props.children}
-          {/* <div className="ui vertical segment content">
-            <div className="ui container fluid">
-            </div>
-          </div> */}
         </Sidebar.Pusher>
         <NotificationPanel status={uiStore.layoutState.notificationPanel} />
       </Sidebar.Pushable>
+      //  BELOW CODE IS FOR RESPONSIVE MENU
+      // <div>
+      //   <Responsive minWidth={992}>
+      //   </Responsive>
+      //   <Responsive maxWidth={991}>
+      //     <Button onClick={this.toggleVisibility} className="item collapseIcon pull-right">
+      //       <i className={`angle ${(uiStore.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
+      //       <span>Collapse</span>
+      //     </Button>
+      //     <Sidebar.Pushable>
+      //       <Sidebar
+      //         as={Menu}
+      //         animation="overlay"
+      //         width="thin"
+      //         visible={uiStore.layoutState.leftPanel}
+      //         icon="labeled"
+      //         vertical
+      //         inverted
+      //       >
+      //         <div className="user-picture">
+      //           <Randavatar
+      //             name={this.props.UserInfo.fullname}
+      //             avatarKey={this.props.UserInfo.avatarKey}
+      //             size="small"
+      //           />
+      //           <h2>{this.props.UserInfo.fullname}</h2>
+      //           <h3>Mobile User</h3>
+      //         </div>
+      //         {
+      //           sidebarItems.map(item => (
+      //             <Menu.Item key={item.to} name="home" as={NavLink} to={`/app/${item.to}`}>
+      //               <Icon name={item.icon} />
+      //               <span>{item.displayName}</span>
+      //             </Menu.Item>
+      //           ))
+      //         }
+      //       </Sidebar>
+      //       <Sidebar.Pusher>
+      //         {this.props.children}
+      //       </Sidebar.Pusher>
+      //       <NotificationPanel status={uiStore.layoutState.notificationPanel} />
+      //     </Sidebar.Pushable>
+      //   </Responsive>
+      // </div>
     );
   }
 }

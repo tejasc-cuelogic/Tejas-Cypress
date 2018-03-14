@@ -5226,7 +5226,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   padding: 3.71428571rem 5rem;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1199px) {
   .content-spacer {
     padding: 1.42857143rem;
   }
@@ -5259,7 +5259,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   padding: 2.85714286rem 5rem 1rem;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1199px) {
   .webcontent-spacer {
     padding: 1.42857143rem;
   }
@@ -5325,7 +5325,7 @@ div.login-form ul.error-messages {
   position: relative;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1199px) {
   .page-header-section {
     min-height: auto;
   }
@@ -5333,7 +5333,7 @@ div.login-form ul.error-messages {
 
 .page-header-section h1 {
   color: #FFFFFF;
-  font-size: 2.5rem;
+  font-size: 2.14285714rem;
 }
 
 .page-header-section h1 a.back-link {
@@ -5376,7 +5376,7 @@ div.login-form ul.error-messages {
   padding: 1rem 5rem;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1199px) {
   .page-header-section .search-filters.webcontent-spacer {
     padding: 0.5rem 1.42857143rem 1rem;
   }
@@ -19544,7 +19544,7 @@ ol.ui.horizontal.list li:before,
 
 .card.editable .ui.form .fields {
   margin: 0em;
-  padding: 1em 0;
+  padding: 0.5em 0;
 }
 
 .card.editable .ui.form .fields:nth-child(odd) {
@@ -19552,7 +19552,7 @@ ol.ui.horizontal.list li:before,
 }
 
 .card.editable .ui.form .fields .field {
-  padding: 0.5em 1em;
+  padding: 0 1em;
 }
 
 .card.editable .ui.form .ui.label {
@@ -19579,7 +19579,7 @@ ol.ui.horizontal.list li:before,
   font-weight: 500;
   line-height: 1.42857143rem;
   color: #303030;
-  padding: 0.5em 1em;
+  padding: 0.5em 0;
   border-width: 0;
   background-color: transparent;
 }
@@ -26522,7 +26522,7 @@ Floated Menu / Item
 }
 
 .ui.card {
-  margin: 1.14285714rem 0em;
+  margin: 2rem 0em;
 }
 
 .ui.cards > .card a,
@@ -29461,7 +29461,7 @@ a.ui.card:hover,
 
 .tabular-wrap .ui.statistic i.icon,
 .sticky-notification .ui.statistic i.icon {
-  margin-left: 1.42857143rem;
+  margin: 0 0 0 0.5rem;
 }
 
 .sticky-notification .ui.statistic {
@@ -36396,8 +36396,11 @@ body.pushable > .pusher {
          Theme Overrides
 *******************************/
 
-.pushable > .sidebar ~ .pusher {
+.pushable > .sidebar.push ~ .pusher {
   padding-left: 64px;
+}
+
+.pushable > .sidebar ~ .pusher {
   -webkit-transition: all .5s ease;
   transition: all .5s ease;
   height: calc(100vh - 58px);
@@ -36408,6 +36411,18 @@ body.pushable > .pusher {
 .pushable > .sidebar ~ .pusher .ui.vertical.segment.content {
   padding: 0;
   min-height: calc(100vh - 58px);
+}
+
+@media only screen and (max-width: 1199px) {
+  .pushable > .sidebar ~ .pusher {
+    background-color: #f4a460;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .pushable > .sidebar ~ .pusher {
+    background-color: #87ceeb;
+  }
 }
 
 .sidebar .user-picture {

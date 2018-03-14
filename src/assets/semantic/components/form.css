@@ -1113,13 +1113,13 @@
 }
 .card.editable .ui.form .fields {
   margin: 0em;
-  padding: 1em 0;
+  padding: 0.5em 0;
 }
 .card.editable .ui.form .fields:nth-child(odd) {
   background-color: #F7F7F7;
 }
 .card.editable .ui.form .fields .field {
-  padding: 0.5em 1em;
+  padding: 0 1em;
 }
 .card.editable .ui.form .ui.label {
   font-size: 0.92857143rem;
@@ -1144,7 +1144,7 @@
   font-weight: 500;
   line-height: 1.42857143rem;
   color: #303030;
-  padding: 0.5em 1em;
+  padding: 0.5em 0;
   border-width: 0;
   background-color: transparent;
 }

@@ -587,7 +587,7 @@
 }
 .tabular-wrap .ui.statistic i.icon,
 .sticky-notification .ui.statistic i.icon {
-  margin-left: 1.42857143rem;
+  margin: 0 0 0 0.5rem;
 }
 .sticky-notification .ui.statistic {
   margin: 0;

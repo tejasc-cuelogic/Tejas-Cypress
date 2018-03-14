@@ -18,7 +18,7 @@
 .content-spacer{
 	position:relative;
 	padding:@52px @70px;
-	@media only screen and (max-width : (@computerBreakpoint - 1px)){
+	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 		padding:@20px;
 	}
 	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
@@ -40,7 +40,7 @@
 }
 .webcontent-spacer{
 	padding:@40px @70px @14px;
-	@media only screen and (max-width : (@computerBreakpoint - 1px)){
+	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 		padding:@20px;
 	}
 	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
@@ -93,13 +93,13 @@ div.login-form {
 	min-height:132px;
 	background-color:@dark-bg-color;
 	position:relative;
-	@media only screen and (max-width : (@computerBreakpoint - 1px)){
+	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 		min-height:auto;
 	}
 	h1{
 		// @include fontBold;
 		color:@inverse-text;
-		font-size:@35px;
+		font-size:@30px;
 		// font-weight: bold;
 		a.back-link{
 			position:absolute;
@@ -131,7 +131,7 @@ div.login-form {
 		background-color:@secondary-text;
 		&.webcontent-spacer{
 			padding:@14px @70px;
-			@media only screen and (max-width : (@computerBreakpoint - 1px)){
+			@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 				padding:@7px @20px @14px;
 			}
 			@media only screen and (max-width : (@tabletBreakpoint - 1px)){

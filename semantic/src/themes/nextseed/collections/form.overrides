@@ -39,12 +39,12 @@
         .ui.form{
             .fields{
                 margin:0em;
-                padding:1em 0;
+                padding:0.5em 0;
                 &:nth-child(odd){
                     background-color:@light-bg-color;
                 }
                 .field{
-                    padding:0.5em @gutterWidth;
+                    padding:0 @gutterWidth;
                 }
             }
             .ui.label{
@@ -70,7 +70,7 @@
                 font-weight:500;
                 line-height:@20px;
                 color:@primary-text;
-                padding:0.5em @gutterWidth;
+                padding:0.5em 0;
                 border-width:0;
                 background-color:transparent;
             }
