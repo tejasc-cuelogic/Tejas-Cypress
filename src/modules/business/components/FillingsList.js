@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Accordion, Icon } from 'semantic-ui-react';
+import { Accordion, Icon, Button } from 'semantic-ui-react';
 
 import XmlSubmission from './XmlSubmission';
 
@@ -16,6 +16,7 @@ const FillingsList = observer(props => (
           >
             <Icon name="dropdown" />
             {filling.id} | {filling.created} |
+            <Button><Icon name="trash" /></Button>
           </Accordion.Title>
           <XmlSubmission
             xmlSubmissions={filling.xmlSubmissions}

@@ -95,11 +95,10 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching business list');
     const payload = {
-      query: 'query getOfferingFilings{offeringFilings{id created payload{' +
-        'templateVariables{ name_of_business } } } }',
+      query: 'query getBusinesses { businesses{ id name created } }',
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => this.setBusinessList(data.body.data.offeringFilings))
+      .then(data => businessStore.setBusinessList(data.body.data.businesses))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.clearLoaderMessage();
@@ -194,17 +193,6 @@ export class Business {
       return hash;
     });
     businessStore.setOfferingList(list);
-  }
-
-  setBusinessList = (data) => {
-    const list = _.map(data, (offering) => {
-      const hash = {};
-      hash.id = offering.id;
-      hash.name = offering.payload.templateVariables.name_of_business;
-      hash.created = offering.created;
-      return hash;
-    });
-    businessStore.setBusinessList(list);
   }
   // Private Methods ends here
 }
