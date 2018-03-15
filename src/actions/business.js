@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import shortid from 'shortid';
 
 import businessStore from './../stores/businessStore';
@@ -18,6 +19,7 @@ export class Business {
     const signaturePersons = [...businessStore.signature.signaturePersons];
     signaturePersons.push(personalSignature);
     businessStore.addNewPersonalSignature(signaturePersons);
+    return personalSignature.id;
   }
 
   /**
@@ -437,8 +439,40 @@ export class Business {
     businessStore.setDocumentList(list);
   }
 
-  setXmlPayload = (payload) => {
+setXmlPayload = (payload) => {
+    const dateFields = ['dateIncorporation', 'deadlineDate']
     if (payload) {
+      businessStore.setBusinessId(payload.businessId);
+      businessStore.setFilingId(payload.filingId);
+      businessStore.setOfferingUrl(payload.offeringUrl);
+      _.map(payload.filerInformation, (value, key) => businessStore.setFilerInfo(key, (value || '')));
+      _.map(payload.issuerInformation, (value, key) => {
+        if (dateFields.includes(key)) {
+          businessStore.setIssuerInfo(key, moment(value, 'MM-DD-YYYY'));
+        } else {
+          businessStore.setIssuerInfo(key, (value || ''));
+        }
+      });
+      _.map(payload.offeringInformation, (value, key) => {
+        if (dateFields.includes(key)) {
+          businessStore.setOfferingInfo(key, moment(value, 'MM-DD-YYYY'));
+        } else {
+          businessStore.setOfferingInfo(key, (value || ''))
+        }
+      });
+      _.map(payload.annualReportDisclosureRequirements, (value, key) => {
+        businessStore.setAnnualReportInfo(key, (value || ''));
+      })
+      _.map(payload.signature, (value, key) => {
+        if (key !== 'signaturePersons') {
+          businessStore.setSignatureInfo(key, (value || ''));
+        }
+      })
+      _.map(payload.signature.signaturePersons, (signature) => {
+        const id = this.addPersonalSignature();
+        _.map(signature, (value, key) => businessStore.changePersonalSignature(key, id, value));
+      })
+      _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
       console.log(payload);
     }
   }

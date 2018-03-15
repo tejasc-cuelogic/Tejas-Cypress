@@ -33,7 +33,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
               <Form.Input
                 label={field.label}
                 name={field.key}
-                defaultValue={field.value}
+                value={field.value}
                 error={!!field.error}
                 onChange={this.handleInputChange}
                 key={field.key}
