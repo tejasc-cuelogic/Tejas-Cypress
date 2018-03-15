@@ -86,7 +86,7 @@ export class BusinessStore {
   }
 
   @computed get canSubmitEditBusinessForm() {
-    return (this.business.name.value !== '' && this.business.desc.value !== '');
+    return (this.business.name.value !== '' && this.business.desc.value !== null);
   }
 
   @computed get getSummary() {
