@@ -94,7 +94,7 @@ export class Business {
   listBusinesses = () => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching business list');
-    const payload = { query: 'query getBusinesses { businesses{ id name created } }' };
+    const payload = { query: 'query getBusinesses { businesses{ id name description created } }' };
     ApiService.post(GRAPHQL, payload)
       .then(data => businessStore.setBusinessList(data.body.data.businesses))
       .catch(err => uiStore.setErrors(err))
