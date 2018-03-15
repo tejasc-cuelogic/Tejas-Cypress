@@ -248,6 +248,7 @@ export class BusinessStore {
     this.isBusinessExist = value;
     if (value === true) {
       this.setNewOfferingError('businessName', 'Business Name is already exist.');
+      this.setBusinessNameErrorOnEdit('name', 'Business Name is already exist.');
     }
   }
 

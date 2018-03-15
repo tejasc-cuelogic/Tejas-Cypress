@@ -16,8 +16,8 @@ export default class NewBusinessForm extends React.Component {
     this.props.businessStore.setBusinessDetailsOnEdit(name, value);
   }
 
-  handleOnBlurOnEdit = (e) => {
-    businessActions.validateBusinessNameOnEdit(e.target.name);
+  handleBusinessNameOnBlurOnEdit = () => {
+    businessActions.businessExistsOnEdit();
   }
 
   handleEditBusiness = (e) => {

@@ -215,15 +215,6 @@ export class Business {
       });
   }
 
-  validateBusinessNameOnEdit = (field) => {
-    this.businessExistsOnEdit();
-    if (businessStore.isBusinessExist) {
-      businessStore.setBusinessNameErrorOnEdit(field, 'Business Name is already exist.');
-    } else {
-      businessStore.setBusinessNameErrorOnEdit(field, '');
-    }
-  }
-
   /**
    * @desc This method fetches filing details from id provided for business,
    * and stores data in store.
