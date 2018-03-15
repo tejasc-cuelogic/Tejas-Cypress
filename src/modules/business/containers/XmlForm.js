@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Divider, Button, Icon } from 'semantic-ui-react';
+import { Form, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
@@ -14,13 +14,11 @@ import businessActions from '../../../actions/business';
 @observer
 export default class XmlForm extends React.Component {
   componentWillMount() {
-    businessActions.listOfferings();
   }
   handleUrlChange = (e, { value }) => {
     this.props.businessStore.setOfferingUrl(value);
   }
   handleSelectChange = (e, { value }) => this.props.businessStore.setOfferingId(value);
-  handleRefreshClick = () => businessActions.listOfferings();
   handleFormSubmit = (e) => {
     e.preventDefault();
     businessActions.generateXml();
@@ -31,20 +29,6 @@ export default class XmlForm extends React.Component {
       <div className="content-spacer">
         <Form className="edgar-form">
           <Form.Group widths="equal">
-            <Button icon onClick={this.handleRefreshClick}>
-              <Icon name="refresh" />
-            </Button>
-            <Form.Select
-              fluid
-              search
-              label="Select Business"
-              loading={this.props.uiStore.dropdownLoader}
-              options={this.props.businessStore.offeringList}
-              placeholder="Select Business Filing"
-              onChange={this.handleSelectChange}
-              className="column"
-              width={8}
-            />
             <Form.Input
               label="Website URL"
               defaultValue={this.props.businessStore.offeringUrl}
