@@ -22,8 +22,8 @@ export default class BusinessDetails extends React.Component {
     this.props.businessStore.setEditBusinessName(true);
   }
 
-  handleBusinessDelete = (e, { businessid }) => {
-    businessActions.deleteBusiness(businessid)
+  handleBusinessDelete = () => {
+    businessActions.deleteBusiness(this.props.match.params.businessId)
       .then(() => this.props.history.push('/app/business'));
   }
 
