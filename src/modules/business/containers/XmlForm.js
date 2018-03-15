@@ -14,11 +14,15 @@ import businessActions from '../../../actions/business';
 @observer
 export default class XmlForm extends React.Component {
   componentWillMount() {
+    businessActions.fetchXmlDetails(this.props.match.params);
   }
+
   handleUrlChange = (e, { value }) => {
     this.props.businessStore.setOfferingUrl(value);
   }
+
   handleSelectChange = (e, { value }) => this.props.businessStore.setOfferingId(value);
+
   handleFormSubmit = (e) => {
     e.preventDefault();
     businessActions.generateXml();
@@ -47,7 +51,7 @@ export default class XmlForm extends React.Component {
           <div
             className="form-footer"
             style={{
-            paddingBottom: '40px',
+              paddingBottom: '40px',
             }}
           >
             <Button color="green" size="large" onClick={this.handleFormSubmit}>
