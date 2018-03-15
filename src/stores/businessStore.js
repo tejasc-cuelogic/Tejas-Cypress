@@ -37,8 +37,13 @@ export class BusinessStore {
     name: {
       value: '',
       error: undefined,
+      key: 'name',
     },
-    desc: '',
+    desc: {
+      value: '',
+      error: undefined,
+      key: 'desc',
+    },
     filings: [],
   };
 
@@ -66,6 +71,12 @@ export class BusinessStore {
   @observable
   newOfferingInformation = { ...NEW_OFFERING_INFORMATION };
 
+  @observable
+  editBusinessName = false;
+
+  @observable
+  editBusinessMode = false;
+
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
   }
@@ -76,6 +87,11 @@ export class BusinessStore {
 
   @computed get getSummary() {
     return this.businessList.length || 0;
+  }
+
+  @action
+  setEditBusinessName(status) {
+    this.editBusinessName = status;
   }
 
   @action
@@ -234,6 +250,26 @@ export class BusinessStore {
   @action
   setBusiness(details) {
     this.business = details;
+  }
+
+  @action
+  setBusinessDetailsOnEdit(field, value) {
+    this.business[field].value = value;
+    if (value === '') {
+      this.setBusinessNameErrorOnEdit(field, `${field} field is required.`);
+    } else {
+      this.setBusinessNameErrorOnEdit(field, '');
+    }
+  }
+
+  @action
+  setBusinessNameErrorOnEdit(field, error) {
+    this.business[field].error = error;
+  }
+
+  @action
+  setBusinessMode(status) {
+    this.editBusinessMode = status;
   }
 }
 

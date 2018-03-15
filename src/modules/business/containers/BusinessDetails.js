@@ -1,11 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Icon, Grid, Button, Confirm } from 'semantic-ui-react';
+import { Icon, Button, Grid, Confirm } from 'semantic-ui-react';
 
 import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
 import businessActions from '../../../actions/business';
+import NewBusinessForm from '../containers/NewBusinessForm';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -17,10 +18,19 @@ export default class BusinessDetails extends React.Component {
 
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
 
-  handleBusinessDelete = () => {
-    const businessid = this.props.match.params.businessId;
+  handleEditBusinessName = () => {
+    this.props.businessStore.setEditBusinessName(true);
+  }
+
+  handleBusinessDelete = (e, { businessid }) => {
     businessActions.deleteBusiness(businessid)
       .then(() => this.props.history.push('/app/business'));
+  }
+
+  handleOpenModal = () => {
+    this.props.businessStore.setBusinessMode(true);
+    this.props.businessStore.resetNewOfferingInfo();
+    this.props.uiStore.setModalStatus(true);
   }
 
   handleDelCancel = () => this.props.uiStore.toggleConfirmBox(false);
@@ -29,6 +39,7 @@ export default class BusinessDetails extends React.Component {
 
   render() {
     const { business } = this.props.businessStore;
+
     return (
       <div>
         <div className="page-header-section webcontent-spacer">
@@ -36,10 +47,12 @@ export default class BusinessDetails extends React.Component {
             <Grid.Row>
               <Grid.Column width={16}>
                 <h1>
+                  <NewBusinessForm />
                   <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
                   {business.name.value}
                   <div className="actions">
                     <Button
+                      onClick={this.handleOpenModal}
                       icon
                       circular
                       inverted
@@ -70,7 +83,7 @@ export default class BusinessDetails extends React.Component {
           </Grid>
         </div>
         <div className="content-spacer">
-          <p>{business.desc}</p>
+          <p>{business.desc.value}</p>
           <FillingsList
             filings={business.filings}
             handleAccordionClick={this.handleAccordionTitleClick}
