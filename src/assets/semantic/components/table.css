@@ -117,6 +117,11 @@
   border-top: none;
 }
 
+/* Repeated tbody */
+.ui.table tbody + tbody tr:first-child td {
+  border-top: 0px solid rgba(34, 36, 38, 0.1);
+}
+
 /* Table Cells */
 .ui.table td {
   padding: 0.78571429em 0.78571429em;

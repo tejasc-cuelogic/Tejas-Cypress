@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import XmlSubmission from './XmlSubmission';
 
 const FillingsList = observer(props => (
-  <Accordion>
+  <Accordion fluid styled>
     {
       props.filings.map(filing => (
         <div key={`${filing.created}_${filing.filingId}`}>
