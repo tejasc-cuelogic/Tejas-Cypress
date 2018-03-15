@@ -5,13 +5,16 @@ import { Accordion } from 'semantic-ui-react';
 import _ from 'lodash';
 
 const XmlSubmission = observer((props) => {
+  const { businessId, filingId } = props;
   if (!_.isEmpty(props.xmlSubmissions)) {
     return (
-      <Accordion.Content active={props.active} key={props.filingId}>
+      <Accordion.Content active={props.active} key={filingId}>
         {
           props.xmlSubmissions.map(xmlSubmission => (
             <div>
-              <Link to={`/app/business/xml/${xmlSubmission.xmlSubmissionId}`}>
+              <Link
+                to={`/app/business/${businessId}/filing/${filingId}/xml/${xmlSubmission.xmlSubmissionId}`}
+              >
                 {`XML Submission | ${xmlSubmission.created}`}
               </Link>
             </div>
