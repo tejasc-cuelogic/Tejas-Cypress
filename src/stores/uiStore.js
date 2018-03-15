@@ -13,6 +13,7 @@ export class UiStore {
   @observable success = undefined;
   @observable redirectURL = undefined;
   @observable dropdownLoader = false;
+  @observable openAccordion = '';
 
   @action
   setProgress(progress = true) {
@@ -79,6 +80,11 @@ export class UiStore {
   @action
   toggleDropdownLoader() {
     this.dropdownLoader = !this.dropdownLoader;
+  }
+
+  @action
+  setOpenAccordion(id) {
+    this.openAccordion = id;
   }
 
   @action

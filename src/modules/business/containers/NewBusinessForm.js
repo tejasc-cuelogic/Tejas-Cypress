@@ -9,7 +9,7 @@ import businessActions from '../../../actions/business';
 @observer
 export default class NewBusinessForm extends React.Component {
   handleOpenModal = () => {
-    businessActions.resetNewOfferingInfo();
+    this.props.businessStore.resetNewOfferingInfo();
   }
 
   handleOnChange = (e, { name, value }) => {

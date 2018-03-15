@@ -44,6 +44,46 @@ export class BusinessStore {
   isBusinessExist = false;
 
   @observable
+  business = {
+    id: '',
+    name: {
+      value: '',
+      error: undefined,
+    },
+    desc: '',
+    filings: [
+      {
+        id: '1234556',
+        created: new Date().toString(),
+        xmlSubmissions: [
+          {
+            id: 'asd3r5rg',
+            created: new Date().toString(),
+          },
+          {
+            id: 'adf982jkr',
+            created: new Date().toString(),
+          },
+        ],
+      },
+      {
+        id: '654321',
+        created: new Date().toString(),
+        xmlSubmissions: [
+          {
+            id: 'asde42sdv',
+            created: new Date().toString(),
+          },
+          {
+            id: 'asd135rgs',
+            created: new Date().toString(),
+          },
+        ],
+      },
+    ],
+  };
+
+  @observable
   filerInformation = { ...FILER_INFORMATION }
 
   @observable
@@ -216,6 +256,11 @@ export class BusinessStore {
     if (value === true) {
       this.setNewOfferingError('businessName', 'Business Name is already exist.');
     }
+  }
+
+  @action
+  setBusiness(details) {
+    this.business = details;
   }
 }
 
