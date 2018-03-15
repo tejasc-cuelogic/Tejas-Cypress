@@ -67,3 +67,8 @@
 		z-index:99;
 	}
 }
+.ui.styled.accordion, .ui.styled.accordion .accordion{
+	.active.title, .active.content{
+		background-color:@lighten-bg-color;
+	}
+}

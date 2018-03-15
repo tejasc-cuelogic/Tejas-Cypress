@@ -26104,7 +26104,7 @@ Floated Menu / Item
 }
 
 .ui.table a {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #303030;
   text-decoration: none;
 }
@@ -29623,6 +29623,13 @@ a.ui.card:hover,
   position: relative;
   float: right;
   z-index: 99;
+}
+
+.ui.styled.accordion .active.title,
+.ui.styled.accordion .accordion .active.title,
+.ui.styled.accordion .active.content,
+.ui.styled.accordion .accordion .active.content {
+  background-color: #fafafa;
 }
 
 /*******************************

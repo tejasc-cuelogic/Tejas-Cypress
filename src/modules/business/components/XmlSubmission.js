@@ -17,7 +17,7 @@ const XmlSubmission = observer((props) => {
                 <Table.Row>
                   <Table.Cell>
                     <Link to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}>
-                      {`XML Submission | ${xmlSubmission.created}`}
+                      {'XML Submission'}
                     </Link>
                   </Table.Cell>
                   <Table.Cell>{`${xmlSubmission.created}`}</Table.Cell>
@@ -31,7 +31,7 @@ const XmlSubmission = observer((props) => {
   }
   return (
     <Accordion.Content active={props.active}>
-      <Card color="red" className="flexible">
+      <Card className="flexible">
         <Card.Content>
           No XML Submissions are present for this filling,{' '}
           <Link to={xmlUrl}>Click here to create new.</Link>
