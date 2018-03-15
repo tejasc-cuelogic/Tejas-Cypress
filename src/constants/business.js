@@ -28,6 +28,21 @@ export const DOCFILE_TYPES = {
   'Resolution - Borrowing Authority (Form).docx': false,
 };
 
+export const TEMPLATE_VARIABLES = {
+  name_of_business: '',
+  shorthand_name: '',
+  investment_multiple: '',
+  revenue_share_percentage: '',
+  minimum_offering_amount: '',
+  offering_amount: '',
+  maturity_date: '',
+  interest_rate: '',
+  offer_date: '',
+  state_of_formation: '',
+  type_of_business: '',
+  termination_date: '',
+};
+
 export const FILER_INFORMATION = {
   filerCik: {
     value: '',

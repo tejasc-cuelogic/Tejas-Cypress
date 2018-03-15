@@ -28,6 +28,7 @@ const FillingsList = observer((props) => {
                 xmlSubmissions={filing.submissions || []}
                 filingId={filing.filingId}
                 active={filing.filingId === props.openAccordion}
+                businessId={props.businessId}
               />
             </div>
           ))
@@ -38,7 +39,7 @@ const FillingsList = observer((props) => {
   return (
     <Accordion>
       <p>No filling is present for this business,
-        <Link to="/app/business/edgar">
+        <Link to={`/app/business/${props.businessId}/edgar`}>
           click here to create new
         </Link>
       </p>
