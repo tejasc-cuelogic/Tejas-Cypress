@@ -191,6 +191,29 @@ export class Business {
       });
   }
 
+  /**
+   *
+   */
+  deleteBusiness = (businessId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Deleting business');
+    const payload = {
+      query: 'mutation deleteBusiness($id: String!){ deleteBusiness(id:$id){ id } }',
+      variables: {
+        id: businessId,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
+  }
+
   // Private Methods starts here
   /**
   * @desc Converts store data in the format that should be sent in an API
@@ -269,11 +292,6 @@ export class Business {
     hash.name = { value: details.name, error: undefined };
     businessStore.setBusiness(hash);
   }
-
-  setTemplateData = (data) => {
-    console.log(data);
-  }
-
   // Private Methods ends here
 }
 

@@ -13,7 +13,13 @@ export default class BusinessDetails extends React.Component {
   componentWillMount() {
     businessActions.getBusinessDetails(this.props.match.params.businessId);
   }
+
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
+
+  handleBusinessDelete = (e, { businessid }) => {
+    businessActions.deleteBusiness(businessid)
+      .then(() => this.props.history.push('/app/business'));
+  }
 
   render() {
     const { business } = this.props.businessStore;
@@ -26,7 +32,13 @@ export default class BusinessDetails extends React.Component {
                 <h3>
                   <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
                   {business.name.value} <Link to="/app/business"><Icon name="write" size="small" /></Link>
-                  <Button floated="right"><Icon name="trash" /></Button>
+                  <Button
+                    floated="right"
+                    businessid={this.props.match.params.businessId}
+                    onClick={this.handleBusinessDelete}
+                  >
+                    <Icon name="trash" />
+                  </Button>
                 </h3>
               </Grid.Column>
             </Grid.Row>
