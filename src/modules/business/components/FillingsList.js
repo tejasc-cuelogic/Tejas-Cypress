@@ -23,7 +23,6 @@ const FillingsList = observer((props) => {
                 <Link to={`/app/business/${props.businessId}/edgar/${filing.filingId}`} as={Button}>
                   <Icon name="eye" />
                 </Link>
-                <Button><Icon name="trash" /></Button>
               </Accordion.Title>
               <XmlSubmission
                 xmlSubmissions={filing.submissions || []}

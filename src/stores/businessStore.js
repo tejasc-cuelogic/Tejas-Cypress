@@ -51,36 +51,7 @@ export class BusinessStore {
       error: undefined,
     },
     desc: '',
-    filings: [
-      {
-        id: '1234556',
-        created: new Date().toString(),
-        xmlSubmissions: [
-          {
-            id: 'asd3r5rg',
-            created: new Date().toString(),
-          },
-          {
-            id: 'adf982jkr',
-            created: new Date().toString(),
-          },
-        ],
-      },
-      {
-        id: '654321',
-        created: new Date().toString(),
-        xmlSubmissions: [
-          {
-            id: 'asde42sdv',
-            created: new Date().toString(),
-          },
-          {
-            id: 'asd135rgs',
-            created: new Date().toString(),
-          },
-        ],
-      },
-    ],
+    filings: [],
   };
 
   @observable
