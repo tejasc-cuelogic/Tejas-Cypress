@@ -4,7 +4,7 @@ import shortid from 'shortid';
 
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
-import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE } from './../constants/business';
+import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE, FILES } from './../constants/business';
 import ApiService from '../services/api';
 
 export class Business {
@@ -26,11 +26,9 @@ export class Business {
   * @desc Makes an API Call to server to generate Docx file from data entered
   */
   generateDocxFile = () => {
-    const { templateVariables, documentList } = businessStore;
+    const { templateVariables } = businessStore;
     uiStore.toggleSubmitButton();
-    const files = [];
-    _.map(documentList, document => files.push(document.name));
-    ApiService.post(EDGAR_URL, { templateVariables, documentList: files })
+    ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES })
       .then((data) => {
         uiStore.setSuccess(`Successfully created docx files with id ${data.body.requestId}`);
       })
@@ -449,7 +447,6 @@ setXmlPayload = (payload) => {
       businessStore.setFilingId(payload.filingId);
       businessStore.setOfferingUrl(payload.offeringUrl);
       // _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name));
-      businessStore.setDocumentList(zz)
       _.map(payload.filerInformation, (value, key) => businessStore.setFilerInfo(key, (value || '')));
       _.map(payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
@@ -477,6 +474,7 @@ setXmlPayload = (payload) => {
         const id = this.addPersonalSignature();
         _.map(signature, (value, key) => businessStore.changePersonalSignature(key, id, value));
       })
+      _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
       console.log(payload);
     }
   }

@@ -54,7 +54,7 @@ export default class XmlForm extends React.Component {
             <Form.Group widths="equal">
               <Form.Input
                 label="Website URL"
-                defaultValue={this.props.businessStore.offeringUrl}
+                value={this.props.businessStore.offeringUrl}
                 onChange={this.handleUrlChange}
                 className="column"
                 width={8}
