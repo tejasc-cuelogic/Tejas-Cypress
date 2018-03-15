@@ -1167,6 +1167,10 @@
   background-color: transparent;
   border-color: transparent transparent #828282;
 }
+.ui.form .error:not(.field) {
+  font-size: 0.85714286rem;
+  color: #9F3A38;
+}
 .page-header-section .ui.input.inverted .icon {
   color: #FFFFFF;
   opacity: 1;
