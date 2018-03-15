@@ -124,6 +124,25 @@ export class Business {
   }
 
   /**
+   * @desc To check if business name is already exist
+   */
+  businessExistsOnEdit = () => {
+    uiStore.setProgress();
+    const payload = {
+      query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
+      variables: {
+        name: businessStore.business.name.value,
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => businessStore.setIsBusinessExist(data.body.data.businessExists))
+      .catch(err => uiStore.setErrors(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  /**
    * @desc This method gets the details of business and store it to store.
    * @param $businessId - Id of business for which data will fetched
   */
@@ -154,6 +173,7 @@ export class Business {
       variables: {
         newBusiness: {
           name: businessStore.newOfferingInformation.businessName.value,
+          description: businessStore.newOfferingInformation.businessDescription.value,
         },
       },
     };
@@ -165,10 +185,43 @@ export class Business {
       });
   }
 
+  /**
+   * @desc To add newly created business in the list
+   */
   addToBusinessList = (data) => {
     const oldBusinessList = [...businessStore.businessList];
     oldBusinessList.push(data);
     businessStore.setBusinessList(oldBusinessList);
+  }
+
+  editBusinessName = () => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Updating Business Name');
+    const payload = {
+      query: 'mutation updateBusiness($id: String!, $updateBusiness: CreateBusinessInput){updateBusiness(id:$id, business: $updateBusiness){id name description}}',
+      variables: {
+        id: businessStore.business.id,
+        updateBusiness: {
+          name: businessStore.business.name.value,
+          description: businessStore.business.desc.value,
+        },
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(uiStore.setSuccess('New business has been created.'), businessStore.setEditBusinessName(false))
+      .catch(err => uiStore.setErrors(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  validateBusinessNameOnEdit = (field) => {
+    this.businessExistsOnEdit();
+    if (businessStore.isBusinessExist) {
+      businessStore.setBusinessNameErrorOnEdit(field, 'Business Name is already exist.');
+    } else {
+      businessStore.setBusinessNameErrorOnEdit(field, '');
+    }
   }
 
   /**
@@ -266,7 +319,8 @@ export class Business {
 
   setBusinessDetails = (details) => {
     const hash = { ...details };
-    hash.name = { value: details.name, error: undefined };
+    hash.name = { value: details.name, error: undefined, key: 'name' };
+    hash.desc = { value: details.description, error: undefined, key: 'desc' };
     businessStore.setBusiness(hash);
   }
 
