@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Icon, Grid } from 'semantic-ui-react';
+import { Icon, Grid, Button } from 'semantic-ui-react';
 
 import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
@@ -13,7 +13,13 @@ export default class BusinessDetails extends React.Component {
   componentWillMount() {
     businessActions.getBusinessDetails(this.props.match.params.businessId);
   }
+
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
+
+  handleBusinessDelete = (e, { businessid }) => {
+    businessActions.deleteBusiness(businessid)
+      .then(() => this.props.history.push('/app/business'));
+  }
 
   render() {
     const { business } = this.props.businessStore;
@@ -27,8 +33,26 @@ export default class BusinessDetails extends React.Component {
                   <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
                   {business.name.value}
                   <div className="actions">
-                    <Link to="/app/business"><Icon name="write" size="small" /></Link>
-                    <Link to="" className="danger"><Icon name="trash" /></Link>
+                    {/* <Link to="/app/business"><Icon name="write" size="small" /></Link>
+                    <Link to="" className="danger"><Icon name="trash" /></Link> */}
+                    <Button
+                      icon
+                      circular
+                      inverted
+                      color="green"
+                    >
+                      <Icon name="write" />
+                    </Button>{' '}
+                    <Button
+                      icon
+                      circular
+                      inverted
+                      color="red"
+                      businessid={this.props.match.params.businessId}
+                      onClick={this.handleBusinessDelete}
+                    >
+                      <Icon name="trash" />
+                    </Button>
                   </div>
                 </h3>
               </Grid.Column>
