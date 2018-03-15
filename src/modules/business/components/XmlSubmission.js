@@ -33,7 +33,7 @@ const XmlSubmission = observer((props) => {
     <Accordion.Content active={props.active}>
       {/* <Card className="flexible">
         <Card.Content> */}
-      <p>No XML Submissions are present for this filling,{' '}
+      <p>No XML Submissions are present for this filing,{' '}
         <Link to={xmlUrl}>Click here to create new.</Link>
       </p>
       {/* </Card.Content>

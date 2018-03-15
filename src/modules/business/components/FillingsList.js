@@ -44,7 +44,7 @@ const FillingsList = observer((props) => {
     <Card.Group centered>
       <Card className="flexible">
         <Card.Content>
-          No filling is present for this business, <Link to={`/app/business/${props.businessId}/edgar`}>click here to create new</Link>
+          No filing is present for this business, <Link to={`/app/business/${props.businessId}/edgar`}>click here to create new</Link>
         </Card.Content>
       </Card>
     </Card.Group>
