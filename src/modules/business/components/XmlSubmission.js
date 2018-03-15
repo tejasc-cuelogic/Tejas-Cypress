@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Accordion, Button, Icon } from 'semantic-ui-react';
+import { Accordion } from 'semantic-ui-react';
 import _ from 'lodash';
 
 const XmlSubmission = observer((props) => {
@@ -14,7 +14,6 @@ const XmlSubmission = observer((props) => {
               <Link to={`/app/business/xml/${xmlSubmission.xmlSubmissionId}`}>
                 {`XML Submission | ${xmlSubmission.created}`}
               </Link>
-              <Button xmlid={xmlSubmission.xmlSubmissionId}><Icon name="trash" /></Button>
             </p>
           ))
         }

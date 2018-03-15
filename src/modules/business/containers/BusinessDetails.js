@@ -26,7 +26,7 @@ export default class BusinessDetails extends React.Component {
                 <h3>
                   <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
                   {business.name.value}
-                  <div className="actions inline">
+                  <div className="actions">
                     <Link to="/app/business"><Icon name="write" size="small" /></Link>
                     <Link to="" className="danger"><Icon name="trash" /></Link>
                   </div>

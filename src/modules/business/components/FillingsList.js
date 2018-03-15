@@ -9,7 +9,7 @@ import XmlSubmission from './XmlSubmission';
 const FillingsList = observer((props) => {
   if (!_.isEmpty(props.filings)) {
     return (
-      <Accordion fluid styled>
+      <Accordion fluid styled className="filing-list">
         {
           props.filings.map(filing => (
             <div key={`${filing.created}_${filing.filingId}`}>
@@ -20,10 +20,11 @@ const FillingsList = observer((props) => {
               >
                 <Icon name="dropdown" />
                 {`Filing | ${filing.created} | `}
-                <Link to={`/app/business/${props.businessId}/edgar/${filing.filingId}`} as={Button}>
-                  <Icon name="eye" />
-                </Link>
-                <Button><Icon name="trash" /></Button>
+                <div className="actions">
+                  <Link to={`/app/business/${props.businessId}/edgar/${filing.filingId}`} as={Button}>
+                    <Icon name="eye" />
+                  </Link>
+                </div>
               </Accordion.Title>
               <XmlSubmission
                 xmlSubmissions={filing.submissions || []}
