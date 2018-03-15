@@ -5346,24 +5346,24 @@ div.login-form ul.error-messages {
   vertical-align: middle;
 }
 
-.page-header-section .actions a {
+.actions {
+  font-size: 1.14285714rem;
+}
+
+.actions a {
   color: #7d7d7d;
 }
 
-.page-header-section .actions a:hover {
+.actions a:hover {
   color: #a3a3a3;
 }
 
-.page-header-section .actions a.danger {
+.actions a.danger {
   color: #EB5757;
 }
 
-.page-header-section .actions a.danger:hover {
+.actions a.danger:hover {
   color: #db1a1a;
-}
-
-.actions {
-  font-size: 1.14285714rem;
 }
 
 .notification-panel {

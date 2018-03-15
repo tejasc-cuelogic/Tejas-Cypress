@@ -10,11 +10,11 @@ const XmlSubmission = observer((props) => {
       <Accordion.Content active={props.active} key={props.filingId}>
         {
           props.xmlSubmissions.map(xmlSubmission => (
-            <div>
+            <p>
               <Link to={`/app/business/xml/${xmlSubmission.xmlSubmissionId}`}>
                 {`XML Submission | ${xmlSubmission.created}`}
               </Link>
-            </div>
+            </p>
           ))
         }
       </Accordion.Content>
