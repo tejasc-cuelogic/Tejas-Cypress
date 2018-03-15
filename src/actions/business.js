@@ -192,6 +192,30 @@ export class Business {
   }
 
   /**
+   * @desc This method fetches XML
+   */
+  fetchXmlDetails =({ filingId, xmlId }) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching XML Data');
+    const payload = {
+      query: 'query fetchFilingSubmission($filingId: ID!, $xmlSubmissionId: ID!)' +
+        '{businessFilingSubmission(filingId:$filingId, xmlSubmissionId:$xmlSubmissionId){ ' +
+        'payload } }',
+      variables: {
+        filingId,
+        xmlSubmissionId: xmlId,
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => console.log(data))
+      .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
+  /**
    *
    */
   deleteBusiness = (businessId) => {
