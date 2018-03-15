@@ -17,7 +17,9 @@ const FillingsList = observer(props => (
           >
             <Icon name="dropdown" />
             {filing.filingId} | {filing.created} |
-            <Link to={`/app/business/edgar/${filing.filingId}`} as={Button}><Icon name="eye" /></Link>
+            <Link to={`/app/business/edgar/${filing.filingId}`} as={Button}>
+              <Icon name="eye" />
+            </Link>
             <Button><Icon name="trash" /></Button>
           </Accordion.Title>
           <XmlSubmission
