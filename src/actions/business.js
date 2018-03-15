@@ -200,9 +200,7 @@ export class Business {
     const payload = {
       query: 'mutation deleteBusiness($id: String!){ deleteBusiness(id:$id){ id } }',
       variables: {
-        id: {
-          id: businessId,
-        },
+        id: businessId,
       },
     };
     return new Promise((res, rej) => {
