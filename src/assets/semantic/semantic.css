@@ -5288,24 +5288,31 @@ div.login-form ul.error-messages {
   background-color: #424242;
 }
 
+.page-header-section h1,
 .page-header-section h3 {
   color: #FFFFFF;
-  font-size: 2.5em;
+  font-size: 2.14285714rem;
 }
 
+.page-header-section h1 a.back-link,
 .page-header-section h3 a.back-link {
   position: absolute;
   left: -35px;
   color: #A9D943;
 }
 
+.page-header-section h1 a.back-link > i.icon,
 .page-header-section h3 a.back-link > i.icon,
+.page-header-section h1 a.back-link i.icons,
 .page-header-section h3 a.back-link i.icons {
   font-size: 0.8em;
 }
 
+.page-header-section h1 a.back-link:hover,
 .page-header-section h3 a.back-link:hover,
+.page-header-section h1 a.back-link:active,
 .page-header-section h3 a.back-link:active,
+.page-header-section h1 a.back-link:focus,
 .page-header-section h3 a.back-link:focus {
   color: #97ca29;
 }
@@ -27547,6 +27554,19 @@ a.ui.card:hover,
 
 .form-card .grid.divided .column:last-child {
   padding-right: 1rem;
+}
+
+.ui.card.flexible {
+  width: auto;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  margin: 0;
+}
+
+.ui.styled.accordion .accordion .content .card > .content,
+.ui.styled.accordion .content .card > .content {
+  padding: 1em 1em;
 }
 
 /*******************************

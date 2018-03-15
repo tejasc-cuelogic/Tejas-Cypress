@@ -200,21 +200,28 @@ div.login-form ul.error-messages {
   min-height: 132px;
   background-color: #424242;
 }
+.page-header-section h1,
 .page-header-section h3 {
   color: #FFFFFF;
-  font-size: 2.5em;
+  font-size: 2.14285714rem;
 }
+.page-header-section h1 a.back-link,
 .page-header-section h3 a.back-link {
   position: absolute;
   left: -35px;
   color: #A9D943;
 }
+.page-header-section h1 a.back-link > i.icon,
 .page-header-section h3 a.back-link > i.icon,
+.page-header-section h1 a.back-link i.icons,
 .page-header-section h3 a.back-link i.icons {
   font-size: 0.8em;
 }
+.page-header-section h1 a.back-link:hover,
 .page-header-section h3 a.back-link:hover,
+.page-header-section h1 a.back-link:active,
 .page-header-section h3 a.back-link:active,
+.page-header-section h1 a.back-link:focus,
 .page-header-section h3 a.back-link:focus {
   color: #97ca29;
 }

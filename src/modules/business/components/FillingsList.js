@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Accordion, Icon, Button } from 'semantic-ui-react';
+import { Accordion, Icon, Button, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 
@@ -38,13 +38,11 @@ const FillingsList = observer((props) => {
     );
   }
   return (
-    <Accordion>
-      <p>No filling is present for this business,
-        <Link to="/app/business/edgar">
-          click here to create new
-        </Link>
-      </p>
-    </Accordion>
+    <Card className="flexible">
+      <Card.Content>
+        No filling is present for this business, <Link to="/app/business/edgar">click here to create new</Link>
+      </Card.Content>
+    </Card>
   );
 });
 

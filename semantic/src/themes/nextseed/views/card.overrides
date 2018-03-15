@@ -29,3 +29,16 @@
         }
     }
 }
+
+.ui.card.flexible{
+    width:auto;
+    display:inline-flex;
+    margin:0;
+}
+.ui.styled.accordion{
+    .accordion .content, .content{
+        .card > .content{
+            padding:1em 1em;
+        }
+    }
+}

@@ -33,7 +33,7 @@ export default class NewBusinessForm extends React.Component {
     const { newOfferingInformation } = this.props.businessStore;
     return (
       <div>
-        <Button onClick={this.handleOpenModal} color="green" floated="right">New Offering</Button>
+        <Button onClick={this.handleOpenModal} color="green" className="rounded" floated="right">New Offering</Button>
         <Modal size="small" open={this.props.uiStore.modalStatus} closeIcon onOpen={this.handleOpenModal}>
           <Modal.Header>Add New Offering</Modal.Header>
           <Modal.Content>

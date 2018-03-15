@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Accordion, Table } from 'semantic-ui-react';
+import { Accordion, Table, Card } from 'semantic-ui-react';
 import _ from 'lodash';
 
 const XmlSubmission = observer((props) => {
@@ -29,15 +29,11 @@ const XmlSubmission = observer((props) => {
   }
   return (
     <Accordion.Content active={props.active}>
-      <Table basic celled collapsing>
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>
-              No XML Submissions are present for this filling, <Link to="/app/business/xml">Click here to create new.</Link>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
+      <Card color="red" className="flexible">
+        <Card.Content>
+          No XML Submissions are present for this filling, <Link to="/app/business/xml">Click here to create new.</Link>
+        </Card.Content>
+      </Card>
       {/* <p>No XML Submissions are present for this filling,
         <Link to="/app/business/xml">
           Click here to create new.
