@@ -15,6 +15,7 @@ export class UiStore {
   @observable success = undefined;
   @observable redirectURL = undefined;
   @observable dropdownLoader = false;
+  @observable confirmBox = false;
   @observable openAccordion = '';
 
   @action
@@ -87,6 +88,11 @@ export class UiStore {
   @action
   toggleDropdownLoader() {
     this.dropdownLoader = !this.dropdownLoader;
+  }
+
+  @action
+  toggleConfirmBox(state) {
+    this.confirmBox = state;
   }
 
   @action

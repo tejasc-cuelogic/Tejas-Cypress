@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Icon, Grid, Button } from 'semantic-ui-react';
+import { Icon, Grid, Button, Confirm } from 'semantic-ui-react';
 
 import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
@@ -12,14 +12,20 @@ import businessActions from '../../../actions/business';
 export default class BusinessDetails extends React.Component {
   componentWillMount() {
     businessActions.getBusinessDetails(this.props.match.params.businessId);
+    this.props.uiStore.toggleConfirmBox(false);
   }
 
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
 
-  handleBusinessDelete = (e, { businessid }) => {
+  handleBusinessDelete = () => {
+    const businessid = this.props.match.params.businessId;
     businessActions.deleteBusiness(businessid)
       .then(() => this.props.history.push('/app/business'));
   }
+
+  handleDelCancel = () => this.props.uiStore.toggleConfirmBox(false);
+
+  confirmDelete = () => this.props.uiStore.toggleConfirmBox(true);
 
   render() {
     const { business } = this.props.businessStore;
@@ -49,10 +55,16 @@ export default class BusinessDetails extends React.Component {
                       inverted
                       color="red"
                       businessid={this.props.match.params.businessId}
-                      onClick={this.handleBusinessDelete}
+                      onClick={this.confirmDelete}
                     >
                       <Icon name="trash" />
                     </Button>
+                    <Confirm
+                      content="Are you sure you want to delete business and its associated data?"
+                      open={this.props.uiStore.confirmBox}
+                      onCancel={this.handleDelCancel}
+                      onConfirm={this.handleBusinessDelete}
+                    />
                   </div>
                 </h3>
               </Grid.Column>
