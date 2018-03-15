@@ -131,8 +131,8 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Getting business data');
     const payload = {
-      query: `query getBusiness { business(id: "${businessId}"){` +
-        ' id name description created filings{ filingId businessId created} } }',
+      query: `query getBusiness { business(id: "${businessId}") { id name description created` +
+        ' filings { filingId businessId created submissions { xmlSubmissionId } } } }',
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setBusinessDetails(data.body.data.business))

@@ -40,22 +40,6 @@ export default class BusinessDetails extends React.Component {
           />
         </div>
       </div>
-
-      // <div>
-      //   <Link to="/app/business">
-      //     <Icon name="arrow left" size="large" />
-      //   </Link>
-      //   <h1>
-      //     {business.name.value} <Icon name="write" size="small" />
-      //     <Button><Icon name="trash" /></Button>
-      //   </h1>
-      //   <p>{business.desc}</p>
-      //   <FillingsList
-      //     filings={business.filings}
-      //     handleAccordionClick={this.handleAccordionTitleClick}
-      //     openAccordion={this.props.uiStore.openAccordion}
-      //   />
-      // </div>
     );
   }
 }
