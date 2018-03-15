@@ -143,6 +143,24 @@ export class Business {
       });
   }
 
+  /**
+   * @desc This method fetches filing details from id provided for business,
+   *       and stores data in store.
+  */
+  // fetchEdgarDetails = (businessId, filingId) => {
+  //   uiStore.setProgress();
+  //   uiStore.setLoaderMessage('Fetching Edgar data');
+  //   const payload = {
+  //     query: ``,
+  //   };
+  //   ApiService.post(GRAPHQL, payload)
+  //     .then(data => console.log(data))
+  //     .catch(err => console.log(err))
+  //     .finally(() => {
+
+  //     });
+  // }
+
   // Private Methods starts here
   /**
   * @desc Converts store data in the format that should be sent in an API

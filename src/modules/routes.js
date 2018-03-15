@@ -103,17 +103,17 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   {
-    path: '/app/business/edgar/:fillingId',
+    path: '/app/business/:businessId/edgar/:filingId',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/edgar',
+    path: '/app/business/:businessId/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/xml',
+    path: '/app/business/:businessId/xml',
     component: XmlForm,
     auth: AdminAuthorization,
   },

@@ -20,13 +20,14 @@ const FillingsList = observer((props) => {
               >
                 <Icon name="dropdown" />
                 {`Filing | ${filing.created} | `}
-                <Link to={`/app/business/edgar/${filing.filingId}`} as={Button}>
+                <Link to={`/app/business/${props.businessId}/edgar/${filing.filingId}`} as={Button}>
                   <Icon name="eye" />
                 </Link>
                 <Button><Icon name="trash" /></Button>
               </Accordion.Title>
               <XmlSubmission
                 xmlSubmissions={filing.submissions || []}
+                filingId={filing.filingId}
                 active={filing.filingId === props.openAccordion}
               />
             </div>
