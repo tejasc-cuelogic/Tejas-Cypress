@@ -85,6 +85,10 @@ export class BusinessStore {
     return (_.every(this.newOfferingInformation, data => !_.isEmpty(data.value)));
   }
 
+  @computed get canSubmitEditBusinessForm() {
+    return (this.business.name.value !== '' && this.business.desc.value !== '');
+  }
+
   @computed get getSummary() {
     return this.businessList.length || 0;
   }

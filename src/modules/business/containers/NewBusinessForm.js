@@ -111,12 +111,28 @@ export default class NewBusinessForm extends React.Component {
             }
           </Modal.Content>
           <Modal.Actions>
+            { editBusinessMode === false &&
             <Button
               color="green"
-              onClick={editBusinessMode === false ? this.handleSubmitForm : this.handleEditBusiness}
+              disabled={
+                !this.props.businessStore.canSubmitNewOfferingForm ||
+                  this.props.uiStore.submitButtonDisabled
+              }
+              onClick={this.handleSubmitForm}
             >
               Submit
-            </Button>
+            </Button>}
+            { editBusinessMode === true &&
+            <Button
+              color="green"
+              disabled={
+                !this.props.businessStore.canSubmitEditBusinessForm ||
+                  this.props.uiStore.submitButtonDisabled
+              }
+              onClick={this.handleEditBusiness}
+            >
+              Submit
+            </Button>}
           </Modal.Actions>
         </Modal>
       </div>
