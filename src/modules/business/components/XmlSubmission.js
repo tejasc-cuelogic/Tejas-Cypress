@@ -16,10 +16,8 @@ const XmlSubmission = observer((props) => {
               props.xmlSubmissions.map(xmlSubmission => (
                 <Table.Row>
                   <Table.Cell>
-                    <Link
-                      to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}
-                    >
-                      {`XML Submission | ${xmlSubmission.created}`}
+                    <Link to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}>
+                      {'XML Submission'}
                     </Link>
                   </Table.Cell>
                   <Table.Cell>{`${xmlSubmission.created}`}</Table.Cell>
@@ -33,16 +31,13 @@ const XmlSubmission = observer((props) => {
   }
   return (
     <Accordion.Content active={props.active}>
-      <Table basic celled collapsing>
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>
-              No XML Submissions are present for this filing,
-              <Link to={xmlUrl}>Click here to create new.</Link>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
+      {/* <Card className="flexible">
+        <Card.Content> */}
+      <p>No XML Submissions are present for this filling,{' '}
+        <Link to={xmlUrl}>Click here to create new.</Link>
+      </p>
+      {/* </Card.Content>
+    </Card> */}
     </Accordion.Content>
   );
 });

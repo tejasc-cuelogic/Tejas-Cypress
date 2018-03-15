@@ -5288,24 +5288,31 @@ div.login-form ul.error-messages {
   background-color: #424242;
 }
 
+.page-header-section h1,
 .page-header-section h3 {
   color: #FFFFFF;
-  font-size: 2.5em;
+  font-size: 2.14285714rem;
 }
 
+.page-header-section h1 a.back-link,
 .page-header-section h3 a.back-link {
   position: absolute;
   left: -35px;
   color: #A9D943;
 }
 
+.page-header-section h1 a.back-link > i.icon,
 .page-header-section h3 a.back-link > i.icon,
+.page-header-section h1 a.back-link i.icons,
 .page-header-section h3 a.back-link i.icons {
   font-size: 0.8em;
 }
 
+.page-header-section h1 a.back-link:hover,
 .page-header-section h3 a.back-link:hover,
+.page-header-section h1 a.back-link:active,
 .page-header-section h3 a.back-link:active,
+.page-header-section h1 a.back-link:focus,
 .page-header-section h3 a.back-link:focus {
   color: #97ca29;
 }
@@ -26097,7 +26104,7 @@ Floated Menu / Item
 }
 
 .ui.table a {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #303030;
   text-decoration: none;
 }
@@ -27547,6 +27554,19 @@ a.ui.card:hover,
 
 .form-card .grid.divided .column:last-child {
   padding-right: 1rem;
+}
+
+.ui.card.flexible {
+  width: auto;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  margin: 0;
+}
+
+.ui.styled.accordion .accordion .content .card > .content,
+.ui.styled.accordion .content .card > .content {
+  padding: 1em 1em;
 }
 
 /*******************************
@@ -29599,7 +29619,37 @@ a.ui.card:hover,
   transform: rotate(180deg);
 }
 
-.ui.accordion.filing-list .actions {
+.ui.styled.accordion.filing-list,
+.ui.styled.accordion .accordion.filing-list {
+  background: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.ui.styled.accordion.filing-list > div,
+.ui.styled.accordion .accordion.filing-list > div {
+  margin-bottom: 1rem;
+  background-color: #FFFFFF;
+}
+
+.ui.styled.accordion.filing-list .title,
+.ui.styled.accordion .accordion.filing-list .title {
+  border: rgba(34, 36, 38, 0.15) 1px solid;
+}
+
+.ui.styled.accordion.filing-list .content,
+.ui.styled.accordion .accordion.filing-list .content {
+  padding: 1em;
+}
+
+.ui.styled.accordion.filing-list .content.active,
+.ui.styled.accordion .accordion.filing-list .content.active {
+  border: rgba(34, 36, 38, 0.15) 1px solid;
+  border-top: none;
+}
+
+.ui.styled.accordion.filing-list .actions,
+.ui.styled.accordion .accordion.filing-list .actions {
   position: relative;
   float: right;
   z-index: 99;

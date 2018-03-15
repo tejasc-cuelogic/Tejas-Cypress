@@ -60,10 +60,33 @@
 		}
 	}
 }
-.ui.accordion.filing-list{
-	.actions{
-		position:relative;
-		float:right;
-		z-index:99;
+.ui.styled.accordion, .ui.styled.accordion .accordion{
+	&.filing-list{
+		background:none;
+		box-shadow:none;
+		> div{
+			margin-bottom:1rem;
+			background-color:@white;
+		}
+		.title{
+			border:@borderColor 1px solid;
+		}
+		.content{
+			padding:1em;
+			&.active{
+				border:@borderColor 1px solid;
+				border-top:none;
+			}
+		}
+		.actions{
+			position:relative;
+			float:right;
+			z-index:99;
+		}
 	}
 }
+// .ui.styled.accordion, .ui.styled.accordion .accordion{
+// 	.active.title, .active.content{
+// 		background-color:@lighten-bg-color;
+// 	}
+// }

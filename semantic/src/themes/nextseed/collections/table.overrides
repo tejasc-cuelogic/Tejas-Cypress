@@ -61,7 +61,7 @@
         }
     }
     a{
-        font-family:@boldFont;
+        font-family:@pageFont;
         color:@primary-text;
         text-decoration:none;
         &:hover{

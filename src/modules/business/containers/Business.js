@@ -23,7 +23,7 @@ class Business extends Component {
           <Grid stackable>
             <Grid.Row>
               <Grid.Column width={4}>
-                <h3>Manage Businesses</h3>
+                <h1>Manage Businesses</h1>
               </Grid.Column>
               <Grid.Column width={6}>
                 <Form inverted>

@@ -35,12 +35,10 @@ export default class BusinessDetails extends React.Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <h3>
+                <h1>
                   <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
                   {business.name.value}
                   <div className="actions">
-                    {/* <Link to="/app/business"><Icon name="write" size="small" /></Link>
-                    <Link to="" className="danger"><Icon name="trash" /></Link> */}
                     <Button
                       icon
                       circular
@@ -66,7 +64,7 @@ export default class BusinessDetails extends React.Component {
                       onConfirm={this.handleBusinessDelete}
                     />
                   </div>
-                </h3>
+                </h1>
               </Grid.Column>
             </Grid.Row>
           </Grid>

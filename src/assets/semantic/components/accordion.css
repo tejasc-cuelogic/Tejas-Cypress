@@ -275,7 +275,32 @@
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
 }
-.ui.accordion.filing-list .actions {
+.ui.styled.accordion.filing-list,
+.ui.styled.accordion .accordion.filing-list {
+  background: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.ui.styled.accordion.filing-list > div,
+.ui.styled.accordion .accordion.filing-list > div {
+  margin-bottom: 1rem;
+  background-color: #FFFFFF;
+}
+.ui.styled.accordion.filing-list .title,
+.ui.styled.accordion .accordion.filing-list .title {
+  border: rgba(34, 36, 38, 0.15) 1px solid;
+}
+.ui.styled.accordion.filing-list .content,
+.ui.styled.accordion .accordion.filing-list .content {
+  padding: 1em;
+}
+.ui.styled.accordion.filing-list .content.active,
+.ui.styled.accordion .accordion.filing-list .content.active {
+  border: rgba(34, 36, 38, 0.15) 1px solid;
+  border-top: none;
+}
+.ui.styled.accordion.filing-list .actions,
+.ui.styled.accordion .accordion.filing-list .actions {
   position: relative;
   float: right;
   z-index: 99;
