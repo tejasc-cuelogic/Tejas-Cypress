@@ -10,6 +10,7 @@ import {
   ANNUAL_REPORT_REQUIREMENTS,
   SIGNATURE,
   NEW_OFFERING_INFORMATION,
+  TEMPLATE_VARIABLES,
 } from './../constants/business';
 
 export class BusinessStore {
@@ -22,20 +23,7 @@ export class BusinessStore {
   offeringUrl = '';
 
   @observable
-  templateVariables = {
-    name_of_business: '',
-    shorthand_name: '',
-    investment_multiple: '',
-    revenue_share_percentage: '',
-    minimum_offering_amount: '',
-    offering_amount: '',
-    maturity_date: '',
-    interest_rate: '',
-    offer_date: '',
-    state_of_formation: '',
-    type_of_business: '',
-    termination_date: '',
-  };
+  templateVariables = { ...TEMPLATE_VARIABLES };
 
   @observable
   businessList = [];
@@ -94,6 +82,11 @@ export class BusinessStore {
   @action
   setTemplateVariable(variable) {
     this.templateVariables = variable;
+  }
+
+  @action
+  resetTemplateVariables() {
+    this.templateVariables = { ...TEMPLATE_VARIABLES };
   }
 
   @action

@@ -290,6 +290,7 @@ export class Business {
   setBusinessDetails = (details) => {
     const hash = { ...details };
     hash.name = { value: details.name, error: undefined };
+    businessStore.setTemplateVariableByKey('name_of_business', details.name);
     businessStore.setBusiness(hash);
   }
   // Private Methods ends here
