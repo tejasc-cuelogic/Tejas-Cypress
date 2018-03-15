@@ -147,19 +147,21 @@ export class Business {
    * @desc This method fetches filing details from id provided for business,
    *       and stores data in store.
   */
-  // fetchEdgarDetails = (businessId, filingId) => {
-  //   uiStore.setProgress();
-  //   uiStore.setLoaderMessage('Fetching Edgar data');
-  //   const payload = {
-  //     query: ``,
-  //   };
-  //   ApiService.post(GRAPHQL, payload)
-  //     .then(data => console.log(data))
-  //     .catch(err => console.log(err))
-  //     .finally(() => {
-
-  //     });
-  // }
+  fetchEdgarDetails = (businessId, filingId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching Edgar data');
+    const payload = {
+      query: `query fetchFilingById { businessFiling(businessId: "${businessId}", ` +
+        `filingId: "${filingId}") { filingPayload } }`,
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
+      .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
 
   // Private Methods starts here
   /**
@@ -238,6 +240,10 @@ export class Business {
     const hash = { ...details };
     hash.name = { value: details.name, error: undefined };
     businessStore.setBusiness(hash);
+  }
+
+  setTemplateData = (data) => {
+    console.log(data);
   }
 
   // Private Methods ends here
