@@ -116,8 +116,13 @@ export class BusinessStore {
   }
 
   @action
-  setTemplateVariable(key, value) {
+  setTemplateVariableByKey(key, value) {
     this.templateVariables[key] = value;
+  }
+
+  @action
+  setTemplateVariable(variable) {
+    this.templateVariables = variable;
   }
 
   @action
