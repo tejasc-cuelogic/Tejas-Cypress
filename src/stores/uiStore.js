@@ -1,6 +1,8 @@
 import { action, observable } from 'mobx';
 
 export class UiStore {
+  @observable
+  modalStatus = false;
   appLoader = false;
   @observable layoutState = {
     leftPanel: false,
@@ -14,6 +16,11 @@ export class UiStore {
   @observable redirectURL = undefined;
   @observable dropdownLoader = false;
   @observable openAccordion = '';
+
+  @action
+  setModalStatus(status) {
+    this.modalStatus = status;
+  }
 
   @action
   setProgress(progress = true) {

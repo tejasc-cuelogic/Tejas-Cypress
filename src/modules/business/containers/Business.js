@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 
+import ListErrors from '../../../components/common/ListErrors';
+import SuccessMessage from '../../../components/common/SuccessMessage';
 import businessActions from '../../../actions/business';
 import BusinessList from '../components/BusinessList';
 import NewBusinessForm from './NewBusinessForm';
 
 @withRouter
-@inject('businessStore')
+@inject('businessStore', 'uiStore')
 @observer
 class Business extends Component {
   componentWillMount() {
@@ -19,6 +21,8 @@ class Business extends Component {
         <div className="column">
           <NewBusinessForm />
         </div>
+        <ListErrors errors={this.props.uiStore.errors} />
+        <SuccessMessage success={this.props.uiStore.success} />
         <div
           className="column nsContent"
           style={{
