@@ -107,6 +107,25 @@ export class Business {
       });
   }
 
+  /**
+   * @desc To check if business name is already exist
+   */
+  businessExists = () => {
+    uiStore.setProgress();
+    const payload = {
+      query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
+      variables: {
+        name: businessStore.newOfferingInformation.businessName.value,
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => this.setIsBusinessExist(data.body.data.businessExists))
+      .catch(err => uiStore.setErrors(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
   // Private Methods starts here
   /**
   * @desc Converts store data in the format that should be sent in an API
@@ -190,6 +209,15 @@ export class Business {
     });
     businessStore.setBusinessList(list);
   }
+
+  setIsBusinessExist = (value) => {
+    businessStore.setIsBusinessExist(value);
+  }
+
+  resetNewOfferingInfo = () => {
+    businessStore.resetNewOfferingInfo();
+  }
+
   // Private Methods ends here
 }
 

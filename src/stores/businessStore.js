@@ -9,6 +9,7 @@ import {
   OFFERING_INFORMATION,
   ANNUAL_REPORT_REQUIREMENTS,
   SIGNATURE,
+  NEW_OFFERING_INFORMATION,
 } from './../constants/business';
 
 export class BusinessStore {
@@ -40,6 +41,9 @@ export class BusinessStore {
   businessList = [];
 
   @observable
+  isBusinessExist = false;
+
+  @observable
   filerInformation = { ...FILER_INFORMATION }
 
   @observable
@@ -60,8 +64,15 @@ export class BusinessStore {
   @observable
   offeringList = [];
 
+  @observable
+  newOfferingInformation = { ...NEW_OFFERING_INFORMATION };
+
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
+  }
+
+  @computed get canSubmitNewOfferingForm() {
+    return (_.every(this.newOfferingInformation, data => !_.isEmpty(data.value)));
   }
 
   @action
@@ -179,6 +190,32 @@ export class BusinessStore {
   @action
   setBusinessList(list) {
     this.businessList = list;
+  }
+
+  @action
+  setNewOfferingInfo(field, value) {
+    this.newOfferingInformation[field].value = value;
+  }
+
+  @action
+  setNewOfferingError(field, error) {
+    this.newOfferingInformation[field].error = error;
+  }
+
+  @action
+  resetNewOfferingInfo() {
+    this.newOfferingInformation.businessName.value = '';
+    this.newOfferingInformation.businessName.error = undefined;
+    this.newOfferingInformation.businessDescription.value = '';
+    this.newOfferingInformation.businessDescription.error = undefined;
+  }
+
+  @action
+  setIsBusinessExist(value) {
+    this.isBusinessExist = value;
+    if (value === true) {
+      this.setNewOfferingError('businessName', 'Business Name is already exist.');
+    }
   }
 }
 

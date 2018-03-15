@@ -110,6 +110,18 @@ export class Validation {
     userStore.setError(field, errors && errors[field][0]);
   }
 
+  /**
+   * @desc Validates fields on new offering creation in business panel
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateNewOfferingInfoField = (field, value) => {
+    businessStore.setNewOfferingInfo(field, value);
+    const { errors } = validationService.validate(businessStore.newOfferingInformation[field]);
+    businessStore.setNewOfferingError(field, errors && errors[field][0]);
+  }
+
   // TODO: Validate create new user form on click of submit button from admin panel
 }
 

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link, withRouter } from 'react-router-dom';
-import { Button } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 
 import businessActions from '../../../actions/business';
 import BusinessList from '../components/BusinessList';
+import NewBusinessForm from './NewBusinessForm';
 
 @withRouter
 @inject('businessStore')
@@ -17,7 +17,7 @@ class Business extends Component {
     return (
       <div className="ui one column grid">
         <div className="column">
-          <Button color="green" as={Link} to="/app/business/new" floated="right">New Offering</Button>
+          <NewBusinessForm />
         </div>
         <div
           className="column nsContent"
