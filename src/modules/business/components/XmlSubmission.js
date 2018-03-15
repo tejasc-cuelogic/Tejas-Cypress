@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 const XmlSubmission = observer((props) => {
   const { businessId, filingId } = props;
+  const xmlUrl = `/app/business/${businessId}/filing/${filingId}/xml`;
   if (!_.isEmpty(props.xmlSubmissions)) {
     return (
       <Accordion.Content active={props.active} key={props.filingId}>
@@ -16,7 +17,7 @@ const XmlSubmission = observer((props) => {
                 <Table.Row>
                   <Table.Cell>
                     <Link
-                      to={`/app/business/${businessId}/filing/${filingId}/xml/${xmlSubmission.xmlSubmissionId}`}
+                      to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}
                     >
                       {`XML Submission | ${xmlSubmission.created}`}
                     </Link>
@@ -36,16 +37,12 @@ const XmlSubmission = observer((props) => {
         <Table.Body>
           <Table.Row>
             <Table.Cell>
-              No XML Submissions are present for this filling, <Link to="/app/business/xml">Click here to create new.</Link>
+              No XML Submissions are present for this filling,
+              <Link to={xmlUrl}>Click here to create new.</Link>
             </Table.Cell>
           </Table.Row>
         </Table.Body>
       </Table>
-      {/* <p>No XML Submissions are present for this filling,
-        <Link to="/app/business/xml">
-          Click here to create new.
-        </Link>
-      </p> */}
     </Accordion.Content>
   );
 });
