@@ -144,9 +144,37 @@ export class Business {
   }
 
   /**
+   * @desc To create a new business
+   */
+  createBusiness = () => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Creating New Business');
+    const payload = {
+      query: 'mutation createBusiness($newBusiness: CreateBusinessInput){createBusiness(newBusiness:$newBusiness){id name created}}',
+      variables: {
+        newBusiness: {
+          name: businessStore.newOfferingInformation.businessName.value,
+        },
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => this.addToBusinessList(data.body.data.createBusiness), uiStore.setSuccess('New business has been created.'), uiStore.setModalStatus(false))
+      .catch(err => uiStore.setErrors(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  addToBusinessList = (data) => {
+    const oldBusinessList = [...businessStore.businessList];
+    oldBusinessList.push(data);
+    businessStore.setBusinessList(oldBusinessList);
+  }
+
+  /**
    * @desc This method fetches filing details from id provided for business,
-   *       and stores data in store.
-  */
+   * and stores data in store.
+   */
   fetchEdgarDetails = (businessId, filingId) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching Edgar data');
