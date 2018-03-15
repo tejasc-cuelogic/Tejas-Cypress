@@ -16,9 +16,7 @@ const XmlSubmission = observer((props) => {
               props.xmlSubmissions.map(xmlSubmission => (
                 <Table.Row>
                   <Table.Cell>
-                    <Link
-                      to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}
-                    >
+                    <Link to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}>
                       {`XML Submission | ${xmlSubmission.created}`}
                     </Link>
                   </Table.Cell>
