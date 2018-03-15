@@ -37,6 +37,7 @@ export default class BusinessDetails extends React.Component {
             filings={business.filings}
             handleAccordionClick={this.handleAccordionTitleClick}
             openAccordion={this.props.uiStore.openAccordion}
+            businessId={this.props.match.params.businessId}
           />
         </div>
       </div>
