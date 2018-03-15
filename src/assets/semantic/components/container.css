@@ -243,6 +243,27 @@ div.login-form ul.error-messages {
   color: #999999;
   margin: 0.714285rem 0 0.5rem;
 }
+.page-header-section .actions {
+  font-size: 1.42857143rem;
+  margin-left: 1.42857143rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+.page-header-section .actions a {
+  color: #7d7d7d;
+}
+.page-header-section .actions a:hover {
+  color: #a3a3a3;
+}
+.page-header-section .actions a.danger {
+  color: #EB5757;
+}
+.page-header-section .actions a.danger:hover {
+  color: #db1a1a;
+}
+.actions {
+  font-size: 1.14285714rem;
+}
 .notification-panel {
   width: 330px;
   height: calc(100vh - 58px);

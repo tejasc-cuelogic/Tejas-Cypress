@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Icon, Button, Grid } from 'semantic-ui-react';
+import { Icon, Grid } from 'semantic-ui-react';
 
 import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
@@ -25,8 +25,11 @@ export default class BusinessDetails extends React.Component {
               <Grid.Column width={16}>
                 <h3>
                   <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
-                  {business.name.value} <Link to="/app/business"><Icon name="write" size="small" /></Link>
-                  <Button floated="right"><Icon name="trash" /></Button>
+                  {business.name.value}
+                  <div className="actions inline">
+                    <Link to="/app/business"><Icon name="write" size="small" /></Link>
+                    <Link to="" className="danger"><Icon name="trash" /></Link>
+                  </div>
                 </h3>
               </Grid.Column>
             </Grid.Row>
