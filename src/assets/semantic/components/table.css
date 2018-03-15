@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.2.14 - Table
+ * # Semantic UI 2.3.0 - Table
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -1206,7 +1206,7 @@
   color: #A9D943;
 }
 .ui.table a.action:hover {
-  color: #9ee110;
+  color: #81ad23;
   text-decoration: none;
 }
 .ui.table.statment-tables td > i.icon {
