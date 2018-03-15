@@ -110,6 +110,27 @@ div.login-form {
 			margin:0.714285rem 0 0.5rem;
 		}
 	}
+	.actions{
+		font-size:@20px;
+		margin-left:@20px;
+		display:inline-block;
+		vertical-align:middle;
+	}
+}
+.actions{
+	font-size:@16px;
+	a{
+		color:@inverse-secondary-text;
+		&:hover{
+			color:lighten(@inverse-secondary-text, 15%);
+		}
+		&.danger{
+			color:@highlight-primary;
+			&:hover{
+				color:darken(@highlight-primary, 15%);
+			}
+		}
+	}
 }
 
 //	Notification panel

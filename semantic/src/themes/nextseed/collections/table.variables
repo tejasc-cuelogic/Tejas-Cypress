@@ -28,14 +28,14 @@
 ---------------*/
 
 /* Table Row */
-@rowBorder: 0px solid @internalBorderColor;
+@rowBorder: 1px solid @internalBorderColor;
 
 /* Table Cell */
 @cellVerticalPadding: @relativeMini;
 @cellHorizontalPadding: @relativeMini;
 @cellVerticalAlign: inherit;
 @cellTextAlign: inherit;
-@cellBorder: 0px solid @internalBorderColor;
+@cellBorder: 1px solid @internalBorderColor;
 
 /* Table Header */
 @headerBorder: 0px solid @internalBorderColor;
