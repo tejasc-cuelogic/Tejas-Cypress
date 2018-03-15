@@ -131,8 +131,8 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Getting business data');
     const payload = {
-      query: `query getBusiness { business(id: "${businessId}"){` +
-        ' id name description created filings{ filingId businessId created} } }',
+      query: `query getBusiness { business(id: "${businessId}") { id name description created` +
+        ' filings { filingId businessId created submissions { xmlSubmissionId created } } } }',
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setBusinessDetails(data.body.data.business))
@@ -169,6 +169,26 @@ export class Business {
     const oldBusinessList = [...businessStore.businessList];
     oldBusinessList.push(data);
     businessStore.setBusinessList(oldBusinessList);
+  }
+
+  /**
+   * @desc This method fetches filing details from id provided for business,
+   * and stores data in store.
+   */
+  fetchEdgarDetails = (businessId, filingId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching Edgar data');
+    const payload = {
+      query: `query fetchFilingById { businessFiling(businessId: "${businessId}", ` +
+        `filingId: "${filingId}") { filingPayload } }`,
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
+      .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
   }
 
   // Private Methods starts here
@@ -248,6 +268,10 @@ export class Business {
     const hash = { ...details };
     hash.name = { value: details.name, error: undefined };
     businessStore.setBusiness(hash);
+  }
+
+  setTemplateData = (data) => {
+    console.log(data);
   }
 
   // Private Methods ends here

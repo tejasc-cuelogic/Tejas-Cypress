@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 
 const BusinessList = observer(props => (
-  <Table celled structured>
+  <Table striped>
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell>Business Name</Table.HeaderCell>

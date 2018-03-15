@@ -117,6 +117,11 @@
   border-top: none;
 }
 
+/* Repeated tbody */
+.ui.table tbody + tbody tr:first-child td {
+  border-top: 0px solid rgba(34, 36, 38, 0.1);
+}
+
 /* Table Cells */
 .ui.table td {
   padding: 0.78571429em 0.78571429em;
@@ -1179,9 +1184,23 @@
   display: block;
 }
 .ui.table a {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: #303030;
+  text-decoration: none;
+}
+.ui.table a:hover {
+  color: inherit;
+  text-decoration: underline;
+}
+.ui.table a.action {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 0.857142em;
+  font-size: 0.85714286rem;
   text-transform: uppercase;
+  color: #A9D943;
+}
+.ui.table a.action:hover {
+  color: #9ee110;
+  text-decoration: none;
 }
 
 

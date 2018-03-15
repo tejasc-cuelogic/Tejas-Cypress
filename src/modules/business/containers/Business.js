@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import { Grid } from 'semantic-ui-react';
 
 import ListErrors from '../../../components/common/ListErrors';
 import SuccessMessage from '../../../components/common/SuccessMessage';
@@ -17,25 +18,24 @@ class Business extends Component {
   }
   render() {
     return (
-      <div className="ui one column grid">
-        <div className="column">
-          <NewBusinessForm />
+      <div>
+        <div className="page-header-section webcontent-spacer">
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={8}>
+                <h3>Business</h3>
+              </Grid.Column>
+              <Grid.Column width={8}>
+                <NewBusinessForm />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </div>
         <ListErrors errors={this.props.uiStore.errors} />
         <SuccessMessage success={this.props.uiStore.success} />
-        <div
-          className="column nsContent"
-          style={{
-            fontSize: '30px',
-            color: '#666',
-            top: '25px',
-            textAlign: 'center',
-          }}
-        >
-          <BusinessList
-            businessList={this.props.businessStore.businessList}
-          />
-        </div>
+        <BusinessList
+          businessList={this.props.businessStore.businessList}
+        />
       </div>
     );
   }
