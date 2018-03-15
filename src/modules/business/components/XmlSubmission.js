@@ -5,6 +5,7 @@ import { Accordion, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 
 const XmlSubmission = observer((props) => {
+  const { businessId, filingId } = props;
   if (!_.isEmpty(props.xmlSubmissions)) {
     return (
       <Accordion.Content active={props.active} key={props.filingId}>
@@ -14,8 +15,10 @@ const XmlSubmission = observer((props) => {
               props.xmlSubmissions.map(xmlSubmission => (
                 <Table.Row>
                   <Table.Cell>
-                    <Link to={`/app/business/xml/${xmlSubmission.xmlSubmissionId}`}>
-                      {'XML Submission'}
+                    <Link
+                      to={`/app/business/${businessId}/filing/${filingId}/xml/${xmlSubmission.xmlSubmissionId}`}
+                    >
+                      {`XML Submission | ${xmlSubmission.created}`}
                     </Link>
                   </Table.Cell>
                   <Table.Cell>{`${xmlSubmission.created}`}</Table.Cell>

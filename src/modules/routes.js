@@ -113,7 +113,12 @@ export const privateRoutes = [
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/:businessId/xml',
+    path: '/app/business/:businessId/filing/:filingId/xml/:xmlId',
+    component: XmlForm,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/business/:businessId/filing/:filingId/xml',
     component: XmlForm,
     auth: AdminAuthorization,
   },
