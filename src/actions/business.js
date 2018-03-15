@@ -261,16 +261,19 @@ export class Business {
         filingId,
       },
     };
-    ApiService.post(GRAPHQL, payload)
-      .then((data) => {
-        businessStore.setFolderId(data.body.data.businessFiling.folderId);
-        this.fetchAttachedFiles(data.body.data.businessFiling.folderId);
-      })
-      .catch(err => console.log(err))
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then((data) => {
+          businessStore.setFolderId(data.body.data.businessFiling.folderId);
+          this.fetchAttachedFiles(data.body.data.businessFiling.folderId);
+          res(data);
+        })
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
   }
 
   /**
@@ -311,7 +314,7 @@ export class Business {
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setDocumentList(data.body.data.files))
-      .fetch(err => console.log(err))
+      .catch(err => (err))
       .finally(() => {
         uiStore.setProgress(false);
         uiStore.clearLoaderMessage();
@@ -445,6 +448,8 @@ setXmlPayload = (payload) => {
       businessStore.setBusinessId(payload.businessId);
       businessStore.setFilingId(payload.filingId);
       businessStore.setOfferingUrl(payload.offeringUrl);
+      // _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name));
+      businessStore.setDocumentList(zz)
       _.map(payload.filerInformation, (value, key) => businessStore.setFilerInfo(key, (value || '')));
       _.map(payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
@@ -472,7 +477,6 @@ setXmlPayload = (payload) => {
         const id = this.addPersonalSignature();
         _.map(signature, (value, key) => businessStore.changePersonalSignature(key, id, value));
       })
-      _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
       console.log(payload);
     }
   }

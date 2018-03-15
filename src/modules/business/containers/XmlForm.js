@@ -17,10 +17,12 @@ export default class XmlForm extends React.Component {
   componentWillMount() {
     this.props.businessStore.setBusinessId(this.props.match.params.businessId);
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
-    businessActions.getFiles(this.props.match.params);
-    if (this.props.match.params.xmlId) {
-      businessActions.fetchXmlDetails(this.props.match.params);
-    }
+    businessActions.getFiles(this.props.match.params)
+      .then(() => {
+        if (this.props.match.params.xmlId) {
+          businessActions.fetchXmlDetails(this.props.match.params);
+        }
+      });
   }
 
   handleUrlChange = (e, { value }) => {
