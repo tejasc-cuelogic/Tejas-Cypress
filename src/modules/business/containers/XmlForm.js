@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Divider, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Form, Divider, Button, Grid, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
@@ -30,35 +31,49 @@ export default class XmlForm extends React.Component {
 
   render() {
     return (
-      <div className="content-spacer">
-        <Form className="edgar-form">
-          <Form.Group widths="equal">
-            <Form.Input
-              label="Website URL"
-              defaultValue={this.props.businessStore.offeringUrl}
-              onChange={this.handleUrlChange}
-              className="column"
-              width={8}
-            />
-          </Form.Group>
-          <FilerInformation />
-          <IssuerInformation />
-          <OfferingInformation />
-          <AnnualReportDisclosureRequirements />
-          <Signature />
-          <FileSelector />
-          <Divider section />
-          <div
-            className="form-footer"
-            style={{
-              paddingBottom: '40px',
-            }}
-          >
-            <Button color="green" size="large" onClick={this.handleFormSubmit}>
-              Submit
-            </Button>
-          </div>
-        </Form>
+      <div>
+        <div className="page-header-section webcontent-spacer">
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={16}>
+                <h1>
+                  <Link to={`/app/business/${this.props.match.params.businessId}`} className="back-link"><Icon name="long arrow left" /></Link>
+                  XML Form
+                </h1>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </div>
+        <div className="content-spacer">
+          <Form className="edgar-form">
+            <Form.Group widths="equal">
+              <Form.Input
+                label="Website URL"
+                defaultValue={this.props.businessStore.offeringUrl}
+                onChange={this.handleUrlChange}
+                className="column"
+                width={8}
+              />
+            </Form.Group>
+            <FilerInformation />
+            <IssuerInformation />
+            <OfferingInformation />
+            <AnnualReportDisclosureRequirements />
+            <Signature />
+            <FileSelector />
+            <Divider section />
+            <div
+              className="form-footer"
+              style={{
+                paddingBottom: '40px',
+              }}
+            >
+              <Button color="green" size="large" onClick={this.handleFormSubmit}>
+                Submit
+              </Button>
+            </div>
+          </Form>
+        </div>
       </div>
     );
   }

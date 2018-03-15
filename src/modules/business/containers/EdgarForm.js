@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Button, Grid, Divider } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Form, Button, Grid, Divider, Icon } from 'semantic-ui-react';
 import shortid from 'shortid';
 import '../../../assets/custom.css';
 
@@ -40,7 +41,10 @@ export default class EdgarForm extends React.Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <h3>Edgar Form</h3>
+                <h1>
+                  <Link to={`/app/business/${this.props.match.params.businessId}`} className="back-link"><Icon name="long arrow left" /></Link>
+                  Edgar Form
+                </h1>
               </Grid.Column>
             </Grid.Row>
           </Grid>
