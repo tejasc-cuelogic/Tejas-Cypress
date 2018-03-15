@@ -69,7 +69,7 @@ export class BusinessStore {
   signature = { ...SIGNATURE }
 
   @observable
-  documentList = { ...DOCFILE_TYPES };
+  documentList = [...DOCFILE_TYPES];
 
   @observable
   offeringList = [];
@@ -116,8 +116,14 @@ export class BusinessStore {
   }
 
   @action
+  setDocumentList(list) {
+    this.documentList = list;
+  }
+
+  @action
   toggleRequiredFiles(key) {
-    this.documentList[key] = !this.documentList[key];
+    _.filter(this.documentList, document => document.name === key)[0].checked =
+      !_.filter(this.documentList, document => document.name === key)[0].checked;
   }
 
   @action

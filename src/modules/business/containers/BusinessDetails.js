@@ -37,6 +37,8 @@ export default class BusinessDetails extends React.Component {
 
   confirmDelete = () => this.props.uiStore.toggleConfirmBox(true);
 
+  handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`)
+
   render() {
     const { business } = this.props.businessStore;
 
@@ -84,6 +86,16 @@ export default class BusinessDetails extends React.Component {
         </div>
         <div className="content-spacer">
           <p>{business.desc.value}</p>
+          <Button
+            icon
+            circular
+            inverted
+            color="green"
+            businessid={this.props.match.params.businessId}
+            onClick={this.handleNewFiling}
+          >
+            <Icon name="plus" />
+          </Button>
           <FillingsList
             filings={business.filings}
             handleAccordionClick={this.handleAccordionTitleClick}

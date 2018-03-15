@@ -43,6 +43,8 @@ export class Business {
   */
   generateXml = () => {
     const {
+      businessId,
+      filingId,
       offeringUrl,
       annualReportRequirements,
       filerInformation,
@@ -53,13 +55,15 @@ export class Business {
     } = businessStore;
 
     const payload = {
+      businessId,
+      filingId,
       offeringUrl,
       filerInformation: this.getFormattedInformation(filerInformation),
       issuerInformation: this.getFormattedInformation(issuerInformation),
       offeringInformation: this.getFormattedInformation(offeringInformation),
       annualReportDisclosureRequirements: this.getFormattedInformation(annualReportRequirements),
       signature: this.getFormattedSignature(signature),
-      documentList: _.filter(_.keys(documentList), key => documentList[key]),
+      documentList: _.filter(documentList, document => document.checked),
     };
 
     ApiService.post(XML_URL, payload)
@@ -244,7 +248,7 @@ export class Business {
       });
   }
 
-  getFolderId = ({ businessId, filingId }) => {
+  getFiles = ({ businessId, filingId }) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching details');
     const payload = {
@@ -304,7 +308,7 @@ export class Business {
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => console.log(data))
+      .then(data => this.setDocumentList(data.body.data.files))
       .fetch(err => console.log(err))
       .finally(() => {
         uiStore.setProgress(false);
@@ -333,6 +337,17 @@ export class Business {
           uiStore.clearLoaderMessage();
         });
     });
+  }
+
+  /**
+   *
+   */
+  toggleFileSelection = (key) => {
+    const { documentList } = businessStore;
+    const file = _.remove(documentList, document => document.name === key)[0];
+    file.checked = !file.checked;
+    documentList.push(file);
+    businessStore.setDocumentList(documentList);
   }
 
   // Private Methods starts here
@@ -414,6 +429,12 @@ export class Business {
     hash.desc = { value: details.description, error: undefined, key: 'desc' };
     businessStore.setTemplateVariableByKey('name_of_business', details.name);
     businessStore.setBusiness(hash);
+  }
+
+  /* eslint-disable */
+  setDocumentList = (list) => {
+    _.map(list, document => document.checked = false);
+    businessStore.setDocumentList(list);
   }
 
   setXmlPayload = (payload) => {
