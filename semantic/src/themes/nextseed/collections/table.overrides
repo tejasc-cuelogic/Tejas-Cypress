@@ -22,8 +22,13 @@
         }
         tbody{
             background:@light-bg-color;
-            tr:nth-child(2n){
-                background:@inverse-text;
+            tr{
+                &:nth-child(2n){
+                    background:@inverse-text;
+                }
+                td{
+                    border-top:none;
+                }
             }
         }
     }

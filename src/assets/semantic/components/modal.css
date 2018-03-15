@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.2.14 - Modal
+ * # Semantic UI 2.3.0 - Modal
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -582,6 +582,14 @@
          Theme Overrides
 *******************************/
 
+.ui.active.dimmer.modals.transition {
+  display: -webkit-box !important;
+  display: flex !important;
+  display: -ms-flexbox !important;
+}
+.ui.active.dimmer.modals.transition .ui.modal {
+  margin: 0 !important;
+}
 
 
 /*******************************

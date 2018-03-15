@@ -194,7 +194,7 @@ export class Business {
     businessStore.setBusinessList(oldBusinessList);
   }
 
-  editBusinessName = () => {
+  editBusinessDetails = () => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Updating Business Name');
     const payload = {
@@ -208,7 +208,7 @@ export class Business {
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(uiStore.setSuccess('New business has been created.'), businessStore.setEditBusinessName(false))
+      .then(businessStore.setEditBusinessName(false), uiStore.setModalStatus(false))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.setProgress(false);
@@ -242,6 +242,29 @@ export class Business {
         uiStore.setProgress(false);
         uiStore.clearLoaderMessage();
       });
+  }
+
+  /**
+   *
+   */
+  deleteBusiness = (businessId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Deleting business');
+    const payload = {
+      query: 'mutation deleteBusiness($id: String!){ deleteBusiness(id:$id){ id } }',
+      variables: {
+        id: businessId,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
   }
 
   // Private Methods starts here
@@ -321,13 +344,9 @@ export class Business {
     const hash = { ...details };
     hash.name = { value: details.name, error: undefined, key: 'name' };
     hash.desc = { value: details.description, error: undefined, key: 'desc' };
+    businessStore.setTemplateVariableByKey('name_of_business', details.name);
     businessStore.setBusiness(hash);
   }
-
-  setTemplateData = (data) => {
-    console.log(data);
-  }
-
   // Private Methods ends here
 }
 
