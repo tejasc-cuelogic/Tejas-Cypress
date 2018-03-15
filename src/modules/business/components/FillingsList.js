@@ -19,7 +19,7 @@ const FillingsList = observer((props) => {
                 dataid={filing.filingId}
               >
                 <Icon name="dropdown" />
-                {`Filing | ${filing.created} | `}
+                {`Filing | ${filing.created}`}
                 <div className="actions">
                   <Link to={`/app/business/${props.businessId}/edgar/${filing.filingId}`} as={Button}>
                     <Icon name="eye" />

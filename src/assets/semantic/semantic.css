@@ -24858,7 +24858,7 @@ Floated Menu / Item
 /* Table Row */
 
 .ui.table tr td {
-  border-top: 0px solid rgba(34, 36, 38, 0.1);
+  border-top: 1px solid rgba(34, 36, 38, 0.1);
 }
 
 .ui.table tr:first-child td {
@@ -24868,7 +24868,7 @@ Floated Menu / Item
 /* Repeated tbody */
 
 .ui.table tbody + tbody tr:first-child td {
-  border-top: 0px solid rgba(34, 36, 38, 0.1);
+  border-top: 1px solid rgba(34, 36, 38, 0.1);
 }
 
 /* Table Cells */
@@ -25000,8 +25000,8 @@ Floated Menu / Item
 
 .ui.structured.celled.table tr th,
 .ui.structured.celled.table tr td {
-  border-left: 0px solid rgba(34, 36, 38, 0.1);
-  border-right: 0px solid rgba(34, 36, 38, 0.1);
+  border-left: 1px solid rgba(34, 36, 38, 0.1);
+  border-right: 1px solid rgba(34, 36, 38, 0.1);
 }
 
 /*--------------
@@ -25945,7 +25945,7 @@ Floated Menu / Item
 
 .ui.celled.table tr th,
 .ui.celled.table tr td {
-  border-left: 0px solid rgba(34, 36, 38, 0.1);
+  border-left: 1px solid rgba(34, 36, 38, 0.1);
 }
 
 .ui.celled.table tr th:first-child,
@@ -26056,6 +26056,10 @@ Floated Menu / Item
 
 .ui.table.striped tbody tr:nth-child(2n) {
   background: #FFFFFF;
+}
+
+.ui.table.striped tbody tr td {
+  border-top: none;
 }
 
 .ui.table.user-list tr.locked .user-image:after {
