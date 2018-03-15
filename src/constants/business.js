@@ -233,9 +233,9 @@ export const OFFERING_INFORMATION = {
   },
   price: {
     value: '',
-    key: '',
+    key: 'price',
     error: undefined,
-    rule: '',
+    rule: 'numeric|max:999999',
   },
   priceDeterminationMethod: {
     value: '',
