@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Icon, Button, Grid } from 'semantic-ui-react';
+import { Icon, Button, Grid, Confirm } from 'semantic-ui-react';
 
 import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
@@ -13,6 +13,7 @@ import NewBusinessForm from '../containers/NewBusinessForm';
 export default class BusinessDetails extends React.Component {
   componentWillMount() {
     businessActions.getBusinessDetails(this.props.match.params.businessId);
+    this.props.uiStore.toggleConfirmBox(false);
   }
 
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
@@ -32,6 +33,10 @@ export default class BusinessDetails extends React.Component {
     this.props.uiStore.setModalStatus(true);
   }
 
+  handleDelCancel = () => this.props.uiStore.toggleConfirmBox(false);
+
+  confirmDelete = () => this.props.uiStore.toggleConfirmBox(true);
+
   render() {
     const { business } = this.props.businessStore;
 
@@ -41,13 +46,11 @@ export default class BusinessDetails extends React.Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <h3>
+                <h1>
                   <NewBusinessForm />
                   <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
                   {business.name.value}
                   <div className="actions">
-                    {/* <Link to="/app/business"><Icon name="write" size="small" /></Link>
-                    <Link to="" className="danger"><Icon name="trash" /></Link> */}
                     <Button
                       onClick={this.handleOpenModal}
                       icon
@@ -63,12 +66,18 @@ export default class BusinessDetails extends React.Component {
                       inverted
                       color="red"
                       businessid={this.props.match.params.businessId}
-                      onClick={this.handleBusinessDelete}
+                      onClick={this.confirmDelete}
                     >
                       <Icon name="trash" />
                     </Button>
+                    <Confirm
+                      content="Are you sure you want to delete business and its associated data?"
+                      open={this.props.uiStore.confirmBox}
+                      onCancel={this.handleDelCancel}
+                      onConfirm={this.handleBusinessDelete}
+                    />
                   </div>
-                </h3>
+                </h1>
               </Grid.Column>
             </Grid.Row>
           </Grid>

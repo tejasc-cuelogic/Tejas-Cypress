@@ -5,6 +5,8 @@ import { Accordion, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 
 const XmlSubmission = observer((props) => {
+  const { businessId, filingId } = props;
+  const xmlUrl = `/app/business/${businessId}/filing/${filingId}/xml`;
   if (!_.isEmpty(props.xmlSubmissions)) {
     return (
       <Accordion.Content active={props.active} key={props.filingId}>
@@ -14,7 +16,7 @@ const XmlSubmission = observer((props) => {
               props.xmlSubmissions.map(xmlSubmission => (
                 <Table.Row>
                   <Table.Cell>
-                    <Link to={`/app/business/xml/${xmlSubmission.xmlSubmissionId}`}>
+                    <Link to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}>
                       {'XML Submission'}
                     </Link>
                   </Table.Cell>
@@ -29,20 +31,13 @@ const XmlSubmission = observer((props) => {
   }
   return (
     <Accordion.Content active={props.active}>
-      <Table basic celled collapsing>
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>
-              No XML Submissions are present for this filling, <Link to="/app/business/xml">Click here to create new.</Link>
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
-      {/* <p>No XML Submissions are present for this filling,
-        <Link to="/app/business/xml">
-          Click here to create new.
-        </Link>
-      </p> */}
+      {/* <Card className="flexible">
+        <Card.Content> */}
+      <p>No XML Submissions are present for this filing,{' '}
+        <Link to={xmlUrl}>Click here to create new.</Link>
+      </p>
+      {/* </Card.Content>
+    </Card> */}
     </Accordion.Content>
   );
 });

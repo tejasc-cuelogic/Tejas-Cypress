@@ -1016,6 +1016,17 @@ a.ui.card:hover,
 .form-card .grid.divided .column:last-child {
   padding-right: 1rem;
 }
+.ui.card.flexible {
+  width: auto;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  margin: 0;
+}
+.ui.styled.accordion .accordion .content .card > .content,
+.ui.styled.accordion .content .card > .content {
+  padding: 1em 1em;
+}
 
 
 /*******************************

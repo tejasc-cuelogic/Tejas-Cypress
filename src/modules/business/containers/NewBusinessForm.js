@@ -48,7 +48,7 @@ export default class NewBusinessForm extends React.Component {
     return (
       <div>
         { editBusinessMode === false &&
-        <Button onClick={this.handleOpenModal} color="green" floated="right">New Offering</Button>
+        <Button onClick={this.handleOpenModal} color="green" className="rounded" floated="right">New Offering</Button>
         }
         <Modal
           size="small"

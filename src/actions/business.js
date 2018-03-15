@@ -94,7 +94,7 @@ export class Business {
   listBusinesses = () => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching business list');
-    const payload = { query: 'query getBusinesses { businesses{ id name created } }' };
+    const payload = { query: 'query getBusinesses { businesses{ id name description created } }' };
     ApiService.post(GRAPHQL, payload)
       .then(data => businessStore.setBusinessList(data.body.data.businesses))
       .catch(err => uiStore.setErrors(err))
@@ -237,6 +237,30 @@ export class Business {
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
+      .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
+  /**
+   * @desc This method fetches XML
+   */
+  fetchXmlDetails =({ filingId, xmlId }) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching XML Data');
+    const payload = {
+      query: 'query fetchFilingSubmission($filingId: ID!, $xmlSubmissionId: ID!)' +
+        '{businessFilingSubmission(filingId:$filingId, xmlSubmissionId:$xmlSubmissionId){ ' +
+        'payload } }',
+      variables: {
+        filingId,
+        xmlSubmissionId: xmlId,
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => console.log(data))
       .catch(err => console.log(err))
       .finally(() => {
         uiStore.setProgress(false);
