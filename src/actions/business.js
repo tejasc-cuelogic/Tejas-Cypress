@@ -105,6 +105,25 @@ export class Business {
   }
 
   /**
+   * @desc To check if business name is already exist
+   */
+  businessExists = () => {
+    uiStore.setProgress();
+    const payload = {
+      query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
+      variables: {
+        name: businessStore.newOfferingInformation.businessName.value,
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => businessStore.setIsBusinessExist(data.body.data.businessExists))
+      .catch(err => uiStore.setErrors(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  /**
    * @desc This method gets the details of business and store it to store.
    * @param $businessId - Id of business for which data will fetched
   */
@@ -202,6 +221,7 @@ export class Business {
     hash.name = { value: details.name, error: undefined };
     businessStore.setBusiness(hash);
   }
+
   // Private Methods ends here
 }
 

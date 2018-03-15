@@ -861,6 +861,23 @@ export const COUNTRIES = [
   { key: 'XX', value: 'XX', text: 'UNKNOWN' },
 ];
 
+export const NEW_OFFERING_INFORMATION = {
+  businessName: {
+    value: '',
+    error: undefined,
+    rule: 'required',
+    key: 'businessName',
+    label: 'Business Name',
+  },
+  businessDescription: {
+    value: '',
+    error: undefined,
+    rule: 'required',
+    key: 'businessDescription',
+    label: 'Description',
+  },
+};
+
 export const EDGAR_URL = '/edgar/publish';
 
 export const XML_URL = '/edgar/primary-data';

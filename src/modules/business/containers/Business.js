@@ -32,26 +32,6 @@ class Business extends Component {
           businessList={this.props.businessStore.businessList}
         />
       </div>
-
-      // <div className="ui one column grid">
-      //   <div className="column">
-      //     <Button color="green" as={Link} to="/app/business/new"
-      //      floated="right">New Offering</Button>
-      //   </div>
-      //   <div
-      //     className="column nsContent"
-      //     style={{
-      //       fontSize: '30px',
-      //       color: '#666',
-      //       top: '25px',
-      //       textAlign: 'center',
-      //     }}
-      //   >
-      //     <BusinessList
-      //       businessList={this.props.businessStore.businessList}
-      //     />
-      //   </div>
-      // </div>
     );
   }
 }
