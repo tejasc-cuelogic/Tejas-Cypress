@@ -132,7 +132,7 @@ export class Business {
     uiStore.setLoaderMessage('Getting business data');
     const payload = {
       query: `query getBusiness { business(id: "${businessId}") { id name description created` +
-        ' filings { filingId businessId created submissions { xmlSubmissionId } } } }',
+        ' filings { filingId businessId created submissions { xmlSubmissionId created } } } }',
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setBusinessDetails(data.body.data.business))
