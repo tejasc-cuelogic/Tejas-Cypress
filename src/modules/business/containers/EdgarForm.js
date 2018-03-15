@@ -25,6 +25,7 @@ export default class EdgarForm extends React.Component {
 
   componentWillUnmount() {
     this.props.uiStore.reset();
+    this.props.businessStore.resetTemplateVariables();
   }
 
   handleInputChange = (e) => {

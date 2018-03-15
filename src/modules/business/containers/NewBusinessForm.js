@@ -8,10 +8,6 @@ import businessActions from '../../../actions/business';
 @inject('businessStore', 'uiStore')
 @observer
 export default class NewBusinessForm extends React.Component {
-  handleOpenModal = () => {
-    this.props.businessStore.resetNewOfferingInfo();
-  }
-
   handleOnChange = (e, { name, value }) => {
     validationActions.validateNewOfferingInfoField(name, value);
   }
@@ -26,7 +22,12 @@ export default class NewBusinessForm extends React.Component {
   }
 
   handleOpenModal = () => {
+    this.props.businessStore.resetNewOfferingInfo();
     this.props.uiStore.setModalStatus(true);
+  }
+
+  handleCloseModal = () => {
+    this.props.uiStore.setModalStatus(false);
   }
 
   render() {
@@ -34,7 +35,13 @@ export default class NewBusinessForm extends React.Component {
     return (
       <div>
         <Button onClick={this.handleOpenModal} color="green" className="rounded" floated="right">New Offering</Button>
-        <Modal size="small" open={this.props.uiStore.modalStatus} closeIcon onOpen={this.handleOpenModal}>
+        <Modal
+          size="small"
+          open={this.props.uiStore.modalStatus}
+          closeIcon
+          onOpen={this.handleOpenModal}
+          onClose={this.handleCloseModal}
+        >
           <Modal.Header>Add New Offering</Modal.Header>
           <Modal.Content>
             <Form error>
@@ -67,7 +74,7 @@ export default class NewBusinessForm extends React.Component {
               onClick={this.handleSubmitForm}
               disabled={
                 !this.props.businessStore.canSubmitNewOfferingForm ||
-                  this.props.uiStore.submitButtonDisabled
+                this.props.uiStore.submitButtonDisabled
               }
             >
               Submit
