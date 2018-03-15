@@ -144,9 +144,37 @@ export class Business {
   }
 
   /**
+   * @desc To create a new business
+   */
+  createBusiness = () => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Creating New Business');
+    const payload = {
+      query: 'mutation createBusiness($newBusiness: CreateBusinessInput){createBusiness(newBusiness:$newBusiness){id name created}}',
+      variables: {
+        newBusiness: {
+          name: businessStore.newOfferingInformation.businessName.value,
+        },
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => this.addToBusinessList(data.body.data.createBusiness), uiStore.setSuccess('New business has been created.'), uiStore.setModalStatus(false))
+      .catch(err => uiStore.setErrors(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  addToBusinessList = (data) => {
+    const oldBusinessList = [...businessStore.businessList];
+    oldBusinessList.push(data);
+    businessStore.setBusinessList(oldBusinessList);
+  }
+
+  /**
    * @desc This method fetches filing details from id provided for business,
-   *       and stores data in store.
-  */
+   * and stores data in store.
+   */
   fetchEdgarDetails = (businessId, filingId) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching Edgar data');
@@ -161,6 +189,29 @@ export class Business {
         uiStore.setProgress(false);
         uiStore.clearLoaderMessage();
       });
+  }
+
+  /**
+   *
+   */
+  deleteBusiness = (businessId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Deleting business');
+    const payload = {
+      query: 'mutation deleteBusiness($id: String!){ deleteBusiness(id:$id){ id } }',
+      variables: {
+        id: businessId,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
   }
 
   // Private Methods starts here
@@ -241,11 +292,6 @@ export class Business {
     hash.name = { value: details.name, error: undefined };
     businessStore.setBusiness(hash);
   }
-
-  setTemplateData = (data) => {
-    console.log(data);
-  }
-
   // Private Methods ends here
 }
 

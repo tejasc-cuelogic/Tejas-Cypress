@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link, withRouter } from 'react-router-dom';
-import { Button, Grid } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import { Grid } from 'semantic-ui-react';
 
+import ListErrors from '../../../components/common/ListErrors';
+import SuccessMessage from '../../../components/common/SuccessMessage';
 import businessActions from '../../../actions/business';
 import BusinessList from '../components/BusinessList';
+import NewBusinessForm from './NewBusinessForm';
 
 @withRouter
-@inject('businessStore')
+@inject('businessStore', 'uiStore')
 @observer
 class Business extends Component {
   componentWillMount() {
@@ -23,11 +26,13 @@ class Business extends Component {
                 <h3>Business</h3>
               </Grid.Column>
               <Grid.Column width={8}>
-                <Button color="green" as={Link} to="/app/business/new" floated="right">New Offering</Button>
+                <NewBusinessForm />
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </div>
+        <ListErrors errors={this.props.uiStore.errors} />
+        <SuccessMessage success={this.props.uiStore.success} />
         <BusinessList
           businessList={this.props.businessStore.businessList}
         />
