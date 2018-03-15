@@ -9,7 +9,7 @@ import XmlSubmission from './XmlSubmission';
 const FillingsList = observer((props) => {
   if (!_.isEmpty(props.filings)) {
     return (
-      <Accordion>
+      <Accordion fluid styled>
         {
           props.filings.map(filing => (
             <div key={`${filing.created}_${filing.filingId}`}>
