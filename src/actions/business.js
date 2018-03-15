@@ -94,16 +94,33 @@ export class Business {
   listBusinesses = () => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching business list');
-    const payload = {
-      query: 'query getOfferingFilings{offeringFilings{id created payload{' +
-        'templateVariables{ name_of_business } } } }',
-    };
+    const payload = { query: 'query getBusinesses { businesses{ id name created } }' };
     ApiService.post(GRAPHQL, payload)
-      .then(data => this.setBusinessList(data.body.data.offeringFilings))
+      .then(data => businessStore.setBusinessList(data.body.data.businesses))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.clearLoaderMessage();
         uiStore.setProgress(false);
+      });
+  }
+
+  /**
+   * @desc This method gets the details of business and store it to store.
+   * @param $businessId - Id of business for which data will fetched
+  */
+  getBusinessDetails = (businessId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Getting business data');
+    const payload = {
+      query: `query getBusiness { business(id: "${businessId}"){` +
+        ' id name description created filings{ filingId businessId created} } }',
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => this.setBusinessDetails(data.body.data.business))
+      .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
@@ -180,15 +197,10 @@ export class Business {
     businessStore.setOfferingList(list);
   }
 
-  setBusinessList = (data) => {
-    const list = _.map(data, (offering) => {
-      const hash = {};
-      hash.id = offering.id;
-      hash.name = offering.payload.templateVariables.name_of_business;
-      hash.created = offering.created;
-      return hash;
-    });
-    businessStore.setBusinessList(list);
+  setBusinessDetails = (details) => {
+    const hash = { ...details };
+    hash.name = { value: details.name, error: undefined };
+    businessStore.setBusiness(hash);
   }
   // Private Methods ends here
 }
