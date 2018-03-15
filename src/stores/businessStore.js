@@ -17,7 +17,13 @@ export class BusinessStore {
   formValues = [...FORM_VALUES];
 
   @observable
-  offeringId = '';
+  businessId = '';
+
+  @observable
+  filingId = '';
+
+  @observable
+  folderId = '';
 
   @observable
   offeringUrl = '';
@@ -115,8 +121,18 @@ export class BusinessStore {
   }
 
   @action
-  setOfferingId(id) {
-    this.offeringId = id;
+  setBusinessId(id) {
+    this.businessId = id;
+  }
+
+  @action
+  setFilingId(id) {
+    this.filingId = id;
+  }
+
+  @action
+  setFolderId(id) {
+    this.folderId = id;
   }
 
   @action

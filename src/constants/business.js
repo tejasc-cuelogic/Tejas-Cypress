@@ -15,18 +15,18 @@ export const FORM_VALUES = [
   { name: 'interest_rate', placeholder: 'Interest Rate' },
 ];
 
-export const DOCFILE_TYPES = {
-  'Form C Issuer Certificate.docx': false,
-  'Form Security Agreement.docx': false,
-  'Form of Note Purchase Agreement - Revenue Share.docx': false,
-  'Form of Note Purchase Agreement - Term Note.docx': false,
-  'Goldstar Escrow Agreement (Form).docx': false,
-  'National - Template Disclosure Statement (Rev).docx': false,
-  'National - Template Disclosure Statement (Term).docx': false,
-  'National Portal - Form of Crowdfunding Portal Agreement (Rev Share).docx': false,
-  'National Portal - Form of Crowdfunding Portal Agreement (Term).docx': false,
-  'Resolution - Borrowing Authority (Form).docx': false,
-};
+export const DOCFILE_TYPES = [
+  { id: '123', name: 'Form C Issuer Certificate.docx', checked: false },
+  { id: '456', name: 'Form Security Agreement.docx', checked: false },
+  { id: '789', name: 'Form of Note Purchase Agreement - Revenue Share.docx', checked: false },
+  { id: '321', name: 'Form of Note Purchase Agreement - Term Note.docx', checked: false },
+  { id: '654', name: 'Goldstar Escrow Agreement (Form).docx', checked: false },
+  { id: '987', name: 'National - Template Disclosure Statement (Rev).docx', checked: false },
+  { id: '100', name: 'National - Template Disclosure Statement (Term).docx', checked: false },
+  { id: '900', name: 'National Portal - Form of Crowdfunding Portal Agreement (Rev Share).docx', checked: false },
+  { id: '344', name: 'National Portal - Form of Crowdfunding Portal Agreement (Term).docx', checked: false },
+  { id: '455', name: 'Resolution - Borrowing Authority (Form).docx', checked: false },
+];
 
 export const TEMPLATE_VARIABLES = {
   name_of_business: '',

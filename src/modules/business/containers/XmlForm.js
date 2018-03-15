@@ -15,14 +15,17 @@ import businessActions from '../../../actions/business';
 @observer
 export default class XmlForm extends React.Component {
   componentWillMount() {
-    businessActions.fetchXmlDetails(this.props.match.params);
+    this.props.businessStore.setBusinessId(this.props.match.params.businessId);
+    this.props.businessStore.setFilingId(this.props.match.params.filingId);
+    businessActions.getFolderId(this.props.match.params);
+    if (this.props.match.params.xmlId) {
+      businessActions.fetchXmlDetails(this.props.match.params);
+    }
   }
 
   handleUrlChange = (e, { value }) => {
     this.props.businessStore.setOfferingUrl(value);
   }
-
-  handleSelectChange = (e, { value }) => this.props.businessStore.setOfferingId(value);
 
   handleFormSubmit = (e) => {
     e.preventDefault();

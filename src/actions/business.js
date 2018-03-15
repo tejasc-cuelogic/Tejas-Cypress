@@ -26,7 +26,9 @@ export class Business {
   generateDocxFile = () => {
     const { templateVariables, documentList } = businessStore;
     uiStore.toggleSubmitButton();
-    ApiService.post(EDGAR_URL, { templateVariables, documentList: _.keys(documentList) })
+    const files = [];
+    _.map(documentList, document => files.push(document.name));
+    ApiService.post(EDGAR_URL, { templateVariables, documentList: files })
       .then((data) => {
         uiStore.setSuccess(`Successfully created docx files with id ${data.body.requestId}`);
       })
@@ -41,7 +43,6 @@ export class Business {
   */
   generateXml = () => {
     const {
-      offeringId,
       offeringUrl,
       annualReportRequirements,
       filerInformation,
@@ -52,7 +53,6 @@ export class Business {
     } = businessStore;
 
     const payload = {
-      offeringId,
       offeringUrl,
       filerInformation: this.getFormattedInformation(filerInformation),
       issuerInformation: this.getFormattedInformation(issuerInformation),
@@ -151,7 +151,7 @@ export class Business {
     uiStore.setLoaderMessage('Getting business data');
     const payload = {
       query: `query getBusiness { business(id: "${businessId}") { id name description created` +
-        ' filings { filingId businessId created submissions { xmlSubmissionId created } } } }',
+        ' filings { filingId businessId created folderId submissions { xmlSubmissionId created } } } }',
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setBusinessDetails(data.body.data.business))
@@ -244,10 +244,33 @@ export class Business {
       });
   }
 
+  getFolderId = ({ businessId, filingId }) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching details');
+    const payload = {
+      query: 'query fetchFilingById($businessId: ID!, $filingId: ID!){businessFiling(businessId: ' +
+        '$businessId, filingId: $filingId) { folderId } }',
+      variables: {
+        businessId,
+        filingId,
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then((data) => {
+        businessStore.setFolderId(data.body.data.businessFiling.folderId);
+        this.fetchAttachedFiles(data.body.data.businessFiling.folderId);
+      })
+      .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
   /**
    * @desc This method fetches XML
    */
-  fetchXmlDetails =({ filingId, xmlId }) => {
+  fetchXmlDetails = ({ filingId, xmlId }) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching XML Data');
     const payload = {
@@ -260,8 +283,29 @@ export class Business {
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => console.log(data))
+      .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission.payload))
       .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
+  /**
+   *
+   */
+  fetchAttachedFiles = (folderId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching available files');
+    const payload = {
+      query: 'query getFIles($folderId: ID!) { files(folderId: $folderId) { id name } }',
+      variables: {
+        folderId,
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => console.log(data))
+      .fetch(err => console.log(err))
       .finally(() => {
         uiStore.setProgress(false);
         uiStore.clearLoaderMessage();
@@ -370,6 +414,12 @@ export class Business {
     hash.desc = { value: details.description, error: undefined, key: 'desc' };
     businessStore.setTemplateVariableByKey('name_of_business', details.name);
     businessStore.setBusiness(hash);
+  }
+
+  setXmlPayload = (payload) => {
+    if (payload) {
+      console.log(payload);
+    }
   }
   // Private Methods ends here
 }
