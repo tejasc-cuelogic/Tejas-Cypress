@@ -17,6 +17,8 @@ export default class Confirm extends React.Component {
   }
 
   handleCodeChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
+  handleEmailChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.confirmCode()

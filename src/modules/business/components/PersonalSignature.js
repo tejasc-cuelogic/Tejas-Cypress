@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 const PersonalSignature = observer(props => (
   <div>
     <div>
-      {props.signaturePerson.map(personData => (
+      {props.signaturePersons.map(personData => (
         <div>
           <Button icon dataId={personData.id} onClick={props.handleDeleteClick}>
             <Icon name="remove" size="mini" />
@@ -38,7 +38,6 @@ const PersonalSignature = observer(props => (
           </Form.Group>
         </div>
       ))}
-      <Button onClick={props.handleAddClick}>Add</Button>
     </div>
   </div>
 ));

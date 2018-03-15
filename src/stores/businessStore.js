@@ -9,6 +9,7 @@ import {
   OFFERING_INFORMATION,
   ANNUAL_REPORT_REQUIREMENTS,
   SIGNATURE,
+  NEW_OFFERING_INFORMATION,
 } from './../constants/business';
 
 export class BusinessStore {
@@ -37,6 +38,23 @@ export class BusinessStore {
   };
 
   @observable
+  businessList = [];
+
+  @observable
+  isBusinessExist = false;
+
+  @observable
+  business = {
+    id: '',
+    name: {
+      value: '',
+      error: undefined,
+    },
+    desc: '',
+    filings: [],
+  };
+
+  @observable
   filerInformation = { ...FILER_INFORMATION }
 
   @observable
@@ -57,13 +75,25 @@ export class BusinessStore {
   @observable
   offeringList = [];
 
+  @observable
+  newOfferingInformation = { ...NEW_OFFERING_INFORMATION };
+
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
   }
 
+  @computed get canSubmitNewOfferingForm() {
+    return (_.every(this.newOfferingInformation, data => !_.isEmpty(data.value)));
+  }
+
   @action
-  setTemplateVariable(key, value) {
+  setTemplateVariableByKey(key, value) {
     this.templateVariables[key] = value;
+  }
+
+  @action
+  setTemplateVariable(variable) {
+    this.templateVariables = variable;
   }
 
   @action
@@ -87,8 +117,23 @@ export class BusinessStore {
   }
 
   @action
+  setFilerError(field, error) {
+    this.filerInformation[field].error = error;
+  }
+
+  @action
+  togglefilerCheckbox(name) {
+    this.filerInformation[name].value = !this.filerInformation[name].value;
+  }
+
+  @action
   setIssuerInfo(field, value) {
     this.issuerInformation[field].value = value;
+  }
+
+  @action
+  setIssuerError(field, error) {
+    this.issuerInformation[field].error = error;
   }
 
   @action
@@ -97,13 +142,28 @@ export class BusinessStore {
   }
 
   @action
+  setOfferingError(field, error) {
+    this.offeringInformation[field].error = error;
+  }
+
+  @action
   setAnnualReportInfo(field, value) {
     this.annualReportRequirements[field].value = value;
   }
 
   @action
+  setAnnualReportError(field, error) {
+    this.annualReportRequirements[field].error = error;
+  }
+
+  @action
   setSignatureInfo(field, value) {
     this.signature[field].value = value;
+  }
+
+  @action
+  setSignatureError(field, error) {
+    this.signature[field].error = error;
   }
 
   /**
@@ -113,28 +173,70 @@ export class BusinessStore {
   */
   @action
   changePersonalSignature(field, id, value) {
-    _.filter(this.signature.signaturePerson, person => person.id === id)[0][field].value = value;
+    _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].value = value;
   }
 
   @action
-  setCountry(value) {
-    this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
+  setPersonalSignatureError(field, id, error) {
+    _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].error = error;
+  }
+
+  @action
+  setCountry(identifier, name, value) {
+    // this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
+    this[identifier][name].value = value;
   }
 
   @action
   addNewPersonalSignature(newSignatures) {
-    this.signature.signaturePerson = newSignatures;
+    this.signature.signaturePersons = newSignatures;
   }
 
   @action
   deletePersonalSignature(id) {
-    const { signaturePerson } = this.signature;
-    this.signature.signaturePerson = _.filter(signaturePerson, person => person.id !== id);
+    const { signaturePersons } = this.signature;
+    this.signature.signaturePersons = _.filter(signaturePersons, person => person.id !== id);
   }
 
   @action
   setOfferingList(list) {
     this.offeringList = list;
+  }
+
+  @action
+  setBusinessList(list) {
+    this.businessList = list;
+  }
+
+  @action
+  setNewOfferingInfo(field, value) {
+    this.newOfferingInformation[field].value = value;
+  }
+
+  @action
+  setNewOfferingError(field, error) {
+    this.newOfferingInformation[field].error = error;
+  }
+
+  @action
+  resetNewOfferingInfo() {
+    this.newOfferingInformation.businessName.value = '';
+    this.newOfferingInformation.businessName.error = undefined;
+    this.newOfferingInformation.businessDescription.value = '';
+    this.newOfferingInformation.businessDescription.error = undefined;
+  }
+
+  @action
+  setIsBusinessExist(value) {
+    this.isBusinessExist = value;
+    if (value === true) {
+      this.setNewOfferingError('businessName', 'Business Name is already exist.');
+    }
+  }
+
+  @action
+  setBusiness(details) {
+    this.business = details;
   }
 }
 

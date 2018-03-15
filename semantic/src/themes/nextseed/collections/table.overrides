@@ -25,8 +25,13 @@
         }
         tbody{
             background:@light-bg-color;
-            tr:nth-child(2n){
-                background:@inverse-text;
+            tr{
+                &:nth-child(2n){
+                    background:@inverse-text;
+                }
+                td{
+                    border-top:none;
+                }
             }
         }
     }
@@ -60,9 +65,23 @@
         }
     }
     a{
-        font-family:@pageFont;
-        font-size:@12px;
-        text-transform:uppercase;
+        font-family:@boldFont;
+        color:@primary-text;
+        text-decoration:none;
+        &:hover{
+            color:inherit;
+            text-decoration:underline;
+        }
+        &.action{
+            font-family:@pageFont;
+            font-size:@12px;
+            text-transform:uppercase;
+            color:@linkColor;
+            &:hover{
+                color:@linkHoverColor;
+                text-decoration:none;
+            }
+        }
     }
     &.statment-tables{
         td>i.icon{

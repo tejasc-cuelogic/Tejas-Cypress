@@ -28,7 +28,9 @@
 }
 
 
-//    Custom for NS V.2 
+/*******************************
+		  Custom for NS V.2
+*******************************/
 /* Accordion Title */
 .ui.accordion{
 	.title:not(.ui){
@@ -56,5 +58,12 @@
 				transform:rotate(180deg);
 			}
 		}
+	}
+}
+.ui.accordion.filing-list{
+	.actions{
+		position:relative;
+		float:right;
+		z-index:99;
 	}
 }

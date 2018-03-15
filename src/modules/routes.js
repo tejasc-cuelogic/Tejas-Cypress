@@ -20,6 +20,7 @@ import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './users/containers/Users';
 import XmlForm from './business/containers/XmlForm';
+import BusinessDetails from './business/containers/BusinessDetails';
 import {
   AdminAuthorization,
   BusinessAuthorization,
@@ -102,14 +103,30 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   {
-    path: '/app/business/edgar',
+    path: '/app/business/:businessId/edgar/:filingId',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/xml',
+    path: '/app/business/:businessId/edgar',
+    component: EdgarForm,
+    auth: BusinessAuthorization,
+  },
+  {
+    path: '/app/business/:businessId/xml',
     component: XmlForm,
     auth: AdminAuthorization,
+  },
+  {
+    path: '/app/business/:businessId',
+    component: BusinessDetails,
+    auth: BusinessAuthorization,
+  },
+  {
+    path: '/app/business',
+    component: Business,
+    auth: BusinessAuthorization,
+    exact: true,
   },
   {
     path: '/app/users/:userId/:section',
@@ -125,12 +142,6 @@ export const privateRoutes = [
     path: '/app/users',
     component: Users,
     auth: BusinessAuthorization,
-  },
-  {
-    path: '/app/business',
-    component: Business,
-    auth: BusinessAuthorization,
-    exact: true,
   },
   {
     path: '/app/settings',

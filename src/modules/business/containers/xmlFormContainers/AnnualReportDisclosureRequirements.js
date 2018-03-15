@@ -4,16 +4,17 @@ import { Divider, Grid, Header, Form, Dropdown } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import { COUNTRIES } from '../../../../constants/business';
+import validationActions from '../../../../actions/validation';
 
 @inject('businessStore')
 @observer
 export default class AnnualReportDisclosureRequirements extends React.Component {
   handleInputChange = (e, { name, value }) => {
-    this.props.businessStore.setAnnualReportInfo(name, value);
+    validationActions.validateAnnualReportField(name, value);
   }
 
-  handleSelectChange = (e, { value }) => {
-    this.props.businessStore.setCountry(value);
+  handleSelectChange = (e, { dataidentifier, name, value }) => {
+    this.props.businessStore.setCountry(dataidentifier, name, value);
   }
 
   render() {
@@ -33,6 +34,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
                 label={field.label}
                 name={field.key}
                 defaultValue={field.value}
+                error={!!field.error}
                 onChange={this.handleInputChange}
                 key={field.key}
                 className="column"
@@ -48,6 +50,8 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
           search
           selection
           placeholder="State"
+          dataidentifier="annualReportRequirements"
+          name="issueJurisdictionSecuritiesOffering"
           options={COUNTRIES}
           onChange={this.handleSelectChange}
           key={annualReportRequirements.issueJurisdictionSecuritiesOffering.key}

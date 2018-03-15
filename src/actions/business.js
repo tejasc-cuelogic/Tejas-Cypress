@@ -9,15 +9,15 @@ import ApiService from '../services/api';
 export class Business {
   /**
   * @desc Adds new field for PersonalSignatureArray
-  *       if previous value of `signaturePerson` prop is [{...}, {...}]
+  *       if previous value of `signaturePersons` prop is [{...}, {...}]
   *       then calling method will add bank map to above array as [{...}, {...}, {...}]
   */
   addPersonalSignature = () => {
     const personalSignature = { ...PERSONAL_SIGNATURE };
     personalSignature.id = shortid.generate();
-    const signaturePerson = [...businessStore.signature.signaturePerson];
-    signaturePerson.push(personalSignature);
-    businessStore.addNewPersonalSignature(signaturePerson);
+    const signaturePersons = [...businessStore.signature.signaturePersons];
+    signaturePersons.push(personalSignature);
+    businessStore.addNewPersonalSignature(signaturePersons);
   }
 
   /**
@@ -62,7 +62,6 @@ export class Business {
       documentList: _.filter(_.keys(documentList), key => documentList[key]),
     };
 
-
     ApiService.post(XML_URL, payload)
       // TODO: Decide what should happen after XML generation
       .then(data => console.log(data))
@@ -85,6 +84,82 @@ export class Business {
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.toggleDropdownLoader();
+      });
+  }
+
+  /**
+   * @desc List all businesses that were filled to nextseed
+   * @todo Add Pagination to api
+  */
+  listBusinesses = () => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching business list');
+    const payload = { query: 'query getBusinesses { businesses{ id name created } }' };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => businessStore.setBusinessList(data.body.data.businesses))
+      .catch(err => uiStore.setErrors(err))
+      .finally(() => {
+        uiStore.clearLoaderMessage();
+        uiStore.setProgress(false);
+      });
+  }
+
+  /**
+   * @desc To check if business name is already exist
+   */
+  businessExists = () => {
+    uiStore.setProgress();
+    const payload = {
+      query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
+      variables: {
+        name: businessStore.newOfferingInformation.businessName.value,
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => businessStore.setIsBusinessExist(data.body.data.businessExists))
+      .catch(err => uiStore.setErrors(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  /**
+   * @desc This method gets the details of business and store it to store.
+   * @param $businessId - Id of business for which data will fetched
+  */
+  getBusinessDetails = (businessId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Getting business data');
+    const payload = {
+      query: `query getBusiness { business(id: "${businessId}") { id name description created` +
+        ' filings { filingId businessId created submissions { xmlSubmissionId created } } } }',
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => this.setBusinessDetails(data.body.data.business))
+      .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
+  /**
+   * @desc This method fetches filing details from id provided for business,
+   *       and stores data in store.
+  */
+  fetchEdgarDetails = (businessId, filingId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching Edgar data');
+    const payload = {
+      query: `query fetchFilingById { businessFiling(businessId: "${businessId}", ` +
+        `filingId: "${filingId}") { filingPayload } }`,
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
+      .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
       });
   }
 
@@ -112,8 +187,15 @@ export class Business {
   */
   getFormattedInformation = (info) => {
     const formattedData = {};
+    const dateKeys = ['dateIncorporation', 'deadlineDate'];
     _.forEach(info, (data, key) => {
-      formattedData[key] = data.value;
+      if (dateKeys.includes(key)) {
+        // If value is date then it has Moment object and not string value, in order to send proper
+        // value to server we have to parse value as follows
+        formattedData[key] = data.value.format('MM-DD-YYYY');
+      } else {
+        formattedData[key] = data.value;
+      }
     });
     return formattedData;
   }
@@ -123,13 +205,13 @@ export class Business {
     formattedData.issuer = signature.issuer.value;
     formattedData.issuerSignature = signature.issuerSignature.value;
     formattedData.issuerTitle = signature.issuerTitle.value;
-    formattedData.signaturePerson = [];
-    _.map(signature.signaturePerson, (person) => {
+    formattedData.signaturePersons = [];
+    _.map(signature.signaturePersons, (person) => {
       const personData = {};
       personData.personSignature = person.personSignature.value;
       personData.personTitle = person.personTitle.value;
       personData.signatureDate = person.signatureDate.value;
-      formattedData.signaturePerson.push(personData);
+      formattedData.signaturePersons.push(personData);
     });
     return formattedData;
   };
@@ -153,6 +235,17 @@ export class Business {
     });
     businessStore.setOfferingList(list);
   }
+
+  setBusinessDetails = (details) => {
+    const hash = { ...details };
+    hash.name = { value: details.name, error: undefined };
+    businessStore.setBusiness(hash);
+  }
+
+  setTemplateData = (data) => {
+    console.log(data);
+  }
+
   // Private Methods ends here
 }
 
