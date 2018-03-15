@@ -34,7 +34,7 @@ const userListing = props => (
               }
             </Table.Cell>
             <Table.Cell className="user-status">
-              <span className="user-name">{`${user.given_name} ${user.family_name}`}</span>
+              <span className="user-name"><Link to="">{`${user.given_name} ${user.family_name}`}</Link></span>
               {user.email}
             </Table.Cell>
             <Table.Cell>Detroit, MI (80331)</Table.Cell>
@@ -45,7 +45,7 @@ const userListing = props => (
             <Table.Cell>2 days ago</Table.Cell>
             <Table.Cell>13 months ago</Table.Cell>
             {/* <Table.Cell><DateTimeFormat datetime={user.UserCreateDate} /></Table.Cell> */}
-            <Table.Cell><Link to="/app/users/1/UserDetails">view profile</Link></Table.Cell>
+            <Table.Cell><Link to="/app/users/1/UserDetails" className="action">view profile</Link></Table.Cell>
           </Table.Row>
         ))}
         {!props.listData &&

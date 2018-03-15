@@ -56,10 +56,22 @@
         }
     }
     a{
-        font-family:@pageFont;
-        font-size:0.857142em;
-        // color:@theme-primary;
-        // text-decoration:none;
-        text-transform:uppercase;
+        font-family:@boldFont;
+        color:@primary-text;
+        text-decoration:none;
+        &:hover{
+            color:inherit;
+            text-decoration:underline;
+        }
+        &.action{
+            font-family:@pageFont;
+            font-size:@12px;
+            text-transform:uppercase;
+            color:@linkColor;
+            &:hover{
+                color:@linkHoverColor;
+                text-decoration:none;
+            }
+        }
     }
 }
