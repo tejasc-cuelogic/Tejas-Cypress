@@ -33,12 +33,12 @@ const XmlSubmission = observer((props) => {
         <Table.Body>
           <Table.Row>
             <Table.Cell>
-              No XML Submissions are present for this filling, <Link to="/app/business/xml">Click here to create new.</Link>
+              No XML Submissions are present for this filing, <Link to="/app/business/xml">Click here to create new.</Link>
             </Table.Cell>
           </Table.Row>
         </Table.Body>
       </Table>
-      {/* <p>No XML Submissions are present for this filling,
+      {/* <p>No XML Submissions are present for this filing,
         <Link to="/app/business/xml">
           Click here to create new.
         </Link>
