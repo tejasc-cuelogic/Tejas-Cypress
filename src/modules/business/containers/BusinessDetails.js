@@ -77,6 +77,7 @@ export default class BusinessDetails extends React.Component {
                       open={this.props.uiStore.confirmBox}
                       onCancel={this.handleDelCancel}
                       onConfirm={this.handleBusinessDelete}
+                      size="tiny"
                     />
                   </div>
                 </h1>
