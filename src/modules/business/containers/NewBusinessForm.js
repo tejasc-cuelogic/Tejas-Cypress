@@ -44,7 +44,7 @@ export default class NewBusinessForm extends React.Component {
     const { newOfferingInformation, editBusinessMode, business } = this.props.businessStore;
     return (
       <div>
-        <Button onClick={this.handleOpenModal} color="green" className="rounded" floated="right">+ New Offering</Button>
+        <Button onClick={this.handleOpenModal} color="green" className="rounded" floated="right">+ New Business</Button>
         <Modal
           size="small"
           open={this.props.uiStore.modalStatus}
@@ -52,7 +52,7 @@ export default class NewBusinessForm extends React.Component {
           onOpen={this.handleOpenModal}
           onClose={this.handleCloseModal}
         >
-          <Modal.Header>{editBusinessMode === false ? 'Add New Offering' : 'Edit Offering'}</Modal.Header>
+          <Modal.Header>{editBusinessMode === false ? 'Add New Business' : 'Edit Business'}</Modal.Header>
           <Modal.Content>
             {editBusinessMode === false &&
             <Form error>

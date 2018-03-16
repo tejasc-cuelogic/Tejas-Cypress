@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Accordion, Table } from 'semantic-ui-react';
 import _ from 'lodash';
+import DateTimeFormat from './../../../components/common/DateTimeFormat';
 
 const XmlSubmission = observer((props) => {
   const { businessId, filingId } = props;
@@ -20,7 +21,7 @@ const XmlSubmission = observer((props) => {
                       {'XML Submission'}
                     </Link>
                   </Table.Cell>
-                  <Table.Cell>{`${xmlSubmission.created}`}</Table.Cell>
+                  <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                 </Table.Row>
               ))
             }
