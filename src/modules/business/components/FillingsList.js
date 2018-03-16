@@ -41,13 +41,11 @@ const FillingsList = observer((props) => {
     );
   }
   return (
-    <Card.Group centered>
-      <Card className="flexible">
-        <Card.Content>
-          No filing is present for this business
-        </Card.Content>
-      </Card>
-    </Card.Group>
+    <Card centered>
+      <Card.Content textAlign="center">
+        No filing is present for this business
+      </Card.Content>
+    </Card>
   );
 });
 

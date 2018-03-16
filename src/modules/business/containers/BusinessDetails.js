@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Icon, Button, Grid, Confirm } from 'semantic-ui-react';
+import { Icon, Button, Grid, Confirm, Item } from 'semantic-ui-react';
 
 import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
@@ -73,25 +73,31 @@ export default class BusinessDetails extends React.Component {
                       open={this.props.uiStore.confirmBox}
                       onCancel={this.handleDelCancel}
                       onConfirm={this.handleBusinessDelete}
+                      size="tiny"
                     />
                   </div>
                 </h1>
+                <p>{business.desc.value}</p>
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </div>
         <div className="content-spacer">
-          <p>{business.desc.value}</p>
-          <Button
-            icon
-            circular
-            inverted
-            color="green"
-            businessid={this.props.match.params.businessId}
-            onClick={this.handleNewFiling}
-          >
-            <Icon name="plus" />
-          </Button>
+          <Item.Group>
+            <Item>
+              <Item.Content verticalAlign="middle">
+                <Button
+                  circular
+                  color="green"
+                  floated="right"
+                  businessid={this.props.match.params.businessId}
+                  onClick={this.handleNewFiling}
+                >
+                  + Add Filing
+                </Button>
+              </Item.Content>
+            </Item>
+          </Item.Group>
           <FillingsList
             filings={business.filings}
             handleAccordionClick={this.handleAccordionTitleClick}

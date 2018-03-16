@@ -497,6 +497,17 @@
          Theme Overrides
 *******************************/
 
+.ui.message.toast {
+  position: fixed;
+  top: -180px;
+  right: 10px;
+  margin: 0;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+.ui.message.toast.visible {
+  top: 10px;
+}
 
 
 /*******************************
