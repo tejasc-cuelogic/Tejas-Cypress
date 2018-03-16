@@ -14,7 +14,7 @@ export class UiStore {
   @observable errors = undefined;
   @observable success = undefined;
   @observable redirectURL = undefined;
-  @observable dropdownLoader = false;
+  @observable asyncCheckLoader = false;
   @observable confirmBox = false;
   @observable openAccordion = '';
 
@@ -86,8 +86,8 @@ export class UiStore {
   }
 
   @action
-  toggleDropdownLoader() {
-    this.dropdownLoader = !this.dropdownLoader;
+  toggleAsyncCheckLoader() {
+    this.asyncCheckLoader = !this.asyncCheckLoader;
   }
 
   @action

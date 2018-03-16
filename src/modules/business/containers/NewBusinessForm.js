@@ -59,6 +59,7 @@ export default class NewBusinessForm extends React.Component {
             {editBusinessMode === false &&
             <Form error>
               <Form.Input
+                loading={this.props.uiStore.asyncCheckLoader}
                 placeholder={newOfferingInformation.businessName.label}
                 className="column"
                 label={newOfferingInformation.businessName.label}
