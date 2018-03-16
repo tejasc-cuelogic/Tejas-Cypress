@@ -443,7 +443,7 @@ setXmlPayload = (payload) => {
         const id = this.addPersonalSignature();
         _.map(signature, (value, key) => {
           if (dateFields.includes(key)) {
-            businessStore.changePersonalSignature(key, id, moment((value || moment()), 'MM-DD-YYYY'));
+            businessStore.changePersonalSignature(key, id, moment((value || moment().format('MM-DD-YYYY'))));
           } else {
             businessStore.changePersonalSignature(key, id, value);
           }
