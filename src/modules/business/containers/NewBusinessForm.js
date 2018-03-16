@@ -16,17 +16,13 @@ export default class NewBusinessForm extends React.Component {
     this.props.businessStore.setBusinessDetailsOnEdit(name, value);
   }
 
-  handleBusinessNameOnBlurOnEdit = () => {
-    businessActions.businessExistsOnEdit();
-  }
-
   handleEditBusiness = (e) => {
     e.preventDefault();
     businessActions.editBusinessDetails();
   }
 
-  handleBusinessNameOnBlur = () => {
-    businessActions.businessExists();
+  handleBusinessNameOnBlur = (e) => {
+    businessActions.businessExists(e.target.value);
   }
 
   handleSubmitForm = (e) => {
@@ -94,7 +90,7 @@ export default class NewBusinessForm extends React.Component {
                 defaultValue={business.name.value}
                 error={!!business.name.error}
                 onChange={this.handleOnChangeOnEdit}
-                onBlur={this.handleBusinessNameOnBlurOnEdit}
+                onBlur={this.handleBusinessNameOnBlur}
               />
               <FieldError error={business.name.error} />
               <Form.TextArea

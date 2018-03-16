@@ -111,31 +111,12 @@ export class Business {
   /**
    * @desc To check if business name is already exist
    */
-  businessExists = () => {
+  businessExists = (field) => {
     uiStore.setProgress();
     const payload = {
       query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
       variables: {
-        name: businessStore.newOfferingInformation.businessName.value,
-      },
-    };
-    ApiService.post(GRAPHQL, payload)
-      .then(data => businessStore.setIsBusinessExist(data.body.data.businessExists))
-      .catch(err => uiStore.setErrors(err))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  }
-
-  /**
-   * @desc To check if business name is already exist
-   */
-  businessExistsOnEdit = () => {
-    uiStore.setProgress();
-    const payload = {
-      query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
-      variables: {
-        name: businessStore.business.name.value,
+        name: field,
       },
     };
     ApiService.post(GRAPHQL, payload)
