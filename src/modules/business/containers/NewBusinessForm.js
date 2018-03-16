@@ -1,4 +1,5 @@
 import React from 'react';
+import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Form, Button, Modal } from 'semantic-ui-react';
 import FieldError from '../../../components/common/FieldError';
@@ -8,21 +9,67 @@ import businessActions from '../../../actions/business';
 @inject('businessStore', 'uiStore')
 @observer
 export default class NewBusinessForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      name: {},
+      desc: {},
+    };
+  }
+
+  componentDidMount() {
+    Object.assign(this.state, {
+      name: toJS(this.props.businessStore.business.name),
+      desc: toJS(this.props.businessStore.business.desc),
+    });
+  }
+
   handleOnChange = (e, { name, value }) => {
     validationActions.validateNewOfferingInfoField(name, value);
   }
 
   handleOnChangeOnEdit = (e, { name, value }) => {
-    this.props.businessStore.setBusinessDetailsOnEdit(name, value);
+    const newState = Object.assign({}, this.state);
+    newState[name].value = value;
+    if (value === '') {
+      newState[name].error = `${newState[name].key} field is required.`;
+    } else {
+      newState[name].error = '';
+    }
+    this.setState({
+      ...newState,
+    });
   }
 
   handleEditBusiness = (e) => {
     e.preventDefault();
+    this.props.businessStore.setBusinessDetailsOnEdit(this.state.name.key, this.state.name.value);
+    this.props.businessStore.setBusinessDetailsOnEdit(this.state.desc.key, this.state.desc.value);
     businessActions.editBusinessDetails();
   }
 
   handleBusinessNameOnBlur = (e) => {
     businessActions.businessExists(e.target.value);
+  }
+
+  handleBusinessNameOnBlurOnEdit = (e) => {
+    const newState = Object.assign({}, this.state);
+    businessActions.businessExistsOnEdit(e.target.value)
+      .then((res) => {
+        if (res.body.data.businessExists) {
+          newState.name.error = 'Business Name is already exist.';
+          this.setState({
+            ...newState,
+          });
+        } else {
+          if (newState.name.value !== '') {
+            newState.name.error = '';
+          }
+          this.setState({
+            ...newState,
+          });
+        }
+      });
   }
 
   handleSubmitForm = (e) => {
@@ -41,7 +88,7 @@ export default class NewBusinessForm extends React.Component {
   }
 
   render() {
-    const { newOfferingInformation, editBusinessMode, business } = this.props.businessStore;
+    const { newOfferingInformation, editBusinessMode } = this.props.businessStore;
     return (
       <div>
         {!this.props.businessid &&
@@ -88,23 +135,23 @@ export default class NewBusinessForm extends React.Component {
                 placeholder="Business Name"
                 className="column"
                 label="Business Name"
-                name={business.name.key}
-                defaultValue={business.name.value}
-                error={!!business.name.error}
+                name={this.state.name.key}
+                defaultValue={this.state.name.value}
+                error={!!this.state.name.error}
                 onChange={this.handleOnChangeOnEdit}
-                onBlur={this.handleBusinessNameOnBlur}
+                onBlur={this.handleBusinessNameOnBlurOnEdit}
               />
-              <FieldError error={business.name.error} />
+              <FieldError error={this.state.name.error} />
               <Form.TextArea
                 placeholder="Description"
                 className="column"
                 label="Description"
-                name={business.desc.key}
-                defaultValue={business.desc.value}
-                error={!!business.desc.error}
+                name={this.state.desc.key}
+                defaultValue={this.state.desc.value}
+                error={!!this.state.desc.error}
                 onChange={this.handleOnChangeOnEdit}
               />
-              <FieldError error={business.desc.error} />
+              <FieldError error={this.state.desc.error} />
             </Form>
             }
           </Modal.Content>
@@ -124,8 +171,8 @@ export default class NewBusinessForm extends React.Component {
             <Button
               color="green"
               disabled={
-                !this.props.businessStore.canSubmitEditBusinessForm ||
-                  this.props.uiStore.submitButtonDisabled
+                !((this.state.name.value !== '' && this.state.desc.value !== '') ||
+                  this.props.uiStore.submitButtonDisabled)
               }
               onClick={this.handleEditBusiness}
             >
