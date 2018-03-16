@@ -18,17 +18,13 @@ export default class BusinessDetails extends React.Component {
 
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
 
-  handleEditBusinessName = () => {
-    this.props.businessStore.setEditBusinessName(true);
-  }
-
   handleBusinessDelete = () => {
     businessActions.deleteBusiness(this.props.match.params.businessId)
       .then(() => this.props.history.push('/app/business'));
   }
 
   handleOpenModal = () => {
-    this.props.businessStore.setBusinessMode(true);
+    this.props.businessStore.setEditBusinessMode(true);
     this.props.businessStore.resetNewOfferingInfo();
     this.props.uiStore.setModalStatus(true);
   }

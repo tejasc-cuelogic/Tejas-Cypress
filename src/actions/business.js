@@ -111,31 +111,12 @@ export class Business {
   /**
    * @desc To check if business name is already exist
    */
-  businessExists = () => {
+  businessExists = (field) => {
     uiStore.setProgress();
     const payload = {
       query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
       variables: {
-        name: businessStore.newOfferingInformation.businessName.value,
-      },
-    };
-    ApiService.post(GRAPHQL, payload)
-      .then(data => businessStore.setIsBusinessExist(data.body.data.businessExists))
-      .catch(err => uiStore.setErrors(err))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  }
-
-  /**
-   * @desc To check if business name is already exist
-   */
-  businessExistsOnEdit = () => {
-    uiStore.setProgress();
-    const payload = {
-      query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
-      variables: {
-        name: businessStore.business.name.value,
+        name: field,
       },
     };
     ApiService.post(GRAPHQL, payload)
@@ -173,7 +154,7 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Creating New Business');
     const payload = {
-      query: 'mutation createBusiness($newBusiness: CreateBusinessInput){createBusiness(newBusiness:$newBusiness){id name created}}',
+      query: 'mutation createBusiness($newBusiness: CreateBusinessInput){createBusiness(newBusiness:$newBusiness){id name created description}}',
       variables: {
         newBusiness: {
           name: businessStore.newOfferingInformation.businessName.value,
@@ -212,20 +193,11 @@ export class Business {
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(businessStore.setEditBusinessName(false), uiStore.setModalStatus(false))
+      .then(uiStore.setModalStatus(false))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.setProgress(false);
       });
-  }
-
-  validateBusinessNameOnEdit = (field) => {
-    this.businessExistsOnEdit();
-    if (businessStore.isBusinessExist) {
-      businessStore.setBusinessNameErrorOnEdit(field, 'Business Name is already exist.');
-    } else {
-      businessStore.setBusinessNameErrorOnEdit(field, '');
-    }
   }
 
   /**
@@ -441,12 +413,11 @@ export class Business {
   }
 
 setXmlPayload = (payload) => {
-    const dateFields = ['dateIncorporation', 'deadlineDate']
+    const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate']
     if (payload) {
       businessStore.setBusinessId(payload.businessId);
       businessStore.setFilingId(payload.filingId);
       businessStore.setOfferingUrl(payload.offeringUrl);
-      // _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name));
       _.map(payload.filerInformation, (value, key) => businessStore.setFilerInfo(key, (value || '')));
       _.map(payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
@@ -472,10 +443,15 @@ setXmlPayload = (payload) => {
       })
       _.map(payload.signature.signaturePersons, (signature) => {
         const id = this.addPersonalSignature();
-        _.map(signature, (value, key) => businessStore.changePersonalSignature(key, id, value));
+        _.map(signature, (value, key) => {
+          if (dateFields.includes(key)) {
+            businessStore.changePersonalSignature(key, id, moment((value || moment()), 'MM-DD-YYYY'));
+          } else {
+            businessStore.changePersonalSignature(key, id, value);
+          }
+        });
       })
       _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
-      console.log(payload);
     }
   }
   // Private Methods ends here

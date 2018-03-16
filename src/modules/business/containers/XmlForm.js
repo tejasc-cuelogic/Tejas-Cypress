@@ -14,7 +14,7 @@ import businessActions from '../../../actions/business';
 @inject('businessStore', 'uiStore')
 @observer
 export default class XmlForm extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.businessStore.setBusinessId(this.props.match.params.businessId);
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
     businessActions.getFiles(this.props.match.params)

@@ -77,9 +77,6 @@ export class BusinessStore {
   newOfferingInformation = { ...NEW_OFFERING_INFORMATION };
 
   @observable
-  editBusinessName = false;
-
-  @observable
   editBusinessMode = false;
 
   @computed get canSubmitEdgarForm() {
@@ -90,13 +87,12 @@ export class BusinessStore {
     return (_.every(this.newOfferingInformation, data => !_.isEmpty(data.value)));
   }
 
-  @computed get getSummary() {
-    return this.businessList.length || 0;
+  @computed get canSubmitEditBusinessForm() {
+    return (this.business.name.value !== '' && this.business.desc.value !== '');
   }
 
-  @action
-  setEditBusinessName(status) {
-    this.editBusinessName = status;
+  @computed get getSummary() {
+    return this.businessList.length || 0;
   }
 
   @action
@@ -275,6 +271,7 @@ export class BusinessStore {
     this.isBusinessExist = value;
     if (value === true) {
       this.setNewOfferingError('businessName', 'Business Name is already exist.');
+      this.setBusinessNameErrorOnEdit('name', 'Business Name is already exist.');
     }
   }
 
@@ -299,7 +296,7 @@ export class BusinessStore {
   }
 
   @action
-  setBusinessMode(status) {
+  setEditBusinessMode(status) {
     this.editBusinessMode = status;
   }
 }
