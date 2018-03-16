@@ -129,8 +129,6 @@ export class Business {
    * @desc To check if business name is already for Edit Business
    */
   businessExistsOnEdit = (field) => {
-    uiStore.setProgress();
-    uiStore.setLoaderMessage('Checking if business exists.');
     const payload = {
       query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
       variables: {
@@ -142,7 +140,6 @@ export class Business {
         .then(data => res(data))
         .catch(err => rej(err))
         .finally(() => {
-          uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
         });
     });

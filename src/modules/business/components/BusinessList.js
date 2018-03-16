@@ -19,7 +19,7 @@ const BusinessList = observer(props => (
       <Table.Body>
         {
           props.businessList.map(business => (
-            <Table.Row>
+            <Table.Row key={business.id}>
               <Table.Cell />
               <Table.Cell singleLine><Link to={`/app/business/${business.id}`}>{business.name}</Link></Table.Cell>
               <Table.Cell singleLine><DateTimeFormat datetime={business.created} /></Table.Cell>

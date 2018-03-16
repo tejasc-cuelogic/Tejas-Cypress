@@ -17,10 +17,10 @@ export default class NewBusinessForm extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
     Object.assign(this.state, {
-      name: toJS(nextProps.businessStore.business.name),
-      desc: toJS(nextProps.businessStore.business.desc),
+      name: toJS(this.props.businessStore.business.name),
+      desc: toJS(this.props.businessStore.business.desc),
     });
   }
 
