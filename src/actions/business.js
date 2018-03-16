@@ -370,7 +370,7 @@ export class Business {
       const personData = {};
       personData.personSignature = person.personSignature.value;
       personData.personTitle = person.personTitle.value;
-      personData.signatureDate = person.signatureDate.value;
+      personData.signatureDate = person.signatureDate.value.format('MM-DD-YYYY');
       formattedData.signaturePersons.push(personData);
     });
     return formattedData;
@@ -411,12 +411,19 @@ export class Business {
   }
 
 setXmlPayload = (payload) => {
-    const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate']
+    const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
+    const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
     if (payload) {
       businessStore.setBusinessId(payload.businessId);
       businessStore.setFilingId(payload.filingId);
       businessStore.setOfferingUrl(payload.offeringUrl);
-      _.map(payload.filerInformation, (value, key) => businessStore.setFilerInfo(key, (value || '')));
+      _.map(payload.filerInformation, (value, key) => {
+        if (confirmationFlags.includes(key)) {
+          businessStore.setFilerInfo(key, (value || false))
+        } else {
+          businessStore.setFilerInfo(key, (value || ''))
+        }
+      });
       _.map(payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
           businessStore.setIssuerInfo(key, moment(value, 'MM-DD-YYYY'));
