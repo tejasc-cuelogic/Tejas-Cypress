@@ -112,7 +112,7 @@ export class Business {
    * @desc To check if business name is already exist
    */
   businessExists = (field) => {
-    uiStore.setProgress();
+    uiStore.toggleAsyncCheckLoader();
     const payload = {
       query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
       variables: {
@@ -122,9 +122,7 @@ export class Business {
     ApiService.post(GRAPHQL, payload)
       .then(data => businessStore.setIsBusinessExist(data.body.data.businessExists))
       .catch(err => uiStore.setErrors(err))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+      .finally(() => uiStore.toggleAsyncCheckLoader());
   }
 
   /**
