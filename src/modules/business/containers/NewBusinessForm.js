@@ -8,12 +8,35 @@ import businessActions from '../../../actions/business';
 @inject('businessStore', 'uiStore')
 @observer
 export default class NewBusinessForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      businessInfo: {},
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      businessInfo: { ...nextProps.businessStore.business },
+    });
+  }
+
   handleOnChange = (e, { name, value }) => {
     validationActions.validateNewOfferingInfoField(name, value);
   }
 
   handleOnChangeOnEdit = (e, { name, value }) => {
-    this.props.businessStore.setBusinessDetailsOnEdit(name, value);
+    // this.props.businessStore.setBusinessDetailsOnEdit(name, value);
+    const newState = { ...this.state.businessInfo };
+    newState[name].value = value;
+    if (value === '') {
+      newState[name].error = `${newState[name]} field is required.`;
+    } else {
+      newState[name].error = '';
+    }
+    this.setState({
+      businessInfo: newState,
+    });
   }
 
   handleEditBusiness = (e) => {
@@ -41,7 +64,8 @@ export default class NewBusinessForm extends React.Component {
   }
 
   render() {
-    const { newOfferingInformation, editBusinessMode, business } = this.props.businessStore;
+    const { newOfferingInformation, editBusinessMode } = this.props.businessStore;
+    const { businessInfo } = this.state;
     return (
       <div>
         <Button onClick={this.handleOpenModal} color="green" className="rounded" floated="right">+ New Offering</Button>
@@ -85,23 +109,23 @@ export default class NewBusinessForm extends React.Component {
                 placeholder="Business Name"
                 className="column"
                 label="Business Name"
-                name={business.name.key}
-                defaultValue={business.name.value}
-                error={!!business.name.error}
+                name={businessInfo.name.key}
+                defaultValue={businessInfo.name.value}
+                error={!!businessInfo.name.error}
                 onChange={this.handleOnChangeOnEdit}
                 onBlur={this.handleBusinessNameOnBlur}
               />
-              <FieldError error={business.name.error} />
+              <FieldError error={businessInfo.name.error} />
               <Form.TextArea
                 placeholder="Description"
                 className="column"
                 label="Description"
-                name={business.desc.key}
-                defaultValue={business.desc.value}
-                error={!!business.desc.error}
+                name={businessInfo.desc.key}
+                defaultValue={businessInfo.desc.value}
+                error={!!businessInfo.desc.error}
                 onChange={this.handleOnChangeOnEdit}
               />
-              <FieldError error={business.desc.error} />
+              <FieldError error={businessInfo.desc.error} />
             </Form>
             }
           </Modal.Content>
