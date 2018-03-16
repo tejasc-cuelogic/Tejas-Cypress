@@ -7,6 +7,7 @@ import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
 import businessActions from '../../../actions/business';
 import NewBusinessForm from '../containers/NewBusinessForm';
+import Spinner from '../../../theme/ui/Spinner';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -37,7 +38,13 @@ export default class BusinessDetails extends React.Component {
 
   render() {
     const { business } = this.props.businessStore;
-
+    if (this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     return (
       <div>
         <div className="page-header-section webcontent-spacer">
@@ -45,7 +52,16 @@ export default class BusinessDetails extends React.Component {
             <Grid.Row>
               <Grid.Column width={16}>
                 <h1>
-                  <NewBusinessForm />
+                  <Button
+                    circular
+                    color="green"
+                    floated="right"
+                    businessid={this.props.match.params.businessId}
+                    onClick={this.handleNewFiling}
+                  >
+                    + Add Filing
+                  </Button>
+                  <NewBusinessForm businessid={this.props.match.params.businessId} />
                   <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
                   {business.name.value}
                   <div className="actions">
@@ -73,25 +89,16 @@ export default class BusinessDetails extends React.Component {
                       open={this.props.uiStore.confirmBox}
                       onCancel={this.handleDelCancel}
                       onConfirm={this.handleBusinessDelete}
+                      size="tiny"
                     />
                   </div>
                 </h1>
+                <p>{business.desc.value}</p>
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </div>
         <div className="content-spacer">
-          <p>{business.desc.value}</p>
-          <Button
-            icon
-            circular
-            inverted
-            color="green"
-            businessid={this.props.match.params.businessId}
-            onClick={this.handleNewFiling}
-          >
-            <Icon name="plus" />
-          </Button>
           <FillingsList
             filings={business.filings}
             handleAccordionClick={this.handleAccordionTitleClick}

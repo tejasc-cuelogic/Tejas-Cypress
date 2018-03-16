@@ -61,15 +61,15 @@ const userListingSubheader = () => (
     <div className="webcontent-spacer">
       <Grid stackable>
         <Grid.Row>
-          <Grid.Column width={4}>
+          <Grid.Column width={6}>
             <h3>Manage Users</h3>
           </Grid.Column>
-          <Grid.Column width={6}>
+          <Grid.Column width={5}>
             <Form inverted>
               <Input fluid inverted icon="search" iconPosition="left" placeholder="Type user’s name, e-mail address or ID number" />
             </Form>
           </Grid.Column>
-          <Grid.Column width={3} textAlign="center">
+          <Grid.Column width={2} textAlign="center">
             <span className="filter-count">0</span>
             <Button as={Link} to="" inverted icon color="green" className="link-button">
               FILTERS <Icon name="caret down" />

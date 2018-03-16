@@ -8,6 +8,7 @@ import SuccessMessage from '../../../components/common/SuccessMessage';
 import businessActions from '../../../actions/business';
 import BusinessList from '../components/BusinessList';
 import NewBusinessForm from './NewBusinessForm';
+import Spinner from '../../../theme/ui/Spinner';
 
 @withRouter
 @inject('businessStore', 'uiStore')
@@ -17,20 +18,27 @@ class Business extends Component {
     businessActions.listBusinesses();
   }
   render() {
+    if (this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     return (
       <div>
         <div className="page-header-section webcontent-spacer">
           <Grid stackable>
             <Grid.Row>
-              <Grid.Column width={4}>
+              <Grid.Column width={6}>
                 <h1>Manage Businesses</h1>
               </Grid.Column>
-              <Grid.Column width={6}>
+              <Grid.Column width={5}>
                 <Form inverted>
                   <Input fluid inverted icon="search" iconPosition="left" placeholder="Type Business’s name, description" />
                 </Form>
               </Grid.Column>
-              <Grid.Column width={3} textAlign="center">
+              <Grid.Column width={2} textAlign="center">
                 <span className="filter-count">0</span>
                 <Button to="" inverted icon color="green" className="link-button">
                   FILTERS <Icon name="caret down" />

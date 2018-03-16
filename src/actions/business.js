@@ -112,7 +112,7 @@ export class Business {
    * @desc To check if business name is already exist
    */
   businessExists = (field) => {
-    uiStore.setProgress();
+    uiStore.toggleAsyncCheckLoader();
     const payload = {
       query: 'query businessExistsByName($name: String!){businessExists(name:$name)}',
       variables: {
@@ -122,9 +122,7 @@ export class Business {
     ApiService.post(GRAPHQL, payload)
       .then(data => businessStore.setIsBusinessExist(data.body.data.businessExists))
       .catch(err => uiStore.setErrors(err))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+      .finally(() => uiStore.toggleAsyncCheckLoader());
   }
 
   /**
@@ -395,7 +393,7 @@ export class Business {
       const personData = {};
       personData.personSignature = person.personSignature.value;
       personData.personTitle = person.personTitle.value;
-      personData.signatureDate = person.signatureDate.value;
+      personData.signatureDate = person.signatureDate.value.format('MM-DD-YYYY');
       formattedData.signaturePersons.push(personData);
     });
     return formattedData;
@@ -436,13 +434,19 @@ export class Business {
   }
 
 setXmlPayload = (payload) => {
-    const dateFields = ['dateIncorporation', 'deadlineDate']
+    const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
+    const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
     if (payload) {
       businessStore.setBusinessId(payload.businessId);
       businessStore.setFilingId(payload.filingId);
       businessStore.setOfferingUrl(payload.offeringUrl);
-      // _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name));
-      _.map(payload.filerInformation, (value, key) => businessStore.setFilerInfo(key, (value || '')));
+      _.map(payload.filerInformation, (value, key) => {
+        if (confirmationFlags.includes(key)) {
+          businessStore.setFilerInfo(key, (value || false))
+        } else {
+          businessStore.setFilerInfo(key, (value || ''))
+        }
+      });
       _.map(payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
           businessStore.setIssuerInfo(key, moment(value, 'MM-DD-YYYY'));
@@ -467,10 +471,15 @@ setXmlPayload = (payload) => {
       })
       _.map(payload.signature.signaturePersons, (signature) => {
         const id = this.addPersonalSignature();
-        _.map(signature, (value, key) => businessStore.changePersonalSignature(key, id, value));
+        _.map(signature, (value, key) => {
+          if (dateFields.includes(key)) {
+            businessStore.changePersonalSignature(key, id, moment((value || moment().format('MM-DD-YYYY'))));
+          } else {
+            businessStore.changePersonalSignature(key, id, value);
+          }
+        });
       })
       _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
-      console.log(payload);
     }
   }
   // Private Methods ends here
