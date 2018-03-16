@@ -8,6 +8,7 @@ import SuccessMessage from '../../../components/common/SuccessMessage';
 import businessActions from '../../../actions/business';
 import BusinessList from '../components/BusinessList';
 import NewBusinessForm from './NewBusinessForm';
+import Spinner from '../../../theme/ui/Spinner';
 
 @withRouter
 @inject('businessStore', 'uiStore')
@@ -17,6 +18,13 @@ class Business extends Component {
     businessActions.listBusinesses();
   }
   render() {
+    if (this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     return (
       <div>
         <div className="page-header-section webcontent-spacer">
