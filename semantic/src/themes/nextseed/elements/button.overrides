@@ -59,4 +59,10 @@
             }
         }
     }
+    &.red.button, &.red.buttons .button{
+        background-color:@highlight-primary;
+        &:hover, &:focus, &:active{
+            background-color:darken(desaturate(spin(@highlight-primary, 0.0997), 7.0155), 4.9020);
+        }
+    }
 }

@@ -5092,6 +5092,20 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   background-color: #A9D943;
 }
 
+.ui.red.button,
+.ui.red.buttons .button {
+  background-color: #EB5757;
+}
+
+.ui.red.button:hover,
+.ui.red.buttons .button:hover,
+.ui.red.button:focus,
+.ui.red.buttons .button:focus,
+.ui.red.button:active,
+.ui.red.buttons .button:active {
+  background-color: #e14848;
+}
+
 /*******************************
          Site Overrides
 *******************************/

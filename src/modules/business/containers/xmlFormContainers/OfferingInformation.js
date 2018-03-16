@@ -108,15 +108,8 @@ export default class OfferingInformation extends React.Component {
             onChange={this.handleChange}
           />
         </Form.Group>
-        <Form.Input
-          label="Target Offering Amount"
-          name="offeringAmount"
-          value={this.offeringInformation.offeringAmount.value}
-          error={!!this.offeringInformation.offeringAmount.error}
-          onChange={this.handleChange}
-        />
         <Form.Group>
-          <div className="field">
+          <div className="three wide field">
             <h5>Is oversubscription Accepted?</h5>
             <Form.Group inline>
               <Form.Radio
@@ -145,6 +138,7 @@ export default class OfferingInformation extends React.Component {
             onChange={this.handleChange}
             disabled={this.getSubscriptionTypeClass()}
             error={!!this.offeringInformation.overSubscriptionAllocationType.error}
+            width={5}
           />
           <Form.Input
             label="Other Description"
@@ -154,6 +148,7 @@ export default class OfferingInformation extends React.Component {
             error={!!this.offeringInformation.descOverSubscription.error}
             onChange={this.handleChange}
             disabled={!this.getSubscriptionDescClass()}
+            width={4}
           />
           <Form.Input
             label="Deadline to reach the Target Offering Amount"
@@ -162,9 +157,18 @@ export default class OfferingInformation extends React.Component {
             error={!!this.offeringInformation.maximumOfferingAmount.error}
             onChange={this.handleChange}
             disabled={this.getSubscriptionTypeClass()}
+            width={4}
           />
         </Form.Group>
         <Form.Group>
+          <Form.Input
+            label="Target Offering Amount"
+            name="offeringAmount"
+            value={this.offeringInformation.offeringAmount.value}
+            error={!!this.offeringInformation.offeringAmount.error}
+            onChange={this.handleChange}
+            width={4}
+          />
           <div className="field three wide">
             { /* eslint-disable jsx-a11y/label-has-for */ }
             <label>Deadline Date</label>
