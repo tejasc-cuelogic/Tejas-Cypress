@@ -15,18 +15,20 @@ export const FORM_VALUES = [
   { name: 'interest_rate', placeholder: 'Interest Rate' },
 ];
 
-export const DOCFILE_TYPES = {
-  'Form C Issuer Certificate.docx': false,
-  'Form Security Agreement.docx': false,
-  'Form of Note Purchase Agreement - Revenue Share.docx': false,
-  'Form of Note Purchase Agreement - Term Note.docx': false,
-  'Goldstar Escrow Agreement (Form).docx': false,
-  'National - Template Disclosure Statement (Rev).docx': false,
-  'National - Template Disclosure Statement (Term).docx': false,
-  'National Portal - Form of Crowdfunding Portal Agreement (Rev Share).docx': false,
-  'National Portal - Form of Crowdfunding Portal Agreement (Term).docx': false,
-  'Resolution - Borrowing Authority (Form).docx': false,
-};
+export const DOCFILE_TYPES = [];
+
+export const FILES = [
+  'Form C Issuer Certificate.docx',
+  'Form Security Agreement.docx',
+  'Form of Note Purchase Agreement - Revenue Share.docx',
+  'Form of Note Purchase Agreement - Term Note.docx',
+  'Goldstar Escrow Agreement (Form).docx',
+  'National - Template Disclosure Statement (Rev).docx',
+  'National - Template Disclosure Statement (Term).docx',
+  'National Portal - Form of Crowdfunding Portal Agreement (Rev Share).docx',
+  'National Portal - Form of Crowdfunding Portal Agreement (Term).docx',
+  'Resolution - Borrowing Authority (Form).docx',
+];
 
 export const TEMPLATE_VARIABLES = {
   name_of_business: '',
@@ -233,9 +235,9 @@ export const OFFERING_INFORMATION = {
   },
   price: {
     value: '',
-    key: '',
+    key: 'price',
     error: undefined,
-    rule: '',
+    rule: 'numeric|max:999999',
   },
   priceDeterminationMethod: {
     value: '',

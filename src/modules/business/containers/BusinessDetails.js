@@ -18,17 +18,13 @@ export default class BusinessDetails extends React.Component {
 
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
 
-  handleEditBusinessName = () => {
-    this.props.businessStore.setEditBusinessName(true);
-  }
-
-  handleBusinessDelete = (e, { businessid }) => {
-    businessActions.deleteBusiness(businessid)
+  handleBusinessDelete = () => {
+    businessActions.deleteBusiness(this.props.match.params.businessId)
       .then(() => this.props.history.push('/app/business'));
   }
 
   handleOpenModal = () => {
-    this.props.businessStore.setBusinessMode(true);
+    this.props.businessStore.setEditBusinessMode(true);
     this.props.businessStore.resetNewOfferingInfo();
     this.props.uiStore.setModalStatus(true);
   }
@@ -36,6 +32,8 @@ export default class BusinessDetails extends React.Component {
   handleDelCancel = () => this.props.uiStore.toggleConfirmBox(false);
 
   confirmDelete = () => this.props.uiStore.toggleConfirmBox(true);
+
+  handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`)
 
   render() {
     const { business } = this.props.businessStore;
@@ -84,6 +82,16 @@ export default class BusinessDetails extends React.Component {
         </div>
         <div className="content-spacer">
           <p>{business.desc.value}</p>
+          <Button
+            icon
+            circular
+            inverted
+            color="green"
+            businessid={this.props.match.params.businessId}
+            onClick={this.handleNewFiling}
+          >
+            <Icon name="plus" />
+          </Button>
           <FillingsList
             filings={business.filings}
             handleAccordionClick={this.handleAccordionTitleClick}

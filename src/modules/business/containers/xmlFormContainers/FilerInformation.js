@@ -24,7 +24,7 @@ export default class FilerInformation extends React.Component {
             placeholder="Filer CIK"
             label="Filer CIK"
             name="filerCik"
-            defaultValue={filerInformation.filerCik.value}
+            value={filerInformation.filerCik.value}
             onChange={this.handleChange}
             className="column"
             error={!!filerInformation.filerCik.error}
@@ -34,7 +34,7 @@ export default class FilerInformation extends React.Component {
             placeholder="Filer CCC"
             label="Filer CCC"
             name="filerCcc"
-            defaultValue={filerInformation.filerCcc.value}
+            value={filerInformation.filerCcc.value}
             onChange={this.handleChange}
             className="column"
             error={!!filerInformation.filerCcc.error}
@@ -77,7 +77,7 @@ export default class FilerInformation extends React.Component {
           placeholder="Name"
           label="Name"
           name="contactName"
-          defaultValue={filerInformation.contactName.value}
+          value={filerInformation.contactName.value}
           error={!!filerInformation.contactName.error}
           onChange={this.handleChange}
         />
@@ -85,7 +85,7 @@ export default class FilerInformation extends React.Component {
           placeholder="Phone Number"
           label="Phone Number"
           name="contactPhone"
-          defaultValue={filerInformation.contactPhone.value}
+          value={filerInformation.contactPhone.value}
           error={!!filerInformation.contactPhone.error}
           onChange={this.handleChange}
         />
@@ -93,7 +93,7 @@ export default class FilerInformation extends React.Component {
           placeholder="Email"
           label="Email"
           name="contactEmail"
-          defaultValue={filerInformation.contactEmail.value}
+          value={filerInformation.contactEmail.value}
           error={!!filerInformation.contactEmail.error}
           onChange={this.handleChange}
         />

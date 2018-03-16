@@ -6,7 +6,7 @@ const PersonalSignature = observer(props => (
   <div>
     <div>
       {props.signaturePersons.map(personData => (
-        <div>
+        <div key={personData.id}>
           <Button icon dataId={personData.id} onClick={props.handleDeleteClick}>
             <Icon name="remove" size="mini" />
           </Button>

@@ -30,21 +30,21 @@ export default class Signature extends React.Component {
           <Form.Input
             label={signature.issuer.label}
             name={signature.issuer.key}
-            defaultValue={signature.issuer.value}
+            value={signature.issuer.value}
             error={!!signature.issuer.error}
             onChange={this.handleChange}
           />
           <Form.Input
             label={signature.issuerSignature.label}
             name={signature.issuerSignature.key}
-            defaultValue={signature.issuerSignature.value}
+            value={signature.issuerSignature.value}
             error={!!signature.issuerSignature.error}
             onChange={this.handleChange}
           />
           <Form.Input
             label={signature.issuerTitle.label}
             name={signature.issuerTitle.key}
-            defaultValue={signature.issuerTitle.value}
+            value={signature.issuerTitle.value}
             error={!!signature.issuerTitle.error}
             onChange={this.handleChange}
           />

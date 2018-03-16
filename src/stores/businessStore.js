@@ -2,7 +2,6 @@ import { observable, action, computed } from 'mobx';
 import _ from 'lodash';
 
 import {
-  DOCFILE_TYPES,
   FORM_VALUES,
   FILER_INFORMATION,
   ISSUER_INFORMATION,
@@ -17,7 +16,13 @@ export class BusinessStore {
   formValues = [...FORM_VALUES];
 
   @observable
-  offeringId = '';
+  businessId = '';
+
+  @observable
+  filingId = '';
+
+  @observable
+  folderId = '';
 
   @observable
   offeringUrl = '';
@@ -63,16 +68,13 @@ export class BusinessStore {
   signature = { ...SIGNATURE }
 
   @observable
-  documentList = { ...DOCFILE_TYPES };
+  documentList = [];
 
   @observable
   offeringList = [];
 
   @observable
   newOfferingInformation = { ...NEW_OFFERING_INFORMATION };
-
-  @observable
-  editBusinessName = false;
 
   @observable
   editBusinessMode = false;
@@ -85,13 +87,12 @@ export class BusinessStore {
     return (_.every(this.newOfferingInformation, data => !_.isEmpty(data.value)));
   }
 
-  @computed get getSummary() {
-    return this.businessList.length || 0;
+  @computed get canSubmitEditBusinessForm() {
+    return (this.business.name.value !== '' && this.business.desc.value !== '');
   }
 
-  @action
-  setEditBusinessName(status) {
-    this.editBusinessName = status;
+  @computed get getSummary() {
+    return this.businessList.length || 0;
   }
 
   @action
@@ -110,13 +111,39 @@ export class BusinessStore {
   }
 
   @action
-  toggleRequiredFiles(key) {
-    this.documentList[key] = !this.documentList[key];
+  setDocumentList(list) {
+    this.documentList = list;
   }
 
   @action
-  setOfferingId(id) {
-    this.offeringId = id;
+  setDocument(name, value) {
+    /*eslint-disable*/
+    _.forEach(this.documentList, (document) => {
+      if (document.name === name) {
+        document.checked = value;
+      }
+    });
+  }
+
+  @action
+  toggleRequiredFiles(key) {
+    _.filter(this.documentList, document => document.name === key)[0].checked =
+      !_.filter(this.documentList, document => document.name === key)[0].checked;
+  }
+
+  @action
+  setBusinessId(id) {
+    this.businessId = id;
+  }
+
+  @action
+  setFilingId(id) {
+    this.filingId = id;
+  }
+
+  @action
+  setFolderId(id) {
+    this.folderId = id;
   }
 
   @action
@@ -244,6 +271,7 @@ export class BusinessStore {
     this.isBusinessExist = value;
     if (value === true) {
       this.setNewOfferingError('businessName', 'Business Name is already exist.');
+      this.setBusinessNameErrorOnEdit('name', 'Business Name is already exist.');
     }
   }
 
@@ -268,7 +296,7 @@ export class BusinessStore {
   }
 
   @action
-  setBusinessMode(status) {
+  setEditBusinessMode(status) {
     this.editBusinessMode = status;
   }
 }

@@ -50,14 +50,14 @@ export default class OfferingInformation extends React.Component {
         <Form.TextArea
           label={LABEL}
           name="compensationAmount"
-          defaultValue={this.offeringInformation.compensationAmount.value}
+          value={this.offeringInformation.compensationAmount.value}
           error={!!this.offeringInformation.compensationAmount.error}
           onChange={this.handleChange}
         />
         <Form.TextArea
           label={LABEL1}
           name="financialInterest"
-          defaultValue={this.offeringInformation.financialInterest.value}
+          value={this.offeringInformation.financialInterest.value}
           error={!!this.offeringInformation.financialInterest.error}
           onChange={this.handleChange}
         />
@@ -68,7 +68,7 @@ export default class OfferingInformation extends React.Component {
             placeholder="Security Type"
             label="Type of Security Offered"
             name="securityOfferedType"
-            defaultValue={this.offeringInformation.securityOfferedType.value}
+            value={this.offeringInformation.securityOfferedType.value}
             options={OFFERED_SECURITIES}
             onChange={this.handleChange}
           />
@@ -76,7 +76,7 @@ export default class OfferingInformation extends React.Component {
             placeholder="Other Description"
             label="Other Description"
             name="securityOfferedOtherDesc"
-            defaultValue={this.offeringInformation.securityOfferedOtherDesc.value}
+            value={this.offeringInformation.securityOfferedOtherDesc.value}
             error={!!this.offeringInformation.securityOfferedOtherDesc.error}
             onChange={this.handleChange}
             disabled={this.getOtherSecurityClass()}
@@ -85,7 +85,7 @@ export default class OfferingInformation extends React.Component {
             placeholder="No. of securities offered"
             label="No. of securities offered"
             name="noOfSecurityOffered"
-            defaultValue={this.offeringInformation.noOfSecurityOffered.value}
+            value={this.offeringInformation.noOfSecurityOffered.value}
             error={!!this.offeringInformation.noOfSecurityOffered.error}
             onChange={this.handleChange}
             disabled={this.getSecurityOfferedClass()}
@@ -94,7 +94,7 @@ export default class OfferingInformation extends React.Component {
             placeholder="Price"
             label="Price"
             name="price"
-            defaultValue={this.offeringInformation.price.value}
+            value={this.offeringInformation.price.value}
             error={!!this.offeringInformation.price.error}
             onChange={this.handleChange}
             disabled={this.getSecurityOfferedClass()}
@@ -103,7 +103,7 @@ export default class OfferingInformation extends React.Component {
             placeholder="Price"
             label="Price (or Method for Determining Price)"
             name="priceDeterminationMethod"
-            defaultValue={this.offeringInformation.priceDeterminationMethod.value}
+            value={this.offeringInformation.priceDeterminationMethod.value}
             error={!!this.offeringInformation.priceDeterminationMethod.error}
             onChange={this.handleChange}
           />
@@ -111,7 +111,7 @@ export default class OfferingInformation extends React.Component {
         <Form.Input
           label="Target Offering Amount"
           name="offeringAmount"
-          defaultValue={this.offeringInformation.offeringAmount.value}
+          value={this.offeringInformation.offeringAmount.value}
           error={!!this.offeringInformation.offeringAmount.error}
           onChange={this.handleChange}
         />
@@ -140,7 +140,7 @@ export default class OfferingInformation extends React.Component {
             search
             label="If yes, disclose how oversubscriptions will be allocated"
             name="overSubscriptionAllocationType"
-            defaultValue={this.offeringInformation.overSubscriptionAllocationType.value}
+            value={this.offeringInformation.overSubscriptionAllocationType.value}
             options={OVER_SUBSCRIPTION_ALLOCATION_TYPES}
             onChange={this.handleChange}
             disabled={this.getSubscriptionTypeClass()}
@@ -150,7 +150,7 @@ export default class OfferingInformation extends React.Component {
             label="Other Description"
             placeholder="Other Description"
             name="descOverSubscription"
-            defaultValue={this.offeringInformation.descOverSubscription.value}
+            value={this.offeringInformation.descOverSubscription.value}
             error={!!this.offeringInformation.descOverSubscription.error}
             onChange={this.handleChange}
             disabled={!this.getSubscriptionDescClass()}
@@ -158,7 +158,7 @@ export default class OfferingInformation extends React.Component {
           <Form.Input
             label="Deadline to reach the Target Offering Amount"
             name="maximumOfferingAmount"
-            defaultValue={this.offeringInformation.maximumOfferingAmount.value}
+            value={this.offeringInformation.maximumOfferingAmount.value}
             error={!!this.offeringInformation.maximumOfferingAmount.error}
             onChange={this.handleChange}
             disabled={this.getSubscriptionTypeClass()}

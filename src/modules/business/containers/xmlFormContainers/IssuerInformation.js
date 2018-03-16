@@ -37,7 +37,7 @@ export default class IssuerInformation extends React.Component {
           placeholder="Name of Issuer"
           label="Name of Issuer"
           name="nameOfIssuer"
-          defaultValue={issuerInformation.nameOfIssuer.value}
+          value={issuerInformation.nameOfIssuer.value}
           error={!!issuerInformation.nameOfIssuer.error}
           onChange={this.handleChange}
         />
@@ -49,7 +49,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="Form"
             label="Form"
             name="legalStatusForm"
-            defaultValue={issuerInformation.legalStatusForm.value}
+            value={issuerInformation.legalStatusForm.value}
             error={!!issuerInformation.legalStatusForm.error}
             onChange={this.handleChange}
             options={LEGAL_FORM_TYPES}
@@ -59,7 +59,7 @@ export default class IssuerInformation extends React.Component {
             label="Other Description"
             name="legalStatusOtherDesc"
             disabled={this.getOtherDescriptionClass()}
-            defaultValue={issuerInformation.legalStatusOtherDesc.value}
+            value={issuerInformation.legalStatusOtherDesc.value}
             error={!!issuerInformation.legalStatusOtherDesc.error}
             onChange={this.handleChange}
           />
@@ -71,7 +71,7 @@ export default class IssuerInformation extends React.Component {
             name="jurisdictionOrganization"
             dataidentifier="issuerInformation"
             options={US_STATES}
-            defaultValue={issuerInformation.jurisdictionOrganization.value}
+            value={issuerInformation.jurisdictionOrganization.value}
             onChange={this.handleSelectChange}
             width={8}
           />
@@ -89,7 +89,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="Address Line 1"
             label="Address Line 1"
             name="street1"
-            defaultValue={issuerInformation.street1.value}
+            value={issuerInformation.street1.value}
             onChange={this.handleChange}
             error={!!issuerInformation.street1.error}
             width={8}
@@ -98,7 +98,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="Address Line 2"
             label="Address Line 2"
             name="street2"
-            defaultValue={issuerInformation.street2.value}
+            value={issuerInformation.street2.value}
             onChange={this.handleChange}
             error={!!issuerInformation.street2.error}
             width={8}
@@ -109,7 +109,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="City"
             label="City"
             name="city"
-            defaultValue={issuerInformation.city.value}
+            value={issuerInformation.city.value}
             onChange={this.handleChange}
             error={!!issuerInformation.city.error}
             width={8}
@@ -122,7 +122,7 @@ export default class IssuerInformation extends React.Component {
             name="stateOrCountry"
             dataidentifier="issuerInformation"
             options={US_STATES}
-            defaultValue={issuerInformation.stateOrCountry.value}
+            value={issuerInformation.stateOrCountry.value}
             onChange={this.handleSelectChange}
             width={8}
           />
@@ -132,7 +132,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="Zip"
             label="Mailing Zip/ Zip Code"
             name="zipCode"
-            defaultValue={issuerInformation.zipCode.value}
+            value={issuerInformation.zipCode.value}
             error={!!issuerInformation.zipCode.error}
             onChange={this.handleChange}
             width={8}
@@ -141,7 +141,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="Website of Issuer"
             label="Website of Issuer"
             name="issuerWebsite"
-            defaultValue={issuerInformation.issuerWebsite.value}
+            value={issuerInformation.issuerWebsite.value}
             error={!!issuerInformation.issuerWebsite.error}
             onChange={this.handleChange}
             width={8}
@@ -153,7 +153,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="CIK Number of Intermediary"
             label="CIK"
             name="commissionCik"
-            defaultValue={issuerInformation.commissionCik.value}
+            value={issuerInformation.commissionCik.value}
             error={!!issuerInformation.commissionCik.error}
             onChange={this.handleChange}
             width={8}
@@ -162,7 +162,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="Company Name"
             label="Company Name"
             name="companyName"
-            defaultValue={issuerInformation.companyName.value}
+            value={issuerInformation.companyName.value}
             error={!!issuerInformation.companyName.error}
             onChange={this.handleChange}
             width={8}
@@ -173,7 +173,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="Commission File Numbe"
             label="Commission File Numbe"
             name="commissionFileNumber"
-            defaultValue={issuerInformation.commissionFileNumber.value}
+            value={issuerInformation.commissionFileNumber.value}
             error={!!issuerInformation.companyName.error}
             onChange={this.handleChange}
             width={8}
@@ -182,7 +182,7 @@ export default class IssuerInformation extends React.Component {
             placeholder="CRD Number"
             label="CRD Number"
             name="crdNumber"
-            defaultValue={issuerInformation.crdNumber.value}
+            value={issuerInformation.crdNumber.value}
             error={!!issuerInformation.crdNumber.error}
             onChange={this.handleChange}
             width={8}

@@ -16,17 +16,13 @@ export default class NewBusinessForm extends React.Component {
     this.props.businessStore.setBusinessDetailsOnEdit(name, value);
   }
 
-  handleOnBlurOnEdit = (e) => {
-    businessActions.validateBusinessNameOnEdit(e.target.name);
-  }
-
   handleEditBusiness = (e) => {
     e.preventDefault();
     businessActions.editBusinessDetails();
   }
 
-  handleBusinessNameOnBlur = () => {
-    businessActions.businessExists();
+  handleBusinessNameOnBlur = (e) => {
+    businessActions.businessExists(e.target.value);
   }
 
   handleSubmitForm = (e) => {
@@ -37,6 +33,7 @@ export default class NewBusinessForm extends React.Component {
   handleOpenModal = () => {
     this.props.businessStore.resetNewOfferingInfo();
     this.props.uiStore.setModalStatus(true);
+    this.props.businessStore.setEditBusinessMode(false);
   }
 
   handleCloseModal = () => {
@@ -47,9 +44,7 @@ export default class NewBusinessForm extends React.Component {
     const { newOfferingInformation, editBusinessMode, business } = this.props.businessStore;
     return (
       <div>
-        { editBusinessMode === false &&
         <Button onClick={this.handleOpenModal} color="green" className="rounded" floated="right">+ New Offering</Button>
-        }
         <Modal
           size="small"
           open={this.props.uiStore.modalStatus}
@@ -94,7 +89,7 @@ export default class NewBusinessForm extends React.Component {
                 defaultValue={business.name.value}
                 error={!!business.name.error}
                 onChange={this.handleOnChangeOnEdit}
-                onBlur={this.handleBusinessNameOnBlurOnEdit}
+                onBlur={this.handleBusinessNameOnBlur}
               />
               <FieldError error={business.name.error} />
               <Form.TextArea
@@ -111,12 +106,28 @@ export default class NewBusinessForm extends React.Component {
             }
           </Modal.Content>
           <Modal.Actions>
+            { editBusinessMode === false &&
             <Button
               color="green"
-              onClick={editBusinessMode === false ? this.handleSubmitForm : this.handleEditBusiness}
+              disabled={
+                !this.props.businessStore.canSubmitNewOfferingForm ||
+                  this.props.uiStore.submitButtonDisabled
+              }
+              onClick={this.handleSubmitForm}
             >
               Submit
-            </Button>
+            </Button>}
+            { editBusinessMode === true &&
+            <Button
+              color="green"
+              disabled={
+                !this.props.businessStore.canSubmitEditBusinessForm ||
+                  this.props.uiStore.submitButtonDisabled
+              }
+              onClick={this.handleEditBusiness}
+            >
+              Submit
+            </Button>}
           </Modal.Actions>
         </Modal>
       </div>

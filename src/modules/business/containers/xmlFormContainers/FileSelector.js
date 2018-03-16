@@ -16,12 +16,12 @@ export default class FileSelector extends React.Component {
         <Grid.Row>
           <Grid stackable columns={2}>
             {
-              _.map(this.props.businessStore.documentList, (value, type) => (
-                <GridColumn key={type}>
+              _.map(this.props.businessStore.documentList, file => (
+                <GridColumn key={file.name}>
                   <Checkbox
-                    label={type}
-                    name={type}
-                    checked={value}
+                    label={file.name}
+                    name={file.name}
+                    checked={file.checked}
                     onChange={this.handleChange}
                   />
                 </GridColumn>
