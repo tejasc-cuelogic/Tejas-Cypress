@@ -77,9 +77,6 @@ export class BusinessStore {
   newOfferingInformation = { ...NEW_OFFERING_INFORMATION };
 
   @observable
-  editBusinessName = false;
-
-  @observable
   editBusinessMode = false;
 
   @computed get canSubmitEdgarForm() {
@@ -96,11 +93,6 @@ export class BusinessStore {
 
   @computed get getSummary() {
     return this.businessList.length || 0;
-  }
-
-  @action
-  setEditBusinessName(status) {
-    this.editBusinessName = status;
   }
 
   @action

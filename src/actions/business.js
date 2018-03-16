@@ -212,7 +212,7 @@ export class Business {
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(businessStore.setEditBusinessName(false), uiStore.setModalStatus(false))
+      .then(uiStore.setModalStatus(false))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.setProgress(false);
