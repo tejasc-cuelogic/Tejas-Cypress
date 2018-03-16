@@ -173,7 +173,7 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Creating New Business');
     const payload = {
-      query: 'mutation createBusiness($newBusiness: CreateBusinessInput){createBusiness(newBusiness:$newBusiness){id name created}}',
+      query: 'mutation createBusiness($newBusiness: CreateBusinessInput){createBusiness(newBusiness:$newBusiness){id name created description}}',
       variables: {
         newBusiness: {
           name: businessStore.newOfferingInformation.businessName.value,
