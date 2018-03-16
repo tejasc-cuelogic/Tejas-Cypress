@@ -7,6 +7,7 @@ import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
 import businessActions from '../../../actions/business';
 import NewBusinessForm from '../containers/NewBusinessForm';
+import Spinner from '../../../theme/ui/Spinner';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -37,7 +38,13 @@ export default class BusinessDetails extends React.Component {
 
   render() {
     const { business } = this.props.businessStore;
-
+    if (this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     return (
       <div>
         <div className="page-header-section webcontent-spacer">

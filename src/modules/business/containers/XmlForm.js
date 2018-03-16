@@ -10,6 +10,7 @@ import AnnualReportDisclosureRequirements from './xmlFormContainers/AnnualReport
 import Signature from './xmlFormContainers/Signature';
 import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
+import Spinner from '../../../theme/ui/Spinner';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -35,6 +36,13 @@ export default class XmlForm extends React.Component {
   };
 
   render() {
+    if (this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     return (
       <div>
         <div className="page-header-section webcontent-spacer">
