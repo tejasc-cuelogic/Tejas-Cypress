@@ -12,13 +12,17 @@ export default class Signature extends React.Component {
   handleChange = (e, { name, value }) => {
     validationActions.validateSignatureInfo(name, value);
   }
-  handlePersonalSignatureChange = (e, { name, value, dataId }) => {
-    this.props.businessStore.changePersonalSignature(name, dataId, value);
+  handlePersonalSignatureChange = (e, { name, value, dataid }) => {
+    this.props.businessStore.changePersonalSignature(name, dataid, value);
+  }
+  handleDateChange = (e, test) => {
+    console.log(test);
+    // this.props.businessStore.changePersonalSignature(test);
   }
   handleAdd = () => {
     businessActions.addPersonalSignature();
   }
-  handleDelete = (e, { dataId }) => this.props.businessStore.deletePersonalSignature(dataId);
+  handleDelete = (e, { dataid }) => this.props.businessStore.deletePersonalSignature(dataid);
 
   render() {
     const { signature } = this.props.businessStore;
@@ -54,6 +58,7 @@ export default class Signature extends React.Component {
           handleChange={this.handlePersonalSignatureChange}
           handleAddClick={this.handleAdd}
           handleDeleteClick={this.handleDelete}
+          handleDateChange={this.handleDateChange}
         />
         <Button onClick={this.handleAdd}>Add</Button>
       </div>

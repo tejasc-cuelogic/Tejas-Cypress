@@ -469,7 +469,7 @@ export const PERSONAL_SIGNATURE = {
     label: 'Title',
   },
   signatureDate: {
-    value: '',
+    value: moment(),
     error: undefined,
     rule: 'required',
     key: 'signatureDate',

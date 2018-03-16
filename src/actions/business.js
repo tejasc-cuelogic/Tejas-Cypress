@@ -441,12 +441,11 @@ export class Business {
   }
 
 setXmlPayload = (payload) => {
-    const dateFields = ['dateIncorporation', 'deadlineDate']
+    const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate']
     if (payload) {
       businessStore.setBusinessId(payload.businessId);
       businessStore.setFilingId(payload.filingId);
       businessStore.setOfferingUrl(payload.offeringUrl);
-      // _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name));
       _.map(payload.filerInformation, (value, key) => businessStore.setFilerInfo(key, (value || '')));
       _.map(payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
@@ -472,10 +471,15 @@ setXmlPayload = (payload) => {
       })
       _.map(payload.signature.signaturePersons, (signature) => {
         const id = this.addPersonalSignature();
-        _.map(signature, (value, key) => businessStore.changePersonalSignature(key, id, value));
+        _.map(signature, (value, key) => {
+          if (dateFields.includes(key)) {
+            businessStore.changePersonalSignature(key, id, moment((value || moment()), 'MM-DD-YYYY'));
+          } else {
+            businessStore.changePersonalSignature(key, id, value);
+          }
+        });
       })
       _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
-      console.log(payload);
     }
   }
   // Private Methods ends here
