@@ -4,12 +4,7 @@
 //  Buttons style CSS
 .ui{
     &.button, &.buttons .button{
-        // font-weight:500;
-        // letter-spacing:1px;
         text-transform:uppercase;
-        // &.basic{
-        //     font-weight:500;
-        // }
         &.rounded{
             border-radius:20px;
         }
@@ -18,6 +13,9 @@
             &:hover, &:focus, &:active{
                 background-color:darken(@theme-primary, 8%);
             }
+        }
+        + .button{
+            margin-left:@10px;
         }
     }
     &.inverted{

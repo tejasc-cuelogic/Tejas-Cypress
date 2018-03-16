@@ -3700,6 +3700,10 @@
 .ui.buttons .button.green:active {
   background-color: #97ca29;
 }
+.ui.button + .button,
+.ui.buttons .button + .button {
+  margin-left: 0.71428571rem;
+}
 .ui.inverted.button,
 .ui.inverted.buttons .button {
   text-transform: none;

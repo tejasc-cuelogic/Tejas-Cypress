@@ -5001,6 +5001,11 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   background-color: #97ca29;
 }
 
+.ui.button + .button,
+.ui.buttons .button + .button {
+  margin-left: 0.71428571rem;
+}
+
 .ui.inverted.button,
 .ui.inverted.buttons .button {
   text-transform: none;
@@ -33121,6 +33126,16 @@ select.ui.dropdown {
 
 .ui.active.dimmer.modals.transition .ui.modal {
   margin: 0 !important;
+}
+
+.ui.modal.deletion .actions .ui.primary.button {
+  background-color: #EB5757;
+}
+
+.ui.modal.deletion .actions .ui.primary.button:hover,
+.ui.modal.deletion .actions .ui.primary.button:focus,
+.ui.modal.deletion .actions .ui.primary.button:active {
+  background-color: #e14848;
 }
 
 /*******************************
