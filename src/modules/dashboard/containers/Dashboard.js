@@ -5,7 +5,7 @@ class Invest extends Component {
   render() {
     return (
       <div className="page-header-section webcontent-spacer">
-        <Grid columns={4}>
+        <Grid columns={16}>
           <Grid.Row>
             <Grid.Column>
               <h3>Dashboard</h3>
