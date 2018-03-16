@@ -167,9 +167,9 @@ export default class OfferingInformation extends React.Component {
             value={this.offeringInformation.offeringAmount.value}
             error={!!this.offeringInformation.offeringAmount.error}
             onChange={this.handleChange}
-            width={4}
+            width={3}
           />
-          <div className="field three wide">
+          <div className="three wide field">
             { /* eslint-disable jsx-a11y/label-has-for */ }
             <label>Deadline Date</label>
             <DatePicker

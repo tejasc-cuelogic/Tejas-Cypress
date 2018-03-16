@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Accordion, Icon, Button, Card } from 'semantic-ui-react';
+import { Accordion, Icon, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import DateTimeFormat from './../../../components/common/DateTimeFormat';
@@ -23,8 +23,8 @@ const FillingsList = observer((props) => {
                   Filing | <DateTimeFormat datetime={filing.created} />
                 </span>
                 <div className="actions">
-                  <Link to={`/app/business/${props.businessId}/edgar/${filing.filingId}`} as={Button}>
-                    <Icon name="eye" />
+                  <Link to={`/app/business/${props.businessId}/edgar/${filing.filingId}`}>
+                    View
                   </Link>
                 </div>
               </Accordion.Title>
