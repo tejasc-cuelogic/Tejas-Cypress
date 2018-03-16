@@ -5001,6 +5001,11 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   background-color: #97ca29;
 }
 
+.ui.button + .button,
+.ui.buttons .button + .button {
+  margin-left: 0.71428571rem;
+}
+
 .ui.inverted.button,
 .ui.inverted.buttons .button {
   text-transform: none;
@@ -5085,6 +5090,20 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 .ui.inverted.green.buttons .button.active,
 .ui.inverted.green.button.active {
   background-color: #A9D943;
+}
+
+.ui.red.button,
+.ui.red.buttons .button {
+  background-color: #EB5757;
+}
+
+.ui.red.button:hover,
+.ui.red.buttons .button:hover,
+.ui.red.button:focus,
+.ui.red.buttons .button:focus,
+.ui.red.button:active,
+.ui.red.buttons .button:active {
+  background-color: #e14848;
 }
 
 /*******************************
@@ -5392,26 +5411,6 @@ div.login-form ul.error-messages {
   margin-left: 1.42857143rem;
   display: inline-block;
   vertical-align: middle;
-}
-
-.actions {
-  font-size: 1.14285714rem;
-}
-
-.actions a {
-  color: #7d7d7d;
-}
-
-.actions a:hover {
-  color: #a3a3a3;
-}
-
-.actions a.danger {
-  color: #EB5757;
-}
-
-.actions a.danger:hover {
-  color: #db1a1a;
 }
 
 .notification-panel {
@@ -19596,6 +19595,11 @@ ol.ui.horizontal.list li:before,
   padding-right: 0;
 }
 
+.edgar-form .react-datepicker-wrapper,
+.edgar-form .react-datepicker-wrapper .react-datepicker__input-container {
+  display: block;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -29707,6 +29711,9 @@ a.ui.card:hover,
   position: relative;
   float: right;
   z-index: 99;
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 0.92857143rem;
+  font-weight: 400;
 }
 
 /*******************************
@@ -33121,6 +33128,16 @@ select.ui.dropdown {
 
 .ui.active.dimmer.modals.transition .ui.modal {
   margin: 0 !important;
+}
+
+.ui.modal.deletion .actions .ui.primary.button {
+  background-color: #EB5757;
+}
+
+.ui.modal.deletion .actions .ui.primary.button:hover,
+.ui.modal.deletion .actions .ui.primary.button:focus,
+.ui.modal.deletion .actions .ui.primary.button:active {
+  background-color: #e14848;
 }
 
 /*******************************

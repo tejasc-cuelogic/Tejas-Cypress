@@ -85,11 +85,13 @@ export default class BusinessDetails extends React.Component {
                       <Icon name="trash" />
                     </Button>
                     <Confirm
+                      header="Confirm"
                       content="Are you sure you want to delete business and its associated data?"
                       open={this.props.uiStore.confirmBox}
                       onCancel={this.handleDelCancel}
                       onConfirm={this.handleBusinessDelete}
                       size="tiny"
+                      className="deletion"
                     />
                   </div>
                 </h1>
