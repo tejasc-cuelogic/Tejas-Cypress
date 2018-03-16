@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Icon, Button, Grid, Confirm, Item } from 'semantic-ui-react';
+import { Icon, Button, Grid, Confirm } from 'semantic-ui-react';
 
 import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
@@ -45,7 +45,16 @@ export default class BusinessDetails extends React.Component {
             <Grid.Row>
               <Grid.Column width={16}>
                 <h1>
-                  <NewBusinessForm />
+                  <Button
+                    circular
+                    color="green"
+                    floated="right"
+                    businessid={this.props.match.params.businessId}
+                    onClick={this.handleNewFiling}
+                  >
+                    + Add Filing
+                  </Button>
+                  <NewBusinessForm businessid={this.props.match.params.businessId} />
                   <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
                   {business.name.value}
                   <div className="actions">
@@ -83,21 +92,6 @@ export default class BusinessDetails extends React.Component {
           </Grid>
         </div>
         <div className="content-spacer">
-          <Item.Group>
-            <Item>
-              <Item.Content verticalAlign="middle">
-                <Button
-                  circular
-                  color="green"
-                  floated="right"
-                  businessid={this.props.match.params.businessId}
-                  onClick={this.handleNewFiling}
-                >
-                  + Add Filing
-                </Button>
-              </Item.Content>
-            </Item>
-          </Item.Group>
           <FillingsList
             filings={business.filings}
             handleAccordionClick={this.handleAccordionTitleClick}

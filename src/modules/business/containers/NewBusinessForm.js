@@ -44,7 +44,9 @@ export default class NewBusinessForm extends React.Component {
     const { newOfferingInformation, editBusinessMode, business } = this.props.businessStore;
     return (
       <div>
-        <Button onClick={this.handleOpenModal} color="green" className="rounded" floated="right">+ New Business</Button>
+        {!this.props.businessid &&
+          <Button onClick={this.handleOpenModal} color="green" className="rounded" floated="right">+ New Business</Button>
+        }
         <Modal
           size="small"
           open={this.props.uiStore.modalStatus}
