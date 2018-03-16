@@ -5353,6 +5353,11 @@ div.login-form ul.error-messages {
   color: #97ca29;
 }
 
+.page-header-section p {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: #FFFFFF;
+}
+
 .page-header-section span.filter-count {
   height: 19px;
   min-width: 19px;
