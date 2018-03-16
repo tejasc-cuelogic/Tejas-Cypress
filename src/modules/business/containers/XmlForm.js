@@ -15,14 +15,19 @@ import businessActions from '../../../actions/business';
 @observer
 export default class XmlForm extends React.Component {
   componentWillMount() {
-    businessActions.fetchXmlDetails(this.props.match.params);
+    this.props.businessStore.setBusinessId(this.props.match.params.businessId);
+    this.props.businessStore.setFilingId(this.props.match.params.filingId);
+    businessActions.getFiles(this.props.match.params)
+      .then(() => {
+        if (this.props.match.params.xmlId) {
+          businessActions.fetchXmlDetails(this.props.match.params);
+        }
+      });
   }
 
   handleUrlChange = (e, { value }) => {
     this.props.businessStore.setOfferingUrl(value);
   }
-
-  handleSelectChange = (e, { value }) => this.props.businessStore.setOfferingId(value);
 
   handleFormSubmit = (e) => {
     e.preventDefault();
@@ -49,7 +54,7 @@ export default class XmlForm extends React.Component {
             <Form.Group widths="equal">
               <Form.Input
                 label="Website URL"
-                defaultValue={this.props.businessStore.offeringUrl}
+                value={this.props.businessStore.offeringUrl}
                 onChange={this.handleUrlChange}
                 className="column"
                 width={8}

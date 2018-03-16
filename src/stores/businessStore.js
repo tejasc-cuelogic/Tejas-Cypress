@@ -2,7 +2,6 @@ import { observable, action, computed } from 'mobx';
 import _ from 'lodash';
 
 import {
-  DOCFILE_TYPES,
   FORM_VALUES,
   FILER_INFORMATION,
   ISSUER_INFORMATION,
@@ -17,7 +16,13 @@ export class BusinessStore {
   formValues = [...FORM_VALUES];
 
   @observable
-  offeringId = '';
+  businessId = '';
+
+  @observable
+  filingId = '';
+
+  @observable
+  folderId = '';
 
   @observable
   offeringUrl = '';
@@ -63,7 +68,7 @@ export class BusinessStore {
   signature = { ...SIGNATURE }
 
   @observable
-  documentList = { ...DOCFILE_TYPES };
+  documentList = [];
 
   @observable
   offeringList = [];
@@ -114,13 +119,39 @@ export class BusinessStore {
   }
 
   @action
-  toggleRequiredFiles(key) {
-    this.documentList[key] = !this.documentList[key];
+  setDocumentList(list) {
+    this.documentList = list;
   }
 
   @action
-  setOfferingId(id) {
-    this.offeringId = id;
+  setDocument(name, value) {
+    /*eslint-disable*/
+    _.forEach(this.documentList, (document) => {
+      if (document.name === name) {
+        document.checked = value;
+      }
+    });
+  }
+
+  @action
+  toggleRequiredFiles(key) {
+    _.filter(this.documentList, document => document.name === key)[0].checked =
+      !_.filter(this.documentList, document => document.name === key)[0].checked;
+  }
+
+  @action
+  setBusinessId(id) {
+    this.businessId = id;
+  }
+
+  @action
+  setFilingId(id) {
+    this.filingId = id;
+  }
+
+  @action
+  setFolderId(id) {
+    this.folderId = id;
   }
 
   @action

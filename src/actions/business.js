@@ -1,9 +1,10 @@
 import _ from 'lodash';
+import moment from 'moment';
 import shortid from 'shortid';
 
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
-import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE } from './../constants/business';
+import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE, FILES } from './../constants/business';
 import ApiService from '../services/api';
 
 export class Business {
@@ -18,15 +19,16 @@ export class Business {
     const signaturePersons = [...businessStore.signature.signaturePersons];
     signaturePersons.push(personalSignature);
     businessStore.addNewPersonalSignature(signaturePersons);
+    return personalSignature.id;
   }
 
   /**
   * @desc Makes an API Call to server to generate Docx file from data entered
   */
   generateDocxFile = () => {
-    const { templateVariables, documentList } = businessStore;
+    const { templateVariables } = businessStore;
     uiStore.toggleSubmitButton();
-    ApiService.post(EDGAR_URL, { templateVariables, documentList: _.keys(documentList) })
+    ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES })
       .then((data) => {
         uiStore.setSuccess(`Successfully created docx files with id ${data.body.requestId}`);
       })
@@ -41,7 +43,8 @@ export class Business {
   */
   generateXml = () => {
     const {
-      offeringId,
+      businessId,
+      filingId,
       offeringUrl,
       annualReportRequirements,
       filerInformation,
@@ -52,14 +55,15 @@ export class Business {
     } = businessStore;
 
     const payload = {
-      offeringId,
+      businessId,
+      filingId,
       offeringUrl,
       filerInformation: this.getFormattedInformation(filerInformation),
       issuerInformation: this.getFormattedInformation(issuerInformation),
       offeringInformation: this.getFormattedInformation(offeringInformation),
       annualReportDisclosureRequirements: this.getFormattedInformation(annualReportRequirements),
       signature: this.getFormattedSignature(signature),
-      documentList: _.filter(_.keys(documentList), key => documentList[key]),
+      documentList: _.filter(documentList, document => document.checked),
     };
 
     ApiService.post(XML_URL, payload)
@@ -151,7 +155,7 @@ export class Business {
     uiStore.setLoaderMessage('Getting business data');
     const payload = {
       query: `query getBusiness { business(id: "${businessId}") { id name description created` +
-        ' filings { filingId businessId created submissions { xmlSubmissionId created } } } }',
+        ' filings { filingId businessId created folderId submissions { xmlSubmissionId created } } } }',
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setBusinessDetails(data.body.data.business))
@@ -235,10 +239,36 @@ export class Business {
       });
   }
 
+  getFiles = ({ businessId, filingId }) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching details');
+    const payload = {
+      query: 'query fetchFilingById($businessId: ID!, $filingId: ID!){businessFiling(businessId: ' +
+        '$businessId, filingId: $filingId) { folderId } }',
+      variables: {
+        businessId,
+        filingId,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then((data) => {
+          businessStore.setFolderId(data.body.data.businessFiling.folderId);
+          this.fetchAttachedFiles(data.body.data.businessFiling.folderId);
+          res(data);
+        })
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
+  }
+
   /**
    * @desc This method fetches XML
    */
-  fetchXmlDetails =({ filingId, xmlId }) => {
+  fetchXmlDetails = ({ filingId, xmlId }) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching XML Data');
     const payload = {
@@ -251,8 +281,29 @@ export class Business {
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => console.log(data))
+      .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission.payload))
       .catch(err => console.log(err))
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
+  /**
+   *
+   */
+  fetchAttachedFiles = (folderId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Fetching available files');
+    const payload = {
+      query: 'query getFIles($folderId: ID!) { files(folderId: $folderId) { id name } }',
+      variables: {
+        folderId,
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => this.setDocumentList(data.body.data.files))
+      .catch(err => (err))
       .finally(() => {
         uiStore.setProgress(false);
         uiStore.clearLoaderMessage();
@@ -280,6 +331,17 @@ export class Business {
           uiStore.clearLoaderMessage();
         });
     });
+  }
+
+  /**
+   *
+   */
+  toggleFileSelection = (key) => {
+    const { documentList } = businessStore;
+    const file = _.remove(documentList, document => document.name === key)[0];
+    file.checked = !file.checked;
+    documentList.push(file);
+    businessStore.setDocumentList(documentList);
   }
 
   // Private Methods starts here
@@ -361,6 +423,51 @@ export class Business {
     hash.desc = { value: details.description, error: undefined, key: 'desc' };
     businessStore.setTemplateVariableByKey('name_of_business', details.name);
     businessStore.setBusiness(hash);
+  }
+
+  /* eslint-disable */
+  setDocumentList = (list) => {
+    _.map(list, document => document.checked = false);
+    businessStore.setDocumentList(list);
+  }
+
+setXmlPayload = (payload) => {
+    const dateFields = ['dateIncorporation', 'deadlineDate']
+    if (payload) {
+      businessStore.setBusinessId(payload.businessId);
+      businessStore.setFilingId(payload.filingId);
+      businessStore.setOfferingUrl(payload.offeringUrl);
+      // _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name));
+      _.map(payload.filerInformation, (value, key) => businessStore.setFilerInfo(key, (value || '')));
+      _.map(payload.issuerInformation, (value, key) => {
+        if (dateFields.includes(key)) {
+          businessStore.setIssuerInfo(key, moment(value, 'MM-DD-YYYY'));
+        } else {
+          businessStore.setIssuerInfo(key, (value || ''));
+        }
+      });
+      _.map(payload.offeringInformation, (value, key) => {
+        if (dateFields.includes(key)) {
+          businessStore.setOfferingInfo(key, moment(value, 'MM-DD-YYYY'));
+        } else {
+          businessStore.setOfferingInfo(key, (value || ''))
+        }
+      });
+      _.map(payload.annualReportDisclosureRequirements, (value, key) => {
+        businessStore.setAnnualReportInfo(key, (value || ''));
+      })
+      _.map(payload.signature, (value, key) => {
+        if (key !== 'signaturePersons') {
+          businessStore.setSignatureInfo(key, (value || ''));
+        }
+      })
+      _.map(payload.signature.signaturePersons, (signature) => {
+        const id = this.addPersonalSignature();
+        _.map(signature, (value, key) => businessStore.changePersonalSignature(key, id, value));
+      })
+      _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
+      console.log(payload);
+    }
   }
   // Private Methods ends here
 }
