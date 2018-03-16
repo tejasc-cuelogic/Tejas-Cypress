@@ -296,7 +296,7 @@ export class BusinessStore {
   }
 
   @action
-  setBusinessMode(status) {
+  setEditBusinessMode(status) {
     this.editBusinessMode = status;
   }
 }

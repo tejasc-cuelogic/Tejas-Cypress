@@ -24,7 +24,7 @@ export default class BusinessDetails extends React.Component {
   }
 
   handleOpenModal = () => {
-    this.props.businessStore.setBusinessMode(true);
+    this.props.businessStore.setEditBusinessMode(true);
     this.props.businessStore.resetNewOfferingInfo();
     this.props.uiStore.setModalStatus(true);
   }
