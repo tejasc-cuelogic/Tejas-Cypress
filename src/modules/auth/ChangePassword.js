@@ -25,8 +25,8 @@ export default class ChangePassword extends React.Component {
     return (
       <div className="login-form">
         <Header as="h1" textAlign="center">
-          Change Password for
-          <span> {this.props.authStore.values.email}</span>
+          Change Password for <br />
+          <span> {(this.props.authStore.values.email) ? this.props.authStore.values.email.value : ''}</span>
         </Header>
         <Grid
           textAlign="center"

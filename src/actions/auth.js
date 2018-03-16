@@ -278,10 +278,15 @@ export class Auth {
     });
     this.cognitoUser.Session = authStore.cognitoUserSession;
     return new Promise((res, rej) => {
-      this.cognitoUser.completeNewPasswordChallenge(password.value, authStore.values, {
-        onSuccess: data => res(data),
-        onFailure: err => rej(err),
-      });
+      // const userData = _.mapValues(authStore.values, prop => prop.value);
+      this.cognitoUser.completeNewPasswordChallenge(
+        password.value,
+        { email: authStore.values.email.value },
+        {
+          onSuccess: data => res(data),
+          onFailure: err => rej(err),
+        },
+      );
     })
       .then(() => {
         uiStore.setSuccess('Successfully changed password');
@@ -364,7 +369,7 @@ export class Auth {
 
   parseRoles = (data) => {
     const newData = data;
-    newData.roles = JSON.parse(data.roles);
+    newData.roles = (data.roles) ? JSON.parse(data.roles) : [];
     return newData;
   };
 }
