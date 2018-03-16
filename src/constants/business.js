@@ -231,7 +231,7 @@ export const OFFERING_INFORMATION = {
     key: 'noOfSecurityOffered',
     error: undefined,
     rule: 'required_if:securityOfferedType,Other|required_if:securityOfferedType,Common Stock|' +
-    'required_if:securityOfferedType,Preffered Stock|max:9999999999|numeric',
+    'required_if:securityOfferedType,Preferred Stock|max:9999999999|numeric',
   },
   price: {
     value: '',
@@ -479,7 +479,7 @@ export const PERSONAL_SIGNATURE = {
 
 export const OFFERED_SECURITIES = [
   { key: 'Common Stock', value: 'Common Stock', text: 'Common Stock' },
-  { key: 'Preffered Stock', value: 'Preffered Stock', text: 'Preffered Stock' },
+  { key: 'Preferred Stock', value: 'Preferred Stock', text: 'Preferred Stock' },
   { key: 'Debt', value: 'Debt', text: 'Debt' },
   { key: 'Other', value: 'Other', text: 'Other' },
 ];
