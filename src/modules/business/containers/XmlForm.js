@@ -32,7 +32,15 @@ export default class XmlForm extends React.Component {
 
   handleFormSubmit = (e) => {
     e.preventDefault();
-    businessActions.generateXml();
+    businessActions.generateXml()
+      .then(() => {
+        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        this.props.uiStore.setSuccess('Successfully submitted XML form.');
+      })
+      .finally(() => {
+        this.props.uiStore.setProgress(false);
+        this.props.uiStore.clearLoaderMessage();
+      });
   };
 
   render() {

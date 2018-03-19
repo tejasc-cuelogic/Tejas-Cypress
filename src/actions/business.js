@@ -27,6 +27,8 @@ export class Business {
   */
   generateDocxFile = () => {
     const { templateVariables } = businessStore;
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Generating Docx File');
     uiStore.toggleSubmitButton();
     return ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES });
   }
@@ -59,11 +61,9 @@ export class Business {
       documentList: _.filter(documentList, document => document.checked),
     };
 
-    ApiService.post(XML_URL, payload)
-      // TODO: Decide what should happen after XML generation
-      .then(data => console.log(data))
-      // TODO: Decide what should happen after error in XML generation
-      .catch(err => console.log(err));
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Submitting XML Form');
+    return ApiService.post(XML_URL, payload);
   }
 
   /**
@@ -186,7 +186,7 @@ export class Business {
    */
   addToBusinessList = (data) => {
     const oldBusinessList = [...businessStore.businessList];
-    oldBusinessList.push(data);
+    oldBusinessList.unshift(data);
     businessStore.setBusinessList(oldBusinessList);
   }
 

@@ -6,8 +6,6 @@ import shortid from 'shortid';
 import '../../../assets/custom.css';
 
 import businessActions from '../../../actions/business';
-import ListErrors from '../../../components/common/ListErrors';
-import SuccessMessage from '../../../components/common/SuccessMessage';
 import Spinner from '../../../theme/ui/Spinner';
 
 const key = shortid.generate();
@@ -28,7 +26,7 @@ export default class EdgarForm extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.uiStore.reset();
+    // this.props.uiStore.reset();
     this.props.businessStore.resetTemplateVariables();
   }
 
@@ -41,10 +39,22 @@ export default class EdgarForm extends React.Component {
       .then((data) => {
         this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
         this.props.uiStore.setSuccess(`Successfully created docx files with id ${data.body.requestId}`);
+      })
+      .finally(() => {
+        this.props.uiStore.toggleSubmitButton();
+        this.props.uiStore.clearLoaderMessage();
+        this.props.uiStore.setProgress(false);
       });
   }
 
   render() {
+    if (this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     const { formValues, templateVariables } = this.props.businessStore;
     if (this.props.uiStore.inProgress) {
       return (
@@ -86,8 +96,6 @@ export default class EdgarForm extends React.Component {
                 }
               </Grid>
               <Divider section />
-              <ListErrors errors={this.props.uiStore.errors} />
-              <SuccessMessage success={this.props.uiStore.success} />
               <div
                 className="form-footer"
                 style={{
