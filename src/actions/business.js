@@ -174,7 +174,7 @@ export class Business {
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setBusinessDetails(data.body.data.business))
-      .catch(err => console.log(err))
+      .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.setProgress(false);
         uiStore.clearLoaderMessage();
@@ -239,8 +239,7 @@ export class Business {
    * and stores data in store.
    */
   fetchEdgarDetails = (businessId, filingId) => {
-    uiStore.setProgress();
-    uiStore.setLoaderMessage('Fetching Edgar data');
+    uiStore.setActionLoader('Fetching Edgar data');
     const payload = {
       query: `query fetchFilingById { businessFiling(businessId: "${businessId}", ` +
         `filingId: "${filingId}") { filingPayload } }`,
@@ -249,8 +248,25 @@ export class Business {
       .then(data => businessStore.setTemplateVariable(data.body.data.businessFiling.filingPayload))
       .catch(err => console.log(err))
       .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
+        uiStore.clearActionLoader();
+      });
+  }
+
+  fetchBusinessName = (businessId) => {
+    uiStore.setActionLoader('Fetching business name');
+    const payload = {
+      query: 'query getBusinessName($businessId: ID!) { business(id: $businessId) { name } }',
+      variables: {
+        businessId,
+      },
+    };
+    ApiService.post(GRAPHQL, payload)
+      .then(data => businessStore.setTemplateVariableByKey(
+        'name_of_business',
+        data.body.data.business.name,
+      ))
+      .finally(() => {
+        uiStore.clearActionLoader();
       });
   }
 

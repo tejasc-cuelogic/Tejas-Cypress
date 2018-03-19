@@ -20,11 +20,13 @@ export default class EdgarForm extends React.Component {
         params.businessId,
         params.filingId,
       );
+    } else if (params.businessId) {
+      businessActions.fetchBusinessName(params.businessId);
     }
   }
 
   componentWillUnmount() {
-    this.props.uiStore.reset();
+    // this.props.uiStore.reset();
     this.props.businessStore.resetTemplateVariables();
   }
 
@@ -46,6 +48,13 @@ export default class EdgarForm extends React.Component {
       );
     }
     const { formValues, templateVariables } = this.props.businessStore;
+    if (this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     return (
       <div>
         <div className="page-header-section webcontent-spacer">

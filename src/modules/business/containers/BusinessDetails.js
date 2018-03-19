@@ -14,7 +14,7 @@ import SuccessMessage from '../../../components/common/SuccessMessage';
 @inject('businessStore', 'uiStore')
 @observer
 export default class BusinessDetails extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     businessActions.getBusinessDetails(this.props.match.params.businessId);
     this.props.uiStore.toggleConfirmBox(false);
   }
@@ -96,8 +96,6 @@ export default class BusinessDetails extends React.Component {
                       className="deletion"
                     />
                   </div>
-                  <ListErrors errors={this.props.uiStore.errors} />
-                  <SuccessMessage success={this.props.uiStore.success} />
                 </h1>
                 <p>{business.desc.value}</p>
               </Grid.Column>
@@ -112,6 +110,8 @@ export default class BusinessDetails extends React.Component {
             businessId={this.props.match.params.businessId}
           />
         </div>
+        <ListErrors errors={this.props.uiStore.errors} />
+        <SuccessMessage success={this.props.uiStore.success} />
       </div>
     );
   }

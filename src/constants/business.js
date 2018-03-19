@@ -249,7 +249,7 @@ export const OFFERING_INFORMATION = {
     value: '',
     key: 'offeringAmount',
     error: undefined,
-    rule: 'required|numeric|max:7',
+    rule: 'required|numeric|max:9999999',
   },
   overSubscriptionAccepted: {
     value: 'Y',
@@ -273,7 +273,7 @@ export const OFFERING_INFORMATION = {
     value: '',
     key: 'maximumOfferingAmount',
     error: undefined,
-    rule: 'required_if:overSubscriptionAccepted,Y|numeric|max:7',
+    rule: 'required_if:overSubscriptionAccepted,Y|numeric|max:9999999',
   },
   deadlineDate: {
     value: moment(),
