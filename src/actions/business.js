@@ -258,14 +258,13 @@ export class Business {
         filingId,
       },
     };
-    return new Promise((res, rej) => {
+    return new Promise((resolve, reject) => {
       ApiService.post(GRAPHQL, payload)
         .then((data) => {
-          businessStore.setFolderId(data.body.data.businessFiling.folderId);
-          this.fetchAttachedFiles(data.body.data.businessFiling.folderId);
-          res(data);
+          this.fetchAttachedFiles(data.body.data.businessFiling.folderId)
+            .then(() => resolve());
         })
-        .catch(err => rej(err))
+        .catch(err => reject(err))
         .finally(() => {
           uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
@@ -309,13 +308,20 @@ export class Business {
         folderId,
       },
     };
-    ApiService.post(GRAPHQL, payload)
-      .then(data => this.setDocumentList(data.body.data.files))
-      .catch(err => (err))
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+    return new Promise((resolve, reject) => {
+      ApiService.post(GRAPHQL, payload)
+        .then((data) => {
+          this.setDocumentList(data.body.data.files);
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
   }
 
   /**
