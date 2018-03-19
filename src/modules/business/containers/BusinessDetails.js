@@ -8,8 +8,6 @@ import uiActions from '../../../actions/ui';
 import businessActions from '../../../actions/business';
 import NewBusinessForm from '../containers/NewBusinessForm';
 import Spinner from '../../../theme/ui/Spinner';
-import ListErrors from '../../../components/common/ListErrors';
-import SuccessMessage from '../../../components/common/SuccessMessage';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -17,6 +15,10 @@ export default class BusinessDetails extends React.Component {
   componentDidMount() {
     businessActions.getBusinessDetails(this.props.match.params.businessId);
     this.props.uiStore.toggleConfirmBox(false);
+  }
+
+  componentWillUnmount() {
+    this.props.uiStore.reset();
   }
 
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
@@ -110,8 +112,6 @@ export default class BusinessDetails extends React.Component {
             businessId={this.props.match.params.businessId}
           />
         </div>
-        <ListErrors errors={this.props.uiStore.errors} />
-        <SuccessMessage success={this.props.uiStore.success} />
       </div>
     );
   }
