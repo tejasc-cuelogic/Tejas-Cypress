@@ -33,6 +33,11 @@ export default class EdgarForm extends React.Component {
     this.props.businessStore.setTemplateVariableByKey(e.target.name, e.target.value);
   };
 
+  handleSubmit = () => {
+    businessActions.generateDocxFile()
+      .then(() => this.props.history.push(`/app/business/${this.props.match.params.businessId}`));
+  }
+
   render() {
     const { formValues, templateVariables } = this.props.businessStore;
     return (
@@ -84,7 +89,7 @@ export default class EdgarForm extends React.Component {
                     !this.props.businessStore.canSubmitEdgarForm ||
                       this.props.uiStore.submitButtonDisabled
                   }
-                  onClick={businessActions.generateDocxFile}
+                  onClick={this.handleSubmit}
                   primary
                 >
                   Generate Docx

@@ -27,15 +27,21 @@ export class Business {
   */
   generateDocxFile = () => {
     const { templateVariables } = businessStore;
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Generating Docx File');
     uiStore.toggleSubmitButton();
-    ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES })
-      .then((data) => {
-        uiStore.setSuccess(`Successfully created docx files with id ${data.body.requestId}`);
-      })
-      .catch(err => uiStore.setErrors(err))
-      .finally(() => {
-        uiStore.toggleSubmitButton();
-      });
+    return new Promise((res, rej) => {
+      ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES })
+        .then((data) => {
+          uiStore.setSuccess(`Successfully created docx files with id ${data.body.requestId}`); res(data);
+        })
+        .catch((err) => { uiStore.setErrors(err); rej(err); })
+        .finally(() => {
+          uiStore.toggleSubmitButton();
+          uiStore.clearLoaderMessage();
+          uiStore.setProgress(false);
+        });
+    });
   }
 
   /**
@@ -66,11 +72,21 @@ export class Business {
       documentList: _.filter(documentList, document => document.checked),
     };
 
-    ApiService.post(XML_URL, payload)
-      // TODO: Decide what should happen after XML generation
-      .then(data => console.log(data))
-      // TODO: Decide what should happen after error in XML generation
-      .catch(err => console.log(err));
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Submitting XML Form');
+    return new Promise((res, rej) => {
+      ApiService.post(XML_URL, payload)
+        // TODO: Decide what should happen after XML generation
+        .then((data) => {
+          uiStore.setSuccess('Successfully submitted XM Form.'); res(data);
+        })
+        // TODO: Decide what should happen after error in XML generation
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
   }
 
   /**

@@ -8,6 +8,8 @@ import uiActions from '../../../actions/ui';
 import businessActions from '../../../actions/business';
 import NewBusinessForm from '../containers/NewBusinessForm';
 import Spinner from '../../../theme/ui/Spinner';
+import ListErrors from '../../../components/common/ListErrors';
+import SuccessMessage from '../../../components/common/SuccessMessage';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -92,6 +94,8 @@ export default class BusinessDetails extends React.Component {
                       size="tiny"
                     />
                   </div>
+                  <ListErrors errors={this.props.uiStore.errors} />
+                  <SuccessMessage success={this.props.uiStore.success} />
                 </h1>
                 <p>{business.desc.value}</p>
               </Grid.Column>
