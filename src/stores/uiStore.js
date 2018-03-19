@@ -101,6 +101,18 @@ export class UiStore {
   }
 
   @action
+  setActionLoader(loaderMessage) {
+    this.inProgress = true;
+    this.loaderMessage = loaderMessage;
+  }
+
+  @action
+  clearActionLoader() {
+    this.inProgress = false;
+    this.loaderMessage = '';
+  }
+
+  @action
   reset() {
     this.inProgress = false;
     this.errors = undefined;

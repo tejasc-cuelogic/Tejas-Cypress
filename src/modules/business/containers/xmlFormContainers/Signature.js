@@ -54,7 +54,7 @@ export default class Signature extends React.Component {
             onChange={this.handleChange}
           />
         </Form.Group>
-        <Header as="h3" textAlign="left">Personal Signature</Header>
+        <Header as="h3" textAlign="left">Personal Signatures</Header>
         <PersonalSignature
           signaturePersons={signature.signaturePersons}
           handleChange={this.handlePersonalSignatureChange}
