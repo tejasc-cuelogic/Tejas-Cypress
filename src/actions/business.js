@@ -40,18 +40,7 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Generating Docx File');
     uiStore.toggleSubmitButton();
-    return new Promise((res, rej) => {
-      ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES })
-        .then((data) => {
-          this.notify(`Successfully created docx files with id ${data.body.requestId}`); res(data);
-        })
-        .catch((err) => { uiStore.setErrors(err); rej(err); })
-        .finally(() => {
-          uiStore.toggleSubmitButton();
-          uiStore.clearLoaderMessage();
-          uiStore.setProgress(false);
-        });
-    });
+    return ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES });
   }
 
   /**
@@ -84,19 +73,7 @@ export class Business {
 
     uiStore.setProgress();
     uiStore.setLoaderMessage('Submitting XML Form');
-    return new Promise((res, rej) => {
-      ApiService.post(XML_URL, payload)
-        // TODO: Decide what should happen after XML generation
-        .then((data) => {
-          this.notify('Successfully submitted XM Form.'); res(data);
-        })
-        // TODO: Decide what should happen after error in XML generation
-        .catch(err => rej(err))
-        .finally(() => {
-          uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
-        });
-    });
+    return ApiService.post(XML_URL, payload);
   }
 
   /**
@@ -291,14 +268,13 @@ export class Business {
         filingId,
       },
     };
-    return new Promise((res, rej) => {
+    return new Promise((resolve, reject) => {
       ApiService.post(GRAPHQL, payload)
         .then((data) => {
-          businessStore.setFolderId(data.body.data.businessFiling.folderId);
-          this.fetchAttachedFiles(data.body.data.businessFiling.folderId);
-          res(data);
+          this.fetchAttachedFiles(data.body.data.businessFiling.folderId)
+            .then(() => resolve());
         })
-        .catch(err => rej(err))
+        .catch(err => reject(err))
         .finally(() => {
           uiStore.setProgress(false);
           uiStore.clearLoaderMessage();
@@ -342,13 +318,20 @@ export class Business {
         folderId,
       },
     };
-    ApiService.post(GRAPHQL, payload)
-      .then(data => this.setDocumentList(data.body.data.files))
-      .catch(err => (err))
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+    return new Promise((resolve, reject) => {
+      ApiService.post(GRAPHQL, payload)
+        .then((data) => {
+          this.setDocumentList(data.body.data.files);
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
   }
 
   /**

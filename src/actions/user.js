@@ -3,6 +3,7 @@ import * as AWSCognito from 'amazon-cognito-identity-js';
 import uiStore from '../stores/uiStore';
 import userStore from '../stores/userStore';
 import { USER_POOL_ID, COGNITO_CLIENT_ID } from './../constants/aws';
+import Alert from '../helper/utility';
 
 export class User {
   userPool = null;
@@ -44,7 +45,7 @@ export class User {
       });
     })
       .then(() => {
-        uiStore.setSuccess('Successfully updated profile details');
+        Alert.notify('Successfully updated profile details', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(err);

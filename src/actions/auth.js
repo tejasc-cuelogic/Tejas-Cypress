@@ -14,6 +14,7 @@ import authStore from './../stores/authStore';
 import commonStore from './../stores/commonStore';
 import adminStore from '../stores/adminStore';
 import uiStore from '../stores/uiStore';
+import Alert from '../helper/utility';
 
 export class Auth {
   defaultRole = 'investor';
@@ -72,7 +73,7 @@ export class Auth {
             res();
           }))
         .then(() => {
-          uiStore.setSuccess('Successfully loaded user data');
+          Alert.notify('Successfully loaded user data', 'success');
         })
         // Empty method needed to avoid warning.
         .catch(() => { })
@@ -129,7 +130,7 @@ export class Auth {
       });
     })
       .then((result) => {
-        uiStore.setSuccess('Successfully logged in');
+        Alert.notify('Successfully logged in', 'success');
         authStore.setUserLoggedIn(true);
         if (result.action && result.action === 'newPassword') {
           authStore.setEmail(result.data.email);
@@ -197,7 +198,7 @@ export class Auth {
       );
     })
       .then(() => {
-        uiStore.setSuccess('Sign up successfull');
+        Alert.notify('Sign up successfull', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
@@ -227,7 +228,7 @@ export class Auth {
       });
     })
       .then(() => {
-        uiStore.setSuccess('Changed Password');
+        Alert.notify('Changed Password', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
@@ -256,7 +257,7 @@ export class Auth {
       });
     })
       .then(() => {
-        uiStore.setSuccess('Password changed successfully');
+        Alert.notify('Password changed successfully', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
@@ -289,7 +290,7 @@ export class Auth {
       );
     })
       .then(() => {
-        uiStore.setSuccess('Successfully changed password');
+        Alert.notify('Successfully changed password', 'success');
         authStore.setNewPasswordRequired(false);
       })
       .catch((err) => {
@@ -319,7 +320,7 @@ export class Auth {
       );
     })
       .then(() => {
-        uiStore.setSuccess('Successfully done confirmation');
+        Alert.notify('Successfully done confirmation', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
