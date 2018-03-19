@@ -1190,6 +1190,10 @@
   padding-left: 0;
   padding-right: 0;
 }
+.edgar-form .react-datepicker-wrapper,
+.edgar-form .react-datepicker-wrapper .react-datepicker__input-container {
+  display: block;
+}
 
 
 /*******************************
