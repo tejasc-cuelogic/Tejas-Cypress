@@ -228,7 +228,7 @@ export class BusinessStore {
   }
 
   @action
-  addNewPersonalSignature(newSignatures) {
+  setNewPersonalSignature(newSignatures) {
     this.signature.signaturePersons = newSignatures;
   }
 
