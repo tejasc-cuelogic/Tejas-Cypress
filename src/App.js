@@ -10,7 +10,6 @@ import Private from './containers/common/Private';
 import Public from './containers/common/Public';
 import authActions from './actions/auth';
 import Spinner from './theme/ui/Spinner';
-import SuccessMessage from './components/common/SuccessMessage';
 import ListErrors from './components/common/ListErrors';
 /**
  * Main App
@@ -59,7 +58,6 @@ class App extends Component {
         </Layout>
         <ToastContainer />
         <ListErrors errors={this.props.uiStore.errors} />
-        <SuccessMessage success={this.props.uiStore.success} />
       </div>
     );
   }

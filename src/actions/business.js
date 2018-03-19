@@ -1,23 +1,14 @@
 import _ from 'lodash';
 import moment from 'moment';
 import shortid from 'shortid';
-import { toast } from 'react-toastify';
 
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
 import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE, FILES } from './../constants/business';
 import ApiService from '../services/api';
+import Alert from '../helper/utility';
 
 export class Business {
-  /**
-   * @desc To show the success message
-   */
-  notify = (msg) => {
-    toast.success(`${msg}`, {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 12000,
-    });
-  }
   /**
   * @desc Adds new field for PersonalSignatureArray
   *       if previous value of `signaturePersons` prop is [{...}, {...}]
@@ -184,7 +175,7 @@ export class Business {
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => this.addToBusinessList(data.body.data.createBusiness), this.notify('New business has been created.'), uiStore.setModalStatus(false))
+      .then(data => this.addToBusinessList(data.body.data.createBusiness), Alert.notify('New business has been created.', 'success'), uiStore.setModalStatus(false))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.setProgress(false);
