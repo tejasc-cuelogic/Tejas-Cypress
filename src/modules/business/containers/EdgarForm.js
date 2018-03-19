@@ -6,8 +6,6 @@ import shortid from 'shortid';
 import '../../../assets/custom.css';
 
 import businessActions from '../../../actions/business';
-import ListErrors from '../../../components/common/ListErrors';
-import SuccessMessage from '../../../components/common/SuccessMessage';
 import Spinner from '../../../theme/ui/Spinner';
 
 const key = shortid.generate();
@@ -81,8 +79,6 @@ export default class EdgarForm extends React.Component {
                 }
               </Grid>
               <Divider section />
-              <ListErrors errors={this.props.uiStore.errors} />
-              <SuccessMessage success={this.props.uiStore.success} />
               <div
                 className="form-footer"
                 style={{
