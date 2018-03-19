@@ -209,7 +209,7 @@ export class Business {
    */
   addToBusinessList = (data) => {
     const oldBusinessList = [...businessStore.businessList];
-    oldBusinessList.push(data);
+    oldBusinessList.unshift(data);
     businessStore.setBusinessList(oldBusinessList);
   }
 
