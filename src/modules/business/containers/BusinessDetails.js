@@ -12,7 +12,7 @@ import Spinner from '../../../theme/ui/Spinner';
 @inject('businessStore', 'uiStore')
 @observer
 export default class BusinessDetails extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     businessActions.getBusinessDetails(this.props.match.params.businessId);
     this.props.uiStore.toggleConfirmBox(false);
   }

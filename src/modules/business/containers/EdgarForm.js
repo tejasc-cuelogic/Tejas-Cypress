@@ -8,6 +8,7 @@ import '../../../assets/custom.css';
 import businessActions from '../../../actions/business';
 import ListErrors from '../../../components/common/ListErrors';
 import SuccessMessage from '../../../components/common/SuccessMessage';
+import Spinner from '../../../theme/ui/Spinner';
 
 const key = shortid.generate();
 
@@ -21,6 +22,8 @@ export default class EdgarForm extends React.Component {
         params.businessId,
         params.filingId,
       );
+    } else if (params.businessId) {
+      businessActions.fetchBusinessName(params.businessId);
     }
   }
 
@@ -33,8 +36,20 @@ export default class EdgarForm extends React.Component {
     this.props.businessStore.setTemplateVariableByKey(e.target.name, e.target.value);
   };
 
+  handleSubmit = () => {
+    businessActions.generateDocxFile()
+      .then(() => this.props.history.push('/app/business'));
+  }
+
   render() {
     const { formValues, templateVariables } = this.props.businessStore;
+    if (this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     return (
       <div>
         <div className="page-header-section webcontent-spacer">
@@ -84,7 +99,7 @@ export default class EdgarForm extends React.Component {
                     !this.props.businessStore.canSubmitEdgarForm ||
                       this.props.uiStore.submitButtonDisabled
                   }
-                  onClick={businessActions.generateDocxFile}
+                  onClick={this.handleSubmit}
                   primary
                 >
                   Generate Docx
