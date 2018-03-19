@@ -18,7 +18,7 @@ export class Business {
     personalSignature.id = shortid.generate();
     const signaturePersons = [...businessStore.signature.signaturePersons];
     signaturePersons.push(personalSignature);
-    businessStore.addNewPersonalSignature(signaturePersons);
+    businessStore.setNewPersonalSignature(signaturePersons);
     return personalSignature.id;
   }
 
@@ -488,6 +488,7 @@ setXmlPayload = (payload) => {
           businessStore.setSignatureInfo(key, (value || ''));
         }
       })
+      businessStore.setNewPersonalSignature([]);
       _.map(payload.signature.signaturePersons, (signature) => {
         const id = this.addPersonalSignature();
         _.map(signature, (value, key) => {
