@@ -8,6 +8,7 @@ import '../../../assets/custom.css';
 import businessActions from '../../../actions/business';
 import ListErrors from '../../../components/common/ListErrors';
 import SuccessMessage from '../../../components/common/SuccessMessage';
+import Spinner from '../../../theme/ui/Spinner';
 
 const key = shortid.generate();
 
@@ -39,6 +40,13 @@ export default class EdgarForm extends React.Component {
   }
 
   render() {
+    if (this.props.uiStore.inProgress) {
+      return (
+        <div>
+          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
+        </div>
+      );
+    }
     const { formValues, templateVariables } = this.props.businessStore;
     return (
       <div>
