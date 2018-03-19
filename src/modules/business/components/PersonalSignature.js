@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Icon } from 'semantic-ui-react';
+import { Form, Button, Input } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import DatePicker from 'react-datepicker';
 
@@ -8,18 +8,24 @@ const PersonalSignature = observer(props => (
     <div>
       {props.signaturePersons.map(personData => (
         <div key={personData.id}>
-          <Button icon dataid={personData.id} onClick={props.handleDeleteClick}>
-            <Icon name="remove" size="mini" />
-          </Button>
           <Form.Group widths="3">
-            <Form.Input
-              dataid={personData.id}
-              label={personData.personSignature.label}
-              placeholder={personData.personSignature.label}
-              name={personData.personSignature.key}
-              value={personData.personSignature.value}
-              onChange={props.handleChange}
-            />
+            <div className="field">
+              { /* eslint-disable jsx-a11y/label-has-for */ }
+              <label>{personData.personSignature.label}</label>
+              <Input
+                type="text"
+                action
+                actionPosition="left"
+                dataid={personData.id}
+                placeholder={personData.personSignature.label}
+                name={personData.personSignature.key}
+                value={personData.personSignature.value}
+                onChange={props.handleChange}
+              >
+                <Button icon="remove" color="red" dataid={personData.id} onClick={props.handleDeleteClick} />
+                <input />
+              </Input>
+            </div>
             <Form.Input
               dataid={personData.id}
               label={personData.personTitle.label}
@@ -28,7 +34,7 @@ const PersonalSignature = observer(props => (
               value={personData.personTitle.value}
               onChange={props.handleChange}
             />
-            <div className="field three wide">
+            <div className="field">
               { /* eslint-disable jsx-a11y/label-has-for */ }
               <label>Signature Date</label>
               <DatePicker

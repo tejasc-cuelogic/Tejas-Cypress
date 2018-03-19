@@ -73,15 +73,18 @@ export default class IssuerInformation extends React.Component {
             options={US_STATES}
             value={issuerInformation.jurisdictionOrganization.value}
             onChange={this.handleSelectChange}
-            width={8}
           />
-          <DatePicker
-            disabledDays={{ after: new Date() }}
-            placeholderText="Date of Incorporation/Organization"
-            dateFormat="MM-DD-YYYY"
-            selected={issuerInformation.dateIncorporation.value}
-            onChange={this.handleDateChange}
-          />
+          <div className="six wide field">
+            { /* eslint-disable jsx-a11y/label-has-for */ }
+            <label>Date Incorporation</label>
+            <DatePicker
+              disabledDays={{ after: new Date() }}
+              placeholderText="Date of Incorporation/Organization"
+              dateFormat="MM-DD-YYYY"
+              selected={issuerInformation.dateIncorporation.value}
+              onChange={this.handleDateChange}
+            />
+          </div>
         </Form.Group>
         <h4>Physical Address of issuer</h4>
         <Form.Group>
