@@ -7,8 +7,8 @@ export class Helper {
   /**
    * Default Values for the alert message
    */
-  position = toast.POSITION.TOP_CENTER;
-  autoClose = 12000;
+  position = toast.POSITION.TOP_RIGHT;
+  autoClose = 2000;
 
   /**
    * @desc To show alert notifications to the user
