@@ -3,8 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Grid, Input, Button, List, Form, Icon } from 'semantic-ui-react';
 
-import ListErrors from '../../../components/common/ListErrors';
-import SuccessMessage from '../../../components/common/SuccessMessage';
 import businessActions from '../../../actions/business';
 import BusinessList from '../components/BusinessList';
 import NewBusinessForm from './NewBusinessForm';
@@ -16,6 +14,9 @@ import Spinner from '../../../theme/ui/Spinner';
 class Business extends Component {
   componentWillMount() {
     businessActions.listBusinesses();
+  }
+  componentWillUnmount() {
+    this.props.uiStore.reset();
   }
   render() {
     if (this.props.uiStore.inProgress) {
@@ -60,8 +61,6 @@ class Business extends Component {
             </Grid.Row>
           </Grid>
         </div>
-        <ListErrors errors={this.props.uiStore.errors} />
-        <SuccessMessage success={this.props.uiStore.success} />
         <BusinessList
           businessList={this.props.businessStore.businessList}
         />

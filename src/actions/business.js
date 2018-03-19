@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import shortid from 'shortid';
+import { toast } from 'react-toastify';
 
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
@@ -8,6 +9,15 @@ import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE, FILES } from './../con
 import ApiService from '../services/api';
 
 export class Business {
+  /**
+   * @desc To show the success message
+   */
+  notify = (msg) => {
+    toast.success(`${msg}`, {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 12000,
+    });
+  }
   /**
   * @desc Adds new field for PersonalSignatureArray
   *       if previous value of `signaturePersons` prop is [{...}, {...}]
@@ -33,7 +43,7 @@ export class Business {
     return new Promise((res, rej) => {
       ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES })
         .then((data) => {
-          uiStore.setSuccess(`Successfully created docx files with id ${data.body.requestId}`); res(data);
+          this.notify(`Successfully created docx files with id ${data.body.requestId}`); res(data);
         })
         .catch((err) => { uiStore.setErrors(err); rej(err); })
         .finally(() => {
@@ -78,7 +88,7 @@ export class Business {
       ApiService.post(XML_URL, payload)
         // TODO: Decide what should happen after XML generation
         .then((data) => {
-          uiStore.setSuccess('Successfully submitted XM Form.'); res(data);
+          this.notify('Successfully submitted XM Form.'); res(data);
         })
         // TODO: Decide what should happen after error in XML generation
         .catch(err => rej(err))
@@ -197,7 +207,7 @@ export class Business {
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => this.addToBusinessList(data.body.data.createBusiness), uiStore.setSuccess('New business has been created.'), uiStore.setModalStatus(false))
+      .then(data => this.addToBusinessList(data.body.data.createBusiness), this.notify('New business has been created.'), uiStore.setModalStatus(false))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.setProgress(false);

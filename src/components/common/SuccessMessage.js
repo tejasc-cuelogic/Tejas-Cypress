@@ -1,35 +1,24 @@
 import React from 'react';
-import { Message } from 'semantic-ui-react';
+import { toast } from 'react-toastify';
 
 class SuccessMessage extends React.Component {
-  state = { visible: true }
-
-  handleDismiss = () => {
-    this.setState({ visible: false });
-
-    setTimeout(() => {
-      this.setState({ visible: true });
-    }, 2000);
+  toastId = null;
+  notify = () => {
+    if (!toast.isActive(this.toastId)) {
+      this.toastId = toast.success(`${this.props.success}`, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 12000,
+      });
+    }
   }
+
   render() {
     const { success } = this.props;
     if (success) {
       return (
-        <Message
-          state={this.state.visible}
-          onDismiss={this.handleDismiss}
-          positive
-          compact
-          className="toast visible"
-        >
-          <Message.Header>Success!!</Message.Header>
-          <p>{success}</p>
-        </Message>
-        // <ul className="">
-        //   <li>
-        //     {success}
-        //   </li>
-        // </ul>
+        <div>
+          {this.notify()}
+        </div>
       );
     }
     return null;

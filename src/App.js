@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Switch, Route } from 'react-router-dom'; // Redirect
 import { inject, observer } from 'mobx-react';
 // import 'semantic-ui-css/semantic.min.css';
+import { ToastContainer } from 'react-toastify';
 import './assets/semantic/semantic.min.css';
 // import './assets/app.css';
 import Layout from './theme/layout/Layout';
@@ -9,6 +10,8 @@ import Private from './containers/common/Private';
 import Public from './containers/common/Public';
 import authActions from './actions/auth';
 import Spinner from './theme/ui/Spinner';
+import SuccessMessage from './components/common/SuccessMessage';
+import ListErrors from './components/common/ListErrors';
 /**
  * Main App
  */
@@ -54,6 +57,9 @@ class App extends Component {
             <Route path="/" component={Public} />
           </Switch>
         </Layout>
+        <ToastContainer />
+        <ListErrors errors={this.props.uiStore.errors} />
+        <SuccessMessage success={this.props.uiStore.success} />
       </div>
     );
   }
