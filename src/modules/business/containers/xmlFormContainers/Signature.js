@@ -30,6 +30,7 @@ export default class Signature extends React.Component {
       <div>
         <Divider section />
         <Header as="h1" textAlign="left">Signature</Header>
+        <Header as="h3" textAlign="left">Issuer Signature</Header>
         <Form.Group widths="3">
           <Form.Input
             label={signature.issuer.label}
@@ -53,6 +54,7 @@ export default class Signature extends React.Component {
             onChange={this.handleChange}
           />
         </Form.Group>
+        <Header as="h3" textAlign="left">Personal Signature</Header>
         <PersonalSignature
           signaturePersons={signature.signaturePersons}
           handleChange={this.handlePersonalSignatureChange}

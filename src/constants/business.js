@@ -1,4 +1,5 @@
 import moment from 'moment';
+import shortid from 'shortid';
 
 export const FORM_VALUES = [
   { name: 'name_of_business', placeholder: 'Business Name' },
@@ -43,6 +44,31 @@ export const TEMPLATE_VARIABLES = {
   state_of_formation: '',
   type_of_business: '',
   termination_date: '',
+};
+
+export const PERSONAL_SIGNATURE = {
+  id: shortid.generate(),
+  personSignature: {
+    value: '',
+    error: undefined,
+    rule: 'required|max:150',
+    key: 'personSignature',
+    label: 'Signature',
+  },
+  personTitle: {
+    value: '',
+    error: undefined,
+    rule: 'required|max:256',
+    key: 'personTitle',
+    label: 'Title',
+  },
+  signatureDate: {
+    value: moment(),
+    error: undefined,
+    rule: 'required',
+    key: 'signatureDate',
+    label: 'Date',
+  },
 };
 
 export const FILER_INFORMATION = {
@@ -449,32 +475,7 @@ export const SIGNATURE = {
     key: 'issuerTitle',
     label: 'Title',
   },
-  signaturePersons: [],
-};
-
-export const PERSONAL_SIGNATURE = {
-  id: '',
-  personSignature: {
-    value: '',
-    error: undefined,
-    rule: 'required|max:150',
-    key: 'personSignature',
-    label: 'Signature',
-  },
-  personTitle: {
-    value: '',
-    error: undefined,
-    rule: 'required|max:256',
-    key: 'personTitle',
-    label: 'Title',
-  },
-  signatureDate: {
-    value: moment(),
-    error: undefined,
-    rule: 'required',
-    key: 'signatureDate',
-    label: 'Date',
-  },
+  signaturePersons: [PERSONAL_SIGNATURE],
 };
 
 export const OFFERED_SECURITIES = [
