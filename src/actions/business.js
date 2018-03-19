@@ -28,20 +28,7 @@ export class Business {
   generateDocxFile = () => {
     const { templateVariables } = businessStore;
     uiStore.toggleSubmitButton();
-    return new Promise((resolve, reject) => {
-      ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES })
-        .then((data) => {
-          uiStore.setSuccess(`Successfully created docx files with id ${data.body.requestId}`);
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(err);
-          reject();
-        })
-        .finally(() => {
-          uiStore.toggleSubmitButton();
-        });
-    });
+    return ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES });
   }
 
   /**
