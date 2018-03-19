@@ -36,7 +36,15 @@ export default class EdgarForm extends React.Component {
 
   handleSubmit = () => {
     businessActions.generateDocxFile()
-      .then(() => this.props.history.push(`/app/business/${this.props.match.params.businessId}`));
+      .then((data) => {
+        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        this.props.uiStore.setSuccess(`Successfully created docx files with id ${data.body.requestId}`);
+      })
+      .finally(() => {
+        this.props.uiStore.toggleSubmitButton();
+        this.props.uiStore.clearLoaderMessage();
+        this.props.uiStore.setProgress(false);
+      });
   }
 
   render() {
