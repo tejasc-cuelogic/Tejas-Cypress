@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Divider, Button, Grid, Icon } from 'semantic-ui-react';
+import { Form, Divider, Button, Grid, Icon, Popup } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
@@ -60,12 +60,19 @@ export default class XmlForm extends React.Component {
         <div className="content-spacer">
           <Form className="edgar-form">
             <Form.Group widths="equal">
-              <Form.Input
-                label="Website URL"
-                value={this.props.businessStore.offeringUrl}
-                onChange={this.handleUrlChange}
-                className="column"
-                width={8}
+              <Popup
+                trigger={
+                  <Form.Input
+                    label="Website URL"
+                    value={this.props.businessStore.offeringUrl}
+                    onChange={this.handleUrlChange}
+                    className="column"
+                    width={8}
+                  />
+                }
+                content="Please enter URL of page, for which screenshot will be generated"
+                on="focus"
+                size="tiny"
               />
             </Form.Group>
             <FilerInformation />

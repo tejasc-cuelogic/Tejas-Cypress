@@ -103,6 +103,14 @@ export default class FilerInformation extends React.Component {
           checked={filerInformation.overrideInternetFlag.value}
           onChange={this.handleCheckboxChange}
         />
+        <Form.Input
+          label="Enter notification email"
+          name="notificationEmail"
+          value={filerInformation.notificationEmail.value}
+          error={!!filerInformation.notificationEmail.error}
+          onChange={this.handleChange}
+          disabled={!filerInformation.overrideInternetFlag.value}
+        />
       </div>
     );
   }

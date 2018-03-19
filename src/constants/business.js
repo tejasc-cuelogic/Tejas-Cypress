@@ -77,6 +77,7 @@ export const FILER_INFORMATION = {
     key: 'filerCik',
     error: undefined,
     rule: 'required|max:10',
+    content: 'Please enter CIK of filer',
   },
   filerCcc: {
     value: '',
@@ -131,6 +132,12 @@ export const FILER_INFORMATION = {
     key: 'contactEmail',
     error: undefined,
     rule: 'required|email|max:80',
+  },
+  notificationEmail: {
+    value: '',
+    key: 'notificationEmail',
+    error: undefined,
+    rule: 'email|max:80',
   },
 };
 
@@ -311,7 +318,7 @@ export const OFFERING_INFORMATION = {
 
 export const ANNUAL_REPORT_REQUIREMENTS = {
   currentEmployees: {
-    value: '0.00',
+    value: '0',
     error: undefined,
     rule: 'required|numeric|max:9999999',
     key: 'currentEmployees',
