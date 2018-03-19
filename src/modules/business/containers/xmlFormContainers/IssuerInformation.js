@@ -63,17 +63,6 @@ export default class IssuerInformation extends React.Component {
             error={!!issuerInformation.legalStatusOtherDesc.error}
             onChange={this.handleChange}
           />
-          <Form.Select
-            fluid
-            search
-            placeholder="Jurisdiction of Incorporation/Organization"
-            label="Jurisdiction of Incorporation/Organization"
-            name="jurisdictionOrganization"
-            dataidentifier="issuerInformation"
-            options={US_STATES}
-            value={issuerInformation.jurisdictionOrganization.value}
-            onChange={this.handleSelectChange}
-          />
           <div className="six wide field">
             { /* eslint-disable jsx-a11y/label-has-for */ }
             <label>Date Incorporation</label>
@@ -85,6 +74,17 @@ export default class IssuerInformation extends React.Component {
               onChange={this.handleDateChange}
             />
           </div>
+          <Form.Select
+            fluid
+            search
+            placeholder="Jurisdiction of Incorporation/Organization"
+            label="Jurisdiction of Incorporation/Organization"
+            name="jurisdictionOrganization"
+            dataidentifier="issuerInformation"
+            options={US_STATES}
+            value={issuerInformation.jurisdictionOrganization.value}
+            onChange={this.handleSelectChange}
+          />
         </Form.Group>
         <h4>Physical Address of issuer</h4>
         <Form.Group>
