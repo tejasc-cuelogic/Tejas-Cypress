@@ -6,7 +6,7 @@ import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
 import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE, FILES } from './../constants/business';
 import ApiService from '../services/api';
-import Alert from '../helper/utility';
+import Helper from '../helper/utility';
 
 export class Business {
   /**
@@ -175,7 +175,7 @@ export class Business {
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => this.addToBusinessList(data.body.data.createBusiness), Alert.notify('New business has been created.', 'success'), uiStore.setModalStatus(false))
+      .then(data => this.addToBusinessList(data.body.data.createBusiness), uiStore.setModalStatus(false), Helper.toast('New business has been created successfully', 'success'))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.setProgress(false);
@@ -205,7 +205,7 @@ export class Business {
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(uiStore.setModalStatus(false))
+      .then(uiStore.setModalStatus(false), Helper.toast('Business details modified successfully', 'success'))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.setProgress(false);

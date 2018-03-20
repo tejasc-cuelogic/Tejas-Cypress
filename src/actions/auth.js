@@ -14,7 +14,7 @@ import authStore from './../stores/authStore';
 import commonStore from './../stores/commonStore';
 import adminStore from '../stores/adminStore';
 import uiStore from '../stores/uiStore';
-import Alert from '../helper/utility';
+import Helper from '../helper/utility';
 
 export class Auth {
   defaultRole = 'investor';
@@ -73,7 +73,7 @@ export class Auth {
             res();
           }))
         .then(() => {
-          Alert.notify('Successfully loaded user data', 'success');
+          Helper.toast('Successfully loaded user data', 'success');
         })
         // Empty method needed to avoid warning.
         .catch(() => { })
@@ -130,7 +130,6 @@ export class Auth {
       });
     })
       .then((result) => {
-        Alert.notify('Successfully logged in', 'success');
         authStore.setUserLoggedIn(true);
         if (result.action && result.action === 'newPassword') {
           authStore.setEmail(result.data.email);
@@ -198,7 +197,7 @@ export class Auth {
       );
     })
       .then(() => {
-        Alert.notify('Sign up successfull', 'success');
+        Helper.toast('Thanks! You have successfully signed up to the NextSeed.', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
@@ -213,7 +212,7 @@ export class Auth {
   resetPassword() {
     uiStore.reset();
     uiStore.setProgress();
-    uiStore.setLoaderMessage('Changing password');
+    uiStore.setLoaderMessage('Password changed successfully');
     const { email } = authStore.values;
     const userData = {
       Username: email.value,
@@ -228,7 +227,7 @@ export class Auth {
       });
     })
       .then(() => {
-        Alert.notify('Changed Password', 'success');
+        Helper.toast('Password changed successfully', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
@@ -257,7 +256,7 @@ export class Auth {
       });
     })
       .then(() => {
-        Alert.notify('Password changed successfully', 'success');
+        Helper.toast('Password changed successfully', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
@@ -290,7 +289,7 @@ export class Auth {
       );
     })
       .then(() => {
-        Alert.notify('Successfully changed password', 'success');
+        Helper.toast('Password changed successfully', 'success');
         authStore.setNewPasswordRequired(false);
       })
       .catch((err) => {
@@ -320,7 +319,7 @@ export class Auth {
       );
     })
       .then(() => {
-        Alert.notify('Successfully done confirmation', 'success');
+        Helper.toast('Successfully done confirmation', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));

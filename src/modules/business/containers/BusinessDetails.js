@@ -8,6 +8,7 @@ import uiActions from '../../../actions/ui';
 import businessActions from '../../../actions/business';
 import NewBusinessForm from '../containers/NewBusinessForm';
 import Spinner from '../../../theme/ui/Spinner';
+import Helper from '../../../helper/utility';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -25,7 +26,10 @@ export default class BusinessDetails extends React.Component {
 
   handleBusinessDelete = () => {
     businessActions.deleteBusiness(this.props.match.params.businessId)
-      .then(() => this.props.history.push('/app/business'));
+      .then(() => {
+        this.props.history.push('/app/business');
+        Helper.toast('Business deleted successfully', 'success');
+      });
   }
 
   handleOpenModal = () => {
