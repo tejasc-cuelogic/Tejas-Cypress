@@ -14,7 +14,7 @@ const FillingsList = observer((props) => {
           props.filings.map(filing => (
             <div key={`${filing.created}_${filing.filingId}`}>
               <Accordion.Title
-                active={filing.filingId === props.openAccordion}
+                active={props.openAccordion.indexOf(filing.filingId) === -1}
                 onClick={props.handleAccordionClick}
                 dataid={filing.filingId}
               >
@@ -31,7 +31,7 @@ const FillingsList = observer((props) => {
               <XmlSubmission
                 xmlSubmissions={filing.submissions || []}
                 filingId={filing.filingId}
-                active={filing.filingId === props.openAccordion}
+                active={props.openAccordion.indexOf(filing.filingId) === -1}
                 businessId={props.businessId}
               />
             </div>
