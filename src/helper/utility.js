@@ -7,9 +7,10 @@ import _ from 'lodash';
 export class Utility {
   // Default options for the toast
   options = {
-    autoClose: 2200,
+    autoClose: 3400,
     position: toast.POSITION.TOP_RIGHT,
     pauseOnHover: true,
+    className: 'info',
   };
 
   /**
@@ -18,7 +19,7 @@ export class Utility {
    */
   toast = (msg, alertType, optionsOverride) => {
     if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
-      toast[alertType](`${msg}`, _.merge({}, this.options, optionsOverride));
+      toast[alertType](`${msg}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
     } else {
       toast(`${msg}`, _.merge({}, this.options, optionsOverride));
     }
