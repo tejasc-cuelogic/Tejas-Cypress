@@ -11,7 +11,7 @@ import Signature from './xmlFormContainers/Signature';
 import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
-import Helper from '../../../helper/utility';
+// import Helper from '../../../helper/utility';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -19,12 +19,12 @@ export default class XmlForm extends React.Component {
   componentDidMount() {
     this.props.businessStore.setBusinessId(this.props.match.params.businessId);
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
-    businessActions.getFiles(this.props.match.params)
-      .then(() => {
-        if (this.props.match.params.xmlId) {
-          businessActions.fetchXmlDetails(this.props.match.params);
-        }
-      });
+    // businessActions.getFiles(this.props.match.params)
+    //   .then(() => {
+    //     if (this.props.match.params.xmlId) {
+    //       businessActions.fetchXmlDetails(this.props.match.params);
+    //     }
+    //   });
   }
 
   handleUrlChange = (e, { value }) => {
@@ -33,15 +33,21 @@ export default class XmlForm extends React.Component {
 
   handleFormSubmit = (e) => {
     e.preventDefault();
-    businessActions.generateXml()
-      .then(() => {
-        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-        Helper.toast('XML form submitted successfully', 'success');
-      })
-      .finally(() => {
-        this.props.uiStore.setProgress(false);
-        this.props.uiStore.clearLoaderMessage();
-      });
+    businessActions.validateXmlForm();
+    if (this.props.businessStore.canSubmitXmlForm) {
+      console.log(true);
+    } else {
+      console.log('==========================failed=====================');
+    }
+    // businessActions.generateXml()
+    //   .then(() => {
+    //     this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+    //     Helper.toast('XML form submitted successfully', 'success');
+    //   })
+    //   .finally(() => {
+    //     this.props.uiStore.setProgress(false);
+    //     this.props.uiStore.clearLoaderMessage();
+    //   });
   };
 
   render() {
