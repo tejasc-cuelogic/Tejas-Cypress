@@ -105,13 +105,13 @@ export const FILER_INFORMATION = {
   },
   returnCopyFlag: {
     value: false,
-    key: '',
+    key: 'returnCopyFlag',
     error: undefined,
     rule: 'required|boolean',
   },
   overrideInternetFlag: {
     value: false,
-    key: '',
+    key: 'overrideInternetFlag',
     error: undefined,
     rule: 'required|boolean',
   },
@@ -274,7 +274,7 @@ export const OFFERING_INFORMATION = {
   },
   priceDeterminationMethod: {
     value: '',
-    key: '',
+    key: 'priceDeterminationMethod',
     error: undefined,
     rule: 'required',
   },
@@ -320,7 +320,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
   currentEmployees: {
     value: '0',
     error: undefined,
-    rule: 'required|numeric|max:9999999',
+    rule: 'required|numeric|max:9999999|min:0',
     key: 'currentEmployees',
     label: 'Current Number of Employees',
 
@@ -454,7 +454,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
   issueJurisdictionSecuritiesOffering: {
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'required|max:53',
     key: 'issueJurisdictionSecuritiesOffering',
     label: 'Using the list below, select the jurisdictions in which the issuer intends to offer the securities',
   },
