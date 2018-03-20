@@ -1,6 +1,7 @@
 import React from 'react';
 import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import moment from 'moment';
 import DatePicker from 'react-datepicker';
 
 import {
@@ -176,6 +177,7 @@ export default class OfferingInformation extends React.Component {
               id="deadlinedate"
               placeholderText="Deadline Date"
               dateFormat="MM-DD-YYYY"
+              minDate={moment()}
               selected={this.offeringInformation.deadlineDate.value}
               onChange={this.handleDateChange}
             />
