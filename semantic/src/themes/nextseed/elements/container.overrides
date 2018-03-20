@@ -269,3 +269,29 @@ div.login-form {
 		}
 	}
 }
+
+//	Toast message Styles
+.toast-message{
+	> div{
+		min-height:54px;
+		padding:0.7em 1em;
+		font-family:@regularFont;
+		border-radius:@absoluteBorderRadius;
+		button{
+			font-size:@12px;
+			font-weight:400;
+		}
+		&.success{
+			background-color:lighten(@highlight-tertiary, 5%);
+		}
+		&.error{
+			background-color:lighten(@highlight-primary, 5%);
+		}
+		&.info{
+			background-color:lighten(@highlight-quaternary, 5%);
+		}
+		&.warning{
+			background-color:lighten(@highlight-secondary, 5%);
+		}
+	}
+}

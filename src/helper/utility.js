@@ -8,7 +8,7 @@ export class Helper {
    * Default Values for the alert message
    */
   position = toast.POSITION.TOP_RIGHT;
-  autoClose = 2000;
+  autoClose = false;
 
   /**
    * @desc To show alert notifications to the user
@@ -22,18 +22,21 @@ export class Helper {
         toast.success(`${msg}`, {
           position: this.position,
           autoClose: this.autoClose,
+          className: 'success',
         });
         break;
       case 'error':
         toast.error(`${msg}`, {
           position: this.position,
           autoClose: this.autoClose,
+          className: 'error',
         });
         break;
       case 'info':
         toast.info(`${msg}`, {
           position: this.position,
           autoClose: this.autoClose,
+          className: 'info',
         });
         break;
     }
