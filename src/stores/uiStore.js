@@ -16,7 +16,7 @@ export class UiStore {
   @observable redirectURL = undefined;
   @observable asyncCheckLoader = false;
   @observable confirmBox = false;
-  @observable openAccordion = '';
+  @observable openAccordion = [];
 
   @action
   setModalStatus(status) {
@@ -97,7 +97,12 @@ export class UiStore {
 
   @action
   setOpenAccordion(id) {
-    this.openAccordion = id;
+    if (this.openAccordion.indexOf(id) !== -1) {
+      const index = this.openAccordion.indexOf(id);
+      this.openAccordion.splice(index, 1);
+    } else {
+      this.openAccordion.push(id);
+    }
   }
 
   @action

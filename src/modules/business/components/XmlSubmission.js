@@ -11,6 +11,9 @@ const XmlSubmission = observer((props) => {
   if (!_.isEmpty(props.xmlSubmissions)) {
     return (
       <Accordion.Content active={props.active} key={props.filingId}>
+        <p>
+          <Link to={xmlUrl}>Click here to create a new submission.</Link>
+        </p>
         <Table basic celled collapsing>
           <Table.Body>
             {
@@ -35,7 +38,7 @@ const XmlSubmission = observer((props) => {
       {/* <Card className="flexible">
         <Card.Content> */}
       <p>No XML Submissions are present for this filing,{' '}
-        <Link to={xmlUrl}>Click here to create new.</Link>
+        <Link to={xmlUrl}>Click here to create a new submission.</Link>
       </p>
       {/* </Card.Content>
     </Card> */}
