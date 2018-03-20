@@ -174,6 +174,8 @@ export default class OfferingInformation extends React.Component {
             { /* eslint-disable jsx-a11y/label-has-for */ }
             <label>Deadline Date</label>
             <DatePicker
+              showMonthDropdown
+              showYearDropdown
               id="deadlinedate"
               placeholderText="Deadline Date"
               dateFormat="MM-DD-YYYY"
