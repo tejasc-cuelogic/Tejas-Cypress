@@ -174,12 +174,8 @@ export class Business {
         },
       },
     };
-    ApiService.post(GRAPHQL, payload)
-      .then(data => this.addToBusinessList(data.body.data.createBusiness), uiStore.setModalStatus(false), Helper.toast('New business has been created successfully', 'success'))
-      .catch(err => uiStore.setErrors(err))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+
+    return ApiService.post(GRAPHQL, payload);
   }
 
   /**
