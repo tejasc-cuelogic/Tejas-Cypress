@@ -11,7 +11,7 @@ import Signature from './xmlFormContainers/Signature';
 import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
-import Alert from '../../../helper/utility';
+import Helper from '../../../helper/utility';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -36,7 +36,7 @@ export default class XmlForm extends React.Component {
     businessActions.generateXml()
       .then(() => {
         this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-        Alert.notify('Successfully submitted XML form.', 'success');
+        Helper.toast('XML form submitted successfully', 'success');
       })
       .finally(() => {
         this.props.uiStore.setProgress(false);

@@ -2,42 +2,28 @@
  * Some generally used function definations being used at multiple places
  */
 import { toast } from 'react-toastify';
+import _ from 'lodash';
 
-export class Helper {
-  /**
-   * Default Values for the alert message
-   */
-  position = toast.POSITION.TOP_RIGHT;
-  autoClose = 2000;
+export class Utility {
+  // Default options for the toast
+  options = {
+    autoClose: 3400,
+    position: toast.POSITION.TOP_RIGHT,
+    pauseOnHover: true,
+    className: 'info',
+  };
 
   /**
    * @desc To show alert notifications to the user
+   * reference: https://fkhadra.github.io/react-toastify/
    */
-  notify = (msg, alertType) => {
-    switch (alertType) {
-      default:
-        toast(msg);
-        break;
-      case 'success':
-        toast.success(`${msg}`, {
-          position: this.position,
-          autoClose: this.autoClose,
-        });
-        break;
-      case 'error':
-        toast.error(`${msg}`, {
-          position: this.position,
-          autoClose: this.autoClose,
-        });
-        break;
-      case 'info':
-        toast.info(`${msg}`, {
-          position: this.position,
-          autoClose: this.autoClose,
-        });
-        break;
+  toast = (msg, alertType, optionsOverride) => {
+    if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
+      toast[alertType](`${msg}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
+    } else {
+      toast(`${msg}`, _.merge({}, this.options, optionsOverride));
     }
   }
 }
 
-export default new Helper();
+export default new Utility();

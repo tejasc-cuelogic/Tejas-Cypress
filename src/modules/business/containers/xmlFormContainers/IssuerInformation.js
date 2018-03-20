@@ -2,6 +2,7 @@ import React from 'react';
 import { Divider, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import DatePicker from 'react-datepicker';
+import moment from 'moment';
 // import moment from 'moment';
 
 import { US_STATES, LEGAL_FORM_TYPES } from '../../../../constants/business';
@@ -63,17 +64,6 @@ export default class IssuerInformation extends React.Component {
             error={!!issuerInformation.legalStatusOtherDesc.error}
             onChange={this.handleChange}
           />
-          <div className="six wide field">
-            { /* eslint-disable jsx-a11y/label-has-for */ }
-            <label>Date Incorporation</label>
-            <DatePicker
-              disabledDays={{ after: new Date() }}
-              placeholderText="Date of Incorporation/Organization"
-              dateFormat="MM-DD-YYYY"
-              selected={issuerInformation.dateIncorporation.value}
-              onChange={this.handleDateChange}
-            />
-          </div>
           <Form.Select
             fluid
             search
@@ -85,6 +75,19 @@ export default class IssuerInformation extends React.Component {
             value={issuerInformation.jurisdictionOrganization.value}
             onChange={this.handleSelectChange}
           />
+          <div className="nine wide field">
+            { /* eslint-disable jsx-a11y/label-has-for */ }
+            <label>Date Incorporation</label>
+            <DatePicker
+              showMonthDropdown
+              showYearDropdown
+              placeholderText="Date of Incorporation/Organization"
+              dateFormat="MM-DD-YYYY"
+              maxDate={moment()}
+              selected={issuerInformation.dateIncorporation.value}
+              onChange={this.handleDateChange}
+            />
+          </div>
         </Form.Group>
         <h4>Physical Address of issuer</h4>
         <Form.Group>

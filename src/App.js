@@ -56,7 +56,7 @@ class App extends Component {
             <Route path="/" component={Public} />
           </Switch>
         </Layout>
-        <ToastContainer />
+        <ToastContainer className="toast-message" />
         <ListErrors errors={this.props.uiStore.errors} />
       </div>
     );
