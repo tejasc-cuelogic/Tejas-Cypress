@@ -582,6 +582,14 @@
          Theme Overrides
 *******************************/
 
+.ui.active.dimmer.modals.transition {
+  display: -webkit-box !important;
+  display: flex !important;
+  display: -ms-flexbox !important;
+}
+.ui.active.dimmer.modals.transition .ui.modal {
+  margin: 0 !important;
+}
 .ui.modal > .close {
   top: 0.5rem;
   right: 0.5rem;
@@ -661,6 +669,9 @@
   font-size: 1.14285714rem;
   letter-spacing: 1px;
   color: #999999;
+}
+.ui.modal .actions {
+  font-size: 1rem;
 }
 .ui.modal .ui.divider {
   color: #999999;

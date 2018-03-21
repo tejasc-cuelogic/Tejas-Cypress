@@ -1,6 +1,15 @@
 /*******************************
          Theme Overrides
 *******************************/
+// Semantic UI modal position fix for V-2.3
+.ui.active.dimmer.modals.transition {
+    display: flex !important;
+    display: -ms-flexbox !important;
+    .ui.modal{
+        margin:0 !important;
+    }
+}
+
 .ui.modal{
     >.close{
         top:@7px;
@@ -80,6 +89,9 @@
             letter-spacing:1px;
             color:@quaternary-text;
         }
+    }
+    .actions{
+        font-size:@14px;
     }
     .ui.divider{
         color:@quaternary-text;

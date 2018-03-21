@@ -73,7 +73,7 @@
             text-decoration:underline;
         }
         &.action{
-            font-family:@pageFont;
+            // font-family:@pageFont;
             font-size:@12px;
             text-transform:uppercase;
             color:@linkColor;

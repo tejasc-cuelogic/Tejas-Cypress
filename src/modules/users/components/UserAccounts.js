@@ -197,7 +197,7 @@ const panes = [
                 </Table.Cell>
                 <Table.Cell>Complete</Table.Cell>
                 <Table.Cell>$4,540.30</Table.Cell>
-                <Table.Cell><Link to="">Update Status</Link></Table.Cell>
+                <Table.Cell><Link to="" className="action">Update Status</Link></Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>02-21-2017</Table.Cell>
@@ -209,7 +209,7 @@ const panes = [
                 </Table.Cell>
                 <Table.Cell>Complete</Table.Cell>
                 <Table.Cell>$4,540.30</Table.Cell>
-                <Table.Cell><Link to="">Update Status</Link></Table.Cell>
+                <Table.Cell><Link to="" className="action">Update Status</Link></Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>02-21-2017</Table.Cell>
@@ -221,7 +221,7 @@ const panes = [
                 </Table.Cell>
                 <Table.Cell>Complete</Table.Cell>
                 <Table.Cell>$4,540.30</Table.Cell>
-                <Table.Cell><Link to="">Update Status</Link></Table.Cell>
+                <Table.Cell><Link to="" className="action">Update Status</Link></Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>02-21-2017</Table.Cell>
@@ -233,7 +233,7 @@ const panes = [
                 </Table.Cell>
                 <Table.Cell>Complete</Table.Cell>
                 <Table.Cell>$4,540.30</Table.Cell>
-                <Table.Cell><Link to="">Update Status</Link></Table.Cell>
+                <Table.Cell><Link to="" className="action">Update Status</Link></Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>02-21-2017</Table.Cell>
@@ -245,7 +245,7 @@ const panes = [
                 </Table.Cell>
                 <Table.Cell>Complete</Table.Cell>
                 <Table.Cell>$4,540.30</Table.Cell>
-                <Table.Cell><Link to="">Update Status</Link></Table.Cell>
+                <Table.Cell><Link to="" className="action">Update Status</Link></Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>02-21-2017</Table.Cell>
@@ -257,7 +257,7 @@ const panes = [
                 </Table.Cell>
                 <Table.Cell>Complete</Table.Cell>
                 <Table.Cell>$4,540.30</Table.Cell>
-                <Table.Cell><Link to="">Update Status</Link></Table.Cell>
+                <Table.Cell><Link to="" className="action">Update Status</Link></Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>02-21-2017</Table.Cell>
@@ -269,7 +269,7 @@ const panes = [
                 </Table.Cell>
                 <Table.Cell>Complete</Table.Cell>
                 <Table.Cell>$4,540.30</Table.Cell>
-                <Table.Cell><Link to="">Update Status</Link></Table.Cell>
+                <Table.Cell><Link to="" className="action">Update Status</Link></Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>02-21-2017</Table.Cell>
@@ -281,7 +281,7 @@ const panes = [
                 </Table.Cell>
                 <Table.Cell>Complete</Table.Cell>
                 <Table.Cell>$4,540.30</Table.Cell>
-                <Table.Cell><Link to="">Update Status</Link></Table.Cell>
+                <Table.Cell><Link to="" className="action">Update Status</Link></Table.Cell>
               </Table.Row>
             </Table.Body>
           </Table>
@@ -304,7 +304,7 @@ const panes = [
                               <Icon name="file pdf outline large" />
                             </Table.Cell>
                             <Table.Cell collapsing>
-                              <Link to=""><Icon name="pencil large" /></Link>
+                              <Link to="" className="action"><Icon name="pencil large" /></Link>
                             </Table.Cell>
                           </Table.Row>
                           <Table.Row>
@@ -314,7 +314,7 @@ const panes = [
                               <Icon name="file pdf outline large" />
                             </Table.Cell>
                             <Table.Cell collapsing>
-                              <Link to=""><Icon name="pencil large" /></Link>
+                              <Link to="" className="action"><Icon name="pencil large" /></Link>
                             </Table.Cell>
                           </Table.Row>
                         </Table.Body>
@@ -340,7 +340,7 @@ const panes = [
                               <Icon name="file pdf outline large" />
                             </Table.Cell>
                             <Table.Cell collapsing>
-                              <Link to=""><Icon name="pencil large" /></Link>
+                              <Link to="" className="action"><Icon name="pencil large" /></Link>
                             </Table.Cell>
                           </Table.Row>
                           <Table.Row>
@@ -350,7 +350,7 @@ const panes = [
                               <Icon name="file pdf outline large" />
                             </Table.Cell>
                             <Table.Cell collapsing>
-                              <Link to=""><Icon name="pencil large" /></Link>
+                              <Link to="" className="action"><Icon name="pencil large" /></Link>
                             </Table.Cell>
                           </Table.Row>
                         </Table.Body>

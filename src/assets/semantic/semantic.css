@@ -5409,26 +5409,6 @@ div.login-form ul.error-messages {
   vertical-align: middle;
 }
 
-.actions {
-  font-size: 1.14285714rem;
-}
-
-.actions a {
-  color: #7d7d7d;
-}
-
-.actions a:hover {
-  color: #a3a3a3;
-}
-
-.actions a.danger {
-  color: #EB5757;
-}
-
-.actions a.danger:hover {
-  color: #db1a1a;
-}
-
 .notification-panel {
   width: 330px;
   height: calc(100vh - 58px);
@@ -26228,7 +26208,6 @@ Floated Menu / Item
 }
 
 .ui.table a.action {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.85714286rem;
   text-transform: uppercase;
   color: #A9D943;
@@ -30516,6 +30495,11 @@ a.ui.card:hover,
 .plus:before { content: '\e802'; }
 */
 
+.ui.checkbox label,
+.ui.checkbox + label {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -33245,6 +33229,16 @@ select.ui.dropdown {
          Theme Overrides
 *******************************/
 
+.ui.active.dimmer.modals.transition {
+  display: -webkit-box !important;
+  display: flex !important;
+  display: -ms-flexbox !important;
+}
+
+.ui.active.dimmer.modals.transition .ui.modal {
+  margin: 0 !important;
+}
+
 .ui.modal > .close {
   top: 0.5rem;
   right: 0.5rem;
@@ -33340,6 +33334,10 @@ select.ui.dropdown {
   font-size: 1.14285714rem;
   letter-spacing: 1px;
   color: #999999;
+}
+
+.ui.modal .actions {
+  font-size: 1rem;
 }
 
 .ui.modal .ui.divider {

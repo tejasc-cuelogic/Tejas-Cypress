@@ -624,6 +624,10 @@
 .dash:before  { content: '\e801'; }
 .plus:before { content: '\e802'; }
 */
+.ui.checkbox label,
+.ui.checkbox + label {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
 
 
 /*******************************

@@ -305,21 +305,6 @@ div.login-form ul.error-messages {
   display: inline-block;
   vertical-align: middle;
 }
-.actions {
-  font-size: 1.14285714rem;
-}
-.actions a {
-  color: #7d7d7d;
-}
-.actions a:hover {
-  color: #a3a3a3;
-}
-.actions a.danger {
-  color: #EB5757;
-}
-.actions a.danger:hover {
-  color: #db1a1a;
-}
 .notification-panel {
   width: 330px;
   height: calc(100vh - 58px);
