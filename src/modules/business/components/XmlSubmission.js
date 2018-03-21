@@ -27,7 +27,7 @@ const XmlSubmission = observer((props) => {
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                   <Table.Cell>
                     {xmlSubmission.jobStatus === 'CREATED' &&
-                      <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button link-button">
+                      <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
                         <Icon name="download" />
                       </a>
                     }
@@ -41,7 +41,7 @@ const XmlSubmission = observer((props) => {
                       onClick={props.confirmForLock}
                     >
                       {xmlSubmission.lockedStatus === true && <Icon name="lock" />}
-                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="unlock" />}
+                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="unlock alternate" />}
                     </Button>
                     <Confirm
                       header="Confirm"
