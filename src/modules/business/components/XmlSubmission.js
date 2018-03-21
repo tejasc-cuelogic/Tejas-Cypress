@@ -26,18 +26,14 @@ const XmlSubmission = observer((props) => {
                   </Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                   <Table.Cell>
-                    {/* <a href="javascript:void(0);" role="button"
-                    onClick={props.confirmDeleteForDuplicated}><Icon name="trash" /></a> */}
+                    {xmlSubmission.jobStatus === 'CREATED' &&
+                      <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button link-button">
+                        <Icon name="download" />
+                      </a>
+                    }
                     <Button
                       icon
-                      // color="green"
-                      className="link-button"
-                    >
-                      <Icon name="download" />
-                    </Button>
-                    <Button
-                      icon
-                      color="red"
+                      color={xmlSubmission.lockedStatus === true ? 'red' : 'green'}
                       className="link-button"
                       filingid={filingId}
                       xmlsubmissionid={xmlSubmission.xmlSubmissionId}
@@ -59,13 +55,12 @@ const XmlSubmission = observer((props) => {
                       size="tiny"
                       className="deletion"
                     />
-                  </Table.Cell>
-                  <Table.Cell>
                     {xmlSubmission.lockedStatus !== true &&
                     <Button
                       icon
                       circular
                       color="red"
+                      className="link-button"
                       filingid={filingId}
                       xmlsubmissionid={xmlSubmission.xmlSubmissionId}
                       onClick={props.confirmDeleteForDuplicated}
@@ -85,9 +80,11 @@ const XmlSubmission = observer((props) => {
                       className="deletion"
                     />
                   </Table.Cell>
-                  {xmlSubmission.jobStatus === 'COMPLETED' &&
+                  {xmlSubmission.jobStatus === 'CREATED' &&
                   <Table.Cell>
-                    <a href={xmlSubmission.xmlSubmissionDownloadUrl} download>Download</a>
+                    <a href={xmlSubmission.xmlSubmissionDownloadUrl} download>
+                      <Icon name="download" />
+                    </a>
                   </Table.Cell>
                   }
                 </Table.Row>
