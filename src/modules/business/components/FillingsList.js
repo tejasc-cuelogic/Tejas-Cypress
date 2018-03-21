@@ -38,7 +38,7 @@ const FillingsList = observer((props) => {
                   </Button>
                   <Confirm
                     header="Confirm"
-                    content="Are you sure you want to delete this filing?"
+                    content="Are you sure you want to delete this filing and associated XML submissions?"
                     open={props.confirmBoxDuplicatedAgain}
                     filingid={props.filingIdToBeDeleted}
                     onCancel={props.handleDelCancelDuplicatedAgain}
