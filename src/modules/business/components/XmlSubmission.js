@@ -85,13 +85,6 @@ const XmlSubmission = observer((props) => {
                       className="deletion"
                     />
                   </Table.Cell>
-                  {/* {xmlSubmission.jobStatus === 'CREATED' &&
-                  <Table.Cell>
-                    <a href={xmlSubmission.xmlSubmissionDownloadUrl} download>
-                      <Icon name="download" />
-                    </a>
-                  </Table.Cell>
-                  } */}
                 </Table.Row>
               ))
             }

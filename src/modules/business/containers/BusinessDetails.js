@@ -149,22 +149,6 @@ export default class BusinessDetails extends React.Component {
     this.props.uiStore.toggleConfirmBoxForLock(false);
   }
 
-  confirmForParentLock = (e, { filingid, lockedstatusforfiling }) => {
-    this.setState({
-      filingId: filingid,
-      lockedStatus: lockedstatusforfiling,
-    });
-    this.props.uiStore.toggleConfirmBoxForParentLock(true);
-  }
-
-  handleCancelForParentLock = () => {
-    this.setState({
-      filingId: '',
-      lockedStatus: '',
-    });
-    this.props.uiStore.toggleConfirmBoxForParentLock(false);
-  }
-
   handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`)
 
   render() {
@@ -252,9 +236,6 @@ export default class BusinessDetails extends React.Component {
             handleXMLSubmissionLockUnlock={this.handleXMLSubmissionLockUnlock}
             confirmBoxForLock={this.props.uiStore.confirmBoxForLock}
             lockedStatusTobeToggled={this.state.lockedStatus}
-            confirmForParentLock={this.confirmForParentLock}
-            confirmBoxForParentLock={this.props.uiStore.confirmBoxForParentLock}
-            handleCancelForParentLock={this.handleCancelForParentLock}
             handleFilingLockUnlock={this.handleFilingLockUnlock}
             isAnyFilingLocked={this.state.isAnyFilingLocked}
           />

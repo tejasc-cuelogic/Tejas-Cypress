@@ -7,7 +7,6 @@ import DateTimeFormat from './../../../components/common/DateTimeFormat';
 import XmlSubmission from './XmlSubmission';
 
 const FillingsList = observer((props) => {
-  console.log(props.filings);
   if (!_.isEmpty(props.filings)) {
     return (
       <Accordion fluid styled className="filing-list">
