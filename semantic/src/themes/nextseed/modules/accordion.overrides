@@ -70,6 +70,9 @@
 		}
 		.title{
 			border:@borderColor 1px solid;
+			&.active{
+				background-color:#F8F8F8;
+			}
 		}
 		.content{
 			padding:1em;
