@@ -251,7 +251,6 @@ div.login-form {
 		content:"A";
 		display:block;
 		border-radius:10px;
-		font-size:@8px;
 		text-align:center;
 		color:@inverse-text;
 		position:absolute;
@@ -290,6 +289,7 @@ div.login-form {
 		font-size:@15px;
 		border-width:1px;
 		&.accredited:after{
+			font-size:@8px;
 			width:13px;
 			height:13px;
 			top:-6px;
@@ -302,6 +302,7 @@ div.login-form {
 		font-size:@22px;
 		border-width:2px;
 		&.accredited:after{
+			font-size:@11px;
 			width:16px;
 			height:16px;
 			top:-8px;

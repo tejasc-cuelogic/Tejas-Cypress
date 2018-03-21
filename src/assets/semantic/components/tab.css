@@ -132,13 +132,11 @@
   right: 2.14285714rem;
   top: 0;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 0.85714286rem;
   text-transform: uppercase;
 }
 .tabular-wrap .ui.segment .main.actions > a {
   color: #EB5757;
-}
-.tabular-wrap .ui.segment .main.actions > a i.icon {
-  vertical-align: bottom;
 }
 .tabular-wrap .ui.segment .main.actions > a:hover,
 .tabular-wrap .ui.segment .main.actions > a:focus,

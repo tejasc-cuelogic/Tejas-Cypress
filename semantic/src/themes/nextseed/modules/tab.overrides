@@ -47,12 +47,10 @@
             right:@30px;
             top:0;
             font-family:@boldFont;
+            font-size:@12px;
             text-transform:uppercase;
             > a{
                 color:@highlight-primary;
-                i.icon{
-                    vertical-align:bottom;
-                }
                 &:hover, &:focus, &:active{
                     color:darken(@highlight-primary, 15%);
                 }

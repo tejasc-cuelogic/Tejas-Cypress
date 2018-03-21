@@ -5508,7 +5508,6 @@ div.login-form ul.error-messages {
   content: "A";
   display: block;
   border-radius: 10px;
-  font-size: 0.57142857rem;
   text-align: center;
   color: #FFFFFF;
   position: absolute;
@@ -5558,6 +5557,7 @@ div.login-form ul.error-messages {
 }
 
 .account-type.small.accredited:after {
+  font-size: 0.57142857rem;
   width: 13px;
   height: 13px;
   top: -6px;
@@ -5572,6 +5572,7 @@ div.login-form ul.error-messages {
 }
 
 .account-type.medium.accredited:after {
+  font-size: 0.78571429rem;
   width: 16px;
   height: 16px;
   top: -8px;
@@ -36884,15 +36885,12 @@ body.pushable > .pusher {
   right: 2.14285714rem;
   top: 0;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 0.85714286rem;
   text-transform: uppercase;
 }
 
 .tabular-wrap .ui.segment .main.actions > a {
   color: #EB5757;
-}
-
-.tabular-wrap .ui.segment .main.actions > a i.icon {
-  vertical-align: bottom;
 }
 
 .tabular-wrap .ui.segment .main.actions > a:hover,

@@ -388,7 +388,6 @@ div.login-form ul.error-messages {
   content: "A";
   display: block;
   border-radius: 10px;
-  font-size: 0.57142857rem;
   text-align: center;
   color: #FFFFFF;
   position: absolute;
@@ -428,6 +427,7 @@ div.login-form ul.error-messages {
   border-width: 1px;
 }
 .account-type.small.accredited:after {
+  font-size: 0.57142857rem;
   width: 13px;
   height: 13px;
   top: -6px;
@@ -440,6 +440,7 @@ div.login-form ul.error-messages {
   border-width: 2px;
 }
 .account-type.medium.accredited:after {
+  font-size: 0.78571429rem;
   width: 16px;
   height: 16px;
   top: -8px;
