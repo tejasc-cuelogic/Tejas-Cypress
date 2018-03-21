@@ -170,7 +170,7 @@ export const ISSUER_INFORMATION = {
     value: moment(),
     key: 'dateIncorporation',
     error: undefined,
-    rule: `required|before:${moment()}`,
+    rule: 'required',
   },
   street1: {
     value: '',

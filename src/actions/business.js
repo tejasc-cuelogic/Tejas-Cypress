@@ -297,11 +297,7 @@ export class Business {
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission.payload))
-      .catch(err => console.log(err))
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+      .catch(err => console.log(err));
   }
 
   /**
