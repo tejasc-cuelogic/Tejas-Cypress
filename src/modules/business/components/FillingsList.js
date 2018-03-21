@@ -40,8 +40,8 @@ const FillingsList = observer((props) => {
                   }
                   {props.isAnyFilingLocked === true &&
                     <Confirm
-                      header="Confirm"
-                      content="Few of the filings must be locked! Please check!"
+                      header="Alert!"
+                      content="You can not delete this Filing as one of its XML Submission is locked."
                       open={props.confirmBoxDuplicatedAgain}
                       onCancel={props.handleDelCancelDuplicatedAgain}
                       onConfirm={props.handleFilingDelete}
