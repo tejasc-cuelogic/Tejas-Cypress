@@ -18,6 +18,7 @@ export default class BusinessDetails extends React.Component {
     this.state = {
       filingId: '',
       xmlSubmissionId: '',
+      lockedStatus: '',
     };
   }
 
@@ -54,6 +55,17 @@ export default class BusinessDetails extends React.Component {
       this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
       Helper.toast('Filing deleted successfully', 'success');
     });
+  }
+
+  handleXMLSubmissionLockUnlock = (e, { filingid, xmlsubmissionid, lockedstatus }) => {
+    const { businessId } = this.props.match.params;
+    const status = !lockedstatus === false ? 'unlocked' : 'locked';
+    businessActions.lockUnlockXmlSubmission(businessId, filingid, xmlsubmissionid, !lockedstatus)
+      .then(() => {
+        this.props.uiStore.toggleConfirmBoxForLock(false);
+        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        Helper.toast(`Filing ${status} successfully`, 'success');
+      });
   }
 
   handleOpenModal = () => {
@@ -94,6 +106,24 @@ export default class BusinessDetails extends React.Component {
       filingId: '',
     });
     this.props.uiStore.toggleConfirmBoxDuplicatedAgain(false);
+  }
+
+  confirmForLock = (e, { filingid, xmlsubmissionid, lockedstatus }) => {
+    this.setState({
+      filingId: filingid,
+      xmlSubmissionId: xmlsubmissionid,
+      lockedStatus: lockedstatus,
+    });
+    this.props.uiStore.toggleConfirmBoxForLock(true);
+  }
+
+  handleCancelForLock = () => {
+    this.setState({
+      filingId: '',
+      xmlSubmissionId: '',
+      lockedStatus: '',
+    });
+    this.props.uiStore.toggleConfirmBoxForLock(false);
   }
 
   handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`)
@@ -178,6 +208,11 @@ export default class BusinessDetails extends React.Component {
             handleFilingDelete={this.handleFilingDelete}
             filingIdToBeDeleted={this.state.filingId}
             xmlSubmissionIdToBeDeleted={this.state.xmlSubmissionId}
+            confirmForLock={this.confirmForLock}
+            handleCancelForLock={this.handleCancelForLock}
+            handleXMLSubmissionLockUnlock={this.handleXMLSubmissionLockUnlock}
+            confirmBoxForLock={this.props.uiStore.confirmBoxForLock}
+            lockedStatusTobeToggled={this.state.lockedStatus}
           />
         </div>
       </div>

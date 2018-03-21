@@ -59,6 +59,11 @@ const FillingsList = observer((props) => {
                 confirmBoxDuplicated={props.confirmBoxDuplicated}
                 handleDelCancelDuplicated={props.handleDelCancelDuplicated}
                 handleXMlSubmissionDelete={props.handleXMlSubmissionDelete}
+                confirmForLock={props.confirmForLock}
+                handleCancelForLock={props.handleCancelForLock}
+                handleXMLSubmissionLockUnlock={props.handleXMLSubmissionLockUnlock}
+                confirmBoxForLock={props.confirmBoxForLock}
+                lockedStatusTobeToggled={props.lockedStatusTobeToggled}
               />
             </div>
           ))

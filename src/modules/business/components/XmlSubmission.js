@@ -32,10 +32,38 @@ const XmlSubmission = observer((props) => {
                       color="red"
                       filingid={filingId}
                       xmlsubmissionid={xmlSubmission.xmlSubmissionId}
+                      lockedstatus={xmlSubmission.lockedStatus}
+                      onClick={props.confirmForLock}
+                    >
+                      {xmlSubmission.lockedStatus === true && <Icon name="lock" />}
+                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="unlock" />}
+                    </Button>
+                    <Confirm
+                      header="Confirm"
+                      content="Are you sure you want to perform this operation?"
+                      open={props.confirmBoxForLock}
+                      filingid={props.filingIdToBeDeleted}
+                      xmlsubmissionid={props.xmlSubmissionIdToBeDeleted}
+                      lockedstatus={props.lockedStatusTobeToggled}
+                      onCancel={props.handleCancelForLock}
+                      onConfirm={props.handleXMLSubmissionLockUnlock}
+                      size="tiny"
+                      className="deletion"
+                    />
+                  </Table.Cell>
+                  <Table.Cell>
+                    {xmlSubmission.lockedStatus !== true &&
+                    <Button
+                      icon
+                      circular
+                      color="red"
+                      filingid={filingId}
+                      xmlsubmissionid={xmlSubmission.xmlSubmissionId}
                       onClick={props.confirmDeleteForDuplicated}
                     >
                       <Icon name="trash" />
                     </Button>
+                    }
                     <Confirm
                       header="Confirm"
                       content="Are you sure you want to delete this XML submission?"
