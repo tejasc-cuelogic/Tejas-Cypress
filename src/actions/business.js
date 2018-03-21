@@ -151,7 +151,16 @@ export class Business {
         ' filings { filingId businessId created folderId submissions { xmlSubmissionId created } } } }',
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => this.setBusinessDetails(data.body.data.business))
+      .then((data) => {
+        this.setBusinessDetails(data.body.data.business);
+        _.filter(data.body.data.business.filings, (filing) => {
+          _.map(filing.submissions, (submission) => {
+            if (submission.jobStatus === 'CREATED') {
+              this.createPoll();
+            }
+          });
+        });
+      })
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.setProgress(false);
@@ -436,13 +445,17 @@ export class Business {
     businessStore.setBusiness(hash);
   }
 
+  createPoll = () => {
+    setTimeout(() => this.getBusinessDetails(businessStore.business.id), 10 * 1000);
+  }
+
   /* eslint-disable */
   setDocumentList = (list) => {
     _.map(list, document => document.checked = false);
     businessStore.setDocumentList(list);
   }
 
-setXmlPayload = (payload) => {
+  setXmlPayload = (payload) => {
     const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
     const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
     if (payload) {
