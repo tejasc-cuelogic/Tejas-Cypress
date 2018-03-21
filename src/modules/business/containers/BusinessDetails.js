@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Icon, Button, Grid, Confirm } from 'semantic-ui-react';
+import _ from 'lodash';
 
 import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
@@ -19,6 +20,7 @@ export default class BusinessDetails extends React.Component {
       filingId: '',
       xmlSubmissionId: '',
       lockedStatus: '',
+      isAnyFilingLocked: false,
     };
   }
 
@@ -50,6 +52,10 @@ export default class BusinessDetails extends React.Component {
   }
 
   handleFilingDelete = (e, { filingid }) => {
+    if (this.state.isAnyFilingLocked === true) {
+      this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+      this.props.uiStore.toggleConfirmBoxDuplicatedAgain(false);
+    }
     businessActions.deleteFiling(this.props.match.params.businessId, filingid).then(() => {
       this.props.uiStore.toggleConfirmBoxDuplicatedAgain(false);
       this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
@@ -63,6 +69,17 @@ export default class BusinessDetails extends React.Component {
     businessActions.lockUnlockXmlSubmission(businessId, filingid, xmlsubmissionid, !lockedstatus)
       .then(() => {
         this.props.uiStore.toggleConfirmBoxForLock(false);
+        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        Helper.toast(`XML submission ${status} successfully`, 'success');
+      });
+  }
+
+  handleFilingLockUnlock = (e, { filingid, lockedstatusforfiling }) => {
+    const { businessId } = this.props.match.params;
+    const status = !lockedstatusforfiling === false ? 'unlocked' : 'locked';
+    businessActions.lockUnlockFiling(businessId, filingid, !lockedstatusforfiling)
+      .then(() => {
+        this.props.uiStore.toggleConfirmBoxForParentLock(false);
         this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
         Helper.toast(`Filing ${status} successfully`, 'success');
       });
@@ -94,7 +111,13 @@ export default class BusinessDetails extends React.Component {
     this.props.uiStore.toggleConfirmBoxDuplicated(false);
   }
 
-  confirmDeleteForDuplicatedAgain = (e, { filingid }) => {
+  confirmDeleteForDuplicatedAgain = (e, { filingid, filings }) => {
+    const isAnyFilingLocked = _.find(filings, { lockedStatus: true });
+    if (isAnyFilingLocked) {
+      this.setState({
+        isAnyFilingLocked: true,
+      });
+    }
     this.setState({
       filingId: filingid,
     });
@@ -131,6 +154,15 @@ export default class BusinessDetails extends React.Component {
       filingId: filingid,
       lockedStatus: lockedstatusforfiling,
     });
+    this.props.uiStore.toggleConfirmBoxForParentLock(true);
+  }
+
+  handleCancelForParentLock = () => {
+    this.setState({
+      filingId: '',
+      lockedStatus: '',
+    });
+    this.props.uiStore.toggleConfirmBoxForParentLock(false);
   }
 
   handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`)
@@ -220,6 +252,11 @@ export default class BusinessDetails extends React.Component {
             handleXMLSubmissionLockUnlock={this.handleXMLSubmissionLockUnlock}
             confirmBoxForLock={this.props.uiStore.confirmBoxForLock}
             lockedStatusTobeToggled={this.state.lockedStatus}
+            confirmForParentLock={this.confirmForParentLock}
+            confirmBoxForParentLock={this.props.uiStore.confirmBoxForParentLock}
+            handleCancelForParentLock={this.handleCancelForParentLock}
+            handleFilingLockUnlock={this.handleFilingLockUnlock}
+            isAnyFilingLocked={this.state.isAnyFilingLocked}
           />
         </div>
       </div>

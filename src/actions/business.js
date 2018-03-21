@@ -405,10 +405,10 @@ export class Business {
   }
 
   /**
-   * @desc To delete Filing for the business
+   * @desc To lock/unlock XML Submission
    */
   lockUnlockXmlSubmission = (businessId, filingId, xmlSubmissionId, lockedStatus) => {
-    const status = lockedStatus === false ? 'unlocking' : 'locking';
+    const status = lockedStatus === false ? 'Unlocking' : 'Locking';
     uiStore.setProgress();
     uiStore.setLoaderMessage(`${status} XML Submission`);
     const payload = {
@@ -419,6 +419,34 @@ export class Business {
       }`,
       variables: {
         businessId, filingId, xmlSubmissionId, lockedStatus,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
+  }
+
+  /**
+   * @desc To lock/unlock filing
+   */
+  lockUnlockFiling = (businessId, filingId, lockedStatus) => {
+    const status = lockedStatus === false ? 'Unlocking' : 'Locking';
+    uiStore.setProgress();
+    uiStore.setLoaderMessage(`${status} filing`);
+    const payload = {
+      query: `mutation lockUnlockBusinessFiling($businessId: String!, $filingId: String!, $lockedStatus: Boolean!){ 
+        lockBusinessFiling(businessId: $businessId, filingId: $filingId, lockedStatus: $lockedStatus){ 
+          filingId 
+        } 
+      }`,
+      variables: {
+        businessId, filingId, lockedStatus,
       },
     };
     return new Promise((res, rej) => {

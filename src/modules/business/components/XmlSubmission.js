@@ -26,9 +26,14 @@ const XmlSubmission = observer((props) => {
                   </Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                   <Table.Cell>
-                    {xmlSubmission.jobStatus === 'CREATED' &&
+                    {xmlSubmission.jobStatus === 'COMPLETED' &&
                       <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
                         <Icon name="download" />
+                      </a>
+                    }
+                    {xmlSubmission.jobStatus === 'CREATED' &&
+                      <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
+                        <Icon name="download" disabled />
                       </a>
                     }
                     <Button
@@ -65,7 +70,7 @@ const XmlSubmission = observer((props) => {
                       xmlsubmissionid={xmlSubmission.xmlSubmissionId}
                       onClick={props.confirmDeleteForDuplicated}
                     >
-                      <Icon name="trash" />
+                      <Icon name="trash" disbaled />
                     </Button>
                     }
                     <Confirm
@@ -80,13 +85,13 @@ const XmlSubmission = observer((props) => {
                       className="deletion"
                     />
                   </Table.Cell>
-                  {xmlSubmission.jobStatus === 'CREATED' &&
+                  {/* {xmlSubmission.jobStatus === 'CREATED' &&
                   <Table.Cell>
                     <a href={xmlSubmission.xmlSubmissionDownloadUrl} download>
                       <Icon name="download" />
                     </a>
                   </Table.Cell>
-                  }
+                  } */}
                 </Table.Row>
               ))
             }

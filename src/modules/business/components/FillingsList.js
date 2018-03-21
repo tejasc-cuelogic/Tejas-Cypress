@@ -27,14 +27,29 @@ const FillingsList = observer((props) => {
                   <Link to={`/app/business/${props.businessId}/edgar/${filing.filingId}`}>
                     View
                   </Link>
+                  {filing.submissions.length !== 0 &&
                   <Button
                     color="red"
                     className="link-button"
                     filingid={filing.filingId}
+                    filings={props.filings}
                     onClick={props.confirmDeleteForDuplicatedAgain}
                   >
                     Delete
                   </Button>
+                  }
+                  {props.isAnyFilingLocked === true &&
+                    <Confirm
+                      header="Confirm"
+                      content="Few of the filings must be locked! Please check!"
+                      open={props.confirmBoxDuplicatedAgain}
+                      onCancel={props.handleDelCancelDuplicatedAgain}
+                      onConfirm={props.handleFilingDelete}
+                      size="tiny"
+                      className="deletion"
+                    />
+                  }
+                  {props.isAnyFilingLocked === false &&
                   <Confirm
                     header="Confirm"
                     content="Are you sure you want to delete this filing and associated XML submissions?"
@@ -45,25 +60,7 @@ const FillingsList = observer((props) => {
                     size="tiny"
                     className="deletion"
                   />
-                  <Button
-                    color="red"
-                    className="link-button"
-                    filingid={filing.filingId}
-                    lockedstatusforfiling={filing.lockedStatus}
-                    onClick={props.confirmForParentLock}
-                  >
-                    Lock/Unlock
-                  </Button>
-                  <Confirm
-                    header="Confirm"
-                    content="Are you sure you want to perform this operation?"
-                    open={props.confirmBoxDuplicatedAgain}
-                    filingid={props.filingIdToBeDeleted}
-                    onCancel={props.handleDelCancelDuplicatedAgain}
-                    onConfirm={props.handleFilingDelete}
-                    size="tiny"
-                    className="deletion"
-                  />
+                  }
                 </div>
               </Accordion.Title>
               <XmlSubmission
