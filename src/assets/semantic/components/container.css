@@ -383,6 +383,28 @@ div.login-form ul.error-messages {
   top: -8px;
   right: -8px;
 }
+.toast-message > div {
+  min-height: 54px;
+  padding: 0.7em 1em;
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  border-radius: 0.28571429rem;
+}
+.toast-message > div button {
+  font-size: 0.85714286rem;
+  font-weight: 400;
+}
+.toast-message > div.success {
+  background-color: #2cc36b;
+}
+.toast-message > div.error {
+  background-color: #ee6e6e;
+}
+.toast-message > div.info {
+  background-color: #43a6df;
+}
+.toast-message > div.warning {
+  background-color: #f4a662;
+}
 
 
 /*******************************

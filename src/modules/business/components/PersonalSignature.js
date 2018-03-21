@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Button, Input } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
+import moment from 'moment';
 import DatePicker from 'react-datepicker';
 
 const PersonalSignature = observer(props => (
@@ -38,9 +39,12 @@ const PersonalSignature = observer(props => (
               { /* eslint-disable jsx-a11y/label-has-for */ }
               <label>Signature Date</label>
               <DatePicker
+                showMonthDropdown
+                showYearDropdown
                 dataid={personData.id}
                 placeholderText="Signature Date"
                 name={personData.signatureDate.key}
+                maxDate={moment()}
                 dateFormat="MM-DD-YYYY"
                 selected={personData.signatureDate.value}
                 onChange={props.handleDateChange}

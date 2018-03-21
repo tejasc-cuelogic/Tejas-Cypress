@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Accordion, Table } from 'semantic-ui-react';
+import { Accordion, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import _ from 'lodash';
 import DateTimeFormat from './../../../components/common/DateTimeFormat';
 
@@ -25,6 +25,34 @@ const XmlSubmission = observer((props) => {
                     </Link>
                   </Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
+                  <Table.Cell>
+                    <Button
+                      icon
+                      circular
+                      color="red"
+                      filingid={filingId}
+                      xmlsubmissionid={xmlSubmission.xmlSubmissionId}
+                      onClick={props.confirmDeleteForDuplicated}
+                    >
+                      <Icon name="trash" />
+                    </Button>
+                    <Confirm
+                      header="Confirm"
+                      content="Are you sure you want to delete this XML submission?"
+                      open={props.confirmBoxDuplicated}
+                      filingid={props.filingIdToBeDeleted}
+                      xmlsubmissionid={props.xmlSubmissionIdToBeDeleted}
+                      onCancel={props.handleDelCancelDuplicated}
+                      onConfirm={props.handleXMlSubmissionDelete}
+                      size="tiny"
+                      className="deletion"
+                    />
+                  </Table.Cell>
+                  {xmlSubmission.jobStatus === 'COMPLETED' &&
+                  <Table.Cell>
+                    <a href={xmlSubmission.xmlSubmissionDownloadUrl} download>Download</a>
+                  </Table.Cell>
+                  }
                 </Table.Row>
               ))
             }

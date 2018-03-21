@@ -5,7 +5,7 @@ import adminStore from './../stores/adminStore';
 import userStore from './../stores/userStore';
 import uiStore from '../stores/uiStore';
 
-import Alert from '../helper/utility';
+import Helper from '../helper/utility';
 
 export class Admin {
   awsCognitoISP = null;
@@ -69,7 +69,7 @@ export class Admin {
         });
       })
         .then((data) => {
-          Alert.notify('User created successfully', 'success');
+          Helper.toast('User created successfully', 'success');
           console.log(data);
         })
         .catch((err) => {
@@ -104,7 +104,7 @@ export class Admin {
     })
       .then(() => {
         adminStore.changeUserStatus(username, STATUSES.deleted);
-        Alert.notify('User has been successfully deleted from pool', 'success');
+        Helper.toast('User has been successfully deleted from pool', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(err);
@@ -137,7 +137,7 @@ export class Admin {
       });
     })
       .then((data) => {
-        Alert.notify('Updated user data', 'success');
+        Helper.toast('Updated user data', 'success');
         console.log(data);
       })
       .catch((err) => {

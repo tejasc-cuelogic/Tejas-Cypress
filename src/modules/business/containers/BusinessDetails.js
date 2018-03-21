@@ -8,10 +8,19 @@ import uiActions from '../../../actions/ui';
 import businessActions from '../../../actions/business';
 import NewBusinessForm from '../containers/NewBusinessForm';
 import Spinner from '../../../theme/ui/Spinner';
+import Helper from '../../../helper/utility';
 
 @inject('businessStore', 'uiStore')
 @observer
 export default class BusinessDetails extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      filingId: '',
+      xmlSubmissionId: '',
+    };
+  }
+
   componentDidMount() {
     businessActions.getBusinessDetails(this.props.match.params.businessId);
     this.props.uiStore.toggleConfirmBox(false);
@@ -25,7 +34,26 @@ export default class BusinessDetails extends React.Component {
 
   handleBusinessDelete = () => {
     businessActions.deleteBusiness(this.props.match.params.businessId)
-      .then(() => this.props.history.push('/app/business'));
+      .then(() => {
+        this.props.history.push('/app/business');
+        Helper.toast('Business deleted successfully', 'success');
+      });
+  }
+
+  handleXMlSubmissionDelete = (e, { filingid, xmlsubmissionid }) => {
+    businessActions.deleteXmlSubmission(filingid, xmlsubmissionid).then(() => {
+      this.props.uiStore.toggleConfirmBoxDuplicated(false);
+      this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+      Helper.toast('XML Submission deleted successfully', 'success');
+    });
+  }
+
+  handleFilingDelete = (e, { filingid }) => {
+    businessActions.deleteFiling(this.props.match.params.businessId, filingid).then(() => {
+      this.props.uiStore.toggleConfirmBoxDuplicatedAgain(false);
+      this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+      Helper.toast('Filing deleted successfully', 'success');
+    });
   }
 
   handleOpenModal = () => {
@@ -37,6 +65,36 @@ export default class BusinessDetails extends React.Component {
   handleDelCancel = () => this.props.uiStore.toggleConfirmBox(false);
 
   confirmDelete = () => this.props.uiStore.toggleConfirmBox(true);
+
+  confirmDeleteForDuplicated = (e, { filingid, xmlsubmissionid }) => {
+    this.setState({
+      filingId: filingid,
+      xmlSubmissionId: xmlsubmissionid,
+    });
+    this.props.uiStore.toggleConfirmBoxDuplicated(true);
+  }
+
+  handleDelCancelDuplicated = () => {
+    this.setState({
+      filingId: '',
+      xmlSubmissionId: '',
+    });
+    this.props.uiStore.toggleConfirmBoxDuplicated(false);
+  }
+
+  confirmDeleteForDuplicatedAgain = (e, { filingid }) => {
+    this.setState({
+      filingId: filingid,
+    });
+    this.props.uiStore.toggleConfirmBoxDuplicatedAgain(true);
+  }
+
+  handleDelCancelDuplicatedAgain = () => {
+    this.setState({
+      filingId: '',
+    });
+    this.props.uiStore.toggleConfirmBoxDuplicatedAgain(false);
+  }
 
   handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`)
 
@@ -110,6 +168,16 @@ export default class BusinessDetails extends React.Component {
             handleAccordionClick={this.handleAccordionTitleClick}
             openAccordion={this.props.uiStore.openAccordion}
             businessId={this.props.match.params.businessId}
+            confirmDeleteForDuplicated={this.confirmDeleteForDuplicated}
+            confirmBoxDuplicated={this.props.uiStore.confirmBoxDuplicated}
+            handleDelCancelDuplicated={this.handleDelCancelDuplicated}
+            handleXMlSubmissionDelete={this.handleXMlSubmissionDelete}
+            confirmDeleteForDuplicatedAgain={this.confirmDeleteForDuplicatedAgain}
+            confirmBoxDuplicatedAgain={this.props.uiStore.confirmBoxDuplicatedAgain}
+            handleDelCancelDuplicatedAgain={this.handleDelCancelDuplicatedAgain}
+            handleFilingDelete={this.handleFilingDelete}
+            filingIdToBeDeleted={this.state.filingId}
+            xmlSubmissionIdToBeDeleted={this.state.xmlSubmissionId}
           />
         </div>
       </div>

@@ -7,7 +7,7 @@ import '../../../assets/custom.css';
 
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
-import Alert from '../../../helper/utility';
+import Helper from '../../../helper/utility';
 
 const key = shortid.generate();
 
@@ -39,7 +39,7 @@ export default class EdgarForm extends React.Component {
     businessActions.generateDocxFile()
       .then((data) => {
         this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-        Alert.notify(`Successfully created docx files with id ${data.body.requestId}`, 'success');
+        Helper.toast(`.docx file with id ${data.body.requestId} created successfully`, 'success');
       })
       .finally(() => {
         this.props.uiStore.toggleSubmitButton();
