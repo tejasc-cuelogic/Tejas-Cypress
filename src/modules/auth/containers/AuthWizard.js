@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Loadable from 'react-loadable';
+import { inject, observer } from 'mobx-react';
 import upperFirst from 'lodash/upperFirst';
 
+@inject('authStore', 'uiStore')
+@observer
 class AuthWizard extends Component {
   render() {
     const module = upperFirst(this.props.authWizardStep) || 'SignupInitial';

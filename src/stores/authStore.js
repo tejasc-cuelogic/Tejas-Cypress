@@ -22,6 +22,9 @@ export class AuthStore {
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
   @observable isUserLoggedIn = false;
+  @observable signupFlow = {
+    type: 'investor',
+  };
 
   @observable
   values = {
@@ -185,6 +188,11 @@ export class AuthStore {
     userStore.forgetUser();
     return new Promise(res => res());
   };
+
+  @action
+  updatesignupFlow(key, value) {
+    this.signupFlow[key] = value;
+  }
 
   simpleErr = err => ({
     statusCode: err.statusCode,
