@@ -290,6 +290,10 @@
 .ui.styled.accordion .accordion.filing-list .title {
   border: rgba(34, 36, 38, 0.15) 1px solid;
 }
+.ui.styled.accordion.filing-list .title.active,
+.ui.styled.accordion .accordion.filing-list .title.active {
+  background-color: #F8F8F8;
+}
 .ui.styled.accordion.filing-list .content,
 .ui.styled.accordion .accordion.filing-list .content {
   padding: 1em;
