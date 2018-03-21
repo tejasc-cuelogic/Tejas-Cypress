@@ -26,10 +26,19 @@ const XmlSubmission = observer((props) => {
                   </Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                   <Table.Cell>
+                    {/* <a href="javascript:void(0);" role="button"
+                    onClick={props.confirmDeleteForDuplicated}><Icon name="trash" /></a> */}
                     <Button
                       icon
-                      circular
+                      // color="green"
+                      className="link-button"
+                    >
+                      <Icon name="download" />
+                    </Button>
+                    <Button
+                      icon
                       color="red"
+                      className="link-button"
                       filingid={filingId}
                       xmlsubmissionid={xmlSubmission.xmlSubmissionId}
                       onClick={props.confirmDeleteForDuplicated}

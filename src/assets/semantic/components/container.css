@@ -243,6 +243,9 @@ div.login-form ul.error-messages {
   text-align: center;
   border-radius: 3px;
 }
+.page-header-section .ui.button.link-button {
+  padding: 0.78571429rem 0;
+}
 .page-header-section .search-filters {
   background-color: #4f4f4f;
 }

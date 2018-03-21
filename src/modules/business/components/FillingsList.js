@@ -28,13 +28,12 @@ const FillingsList = observer((props) => {
                     View
                   </Link>
                   <Button
-                    icon
-                    circular
                     color="red"
+                    className="link-button"
                     filingid={filing.filingId}
                     onClick={props.confirmDeleteForDuplicatedAgain}
                   >
-                    <Icon name="trash" />
+                    Delete
                   </Button>
                   <Confirm
                     header="Confirm"

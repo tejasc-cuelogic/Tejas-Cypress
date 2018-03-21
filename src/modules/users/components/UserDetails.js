@@ -12,7 +12,7 @@ const userDetails = () => (
             <h3>Names</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
-              <Button color="green" size="mini" className="rounded"
+              <Button circular color="green" size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
               <Link to="/edit"><Icon name="pencil" />Edit</Link>
             </div>
@@ -89,7 +89,7 @@ const userDetails = () => (
             <h3>DOB & SSN</h3>
             <div className="actions">
               <Link to="/edit" className="negative">Cancel</Link>
-              <Button color="green" size="mini" className="rounded" to="/app/users/new"><Icon name="check" />Save</Button>
+              <Button circular color="green" size="mini" to="/app/users/new"><Icon name="check" />Save</Button>
               {/* <Link to="/edit"><Icon name="pencil" />Edit</Link> */}
             </div>
             <Form>
@@ -117,7 +117,7 @@ const userDetails = () => (
             <h3>Email & Password</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
-              <Button color="green" size="mini" className="rounded"
+              <Button circular color="green" size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
               <Link to="/edit"><Icon name="pencil" />Edit</Link>
             </div>
@@ -148,7 +148,7 @@ const userDetails = () => (
             <h3>Addresses</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
-              <Button color="green" size="mini" className="rounded"
+              <Button circular color="green" size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
               <Link to="/edit"><Icon name="pencil" />Edit</Link>
             </div>
@@ -257,7 +257,7 @@ const userDetails = () => (
             <h3>Phone Numbers</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
-              <Button color="green" size="mini" className="rounded"
+              <Button circular color="green" size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
               <Link to="/edit"><Icon name="pencil" />Edit</Link>
             </div>
