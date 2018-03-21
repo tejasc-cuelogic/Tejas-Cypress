@@ -45,6 +45,25 @@ const FillingsList = observer((props) => {
                     size="tiny"
                     className="deletion"
                   />
+                  <Button
+                    color="red"
+                    className="link-button"
+                    filingid={filing.filingId}
+                    lockedstatusforfiling={filing.lockedStatus}
+                    onClick={props.confirmForParentLock}
+                  >
+                    Lock/Unlock
+                  </Button>
+                  <Confirm
+                    header="Confirm"
+                    content="Are you sure you want to perform this operation?"
+                    open={props.confirmBoxDuplicatedAgain}
+                    filingid={props.filingIdToBeDeleted}
+                    onCancel={props.handleDelCancelDuplicatedAgain}
+                    onConfirm={props.handleFilingDelete}
+                    size="tiny"
+                    className="deletion"
+                  />
                 </div>
               </Accordion.Title>
               <XmlSubmission

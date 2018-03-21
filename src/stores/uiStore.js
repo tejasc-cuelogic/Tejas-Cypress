@@ -19,6 +19,7 @@ export class UiStore {
   @observable confirmBoxDuplicated = false;
   @observable confirmBoxDuplicatedAgain = false;
   @observable confirmBoxForLock = false;
+  @observable confirmBoxForParentLock = false;
   @observable openAccordion = [];
 
   @action
@@ -111,6 +112,11 @@ export class UiStore {
   @action
   toggleConfirmBoxForLock(state) {
     this.confirmBoxForLock = state;
+  }
+
+  @action
+  toggleConfirmBoxForParentLock(state) {
+    this.confirmBoxForParentLock = state;
   }
 
   @action

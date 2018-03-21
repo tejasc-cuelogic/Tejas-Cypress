@@ -126,6 +126,13 @@ export default class BusinessDetails extends React.Component {
     this.props.uiStore.toggleConfirmBoxForLock(false);
   }
 
+  confirmForParentLock = (e, { filingid, lockedstatusforfiling }) => {
+    this.setState({
+      filingId: filingid,
+      lockedStatus: lockedstatusforfiling,
+    });
+  }
+
   handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`)
 
   render() {
