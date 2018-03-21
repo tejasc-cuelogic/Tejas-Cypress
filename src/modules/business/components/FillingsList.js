@@ -28,17 +28,16 @@ const FillingsList = observer((props) => {
                     View
                   </Link>
                   <Button
-                    icon
-                    circular
                     color="red"
+                    className="link-button"
                     filingid={filing.filingId}
                     onClick={props.confirmDeleteForDuplicatedAgain}
                   >
-                    <Icon name="trash" />
+                    Delete
                   </Button>
                   <Confirm
                     header="Confirm"
-                    content="Are you sure you want to delete this filing?"
+                    content="Are you sure you want to delete this filing and associated XML submissions?"
                     open={props.confirmBoxDuplicatedAgain}
                     filingid={props.filingIdToBeDeleted}
                     onCancel={props.handleDelCancelDuplicatedAgain}

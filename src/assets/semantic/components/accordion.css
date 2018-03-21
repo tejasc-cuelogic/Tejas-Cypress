@@ -290,6 +290,10 @@
 .ui.styled.accordion .accordion.filing-list .title {
   border: rgba(34, 36, 38, 0.15) 1px solid;
 }
+.ui.styled.accordion.filing-list .title.active,
+.ui.styled.accordion .accordion.filing-list .title.active {
+  background-color: #F8F8F8;
+}
 .ui.styled.accordion.filing-list .content,
 .ui.styled.accordion .accordion.filing-list .content {
   padding: 1em;
@@ -304,9 +308,29 @@
   position: relative;
   float: right;
   z-index: 99;
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+.ui.styled.accordion.filing-list .actions a,
+.ui.styled.accordion .accordion.filing-list .actions a,
+.ui.styled.accordion.filing-list .actions .ui.button,
+.ui.styled.accordion .accordion.filing-list .actions .ui.button,
+.ui.styled.accordion.filing-list .actions .ui.buttons .button,
+.ui.styled.accordion .accordion.filing-list .actions .ui.buttons .button {
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   font-weight: 400;
+  text-transform: none;
+  margin: 0;
+  padding: 0 0.57142857rem;
+  border-right: rgba(34, 36, 38, 0.15) 1px solid;
+}
+.ui.styled.accordion.filing-list .actions a:last-child,
+.ui.styled.accordion .accordion.filing-list .actions a:last-child,
+.ui.styled.accordion.filing-list .actions .ui.button:last-child,
+.ui.styled.accordion .accordion.filing-list .actions .ui.button:last-child,
+.ui.styled.accordion.filing-list .actions .ui.buttons .button:last-child,
+.ui.styled.accordion .accordion.filing-list .actions .ui.buttons .button:last-child {
+  border: none;
+  padding-right: 0;
 }
 
 

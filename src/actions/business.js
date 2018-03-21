@@ -92,7 +92,12 @@ export class Business {
   listBusinesses = () => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching business list');
-    const payload = { query: 'query getBusinesses { businesses{ id name description created } }' };
+    const params = { field: 'created', sort: 'desc' };
+    const payload = {
+      query: 'query getBusinesses($orderByBusiness: businessOrderBy) { businesses(orderBy:$orderByBusiness){ id name description created } }',
+      variables: { orderByBusiness: params },
+    };
+
     ApiService.post(GRAPHQL, payload)
       .then(data => businessStore.setBusinessList(data.body.data.businesses))
       .catch(err => uiStore.setErrors(err))
