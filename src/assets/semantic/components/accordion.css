@@ -332,6 +332,14 @@
   border: none;
   padding-right: 0;
 }
+.ui.styled.accordion.filing-list a:hover,
+.ui.styled.accordion .accordion.filing-list a:hover,
+.ui.styled.accordion.filing-list a:focus,
+.ui.styled.accordion .accordion.filing-list a:focus,
+.ui.styled.accordion.filing-list a:active,
+.ui.styled.accordion .accordion.filing-list a:active {
+  text-decoration: none;
+}
 
 
 /*******************************

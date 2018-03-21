@@ -99,6 +99,11 @@
 				}
 			}
 		}
+		a{
+			&:hover, &:focus, &:active{
+				text-decoration:none;
+			}
+		}
 	}
 }
 // .ui.styled.accordion, .ui.styled.accordion .accordion{
