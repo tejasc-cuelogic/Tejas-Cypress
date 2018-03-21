@@ -148,7 +148,7 @@ export class Business {
     uiStore.setLoaderMessage('Getting business data');
     const payload = {
       query: `query getBusiness { business(id: "${businessId}") { id name description created` +
-        ' filings { filingId businessId created folderId submissions { xmlSubmissionId created } } } }',
+        ' filings { filingId businessId created folderId submissions { xmlSubmissionId created xmlSubmissionDownloadUrl jobStatus } } } }',
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setBusinessDetails(data.body.data.business))
@@ -331,6 +331,61 @@ export class Business {
       query: 'mutation deleteBusiness($id: String!){ deleteBusiness(id:$id){ id } }',
       variables: {
         id: businessId,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
+  }
+
+  /**
+   * @desc To delete XML submission for the filing
+   */
+  deleteXmlSubmission = (filingId, xmlSubmissionId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Deleting XML Submission');
+    const payload = {
+      query: `mutation deleteXmlSubmissionById($filingId: String!, $xmlSubmissionId: String!) {
+        deleteBusinessFilingSubmission(filingId: $filingId, xmlSubmissionId: $xmlSubmissionId){
+          xmlSubmissionId
+        }
+      }`,
+      variables: {
+        filingId, xmlSubmissionId,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
+  }
+
+  /**
+   * @desc To delete Filing for the business
+   */
+  deleteFiling = (businessId, filingId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Deleting Business Filing');
+    const payload = {
+      query: `mutation deleteBusinessFiling($businessId: String!, $filingId: String!) {
+         deleteBusinessFiling(businessId: $businessId, filingId: $filingId ){
+           businessId 
+           created 
+          } 
+      }`,
+      variables: {
+        businessId, filingId,
       },
     };
     return new Promise((res, rej) => {

@@ -16,6 +16,8 @@ export class UiStore {
   @observable redirectURL = undefined;
   @observable asyncCheckLoader = false;
   @observable confirmBox = false;
+  @observable confirmBoxDuplicated = false;
+  @observable confirmBoxDuplicatedAgain = false;
   @observable openAccordion = [];
 
   @action
@@ -93,6 +95,16 @@ export class UiStore {
   @action
   toggleConfirmBox(state) {
     this.confirmBox = state;
+  }
+
+  @action
+  toggleConfirmBoxDuplicated(state) {
+    this.confirmBoxDuplicated = state;
+  }
+
+  @action
+  toggleConfirmBoxDuplicatedAgain(state) {
+    this.confirmBoxDuplicatedAgain = state;
   }
 
   @action
