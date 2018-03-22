@@ -1,7 +1,10 @@
 import _ from 'lodash';
 import moment from 'moment';
 import shortid from 'shortid';
+import graphql from 'graphql';
 
+import { GqlClient as client } from '../services/graphql';
+import { listOfferings } from '../stores/queries/business';
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
 import {
@@ -90,12 +93,18 @@ export class Business {
   *       Fetches list of offerings from DynamoDB
   */
   listOfferings = () => {
-    const payload = {
-      query: 'query getOfferingFilings{offeringFilings{id created payload{' +
-        'templateVariables{ name_of_business } } } }',
-    };
-    uiStore.toggleDropdownLoader();
-    ApiService.post(GRAPHQL, payload)
+    // const payload = {
+    //   query: 'query getOfferingFilings{offeringFilings{id created payload{' +
+    //     'templateVariables{ name_of_business } } } }',
+    // };
+    // uiStore.toggleDropdownLoader();
+    // ApiService.post(GRAPHQL, payload)
+    //   .then(data => this.setOfferings(data.body.data.offeringFilings))
+    //   .catch(err => uiStore.setErrors(err))
+    //   .finally(() => {
+    //     uiStore.toggleDropdownLoader();
+    //   });
+    graphql({ client, query: listOfferings })
       .then(data => this.setOfferings(data.body.data.offeringFilings))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
