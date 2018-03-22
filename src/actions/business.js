@@ -175,9 +175,11 @@ export class Business {
    * @desc This method gets the details of business and store it to store.
    * @param $businessId - Id of business for which data will fetched
   */
-  getBusinessDetails = (businessId) => {
-    uiStore.setProgress();
-    uiStore.setLoaderMessage('Getting business data');
+  getBusinessDetails = (businessId, showLoader = true) => {
+    if (showLoader) {
+      uiStore.setProgress();
+      uiStore.setLoaderMessage('Getting business data');
+    }
     const payload = {
       query: `query getBusiness { business(id: "${businessId}") { id name description created` +
         ' filings { filingId filingFolderName businessId created folderId lockedStatus submissions { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus lockedStatus} } } }',
@@ -585,7 +587,7 @@ export class Business {
   }
 
   createPoll = () => {
-    setTimeout(() => this.getBusinessDetails(businessStore.business.id), 10 * 1000);
+    setTimeout(() => this.getBusinessDetails(businessStore.business.id, false), 15 * 1000);
   }
 
   /* eslint-disable */
