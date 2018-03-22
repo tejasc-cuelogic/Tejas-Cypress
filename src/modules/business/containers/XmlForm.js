@@ -12,6 +12,7 @@ import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
 import Helper from '../../../helper/utility';
+import FieldError from '../../../components/common/FieldError';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -50,6 +51,7 @@ export default class XmlForm extends React.Component {
   };
 
   render() {
+    const { xmlError } = this.props.businessStore;
     if (this.props.uiStore.inProgress) {
       return (
         <div>
@@ -71,6 +73,7 @@ export default class XmlForm extends React.Component {
             </Grid.Row>
           </Grid>
         </div>
+        <FieldError error={xmlError} className="align-center" />
         <div className="content-spacer">
           <Form className="edgar-form">
             <Form.Group widths="equal">
