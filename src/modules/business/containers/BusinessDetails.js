@@ -31,6 +31,7 @@ export default class BusinessDetails extends React.Component {
   confirmDelete = (e, {
     entity, refid, subrefid, lockedstatus, filings,
   }) => {
+    e.stopPropagation();
     let anyFilingXmlLocked = false;
     let entityV = entity;
     const filing = _.find(filings, { filingId: subrefid });
@@ -56,7 +57,6 @@ export default class BusinessDetails extends React.Component {
   }
 
   handleDeleteFiling = () => {
-    console.log(this.props.uiStore.confirmBox.metaData.isAnyFilingLocked);
     if (this.props.uiStore.confirmBox.metaData.isAnyFilingLocked) {
       this.handleDeleteCancel();
       this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
