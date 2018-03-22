@@ -1,12 +1,23 @@
 import _ from 'lodash';
 import moment from 'moment';
 import shortid from 'shortid';
+import graphql from 'graphql';
 
+import { GqlClient as client } from '../services/graphql';
+import { listOfferings } from '../stores/queries/business';
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
-import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE, FILES } from './../constants/business';
+import {
+  EDGAR_URL,
+  XML_URL,
+  GRAPHQL,
+  PERSONAL_SIGNATURE,
+  FILES,
+  XML_STATUSES,
+} from './../constants/business';
 import ApiService from '../services/api';
 import Helper from '../helper/utility';
+import validationActions from './validation';
 
 export class Business {
   /**
@@ -68,16 +79,32 @@ export class Business {
   }
 
   /**
+   *
+   */
+  validateXmlForm = () => {
+    this.validateFilerInfo(businessStore);
+    this.validateIssuerInfo(businessStore);
+    this.validateOfferingInfo(businessStore);
+    this.validateAnnualReportInfo(businessStore);
+  }
+
+  /**
   * @desc Lists offerings submitted and which needs to be converted to XML for final submission
   *       Fetches list of offerings from DynamoDB
   */
   listOfferings = () => {
-    const payload = {
-      query: 'query getOfferingFilings{offeringFilings{id created payload{' +
-        'templateVariables{ name_of_business } } } }',
-    };
-    uiStore.toggleDropdownLoader();
-    ApiService.post(GRAPHQL, payload)
+    // const payload = {
+    //   query: 'query getOfferingFilings{offeringFilings{id created payload{' +
+    //     'templateVariables{ name_of_business } } } }',
+    // };
+    // uiStore.toggleDropdownLoader();
+    // ApiService.post(GRAPHQL, payload)
+    //   .then(data => this.setOfferings(data.body.data.offeringFilings))
+    //   .catch(err => uiStore.setErrors(err))
+    //   .finally(() => {
+    //     uiStore.toggleDropdownLoader();
+    //   });
+    graphql({ client, query: listOfferings })
       .then(data => this.setOfferings(data.body.data.offeringFilings))
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
@@ -153,10 +180,19 @@ export class Business {
     uiStore.setLoaderMessage('Getting business data');
     const payload = {
       query: `query getBusiness { business(id: "${businessId}") { id name description created` +
-        ' filings { filingId businessId created folderId lockedStatus submissions { xmlSubmissionId created xmlSubmissionDownloadUrl jobStatus lockedStatus} } } }',
+        ' filings { filingId filingFolderName businessId created folderId lockedStatus submissions { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus lockedStatus} } } }',
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => this.setBusinessDetails(data.body.data.business))
+      .then((data) => {
+        this.setBusinessDetails(data.body.data.business);
+        _.filter(data.body.data.business.filings, (filing) => {
+          _.map(filing.submissions, (submission) => {
+            if (submission.jobStatus === XML_STATUSES.created) {
+              this.createPoll();
+            }
+          });
+        });
+      })
       .catch(err => uiStore.setErrors(err))
       .finally(() => {
         uiStore.setProgress(false);
@@ -291,11 +327,7 @@ export class Business {
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission.payload))
-      .catch(err => console.log(err))
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+      .catch(err => console.log(err));
   }
 
   /**
@@ -552,13 +584,17 @@ export class Business {
     businessStore.setBusiness(hash);
   }
 
+  createPoll = () => {
+    setTimeout(() => this.getBusinessDetails(businessStore.business.id), 10 * 1000);
+  }
+
   /* eslint-disable */
   setDocumentList = (list) => {
     _.map(list, document => document.checked = false);
     businessStore.setDocumentList(list);
   }
 
-setXmlPayload = (payload) => {
+  setXmlPayload = (payload) => {
     const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
     const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
     if (payload) {
@@ -607,6 +643,26 @@ setXmlPayload = (payload) => {
       })
       _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
     }
+  }
+
+  validateFilerInfo = ({ filerInformation }) => {
+    const newFiler = validationActions.validateXmlFormData(filerInformation);
+    businessStore.setFiler(newFiler);
+  }
+
+  validateIssuerInfo = ({ issuerInformation }) => {
+    const newIssuer = validationActions.validateXmlFormData(issuerInformation);
+    businessStore.setIssuer(newIssuer);
+  }
+
+  validateOfferingInfo = ({ offeringInformation }) => {
+    const newOffering = validationActions.validateXmlFormData(offeringInformation);
+    businessStore.setOffering(newOffering);
+  }
+
+  validateAnnualReportInfo = ({ annualReportRequirements }) => {
+    const newAnnualReport = validationActions.validateXmlFormData(annualReportRequirements);
+    businessStore.setAnnualReport(newAnnualReport);
   }
   // Private Methods ends here
 }

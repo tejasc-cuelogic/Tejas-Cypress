@@ -21,7 +21,7 @@ const XmlSubmission = observer((props) => {
                 <Table.Row key={xmlSubmission.xmlSubmissionId}>
                   <Table.Cell>
                     <Link to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}>
-                      {'XML Submission'}
+                      {xmlSubmission.folderName}
                     </Link>
                   </Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>

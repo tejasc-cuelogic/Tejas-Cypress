@@ -74,8 +74,8 @@
 /* Styled Title */
 @styledTitleMargin: 0em;
 @styledTitlePadding: 0.75em 1em;
-@styledTitleFontWeight: bold;
-@styledTitleColor: @unselectedTextColor;
+@styledTitleFontWeight: normal;
+@styledTitleColor: @tertiary-text;
 @styledTitleTransition: background-color @defaultDuration @defaultEasing;
 @styledTitleBorder: 1px solid @borderColor;
 @styledTitleTransition:
@@ -87,7 +87,7 @@
 @styledTitleHoverBackground: transparent;
 @styledTitleHoverColor: @textColor;
 @styledActiveTitleBackground: transparent;
-@styledActiveTitleColor: @selectedTextColor;
+@styledActiveTitleColor: @primary-text;
 
 /* Styled Child Title States */
 @styledHoverChildTitleBackground: @styledTitleHoverBackground;

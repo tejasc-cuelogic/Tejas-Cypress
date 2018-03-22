@@ -91,6 +91,13 @@ export class BusinessStore {
     return (this.business.name.value !== '' && this.business.desc.value !== '');
   }
 
+  @computed get canSubmitXmlForm() {
+    return _.isEmpty(_.filter(this.filerInformation, field => field.error)) &&
+      _.isEmpty(_.filter(this.issuerInformation, field => field.error)) &&
+      _.isEmpty(_.filter(this.offeringInformation, field => field.error)) &&
+      _.isEmpty(_.filter(this.annualReportRequirements, field => field.error));
+  }
+
   @computed get getSummary() {
     return this.businessList.length || 0;
   }
@@ -152,6 +159,11 @@ export class BusinessStore {
   }
 
   @action
+  setFiler(filerInformation) {
+    this.filerInformation = filerInformation;
+  }
+
+  @action
   setFilerInfo(field, value) {
     this.filerInformation[field].value = value;
   }
@@ -167,6 +179,11 @@ export class BusinessStore {
   }
 
   @action
+  setIssuer(issuerInformation) {
+    this.issuerInformation = issuerInformation;
+  }
+
+  @action
   setIssuerInfo(field, value) {
     this.issuerInformation[field].value = value;
   }
@@ -177,6 +194,11 @@ export class BusinessStore {
   }
 
   @action
+  setOffering(offeringInformation) {
+    this.offeringInformation = offeringInformation;
+  }
+
+  @action
   setOfferingInfo(field, value) {
     this.offeringInformation[field].value = value;
   }
@@ -184,6 +206,11 @@ export class BusinessStore {
   @action
   setOfferingError(field, error) {
     this.offeringInformation[field].error = error;
+  }
+
+  @action
+  setAnnualReport(newAnnualReport) {
+    this.annualReportRequirements = newAnnualReport;
   }
 
   @action
