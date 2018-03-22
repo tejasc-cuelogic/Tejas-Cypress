@@ -19,8 +19,11 @@ export class UiStore {
     entity: '',
     refId: '',
     subRefId: '',
+    metaData: {
+      lockedStatus: false,
+      isAnyFilingXmlLocked: false,
+    },
   };
-  @observable confirmBoxForLock = false;
   @observable openAccordion = [];
 
   @action
@@ -96,15 +99,12 @@ export class UiStore {
   }
 
   @action
-  setConfirmBox(entity, refId, subRefId) {
+  setConfirmBox(entity, refId, subRefId, lockedStatus, isAnyFilingXmlLocked) {
     this.confirmBox.entity = entity;
     this.confirmBox.refId = refId;
     this.confirmBox.subRefId = subRefId;
-  }
-
-  @action
-  toggleConfirmBoxForLock(state) {
-    this.confirmBoxForLock = state;
+    this.confirmBox.metaData.lockedStatus = lockedStatus;
+    this.confirmBox.metaData.isAnyFilingXmlLocked = isAnyFilingXmlLocked;
   }
 
   @action

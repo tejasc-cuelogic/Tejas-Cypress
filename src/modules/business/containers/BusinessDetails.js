@@ -28,12 +28,14 @@ export default class BusinessDetails extends React.Component {
     this.props.uiStore.setModalStatus(true);
   }
 
-  confirmDelete = (e, { entity, refid, subrefid }) => {
-    this.props.uiStore.setConfirmBox(entity, refid, subrefid);
+  confirmDelete = (e, {
+    entity, refid, subrefid, lockedstatus,
+  }) => {
+    this.props.uiStore.setConfirmBox(entity, refid, subrefid, !lockedstatus);
   }
 
   handleDeleteCancel = () => {
-    this.props.uiStore.setConfirmBox('', '', '');
+    this.props.uiStore.setConfirmBox('', '', '', false);
   }
 
   handleDeleteBusiness = () => {
@@ -65,7 +67,22 @@ export default class BusinessDetails extends React.Component {
     });
   }
 
+  handleXMLSubmissionLockUnlock = () => {
+    const { businessId } = this.props.match.params;
+    const filingId = this.props.uiStore.confirmBox.refId;
+    const xmlSubmissionId = this.props.uiStore.confirmBox.subRefId;
+    const lockStatus = this.props.uiStore.confirmBox.metaData.lockedStatus;
+    const status = lockStatus === false ? 'unlocked' : 'locked';
+    businessActions.lockUnlockXmlSubmission(businessId, filingId, xmlSubmissionId, lockStatus)
+      .then(() => {
+        this.handleDeleteCancel();
+        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        Helper.toast(`XML submission ${status} successfully`, 'success');
+      });
+  }
+
   render() {
+    console.log(this.props.uiStore.confirmBox);
     const { business } = this.props.businessStore;
     if (this.props.uiStore.inProgress) {
       return (
@@ -141,6 +158,7 @@ export default class BusinessDetails extends React.Component {
             confirmBoxValues={this.props.uiStore.confirmBox}
             handleDeleteFiling={this.handleDeleteFiling}
             handleDeleteXMlSubmission={this.handleDeleteXMlSubmission}
+            handleXMLSubmissionLockUnlock={this.handleXMLSubmissionLockUnlock}
           />
         </div>
       </div>

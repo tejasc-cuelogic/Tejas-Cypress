@@ -26,11 +26,29 @@ const XmlSubmission = observer((props) => {
                   </Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                   <Table.Cell>
+                    <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className={xmlSubmission.jobStatus === 'COMPLETED' ? 'ui button icon link-button' : 'ui button icon link-button disabled'}>
+                      <Icon name="download" />
+                    </a>
+
+                    <Button
+                      icon
+                      color={xmlSubmission.lockedStatus === true ? 'red' : 'green'}
+                      className="link-button"
+                      entity="lockunlock"
+                      refid={filingId}
+                      subrefid={xmlSubmission.xmlSubmissionId}
+                      lockedstatus={xmlSubmission.lockedStatus}
+                      onClick={props.confirmDelete}
+                    >
+                      {xmlSubmission.lockedStatus === true && <Icon name="lock" />}
+                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="unlock alternate" />}
+                    </Button>
+
                     <Button
                       icon
                       circular
                       color="red"
-                      className="link-button"
+                      className={xmlSubmission.lockedStatus === true ? 'link-button disabled' : 'link-button'}
                       entity="xml"
                       refid={filingId}
                       subrefid={xmlSubmission.xmlSubmissionId}
@@ -48,6 +66,15 @@ const XmlSubmission = observer((props) => {
               open={props.confirmBoxValues.entity === 'xml'}
               onCancel={props.handleDeleteCancel}
               onConfirm={props.handleDeleteXMlSubmission}
+              size="tiny"
+              className="deletion"
+            />
+            <Confirm
+              header="Confirm"
+              content={props.confirmBoxValues.metaData.lockedStatus === true ? 'Are you sure you want to lock this XML submission?' : 'Are you sure you want to unlock this XML submission?'}
+              open={props.confirmBoxValues.entity === 'lockunlock'}
+              onCancel={props.handleDeleteCancel}
+              onConfirm={props.handleXMLSubmissionLockUnlock}
               size="tiny"
               className="deletion"
             />

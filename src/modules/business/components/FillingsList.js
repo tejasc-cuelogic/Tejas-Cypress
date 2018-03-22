@@ -30,6 +30,7 @@ const FillingsList = observer((props) => {
                     color="red"
                     className="link-button"
                     entity="filing"
+                    filings={props.filings}
                     refid={props.businessId}
                     subrefid={filing.filingId}
                     onClick={props.confirmDelete}
@@ -47,6 +48,7 @@ const FillingsList = observer((props) => {
                 confirmDelete={props.confirmDelete}
                 handleDeleteCancel={props.handleDeleteCancel}
                 handleDeleteXMlSubmission={props.handleDeleteXMlSubmission}
+                handleXMLSubmissionLockUnlock={props.handleXMLSubmissionLockUnlock}
               />
             </div>
           ))
