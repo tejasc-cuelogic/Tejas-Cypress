@@ -29572,8 +29572,8 @@ a.ui.card:hover,
 .ui.styled.accordion .accordion .title {
   margin: 0em;
   padding: 0.75em 1em;
-  color: rgba(0, 0, 0, 0.4);
-  font-weight: bold;
+  color: #828282;
+  font-weight: normal;
   border-top: 1px solid rgba(34, 36, 38, 0.15);
   -webkit-transition: background 0.1s ease, color 0.1s ease;
   transition: background 0.1s ease, color 0.1s ease;
@@ -29617,12 +29617,12 @@ a.ui.card:hover,
 
 .ui.styled.accordion .active.title {
   background: transparent;
-  color: rgba(0, 0, 0, 0.95);
+  color: #303030;
 }
 
 .ui.styled.accordion .accordion .active.title {
   background: transparent;
-  color: rgba(0, 0, 0, 0.95);
+  color: #303030;
 }
 
 /*******************************
@@ -29740,6 +29740,14 @@ a.ui.card:hover,
 .ui.styled.accordion.filing-list .title.active,
 .ui.styled.accordion .accordion.filing-list .title.active {
   background-color: #F8F8F8;
+}
+
+.ui.styled.accordion.filing-list .title time,
+.ui.styled.accordion .accordion.filing-list .title time {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 0.85714286rem;
+  margin-left: 0.35714286rem;
+  color: #828282;
 }
 
 .ui.styled.accordion.filing-list .content,
