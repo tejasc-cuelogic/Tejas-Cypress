@@ -21,7 +21,7 @@ class signupInitial extends Component {
         <Modal.Content className="signup-modal">
           <Grid stackable textAlign="center">
             <Grid.Row columns={2}>
-              {userTypes.map((type) => (
+              {userTypes.map(type => (
                 <Grid.Column onClick={() => this.chooseType(type.value)} key={type.key}>
                   <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
                     <Icon name="money" size="huge" />
