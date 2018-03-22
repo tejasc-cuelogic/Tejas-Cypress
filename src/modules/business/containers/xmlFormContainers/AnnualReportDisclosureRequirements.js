@@ -19,7 +19,6 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
 
   render() {
     const { annualReportRequirements } = this.props.businessStore;
-
     return (
       <div>
         <Divider section />
@@ -54,6 +53,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
           name="issueJurisdictionSecuritiesOffering"
           options={COUNTRIES}
           onChange={this.handleSelectChange}
+          error={!!annualReportRequirements.issueJurisdictionSecuritiesOffering.error}
           key={annualReportRequirements.issueJurisdictionSecuritiesOffering.key}
         />
       </div>

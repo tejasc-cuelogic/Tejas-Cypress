@@ -44,6 +44,7 @@ export default class OfferingInformation extends React.Component {
   }
 
   render() {
+    const { offeringInformation } = this.props.businessStore;
     return (
       <div>
         <Divider section />
@@ -51,15 +52,15 @@ export default class OfferingInformation extends React.Component {
         <Form.TextArea
           label={LABEL}
           name="compensationAmount"
-          value={this.offeringInformation.compensationAmount.value}
-          error={!!this.offeringInformation.compensationAmount.error}
+          value={offeringInformation.compensationAmount.value}
+          error={!!offeringInformation.compensationAmount.error}
           onChange={this.handleChange}
         />
         <Form.TextArea
           label={LABEL1}
           name="financialInterest"
-          value={this.offeringInformation.financialInterest.value}
-          error={!!this.offeringInformation.financialInterest.error}
+          value={offeringInformation.financialInterest.value}
+          error={!!offeringInformation.financialInterest.error}
           onChange={this.handleChange}
         />
         <Form.Group widths="equal">
@@ -69,7 +70,8 @@ export default class OfferingInformation extends React.Component {
             placeholder="Security Type"
             label="Type of Security Offered"
             name="securityOfferedType"
-            value={this.offeringInformation.securityOfferedType.value}
+            value={offeringInformation.securityOfferedType.value}
+            error={!!offeringInformation.securityOfferedType.error}
             options={OFFERED_SECURITIES}
             onChange={this.handleChange}
           />
@@ -77,8 +79,8 @@ export default class OfferingInformation extends React.Component {
             placeholder="Other Description"
             label="Other Description"
             name="securityOfferedOtherDesc"
-            value={this.offeringInformation.securityOfferedOtherDesc.value}
-            error={!!this.offeringInformation.securityOfferedOtherDesc.error}
+            value={offeringInformation.securityOfferedOtherDesc.value}
+            error={!!offeringInformation.securityOfferedOtherDesc.error}
             onChange={this.handleChange}
             disabled={this.getOtherSecurityClass()}
           />
@@ -86,8 +88,8 @@ export default class OfferingInformation extends React.Component {
             placeholder="No. of securities offered"
             label="No. of securities offered"
             name="noOfSecurityOffered"
-            value={this.offeringInformation.noOfSecurityOffered.value}
-            error={!!this.offeringInformation.noOfSecurityOffered.error}
+            value={offeringInformation.noOfSecurityOffered.value}
+            error={!!offeringInformation.noOfSecurityOffered.error}
             onChange={this.handleChange}
             disabled={this.getSecurityOfferedClass()}
           />
@@ -95,8 +97,8 @@ export default class OfferingInformation extends React.Component {
             placeholder="Price"
             label="Price"
             name="price"
-            value={this.offeringInformation.price.value}
-            error={!!this.offeringInformation.price.error}
+            value={offeringInformation.price.value}
+            error={!!offeringInformation.price.error}
             onChange={this.handleChange}
             disabled={this.getSecurityOfferedClass()}
           />
@@ -104,8 +106,8 @@ export default class OfferingInformation extends React.Component {
             placeholder="Price"
             label="Price (or Method for Determining Price)"
             name="priceDeterminationMethod"
-            value={this.offeringInformation.priceDeterminationMethod.value}
-            error={!!this.offeringInformation.priceDeterminationMethod.error}
+            value={offeringInformation.priceDeterminationMethod.value}
+            error={!!offeringInformation.priceDeterminationMethod.error}
             onChange={this.handleChange}
           />
         </Form.Group>
@@ -134,19 +136,19 @@ export default class OfferingInformation extends React.Component {
             search
             label="If yes, disclose how oversubscriptions will be allocated"
             name="overSubscriptionAllocationType"
-            value={this.offeringInformation.overSubscriptionAllocationType.value}
+            value={offeringInformation.overSubscriptionAllocationType.value}
             options={OVER_SUBSCRIPTION_ALLOCATION_TYPES}
             onChange={this.handleChange}
             disabled={this.getSubscriptionTypeClass()}
-            error={!!this.offeringInformation.overSubscriptionAllocationType.error}
+            error={!!offeringInformation.overSubscriptionAllocationType.error}
             width={5}
           />
           <Form.Input
             label="Other Description"
             placeholder="Other Description"
             name="descOverSubscription"
-            value={this.offeringInformation.descOverSubscription.value}
-            error={!!this.offeringInformation.descOverSubscription.error}
+            value={offeringInformation.descOverSubscription.value}
+            error={!!offeringInformation.descOverSubscription.error}
             onChange={this.handleChange}
             disabled={!this.getSubscriptionDescClass()}
             width={4}
@@ -154,8 +156,8 @@ export default class OfferingInformation extends React.Component {
           <Form.Input
             label="Deadline to reach the Target Offering Amount"
             name="maximumOfferingAmount"
-            value={this.offeringInformation.maximumOfferingAmount.value}
-            error={!!this.offeringInformation.maximumOfferingAmount.error}
+            value={offeringInformation.maximumOfferingAmount.value}
+            error={!!offeringInformation.maximumOfferingAmount.error}
             onChange={this.handleChange}
             disabled={this.getSubscriptionTypeClass()}
             width={4}
@@ -165,8 +167,8 @@ export default class OfferingInformation extends React.Component {
           <Form.Input
             label="Target Offering Amount"
             name="offeringAmount"
-            value={this.offeringInformation.offeringAmount.value}
-            error={!!this.offeringInformation.offeringAmount.error}
+            value={offeringInformation.offeringAmount.value}
+            error={!!offeringInformation.offeringAmount.error}
             onChange={this.handleChange}
             width={3}
           />

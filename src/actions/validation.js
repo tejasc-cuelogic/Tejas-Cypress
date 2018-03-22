@@ -7,6 +7,15 @@ import userStore from './../stores/userStore';
 
 import { REGISTRATION } from './../constants/validation';
 
+const conditionalRequire = {
+  verify: 'password',
+  legalStatusOtherDesc: 'legalStatusForm',
+  securityOfferedOtherDesc: 'securityOfferedType',
+  noOfSecurityOffered: 'securityOfferedType',
+  overSubscriptionAllocationType: 'overSubscriptionAccepted',
+  descOverSubscription: 'overSubscriptionAllocationType',
+};
+
 // TODO: make class in such way that methods should not be dependent on any stores...
 export class Validation {
   /**
@@ -16,7 +25,6 @@ export class Validation {
   * @returns null
   */
   validateRegisterField = (field, value) => {
-    const conditionalRequire = { verify: 'password' };
     // First set value to authStore
     authStore.setValue(field, value);
     // Vaidate whether field value is valid
@@ -36,7 +44,6 @@ export class Validation {
   }
 
   validateIssuerInfoField = (field, value) => {
-    const conditionalRequire = { legalStatusOtherDesc: 'legalStatusForm' };
     businessStore.setIssuerInfo(field, value);
     const { errors } = validationService.validate(
       businessStore.issuerInformation[field],
@@ -46,12 +53,6 @@ export class Validation {
   }
 
   validateOfferingInfoField = (field, value) => {
-    const conditionalRequire = {
-      securityOfferedOtherDesc: 'securityOfferedType',
-      noOfSecurityOffered: 'securityOfferedType',
-      overSubscriptionAllocationType: 'overSubscriptionAccepted',
-      descOverSubscription: 'overSubscriptionAllocationType',
-    };
     businessStore.setOfferingInfo(field, value);
     const { errors } = validationService.validate(
       businessStore.offeringInformation[field],
@@ -120,6 +121,22 @@ export class Validation {
     businessStore.setNewOfferingInfo(field, value);
     const { errors } = validationService.validate(businessStore.newOfferingInformation[field]);
     businessStore.setNewOfferingError(field, errors && errors[field][0]);
+  }
+
+  /**
+   *
+   */
+  validateXmlFormData = (data) => {
+    const newData = {};
+    _.map(data, (field) => {
+      const { errors } = validationService.validate(
+        field,
+        data[conditionalRequire[field.key]],
+      );
+      newData[field.key] = { ...field };
+      newData[field.key].error = (errors && errors[field.key][0]);
+    });
+    return newData;
   }
 
   // TODO: Validate create new user form on click of submit button from admin panel
