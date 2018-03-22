@@ -26,6 +26,7 @@ class InvestorSignup extends Component {
         .then(() => {
           console.log('yoo');
           this.props.history.replace('/confirm');
+          this.props.setAuthWizardStep();
         })
         .catch(() => {});
     }
@@ -45,7 +46,6 @@ class InvestorSignup extends Component {
           <Header as="h2">
             Sign Up as&nbsp;
             {(this.props.authStore.signupFlow.type === 'investor') ? 'Investor' : 'Business Owner'}
-            <Button onClick={this.checkRouting} />
           </Header>
         </Modal.Header>
         <Modal.Content className="signup-modal">
@@ -61,7 +61,7 @@ class InvestorSignup extends Component {
                 fluid
                 label="First Name"
                 placeholder="First Name"
-                name="givenName"                
+                name="givenName"
                 value={values.givenName.value}
                 onChange={this.handleInputChange}
                 error={!!values.givenName.error}
