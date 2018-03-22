@@ -4,7 +4,14 @@ import shortid from 'shortid';
 
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
-import { EDGAR_URL, XML_URL, GRAPHQL, PERSONAL_SIGNATURE, FILES } from './../constants/business';
+import {
+  EDGAR_URL,
+  XML_URL,
+  GRAPHQL,
+  PERSONAL_SIGNATURE,
+  FILES,
+  XML_STATUSES,
+} from './../constants/business';
 import ApiService from '../services/api';
 import Helper from '../helper/utility';
 
@@ -155,7 +162,7 @@ export class Business {
         this.setBusinessDetails(data.body.data.business);
         _.filter(data.body.data.business.filings, (filing) => {
           _.map(filing.submissions, (submission) => {
-            if (submission.jobStatus === 'CREATED') {
+            if (submission.jobStatus === XML_STATUSES.created) {
               this.createPoll();
             }
           });

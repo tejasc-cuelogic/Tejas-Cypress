@@ -903,6 +903,12 @@ export const NEW_OFFERING_INFORMATION = {
   },
 };
 
+export const XML_STATUSES = {
+  created: 'CREATED',
+  completed: 'COMPLETED',
+  errored: null,
+};
+
 export const EDGAR_URL = '/edgar/publish';
 
 export const XML_URL = '/edgar/primary-data';
