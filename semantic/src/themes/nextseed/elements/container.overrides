@@ -298,3 +298,8 @@ div.login-form {
 		}
 	}
 }
+a.disabled, a.disabled:hover, a.disabled:focus{
+	cursor:default;
+	opacity:.45 !important;
+	pointer-events:none !important;
+}
