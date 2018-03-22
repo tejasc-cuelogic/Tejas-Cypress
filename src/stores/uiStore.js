@@ -15,9 +15,11 @@ export class UiStore {
   @observable success = undefined;
   @observable redirectURL = undefined;
   @observable asyncCheckLoader = false;
-  @observable confirmBox = false;
-  @observable confirmBoxDuplicated = false;
-  @observable confirmBoxDuplicatedAgain = false;
+  @observable confirmBox = {
+    entity: '',
+    refId: '',
+    subRefId: '',
+  };
   @observable confirmBoxForLock = false;
   @observable openAccordion = [];
 
@@ -94,18 +96,10 @@ export class UiStore {
   }
 
   @action
-  toggleConfirmBox(state) {
-    this.confirmBox = state;
-  }
-
-  @action
-  toggleConfirmBoxDuplicated(state) {
-    this.confirmBoxDuplicated = state;
-  }
-
-  @action
-  toggleConfirmBoxDuplicatedAgain(state) {
-    this.confirmBoxDuplicatedAgain = state;
+  setConfirmBox(entity, refId, subRefId) {
+    this.confirmBox.entity = entity;
+    this.confirmBox.refId = refId;
+    this.confirmBox.subRefId = subRefId;
   }
 
   @action

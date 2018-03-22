@@ -26,40 +26,16 @@ const FillingsList = observer((props) => {
                   <Link to={`/app/business/${props.businessId}/edgar/${filing.filingId}`}>
                     View
                   </Link>
-                  {filing.submissions.length !== 0 &&
                   <Button
                     color="red"
                     className="link-button"
-                    filingid={filing.filingId}
-                    filings={props.filings}
-                    onClick={props.confirmDeleteForDuplicatedAgain}
+                    entity="filing"
+                    refid={props.businessId}
+                    subrefid={filing.filingId}
+                    onClick={props.confirmDelete}
                   >
                     Delete
                   </Button>
-                  }
-                  {props.isAnyFilingLocked === true &&
-                    <Confirm
-                      header="Alert!"
-                      content="You can not delete this Filing as one of its XML Submission is locked."
-                      open={props.confirmBoxDuplicatedAgain}
-                      onCancel={props.handleDelCancelDuplicatedAgain}
-                      onConfirm={props.handleFilingDelete}
-                      size="tiny"
-                      className="deletion"
-                    />
-                  }
-                  {props.isAnyFilingLocked === false &&
-                  <Confirm
-                    header="Confirm"
-                    content="Are you sure you want to delete this filing and associated XML submissions?"
-                    open={props.confirmBoxDuplicatedAgain}
-                    filingid={props.filingIdToBeDeleted}
-                    onCancel={props.handleDelCancelDuplicatedAgain}
-                    onConfirm={props.handleFilingDelete}
-                    size="tiny"
-                    className="deletion"
-                  />
-                  }
                 </div>
               </Accordion.Title>
               <XmlSubmission
@@ -67,21 +43,23 @@ const FillingsList = observer((props) => {
                 filingId={filing.filingId}
                 active={props.openAccordion.indexOf(filing.filingId) === -1}
                 businessId={props.businessId}
-                filingIdToBeDeleted={props.filingIdToBeDeleted}
-                xmlSubmissionIdToBeDeleted={props.xmlSubmissionIdToBeDeleted}
-                confirmDeleteForDuplicated={props.confirmDeleteForDuplicated}
-                confirmBoxDuplicated={props.confirmBoxDuplicated}
-                handleDelCancelDuplicated={props.handleDelCancelDuplicated}
-                handleXMlSubmissionDelete={props.handleXMlSubmissionDelete}
-                confirmForLock={props.confirmForLock}
-                handleCancelForLock={props.handleCancelForLock}
-                handleXMLSubmissionLockUnlock={props.handleXMLSubmissionLockUnlock}
-                confirmBoxForLock={props.confirmBoxForLock}
-                lockedStatusTobeToggled={props.lockedStatusTobeToggled}
+                confirmBoxValues={props.confirmBoxValues}
+                confirmDelete={props.confirmDelete}
+                handleDeleteCancel={props.handleDeleteCancel}
+                handleDeleteXMlSubmission={props.handleDeleteXMlSubmission}
               />
             </div>
           ))
         }
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to delete this filing and associated XML submissions?"
+          open={props.confirmBoxValues.entity === 'filing'}
+          onCancel={props.handleDeleteCancel}
+          onConfirm={props.handleDeleteFiling}
+          size="tiny"
+          className="deletion"
+        />
       </Accordion>
     );
   }

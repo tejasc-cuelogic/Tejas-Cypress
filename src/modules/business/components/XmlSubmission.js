@@ -26,68 +26,31 @@ const XmlSubmission = observer((props) => {
                   </Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                   <Table.Cell>
-                    {xmlSubmission.jobStatus === 'COMPLETED' &&
-                      <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
-                        <Icon name="download" />
-                      </a>
-                    }
-                    {xmlSubmission.jobStatus === 'CREATED' &&
-                      <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
-                        <Icon name="download" disabled />
-                      </a>
-                    }
-                    <Button
-                      icon
-                      color={xmlSubmission.lockedStatus === true ? 'red' : 'green'}
-                      className="link-button"
-                      filingid={filingId}
-                      xmlsubmissionid={xmlSubmission.xmlSubmissionId}
-                      lockedstatus={xmlSubmission.lockedStatus}
-                      onClick={props.confirmForLock}
-                    >
-                      {xmlSubmission.lockedStatus === true && <Icon name="lock" />}
-                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="unlock alternate" />}
-                    </Button>
-                    <Confirm
-                      header="Confirm"
-                      content="Are you sure you want to perform this operation?"
-                      open={props.confirmBoxForLock}
-                      filingid={props.filingIdToBeDeleted}
-                      xmlsubmissionid={props.xmlSubmissionIdToBeDeleted}
-                      lockedstatus={props.lockedStatusTobeToggled}
-                      onCancel={props.handleCancelForLock}
-                      onConfirm={props.handleXMLSubmissionLockUnlock}
-                      size="tiny"
-                      className="deletion"
-                    />
-                    {xmlSubmission.lockedStatus !== true &&
                     <Button
                       icon
                       circular
                       color="red"
                       className="link-button"
-                      filingid={filingId}
-                      xmlsubmissionid={xmlSubmission.xmlSubmissionId}
-                      onClick={props.confirmDeleteForDuplicated}
+                      entity="xml"
+                      refid={filingId}
+                      subrefid={xmlSubmission.xmlSubmissionId}
+                      onClick={props.confirmDelete}
                     >
-                      <Icon name="trash" disbaled />
+                      <Icon name="trash" />
                     </Button>
-                    }
-                    <Confirm
-                      header="Confirm"
-                      content="Are you sure you want to delete this XML submission?"
-                      open={props.confirmBoxDuplicated}
-                      filingid={props.filingIdToBeDeleted}
-                      xmlsubmissionid={props.xmlSubmissionIdToBeDeleted}
-                      onCancel={props.handleDelCancelDuplicated}
-                      onConfirm={props.handleXMlSubmissionDelete}
-                      size="tiny"
-                      className="deletion"
-                    />
                   </Table.Cell>
                 </Table.Row>
               ))
             }
+            <Confirm
+              header="Confirm"
+              content="Are you sure you want to delete this XML submission?"
+              open={props.confirmBoxValues.entity === 'xml'}
+              onCancel={props.handleDeleteCancel}
+              onConfirm={props.handleDeleteXMlSubmission}
+              size="tiny"
+              className="deletion"
+            />
           </Table.Body>
         </Table>
       </Accordion.Content>

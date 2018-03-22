@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Icon, Button, Grid, Confirm } from 'semantic-ui-react';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
@@ -14,28 +14,30 @@ import Helper from '../../../helper/utility';
 @inject('businessStore', 'uiStore')
 @observer
 export default class BusinessDetails extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      filingId: '',
-      xmlSubmissionId: '',
-      lockedStatus: '',
-      isAnyFilingLocked: false,
-    };
-  }
-
   componentDidMount() {
     businessActions.getBusinessDetails(this.props.match.params.businessId);
-    this.props.uiStore.toggleConfirmBox(false);
-  }
-
-  componentWillUnmount() {
-    this.props.uiStore.reset();
   }
 
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
 
-  handleBusinessDelete = () => {
+  handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`);
+
+  editBusinessModal = () => {
+    this.props.businessStore.setEditBusinessMode(true);
+    this.props.businessStore.resetNewOfferingInfo();
+    this.props.uiStore.setModalStatus(true);
+  }
+
+  confirmDelete = (e, { entity, refid, subrefid }) => {
+    this.props.uiStore.setConfirmBox(entity, refid, subrefid);
+  }
+
+  handleDeleteCancel = () => {
+    this.props.uiStore.setConfirmBox('', '', '');
+  }
+
+  handleDeleteBusiness = () => {
+    this.props.uiStore.setConfirmBox('', '');
     businessActions.deleteBusiness(this.props.match.params.businessId)
       .then(() => {
         this.props.history.push('/app/business');
@@ -43,113 +45,25 @@ export default class BusinessDetails extends React.Component {
       });
   }
 
-  handleXMlSubmissionDelete = (e, { filingid, xmlsubmissionid }) => {
-    businessActions.deleteXmlSubmission(filingid, xmlsubmissionid).then(() => {
-      this.props.uiStore.toggleConfirmBoxDuplicated(false);
+  handleDeleteFiling = () => {
+    const filingId = this.props.uiStore.confirmBox.subRefId;
+    businessActions.deleteFiling(this.props.match.params.businessId, filingId)
+      .then(() => {
+        this.handleDeleteCancel();
+        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        Helper.toast('Filing deleted successfully', 'success');
+      });
+  }
+
+  handleDeleteXMlSubmission = () => {
+    const filingId = this.props.uiStore.confirmBox.refId;
+    const xmlSubmissionId = this.props.uiStore.confirmBox.subRefId;
+    businessActions.deleteXmlSubmission(filingId, xmlSubmissionId).then(() => {
+      this.handleDeleteCancel();
       this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
       Helper.toast('XML Submission deleted successfully', 'success');
     });
   }
-
-  handleFilingDelete = (e, { filingid }) => {
-    if (this.state.isAnyFilingLocked === true) {
-      this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-      this.props.uiStore.toggleConfirmBoxDuplicatedAgain(false);
-    }
-    businessActions.deleteFiling(this.props.match.params.businessId, filingid).then(() => {
-      this.props.uiStore.toggleConfirmBoxDuplicatedAgain(false);
-      this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-      Helper.toast('Filing deleted successfully', 'success');
-    });
-  }
-
-  handleXMLSubmissionLockUnlock = (e, { filingid, xmlsubmissionid, lockedstatus }) => {
-    const { businessId } = this.props.match.params;
-    const status = !lockedstatus === false ? 'unlocked' : 'locked';
-    businessActions.lockUnlockXmlSubmission(businessId, filingid, xmlsubmissionid, !lockedstatus)
-      .then(() => {
-        this.props.uiStore.toggleConfirmBoxForLock(false);
-        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-        Helper.toast(`XML submission ${status} successfully`, 'success');
-      });
-  }
-
-  handleFilingLockUnlock = (e, { filingid, lockedstatusforfiling }) => {
-    const { businessId } = this.props.match.params;
-    const status = !lockedstatusforfiling === false ? 'unlocked' : 'locked';
-    businessActions.lockUnlockFiling(businessId, filingid, !lockedstatusforfiling)
-      .then(() => {
-        this.props.uiStore.toggleConfirmBoxForParentLock(false);
-        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-        Helper.toast(`Filing ${status} successfully`, 'success');
-      });
-  }
-
-  handleOpenModal = () => {
-    this.props.businessStore.setEditBusinessMode(true);
-    this.props.businessStore.resetNewOfferingInfo();
-    this.props.uiStore.setModalStatus(true);
-  }
-
-  handleDelCancel = () => this.props.uiStore.toggleConfirmBox(false);
-
-  confirmDelete = () => this.props.uiStore.toggleConfirmBox(true);
-
-  confirmDeleteForDuplicated = (e, { filingid, xmlsubmissionid }) => {
-    this.setState({
-      filingId: filingid,
-      xmlSubmissionId: xmlsubmissionid,
-    });
-    this.props.uiStore.toggleConfirmBoxDuplicated(true);
-  }
-
-  handleDelCancelDuplicated = () => {
-    this.setState({
-      filingId: '',
-      xmlSubmissionId: '',
-    });
-    this.props.uiStore.toggleConfirmBoxDuplicated(false);
-  }
-
-  confirmDeleteForDuplicatedAgain = (e, { filingid, filings }) => {
-    const isAnyFilingLocked = _.find(filings, { lockedStatus: true });
-    if (isAnyFilingLocked) {
-      this.setState({
-        isAnyFilingLocked: true,
-      });
-    }
-    this.setState({
-      filingId: filingid,
-    });
-    this.props.uiStore.toggleConfirmBoxDuplicatedAgain(true);
-  }
-
-  handleDelCancelDuplicatedAgain = () => {
-    this.setState({
-      filingId: '',
-    });
-    this.props.uiStore.toggleConfirmBoxDuplicatedAgain(false);
-  }
-
-  confirmForLock = (e, { filingid, xmlsubmissionid, lockedstatus }) => {
-    this.setState({
-      filingId: filingid,
-      xmlSubmissionId: xmlsubmissionid,
-      lockedStatus: lockedstatus,
-    });
-    this.props.uiStore.toggleConfirmBoxForLock(true);
-  }
-
-  handleCancelForLock = () => {
-    this.setState({
-      filingId: '',
-      xmlSubmissionId: '',
-      lockedStatus: '',
-    });
-    this.props.uiStore.toggleConfirmBoxForLock(false);
-  }
-
-  handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`)
 
   render() {
     const { business } = this.props.businessStore;
@@ -171,7 +85,6 @@ export default class BusinessDetails extends React.Component {
                     circular
                     color="green"
                     floated="right"
-                    businessid={this.props.match.params.businessId}
                     onClick={this.handleNewFiling}
                   >
                     + Add Filing
@@ -181,7 +94,7 @@ export default class BusinessDetails extends React.Component {
                   {business.name.value}
                   <div className="actions">
                     <Button
-                      onClick={this.handleOpenModal}
+                      onClick={this.editBusinessModal}
                       icon
                       circular
                       inverted
@@ -194,7 +107,9 @@ export default class BusinessDetails extends React.Component {
                       circular
                       inverted
                       color="red"
-                      businessid={this.props.match.params.businessId}
+                      entity="business"
+                      refid={this.props.match.params.businessId}
+                      subrefid=""
                       onClick={this.confirmDelete}
                     >
                       <Icon name="trash" />
@@ -202,9 +117,9 @@ export default class BusinessDetails extends React.Component {
                     <Confirm
                       header="Confirm"
                       content="Are you sure you want to delete business and its associated data?"
-                      open={this.props.uiStore.confirmBox}
-                      onCancel={this.handleDelCancel}
-                      onConfirm={this.handleBusinessDelete}
+                      open={this.props.uiStore.confirmBox.entity === 'business'}
+                      onCancel={this.handleDeleteCancel}
+                      onConfirm={this.handleDeleteBusiness}
                       size="tiny"
                       className="deletion"
                     />
@@ -221,23 +136,11 @@ export default class BusinessDetails extends React.Component {
             handleAccordionClick={this.handleAccordionTitleClick}
             openAccordion={this.props.uiStore.openAccordion}
             businessId={this.props.match.params.businessId}
-            confirmDeleteForDuplicated={this.confirmDeleteForDuplicated}
-            confirmBoxDuplicated={this.props.uiStore.confirmBoxDuplicated}
-            handleDelCancelDuplicated={this.handleDelCancelDuplicated}
-            handleXMlSubmissionDelete={this.handleXMlSubmissionDelete}
-            confirmDeleteForDuplicatedAgain={this.confirmDeleteForDuplicatedAgain}
-            confirmBoxDuplicatedAgain={this.props.uiStore.confirmBoxDuplicatedAgain}
-            handleDelCancelDuplicatedAgain={this.handleDelCancelDuplicatedAgain}
-            handleFilingDelete={this.handleFilingDelete}
-            filingIdToBeDeleted={this.state.filingId}
-            xmlSubmissionIdToBeDeleted={this.state.xmlSubmissionId}
-            confirmForLock={this.confirmForLock}
-            handleCancelForLock={this.handleCancelForLock}
-            handleXMLSubmissionLockUnlock={this.handleXMLSubmissionLockUnlock}
-            confirmBoxForLock={this.props.uiStore.confirmBoxForLock}
-            lockedStatusTobeToggled={this.state.lockedStatus}
-            handleFilingLockUnlock={this.handleFilingLockUnlock}
-            isAnyFilingLocked={this.state.isAnyFilingLocked}
+            confirmDelete={this.confirmDelete}
+            handleDeleteCancel={this.handleDeleteCancel}
+            confirmBoxValues={this.props.uiStore.confirmBox}
+            handleDeleteFiling={this.handleDeleteFiling}
+            handleDeleteXMlSubmission={this.handleDeleteXMlSubmission}
           />
         </div>
       </div>
