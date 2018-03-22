@@ -79,6 +79,9 @@ export class BusinessStore {
   @observable
   editBusinessMode = false;
 
+  @observable
+  xmlError = undefined;
+
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
   }
@@ -319,6 +322,11 @@ export class BusinessStore {
   @action
   setEditBusinessMode(status) {
     this.editBusinessMode = status;
+  }
+
+  @action
+  setXmlError(error) {
+    this.xmlError = error;
   }
 }
 
