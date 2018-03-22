@@ -14,6 +14,7 @@ import {
 } from './../constants/business';
 import ApiService from '../services/api';
 import Helper from '../helper/utility';
+import validationActions from './validation';
 
 export class Business {
   /**
@@ -72,6 +73,16 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Submitting XML Form');
     return ApiService.post(XML_URL, payload);
+  }
+
+  /**
+   *
+   */
+  validateXmlForm = () => {
+    this.validateFilerInfo(businessStore);
+    this.validateIssuerInfo(businessStore);
+    this.validateOfferingInfo(businessStore);
+    this.validateAnnualReportInfo(businessStore);
   }
 
   /**
@@ -302,11 +313,7 @@ export class Business {
     };
     ApiService.post(GRAPHQL, payload)
       .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission.payload))
-      .catch(err => console.log(err))
-      .finally(() => {
-        uiStore.setProgress(false);
-        uiStore.clearLoaderMessage();
-      });
+      .catch(err => console.log(err));
   }
 
   /**
@@ -511,6 +518,26 @@ export class Business {
       })
       _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
     }
+  }
+
+  validateFilerInfo = ({ filerInformation }) => {
+    const newFiler = validationActions.validateXmlFormData(filerInformation);
+    businessStore.setFiler(newFiler);
+  }
+
+  validateIssuerInfo = ({ issuerInformation }) => {
+    const newIssuer = validationActions.validateXmlFormData(issuerInformation);
+    businessStore.setIssuer(newIssuer);
+  }
+
+  validateOfferingInfo = ({ offeringInformation }) => {
+    const newOffering = validationActions.validateXmlFormData(offeringInformation);
+    businessStore.setOffering(newOffering);
+  }
+
+  validateAnnualReportInfo = ({ annualReportRequirements }) => {
+    const newAnnualReport = validationActions.validateXmlFormData(annualReportRequirements);
+    businessStore.setAnnualReport(newAnnualReport);
   }
   // Private Methods ends here
 }
