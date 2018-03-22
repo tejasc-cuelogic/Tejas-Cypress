@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Icon, Button, Grid, Confirm } from 'semantic-ui-react';
-// import _ from 'lodash';
+import _ from 'lodash';
 
 import FillingsList from '../components/FillingsList';
 import uiActions from '../../../actions/ui';
@@ -29,9 +29,17 @@ export default class BusinessDetails extends React.Component {
   }
 
   confirmDelete = (e, {
-    entity, refid, subrefid, lockedstatus,
+    entity, refid, subrefid, lockedstatus, filings,
   }) => {
-    this.props.uiStore.setConfirmBox(entity, refid, subrefid, !lockedstatus);
+    let anyFilingXmlLocked = false;
+    let entityV = entity;
+    const filing = _.find(filings, { filingId: subrefid });
+    const isAnyFilingLocked = _.find(filing.submissions, { lockedStatus: true });
+    if (isAnyFilingLocked) {
+      anyFilingXmlLocked = true;
+      entityV = '';
+    }
+    this.props.uiStore.setConfirmBox(entityV, refid, subrefid, !lockedstatus, anyFilingXmlLocked);
   }
 
   handleDeleteCancel = () => {
@@ -48,13 +56,19 @@ export default class BusinessDetails extends React.Component {
   }
 
   handleDeleteFiling = () => {
-    const filingId = this.props.uiStore.confirmBox.subRefId;
-    businessActions.deleteFiling(this.props.match.params.businessId, filingId)
-      .then(() => {
-        this.handleDeleteCancel();
-        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-        Helper.toast('Filing deleted successfully', 'success');
-      });
+    console.log(this.props.uiStore.confirmBox.metaData.isAnyFilingLocked);
+    if (this.props.uiStore.confirmBox.metaData.isAnyFilingLocked) {
+      this.handleDeleteCancel();
+      this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+    } else {
+      const filingId = this.props.uiStore.confirmBox.subRefId;
+      businessActions.deleteFiling(this.props.match.params.businessId, filingId)
+        .then(() => {
+          this.handleDeleteCancel();
+          this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+          Helper.toast('Filing deleted successfully', 'success');
+        });
+    }
   }
 
   handleDeleteXMlSubmission = () => {
