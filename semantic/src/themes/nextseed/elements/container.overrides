@@ -295,3 +295,16 @@ div.login-form {
 		}
 	}
 }
+.field-error-message{
+	background-color:@negativeBackgroundColor;
+	border:@negativeBorderColor 1px solid;
+	color:@negativeTextColor;
+	border-radius:@4px;
+	padding: @10px;
+    display: inline-block;
+	position: absolute;
+	left: 50%;
+	top: 10px;
+	z-index:99;
+    transform: translate(-50%,0);
+}
