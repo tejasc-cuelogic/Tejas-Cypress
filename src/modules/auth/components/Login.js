@@ -73,10 +73,10 @@ class Login extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <p>Dont have an account? <Link to="" onClick={() => props.setAuthWizardStep('SignupInitial')}>Sign up</Link></p>
+          <p>Dont have an account? <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')}>Sign up</Link></p>
         </Modal.Actions>
       </Modal>
-    )
+    );
   }
 }
 
