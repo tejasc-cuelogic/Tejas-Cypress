@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Divider, Button, Grid, Icon, Popup } from 'semantic-ui-react';
+import { Form, Divider, Button, Grid, Icon, Popup, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
@@ -12,10 +12,18 @@ import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
 import Helper from '../../../helper/utility';
+import ListErrors from '../../../components/common/ListErrors';
 
 @inject('businessStore', 'uiStore')
 @observer
 export default class XmlForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      errors: [],
+    };
+  }
+
   componentDidMount() {
     this.props.businessStore.setBusinessId(this.props.match.params.businessId);
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
@@ -25,6 +33,10 @@ export default class XmlForm extends React.Component {
           businessActions.fetchXmlDetails(this.props.match.params);
         }
       });
+  }
+
+  componentWillUnmount() {
+    this.props.uiStore.reset();
   }
 
   handleUrlChange = (e, { value }) => {
@@ -40,12 +52,16 @@ export default class XmlForm extends React.Component {
           this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
           Helper.toast('XML form submitted successfully', 'success');
         })
+        .catch((err) => {
+          this.setState({ errors: err.response.body.message });
+          Helper.toast('Something went wrong while submitting XML Form, Please try again.', 'error', { position: 'top-center' });
+        })
         .finally(() => {
           this.props.uiStore.setProgress(false);
           this.props.uiStore.clearLoaderMessage();
         });
     } else {
-      alert('Form has validation errors');
+      Helper.toast('Form has validation errors', 'error', { position: 'top-center' });
     }
   };
 
@@ -107,6 +123,11 @@ export default class XmlForm extends React.Component {
               </Button>
               <Button as={Link} size="large" to={`/app/business/${this.props.match.params.businessId}`}>Cancel</Button>
             </div>
+            {this.state.errors && this.state.errors.message &&
+              <Message error textAlign="left">
+                <ListErrors errors={[this.state.errors.message.errors]} />
+              </Message>
+            }
           </Form>
         </div>
       </div>
