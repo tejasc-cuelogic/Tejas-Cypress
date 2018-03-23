@@ -10,8 +10,10 @@ import validationActions from '../../../../actions/validation';
 @observer
 export default class AnnualReportDisclosureRequirements extends React.Component {
   handleInputChange = (e, { name, value }) => {
-    validationActions.validateAnnualReportField(name, value);
+    this.props.businessStore.setAnnualReportInfo(name, value);
   }
+
+  handleOnBlur = e => validationActions.validateAnnualReportField(e.target.name)
 
   handleSelectChange = (e, { dataidentifier, name, value }) => {
     this.props.businessStore.setCountry(dataidentifier, name, value);
@@ -35,6 +37,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
                 value={field.value}
                 error={!!field.error}
                 onChange={this.handleInputChange}
+                onBlur={this.handleOnBlur}
                 key={field.key}
                 className="column"
                 width={8}

@@ -15,9 +15,9 @@ export default class IssuerInformation extends React.Component {
 
   issuerInformation = this.props.businessStore.issuerInformation;
 
-  handleChange = (e, { name, value }) => {
-    validationActions.validateIssuerInfoField(name, value);
-  }
+  handleChange = (e, { name, value }) => this.props.businessStore.setIssuerInfo(name, value)
+
+  handleOnBlur = e => validationActions.validateIssuerInfoField(e.target.name)
 
   /* eslint-disable no-underscore-dangle */
   handleDateChange = (date) => {
@@ -41,6 +41,7 @@ export default class IssuerInformation extends React.Component {
           value={issuerInformation.nameOfIssuer.value}
           error={!!issuerInformation.nameOfIssuer.error}
           onChange={this.handleChange}
+          onBlur={this.handleOnBlur}
         />
         <h4>Legal Status of Issuer</h4>
         <Form.Group widths="equal">
@@ -63,6 +64,7 @@ export default class IssuerInformation extends React.Component {
             value={issuerInformation.legalStatusOtherDesc.value}
             error={!!issuerInformation.legalStatusOtherDesc.error}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
           />
           <Form.Select
             fluid
@@ -97,6 +99,7 @@ export default class IssuerInformation extends React.Component {
             name="street1"
             value={issuerInformation.street1.value}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             error={!!issuerInformation.street1.error}
             width={8}
           />
@@ -106,6 +109,7 @@ export default class IssuerInformation extends React.Component {
             name="street2"
             value={issuerInformation.street2.value}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             error={!!issuerInformation.street2.error}
             width={8}
           />
@@ -117,6 +121,7 @@ export default class IssuerInformation extends React.Component {
             name="city"
             value={issuerInformation.city.value}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             error={!!issuerInformation.city.error}
             width={8}
           />
@@ -141,6 +146,7 @@ export default class IssuerInformation extends React.Component {
             value={issuerInformation.zipCode.value}
             error={!!issuerInformation.zipCode.error}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             width={8}
           />
           <Form.Input
@@ -150,6 +156,7 @@ export default class IssuerInformation extends React.Component {
             value={issuerInformation.issuerWebsite.value}
             error={!!issuerInformation.issuerWebsite.error}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             width={8}
           />
         </Form.Group>
@@ -162,6 +169,7 @@ export default class IssuerInformation extends React.Component {
             value={issuerInformation.commissionCik.value}
             error={!!issuerInformation.commissionCik.error}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             width={8}
           />
           <Form.Input
@@ -171,6 +179,7 @@ export default class IssuerInformation extends React.Component {
             value={issuerInformation.companyName.value}
             error={!!issuerInformation.companyName.error}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             width={8}
           />
         </Form.Group>
@@ -182,6 +191,7 @@ export default class IssuerInformation extends React.Component {
             value={issuerInformation.commissionFileNumber.value}
             error={!!issuerInformation.companyName.error}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             width={8}
           />
           <Form.Input
@@ -191,6 +201,7 @@ export default class IssuerInformation extends React.Component {
             value={issuerInformation.crdNumber.value}
             error={!!issuerInformation.crdNumber.error}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             width={8}
           />
         </Form.Group>

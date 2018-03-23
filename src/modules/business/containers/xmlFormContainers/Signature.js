@@ -9,12 +9,14 @@ import validationActions from '../../../../actions/validation';
 @inject('businessStore')
 @observer
 export default class Signature extends React.Component {
-  handleChange = (e, { name, value }) => {
-    validationActions.validateSignatureInfo(name, value);
-  }
+  handleChange = (e, { name, value }) => this.props.businessStore.setSignatureInfo(name, value)
+
+  handleOnBlur = e => validationActions.validateSignatureInfo(e.target.name)
+
   handlePersonalSignatureChange = (e, { name, value, dataid }) => {
     this.props.businessStore.changePersonalSignature(name, dataid, value);
   }
+
   handleDateChange = (e, test) => {
     console.log(test);
     // this.props.businessStore.changePersonalSignature(test);
@@ -38,6 +40,7 @@ export default class Signature extends React.Component {
             value={signature.issuer.value}
             error={!!signature.issuer.error}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
           />
           <Form.Input
             label={signature.issuerSignature.label}
@@ -45,6 +48,7 @@ export default class Signature extends React.Component {
             value={signature.issuerSignature.value}
             error={!!signature.issuerSignature.error}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
           />
           <Form.Input
             label={signature.issuerTitle.label}
@@ -52,6 +56,7 @@ export default class Signature extends React.Component {
             value={signature.issuerTitle.value}
             error={!!signature.issuerTitle.error}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
           />
         </Form.Group>
         <Header as="h3" textAlign="left">Personal Signatures</Header>

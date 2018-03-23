@@ -14,6 +14,7 @@ const conditionalRequire = {
   noOfSecurityOffered: 'securityOfferedType',
   overSubscriptionAllocationType: 'overSubscriptionAccepted',
   descOverSubscription: 'overSubscriptionAllocationType',
+  maximumOfferingAmount: 'overSubscriptionAccepted',
 };
 
 // TODO: make class in such way that methods should not be dependent on any stores...
@@ -44,8 +45,7 @@ export class Validation {
    * @param $value Value that user entered in input field on form
    * @return null
    */
-  validateFilerInfoField = (field, value) => {
-    businessStore.setFilerInfo(field, value);
+  validateFilerInfoField = (field) => {
     const { errors } = validationService.validate(businessStore.filerInformation[field]);
     if (errors) {
       businessStore.setXmlError(errors[field][0]);
@@ -62,8 +62,7 @@ export class Validation {
    * @param $value Value that user entered in input field on form
    * @return null
    */
-  validateIssuerInfoField = (field, value) => {
-    businessStore.setIssuerInfo(field, value);
+  validateIssuerInfoField = (field) => {
     const { errors } = validationService.validate(
       businessStore.issuerInformation[field],
       businessStore.issuerInformation[conditionalRequire[field]],
@@ -83,8 +82,7 @@ export class Validation {
    * @param $value Value that user entered in input field on form
    * @return null
    */
-  validateOfferingInfoField = (field, value) => {
-    businessStore.setOfferingInfo(field, value);
+  validateOfferingInfoField = (field) => {
     const { errors } = validationService.validate(
       businessStore.offeringInformation[field],
       businessStore.offeringInformation[conditionalRequire[field]],
@@ -104,8 +102,7 @@ export class Validation {
    * @param $value Value that user entered in input field on form
    * @return null
    */
-  validateAnnualReportField = (field, value) => {
-    businessStore.setAnnualReportInfo(field, value);
+  validateAnnualReportField = (field) => {
     const { errors } = validationService.validate(businessStore.annualReportRequirements[field]);
     if (errors) {
       businessStore.setXmlError(errors[field][0]);
@@ -122,8 +119,7 @@ export class Validation {
    * @param $value Value that user entered in input field on form
    * @return null
    */
-  validateSignatureInfo = (field, value) => {
-    businessStore.setSignatureInfo(field, value);
+  validateSignatureInfo = (field) => {
     const { errors } = validationService.validate(businessStore.signature[field]);
     if (errors) {
       businessStore.setXmlError(errors[field][0]);

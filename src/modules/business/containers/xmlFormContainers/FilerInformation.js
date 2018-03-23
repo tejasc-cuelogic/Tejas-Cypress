@@ -7,7 +7,9 @@ import validationActions from '../../../../actions/validation';
 @inject('businessStore')
 @observer
 export default class FilerInformation extends React.Component {
-  handleChange = (e, { name, value }) => validationActions.validateFilerInfoField(name, value)
+  handleChange = (e, { name, value }) => this.props.businessStore.setFilerInfo(name, value)
+
+  handleOnBlur = e => validationActions.validateFilerInfoField(e.target.name)
 
   handleCheckboxChange = (e, { name }) => {
     this.props.businessStore.togglefilerCheckbox(name);
@@ -26,6 +28,7 @@ export default class FilerInformation extends React.Component {
             name="filerCik"
             value={filerInformation.filerCik.value}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             className="column"
             error={!!filerInformation.filerCik.error}
             width={8}
@@ -36,6 +39,7 @@ export default class FilerInformation extends React.Component {
             name="filerCcc"
             value={filerInformation.filerCcc.value}
             onChange={this.handleChange}
+            onBlur={this.handleOnBlur}
             className="column"
             error={!!filerInformation.filerCcc.error}
             width={8}
@@ -80,6 +84,7 @@ export default class FilerInformation extends React.Component {
           value={filerInformation.contactName.value}
           error={!!filerInformation.contactName.error}
           onChange={this.handleChange}
+          onBlur={this.handleOnBlur}
         />
         <Form.Input
           placeholder="Phone Number"
@@ -88,6 +93,7 @@ export default class FilerInformation extends React.Component {
           value={filerInformation.contactPhone.value}
           error={!!filerInformation.contactPhone.error}
           onChange={this.handleChange}
+          onBlur={this.handleOnBlur}
         />
         <Form.Input
           placeholder="Email"
@@ -96,12 +102,14 @@ export default class FilerInformation extends React.Component {
           value={filerInformation.contactEmail.value}
           error={!!filerInformation.contactEmail.error}
           onChange={this.handleChange}
+          onBlur={this.handleOnBlur}
         />
         <Form.Checkbox
           label="Notify via Filing Website only?"
           name="overrideInternetFlag"
           checked={filerInformation.overrideInternetFlag.value}
           onChange={this.handleCheckboxChange}
+          onBlur={this.handleOnBlur}
         />
         <Form.Input
           label="Enter notification email"
@@ -109,6 +117,7 @@ export default class FilerInformation extends React.Component {
           value={filerInformation.notificationEmail.value}
           error={!!filerInformation.notificationEmail.error}
           onChange={this.handleChange}
+          onBlur={this.handleOnBlur}
           disabled={!filerInformation.overrideInternetFlag.value}
         />
       </div>
