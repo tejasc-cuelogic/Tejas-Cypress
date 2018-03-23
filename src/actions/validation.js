@@ -40,6 +40,11 @@ export class Validation {
   validateFilerInfoField = (field, value) => {
     businessStore.setFilerInfo(field, value);
     const { errors } = validationService.validate(businessStore.filerInformation[field]);
+    if (errors) {
+      businessStore.setXmlError(errors[field][0]);
+    } else {
+      businessStore.setXmlError(undefined);
+    }
     businessStore.setFilerError(field, errors && errors[field][0]);
   }
 
@@ -49,6 +54,11 @@ export class Validation {
       businessStore.issuerInformation[field],
       businessStore.issuerInformation[conditionalRequire[field]],
     );
+    if (errors) {
+      businessStore.setXmlError(errors[field][0]);
+    } else {
+      businessStore.setXmlError(undefined);
+    }
     businessStore.setIssuerError(field, errors && errors[field][0]);
   }
 
@@ -58,18 +68,33 @@ export class Validation {
       businessStore.offeringInformation[field],
       businessStore.offeringInformation[conditionalRequire[field]],
     );
+    if (errors) {
+      businessStore.setXmlError(errors[field][0]);
+    } else {
+      businessStore.setXmlError(undefined);
+    }
     businessStore.setOfferingError(field, errors && errors[field][0]);
   }
 
   validateAnnualReportField = (field, value) => {
     businessStore.setAnnualReportInfo(field, value);
     const { errors } = validationService.validate(businessStore.annualReportRequirements[field]);
+    if (errors) {
+      businessStore.setXmlError(errors[field][0]);
+    } else {
+      businessStore.setXmlError(undefined);
+    }
     businessStore.setAnnualReportError(field, errors && errors[field][0]);
   }
 
   validateSignatureInfo = (field, value) => {
     businessStore.setSignatureInfo(field, value);
     const { errors } = validationService.validate(businessStore.signature[field]);
+    if (errors) {
+      businessStore.setXmlError(errors[field][0]);
+    } else {
+      businessStore.setXmlError(undefined);
+    }
     businessStore.setSignatureError(field, errors && errors[field][0]);
   }
 
