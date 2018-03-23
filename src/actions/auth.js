@@ -65,6 +65,7 @@ export class Auth {
           new Promise((res) => {
             userStore.setCurrentUser(this.parseRoles(this.mapCognitoToken(data.attributes)));
             authStore.setUserLoggedIn(true);
+            commonStore.setToken(data.session.idToken.jwtToken);
             AWS.config.region = AWS_REGION;
             if (userStore.isCurrentUserWithRole('admin')) {
               this.setAWSAdminAccess(data.session.idToken.jwtToken);
