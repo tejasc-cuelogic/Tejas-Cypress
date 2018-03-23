@@ -180,9 +180,11 @@ export class Business {
       uiStore.setProgress();
       uiStore.setLoaderMessage('Getting business data');
     }
+    const params = { field: 'created', sort: 'desc' };
     const payload = {
-      query: `query getBusiness { business(id: "${businessId}") { id name description created` +
-        ' filings { filingId filingFolderName businessId created folderId lockedStatus submissions { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus lockedStatus} } } }',
+      query: `query getBusiness($orderByBusinessFilings:businessfilingOrderBy, $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) { business(id: "${businessId}") { id name description created` +
+        ' filings(orderBy: $orderByBusinessFilings) { filingId filingFolderName businessId created folderId lockedStatus submissions(orderBy: $orderByBusinessFilingSubmission) { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus lockedStatus} } } }',
+      variables: { orderByBusinessFilings: params, orderByBusinessFilingSubmission: params },
     };
     ApiService.post(GRAPHQL, payload)
       .then((data) => {
