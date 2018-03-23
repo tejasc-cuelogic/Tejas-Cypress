@@ -9,7 +9,7 @@ class AuthWizard extends Component {
   render() {
     const module = upperFirst(this.props.authWizardStep) || 'SignupInitial';
     const AuthModule = Loadable({
-      loader: () => import(`../components/${module}`),
+      loader: () => import(`./${module}`),
       loading() {
         return <div>Loading...</div>;
       },
