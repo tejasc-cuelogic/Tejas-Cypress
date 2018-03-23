@@ -62,6 +62,8 @@ export default class BusinessDetails extends React.Component {
       .then(() => {
         this.props.history.push('/app/business');
         Helper.toast('Business deleted successfully', 'success');
+      }).catch(() => {
+        Helper.toast('Something went wrong while deleting business Please try again.', 'error', { position: 'top-center' });
       });
   }
 
@@ -76,6 +78,8 @@ export default class BusinessDetails extends React.Component {
           this.handleDeleteCancel();
           this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
           Helper.toast('Filing deleted successfully', 'success');
+        }).catch(() => {
+          Helper.toast('Something went wrong while deleting filing Please try again.', 'error', { position: 'top-center' });
         });
     }
   }
@@ -87,6 +91,8 @@ export default class BusinessDetails extends React.Component {
       this.handleDeleteCancel();
       this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
       Helper.toast('XML Submission deleted successfully', 'success');
+    }).catch(() => {
+      Helper.toast('Something went wrong while deleting XMl submission Please try again.', 'error', { position: 'top-center' });
     });
   }
 
