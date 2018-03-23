@@ -26,10 +26,14 @@ const XmlSubmission = observer((props) => {
                   </Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                   <Table.Cell>
-                    <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className={xmlSubmission.jobStatus === 'COMPLETED' ? 'ui button icon link-button' : 'ui button icon link-button disabled'}>
-                      <Icon name="download" />
-                    </a>
-
+                    {
+                      (xmlSubmission.jobStatus === 'COMPLETED')
+                        ? (
+                          <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
+                            <Icon name="download" />
+                          </a>
+                        ) : <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
+                    }
                     <Button
                       icon
                       color={xmlSubmission.lockedStatus === true ? 'red' : 'green'}
