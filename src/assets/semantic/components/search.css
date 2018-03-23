@@ -252,6 +252,18 @@
   color: rgba(0, 0, 0, 0.85);
 }
 
+/*--------------------
+        Disabled
+----------------------*/
+
+
+/* Disabled */
+.ui.disabled.search {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
 
 /*******************************
            Types
