@@ -37,6 +37,13 @@ export class Validation {
     authStore.setError(field, errors && errors[field][0]);
   }
 
+  /**
+   * @desc validates filer information on XML form, this method validated field and stores an error
+   *       in store if any.
+   * @param $field Field name or id which needs to be validated
+   * @param $value Value that user entered in input field on form
+   * @return null
+   */
   validateFilerInfoField = (field, value) => {
     businessStore.setFilerInfo(field, value);
     const { errors } = validationService.validate(businessStore.filerInformation[field]);
@@ -48,6 +55,13 @@ export class Validation {
     businessStore.setFilerError(field, errors && errors[field][0]);
   }
 
+  /**
+   * @desc validates issuer information on XML form, this method validated field and stores an error
+   *       in store if any.
+   * @param $field Field name or id which needs to be validated
+   * @param $value Value that user entered in input field on form
+   * @return null
+   */
   validateIssuerInfoField = (field, value) => {
     businessStore.setIssuerInfo(field, value);
     const { errors } = validationService.validate(
@@ -62,6 +76,13 @@ export class Validation {
     businessStore.setIssuerError(field, errors && errors[field][0]);
   }
 
+  /**
+   * @desc validates offering information on XML form, this method validated field and stores an
+   *       error in store if any.
+   * @param $field Field name or id which needs to be validated
+   * @param $value Value that user entered in input field on form
+   * @return null
+   */
   validateOfferingInfoField = (field, value) => {
     businessStore.setOfferingInfo(field, value);
     const { errors } = validationService.validate(
@@ -76,6 +97,13 @@ export class Validation {
     businessStore.setOfferingError(field, errors && errors[field][0]);
   }
 
+  /**
+   * @desc validates Annual report information on XML form, this method validated field and stores
+   *       an error in store if any.
+   * @param $field Field name or id which needs to be validated
+   * @param $value Value that user entered in input field on form
+   * @return null
+   */
   validateAnnualReportField = (field, value) => {
     businessStore.setAnnualReportInfo(field, value);
     const { errors } = validationService.validate(businessStore.annualReportRequirements[field]);
@@ -87,6 +115,13 @@ export class Validation {
     businessStore.setAnnualReportError(field, errors && errors[field][0]);
   }
 
+  /**
+   * @desc validates signature information on XML form, this method validated field and stores an
+   *       error in store if any.
+   * @param $field Field name or id which needs to be validated
+   * @param $value Value that user entered in input field on form
+   * @return null
+   */
   validateSignatureInfo = (field, value) => {
     businessStore.setSignatureInfo(field, value);
     const { errors } = validationService.validate(businessStore.signature[field]);
@@ -98,6 +133,13 @@ export class Validation {
     businessStore.setSignatureError(field, errors && errors[field][0]);
   }
 
+  /**
+   * @desc validates Personal Signature and sets error to store if any
+   * @param $field Field name that needs to be validated
+   * @param $id Uniq Dom id of that field
+   * @param $value value that user entered in input element
+   * @return null
+   */
   validatePersonalSignature = (field, id, value) => {
     businessStore.changePersonalSignature(field, id, value);
   }
@@ -149,7 +191,9 @@ export class Validation {
   }
 
   /**
-   *
+   * @desc Validated whole XML form and set an error to particular field in store.
+   * @param $data Complete XML form data that needs to be validated before submission.
+   * @return $newData with validation errors
    */
   validateXmlFormData = (data) => {
     const newData = {};
