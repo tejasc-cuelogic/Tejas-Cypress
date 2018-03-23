@@ -413,14 +413,23 @@ div.login-form ul.error-messages {
   border: #E0B4B4 1px solid;
   color: #9F3A38;
   border-radius: 0.28571429rem;
+  max-height: 100px;
+  overflow-y: scroll;
+  position: fixed;
   padding: 0.71428571rem;
   display: inline-block;
-  position: absolute;
   left: 50%;
   top: 10px;
   z-index: 99;
   -webkit-transform: translate(-50%, 0);
           transform: translate(-50%, 0);
+}
+a.disabled,
+a.disabled:hover,
+a.disabled:focus {
+  cursor: default;
+  opacity: .45 !important;
+  pointer-events: none !important;
 }
 
 
