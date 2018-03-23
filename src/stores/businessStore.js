@@ -80,7 +80,7 @@ export class BusinessStore {
   editBusinessMode = false;
 
   @observable
-  xmlError = undefined;
+  xmlErrors = {};
 
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
@@ -325,8 +325,8 @@ export class BusinessStore {
   }
 
   @action
-  setXmlError(error) {
-    this.xmlError = error;
+  setXmlError(errors) {
+    this.xmlErrors = { ...errors };
   }
 }
 

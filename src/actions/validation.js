@@ -47,11 +47,7 @@ export class Validation {
    */
   validateFilerInfoField = (field) => {
     const { errors } = validationService.validate(businessStore.filerInformation[field]);
-    if (errors) {
-      businessStore.setXmlError(errors[field][0]);
-    } else {
-      businessStore.setXmlError(undefined);
-    }
+    this.formValidationErrors(errors, field);
     businessStore.setFilerError(field, errors && errors[field][0]);
   }
 
@@ -68,9 +64,9 @@ export class Validation {
       businessStore.issuerInformation[conditionalRequire[field]],
     );
     if (errors) {
-      businessStore.setXmlError(errors[field][0]);
+      businessStore.setXmlError(field, errors[field][0]);
     } else {
-      businessStore.setXmlError(undefined);
+      businessStore.removeXmlError(field);
     }
     businessStore.setIssuerError(field, errors && errors[field][0]);
   }
@@ -88,9 +84,9 @@ export class Validation {
       businessStore.offeringInformation[conditionalRequire[field]],
     );
     if (errors) {
-      businessStore.setXmlError(errors[field][0]);
+      businessStore.setXmlError(field, errors[field][0]);
     } else {
-      businessStore.setXmlError(undefined);
+      businessStore.removeXmlError(field);
     }
     businessStore.setOfferingError(field, errors && errors[field][0]);
   }
@@ -205,6 +201,21 @@ export class Validation {
   }
 
   // TODO: Validate create new user form on click of submit button from admin panel
+
+  // Private Methods starts here
+  formValidationErrors = (errors, field) => {
+    if (errors) {
+      const newErrors = { ...businessStore.xmlErrors };
+      /* eslint-disable prefer-destructuring */
+      newErrors[field] = errors[field][0];
+      businessStore.setXmlError(newErrors);
+    } else {
+      const newErrors = { ...businessStore.xmlErrors };
+      _.omit(newErrors, field);
+      businessStore.setXmlError(newErrors);
+    }
+  }
+  // Private Methods ends here
 }
 
 export default new Validation();
