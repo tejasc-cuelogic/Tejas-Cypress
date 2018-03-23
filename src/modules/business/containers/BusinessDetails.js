@@ -32,15 +32,24 @@ export default class BusinessDetails extends React.Component {
     entity, refid, subrefid, lockedstatus, filings,
   }) => {
     e.stopPropagation();
-    let anyFilingXmlLocked = false;
-    let entityV = entity;
-    const filing = _.find(filings, { filingId: subrefid });
-    const isAnyFilingLocked = _.find(filing.submissions, { lockedStatus: true });
-    if (isAnyFilingLocked) {
-      anyFilingXmlLocked = true;
-      entityV = '';
+    const anyFilingXmlLocked = false;
+    const entityV = entity;
+    if (entityV === 'filing' && !this.canDeleteFiling(subrefid, filings)) {
+      Helper.toast('You can not delete this Filing as one of its XML Submission is locked', 'warning', { position: 'top-center' });
+      return false;
     }
+
     this.props.uiStore.setConfirmBox(entityV, refid, subrefid, !lockedstatus, anyFilingXmlLocked);
+    return true;
+  }
+
+  canDeleteFiling = (subrefid, filings) => {
+    const filing = _.find(filings, { filingId: subrefid });
+    const isLocked = _.find(filing.submissions, { lockedStatus: true });
+    if (filing.submissions.length === 0 || typeof isLocked === 'undefined') {
+      return true;
+    }
+    return false;
   }
 
   handleDeleteCancel = () => {
@@ -96,7 +105,6 @@ export default class BusinessDetails extends React.Component {
   }
 
   render() {
-    console.log(this.props.uiStore.confirmBox);
     const { business } = this.props.businessStore;
     if (this.props.uiStore.inProgress) {
       return (
@@ -168,6 +176,7 @@ export default class BusinessDetails extends React.Component {
             openAccordion={this.props.uiStore.openAccordion}
             businessId={this.props.match.params.businessId}
             confirmDelete={this.confirmDelete}
+            canDeleteFiling={this.canDeleteFiling}
             handleDeleteCancel={this.handleDeleteCancel}
             confirmBoxValues={this.props.uiStore.confirmBox}
             handleDeleteFiling={this.handleDeleteFiling}

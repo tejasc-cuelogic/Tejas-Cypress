@@ -7,7 +7,7 @@ import _ from 'lodash';
 export class Utility {
   // Default options for the toast
   options = {
-    autoClose: 3400,
+    autoClose: 3800,
     position: toast.POSITION.TOP_RIGHT,
     pauseOnHover: true,
     className: 'info',
