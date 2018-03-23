@@ -1,5 +1,5 @@
  /*
- * # Semantic UI - 2.3.0
+ * # Semantic UI - 2.3.1
  * https://github.com/Semantic-Org/Semantic-UI
  * http://www.semantic-ui.com/
  *
@@ -5120,7 +5120,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.3.0 - Container
+ * # Semantic UI 2.3.1 - Container
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -5600,6 +5600,21 @@ div.login-form ul.error-messages {
 
 .toast-message > div.warning {
   background-color: #f4a662;
+}
+
+.field-error-message {
+  background-color: #FFF6F6;
+  border: #E0B4B4 1px solid;
+  color: #9F3A38;
+  border-radius: 0.28571429rem;
+  padding: 0.71428571rem;
+  display: inline-block;
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  z-index: 99;
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
 }
 
 /*******************************
