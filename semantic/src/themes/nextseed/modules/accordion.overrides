@@ -73,6 +73,12 @@
 			&.active{
 				background-color:#F8F8F8;
 			}
+			time{
+				font-family:@regularFont;
+				font-size:@12px;
+				margin-left:@5px;
+				color:@tertiary-text;
+			}
 		}
 		.content{
 			padding:1em;
@@ -85,9 +91,24 @@
 			position:relative;
 			float:right;
 			z-index:99;
-			font-family:@regularFont;
-			font-size:@13px;
-			font-weight:400;
+			a, .ui.button, .ui.buttons .button{
+				font-family:@pageFont;
+				font-size:@13px;
+				font-weight:400;
+				text-transform:none;
+				margin:0;
+				padding:0 @8px;
+				border-right:@borderColor 1px solid;
+				&:last-child{
+					border:none;
+					padding-right:0;
+				}
+			}
+		}
+		a{
+			&:hover, &:focus, &:active{
+				text-decoration:none;
+			}
 		}
 	}
 }

@@ -102,6 +102,9 @@ div.login-form {
 		text-align:center;
 		border-radius:3px;
 	}
+	.ui.button.link-button{
+		padding:@11px 0;
+	}
 	.search-filters{
 		background-color:@secondary-text;
 		&.webcontent-spacer{
@@ -294,4 +297,9 @@ div.login-form {
 			background-color:lighten(@highlight-secondary, 5%);
 		}
 	}
+}
+a.disabled, a.disabled:hover, a.disabled:focus{
+	cursor:default;
+	opacity:.45 !important;
+	pointer-events:none !important;
 }

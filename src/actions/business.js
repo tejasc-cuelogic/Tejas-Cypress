@@ -119,7 +119,12 @@ export class Business {
   listBusinesses = () => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching business list');
-    const payload = { query: 'query getBusinesses { businesses{ id name description created } }' };
+    const params = { field: 'created', sort: 'desc' };
+    const payload = {
+      query: 'query getBusinesses($orderByBusiness: businessOrderBy) { businesses(orderBy:$orderByBusiness){ id name description created } }',
+      variables: { orderByBusiness: params },
+    };
+
     ApiService.post(GRAPHQL, payload)
       .then(data => businessStore.setBusinessList(data.body.data.businesses))
       .catch(err => uiStore.setErrors(err))
@@ -170,12 +175,14 @@ export class Business {
    * @desc This method gets the details of business and store it to store.
    * @param $businessId - Id of business for which data will fetched
   */
-  getBusinessDetails = (businessId) => {
-    uiStore.setProgress();
-    uiStore.setLoaderMessage('Getting business data');
+  getBusinessDetails = (businessId, showLoader = true) => {
+    if (showLoader) {
+      uiStore.setProgress();
+      uiStore.setLoaderMessage('Getting business data');
+    }
     const payload = {
       query: `query getBusiness { business(id: "${businessId}") { id name description created` +
-        ' filings { filingId businessId created folderId submissions { xmlSubmissionId created } } } }',
+        ' filings { filingId filingFolderName businessId created folderId lockedStatus submissions { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus lockedStatus} } } }',
     };
     ApiService.post(GRAPHQL, payload)
       .then((data) => {
@@ -377,6 +384,117 @@ export class Business {
   }
 
   /**
+   * @desc To delete XML submission for the filing
+   */
+  deleteXmlSubmission = (filingId, xmlSubmissionId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Deleting XML Submission');
+    const payload = {
+      query: `mutation deleteXmlSubmissionById($filingId: String!, $xmlSubmissionId: String!) {
+        deleteBusinessFilingSubmission(filingId: $filingId, xmlSubmissionId: $xmlSubmissionId){
+          xmlSubmissionId
+        }
+      }`,
+      variables: {
+        filingId, xmlSubmissionId,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
+  }
+
+  /**
+   * @desc To delete Filing for the business
+   */
+  deleteFiling = (businessId, filingId) => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Deleting Business Filing');
+    const payload = {
+      query: `mutation deleteBusinessFiling($businessId: String!, $filingId: String!) {
+         deleteBusinessFiling(businessId: $businessId, filingId: $filingId ){
+           businessId 
+           created 
+          } 
+      }`,
+      variables: {
+        businessId, filingId,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
+  }
+
+  /**
+   * @desc To lock/unlock XML Submission
+   */
+  lockUnlockXmlSubmission = (businessId, filingId, xmlSubmissionId, lockedStatus) => {
+    const status = lockedStatus === false ? 'Unlocking' : 'Locking';
+    uiStore.setProgress();
+    uiStore.setLoaderMessage(`${status} XML Submission`);
+    const payload = {
+      query: `mutation lockUnlockBusinessFilingSubmission($businessId: String!, $filingId: String!, $xmlSubmissionId: String!, $lockedStatus: Boolean!){ 
+        lockBusinessFilingSubmission(businessId: $businessId,filingId: $filingId, xmlSubmissionId: $xmlSubmissionId, lockedStatus: $lockedStatus){ 
+          businessId xmlSubmissionId lockedStatus 
+        } 
+      }`,
+      variables: {
+        businessId, filingId, xmlSubmissionId, lockedStatus,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
+  }
+
+  /**
+   * @desc To lock/unlock filing
+   */
+  lockUnlockFiling = (businessId, filingId, lockedStatus) => {
+    const status = lockedStatus === false ? 'Unlocking' : 'Locking';
+    uiStore.setProgress();
+    uiStore.setLoaderMessage(`${status} filing`);
+    const payload = {
+      query: `mutation lockUnlockBusinessFiling($businessId: String!, $filingId: String!, $lockedStatus: Boolean!){ 
+        lockBusinessFiling(businessId: $businessId, filingId: $filingId, lockedStatus: $lockedStatus){ 
+          filingId 
+        } 
+      }`,
+      variables: {
+        businessId, filingId, lockedStatus,
+      },
+    };
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
+  }
+
+  /**
    *
    */
   toggleFileSelection = (key) => {
@@ -469,7 +587,7 @@ export class Business {
   }
 
   createPoll = () => {
-    setTimeout(() => this.getBusinessDetails(businessStore.business.id), 10 * 1000);
+    setTimeout(() => this.getBusinessDetails(businessStore.business.id, false), 15 * 1000);
   }
 
   /* eslint-disable */

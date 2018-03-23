@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Accordion, Table } from 'semantic-ui-react';
+import { Accordion, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import _ from 'lodash';
 import DateTimeFormat from './../../../components/common/DateTimeFormat';
 
@@ -21,13 +21,63 @@ const XmlSubmission = observer((props) => {
                 <Table.Row key={xmlSubmission.xmlSubmissionId}>
                   <Table.Cell>
                     <Link to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}>
-                      {'XML Submission'}
+                      {xmlSubmission.folderName}
                     </Link>
                   </Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
+                  <Table.Cell>
+                    <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className={xmlSubmission.jobStatus === 'COMPLETED' ? 'ui button icon link-button' : 'ui button icon link-button disabled'}>
+                      <Icon name="download" />
+                    </a>
+
+                    <Button
+                      icon
+                      color={xmlSubmission.lockedStatus === true ? 'red' : 'green'}
+                      className="link-button"
+                      entity="lockunlock"
+                      refid={filingId}
+                      subrefid={xmlSubmission.xmlSubmissionId}
+                      lockedstatus={xmlSubmission.lockedStatus}
+                      onClick={props.confirmDelete}
+                    >
+                      {xmlSubmission.lockedStatus === true && <Icon name="lock" />}
+                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="unlock alternate" />}
+                    </Button>
+
+                    <Button
+                      icon
+                      circular
+                      color="red"
+                      className={xmlSubmission.lockedStatus === true ? 'link-button disabled' : 'link-button'}
+                      entity="xml"
+                      refid={filingId}
+                      subrefid={xmlSubmission.xmlSubmissionId}
+                      onClick={props.confirmDelete}
+                    >
+                      <Icon name="trash" />
+                    </Button>
+                  </Table.Cell>
                 </Table.Row>
               ))
             }
+            <Confirm
+              header="Confirm"
+              content="Are you sure you want to delete this XML submission?"
+              open={props.confirmBoxValues.entity === 'xml'}
+              onCancel={props.handleDeleteCancel}
+              onConfirm={props.handleDeleteXMlSubmission}
+              size="tiny"
+              className="deletion"
+            />
+            <Confirm
+              header="Confirm"
+              content={props.confirmBoxValues.metaData.lockedStatus === true ? 'Are you sure you want to lock this XML submission?' : 'Are you sure you want to unlock this XML submission?'}
+              open={props.confirmBoxValues.entity === 'lockunlock'}
+              onCancel={props.handleDeleteCancel}
+              onConfirm={props.handleXMLSubmissionLockUnlock}
+              size="tiny"
+              className="deletion"
+            />
           </Table.Body>
         </Table>
       </Accordion.Content>

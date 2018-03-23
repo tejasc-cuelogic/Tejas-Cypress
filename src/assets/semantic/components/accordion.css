@@ -134,8 +134,8 @@
 .ui.styled.accordion .accordion .title {
   margin: 0em;
   padding: 0.75em 1em;
-  color: rgba(0, 0, 0, 0.4);
-  font-weight: bold;
+  color: #828282;
+  font-weight: normal;
   border-top: 1px solid rgba(34, 36, 38, 0.15);
   -webkit-transition: background 0.1s ease, color 0.1s ease;
   transition: background 0.1s ease, color 0.1s ease;
@@ -173,11 +173,11 @@
 /* Active */
 .ui.styled.accordion .active.title {
   background: transparent;
-  color: rgba(0, 0, 0, 0.95);
+  color: #303030;
 }
 .ui.styled.accordion .accordion .active.title {
   background: transparent;
-  color: rgba(0, 0, 0, 0.95);
+  color: #303030;
 }
 
 
@@ -290,6 +290,17 @@
 .ui.styled.accordion .accordion.filing-list .title {
   border: rgba(34, 36, 38, 0.15) 1px solid;
 }
+.ui.styled.accordion.filing-list .title.active,
+.ui.styled.accordion .accordion.filing-list .title.active {
+  background-color: #F8F8F8;
+}
+.ui.styled.accordion.filing-list .title time,
+.ui.styled.accordion .accordion.filing-list .title time {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 0.85714286rem;
+  margin-left: 0.35714286rem;
+  color: #828282;
+}
 .ui.styled.accordion.filing-list .content,
 .ui.styled.accordion .accordion.filing-list .content {
   padding: 1em;
@@ -304,9 +315,37 @@
   position: relative;
   float: right;
   z-index: 99;
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+.ui.styled.accordion.filing-list .actions a,
+.ui.styled.accordion .accordion.filing-list .actions a,
+.ui.styled.accordion.filing-list .actions .ui.button,
+.ui.styled.accordion .accordion.filing-list .actions .ui.button,
+.ui.styled.accordion.filing-list .actions .ui.buttons .button,
+.ui.styled.accordion .accordion.filing-list .actions .ui.buttons .button {
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   font-weight: 400;
+  text-transform: none;
+  margin: 0;
+  padding: 0 0.57142857rem;
+  border-right: rgba(34, 36, 38, 0.15) 1px solid;
+}
+.ui.styled.accordion.filing-list .actions a:last-child,
+.ui.styled.accordion .accordion.filing-list .actions a:last-child,
+.ui.styled.accordion.filing-list .actions .ui.button:last-child,
+.ui.styled.accordion .accordion.filing-list .actions .ui.button:last-child,
+.ui.styled.accordion.filing-list .actions .ui.buttons .button:last-child,
+.ui.styled.accordion .accordion.filing-list .actions .ui.buttons .button:last-child {
+  border: none;
+  padding-right: 0;
+}
+.ui.styled.accordion.filing-list a:hover,
+.ui.styled.accordion .accordion.filing-list a:hover,
+.ui.styled.accordion.filing-list a:focus,
+.ui.styled.accordion .accordion.filing-list a:focus,
+.ui.styled.accordion.filing-list a:active,
+.ui.styled.accordion .accordion.filing-list a:active {
+  text-decoration: none;
 }
 
 
