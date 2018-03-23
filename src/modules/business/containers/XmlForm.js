@@ -90,9 +90,8 @@ export default class XmlForm extends React.Component {
             </Grid.Row>
           </Grid>
         </div>
-        <FormErrors xmlErrors={xmlErrors} className="align-center" />
         <div className="content-spacer">
-          <FieldError error={xmlError} />
+          <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
           <Form className="edgar-form">
             <Form.Group widths="equal">
               <Popup

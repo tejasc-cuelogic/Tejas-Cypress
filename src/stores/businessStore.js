@@ -328,6 +328,11 @@ export class BusinessStore {
   setXmlError(errors) {
     this.xmlErrors = { ...errors };
   }
+
+  @action
+  removeXmlError(key) {
+    this.xmlErrors = _.omit(this.xmlErrors, key);
+  }
 }
 
 export default new BusinessStore();

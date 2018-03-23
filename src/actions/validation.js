@@ -63,11 +63,7 @@ export class Validation {
       businessStore.issuerInformation[field],
       businessStore.issuerInformation[conditionalRequire[field]],
     );
-    if (errors) {
-      businessStore.setXmlError(field, errors[field][0]);
-    } else {
-      businessStore.removeXmlError(field);
-    }
+    this.formValidationErrors(errors, field);
     businessStore.setIssuerError(field, errors && errors[field][0]);
   }
 
@@ -83,11 +79,7 @@ export class Validation {
       businessStore.offeringInformation[field],
       businessStore.offeringInformation[conditionalRequire[field]],
     );
-    if (errors) {
-      businessStore.setXmlError(field, errors[field][0]);
-    } else {
-      businessStore.removeXmlError(field);
-    }
+    this.formValidationErrors(errors, field);
     businessStore.setOfferingError(field, errors && errors[field][0]);
   }
 
@@ -100,11 +92,7 @@ export class Validation {
    */
   validateAnnualReportField = (field) => {
     const { errors } = validationService.validate(businessStore.annualReportRequirements[field]);
-    if (errors) {
-      businessStore.setXmlError(errors[field][0]);
-    } else {
-      businessStore.setXmlError(undefined);
-    }
+    this.formValidationErrors(errors, field);
     businessStore.setAnnualReportError(field, errors && errors[field][0]);
   }
 
@@ -117,11 +105,7 @@ export class Validation {
    */
   validateSignatureInfo = (field) => {
     const { errors } = validationService.validate(businessStore.signature[field]);
-    if (errors) {
-      businessStore.setXmlError(errors[field][0]);
-    } else {
-      businessStore.setXmlError(undefined);
-    }
+    this.formValidationErrors(errors, field);
     businessStore.setSignatureError(field, errors && errors[field][0]);
   }
 
@@ -203,6 +187,15 @@ export class Validation {
   // TODO: Validate create new user form on click of submit button from admin panel
 
   // Private Methods starts here
+
+  /**
+   * @desc This method checks if error is present or not, if error is present it add error in store
+   *       with the field name and if error is not present it removed error from store for provided
+   *       field.
+   * @param $errors Error for particular field
+   * @param $field Name of field for which error is present
+   * @return null
+   */
   formValidationErrors = (errors, field) => {
     if (errors) {
       const newErrors = { ...businessStore.xmlErrors };
@@ -210,11 +203,10 @@ export class Validation {
       newErrors[field] = errors[field][0];
       businessStore.setXmlError(newErrors);
     } else {
-      const newErrors = { ...businessStore.xmlErrors };
-      _.omit(newErrors, field);
-      businessStore.setXmlError(newErrors);
+      businessStore.removeXmlError(field);
     }
   }
+
   // Private Methods ends here
 }
 
