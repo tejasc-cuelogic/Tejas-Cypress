@@ -16,6 +16,13 @@ class InvestorSignup extends Component {
     this.props.authStore.reset();
   }
 
+  getNameError = (firstName, lastName) => {
+    if (firstName || lastName) {
+      return `The ${firstName ? 'FirstName' : ''} ${firstName && lastName ? 'and' : ''} ${lastName ? 'LastName' : ''} Field required`;
+    }
+    return '';
+  }
+
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
 
   handleSubmitForm = (e) => {
@@ -28,7 +35,7 @@ class InvestorSignup extends Component {
           this.props.history.replace('/confirm');
           this.props.setAuthWizardStep();
         })
-        .catch(() => {});
+        .catch(() => { });
     }
   };
 
@@ -76,8 +83,9 @@ class InvestorSignup extends Component {
                 error={!!values.familyName.error}
               />
             </Form.Group>
-            <FieldError error={values.givenName.error} />
-            <FieldError error={values.familyName.error} />
+            <FieldError
+              error={this.getNameError(values.givenName.error, values.familyName.error)}
+            />
             <Form.Input
               fluid
               label="E-mail"
