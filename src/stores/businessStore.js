@@ -177,6 +177,11 @@ export class BusinessStore {
   }
 
   @action
+  clearFiler() {
+    this.filerInformation = { ...FILER_INFORMATION };
+  }
+
+  @action
   togglefilerCheckbox(name) {
     this.filerInformation[name].value = !this.filerInformation[name].value;
   }
@@ -197,6 +202,11 @@ export class BusinessStore {
   }
 
   @action
+  clearIssuer() {
+    this.issuerInformation = { ...ISSUER_INFORMATION };
+  }
+
+  @action
   setOffering(offeringInformation) {
     this.offeringInformation = offeringInformation;
   }
@@ -209,6 +219,11 @@ export class BusinessStore {
   @action
   setOfferingError(field, error) {
     this.offeringInformation[field].error = error;
+  }
+
+  @action
+  clearOffering() {
+    this.offeringInformation = { ...OFFERING_INFORMATION };
   }
 
   @action
@@ -227,6 +242,11 @@ export class BusinessStore {
   }
 
   @action
+  clearAnnualReport() {
+    this.annualReportRequirements = { ...ANNUAL_REPORT_REQUIREMENTS };
+  }
+
+  @action
   setSignatureInfo(field, value) {
     this.signature[field].value = value;
   }
@@ -234,6 +254,11 @@ export class BusinessStore {
   @action
   setSignatureError(field, error) {
     this.signature[field].error = error;
+  }
+
+  @action
+  clearSignature() {
+    this.signature = { ...SIGNATURE }
   }
 
   /**
