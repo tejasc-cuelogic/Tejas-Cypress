@@ -1,6 +1,15 @@
 /*******************************
          Theme Overrides
 *******************************/
+// Semantic UI modal position fix
+.ui.active.dimmer.modals.transition {
+    display: flex !important;
+    display: -ms-flexbox !important;
+    .ui.modal{
+        margin:0 !important;
+    }
+}
+
 .ui.modal{
     >.close{
         top:@7px;

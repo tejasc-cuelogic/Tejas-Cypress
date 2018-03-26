@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.2.14 - Form
+ * # Semantic UI 2.3.0 - Form
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -1189,6 +1189,11 @@
 .notification-box .ui.form.inverted input[type=url] {
   padding-left: 0;
   padding-right: 0;
+}
+.ui.form p.field-error {
+  font-size: 0.85714286rem;
+  color: #9F3A38;
+  margin: -2rem 0 0.71428571rem;
 }
 
 

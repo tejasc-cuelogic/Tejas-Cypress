@@ -66,7 +66,6 @@ class InvestorSignup extends Component {
                 onChange={this.handleInputChange}
                 error={!!values.givenName.error}
               />
-              <FieldError error={values.givenName.error} />
               <Form.Input
                 fluid
                 label="Last Name"
@@ -76,8 +75,9 @@ class InvestorSignup extends Component {
                 onChange={this.handleInputChange}
                 error={!!values.familyName.error}
               />
-              <FieldError error={values.familyName.error} />
             </Form.Group>
+            <FieldError error={values.givenName.error} />
+            <FieldError error={values.familyName.error} />
             <Form.Input
               fluid
               label="E-mail"

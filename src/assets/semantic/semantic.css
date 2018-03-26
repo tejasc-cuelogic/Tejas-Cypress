@@ -1,5 +1,5 @@
  /*
- * # Semantic UI - 2.2.14
+ * # Semantic UI - 2.3.0
  * https://github.com/Semantic-Org/Semantic-UI
  * http://www.semantic-ui.com/
  *
@@ -18351,7 +18351,7 @@ ol.ui.horizontal.list li:before,
          Site Overrides
 *******************************/
 /*!
- * # Semantic UI 2.2.14 - Form
+ * # Semantic UI 2.3.0 - Form
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -19660,6 +19660,12 @@ ol.ui.horizontal.list li:before,
 .notification-box .ui.form.inverted input[type=url] {
   padding-left: 0;
   padding-right: 0;
+}
+
+.ui.form p.field-error {
+  font-size: 0.85714286rem;
+  color: #9F3A38;
+  margin: -2rem 0 0.71428571rem;
 }
 
 /*******************************
@@ -32596,7 +32602,7 @@ select.ui.dropdown {
   padding-bottom: 42.85714286%;
 }
 /*!
- * # Semantic UI 2.2.14 - Modal
+ * # Semantic UI 2.3.0 - Modal
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -32619,6 +32625,9 @@ select.ui.dropdown {
   box-shadow: 1px 3px 3px 0px rgba(0, 0, 0, 0.2), 1px 3px 15px 2px rgba(0, 0, 0, 0.2);
   -webkit-transform-origin: 50% 25%;
   transform-origin: 50% 25%;
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
   border-radius: 0.71428571rem;
   -webkit-user-select: text;
   -moz-user-select: text;
@@ -33240,6 +33249,16 @@ select.ui.dropdown {
 /*******************************
          Theme Overrides
 *******************************/
+
+.ui.active.dimmer.modals.transition {
+  display: -webkit-box !important;
+  display: flex !important;
+  display: -ms-flexbox !important;
+}
+
+.ui.active.dimmer.modals.transition .ui.modal {
+  margin: 0 !important;
+}
 
 .ui.modal > .close {
   top: 0.5rem;
