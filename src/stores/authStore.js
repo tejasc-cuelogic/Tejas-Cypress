@@ -82,6 +82,11 @@ export class AuthStore {
     return _.isEmpty(_.filter(this.values, field => field.error));
   }
 
+  @computed get canLogin() {
+    return _.isEmpty(this.values.email.value) || _.isEmpty(this.values.password.value)
+      || !!this.values.password.error || !!this.values.email.error;
+  }
+
   @computed get canConfirm() {
     return _.isEmpty(this.values.code.value) || !!this.values.code.error;
   }

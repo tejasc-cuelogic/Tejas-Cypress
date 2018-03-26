@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import authActions from './../../../actions/auth';
 import ListErrors from '../../../components/common/ListErrors';
+import validationActions from '../../../actions/validation';
+import FieldError from '../../../components/common/FieldError';
 
 @inject('authStore', 'uiStore', 'userStore')
 @withRouter
@@ -11,9 +13,10 @@ import ListErrors from '../../../components/common/ListErrors';
 class Login extends Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
+    this.props.authStore.reset();
   }
 
-  handleInputChange = (e, { name, value }) => this.props.authStore.setValue(name, value);
+  handleInputChange = (e, { name, value }) => validationActions.validateLoginField(name, value);
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.login()
@@ -29,7 +32,7 @@ class Login extends Component {
   };
 
   render() {
-    const { values } = this.props.authStore;
+    const { values, canLogin } = this.props.authStore;
     const { errors } = this.props.uiStore;
 
     return (
@@ -52,7 +55,9 @@ class Login extends Component {
               name="email"
               value={values.email.value}
               onChange={this.handleInputChange}
+              error={!!values.email.error}
             />
+            <FieldError error={values.email.error} />
             <Form.Input
               fluid
               label="Password"
@@ -61,9 +66,11 @@ class Login extends Component {
               name="password"
               value={values.password.value}
               onChange={this.handleInputChange}
+              error={!!values.password.error}
             />
+            <FieldError error={values.password.error} />
             <div className="center-align">
-              <Button circular color="green" size="large">Log in</Button>
+              <Button circular color="green" size="large" disabled={canLogin}>Log in</Button>
             </div>
             {errors &&
               <Message error textAlign="left">

@@ -4,12 +4,12 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
 import authActions from '../../../actions/auth';
 import ListErrors from '../../../components/common/ListErrors';
-// import FieldError from '../../../components/common/FieldError';
+import FieldError from '../../../components/common/FieldError';
 import validationActions from '../../../actions/validation';
 
 @inject('authStore', 'uiStore')
-@observer
 @withRouter
+@observer
 class InvestorSignup extends Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
@@ -66,6 +66,7 @@ class InvestorSignup extends Component {
                 onChange={this.handleInputChange}
                 error={!!values.givenName.error}
               />
+              <FieldError error={values.givenName.error} />
               <Form.Input
                 fluid
                 label="Last Name"
@@ -75,6 +76,7 @@ class InvestorSignup extends Component {
                 onChange={this.handleInputChange}
                 error={!!values.familyName.error}
               />
+              <FieldError error={values.familyName.error} />
             </Form.Group>
             <Form.Input
               fluid
@@ -85,6 +87,7 @@ class InvestorSignup extends Component {
               onChange={this.handleInputChange}
               error={!!values.email.error}
             />
+            <FieldError error={values.email.error} />
             <Form.Input
               fluid
               label="Password"
@@ -95,6 +98,7 @@ class InvestorSignup extends Component {
               onChange={this.handleInputChange}
               error={!!values.password.error}
             />
+            <FieldError error={values.password.error} />
             <Form.Input
               fluid
               label="Verify Password"
@@ -105,6 +109,7 @@ class InvestorSignup extends Component {
               onChange={this.handleInputChange}
               error={!!values.verify.error}
             />
+            <FieldError error={values.verify.error} />
             <div className="center-align">
               <Button circular color="green" disabled={!this.props.authStore.canRegister} size="large">Register</Button>
             </div>
