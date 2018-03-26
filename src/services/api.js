@@ -1,5 +1,6 @@
 import request from 'superagent';
 import { API_ROOT } from '../constants/common';
+import commonStore from '../stores/commonStore';
 
 export class Api {
   get = (url, payload) => (
@@ -7,6 +8,7 @@ export class Api {
       request
         .get(`${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
+        .set('Authorization', commonStore.token)
         .send(payload)
         .end((err, data) => {
           if (err) {
@@ -22,6 +24,7 @@ export class Api {
       request
         .post(`${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
+        .set('Authorization', commonStore.token)
         .send(payload)
         .end((err, data) => {
           if (err) {
@@ -37,6 +40,7 @@ export class Api {
       request
         .delete(`${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
+        .set('Authorization', commonStore.token)
         .send(payload)
         .end((err, data) => {
           if (err) {
@@ -52,6 +56,7 @@ export class Api {
       request
         .put(`${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
+        .set('Authorization', commonStore.token)
         .send(payload)
         .end((err, data) => {
           if (err) {
