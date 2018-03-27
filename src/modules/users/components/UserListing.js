@@ -37,7 +37,7 @@ const userListing = props => (
                 }
               </Table.Cell>
               <Table.Cell className="user-status">
-                <span className="user-name">{`${user.given_name} ${user.family_name}`}</span>
+                <span className="user-name"><Link to="/app/users/1/UserDetails">{`${user.given_name} ${user.family_name}`}</Link></span>
                 {user.email}
               </Table.Cell>
               <Table.Cell>Detroit, MI (80331)</Table.Cell>
