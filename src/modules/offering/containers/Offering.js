@@ -31,19 +31,23 @@ class Offering extends Component {
     }
 
     return (
-      <div className="ui one column grid">
-        <div
-          className="column nsContent"
-          style={{
-            fontSize: '30px',
-            color: '#666',
-            textAlign: 'center',
-            // top: '25px',
-          }}
-        >
-          <span className="title">NextSeed Offerings</span>
-          <span className="infotext">Invest in growing local businesses</span>
-          {pageContent}
+      <div className="ui vertical segment content">
+        <div className="ui container">
+          <div className="ui one column grid">
+            <div
+              className="column nsContent"
+              style={{
+                fontSize: '30px',
+                color: '#666',
+                textAlign: 'center',
+                // top: '25px',
+              }}
+            >
+              <span className="title">NextSeed Offerings</span>
+              <span className="infotext">Invest in growing local businesses</span>
+              {pageContent}
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -31,11 +31,15 @@ class CaseStudies extends Component {
     }
 
     return (
-      <div className="ui one column grid">
-        <div className="column nsContent">
-          <span className="title">NextSeed Case Studies</span>
-          <span className="infotext">Have a look at our Case Studies</span>
-          {pageContent}
+      <div className="ui vertical segment content">
+        <div className="ui container">
+          <div className="ui one column grid">
+            <div className="column nsContent">
+              <span className="title">NextSeed Case Studies</span>
+              <span className="infotext">Have a look at our Case Studies</span>
+              {pageContent}
+            </div>
+          </div>
         </div>
       </div>
     );

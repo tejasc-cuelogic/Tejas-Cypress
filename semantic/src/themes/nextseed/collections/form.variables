@@ -22,10 +22,10 @@
 /* Form Label */
 @labelDistance: @4px;
 @labelMargin: 0em 0em @labelDistance 0em;
-@labelFontSize: @relativeSmall;
+@labelFontSize:1rem;
 @labelFontWeight: 500;
 @labelTextTransform: none;
-@labelColor: @textColor;
+@labelColor: @quaternary-text;
 
 /* Input */
 @inputFont: @pageFont;

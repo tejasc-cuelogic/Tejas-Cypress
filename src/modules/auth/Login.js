@@ -32,63 +32,67 @@ export default class Login extends React.Component {
     const { errors } = this.props.uiStore;
 
     return (
-      <div className="login-form">
-        <Header as="h1" textAlign="center">Sign in to invest today or access your business application</Header>
-        <Grid
-          textAlign="center"
-          verticalAlign="middle"
-        >
-          <Grid.Column>
-            <Form>
-              <div stacked>
-                <Button color="facebook" fluid>
-                  <Icon name="facebook" /> LOG IN WITH FACEBOOK
-                </Button>
-              </div>
-            </Form>
-            <Divider horizontal>Or</Divider>
-            <Form error onSubmit={this.handleSubmitForm}>
-              <div stacked>
-                <Form.Input
-                  fluid
-                  icon="envelope"
-                  iconPosition="left"
-                  placeholder="E-mail address"
-                  name="email"
-                  value={values.email.value}
-                  onChange={this.handleInputChange}
-                />
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Password"
-                  type="password"
-                  name="password"
-                  value={values.password.value}
-                  onChange={this.handleInputChange}
-                />
-                <Button
-                  fluid
-                  color="green"
-                  size="large"
-                >
-                  Log in with Email
-                </Button>
-                {errors &&
-                  <Message error textAlign="left">
-                    <ListErrors errors={[errors.message]} />
-                  </Message>
-                }
-              </div>
-            </Form>
-            <Divider section />
-            <Message>
-              <p><Link to="forgot-password">Forgot Password?</Link></p>
-              <p>New here? <Link to="register">Sign up</Link></p>
-            </Message>
-          </Grid.Column>
-        </Grid>
+      <div className="ui vertical segment content">
+        <div className="ui container">
+          <div className="login-form">
+            <Header as="h1" textAlign="center">Sign in to invest today or access your business application</Header>
+            <Grid
+              textAlign="center"
+              verticalAlign="middle"
+            >
+              <Grid.Column>
+                <Form>
+                  <div stacked>
+                    <Button color="facebook" fluid>
+                      <Icon name="facebook" /> LOG IN WITH FACEBOOK
+                    </Button>
+                  </div>
+                </Form>
+                <Divider horizontal>Or</Divider>
+                <Form error onSubmit={this.handleSubmitForm}>
+                  <div stacked>
+                    <Form.Input
+                      fluid
+                      icon="envelope"
+                      iconPosition="left"
+                      placeholder="E-mail address"
+                      name="email"
+                      value={values.email.value}
+                      onChange={this.handleInputChange}
+                    />
+                    <Form.Input
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      placeholder="Password"
+                      type="password"
+                      name="password"
+                      value={values.password.value}
+                      onChange={this.handleInputChange}
+                    />
+                    <Button
+                      fluid
+                      color="green"
+                      size="large"
+                    >
+                      Log in with Email
+                    </Button>
+                    {errors &&
+                      <Message error textAlign="left">
+                        <ListErrors errors={[errors.message]} />
+                      </Message>
+                    }
+                  </div>
+                </Form>
+                <Divider section />
+                <Message>
+                  <p><Link to="forgot-password">Forgot Password?</Link></p>
+                  <p>New here? <Link to="register">Sign up</Link></p>
+                </Message>
+              </Grid.Column>
+            </Grid>
+          </div>
+        </div>
       </div>
     );
   }

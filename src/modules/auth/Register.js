@@ -37,102 +37,106 @@ export default class Register extends React.Component {
     ];
 
     return (
-      <div className="login-form">
-        <Header as="h1" textAlign="center">Sign Up</Header>
-        <Grid
-          textAlign="center"
-          verticalAlign="middle"
-        >
-          <Grid.Column>
-            <Form error onSubmit={this.handleSubmitForm}>
-              <div stacked="true">
-                <Form.Input
-                  fluid
-                  icon="user"
-                  iconPosition="left"
-                  placeholder="First Name"
-                  name="givenName"
-                  value={values.givenName.value}
-                  onChange={this.handleInputChange}
-                  error={!!values.givenName.error}
-                />
-                <FieldError error={values.givenName.error} />
-                <Form.Input
-                  fluid
-                  icon="user"
-                  iconPosition="left"
-                  placeholder="Last Name"
-                  name="familyName"
-                  value={values.familyName.value}
-                  onChange={this.handleInputChange}
-                  error={!!values.familyName.error}
-                />
-                <FieldError error={values.familyName.error} />
-                <Form.Input
-                  fluid
-                  icon="envelope"
-                  iconPosition="left"
-                  placeholder="Email"
-                  name="email"
-                  value={values.email.value}
-                  onChange={this.handleInputChange}
-                  error={!!values.email.error}
-                />
-                <FieldError error={values.email.error} />
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  value={values.password.value}
-                  onChange={this.handleInputChange}
-                  error={!!values.password.error}
-                />
-                <FieldError error={values.password.error} />
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  type="password"
-                  placeholder="Verify Password"
-                  name="verify"
-                  value={values.verify.value}
-                  onChange={this.handleInputChange}
-                  error={!!values.verify.error}
-                />
-                <FieldError error={values.verify.error} />
-                <Form.Select
-                  fluid
-                  options={options}
-                  placeholder="Role"
-                  name="role"
-                  onChange={this.handleInputChange}
-                  error={!!values.role.error}
-                />
-                <FieldError error={values.role.error} />
-                <Button
-                  fluid
-                  color="green"
-                  disabled={!this.props.authStore.canRegister}
-                  size="large"
-                >
-                  Sign Up
-                </Button>
-                {errors &&
-                  <Message error textAlign="left">
-                    <ListErrors errors={[errors.message]} />
-                  </Message>
-                }
-              </div>
-            </Form>
-            <Divider section />
-            <Message>
-              <p><Link to="login">Have an account?</Link></p>
-            </Message>
-          </Grid.Column>
-        </Grid>
+      <div className="ui vertical segment content">
+        <div className="ui container">
+          <div className="login-form">
+            <Header as="h1" textAlign="center">Sign Up</Header>
+            <Grid
+              textAlign="center"
+              verticalAlign="middle"
+            >
+              <Grid.Column>
+                <Form error onSubmit={this.handleSubmitForm}>
+                  <div stacked="true">
+                    <Form.Input
+                      fluid
+                      icon="user"
+                      iconPosition="left"
+                      placeholder="First Name"
+                      name="givenName"
+                      value={values.givenName.value}
+                      onChange={this.handleInputChange}
+                      error={!!values.givenName.error}
+                    />
+                    <FieldError error={values.givenName.error} />
+                    <Form.Input
+                      fluid
+                      icon="user"
+                      iconPosition="left"
+                      placeholder="Last Name"
+                      name="familyName"
+                      value={values.familyName.value}
+                      onChange={this.handleInputChange}
+                      error={!!values.familyName.error}
+                    />
+                    <FieldError error={values.familyName.error} />
+                    <Form.Input
+                      fluid
+                      icon="envelope"
+                      iconPosition="left"
+                      placeholder="Email"
+                      name="email"
+                      value={values.email.value}
+                      onChange={this.handleInputChange}
+                      error={!!values.email.error}
+                    />
+                    <FieldError error={values.email.error} />
+                    <Form.Input
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      type="password"
+                      placeholder="Password"
+                      name="password"
+                      value={values.password.value}
+                      onChange={this.handleInputChange}
+                      error={!!values.password.error}
+                    />
+                    <FieldError error={values.password.error} />
+                    <Form.Input
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      type="password"
+                      placeholder="Verify Password"
+                      name="verify"
+                      value={values.verify.value}
+                      onChange={this.handleInputChange}
+                      error={!!values.verify.error}
+                    />
+                    <FieldError error={values.verify.error} />
+                    <Form.Select
+                      fluid
+                      options={options}
+                      placeholder="Role"
+                      name="role"
+                      onChange={this.handleInputChange}
+                      error={!!values.role.error}
+                    />
+                    <FieldError error={values.role.error} />
+                    <Button
+                      fluid
+                      color="green"
+                      disabled={!this.props.authStore.canRegister}
+                      size="large"
+                    >
+                      Sign Up
+                    </Button>
+                    {errors &&
+                      <Message error textAlign="left">
+                        <ListErrors errors={[errors.message]} />
+                      </Message>
+                    }
+                  </div>
+                </Form>
+                <Divider section />
+                <Message>
+                  <p><Link to="login">Have an account?</Link></p>
+                </Message>
+              </Grid.Column>
+            </Grid>
+          </div>
+        </div>
       </div>
     );
   }

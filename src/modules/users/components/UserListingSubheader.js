@@ -61,8 +61,8 @@ const userListingSubheader = () => (
     <div className="webcontent-spacer">
       <Grid stackable>
         <Grid.Row>
-          <Grid.Column width={6}>
-            <h3>Manage Users</h3>
+          <Grid.Column width={4}>
+            <h1>Manage Users</h1>
           </Grid.Column>
           <Grid.Column width={5}>
             <Form inverted>
@@ -93,7 +93,7 @@ const userListingSubheader = () => (
       </Grid>
     </div>
     <div className="search-filters webcontent-spacer">
-      <Grid>
+      <Grid stackable>
         <Grid.Row>
           <Grid.Column width={3}>
             <h5>Account Type</h5>

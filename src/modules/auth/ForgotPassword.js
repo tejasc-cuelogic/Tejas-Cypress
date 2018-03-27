@@ -33,47 +33,51 @@ export default class ForgotPassword extends React.Component {
     const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
-      <div className="login-form">
-        <Header as="h1" textAlign="center">Need a link to reset your password?</Header>
-        <Grid
-          textAlign="center"
-          verticalAlign="middle"
-        >
-          <Grid.Column>
-            <Form error onSubmit={this.handleSubmitForm}>
-              <div stacked>
-                <Form.Input
-                  fluid
-                  icon="envelope"
-                  iconPosition="left"
-                  placeholder="E-mail address"
-                  name="email"
-                  value={values.email.value}
-                  onChange={this.handleInputChange}
-                  error={!!values.email.error}
-                />
-                <FieldError error={values.email.error} />
-                <Button
-                  fluid
-                  color="green"
-                  size="large"
-                  disabled={this.props.authStore.canSendMail}
-                >
-                  Continue
-                </Button>
-                {errors &&
-                  <Message error textAlign="left">
-                    <ListErrors errors={errors ? [errors.message] : []} />
-                  </Message>
-                }
-              </div>
-            </Form>
-            <Divider section />
-            <Message>
-              <p><Link to="login">Return to log In</Link></p>
-            </Message>
-          </Grid.Column>
-        </Grid>
+      <div className="ui vertical segment content">
+        <div className="ui container">
+          <div className="login-form">
+            <Header as="h1" textAlign="center">Need a link to reset your password?</Header>
+            <Grid
+              textAlign="center"
+              verticalAlign="middle"
+            >
+              <Grid.Column>
+                <Form error onSubmit={this.handleSubmitForm}>
+                  <div stacked>
+                    <Form.Input
+                      fluid
+                      icon="envelope"
+                      iconPosition="left"
+                      placeholder="E-mail address"
+                      name="email"
+                      value={values.email.value}
+                      onChange={this.handleInputChange}
+                      error={!!values.email.error}
+                    />
+                    <FieldError error={values.email.error} />
+                    <Button
+                      fluid
+                      color="green"
+                      size="large"
+                      disabled={this.props.authStore.canSendMail}
+                    >
+                      Continue
+                    </Button>
+                    {errors &&
+                      <Message error textAlign="left">
+                        <ListErrors errors={errors ? [errors.message] : []} />
+                      </Message>
+                    }
+                  </div>
+                </Form>
+                <Divider section />
+                <Message>
+                  <p><Link to="login">Return to log In</Link></p>
+                </Message>
+              </Grid.Column>
+            </Grid>
+          </div>
+        </div>
       </div>
     );
   }

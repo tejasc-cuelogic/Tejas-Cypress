@@ -24,7 +24,7 @@
   color: rgba(0, 0, 0, 0.6);
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0em 0.25em 0em 0em;
-  padding: 0.78571429em 1.5em 0.78571429em;
+  padding: 1em 1.5em 1em;
   text-transform: none;
   text-shadow: none;
   font-weight: 500;
@@ -663,15 +663,15 @@
 
 .ui.compact.buttons .button,
 .ui.compact.button {
-  padding: 0.58928571em 1.125em 0.58928571em;
+  padding: 0.75em 1.125em 0.75em;
 }
 .ui.compact.icon.buttons .button,
 .ui.compact.icon.button {
-  padding: 0.58928571em 0.58928571em 0.58928571em;
+  padding: 0.75em 0.75em 0.75em;
 }
 .ui.compact.labeled.icon.buttons .button,
 .ui.compact.labeled.icon.button {
-  padding: 0.58928571em 3.69642857em 0.58928571em;
+  padding: 0.75em 4.125em 0.75em;
 }
 
 /*-------------------
@@ -725,7 +725,7 @@
 
 .ui.icon.buttons .button,
 .ui.icon.button {
-  padding: 0.78571429em 0.78571429em 0.78571429em;
+  padding: 1em 1em 1em;
 }
 .ui.icon.buttons .button > .icon,
 .ui.icon.button > .icon {
@@ -871,7 +871,7 @@
 .ui.labeled.icon.buttons .button,
 .ui.labeled.icon.button {
   position: relative;
-  padding-left: 4.07142857em !important;
+  padding-left: 4.5em !important;
   padding-right: 1.5em !important;
 }
 
@@ -886,7 +886,7 @@
   border-bottom-left-radius: inherit;
   text-align: center;
   margin: 0em;
-  width: 2.57142857em;
+  width: 3em;
   background-color: rgba(0, 0, 0, 0.05);
   color: '';
   -webkit-box-shadow: -1px 0px 0px 0px transparent inset;
@@ -902,7 +902,7 @@
 
 /* Right Labeled */
 .ui[class*="right labeled"].icon.button {
-  padding-right: 4.07142857em !important;
+  padding-right: 4.5em !important;
   padding-left: 1.5em !important;
 }
 .ui[class*="right labeled"].icon.button > .icon {
@@ -993,7 +993,7 @@
 .ui.buttons .or {
   position: relative;
   width: 0.3em;
-  height: 2.57142857em;
+  height: 3em;
   z-index: 3;
 }
 .ui.buttons .or:before {
@@ -1005,11 +1005,11 @@
   left: 50%;
   background-color: #FFFFFF;
   text-shadow: none;
-  margin-top: -0.89285714em;
-  margin-left: -0.89285714em;
-  width: 1.78571429em;
-  height: 1.78571429em;
-  line-height: 1.78571429em;
+  margin-top: -1em;
+  margin-left: -1em;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
   color: rgba(0, 0, 0, 0.4);
   font-style: normal;
   font-weight: bold;
@@ -3673,132 +3673,6 @@
 }
 .ui.vertical.buttons .button:only-child {
   border-radius: 0.28571429rem;
-}
-
-
-/*******************************
-         Theme Overrides
-*******************************/
-
-.ui.button,
-.ui.buttons .button {
-  text-transform: uppercase;
-}
-.ui.button.green,
-.ui.buttons .button.green {
-  background-color: #A9D943;
-}
-.ui.button.green:hover,
-.ui.buttons .button.green:hover,
-.ui.button.green:focus,
-.ui.buttons .button.green:focus,
-.ui.button.green:active,
-.ui.buttons .button.green:active {
-  background-color: #97ca29;
-}
-.ui.button + .button,
-.ui.buttons .button + .button {
-  margin-left: 0.71428571rem;
-}
-.ui.button.link-button,
-.ui.buttons .button.link-button {
-  padding: 0;
-  background-color: transparent !important;
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
-}
-.ui.button.link-button:hover,
-.ui.buttons .button.link-button:hover,
-.ui.button.link-button:focus,
-.ui.buttons .button.link-button:focus,
-.ui.button.link-button:active,
-.ui.buttons .button.link-button:active {
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
-}
-.ui.button.link-button.basic,
-.ui.buttons .button.link-button.basic {
-  color: #999999 !important;
-}
-.ui.button.link-button.basic:hover,
-.ui.buttons .button.link-button.basic:hover,
-.ui.button.link-button.basic:focus,
-.ui.buttons .button.link-button.basic:focus,
-.ui.button.link-button.basic:active,
-.ui.buttons .button.link-button.basic:active {
-  color: #bababa !important;
-}
-.ui.button.link-button.green,
-.ui.buttons .button.link-button.green {
-  color: #A9D943;
-}
-.ui.button.link-button.green:hover,
-.ui.buttons .button.link-button.green:hover,
-.ui.button.link-button.green:focus,
-.ui.buttons .button.link-button.green:focus,
-.ui.button.link-button.green:active,
-.ui.buttons .button.link-button.green:active {
-  color: #97ca29;
-}
-.ui.button.link-button.red,
-.ui.buttons .button.link-button.red {
-  color: #EB5757;
-}
-.ui.button.link-button.red:hover,
-.ui.buttons .button.link-button.red:hover,
-.ui.button.link-button.red:focus,
-.ui.buttons .button.link-button.red:focus,
-.ui.button.link-button.red:active,
-.ui.buttons .button.link-button.red:active {
-  color: #e62929;
-}
-.ui.inverted.button,
-.ui.inverted.buttons .button {
-  text-transform: none;
-}
-.ui.inverted.red.buttons .button,
-.ui.inverted.red.button {
-  color: #EB5757;
-  -webkit-box-shadow: 0px 0px 0px 2px #EB5757 inset !important;
-          box-shadow: 0px 0px 0px 2px #EB5757 inset !important;
-}
-.ui.inverted.red.buttons .button:hover,
-.ui.inverted.red.button:hover,
-.ui.inverted.red.buttons .button:focus,
-.ui.inverted.red.button:focus,
-.ui.inverted.red.buttons .button:active,
-.ui.inverted.red.button:active,
-.ui.inverted.red.buttons .button.active,
-.ui.inverted.red.button.active {
-  background-color: #EB5757;
-}
-.ui.inverted.green.buttons .button,
-.ui.inverted.green.button {
-  color: #A9D943;
-  -webkit-box-shadow: 0px 0px 0px 2px #A9D943 inset !important;
-          box-shadow: 0px 0px 0px 2px #A9D943 inset !important;
-}
-.ui.inverted.green.buttons .button:hover,
-.ui.inverted.green.button:hover,
-.ui.inverted.green.buttons .button:focus,
-.ui.inverted.green.button:focus,
-.ui.inverted.green.buttons .button:active,
-.ui.inverted.green.button:active,
-.ui.inverted.green.buttons .button.active,
-.ui.inverted.green.button.active {
-  background-color: #A9D943;
-}
-.ui.red.button,
-.ui.red.buttons .button {
-  background-color: #EB5757;
-}
-.ui.red.button:hover,
-.ui.red.buttons .button:hover,
-.ui.red.button:focus,
-.ui.red.buttons .button:focus,
-.ui.red.button:active,
-.ui.red.buttons .button:active {
-  background-color: #e14848;
 }
 
 

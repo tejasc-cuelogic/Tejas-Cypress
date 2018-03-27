@@ -68,9 +68,9 @@
 			margin:0 5px 0 0;
 			&:before{
 				content:"\00B7\00B7\00B7";
-				font-size:27px;
+				font-size:@27px;
 				letter-spacing:-3px;
-				line-height:10px;
+				line-height:@10px;
 				color:@quaternary-text;
 			}
 		}

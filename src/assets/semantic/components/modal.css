@@ -26,7 +26,7 @@
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
-  border-radius: 0.28571429rem;
+  border-radius: 0.71428571rem;
   -webkit-user-select: text;
      -moz-user-select: text;
       -ms-user-select: text;
@@ -35,12 +35,12 @@
 }
 .ui.modal > :first-child:not(.icon),
 .ui.modal > .icon:first-child + * {
-  border-top-left-radius: 0.28571429rem;
-  border-top-right-radius: 0.28571429rem;
+  border-top-left-radius: 0.71428571rem;
+  border-top-right-radius: 0.71428571rem;
 }
 .ui.modal > :last-child {
-  border-bottom-left-radius: 0.28571429rem;
-  border-bottom-right-radius: 0.28571429rem;
+  border-bottom-left-radius: 0.71428571rem;
+  border-bottom-right-radius: 0.71428571rem;
 }
 
 
@@ -79,11 +79,11 @@
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   margin: 0em;
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 3rem;
   -webkit-box-shadow: none;
           box-shadow: none;
   color: rgba(0, 0, 0, 0.85);
-  border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+  border-bottom: none;
 }
 .ui.modal > .header:not(.ui) {
   font-size: 1.42857143rem;
@@ -100,7 +100,7 @@
   width: 100%;
   font-size: 1em;
   line-height: 1.4;
-  padding: 1.5rem;
+  padding: 2.5rem 3rem;
   background: #FFFFFF;
 }
 .ui.modal > .image.content {
@@ -169,9 +169,9 @@
 ---------------*/
 
 .ui.modal > .actions {
-  background: #F9FAFB;
-  padding: 1rem 1rem;
-  border-top: 1px solid rgba(34, 36, 38, 0.15);
+  background: #FFFFFF;
+  padding: 1rem 1.5rem;
+  border-top: none;
   text-align: right;
 }
 .ui.modal .actions > .button {
@@ -271,7 +271,7 @@
   
 /* Let Buttons Stack */
   .ui.modal > .actions {
-    padding: 1rem 1rem 0rem !important;
+    padding: 1rem !important;
   }
   .ui.modal .actions > .buttons,
   .ui.modal .actions > .button {
@@ -575,28 +575,6 @@
     width: 1140px;
     margin: 0em 0em 0em -570px;
   }
-}
-
-
-/*******************************
-         Theme Overrides
-*******************************/
-
-.ui.active.dimmer.modals.transition {
-  display: -webkit-box !important;
-  display: flex !important;
-  display: -ms-flexbox !important;
-}
-.ui.active.dimmer.modals.transition .ui.modal {
-  margin: 0 !important;
-}
-.ui.modal.deletion .actions .ui.primary.button {
-  background-color: #EB5757;
-}
-.ui.modal.deletion .actions .ui.primary.button:hover,
-.ui.modal.deletion .actions .ui.primary.button:focus,
-.ui.modal.deletion .actions .ui.primary.button:active {
-  background-color: #e14848;
 }
 
 

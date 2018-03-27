@@ -1,7 +1,7 @@
 /*******************************
          Theme Overrides
 *******************************/
-// Semantic UI modal position fix
+// Semantic UI modal position fix for V-2.3
 .ui.active.dimmer.modals.transition {
     display: flex !important;
     display: -ms-flexbox !important;
@@ -20,3 +20,115 @@
         }
     }
 }
+.ui.modal{
+    >.close{
+        top:@7px;
+        right:@7px;
+        opacity:0.5;
+        color:@quaternary-text;
+    }
+    >.header:not(.ui){
+        padding-top:@42px;
+        .back-link{
+            font-size:@16px;
+            font-weight:400;
+            position:absolute;
+            top:@12px;
+            left:@12px;
+        }
+        .ui.header{
+            margin:0 0 @7px;
+        }
+        p{
+            font-family:@pageFont;
+            font-weight:500;
+            font-size:@14px;
+            color:@dark-bg-color;
+        }
+    }
+    .content{
+        padding-top:@20px;
+        &.login-modal{
+            // max-width:404px;
+            margin:0 auto;
+        }
+        &.signup-modal{
+            // max-width:548px;
+            // margin:0 auto;
+            .user-type{
+                height:100%;
+                padding:@14px;
+                border-radius:@defaultBorderRadius * 1.5;
+                border:darken(@light-bg-color, 9%) 1px solid;
+                cursor:pointer;
+                h3{
+                    margin:@7px 0;
+                }
+                p{
+                    font-family:@regularFont;
+                    font-size:@13px;
+                    color:@fullBlack;
+                }
+                &:hover, &:focus, &.active{
+                    border-color:@theme-primary-darken;
+                    i.icon{
+                        color:@theme-primary-darken;
+                    }
+                }
+            }
+        }
+        .ui{
+            &.button, &.buttons .button{
+                letter-spacing:1px;
+                &:not(.circular){
+                    border-radius:0;
+                }
+                &.large{
+                    font-size:@14px;
+                }
+                &.circular{
+                    min-width:160px;
+                }
+            }
+        }
+        a.cancel-link{
+            margin:1.5rem 0 0;
+            display:inline-block;
+            font-family:@regularFont;
+            font-size:@16px;
+            letter-spacing:1px;
+            color:@quaternary-text;
+        }
+    }
+    .actions{
+        font-size:@14px;
+    }
+    .ui.divider{
+        color:@quaternary-text;
+        &:before, &:after{
+            background:none;
+        }
+    }
+    .ui.form{
+        .fields .field{
+            margin-bottom:@14px;
+        }
+        .field{
+            margin:0 0 @28px;
+            .ui.input input{
+                font-family:@boldFont;
+                padding-left:0;
+                padding-right:0;
+                border-radius:0;
+                border:none;
+                border-bottom:@borderColor 1px solid;
+            }
+            > label{
+                i.icon.help{
+                    margin-left:@7px;
+                }
+            }
+        }
+    }
+}
+

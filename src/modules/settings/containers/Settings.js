@@ -22,7 +22,7 @@ class Settings extends React.Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <h3>Your Settings</h3>
+                <h1>Your Settings</h1>
               </Grid.Column>
             </Grid.Row>
           </Grid>

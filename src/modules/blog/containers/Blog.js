@@ -31,11 +31,15 @@ class Blog extends Component {
     }
 
     return (
-      <div className="ui one column grid">
-        <div className="column nsContent">
-          <span className="title">NextSeed Blog</span>
-          <span className="infotext">Let your community invest in your success</span>
-          {pageContent}
+      <div className="ui vertical segment content">
+        <div className="ui container">
+          <div className="ui one column grid">
+            <div className="column nsContent">
+              <span className="title">NextSeed Blog</span>
+              <span className="infotext">Let your community invest in your success</span>
+              {pageContent}
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -20,7 +20,7 @@
 
 
 .notification-box{
-    .ui.clearing.hidden.divider{
-        margin:0.5rem 0;
-    }
+  .ui.clearing.hidden.divider{
+    margin:@7px 0;
+  }
 }
