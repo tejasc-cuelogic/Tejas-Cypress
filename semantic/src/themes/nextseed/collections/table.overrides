@@ -62,6 +62,9 @@
         .user-name{
             font-family:@boldFont;
             display:block;
+            > a{
+                font-family:inherit;
+            }
         }
     }
     a{
