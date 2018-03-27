@@ -7,11 +7,20 @@ import uiStore from '../stores/uiStore';
 
 import Helper from '../helper/utility';
 
+/**
+ * @desc All actions that admin has to perform
+ *       IMP: All these actions need admin creds that are being set from
+ *       Auth::setAdminAccess from auth actions
+ */
 export class Admin {
   awsCognitoISP = null;
 
-  // List all user from admin side
-  // TODO: Pass pagination token and other params as require
+  /**
+   * @desc List users in cognito from whatever options we have passed.
+   * @param $options options by which users have to be filtered out
+   */
+  // TODO: Pass pagination token and other params as require.
+  // Visit https://github.com/CassetteRocks/react-infinite-scroller for same.
   listUsers = (options) => {
     uiStore.reset();
     // uiStore.setProgress();
@@ -46,7 +55,9 @@ export class Admin {
     );
   }
 
-  // Creates new user on congnito user pool
+  /**
+   * @desc Creates New user from parameters that have been stored in store
+   */
   createNewUser = () => {
     uiStore.reset();
     uiStore.setProgress();
@@ -68,10 +79,7 @@ export class Admin {
           res(data);
         });
       })
-        .then((data) => {
-          Helper.toast('User created successfully', 'success');
-          console.log(data);
-        })
+        .then(() => Helper.toast('User created successfully', 'success'))
         .catch((err) => {
           uiStore.setErrors(err);
           throw err;
@@ -83,7 +91,11 @@ export class Admin {
     );
   }
 
-  // Deletes user from user pool. THIS ACTION IS NOT REVERSIBLE
+  /**
+   * @desc Delete user from username that has been passed, username here is email id that user has
+   *       given while signing up
+   * @param $username Username(email) of user which has to be deleted from cognito pool.
+   */
   deleteUser = (username) => {
     uiStore.reset();
     uiStore.setProgress();
@@ -116,7 +128,9 @@ export class Admin {
       });
   }
 
-  // Admin can change non mandatory attributes of user.
+  /**
+   * @desc Update User profile from backend, all attributes are retrieved from userStore.
+   */
   updateUserAttributes = () => {
     uiStore.reset();
     uiStore.setProgress();
@@ -136,10 +150,7 @@ export class Admin {
         res(data);
       });
     })
-      .then((data) => {
-        Helper.toast('Updated user data', 'success');
-        console.log(data);
-      })
+      .then(() => Helper.toast('Updated user data', 'success'))
       .catch((err) => {
         uiStore.setErrors(err);
         throw err;
@@ -150,7 +161,11 @@ export class Admin {
       });
   }
 
-  // Search User
+  /**
+   * @desc Search user from provided querystring
+   * @param $queryString #String Query from which we have to search user in cognito userpool
+   * @return List of user matching search query.
+   */
   searchUser = (queryString) => {
     let filterString = '';
     if (queryString.length !== 0) {
@@ -162,33 +177,35 @@ export class Admin {
 
   // Private method starts here
 
-  /*
-    `getFormatedUserData` returns formated user data
-    input for method consist for array with hashes in following format
-      [
-        {
-          Attributes: [
-            {Name: 'given_name', Value: 'test'},
-            .
-            .
-          ],
-          Enabled: true,
-          UserStatus: 'CONFIRMED',
-        },
-        {...},
-        {...}
-      ]
-    and method flattens out this structure for ease of use as following
-      {
-        #username: {
-                      given_name: 'test',
-                      enabled: true,
-                      confirmed: true/false
-                    },
-        #username: {...},
-        #username: {...}
-      }
-  */
+  /**
+   * @desc Arrange user data that has been recieved from cognito.
+   * @param $userList #Array List of users that is recied from cognito API. UserList will be in
+   *        format below
+   *        input for method consist for array with hashes in following format
+   *        [
+   *          {
+   *            Attributes: [
+   *              { Name: 'given_name', Value: 'test' },
+   *              .
+   *              .
+   *            ],
+   *            Enabled: true,
+   *            UserStatus: 'CONFIRMED',
+   *          },
+   *          {...},
+   *          {...}
+   *        ]
+   * @return Processed userList
+   *         {
+   *            #username: {
+   *              given_name: 'test',
+   *              enabled: true,
+   *              confirmed: true/false
+   *            },
+   *            #username: {...},
+   *            #username: {...}
+   *         }
+   */
   getFormatedUserData = (userList) => {
     const formatedUserData = {};
 
@@ -208,9 +225,11 @@ export class Admin {
     return formatedUserData;
   }
 
-  /* Returns user attributes in format required to submit to AWS Cognito
-      If newUser parameter is set to true it will add two more attributes which are required
-    while creating new user.
+  /**
+   * @desc Maps user attributes in format required by cognito API, method is being executed for new
+   *       User, two extra parameters i.e. email and email verified are passed explicitly.
+   * @param $newUser #Boolean value to decide if method is being executed for new user
+   * @return Formatted user data
   */
   mappedUserAttributes = (newUser = true) => {
     const userData = [
