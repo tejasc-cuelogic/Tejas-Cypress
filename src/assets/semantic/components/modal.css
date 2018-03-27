@@ -26,7 +26,7 @@
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
-  border-radius: 0.28571429rem;
+  border-radius: 0.71428571rem;
   -webkit-user-select: text;
      -moz-user-select: text;
       -ms-user-select: text;
@@ -35,12 +35,12 @@
 }
 .ui.modal > :first-child:not(.icon),
 .ui.modal > .icon:first-child + * {
-  border-top-left-radius: 0.28571429rem;
-  border-top-right-radius: 0.28571429rem;
+  border-top-left-radius: 0.71428571rem;
+  border-top-right-radius: 0.71428571rem;
 }
 .ui.modal > :last-child {
-  border-bottom-left-radius: 0.28571429rem;
-  border-bottom-right-radius: 0.28571429rem;
+  border-bottom-left-radius: 0.71428571rem;
+  border-bottom-right-radius: 0.71428571rem;
 }
 
 
@@ -79,7 +79,7 @@
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   margin: 0em;
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 3rem;
   -webkit-box-shadow: none;
           box-shadow: none;
   color: rgba(0, 0, 0, 0.85);
@@ -100,7 +100,7 @@
   width: 100%;
   font-size: 1em;
   line-height: 1.4;
-  padding: 1.5rem;
+  padding: 2.5rem 3rem;
   background: #FFFFFF;
 }
 .ui.modal > .image.content {
@@ -170,7 +170,7 @@
 
 .ui.modal > .actions {
   background: #F9FAFB;
-  padding: 1rem 1rem;
+  padding: 1rem 1.5rem;
   border-top: 1px solid rgba(34, 36, 38, 0.15);
   text-align: right;
 }
@@ -271,7 +271,7 @@
   
 /* Let Buttons Stack */
   .ui.modal > .actions {
-    padding: 1rem 1rem 0rem !important;
+    padding: 1rem !important;
   }
   .ui.modal .actions > .buttons,
   .ui.modal .actions > .button {
@@ -597,6 +597,125 @@
 .ui.modal.deletion .actions .ui.primary.button:focus,
 .ui.modal.deletion .actions .ui.primary.button:active {
   background-color: #e14848;
+}
+.ui.modal > .close {
+  top: 0.5rem;
+  right: 0.5rem;
+  opacity: 0.5;
+  color: #999999;
+}
+.ui.modal > .header:not(.ui).signup-header {
+  padding-top: 3rem;
+  border: none;
+}
+.ui.modal > .header:not(.ui).signup-header .back-link {
+  font-size: 1.14285714rem;
+  font-weight: 400;
+  position: absolute;
+  top: 0.85714286rem;
+  left: 0.85714286rem;
+}
+.ui.modal > .header:not(.ui).signup-header .ui.header {
+  margin: 0 0 0.5rem;
+}
+.ui.modal > .header:not(.ui).signup-header p {
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #424242;
+}
+.ui.modal .content {
+  padding-top: 1.42857143rem;
+}
+.ui.modal .content.login-modal {
+  margin: 0 auto;
+}
+.ui.modal .content.signup-content .user-type {
+  height: 100%;
+  padding: 1rem;
+  border-radius: 0.42857143rem;
+  border: #e0e0e0 1px solid;
+  cursor: pointer;
+}
+.ui.modal .content.signup-content .user-type h3 {
+  margin: 0.5rem 0;
+}
+.ui.modal .content.signup-content .user-type p {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 0.92857143rem;
+  color: #000000;
+}
+.ui.modal .content.signup-content .user-type:hover,
+.ui.modal .content.signup-content .user-type:focus,
+.ui.modal .content.signup-content .user-type.active {
+  border-color: #81ad23;
+}
+.ui.modal .content.signup-content .user-type:hover i.icon,
+.ui.modal .content.signup-content .user-type:focus i.icon,
+.ui.modal .content.signup-content .user-type.active i.icon {
+  color: #81ad23;
+}
+.ui.modal .content .ui.button,
+.ui.modal .content .ui.buttons .button {
+  letter-spacing: 1px;
+}
+.ui.modal .content .ui.button:not(.circular),
+.ui.modal .content .ui.buttons .button:not(.circular) {
+  border-radius: 0;
+}
+.ui.modal .content .ui.button.large,
+.ui.modal .content .ui.buttons .button.large {
+  font-size: 1rem;
+}
+.ui.modal .content .ui.button.circular,
+.ui.modal .content .ui.buttons .button.circular {
+  min-width: 160px;
+}
+.ui.modal .content a.cancel-link {
+  margin: 1.5rem 0 0;
+  display: inline-block;
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 1.14285714rem;
+  letter-spacing: 1px;
+  color: #999999;
+}
+.ui.modal .actions {
+  font-size: 1rem;
+}
+.ui.modal .actions.signup-actions {
+  background-color: #FFFFFF;
+  border: none;
+}
+.ui.modal .ui.divider {
+  color: #999999;
+}
+.ui.modal .ui.divider:before,
+.ui.modal .ui.divider:after {
+  background: none;
+}
+.ui.modal .ui.form .fields .field {
+  margin-bottom: 1rem;
+}
+.ui.modal .ui.form .field {
+  margin: 0 0 2rem;
+}
+.ui.modal .ui.form .field .ui.input input {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
+}
+.ui.modal .ui.form .field > label i.icon.help {
+  margin-left: 0.5rem;
+}
+.ui.modal .ui.form textarea {
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
 
 

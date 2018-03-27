@@ -1504,9 +1504,9 @@ select.ui.dropdown {
 }
 .notification-box .ui.dropdown .icon.dropdown:before {
   content: "\00B7\00B7\00B7";
-  font-size: 27px;
+  font-size: 1.92857143rem;
   letter-spacing: -3px;
-  line-height: 10px;
+  line-height: 0.71428571rem;
   color: #999999;
 }
 

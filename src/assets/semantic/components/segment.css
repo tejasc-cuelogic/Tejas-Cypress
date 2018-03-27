@@ -809,6 +809,14 @@
          Theme Overrides
 *******************************/
 
+.ui.segment[class*="bottom attached"] {
+  border-radius: 0;
+}
+.account-type-tab .ui.attached.segment {
+  padding-left: 0;
+  padding-right: 0;
+  border: none;
+}
 
 
 /*******************************

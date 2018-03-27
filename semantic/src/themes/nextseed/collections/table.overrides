@@ -1,15 +1,18 @@
 /*******************************
          Theme Overrides
 *******************************/
+.table-wrapper{
+    overflow:auto;
+}
 .ui.table{
     font-family:@regularFont;
     thead th{
-        padding:1.666667em;
-        font-size:0.857142em;
+        padding:@20px;
+        font-size:@12px;
         text-transform:uppercase;
     }
     td{
-        padding:0.833334em 1.666667em;
+        padding:@12px @24px;
     }
     &.sortable{
         thead th{
@@ -53,11 +56,15 @@
             position:relative;
             .ui.avatar.image{
                 margin-right:0;
+                border:1px solid @border-color;
             }
         }
         .user-name{
             font-family:@boldFont;
             display:block;
+            > a{
+                font-family:inherit;
+            }
         }
     }
     a{
@@ -69,7 +76,7 @@
             text-decoration:underline;
         }
         &.action{
-            font-family:@pageFont;
+            // font-family:@pageFont;
             font-size:@12px;
             text-transform:uppercase;
             color:@linkColor;
@@ -77,6 +84,13 @@
                 color:@linkHoverColor;
                 text-decoration:none;
             }
+        }
+    }
+    &.statment-tables{
+        td>i.icon{
+            color:@quaternary-text;
+            margin-left:@6px;
+            vertical-align:middle;
         }
     }
 }

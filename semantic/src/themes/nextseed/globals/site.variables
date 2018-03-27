@@ -110,6 +110,7 @@
 @h3 : unit((18 / 14), rem);
 @h4 : unit((15 / 14), rem);
 @h5 : unit((14 / 14), rem);
+@h6 : unit((13 / 14), rem);
 
 /*--------------
    Form Input
@@ -181,7 +182,7 @@
 
 @linkColor           : @theme-primary;
 @linkUnderline       : none;
-@linkHoverColor      : darken(saturate(@linkColor, 20), 15, relative);
+@linkHoverColor      : @theme-primary-darken;
 @linkHoverUnderline  : @linkUnderline;
 
 /*-------------------
@@ -539,7 +540,7 @@
 
 /* Header Spacing */
 @headerTopMargin    : ~"calc(2rem - "@headerLineHeightOffset~")";
-@headerBottomMargin : 1rem;
+@headerBottomMargin : 1.5rem;
 @headerMargin       : @headerTopMargin 0em @headerBottomMargin;
 
 /* Minimum Mobile Width */
@@ -643,6 +644,7 @@
 @62px : unit( (62 / @emSize), rem);
 @63px : unit( (63 / @emSize), rem);
 @64px : unit( (64 / @emSize), rem);
+@70px : unit( (70 / @emSize), rem);
 
 @relative1px  : unit( (1 / @emSize), em);
 @relative2px  : unit( (2 / @emSize), em);
@@ -1002,33 +1004,33 @@
         Custom variables
 -------------------------------*/
 
-// @font-name: "San Francisco Display Medium";
-// @font-family: @font-name, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-
 //  THEME BASE COLORS
 @theme-primary:#A9D943;
-@theme-primary-darken:darken(@theme-primary, 15%);                //  #81AD23 ~ 85B02B
+@theme-primary-darken:darken(@theme-primary, 15%);					//  #81AD23 ~ 85B02B
 
 //  BACKGROUND COLORS
 @dark-bg-color:#424242;
-@darken-bg-color:darken(@dark-bg-color, 4%);                  //  #383838       (when base = 424242)
-@darker-bg-color:darken(@dark-bg-color, 11%);                 //  #262626       (when base = 424242)
+@darken-bg-color:darken(@dark-bg-color, 4%);				    		//  #383838           (when base = 424242)
+@darker-bg-color:darken(@dark-bg-color, 11%);			    			//  #262626           (when base = 424242)
 
 @light-bg-color:#F7F7F7;
-@lighten-bg-color:lighten(@light-bg-color, 1%);                 //  #FAFAFA       (when base = F7F7F7)
-@lighter-bg-color:lighten(@light-bg-color, 4%);                 //  #FFFFFF       (when base = F7F7F7)
+@lighten-bg-color:lighten(@light-bg-color, 1%);			  			//  #FAFAFA           (when base = F7F7F7)
+@lighter-bg-color:lighten(@light-bg-color, 4%);			  			//  #FFFFFF           (when base = F7F7F7)
 
 //  TEXT COLORS
 @primary-text:#303030;
-@secondary-text:lighten(@primary-text, 12%);                  //  #4F4F4F       (when base = 303030)
-@tertiary-text:lighten(@primary-text, 32%);                   //  #828282       (when base = 303030)
-@quaternary-text:lighten(@primary-text, 41%);                 //  #999999 ~ 989898  (when base = 303030)
+@secondary-text:lighten(@primary-text, 12%);			    			//  #4F4F4F           (when base = 303030)
+@tertiary-text:lighten(@primary-text, 32%);					     		//  #828282           (when base = 303030)
+@quaternary-text:lighten(@primary-text, 41%);				     		//  #999999 ~ 989898  (when base = 303030)
 @inverse-text:#FFFFFF;
-@inverse-secondary-text:darken(@inverse-text, 51%);               //  #7D7D7D       (when base = 303030)
+@inverse-secondary-text:darken(@inverse-text, 51%);					//  #7D7D7D           (when base = 303030)
+
+@border-color:lighten(@primary-text, 69%);                  //  #E0E0E0           (when base = 303030)
+@border-light:lighten(@primary-text, 76%);                  //  #F2F2F2           (when base = 303030)
 
 //  HIGHLIGHT COLORS
-@highlight-primary:#EB5757;                           //  Red
-@highlight-secondary:#F2994A;                         //  Orange
-@highlight-tertiary:#27AE60;                          //  Green
-@highlight-quaternary:#2D9CDB;                          //  Sky-Blue 
-@highlight-quinary:#9B51E0;                           //  Violet
+@highlight-primary:#EB5757;										          	//  Red
+@highlight-secondary:#F2994A;	          									//  Orange
+@highlight-tertiary:#27AE60;						          				//  Green
+@highlight-quaternary:#2D9CDB;						        				//  Sky-Blue 
+@highlight-quinary:#9B51E0;			          								//  Violet

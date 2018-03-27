@@ -7,6 +7,7 @@ import Logo from '../../assets/images/nextseed_logo_color.svg';
 
 const UserNavigation = (props) => {
   const toggleNotification = () => uiStore.updateLayoutState('notificationPanel');
+  const loadAuthModule = state => uiStore.setAuthWizardStep(state);
 
   if (props.currentUser) {
     return (
@@ -27,8 +28,8 @@ const UserNavigation = (props) => {
   return (
     <Dropdown item simple text="Log In or Sign Up">
       <Dropdown.Menu>
-        <Dropdown.Item as={NavLink} to="/login">Log In</Dropdown.Item>
-        <Dropdown.Item as={NavLink} to="/register">Register</Dropdown.Item>
+        <Dropdown.Item onClick={() => loadAuthModule('Login')}>Log In</Dropdown.Item>
+        <Dropdown.Item onClick={() => loadAuthModule('SignupInitial')}>Register</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

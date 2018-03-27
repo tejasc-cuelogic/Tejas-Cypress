@@ -2031,10 +2031,10 @@
          Theme Overrides
 *******************************/
 
-.compact .ui.grid {
+.compact > .ui.grid {
   margin: 0;
 }
-.compact .ui.grid > .column:not(.row) {
+.compact > .ui.grid > .column:not(.row) {
   padding: 0;
 }
 

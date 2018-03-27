@@ -55,8 +55,8 @@
 .ui.form .field > label {
   display: block;
   margin: 0em 0em 0.28571429rem 0em;
-  color: #303030;
-  font-size: 0.92857143em;
+  color: #999999;
+  font-size: 1rem;
   font-weight: 500;
   text-transform: none;
 }
@@ -755,8 +755,8 @@
 }
 .ui.form .grouped.fields > label {
   margin: 0em 0em 0.28571429rem 0em;
-  color: #303030;
-  font-size: 0.92857143em;
+  color: #999999;
+  font-size: 1rem;
   font-weight: 500;
   text-transform: none;
 }
@@ -990,9 +990,9 @@
   margin-top: 0em;
   margin-bottom: 0em;
   vertical-align: baseline;
-  font-size: 0.92857143em;
+  font-size: 1rem;
   font-weight: 500;
-  color: #303030;
+  color: #999999;
   text-transform: none;
 }
 
@@ -1072,75 +1072,79 @@
          Theme Overrides
 *******************************/
 
-.form-card.editable {
+.card.editable {
   position: relative;
 }
-.form-card.editable.editing {
+.card.editable.editing {
   z-index: 2;
 }
-.form-card.editable .actions {
+.card.editable .actions {
   position: absolute;
   top: 20px;
   right: 30px;
 }
-.form-card.editable .actions a {
+.card.editable .actions .button {
+  padding: 0.5rem 1.5rem 0.5rem;
+  text-transform: uppercase;
+}
+.card.editable .actions a {
   margin: 0 1rem;
-  font-size: 0.928571em;
-  line-height: 1.428571rem;
+  font-size: 0.92857143rem;
+  line-height: 1.42857143rem;
   font-weight: 500;
   text-transform: uppercase;
   color: #A9D943;
 }
-.form-card.editable .actions a:last-child {
+.card.editable .actions a:last-child {
   margin-right: 0;
 }
-.form-card.editable .actions a:hover,
-.form-card.editable .actions a:focus,
-.form-card.editable .actions a:active {
+.card.editable .actions a:hover,
+.card.editable .actions a:focus,
+.card.editable .actions a:active {
   color: #97ca29;
 }
-.form-card.editable .actions a.negative {
+.card.editable .actions a.negative {
   color: #999999;
 }
-.form-card.editable .actions a.negative:hover,
-.form-card.editable .actions a.negative:focus,
-.form-card.editable .actions a.negative:active {
+.card.editable .actions a.negative:hover,
+.card.editable .actions a.negative:focus,
+.card.editable .actions a.negative:active {
   color: #848484;
 }
-.form-card.editable .ui.form .fields {
+.card.editable .ui.form .fields {
   margin: 0em;
-  padding: 1em 0;
+  padding: 0.5em 0;
 }
-.form-card.editable .ui.form .fields:nth-child(odd) {
+.card.editable .ui.form .fields:nth-child(odd) {
   background-color: #F7F7F7;
 }
-.form-card.editable .ui.form .fields .field {
+.card.editable .ui.form .fields .field {
   padding: 0 1em;
 }
-.form-card.editable .ui.form .ui.label {
-  font-size: 0.928571em;
+.card.editable .ui.form .ui.label {
+  font-size: 0.92857143rem;
   font-weight: 400;
-  line-height: 1.428571rem;
+  line-height: 1.42857143rem;
   color: #999999;
-  padding: 0;
+  padding: 0.5em 0;
   background-color: transparent;
 }
-.form-card.editable .ui.form input:not([type]),
-.form-card.editable .ui.form input[type=date],
-.form-card.editable .ui.form input[type=datetime-local],
-.form-card.editable .ui.form input[type=email],
-.form-card.editable .ui.form input[type=file],
-.form-card.editable .ui.form input[type=number],
-.form-card.editable .ui.form input[type=password],
-.form-card.editable .ui.form input[type=search],
-.form-card.editable .ui.form input[type=tel],
-.form-card.editable .ui.form input[type=text],
-.form-card.editable .ui.form input[type=time],
-.form-card.editable .ui.form input[type=url] {
+.card.editable .ui.form input:not([type]),
+.card.editable .ui.form input[type=date],
+.card.editable .ui.form input[type=datetime-local],
+.card.editable .ui.form input[type=email],
+.card.editable .ui.form input[type=file],
+.card.editable .ui.form input[type=number],
+.card.editable .ui.form input[type=password],
+.card.editable .ui.form input[type=search],
+.card.editable .ui.form input[type=tel],
+.card.editable .ui.form input[type=text],
+.card.editable .ui.form input[type=time],
+.card.editable .ui.form input[type=url] {
   font-weight: 500;
-  line-height: 1.428571rem;
+  line-height: 1.42857143rem;
   color: #303030;
-  padding: 0 1em;
+  padding: 0.5em 0;
   border-width: 0;
   background-color: transparent;
 }

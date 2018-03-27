@@ -29,71 +29,75 @@ export default class ResetPassword extends React.Component {
     const { errors } = this.props.uiStore;
 
     return (
-      <div className="login-form">
-        <Header as="h1" textAlign="center">Reset Password</Header>
-        <p className="note">The verification code has been sent to your registered email address</p>
-        <Grid
-          textAlign="center"
-          verticalAlign="middle"
-        >
-          <Grid.Column>
-            <Form error onSubmit={this.handleSubmitForm}>
-              <div stacked>
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Password"
-                  name="password"
-                  type="password"
-                  value={values.password.value}
-                  onChange={this.handleInputChange}
-                  error={!!values.password.error}
-                />
-                <FieldError error={values.password.error} />
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Verify Password"
-                  name="verify"
-                  type="password"
-                  value={values.verify.value}
-                  onChange={this.handleInputChange}
-                  error={!!values.verify.error}
-                />
-                <FieldError error={values.verify.error} />
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Verification Code"
-                  name="code"
-                  value={values.code.value}
-                  onChange={this.handleInputChange}
-                  error={!!values.code.error}
-                />
-                <FieldError error={values.code.error} />
-                <Button
-                  fluid
-                  color="green"
-                  disabled={!this.props.authStore.canRegister}
-                >
-                  Reset Password
-                </Button>
-                {errors &&
-                  <Message error textAlign="left">
-                    <ListErrors errors={[errors.message]} />
-                  </Message>
-                }
-              </div>
-            </Form>
-            <Divider section />
-            <Message>
-              <p><Link to="login">Remembered password?</Link></p>
-            </Message>
-          </Grid.Column>
-        </Grid>
+      <div className="ui vertical segment content">
+        <div className="ui container">
+          <div className="login-form">
+            <Header as="h1" textAlign="center">Reset Password</Header>
+            <p className="note">The verification code has been sent to your registered email address</p>
+            <Grid
+              textAlign="center"
+              verticalAlign="middle"
+            >
+              <Grid.Column>
+                <Form error onSubmit={this.handleSubmitForm}>
+                  <div stacked>
+                    <Form.Input
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      placeholder="Password"
+                      name="password"
+                      type="password"
+                      value={values.password.value}
+                      onChange={this.handleInputChange}
+                      error={!!values.password.error}
+                    />
+                    <FieldError error={values.password.error} />
+                    <Form.Input
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      placeholder="Verify Password"
+                      name="verify"
+                      type="password"
+                      value={values.verify.value}
+                      onChange={this.handleInputChange}
+                      error={!!values.verify.error}
+                    />
+                    <FieldError error={values.verify.error} />
+                    <Form.Input
+                      fluid
+                      icon="lock"
+                      iconPosition="left"
+                      placeholder="Verification Code"
+                      name="code"
+                      value={values.code.value}
+                      onChange={this.handleInputChange}
+                      error={!!values.code.error}
+                    />
+                    <FieldError error={values.code.error} />
+                    <Button
+                      fluid
+                      color="green"
+                      disabled={!this.props.authStore.canRegister}
+                    >
+                      Reset Password
+                    </Button>
+                    {errors &&
+                      <Message error textAlign="left">
+                        <ListErrors errors={[errors.message]} />
+                      </Message>
+                    }
+                  </div>
+                </Form>
+                <Divider section />
+                <Message>
+                  <p><Link to="login">Remembered password?</Link></p>
+                </Message>
+              </Grid.Column>
+            </Grid>
+          </div>
+        </div>
       </div>
     );
   }

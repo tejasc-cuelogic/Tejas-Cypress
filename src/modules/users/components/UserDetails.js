@@ -5,10 +5,10 @@ import { Grid, Icon, Form, Input, Label, Button } from 'semantic-ui-react';
 const userDetails = () => (
   <div className="content-spacer">
     <div className="overlay editing" />
-    <Grid columns={1}>
+    <Grid columns={1} stackable>
       <Grid.Row>
         <Grid.Column>
-          <div className="form-card editable">
+          <div className="form-card card editable">
             <h3>Names</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
@@ -17,7 +17,7 @@ const userDetails = () => (
               <Link to="/edit"><Icon name="pencil" />Edit</Link>
             </div>
             <Form>
-              <Grid columns={2} divided>
+              <Grid columns={2} divided stackable>
                 <Grid.Row>
                   <Grid.Column>
                     <h4>Name</h4>
@@ -85,7 +85,7 @@ const userDetails = () => (
       </Grid.Row>
       <Grid.Row>
         <Grid.Column width={8}>
-          <div className="form-card editable editing">
+          <div className="form-card card editable editing">
             <h3>DOB & SSN</h3>
             <div className="actions">
               <Link to="/edit" className="negative">Cancel</Link>
@@ -113,7 +113,7 @@ const userDetails = () => (
           </div>
         </Grid.Column>
         <Grid.Column width={8}>
-          <div className="form-card editable">
+          <div className="form-card card editable">
             <h3>Email & Password</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
@@ -144,7 +144,7 @@ const userDetails = () => (
       </Grid.Row>
       <Grid.Row>
         <Grid.Column>
-          <div className="form-card editable">
+          <div className="form-card card editable">
             <h3>Addresses</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
@@ -153,7 +153,7 @@ const userDetails = () => (
               <Link to="/edit"><Icon name="pencil" />Edit</Link>
             </div>
             <Form>
-              <Grid columns={2} divided>
+              <Grid columns={2} divided stackable>
                 <Grid.Row>
                   <Grid.Column>
                     <h4>Residence Address</h4>
@@ -253,7 +253,7 @@ const userDetails = () => (
       </Grid.Row>
       <Grid.Row>
         <Grid.Column width={8}>
-          <div className="form-card editable">
+          <div className="form-card card editable">
             <h3>Phone Numbers</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
