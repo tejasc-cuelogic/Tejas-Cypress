@@ -17,7 +17,22 @@ const conditionalRequire = {
   maximumOfferingAmount: 'overSubscriptionAccepted',
 };
 
-// TODO: make class in such way that methods should not be dependent on any stores...
+/**
+ * @desc Validation class for form inputs
+ * @function $validateRegisterField
+ * @function $validateFilerInfoField
+ * @function $validateIssuerInfoField
+ * @function $validateOfferingInfoField
+ * @function $validateAnnualReportField
+ * @function $validateSignatureInfo
+ * @function $validateRegisterForm
+ * @function $validateNewUserField
+ * @function $validateNewOfferingInfoField
+ * @function $validateXmlFormData
+ * @function $formValidationErrors
+ * @todo make class in such way that methods should not be dependent on any stores...
+ * @todo Validate create new user form on click of submit button from admin panel
+ */
 export class Validation {
   /**
   * @desc Validates single field on registration form
@@ -183,8 +198,6 @@ export class Validation {
     });
     return newData;
   }
-
-  // TODO: Validate create new user form on click of submit button from admin panel
 
   // Private Methods starts here
 
