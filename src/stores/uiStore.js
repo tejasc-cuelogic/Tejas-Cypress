@@ -27,7 +27,6 @@ export class UiStore {
   @observable openAccordion = [];
   @observable dropdownLoader = false;
   @observable authWizardStep = undefined;
-  @observable openAccordion = '';
 
   @action
   setModalStatus(status) {
