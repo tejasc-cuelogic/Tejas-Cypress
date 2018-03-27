@@ -11,6 +11,11 @@ import Helper from '../helper/utility';
  * @desc All actions that admin has to perform
  *       IMP: All these actions need admin creds that are being set from
  *       Auth::setAdminAccess from auth actions
+ * @function $listUsers
+ * @function $createNewUser
+ * @function $deleteUser
+ * @function $updateUserAttributes
+ * @function $searchUser
  */
 export class Admin {
   awsCognitoISP = null;
@@ -18,9 +23,9 @@ export class Admin {
   /**
    * @desc List users in cognito from whatever options we have passed.
    * @param $options options by which users have to be filtered out
+   * @todo Pass pagination token and other params as require.
+   * @see https://github.com/CassetteRocks/react-infinite-scroller
    */
-  // TODO: Pass pagination token and other params as require.
-  // Visit https://github.com/CassetteRocks/react-infinite-scroller for same.
   listUsers = (options) => {
     uiStore.reset();
     // uiStore.setProgress();
@@ -94,7 +99,8 @@ export class Admin {
   /**
    * @desc Delete user from username that has been passed, username here is email id that user has
    *       given while signing up
-   * @param $username Username(email) of user which has to be deleted from cognito pool.
+   * @param $username @type String - Username(email) of user which has to be deleted from cognito
+   *        userpool.
    */
   deleteUser = (username) => {
     uiStore.reset();
@@ -162,8 +168,9 @@ export class Admin {
   }
 
   /**
-   * @desc Search user from provided querystring
-   * @param $queryString #String Query from which we have to search user in cognito userpool
+   * @desc Search user from provided querystring, internally this method calls @function $listUsers
+   *       with search parameters
+   * @param $queryString @type String - Query from which we have to search user in cognito userpool
    * @return List of user matching search query.
    */
   searchUser = (queryString) => {
@@ -179,8 +186,8 @@ export class Admin {
 
   /**
    * @desc Arrange user data that has been recieved from cognito.
-   * @param $userList #Array List of users that is recied from cognito API. UserList will be in
-   *        format below
+   * @param $userList @type Array - List of users that is recied from cognito API. UserList will be
+   *        in format below
    *        input for method consist for array with hashes in following format
    *        [
    *          {
@@ -195,7 +202,7 @@ export class Admin {
    *          {...},
    *          {...}
    *        ]
-   * @return Processed userList
+   * @return Processed userList @type Object
    *         {
    *            #username: {
    *              given_name: 'test',
@@ -228,7 +235,7 @@ export class Admin {
   /**
    * @desc Maps user attributes in format required by cognito API, method is being executed for new
    *       User, two extra parameters i.e. email and email verified are passed explicitly.
-   * @param $newUser #Boolean value to decide if method is being executed for new user
+   * @param $newUser @type boolean - value to decide if method is being executed for new user
    * @return Formatted user data
   */
   mappedUserAttributes = (newUser = true) => {
