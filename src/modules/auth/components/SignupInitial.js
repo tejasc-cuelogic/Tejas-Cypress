@@ -4,11 +4,11 @@ import { Modal, Button, Grid, Header, Icon } from 'semantic-ui-react';
 
 const signupInitial = props => (
   <Modal size="tiny" open>
-    <Modal.Header className="center-align">
+    <Modal.Header className="center-align signup-header">
       <Header as="h2">How can NextSeed Help you?</Header>
       <p>Do you want to invest or apply for funding?</p>
     </Modal.Header>
-    <Modal.Content className="signup-modal">
+    <Modal.Content className="signup-content">
       <Grid stackable textAlign="center">
         <Grid.Row columns={2}>
           <Grid.Column>
@@ -33,7 +33,7 @@ const signupInitial = props => (
         </Grid.Row>
       </Grid>
     </Modal.Content>
-    <Modal.Actions>
+    <Modal.Actions className="signup-actions">
       <p>Already have an account? <Link to="" onClick={() => props.setAuthWizardStep('Login')}>Log in</Link></p>
     </Modal.Actions>
   </Modal>

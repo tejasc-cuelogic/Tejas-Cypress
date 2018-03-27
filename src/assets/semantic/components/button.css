@@ -3677,6 +3677,136 @@
 
 
 /*******************************
+         Theme Overrides
+*******************************/
+
+.ui.button,
+.ui.buttons .button {
+  text-transform: uppercase;
+}
+.ui.button.rounded,
+.ui.buttons .button.rounded {
+  border-radius: 20px;
+}
+.ui.button.green,
+.ui.buttons .button.green {
+  background-color: #A9D943;
+}
+.ui.button.green:hover,
+.ui.buttons .button.green:hover,
+.ui.button.green:focus,
+.ui.buttons .button.green:focus,
+.ui.button.green:active,
+.ui.buttons .button.green:active {
+  background-color: #97ca29;
+}
+.ui.button + .button,
+.ui.buttons .button + .button {
+  margin-left: 0.71428571rem;
+}
+.ui.button.link-button,
+.ui.buttons .button.link-button {
+  padding: 0;
+  background-color: transparent !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+.ui.button.link-button:hover,
+.ui.buttons .button.link-button:hover,
+.ui.button.link-button:focus,
+.ui.buttons .button.link-button:focus,
+.ui.button.link-button:active,
+.ui.buttons .button.link-button:active {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+.ui.button.link-button.basic,
+.ui.buttons .button.link-button.basic {
+  color: #999999 !important;
+}
+.ui.button.link-button.basic:hover,
+.ui.buttons .button.link-button.basic:hover,
+.ui.button.link-button.basic:focus,
+.ui.buttons .button.link-button.basic:focus,
+.ui.button.link-button.basic:active,
+.ui.buttons .button.link-button.basic:active {
+  color: #bababa !important;
+}
+.ui.button.link-button.green,
+.ui.buttons .button.link-button.green {
+  color: #A9D943;
+}
+.ui.button.link-button.green:hover,
+.ui.buttons .button.link-button.green:hover,
+.ui.button.link-button.green:focus,
+.ui.buttons .button.link-button.green:focus,
+.ui.button.link-button.green:active,
+.ui.buttons .button.link-button.green:active {
+  color: #97ca29;
+}
+.ui.button.link-button.red,
+.ui.buttons .button.link-button.red {
+  color: #EB5757;
+}
+.ui.button.link-button.red:hover,
+.ui.buttons .button.link-button.red:hover,
+.ui.button.link-button.red:focus,
+.ui.buttons .button.link-button.red:focus,
+.ui.button.link-button.red:active,
+.ui.buttons .button.link-button.red:active {
+  color: #e62929;
+}
+.ui.inverted.button,
+.ui.inverted.buttons .button {
+  text-transform: none;
+}
+.ui.inverted.red.buttons .button,
+.ui.inverted.red.button {
+  color: #EB5757;
+  -webkit-box-shadow: 0px 0px 0px 2px #EB5757 inset !important;
+          box-shadow: 0px 0px 0px 2px #EB5757 inset !important;
+}
+.ui.inverted.red.buttons .button:hover,
+.ui.inverted.red.button:hover,
+.ui.inverted.red.buttons .button:focus,
+.ui.inverted.red.button:focus,
+.ui.inverted.red.buttons .button:active,
+.ui.inverted.red.button:active,
+.ui.inverted.red.buttons .button.active,
+.ui.inverted.red.button.active {
+  background-color: #EB5757;
+}
+.ui.inverted.green.buttons .button,
+.ui.inverted.green.button {
+  color: #A9D943;
+  -webkit-box-shadow: 0px 0px 0px 2px #A9D943 inset !important;
+          box-shadow: 0px 0px 0px 2px #A9D943 inset !important;
+}
+.ui.inverted.green.buttons .button:hover,
+.ui.inverted.green.button:hover,
+.ui.inverted.green.buttons .button:focus,
+.ui.inverted.green.button:focus,
+.ui.inverted.green.buttons .button:active,
+.ui.inverted.green.button:active,
+.ui.inverted.green.buttons .button.active,
+.ui.inverted.green.button.active {
+  background-color: #A9D943;
+}
+.ui.red.button,
+.ui.red.buttons .button {
+  background-color: #EB5757;
+}
+.ui.red.button:hover,
+.ui.red.buttons .button:hover,
+.ui.red.button:focus,
+.ui.red.buttons .button:focus,
+.ui.red.button:active,
+.ui.red.buttons .button:active {
+  background-color: #e14848;
+}
+
+
+/*******************************
          Site Overrides
 *******************************/
 

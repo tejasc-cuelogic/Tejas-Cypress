@@ -4,10 +4,10 @@ import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 
 const Login = props => (
   <Modal size="tiny" open>
-    <Modal.Header className="center-align">
+    <Modal.Header className="center-align signup-header">
       <Header as="h2">Log in to NextSeed</Header>
     </Modal.Header>
-    <Modal.Content className="signup-modal">
+    <Modal.Content className="signup-content">
       <Form>
         <Button color="facebook" size="large" fluid>
           Log in with Facebook
@@ -35,7 +35,7 @@ const Login = props => (
         </div>
       </Form>
     </Modal.Content>
-    <Modal.Actions>
+    <Modal.Actions className="signup-actions">
       <p>Dont have an account? <Link to="" onClick={() => props.setAuthWizardStep('SignupInitial')}>Sign up</Link></p>
     </Modal.Actions>
   </Modal>

@@ -35,7 +35,7 @@
 @headerBoxShadow: none;
 @headerFontWeight: bold;
 @headerFontFamily: @headerFont;
-@headerBorder:none;
+@headerBorder: 1px solid @borderColor;
 
 /* Content */
 @contentFontSize: 1em;
@@ -54,8 +54,8 @@
 @descriptionVerticalAlign: top;
 
 /* Modal Actions */
-@actionBorder: none;
-@actionBackground: @inverse-text;
+@actionBorder: 1px solid @borderColor;
+@actionBackground: @offWhite;
 @actionPadding: 1rem 1.5rem;
 @actionAlign: right;
 
