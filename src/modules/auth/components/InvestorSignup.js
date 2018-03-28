@@ -22,7 +22,7 @@ class InvestorSignup extends Component {
     validationActions.validateRegisterForm();
     if (this.props.authStore.canRegister) {
       authActions.register()
-        .then(() => this.props.history.replace('/confirm'))
+        .then(() => this.props.setAuthWizardStep('InvestorPersonalDetails'))
         .catch(() => {});
     }
   };
