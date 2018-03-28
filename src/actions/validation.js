@@ -17,12 +17,27 @@ const conditionalRequire = {
   maximumOfferingAmount: 'overSubscriptionAccepted',
 };
 
-// TODO: make class in such way that methods should not be dependent on any stores...
+/**
+ * @desc Validation class for form inputs
+ * @function $validateRegisterField
+ * @function $validateFilerInfoField
+ * @function $validateIssuerInfoField
+ * @function $validateOfferingInfoField
+ * @function $validateAnnualReportField
+ * @function $validateSignatureInfo
+ * @function $validateRegisterForm
+ * @function $validateNewUserField
+ * @function $validateNewOfferingInfoField
+ * @function $validateXmlFormData
+ * @function $formValidationErrors
+ * @todo make class in such way that methods should not be dependent on any stores...
+ * @todo Validate create new user form on click of submit button from admin panel
+ */
 export class Validation {
   /**
   * @desc Validates single field on registration form
-  * @param string $field - field name to be validated
-  * @param string $value - value that needs to be assigned to the field
+  * @param $field @type String - field name to be validated
+  * @param $value @type String/Object - value that needs to be assigned to the field
   * @returns null
   */
   validateRegisterField = (field, value) => {
@@ -41,8 +56,8 @@ export class Validation {
   /**
    * @desc validates filer information on XML form, this method validated field and stores an error
    *       in store if any.
-   * @param $field Field name or id which needs to be validated
-   * @param $value Value that user entered in input field on form
+   * @param $field @type String - Field name or id which needs to be validated
+   * @param $value @type String/Object - Value that user entered in input field on form
    * @return null
    */
   validateFilerInfoField = (field) => {
@@ -54,8 +69,8 @@ export class Validation {
   /**
    * @desc validates issuer information on XML form, this method validated field and stores an error
    *       in store if any.
-   * @param $field Field name or id which needs to be validated
-   * @param $value Value that user entered in input field on form
+   * @param $field @type String - Field name or id which needs to be validated
+   * @param $value @type String/Object - Value that user entered in input field on form
    * @return null
    */
   validateIssuerInfoField = (field) => {
@@ -70,8 +85,8 @@ export class Validation {
   /**
    * @desc validates offering information on XML form, this method validated field and stores an
    *       error in store if any.
-   * @param $field Field name or id which needs to be validated
-   * @param $value Value that user entered in input field on form
+   * @param $field @type String - Field name or id which needs to be validated
+   * @param $value @type String/Object - Value that user entered in input field on form
    * @return null
    */
   validateOfferingInfoField = (field) => {
@@ -86,8 +101,8 @@ export class Validation {
   /**
    * @desc validates Annual report information on XML form, this method validated field and stores
    *       an error in store if any.
-   * @param $field Field name or id which needs to be validated
-   * @param $value Value that user entered in input field on form
+   * @param $field @type String - Field name or id which needs to be validated
+   * @param $value @type String/Object - Value that user entered in input field on form
    * @return null
    */
   validateAnnualReportField = (field) => {
@@ -99,8 +114,8 @@ export class Validation {
   /**
    * @desc validates signature information on XML form, this method validated field and stores an
    *       error in store if any.
-   * @param $field Field name or id which needs to be validated
-   * @param $value Value that user entered in input field on form
+   * @param $field @type String - Field name or id which needs to be validated
+   * @param $value @type String/Object - Value that user entered in input field on form
    * @return null
    */
   validateSignatureInfo = (field) => {
@@ -111,9 +126,9 @@ export class Validation {
 
   /**
    * @desc validates Personal Signature and sets error to store if any
-   * @param $field Field name that needs to be validated
-   * @param $id Uniq Dom id of that field
-   * @param $value value that user entered in input element
+   * @param $field @type String - Field name that needs to be validated
+   * @param $id @type String - Uniq Dom id of that field
+   * @param $value @type String/Object - value that user entered in input element
    * @return null
    */
   validatePersonalSignature = (field, id, value) => {
@@ -141,8 +156,8 @@ export class Validation {
 
   /**
   * @desc Validates fields on new user creation form in admin panel
-  * @param string $field - field on form that need to be validated
-  * @param string $value - value that need to be set to field
+  * @param $field @type String - field on form that need to be validated
+  * @param $value @type String/Object - value that need to be set to field
   * @return null
   */
   validateNewUserField = (field, value) => {
@@ -156,8 +171,8 @@ export class Validation {
 
   /**
    * @desc Validates fields on new offering creation in business panel
-   * @param string $field - field on form that need to be validated
-   * @param string $value - value that need to be set to field
+   * @param $field @type String - field on form that need to be validated
+   * @param $value @type String/Object - value that need to be set to field
    * @return null
    */
   validateNewOfferingInfoField = (field, value) => {
@@ -168,8 +183,8 @@ export class Validation {
 
   /**
    * @desc Validated whole XML form and set an error to particular field in store.
-   * @param $data Complete XML form data that needs to be validated before submission.
-   * @return $newData with validation errors
+   * @param $data @type Object - All XML form data that needs to be validated before submission.
+   * @return $newData @type Object - Object with validation errors
    */
   validateXmlFormData = (data) => {
     const newData = {};
@@ -184,16 +199,14 @@ export class Validation {
     return newData;
   }
 
-  // TODO: Validate create new user form on click of submit button from admin panel
-
   // Private Methods starts here
 
   /**
    * @desc This method checks if error is present or not, if error is present it add error in store
    *       with the field name and if error is not present it removed error from store for provided
    *       field.
-   * @param $errors Error for particular field
-   * @param $field Name of field for which error is present
+   * @param $errors @type Object - Error for particular field
+   * @param $field @type String - Name of field for which error is present
    * @return null
    */
   formValidationErrors = (errors, field) => {
