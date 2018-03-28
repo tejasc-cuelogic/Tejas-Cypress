@@ -4,18 +4,7 @@ import validationService from './../services/validation';
 import authStore from './../stores/authStore';
 import businessStore from './../stores/businessStore';
 import userStore from './../stores/userStore';
-
-import { REGISTRATION } from './../constants/validation';
-
-const conditionalRequire = {
-  verify: 'password',
-  legalStatusOtherDesc: 'legalStatusForm',
-  securityOfferedOtherDesc: 'securityOfferedType',
-  noOfSecurityOffered: 'securityOfferedType',
-  overSubscriptionAllocationType: 'overSubscriptionAccepted',
-  descOverSubscription: 'overSubscriptionAllocationType',
-  maximumOfferingAmount: 'overSubscriptionAccepted',
-};
+import { REGISTRATION, CONDITIONAL_REQUIRE } from './../constants/validation';
 
 // TODO: make class in such way that methods should not be dependent on any stores...
 export class Validation {
@@ -32,7 +21,7 @@ export class Validation {
     // Extra parameter for password needed to check verify password matched or not
     const { errors } = validationService.validate(
       authStore.values[field],
-      authStore.values[conditionalRequire[field]],
+      authStore.values[CONDITIONAL_REQUIRE[field]],
     );
     // Set errors if any to store or else `undefined` will get set to variable.
     authStore.setError(field, errors && errors[field][0]);
@@ -61,7 +50,7 @@ export class Validation {
   validateIssuerInfoField = (field) => {
     const { errors } = validationService.validate(
       businessStore.issuerInformation[field],
-      businessStore.issuerInformation[conditionalRequire[field]],
+      businessStore.issuerInformation[CONDITIONAL_REQUIRE[field]],
     );
     this.formValidationErrors(errors, field);
     businessStore.setIssuerError(field, errors && errors[field][0]);
@@ -77,7 +66,7 @@ export class Validation {
   validateOfferingInfoField = (field) => {
     const { errors } = validationService.validate(
       businessStore.offeringInformation[field],
-      businessStore.offeringInformation[conditionalRequire[field]],
+      businessStore.offeringInformation[CONDITIONAL_REQUIRE[field]],
     );
     this.formValidationErrors(errors, field);
     businessStore.setOfferingError(field, errors && errors[field][0]);
@@ -176,7 +165,7 @@ export class Validation {
     _.map(data, (field) => {
       const { errors } = validationService.validate(
         field,
-        data[conditionalRequire[field.key]],
+        data[CONDITIONAL_REQUIRE[field.key]],
       );
       newData[field.key] = { ...field };
       newData[field.key].error = (errors && errors[field.key][0]);
