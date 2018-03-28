@@ -19792,6 +19792,12 @@ ol.ui.horizontal.list li:before,
   display: block;
 }
 
+.ui.form p.field-error {
+  font-size: 0.85714286rem;
+  color: #9F3A38;
+  margin: -2rem 0 0.71428571rem;
+}
+
 /*******************************
          Site Overrides
 *******************************/
