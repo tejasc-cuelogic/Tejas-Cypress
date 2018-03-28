@@ -3,7 +3,9 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 
+import FieldError from '../../../components/common/FieldError';
 import authActions from '../../../actions/auth';
+import validationActions from '../../../actions/validation';
 
 @inject('authStore', 'uiStore')
 @observer
@@ -12,7 +14,7 @@ class Login extends Component {
     this.props.uiStore.clearErrors();
   }
 
-  handleInputChange = (e, { name, value }) => this.props.authStore.setValue(name, value);
+  handleInputChange = (e, { name, value }) => validationActions.validateLoginField(name, value);
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.login()
@@ -49,7 +51,9 @@ class Login extends Component {
               name="email"
               value={values.email.value}
               onChange={this.handleInputChange}
+              error={!!values.email.error}
             />
+            <FieldError error={values.email.error} />
             <Form.Input
               fluid
               label="Password"
@@ -58,7 +62,9 @@ class Login extends Component {
               name="password"
               value={values.password.value}
               onChange={this.handleInputChange}
+              error={!!values.password.error}
             />
+            <FieldError error={values.password.error} />
             <div className="center-align">
               <Button circular color="green" onClick={() => this.props.setAuthWizardStep('InvestorPersonalDetails')} size="large">Log in</Button>
             </div>

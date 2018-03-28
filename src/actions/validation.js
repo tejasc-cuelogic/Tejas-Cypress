@@ -207,6 +207,21 @@ export class Validation {
     }
   }
 
+  /**
+  * @desc Validates fields on login
+  * @param string $field - field on form that need to be validated
+  * @param string $value - value that need to be set to field
+  * @return null
+  */
+  validateLoginField = (field, value) => {
+    // First set value to authStore
+    authStore.setValue(field, value);
+    // Vaidate whether field value is valid
+    const { errors } = validationService.validate(authStore.values[field]);
+    // Set errors if any to store or else `undefined` will get set to variable.
+    authStore.setError(field, errors && errors[field][0]);
+  }
+
   // Private Methods ends here
 }
 

@@ -22,7 +22,8 @@ class InvestorSignup extends Component {
     validationActions.validateRegisterForm();
     if (this.props.authStore.canRegister) {
       authActions.register()
-        .then(() => this.props.history.replace('/confirm'))
+        // .then(() => this.props.history.replace('/confirm'))
+        .then(() => this.props.setAuthWizardStep('InvestorPersonalDetails'))
         .catch(() => {});
     }
   };
@@ -88,7 +89,13 @@ class InvestorSignup extends Component {
             />
             <FieldError error={values.password.error} />
             <div className="center-align">
-              <Button circular color="green" onClick={() => this.props.setAuthWizardStep('InvestorPersonalDetails')} size="large">Register</Button>
+              <Button
+                circular
+                color="green"
+                disabled={!this.props.authStore.canRegister}
+                size="large"
+              >Register
+              </Button>
             </div>
           </Form>
         </Modal.Content>
