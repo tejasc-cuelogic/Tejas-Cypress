@@ -16,6 +16,19 @@ import adminStore from '../stores/adminStore';
 import uiStore from '../stores/uiStore';
 import Helper from '../helper/utility';
 
+/**
+ * @desc Class for all authorization actions
+ * @constructor Set cognito userPool.
+ * @function $verifySession - verifies session if token is present in local storage
+ * @function $setAdminAccess - sets admin access if user has admin role.
+ * @function $login - Method for user login
+ * @function $register - Registers new user
+ * @function $resetPassword - reset password for user
+ * @function $setNewPassword - Sets password for newly created user from admin section
+ * @function $changePassword - Changes password for user
+ * @function $confirmCode - Confirms user after registration
+ * @function $logout - Logs out user
+ */
 export class Auth {
   defaultRole = 'investor';
   userPool = null;
@@ -28,6 +41,11 @@ export class Auth {
     });
   }
 
+  /**
+   * @desc after refresh or coming to page after some time method verify if session is valid or not
+   *       if token is present in browsers local storage, also internally set admin access to user
+   *       if user has `admin` role.
+   */
   verifySession = () => {
     uiStore.reset();
     uiStore.setAppLoader(true);
@@ -86,6 +104,11 @@ export class Auth {
     );
   };
 
+  /**
+   * @desc This method sets admin access to user if user has admin role
+   * @param $jwtToekn @type string Token that is returned after verifying session or logging in.
+   * @return AWS Creds
+   */
   setAWSAdminAccess = (jwtToken) => {
     // Create a object for the Identity pool and pass the appropriate paramenters to it
     const identityPoolDetails = {
@@ -105,6 +128,11 @@ export class Auth {
     });
   }
 
+  /**
+   * @desc Logs in user from username and password that user has entered. Fetches username and
+   *       password from authStore.
+   * @return null
+   */
   login() {
     uiStore.reset();
     uiStore.setProgress();
@@ -157,6 +185,10 @@ export class Auth {
       });
   }
 
+  /**
+   * @desc Registers new user. Fetches required data from authStore.
+   * @return null.
+   */
   register() {
     uiStore.reset();
     uiStore.setProgress();
@@ -252,6 +284,12 @@ export class Auth {
       });
   }
 
+  /**
+   * @desc Method is being called when user clicks on forgot password, which internally sends code
+   *       required for changing password. On successfull completion user gets redirected to change
+   *       password page.
+   * @return null
+   */
   resetPassword() {
     uiStore.reset();
     uiStore.setProgress();
@@ -282,6 +320,10 @@ export class Auth {
       });
   }
 
+  /**
+   * @desc Method changes password after first login for new user created from admin panel
+   * @return null
+   */
   setNewPassword() {
     uiStore.reset();
     uiStore.setProgress();
@@ -311,6 +353,10 @@ export class Auth {
       });
   }
 
+  /**
+   * @desc Changes user password. Method gets called in success flow of forgot password
+   * @return null.
+   */
   changePassword() {
     uiStore.reset();
     uiStore.setProgress();
@@ -345,6 +391,11 @@ export class Auth {
       });
   }
 
+  /**
+   * @desc Confirms code that user gets on email on successfull registration
+   * @return null
+   * @todo Remove this method as new user who is registering will be auto confirmed.
+   */
   confirmCode() {
     uiStore.reset();
     uiStore.setProgress();
@@ -374,6 +425,10 @@ export class Auth {
       });
   }
 
+  /**
+   * @desc Logs out user and clears all tokens stored in browser's local storage
+   * @return null
+   */
   logout = () => (
     new Promise((res) => {
       commonStore.setToken(undefined);
@@ -392,6 +447,11 @@ export class Auth {
     message: err.message,
   });
 
+  /**
+   * @desc Method replaces all snake case keys to camel case of data recieved from cognito
+   * @param $data @type Object - Data with keys in snake case format
+   * @return $newData @type Object - Data with keys in camel case format
+   */
   mapCognitoToken = (data) => {
     const mappedUser = data.reduce((obj, item) => {
       const key = camel(item.Name.replace(/^custom:/, ''));
@@ -402,6 +462,13 @@ export class Auth {
     return mappedUser;
   };
 
+  /**
+   * @desc Cognito stores role with key `custom:roles` while in app it is stored as `roles`. This
+   *       method removes key `custom:roles` and adds `roles` as required by keeping all other data
+   *       as it is.
+   * @param $data @type Object - data that is recieved after login or verifying session
+   * @return $newData @type Object - data in format needed by application.
+   */
   adjustRoles = (data) => {
     const newData = {};
     _.map(data, (val, key) => { (newData[camel(key)] = val); });
@@ -410,6 +477,11 @@ export class Auth {
     return newData;
   };
 
+  /**
+   * @desc Roles recieved from cognito is array in string format. This method parse those roles.
+   * @param $data @type Object - data that in key value format
+   * @return $newData @type Object - Clean and parsed data
+   */
   parseRoles = (data) => {
     const newData = data;
     newData.roles = (data.roles) ? JSON.parse(data.roles) : [];
