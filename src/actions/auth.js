@@ -199,6 +199,48 @@ export class Auth {
     })
       .then(() => {
         Helper.toast('Thanks! You have successfully signed up to the NextSeed.', 'success');
+        const authenticationDetails = new AWSCognito.AuthenticationDetails({
+          Username: authStore.values.email.value,
+          Password: authStore.values.password.value,
+        });
+
+        this.cognitoUser = new AWSCognito.CognitoUser({
+          Username: authStore.values.email.value,
+          Pool: this.userPool,
+        });
+        return new Promise((res, rej) => {
+          this.cognitoUser.authenticateUser(authenticationDetails, {
+            onSuccess: result => res({ data: result }),
+            newPasswordRequired: (result) => {
+              res({ data: result, action: 'newPassword' });
+            },
+            onFailure: err => rej(err),
+          });
+        })
+          .then((result) => {
+            authStore.setUserLoggedIn(true);
+            if (result.action && result.action === 'newPassword') {
+              authStore.setEmail(result.data.email);
+              authStore.setCognitoUserSession(this.cognitoUser.Session);
+              authStore.setNewPasswordRequired(true);
+            } else {
+              const { data } = result;
+              // Extract JWT from token
+              commonStore.setToken(data.idToken.jwtToken);
+              userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+              AWS.config.region = AWS_REGION;
+              if (userStore.isCurrentUserWithRole('admin')) {
+                this.setAWSAdminAccess(data.idToken.jwtToken);
+              }
+            }
+          })
+          .catch((err) => {
+            uiStore.setErrors(this.simpleErr(err));
+            throw err;
+          })
+          .finally(() => {
+            uiStore.setProgress(false);
+          });
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));

@@ -31,9 +31,13 @@ class InvestorSignup extends Component {
     if (this.props.authStore.canRegister) {
       authActions.register()
         .then(() => {
-          console.log('yoo');
-          this.props.history.replace('/confirm');
           this.props.setAuthWizardStep();
+          if (this.props.authStore.newPasswordRequired) {
+            this.props.history.push('/change-password');
+          } else {
+            this.props.authStore.reset();
+            this.props.history.replace('/app/dashboard');
+          }
         })
         .catch(() => { });
     }
@@ -48,14 +52,19 @@ class InvestorSignup extends Component {
 
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
-        <Modal.Header className="center-align">
+        <Modal.Header className="center-align signup-header">
           <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon name="arrow left" /></Link>
           <Header as="h2">
             Sign Up as&nbsp;
             {(this.props.authStore.signupFlow.type === 'investor') ? 'Investor' : 'Business Owner'}
           </Header>
         </Modal.Header>
-        <Modal.Content className="signup-modal">
+        <Modal.Content className="signup-content">
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
           <Form>
             <Button color="facebook" size="large" fluid>
               Sign up with Facebook
@@ -121,14 +130,9 @@ class InvestorSignup extends Component {
             <div className="center-align">
               <Button circular color="green" disabled={!this.props.authStore.canRegister} size="large">Register</Button>
             </div>
-            {errors &&
-              <Message error textAlign="left">
-                <ListErrors errors={[errors.message]} />
-              </Message>
-            }
           </Form>
         </Modal.Content>
-        <Modal.Actions>
+        <Modal.Actions className="signup-actions">
           {/* <p className="pull-left"><Link to="forgot-password">Forgot Password?</Link></p> */}
           <p>Already have an account? <Link to="" onClick={() => this.props.setAuthWizardStep('Login')}>Log in</Link></p>
         </Modal.Actions>
