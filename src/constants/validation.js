@@ -1,5 +1,6 @@
-// Validate only following fields from authStore in bulk validation after user submits data on
-// sign up form
+/**
+ * @desc Validate only following fields from authStore in bulk validation after user submits data on
+ */
 export const REGISTRATION = [
   'givenName',
   'familyName',
@@ -9,8 +10,10 @@ export const REGISTRATION = [
   'role',
 ];
 
-// Validate only following fields from userStore in bulk validation after admin submits data while
-// creating new user
+/**
+ * @desc Validate only following fields from userStore in bulk validation after admin submits data
+ *       while
+ */
 export const NEW_USER = [
   'givenName',
   'familyName',
@@ -18,3 +21,16 @@ export const NEW_USER = [
   'password',
   'roles',
 ];
+
+/**
+ * @desc Pass fields in values if fields in keys needs validation
+ */
+export const CONDITIONAL_REQUIRE = {
+  verify: 'password',
+  legalStatusOtherDesc: 'legalStatusForm',
+  securityOfferedOtherDesc: 'securityOfferedType',
+  noOfSecurityOffered: 'securityOfferedType',
+  overSubscriptionAllocationType: 'overSubscriptionAccepted',
+  descOverSubscription: 'overSubscriptionAllocationType',
+  maximumOfferingAmount: 'overSubscriptionAccepted',
+};
