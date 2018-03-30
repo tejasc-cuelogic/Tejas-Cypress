@@ -5,7 +5,6 @@ import { Modal, Button, Header, Icon, Form, Divider, Input, Popup } from 'semant
 const investorPersonalDetails = props => (
   <Modal size="tiny" open>
     <Modal.Header className="center-align signup-header">
-      <Link to="" onClick={() => props.setAuthWizardStep('investorSignup')} className="back-link"><Icon name="arrow left" /></Link>
       <Header as="h2">Hello James!</Header>
       <p>You’re almost at your personal dashboard</p>
       <Divider />
