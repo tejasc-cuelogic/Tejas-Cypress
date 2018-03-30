@@ -2,6 +2,9 @@ import request from 'superagent';
 import { API_ROOT } from '../constants/common';
 import commonStore from '../stores/commonStore';
 
+/**
+ * @desc Service to make asynchronous API calls from system
+ */
 export class Api {
   get = (url, payload) => (
     new Promise((resolve, reject) => {
