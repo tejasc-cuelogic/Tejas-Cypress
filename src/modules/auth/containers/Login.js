@@ -41,6 +41,11 @@ class Login extends Component {
           <Header as="h2">Log in to NextSeed</Header>
         </Modal.Header>
         <Modal.Content className="signup-modal">
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
           <Form>
             <Button color="facebook" size="large" fluid>
               Log in with Facebook
@@ -72,11 +77,6 @@ class Login extends Component {
             <div className="center-align">
               <Button circular color="green" size="large" disabled={canLogin}>Log in</Button>
             </div>
-            {errors &&
-              <Message error textAlign="left">
-                <ListErrors errors={[errors.message]} />
-              </Message>
-            }
           </Form>
         </Modal.Content>
         <Modal.Actions>
