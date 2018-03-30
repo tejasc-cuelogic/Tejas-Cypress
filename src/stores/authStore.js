@@ -22,6 +22,9 @@ export class AuthStore {
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
   @observable isUserLoggedIn = false;
+  @observable signupFlow = {
+    type: 'investor',
+  };
 
   @observable
   values = {
@@ -77,6 +80,11 @@ export class AuthStore {
 
   @computed get canRegister() {
     return _.isEmpty(_.filter(this.values, field => field.error));
+  }
+
+  @computed get canLogin() {
+    return _.isEmpty(this.values.email.value) || _.isEmpty(this.values.password.value)
+      || !!this.values.password.error || !!this.values.email.error;
   }
 
   @computed get canConfirm() {
@@ -185,6 +193,11 @@ export class AuthStore {
     userStore.forgetUser();
     return new Promise(res => res());
   };
+
+  @action
+  updatesignupFlow(key, value) {
+    this.signupFlow[key] = value;
+  }
 
   simpleErr = err => ({
     statusCode: err.statusCode,
