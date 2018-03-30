@@ -67,7 +67,7 @@ const XmlSubmission = observer((props) => {
             <Confirm
               header="Confirm"
               content="Are you sure you want to delete this XML submission?"
-              open={props.confirmBoxValues.entity === 'xml'}
+              open={props.confirmBoxValues.entity === 'xml' && filingId === props.confirmBoxValues.refId}
               onCancel={props.handleDeleteCancel}
               onConfirm={props.handleDeleteXMlSubmission}
               size="tiny"
@@ -76,7 +76,7 @@ const XmlSubmission = observer((props) => {
             <Confirm
               header="Confirm"
               content={props.confirmBoxValues.metaData.lockedStatus === true ? 'Are you sure you want to lock this XML submission?' : 'Are you sure you want to unlock this XML submission?'}
-              open={props.confirmBoxValues.entity === 'lockunlock'}
+              open={props.confirmBoxValues.entity === 'lockunlock' && filingId === props.confirmBoxValues.refId}
               onCancel={props.handleDeleteCancel}
               onConfirm={props.handleXMLSubmissionLockUnlock}
               size="tiny"

@@ -62,15 +62,6 @@ const FillingsList = observer((props) => {
           size="tiny"
           className="deletion"
         />
-        <Confirm
-          header="Alert!"
-          content="You can not delete this Filing as one of its XML Submission is locked."
-          open={props.confirmBoxValues.metaData.isAnyFilingXmlLocked}
-          onCancel={props.handleDeleteCancel}
-          onConfirm={props.handleDeleteFiling}
-          size="tiny"
-          className="deletion"
-        />
       </Accordion>
     );
   }
