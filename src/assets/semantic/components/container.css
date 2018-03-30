@@ -300,7 +300,7 @@ div.login-form ul.error-messages {
   margin: 0 0 0.5rem;
 }
 .page-header-section .sticky-notification {
-  position: fixed;
+  position: absolute;
   width: 50%;
   right: 5rem;
   top: 3rem;

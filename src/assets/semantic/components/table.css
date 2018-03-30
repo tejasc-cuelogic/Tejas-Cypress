@@ -1205,10 +1205,10 @@
 .ui.table a.action {
   font-size: 0.85714286rem;
   text-transform: uppercase;
-  color: #A9D943;
+  color: #772df9;
 }
 .ui.table a.action:hover {
-  color: #81ad23;
+  color: #5a07ec;
   text-decoration: none;
 }
 .ui.table.statment-tables td > i.icon {

@@ -180,9 +180,9 @@
        Links
 --------------------*/
 
-@linkColor           : @theme-primary;
+@linkColor           : @link-color;
 @linkUnderline       : none;
-@linkHoverColor      : @theme-primary-darken;
+@linkHoverColor      : @link-color-darken;
 @linkHoverUnderline  : @linkUnderline;
 
 /*-------------------
@@ -1024,6 +1024,9 @@
 @quaternary-text:lighten(@primary-text, 41%);				     		//  #999999 ~ 989898  (when base = 303030)
 @inverse-text:#FFFFFF;
 @inverse-secondary-text:darken(@inverse-text, 51%);					//  #7D7D7D           (when base = 303030)
+
+@link-color:#772df9;
+@link-color-darken:darken(@link-color, 10%);
 
 @border-color:lighten(@primary-text, 69%);                  //  #E0E0E0           (when base = 303030)
 @border-light:lighten(@primary-text, 76%);                  //  #F2F2F2           (when base = 303030)

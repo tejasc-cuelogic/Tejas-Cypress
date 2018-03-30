@@ -3,29 +3,29 @@
 *******************************/
 
 // .page-header-section{
-    .ui.horizontal.list{
-        .item{
-            font-size:@12px;
-            color:@inverse-text;
+.ui.horizontal.list{
+    .item{
+        font-size:@12px;
+        color:@inverse-text;
+    }
+    a.item{
+        color:@inverse-secondary-text;
+        &:hover, &:focus, &.active{
+            color:@theme-primary;
         }
-        a.item{
+    }
+    &.link{
+        > a.item{
+            font-size:@12px;
+            margin-left:@28px;
+            text-transform:uppercase;
             color:@inverse-secondary-text;
             &:hover, &:focus, &.active{
                 color:@theme-primary;
             }
         }
-        &.link{
-            > a.item{
-                font-size:@12px;
-                margin-left:@28px;
-                text-transform:uppercase;
-                color:@inverse-secondary-text;
-                &:hover, &:focus, &.active{
-                    color:@theme-primary;
-                }
-            }
-        }
     }
+}
 // }
 
 .tabular-wrap .ui.segment{
