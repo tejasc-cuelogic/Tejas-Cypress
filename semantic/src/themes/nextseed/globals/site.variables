@@ -180,9 +180,9 @@
        Links
 --------------------*/
 
-@linkColor           : @link-color;
+@linkColor           : @theme-primary;
 @linkUnderline       : none;
-@linkHoverColor      : @link-color-darken;
+@linkHoverColor      : @theme-primary-darken;
 @linkHoverUnderline  : @linkUnderline;
 
 /*-------------------
