@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Modal, Grid, Button, Header, Tab, Menu, Icon } from 'semantic-ui-react';
+import { Modal, Grid, Button, Header, Tab, Menu } from 'semantic-ui-react';
 
 const panes = [
   {
@@ -18,7 +17,7 @@ const panes = [
     ],
   },
   {
-    menuItem: <Menu.Item key="individual"><div className="account-tab"><div className="account-type small">E</div> Entity</div></Menu.Item>,
+    menuItem: <Menu.Item key="entity"><div className="account-tab"><div className="account-type small">E</div> Entity</div></Menu.Item>,
     render: () => [
       <Tab.Pane key="tab2">
         <p>Invest on NextSeed with a corporate, LLC or Trust investment account.<br /><br />
@@ -30,9 +29,9 @@ const panes = [
     ],
   },
   {
-    menuItem: <Menu.Item key="individual"><div className="account-tab"><div className="account-type small">R</div> IRA</div></Menu.Item>,
+    menuItem: <Menu.Item key="ira"><div className="account-tab"><div className="account-type small">R</div> IRA</div></Menu.Item>,
     render: () => [
-      <Tab.Pane>
+      <Tab.Pane key="tab3">
         <p>Begin investing in local businesses with a self-directed NextSeed IRA. Get the benefits
           of investing with a retirement account (Traditional and Roth IRA options available) while
           investing in this new asset class.<br /><br />
@@ -49,9 +48,8 @@ const panes = [
 ];
 
 const investmentChooseType = props => (
-  <Modal open closeIcon>
+  <Modal open closeIcon onClose={() => props.setDashboardWizardStep()}>
     <Modal.Header className="center-align signup-header">
-      <Link to="" onClick={() => props.setAuthWizardStep('InvestorPersonalDetails')} className="back-link"><Icon name="arrow left" /></Link>
       <Header as="h2">What type of Investment Account would you like to start?</Header>
       <p>Choose an account type</p>
     </Modal.Header>
@@ -67,10 +65,11 @@ const investmentChooseType = props => (
             stackable: true,
           }}
           panes={panes}
+          onTabChange={props.handleAccoutTypeChange}
         />
         <Grid.Row>
           <Grid.Column>
-            <Button circular color="green" onClick={() => props.setAuthWizardStep('InvestmentChooseType')} content="Accept" />
+            <Button circular color="green" onClick={() => props.setDashboardWizardStep('InvestmentChooseType')} content="Accept" />
           </Grid.Column>
         </Grid.Row>
       </Grid>

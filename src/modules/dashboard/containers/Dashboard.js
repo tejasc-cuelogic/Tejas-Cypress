@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Card, List, Header, Icon, Statistic, Button, Responsive } from 'semantic-ui-react';
-// import Logo from '../../../assets/images/ns-logo-small.svg';
+import DashboardWizard from './DashboardWizard';
 
+@inject('uiStore', 'accountStore')
+@observer
 class Invest extends Component {
+  handleAccoutTypeChange = (e, data) => {
+    this.props.accountStore.setAccountType(data.activeIndex);
+  }
+
   render() {
     return (
       <div>
@@ -57,7 +64,7 @@ class Invest extends Component {
                         </List.Item>
                         <List.Item>
                           <List.Icon name="circle thin large" />
-                          <List.Content verticalAlign="middle">Create your first NextSeed Account <Link as="a" to=""><strong>here</strong></Link></List.Content>
+                          <List.Content verticalAlign="middle">Create your first NextSeed Account <Link to="/app/dashboard" onClick={() => this.props.uiStore.setDashboardWizardStep('InvestmentChooseType')}><strong >here</strong></Link></List.Content>
                         </List.Item>
                       </List>
                     </Card.Description>
@@ -67,6 +74,11 @@ class Invest extends Component {
             </Grid.Row>
           </Grid>
         </div>
+        {this.props.uiStore.dashboardStep &&
+        <DashboardWizard
+          handleAccoutTypeChange={this.handleAccoutTypeChange}
+        />
+        }
       </div>
     );
   }
