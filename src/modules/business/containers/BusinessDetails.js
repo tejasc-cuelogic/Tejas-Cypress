@@ -25,7 +25,7 @@ export default class BusinessDetails extends React.Component {
   editBusinessModal = () => {
     this.props.businessStore.setEditBusinessMode(true);
     this.props.businessStore.resetNewOfferingInfo();
-    this.props.uiStore.setModalStatus(true);
+    this.props.uiStore.setModalStatus('BusinessForm');
   }
 
   confirmDelete = (e, {
