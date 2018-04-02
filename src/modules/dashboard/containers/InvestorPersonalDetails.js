@@ -11,6 +11,12 @@ import FieldError from '../../../components/common/FieldError';
 @inject('profileStore', 'uiStore', 'userStore')
 @observer
 export default class investorPersonalDetails extends Component {
+  componentWillMount() {
+    const { currentUser } = this.props.userStore;
+    this.props.profileStore.setProfileDetails('firstLegalName', currentUser.givenName);
+    this.props.profileStore.setProfileDetails('lastLegalName', currentUser.familyName);
+  }
+
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
     this.props.profileStore.resetProfileDetails();
