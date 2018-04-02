@@ -5,7 +5,7 @@ import { Grid, Card, Header, Icon } from 'semantic-ui-react';
 import PageHeaderSection from '../../../components/common/PageHeaderSection';
 import StickyNotification from '../components/StickyNotification';
 import AccountSetupChecklist from '../components/AccountSetupChecklist';
-import InvestorPersonalDetails from '../components/InvestorPersonalDetails';
+import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 
 @inject('uiStore', 'accountStore')
@@ -22,11 +22,16 @@ class Dashboard extends Component {
     const stepinfo = {
       value: 'Verify your identity',
       label: 'Complete all required information about yourself',
+      linkText: 'Verify me',
+      linkPath: 'InvestorPersonalDetails',
     };
     return (
       <div>
         <PageHeaderSection title="Dashboard">
-          <StickyNotification stepinfo={stepinfo} />
+          <StickyNotification
+            stepinfo={stepinfo}
+            setDashboardWizardSetup={this.setDashboardWizardSetup}
+          />
         </PageHeaderSection>
         <div className="content-spacer">
           <Header as="h3">Welcome to NextSeed!</Header>

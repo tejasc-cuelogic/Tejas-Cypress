@@ -13,7 +13,7 @@ class DashboardWizard extends Component {
   render() {
     const module = upperFirst(this.props.uiStore.dashboardStep);
     const DashboardModule = Loadable({
-      loader: () => import(`../components/${module}`),
+      loader: () => (module === 'InvestorPersonalDetails' ? import(`../containers/${module}`) : import(`../components/${module}`)),
       loading() {
         return <div>Loading...</div>;
       },

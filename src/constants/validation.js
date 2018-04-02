@@ -23,6 +23,22 @@ export const NEW_USER = [
 ];
 
 /**
+ * @desc Validate only following fields from profileStore in bulk validation after
+ *      user submits data
+ */
+export const PROFILE_DETAILS = [
+  'firstLegalName',
+  'lastLegalName',
+  'residentalStreet',
+  'city',
+  'state',
+  'zipCode',
+  'phoneNumber',
+  'dateOfBirth',
+  'ssn',
+];
+
+/**
  * @desc Pass fields in values if fields in keys needs validation
  */
 export const CONDITIONAL_REQUIRE = {

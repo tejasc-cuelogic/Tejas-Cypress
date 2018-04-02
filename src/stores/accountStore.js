@@ -12,7 +12,6 @@ export class AccountStore {
   @action
   setAccountType(type) {
     this.accountType = this.accountTypes[type];
-    console.log(this.accountType);
   }
 }
 

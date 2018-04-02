@@ -4,7 +4,8 @@ import validationService from './../services/validation';
 import authStore from './../stores/authStore';
 import businessStore from './../stores/businessStore';
 import userStore from './../stores/userStore';
-import { REGISTRATION, CONDITIONAL_REQUIRE } from './../constants/validation';
+import profileStore from './../stores/profileStore';
+import { REGISTRATION, PROFILE_DETAILS, CONDITIONAL_REQUIRE } from './../constants/validation';
 
 /**
  * @desc Validation class for form inputs
@@ -239,6 +240,34 @@ export class Validation {
     const { errors } = validationService.validate(authStore.values[field]);
     // Set errors if any to store or else `undefined` will get set to variable.
     authStore.setError(field, errors && errors[field][0]);
+  }
+
+  /**
+   * @desc Validates fields on profile details
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateProfileDetailsField = (field, value) => {
+    profileStore.setProfileDetails(field, value);
+    const { errors } = validationService.validate(profileStore.profileDetails[field]);
+    profileStore.setProfileError(field, errors && errors[field][0]);
+  }
+
+  /**
+  * @desc Validated complete Profile details form after clicking submit button
+  * @return null
+  */
+  validateProfileDetailsForm = () => {
+    _.map(profileStore.profileDetails, (value) => {
+      const { key } = value;
+      // Select only required values and exclude others from being checked
+      if (PROFILE_DETAILS.includes(key)) {
+        const { errors } = validationService.validate(value);
+        // Store errors to store if any or else `undefined` will get set to it
+        profileStore.setProfileError(key, errors && errors[key][0]);
+      }
+    });
   }
 
   // Private Methods ends here
