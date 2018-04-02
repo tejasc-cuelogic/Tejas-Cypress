@@ -154,6 +154,7 @@ export default class investorPersonalDetails extends Component {
                 <FieldError error={profileDetails.zipCode.error} />
               </Form.Field>
             </Form.Group>
+            {/* <FieldError error={profileDetails.residentalStreet.error} /> */}
             <Form.Group widths="equal">
               <Form.Field>
                 <label>
@@ -178,16 +179,19 @@ export default class investorPersonalDetails extends Component {
                 onChange={this.handleInputChange}
                 error={!!profileDetails.dateOfBirth.error}
               /> */}
-              <DatePicker
-                showMonthDropdown
-                showYearDropdown
-                placeholderText={profileDetails.dateOfBirth.label}
-                dateFormat="MM-DD-YYYY"
-                maxDate={moment()}
-                selected={profileDetails.dateOfBirth.value}
-                onChange={this.handleDateChange}
-              />
-              <FieldError error={profileDetails.dateOfBirth.error} />
+              <Form.Field>
+                <label>Date of Birth</label>
+                <DatePicker
+                  showMonthDropdown
+                  showYearDropdown
+                  placeholderText={profileDetails.dateOfBirth.label}
+                  dateFormat="MM-DD-YYYY"
+                  maxDate={moment()}
+                  selected={profileDetails.dateOfBirth.value}
+                  onChange={this.handleDateChange}
+                />
+                <FieldError error={profileDetails.dateOfBirth.error} />
+              </Form.Field>
             </Form.Group>
             <Form.Field>
               <label>
@@ -207,7 +211,7 @@ export default class investorPersonalDetails extends Component {
               <Button circular color="green" size="large" disabled={!this.props.profileStore.canSubmitProfileDetails}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Link to="" className="cancel-link">I’ll finish this later</Link>
+              <Button className="cancel-link">I’ll finish this later</Button>
             </div>
           </Form>
         </Modal.Content>

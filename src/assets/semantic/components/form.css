@@ -55,7 +55,7 @@
 .ui.form .field > label {
   display: block;
   margin: 0em 0em 0.28571429rem 0em;
-  color: #999999;
+  color: #000000;
   font-size: 1rem;
   font-weight: 500;
   text-transform: none;
@@ -755,7 +755,7 @@
 }
 .ui.form .grouped.fields > label {
   margin: 0em 0em 0.28571429rem 0em;
-  color: #999999;
+  color: #000000;
   font-size: 1rem;
   font-weight: 500;
   text-transform: none;
@@ -992,7 +992,7 @@
   vertical-align: baseline;
   font-size: 1rem;
   font-weight: 500;
-  color: #999999;
+  color: #000000;
   text-transform: none;
 }
 
@@ -1172,7 +1172,6 @@
   border-color: transparent transparent #828282;
 }
 .ui.form .error:not(.field) {
-  font-size: 0.85714286rem;
   color: #9F3A38;
 }
 .page-header-section .ui.input.inverted .icon {
@@ -1194,14 +1193,13 @@
   padding-left: 0;
   padding-right: 0;
 }
-.edgar-form .react-datepicker-wrapper,
-.edgar-form .react-datepicker-wrapper .react-datepicker__input-container {
+.react-datepicker-wrapper,
+.react-datepicker-wrapper .react-datepicker__input-container {
   display: block;
 }
 .ui.form p.field-error {
-  font-size: 0.85714286rem;
-  color: #9F3A38;
-  margin: -2rem 0 0.71428571rem;
+  font-size: 0.92857143rem;
+  color: #EB5757;
 }
 
 

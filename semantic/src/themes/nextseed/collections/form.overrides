@@ -104,7 +104,7 @@
         }
     }
     .error:not(.field){
-        font-size:@12px;
+        // font-size:@12px;
         color:@negativeTextColor;
     }
 }
@@ -137,15 +137,14 @@
     }
 }
 
-.edgar-form{
-    .react-datepicker-wrapper, .react-datepicker-wrapper .react-datepicker__input-container{
-        display:block;
-    }
+.react-datepicker-wrapper, .react-datepicker-wrapper .react-datepicker__input-container{
+display:block;
 }
+
 .ui.form{
     p.field-error{
-        font-size:@12px;
-        color:@negativeTextColor;
-        margin:-@28px 0 @10px;
+        font-size:@13px;
+        color:@highlight-primary;
+        // margin:-@28px 0 @10px;
     }
 }

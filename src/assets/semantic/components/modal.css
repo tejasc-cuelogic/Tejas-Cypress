@@ -671,13 +671,17 @@
 .ui.modal .content .ui.buttons .button.circular {
   min-width: 160px;
 }
-.ui.modal .content a.cancel-link {
+.ui.modal .content a.cancel-link,
+.ui.modal .content .button.cancel-link {
   margin: 1.5rem 0 0;
+  padding: 0;
   display: inline-block;
+  background: transparent;
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   letter-spacing: 1px;
   color: #999999;
+  text-transform: none;
 }
 .ui.modal .actions {
   font-size: 1rem;
@@ -699,8 +703,31 @@
 .ui.modal .ui.form .field {
   margin: 0 0 2rem;
 }
-.ui.modal .ui.form .field .ui.input input {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+.ui.modal .ui.form .field .ui.input input:not([type]),
+.ui.modal .ui.form .field input:not([type]),
+.ui.modal .ui.form .field .ui.input input[type=date],
+.ui.modal .ui.form .field input[type=date],
+.ui.modal .ui.form .field .ui.input input[type=datetime-local],
+.ui.modal .ui.form .field input[type=datetime-local],
+.ui.modal .ui.form .field .ui.input input[type=email],
+.ui.modal .ui.form .field input[type=email],
+.ui.modal .ui.form .field .ui.input input[type=file],
+.ui.modal .ui.form .field input[type=file],
+.ui.modal .ui.form .field .ui.input input[type=number],
+.ui.modal .ui.form .field input[type=number],
+.ui.modal .ui.form .field .ui.input input[type=password],
+.ui.modal .ui.form .field input[type=password],
+.ui.modal .ui.form .field .ui.input input[type=search],
+.ui.modal .ui.form .field input[type=search],
+.ui.modal .ui.form .field .ui.input input[type=tel],
+.ui.modal .ui.form .field input[type=tel],
+.ui.modal .ui.form .field .ui.input input[type=text],
+.ui.modal .ui.form .field input[type=text],
+.ui.modal .ui.form .field .ui.input input[type=time],
+.ui.modal .ui.form .field input[type=time],
+.ui.modal .ui.form .field .ui.input input[type=url],
+.ui.modal .ui.form .field input[type=url] {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding-left: 0;
   padding-right: 0;
   border-radius: 0;
@@ -709,6 +736,7 @@
 }
 .ui.modal .ui.form .field > label i.icon.help {
   margin-left: 0.5rem;
+  color: #999999;
 }
 .ui.modal .ui.form textarea {
   padding-left: 0;
