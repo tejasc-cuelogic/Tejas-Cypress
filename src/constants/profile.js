@@ -1,6 +1,13 @@
 import moment from 'moment';
 
 export const PROFILE_DETAILS = {
+  title: {
+    value: '',
+    key: 'title',
+    error: undefined,
+    rule: 'required',
+    label: 'Title',
+  },
   firstLegalName: {
     value: '',
     key: 'firstLegalName',
@@ -63,5 +70,42 @@ export const PROFILE_DETAILS = {
     error: undefined,
     rule: 'required',
     label: 'SSN',
+  },
+};
+
+export const PROFILE_DETAILS_TITLE = [
+  { key: 'Mr', value: 'Mr', text: 'Mr' },
+  { key: 'Ms', value: 'Ms', text: 'Ms' },
+  { key: 'Mrs', value: 'Mrs', text: 'Mrs' },
+];
+
+export const IDENTITY_QUESTIONS_FORM_VALUES = {
+  question1: {
+    value: '',
+    key: 'question1',
+    error: undefined,
+    rule: 'required',
+    label: 'In which city is Baker Street?',
+  },
+  question2: {
+    value: '',
+    key: 'question2',
+    error: undefined,
+    rule: 'required',
+    label: 'From whom did you purchase the property at Baker Street 221?',
+  },
+  question3: {
+    value: '',
+    key: 'question3',
+    error: undefined,
+    rule: 'required',
+    label: 'In which country have you lived?',
+  },
+  question4: {
+    value: '',
+    key: 'question4',
+    error: undefined,
+    rule: 'required',
+    label: 'Between 1979 and 1980, in which state you have lived?',
   },
 };

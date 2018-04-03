@@ -27,6 +27,7 @@ export const NEW_USER = [
  *      user submits data
  */
 export const PROFILE_DETAILS = [
+  'title',
   'firstLegalName',
   'lastLegalName',
   'residentalStreet',

@@ -3,10 +3,12 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import { Modal, Button, Header, Icon, Form, Divider, Input, Popup } from 'semantic-ui-react';
+import { Modal, Button, Header, Icon, Form, Divider, Input, Popup, Select } from 'semantic-ui-react';
+import InputMask from 'react-input-mask';
 
 import validationActions from './../../../actions/validation';
 import FieldError from '../../../components/common/FieldError';
+import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
 
 @inject('profileStore', 'uiStore', 'userStore')
 @observer
@@ -29,12 +31,20 @@ export default class investorPersonalDetails extends Component {
     validationActions.validateProfileDetailsField('dateOfBirth', date);
   }
 
+  handleMaskedInputChange = (e) => {
+    let maskedInputValue = e.target.value;
+    maskedInputValue = maskedInputValue.split('-').join('');
+    console.log(e.target.name, maskedInputValue);
+    validationActions.validateProfileDetailsField(e.target.name, maskedInputValue);
+  }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
-    validationActions.validateProfileDetailsForm();
-    if (this.props.profileStore.canSubmitProfileDetails) {
-      console.log(this.props.profileStore.profileDetails);
-    }
+    this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation');
+    // validationActions.validateProfileDetailsForm();
+    // if (this.props.profileStore.canSubmitProfileDetails) {
+    //   console.log(this.props.profileStore.profileDetails);
+    // }
   }
 
   render() {
@@ -53,6 +63,22 @@ export default class investorPersonalDetails extends Component {
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
+              <Form.Field>
+                {/* eslint-disable */}
+                <label>
+                  {profileDetails.title.label}
+                </label>
+                <Select
+                  fluid
+                  placeholder={profileDetails.title.label}
+                  name={profileDetails.title.key}
+                  value={profileDetails.title.value}
+                  onChange={this.handleInputChange}
+                  error={!!profileDetails.title.error}
+                  options={PROFILE_DETAILS_TITLE}
+                />
+                <FieldError error={profileDetails.firstLegalName.error} />
+              </Form.Field>
               <Form.Field>
                 {/* eslint-disable */}
                 <label>
@@ -166,25 +192,17 @@ export default class investorPersonalDetails extends Component {
                 <label>
                   {profileDetails.phoneNumber.label}
                 </label>
-                <Input
-                  fluid
-                  placeholder={profileDetails.phoneNumber.label}
+                <InputMask 
                   name={profileDetails.phoneNumber.key}
                   value={profileDetails.phoneNumber.value}
-                  onChange={this.handleInputChange}
+                  onChange={this.handleMaskedInputChange}
                   error={!!profileDetails.phoneNumber.error}
+                  mask="999-999-9999" 
+                  maskChar=" " 
+                  alwaysShowMask={true}
                 />
                 <FieldError error={profileDetails.phoneNumber.error} />
               </Form.Field>
-              {/* <Form.Input
-                fluid
-                label={profileDetails.dateOfBirth.label}
-                placeholder={profileDetails.dateOfBirth.label}
-                name={profileDetails.dateOfBirth.key}
-                value={profileDetails.dateOfBirth.value}
-                onChange={this.handleInputChange}
-                error={!!profileDetails.dateOfBirth.error}
-              /> */}
               <Form.Field>
                 <label>Date of Birth</label>
                 <DatePicker
@@ -203,13 +221,14 @@ export default class investorPersonalDetails extends Component {
               <label>
                 {profileDetails.ssn.label}
               </label>
-              <Input
-                fluid
-                placeholder={profileDetails.ssn.label}
+              <InputMask
                 name={profileDetails.ssn.key}
                 value={profileDetails.ssn.value}
-                onChange={this.handleInputChange}
+                onChange={this.handleMaskedInputChange}
                 error={!!profileDetails.ssn.error}
+                mask="999-999-9999" 
+                maskChar=" " 
+                alwaysShowMask={true}
               />
               <FieldError error={profileDetails.ssn.error} />
             </Form.Field>

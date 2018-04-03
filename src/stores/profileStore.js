@@ -5,12 +5,15 @@ import uiStore from './uiStore';
 
 import {
   PROFILE_DETAILS,
+  IDENTITY_QUESTIONS_FORM_VALUES,
 } from '../constants/profile';
 
 export class ProfileStore {
   @observable profile = undefined;
 
   @observable profileDetails = { ...PROFILE_DETAILS }
+
+  @observable confirmIdentityQuestions = { ...IDENTITY_QUESTIONS_FORM_VALUES }
 
   @action loadProfile(username) {
     uiStore.setProgress(true);
@@ -54,6 +57,16 @@ export class ProfileStore {
   @computed
   get canSubmitProfileDetails() {
     return _.isEmpty(_.filter(this.profileDetails, field => field.error));
+  }
+
+  @action
+  setConfirmIdentityQuestions(field, value) {
+    this.confirmIdentityQuestions[field].value = value;
+  }
+
+  @action
+  setConfirmIdentityQuestionsError(field, error) {
+    this.confirmIdentityQuestions[field].error = error;
   }
 }
 export default new ProfileStore();
