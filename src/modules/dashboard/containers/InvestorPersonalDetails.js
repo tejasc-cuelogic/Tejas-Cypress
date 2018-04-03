@@ -217,7 +217,7 @@ export default class investorPersonalDetails extends Component {
               <Button circular color="green" size="large" disabled={!this.props.profileStore.canSubmitProfileDetails}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Button className="cancel-link">I’ll finish this later</Button>
+              <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>
             </div>
           </Form>
         </Modal.Content>
