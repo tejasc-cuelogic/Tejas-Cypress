@@ -4979,7 +4979,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 .ui.button,
 .ui.buttons .button {
-  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .ui.button.rounded,
@@ -5119,6 +5119,18 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 .ui.red.button:active,
 .ui.red.buttons .button:active {
   background-color: #e14848;
+}
+
+.ui.button.relaxed,
+.ui.buttons .button.relaxed {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+.ui.button.relaxed.very,
+.ui.buttons .button.relaxed.very {
+  padding-left: 4.57142857rem;
+  padding-right: 4.57142857rem;
 }
 
 /*******************************
@@ -18528,7 +18540,7 @@ ol.ui.horizontal.list li:before,
   display: block;
   margin: 0em 0em 0.28571429rem 0em;
   color: #000000;
-  font-size: 1rem;
+  font-size: 0.92857143rem;
   font-weight: 500;
   text-transform: none;
 }
@@ -19283,7 +19295,7 @@ ol.ui.horizontal.list li:before,
 .ui.form .grouped.fields > label {
   margin: 0em 0em 0.28571429rem 0em;
   color: #000000;
-  font-size: 1rem;
+  font-size: 0.92857143rem;
   font-weight: 500;
   text-transform: none;
 }
@@ -19552,7 +19564,7 @@ ol.ui.horizontal.list li:before,
   margin-top: 0em;
   margin-bottom: 0em;
   vertical-align: baseline;
-  font-size: 1rem;
+  font-size: 0.92857143rem;
   font-weight: 500;
   color: #000000;
   text-transform: none;
@@ -19794,6 +19806,35 @@ ol.ui.horizontal.list li:before,
 .ui.form p.field-error {
   font-size: 0.92857143rem;
   color: #EB5757;
+}
+
+.ui.modal .ui.form.file-uploader-inline .file-uploader {
+  height: 58px;
+  padding: 1rem;
+  border-radius: 0.28571429rem;
+  border: #7d7d7d 1px dashed;
+  position: relative;
+  color: #A9D943;
+  line-height: 2rem;
+  text-align: center;
+}
+
+.ui.modal .ui.form.file-uploader-inline .file-uploader .icon {
+  margin-right: 0.42857143rem;
+}
+
+.ui.modal .ui.form.file-uploader-inline .file-uploader > span {
+  color: #000000;
+}
+
+.ui.modal .ui.form.file-uploader-inline .file-uploader input[type=file] {
+  opacity: 0;
+  width: 100%;
+  height: 56px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
 }
 
 /*******************************
@@ -33578,16 +33619,6 @@ select.ui.dropdown {
   color: #81ad23;
 }
 
-.ui.modal .content .ui.button,
-.ui.modal .content .ui.buttons .button {
-  letter-spacing: 1px;
-}
-
-.ui.modal .content .ui.button:not(.circular),
-.ui.modal .content .ui.buttons .button:not(.circular) {
-  border-radius: 0;
-}
-
 .ui.modal .content .ui.button.large,
 .ui.modal .content .ui.buttons .button.large {
   font-size: 1rem;
@@ -33609,6 +33640,14 @@ select.ui.dropdown {
   letter-spacing: 1px;
   color: #999999;
   text-transform: none;
+}
+
+.ui.modal .content .ui.huge.input input[type=tel] {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  border: none;
+  background: #f2f2f2;
+  text-align: center;
+  margin-bottom: 0.71428571rem;
 }
 
 .ui.modal .actions {
@@ -33669,8 +33708,55 @@ select.ui.dropdown {
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
 
-.ui.modal .ui.form .field > label i.icon.help {
+.ui.modal .ui.form .field .ui.selection.dropdown {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  padding-left: 0.35714286rem;
+  padding-right: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
+}
+
+.ui.modal .ui.form .field .ui.selection.dropdown .icon {
+  padding-right: 0.35714286rem;
+}
+
+.ui.modal .ui.form .field .ui.selection.dropdown.active .menu {
+  border: none;
+}
+
+.ui.modal .ui.form .field .ui.selection.dropdown.active .menu > .item {
+  padding-left: 0.35714286rem !important;
+  padding-right: 0.35714286rem !important;
+}
+
+.ui.modal .ui.form .field.otp-field {
+  margin: 3rem 0;
+}
+
+.ui.modal .ui.form .field.otp-field label {
+  font-size: 1rem;
+}
+
+.ui.modal .ui.form .field.otp-field .ui.input > input {
+  max-width: 290px;
+  margin: 0 auto;
+  padding-left: 13px;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  letter-spacing: 38px;
+  border: none;
+  background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #e0e0e0), color-stop(0%, rgba(0, 0, 0, 0)));
+  background-image: -webkit-linear-gradient(right, #e0e0e0 75%, rgba(0, 0, 0, 0) 0%);
+  background-image: linear-gradient(to left, #e0e0e0 75%, rgba(0, 0, 0, 0) 0%);
+  background-position: bottom;
+  background-size: 51px 1px;
+  background-repeat: repeat-x;
+  background-position-x: 35px;
+}
+
+.ui.modal .ui.form label i.icon.help {
   margin-left: 0.5rem;
+  font-size: 1rem;
   color: #999999;
 }
 

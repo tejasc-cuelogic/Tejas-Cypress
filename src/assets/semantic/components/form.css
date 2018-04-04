@@ -56,7 +56,7 @@
   display: block;
   margin: 0em 0em 0.28571429rem 0em;
   color: #000000;
-  font-size: 1rem;
+  font-size: 0.92857143rem;
   font-weight: 500;
   text-transform: none;
 }
@@ -756,7 +756,7 @@
 .ui.form .grouped.fields > label {
   margin: 0em 0em 0.28571429rem 0em;
   color: #000000;
-  font-size: 1rem;
+  font-size: 0.92857143rem;
   font-weight: 500;
   text-transform: none;
 }
@@ -990,7 +990,7 @@
   margin-top: 0em;
   margin-bottom: 0em;
   vertical-align: baseline;
-  font-size: 1rem;
+  font-size: 0.92857143rem;
   font-weight: 500;
   color: #000000;
   text-transform: none;
@@ -1200,6 +1200,31 @@
 .ui.form p.field-error {
   font-size: 0.92857143rem;
   color: #EB5757;
+}
+.ui.modal .ui.form.file-uploader-inline .file-uploader {
+  height: 58px;
+  padding: 1rem;
+  border-radius: 0.28571429rem;
+  border: #7d7d7d 1px dashed;
+  position: relative;
+  color: #A9D943;
+  line-height: 2rem;
+  text-align: center;
+}
+.ui.modal .ui.form.file-uploader-inline .file-uploader .icon {
+  margin-right: 0.42857143rem;
+}
+.ui.modal .ui.form.file-uploader-inline .file-uploader > span {
+  color: #000000;
+}
+.ui.modal .ui.form.file-uploader-inline .file-uploader input[type=file] {
+  opacity: 0;
+  width: 100%;
+  height: 56px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
 }
 
 
