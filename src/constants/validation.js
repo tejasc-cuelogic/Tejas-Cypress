@@ -40,6 +40,30 @@ export const PROFILE_DETAILS = [
 ];
 
 /**
+ * @desc Validate only following fields after submitting verification code to Confirm Phone Number
+ */
+export const CONFIRM_PHONE_NUMBER_VERIFICATION_CODE = [
+  'verificationCode',
+];
+
+/**
+ * @desc Validate only following fields after submitting verification code to Confirm Email Address
+ */
+export const CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE = [
+  'verificationCode',
+];
+
+/**
+ * @desc Validate only following fields after submitting identity form
+ */
+export const CONFIRM_IDENTITY_QUESTIONS = [
+  'question1',
+  'question2',
+  'question3',
+  'question4',
+];
+
+/**
  * @desc Pass fields in values if fields in keys needs validation
  */
 export const CONDITIONAL_REQUIRE = {

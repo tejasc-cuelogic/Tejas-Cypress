@@ -15,6 +15,22 @@ export class ProfileStore {
 
   @observable confirmIdentityQuestions = { ...IDENTITY_QUESTIONS_FORM_VALUES }
 
+  @observable confirmPhoneNumberVerificationCode = {
+    value: '',
+    key: 'verificationCode',
+    error: undefined,
+    rule: 'required',
+    label: 'Enter verification code here:',
+  }
+
+  @observable confirmEmailAddressVerificationCode = {
+    value: '',
+    key: 'verificationCode',
+    error: undefined,
+    rule: 'required',
+    label: 'Enter verification code here:',
+  }
+
   @action loadProfile(username) {
     uiStore.setProgress(true);
     api.User.get(username)
@@ -67,6 +83,53 @@ export class ProfileStore {
   @action
   setConfirmIdentityQuestionsError(field, error) {
     this.confirmIdentityQuestions[field].error = error;
+  }
+
+  @computed
+  get canSubmitConfirmIdentityForm() {
+    return _.isEmpty(_.filter(this.confirmIdentityQuestions, field => field.error));
+  }
+
+  @action
+  setConfirmEmailAddressVerificationCode(code) {
+    this.confirmEmailAddressVerificationCode.value = code;
+  }
+
+  @action
+  setConfirmEmailAddressVerificationCodeError(error) {
+    this.confirmEmailAddressVerificationCode.error = error;
+  }
+
+  @action
+  resetConfirmEmailAddressVerificationCode() {
+    this.confirmEmailAddressVerificationCode.value = '';
+    this.confirmEmailAddressVerificationCode.error = undefined;
+  }
+
+  @computed
+  get canSubmitEmailAddressVerification() {
+    return _.isEmpty(this.confirmEmailAddressVerificationCode.error);
+  }
+
+  @action
+  setConfirmPhoneNumberVerificationCode(code) {
+    this.confirmPhoneNumberVerificationCode.value = code;
+  }
+
+  @action
+  setConfirmPhoneNumberVerificationCodeError(error) {
+    this.confirmPhoneNumberVerificationCode.error = error;
+  }
+
+  @action
+  resetConfirmPhoneNumberVerificationCode() {
+    this.confirmPhoneNumberVerificationCode.value = '';
+    this.confirmPhoneNumberVerificationCode.error = undefined;
+  }
+
+  @computed
+  get canSubmitPhoneNumberVerification() {
+    return _.isEmpty(this.confirmPhoneNumberVerificationCode.error);
   }
 }
 export default new ProfileStore();

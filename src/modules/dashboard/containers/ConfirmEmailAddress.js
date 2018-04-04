@@ -8,33 +8,33 @@ import FieldError from '../../../components/common/FieldError';
 
 @inject('profileStore', 'uiStore')
 @observer
-export default class ConfirmPhoneNumber extends Component {
+export default class ConfirmEmailAddress extends Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
-    this.props.profileStore.resetConfirmPhoneNumberVerificationCode();
+    this.props.profileStore.resetConfirmEmailAddressVerificationCode();
   }
 
   handleInputChange = (e, { name, value }) =>
-    validationActions.validateVerificationCodeForPhoneNumber(name, value);
+    validationActions.validateVerificationCodeForEmailAddress(name, value);
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    validationActions.validateConfirmPhoneNumberForm();
-    if (this.props.profileStore.canSubmitPhoneNumberVerification) {
-      this.props.setDashboardWizardStep('');
+    validationActions.validateConfirmEmailAddressForm();
+    if (this.props.profileStore.canSubmitEmailAddressVerification) {
+      this.props.setDashboardWizardStep('InvestorPersonalDetails');
     }
   }
 
   render() {
-    const { profileDetails, confirmPhoneNumberVerificationCode } = this.props.profileStore;
+    const { confirmEmailAddressVerificationCode } = this.props.profileStore;
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Confirm your phone number</Header>
+          <Header as="h2">Confirm your email address</Header>
           <Divider />
-          <p>We are about to text a verification code to:
-            {profileDetails.phoneNumber.value}
-            <Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>Change phone number</Link>
+          <p>Please check the verification code in the email we sent to:
+            james.smith@gmail.com
+            <Link to="">Change email address</Link>
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
@@ -42,22 +42,22 @@ export default class ConfirmPhoneNumber extends Component {
             <Form.Field>
               { /*  eslint-disable jsx-a11y/label-has-for */ }
               <label>
-                {confirmPhoneNumberVerificationCode.label}
+                {confirmEmailAddressVerificationCode.label}
               </label>
               <Input
                 fluid
-                name={confirmPhoneNumberVerificationCode.key}
-                value={confirmPhoneNumberVerificationCode.value}
+                name={confirmEmailAddressVerificationCode.key}
+                value={confirmEmailAddressVerificationCode.value}
                 onChange={this.handleInputChange}
-                error={!!confirmPhoneNumberVerificationCode.error}
+                error={!!confirmEmailAddressVerificationCode.error}
               />
-              <FieldError error={confirmPhoneNumberVerificationCode.error} />
+              <FieldError error={confirmEmailAddressVerificationCode.error} />
             </Form.Field>
             <div className="center-align">
               <Button circular color="green" size="large" >Confirm</Button>
             </div>
             <div className="center-align">
-              <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>Resend the code to my phone</Button>
+              <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>Resend the code to my email</Button>
             </div>
           </Form>
         </Modal.Content>

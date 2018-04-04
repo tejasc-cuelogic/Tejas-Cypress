@@ -10,24 +10,24 @@ export default class ConfirmIdentityDocuments extends Component {
           <Header as="h2">We need to confirm your identity</Header>
           <Divider />
           <p>Please upload two valid identity documents or
-            <Link to="">update your SSN number</Link>
+            <Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>update your SSN number</Link>
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.handleSubmitForm}>
             <Form.Field>
-              {/* eslint-disable */}
+              { /*  eslint-disable jsx-a11y/label-has-for */ }
               <label>
                 Upload a Photo ID
                 Driving Liscence or passport
               </label>
               <Input
-                  fluid
-                  type="file"
-                  placeholder="test"
-                  name="test"
-                  value="test"
-                />
+                fluid
+                type="file"
+                placeholder="test"
+                name="test"
+                value="test"
+              />
             </Form.Field>
             <Form.Field>
               {/* eslint-disable */}
@@ -50,7 +50,7 @@ export default class ConfirmIdentityDocuments extends Component {
                 />
             </Form.Field>
             <div className="center-align">
-              <Button circular color="green" size="large" >Verify my identity</Button>
+              <Button circular color="green" size="large" onClick={() => this.props.setDashboardWizardStep('ConfirmPhoneNumber')} >Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I'll finish this letter</Button>

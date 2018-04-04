@@ -21,7 +21,7 @@ export default class investorPersonalDetails extends Component {
 
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
-    this.props.profileStore.resetProfileDetails();
+    // this.props.profileStore.resetProfileDetails();
   }
 
   handleInputChange = (e, { name, value }) =>
@@ -34,17 +34,17 @@ export default class investorPersonalDetails extends Component {
   handleMaskedInputChange = (e) => {
     let maskedInputValue = e.target.value;
     maskedInputValue = maskedInputValue.split('-').join('');
-    console.log(e.target.name, maskedInputValue);
     validationActions.validateProfileDetailsField(e.target.name, maskedInputValue);
   }
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation');
-    // validationActions.validateProfileDetailsForm();
-    // if (this.props.profileStore.canSubmitProfileDetails) {
-    //   console.log(this.props.profileStore.profileDetails);
-    // }
+    console.log(this.props.profileStore.profileDetails);
+    validationActions.validateProfileDetailsForm();
+    if (this.props.profileStore.canSubmitProfileDetails) {
+      console.log(this.props.profileStore.profileDetails);
+      this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation');
+    }
   }
 
   render() {
