@@ -5,7 +5,7 @@ import authStore from './../stores/authStore';
 import businessStore from './../stores/businessStore';
 import userStore from './../stores/userStore';
 import profileStore from './../stores/profileStore';
-import { REGISTRATION, PROFILE_DETAILS, CONDITIONAL_REQUIRE } from './../constants/validation';
+import { REGISTRATION, PROFILE_DETAILS, CONDITIONAL_REQUIRE, CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE, CONFIRM_PHONE_NUMBER_VERIFICATION_CODE, CONFIRM_IDENTITY_QUESTIONS } from './../constants/validation';
 
 /**
  * @desc Validation class for form inputs
@@ -266,6 +266,83 @@ export class Validation {
         const { errors } = validationService.validate(value);
         // Store errors to store if any or else `undefined` will get set to it
         profileStore.setProfileError(key, errors && errors[key][0]);
+      }
+    });
+  }
+
+  /**
+   * @desc Validates fields on Email Address Verification
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateVerificationCodeForEmailAddress = (field, value) => {
+    profileStore.setConfirmEmailAddressVerificationCode(value);
+    const { errors } = validationService.validate(profileStore.confirmEmailAddressVerificationCode);
+    profileStore.setConfirmEmailAddressVerificationCodeError(errors && errors[field][0]);
+  }
+
+  /**
+   * @desc Validates Confirm Email Address Form after Form Submission
+   */
+  validateConfirmEmailAddressForm = () => {
+    const { key } = profileStore.confirmEmailAddressVerificationCode;
+    // Select only required values and exclude others from being checked
+    if (CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE.includes(key)) {
+      const { errors } =
+      validationService.validate(profileStore.confirmEmailAddressVerificationCode);
+      // Store errors to store if any or else `undefined` will get set to it
+      profileStore.setConfirmEmailAddressVerificationCodeError(errors && errors[key][0]);
+    }
+  }
+
+  /**
+   * @desc Validates fields on Phone Number Verification
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateVerificationCodeForPhoneNumber = (field, value) => {
+    profileStore.setConfirmPhoneNumberVerificationCode(value);
+    const { errors } = validationService.validate(profileStore.confirmPhoneNumberVerificationCode);
+    profileStore.setConfirmPhoneNumberVerificationCodeError(errors && errors[field][0]);
+  }
+
+  /**
+   * @desc Validates Confirm Phone Number Form after Form Submission
+   */
+  validateConfirmPhoneNumberForm = () => {
+    const { key } = profileStore.confirmPhoneNumberVerificationCode;
+    // Select only required values and exclude others from being checked
+    if (CONFIRM_PHONE_NUMBER_VERIFICATION_CODE.includes(key)) {
+      const { errors } =
+      validationService.validate(profileStore.confirmPhoneNumberVerificationCode);
+      // Store errors to store if any or else `undefined` will get set to it
+      profileStore.setConfirmPhoneNumberVerificationCodeError(errors && errors[key][0]);
+    }
+  }
+
+  /**
+   * @desc Validates Comfirm Identity Form fields
+   */
+  validateConfirmidentityFormFields = (field, value) => {
+    profileStore.setConfirmIdentityQuestions(field, value);
+    const { errors } = validationService.validate(profileStore.confirmIdentityQuestions[field]);
+    profileStore.setConfirmIdentityQuestionsError(field, errors && errors[field][0]);
+  }
+
+  /**
+  * @desc Validated Confirm Identity form after clicking submit button
+  * @return null
+  */
+  validateConfirmIdentityForm = () => {
+    _.map(profileStore.confirmIdentityQuestions, (value) => {
+      const { key } = value;
+      // Select only required values and exclude others from being checked
+      if (CONFIRM_IDENTITY_QUESTIONS.includes(key)) {
+        const { errors } = validationService.validate(value);
+        // Store errors to store if any or else `undefined` will get set to it
+        profileStore.setConfirmIdentityQuestionsError(key, errors && errors[key][0]);
       }
     });
   }

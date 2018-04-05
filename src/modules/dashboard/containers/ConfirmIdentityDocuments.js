@@ -11,7 +11,7 @@ export default class ConfirmIdentityDocuments extends Component {
           <Divider />
           <p>
             Please upload two valid identity documents or<br />
-            <Link to="">update your SSN number</Link>
+            <Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>update your SSN number</Link>
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">

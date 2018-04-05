@@ -47,7 +47,7 @@ export const PROFILE_DETAILS = {
     value: '',
     key: 'zipCode',
     error: undefined,
-    rule: 'required',
+    rule: 'required|numeric',
     label: 'Zip Code',
   },
   phoneNumber: {
@@ -86,6 +86,7 @@ export const IDENTITY_QUESTIONS_FORM_VALUES = {
     error: undefined,
     rule: 'required',
     label: 'In which city is Baker Street?',
+    placeHolder: 'Type answer',
   },
   question2: {
     value: '',
@@ -93,6 +94,7 @@ export const IDENTITY_QUESTIONS_FORM_VALUES = {
     error: undefined,
     rule: 'required',
     label: 'From whom did you purchase the property at Baker Street 221?',
+    placeHolder: 'Type answer',
   },
   question3: {
     value: '',
@@ -100,6 +102,7 @@ export const IDENTITY_QUESTIONS_FORM_VALUES = {
     error: undefined,
     rule: 'required',
     label: 'In which country have you lived?',
+    placeHolder: 'Type answer',
   },
   question4: {
     value: '',
@@ -107,5 +110,6 @@ export const IDENTITY_QUESTIONS_FORM_VALUES = {
     error: undefined,
     rule: 'required',
     label: 'Between 1979 and 1980, in which state you have lived?',
+    placeHolder: 'Type answer',
   },
 };
