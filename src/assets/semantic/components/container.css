@@ -299,18 +299,22 @@ div.login-form ul.error-messages {
   color: #999999;
   margin: 0 0 0.5rem;
 }
-.page-header-section .sticky-notification {
-  position: absolute;
-  width: 50%;
-  right: 5rem;
-  top: 3rem;
-  z-index: 9;
-}
 .page-header-section .actions {
   font-size: 1.42857143rem;
   margin-left: 1.42857143rem;
   display: inline-block;
   vertical-align: middle;
+}
+.top-cta-section {
+  height: 104px;
+  background: #4f4f4f;
+}
+.top-cta-section .sticky-notification {
+  position: relative;
+  width: 50%;
+  left: 5rem;
+  top: 2rem;
+  z-index: 9;
 }
 .notification-panel {
   width: 330px;

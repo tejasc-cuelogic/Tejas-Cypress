@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Card, Header, Item, Icon, Statistic, Button, Responsive } from 'semantic-ui-react';
+import { Grid, Card, Header, Item, Statistic, Button, Responsive, Divider } from 'semantic-ui-react';
 import Thumb from '../../../assets/images/ns-logo-small.svg';
 
 class Invest extends Component {
@@ -15,6 +15,8 @@ class Invest extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
+        </div>
+        <div className="top-cta-section">
           <Responsive {...Responsive.onlyComputer}>
             <div className="sticky-notification">
               <Card fluid raised>
@@ -30,6 +32,7 @@ class Invest extends Component {
             </div>
           </Responsive>
         </div>
+        <Divider hidden />
         <div className="content-spacer">
           <Header as="h3">Welcome to NextSeed!</Header>
           <Grid>
@@ -44,38 +47,18 @@ class Invest extends Component {
                       to unlock all features:
                     </Card.Meta>
                   </Card.Content>
-                  {/* <Card.Content>
-                    <Card.Description>
-                      <List relaxed className="check-list">
-                        <List.Item>
-                          <List.Icon name="check circle large" />
-                          <List.Content verticalAlign="middle">Complete all required information
-                          about you <Link as="a" to=""><strong>here</strong></Link></List.Content>
-                        </List.Item>
-                        <List.Item>
-                          <List.Icon name="circle thin large" />
-                          <List.Content verticalAlign="middle">Confirm your email address. <Link
-                          as="a" to=""><strong>Resend email?</strong></Link></List.Content>
-                        </List.Item>
-                        <List.Item>
-                          <List.Icon name="circle thin large" />
-                          <List.Content verticalAlign="middle">Create your first NextSeed Account
-                          <Link as="a" to=""><strong>here</strong></Link></List.Content>
-                        </List.Item>
-                      </List>
-                    </Card.Description>
-                  </Card.Content> */}
                 </Card>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row>
+            {/* <Grid.Row>
               <Grid.Column mobile={16} tablet={16} computer={6}>
                 <Card.Group className="steps-card">
                   <Card fluid raised>
                     <Card.Content>
                       <Card.Description>
                         <Icon name="numbar" data-icon="1" />
-                        Complete all required information about you <Link as="a" to=""><strong>here</strong></Link>
+                        Complete all required information about you
+                        <Link as="a" to=""><strong>here</strong></Link>
                       </Card.Description>
                     </Card.Content>
                   </Card>
@@ -83,7 +66,8 @@ class Invest extends Component {
                     <Card.Content>
                       <Card.Description>
                         <Icon name="numbar" data-icon="2" />
-                        Confirm your e-mail address. <Link as="a" to=""><strong>Resend email</strong></Link>
+                        Confirm your e-mail address.
+                        <Link as="a" to=""><strong>Resend email</strong></Link>
                       </Card.Description>
                     </Card.Content>
                   </Card>
@@ -97,7 +81,7 @@ class Invest extends Component {
                   </Card>
                 </Card.Group>
               </Grid.Column>
-            </Grid.Row>
+            </Grid.Row> */}
           </Grid>
         </div>
       </div>
