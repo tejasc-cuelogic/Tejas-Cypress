@@ -103,12 +103,14 @@
             color:@quaternary-text;
             text-transform:none;
         }
-        .ui.huge.input input[type=tel]{
-            font-family:@boldFont;
-            border:none;
-            background:@border-light;
-            text-align:center;
-            margin-bottom:@10px;
+        .ui.huge.input{
+            input[type=tel], input[type=email]{
+                font-family:@boldFont;
+                border:none;
+                background:@border-light;
+                text-align:center;
+                margin-bottom:@10px;
+            }
         }
     }
     .actions{

@@ -33642,7 +33642,8 @@ select.ui.dropdown {
   text-transform: none;
 }
 
-.ui.modal .content .ui.huge.input input[type=tel] {
+.ui.modal .content .ui.huge.input input[type=tel],
+.ui.modal .content .ui.huge.input input[type=email] {
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   border: none;
   background: #f2f2f2;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider, Input } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
 import FieldError from '../../../components/common/FieldError';
@@ -32,27 +32,23 @@ export default class ConfirmEmailAddress extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your email address</Header>
           <Divider />
-          <p>Please check the verification code in the email we sent to:
-            james.smith@gmail.com
-            <Link to="">Change email address</Link>
-          </p>
+          <p>Please check the verification code in the email we sent to:</p>
         </Modal.Header>
-        <Modal.Content className="signup-content">
+        <Modal.Content className="signup-content center-align">
+          <Form.Input
+            size="huge"
+            type="email"
+            value="james.smith@gmail.com"
+            readOnly
+          />
+          <p><Link to="">Change email address</Link></p>
           <Form error onSubmit={this.handleSubmitForm}>
-            <Form.Field>
-              { /*  eslint-disable jsx-a11y/label-has-for */ }
-              <label>
-                {confirmEmailAddressVerificationCode.label}
-              </label>
-              <Input
-                fluid
-                name={confirmEmailAddressVerificationCode.key}
-                value={confirmEmailAddressVerificationCode.value}
-                onChange={this.handleInputChange}
-                error={!!confirmEmailAddressVerificationCode.error}
-              />
-              <FieldError error={confirmEmailAddressVerificationCode.error} />
-            </Form.Field>
+            <Form.Input
+              size="huge"
+              label="Enter verification code here:"
+              className="otp-field"
+            />
+            <FieldError error={confirmEmailAddressVerificationCode.error} />
             <div className="center-align">
               <Button circular color="green" size="large" >Confirm</Button>
             </div>
