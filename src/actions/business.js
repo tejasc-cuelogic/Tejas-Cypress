@@ -532,11 +532,14 @@ export class Business {
   getFormattedInformation = (info) => {
     const formattedData = {};
     const dateKeys = ['dateIncorporation', 'deadlineDate'];
+    const arrayKeys = ['notificationEmail'];
     _.forEach(info, (data, key) => {
       if (dateKeys.includes(key)) {
         // If value is date then it has Moment object and not string value, in order to send proper
         // value to server we have to parse value as follows
         formattedData[key] = data.value.format('MM-DD-YYYY');
+      } else if (arrayKeys.includes(key)) {
+        formattedData[key] = Helper.convertCommaSeparatedStringToArray(data.value);
       } else {
         formattedData[key] = data.value;
       }
@@ -601,6 +604,7 @@ export class Business {
   setXmlPayload = (payload) => {
     const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
     const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
+    const arrayKeys = ['notificationEmail'];
     if (payload) {
       businessStore.setBusinessId(payload.businessId);
       businessStore.setFilingId(payload.filingId);
@@ -608,7 +612,11 @@ export class Business {
       _.map(payload.filerInformation, (value, key) => {
         if (confirmationFlags.includes(key)) {
           businessStore.setFilerInfo(key, (value || false))
-        } else {
+        } else if (arrayKeys.includes(key)) {
+          value = Helper.convertArrayToCommaSeparatedString(value);
+          businessStore.setFilerInfo(key, (value || ''))
+        }
+        else {
           businessStore.setFilerInfo(key, (value || ''))
         }
       });

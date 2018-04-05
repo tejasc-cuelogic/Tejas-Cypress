@@ -24,6 +24,24 @@ export class Utility {
       toast(`${msg}`, _.merge({}, this.options, optionsOverride));
     }
   }
+
+  /**
+   * @desc To Convert Comma Separated String To Array
+   */
+  convertCommaSeparatedStringToArray = (string) => {
+    const convertedArray = string.split(',').map(item => item.trim());
+    return convertedArray;
+  }
+
+  /**
+   * @desc To Convert Array to Comma Seprated String
+   */
+  convertArrayToCommaSeparatedString = (array) => {
+    if (array instanceof Array) {
+      return array.join(', ');
+    }
+    return '';
+  }
 }
 
 export default new Utility();

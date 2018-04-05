@@ -131,13 +131,13 @@ export const FILER_INFORMATION = {
     value: '',
     key: 'contactEmail',
     error: undefined,
-    rule: 'required|email|max:80',
+    rule: 'email|max:80',
   },
   notificationEmail: {
     value: '',
     key: 'notificationEmail',
     error: undefined,
-    rule: 'email|max:80',
+    rule: 'string',
   },
 };
 
