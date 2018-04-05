@@ -69,7 +69,7 @@ const investmentChooseType = props => (
         />
         <Grid.Row>
           <Grid.Column>
-            <Button circular color="green" onClick={() => props.setDashboardWizardStep('InvestmentChooseType')} content="Accept" />
+            <Button circular color="green" onClick={() => props.setDashboardWizardStep('LinkBankAccount')} content="Accept" />
           </Grid.Column>
         </Grid.Row>
       </Grid>
