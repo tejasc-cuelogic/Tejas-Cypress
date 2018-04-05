@@ -131,7 +131,7 @@ export const FILER_INFORMATION = {
     value: '',
     key: 'contactEmail',
     error: undefined,
-    rule: 'email|max:80',
+    rule: 'required|email|max:80',
   },
   notificationEmail: {
     value: '',
