@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider, Input } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
+import InputMask from 'react-input-mask';
 
 import validationActions from '../../../actions/validation';
 import FieldError from '../../../components/common/FieldError';
@@ -32,29 +33,35 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your phone number</Header>
           <Divider />
-          <p>We are about to text a verification code to:
-            {profileDetails.phoneNumber.value}
-            <Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>Change phone number</Link>
-          </p>
+          <p>We are about to text a verification code to:</p>
         </Modal.Header>
-        <Modal.Content className="signup-content">
-          <Form error onSubmit={this.handleSubmitForm}>
-            <Form.Field>
-              { /*  eslint-disable jsx-a11y/label-has-for */ }
-              <label>
-                {confirmPhoneNumberVerificationCode.label}
-              </label>
-              <Input
-                fluid
-                name={confirmPhoneNumberVerificationCode.key}
-                value={confirmPhoneNumberVerificationCode.value}
-                onChange={this.handleInputChange}
-                error={!!confirmPhoneNumberVerificationCode.error}
+        <Modal.Content className="signup-content center-align">
+          <div className="field">
+            <div className="ui huge input">
+              <InputMask
+                type="tel"
+                value={profileDetails.phoneNumber.value}
+                mask="+9 999-999-9999"
+                maskChar=" "
+                alwaysShowMask
+                readOnly
               />
-              <FieldError error={confirmPhoneNumberVerificationCode.error} />
-            </Form.Field>
+            </div>
+          </div>
+          <p><Link to="">Change phone number</Link></p>
+          <Form error onSubmit={this.handleSubmitForm}>
+            <Form.Input
+              size="huge"
+              label="Enter verification code here:"
+              className="otp-field"
+              name={confirmPhoneNumberVerificationCode.key}
+              value={confirmPhoneNumberVerificationCode.value}
+              onChange={this.handleInputChange}
+              error={!!confirmPhoneNumberVerificationCode.error}
+            />
+            <FieldError error={confirmPhoneNumberVerificationCode.error} />
             <div className="center-align">
-              <Button circular color="green" size="large" >Confirm</Button>
+              <Button color="green" size="large" className="very relaxed">Confirm</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>Resend the code to my phone</Button>

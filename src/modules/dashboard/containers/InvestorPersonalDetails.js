@@ -34,6 +34,8 @@ export default class investorPersonalDetails extends Component {
   handleMaskedInputChange = (e) => {
     let maskedInputValue = e.target.value;
     maskedInputValue = maskedInputValue.split('-').join('');
+    // eslint-disable-next-line
+    console.log(e.target.name, maskedInputValue);
     validationActions.validateProfileDetailsField(e.target.name, maskedInputValue);
   }
 
@@ -63,8 +65,8 @@ export default class investorPersonalDetails extends Component {
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
-              <Form.Field>
-                {/* eslint-disable */}
+              <Form.Field width={4}>
+                {/* eslint-disable jsx-a11y/label-has-for */}
                 <label>
                   {profileDetails.title.label}
                 </label>
@@ -80,7 +82,6 @@ export default class investorPersonalDetails extends Component {
                 <FieldError error={profileDetails.firstLegalName.error} />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable */}
                 <label>
                   First Legal Name
                   <Popup
@@ -122,7 +123,6 @@ export default class investorPersonalDetails extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Field>
-              {/* eslint-disable */}
               <label>
                 Residental Street
                 <Popup
@@ -192,14 +192,14 @@ export default class investorPersonalDetails extends Component {
                 <label>
                   {profileDetails.phoneNumber.label}
                 </label>
-                <InputMask 
+                <InputMask
                   name={profileDetails.phoneNumber.key}
                   value={profileDetails.phoneNumber.value}
                   onChange={this.handleMaskedInputChange}
                   error={!!profileDetails.phoneNumber.error}
-                  mask="999-999-9999" 
-                  maskChar=" " 
-                  alwaysShowMask={true}
+                  mask="999-999-9999"
+                  maskChar=" "
+                  alwaysShowMask
                 />
                 <FieldError error={profileDetails.phoneNumber.error} />
               </Form.Field>
@@ -226,21 +226,21 @@ export default class investorPersonalDetails extends Component {
                 value={profileDetails.ssn.value}
                 onChange={this.handleMaskedInputChange}
                 error={!!profileDetails.ssn.error}
-                mask="999-999-9999" 
-                maskChar=" " 
-                alwaysShowMask={true}
+                mask="999-999-9999"
+                maskChar=" "
+                alwaysShowMask
               />
               <FieldError error={profileDetails.ssn.error} />
             </Form.Field>
             <div className="center-align">
-              <Button circular color="green" size="large" disabled={!this.props.profileStore.canSubmitProfileDetails}>Confirm</Button>
+              <Button color="green" size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitProfileDetails}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>
             </div>
           </Form>
         </Modal.Content>
-    </Modal>
+      </Modal>
     );
   }
 }

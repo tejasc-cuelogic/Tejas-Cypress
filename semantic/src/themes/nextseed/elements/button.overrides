@@ -4,9 +4,9 @@
 //  Buttons style CSS
 .ui{
     &.button, &.buttons .button{
-        text-transform:uppercase;
+        // text-transform:uppercase;
         // font-weight:500;
-        // letter-spacing:1px;
+        letter-spacing:1px;
         // text-transform:uppercase;
         // &.basic{
         //     font-weight:500;
@@ -73,6 +73,17 @@
         background-color:@highlight-primary;
         &:hover, &:focus, &:active{
             background-color:darken(desaturate(spin(@highlight-primary, 0.0997), 7.0155), 4.9020);
+        }
+    }
+}
+
+.ui.button, .ui.buttons .button{
+    &.relaxed{
+        padding-left:@42px;
+        padding-right:@42px;
+        &.very{
+            padding-left:@64px;
+            padding-right:@64px;
         }
     }
 }
