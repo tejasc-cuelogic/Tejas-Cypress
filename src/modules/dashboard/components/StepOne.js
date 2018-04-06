@@ -1,24 +1,6 @@
 import React from 'react';
 
 export default class StepOne extends React.Component {
-  // constructor () {
-  //   super()
-  //   this.state = {
-  //     firstName: '',
-  //     lastName: ''
-  //   }
-  //   this.handleFirstNameChanged = this.handleFirstNameChanged.bind(this);
-  //   this.handleLastNameChanged = this.handleLastNameChanged.bind(this);
-  // }
-
-  // handleFirstNameChanged (event) {
-  //   this.setState({firstName: event.target.value})
-  // }
-
-  // handleLastNameChanged (event) {
-  //   this.setState({lastName: event.target.value})
-  // }
-
   render() {
     return (
       <div>

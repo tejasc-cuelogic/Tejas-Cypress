@@ -1,24 +1,6 @@
 import React from 'react';
 
-export class StepTwo extends React.Component {
-//   constructor () {
-//     super()
-//     this.state = {
-//       email: '',
-//       emailConfirm: ''
-//     }
-//     this.handleEmailChanged = this.handleEmailChanged.bind(this);
-//     this.handleEmailConfirmChanged = this.handleEmailConfirmChanged.bind(this);
-//   }
-
-//   handleEmailChanged (event) {
-//     this.setState({email: event.target.value})
-//   }
-
-//   handleEmailConfirmChanged (event) {
-//     this.setState({emailConfirm: event.target.value})
-//   }
-
+export default class StepTwo extends React.Component {
   render() {
     return (
       <div>
