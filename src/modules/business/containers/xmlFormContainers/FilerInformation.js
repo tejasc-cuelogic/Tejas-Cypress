@@ -12,14 +12,14 @@ export default class FilerInformation extends React.Component {
 
   handleNotificationEmailChange = (chips) => {
     const newErrors = { ...this.props.businessStore.xmlErrors };
-    const pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    const pattern = /^([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)@([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)[\\.]([a-zA-Z]{2,9})$/;
     let isValid = true;
     chips.map((element) => {
       isValid = pattern.test(element);
       return isValid;
     });
     if (!isValid) {
-      const errorMessage = 'Notification Email field is invalid';
+      const errorMessage = 'The notificationEmail format is invalid.';
       newErrors.notificationEmailElement = errorMessage;
       this.props.businessStore.setXmlError(newErrors);
       this.props.businessStore.setFilerError('notificationEmail', errorMessage);
@@ -132,23 +132,16 @@ export default class FilerInformation extends React.Component {
           onChange={this.handleCheckboxChange}
           onBlur={this.handleOnBlur}
         />
-        {/* <Form.Input
-          label="Enter notification email"
-          name="notificationEmail"
-          value={filerInformation.notificationEmail.value}
-          error={!!filerInformation.notificationEmail.error}
-          onChange={this.handleChange}
-          onBlur={this.handleOnBlur}
-          disabled={!filerInformation.overrideInternetFlag.value}
-        /> */}
         <div className={!filerInformation.overrideInternetFlag.value ? 'field disabled' : 'field'} >
+          { /* eslint-disable jsx-a11y/label-has-for */ }
+          <label>
+            Enter notification email
+          </label>
           <Chips
-            className="test"
-            label="Enter notification email"
             value={filerInformation.notificationEmail.value}
             error={!!filerInformation.notificationEmail.error}
             onChange={this.handleNotificationEmailChange}
-            disabled={!filerInformation.overrideInternetFlag.value}
+            createChipKeys={[9, 13, 32, 188]}
           />
         </div>
       </div>
