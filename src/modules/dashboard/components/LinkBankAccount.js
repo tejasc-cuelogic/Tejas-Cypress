@@ -1,7 +1,7 @@
 import React from 'react';
-import StepZilla from 'react-stepzilla';
 import { Modal } from 'semantic-ui-react';
 
+import MuliStep from '../../../helper/MultiStep';
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 
@@ -17,7 +17,7 @@ export default class LinkBankAccount extends React.Component {
       <div className="step-progress">
         <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
           <Modal.Content className="signup-content">
-            <StepZilla steps={steps} />
+            <MuliStep steps={steps} />
           </Modal.Content>
         </Modal>
       </div>
