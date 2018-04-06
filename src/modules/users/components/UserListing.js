@@ -3,9 +3,10 @@ import { Table } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-// import DateTimeFormat from './../../../components/common/DateTimeFormat';
+import DateTimeFormat from './../../../components/common/DateTimeFormat';
 import Pagination from './../../../theme/table/Pagination';
 import Randavatar from './../../../components/common/Randavatar';
+import UserTypeIcon from './UserTypeIcon';
 
 const paginateOptions = {
   activePage: 5,
@@ -28,26 +29,26 @@ const userListing = props => (
         </Table.Header>
         <Table.Body>
           {_.map(props.listData, user => (
-            <Table.Row key={user.username}>
+            <Table.Row className={(user.locked) ? 'locked' : ''} key={user.id}>
               <Table.Cell collapsing>
                 {!user.profilepic &&
                   <div className="user-image">
-                    <Randavatar avatarKey={user.username} name={user.given_name} size="mini" />
+                    <Randavatar avatarKey={user.id} name={user.id} size="mini" />
                   </div>
                 }
               </Table.Cell>
               <Table.Cell className="user-status">
-                <span className="user-name"><Link to="/app/users/1/UserDetails">{`${user.given_name} ${user.family_name}`}</Link></span>
+                <span className="user-name"><Link to={`/app/users/${user.id}/UserDetails`}>{`${user.firstName} ${user.lastName}`}</Link></span>
                 {user.email}
               </Table.Cell>
               <Table.Cell>Detroit, MI (80331)</Table.Cell>
               <Table.Cell>617 434-1551</Table.Cell>
               <Table.Cell>
-                <div className="account-type small full accredited">R</div>
+                <UserTypeIcon user={user} />
               </Table.Cell>
-              <Table.Cell>2 days ago</Table.Cell>
-              <Table.Cell>13 months ago</Table.Cell>
-              {/* <Table.Cell><DateTimeFormat datetime={user.UserCreateDate} /></Table.Cell> */}
+              <Table.Cell><DateTimeFormat fromNow datetime={user.lastLogin} /></Table.Cell>
+              <Table.Cell><DateTimeFormat fromNow datetime={user.createdAt} /></Table.Cell>
+              {/* <Table.Cell><DateTimeFormat datetime={user.createdAt} /></Table.Cell> */}
               <Table.Cell><Link to="/app/users/1/UserDetails" className="action">view profile</Link></Table.Cell>
             </Table.Row>
           ))}

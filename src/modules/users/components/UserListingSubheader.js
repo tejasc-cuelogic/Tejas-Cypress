@@ -56,7 +56,7 @@ const city = [
   },
 ];
 
-const userListingSubheader = () => (
+const userListingSubheader = props => (
   <div className="page-header-section">
     <div className="webcontent-spacer">
       <Grid stackable>
@@ -82,11 +82,15 @@ const userListingSubheader = () => (
         <Grid.Row>
           <Grid.Column width={16}>
             <List horizontal relaxed>
-              <List.Item>Showing <strong>256</strong> records.</List.Item>
+              <List.Item>Showing <strong>{props.summary.total}</strong> records.</List.Item>
               <List.Item as="a" to="/users/new">No filters applied.</List.Item>
-              <List.Item>65 Individual</List.Item>
-              <List.Item>65 Entity</List.Item>
-              <List.Item>65 IRA</List.Item>
+              {
+                Object.keys(props.summary.byType).map(igKey => (
+                  <List.Item>
+                    {props.summary.byType[igKey]} {igKey}
+                  </List.Item>
+                ))
+              }
             </List>
           </Grid.Column>
         </Grid.Row>
