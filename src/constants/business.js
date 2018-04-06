@@ -134,10 +134,10 @@ export const FILER_INFORMATION = {
     rule: 'required|email|max:80',
   },
   notificationEmail: {
-    value: '',
+    value: [],
     key: 'notificationEmail',
     error: undefined,
-    rule: 'string',
+    rule: 'array|max:3',
   },
 };
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Header, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
+import Chips from 'react-chips/lib/Chips';
 import validationActions from '../../../../actions/validation';
 
 @inject('businessStore')
@@ -9,11 +10,31 @@ import validationActions from '../../../../actions/validation';
 export default class FilerInformation extends React.Component {
   handleChange = (e, { name, value }) => this.props.businessStore.setFilerInfo(name, value)
 
-  handleOnBlur = e => validationActions.validateFilerInfoField(e.target.name)
+  handleNotificationEmailChange = (chips) => {
+    const newErrors = { ...this.props.businessStore.xmlErrors };
+    const pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    let isValid = true;
+    chips.map((element) => {
+      isValid = pattern.test(element);
+      return isValid;
+    });
+    if (!isValid) {
+      const errorMessage = 'Notification Email field is invalid';
+      newErrors.notificationEmailElement = errorMessage;
+      this.props.businessStore.setXmlError(newErrors);
+      this.props.businessStore.setFilerError('notificationEmail', errorMessage);
+    } else {
+      this.props.businessStore.removeXmlError('notificationEmailElement');
+    }
+    this.props.businessStore.setFilerInfo('notificationEmail', chips);
+    validationActions.validateFilerInfoField('notificationEmail');
+  }
 
   handleCheckboxChange = (e, { name }) => {
     this.props.businessStore.togglefilerCheckbox(name);
   }
+
+  handleOnBlur = e => validationActions.validateFilerInfoField(e.target.name)
 
   render() {
     const { filerInformation } = this.props.businessStore;
@@ -111,7 +132,7 @@ export default class FilerInformation extends React.Component {
           onChange={this.handleCheckboxChange}
           onBlur={this.handleOnBlur}
         />
-        <Form.Input
+        {/* <Form.Input
           label="Enter notification email"
           name="notificationEmail"
           value={filerInformation.notificationEmail.value}
@@ -119,7 +140,17 @@ export default class FilerInformation extends React.Component {
           onChange={this.handleChange}
           onBlur={this.handleOnBlur}
           disabled={!filerInformation.overrideInternetFlag.value}
-        />
+        /> */}
+        <div className={!filerInformation.overrideInternetFlag.value ? 'field disabled' : 'field'} >
+          <Chips
+            className="test"
+            label="Enter notification email"
+            value={filerInformation.notificationEmail.value}
+            error={!!filerInformation.notificationEmail.error}
+            onChange={this.handleNotificationEmailChange}
+            disabled={!filerInformation.overrideInternetFlag.value}
+          />
+        </div>
       </div>
     );
   }

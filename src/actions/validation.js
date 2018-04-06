@@ -222,7 +222,10 @@ export class Validation {
       newErrors[field] = errors[field][0];
       businessStore.setXmlError(newErrors);
     } else {
-      businessStore.removeXmlError(field);
+      /* eslint-disable no-lonely-if */
+      if (field !== 'notificationEmailElement') {
+        businessStore.removeXmlError(field);
+      }
     }
   }
 
