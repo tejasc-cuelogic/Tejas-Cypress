@@ -5,10 +5,12 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { Modal, Button, Header, Icon, Form, Divider, Input, Popup, Select } from 'semantic-ui-react';
 import InputMask from 'react-input-mask';
+import Autocomplete from 'react-google-autocomplete';
 
 import validationActions from './../../../actions/validation';
 import FieldError from '../../../components/common/FieldError';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
+import profileActions from '../../../actions/profile';
 
 @inject('profileStore', 'uiStore', 'userStore')
 @observer
@@ -34,17 +36,14 @@ export default class investorPersonalDetails extends Component {
   handleMaskedInputChange = (e) => {
     let maskedInputValue = e.target.value;
     maskedInputValue = maskedInputValue.split('-').join('');
-    // eslint-disable-next-line
     console.log(e.target.name, maskedInputValue);
     validationActions.validateProfileDetailsField(e.target.name, maskedInputValue);
   }
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    console.log(this.props.profileStore.profileDetails);
     validationActions.validateProfileDetailsForm();
     if (this.props.profileStore.canSubmitProfileDetails) {
-      console.log(this.props.profileStore.profileDetails);
       this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation');
     }
   }
@@ -72,14 +71,13 @@ export default class investorPersonalDetails extends Component {
                 </label>
                 <Select
                   fluid
-                  placeholder={profileDetails.title.label}
                   name={profileDetails.title.key}
                   value={profileDetails.title.value}
                   onChange={this.handleInputChange}
                   error={!!profileDetails.title.error}
                   options={PROFILE_DETAILS_TITLE}
                 />
-                <FieldError error={profileDetails.firstLegalName.error} />
+                <FieldError error={profileDetails.title.error} />
               </Form.Field>
               <Form.Field>
                 <label>
@@ -123,6 +121,12 @@ export default class investorPersonalDetails extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Field>
+              <Autocomplete
+                onPlaceSelected={(place) => {
+                  profileActions.setAddressFieldsOnGoogleAutocomplete(place);
+                }}
+                types={['address']}
+              />
               <label>
                 Residental Street
                 <Popup

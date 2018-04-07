@@ -48,7 +48,7 @@ export default class ConfirmPhoneNumber extends Component {
               />
             </div>
           </div>
-          <p><Link to="">Change phone number</Link></p>
+          <p><Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>Change phone number</Link></p>
           <Form error onSubmit={this.handleSubmitForm}>
             <Form.Input
               size="huge"
@@ -58,6 +58,7 @@ export default class ConfirmPhoneNumber extends Component {
               value={confirmPhoneNumberVerificationCode.value}
               onChange={this.handleInputChange}
               error={!!confirmPhoneNumberVerificationCode.error}
+              maxLength={6}
             />
             <FieldError error={confirmPhoneNumberVerificationCode.error} />
             <div className="center-align">

@@ -23,7 +23,7 @@ class Dashboard extends Component {
       value: 'Verify your identity',
       label: 'Complete all required information about yourself',
       linkText: 'Verify me',
-      linkPath: 'ConfirmEmailAddress',
+      linkPath: 'InvestorPersonalDetails',
     };
     return (
       <div>

@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid } from 'semantic-ui-react';
 
 export default class ConfirmIdentityDocuments extends Component {
+  handleSubmitForm = (e) => {
+    e.preventDefault();
+    this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+  }
   render() {
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
