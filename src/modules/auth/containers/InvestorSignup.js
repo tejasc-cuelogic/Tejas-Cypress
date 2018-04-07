@@ -13,7 +13,7 @@ import validationActions from '../../../actions/validation';
 class InvestorSignup extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
-    this.props.authStore.reset();
+    // this.props.authStore.reset();
   }
 
   getNameError = (firstName, lastName) => {
