@@ -9,26 +9,39 @@ import UserListing from './../components/UserListing';
 class Users extends Component {
   headerMeta = [
     ['profilepic', '', false],
-    ['full_name', 'Full Name', true],
-    ['residence_city', 'Residence City', true],
-    ['phone', 'Phone', true],
-    ['type', 'Type', true],
-    ['last_login', 'Last Login', true],
-    ['account_creation', 'Account Creation', true],
+    ['firstName', 'Full Name', true],
+    ['residence_city', 'Residence City', false],
+    ['phone', 'Phone', false],
+    ['accountType', 'Type', true],
+    ['lastLogin', 'Last Login', true],
+    ['createdAt', 'Account Creation', true],
     ['actions', '', false],
   ];
+
+  sortHandler = (by, sortable) => {
+    this.props.userListingStore.initiateSort(by, sortable);
+  };
+
+  toggleSearch = () => this.props.userListingStore.toggleSearch();
+
   render() {
     const {
       users, loading, error, usersSummary,
     } = this.props.userListingStore;
     return (
       <Aux>
-        <UserListingSubheader summary={usersSummary} />
+        <UserListingSubheader
+          summary={usersSummary}
+          currState={this.props.userListingStore.requestState}
+          toggleSearch={this.toggleSearch}
+        />
         <UserListing
           loading={loading}
           error={error}
           header={this.headerMeta}
           listData={users}
+          sortHandler={this.sortHandler}
+          sortState={this.props.userListingStore.sortInfo}
         />
       </Aux>
     );

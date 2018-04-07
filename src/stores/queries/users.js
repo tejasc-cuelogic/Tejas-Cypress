@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions
 export const allUsersQuery = gql`
-  query allUsers($first: Int!, $skip: Int!) {
-    allUsers(first: $first, skip: $skip) {
+  query allUsers($first: Int!, $skip: Int!, $orderBy: UserOrderBy) {
+    allUsers(first: $first, skip: $skip, orderBy: $orderBy) {
       id
       firstName
       lastName

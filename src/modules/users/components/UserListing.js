@@ -18,13 +18,37 @@ const paginateOptions = {
   totalPages: 50,
 };
 
+const statusRow = (props) => {
+  let message = '';
+  if (props.error) {
+    message = 'Something went wrong while loading data, please try again!';
+  } else if (props.loading) {
+    message = 'Loading...';
+  } else if (props.listData && props.listData.length === 0) {
+    message = 'No record found';
+  }
+  return (
+    <Table.Row>
+      <Table.Cell textAlign="center" colSpan={props.header.length}>{message}</Table.Cell>
+    </Table.Row>
+  );
+};
+
 const userListing = props => (
   <Aux>
     <div className="table-wrapper">
       <Table striped sortable singleLine className="user-list">
         <Table.Header>
           <Table.Row>
-            {props.header.map(item => <Table.HeaderCell key={item[0]}>{item[1]}</Table.HeaderCell>)}
+            {props.header.map(item => (
+              <Table.HeaderCell
+                sorted={props.sortState.by === item[0] ? props.sortState.direction : null}
+                onClick={() => props.sortHandler(item[0], item[2])}
+                key={item[0]}
+              >
+                {item[1]}
+              </Table.HeaderCell>
+            ))}
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -49,14 +73,10 @@ const userListing = props => (
               <Table.Cell><DateTimeFormat fromNow datetime={user.lastLogin} /></Table.Cell>
               <Table.Cell><DateTimeFormat fromNow datetime={user.createdAt} /></Table.Cell>
               {/* <Table.Cell><DateTimeFormat datetime={user.createdAt} /></Table.Cell> */}
-              <Table.Cell><Link to="/app/users/1/UserDetails" className="action">view profile</Link></Table.Cell>
+              <Table.Cell><Link to={`/app/users/${user.id}/UserDetails`} className="action">view profile</Link></Table.Cell>
             </Table.Row>
           ))}
-          {!props.listData &&
-            <Table.Row>
-              <Table.Cell colSpan={props.header.length}>No record found</Table.Cell>
-            </Table.Row>
-          }
+          {statusRow(props)}
         </Table.Body>
       </Table>
     </div>

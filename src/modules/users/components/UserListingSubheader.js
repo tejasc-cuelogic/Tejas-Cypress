@@ -71,7 +71,7 @@ const userListingSubheader = props => (
           </Grid.Column>
           <Grid.Column width={2} textAlign="center">
             <span className="filter-count">0</span>
-            <Button icon color="green" className="link-button">
+            <Button icon color="green" onClick={props.toggleSearch} className="link-button">
               FILTERS <Icon name="caret down" />
             </Button>
           </Grid.Column>
@@ -86,7 +86,7 @@ const userListingSubheader = props => (
               <List.Item as="a" to="/users/new">No filters applied.</List.Item>
               {
                 Object.keys(props.summary.byType).map(igKey => (
-                  <List.Item>
+                  <List.Item key={igKey}>
                     {props.summary.byType[igKey]} {igKey}
                   </List.Item>
                 ))
@@ -96,41 +96,43 @@ const userListingSubheader = props => (
         </Grid.Row>
       </Grid>
     </div>
-    <div className="search-filters webcontent-spacer">
-      <Grid stackable>
-        <Grid.Row>
-          <Grid.Column width={3}>
-            <h5>Account Type</h5>
-            <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={accountType} />
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <h5>Status</h5>
-            <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={status} />
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <h5>Accridiation</h5>
-            <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={accridiation} />
-          </Grid.Column>
-          <Grid.Column width={4}>
-            <h5>Creation date</h5>
-            <Form>
-              <Form.Group widths="equal">
-                <Form.Field>
-                  <Input fluid icon="calendar outline" iconPosition="left" placeholder="01/01/2017" />
-                </Form.Field>
-                <Form.Field>
-                  <Input fluid icon="calendar outline" iconPosition="left" placeholder="01/01/2018" />
-                </Form.Field>
-              </Form.Group>
-            </Form>
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <h5>City</h5>
-            <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={city} />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </div>
+    {props.currState.filters &&
+      <div className="search-filters webcontent-spacer">
+        <Grid stackable>
+          <Grid.Row>
+            <Grid.Column width={3}>
+              <h5>Account Type</h5>
+              <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={accountType} />
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <h5>Status</h5>
+              <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={status} />
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <h5>Accridiation</h5>
+              <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={accridiation} />
+            </Grid.Column>
+            <Grid.Column width={4}>
+              <h5>Creation date</h5>
+              <Form>
+                <Form.Group widths="equal">
+                  <Form.Field>
+                    <Input fluid icon="calendar outline" iconPosition="left" placeholder="01/01/2017" />
+                  </Form.Field>
+                  <Form.Field>
+                    <Input fluid icon="calendar outline" iconPosition="left" placeholder="01/01/2018" />
+                  </Form.Field>
+                </Form.Group>
+              </Form>
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <h5>City</h5>
+              <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={city} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </div>
+    }
   </div>
 );
 
