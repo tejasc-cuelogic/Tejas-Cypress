@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
+// import authActions from '../../../actions/auth';
 import FieldError from '../../../components/common/FieldError';
 
 @inject('authStore', 'uiStore')
@@ -15,18 +16,23 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   handleInputChange = (e, { name, value }) =>
-    validationActions.validateVerificationCodeForEmailAddress(name, value);
+    validationActions.validateLoginField(name, value);
 
   handleSubmitForm = (e) => {
     e.preventDefault();
     validationActions.validateConfirmEmailAddressForm();
     if (this.props.authStore.canSubmitEmailAddressVerification) {
       this.props.setAuthWizardStep('Login');
+      // authActions.confirmCode()
+      //   .then(() => {
+      //     this.props.setAuthWizardStep('Login');
+      //   })
+      //   .catch(() => { });
     }
   }
 
   render() {
-    const { values, verificationCode } = this.props.authStore;
+    const { values } = this.props.authStore;
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
         <Modal.Header className="center-align signup-header">
@@ -48,12 +54,12 @@ export default class ConfirmEmailAddress extends Component {
               label="Enter verification code here:"
               className="otp-field"
               maxLength={6}
-              name={verificationCode.name}
-              value={verificationCode.value}
-              error={!!verificationCode.error}
+              name={values.code.key}
+              value={values.code.value}
+              error={!!values.code.error}
               onChange={this.handleInputChange}
             />
-            <FieldError error={verificationCode.error} />
+            <FieldError error={values.code.error} />
             <div className="center-align">
               <Button circular color="green" size="large" disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>

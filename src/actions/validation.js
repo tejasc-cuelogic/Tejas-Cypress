@@ -271,28 +271,16 @@ export class Validation {
   }
 
   /**
-   * @desc Validates fields on Email Address Verification
-   * @param string $field - field on form that need to be validated
-   * @param string $value - value that need to be set to field
-   * @return null
-   */
-  validateVerificationCodeForEmailAddress = (field, value) => {
-    authStore.setVerificationCode(value);
-    const { errors } = validationService.validate(authStore.verificationCode);
-    authStore.setVerificationCodeError(errors && errors[field][0]);
-  }
-
-  /**
    * @desc Validates Confirm Email Address Form after Form Submission
    */
   validateConfirmEmailAddressForm = () => {
-    const { key } = authStore.verificationCode;
+    const { key } = authStore.values.code;
     // Select only required values and exclude others from being checked
     if (CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE.includes(key)) {
       const { errors } =
-      validationService.validate(authStore.verificationCode);
+      validationService.validate(authStore.values.code);
       // Store errors to store if any or else `undefined` will get set to it
-      authStore.setVerificationCodeError(errors && errors[key][0]);
+      authStore.setError('code', errors && errors[key][0]);
     }
   }
 

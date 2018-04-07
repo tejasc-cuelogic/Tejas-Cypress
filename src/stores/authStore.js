@@ -78,13 +78,6 @@ export class AuthStore {
     },
   };
 
-  @observable verificationCode = {
-    value: '',
-    key: 'verificationCode',
-    error: undefined,
-    rule: 'required',
-  }
-
   @computed get canRegister() {
     return _.isEmpty(_.filter(this.values, field => field.error));
   }
@@ -150,19 +143,9 @@ export class AuthStore {
     this.values.role.error = undefined;
   }
 
-  @action
-  setVerificationCode(code) {
-    this.verificationCode.value = code;
-  }
-
-  @action
-  setVerificationCodeError(error) {
-    this.verificationCode.error = error;
-  }
-
   @computed
   get canSubmitEmailAddressVerification() {
-    return _.isEmpty(this.verificationCode.error);
+    return _.isEmpty(this.values.code.error);
   }
 
   @action
