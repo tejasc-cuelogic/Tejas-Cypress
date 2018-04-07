@@ -277,22 +277,22 @@ export class Validation {
    * @return null
    */
   validateVerificationCodeForEmailAddress = (field, value) => {
-    profileStore.setConfirmEmailAddressVerificationCode(value);
-    const { errors } = validationService.validate(profileStore.confirmEmailAddressVerificationCode);
-    profileStore.setConfirmEmailAddressVerificationCodeError(errors && errors[field][0]);
+    authStore.setVerificationCode(value);
+    const { errors } = validationService.validate(authStore.verificationCode);
+    authStore.setVerificationCodeError(errors && errors[field][0]);
   }
 
   /**
    * @desc Validates Confirm Email Address Form after Form Submission
    */
   validateConfirmEmailAddressForm = () => {
-    const { key } = profileStore.confirmEmailAddressVerificationCode;
+    const { key } = authStore.verificationCode;
     // Select only required values and exclude others from being checked
     if (CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE.includes(key)) {
       const { errors } =
-      validationService.validate(profileStore.confirmEmailAddressVerificationCode);
+      validationService.validate(authStore.verificationCode);
       // Store errors to store if any or else `undefined` will get set to it
-      profileStore.setConfirmEmailAddressVerificationCodeError(errors && errors[key][0]);
+      authStore.setVerificationCodeError(errors && errors[key][0]);
     }
   }
 
