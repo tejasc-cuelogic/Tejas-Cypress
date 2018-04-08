@@ -24,6 +24,8 @@ class Users extends Component {
 
   toggleSearch = () => this.props.userListingStore.toggleSearch();
 
+  loadMore = () => this.props.userListingStore.loadMore();
+
   render() {
     const {
       users, loading, error, usersSummary,
@@ -41,6 +43,7 @@ class Users extends Component {
           header={this.headerMeta}
           listData={users}
           sortHandler={this.sortHandler}
+          loadMore={this.loadMore}
           sortState={this.props.userListingStore.sortInfo}
         />
       </Aux>

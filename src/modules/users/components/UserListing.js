@@ -79,6 +79,7 @@ const userListing = props => (
           {statusRow(props)}
         </Table.Body>
       </Table>
+      <button onClick={props.loadMore}>loadMore {(props.loading) ? 'loading' : 'not'}</button>
     </div>
     {props.hasPagination &&
       <Pagination paginateOptions={paginateOptions} colspan={props.header.length} />

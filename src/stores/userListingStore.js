@@ -28,8 +28,8 @@ export class UserListingStore {
       client,
       query: allUsersQuery,
       variables: {
-        first: 200,
-        skip: 0,
+        first: this.requestState.first,
+        skip: this.requestState.skip,
         orderBy: `${this.requestState.sort.by}_${this.requestState.sort.direction}`,
       },
     });
@@ -41,6 +41,11 @@ export class UserListingStore {
 
   @computed get users() {
     return (this.allUsers.data && toJS(this.allUsers.data.allUsers)) || [];
+  }
+
+  @computed get allUsersMeta() {
+    return (this.allUsers.data && this.allUsers.data._allUsersMeta) ?
+      this.allUsers.data._allUsersMeta.count : 0;
   }
 
   @computed get error() {
@@ -69,10 +74,25 @@ export class UserListingStore {
 
   @action
   initiateSort(by, sortable) {
+    // https://blog.graph.cool/designing-powerful-apis-with-graphql-query-parameters-8c44a04658a9
     if (sortable) {
       this.requestState.sort.by = by;
       this.requestState.sort.direction = this.requestState.sort.direction === 'ASC' ? 'DESC' : 'ASC';
       this.initRequest();
+    }
+  }
+
+  @action
+  loadMore = () => {
+    if (this.allUsersMeta > this.users.length) {
+      this.requestState.skip = this.users.length;
+      this.allUsers.loading = true;
+      this.allUsers.ref.fetchMore({
+        variables: { skip: this.requestState.skip },
+        updateQuery: (previousResult, { fetchMoreResult }) => ({
+          allUsers: [...previousResult.allUsers, ...fetchMoreResult.allUsers],
+        }),
+      });
     }
   }
 
