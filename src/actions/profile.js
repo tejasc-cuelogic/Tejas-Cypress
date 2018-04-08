@@ -1,4 +1,4 @@
-import profileStore from '../stores/profileStore';
+import validationActions from '../actions/validation';
 
 export class Profile {
   setAddressFieldsOnGoogleAutocomplete = (place) => {
@@ -20,10 +20,10 @@ export class Profile {
       zipCode = place.address_components[8].short_name;
     }
 
-    profileStore.setProfileDetails('residentalStreet', residentalStreet);
-    profileStore.setProfileDetails('city', city);
-    profileStore.setProfileDetails('state', state);
-    profileStore.setProfileDetails('zipCode', zipCode);
+    validationActions.validateProfileDetailsField('residentalStreet', residentalStreet);
+    validationActions.validateProfileDetailsField('city', city);
+    validationActions.validateProfileDetailsField('state', state);
+    validationActions.validateProfileDetailsField('zipCode', zipCode);
   }
 }
 

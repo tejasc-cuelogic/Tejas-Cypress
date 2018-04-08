@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid } from 'semantic-ui-react';
 
+@inject('profileStore')
+@observer
 export default class ConfirmIdentityDocuments extends Component {
+  uploadDocument = (e) => {
+    if (e.target.files.length) {
+      const uploadFile = e.target.files[0];
+      this.props.profileStore.setConfirmIdentityDocuments(e.target.name, uploadFile.name);
+    }
+  }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.setDashboardWizardStep('ConfirmPhoneNumber');
   }
   render() {
+    const { confirmIdentityDocuments } = this.props.profileStore;
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
@@ -32,7 +43,12 @@ export default class ConfirmIdentityDocuments extends Component {
                 <Grid.Column width={9}>
                   <div className="file-uploader">
                     <Icon name="upload" /> Choose a file <span>or drag it here</span>
-                    <input type="file" />
+                    <input
+                      name={confirmIdentityDocuments.photoId.key}
+                      type="file"
+                      onChange={this.uploadDocument}
+                    />
+                    {confirmIdentityDocuments.photoId.nameOfUploadedFile}
                   </div>
                 </Grid.Column>
               </Grid.Row>
@@ -53,7 +69,12 @@ export default class ConfirmIdentityDocuments extends Component {
                 <Grid.Column width={9}>
                   <div className="file-uploader">
                     <Icon name="upload" /> Choose a file <span>or drag it here</span>
-                    <input type="file" />
+                    <input
+                      name={confirmIdentityDocuments.proofOfResidence.key}
+                      type="file"
+                      onChange={this.uploadDocument}
+                    />
+                    {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile}
                   </div>
                 </Grid.Column>
               </Grid.Row>

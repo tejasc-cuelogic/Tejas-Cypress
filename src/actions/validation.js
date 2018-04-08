@@ -285,28 +285,16 @@ export class Validation {
   }
 
   /**
-   * @desc Validates fields on Phone Number Verification
-   * @param string $field - field on form that need to be validated
-   * @param string $value - value that need to be set to field
-   * @return null
-   */
-  validateVerificationCodeForPhoneNumber = (field, value) => {
-    profileStore.setConfirmPhoneNumberVerificationCode(value);
-    const { errors } = validationService.validate(profileStore.confirmPhoneNumberVerificationCode);
-    profileStore.setConfirmPhoneNumberVerificationCodeError(errors && errors[field][0]);
-  }
-
-  /**
    * @desc Validates Confirm Phone Number Form after Form Submission
    */
   validateConfirmPhoneNumberForm = () => {
-    const { key } = profileStore.confirmPhoneNumberVerificationCode;
+    const { key } = profileStore.profileDetails.code;
     // Select only required values and exclude others from being checked
     if (CONFIRM_PHONE_NUMBER_VERIFICATION_CODE.includes(key)) {
       const { errors } =
-      validationService.validate(profileStore.confirmPhoneNumberVerificationCode);
+      validationService.validate(profileStore.profileDetails.code);
       // Store errors to store if any or else `undefined` will get set to it
-      profileStore.setConfirmPhoneNumberVerificationCodeError(errors && errors[key][0]);
+      profileStore.setProfileError('code', errors && errors[key][0]);
     }
   }
 

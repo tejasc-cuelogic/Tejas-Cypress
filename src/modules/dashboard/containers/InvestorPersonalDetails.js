@@ -11,6 +11,7 @@ import validationActions from './../../../actions/validation';
 import FieldError from '../../../components/common/FieldError';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
 import profileActions from '../../../actions/profile';
+import Helper from '../../../helper/utility';
 
 @inject('profileStore', 'uiStore', 'userStore')
 @observer
@@ -34,10 +35,9 @@ export default class investorPersonalDetails extends Component {
   }
 
   handleMaskedInputChange = (e) => {
-    let maskedInputValue = e.target.value;
-    maskedInputValue = maskedInputValue.split('-').join('');
-    console.log(e.target.name, maskedInputValue);
-    validationActions.validateProfileDetailsField(e.target.name, maskedInputValue);
+    const maskedInputValue = e.target.value;
+    const unMaskedInputValue = Helper.unMaskInput(maskedInputValue);
+    validationActions.validateProfileDetailsField(e.target.name, unMaskedInputValue);
   }
 
   handleSubmitForm = (e) => {

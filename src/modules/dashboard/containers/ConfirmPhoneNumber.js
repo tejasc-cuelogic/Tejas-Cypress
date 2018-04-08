@@ -12,11 +12,16 @@ import FieldError from '../../../components/common/FieldError';
 export default class ConfirmPhoneNumber extends Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
-    this.props.profileStore.resetConfirmPhoneNumberVerificationCode();
   }
 
   handleInputChange = (e, { name, value }) =>
-    validationActions.validateVerificationCodeForPhoneNumber(name, value);
+    validationActions.validateProfileDetailsField(name, value);
+
+  restrictInputAfterMaxLength = (e) => {
+    if (e.target.value.toString().length === 6) {
+      e.preventDefault();
+    }
+  }
 
   handleSubmitForm = (e) => {
     e.preventDefault();
@@ -27,7 +32,7 @@ export default class ConfirmPhoneNumber extends Component {
   }
 
   render() {
-    const { profileDetails, confirmPhoneNumberVerificationCode } = this.props.profileStore;
+    const { profileDetails } = this.props.profileStore;
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
@@ -54,13 +59,14 @@ export default class ConfirmPhoneNumber extends Component {
               size="huge"
               label="Enter verification code here:"
               className="otp-field"
-              name={confirmPhoneNumberVerificationCode.key}
-              value={confirmPhoneNumberVerificationCode.value}
+              name={profileDetails.code.key}
+              value={profileDetails.code.value}
               onChange={this.handleInputChange}
-              error={!!confirmPhoneNumberVerificationCode.error}
+              error={!!profileDetails.code.error}
               maxLength={6}
+              onKeyPress={this.restrictInputAfterMaxLength}
             />
-            <FieldError error={confirmPhoneNumberVerificationCode.error} />
+            <FieldError error={profileDetails.code.error} />
             <div className="center-align">
               <Button color="green" size="large" className="very relaxed">Confirm</Button>
             </div>
