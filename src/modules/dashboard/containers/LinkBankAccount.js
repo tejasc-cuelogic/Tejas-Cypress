@@ -2,13 +2,13 @@ import React from 'react';
 import { Modal } from 'semantic-ui-react';
 
 import MuliStep from '../../../helper/MultiStep';
-import StepOne from './StepOne';
-import StepTwo from './StepTwo';
+import LinkBankAccountPlaid from './LinkBankAccountPlaid';
+import CreateAccount from './CreateAccount';
 
 const steps =
   [
-    { name: 'Step 1', component: <StepOne /> },
-    { name: 'Step 2', component: <StepTwo /> },
+    { name: 'Link Bank', component: <LinkBankAccountPlaid /> },
+    { name: 'Summary', component: <CreateAccount /> },
   ];
 
 export default class LinkBankAccount extends React.Component {

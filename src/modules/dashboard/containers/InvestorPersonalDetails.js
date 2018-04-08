@@ -39,10 +39,8 @@ export default class investorPersonalDetails extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    console.log(this.props.profileStore.profileDetails);
     validationActions.validateProfileDetailsForm();
     if (this.props.profileStore.canSubmitProfileDetails) {
-      console.log(this.props.profileStore.profileDetails);
       this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation');
     }
   }
