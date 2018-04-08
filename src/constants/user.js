@@ -8,6 +8,17 @@ export const USER_TYPES_META = [
   },
 ];
 
+export const USER_LIST_META = [
+  ['profilepic', '', false],
+  ['firstName', 'Full Name', true],
+  ['residence_city', 'Residence City', false],
+  ['phone', 'Phone', false],
+  ['accountType', 'Type', true],
+  ['lastLogin', 'Last Login', true],
+  ['createdAt', 'Account Creation', true],
+  ['actions', '', false],
+];
+
 // Filters
 export const AccountType = [{ text: 'Admin', value: 'Admin' }, { text: 'Business', value: 'Business' }, { text: 'IRA', value: 'IRA' }, { text: 'Individual', value: 'Individual' }, { text: 'Entity', value: 'Entity' }];
 
