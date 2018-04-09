@@ -5,6 +5,7 @@ import authStore from './../stores/authStore';
 import businessStore from './../stores/businessStore';
 import userStore from './../stores/userStore';
 import profileStore from './../stores/profileStore';
+import accountStore from './../stores/accountStore';
 import { REGISTRATION, PROFILE_DETAILS, CONDITIONAL_REQUIRE, CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE, CONFIRM_PHONE_NUMBER_VERIFICATION_CODE, CONFIRM_IDENTITY_QUESTIONS } from './../constants/validation';
 
 /**
@@ -345,6 +346,18 @@ export class Validation {
         profileStore.setConfirmIdentityQuestionsError(key, errors && errors[key][0]);
       }
     });
+  }
+
+  /**
+   * @desc validates Individual Account's fields on change.
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateIndividualAccountField = (field, value) => {
+    accountStore.setIndividualAccountDetails(field, value);
+    const { errors } = validationService.validate(accountStore.individualAccount[field]);
+    accountStore.setIndividualAccountError(field, errors && errors[field][0]);
   }
 
   // Private Methods ends here
