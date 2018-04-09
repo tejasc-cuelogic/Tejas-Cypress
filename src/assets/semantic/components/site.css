@@ -102,11 +102,11 @@ p:last-child {
 --------------------*/
 
 a {
-  color: #A9D943;
+  color: #98CE23;
   text-decoration: none;
 }
 a:hover {
-  color: #81ad23;
+  color: #7eab1d;
   text-decoration: none;
 }
 
@@ -223,6 +223,69 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.eot?#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.woff2") format('woff2'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.woff") format('woff'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.ttf") format('truetype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.svg#SFProDisplay-Heavy") format('svg');
   font-style: normal;
   font-weight: 900;
+}
+ol.progtrckr {
+  margin: 0;
+  padding: 0 0 2.2rem;
+  list-style-type: none;
+  text-align: center;
+}
+ol.progtrckr li {
+  margin: 0 0.71428571rem;
+  min-width: 60px;
+  display: inline-block;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 0.92857143rem;
+  line-height: 2rem;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+ol.progtrckr li:after {
+  content: "";
+  width: 60px;
+  height: 4px;
+  border-radius: 0.28571429rem;
+  display: block;
+  background: #666666;
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translate(-50%, 0%);
+          transform: translate(-50%, 0%);
+}
+ol.progtrckr li.progtrckr-todo {
+  color: #666666;
+}
+ol.progtrckr li.progtrckr-todo:after {
+  background: #666666;
+}
+ol.progtrckr li.progtrckr-doing {
+  color: #FFFFFF;
+}
+ol.progtrckr li.progtrckr-doing:after {
+  background: #FFFFFF;
+}
+ol.progtrckr li.progtrckr-done {
+  color: #98CE23;
+}
+ol.progtrckr li.progtrckr-done:after {
+  background: #98CE23;
+}
+ol.progtrckr li.progtrckr-done.error {
+  color: #EB5757;
+}
+ol.progtrckr li.progtrckr-done.error:after {
+  background: #EB5757;
+}
+@media (max-width: 650px) {
+  .progtrckr li span {
+    display: none;
+  }
+}
+@media (max-width: 650px) {
+  .progtrckr em {
+    display: inline;
+  }
 }
 
 

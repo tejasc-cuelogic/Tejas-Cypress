@@ -163,11 +163,11 @@
   margin-right: 0.57142857rem;
 }
 .account-type-tab > .ui.item.menu.secondary a.item.active .account-tab {
-  border-color: #A9D943;
+  border-color: #98CE23;
 }
 .account-type-tab > .ui.item.menu.secondary a.item.active .account-tab .account-type {
-  color: #A9D943;
-  border-color: #A9D943;
+  color: #98CE23;
+  border-color: #98CE23;
 }
 .account-type-tab .tab {
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;

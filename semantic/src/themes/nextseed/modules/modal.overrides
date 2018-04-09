@@ -87,9 +87,9 @@
                 &.large{
                     font-size:@14px;
                 }
-                &.circular{
-                    min-width:160px;
-                }
+                // &.circular{
+                //     min-width:160px;
+                // }
             }
         }
         a.cancel-link, .button.cancel-link{
@@ -161,3 +161,45 @@
     }
 }
 
+//  Multistep form Modal styles
+.ui.modal.basic.multistep-modal{
+    >.close{
+        top:-2.5rem;
+        right:-2.5rem;
+    }
+    .multistep.content{
+        background:@white;
+        border-radius:@10px;
+        position:relative;
+        padding:2.5rem 3rem;
+        .ui.button.multistep__btn{
+            background:@white;
+            color:@theme-primary;
+            letter-spacing:0;
+            box-shadow:0 0 16px 2px fade(@fullBlack, 15%) !important;
+            margin:0;
+            position:absolute;
+            top:50%;
+            &.disabled{
+                background:@border-color;
+                color:@inverse-text-darken;
+                opacity:1 !important;
+            }
+            >.icon{
+                width:auto;
+            }
+            &.prev{
+                left:0;
+                transform:translate(-50%, -50%);
+            }
+            &.next{
+                right:0;
+                transform:translate(50%, -50%);
+                &.active{
+                    background:@theme-primary;
+                    color:@white;
+                }
+            }
+        }
+    }
+}

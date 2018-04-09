@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'semantic-ui-react';
+import { Modal, Header, Button } from 'semantic-ui-react';
 
 export default class MultiStep extends React.Component {
   constructor(props) {
@@ -97,8 +97,8 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
       <li className={this.getClassName('progtrckr', i)} onClick={this.handleOnClick} key={i} value={i}>
-        <em>{i + 1}</em>
-        <span>{this.props.steps[i].name}</span>
+        {/* <em>{i + 1}</em> */}
+        {this.props.steps[i].name}
       </li>
     ));
   }
@@ -107,30 +107,30 @@ export default class MultiStep extends React.Component {
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
       <div onKeyDown={this.handleKeyDown}>
-        <Modal size="tiny" basic open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+        <Modal size="tiny" basic open closeIcon className="multistep-modal">
+          <Header as="h1" textAlign="center">Individual  account creation</Header>
           <ol className="progtrckr">
             {this.renderSteps()}
           </ol>
           <Modal.Content className="multistep">
             {this.props.steps[this.state.compState].component}
-          </Modal.Content>
-          <div className="multistep-nav" style={this.props.showNavigation ? {} : this.hidden}>
-            <button
-              style={this.state.showPreviousBtn ? {} : this.hidden}
-              className="multistep__btn--prev"
+            <Button
+              circular
+              icon="arrow left"
+              // style={this.state.showPreviousBtn ? {} : this.hidden}
+              className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
               onClick={this.previous}
-            >
-              Previous
-            </button>
-
-            <button
-              style={this.state.showNextBtn ? {} : this.hidden}
-              className="multistep__btn--next"
+            />
+            <Button
+              circular
+              icon="arrow right"
+              // style={this.state.showNextBtn ? {} : this.hidden}
+              className={(this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
               onClick={this.next}
-            >
-              Next
-            </button>
-          </div>
+            />
+            {/* <div className="multistep-nav" style={this.props.showNavigation ? {} : this.hidden}>
+            </div> */}
+          </Modal.Content>
         </Modal>
       </div>
     );

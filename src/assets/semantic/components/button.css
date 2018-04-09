@@ -3690,7 +3690,7 @@
 }
 .ui.button.green,
 .ui.buttons .button.green {
-  background-color: #A9D943;
+  background-color: #98CE23;
 }
 .ui.button.green:hover,
 .ui.buttons .button.green:hover,
@@ -3698,7 +3698,7 @@
 .ui.buttons .button.green:focus,
 .ui.button.green:active,
 .ui.buttons .button.green:active {
-  background-color: #97ca29;
+  background-color: #7eab1d;
 }
 .ui.button + .button,
 .ui.buttons .button + .button {
@@ -3734,7 +3734,7 @@
 }
 .ui.button.link-button.green,
 .ui.buttons .button.link-button.green {
-  color: #A9D943;
+  color: #98CE23;
 }
 .ui.button.link-button.green:hover,
 .ui.buttons .button.link-button.green:hover,
@@ -3742,7 +3742,7 @@
 .ui.buttons .button.link-button.green:focus,
 .ui.button.link-button.green:active,
 .ui.buttons .button.link-button.green:active {
-  color: #97ca29;
+  color: #7eab1d;
 }
 .ui.button.link-button.red,
 .ui.buttons .button.link-button.red {
@@ -3778,9 +3778,9 @@
 }
 .ui.inverted.green.buttons .button,
 .ui.inverted.green.button {
-  color: #A9D943;
-  -webkit-box-shadow: 0px 0px 0px 2px #A9D943 inset !important;
-          box-shadow: 0px 0px 0px 2px #A9D943 inset !important;
+  color: #98CE23;
+  -webkit-box-shadow: 0px 0px 0px 2px #98CE23 inset !important;
+          box-shadow: 0px 0px 0px 2px #98CE23 inset !important;
 }
 .ui.inverted.green.buttons .button:hover,
 .ui.inverted.green.button:hover,
@@ -3790,7 +3790,7 @@
 .ui.inverted.green.button:active,
 .ui.inverted.green.buttons .button.active,
 .ui.inverted.green.button.active {
-  background-color: #A9D943;
+  background-color: #98CE23;
 }
 .ui.red.button,
 .ui.red.buttons .button {
