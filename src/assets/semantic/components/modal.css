@@ -751,39 +751,35 @@
   position: relative;
   padding: 2.5rem 3rem;
 }
-.ui.modal.basic.multistep-modal .multistep.content .multistep-nav {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  -webkit-transform: translate(0%, -50%);
-          transform: translate(0%, -50%);
-}
-.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .ui.button {
+.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn {
   background: #FFFFFF;
   color: #98CE23;
   letter-spacing: 0;
   -webkit-box-shadow: 0 0 16px 2px rgba(0, 0, 0, 0.15) !important;
           box-shadow: 0 0 16px 2px rgba(0, 0, 0, 0.15) !important;
+  margin: 0;
+  position: absolute;
+  top: 50%;
 }
-.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .ui.button.disabled {
+.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn.disabled {
   background: #e0e0e0;
   color: #bdbdbd;
   opacity: 1 !important;
 }
-.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .ui.button > .icon {
+.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn > .icon {
   width: auto;
 }
-.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .multistep__btn--prev {
-  -webkit-transform: translate(-50%, 0%);
-          transform: translate(-50%, 0%);
+.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn.prev {
+  left: 0;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
 }
-.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .multistep__btn--next {
-  float: right;
-  -webkit-transform: translate(50%, 0%);
-          transform: translate(50%, 0%);
+.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn.next {
+  right: 0;
+  -webkit-transform: translate(50%, -50%);
+          transform: translate(50%, -50%);
 }
-.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .multistep__btn--next.active {
+.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn.next.active {
   background: #98CE23;
   color: #FFFFFF;
 }

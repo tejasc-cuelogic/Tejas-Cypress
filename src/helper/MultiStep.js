@@ -114,22 +114,22 @@ export default class MultiStep extends React.Component {
           </ol>
           <Modal.Content className="multistep">
             {this.props.steps[this.state.compState].component}
-            <div className="multistep-nav" style={this.props.showNavigation ? {} : this.hidden}>
-              <Button
-                circular
-                icon="arrow left"
-                style={this.state.showPreviousBtn ? {} : this.hidden}
-                className="multistep__btn--prev"
-                onClick={this.previous}
-              />
-              <Button
-                circular
-                icon="arrow right"
-                style={this.state.showNextBtn ? {} : this.hidden}
-                className="multistep__btn--next"
-                onClick={this.next}
-              />
-            </div>
+            <Button
+              circular
+              icon="arrow left"
+              style={this.state.showPreviousBtn ? {} : this.hidden}
+              className="multistep__btn prev"
+              onClick={this.previous}
+            />
+            <Button
+              circular
+              icon="arrow right"
+              style={this.state.showNextBtn ? {} : this.hidden}
+              className="multistep__btn next"
+              onClick={this.next}
+            />
+            {/* <div className="multistep-nav" style={this.props.showNavigation ? {} : this.hidden}>
+            </div> */}
           </Modal.Content>
         </Modal>
       </div>

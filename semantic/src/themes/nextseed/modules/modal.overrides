@@ -172,32 +172,29 @@
         border-radius:@10px;
         position:relative;
         padding:2.5rem 3rem;
-        .multistep-nav{
+        .ui.button.multistep__btn{
+            background:@white;
+            color:@theme-primary;
+            letter-spacing:0;
+            box-shadow:0 0 16px 2px fade(@fullBlack, 15%) !important;
+            margin:0;
             position:absolute;
-            left:0;
-            right:0;
             top:50%;
-            transform:translate(0%, -50%);
-            .ui.button{
-                background:@white;
-                color:@theme-primary;
-                letter-spacing:0;
-                box-shadow:0 0 16px 2px fade(@fullBlack, 15%) !important;
-                &.disabled{
-                    background:@border-color;
-                    color:@inverse-text-darken;
-                    opacity:1 !important;
-                }
-                >.icon{
-                    width:auto;
-                }
+            &.disabled{
+                background:@border-color;
+                color:@inverse-text-darken;
+                opacity:1 !important;
             }
-            .multistep__btn--prev{
-                transform:translate(-50%, 0%);
+            >.icon{
+                width:auto;
             }
-            .multistep__btn--next{
-                float:right;
-                transform:translate(50%, 0%);
+            &.prev{
+                left:0;
+                transform:translate(-50%, -50%);
+            }
+            &.next{
+                right:0;
+                transform:translate(50%, -50%);
                 &.active{
                     background:@theme-primary;
                     color:@white;
