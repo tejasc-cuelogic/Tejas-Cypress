@@ -47,7 +47,7 @@ const panes = [
   },
 ];
 
-const investmentChooseType = props => (
+const InvestmentChooseType = props => (
   <Modal open closeIcon onClose={() => props.setDashboardWizardStep()}>
     <Modal.Header className="center-align signup-header">
       <Header as="h2">What type of Investment Account would you like to start?</Header>
@@ -69,7 +69,7 @@ const investmentChooseType = props => (
         />
         <Grid.Row>
           <Grid.Column>
-            <Button circular color="green" onClick={() => props.setDashboardWizardStep('LinkBankAccount')} content="Accept" />
+            <Button circular color="green" onClick={() => props.setDashboardWizardStep(props.routeOnInvestmentTypeSelection)} content="Accept" />
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -77,4 +77,4 @@ const investmentChooseType = props => (
   </Modal>
 );
 
-export default investmentChooseType;
+export default InvestmentChooseType;

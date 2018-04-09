@@ -18,6 +18,7 @@ class Dashboard extends Component {
   handleAccoutTypeChange = (e, data) => {
     this.props.accountStore.setAccountType(data.activeIndex);
   }
+
   render() {
     const stepinfo = {
       value: 'Verify your identity',
@@ -57,6 +58,7 @@ class Dashboard extends Component {
         {this.props.uiStore.dashboardStep &&
         <DashboardWizard
           handleAccoutTypeChange={this.handleAccoutTypeChange}
+          routeOnInvestmentTypeSelection={this.props.accountStore.routeOnInvestmentTypeSelection}
         />
         }
         {this.props.uiStore.modalStatus &&

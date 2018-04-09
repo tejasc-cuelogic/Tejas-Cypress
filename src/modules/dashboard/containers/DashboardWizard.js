@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import { inject, observer } from 'mobx-react';
-import upperFirst from 'lodash/upperFirst';
 
 @inject('authStore', 'uiStore', 'accountStore')
 @observer
@@ -11,9 +10,9 @@ class DashboardWizard extends Component {
   }
 
   render() {
-    const module = upperFirst(this.props.uiStore.dashboardStep);
+    const module = this.props.uiStore.dashboardStep;
     const DashboardModule = Loadable({
-      loader: () => (module === 'LinkBankAccount' || module === 'LinkBankAccountPlaid' || module === 'LinkBankAccountForm' || module === 'CreateAccount' || module === 'ConfirmEmailAddress' || module === 'InvestorPersonalDetails' || module === 'ConfirmIdentityForm' || module === 'ConfirmPhoneNumber' || module === 'ConfirmIdentityDocuments' ? import(`../containers/${module}`) : import(`../components/${module}`)),
+      loader: () => (module === `${this.props.accountStore.accountType}/AccountCreation` || module === `${this.props.accountStore.accountType}/LinkBankAccount` || module === 'InvestorPersonalDetails' || module === 'ConfirmIdentityForm' || module === 'ConfirmPhoneNumber' || module === 'ConfirmIdentityDocuments' ? import(`../containers/${module}`) : import(`../components/${module}`)),
       loading() {
         return <div>Loading...</div>;
       },

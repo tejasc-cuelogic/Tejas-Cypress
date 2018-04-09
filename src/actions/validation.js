@@ -360,6 +360,18 @@ export class Validation {
     accountStore.setIndividualAccountError(field, errors && errors[field][0]);
   }
 
+  /**
+   * @desc validates IRA Account's fields on change.
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateIraAccountField = (field, value) => {
+    accountStore.setIraAccountDetails(field, value);
+    const { errors } = validationService.validate(accountStore.iraAccount[field]);
+    accountStore.setIraAccountError(field, errors && errors[field][0]);
+  }
+
   // Private Methods ends here
 }
 

@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react';
 import PlaidLink from 'react-plaid-link';
 import { Header, Form, Input, Button, Popup, Icon } from 'semantic-ui-react';
 
-import validationActions from '../../../actions/validation';
+import validationActions from '../../../../actions/validation';
+import FieldError from '../../../../components/common/FieldError';
 
 @inject('accountStore')
 @observer
@@ -60,7 +61,9 @@ export default class LinkBankAccountPlaid extends React.Component {
                 value={individualAccount.bankRoutingNumber.value}
                 error={!!individualAccount.bankRoutingNumber.error}
                 onChange={this.handleInputChange}
+                maxLength={10}
               />
+              <FieldError error={individualAccount.bankRoutingNumber.error} />
             </Form.Field>
             <Form.Field>
               <label>
@@ -77,7 +80,9 @@ export default class LinkBankAccountPlaid extends React.Component {
                 value={individualAccount.bankAccountNumber.value}
                 error={!!individualAccount.bankAccountNumber.error}
                 onChange={this.handleInputChange}
+                maxLength={12}
               />
+              <FieldError error={individualAccount.bankAccountNumber.error} />
             </Form.Field>
             <div className="center-align">
               <Button circular color="green" size="large">Confirm</Button>
