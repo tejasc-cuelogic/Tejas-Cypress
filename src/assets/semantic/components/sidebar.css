@@ -729,7 +729,7 @@ body.pushable > .pusher {
 }
 .ui.sidebar.left.push .item.active {
   background: transparent;
-  color: #A9D943 !important;
+  color: #98CE23 !important;
 }
 .ui.sidebar.left.push .item.active > i.icon:after {
   content: "";
@@ -737,7 +737,7 @@ body.pushable > .pusher {
   height: 6px;
   border-radius: 3px;
   display: block;
-  background: #A9D943;
+  background: #98CE23;
   position: absolute;
   left: 50%;
   margin-left: -2px;

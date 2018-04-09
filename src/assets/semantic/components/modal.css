@@ -648,12 +648,12 @@
 .ui.modal .content.signup-content .user-type:hover,
 .ui.modal .content.signup-content .user-type:focus,
 .ui.modal .content.signup-content .user-type.active {
-  border-color: #81ad23;
+  border-color: #7eab1d;
 }
 .ui.modal .content.signup-content .user-type:hover i.icon,
 .ui.modal .content.signup-content .user-type:focus i.icon,
 .ui.modal .content.signup-content .user-type.active i.icon {
-  color: #81ad23;
+  color: #7eab1d;
 }
 .ui.modal .content .ui.button,
 .ui.modal .content .ui.buttons .button {
@@ -666,10 +666,6 @@
 .ui.modal .content .ui.button.large,
 .ui.modal .content .ui.buttons .button.large {
   font-size: 1rem;
-}
-.ui.modal .content .ui.button.circular,
-.ui.modal .content .ui.buttons .button.circular {
-  min-width: 160px;
 }
 .ui.modal .content a.cancel-link,
 .ui.modal .content .button.cancel-link {
@@ -744,6 +740,52 @@
   border-radius: 0;
   border: none;
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
+}
+.ui.modal.basic.multistep-modal > .close {
+  top: -2.5rem;
+  right: -2.5rem;
+}
+.ui.modal.basic.multistep-modal .multistep.content {
+  background: #FFFFFF;
+  border-radius: 0.71428571rem;
+  position: relative;
+  padding: 2.5rem 3rem;
+}
+.ui.modal.basic.multistep-modal .multistep.content .multistep-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  -webkit-transform: translate(0%, -50%);
+          transform: translate(0%, -50%);
+}
+.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .ui.button {
+  background: #FFFFFF;
+  color: #98CE23;
+  letter-spacing: 0;
+  -webkit-box-shadow: 0 0 16px 2px rgba(0, 0, 0, 0.15) !important;
+          box-shadow: 0 0 16px 2px rgba(0, 0, 0, 0.15) !important;
+}
+.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .ui.button.disabled {
+  background: #e0e0e0;
+  color: #bdbdbd;
+  opacity: 1 !important;
+}
+.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .ui.button > .icon {
+  width: auto;
+}
+.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .multistep__btn--prev {
+  -webkit-transform: translate(-50%, 0%);
+          transform: translate(-50%, 0%);
+}
+.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .multistep__btn--next {
+  float: right;
+  -webkit-transform: translate(50%, 0%);
+          transform: translate(50%, 0%);
+}
+.ui.modal.basic.multistep-modal .multistep.content .multistep-nav .multistep__btn--next.active {
+  background: #98CE23;
+  color: #FFFFFF;
 }
 
 

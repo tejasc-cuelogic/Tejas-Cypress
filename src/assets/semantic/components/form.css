@@ -1093,7 +1093,7 @@
   line-height: 1.42857143rem;
   font-weight: 500;
   text-transform: uppercase;
-  color: #A9D943;
+  color: #98CE23;
 }
 .card.editable .actions a:last-child {
   margin-right: 0;
@@ -1101,7 +1101,7 @@
 .card.editable .actions a:hover,
 .card.editable .actions a:focus,
 .card.editable .actions a:active {
-  color: #97ca29;
+  color: #7eab1d;
 }
 .card.editable .actions a.negative {
   color: #999999;

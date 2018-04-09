@@ -246,7 +246,7 @@ div.login-form ul.error-messages {
 .page-header-section h1 a.back-link {
   position: absolute;
   left: -35px;
-  color: #A9D943;
+  color: #98CE23;
 }
 .page-header-section h1 a.back-link > i.icon,
 .page-header-section h1 a.back-link i.icons {
@@ -255,7 +255,7 @@ div.login-form ul.error-messages {
 .page-header-section h1 a.back-link:hover,
 .page-header-section h1 a.back-link:active,
 .page-header-section h1 a.back-link:focus {
-  color: #97ca29;
+  color: #7eab1d;
 }
 .page-header-section p {
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -266,7 +266,7 @@ div.login-form ul.error-messages {
   min-width: 19px;
   padding: 0 4px;
   margin-right: 1rem;
-  background: #A9D943;
+  background: #98CE23;
   display: inline-block;
   font-size: 0.78571429rem;
   line-height: 1.35714286rem;
@@ -352,7 +352,7 @@ div.login-form ul.error-messages {
 .notification-box h4.amount {
   font-size: 1.42857143rem;
   font-weight: 900;
-  color: #A9D943;
+  color: #98CE23;
 }
 .ui.segment.inverted.footer,
 .ui.primary.segment.inverted.footer {
@@ -500,7 +500,7 @@ a.disabled:focus {
   color: #e0e0e0;
 }
 .check-list .item i.icon.check.circle {
-  color: #A9D943;
+  color: #98CE23;
 }
 
 

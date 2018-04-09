@@ -181,11 +181,11 @@ ol.ui.list ol li,
 .ui.list .list > a.item,
 .ui.list > a.item {
   cursor: pointer;
-  color: #A9D943;
+  color: #98CE23;
 }
 .ui.list .list > a.item:hover,
 .ui.list > a.item:hover {
-  color: #81ad23;
+  color: #7eab1d;
 }
 
 /* Linked Item Icons */
@@ -198,11 +198,11 @@ ol.ui.list ol li,
 .ui.list .list > .item a.header,
 .ui.list > .item a.header {
   cursor: pointer;
-  color: #A9D943 !important;
+  color: #98CE23 !important;
 }
 .ui.list .list > .item a.header:hover,
 .ui.list > .item a.header:hover {
-  color: #81ad23 !important;
+  color: #7eab1d !important;
 }
 
 /* Floated Content */
@@ -366,7 +366,7 @@ ol.ui.list ol li,
 }
 .ui.inverted.list .list > a.item:hover,
 .ui.inverted.list > a.item:hover {
-  color: #81ad23;
+  color: #7eab1d;
 }
 
 /* Linking Content */
@@ -374,7 +374,7 @@ ol.ui.list ol li,
   color: rgba(255, 255, 255, 0.9) !important;
 }
 .ui.inverted.list .item a:not(.ui):hover {
-  color: #81ad23 !important;
+  color: #7eab1d !important;
 }
 
 /*-------------------
@@ -953,7 +953,7 @@ ol.ui.horizontal.list li:before,
 .ui.horizontal.list a.item:hover,
 .ui.horizontal.list a.item:focus,
 .ui.horizontal.list a.item.active {
-  color: #A9D943;
+  color: #98CE23;
 }
 .ui.horizontal.list.link > a.item {
   font-size: 0.85714286rem;
@@ -964,7 +964,7 @@ ol.ui.horizontal.list li:before,
 .ui.horizontal.list.link > a.item:hover,
 .ui.horizontal.list.link > a.item:focus,
 .ui.horizontal.list.link > a.item.active {
-  color: #A9D943;
+  color: #98CE23;
 }
 .tabular-wrap .ui.segment .ui.horizontal.list.link {
   margin-bottom: 2rem;
@@ -978,7 +978,7 @@ ol.ui.horizontal.list li:before,
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item:focus,
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item.active {
   color: #303030;
-  border-color: #A9D943;
+  border-color: #98CE23;
 }
 
 
