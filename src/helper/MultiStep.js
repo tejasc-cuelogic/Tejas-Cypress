@@ -1,4 +1,5 @@
 import React from 'react';
+import { Modal } from 'semantic-ui-react';
 
 export default class MultiStep extends React.Component {
   constructor(props) {
@@ -105,28 +106,32 @@ export default class MultiStep extends React.Component {
   render() {
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
-      <div className="container" onKeyDown={this.handleKeyDown}>
-        <ol className="progtrckr">
-          {this.renderSteps()}
-        </ol>
-        {this.props.steps[this.state.compState].component}
-        <div style={this.props.showNavigation ? {} : this.hidden}>
-          <button
-            style={this.state.showPreviousBtn ? {} : this.hidden}
-            className="multistep__btn--prev"
-            onClick={this.previous}
-          >
-            Previous
-          </button>
+      <div onKeyDown={this.handleKeyDown}>
+        <Modal size="tiny" basic open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+          <ol className="progtrckr">
+            {this.renderSteps()}
+          </ol>
+          <Modal.Content className="multistep">
+            {this.props.steps[this.state.compState].component}
+          </Modal.Content>
+          <div className="multistep-nav" style={this.props.showNavigation ? {} : this.hidden}>
+            <button
+              style={this.state.showPreviousBtn ? {} : this.hidden}
+              className="multistep__btn--prev"
+              onClick={this.previous}
+            >
+              Previous
+            </button>
 
-          <button
-            style={this.state.showNextBtn ? {} : this.hidden}
-            className="multistep__btn--next"
-            onClick={this.next}
-          >
-            Next
-          </button>
-        </div>
+            <button
+              style={this.state.showNextBtn ? {} : this.hidden}
+              className="multistep__btn--next"
+              onClick={this.next}
+            >
+              Next
+            </button>
+          </div>
+        </Modal>
       </div>
     );
   }
