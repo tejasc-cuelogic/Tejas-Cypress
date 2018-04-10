@@ -6,6 +6,8 @@ import {
   FUNDING_OPTIONS,
   INDIVIDUAL_ACCOUNT_CREATION,
   IRA_ACCOUNT_CREATION,
+  IS_ENTITY_TRUST,
+  ENTITY_ACCOUNT_CREATION,
 } from '../constants/account';
 
 export class AccountStore {
@@ -17,12 +19,14 @@ export class AccountStore {
 
   @observable iraAccount = { ...IRA_ACCOUNT_CREATION }
 
+  @observable entityAccount = { ...ENTITY_ACCOUNT_CREATION }
+
   @computed
   get routeOnInvestmentTypeSelection() {
     let routeForInvestTypeSelection = '';
     if (this.accountType === 'individual') {
       routeForInvestTypeSelection = `${this.accountType}/LinkBankAccount`;
-    } else if (this.accountType === 'ira') {
+    } else if (this.accountType === 'ira' || this.accountType === 'entity') {
       routeForInvestTypeSelection = `${this.accountType}/AccountCreation`;
     }
     return routeForInvestTypeSelection;
@@ -66,6 +70,21 @@ export class AccountStore {
   @action
   setIraFundingOption(option) {
     this.setIraAccountDetails('fundingOption', FUNDING_OPTIONS[option]);
+  }
+
+  @action
+  setEntityAccountDetails(field, value) {
+    this.entityAccount[field].value = value;
+  }
+
+  @action
+  setEntityAccountError(field, error) {
+    this.entityAccount[field].error = error;
+  }
+
+  @action
+  setIsEntityTrust(option) {
+    this.setEntityAccountDetails('isEntityTrust', IS_ENTITY_TRUST[option]);
   }
 }
 

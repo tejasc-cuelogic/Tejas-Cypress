@@ -1,7 +1,9 @@
+import moment from 'moment';
+
 export const INVESTMENT_ACCOUNT_TYPES = {
   0: 'individual',
-  1: 'entity',
-  2: 'ira',
+  1: 'ira',
+  2: 'entity',
 };
 
 export const FUNDING_OPTIONS = {
@@ -72,6 +74,134 @@ export const IRA_ACCOUNT_CREATION = {
     key: 'driversLicence',
     error: undefined,
     rule: 'required',
+    label: '',
+    placeHolder: '',
+  },
+};
+
+export const IS_ENTITY_TRUST = {
+  0: 'yes',
+  1: 'no',
+};
+
+export const ENTITY_ACCOUNT_CREATION = {
+  entityNetAssets: {
+    value: '',
+    key: 'entityNetAssets',
+    error: undefined,
+    rule: 'required|numeric',
+    label: 'Entity Net Assets',
+    placeHolder: '',
+  },
+  cfInvestments: {
+    value: '',
+    key: 'cfInvestments',
+    error: undefined,
+    rule: 'required|numeric',
+    label: 'Other religion CF investments made in prior 12 months',
+    placeHolder: '',
+  },
+  nameOfEntity: {
+    value: '',
+    key: 'nameOfEntity',
+    error: undefined,
+    rule: 'required|string',
+    label: 'Name of Entity',
+    placeHolder: 'e.g Company',
+  },
+  taxId: {
+    value: '',
+    key: 'taxId',
+    error: undefined,
+    rule: 'required|string',
+    label: 'Tax ID',
+    placeHolder: 'Enter Tax ID',
+  },
+  street: {
+    value: '',
+    key: 'street',
+    error: undefined,
+    rule: 'required|string',
+    label: 'Street',
+    placeHolder: '',
+  },
+  city: {
+    value: '',
+    key: 'city',
+    error: undefined,
+    rule: 'required|string',
+    label: 'City',
+    placeHolder: '',
+  },
+  state: {
+    value: '',
+    key: 'state',
+    error: undefined,
+    rule: 'required|string',
+    label: 'State',
+    placeHolder: '',
+  },
+  zipCode: {
+    value: '',
+    key: 'zipCode',
+    error: undefined,
+    rule: 'required|numeric',
+    label: 'ZIP Code',
+    placeHolder: '',
+  },
+  isEntityTrust: {
+    value: IS_ENTITY_TRUST[0],
+    key: 'isEntityTrust',
+    error: undefined,
+    rule: 'required',
+    label: '',
+    placeHolder: '',
+  },
+  dateOfTrust: {
+    value: moment(),
+    key: 'dateOfTrust',
+    error: undefined,
+    rule: 'required',
+    label: 'Select date',
+    placeHolder: '',
+  },
+  entityTitle: {
+    value: '',
+    key: 'entityTitle',
+    error: undefined,
+    rule: 'required',
+    label: 'What is your title with the Entity',
+    placeHolder: 'e.g. CEO',
+  },
+  photoId: {
+    value: '',
+    key: 'photoId',
+    error: undefined,
+    rule: '',
+    label: '',
+    placeHolder: '',
+  },
+  entityFormationDocument: {
+    value: '',
+    key: 'entityFormationDocument',
+    error: undefined,
+    rule: '',
+    label: '',
+    placeHolder: '',
+  },
+  entityOperatingDocument: {
+    value: '',
+    key: 'entityOperatingDocument',
+    error: undefined,
+    rule: '',
+    label: '',
+    placeHolder: '',
+  },
+  einVerification: {
+    value: '',
+    key: 'einVerification',
+    error: undefined,
+    rule: '',
     label: '',
     placeHolder: '',
   },

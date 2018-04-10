@@ -17,18 +17,6 @@ const panes = [
     ],
   },
   {
-    menuItem: <Menu.Item key="entity"><div className="account-tab"><div className="account-type small">E</div> Entity</div></Menu.Item>,
-    render: () => [
-      <Tab.Pane key="tab2">
-        <p>Invest on NextSeed with a corporate, LLC or Trust investment account.<br /><br />
-          Minimum opening deposit of $5,000. Please note investment limits apply. The uninvested
-          cash in your account 1 is FDIC-insured up to $250,000 and is interest-bearing.<br /><br />
-          We safeguard your information with bank-level security measures.
-        </p>
-      </Tab.Pane>,
-    ],
-  },
-  {
     menuItem: <Menu.Item key="ira"><div className="account-tab"><div className="account-type small">R</div> IRA</div></Menu.Item>,
     render: () => [
       <Tab.Pane key="tab3">
@@ -41,6 +29,18 @@ const panes = [
           Promotional Offer: For new NextSeed IRA Accounts, NextSeed will cover the one-time setup
           fee and annual account fees for four years! For full details, go to the Terms and
           Conditions.
+        </p>
+      </Tab.Pane>,
+    ],
+  },
+  {
+    menuItem: <Menu.Item key="entity"><div className="account-tab"><div className="account-type small">E</div> Entity</div></Menu.Item>,
+    render: () => [
+      <Tab.Pane key="tab2">
+        <p>Invest on NextSeed with a corporate, LLC or Trust investment account.<br /><br />
+          Minimum opening deposit of $5,000. Please note investment limits apply. The uninvested
+          cash in your account 1 is FDIC-insured up to $250,000 and is interest-bearing.<br /><br />
+          We safeguard your information with bank-level security measures.
         </p>
       </Tab.Pane>,
     ],

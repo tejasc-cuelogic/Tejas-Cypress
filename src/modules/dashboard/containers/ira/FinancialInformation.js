@@ -18,7 +18,7 @@ export default class FinancialInformation extends React.Component {
       <div>
         <div>
           <Header as="h2">Complete your financial information</Header>
-          <Form error onSubmit={this.handleSubmitForm}>
+          <Form error>
             <Form.Field>
               { /*  eslint-disable jsx-a11y/label-has-for */ }
               <label>

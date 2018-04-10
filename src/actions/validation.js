@@ -372,6 +372,18 @@ export class Validation {
     accountStore.setIraAccountError(field, errors && errors[field][0]);
   }
 
+  /**
+   * @desc validates Entity Account's fields on change.
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateEntityAccountField = (field, value) => {
+    accountStore.setEntityAccountDetails(field, value);
+    const { errors } = validationService.validate(accountStore.entityAccount[field]);
+    accountStore.setEntityAccountError(field, errors && errors[field][0]);
+  }
+
   // Private Methods ends here
 }
 
