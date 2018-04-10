@@ -655,10 +655,6 @@
 .ui.modal .content.signup-content .user-type.active i.icon {
   color: #7eab1d;
 }
-.ui.modal .content .ui.button,
-.ui.modal .content .ui.buttons .button {
-  letter-spacing: 1px;
-}
 .ui.modal .content .ui.button.large,
 .ui.modal .content .ui.buttons .button.large {
   min-width: 160px;
@@ -681,6 +677,14 @@
 .ui.modal .content a.theme-link,
 .ui.modal .content .button.theme-link {
   color: #98CE23;
+}
+.ui.modal .content .ui.huge.input input[type=tel],
+.ui.modal .content .ui.huge.input input[type=email] {
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  border: none;
+  background: #f2f2f2;
+  text-align: center;
+  margin-bottom: 0.71428571rem;
 }
 .ui.modal .actions {
   font-size: 1rem;
@@ -734,8 +738,48 @@
   border: none;
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
-.ui.modal .ui.form .field > label i.icon.help {
+.ui.modal .ui.form .field .ui.selection.dropdown {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  padding-left: 0.35714286rem;
+  padding-right: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
+}
+.ui.modal .ui.form .field .ui.selection.dropdown .icon {
+  padding-right: 0.35714286rem;
+}
+.ui.modal .ui.form .field .ui.selection.dropdown.active .menu {
+  border: none;
+}
+.ui.modal .ui.form .field .ui.selection.dropdown.active .menu > .item {
+  padding-left: 0.35714286rem !important;
+  padding-right: 0.35714286rem !important;
+}
+.ui.modal .ui.form .field.otp-field {
+  margin: 3rem 0;
+}
+.ui.modal .ui.form .field.otp-field label {
+  font-size: 1rem;
+}
+.ui.modal .ui.form .field.otp-field .ui.input > input {
+  max-width: 290px;
+  margin: 0 auto;
+  padding-left: 13px;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  letter-spacing: 38px;
+  border: none;
+  background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #e0e0e0), color-stop(0%, rgba(0, 0, 0, 0)));
+  background-image: -webkit-linear-gradient(right, #e0e0e0 75%, rgba(0, 0, 0, 0) 0%);
+  background-image: linear-gradient(to left, #e0e0e0 75%, rgba(0, 0, 0, 0) 0%);
+  background-position: bottom;
+  background-size: 51px 1px;
+  background-repeat: repeat-x;
+  background-position-x: 35px;
+}
+.ui.modal .ui.form label i.icon.help {
   margin-left: 0.5rem;
+  font-size: 1rem;
   color: #999999;
 }
 .ui.modal .ui.form textarea {

@@ -3680,6 +3680,10 @@
          Theme Overrides
 *******************************/
 
+.ui.button,
+.ui.buttons .button {
+  letter-spacing: 1px;
+}
 .ui.button.rounded,
 .ui.buttons .button.rounded {
   border-radius: 20px;
@@ -3799,6 +3803,16 @@
 .ui.red.button:active,
 .ui.red.buttons .button:active {
   background-color: #e14848;
+}
+.ui.button.relaxed,
+.ui.buttons .button.relaxed {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+.ui.button.relaxed.very,
+.ui.buttons .button.relaxed.very {
+  padding-left: 4.57142857rem;
+  padding-right: 4.57142857rem;
 }
 
 

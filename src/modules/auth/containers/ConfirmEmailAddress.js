@@ -4,31 +4,37 @@ import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
+import authActions from '../../../actions/auth';
 import FieldError from '../../../components/common/FieldError';
 
-@inject('profileStore', 'uiStore')
+@inject('authStore', 'uiStore')
 @observer
 export default class ConfirmEmailAddress extends Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
-    this.props.profileStore.resetConfirmEmailAddressVerificationCode();
+    this.props.uiStore.reset();
   }
 
   handleInputChange = (e, { name, value }) =>
-    validationActions.validateVerificationCodeForEmailAddress(name, value);
+    validationActions.validateLoginField(name, value);
 
   handleSubmitForm = (e) => {
     e.preventDefault();
     validationActions.validateConfirmEmailAddressForm();
-    if (this.props.profileStore.canSubmitEmailAddressVerification) {
-      this.props.setDashboardWizardStep('InvestorPersonalDetails');
+    if (this.props.authStore.canSubmitEmailAddressVerification) {
+      this.props.setAuthWizardStep('Login');
+      authActions.confirmCode()
+        .then(() => {
+          this.props.setAuthWizardStep('Login');
+        })
+        .catch(() => { });
     }
   }
 
   render() {
-    const { confirmEmailAddressVerificationCode } = this.props.profileStore;
+    const { values } = this.props.authStore;
     return (
-      <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="tiny" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your email address</Header>
           <Divider />
@@ -38,22 +44,27 @@ export default class ConfirmEmailAddress extends Component {
           <Form.Input
             size="huge"
             type="email"
-            value="james.smith@gmail.com"
+            value={values.email.value}
             readOnly
           />
-          <p><Link to="">Change email address</Link></p>
+          <p><Link to="/app/dashboard" onClick={() => this.props.setAuthWizardStep('InvestorSignup')}>Change email address</Link></p>
           <Form error onSubmit={this.handleSubmitForm}>
             <Form.Input
               size="huge"
               label="Enter verification code here:"
               className="otp-field"
+              maxLength={6}
+              name={values.code.key}
+              value={values.code.value}
+              error={!!values.code.error}
+              onChange={this.handleInputChange}
             />
-            <FieldError error={confirmEmailAddressVerificationCode.error} />
+            <FieldError error={values.code.error} />
             <div className="center-align">
-              <Button circular color="green" size="large" >Confirm</Button>
+              <Button circular color="green" size="large" disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>Resend the code to my email</Button>
+              <Button className="cancel-link" onClick={() => this.props.setAuthWizardStep()}>Resend the code to my email</Button>
             </div>
           </Form>
         </Modal.Content>

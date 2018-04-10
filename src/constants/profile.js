@@ -71,6 +71,13 @@ export const PROFILE_DETAILS = {
     rule: 'required',
     label: 'SSN',
   },
+  code: {
+    value: '',
+    key: 'code',
+    error: undefined,
+    rule: 'required|numeric|digits:6',
+    label: 'Enter verification code here:',
+  },
 };
 
 export const PROFILE_DETAILS_TITLE = [
@@ -113,3 +120,15 @@ export const IDENTITY_QUESTIONS_FORM_VALUES = {
     placeHolder: 'Type answer',
   },
 };
+
+export const CONFIRM_IDENTITY_DOCUMENTS = {
+  photoId: {
+    key: 'photoId',
+    nameOfUploadedFile: '',
+  },
+  proofOfResidence: {
+    key: 'proofOfResidence',
+    nameOfUploadedFile: '',
+  },
+};
+

@@ -11,9 +11,9 @@ import validationActions from '../../../actions/validation';
 @withRouter
 @observer
 class InvestorSignup extends Component {
-  componentWillUnmount() {
+  componentWillMount() {
     this.props.uiStore.clearErrors();
-    this.props.authStore.reset();
+    // this.props.authStore.reset();
   }
 
   getNameError = (firstName, lastName) => {
@@ -35,8 +35,7 @@ class InvestorSignup extends Component {
           if (this.props.authStore.newPasswordRequired) {
             this.props.history.push('/change-password');
           } else {
-            this.props.authStore.reset();
-            this.props.history.replace('/app/dashboard');
+            this.props.setAuthWizardStep('ConfirmEmailAddress');
           }
         })
         .catch(() => { });

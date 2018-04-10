@@ -143,6 +143,11 @@ export class AuthStore {
     this.values.role.error = undefined;
   }
 
+  @computed
+  get canSubmitEmailAddressVerification() {
+    return _.isEmpty(this.values.code.error);
+  }
+
   @action
   setNewPasswordRequired(value) {
     this.newPasswordRequired = value;
