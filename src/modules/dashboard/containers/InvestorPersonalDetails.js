@@ -27,7 +27,10 @@ export default class investorPersonalDetails extends Component {
     // this.props.profileStore.resetProfileDetails();
   }
 
-  handleInputChange = e =>
+  handleInputChange = (e, { name, value }) =>
+    validationActions.validateProfileDetailsField(name, value);
+
+  handleAutocompleteInputChange = e =>
     validationActions.validateProfileDetailsField(e.target.name, e.target.value);
 
   handleDateChange = (date) => {
@@ -138,7 +141,7 @@ export default class investorPersonalDetails extends Component {
                 placeholder={profileDetails.residentalStreet.label}
                 name={profileDetails.residentalStreet.key}
                 value={profileDetails.residentalStreet.value}
-                onChange={this.handleInputChange}
+                onChange={this.handleAutocompleteInputChange}
               />
               <FieldError error={profileDetails.residentalStreet.error} />
             </Form.Field>

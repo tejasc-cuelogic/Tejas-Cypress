@@ -174,5 +174,15 @@ display:block;
             left:0;
             cursor:pointer;
         }
+        &.attached{
+            font-family:@boldFont;
+            color:@link-color;
+            border:none;
+            background:@border-color;
+            .icon{
+                margin:0 0 0 @6px;
+                color:@tertiary-text;
+            }
+        }
     }
 }

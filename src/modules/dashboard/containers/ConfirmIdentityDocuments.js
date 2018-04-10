@@ -41,15 +41,22 @@ export default class ConfirmIdentityDocuments extends Component {
                   </label>
                 </Grid.Column>
                 <Grid.Column width={9}>
-                  <div className="file-uploader">
-                    <Icon name="upload" /> Choose a file <span>or drag it here</span>
-                    <input
-                      name={confirmIdentityDocuments.photoId.key}
-                      type="file"
-                      onChange={this.uploadDocument}
-                    />
-                    {confirmIdentityDocuments.photoId.nameOfUploadedFile}
+                  {confirmIdentityDocuments.photoId.nameOfUploadedFile === '' &&
+                    <div className="file-uploader">
+                      <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                      <input
+                        name={confirmIdentityDocuments.photoId.key}
+                        type="file"
+                        onChange={this.uploadDocument}
+                      />
+                    </div>
+                  }
+                  {confirmIdentityDocuments.photoId.nameOfUploadedFile !== '' &&
+                  <div className="file-uploader attached">
+                      {confirmIdentityDocuments.photoId.nameOfUploadedFile}
+                    <Icon name="remove" />
                   </div>
+                  }
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
@@ -67,15 +74,22 @@ export default class ConfirmIdentityDocuments extends Component {
                   </label>
                 </Grid.Column>
                 <Grid.Column width={9}>
-                  <div className="file-uploader">
-                    <Icon name="upload" /> Choose a file <span>or drag it here</span>
-                    <input
-                      name={confirmIdentityDocuments.proofOfResidence.key}
-                      type="file"
-                      onChange={this.uploadDocument}
-                    />
-                    {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile}
-                  </div>
+                  {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile === '' &&
+                    <div className="file-uploader">
+                      <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                      <input
+                        name={confirmIdentityDocuments.proofOfResidence.key}
+                        type="file"
+                        onChange={this.uploadDocument}
+                      />
+                    </div>
+                  }
+                  {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile !== '' &&
+                    <div className="file-uploader attached">
+                      {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile}
+                      <Icon name="remove" />
+                    </div>
+                  }
                 </Grid.Column>
               </Grid.Row>
             </Grid>

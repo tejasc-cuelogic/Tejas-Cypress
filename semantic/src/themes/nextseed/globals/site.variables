@@ -1034,3 +1034,5 @@
 @highlight-tertiary:#27AE60;						          				//  Green
 @highlight-quaternary:#2D9CDB;						        				//  Sky-Blue 
 @highlight-quinary:#9B51E0;			          								//  Violet
+
+@link-color:#772DF9;
