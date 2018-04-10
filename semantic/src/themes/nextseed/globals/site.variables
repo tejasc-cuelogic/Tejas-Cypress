@@ -1028,6 +1028,9 @@
 @inverse-text-darken:darken(@inverse-text, 26%);            //  #BDBDBD           (when base = FFFFFF)
 @inverse-secondary-text:darken(@inverse-text, 51%);					//  #7D7D7D           (when base = FFFFFF)
 
+@link-color:#772df9;
+@link-color-darken:darken(@link-color, 10%);
+
 @border-color:lighten(@primary-text, 69%);                  //  #E0E0E0           (when base = 303030)
 @border-light:lighten(@primary-text, 76%);                  //  #F2F2F2           (when base = 303030)
 

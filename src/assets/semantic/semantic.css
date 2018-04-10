@@ -5402,7 +5402,7 @@ ol.progtrckr li.progtrckr-done.error:after {
 }
 
 .webcontent-spacer {
-  padding: 2.85714286rem 5rem 1rem;
+  padding: 1.14285714rem 5rem;
 }
 
 @media only screen and (max-width: 1199px) {
@@ -5466,7 +5466,6 @@ div.login-form ul.error-messages {
 }
 
 .page-header-section {
-  min-height: 132px;
   background-color: #424242;
   position: relative;
 }
@@ -5549,19 +5548,24 @@ div.login-form ul.error-messages {
   margin: 0 0 0.5rem;
 }
 
-.page-header-section .sticky-notification {
-  position: fixed;
-  width: 50%;
-  right: 5rem;
-  top: 3rem;
-  z-index: 9;
-}
-
 .page-header-section .actions {
   font-size: 1.42857143rem;
   margin-left: 1.42857143rem;
   display: inline-block;
   vertical-align: middle;
+}
+
+.top-cta-section {
+  height: 104px;
+  background: #4f4f4f;
+}
+
+.top-cta-section .sticky-notification {
+  position: relative;
+  width: 50%;
+  left: 5rem;
+  top: 2rem;
+  z-index: 9;
 }
 
 .notification-panel {
@@ -27071,14 +27075,14 @@ Floated Menu / Item
 
 .ui.cards > .card > .content a:not(.ui),
 .ui.card > .content a:not(.ui) {
-  color: #98CE23;
+  color: #772df9;
   -webkit-transition: color 0.1s ease;
   transition: color 0.1s ease;
 }
 
 .ui.cards > .card > .content a:not(.ui):hover,
 .ui.card > .content a:not(.ui):hover {
-  color: #7eab1d;
+  color: #5a07ec;
 }
 
 /* Header */
@@ -27908,23 +27912,35 @@ a.ui.card:hover,
   padding: 1em 1em;
 }
 
+.ui.card.welcome-card > .content,
+.ui.cards > .card.welcome-card > .content {
+  padding: 1.78571429rem;
+}
+
 .ui.card.welcome-card > .content i.icon.pull-left,
 .ui.cards > .card.welcome-card > .content i.icon.pull-left {
   width: auto;
-  margin: 0 0.5rem 0 0;
+  margin: 0 1rem 0 0;
+}
+
+.ui.card.welcome-card > .content .ui.mini.image,
+.ui.cards > .card.welcome-card > .content .ui.mini.image {
+  width: 54px;
+  margin: 0 1.28571429rem 0 0;
 }
 
 .ui.card.welcome-card > .content > .header:not(.ui),
 .ui.cards > .card.welcome-card > .content > .header:not(.ui) {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 1.71428571rem;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 1.42857143rem;
   font-weight: 400;
+  margin-top: 0;
 }
 
 .ui.card.welcome-card > .content > .meta,
 .ui.cards > .card.welcome-card > .content > .meta {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 1rem;
+  font-size: 1.14285714rem;
   text-transform: none;
   color: #999999;
   letter-spacing: 1px;
@@ -27967,6 +27983,35 @@ a.ui.card:hover,
 .sticky-notification .ui.card .meta {
   font-size: 0.92857143rem;
   text-transform: none;
+}
+
+.ui.cards.steps-card .description {
+  font-size: 16px;
+}
+
+.ui.cards.steps-card .description i.icon.numbar {
+  height: 26px;
+  width: 26px;
+  line-height: 26px;
+  background: #98CE23;
+  padding: 0;
+  margin: 0 .75rem 0 0;
+  border-radius: 50%;
+}
+
+.ui.cards.steps-card .description i.icon.numbar[data-icon]:before {
+  content: attr(data-icon) !important;
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 1.14285714rem;
+  color: #FFFFFF;
+}
+
+.ui.cards.steps-card .description.disabled {
+  color: #e0e0e0;
+}
+
+.ui.cards.steps-card .description.disabled i.icon.numbar {
+  background: #F7F7F7;
 }
 
 /*******************************
