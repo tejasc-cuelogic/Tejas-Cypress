@@ -27,8 +27,8 @@ export default class investorPersonalDetails extends Component {
     // this.props.profileStore.resetProfileDetails();
   }
 
-  handleInputChange = (e, { name, value }) =>
-    validationActions.validateProfileDetailsField(name, value);
+  handleInputChange = e =>
+    validationActions.validateProfileDetailsField(e.target.name, e.target.value);
 
   handleDateChange = (date) => {
     validationActions.validateProfileDetailsField('dateOfBirth', date);
@@ -121,12 +121,6 @@ export default class investorPersonalDetails extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Field>
-              <Autocomplete
-                onPlaceSelected={(place) => {
-                  profileActions.setAddressFieldsOnGoogleAutocomplete(place);
-                }}
-                types={['address']}
-              />
               <label>
                 Residental Street
                 <Popup
@@ -136,13 +130,15 @@ export default class investorPersonalDetails extends Component {
                   className="center-align"
                 />
               </label>
-              <Input
-                fluid
+              <Autocomplete
+                onPlaceSelected={(place) => {
+                  profileActions.setAddressFieldsOnGoogleAutocomplete(place);
+                }}
+                types={['address']}
                 placeholder={profileDetails.residentalStreet.label}
                 name={profileDetails.residentalStreet.key}
                 value={profileDetails.residentalStreet.value}
                 onChange={this.handleInputChange}
-                error={!!profileDetails.residentalStreet.error}
               />
               <FieldError error={profileDetails.residentalStreet.error} />
             </Form.Field>
