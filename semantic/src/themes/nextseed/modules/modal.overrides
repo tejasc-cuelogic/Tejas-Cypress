@@ -81,19 +81,19 @@
         .ui{
             &.button, &.buttons .button{
                 letter-spacing:1px;
-                &:not(.circular){
-                    border-radius:0;
-                }
+                // &:not(.circular){
+                //     border-radius:0;
+                // }
                 &.large{
+                    min-width:160px;
                     font-size:@14px;
                 }
                 // &.circular{
-                //     min-width:160px;
                 // }
             }
         }
-        a.cancel-link, .button.cancel-link{
-            margin:1.5rem 0 0;
+        a.cancel-link, .button.cancel-link, a.theme-link, .button.theme-link{
+            margin:2.5rem 0 0;
             padding:0;
             display:inline-block;
             background:transparent;
@@ -102,6 +102,9 @@
             letter-spacing:1px;
             color:@quaternary-text;
             text-transform:none;
+        }
+        a.theme-link, .button.theme-link{
+            color:@theme-primary;
         }
     }
     .actions{
@@ -140,6 +143,7 @@
                     padding-left:0;
                     padding-right:0;
                     border-radius:0;
+                    background:transparent;
                     border:none;
                     border-bottom:@borderColor 1px solid;
                 }
@@ -163,6 +167,7 @@
 
 //  Multistep form Modal styles
 .ui.modal.basic.multistep-modal{
+    color:@primary-text;
     >.close{
         top:-2.5rem;
         right:-2.5rem;
@@ -171,7 +176,7 @@
         background:@white;
         border-radius:@10px;
         position:relative;
-        padding:2.5rem 3rem;
+        padding:@50px @80px;
         .ui.button.multistep__btn{
             background:@white;
             color:@theme-primary;
@@ -200,6 +205,35 @@
                     color:@white;
                 }
             }
+        }
+        .field-wrap{
+            margin:@30px auto;
+            padding:@25px @60px;
+            background:@lighten-bg-color;
+            >.field:last-child{
+                margin-bottom:0;
+            }
+        }
+        .summary-wrap{
+            text-align:center;
+            margin-bottom:@30px;
+            .field-wrap{
+                display:inline-block;
+                padding:@30px;
+            }
+        }
+    }
+}
+.summary-wrap{
+    .ui.items > .item{
+        background:@white;
+        box-shadow:0 0 10px 2px fade(@fullBlack, 8%);
+        .ui.image{
+            padding:@16px;
+            border-right:@border-light 1px solid;
+        }
+        .content{
+            padding:@16px @21px;
         }
     }
 }

@@ -900,7 +900,7 @@ ol.progtrckr li.progtrckr-done.error:after {
   font-style: normal;
   text-align: center;
   text-decoration: none;
-  border-radius: 0.28571429rem;
+  border-radius: 0.42857143rem;
   -webkit-box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
   box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px rgba(34, 36, 38, 0.15) inset;
   -webkit-user-select: none;
@@ -1687,7 +1687,7 @@ ol.progtrckr li.progtrckr-done.error:after {
   background: transparent none !important;
   color: rgba(0, 0, 0, 0.6) !important;
   font-weight: normal;
-  border-radius: 0.28571429rem;
+  border-radius: 0.42857143rem;
   text-transform: none;
   text-shadow: none !important;
   -webkit-box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 0.15) inset;
@@ -1698,7 +1698,7 @@ ol.progtrckr li.progtrckr-done.error:after {
   -webkit-box-shadow: none;
   box-shadow: none;
   border: 1px solid rgba(34, 36, 38, 0.15);
-  border-radius: 0.28571429rem;
+  border-radius: 0.42857143rem;
 }
 
 .ui.basic.buttons .button {
@@ -1901,23 +1901,23 @@ ol.progtrckr li.progtrckr-done.error:after {
 }
 
 .ui.labeled.icon.buttons .button:first-child > .icon {
-  border-top-left-radius: 0.28571429rem;
-  border-bottom-left-radius: 0.28571429rem;
+  border-top-left-radius: 0.42857143rem;
+  border-bottom-left-radius: 0.42857143rem;
 }
 
 .ui.labeled.icon.buttons .button:last-child > .icon {
-  border-top-right-radius: 0.28571429rem;
-  border-bottom-right-radius: 0.28571429rem;
+  border-top-right-radius: 0.42857143rem;
+  border-bottom-right-radius: 0.42857143rem;
 }
 
 .ui.vertical.labeled.icon.buttons .button:first-child > .icon {
   border-radius: 0em;
-  border-top-left-radius: 0.28571429rem;
+  border-top-left-radius: 0.42857143rem;
 }
 
 .ui.vertical.labeled.icon.buttons .button:last-child > .icon {
   border-radius: 0em;
-  border-bottom-left-radius: 0.28571429rem;
+  border-bottom-left-radius: 0.42857143rem;
 }
 
 /* Fluid Labeled */
@@ -2027,11 +2027,11 @@ ol.progtrckr li.progtrckr-done.error:after {
 /* Top / Bottom */
 
 .ui.attached.top.button {
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  border-radius: 0.42857143rem 0.42857143rem 0em 0em;
 }
 
 .ui.attached.bottom.button {
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+  border-radius: 0em 0em 0.42857143rem 0.42857143rem;
 }
 
 /* Left / Right */
@@ -2041,14 +2041,14 @@ ol.progtrckr li.progtrckr-done.error:after {
   border-left: none;
   text-align: right;
   padding-right: 0.75em;
-  border-radius: 0.28571429rem 0em 0em 0.28571429rem;
+  border-radius: 0.42857143rem 0em 0em 0.42857143rem;
 }
 
 .ui.right.attached.button {
   display: inline-block;
   text-align: left;
   padding-left: 0.75em;
-  border-radius: 0em 0.28571429rem 0.28571429rem 0em;
+  border-radius: 0em 0.42857143rem 0.42857143rem 0em;
 }
 
 /* Plural */
@@ -2081,28 +2081,28 @@ ol.progtrckr li.progtrckr-done.error:after {
 
 .ui[class*="top attached"].buttons {
   margin-bottom: -1px;
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  border-radius: 0.42857143rem 0.42857143rem 0em 0em;
 }
 
 .ui[class*="top attached"].buttons .button:first-child {
-  border-radius: 0.28571429rem 0em 0em 0em;
+  border-radius: 0.42857143rem 0em 0em 0em;
 }
 
 .ui[class*="top attached"].buttons .button:last-child {
-  border-radius: 0em 0.28571429rem 0em 0em;
+  border-radius: 0em 0.42857143rem 0em 0em;
 }
 
 .ui[class*="bottom attached"].buttons {
   margin-top: -1px;
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+  border-radius: 0em 0em 0.42857143rem 0.42857143rem;
 }
 
 .ui[class*="bottom attached"].buttons .button:first-child {
-  border-radius: 0em 0em 0em 0.28571429rem;
+  border-radius: 0em 0em 0em 0.42857143rem;
 }
 
 .ui[class*="bottom attached"].buttons .button:last-child {
-  border-radius: 0em 0em 0.28571429rem 0em;
+  border-radius: 0em 0em 0.42857143rem 0em;
 }
 
 /* Left / Right */
@@ -2113,17 +2113,17 @@ ol.progtrckr li.progtrckr-done.error:after {
   display: inline-flex;
   margin-right: 0em;
   margin-left: -1px;
-  border-radius: 0em 0.28571429rem 0.28571429rem 0em;
+  border-radius: 0em 0.42857143rem 0.42857143rem 0em;
 }
 
 .ui[class*="left attached"].buttons .button:first-child {
   margin-left: -1px;
-  border-radius: 0em 0.28571429rem 0em 0em;
+  border-radius: 0em 0.42857143rem 0em 0em;
 }
 
 .ui[class*="left attached"].buttons .button:last-child {
   margin-left: -1px;
-  border-radius: 0em 0em 0.28571429rem 0em;
+  border-radius: 0em 0em 0.42857143rem 0em;
 }
 
 .ui[class*="right attached"].buttons {
@@ -2132,17 +2132,17 @@ ol.progtrckr li.progtrckr-done.error:after {
   display: inline-flex;
   margin-left: 0em;
   margin-right: -1px;
-  border-radius: 0.28571429rem 0em 0em 0.28571429rem;
+  border-radius: 0.42857143rem 0em 0em 0.42857143rem;
 }
 
 .ui[class*="right attached"].buttons .button:first-child {
   margin-left: -1px;
-  border-radius: 0.28571429rem 0em 0em 0em;
+  border-radius: 0.42857143rem 0em 0em 0em;
 }
 
 .ui[class*="right attached"].buttons .button:last-child {
   margin-left: -1px;
-  border-radius: 0em 0em 0em 0.28571429rem;
+  border-radius: 0em 0em 0em 0.42857143rem;
 }
 
 /*-------------------
@@ -5003,13 +5003,13 @@ ol.progtrckr li.progtrckr-done.error:after {
 .ui.buttons .button:first-child {
   border-left: none;
   margin-left: 0em;
-  border-top-left-radius: 0.28571429rem;
-  border-bottom-left-radius: 0.28571429rem;
+  border-top-left-radius: 0.42857143rem;
+  border-bottom-left-radius: 0.42857143rem;
 }
 
 .ui.buttons .button:last-child {
-  border-top-right-radius: 0.28571429rem;
-  border-bottom-right-radius: 0.28571429rem;
+  border-top-right-radius: 0.42857143rem;
+  border-bottom-right-radius: 0.42857143rem;
 }
 
 /* Vertical  Style */
@@ -5035,28 +5035,23 @@ ol.progtrckr li.progtrckr-done.error:after {
 }
 
 .ui.vertical.buttons .button:first-child {
-  border-top-left-radius: 0.28571429rem;
-  border-top-right-radius: 0.28571429rem;
+  border-top-left-radius: 0.42857143rem;
+  border-top-right-radius: 0.42857143rem;
 }
 
 .ui.vertical.buttons .button:last-child {
   margin-bottom: 0px;
-  border-bottom-left-radius: 0.28571429rem;
-  border-bottom-right-radius: 0.28571429rem;
+  border-bottom-left-radius: 0.42857143rem;
+  border-bottom-right-radius: 0.42857143rem;
 }
 
 .ui.vertical.buttons .button:only-child {
-  border-radius: 0.28571429rem;
+  border-radius: 0.42857143rem;
 }
 
 /*******************************
          Theme Overrides
 *******************************/
-
-.ui.button,
-.ui.buttons .button {
-  text-transform: uppercase;
-}
 
 .ui.button.rounded,
 .ui.buttons .button.rounded {
@@ -33659,19 +33654,17 @@ select.ui.dropdown {
   letter-spacing: 1px;
 }
 
-.ui.modal .content .ui.button:not(.circular),
-.ui.modal .content .ui.buttons .button:not(.circular) {
-  border-radius: 0;
-}
-
 .ui.modal .content .ui.button.large,
 .ui.modal .content .ui.buttons .button.large {
+  min-width: 160px;
   font-size: 1rem;
 }
 
 .ui.modal .content a.cancel-link,
-.ui.modal .content .button.cancel-link {
-  margin: 1.5rem 0 0;
+.ui.modal .content .button.cancel-link,
+.ui.modal .content a.theme-link,
+.ui.modal .content .button.theme-link {
+  margin: 2.5rem 0 0;
   padding: 0;
   display: inline-block;
   background: transparent;
@@ -33680,6 +33673,11 @@ select.ui.dropdown {
   letter-spacing: 1px;
   color: #999999;
   text-transform: none;
+}
+
+.ui.modal .content a.theme-link,
+.ui.modal .content .button.theme-link {
+  color: #98CE23;
 }
 
 .ui.modal .actions {
@@ -33736,6 +33734,7 @@ select.ui.dropdown {
   padding-left: 0;
   padding-right: 0;
   border-radius: 0;
+  background: transparent;
   border: none;
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
@@ -33753,6 +33752,10 @@ select.ui.dropdown {
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
 
+.ui.modal.basic.multistep-modal {
+  color: #303030;
+}
+
 .ui.modal.basic.multistep-modal > .close {
   top: -2.5rem;
   right: -2.5rem;
@@ -33762,7 +33765,7 @@ select.ui.dropdown {
   background: #FFFFFF;
   border-radius: 0.71428571rem;
   position: relative;
-  padding: 2.5rem 3rem;
+  padding: 3.57142857rem 5.71428571rem;
 }
 
 .ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn {
@@ -33801,6 +33804,41 @@ select.ui.dropdown {
 .ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn.next.active {
   background: #98CE23;
   color: #FFFFFF;
+}
+
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap {
+  margin: 2.14285714rem auto;
+  padding: 1.78571429rem 4.28571429rem;
+  background: #fafafa;
+}
+
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap > .field:last-child {
+  margin-bottom: 0;
+}
+
+.ui.modal.basic.multistep-modal .multistep.content .summary-wrap {
+  text-align: center;
+  margin-bottom: 2.14285714rem;
+}
+
+.ui.modal.basic.multistep-modal .multistep.content .summary-wrap .field-wrap {
+  display: inline-block;
+  padding: 2.14285714rem;
+}
+
+.summary-wrap .ui.items > .item {
+  background: #FFFFFF;
+  -webkit-box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.08);
+}
+
+.summary-wrap .ui.items > .item .ui.image {
+  padding: 1.14285714rem;
+  border-right: #f2f2f2 1px solid;
+}
+
+.summary-wrap .ui.items > .item .content {
+  padding: 1.14285714rem 1.5rem;
 }
 
 /*******************************
