@@ -47,7 +47,7 @@ const AccountSetupChecklist = props => (
       <List relaxed className="check-list">
         {checklistMeta.map((item, index) => (
           <List.Item key={item.item}>
-            <List.Icon name="check circle large" />
+            <List.Icon name="check circle" size="large" />
             <List.Content verticalAlign="middle">
               {!item.status && index === 2 &&
                 <Link as="a" to="/app/dashboard" onClick={() => props.setDashboardWizardSetup('InvestmentChooseType')}><strong> {item.preMeta.link.text}</strong></Link>

@@ -37,58 +37,61 @@ export default class LinkBankAccountPlaid extends React.Component {
             </div>
           </div>
           <div className="center-align">
-            <Button className="cancel-link" color="green" onClick={() => this.props.accountStore.setBankLinkInterface('form')}>or enter bank details manually</Button>
+            <Button className="theme-link" color="green" onClick={() => this.props.accountStore.setBankLinkInterface('form')}>or enter bank details manually</Button>
           </div>
         </div>
         }
         {this.props.accountStore.bankLinkInterface === 'form' &&
         <div>
-          <Header as="h2">Link Bank Account</Header>
+          <Header as="h2" textAlign="center">Link Bank Account</Header>
+          <p className="center-align">We need this information to lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
           <Form error onSubmit={this.handleSubmitForm}>
-            <Form.Field>
-              { /*  eslint-disable jsx-a11y/label-has-for */ }
-              <label>
-                {individualAccount.bankRoutingNumber.label}
-                <Popup
-                  trigger={<Icon name="help circle outline" />}
-                  content="Put your first name as listed on your driver license"
-                  position="top center"
-                  className="center-align"
+            <div className="field-wrap">
+              <Form.Field>
+                { /*  eslint-disable jsx-a11y/label-has-for */ }
+                <label>
+                  {individualAccount.bankRoutingNumber.label}
+                  <Popup
+                    trigger={<Icon name="help circle outline" />}
+                    content="Put your 10 digit bank routing number"
+                    position="top center"
+                    className="center-align"
+                  />
+                </label>
+                <Input
+                  name={individualAccount.bankRoutingNumber.key}
+                  value={individualAccount.bankRoutingNumber.value}
+                  error={!!individualAccount.bankRoutingNumber.error}
+                  onChange={this.handleInputChange}
+                  maxLength={10}
                 />
-              </label>
-              <Input
-                name={individualAccount.bankRoutingNumber.key}
-                value={individualAccount.bankRoutingNumber.value}
-                error={!!individualAccount.bankRoutingNumber.error}
-                onChange={this.handleInputChange}
-                maxLength={10}
-              />
-              <FieldError error={individualAccount.bankRoutingNumber.error} />
-            </Form.Field>
-            <Form.Field>
-              <label>
-                {individualAccount.bankAccountNumber.label}
-                <Popup
-                  trigger={<Icon name="help circle outline" />}
-                  content="Put your first name as listed on your driver license"
-                  position="top center"
-                  className="center-align"
+                <FieldError error={individualAccount.bankRoutingNumber.error} />
+              </Form.Field>
+              <Form.Field>
+                <label>
+                  {individualAccount.bankAccountNumber.label}
+                  <Popup
+                    trigger={<Icon name="help circle outline" />}
+                    content="Put your 12 digit bank account number"
+                    position="top center"
+                    className="center-align"
+                  />
+                </label>
+                <Input
+                  name={individualAccount.bankAccountNumber.key}
+                  value={individualAccount.bankAccountNumber.value}
+                  error={!!individualAccount.bankAccountNumber.error}
+                  onChange={this.handleInputChange}
+                  maxLength={12}
                 />
-              </label>
-              <Input
-                name={individualAccount.bankAccountNumber.key}
-                value={individualAccount.bankAccountNumber.value}
-                error={!!individualAccount.bankAccountNumber.error}
-                onChange={this.handleInputChange}
-                maxLength={12}
-              />
-              <FieldError error={individualAccount.bankAccountNumber.error} />
-            </Form.Field>
-            <div className="center-align">
-              <Button circular color="green" size="large">Confirm</Button>
+                <FieldError error={individualAccount.bankAccountNumber.error} />
+              </Form.Field>
             </div>
             <div className="center-align">
-              <Button className="cancel-link" onClick={() => this.props.accountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
+              <Button color="green" size="large">Confirm</Button>
+            </div>
+            <div className="center-align">
+              <Button className="theme-link" onClick={() => this.props.accountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
             </div>
           </Form>
         </div>

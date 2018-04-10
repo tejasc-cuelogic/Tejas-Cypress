@@ -659,17 +659,16 @@
 .ui.modal .content .ui.buttons .button {
   letter-spacing: 1px;
 }
-.ui.modal .content .ui.button:not(.circular),
-.ui.modal .content .ui.buttons .button:not(.circular) {
-  border-radius: 0;
-}
 .ui.modal .content .ui.button.large,
 .ui.modal .content .ui.buttons .button.large {
+  min-width: 160px;
   font-size: 1rem;
 }
 .ui.modal .content a.cancel-link,
-.ui.modal .content .button.cancel-link {
-  margin: 1.5rem 0 0;
+.ui.modal .content .button.cancel-link,
+.ui.modal .content a.theme-link,
+.ui.modal .content .button.theme-link {
+  margin: 2.5rem 0 0;
   padding: 0;
   display: inline-block;
   background: transparent;
@@ -678,6 +677,10 @@
   letter-spacing: 1px;
   color: #999999;
   text-transform: none;
+}
+.ui.modal .content a.theme-link,
+.ui.modal .content .button.theme-link {
+  color: #98CE23;
 }
 .ui.modal .actions {
   font-size: 1rem;
@@ -727,6 +730,7 @@
   padding-left: 0;
   padding-right: 0;
   border-radius: 0;
+  background: transparent;
   border: none;
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
@@ -741,6 +745,9 @@
   border: none;
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
+.ui.modal.basic.multistep-modal {
+  color: #303030;
+}
 .ui.modal.basic.multistep-modal > .close {
   top: -2.5rem;
   right: -2.5rem;
@@ -749,7 +756,7 @@
   background: #FFFFFF;
   border-radius: 0.71428571rem;
   position: relative;
-  padding: 2.5rem 3rem;
+  padding: 3.57142857rem 5.71428571rem;
 }
 .ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn {
   background: #FFFFFF;
@@ -782,6 +789,34 @@
 .ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn.next.active {
   background: #98CE23;
   color: #FFFFFF;
+}
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap {
+  margin: 2.14285714rem auto;
+  padding: 1.78571429rem 4.28571429rem;
+  background: #fafafa;
+}
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap > .field:last-child {
+  margin-bottom: 0;
+}
+.ui.modal.basic.multistep-modal .multistep.content .summary-wrap {
+  text-align: center;
+  margin-bottom: 2.14285714rem;
+}
+.ui.modal.basic.multistep-modal .multistep.content .summary-wrap .field-wrap {
+  display: inline-block;
+  padding: 2.14285714rem;
+}
+.summary-wrap .ui.items > .item {
+  background: #FFFFFF;
+  -webkit-box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.08);
+          box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.08);
+}
+.summary-wrap .ui.items > .item .ui.image {
+  padding: 1.14285714rem;
+  border-right: #f2f2f2 1px solid;
+}
+.summary-wrap .ui.items > .item .content {
+  padding: 1.14285714rem 1.5rem;
 }
 
 
