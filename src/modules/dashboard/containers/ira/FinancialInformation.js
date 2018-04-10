@@ -12,7 +12,6 @@ export default class FinancialInformation extends React.Component {
     validationActions.validateIraAccountField(name, value);
   }
   render() {
-    console.log(this.props);
     const { iraAccount } = this.props.accountStore;
     return (
       <div>
