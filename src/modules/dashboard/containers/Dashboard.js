@@ -72,15 +72,17 @@ class Dashboard extends Component {
           <Header as="h3">Welcome to NextSeed!</Header>
           <Grid>
             <Grid.Row>
-              <Grid.Column mobile={16} tablet={16} computer={8}>
+              <Grid.Column mobile={16} tablet={16} computer={5}>
                 <Card fluid raised className="welcome-card">
                   <Card.Content>
                     <Item.Image size="mini" floated="left" src={Thumb} />
                     {/* <Icon size="huge" name="thin circle" className="pull-left" /> */}
-                    <Card.Header>Thank you for signing up!</Card.Header>
-                    <Card.Meta>Please complete the following steps in order
+                    <Card.Header>
+                      Would you like to start the process of new account creation?
+                    </Card.Header>
+                    {/* <Card.Meta>Please complete the following steps in order
                       to unlock all features:
-                    </Card.Meta>
+                    </Card.Meta> */}
                   </Card.Content>
                   <AccountSetupChecklist
                     setDashboardWizardSetup={this.setDashboardWizardSetup}
