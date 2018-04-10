@@ -1,4 +1,5 @@
 import { observable, action, computed } from 'mobx';
+import _ from 'lodash';
 
 import {
   INVESTMENT_ACCOUNT_TYPES,
@@ -70,6 +71,12 @@ export class AccountStore {
   @action
   setIraFundingOption(option) {
     this.setIraAccountDetails('fundingOption', FUNDING_OPTIONS[option]);
+  }
+
+  @computed
+  get isValidIraFinancialInformation() {
+    return _.isEmpty(this.iraAccount.networth.error) &&
+    _.isEmpty(this.iraAccount.annualIncome.error);
   }
 
   @action
