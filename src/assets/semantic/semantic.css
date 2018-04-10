@@ -5331,7 +5331,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 }
 
 .webcontent-spacer {
-  padding: 2.85714286rem 5rem 1rem;
+  padding: 1.14285714rem 5rem;
 }
 
 @media only screen and (max-width: 1199px) {
@@ -5395,7 +5395,6 @@ div.login-form ul.error-messages {
 }
 
 .page-header-section {
-  min-height: 132px;
   background-color: #424242;
   position: relative;
 }

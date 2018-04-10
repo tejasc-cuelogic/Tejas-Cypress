@@ -11,7 +11,7 @@ class Invest extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={4}>
-                <h1>Dashboard</h1>
+                <h1>Summary</h1>
               </Grid.Column>
             </Grid.Row>
           </Grid>
