@@ -83,10 +83,11 @@ class Dashboard extends Component {
                     {/* <Card.Meta>Please complete the following steps in order
                       to unlock all features:
                     </Card.Meta> */}
+                    <Divider hidden />
+                    <AccountSetupChecklist
+                      setDashboardWizardSetup={this.setDashboardWizardSetup}
+                    />
                   </Card.Content>
-                  <AccountSetupChecklist
-                    setDashboardWizardSetup={this.setDashboardWizardSetup}
-                  />
                 </Card>
               </Grid.Column>
             </Grid.Row>

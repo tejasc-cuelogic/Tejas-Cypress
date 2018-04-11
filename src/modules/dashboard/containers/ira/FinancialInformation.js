@@ -31,10 +31,9 @@ export default class FinancialInformation extends React.Component {
                     className="center-align"
                   />
                 </label>
-                <Input type="text" placeholder="Amount">
+                <Input labelPosition="right" type="text" placeholder="Amount">
                   <Label basic>$</Label>
                   <input />
-                  <Label>.00</Label>
                 </Input>
                 <Input
                   name={iraAccount.networth.key}

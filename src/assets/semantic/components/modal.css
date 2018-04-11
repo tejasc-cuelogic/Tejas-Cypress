@@ -734,17 +734,23 @@
   padding-left: 0;
   padding-right: 0;
   border-radius: 0;
-  background: transparent;
+  background-color: transparent;
   border: none;
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
-.ui.modal .ui.form .field .ui.selection.dropdown {
+.ui.modal .ui.form .field .ui.selection.dropdown,
+.ui.modal .ui.form .field .ui.labeled.input .ui.label {
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding-left: 0.35714286rem;
   padding-right: 0;
   border-radius: 0;
   border: none;
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
+}
+.ui.modal .ui.form .field .ui.labeled.input .ui.label {
+  background-color: transparent;
+  padding-right: 0.85714286rem;
+  padding-left: 0;
 }
 .ui.modal .ui.form .field .ui.selection.dropdown .icon {
   padding-right: 0.35714286rem;
