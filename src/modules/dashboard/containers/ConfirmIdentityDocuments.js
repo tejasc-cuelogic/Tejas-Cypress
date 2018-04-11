@@ -13,6 +13,14 @@ export default class ConfirmIdentityDocuments extends Component {
     }
   }
 
+  removeUploadedPhotoId = () => {
+    this.props.profileStore.setConfirmIdentityDocuments('photoId', '');
+  }
+
+  removeUploadedProofOfResidence = () => {
+    this.props.profileStore.setConfirmIdentityDocuments('proofOfResidence', '');
+  }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.setDashboardWizardStep('ConfirmPhoneNumber');
@@ -54,7 +62,7 @@ export default class ConfirmIdentityDocuments extends Component {
                   {confirmIdentityDocuments.photoId.nameOfUploadedFile !== '' &&
                   <div className="file-uploader attached">
                       {confirmIdentityDocuments.photoId.nameOfUploadedFile}
-                    <Icon name="remove" />
+                    <Icon name="remove" onClick={this.removeUploadedPhotoId} />
                   </div>
                   }
                 </Grid.Column>
@@ -96,7 +104,7 @@ export default class ConfirmIdentityDocuments extends Component {
                   {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile !== '' &&
                     <div className="file-uploader attached">
                       {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile}
-                      <Icon name="remove" />
+                      <Icon name="remove" onClick={this.removeUploadedProofOfResidence} />
                     </div>
                   }
                 </Grid.Column>
