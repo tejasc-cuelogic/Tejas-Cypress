@@ -39,7 +39,8 @@
 	}
 }
 .webcontent-spacer{
-	padding:@40px @70px @14px;
+	// padding:@40px @70px @14px;
+	padding:@16px @70px;
 	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 		padding:@20px;
 	}
@@ -90,7 +91,7 @@ div.login-form {
 
 //	Page Header Styles
 .page-header-section{
-	min-height:132px;
+	// min-height:132px;
 	background-color:@dark-bg-color;
 	position:relative;
 	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
@@ -152,18 +153,22 @@ div.login-form {
 			margin:0 0 @7px;
 		}
 	}
-	.sticky-notification{
-		position:fixed;
-		width:50%;
-		right:5rem;
-		top:3rem;
-		z-index:9;
-	}
 	.actions{
 		font-size:@20px;
 		margin-left:@20px;
 		display:inline-block;
 		vertical-align:middle;
+	}
+}
+.top-cta-section{
+	height:104px;
+	background:@secondary-text;
+	.sticky-notification{
+		position:relative;
+		width:50%;
+		left:5rem;
+		top:2rem;
+		z-index:9;
 	}
 }
 // .actions{

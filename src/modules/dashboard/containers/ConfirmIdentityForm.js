@@ -27,7 +27,8 @@ export default class ConfirmIdentityForm extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h2">We need to confirm your identity</Header>
           <Divider />
-          <p>Please answer the questions below or
+          <p>
+            Please answer the questions below or<br />
             <Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>update your address</Link>
           </p>
         </Modal.Header>
@@ -88,10 +89,10 @@ export default class ConfirmIdentityForm extends Component {
                 onChange={this.handleInputChange}
                 error={!!confirmIdentityQuestions.question4.error}
               />
-              <FieldError error={confirmIdentityQuestions.question3.error} />
+              <FieldError error={confirmIdentityQuestions.question4.error} />
             </Form.Field>
             <div className="center-align">
-              <Button circular color="green" size="large">Verify my identity</Button>
+              <Button color="green" size="large" className="relaxed">Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>

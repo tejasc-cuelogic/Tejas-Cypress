@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider, Input } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
+import InputMask from 'react-input-mask';
 
 import validationActions from '../../../actions/validation';
 import FieldError from '../../../components/common/FieldError';
@@ -11,11 +12,16 @@ import FieldError from '../../../components/common/FieldError';
 export default class ConfirmPhoneNumber extends Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
-    this.props.profileStore.resetConfirmPhoneNumberVerificationCode();
   }
 
   handleInputChange = (e, { name, value }) =>
-    validationActions.validateVerificationCodeForPhoneNumber(name, value);
+    validationActions.validateProfileDetailsField(name, value);
+
+  restrictInputAfterMaxLength = (e) => {
+    if (e.target.value.toString().length === 6) {
+      e.preventDefault();
+    }
+  }
 
   handleSubmitForm = (e) => {
     e.preventDefault();
@@ -26,35 +32,43 @@ export default class ConfirmPhoneNumber extends Component {
   }
 
   render() {
-    const { profileDetails, confirmPhoneNumberVerificationCode } = this.props.profileStore;
+    const { profileDetails } = this.props.profileStore;
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your phone number</Header>
           <Divider />
-          <p>We are about to text a verification code to:
-            {profileDetails.phoneNumber.value}
-            <Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>Change phone number</Link>
-          </p>
+          <p>We are about to text a verification code to:</p>
         </Modal.Header>
-        <Modal.Content className="signup-content">
-          <Form error onSubmit={this.handleSubmitForm}>
-            <Form.Field>
-              { /*  eslint-disable jsx-a11y/label-has-for */ }
-              <label>
-                {confirmPhoneNumberVerificationCode.label}
-              </label>
-              <Input
-                fluid
-                name={confirmPhoneNumberVerificationCode.key}
-                value={confirmPhoneNumberVerificationCode.value}
-                onChange={this.handleInputChange}
-                error={!!confirmPhoneNumberVerificationCode.error}
+        <Modal.Content className="signup-content center-align">
+          <div className="field">
+            <div className="ui huge input">
+              <InputMask
+                type="tel"
+                value={profileDetails.phoneNumber.value}
+                mask="+9 999-999-9999"
+                maskChar=" "
+                alwaysShowMask
+                readOnly
               />
-              <FieldError error={confirmPhoneNumberVerificationCode.error} />
-            </Form.Field>
+            </div>
+          </div>
+          <p><Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>Change phone number</Link></p>
+          <Form error onSubmit={this.handleSubmitForm}>
+            <Form.Input
+              size="huge"
+              label="Enter verification code here:"
+              className="otp-field"
+              name={profileDetails.code.key}
+              value={profileDetails.code.value}
+              onChange={this.handleInputChange}
+              error={!!profileDetails.code.error}
+              maxLength={6}
+              onKeyPress={this.restrictInputAfterMaxLength}
+            />
+            <FieldError error={profileDetails.code.error} />
             <div className="center-align">
-              <Button circular color="green" size="large" >Confirm</Button>
+              <Button color="green" size="large" className="very relaxed">Confirm</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>Resend the code to my phone</Button>

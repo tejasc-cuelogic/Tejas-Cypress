@@ -22,7 +22,7 @@
 /* Form Label */
 @labelDistance: @4px;
 @labelMargin: 0em 0em @labelDistance 0em;
-@labelFontSize:1rem;
+@labelFontSize:@13px;
 @labelFontWeight: 500;
 @labelTextTransform: none;
 @labelColor:@fullBlack;

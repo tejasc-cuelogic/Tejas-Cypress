@@ -43,14 +43,14 @@ export const PROFILE_DETAILS = [
  * @desc Validate only following fields after submitting verification code to Confirm Phone Number
  */
 export const CONFIRM_PHONE_NUMBER_VERIFICATION_CODE = [
-  'verificationCode',
+  'code',
 ];
 
 /**
  * @desc Validate only following fields after submitting verification code to Confirm Email Address
  */
 export const CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE = [
-  'verificationCode',
+  'code',
 ];
 
 /**

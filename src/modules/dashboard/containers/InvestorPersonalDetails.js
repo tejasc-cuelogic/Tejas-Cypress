@@ -5,10 +5,13 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { Modal, Button, Header, Icon, Form, Divider, Input, Popup, Select } from 'semantic-ui-react';
 import InputMask from 'react-input-mask';
+import Autocomplete from 'react-google-autocomplete';
 
 import validationActions from './../../../actions/validation';
 import FieldError from '../../../components/common/FieldError';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
+import profileActions from '../../../actions/profile';
+import Helper from '../../../helper/utility';
 
 @inject('profileStore', 'uiStore', 'userStore')
 @observer
@@ -27,14 +30,17 @@ export default class investorPersonalDetails extends Component {
   handleInputChange = (e, { name, value }) =>
     validationActions.validateProfileDetailsField(name, value);
 
+  handleAutocompleteInputChange = e =>
+    validationActions.validateProfileDetailsField(e.target.name, e.target.value);
+
   handleDateChange = (date) => {
     validationActions.validateProfileDetailsField('dateOfBirth', date);
   }
 
   handleMaskedInputChange = (e) => {
-    let maskedInputValue = e.target.value;
-    maskedInputValue = maskedInputValue.split('-').join('');
-    validationActions.validateProfileDetailsField(e.target.name, maskedInputValue);
+    const maskedInputValue = e.target.value;
+    const unMaskedInputValue = Helper.unMaskInput(maskedInputValue);
+    validationActions.validateProfileDetailsField(e.target.name, unMaskedInputValue);
   }
 
   handleSubmitForm = (e) => {
@@ -61,24 +67,22 @@ export default class investorPersonalDetails extends Component {
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
-              <Form.Field>
-                {/* eslint-disable */}
+              <Form.Field width={4}>
+                {/* eslint-disable jsx-a11y/label-has-for */}
                 <label>
                   {profileDetails.title.label}
                 </label>
                 <Select
                   fluid
-                  placeholder={profileDetails.title.label}
                   name={profileDetails.title.key}
                   value={profileDetails.title.value}
                   onChange={this.handleInputChange}
                   error={!!profileDetails.title.error}
                   options={PROFILE_DETAILS_TITLE}
                 />
-                <FieldError error={profileDetails.firstLegalName.error} />
+                <FieldError error={profileDetails.title.error} />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable */}
                 <label>
                   First Legal Name
                   <Popup
@@ -120,7 +124,6 @@ export default class investorPersonalDetails extends Component {
               </Form.Field>
             </Form.Group>
             <Form.Field>
-              {/* eslint-disable */}
               <label>
                 Residental Street
                 <Popup
@@ -130,13 +133,15 @@ export default class investorPersonalDetails extends Component {
                   className="center-align"
                 />
               </label>
-              <Input
-                fluid
+              <Autocomplete
+                onPlaceSelected={(place) => {
+                  profileActions.setAddressFieldsOnGoogleAutocomplete(place);
+                }}
+                types={['address']}
                 placeholder={profileDetails.residentalStreet.label}
                 name={profileDetails.residentalStreet.key}
                 value={profileDetails.residentalStreet.value}
-                onChange={this.handleInputChange}
-                error={!!profileDetails.residentalStreet.error}
+                onChange={this.handleAutocompleteInputChange}
               />
               <FieldError error={profileDetails.residentalStreet.error} />
             </Form.Field>
@@ -190,14 +195,14 @@ export default class investorPersonalDetails extends Component {
                 <label>
                   {profileDetails.phoneNumber.label}
                 </label>
-                <InputMask 
+                <InputMask
                   name={profileDetails.phoneNumber.key}
                   value={profileDetails.phoneNumber.value}
                   onChange={this.handleMaskedInputChange}
                   error={!!profileDetails.phoneNumber.error}
-                  mask="999-999-9999" 
-                  maskChar=" " 
-                  alwaysShowMask={true}
+                  mask="999-999-9999"
+                  maskChar=" "
+                  alwaysShowMask
                 />
                 <FieldError error={profileDetails.phoneNumber.error} />
               </Form.Field>
@@ -224,21 +229,21 @@ export default class investorPersonalDetails extends Component {
                 value={profileDetails.ssn.value}
                 onChange={this.handleMaskedInputChange}
                 error={!!profileDetails.ssn.error}
-                mask="999-999-9999" 
-                maskChar=" " 
-                alwaysShowMask={true}
+                mask="999-999-9999"
+                maskChar=" "
+                alwaysShowMask
               />
               <FieldError error={profileDetails.ssn.error} />
             </Form.Field>
             <div className="center-align">
-              <Button circular color="green" size="large" disabled={!this.props.profileStore.canSubmitProfileDetails}>Confirm</Button>
+              <Button color="green" size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitProfileDetails}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>
             </div>
           </Form>
         </Modal.Content>
-    </Modal>
+      </Modal>
     );
   }
 }
