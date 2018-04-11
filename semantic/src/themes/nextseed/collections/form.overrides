@@ -80,6 +80,9 @@
 
 /*  Inverted Form  */
 .ui.form{
+    .field>label{
+        display:inline-block;
+    }
     &.inverted{
         label{
             font-weight:400;

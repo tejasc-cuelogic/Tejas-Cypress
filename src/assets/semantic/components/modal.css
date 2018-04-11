@@ -100,7 +100,7 @@
   width: 100%;
   font-size: 1em;
   line-height: 1.4;
-  padding: 2.5rem 3rem;
+  padding: 2.5rem 4rem;
   background: #FFFFFF;
 }
 .ui.modal > .image.content {
@@ -445,26 +445,26 @@
 }
 @media only screen and (min-width: 768px) {
   .ui.mini.modal {
-    width: 35.2%;
-    margin: 0em 0em 0em -17.6%;
+    width: 44%;
+    margin: 0em 0em 0em -22%;
   }
 }
 @media only screen and (min-width: 992px) {
   .ui.mini.modal {
-    width: 340px;
-    margin: 0em 0em 0em -170px;
+    width: 425px;
+    margin: 0em 0em 0em -212.5px;
   }
 }
 @media only screen and (min-width: 1200px) {
   .ui.mini.modal {
-    width: 360px;
-    margin: 0em 0em 0em -180px;
+    width: 450px;
+    margin: 0em 0em 0em -225px;
   }
 }
 @media only screen and (min-width: 1920px) {
   .ui.mini.modal {
-    width: 380px;
-    margin: 0em 0em 0em -190px;
+    width: 475px;
+    margin: 0em 0em 0em -237.5px;
   }
 }
 
@@ -519,26 +519,26 @@
 }
 @media only screen and (min-width: 768px) {
   .ui.small.modal {
-    width: 70.4%;
-    margin: 0em 0em 0em -35.2%;
+    width: 61.6%;
+    margin: 0em 0em 0em -30.8%;
   }
 }
 @media only screen and (min-width: 992px) {
   .ui.small.modal {
-    width: 680px;
-    margin: 0em 0em 0em -340px;
+    width: 595px;
+    margin: 0em 0em 0em -297.5px;
   }
 }
 @media only screen and (min-width: 1200px) {
   .ui.small.modal {
-    width: 720px;
-    margin: 0em 0em 0em -360px;
+    width: 630px;
+    margin: 0em 0em 0em -315px;
   }
 }
 @media only screen and (min-width: 1920px) {
   .ui.small.modal {
-    width: 760px;
-    margin: 0em 0em 0em -380px;
+    width: 665px;
+    margin: 0em 0em 0em -332.5px;
   }
 }
 
@@ -618,6 +618,11 @@
 .ui.modal > .header:not(.ui).signup-header .ui.header {
   margin: 0 0 0.5rem;
 }
+.ui.modal > .header:not(.ui).signup-header .ui.divider {
+  max-width: 140px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .ui.modal > .header:not(.ui).signup-header p {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
@@ -664,7 +669,7 @@
 .ui.modal .content .button.cancel-link,
 .ui.modal .content a.theme-link,
 .ui.modal .content .button.theme-link {
-  margin: 2.5rem 0 0;
+  margin: 1.5rem 0 0;
   padding: 0;
   display: inline-block;
   background: transparent;

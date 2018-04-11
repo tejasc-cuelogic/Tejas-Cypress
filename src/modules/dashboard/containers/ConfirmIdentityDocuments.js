@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List } from 'semantic-ui-react';
 
 @inject('profileStore')
 @observer
@@ -63,12 +63,21 @@ export default class ConfirmIdentityDocuments extends Component {
                 <Grid.Column width={7}>
                   <label>
                     <h3>Proof of Residence
-                      <Popup
-                        trigger={<Icon name="help circle outline" />}
-                        content="Put your first name as listed on your driver license"
-                        position="top center"
-                        className="center-align"
-                      />
+                      <Popup trigger={<Icon name="help circle outline" />} position="top center" flowing hoverable>
+                        <Popup.Content>
+                          <p><b>Acceptable documents:</b></p>
+                          <List bulleted>
+                            <List.Item>Utility bill in your name for that address</List.Item>
+                            <List.Item>
+                              Signed lease (if an apartment) that shows the<br />
+                              address (just the signature page)
+                            </List.Item>
+                            <List.Item>Voided check with your name  and address on it</List.Item>
+                            <List.Item>A completed USPS mail forward form</List.Item>
+                            <List.Item>DMV registration form</List.Item>
+                          </List>
+                        </Popup.Content>
+                      </Popup>
                     </h3>
                     Utility Bill or USPS change of address format
                   </label>

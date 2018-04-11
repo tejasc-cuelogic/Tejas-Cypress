@@ -39,7 +39,7 @@
 
 /* Content */
 @contentFontSize: 1em;
-@contentPadding:2.5rem 3rem;
+@contentPadding:2.5rem 4rem;
 @contentLineHeight: 1.4;
 @contentBackground: #FFFFFF;
 
@@ -129,10 +129,10 @@
 --------------------*/
 
 /* Size Widths */
-@miniRatio: 0.4;
-@tinyRatio: 0.6;
-@smallRatio: 0.8;
-@largeRatio: 1.2;
+@miniRatio: 0.5;          //  475
+@tinyRatio: 0.6;          //  570
+@smallRatio: 0.7;         //  665
+@largeRatio: 1.2;         //  1140
 
 /* Derived Responsive Sizes */
 @miniHeaderSize: 1.3em;
