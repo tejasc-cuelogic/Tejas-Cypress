@@ -36,8 +36,8 @@ class Login extends Component {
     const { errors } = this.props.uiStore;
 
     return (
-      <Modal size="tiny" dimmer="blurring" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
-        <Modal.Header className="center-align">
+      <Modal size="mini" dimmer="blurring" open onClose={() => this.props.setAuthWizardStep()}>
+        <Modal.Header className="center-align signup-header">
           <Header as="h2">Log in to NextSeed</Header>
         </Modal.Header>
         <Modal.Content className="signup-modal">
@@ -75,11 +75,11 @@ class Login extends Component {
             />
             <FieldError error={values.password.error} />
             <div className="center-align">
-              <Button circular color="green" size="large" disabled={canLogin}>Log in</Button>
+              <Button color="green" size="large" className="very relaxed" disabled={canLogin}>Log in</Button>
             </div>
           </Form>
         </Modal.Content>
-        <Modal.Actions>
+        <Modal.Actions className="signup-actions">
           <p>Dont have an account? <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')}>Sign up</Link></p>
         </Modal.Actions>
       </Modal>
