@@ -11,6 +11,9 @@ export default class Identity extends Component {
       this.props.accountStore.setIraAccountDetails(e.target.name, uploadFile.name);
     }
   }
+  removeUploadedDriversLicence = () => {
+    this.props.accountStore.setIraAccountDetails('driversLicence', '');
+  }
   render() {
     const { driversLicence } = this.props.accountStore.iraAccount;
     return (
@@ -19,15 +22,22 @@ export default class Identity extends Component {
         <Grid textAlign="center">
           <Form error className="file-uploader-inline">
             <Form.Field>
-              <div className="file-uploader">
-                <Icon name="upload" /> Choose a file <span>or drag it here</span>
-                <input
-                  name={driversLicence.key}
-                  type="file"
-                  onChange={this.uploadDocument}
-                />
-                {driversLicence.value}
-              </div>
+              {driversLicence.value === '' &&
+                <div className="file-uploader">
+                  <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                  <input
+                    name={driversLicence.key}
+                    type="file"
+                    onChange={this.uploadDocument}
+                  />
+                </div>
+              }
+              {driversLicence.value !== '' &&
+                <div className="file-uploader attached">
+                  {driversLicence.value}
+                  <Icon name="remove" onClick={this.removeUploadedDriversLicence} />
+                </div>
+              }
             </Form.Field>
           </Form>
         </Grid>
