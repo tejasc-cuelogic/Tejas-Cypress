@@ -31,7 +31,7 @@ class InvestorSignup extends Component {
     const { values } = this.props.authStore;
 
     return (
-      <Modal size="tiny" open>
+      <Modal size="tiny" dimmer="blurring" open>
         <Modal.Header className="center-align signup-header">
           <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon name="arrow left" /></Link>
           <Header as="h2">Sign Up as Investor</Header>

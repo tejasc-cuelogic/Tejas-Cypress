@@ -32,7 +32,7 @@ class Login extends Component {
     const { values } = this.props.authStore;
 
     return (
-      <Modal size="tiny" open>
+      <Modal size="tiny" dimmer="blurring" open>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Log in to NextSeed</Header>
         </Modal.Header>

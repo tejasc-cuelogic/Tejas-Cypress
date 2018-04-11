@@ -31123,7 +31123,7 @@ body.dimmable > .dimmer {
 /* Dimmer Color */
 
 .blurring.dimmable > .dimmer {
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.85);
 }
 
 .blurring.dimmable > .inverted.dimmer {
@@ -33938,6 +33938,10 @@ select.ui.dropdown {
   border-radius: 1.07142857rem;
   top: 1rem;
   right: 1rem;
+}
+
+.ui.modal.basic.multistep-modal .ui.header {
+  border: none;
 }
 
 .ui.modal.basic.multistep-modal .multistep.content {

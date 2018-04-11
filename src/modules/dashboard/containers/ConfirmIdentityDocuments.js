@@ -20,7 +20,7 @@ export default class ConfirmIdentityDocuments extends Component {
   render() {
     const { confirmIdentityDocuments } = this.props.profileStore;
     return (
-      <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="tiny" dimmer="blurring" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">We need to confirm your identity</Header>
           <Divider />

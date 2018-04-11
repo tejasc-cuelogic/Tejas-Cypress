@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button, Header, Divider } from 'semantic-ui-react';
 
 const selectQuestionsOrEditInformation = props => (
-  <Modal size="mini" open closeIcon onClose={() => props.setDashboardWizardStep()}>
+  <Modal size="mini" dimmer="blurring" open closeIcon onClose={() => props.setDashboardWizardStep()}>
     <Modal.Header className="center-align signup-header">
       <Header as="h2">There was a problem with verifying your identity</Header>
       <Divider />

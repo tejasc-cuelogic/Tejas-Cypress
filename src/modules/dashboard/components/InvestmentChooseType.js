@@ -48,7 +48,7 @@ const panes = [
 ];
 
 const InvestmentChooseType = props => (
-  <Modal size="small" open closeIcon onClose={() => props.setDashboardWizardStep()}>
+  <Modal size="small" dimmer="blurring" open closeIcon onClose={() => props.setDashboardWizardStep()}>
     <Modal.Header className="center-align signup-header">
       <Header as="h2">What type of Investment Account would you like to start?</Header>
       <p>Choose an account type</p>

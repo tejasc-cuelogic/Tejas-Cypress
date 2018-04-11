@@ -50,7 +50,7 @@ class InvestorSignup extends Component {
     values.role.value = this.props.authStore.signupFlow.type;
 
     return (
-      <Modal size="tiny" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
+      <Modal size="tiny" dimmer="blurring" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon name="arrow left" /></Link>
           <Header as="h2">

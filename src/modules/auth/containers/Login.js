@@ -36,7 +36,7 @@ class Login extends Component {
     const { errors } = this.props.uiStore;
 
     return (
-      <Modal size="tiny" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
+      <Modal size="tiny" dimmer="blurring" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
         <Modal.Header className="center-align">
           <Header as="h2">Log in to NextSeed</Header>
         </Modal.Header>

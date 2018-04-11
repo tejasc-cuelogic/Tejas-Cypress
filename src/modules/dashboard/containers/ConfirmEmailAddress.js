@@ -28,7 +28,7 @@ export default class ConfirmEmailAddress extends Component {
   render() {
     const { confirmEmailAddressVerificationCode } = this.props.profileStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="mini" dimmer="blurring" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your email address</Header>
           <Divider />

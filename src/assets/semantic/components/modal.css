@@ -815,6 +815,9 @@
   top: 1rem;
   right: 1rem;
 }
+.ui.modal.basic.multistep-modal .ui.header {
+  border: none;
+}
 .ui.modal.basic.multistep-modal .multistep.content {
   background: #FFFFFF;
   border-radius: 0.71428571rem;

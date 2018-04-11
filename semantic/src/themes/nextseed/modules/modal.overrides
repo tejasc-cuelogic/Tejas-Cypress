@@ -239,6 +239,9 @@
         top:1rem;
         right:1rem;
     }
+    .ui.header{
+        border:none;
+    }
     .multistep.content{
         background:@white;
         border-radius:@10px;
