@@ -89,7 +89,12 @@ export class AccountStore {
 
   @action
   setIsEntityTrust(option) {
-    this.setEntityAccountDetails('isEntityTrust', IS_ENTITY_TRUST[option]);
+    const field = 'isEntityTrust';
+    const value = {
+      activeIndex: option,
+      type: IS_ENTITY_TRUST[option],
+    };
+    this.setEntityAccountDetails(field, value);
   }
 }
 
