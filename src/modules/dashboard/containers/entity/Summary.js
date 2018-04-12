@@ -16,7 +16,7 @@ export default class Summary extends Component {
         Tax ID - {entityAccount.taxId.value}
         Entity Address - {entityAccount.street.value}, {entityAccount.city.value},
         {entityAccount.state.value}, {entityAccount.zipCode.value}
-        Is Entity a trust? - {entityAccount.isEntityTrust.value}
+        Is Entity a trust? - {entityAccount.isEntityTrust.value.type}
         Title with the entity - {entityAccount.entityTitle.value}
         Bank account - test
       </div>
