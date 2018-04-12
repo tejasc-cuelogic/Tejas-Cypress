@@ -14,7 +14,10 @@ import {
 export class AccountStore {
   @observable bankLinkInterface = 'list';
 
-  @observable accountType = INVESTMENT_ACCOUNT_TYPES[0];
+  @observable accountType = {
+    activeIndex: 0,
+    type: INVESTMENT_ACCOUNT_TYPES[0],
+  }
 
   @observable individualAccount = { ...INDIVIDUAL_ACCOUNT_CREATION }
 
@@ -24,18 +27,13 @@ export class AccountStore {
 
   @computed
   get routeOnInvestmentTypeSelection() {
-    let routeForInvestTypeSelection = '';
-    if (this.accountType === 'individual') {
-      routeForInvestTypeSelection = `${this.accountType}/LinkBankAccount`;
-    } else if (this.accountType === 'ira' || this.accountType === 'entity') {
-      routeForInvestTypeSelection = `${this.accountType}/AccountCreation`;
-    }
-    return routeForInvestTypeSelection;
+    return `${this.accountType.type}/AccountCreation`;
   }
 
   @action
   setAccountType(type) {
-    this.accountType = INVESTMENT_ACCOUNT_TYPES[type];
+    this.accountType.activeIndex = type;
+    this.accountType.type = INVESTMENT_ACCOUNT_TYPES[type];
   }
 
   @action
@@ -65,12 +63,22 @@ export class AccountStore {
 
   @action
   setIraAccountType(type) {
-    this.setIraAccountDetails('accountType', IRA_ACCOUNT_TYPES[type]);
+    const field = 'accountType';
+    const value = {
+      activeIndex: type,
+      type: IRA_ACCOUNT_TYPES[type],
+    };
+    this.setIraAccountDetails(field, value);
   }
 
   @action
   setIraFundingOption(option) {
-    this.setIraAccountDetails('fundingOption', FUNDING_OPTIONS[option]);
+    const field = 'fundingOption';
+    const value = {
+      activeIndex: option,
+      type: FUNDING_OPTIONS[option],
+    };
+    this.setIraAccountDetails(field, value);
   }
 
   @computed
@@ -91,7 +99,12 @@ export class AccountStore {
 
   @action
   setIsEntityTrust(option) {
-    this.setEntityAccountDetails('isEntityTrust', IS_ENTITY_TRUST[option]);
+    const field = 'isEntityTrust';
+    const value = {
+      activeIndex: option,
+      type: IS_ENTITY_TRUST[option],
+    };
+    this.setEntityAccountDetails(field, value);
   }
 }
 

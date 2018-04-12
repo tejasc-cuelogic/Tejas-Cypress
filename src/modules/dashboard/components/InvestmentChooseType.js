@@ -66,6 +66,7 @@ const InvestmentChooseType = props => (
             stackable: true,
           }}
           panes={panes}
+          activeIndex={props.selectedInvestmentType.activeIndex}
           onTabChange={props.handleAccoutTypeChange}
         />
       </Grid>

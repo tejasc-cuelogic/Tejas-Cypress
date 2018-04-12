@@ -18,8 +18,8 @@ const panes = [
 @inject('accountStore')
 @observer
 export default class AccountType extends Component {
-  handleIsEntityTrust = (e, data) => {
-    this.props.accountStore.setIsEntityTrust(data.activeIndex);
+  handleIsEntityTrust = (e, { activeIndex }) => {
+    this.props.accountStore.setIsEntityTrust(activeIndex);
   }
   handleDateChange = (date) => {
     validationActions.validateEntityAccountField('dateOfTrust', date);
@@ -40,6 +40,7 @@ export default class AccountType extends Component {
               stackable: true,
             }}
             panes={panes}
+            activeIndex={entityAccount.isEntityTrust.value.activeIndex}
             onTabChange={this.handleIsEntityTrust}
           />
         </Grid>

@@ -14,10 +14,11 @@ const panes = [
 @inject('accountStore')
 @observer
 export default class AccountType extends Component {
-  handleAccountType = (e, data) => {
-    this.props.accountStore.setIraAccountType(data.activeIndex);
+  handleAccountType = (e, { activeIndex }) => {
+    this.props.accountStore.setIraAccountType(activeIndex);
   }
   render() {
+    const { iraAccount } = this.props.accountStore;
     return (
       <div>
         <Header as="h2">What type of IRA account you want to create?</Header>
@@ -33,6 +34,7 @@ export default class AccountType extends Component {
               stackable: true,
             }}
             panes={panes}
+            activeIndex={iraAccount.accountType.value.activeIndex}
             onTabChange={this.handleAccountType}
           />
         </Grid>

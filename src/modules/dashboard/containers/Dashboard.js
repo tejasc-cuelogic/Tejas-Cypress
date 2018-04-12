@@ -17,8 +17,8 @@ class Dashboard extends Component {
     this.props.uiStore.setDashboardWizardStep(step);
   }
 
-  handleAccoutTypeChange = (e, data) => {
-    this.props.accountStore.setAccountType(data.activeIndex);
+  handleAccoutTypeChange = (e, { activeIndex }) => {
+    this.props.accountStore.setAccountType(activeIndex);
   }
 
   render() {
@@ -27,7 +27,6 @@ class Dashboard extends Component {
       label: 'Complete all required information about yourself',
       linkText: 'Verify me',
       linkPath: 'InvestorPersonalDetails',
-      // linkPath: 'ConfirmIdentityDocuments',
     };
     return (
       <div>
@@ -129,6 +128,7 @@ class Dashboard extends Component {
         <DashboardWizard
           handleAccoutTypeChange={this.handleAccoutTypeChange}
           routeOnInvestmentTypeSelection={this.props.accountStore.routeOnInvestmentTypeSelection}
+          selectedInvestmentType={this.props.accountStore.accountType}
         />
         }
         {this.props.uiStore.modalStatus &&

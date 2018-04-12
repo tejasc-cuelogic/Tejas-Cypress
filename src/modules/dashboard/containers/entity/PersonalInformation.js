@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Form, Input } from 'semantic-ui-react';
+import { Header, Form, Input, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FieldError from '../../../../components/common/FieldError';
@@ -11,6 +11,18 @@ export default class PersonalInformation extends Component {
   handleInputChange = (e, { name, value }) => {
     validationActions.validateEntityAccountField(name, value);
   }
+
+  uploadDocument = (e) => {
+    if (e.target.files.length) {
+      const uploadFile = e.target.files[0];
+      this.props.accountStore.setEntityAccountDetails(e.target.name, uploadFile.name);
+    }
+  }
+
+  removeUploadedPhotoId = () => {
+    this.props.accountStore.setEntityAccountDetails('photoId', '');
+  }
+
   render() {
     const { entityAccount } = this.props.accountStore;
     const { currentUser } = this.props.userStore;
@@ -34,6 +46,28 @@ export default class PersonalInformation extends Component {
               onChange={this.handleInputChange}
             />
             <FieldError error={entityAccount.entityTitle.error} />
+          </Form.Field>
+          <Form.Field>
+            <label>
+              <h3>Upload a Photo ID</h3>
+              Driving Liscence or passport
+            </label>
+            {entityAccount.photoId.value === '' &&
+              <div className="file-uploader">
+                <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                <input
+                  name={entityAccount.photoId.key}
+                  type="file"
+                  onChange={this.uploadDocument}
+                />
+              </div>
+            }
+            {entityAccount.photoId.value !== '' &&
+            <div className="file-uploader attached">
+                {entityAccount.photoId.value}
+              <Icon name="remove" onClick={this.removeUploadedPhotoId} />
+            </div>
+            }
           </Form.Field>
         </Form>
       </div>

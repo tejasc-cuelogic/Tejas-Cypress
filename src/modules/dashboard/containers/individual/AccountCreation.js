@@ -10,7 +10,7 @@ const steps =
     { name: 'Summary', component: <CreateAccount /> },
   ];
 
-export default class LinkBankAccount extends React.Component {
+export default class AccountCreation extends React.Component {
   render() {
     return (
       <div className="step-progress">

@@ -54,7 +54,10 @@ export const IRA_ACCOUNT_CREATION = {
     placeHolder: 'Your annual income',
   },
   accountType: {
-    value: IRA_ACCOUNT_TYPES[0],
+    value: {
+      activeIndex: 0,
+      type: IRA_ACCOUNT_TYPES[0],
+    },
     key: 'accountType',
     error: undefined,
     rule: 'required|string',
@@ -62,7 +65,10 @@ export const IRA_ACCOUNT_CREATION = {
     placeHolder: '',
   },
   fundingOption: {
-    value: FUNDING_OPTIONS[0],
+    value: {
+      activeIndex: 0,
+      type: FUNDING_OPTIONS[0],
+    },
     key: 'accountType',
     error: undefined,
     rule: 'required|string',
@@ -150,7 +156,10 @@ export const ENTITY_ACCOUNT_CREATION = {
     placeHolder: '',
   },
   isEntityTrust: {
-    value: IS_ENTITY_TRUST[0],
+    value: {
+      activeIndex: 0,
+      type: IS_ENTITY_TRUST[0],
+    },
     key: 'isEntityTrust',
     error: undefined,
     rule: 'required',
@@ -186,7 +195,7 @@ export const ENTITY_ACCOUNT_CREATION = {
     key: 'entityFormationDocument',
     error: undefined,
     rule: '',
-    label: '',
+    label: 'Entity Formation Document',
     placeHolder: '',
   },
   entityOperatingDocument: {
@@ -194,7 +203,7 @@ export const ENTITY_ACCOUNT_CREATION = {
     key: 'entityOperatingDocument',
     error: undefined,
     rule: '',
-    label: '',
+    label: 'Entity Operating Document',
     placeHolder: '',
   },
   einVerification: {
@@ -202,7 +211,7 @@ export const ENTITY_ACCOUNT_CREATION = {
     key: 'einVerification',
     error: undefined,
     rule: '',
-    label: '',
+    label: 'EIN Verification',
     placeHolder: '',
   },
 };
