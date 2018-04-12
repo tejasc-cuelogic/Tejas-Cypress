@@ -23,7 +23,7 @@ building-code-dev:
   script:
     - bash EnvVariables.sh us-east-1 dev
     - npm install
-    - process.env.CInpm run build
+    - npm run build
   artifacts:
     paths:
     - build/
