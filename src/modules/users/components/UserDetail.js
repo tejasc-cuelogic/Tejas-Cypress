@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Aux from 'react-aux';
 import { Grid, Icon, Form, Input, Label, Button } from 'semantic-ui-react';
 
-const userDetails = () => (
+const userDetails = props => (
   <div className="content-spacer">
-    <div className="overlay editing" />
+    <div className={`overlay ${(props.editCard) ? 'editing' : ''}`} />
     <Grid columns={1} stackable>
       <Grid.Row>
         <Grid.Column>
@@ -27,7 +28,7 @@ const userDetails = () => (
                           <Label>First Name</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="James" readOnly />
+                          <Input type="text" value={props.user.firstName || ''} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -35,7 +36,7 @@ const userDetails = () => (
                           <Label>Middle Name</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="Thomas" readOnly />
+                          <Input type="text" value={props.user.middleName || ''} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -43,7 +44,7 @@ const userDetails = () => (
                           <Label>Last Name</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="Gainsborough" readOnly />
+                          <Input type="text" value={props.user.lastName || ''} readOnly />
                         </Form.Field>
                       </Form.Group>
                     </div>
@@ -56,7 +57,7 @@ const userDetails = () => (
                           <Label>First Name</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="James" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalName.firstLegalName} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -64,7 +65,7 @@ const userDetails = () => (
                           <Label>Middle Name</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="Thomas" readOnly />
+                          <Input type="text" defaultValue="" readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -72,7 +73,7 @@ const userDetails = () => (
                           <Label>Last Name</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="Gainsborough" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalName.lastLegalName} readOnly />
                         </Form.Field>
                       </Form.Group>
                     </div>
@@ -85,12 +86,20 @@ const userDetails = () => (
       </Grid.Row>
       <Grid.Row>
         <Grid.Column width={8}>
-          <div className="form-card card editable editing">
+          <div className={`form-card card editable ${(props.editCard === 2) ? 'editing' : ''}`}>
             <h3>DOB & SSN</h3>
             <div className="actions">
-              <Link to="/edit" className="negative">Cancel</Link>
-              <Button circular color="green" size="mini" to="/app/users/new"><Icon name="check" />Save</Button>
-              {/* <Link to="/edit"><Icon name="pencil" />Edit</Link> */}
+              {(props.editCard === 2) ? (
+                <Aux>
+                  <Button onClick={() => props.setEditCard(0)} className="negative">Cancel</Button>
+                  <Button onClick={props.save} circular color="green" size="mini" to=""><Icon name="check" />Save</Button>
+                </Aux>
+              ) : (
+                <Aux>
+                  <Button onClick={() => props.setEditCard(2)}><Icon name="pencil" />Edit</Button>
+                </Aux>
+              )
+              }
             </div>
             <Form>
               <Form.Group>
@@ -98,7 +107,7 @@ const userDetails = () => (
                   <Label>Date of Birth</Label>
                 </Form.Field>
                 <Form.Field width={8}>
-                  <Input type="text" defaultValue="01-02-1989" readOnly />
+                  <Input type="text" defaultValue={props.details.legalDetails.dateOfBirth} />
                 </Form.Field>
               </Form.Group>
               <Form.Group>
@@ -106,7 +115,7 @@ const userDetails = () => (
                   <Label>SSN number</Label>
                 </Form.Field>
                 <Form.Field width={8}>
-                  <Input type="text" defaultValue="XXX-XX-XXX" readOnly />
+                  <Input type="text" defaultValue={props.details.legalDetails.ssn} />
                 </Form.Field>
               </Form.Group>
             </Form>
@@ -163,7 +172,7 @@ const userDetails = () => (
                           <Label>Street 1</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="Baker Street" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalAddress.street1} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -171,7 +180,7 @@ const userDetails = () => (
                           <Label>Street 2</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="221B" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalAddress.street2} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -179,7 +188,7 @@ const userDetails = () => (
                           <Label>City</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="New York" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalAddress.city} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -187,7 +196,7 @@ const userDetails = () => (
                           <Label>State</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="NY" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalAddress.state} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -195,7 +204,7 @@ const userDetails = () => (
                           <Label>ZIP code</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="1001" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalAddress.zipCode} readOnly />
                         </Form.Field>
                       </Form.Group>
                     </div>
@@ -208,7 +217,7 @@ const userDetails = () => (
                           <Label>Street 1</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="Baker Street" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalAddress.street1} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -216,7 +225,7 @@ const userDetails = () => (
                           <Label>Street 2</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="221B" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalAddress.street2} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -224,7 +233,7 @@ const userDetails = () => (
                           <Label>City</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="New York" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalAddress.city} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -232,7 +241,7 @@ const userDetails = () => (
                           <Label>State</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="NY" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalAddress.state} readOnly />
                         </Form.Field>
                       </Form.Group>
                       <Form.Group>
@@ -240,7 +249,7 @@ const userDetails = () => (
                           <Label>ZIP code</Label>
                         </Form.Field>
                         <Form.Field width={8}>
-                          <Input type="text" defaultValue="1001" readOnly />
+                          <Input type="text" defaultValue={props.details.legalDetails.legalAddress.zipCode} readOnly />
                         </Form.Field>
                       </Form.Group>
                     </div>
@@ -264,18 +273,10 @@ const userDetails = () => (
             <Form>
               <Form.Group>
                 <Form.Field width={8}>
-                  <Label>Phone number 1</Label>
+                  <Label>Phone number</Label>
                 </Form.Field>
                 <Form.Field width={8}>
-                  <Input type="tel" defaultValue="202-555-0170" readOnly />
-                </Form.Field>
-              </Form.Group>
-              <Form.Group>
-                <Form.Field width={8}>
-                  <Label>Phone number 2</Label>
-                </Form.Field>
-                <Form.Field width={8}>
-                  <Input type="tel" defaultValue="202-555-0173" readOnly />
+                  <Input type="tel" defaultValue={props.details.contactDetails.phone.number} readOnly />
                 </Form.Field>
               </Form.Group>
             </Form>

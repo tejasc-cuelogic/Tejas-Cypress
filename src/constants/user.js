@@ -19,11 +19,33 @@ export const USER_LIST_META = [
   ['actions', '', false],
 ];
 
+export const USER_DETAIL_SECTIONS = ['Profile', 'Accounts', 'Activity', 'Investments', 'Transactions', 'Statements', 'Referrals', 'Messages'];
+
 // Filters
-export const AccountType = [{ text: 'Admin', value: 'Admin' }, { text: 'Business', value: 'Business' }, { text: 'IRA', value: 'IRA' }, { text: 'Individual', value: 'Individual' }, { text: 'Entity', value: 'Entity' }];
+export const FILTER_META = {
+  accountType: [
+    { text: 'Admin', value: 'ADMIN' },
+    { text: 'Business', value: 'BUSINESS' },
+    { text: 'IRA', value: 'IRA' },
+    { text: 'Individual', value: 'INDIVIDUAL' },
+    { text: 'Entity', value: 'ENTITY' },
+  ],
+  status: [
+    { text: 'Unlocked', value: 'UNLOCKED' },
+    { text: 'Locked', value: 'LOCKED' },
+  ],
+  accredited: [
+    { text: 'Accridiated', value: 'YES' },
+    { text: 'Non-Accridiated', value: 'NO' },
+  ],
+  city: [
+    { text: 'Loveland', value: 'Loveland' },
+    { text: 'Moscow', value: 'Moscow' },
+  ],
+};
+/* eslint-disable */
+export const USER_POOL = {"id":"5acc7be47498ac534eed4f84","email":"pickettbryan@securia.com","firstName":"Ada","lastName":"Mccullough","createdDate":"2015-03-07T06:02:12 -06:-30","updatedDate":"2018-01-16T01:47:07 -06:-30","legalDetails":{"verificationStartDate":"2014-01-07T04:21:39 -06:-30","verificationCompletionDate":"2014-05-14T12:34:12 -06:-30","legalName":{"firstLegalName":"Tanner","lastLegalName":"Guerra"},"dateOfBirth":"02-03-1980","ssn":"145-47-8825","legalAddress":{"street1":"Willow Street","street2":"Coles Street","city":"Lisco","state":"Connecticut","zipCode":2103}},"contactDetails":{"email":{"email":"tannerguerra@securia.com","verificationDate":"2017-11-29T11:46:08 -06:-30"},"phone":{"number":"+1 (871) 523-3343"}}};
 
-export const Status = [{ text: 'Unlocked', value: 'Unlocked' }, { text: 'Locked', value: 'Locked' }];
-
-export const Accridiation = [{ text: 'Accridiated', value: 'Accridiated' }, { text: 'Non-Accridiated', value: 'Non-Accridiated' }];
-
-export const City = [{ text: 'Alabama', value: 'Alabama' }, { text: 'New York', value: 'New York' }];
+export const RANDOM_USER = () => {
+  return USER_POOL;
+}

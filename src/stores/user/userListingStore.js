@@ -1,13 +1,15 @@
 /* eslint-disable class-methods-use-this */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../services/GqlClient2';
-import { allUsersQuery } from './queries/users';
+import isArray from 'lodash/isArray';
+import { GqlClient as client } from '../../services/GqlClient2';
+import { allUsersQuery } from '../queries/users';
 
 export class UserListingStore {
   @observable usersData = [];
+  @observable filters = true;
   @observable requestState = {
-    first: 20,
+    first: 10,
     skip: 0,
     filters: false,
     sort: {
@@ -24,6 +26,30 @@ export class UserListingStore {
   }
 
   initRequest = () => {
+    const { filterGlobal } = this.requestState.search;
+    const filters = toJS({ ...this.requestState.search });
+    Object.keys(filters).forEach((key) => {
+      const ele = toJS(filters[key]);
+      if (isArray(ele)) {
+        if (ele.length > 0) {
+          filters[`${key}_in`] = ele;
+        }
+        delete filters[key];
+      } else {
+        filters[key] = (key.indexOf('_lte') !== -1) ? `${filters[key]}T23:59:59` : filters[key];
+      }
+    });
+
+    filters.filterGlobal = undefined;
+
+    if (filterGlobal) {
+      filters.OR = [
+        { firstName: filterGlobal },
+        { lastName: filterGlobal },
+        { email_contains: filterGlobal },
+      ];
+    }
+
     this.usersData = graphql({
       client,
       query: allUsersQuery,
@@ -31,6 +57,7 @@ export class UserListingStore {
         first: this.requestState.first,
         skip: this.requestState.skip,
         orderBy: `${this.requestState.sort.by}_${this.requestState.sort.direction}`,
+        filters,
       },
     });
   }
@@ -57,7 +84,8 @@ export class UserListingStore {
   }
 
   @computed get count() {
-    return this.usersData.count;
+    return (this.allUsers.data && this.allUsers.data.allUsers) ?
+      this.allUsers.data.allUsers.length : 0;
   }
 
   @computed get sortInfo() {
@@ -68,8 +96,21 @@ export class UserListingStore {
 
   @action
   toggleSearch = () => {
-    this.requestState.filters = !this.requestState.filters;
-    console.log(this.requestState.filters);
+    this.filters = !this.filters;
+  }
+
+  @action
+  initiateSearch = (srchParams) => {
+    this.requestState.skip = 0; // reset
+    this.requestState.search = srchParams;
+    this.initRequest();
+  }
+
+  @action
+  setInitiateSrch = (name, value) => {
+    const srchParams = { ...this.requestState.search };
+    srchParams[name] = value;
+    this.initiateSearch(srchParams);
   }
 
   @action
@@ -96,15 +137,14 @@ export class UserListingStore {
     }
   }
 
-  getRandom = (min, max) => Math.floor(Math.random() * min) + max;
-
   @computed get usersSummary() {
     return {
-      total: this.getRandom(250, 400),
+      total: this.allUsersMeta,
+      count: this.count,
       byType: {
-        Individual: this.getRandom(50, 80),
-        Entity: this.getRandom(50, 80),
-        IRA: this.getRandom(50, 80),
+        Individual: 20,
+        Entity: 22,
+        IRA: 17,
       },
     };
   }

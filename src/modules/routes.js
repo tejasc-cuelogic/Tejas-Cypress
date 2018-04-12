@@ -19,6 +19,7 @@ import Banking from './banking/containers/Banking';
 import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './users/containers/Users';
+import UserDetails from './users/containers/UserDetails';
 import XmlForm from './business/containers/XmlForm';
 import BusinessDetails from './business/containers/BusinessDetails';
 import {
@@ -135,7 +136,7 @@ export const privateRoutes = [
   },
   {
     path: '/app/users/:userId/:section',
-    component: Users,
+    component: UserDetails,
     auth: BusinessAuthorization,
   },
   {

@@ -2,8 +2,31 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions
 export const allUsersQuery = gql`
-  query allUsers($first: Int!, $skip: Int!, $orderBy: UserOrderBy) {
-    allUsers(first: $first, skip: $skip, orderBy: $orderBy) {
+  query allUsers($first: Int!, $skip: Int!, $orderBy: UserOrderBy, $filters: UserFilter) {
+    allUsers(first: $first, skip: $skip, orderBy: $orderBy, filter: $filters) {
+      id
+      firstName
+      lastName
+      email
+      city
+      state
+      zipCode
+      phoneNumber
+      accountType
+      accredited
+      lastLogin
+      createdAt
+      status
+    }
+    _allUsersMeta(filter: $filters) {
+      count
+    }
+  }
+`;
+
+export const userDetailsQuery = gql`
+  query userDetails($id: ID) {
+    User(id: $id) {
       id
       firstName
       lastName
@@ -12,12 +35,6 @@ export const allUsersQuery = gql`
       accredited
       lastLogin
       createdAt
-      phoneNumbers {
-        phoneNumber
-      }
-    }
-    _allUsersMeta {
-      count
     }
   }
 `;

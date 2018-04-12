@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, List, Icon, Responsive } from 'semantic-ui-react';
+import { USER_DETAIL_SECTIONS } from '../../../constants/user';
 
-const userModuleSubheader = () => (
+const userModuleSubheader = props => (
   <div className="page-header-section webcontent-spacer">
     <Grid>
       <Grid.Row>
@@ -11,21 +12,25 @@ const userModuleSubheader = () => (
             <Responsive {...Responsive.onlyComputer}>
               <Link to="/app/users" className="back-link"><Icon name="long arrow left" /></Link>
             </Responsive>
-            James Wright
+            {props.fullname}
           </h1>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
         <Grid.Column width={16}>
           <List horizontal link>
-            <List.Item as="a" href="/app/users/1/UserDetails" active>Profile</List.Item>
-            <List.Item as="a" href="/app/users/1/UserAccounts">Accounts</List.Item>
-            <List.Item as="a" href="/app/users/new">Activity</List.Item>
-            <List.Item as="a" href="/app/users/new">Investments</List.Item>
-            <List.Item as="a" href="/app/users/new">Transactions</List.Item>
-            <List.Item as="a" href="/app/users/new">Statements</List.Item>
-            <List.Item as="a" href="/app/users/new">Referrals</List.Item>
-            <List.Item as="a" href="/app/users/new">Messages</List.Item>
+            {
+              USER_DETAIL_SECTIONS.map(section => (
+                <List.Item
+                  className={(props.section.toLowerCase() === section.toLowerCase()) ? 'active' : ''}
+                  key={section}
+                  as="a"
+                  href={`/app/users/1/${section}`}
+                >
+                  {section}
+                </List.Item>
+              ))
+            }
           </List>
         </Grid.Column>
       </Grid.Row>

@@ -71,6 +71,7 @@
     "react-error-overlay": "^1.0.10",
     "react-loadable": "^5.3.1",
     "react-moment": "^0.7.0",
+    "react-on-screen": "^2.0.4",
     "react-router-dom": "^4.2.2",
     "react-toastify": "^3.4.3",
     "sass-loader": "^6.0.6",

@@ -7,4 +7,5 @@ export { default as profileStore } from './profileStore';
 export { default as userStore } from './userStore';
 export { default as uiStore } from './uiStore';
 export { default as offeringsStore } from './offeringsStore';
-export { default as userListingStore } from './userListingStore';
+export { default as userListingStore } from './user/userListingStore';
+export { default as userDetailsStore } from './user/userDetailsStore';

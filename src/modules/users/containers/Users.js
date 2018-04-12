@@ -8,13 +8,27 @@ import UserListing from './../components/UserListing';
 @inject('userListingStore')
 @observer
 class Users extends Component {
-  sortHandler = (by, sortable) => {
-    this.props.userListingStore.initiateSort(by, sortable);
-  };
+  setSearchParam = (e, { name, value }) => this.props.userListingStore.setInitiateSrch(name, value);
+
+  dateFilter = (e) => {
+    if (e.target.value !== '' && e.target.name !== '') {
+      this.props.userListingStore.setInitiateSrch(e.target.name, e.target.value);
+    }
+  }
 
   toggleSearch = () => this.props.userListingStore.toggleSearch();
 
   loadMore = () => this.props.userListingStore.loadMore();
+
+  sortHandler = (by, sortable) => {
+    this.props.userListingStore.initiateSort(by, sortable);
+  };
+
+  executeSearch = (e) => {
+    if (e.charCode === 13) {
+      this.props.userListingStore.setInitiateSrch('filterGlobal', e.target.value);
+    }
+  }
 
   render() {
     const {
@@ -24,8 +38,11 @@ class Users extends Component {
       <Aux>
         <UserListingSubheader
           summary={usersSummary}
-          currState={this.props.userListingStore.requestState}
+          filters={this.props.userListingStore.filters}
           toggleSearch={this.toggleSearch}
+          executeSearch={this.executeSearch}
+          setSearchParam={this.setSearchParam}
+          dateFilter={this.dateFilter}
         />
         <UserListing
           loading={loading}
