@@ -1,0 +1,81 @@
+image: awscli:custom
+
+stages:
+  - build
+  - deploy
+  
+#---------------------------------Dev-------------------------------------------
+
+#Building code
+building-code-dev:
+  cache:
+    paths:
+    - node_modules/
+  only:
+    refs:
+      - develop
+  tags:
+    - ns-client
+  stage: build
+  script:
+    - bash EnvVariables.sh us-east-1 dev
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+    - build/
+    expire_in: 1 day
+
+#Deploying code to s3 bucket
+deploying-code-dev:
+  only:
+    refs:
+      - develop
+  environment:
+    name: dev
+  tags:
+    - ns-client
+  stage: deploy
+  script: 
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://ns-client-dev/ --recursive
+  dependencies:
+    - building-code-dev
+    
+#---------------------------------Production------------------------------------
+
+#Building code
+building-code-prod:
+  cache:
+    paths:
+    - node_modules/
+  only:
+    refs:
+      - cicd-prod
+  tags:
+    - ns-client
+  stage: build
+  script: 
+    - bash EnvVariables.sh us-east-1 prod
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+    - build/
+    expire_in: 1 day
+
+#Deploying code to s3 bucket
+deploying-code-prod:
+  only:
+    refs:
+      - cicd-prod
+  environment:
+    name: production
+  tags:
+    - ns-client
+  stage: deploy
+  script: 
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://ns-client-prod/ --recursive
+  dependencies:
+    - building-code-prod
