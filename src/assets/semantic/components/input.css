@@ -166,31 +166,31 @@
 .ui.input.error > input {
   background-color: #FFF6F6;
   border-color: #E0B4B4;
-  color: #9F3A38;
+  color: #EB5757;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
 
 /* Error Placeholder */
 .ui.input.error > input::-webkit-input-placeholder {
-  color: #e7bdbc;
+  color: #ffffff;
 }
 .ui.input.error > input::-moz-placeholder {
-  color: #e7bdbc;
+  color: #ffffff;
 }
 .ui.input.error > input:-ms-input-placeholder {
-  color: #e7bdbc !important;
+  color: #ffffff !important;
 }
 
 /* Focused Error Placeholder */
 .ui.input.error > input:focus::-webkit-input-placeholder {
-  color: #da9796;
+  color: #fbe0e0;
 }
 .ui.input.error > input:focus::-moz-placeholder {
-  color: #da9796;
+  color: #fbe0e0;
 }
 .ui.input.error > input:focus:-ms-input-placeholder {
-  color: #da9796 !important;
+  color: #fbe0e0 !important;
 }
 
 

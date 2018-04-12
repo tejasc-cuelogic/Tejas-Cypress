@@ -307,8 +307,3 @@
         }
     }
 }
-
-//  Restrict Google auto-address field from blur effect on modal open
-.blurring.dimmed.dimmable>.pac-container{
-    filter:blur(0px) grayscale(0);
-}

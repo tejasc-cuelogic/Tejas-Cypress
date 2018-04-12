@@ -884,10 +884,6 @@
 .summary-wrap .ui.items > .item .content {
   padding: 1.14285714rem 1.5rem;
 }
-.blurring.dimmed.dimmable > .pac-container {
-  -webkit-filter: blur(0px) grayscale(0);
-          filter: blur(0px) grayscale(0);
-}
 
 
 /*******************************

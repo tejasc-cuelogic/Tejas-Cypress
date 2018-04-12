@@ -261,7 +261,7 @@
   white-space: normal;
   background: #FFFFFF !important;
   border: 1px solid #E0B4B4 !important;
-  color: #9F3A38 !important;
+  color: #EB5757 !important;
 }
 .ui.form .inline.fields .field .prompt,
 .ui.form .inline.field .prompt {
@@ -334,22 +334,22 @@
 
 /* Error Placeholder */
 .ui.form .error ::-webkit-input-placeholder {
-  color: #e7bdbc;
+  color: #ffffff;
 }
 .ui.form .error :-ms-input-placeholder {
-  color: #e7bdbc !important;
+  color: #ffffff !important;
 }
 .ui.form .error ::-moz-placeholder {
-  color: #e7bdbc;
+  color: #ffffff;
 }
 .ui.form .error :focus::-webkit-input-placeholder {
-  color: #da9796;
+  color: #fbe0e0;
 }
 .ui.form .error :focus:-ms-input-placeholder {
-  color: #da9796 !important;
+  color: #fbe0e0 !important;
 }
 .ui.form .error :focus::-moz-placeholder {
-  color: #da9796;
+  color: #fbe0e0;
 }
 
 /*--------------------
@@ -444,11 +444,11 @@
 .ui.form .field.error label,
 .ui.form .fields.error .field .input,
 .ui.form .field.error .input {
-  color: #9F3A38;
+  color: #EB5757;
 }
 .ui.form .fields.error .field .corner.label,
 .ui.form .field.error .corner.label {
-  border-color: #9F3A38;
+  border-color: #EB5757;
   color: #FFFFFF;
 }
 .ui.form .fields.error .field textarea,
@@ -481,7 +481,7 @@
 .ui.form .field.error input[type="url"] {
   background: #FFF6F6;
   border-color: #E0B4B4;
-  color: #9F3A38;
+  color: #EB5757;
   border-radius: '';
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -502,7 +502,7 @@
 .ui.form .field.error input[type="url"]:focus {
   background: #FFF6F6;
   border-color: #E0B4B4;
-  color: #9F3A38;
+  color: #EB5757;
   -webkit-appearance: none;
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -523,7 +523,7 @@
 .ui.form .field.error .ui.dropdown .text,
 .ui.form .field.error .ui.dropdown .item {
   background: #FFF6F6;
-  color: #9F3A38;
+  color: #EB5757;
 }
 .ui.form .fields.error .field .ui.dropdown,
 .ui.form .field.error .ui.dropdown {
@@ -540,7 +540,7 @@
 .ui.form .fields.error .field .ui.multiple.selection.dropdown > .label,
 .ui.form .field.error .ui.multiple.selection.dropdown > .label {
   background-color: #EACBCB;
-  color: #9F3A38;
+  color: #EB5757;
 }
 
 /* Hover */
@@ -569,7 +569,7 @@
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) label,
 .ui.form .fields.error .field .checkbox:not(.toggle):not(.slider) .box,
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) .box {
-  color: #9F3A38;
+  color: #EB5757;
 }
 .ui.form .fields.error .field .checkbox:not(.toggle):not(.slider) label:before,
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) label:before,
@@ -582,7 +582,7 @@
 .ui.form .field.error .checkbox label:after,
 .ui.form .fields.error .field .checkbox .box:after,
 .ui.form .field.error .checkbox .box:after {
-  color: #9F3A38;
+  color: #EB5757;
 }
 
 /*--------------------
@@ -1175,7 +1175,7 @@
   border-color: transparent transparent #828282;
 }
 .ui.form .error:not(.field) {
-  color: #9F3A38;
+  color: #EB5757;
 }
 .page-header-section .ui.input.inverted .icon {
   color: #FFFFFF;
@@ -1230,14 +1230,26 @@
   cursor: pointer;
 }
 .ui.modal .ui.form.file-uploader-inline .file-uploader.attached {
+  padding-right: 2rem;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #772DF9;
   border: none;
   background: #e0e0e0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui.modal .ui.form.file-uploader-inline .file-uploader.attached > span {
+  color: #772DF9;
 }
 .ui.modal .ui.form.file-uploader-inline .file-uploader.attached .icon {
-  margin: 0 0 0 0.42857143rem;
+  margin: -0.5rem 0 0 0;
+  line-height: 1rem;
   color: #828282;
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  cursor: pointer;
 }
 
 
