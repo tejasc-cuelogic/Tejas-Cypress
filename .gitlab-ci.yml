@@ -21,7 +21,7 @@ building-code-dev:
     - ns-client
   stage: build
   script:
-    - bash EnvVariables.sh us-east-1 dev
+    - bash scripts/setEnvironmentVariables.sh us-east-1 dev
     - npm install
     - npm run build
   artifacts:
@@ -59,7 +59,7 @@ building-code-prod:
     - ns-client
   stage: build
   script: 
-    - bash EnvVariables.sh us-east-1 prod
+    - bash scripts/setEnvironmentVariables.sh us-east-1 prod
     - npm install
     - npm run build
   artifacts:
