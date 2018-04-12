@@ -86,6 +86,12 @@ div.login-form {
 .center-align{
 	text-align:center !important;
 }
+.success{
+	color:@theme-primary !important;
+}
+.error{
+	color:@highlight-primary !important;
+}
 
 //	Admin Page Content Styles	//
 

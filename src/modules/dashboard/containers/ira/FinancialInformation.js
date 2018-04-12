@@ -31,16 +31,18 @@ export default class FinancialInformation extends React.Component {
                     className="center-align"
                   />
                 </label>
-                <Input labelPosition="right" type="text" placeholder="Amount">
+                <Input
+                  name={iraAccount.networth.key}
+                  placeholder={iraAccount.networth.placeHolder}
+                  value={iraAccount.networth.value}
+                  error={!!iraAccount.networth.error}
+                  onChange={this.handleInputChange}
+                  maxLength={10}
+                  labelPosition="right"
+                  type="text"
+                >
                   <Label basic>$</Label>
-                  <input
-                    name={iraAccount.networth.key}
-                    placeholder={iraAccount.networth.placeHolder}
-                    value={iraAccount.networth.value}
-                    error={!!iraAccount.networth.error}
-                    onChange={this.handleInputChange}
-                    maxLength={10}
-                  />
+                  <input />
                 </Input>
                 <FieldError error={iraAccount.networth.error} />
               </Form.Field>
@@ -54,16 +56,18 @@ export default class FinancialInformation extends React.Component {
                     className="center-align"
                   />
                 </label>
-                <Input labelPosition="right" type="text" placeholder="Amount">
+                <Input
+                  name={iraAccount.annualIncome.key}
+                  placeholder={iraAccount.annualIncome.placeHolder}
+                  value={iraAccount.annualIncome.value}
+                  error={!!iraAccount.annualIncome.error}
+                  onChange={this.handleInputChange}
+                  maxLength={12}
+                  labelPosition="right"
+                  type="text"
+                >
                   <Label basic>$</Label>
-                  <input
-                    name={iraAccount.annualIncome.key}
-                    placeholder={iraAccount.annualIncome.placeHolder}
-                    value={iraAccount.annualIncome.value}
-                    error={!!iraAccount.annualIncome.error}
-                    onChange={this.handleInputChange}
-                    maxLength={12}
-                  />
+                  <input />
                 </Input>
                 <FieldError error={iraAccount.annualIncome.error} />
               </Form.Field>

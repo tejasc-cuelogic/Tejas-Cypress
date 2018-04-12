@@ -229,6 +229,12 @@ div.login-form ul.error-messages {
 .center-align {
   text-align: center !important;
 }
+.success {
+  color: #98CE23 !important;
+}
+.error {
+  color: #EB5757 !important;
+}
 .page-header-section {
   background-color: #424242;
   position: relative;
