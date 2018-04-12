@@ -186,7 +186,7 @@ export const ENTITY_ACCOUNT_CREATION = {
     key: 'entityFormationDocument',
     error: undefined,
     rule: '',
-    label: '',
+    label: 'Entity Formation Document',
     placeHolder: '',
   },
   entityOperatingDocument: {
@@ -194,7 +194,7 @@ export const ENTITY_ACCOUNT_CREATION = {
     key: 'entityOperatingDocument',
     error: undefined,
     rule: '',
-    label: '',
+    label: 'Entity Operating Document',
     placeHolder: '',
   },
   einVerification: {
@@ -202,7 +202,7 @@ export const ENTITY_ACCOUNT_CREATION = {
     key: 'einVerification',
     error: undefined,
     rule: '',
-    label: '',
+    label: 'EIN Verification',
     placeHolder: '',
   },
 };
