@@ -143,8 +143,11 @@
 .tabular-wrap .ui.segment .main.actions > a:active {
   color: #db1a1a;
 }
+.account-type-tab {
+  margin: 2.57142857rem 0;
+}
 .account-type-tab > .ui.item.menu.secondary {
-  margin: 0 -1rem 1rem !important;
+  margin: 0 -1rem 2rem !important;
   width: auto !important;
 }
 .account-type-tab > .ui.item.menu.secondary a.item {

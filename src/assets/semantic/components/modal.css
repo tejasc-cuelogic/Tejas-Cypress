@@ -618,9 +618,6 @@
 .ui.modal > .header:not(.ui).signup-header .ui.header {
   margin: 0 0 0.5rem;
 }
-.ui.modal > .header:not(.ui).signup-header h4.ui.header {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
 .ui.modal > .header:not(.ui).signup-header .ui.divider {
   max-width: 140px;
   margin-left: auto;
@@ -631,6 +628,9 @@
   font-weight: 500;
   font-size: 1rem;
   color: #424242;
+}
+.ui.modal h4.ui.header {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 .ui.modal .content {
   padding-top: 1.42857143rem;
@@ -788,9 +788,10 @@
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
 .ui.modal .ui.form .field .ui.labeled.input .ui.label {
-  background-color: transparent;
-  padding-right: 0.85714286rem;
+  font-weight: 400;
   padding-left: 0;
+  padding-right: 0.85714286rem;
+  background-color: transparent;
 }
 .ui.modal .ui.form .field .ui.selection.dropdown .icon {
   padding-right: 0.35714286rem;

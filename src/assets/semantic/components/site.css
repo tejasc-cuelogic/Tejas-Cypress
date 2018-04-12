@@ -226,7 +226,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 }
 ol.progtrckr {
   margin: 0;
-  padding: 0 0 2.2rem;
+  padding: 1.71428571rem 0 2.85714286rem;
   list-style-type: none;
   text-align: center;
 }

@@ -7,8 +7,8 @@ export default class CreateAccount extends React.Component {
   render() {
     return (
       <div>
-        <Header as="h2" textAlign="center">Link Bank Account</Header>
-        <p className="center-align">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <Header as="h1" textAlign="center">Link Bank Account</Header>
+        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
         <div className="summary-wrap">
           <div className="field-wrap">
             <Header as="h3" textAlign="center">Linked Bank Account</Header>

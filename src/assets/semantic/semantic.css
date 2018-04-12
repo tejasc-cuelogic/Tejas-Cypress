@@ -790,7 +790,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 ol.progtrckr {
   margin: 0;
-  padding: 0 0 2.2rem;
+  padding: 1.71428571rem 0 2.85714286rem;
   list-style-type: none;
   text-align: center;
 }
@@ -33725,10 +33725,6 @@ select.ui.dropdown {
   margin: 0 0 0.5rem;
 }
 
-.ui.modal > .header:not(.ui).signup-header h4.ui.header {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
 .ui.modal > .header:not(.ui).signup-header .ui.divider {
   max-width: 140px;
   margin-left: auto;
@@ -33740,6 +33736,10 @@ select.ui.dropdown {
   font-weight: 500;
   font-size: 1rem;
   color: #424242;
+}
+
+.ui.modal h4.ui.header {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .ui.modal .content {
@@ -33923,9 +33923,10 @@ select.ui.dropdown {
 }
 
 .ui.modal .ui.form .field .ui.labeled.input .ui.label {
-  background-color: transparent;
-  padding-right: 0.85714286rem;
+  font-weight: 400;
   padding-left: 0;
+  padding-right: 0.85714286rem;
+  background-color: transparent;
 }
 
 .ui.modal .ui.form .field .ui.selection.dropdown .icon {
@@ -37586,8 +37587,12 @@ body.pushable > .pusher {
   color: #db1a1a;
 }
 
+.account-type-tab {
+  margin: 2.57142857rem 0;
+}
+
 .account-type-tab > .ui.item.menu.secondary {
-  margin: 0 -1rem 1rem !important;
+  margin: 0 -1rem 2rem !important;
   width: auto !important;
 }
 

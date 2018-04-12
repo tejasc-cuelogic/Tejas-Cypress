@@ -16,8 +16,8 @@ export default class FinancialInformation extends React.Component {
     return (
       <div>
         <div>
-          <Header as="h2" textAlign="center">Complete your financial information</Header>
-          <p className="center-align">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <Header as="h1" textAlign="center">Complete your financial information</Header>
+          <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
           <Form error>
             <div className="field-wrap">
               <Form.Field>
@@ -33,16 +33,15 @@ export default class FinancialInformation extends React.Component {
                 </label>
                 <Input labelPosition="right" type="text" placeholder="Amount">
                   <Label basic>$</Label>
-                  <input />
+                  <input
+                    name={iraAccount.networth.key}
+                    placeholder={iraAccount.networth.placeHolder}
+                    value={iraAccount.networth.value}
+                    error={!!iraAccount.networth.error}
+                    onChange={this.handleInputChange}
+                    maxLength={10}
+                  />
                 </Input>
-                <Input
-                  name={iraAccount.networth.key}
-                  placeholder={iraAccount.networth.placeHolder}
-                  value={iraAccount.networth.value}
-                  error={!!iraAccount.networth.error}
-                  onChange={this.handleInputChange}
-                  maxLength={10}
-                />
                 <FieldError error={iraAccount.networth.error} />
               </Form.Field>
               <Form.Field>
@@ -55,14 +54,17 @@ export default class FinancialInformation extends React.Component {
                     className="center-align"
                   />
                 </label>
-                <Input
-                  name={iraAccount.annualIncome.key}
-                  placeholder={iraAccount.annualIncome.placeHolder}
-                  value={iraAccount.annualIncome.value}
-                  error={!!iraAccount.annualIncome.error}
-                  onChange={this.handleInputChange}
-                  maxLength={12}
-                />
+                <Input labelPosition="right" type="text" placeholder="Amount">
+                  <Label basic>$</Label>
+                  <input
+                    name={iraAccount.annualIncome.key}
+                    placeholder={iraAccount.annualIncome.placeHolder}
+                    value={iraAccount.annualIncome.value}
+                    error={!!iraAccount.annualIncome.error}
+                    onChange={this.handleInputChange}
+                    maxLength={12}
+                  />
+                </Input>
                 <FieldError error={iraAccount.annualIncome.error} />
               </Form.Field>
             </div>

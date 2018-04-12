@@ -38,7 +38,7 @@
 //	Multistep modal navigation
 ol.progtrckr {
 	margin:0;
-	padding:0 0 2.2rem;
+	padding:@24px 0 @40px;
 	list-style-type:none;
 	text-align:center;
 	li {

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Modal, Grid, Button, Header, Tab, Menu, Divider } from 'semantic-ui-react';
+import { Modal, Grid, Button, Header, Tab, Menu } from 'semantic-ui-react';
 
 const panes = [
   {
     menuItem: <Menu.Item key="individual"><div className="account-tab"><div className="account-type small">I</div> Individual</div></Menu.Item>,
     render: () => [
-      <Tab.Pane key="tab1">
+      <Tab.Pane key="individual">
         <p>Create a NextSeed Investment Account by linking your checking account. You can easily
           connect your account by logging in through our secure system or by manually entering
           your account information.<br /><br />
@@ -19,7 +19,7 @@ const panes = [
   {
     menuItem: <Menu.Item key="ira"><div className="account-tab"><div className="account-type small">R</div> IRA</div></Menu.Item>,
     render: () => [
-      <Tab.Pane key="tab3">
+      <Tab.Pane key="ira">
         <p>Begin investing in local businesses with a self-directed NextSeed IRA. Get the benefits
           of investing with a retirement account (Traditional and Roth IRA options available) while
           investing in this new asset class.<br /><br />
@@ -36,7 +36,7 @@ const panes = [
   {
     menuItem: <Menu.Item key="entity"><div className="account-tab"><div className="account-type small">E</div> Entity</div></Menu.Item>,
     render: () => [
-      <Tab.Pane key="tab2">
+      <Tab.Pane key="entity">
         <p>Invest on NextSeed with a corporate, LLC or Trust investment account.<br /><br />
           Minimum opening deposit of $5,000. Please note investment limits apply. The uninvested
           cash in your account 1 is FDIC-insured up to $250,000 and is interest-bearing.<br /><br />
@@ -51,10 +51,9 @@ const InvestmentChooseType = props => (
   <Modal size="small" open closeIcon onClose={() => props.setDashboardWizardStep()}>
     <Modal.Header className="center-align signup-header">
       <Header as="h1">What type of Investment Account would you like to start?</Header>
-      <Divider hidden />
-      <Header as="h4">Choose an account type</Header>
     </Modal.Header>
     <Modal.Content className="signup-content">
+      <Header as="h4" textAlign="center">Choose an account type</Header>
       <Grid textAlign="center">
         <Tab
           className="account-type-tab"
@@ -70,7 +69,6 @@ const InvestmentChooseType = props => (
           onTabChange={props.handleAccoutTypeChange}
         />
       </Grid>
-      <Divider hidden />
       <Button
         circular
         icon="arrow right"

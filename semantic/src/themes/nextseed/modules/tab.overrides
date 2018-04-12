@@ -60,8 +60,9 @@
 }
 
 .account-type-tab{
+    margin:@36px 0;
     > .ui.item.menu.secondary{
-        margin: 0 -1rem 1rem !important;
+        margin: 0 -1rem 2rem !important;
         width: auto !important;
         a.item{
             margin-top:1rem;

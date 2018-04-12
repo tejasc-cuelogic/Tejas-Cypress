@@ -22,6 +22,8 @@ export default class LinkBankAccountPlaid extends React.Component {
       <div>
         {this.props.accountStore.bankLinkInterface === 'list' &&
         <div>
+          <Header as="h1" textAlign="center">Link Bank Account</Header>
+          <Header as="h4" textAlign="center">Select your bank from the list</Header>
           <div className="row">
             <div className="six columns">
               <PlaidLink
@@ -37,14 +39,14 @@ export default class LinkBankAccountPlaid extends React.Component {
             </div>
           </div>
           <div className="center-align">
-            <Button className="theme-link" color="green" onClick={() => this.props.accountStore.setBankLinkInterface('form')}>or enter bank details manually</Button>
+            <Button className="theme-link" color="green" onClick={() => this.props.accountStore.setBankLinkInterface('form')}>or enter it manually</Button>
           </div>
         </div>
         }
         {this.props.accountStore.bankLinkInterface === 'form' &&
         <div>
-          <Header as="h2" textAlign="center">Link Bank Account</Header>
-          <p className="center-align">We need this information to lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <Header as="h1" textAlign="center">Link Bank Account</Header>
+          <Header as="h4" textAlign="center">We need this information to lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
           <Form error onSubmit={this.handleSubmitForm}>
             <div className="field-wrap">
               <Form.Field>
