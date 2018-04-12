@@ -12,7 +12,7 @@ class DashboardWizard extends Component {
   render() {
     const module = this.props.uiStore.dashboardStep;
     const DashboardModule = Loadable({
-      loader: () => (module === `${this.props.accountStore.accountType}/AccountCreation` || module === `${this.props.accountStore.accountType}/LinkBankAccount` || module === 'InvestorPersonalDetails' || module === 'ConfirmIdentityForm' || module === 'ConfirmIdentityDocuments' || module === 'ConfirmPhoneNumber' ? import(`../containers/${module}`) : import(`../components/${module}`)),
+      loader: () => (module === `${this.props.accountStore.accountType.type}/AccountCreation` || module === `${this.props.accountStore.accountType.type}/LinkBankAccount` || module === 'InvestorPersonalDetails' || module === 'ConfirmIdentityForm' || module === 'ConfirmIdentityDocuments' || module === 'ConfirmPhoneNumber' ? import(`../containers/${module}`) : import(`../components/${module}`)),
       loading() {
         return <div>Loading...</div>;
       },

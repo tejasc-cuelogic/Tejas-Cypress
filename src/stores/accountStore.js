@@ -14,7 +14,10 @@ import {
 export class AccountStore {
   @observable bankLinkInterface = 'list';
 
-  @observable accountType = INVESTMENT_ACCOUNT_TYPES[0];
+  @observable accountType = {
+    activeIndex: 0,
+    type: INVESTMENT_ACCOUNT_TYPES[0],
+  }
 
   @observable individualAccount = { ...INDIVIDUAL_ACCOUNT_CREATION }
 
@@ -24,18 +27,13 @@ export class AccountStore {
 
   @computed
   get routeOnInvestmentTypeSelection() {
-    let routeForInvestTypeSelection = '';
-    if (this.accountType === 'individual') {
-      routeForInvestTypeSelection = `${this.accountType}/LinkBankAccount`;
-    } else if (this.accountType === 'ira' || this.accountType === 'entity') {
-      routeForInvestTypeSelection = `${this.accountType}/AccountCreation`;
-    }
-    return routeForInvestTypeSelection;
+    return `${this.accountType.type}/AccountCreation`;
   }
 
   @action
   setAccountType(type) {
-    this.accountType = INVESTMENT_ACCOUNT_TYPES[type];
+    this.accountType.activeIndex = type;
+    this.accountType.type = INVESTMENT_ACCOUNT_TYPES[type];
   }
 
   @action
