@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Modal, Button, Grid, Header, Icon } from 'semantic-ui-react';
 
 const signupInitial = props => (
-  <Modal size="tiny" dimmer="blurring" open>
+  <Modal size="tiny" open>
     <Modal.Header className="center-align signup-header">
       <Header as="h2">How can NextSeed Help you?</Header>
       <p>Do you want to invest or apply for funding?</p>

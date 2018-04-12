@@ -23,7 +23,7 @@ export default class ConfirmIdentityForm extends Component {
   render() {
     const { confirmIdentityQuestions } = this.props.profileStore;
     return (
-      <Modal size="mini" dimmer="blurring" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">We need to confirm your identity</Header>
           <Link to="" className="back-link"><Icon name="arrow left" /></Link>

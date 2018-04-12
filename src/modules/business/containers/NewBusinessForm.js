@@ -107,7 +107,6 @@ export default class NewBusinessForm extends React.Component {
         }
         <Modal
           size="small"
-          dimmer="blurring"
           open={this.props.uiStore.modalStatus === 'BusinessForm'}
           closeIcon
           onOpen={this.handleOpenModal}

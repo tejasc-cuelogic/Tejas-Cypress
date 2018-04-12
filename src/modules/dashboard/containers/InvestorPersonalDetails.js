@@ -55,7 +55,7 @@ export default class investorPersonalDetails extends Component {
     const { profileDetails } = this.props.profileStore;
     const welcomeMsg = `Hello ${this.props.userStore.currentUser.givenName}!`;
     return (
-      <Modal size="mini" dimmer="blurring" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">{welcomeMsg}</Header>
           <p>You’re almost at your personal dashboard</p>

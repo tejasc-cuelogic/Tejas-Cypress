@@ -28,7 +28,7 @@ export default class ConfirmIdentityDocuments extends Component {
   render() {
     const { confirmIdentityDocuments } = this.props.profileStore;
     return (
-      <Modal size="tiny" dimmer="blurring" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">We need to confirm your identity</Header>
           <Divider />
@@ -71,7 +71,7 @@ export default class ConfirmIdentityDocuments extends Component {
                 <Grid.Column width={7}>
                   <label>
                     <h3>Proof of Residence
-                      <Popup trigger={<Icon name="help circle outline" />} position="top center" flowing hoverable>
+                      <Popup className="test" trigger={<Icon name="help circle outline" />} position="top center" flowing hoverable>
                         <Popup.Content>
                           <p><b>Acceptable documents:</b></p>
                           <List bulleted>
