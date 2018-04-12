@@ -1,7 +1,7 @@
 image: awscli:custom
 
 variables:
-  CI: false
+  CI: "false"
 
 stages:
   - build
