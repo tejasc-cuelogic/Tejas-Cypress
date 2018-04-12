@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Grid, Button, Header, Tab, Menu } from 'semantic-ui-react';
+import { Modal, Grid, Button, Header, Tab, Menu, Divider } from 'semantic-ui-react';
 
 const panes = [
   {
@@ -50,8 +50,9 @@ const panes = [
 const InvestmentChooseType = props => (
   <Modal size="small" open closeIcon onClose={() => props.setDashboardWizardStep()}>
     <Modal.Header className="center-align signup-header">
-      <Header as="h2">What type of Investment Account would you like to start?</Header>
-      <p>Choose an account type</p>
+      <Header as="h1">What type of Investment Account would you like to start?</Header>
+      <Divider hidden />
+      <Header as="h4">Choose an account type</Header>
     </Modal.Header>
     <Modal.Content className="signup-content">
       <Grid textAlign="center">
@@ -68,12 +69,14 @@ const InvestmentChooseType = props => (
           activeIndex={props.selectedInvestmentType.activeIndex}
           onTabChange={props.handleAccoutTypeChange}
         />
-        <Grid.Row>
-          <Grid.Column>
-            <Button circular color="green" onClick={() => props.setDashboardWizardStep(props.routeOnInvestmentTypeSelection)} content="Accept" />
-          </Grid.Column>
-        </Grid.Row>
       </Grid>
+      <Divider hidden />
+      <Button
+        circular
+        icon="arrow right"
+        className="multistep__btn next active"
+        onClick={() => props.setDashboardWizardStep(props.routeOnInvestmentTypeSelection)}
+      />
     </Modal.Content>
   </Modal>
 );

@@ -61,7 +61,9 @@ export default class ConfirmIdentityDocuments extends Component {
                   }
                   {confirmIdentityDocuments.photoId.nameOfUploadedFile !== '' &&
                   <div className="file-uploader attached">
+                    <span title={confirmIdentityDocuments.photoId.nameOfUploadedFile}>
                       {confirmIdentityDocuments.photoId.nameOfUploadedFile}
+                    </span>
                     <Icon name="remove" onClick={this.removeUploadedPhotoId} />
                   </div>
                   }
@@ -103,7 +105,9 @@ export default class ConfirmIdentityDocuments extends Component {
                   }
                   {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile !== '' &&
                     <div className="file-uploader attached">
-                      {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile}
+                      <span title={confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile}>
+                        {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile}
+                      </span>
                       <Icon name="remove" onClick={this.removeUploadedProofOfResidence} />
                     </div>
                   }

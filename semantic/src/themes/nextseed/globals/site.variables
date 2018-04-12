@@ -400,7 +400,7 @@
 @negativeBackgroundColor : #FFF6F6;
 @negativeBorderColor     : #E0B4B4;
 @negativeHeaderColor     : #912D2B;
-@negativeTextColor       : #9F3A38;
+@negativeTextColor       : @highlight-primary;
 
 /* Info */
 @infoColor              : #31CCEC;
