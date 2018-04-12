@@ -30,15 +30,17 @@ export default class FinancialInformation extends Component {
                   className="center-align"
                 />
               </label>
-              <Input labelPosition="right" type="text" placeholder="Amount">
+              <Input
+                name={entityAccount.entityNetAssets.key}
+                placeholder={entityAccount.entityNetAssets.placeHolder}
+                value={entityAccount.entityNetAssets.value}
+                error={!!entityAccount.entityNetAssets.error}
+                onChange={this.handleInputChange}
+                labelPosition="right"
+                type="text"
+              >
                 <Label basic>$</Label>
-                <input
-                  name={entityAccount.entityNetAssets.key}
-                  placeholder={entityAccount.entityNetAssets.placeHolder}
-                  value={entityAccount.entityNetAssets.value}
-                  error={!!entityAccount.entityNetAssets.error}
-                  onChange={this.handleInputChange}
-                />
+                <input />
               </Input>
               <FieldError error={entityAccount.entityNetAssets.error} />
             </Form.Field>
@@ -52,15 +54,17 @@ export default class FinancialInformation extends Component {
                   className="center-align"
                 />
               </label>
-              <Input labelPosition="right" type="text" placeholder="Amount">
+              <Input
+                name={entityAccount.cfInvestments.key}
+                placeholder={entityAccount.cfInvestments.placeHolder}
+                value={entityAccount.cfInvestments.value}
+                error={!!entityAccount.cfInvestments.error}
+                onChange={this.handleInputChange}
+                labelPosition="right"
+                type="text"
+              >
                 <Label basic>$</Label>
-                <input
-                  name={entityAccount.cfInvestments.key}
-                  placeholder={entityAccount.cfInvestments.placeHolder}
-                  value={entityAccount.cfInvestments.value}
-                  error={!!entityAccount.cfInvestments.error}
-                  onChange={this.handleInputChange}
-                />
+                <input />
               </Input>
               <FieldError error={entityAccount.cfInvestments.error} />
             </Form.Field>

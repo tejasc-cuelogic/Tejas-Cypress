@@ -69,9 +69,9 @@ class Dashboard extends Component {
         <Divider hidden />
         <div className="content-spacer">
           <Header as="h3">Welcome to NextSeed!</Header>
-          <Grid>
+          <Grid stackable>
             <Grid.Row>
-              <Grid.Column mobile={16} tablet={16} computer={5}>
+              <Grid.Column computer={8} largeScreen={8} widescreen={5}>
                 <Card fluid raised className="welcome-card">
                   <Card.Content>
                     <Item.Image size="mini" floated="left" src={Thumb} />
