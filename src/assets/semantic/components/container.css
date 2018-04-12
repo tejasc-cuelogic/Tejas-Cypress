@@ -466,7 +466,7 @@ div.login-form ul.error-messages {
 .field-error-message {
   background-color: #FFF6F6;
   border: #E0B4B4 1px solid;
-  color: #9F3A38;
+  color: #EB5757;
   border-radius: 0.28571429rem;
   max-height: 100px;
   overflow-y: auto;

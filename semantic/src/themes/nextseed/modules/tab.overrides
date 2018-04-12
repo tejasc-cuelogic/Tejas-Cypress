@@ -90,6 +90,6 @@
     }
     .tab{
         font-family:@regularFont;
-        font-size:@16px;
+        font-size:@14px;
     }
 }

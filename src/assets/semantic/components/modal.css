@@ -618,6 +618,9 @@
 .ui.modal > .header:not(.ui).signup-header .ui.header {
   margin: 0 0 0.5rem;
 }
+.ui.modal > .header:not(.ui).signup-header h4.ui.header {
+  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
 .ui.modal > .header:not(.ui).signup-header .ui.divider {
   max-width: 140px;
   margin-left: auto;
@@ -690,6 +693,38 @@
   background: #f2f2f2;
   text-align: center;
   margin-bottom: 0.71428571rem;
+}
+.ui.modal .content .ui.button.multistep__btn {
+  background: #FFFFFF;
+  color: #98CE23;
+  letter-spacing: 0;
+  -webkit-box-shadow: 0 0 16px 2px rgba(0, 0, 0, 0.15) !important;
+          box-shadow: 0 0 16px 2px rgba(0, 0, 0, 0.15) !important;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+}
+.ui.modal .content .ui.button.multistep__btn.disabled {
+  background: #e0e0e0;
+  color: #bdbdbd;
+  opacity: 1 !important;
+}
+.ui.modal .content .ui.button.multistep__btn > .icon {
+  width: auto;
+}
+.ui.modal .content .ui.button.multistep__btn.prev {
+  left: 0;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+.ui.modal .content .ui.button.multistep__btn.next {
+  right: 0;
+  -webkit-transform: translate(50%, -50%);
+          transform: translate(50%, -50%);
+}
+.ui.modal .content .ui.button.multistep__btn.next.active {
+  background: #98CE23;
+  color: #FFFFFF;
 }
 .ui.modal .actions {
   font-size: 1rem;
@@ -824,38 +859,6 @@
   position: relative;
   padding: 3.57142857rem 5.71428571rem;
 }
-.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn {
-  background: #FFFFFF;
-  color: #98CE23;
-  letter-spacing: 0;
-  -webkit-box-shadow: 0 0 16px 2px rgba(0, 0, 0, 0.15) !important;
-          box-shadow: 0 0 16px 2px rgba(0, 0, 0, 0.15) !important;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-}
-.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn.disabled {
-  background: #e0e0e0;
-  color: #bdbdbd;
-  opacity: 1 !important;
-}
-.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn > .icon {
-  width: auto;
-}
-.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn.prev {
-  left: 0;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-}
-.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn.next {
-  right: 0;
-  -webkit-transform: translate(50%, -50%);
-          transform: translate(50%, -50%);
-}
-.ui.modal.basic.multistep-modal .multistep.content .ui.button.multistep__btn.next.active {
-  background: #98CE23;
-  color: #FFFFFF;
-}
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap {
   margin: 2.14285714rem auto;
   padding: 1.78571429rem 4.28571429rem;
@@ -883,10 +886,6 @@
 }
 .summary-wrap .ui.items > .item .content {
   padding: 1.14285714rem 1.5rem;
-}
-.blurring.dimmed.dimmable > .pac-container {
-  -webkit-filter: blur(0px) grayscale(0);
-          filter: blur(0px) grayscale(0);
 }
 
 
