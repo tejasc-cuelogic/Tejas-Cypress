@@ -26,7 +26,7 @@ export class UserListingStore {
   }
 
   initRequest = () => {
-    const { filterGlobal } = this.requestState.search;
+    const { keyword } = this.requestState.search;
     const filters = toJS({ ...this.requestState.search });
     Object.keys(filters).forEach((key) => {
       const ele = toJS(filters[key]);
@@ -40,13 +40,13 @@ export class UserListingStore {
       }
     });
 
-    filters.filterGlobal = undefined;
+    filters.keyword = undefined;
 
-    if (filterGlobal) {
+    if (keyword) {
       filters.OR = [
-        { firstName: filterGlobal },
-        { lastName: filterGlobal },
-        { email_contains: filterGlobal },
+        { firstName: keyword },
+        { lastName: keyword },
+        { email_contains: keyword },
       ];
     }
 

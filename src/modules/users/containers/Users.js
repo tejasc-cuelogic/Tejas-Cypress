@@ -26,7 +26,7 @@ class Users extends Component {
 
   executeSearch = (e) => {
     if (e.charCode === 13) {
-      this.props.userListingStore.setInitiateSrch('filterGlobal', e.target.value);
+      this.props.userListingStore.setInitiateSrch('keyword', e.target.value);
     }
   }
 
@@ -39,6 +39,7 @@ class Users extends Component {
         <UserListingSubheader
           summary={usersSummary}
           filters={this.props.userListingStore.filters}
+          requestState={this.props.userListingStore.requestState}
           toggleSearch={this.toggleSearch}
           executeSearch={this.executeSearch}
           setSearchParam={this.setSearchParam}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
-import { DropdownFilter, DateRangeFilter } from './widgets/Filters';
+import { DropdownFilter, DateRangeFilter, AppliedFilters } from './widgets/Filters';
 import { FILTER_META } from './../../../constants/user';
 
 const userListingSubheader = props => (
@@ -33,7 +33,7 @@ const userListingSubheader = props => (
               <List.Item>
                 {`Showing ${props.summary.count} filtered records out of total ${props.summary.total}.`}
               </List.Item>
-              <List.Item as="a" to="/users/new">No filters applied.</List.Item>
+              <AppliedFilters filters={props.requestState.search} />
             </List>
           </Grid.Column>
         </Grid.Row>

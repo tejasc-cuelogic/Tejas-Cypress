@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Dropdown, Form, Input } from 'semantic-ui-react';
+import { Grid, Dropdown, Form, Input, Label, Icon, List } from 'semantic-ui-react';
 import camelCase from 'lodash/camelCase';
 
 export const DropdownFilter = props => (
@@ -33,3 +33,19 @@ export const DateRangeFilter = props => (
     </Form>
   </Grid.Column>
 );
+
+export const AppliedFilters = (props) => {
+  const filterKeys = Object.keys(props.filters);
+  if (filterKeys.length < 1) {
+    return <List.Item as="a" to="">No filters applied.</List.Item>;
+  }
+  return (
+    <span>
+      {
+        filterKeys.map(f => (
+          <Label key={f} as="a">{`${f}: ${props.filters[f]}`}<Icon name="delete" onClick={props.click} /></Label>
+        ))
+      }
+    </span>
+  );
+};
