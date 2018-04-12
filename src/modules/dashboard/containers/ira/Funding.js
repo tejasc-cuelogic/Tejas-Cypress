@@ -17,10 +17,11 @@ const panes = [
 @inject('accountStore')
 @observer
 export default class Funding extends Component {
-  handleFundingOption = (e, data) => {
-    this.props.accountStore.setIraFundingOption(data.activeIndex);
+  handleFundingOption = (e, { activeIndex }) => {
+    this.props.accountStore.setIraFundingOption(activeIndex);
   }
   render() {
+    const { iraAccount } = this.props.accountStore;
     return (
       <div>
         <Header as="h2">How would you like to fund your IRA?</Header>
@@ -36,6 +37,7 @@ export default class Funding extends Component {
               stackable: true,
             }}
             panes={panes}
+            activeIndex={iraAccount.fundingOption.value.activeIndex}
             onTabChange={this.handleFundingOption}
           />
         </Grid>

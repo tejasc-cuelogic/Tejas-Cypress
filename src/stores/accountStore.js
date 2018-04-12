@@ -63,12 +63,22 @@ export class AccountStore {
 
   @action
   setIraAccountType(type) {
-    this.setIraAccountDetails('accountType', IRA_ACCOUNT_TYPES[type]);
+    const field = 'accountType';
+    const value = {
+      activeIndex: type,
+      type: IRA_ACCOUNT_TYPES[type],
+    };
+    this.setIraAccountDetails(field, value);
   }
 
   @action
   setIraFundingOption(option) {
-    this.setIraAccountDetails('fundingOption', FUNDING_OPTIONS[option]);
+    const field = 'fundingOption';
+    const value = {
+      activeIndex: option,
+      type: FUNDING_OPTIONS[option],
+    };
+    this.setIraAccountDetails(field, value);
   }
 
   @computed

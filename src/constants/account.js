@@ -54,7 +54,10 @@ export const IRA_ACCOUNT_CREATION = {
     placeHolder: 'Your annual income',
   },
   accountType: {
-    value: IRA_ACCOUNT_TYPES[0],
+    value: {
+      activeIndex: 0,
+      type: IRA_ACCOUNT_TYPES[0],
+    },
     key: 'accountType',
     error: undefined,
     rule: 'required|string',
@@ -62,7 +65,10 @@ export const IRA_ACCOUNT_CREATION = {
     placeHolder: '',
   },
   fundingOption: {
-    value: FUNDING_OPTIONS[0],
+    value: {
+      activeIndex: 0,
+      type: FUNDING_OPTIONS[0],
+    },
     key: 'accountType',
     error: undefined,
     rule: 'required|string',
