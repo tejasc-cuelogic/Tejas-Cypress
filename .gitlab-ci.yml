@@ -44,7 +44,45 @@ deploying-code-dev:
     - aws s3 cp build/ s3://ns-client-dev/ --recursive
   dependencies:
     - building-code-dev
-    
+
+#---------------------------------Qa--------------------------------------------
+
+#Building code
+building-code-qa:
+  cache:
+    paths:
+    - node_modules/
+  only:
+    refs:
+      - qa
+  tags:
+    - ns-client
+  stage: build
+  script: 
+    - bash scripts/setEnvironmentVariables.sh us-east-1 qa
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+    - build/
+    expire_in: 1 day
+
+#Deploying code to s3 bucket
+deploying-code-qa:
+  only:
+    refs:
+      - qa
+  environment:
+    name: qa
+  tags:
+    - ns-client
+  stage: deploy
+  script: 
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://ns-client-qa/ --recursive
+  dependencies:
+    - building-code-qa
+
 #---------------------------------Production------------------------------------
 
 #Building code
@@ -54,7 +92,7 @@ building-code-prod:
     - node_modules/
   only:
     refs:
-      - cicd-prod
+      - master
   tags:
     - ns-client
   stage: build
@@ -71,7 +109,7 @@ building-code-prod:
 deploying-code-prod:
   only:
     refs:
-      - cicd-prod
+      - master
   environment:
     name: production
   tags:
