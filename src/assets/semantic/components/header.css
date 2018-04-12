@@ -327,13 +327,13 @@ h5.ui.header .sub.header {
 /*--- Red ---*/
 
 .ui.red.header {
-  color: #DB2828 !important;
+  color: #EB5757 !important;
 }
 a.ui.red.header:hover {
-  color: #d01919 !important;
+  color: #f13838 !important;
 }
 .ui.red.dividing.header {
-  border-bottom: 2px solid #DB2828;
+  border-bottom: 2px solid #EB5757;
 }
 
 /* Inverted */

@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import { Modal, Button, Header, Icon, Form, Divider, Input, Popup, Select } from 'semantic-ui-react';
+import { Modal, Button, Header, Icon, Form, Divider, Input, Popup } from 'semantic-ui-react';
 import InputMask from 'react-input-mask';
 import Autocomplete from 'react-google-autocomplete';
 
@@ -55,7 +55,7 @@ export default class investorPersonalDetails extends Component {
     const { profileDetails } = this.props.profileStore;
     const welcomeMsg = `Hello ${this.props.userStore.currentUser.givenName}!`;
     return (
-      <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">{welcomeMsg}</Header>
           <p>You’re almost at your personal dashboard</p>
@@ -67,13 +67,12 @@ export default class investorPersonalDetails extends Component {
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
-              <Form.Field width={4}>
-                {/* eslint-disable jsx-a11y/label-has-for */}
-                <label>
-                  {profileDetails.title.label}
-                </label>
-                <Select
+              <Form.Field width={6}>
+                {/* <Label basic color="red" pointing="below">
+                {profileDetails.title.error}</Label> */}
+                <Form.Select
                   fluid
+                  label={profileDetails.title.label}
                   name={profileDetails.title.key}
                   value={profileDetails.title.value}
                   onChange={this.handleInputChange}
@@ -83,15 +82,15 @@ export default class investorPersonalDetails extends Component {
                 <FieldError error={profileDetails.title.error} />
               </Form.Field>
               <Form.Field>
-                <label>
-                  First Legal Name
-                  <Popup
-                    trigger={<Icon name="help circle outline" />}
-                    content="Put your first name as listed on your driver license"
-                    position="top center"
-                    className="center-align"
-                  />
-                </label>
+                {/* eslint-disable jsx-a11y/label-has-for */}
+                <Popup
+                  trigger={<label>First Legal Name</label>}
+                  content="Put your first name as listed on your driver license"
+                  position="top center"
+                  className="center-align"
+                />
+                {/* <Label basic color="red" pointing="below">
+                {profileDetails.firstLegalName.error}</Label> */}
                 <Input
                   fluid
                   placeholder={profileDetails.firstLegalName.label}
@@ -103,15 +102,14 @@ export default class investorPersonalDetails extends Component {
                 <FieldError error={profileDetails.firstLegalName.error} />
               </Form.Field>
               <Form.Field>
-                <label>
-                  Last Legal Name
-                  <Popup
-                    trigger={<Icon name="help circle outline" />}
-                    content="Put your last name as listed on your driver license"
-                    position="top center"
-                    className="center-align"
-                  />
-                </label>
+                <Popup
+                  trigger={<label>Last Legal Name</label>}
+                  content="Put your last name as listed on your driver license"
+                  position="top center"
+                  className="center-align"
+                />
+                {/* <Label basic color="red" pointing="below">
+                {profileDetails.lastLegalName.error}</Label> */}
                 <Input
                   fluid
                   placeholder={profileDetails.lastLegalName.label}
@@ -133,6 +131,8 @@ export default class investorPersonalDetails extends Component {
                   className="center-align"
                 />
               </label>
+              {/* <Label basic color="red" pointing="below">
+              {profileDetails.residentalStreet.error}</Label> */}
               <Autocomplete
                 onPlaceSelected={(place) => {
                   profileActions.setAddressFieldsOnGoogleAutocomplete(place);
@@ -147,11 +147,11 @@ export default class investorPersonalDetails extends Component {
             </Form.Field>
             <Form.Group widths="equal">
               <Form.Field>
-                <label>
-                  {profileDetails.city.label}
-                </label>
-                <Input
+                {/* <Label basic color="red" pointing="below">
+                {profileDetails.city.error}</Label> */}
+                <Form.Input
                   fluid
+                  label={profileDetails.city.label}
                   placeholder={profileDetails.city.label}
                   name={profileDetails.city.key}
                   value={profileDetails.city.value}
@@ -161,11 +161,11 @@ export default class investorPersonalDetails extends Component {
                 <FieldError error={profileDetails.city.error} />
               </Form.Field>
               <Form.Field>
-                <label>
-                  {profileDetails.state.label}
-                </label>
-                <Input
+                {/* <Label basic color="red" pointing="below">
+                {profileDetails.state.error}</Label> */}
+                <Form.Input
                   fluid
+                  label={profileDetails.state.label}
                   placeholder={profileDetails.state.label}
                   name={profileDetails.state.key}
                   value={profileDetails.state.value}
@@ -175,11 +175,11 @@ export default class investorPersonalDetails extends Component {
                 <FieldError error={profileDetails.state.error} />
               </Form.Field>
               <Form.Field>
-                <label>
-                  {profileDetails.zipCode.label}
-                </label>
-                <Input
+                {/* <Label basic color="red" pointing="below">
+                {profileDetails.zipCode.error}</Label> */}
+                <Form.Input
                   fluid
+                  label={profileDetails.zipCode.label}
                   placeholder={profileDetails.zipCode.label}
                   name={profileDetails.zipCode.key}
                   value={profileDetails.zipCode.value}
@@ -195,6 +195,8 @@ export default class investorPersonalDetails extends Component {
                 <label>
                   {profileDetails.phoneNumber.label}
                 </label>
+                {/* <Label basic color="red" pointing="below">
+                {profileDetails.phoneNumber.error}</Label> */}
                 <InputMask
                   name={profileDetails.phoneNumber.key}
                   value={profileDetails.phoneNumber.value}
@@ -208,9 +210,12 @@ export default class investorPersonalDetails extends Component {
               </Form.Field>
               <Form.Field>
                 <label>Date of Birth</label>
+                {/* <Label basic color="red" pointing="below">
+                {profileDetails.dateOfBirth.error}</Label> */}
                 <DatePicker
                   showMonthDropdown
                   showYearDropdown
+                  label="Date of Birth"
                   placeholderText={profileDetails.dateOfBirth.label}
                   dateFormat="MM-DD-YYYY"
                   maxDate={moment()}
@@ -224,7 +229,10 @@ export default class investorPersonalDetails extends Component {
               <label>
                 {profileDetails.ssn.label}
               </label>
+              {/* <Label basic color="red" pointing="below">
+              {profileDetails.ssn.error}</Label> */}
               <InputMask
+                label={profileDetails.ssn.label}
                 name={profileDetails.ssn.key}
                 value={profileDetails.ssn.value}
                 onChange={this.handleMaskedInputChange}
@@ -236,7 +244,7 @@ export default class investorPersonalDetails extends Component {
               <FieldError error={profileDetails.ssn.error} />
             </Form.Field>
             <div className="center-align">
-              <Button color="green" size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitProfileDetails}>Verify my identity</Button>
+              <Button color={!this.props.profileStore.canSubmitProfileDetails ? '' : 'green'} size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitProfileDetails}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>

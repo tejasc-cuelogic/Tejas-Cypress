@@ -26,7 +26,7 @@
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
-  border-radius: 0.71428571rem;
+  border-radius: 0.42857143rem;
   -webkit-user-select: text;
      -moz-user-select: text;
       -ms-user-select: text;
@@ -35,12 +35,12 @@
 }
 .ui.modal > :first-child:not(.icon),
 .ui.modal > .icon:first-child + * {
-  border-top-left-radius: 0.71428571rem;
-  border-top-right-radius: 0.71428571rem;
+  border-top-left-radius: 0.42857143rem;
+  border-top-right-radius: 0.42857143rem;
 }
 .ui.modal > :last-child {
-  border-bottom-left-radius: 0.71428571rem;
-  border-bottom-right-radius: 0.71428571rem;
+  border-bottom-left-radius: 0.42857143rem;
+  border-bottom-right-radius: 0.42857143rem;
 }
 
 
@@ -100,7 +100,7 @@
   width: 100%;
   font-size: 1em;
   line-height: 1.4;
-  padding: 2.5rem 3rem;
+  padding: 2.5rem 4rem;
   background: #FFFFFF;
 }
 .ui.modal > .image.content {
@@ -170,9 +170,9 @@
 
 .ui.modal > .actions {
   background: #F9FAFB;
-  padding: 1rem 1.5rem;
+  padding: 0 1.5rem 2rem;
   border-top: 1px solid rgba(34, 36, 38, 0.15);
-  text-align: right;
+  text-align: center;
 }
 .ui.modal .actions > .button {
   margin-left: 0.75em;
@@ -445,26 +445,26 @@
 }
 @media only screen and (min-width: 768px) {
   .ui.mini.modal {
-    width: 35.2%;
-    margin: 0em 0em 0em -17.6%;
+    width: 44%;
+    margin: 0em 0em 0em -22%;
   }
 }
 @media only screen and (min-width: 992px) {
   .ui.mini.modal {
-    width: 340px;
-    margin: 0em 0em 0em -170px;
+    width: 425px;
+    margin: 0em 0em 0em -212.5px;
   }
 }
 @media only screen and (min-width: 1200px) {
   .ui.mini.modal {
-    width: 360px;
-    margin: 0em 0em 0em -180px;
+    width: 450px;
+    margin: 0em 0em 0em -225px;
   }
 }
 @media only screen and (min-width: 1920px) {
   .ui.mini.modal {
-    width: 380px;
-    margin: 0em 0em 0em -190px;
+    width: 475px;
+    margin: 0em 0em 0em -237.5px;
   }
 }
 
@@ -519,26 +519,26 @@
 }
 @media only screen and (min-width: 768px) {
   .ui.small.modal {
-    width: 70.4%;
-    margin: 0em 0em 0em -35.2%;
+    width: 61.6%;
+    margin: 0em 0em 0em -30.8%;
   }
 }
 @media only screen and (min-width: 992px) {
   .ui.small.modal {
-    width: 680px;
-    margin: 0em 0em 0em -340px;
+    width: 595px;
+    margin: 0em 0em 0em -297.5px;
   }
 }
 @media only screen and (min-width: 1200px) {
   .ui.small.modal {
-    width: 720px;
-    margin: 0em 0em 0em -360px;
+    width: 630px;
+    margin: 0em 0em 0em -315px;
   }
 }
 @media only screen and (min-width: 1920px) {
   .ui.small.modal {
-    width: 760px;
-    margin: 0em 0em 0em -380px;
+    width: 665px;
+    margin: 0em 0em 0em -332.5px;
   }
 }
 
@@ -618,6 +618,11 @@
 .ui.modal > .header:not(.ui).signup-header .ui.header {
   margin: 0 0 0.5rem;
 }
+.ui.modal > .header:not(.ui).signup-header .ui.divider {
+  max-width: 140px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .ui.modal > .header:not(.ui).signup-header p {
   font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
@@ -664,7 +669,7 @@
 .ui.modal .content .button.cancel-link,
 .ui.modal .content a.theme-link,
 .ui.modal .content .button.theme-link {
-  margin: 2.5rem 0 0;
+  margin: 1.5rem 0 0;
   padding: 0;
   display: inline-block;
   background: transparent;
@@ -797,10 +802,21 @@
 }
 .ui.modal.basic.multistep-modal {
   color: #303030;
+  will-change: auto;
 }
 .ui.modal.basic.multistep-modal > .close {
-  top: -2.5rem;
-  right: -2.5rem;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  padding: 0;
+  margin: 0;
+  background: #FFFFFF;
+  border-radius: 1.07142857rem;
+  top: 1rem;
+  right: 1rem;
+}
+.ui.modal.basic.multistep-modal .ui.header {
+  border: none;
 }
 .ui.modal.basic.multistep-modal .multistep.content {
   background: #FFFFFF;
@@ -867,6 +883,10 @@
 }
 .summary-wrap .ui.items > .item .content {
   padding: 1.14285714rem 1.5rem;
+}
+.blurring.dimmed.dimmable > .pac-container {
+  -webkit-filter: blur(0px) grayscale(0);
+          filter: blur(0px) grayscale(0);
 }
 
 

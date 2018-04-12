@@ -681,7 +681,7 @@
 .ui.form .required.field > .checkbox:after {
   margin: -0.2em 0em 0em 0.2em;
   content: '*';
-  color: #DB2828;
+  color: #EB5757;
 }
 .ui.form .required.fields:not(.grouped) > .field > label:after,
 .ui.form .required.fields.grouped > label:after,
@@ -1150,6 +1150,9 @@
 }
 
 /*  Inverted Form  */
+.ui.form .field > label {
+  display: inline-block;
+}
 .ui.form.inverted label {
   font-weight: 400;
   color: #FFFFFF;

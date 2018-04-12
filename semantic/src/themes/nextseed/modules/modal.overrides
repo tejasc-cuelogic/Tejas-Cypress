@@ -40,6 +40,11 @@
         .ui.header{
             margin:0 0 @7px;
         }
+        .ui.divider{
+            max-width:140px;
+            margin-left:auto;
+            margin-right:auto;
+        }
         p{
             font-family:@pageFont;
             font-weight:500;
@@ -93,7 +98,7 @@
             }
         }
         a.cancel-link, .button.cancel-link, a.theme-link, .button.theme-link{
-            margin:2.5rem 0 0;
+            margin:1.5rem 0 0;
             padding:0;
             display:inline-block;
             background:transparent;
@@ -222,9 +227,20 @@
 //  Multistep form Modal styles
 .ui.modal.basic.multistep-modal{
     color:@primary-text;
+    will-change:auto;
     >.close{
-        top:-2.5rem;
-        right:-2.5rem;
+        height:30px;
+        width:30px;
+        line-height:30px;
+        padding:0;
+        margin:0;
+        background:@white;
+        border-radius:@15px;
+        top:1rem;
+        right:1rem;
+    }
+    .ui.header{
+        border:none;
     }
     .multistep.content{
         background:@white;
@@ -290,4 +306,9 @@
             padding:@16px @21px;
         }
     }
+}
+
+//  Restrict Google auto-address field from blur effect on modal open
+.blurring.dimmed.dimmable>.pac-container{
+    filter:blur(0px) grayscale(0);
 }
