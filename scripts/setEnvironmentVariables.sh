@@ -35,6 +35,10 @@ qa)
 	settingEnv
 ;;
 
+prod)
+	settingEnv
+;;
+
 *) 
 	echo "Specified environment : $environment is not available."
 	exit 1
