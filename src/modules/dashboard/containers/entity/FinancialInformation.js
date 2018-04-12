@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Input, Popup, Icon } from 'semantic-ui-react';
+import { Header, Form, Input, Popup, Icon, Label } from 'semantic-ui-react';
 
 import validationActions from '../../../../actions/validation';
 import FieldError from '../../../../components/common/FieldError';
@@ -15,47 +15,56 @@ export default class FinancialInformation extends Component {
     const { entityAccount } = this.props.accountStore;
     return (
       <div>
-        <Header as="h2">Complete financial info about entity</Header>
+        <Header as="h1" textAlign="center">Complete financial info about entity</Header>
+        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
         <Form error>
-          <Form.Field>
-            { /*  eslint-disable jsx-a11y/label-has-for */ }
-            <label>
-              {entityAccount.entityNetAssets.label}
-              <Popup
-                trigger={<Icon name="help circle outline" />}
-                content="Put your first name as listed on your driver license"
-                position="top center"
-                className="center-align"
-              />
-            </label>
-            <Input
-              name={entityAccount.entityNetAssets.key}
-              placeholder={entityAccount.entityNetAssets.placeHolder}
-              value={entityAccount.entityNetAssets.value}
-              error={!!entityAccount.entityNetAssets.error}
-              onChange={this.handleInputChange}
-            />
-            <FieldError error={entityAccount.entityNetAssets.error} />
-          </Form.Field>
-          <Form.Field>
-            <label>
-              {entityAccount.cfInvestments.label}
-              <Popup
-                trigger={<Icon name="help circle outline" />}
-                content="Put your first name as listed on your driver license"
-                position="top center"
-                className="center-align"
-              />
-            </label>
-            <Input
-              name={entityAccount.cfInvestments.key}
-              placeholder={entityAccount.cfInvestments.placeHolder}
-              value={entityAccount.cfInvestments.value}
-              error={!!entityAccount.cfInvestments.error}
-              onChange={this.handleInputChange}
-            />
-            <FieldError error={entityAccount.cfInvestments.error} />
-          </Form.Field>
+          <div className="field-wrap">
+            <Form.Field>
+              { /*  eslint-disable jsx-a11y/label-has-for */ }
+              <label>
+                {entityAccount.entityNetAssets.label}
+                <Popup
+                  trigger={<Icon name="help circle outline" />}
+                  content="What is your net entity assets?"
+                  position="top center"
+                  className="center-align"
+                />
+              </label>
+              <Input labelPosition="right" type="text" placeholder="Amount">
+                <Label basic>$</Label>
+                <input
+                  name={entityAccount.entityNetAssets.key}
+                  placeholder={entityAccount.entityNetAssets.placeHolder}
+                  value={entityAccount.entityNetAssets.value}
+                  error={!!entityAccount.entityNetAssets.error}
+                  onChange={this.handleInputChange}
+                />
+              </Input>
+              <FieldError error={entityAccount.entityNetAssets.error} />
+            </Form.Field>
+            <Form.Field>
+              <label>
+                {entityAccount.cfInvestments.label}
+                <Popup
+                  trigger={<Icon name="help circle outline" />}
+                  content={entityAccount.cfInvestments.label}
+                  position="top center"
+                  className="center-align"
+                />
+              </label>
+              <Input labelPosition="right" type="text" placeholder="Amount">
+                <Label basic>$</Label>
+                <input
+                  name={entityAccount.cfInvestments.key}
+                  placeholder={entityAccount.cfInvestments.placeHolder}
+                  value={entityAccount.cfInvestments.value}
+                  error={!!entityAccount.cfInvestments.error}
+                  onChange={this.handleInputChange}
+                />
+              </Input>
+              <FieldError error={entityAccount.cfInvestments.error} />
+            </Form.Field>
+          </div>
         </Form>
       </div>
     );
