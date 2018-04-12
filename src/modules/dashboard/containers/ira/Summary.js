@@ -10,8 +10,8 @@ export default class Summary extends Component {
     return (
       <div>
         <Header as="h2">Verify the information and create IRA account</Header>
-        Account type - {iraAccount.accountType.value}
-        Funding option - {iraAccount.fundingOption.value}
+        Account type - {iraAccount.accountType.value.type}
+        Funding option - {iraAccount.fundingOption.value.type}
         Your networth - {iraAccount.networth.value}
         Your annual income - {iraAccount.annualIncome.value}
         drivers licence - {iraAccount.driversLicence.value}
