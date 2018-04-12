@@ -113,7 +113,7 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|string',
     label: 'Name of Entity',
-    placeHolder: 'e.g Company',
+    placeHolder: 'e.g Pad Wealth',
   },
   taxId: {
     value: '',
@@ -121,7 +121,7 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|string',
     label: 'Tax ID',
-    placeHolder: 'Enter Tax ID',
+    placeHolder: '12345',
   },
   street: {
     value: '',
@@ -171,7 +171,7 @@ export const ENTITY_ACCOUNT_CREATION = {
     key: 'dateOfTrust',
     error: undefined,
     rule: 'required',
-    label: 'Select date',
+    label: 'Date of Trust',
     placeHolder: '',
   },
   entityTitle: {

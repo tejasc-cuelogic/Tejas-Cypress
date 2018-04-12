@@ -152,7 +152,8 @@ display:block;
     }
 }
 
-.ui.modal .ui.form.file-uploader-inline{
+// .ui.modal .ui.form.file-uploader-inline{
+.file-uploader-inline{
     .file-uploader{
         height:58px;
         padding:@14px;

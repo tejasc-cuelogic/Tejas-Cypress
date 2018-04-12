@@ -865,7 +865,8 @@
   padding: 1.78571429rem 4.28571429rem;
   background: #fafafa;
 }
-.ui.modal.basic.multistep-modal .multistep.content .field-wrap > .field:last-child {
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap > .fields:last-child,
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .field:last-child {
   margin-bottom: 0;
 }
 .ui.modal.basic.multistep-modal .multistep.content .summary-wrap {

@@ -284,7 +284,7 @@
             margin:@30px auto;
             padding:@25px @60px;
             background:@lighten-bg-color;
-            >.field:last-child{
+            >.fields:last-child, .field:last-child{
                 margin-bottom:0;
             }
         }

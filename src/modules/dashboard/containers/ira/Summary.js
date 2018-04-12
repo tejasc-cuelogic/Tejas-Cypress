@@ -35,10 +35,10 @@ export default class Summary extends Component {
                   <Table.Cell><b>Drivers licence</b></Table.Cell>
                   <Table.Cell>
                     {iraAccount.driversLicence.value !== '' &&
-                      <span className="success"><b>Uploaded</b></span>
+                      <span className="positive-text"><b>Uploaded</b></span>
                     }
                     {iraAccount.driversLicence.value === '' &&
-                      <span className="error"><b>Not Uploaded</b></span>
+                      <span className="negative-text"><b>Not Uploaded</b></span>
                     }
                   </Table.Cell>
                 </Table.Row>
