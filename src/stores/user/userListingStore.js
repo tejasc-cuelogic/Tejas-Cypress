@@ -33,6 +33,8 @@ export class UserListingStore {
       if (isArray(ele)) {
         if (ele.length > 0) {
           filters[`${key}_in`] = ele;
+        } else {
+          delete this.requestState.search[key];
         }
         delete filters[key];
       } else {
@@ -111,6 +113,12 @@ export class UserListingStore {
     const srchParams = { ...this.requestState.search };
     srchParams[name] = value;
     this.initiateSearch(srchParams);
+  }
+
+  @action
+  removeFilter = (name) => {
+    delete this.requestState.search[name];
+    this.initRequest();
   }
 
   @action

@@ -33,7 +33,7 @@ const userListingSubheader = props => (
               <List.Item>
                 {`Showing ${props.summary.count} filtered records out of total ${props.summary.total}.`}
               </List.Item>
-              <AppliedFilters filters={props.requestState.search} />
+              <AppliedFilters filters={props.requestState.search} click={props.removeFilter} />
             </List>
           </Grid.Column>
         </Grid.Row>
@@ -42,11 +42,11 @@ const userListingSubheader = props => (
     <div style={{ display: props.filters ? '' : 'none' }} className="search-filters webcontent-spacer">
       <Grid stackable>
         <Grid.Row>
-          <DropdownFilter name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} />
-          <DropdownFilter name="Status" change={props.setSearchParam} options={FILTER_META.status} />
-          <DropdownFilter name="Accridiation" keyName="accredited" change={props.setSearchParam} options={FILTER_META.accredited} />
+          <DropdownFilter value={props.requestState.search.accountType} name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} />
+          <DropdownFilter value={props.requestState.search.status} name="Status" change={props.setSearchParam} options={FILTER_META.status} />
+          <DropdownFilter value={props.requestState.search.accredited} name="Accridiation" keyName="accredited" change={props.setSearchParam} options={FILTER_META.accredited} />
           <DateRangeFilter label="Creation date" name="createdAt" change={props.dateFilter} />
-          <DropdownFilter name="City" change={props.setSearchParam} options={FILTER_META.city} />
+          <DropdownFilter value={props.requestState.search.city} name="City" change={props.setSearchParam} options={FILTER_META.city} />
         </Grid.Row>
       </Grid>
     </div>

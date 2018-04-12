@@ -20,6 +20,8 @@ class Users extends Component {
 
   loadMore = () => this.props.userListingStore.loadMore();
 
+  removeFilter = name => this.props.userListingStore.removeFilter(name);
+
   sortHandler = (by, sortable) => {
     this.props.userListingStore.initiateSort(by, sortable);
   };
@@ -44,6 +46,7 @@ class Users extends Component {
           executeSearch={this.executeSearch}
           setSearchParam={this.setSearchParam}
           dateFilter={this.dateFilter}
+          removeFilter={this.removeFilter}
         />
         <UserListing
           loading={loading}

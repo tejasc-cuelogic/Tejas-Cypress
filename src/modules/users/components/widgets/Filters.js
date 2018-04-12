@@ -1,6 +1,8 @@
 import React from 'react';
+import { toJS } from 'mobx';
 import { Grid, Dropdown, Form, Input, Label, Icon, List } from 'semantic-ui-react';
 import camelCase from 'lodash/camelCase';
+import startCase from 'lodash/startCase';
 
 export const DropdownFilter = props => (
   <Grid.Column width={3}>
@@ -9,6 +11,7 @@ export const DropdownFilter = props => (
       name={props.keyName || camelCase(props.name)}
       onChange={props.change}
       className="inverted"
+      value={toJS(props.value) || []}
       placeholder="Select Filter"
       fluid
       multiple
@@ -43,7 +46,10 @@ export const AppliedFilters = (props) => {
     <span>
       {
         filterKeys.map(f => (
-          <Label key={f} as="a">{`${f}: ${props.filters[f]}`}<Icon name="delete" onClick={props.click} /></Label>
+          <Label style={{ fontSize: '11px' }} key={f} as="a">
+            {`${startCase(f)}: ${props.filters[f]}`}
+            <Icon name="delete" onClick={() => props.click(f)} />
+          </Label>
         ))
       }
     </span>
