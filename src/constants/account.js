@@ -7,14 +7,14 @@ export const INVESTMENT_ACCOUNT_TYPES = {
 };
 
 export const FUNDING_OPTIONS = {
-  0: 'check',
-  1: 'iratransfer',
-  2: 'directrollover',
+  0: 'Check',
+  1: 'IRA Transfer',
+  2: 'Direct Rollover',
 };
 
 export const IRA_ACCOUNT_TYPES = {
-  0: 'traditional',
-  1: 'roth',
+  0: 'Traditional',
+  1: 'Roth',
 };
 
 export const INDIVIDUAL_ACCOUNT_CREATION = {
