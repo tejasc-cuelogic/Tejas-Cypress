@@ -3,6 +3,7 @@ import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Autocomplete from 'react-google-autocomplete';
 
+import { US_STATES } from '../../../../constants/account';
 import accountActions from '../../../../actions/account';
 import validationActions from '../../../../actions/validation';
 import FieldError from '../../../../components/common/FieldError';
@@ -74,14 +75,16 @@ export default class General extends Component {
                 <FieldError error={entityAccount.city.error} />
               </Form.Field>
               <Form.Field>
-                <Form.Input
+                <Form.Select
                   fluid
+                  search
                   name={entityAccount.state.key}
                   label={entityAccount.state.label}
                   placeholder={entityAccount.state.placeHolder}
                   value={entityAccount.state.value}
                   error={!!entityAccount.state.error}
                   onChange={this.handleInputChange}
+                  options={US_STATES}
                 />
               </Form.Field>
               <Form.Field>
