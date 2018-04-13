@@ -858,14 +858,15 @@
   background: #FFFFFF;
   border-radius: 0.71428571rem;
   position: relative;
-  padding: 3.57142857rem 5.71428571rem;
+  padding: 3.57142857rem 5rem;
 }
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap {
   margin: 2.14285714rem auto;
   padding: 1.78571429rem 4.28571429rem;
   background: #fafafa;
 }
-.ui.modal.basic.multistep-modal .multistep.content .field-wrap > .field:last-child {
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap > .fields:last-child,
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .field:last-child {
   margin-bottom: 0;
 }
 .ui.modal.basic.multistep-modal .multistep.content .summary-wrap {

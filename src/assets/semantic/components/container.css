@@ -228,11 +228,14 @@ div.login-form ul.error-messages {
 }
 .center-align {
   text-align: center !important;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
-.success {
+.positive-text {
   color: #98CE23 !important;
 }
-.error {
+.negative-text {
   color: #EB5757 !important;
 }
 .page-header-section {

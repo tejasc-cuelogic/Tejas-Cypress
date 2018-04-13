@@ -85,11 +85,12 @@ div.login-form {
 }
 .center-align{
 	text-align:center !important;
+	justify-content:center;
 }
-.success{
+.positive-text{
 	color:@theme-primary !important;
 }
-.error{
+.negative-text{
 	color:@highlight-primary !important;
 }
 
