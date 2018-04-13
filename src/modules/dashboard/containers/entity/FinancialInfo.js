@@ -30,21 +30,6 @@ export default class AccountType extends Component {
       <div>
         <Header as="h1" textAlign="center">Is entity a trust?</Header>
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Header>
-        {/* <Grid textAlign="center">
-          <Tab
-            className="account-type-tab"
-            menu={{
-              secondary: true,
-              pointing: true,
-              className: 'item two',
-              fluid: true,
-              stackable: true,
-            }}
-            panes={panes}
-            activeIndex={entityAccount.isEntityTrust.value.activeIndex}
-            onTabChange={this.handleIsEntityTrust}
-          />
-        </Grid> */}
         <Form error>
           <Form.Group inline className="button-radio center-align">
             <Form.Radio label="Yes" value="yes" onChange={this.handleChange} />
