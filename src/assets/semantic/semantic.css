@@ -5480,13 +5480,16 @@ div.login-form ul.error-messages {
 
 .center-align {
   text-align: center !important;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 
-.success {
+.positive-text {
   color: #98CE23 !important;
 }
 
-.error {
+.negative-text {
   color: #EB5757 !important;
 }
 
@@ -19901,7 +19904,7 @@ ol.ui.horizontal.list li:before,
   color: #EB5757;
 }
 
-.ui.modal .ui.form.file-uploader-inline .file-uploader {
+.file-uploader {
   height: 58px;
   padding: 1rem;
   border-radius: 0.28571429rem;
@@ -19912,15 +19915,15 @@ ol.ui.horizontal.list li:before,
   text-align: center;
 }
 
-.ui.modal .ui.form.file-uploader-inline .file-uploader .icon {
+.file-uploader .icon {
   margin-right: 0.42857143rem;
 }
 
-.ui.modal .ui.form.file-uploader-inline .file-uploader > span {
+.file-uploader > span {
   color: #000000;
 }
 
-.ui.modal .ui.form.file-uploader-inline .file-uploader input[type=file] {
+.file-uploader input[type=file] {
   opacity: 0;
   width: 100%;
   height: 56px;
@@ -19930,7 +19933,7 @@ ol.ui.horizontal.list li:before,
   cursor: pointer;
 }
 
-.ui.modal .ui.form.file-uploader-inline .file-uploader.attached {
+.file-uploader.attached {
   padding-right: 2rem;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #772DF9;
@@ -19941,11 +19944,11 @@ ol.ui.horizontal.list li:before,
   white-space: nowrap;
 }
 
-.ui.modal .ui.form.file-uploader-inline .file-uploader.attached > span {
+.file-uploader.attached > span {
   color: #772DF9;
 }
 
-.ui.modal .ui.form.file-uploader-inline .file-uploader.attached .icon {
+.file-uploader.attached .icon {
   margin: -0.5rem 0 0 0;
   line-height: 1rem;
   color: #828282;
@@ -30919,7 +30922,7 @@ a.ui.card:hover,
 }
 
 /*******************************
-         Theme Overrides
+				 Theme Overrides
 *******************************/
 
 @font-face {
@@ -30958,6 +30961,25 @@ a.ui.card:hover,
 .ui.checkbox label,
 .ui.checkbox + label {
   font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.button-radio .ui.radio.checkbox label {
+  height: 52px;
+  min-width: 160px;
+  padding: 15px;
+  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  border: #e0e0e0 1px solid;
+  border-radius: 0.42857143rem;
+}
+
+.button-radio .ui.radio.checkbox label:before,
+.button-radio .ui.radio.checkbox label:after {
+  display: none;
+}
+
+.button-radio .ui.radio.checkbox.checked label {
+  border-color: #98CE23;
 }
 
 /*******************************
@@ -34013,7 +34035,7 @@ select.ui.dropdown {
   background: #FFFFFF;
   border-radius: 0.71428571rem;
   position: relative;
-  padding: 3.57142857rem 5.71428571rem;
+  padding: 3.57142857rem 5rem;
 }
 
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap {
@@ -34022,7 +34044,8 @@ select.ui.dropdown {
   background: #fafafa;
 }
 
-.ui.modal.basic.multistep-modal .multistep.content .field-wrap > .field:last-child {
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap > .fields:last-child,
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .field:last-child {
   margin-bottom: 0;
 }
 

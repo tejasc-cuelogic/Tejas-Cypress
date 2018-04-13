@@ -1204,7 +1204,7 @@
   font-size: 0.92857143rem;
   color: #EB5757;
 }
-.ui.modal .ui.form.file-uploader-inline .file-uploader {
+.file-uploader {
   height: 58px;
   padding: 1rem;
   border-radius: 0.28571429rem;
@@ -1214,13 +1214,13 @@
   line-height: 2rem;
   text-align: center;
 }
-.ui.modal .ui.form.file-uploader-inline .file-uploader .icon {
+.file-uploader .icon {
   margin-right: 0.42857143rem;
 }
-.ui.modal .ui.form.file-uploader-inline .file-uploader > span {
+.file-uploader > span {
   color: #000000;
 }
-.ui.modal .ui.form.file-uploader-inline .file-uploader input[type=file] {
+.file-uploader input[type=file] {
   opacity: 0;
   width: 100%;
   height: 56px;
@@ -1229,7 +1229,7 @@
   left: 0;
   cursor: pointer;
 }
-.ui.modal .ui.form.file-uploader-inline .file-uploader.attached {
+.file-uploader.attached {
   padding-right: 2rem;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #772DF9;
@@ -1239,10 +1239,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.ui.modal .ui.form.file-uploader-inline .file-uploader.attached > span {
+.file-uploader.attached > span {
   color: #772DF9;
 }
-.ui.modal .ui.form.file-uploader-inline .file-uploader.attached .icon {
+.file-uploader.attached .icon {
   margin: -0.5rem 0 0 0;
   line-height: 1rem;
   color: #828282;

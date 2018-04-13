@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Form, Input } from 'semantic-ui-react';
+import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import validationActions from '../../../../actions/validation';
@@ -15,74 +15,79 @@ export default class General extends Component {
     const { entityAccount } = this.props.accountStore;
     return (
       <div>
-        <Header as="h2">General Information</Header>
+        <Header as="h1" textAlign="center">General Information</Header>
         <Form error>
-          <Form.Field>
-            { /*  eslint-disable jsx-a11y/label-has-for */ }
-            <label>
-              {entityAccount.nameOfEntity.label}
-            </label>
-            <Input
-              name={entityAccount.nameOfEntity.key}
-              placeholder={entityAccount.nameOfEntity.placeHolder}
-              value={entityAccount.nameOfEntity.value}
-              error={!!entityAccount.nameOfEntity.error}
-              onChange={this.handleInputChange}
-            />
-            <FieldError error={entityAccount.nameOfEntity.error} />
-          </Form.Field>
-          <Form.Field>
-            <label>
-              {entityAccount.taxId.label}
-            </label>
-            <Input
-              name={entityAccount.taxId.key}
-              placeholder={entityAccount.taxId.placeHolder}
-              value={entityAccount.taxId.value}
-              error={!!entityAccount.taxId.error}
-              onChange={this.handleInputChange}
-            />
-            <FieldError error={entityAccount.taxId.error} />
-          </Form.Field>
-          <Form.Field>
-            <label>
-              {entityAccount.street.label}
-            </label>
-            <Input
-              name={entityAccount.street.key}
-              placeholder={entityAccount.street.placeHolder}
-              value={entityAccount.street.value}
-              error={!!entityAccount.street.error}
-              onChange={this.handleInputChange}
-            />
-            <FieldError error={entityAccount.street.error} />
-          </Form.Field>
-          <Form.Field>
-            <label>
-              {entityAccount.city.label}
-            </label>
-            <Input
-              name={entityAccount.city.key}
-              placeholder={entityAccount.city.placeHolder}
-              value={entityAccount.city.value}
-              error={!!entityAccount.city.error}
-              onChange={this.handleInputChange}
-            />
-            <FieldError error={entityAccount.city.error} />
-          </Form.Field>
-          <Form.Field>
-            <label>
-              {entityAccount.zipCode.label}
-            </label>
-            <Input
-              name={entityAccount.zipCode.key}
-              placeholder={entityAccount.zipCode.placeHolder}
-              value={entityAccount.zipCode.value}
-              error={!!entityAccount.zipCode.error}
-              onChange={this.handleInputChange}
-            />
-            <FieldError error={entityAccount.zipCode.error} />
-          </Form.Field>
+          <div className="field-wrap">
+            <Form.Field>
+              <Form.Input
+                fluid
+                name={entityAccount.nameOfEntity.key}
+                label={entityAccount.nameOfEntity.label}
+                placeholder={entityAccount.nameOfEntity.placeHolder}
+                value={entityAccount.nameOfEntity.value}
+                error={!!entityAccount.nameOfEntity.error}
+                onChange={this.handleInputChange}
+              />
+              <FieldError error={entityAccount.nameOfEntity.error} />
+            </Form.Field>
+            <Form.Field>
+              <Form.Input
+                fluid
+                name={entityAccount.taxId.key}
+                label={entityAccount.taxId.label}
+                placeholder={entityAccount.taxId.placeHolder}
+                value={entityAccount.taxId.value}
+                error={!!entityAccount.taxId.error}
+                onChange={this.handleInputChange}
+              />
+              <FieldError error={entityAccount.taxId.error} />
+            </Form.Field>
+            <h5>Entity Address</h5>
+            <Form.Field>
+              <Form.Input
+                fluid
+                name={entityAccount.street.key}
+                label={entityAccount.street.label}
+                placeholder={entityAccount.street.placeHolder}
+                value={entityAccount.street.value}
+                error={!!entityAccount.street.error}
+                onChange={this.handleInputChange}
+              />
+              <FieldError error={entityAccount.street.error} />
+            </Form.Field>
+            <Form.Group widths="equal">
+              <Form.Field>
+                <Form.Input
+                  fluid
+                  name={entityAccount.city.key}
+                  label={entityAccount.city.label}
+                  placeholder={entityAccount.city.placeHolder}
+                  value={entityAccount.city.value}
+                  error={!!entityAccount.city.error}
+                  onChange={this.handleInputChange}
+                />
+                <FieldError error={entityAccount.city.error} />
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  fluid
+                  label="State"
+                />
+              </Form.Field>
+              <Form.Field>
+                <Form.Input
+                  fluid
+                  name={entityAccount.zipCode.key}
+                  label={entityAccount.zipCode.label}
+                  placeholder={entityAccount.zipCode.placeHolder}
+                  value={entityAccount.zipCode.value}
+                  error={!!entityAccount.zipCode.error}
+                  onChange={this.handleInputChange}
+                />
+                <FieldError error={entityAccount.zipCode.error} />
+              </Form.Field>
+            </Form.Group>
+          </div>
         </Form>
       </div>
     );

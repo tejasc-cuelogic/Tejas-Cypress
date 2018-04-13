@@ -8,7 +8,7 @@ export default class LinkBankAccount extends Component {
   render() {
     return (
       <div>
-        <Header as="h2">Link Bank Account</Header>
+        <Header as="h1" textAlign="center">Link Bank Account</Header>
       </div>
     );
   }

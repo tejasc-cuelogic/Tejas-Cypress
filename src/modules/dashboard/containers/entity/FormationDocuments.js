@@ -28,7 +28,8 @@ export default class FormationDocumemts extends Component {
     const { entityAccount } = this.props.accountStore;
     return (
       <div>
-        <Header as="h2">Upload required documentation</Header>
+        <Header as="h1" textAlign="center">Upload required documentation</Header>
+        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Header>
         <Form className="file-uploader-inline">
           <Grid divided="vertically">
             <Grid.Row>

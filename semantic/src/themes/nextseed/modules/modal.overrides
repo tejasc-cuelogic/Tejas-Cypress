@@ -279,12 +279,12 @@
         background:@white;
         border-radius:@10px;
         position:relative;
-        padding:@50px @80px;
+        padding:@50px @70px;
         .field-wrap{
             margin:@30px auto;
             padding:@25px @60px;
             background:@lighten-bg-color;
-            >.field:last-child{
+            >.fields:last-child, .field:last-child{
                 margin-bottom:0;
             }
         }
