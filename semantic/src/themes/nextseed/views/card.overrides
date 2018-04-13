@@ -1,7 +1,7 @@
 /*******************************
          Theme Overrides
 *******************************/
-.card.form-card{
+.card.form-card, .cards>.card.form-card{
     border-radius:@relative10px;
     padding:@32px;
     background-color:@lighter-bg-color;
@@ -27,6 +27,11 @@
                 padding-right:1rem;
             }
         }
+    }
+}
+.ui.stackable.cards>.card{
+    @media only screen and (max-width : (@tabletBreakpoint - 1px)){
+        padding:@32px !important;
     }
 }
 
