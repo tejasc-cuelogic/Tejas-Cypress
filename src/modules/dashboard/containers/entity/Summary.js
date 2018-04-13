@@ -28,11 +28,11 @@ export default class Summary extends Component {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell><b>Entity net assest</b></Table.Cell>
-                  <Table.Cell>{entityAccount.entityNetAssets.value}</Table.Cell>
+                  <Table.Cell>{entityAccount.entityNetAssets.value !== '' ? `$${entityAccount.entityNetAssets.value}` : ''}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Other CF Investments</b></Table.Cell>
-                  <Table.Cell>{entityAccount.cfInvestments.value}</Table.Cell>
+                  <Table.Cell>{entityAccount.cfInvestments.value !== '' ? `$${entityAccount.cfInvestments.value}` : ''}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Entitys name</b></Table.Cell>

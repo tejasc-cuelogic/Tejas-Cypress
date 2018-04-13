@@ -26,11 +26,11 @@ export default class Summary extends Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your networth</b></Table.Cell>
-                    <Table.Cell>$ {iraAccount.networth.value}</Table.Cell>
+                    <Table.Cell>{iraAccount.networth.value !== '' ? `$${iraAccount.networth.value}` : ''}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your annual income</b></Table.Cell>
-                    <Table.Cell>$ {iraAccount.annualIncome.value}</Table.Cell>
+                    <Table.Cell>{iraAccount.annualIncome.value !== '' ? `$${iraAccount.annualIncome.value}` : ''}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Drivers licence</b></Table.Cell>
