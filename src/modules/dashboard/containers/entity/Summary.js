@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Header, Table, Button, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Banklogo from '../../../../assets/images/boa-logo.jpg';
+import DateTimeFormat from '../../../../components/common/DateTimeFormat';
 
 @inject('accountStore')
 @observer
@@ -43,13 +44,19 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row verticalAlign="top">
                   <Table.Cell><b>Entity Address</b></Table.Cell>
-                  <Table.Cell>{entityAccount.street.value}, {entityAccount.city.value},
-                    {entityAccount.state.value}, {entityAccount.zipCode.value}
+                  <Table.Cell>{this.props.accountStore.fullAddress}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Is Entity a trust?</b></Table.Cell>
-                  <Table.Cell>{entityAccount.isEntityTrust.value.type}</Table.Cell>
+                  <Table.Cell>{entityAccount.isEntityTrust.value}
+                    {entityAccount.isEntityTrust.value === 'yes' &&
+                      ', since '
+                    }
+                    {entityAccount.isEntityTrust.value === 'yes' &&
+                      <DateTimeFormat datetime={entityAccount.dateOfTrust.value} />
+                    }
+                  </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Title with the entity</b></Table.Cell>

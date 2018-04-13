@@ -6,20 +6,11 @@ import moment from 'moment';
 
 import validationActions from '../../../../actions/validation';
 
-// const panes = [
-//   {
-//     menuItem: <Menu.Item key="yes"><div className="account-tab">Yes</div></Menu.Item>,
-//   },
-//   {
-//     menuItem: <Menu.Item key="no"><div className="account-tab">No</div></Menu.Item>,
-//   },
-// ];
-
 @inject('accountStore')
 @observer
 export default class AccountType extends Component {
-  handleIsEntityTrust = (e, { activeIndex }) => {
-    this.props.accountStore.setIsEntityTrust(activeIndex);
+  handleChange = (e, { name, value }) => {
+    this.props.accountStore.setEntityAccountDetails(name, value);
   }
   handleDateChange = (date) => {
     validationActions.validateEntityAccountField('dateOfTrust', date);
@@ -32,8 +23,8 @@ export default class AccountType extends Component {
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Header>
         <Form error>
           <Form.Group inline className="button-radio center-align">
-            <Form.Radio label="Yes" value="yes" onChange={this.handleChange} />
-            <Form.Radio label="No" value="no" onChange={this.handleChange} />
+            <Form.Radio label="Yes" name={entityAccount.isEntityTrust.key} value="yes" checked={entityAccount.isEntityTrust.value === 'yes'} onChange={this.handleChange} />
+            <Form.Radio label="No" name={entityAccount.isEntityTrust.key} value="no" checked={entityAccount.isEntityTrust.value === 'no'} onChange={this.handleChange} />
           </Form.Group>
           <div className="field-wrap">
             <Form.Field>
@@ -49,6 +40,7 @@ export default class AccountType extends Component {
                 maxDate={moment()}
                 selected={entityAccount.dateOfTrust.value}
                 onChange={this.handleDateChange}
+                disabled={entityAccount.isEntityTrust.value === 'no'}
               />
             </Form.Field>
           </div>

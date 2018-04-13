@@ -106,6 +106,23 @@ export class AccountStore {
     };
     this.setEntityAccountDetails(field, value);
   }
-}
 
+  @computed
+  get fullAddress() {
+    let address = '';
+    if (this.entityAccount.street.value !== '') {
+      address = this.entityAccount.street.value;
+    }
+    if (this.entityAccount.city.value !== '') {
+      address += this.entityAccount.street.value !== '' ? `, ${this.entityAccount.city.value}` : this.entityAccount.city.value;
+    }
+    if (this.entityAccount.state.value !== '') {
+      address += this.entityAccount.city.value !== '' ? `, ${this.entityAccount.state.value}` : this.entityAccount.state.value;
+    }
+    if (this.entityAccount.zipCode.value !== '') {
+      address += this.entityAccount.state.value !== '' ? `, ${this.entityAccount.zipCode.value}` : this.entityAccount.zipCode.value;
+    }
+    return address;
+  }
+}
 export default new AccountStore();

@@ -156,10 +156,7 @@ export const ENTITY_ACCOUNT_CREATION = {
     placeHolder: '',
   },
   isEntityTrust: {
-    value: {
-      activeIndex: 0,
-      type: IS_ENTITY_TRUST[0],
-    },
+    value: 'yes',
     key: 'isEntityTrust',
     error: undefined,
     rule: 'required',

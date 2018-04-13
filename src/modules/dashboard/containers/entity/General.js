@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import Autocomplete from 'react-google-autocomplete';
 
+import accountActions from '../../../../actions/account';
 import validationActions from '../../../../actions/validation';
 import FieldError from '../../../../components/common/FieldError';
 
@@ -11,6 +13,8 @@ export default class General extends Component {
   handleInputChange = (e, { name, value }) => {
     validationActions.validateEntityAccountField(name, value);
   }
+  handleAutocompleteInputChange = e =>
+    validationActions.validateEntityAccountField(e.target.name, e.target.value);
   render() {
     const { entityAccount } = this.props.accountStore;
     return (
@@ -44,14 +48,15 @@ export default class General extends Component {
             </Form.Field>
             <h5>Entity Address</h5>
             <Form.Field>
-              <Form.Input
-                fluid
+              <Autocomplete
+                onPlaceSelected={(place) => {
+                  accountActions.setAddressFieldsOnGoogleAutocomplete(place);
+                }}
+                types={['address']}
+                placeholder={entityAccount.street.label}
                 name={entityAccount.street.key}
-                label={entityAccount.street.label}
-                placeholder={entityAccount.street.placeHolder}
                 value={entityAccount.street.value}
-                error={!!entityAccount.street.error}
-                onChange={this.handleInputChange}
+                onChange={this.handleAutocompleteInputChange}
               />
               <FieldError error={entityAccount.street.error} />
             </Form.Field>
@@ -71,7 +76,12 @@ export default class General extends Component {
               <Form.Field>
                 <Form.Input
                   fluid
-                  label="State"
+                  name={entityAccount.state.key}
+                  label={entityAccount.state.label}
+                  placeholder={entityAccount.state.placeHolder}
+                  value={entityAccount.state.value}
+                  error={!!entityAccount.state.error}
+                  onChange={this.handleInputChange}
                 />
               </Form.Field>
               <Form.Field>
