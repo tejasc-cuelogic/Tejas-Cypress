@@ -100,7 +100,7 @@
             border-radius:0;
             color:@quaternary-text;
             background-color:transparent;
-            border-color:transparent transparent @tertiary-text;
+            border-color:transparent transparent @border-color;
         }
     }
     .error:not(.field){

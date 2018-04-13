@@ -5298,7 +5298,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 .content-spacer {
   position: relative;
-  padding: 3.71428571rem 5rem;
+  padding: 2.14285714rem 2.85714286rem;
 }
 
 @media only screen and (max-width: 1199px) {
@@ -5331,7 +5331,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 }
 
 .webcontent-spacer {
-  padding: 2.85714286rem 5rem 1rem;
+  padding: 1.42857143rem 2.85714286rem;
 }
 
 @media only screen and (max-width: 1199px) {
@@ -5395,14 +5395,21 @@ div.login-form ul.error-messages {
 }
 
 .page-header-section {
-  min-height: 132px;
   background-color: #424242;
   position: relative;
+  padding: 1.42857143rem 2.85714286rem;
 }
 
 @media only screen and (max-width: 1199px) {
   .page-header-section {
     min-height: auto;
+    padding: 1.42857143rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .page-header-section {
+    padding: 1.42857143rem 0.71428571rem;
   }
 }
 
@@ -5452,32 +5459,6 @@ div.login-form ul.error-messages {
   padding: 0.78571429rem 0;
 }
 
-.page-header-section .search-filters {
-  background-color: #4f4f4f;
-}
-
-.page-header-section .search-filters.webcontent-spacer {
-  padding: 1rem 5rem;
-}
-
-@media only screen and (max-width: 1199px) {
-  .page-header-section .search-filters.webcontent-spacer {
-    padding: 0.5rem 1.42857143rem 1rem;
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .page-header-section .search-filters.webcontent-spacer {
-    padding: 0.5rem 0.71428571rem 1rem;
-  }
-}
-
-.page-header-section .search-filters h5 {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  color: #999999;
-  margin: 0 0 0.5rem;
-}
-
 .page-header-section .sticky-notification {
   position: fixed;
   width: 50%;
@@ -5491,6 +5472,34 @@ div.login-form ul.error-messages {
   margin-left: 1.42857143rem;
   display: inline-block;
   vertical-align: middle;
+}
+
+.search-filters {
+  background-color: #4f4f4f;
+  padding: 1rem 2.85714286rem;
+}
+
+@media only screen and (max-width: 1199px) {
+  .search-filters {
+    padding: 0.5rem 1.42857143rem 1rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .search-filters {
+    padding: 0.5rem 0.71428571rem 1rem;
+  }
+}
+
+.search-filters h5 {
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: #999999;
+  margin: 0 0 0.5rem;
+}
+
+.filter-meta {
+  background-color: #424242;
+  padding: 1rem 2.85714286rem;
 }
 
 .notification-panel {
@@ -19758,7 +19767,7 @@ ol.ui.horizontal.list li:before,
   border-radius: 0;
   color: #999999;
   background-color: transparent;
-  border-color: transparent transparent #828282;
+  border-color: transparent transparent #e0e0e0;
 }
 
 .ui.form .error:not(.field) {
@@ -25025,7 +25034,7 @@ Floated Menu / Item
   box-shadow: none;
   border-radius: 0rem;
   text-align: left;
-  color: #303030;
+  color: #000000;
   border-collapse: separate;
   border-spacing: 0px;
 }
@@ -25067,7 +25076,7 @@ Floated Menu / Item
   font-style: none;
   font-weight: 500;
   text-transform: none;
-  border-bottom: 0px solid rgba(34, 36, 38, 0.1);
+  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
   border-left: none;
 }
 
@@ -26034,7 +26043,7 @@ Floated Menu / Item
   content: '';
   height: 1em;
   width: auto;
-  opacity: 0.8;
+  opacity: 1;
   margin: 0em 0em 0em 0.5em;
   font-family: 'Icons';
 }
@@ -26055,14 +26064,14 @@ Floated Menu / Item
 }
 
 .ui.sortable.table thead th:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: '';
   color: rgba(0, 0, 0, 0.8);
 }
 
 /* Sorted */
 
 .ui.sortable.table thead th.sorted {
-  background: rgba(0, 0, 0, 0.05);
+  background: '';
   color: rgba(0, 0, 0, 0.95);
 }
 
@@ -26073,7 +26082,7 @@ Floated Menu / Item
 /* Sorted Hover */
 
 .ui.sortable.table thead th.sorted:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: '';
   color: rgba(0, 0, 0, 0.95);
 }
 
@@ -26251,12 +26260,12 @@ Floated Menu / Item
 ---------------*/
 
 .ui.compact.table th {
-  padding-left: 0.7em;
-  padding-right: 0.7em;
+  padding-left: 0.71428571em;
+  padding-right: 0.71428571em;
 }
 
 .ui.compact.table td {
-  padding: 0.5em 0.7em;
+  padding: 0.5em 0.71428571em;
 }
 
 /* Very */
@@ -26305,9 +26314,7 @@ Floated Menu / Item
 }
 
 .ui.table thead th {
-  padding: 1.42857143rem;
-  font-size: 0.85714286rem;
-  text-transform: uppercase;
+  font-size: 0.92857143rem;
 }
 
 .ui.table td {
@@ -26315,7 +26322,12 @@ Floated Menu / Item
 }
 
 .ui.table.sortable thead th {
-  color: #999999;
+  color: #828282;
+}
+
+.ui.table.sortable thead th:after {
+  font-size: 1.14285714rem;
+  color: #A9D943;
 }
 
 .ui.table.striped thead th:hover {
@@ -26334,19 +26346,23 @@ Floated Menu / Item
   border-top: none;
 }
 
+.ui.table.user-list tr.locked {
+  color: #7d7d7d;
+}
+
 .ui.table.user-list tr.locked .user-image:after {
   content: "\F023";
   font-family: "Icons";
   font-size: 20px;
   color: #EB5757;
-  text-shadow: 0px 0px 8px #FFFFFF;
+  text-shadow: -2px 2px 0px #FFFFFF, 2px 2px 0px #FFFFFF, 2px -2px 0px #FFFFFF, -2px -2px 0px #FFFFFF, 0px -2px 0px #FFFFFF;
   position: absolute;
   bottom: -4px;
   right: -4px;
   z-index: 1;
 }
 
-.ui.table.user-list tr.locked .user-status {
+.ui.table.user-list tr.locked .user-status a {
   color: #EB5757;
 }
 
@@ -26357,6 +26373,11 @@ Floated Menu / Item
 .ui.table.user-list .user-image .ui.avatar.image {
   margin-right: 0;
   border: 1px solid #e0e0e0;
+}
+
+.ui.table.user-list .user-image .ui.avatar.image.mini {
+  width: 35px;
+  height: auto;
 }
 
 .ui.table.user-list .user-name {
@@ -31953,7 +31974,7 @@ select.ui.dropdown {
 
 .ui.dropdown:not(.button) > .default.text,
 .ui.default.dropdown:not(.button) > .text {
-  color: #efefef;
+  color: #828282;
 }
 
 .ui.dropdown:not(.button) > input:focus ~ .default.text,
@@ -32611,7 +32632,7 @@ select.ui.dropdown {
 }
 
 /*******************************
-         Theme Overrides
+		 Theme Overrides
 *******************************/
 
 /* Dropdown Carets */
@@ -32685,6 +32706,28 @@ select.ui.dropdown {
   letter-spacing: -3px;
   line-height: 0.71428571rem;
   color: #999999;
+}
+
+.search-filters .ui.dropdown.selection {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 0;
+  font-size: 0.92857143rem;
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  border-bottom: #e0e0e0 1px solid;
+}
+
+.search-filters .ui.dropdown.multiple > .text {
+  margin-left: 0;
+}
+
+.search-filters .ui.dropdown .dropdown.icon {
+  font-size: 1.14285714rem;
+  line-height: 0.42857143rem;
+  padding-right: 0;
+  color: #A9D943;
 }
 
 /*******************************

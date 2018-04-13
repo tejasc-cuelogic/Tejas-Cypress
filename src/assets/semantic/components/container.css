@@ -152,7 +152,7 @@
 }
 .content-spacer {
   position: relative;
-  padding: 3.71428571rem 5rem;
+  padding: 2.14285714rem 2.85714286rem;
 }
 @media only screen and (max-width: 1199px) {
   .content-spacer {
@@ -180,7 +180,7 @@
   z-index: 1;
 }
 .webcontent-spacer {
-  padding: 2.85714286rem 5rem 1rem;
+  padding: 1.42857143rem 2.85714286rem;
 }
 @media only screen and (max-width: 1199px) {
   .webcontent-spacer {
@@ -230,13 +230,19 @@ div.login-form ul.error-messages {
   text-align: center !important;
 }
 .page-header-section {
-  min-height: 132px;
   background-color: #424242;
   position: relative;
+  padding: 1.42857143rem 2.85714286rem;
 }
 @media only screen and (max-width: 1199px) {
   .page-header-section {
     min-height: auto;
+    padding: 1.42857143rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .page-header-section {
+    padding: 1.42857143rem 0.71428571rem;
   }
 }
 .page-header-section h1 {
@@ -278,27 +284,6 @@ div.login-form ul.error-messages {
 .page-header-section .ui.button.link-button {
   padding: 0.78571429rem 0;
 }
-.page-header-section .search-filters {
-  background-color: #4f4f4f;
-}
-.page-header-section .search-filters.webcontent-spacer {
-  padding: 1rem 5rem;
-}
-@media only screen and (max-width: 1199px) {
-  .page-header-section .search-filters.webcontent-spacer {
-    padding: 0.5rem 1.42857143rem 1rem;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .page-header-section .search-filters.webcontent-spacer {
-    padding: 0.5rem 0.71428571rem 1rem;
-  }
-}
-.page-header-section .search-filters h5 {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  color: #999999;
-  margin: 0 0 0.5rem;
-}
 .page-header-section .sticky-notification {
   position: fixed;
   width: 50%;
@@ -311,6 +296,29 @@ div.login-form ul.error-messages {
   margin-left: 1.42857143rem;
   display: inline-block;
   vertical-align: middle;
+}
+.search-filters {
+  background-color: #4f4f4f;
+  padding: 1rem 2.85714286rem;
+}
+@media only screen and (max-width: 1199px) {
+  .search-filters {
+    padding: 0.5rem 1.42857143rem 1rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .search-filters {
+    padding: 0.5rem 0.71428571rem 1rem;
+  }
+}
+.search-filters h5 {
+  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: #999999;
+  margin: 0 0 0.5rem;
+}
+.filter-meta {
+  background-color: #424242;
+  padding: 1rem 2.85714286rem;
 }
 .notification-panel {
   width: 330px;

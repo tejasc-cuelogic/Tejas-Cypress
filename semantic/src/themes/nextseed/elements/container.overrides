@@ -17,7 +17,7 @@
 }
 .content-spacer{
 	position:relative;
-	padding:@52px @70px;
+	padding:@30px @40px;
 	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 		padding:@20px;
 	}
@@ -39,7 +39,8 @@
 	}
 }
 .webcontent-spacer{
-	padding:@40px @70px @14px;
+	// padding:@40px @70px @14px;
+	padding:@20px @40px;
 	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 		padding:@20px;
 	}
@@ -90,11 +91,16 @@ div.login-form {
 
 //	Page Header Styles
 .page-header-section{
-	min-height:132px;
+	// min-height:132px;
 	background-color:@dark-bg-color;
 	position:relative;
+	padding:@20px @40px;
 	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 		min-height:auto;
+		padding:@20px;
+	}
+	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+		padding:@20px @10px;
 	}
 	h1{
 		// @include fontBold;
@@ -134,24 +140,6 @@ div.login-form {
 	.ui.button.link-button{
 		padding:@11px 0;
 	}
-	.search-filters{
-		background-color:@secondary-text;
-		&.webcontent-spacer{
-			padding:@14px @70px;
-			@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
-				padding:@7px @20px @14px;
-			}
-			@media only screen and (max-width : (@tabletBreakpoint - 1px)){
-				padding:@7px @10px @14px;
-			}
-		}
-		h5{
-			// font-size:0.857142em;
-			font-family:@pageFont;
-			color:@quaternary-text;
-			margin:0 0 @7px;
-		}
-	}
 	.sticky-notification{
 		position:fixed;
 		width:50%;
@@ -165,6 +153,29 @@ div.login-form {
 		display:inline-block;
 		vertical-align:middle;
 	}
+}
+.search-filters{
+	background-color:@secondary-text;
+	// padding:@14px @70px;
+	padding:@14px @40px;
+	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+		padding:@7px @20px @14px;
+	}
+	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+		padding:@7px @10px @14px;
+	}
+	// &.webcontent-spacer{
+	// }
+	h5{
+		// font-size:0.857142em;
+		font-family:@pageFont;
+		color:@quaternary-text;
+		margin:0 0 @7px;
+	}
+}
+.filter-meta{
+	background-color:@dark-bg-color;
+	padding:@14px @40px;
 }
 // .actions{
 // 	font-size:@16px;

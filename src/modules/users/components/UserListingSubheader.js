@@ -5,8 +5,8 @@ import { DropdownFilter, DateRangeFilter, AppliedFilters } from './widgets/Filte
 import { FILTER_META } from './../../../constants/user';
 
 const userListingSubheader = props => (
-  <div className="page-header-section">
-    <div className="webcontent-spacer">
+  <div>
+    <div className="page-header-section">
       <Grid stackable>
         <Grid.Row>
           <Grid.Column width={4}>
@@ -24,9 +24,32 @@ const userListingSubheader = props => (
             </Button>
           </Grid.Column>
           <Grid.Column width={4} textAlign="right">
-            <Button circular color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
+            <Button color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
           </Grid.Column>
         </Grid.Row>
+      </Grid>
+    </div>
+    {/* <Transition.Group animation="slide down" duration="500">
+      {props.filters && */}
+    {/* <div className={props.filters ? 'demo' : 'demo collapsed'}> */}
+    <div style={{ display: props.filters ? '' : 'none' }} className="search-filters">
+      <Form inverted>
+        <Grid stackable>
+          <Grid.Row>
+            <DropdownFilter value={props.requestState.search.accountType} name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} />
+            <DropdownFilter value={props.requestState.search.status} name="Status" change={props.setSearchParam} options={FILTER_META.status} />
+            <DropdownFilter value={props.requestState.search.accredited} name="Accridiation" keyName="accredited" change={props.setSearchParam} options={FILTER_META.accredited} />
+            <DateRangeFilter label="Date Range" name="createdAt" change={props.dateFilter} />
+            <DropdownFilter value={props.requestState.search.city} name="City" change={props.setSearchParam} options={FILTER_META.city} />
+          </Grid.Row>
+        </Grid>
+      </Form>
+    </div>
+    {/* </div> */}
+    {/* }
+    </Transition.Group> */}
+    <div className="filter-meta">
+      <Grid stackable>
         <Grid.Row>
           <Grid.Column width={16}>
             <List horizontal relaxed>
@@ -36,17 +59,6 @@ const userListingSubheader = props => (
               <AppliedFilters filters={props.requestState.search} click={props.removeFilter} />
             </List>
           </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </div>
-    <div style={{ display: props.filters ? '' : 'none' }} className="search-filters webcontent-spacer">
-      <Grid stackable>
-        <Grid.Row>
-          <DropdownFilter value={props.requestState.search.accountType} name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} />
-          <DropdownFilter value={props.requestState.search.status} name="Status" change={props.setSearchParam} options={FILTER_META.status} />
-          <DropdownFilter value={props.requestState.search.accredited} name="Accridiation" keyName="accredited" change={props.setSearchParam} options={FILTER_META.accredited} />
-          <DateRangeFilter label="Creation date" name="createdAt" change={props.dateFilter} />
-          <DropdownFilter value={props.requestState.search.city} name="City" change={props.setSearchParam} options={FILTER_META.city} />
         </Grid.Row>
       </Grid>
     </div>

@@ -284,7 +284,7 @@
 @hoveredZIndex: @menuZIndex + 2;
 
 /* Default Text */
-@defaultTextColor: @inputPlaceholderColor;
+@defaultTextColor:@tertiary-text;
 @defaultTextFocusColor: @inputPlaceholderFocusColor;
 
 /* Loading */

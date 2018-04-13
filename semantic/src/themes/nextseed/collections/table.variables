@@ -17,7 +17,7 @@
   color @defaultDuration @defaultEasing
 ;
 @background: @white;
-@color: @textColor;
+@color: @fullBlack;
 @borderWidth: 0;
 @border: @borderWidth solid @borderColor;
 @boxShadow: none;
@@ -38,7 +38,7 @@
 @cellBorder: 1px solid @internalBorderColor;
 
 /* Table Header */
-@headerBorder: 0px solid @internalBorderColor;
+@headerBorder:1px solid @internalBorderColor;
 @headerDivider: none;
 @headerBackground: @inverse-text;
 @headerAlign: inherit;
@@ -176,19 +176,19 @@
 @sortableBorder: 0px solid @borderColor;
 @sortableIconWidth: auto;
 @sortableIconDistance: 0.5em;
-@sortableIconOpacity: 0.8;
+@sortableIconOpacity:1;
 @sortableIconFont: 'Icons';
 @sortableIconAscending: '\f0d8';
 @sortableIconDescending: '\f0d7';
 @sortableDisabledColor: @disabledTextColor;
 
-@sortableHoverBackground: @transparentBlack;
+@sortableHoverBackground:'';
 @sortableHoverColor: @hoveredTextColor;
 
-@sortableActiveBackground: @transparentBlack;
+@sortableActiveBackground:'';
 @sortableActiveColor: @selectedTextColor;
 
-@sortableActiveHoverBackground: @transparentBlack;
+@sortableActiveHoverBackground:'';
 @sortableActiveHoverColor: @selectedTextColor;
 
 @sortableInvertedBorderColor: transparent;
@@ -235,7 +235,7 @@
 
 /* Compact */
 @compactVerticalPadding: 0.5em;
-@compactHorizontalPadding: 0.7em;
+@compactHorizontalPadding:@relative10px;
 @veryCompactVerticalPadding: 0.4em;
 @veryCompactHorizontalPadding: 0.6em;
 

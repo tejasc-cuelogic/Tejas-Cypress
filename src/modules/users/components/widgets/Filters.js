@@ -46,7 +46,7 @@ export const AppliedFilters = (props) => {
     <span>
       {
         filterKeys.map(f => (
-          <Label style={{ fontSize: '9px' }} key={f} as="a">
+          <Label key={f} as="a">
             {`${startCase(f)}: ${props.filters[f]}`}
             <Icon name="delete" onClick={() => props.click(f)} />
           </Label>

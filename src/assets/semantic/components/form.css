@@ -1169,7 +1169,7 @@
   border-radius: 0;
   color: #999999;
   background-color: transparent;
-  border-color: transparent transparent #828282;
+  border-color: transparent transparent #e0e0e0;
 }
 .ui.form .error:not(.field) {
   font-size: 0.85714286rem;

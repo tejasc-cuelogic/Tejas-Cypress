@@ -853,7 +853,7 @@ select.ui.dropdown {
 
 .ui.dropdown:not(.button) > .default.text,
 .ui.default.dropdown:not(.button) > .text {
-  color: #efefef;
+  color: #828282;
 }
 .ui.dropdown:not(.button) > input:focus ~ .default.text,
 .ui.default.dropdown:not(.button) > input:focus ~ .text {
@@ -1443,7 +1443,7 @@ select.ui.dropdown {
 
 
 /*******************************
-         Theme Overrides
+		 Theme Overrides
 *******************************/
 
 
@@ -1508,6 +1508,25 @@ select.ui.dropdown {
   letter-spacing: -3px;
   line-height: 0.71428571rem;
   color: #999999;
+}
+.search-filters .ui.dropdown.selection {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 0;
+  font-size: 0.92857143rem;
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  border-bottom: #e0e0e0 1px solid;
+}
+.search-filters .ui.dropdown.multiple > .text {
+  margin-left: 0;
+}
+.search-filters .ui.dropdown .dropdown.icon {
+  font-size: 1.14285714rem;
+  line-height: 0.42857143rem;
+  padding-right: 0;
+  color: #A9D943;
 }
 
 
