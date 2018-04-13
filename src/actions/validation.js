@@ -370,7 +370,7 @@ export class Validation {
       if (LINK_BANK_ACCCOUNT_FORM.includes(key)) {
         const { errors } = validationService.validate(value);
         // Store errors to store if any or else `undefined` will get set to it
-        accountStore.setEntityAccountError(key, errors && errors[key][0]);
+        accountStore.setIndividualAccountError(key, errors && errors[key][0]);
       }
     });
   }

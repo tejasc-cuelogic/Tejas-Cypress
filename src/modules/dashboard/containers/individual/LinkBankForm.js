@@ -13,6 +13,7 @@ export default class LinkBankForm extends Component {
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
+    validationActions.validateLinkBankAccountForm();
   }
   render() {
     const { individualAccount } = this.props.accountStore;
