@@ -64,6 +64,14 @@ export const CONFIRM_IDENTITY_QUESTIONS = [
 ];
 
 /**
+ * @desc Validate onlt following fields after submitting Link Bank Account Form
+ */
+export const LINK_BANK_ACCCOUNT_FORM = [
+  'bankRoutingNumber',
+  'bankAccountNumber',
+];
+
+/**
  * @desc Pass fields in values if fields in keys needs validation
  */
 export const CONDITIONAL_REQUIRE = {

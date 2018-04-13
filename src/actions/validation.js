@@ -6,7 +6,7 @@ import businessStore from './../stores/businessStore';
 import userStore from './../stores/userStore';
 import profileStore from './../stores/profileStore';
 import accountStore from './../stores/accountStore';
-import { REGISTRATION, PROFILE_DETAILS, CONDITIONAL_REQUIRE, CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE, CONFIRM_PHONE_NUMBER_VERIFICATION_CODE, CONFIRM_IDENTITY_QUESTIONS } from './../constants/validation';
+import { REGISTRATION, PROFILE_DETAILS, CONDITIONAL_REQUIRE, CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE, CONFIRM_PHONE_NUMBER_VERIFICATION_CODE, CONFIRM_IDENTITY_QUESTIONS, LINK_BANK_ACCCOUNT_FORM } from './../constants/validation';
 
 /**
  * @desc Validation class for form inputs
@@ -358,6 +358,21 @@ export class Validation {
     accountStore.setEntityAccountDetails(field, value);
     const { errors } = validationService.validate(accountStore.entityAccount[field]);
     accountStore.setEntityAccountError(field, errors && errors[field][0]);
+  }
+
+  /**
+   * @desc Validates Link Bank Account Form for Individual
+   */
+  validateLinkBankAccountForm = () => {
+    _.map(accountStore.individualAccount, (value) => {
+      const { key } = value;
+      // Select only required values and exclude others from being checked
+      if (LINK_BANK_ACCCOUNT_FORM.includes(key)) {
+        const { errors } = validationService.validate(value);
+        // Store errors to store if any or else `undefined` will get set to it
+        accountStore.setEntityAccountError(key, errors && errors[key][0]);
+      }
+    });
   }
 
   // Private Methods ends here
