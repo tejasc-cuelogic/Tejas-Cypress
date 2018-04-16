@@ -26,7 +26,7 @@ export default class CreateAccount extends React.Component {
           </div>
         </div>
         <div className="center-align">
-          <Button color="green" size="large">Create the account</Button>
+          <Button primary size="large">Create the account</Button>
         </div>
       </div>
     );

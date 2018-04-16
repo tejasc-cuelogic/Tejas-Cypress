@@ -25,7 +25,7 @@ export default class LinkBankAccountForm extends React.Component {
             />
           </Form.Field>
           <div className="center-align">
-            <Button circular color="green" size="large">Confirm</Button>
+            <Button circular primary size="large">Confirm</Button>
           </div>
           <div className="center-align">
             <Button className="cancel-link" onClick={this.props.toggleBankLinkInterface}>Or select your bank from the list</Button>

@@ -128,7 +128,7 @@ export default class XmlForm extends React.Component {
                 paddingBottom: '40px',
               }}
             >
-              <Button color="green" size="large" onClick={this.handleFormSubmit}>
+              <Button primary size="large" onClick={this.handleFormSubmit}>
                 Submit
               </Button>
               <Button as={Link} size="large" to={`/app/business/${this.props.match.params.businessId}`}>Cancel</Button>

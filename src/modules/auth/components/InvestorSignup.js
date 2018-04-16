@@ -90,7 +90,7 @@ class InvestorSignup extends Component {
             <div className="center-align">
               <Button
                 circular
-                color="green"
+                primary
                 disabled={!this.props.authStore.canRegister}
                 size="large"
               >Register

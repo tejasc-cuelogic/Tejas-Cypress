@@ -80,7 +80,7 @@ export default class Summary extends Component {
           </div>
         </div>
         <div className="center-align">
-          <Button color="green" size="large">Create the account</Button>
+          <Button primary size="large">Create the account</Button>
         </div>
       </div>
     );

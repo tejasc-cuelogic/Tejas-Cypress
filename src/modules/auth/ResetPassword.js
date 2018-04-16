@@ -78,7 +78,7 @@ export default class ResetPassword extends React.Component {
                     <FieldError error={values.code.error} />
                     <Button
                       fluid
-                      color="green"
+                      primary
                       disabled={!this.props.authStore.canRegister}
                     >
                       Reset Password

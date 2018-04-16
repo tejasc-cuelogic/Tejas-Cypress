@@ -72,7 +72,7 @@ export default class Login extends React.Component {
                     />
                     <Button
                       fluid
-                      color="green"
+                      primary
                       size="large"
                     >
                       Log in with Email

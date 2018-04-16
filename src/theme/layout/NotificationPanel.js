@@ -56,7 +56,7 @@ const notificationPanel = (props) => {
                   </Accordion.Content>
                 </Accordion>
                 {notification.money &&
-                  <Button inverted size="small" color="green" className="link-button"><Icon name="line graph" />See full portfolio stats</Button>
+                  <Button inverted size="small" primary className="link-button"><Icon name="line graph" />See full portfolio stats</Button>
                 }
               </div>
             ))}

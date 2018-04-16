@@ -53,7 +53,7 @@ export default class ChangePassword extends React.Component {
                 />
                 <Button
                   fluid
-                  color="green"
+                  primary
                   onClick={this.handleClick}
                 >
                   Change Password

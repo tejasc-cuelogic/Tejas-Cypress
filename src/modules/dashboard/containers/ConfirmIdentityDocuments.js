@@ -128,7 +128,7 @@ export default class ConfirmIdentityDocuments extends Component {
             </Grid>
             <Divider section hidden />
             <div className="center-align">
-              <Button color="green" size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitConfirmIdentityDocumentsForm}>Verify my identity</Button>
+              <Button primary size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitConfirmIdentityDocumentsForm}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I`ll finish this letter</Button>

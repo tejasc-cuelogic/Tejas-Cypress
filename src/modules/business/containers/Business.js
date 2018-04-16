@@ -41,7 +41,7 @@ class Business extends Component {
               </Grid.Column>
               <Grid.Column width={2} textAlign="center">
                 <span className="filter-count">0</span>
-                <Button icon color="green" className="link-button">
+                <Button icon primary className="link-button">
                   FILTERS <Icon name="caret down" />
                 </Button>
               </Grid.Column>

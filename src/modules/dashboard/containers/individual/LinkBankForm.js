@@ -64,7 +64,7 @@ export default class LinkBankForm extends Component {
             </Form.Field>
           </div>
           <div className="center-align">
-            <Button color="green" size="large">Confirm</Button>
+            <Button primary size="large">Confirm</Button>
           </div>
           <div className="center-align">
             <Button className="theme-link" onClick={() => this.props.accountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>

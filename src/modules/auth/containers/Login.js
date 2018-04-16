@@ -75,7 +75,7 @@ class Login extends Component {
             />
             <FieldError error={values.password.error} />
             <div className="center-align">
-              <Button color="green" size="large" className="very relaxed" disabled={canLogin}>Log in</Button>
+              <Button primary size="large" className="very relaxed" disabled={canLogin}>Log in</Button>
             </div>
           </Form>
         </Modal.Content>

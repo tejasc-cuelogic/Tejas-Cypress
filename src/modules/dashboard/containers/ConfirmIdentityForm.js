@@ -76,7 +76,7 @@ export default class ConfirmIdentityForm extends Component {
             />
             <FieldError error={confirmIdentityQuestions.question4.error} />
             <div className="center-align">
-              <Button color="green" size="large" className="relaxed">Verify my identity</Button>
+              <Button primary size="large" className="relaxed">Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>

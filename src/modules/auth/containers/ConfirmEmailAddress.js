@@ -62,7 +62,7 @@ export default class ConfirmEmailAddress extends Component {
             />
             <FieldError error={values.code.error} />
             <div className="center-align">
-              <Button color="green" size="large" className="very relaxed" disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
+              <Button primary size="large" className="very relaxed" disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setAuthWizardStep()}>Resend the code to my email</Button>

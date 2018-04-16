@@ -103,7 +103,7 @@ export default class NewBusinessForm extends React.Component {
     return (
       <div>
         {!this.props.businessid &&
-          <Button circular color="green" floated="right" onClick={this.handleOpenModal}>+ New Business</Button>
+          <Button circular primary floated="right" onClick={this.handleOpenModal}>+ New Business</Button>
         }
         <Modal
           size="small"
@@ -169,7 +169,7 @@ export default class NewBusinessForm extends React.Component {
           <Modal.Actions>
             { editBusinessMode === false &&
             <Button
-              color="green"
+              primary
               disabled={
                 !this.props.businessStore.canSubmitNewOfferingForm ||
                   this.props.uiStore.submitButtonDisabled
@@ -180,7 +180,7 @@ export default class NewBusinessForm extends React.Component {
             </Button>}
             { editBusinessMode === true &&
             <Button
-              color="green"
+              primary
               disabled={
                 !((this.state.name.value !== '' && this.state.desc.value !== '') ||
                   this.props.uiStore.submitButtonDisabled)

@@ -106,13 +106,12 @@ export default class EdgarForm extends React.Component {
                 }}
               >
                 <Button
-                  color="green"
+                  primary
                   disabled={
                     !this.props.businessStore.canSubmitEdgarForm ||
                       this.props.uiStore.submitButtonDisabled
                   }
                   onClick={this.handleSubmit}
-                  primary
                 >
                   Generate Docx
                 </Button>

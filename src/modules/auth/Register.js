@@ -116,7 +116,7 @@ export default class Register extends React.Component {
                     <FieldError error={values.role.error} />
                     <Button
                       fluid
-                      color="green"
+                      primary
                       disabled={!this.props.authStore.canRegister}
                       size="large"
                     >

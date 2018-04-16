@@ -57,7 +57,7 @@ export default class ForgotPassword extends React.Component {
                     <FieldError error={values.email.error} />
                     <Button
                       fluid
-                      color="green"
+                      primary
                       size="large"
                       disabled={this.props.authStore.canSendMail}
                     >

@@ -33,7 +33,7 @@ class signupInitial extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <Button color="green" size="large" className="very relaxed" onClick={() => this.props.setAuthWizardStep('InvestorSignup')} content="Start" />
+                <Button primary size="large" className="very relaxed" onClick={() => this.props.setAuthWizardStep('InvestorSignup')} content="Start" />
               </Grid.Column>
             </Grid.Row>
           </Grid>

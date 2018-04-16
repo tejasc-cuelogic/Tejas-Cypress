@@ -61,7 +61,7 @@ export default class Confirm extends React.Component {
                     <FieldError error={values.code.error} />
                     <Button
                       fluid
-                      color="green"
+                      primary
                       disabled={this.props.authStore.canConfirm}
                     >
                       Confirm!

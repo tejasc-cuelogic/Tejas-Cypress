@@ -4553,7 +4553,7 @@ ol.progtrckr li.progtrckr-done.error:after {
 
 .ui.primary.buttons .button,
 .ui.primary.button {
-  background-color: #2185D0;
+  background-color: #98CE23;
   color: #FFFFFF;
   text-shadow: none;
   background-image: none;
@@ -4566,21 +4566,21 @@ ol.progtrckr li.progtrckr-done.error:after {
 
 .ui.primary.buttons .button:hover,
 .ui.primary.button:hover {
-  background-color: #1678c2;
+  background-color: #8bc018;
   color: #FFFFFF;
   text-shadow: none;
 }
 
 .ui.primary.buttons .button:focus,
 .ui.primary.button:focus {
-  background-color: #0d71bb;
+  background-color: #84b90f;
   color: #FFFFFF;
   text-shadow: none;
 }
 
 .ui.primary.buttons .button:active,
 .ui.primary.button:active {
-  background-color: #1a69a4;
+  background-color: #78a21c;
   color: #FFFFFF;
   text-shadow: none;
 }
@@ -4589,7 +4589,7 @@ ol.progtrckr li.progtrckr-done.error:after {
 .ui.primary.buttons .active.button:active,
 .ui.primary.active.button,
 .ui.primary.button .active.button:active {
-  background-color: #1279c6;
+  background-color: #8cc414;
   color: #FFFFFF;
   text-shadow: none;
 }
@@ -4598,40 +4598,40 @@ ol.progtrckr li.progtrckr-done.error:after {
 
 .ui.basic.primary.buttons .button,
 .ui.basic.primary.button {
-  -webkit-box-shadow: 0px 0px 0px 1px #2185D0 inset !important;
-  box-shadow: 0px 0px 0px 1px #2185D0 inset !important;
-  color: #2185D0 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #98CE23 inset !important;
+  box-shadow: 0px 0px 0px 1px #98CE23 inset !important;
+  color: #98CE23 !important;
 }
 
 .ui.basic.primary.buttons .button:hover,
 .ui.basic.primary.button:hover {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #1678c2 inset !important;
-  box-shadow: 0px 0px 0px 1px #1678c2 inset !important;
-  color: #1678c2 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #8bc018 inset !important;
+  box-shadow: 0px 0px 0px 1px #8bc018 inset !important;
+  color: #8bc018 !important;
 }
 
 .ui.basic.primary.buttons .button:focus,
 .ui.basic.primary.button:focus {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #0d71bb inset !important;
-  box-shadow: 0px 0px 0px 1px #0d71bb inset !important;
-  color: #1678c2 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #84b90f inset !important;
+  box-shadow: 0px 0px 0px 1px #84b90f inset !important;
+  color: #8bc018 !important;
 }
 
 .ui.basic.primary.buttons .active.button,
 .ui.basic.primary.active.button {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #1279c6 inset !important;
-  box-shadow: 0px 0px 0px 1px #1279c6 inset !important;
-  color: #1a69a4 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #8cc414 inset !important;
+  box-shadow: 0px 0px 0px 1px #8cc414 inset !important;
+  color: #78a21c !important;
 }
 
 .ui.basic.primary.buttons .button:active,
 .ui.basic.primary.button:active {
-  -webkit-box-shadow: 0px 0px 0px 1px #1a69a4 inset !important;
-  box-shadow: 0px 0px 0px 1px #1a69a4 inset !important;
-  color: #1a69a4 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #78a21c inset !important;
+  box-shadow: 0px 0px 0px 1px #78a21c inset !important;
+  color: #78a21c !important;
 }
 
 .ui.buttons:not(.vertical) > .basic.primary.button:not(:first-child) {
@@ -30822,7 +30822,7 @@ a.ui.card:hover,
 
 .ui.toggle.checkbox input:checked ~ .box:before,
 .ui.toggle.checkbox input:checked ~ label:before {
-  background-color: #2185D0 !important;
+  background-color: #98CE23 !important;
 }
 
 .ui.toggle.checkbox input:checked ~ .box:after,
@@ -30841,7 +30841,7 @@ a.ui.card:hover,
 
 .ui.toggle.checkbox input:focus:checked ~ .box:before,
 .ui.toggle.checkbox input:focus:checked ~ label:before {
-  background-color: #0d71bb !important;
+  background-color: #84b90f !important;
 }
 
 /*******************************

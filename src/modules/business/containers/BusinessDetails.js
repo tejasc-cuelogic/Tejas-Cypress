@@ -128,7 +128,7 @@ export default class BusinessDetails extends React.Component {
                 <h1>
                   <Button
                     circular
-                    color="green"
+                    primary
                     floated="right"
                     onClick={this.handleNewFiling}
                   >
@@ -143,7 +143,7 @@ export default class BusinessDetails extends React.Component {
                       icon
                       circular
                       inverted
-                      color="green"
+                      primary
                     >
                       <Icon name="write" />
                     </Button>{' '}

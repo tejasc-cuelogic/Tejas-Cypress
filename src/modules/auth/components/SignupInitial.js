@@ -28,7 +28,7 @@ const signupInitial = props => (
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <Button circular color="green" onClick={() => props.setAuthWizardStep('InvestorSignup')} content="Start" />
+            <Button circular primary onClick={() => props.setAuthWizardStep('InvestorSignup')} content="Start" />
           </Grid.Column>
         </Grid.Row>
       </Grid>

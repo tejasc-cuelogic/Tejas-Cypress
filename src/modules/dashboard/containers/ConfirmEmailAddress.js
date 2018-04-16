@@ -50,7 +50,7 @@ export default class ConfirmEmailAddress extends Component {
             />
             <FieldError error={confirmEmailAddressVerificationCode.error} />
             <div className="center-align">
-              <Button circular color="green" size="large" >Confirm</Button>
+              <Button circular primary size="large" >Confirm</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>Resend the code to my email</Button>

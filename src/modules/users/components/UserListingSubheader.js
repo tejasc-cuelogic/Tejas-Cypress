@@ -71,12 +71,12 @@ const userListingSubheader = () => (
           </Grid.Column>
           <Grid.Column width={2} textAlign="center">
             <span className="filter-count">0</span>
-            <Button icon color="green" className="link-button">
+            <Button icon primary className="link-button">
               FILTERS <Icon name="caret down" />
             </Button>
           </Grid.Column>
           <Grid.Column width={3} textAlign="right">
-            <Button circular color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
+            <Button circular primary as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>

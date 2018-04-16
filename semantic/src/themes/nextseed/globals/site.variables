@@ -109,7 +109,7 @@
     Brand Colors
 --------------------*/
 
-@primaryColor        : @blue;
+@primaryColor        : @theme-primary;
 @secondaryColor      : @black;
 
 @lightPrimaryColor   : @lightBlue;
