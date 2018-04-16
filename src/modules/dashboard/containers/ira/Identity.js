@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Form, Icon, Divider } from 'semantic-ui-react';
+import { Header, Form, Icon, Divider, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 @inject('accountStore')
@@ -22,25 +22,36 @@ export default class Identity extends Component {
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</Header>
         <Divider section hidden />
         <Form className="file-uploader-inline">
-          <Form.Field>
-            {driversLicence.value === '' &&
-              <div className="file-uploader">
-                <Icon name="upload" /> Choose a file <span>or drag it here</span>
-                <input
-                  name={driversLicence.key}
-                  type="file"
-                  onChange={this.uploadDocument}
-                  accept=".jpg,.jpeg,.pdf"
-                />
-              </div>
-            }
-            {driversLicence.value !== '' &&
-              <div className="file-uploader attached">
-                <span title={driversLicence.value}>{driversLicence.value}</span>
-                <Icon name="remove" onClick={this.removeUploadedDriversLicence} />
-              </div>
-            }
-          </Form.Field>
+          <Grid divided="vertically">
+            <Grid.Row>
+              <Grid.Column width={7}>
+                {/* eslint-disable jsx-a11y/label-has-for */}
+                <label>
+                  <h3>Upload a Photo ID</h3>
+                  Driving Liscence or passport
+                </label>
+              </Grid.Column>
+              <Grid.Column width={9}>
+                {driversLicence.value === '' &&
+                  <div className="file-uploader">
+                    <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                    <input
+                      name={driversLicence.key}
+                      type="file"
+                      onChange={this.uploadDocument}
+                      accept=".jpg,.jpeg,.pdf"
+                    />
+                  </div>
+                }
+                {driversLicence.value !== '' &&
+                  <div className="file-uploader attached">
+                    <span title={driversLicence.value}>{driversLicence.value}</span>
+                    <Icon name="remove" onClick={this.removeUploadedDriversLicence} />
+                  </div>
+                }
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Form>
         <Divider section hidden />
         <p className="center-align">As a regulated financial service company operating in the US we are periodically
