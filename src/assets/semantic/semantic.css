@@ -8,7 +8,7 @@
  * http://opensource.org/licenses/MIT
  *
  */
-@import url('https://fonts.googleapis.com/css?family=SF Pro Display Heavy:400,700,400italic,700italic&subset=latin');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin');
 /*!
  * # Semantic UI 2.3.1 - Reset
  * http://github.com/semantic-org/semantic-ui/
@@ -194,11 +194,6 @@ strong {
 /**
  * Add the correct font weight in Chrome, Edge, and Safari.
  */
-
-b,
-strong {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
 
 /**
  * 1. Correct the inheritance and scaling of font size in all browsers.
@@ -569,7 +564,7 @@ body {
   overflow-x: hidden;
   min-width: 320px;
   background: #FFFFFF;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.571428em;
   color: #303030;
@@ -585,7 +580,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
   margin: calc(2rem -  0.14285714em ) 0em 1.5rem;
   font-weight: 500;
@@ -756,38 +751,6 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
         Global Overrides
 *******************************/
 
-@font-face {
-  font-family: 'SF Pro Display Regular';
-  src: url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.eot");
-  src: url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.eot?#iefix") format('embedded-opentype'), url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.woff2") format('woff2'), url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.woff") format('woff'), url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.ttf") format('truetype'), url("./themes/nextseed/assets/fonts/SFProDisplay-Regular.svg#SFProDisplay-Regular") format('svg');
-  font-style: normal;
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: 'SF Pro Display Medium';
-  src: url("./themes/nextseed/assets/fonts/SFProDisplay-Medium.eot");
-  src: url("./themes/nextseed/assets/fonts/SFProDisplay-Medium.eot?#iefix") format('embedded-opentype'), url("./themes/nextseed/assets/fonts/SFProDisplay-Medium.woff2") format('woff2'), url("./themes/nextseed/assets/fonts/SFProDisplay-Medium.woff") format('woff'), url("./themes/nextseed/assets/fonts/SFProDisplay-Medium.ttf") format('truetype'), url("./themes/nextseed/assets/fonts/SFProDisplay-Medium.svg#SFProDisplay-Medium") format('svg');
-  font-style: normal;
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: 'SF Pro Display Bold';
-  src: url("./themes/nextseed/assets/fonts/SFProDisplay-Bold.eot");
-  src: url("./themes/nextseed/assets/fonts/SFProDisplay-Bold.eot?#iefix") format('embedded-opentype'), url("./themes/nextseed/assets/fonts/SFProDisplay-Bold.woff2") format('woff2'), url("./themes/nextseed/assets/fonts/SFProDisplay-Bold.woff") format('woff'), url("./themes/nextseed/assets/fonts/SFProDisplay-Bold.ttf") format('truetype'), url("./themes/nextseed/assets/fonts/SFProDisplay-Bold.svg#SFProDisplay-Bold") format('svg');
-  font-style: normal;
-  font-weight: 700;
-}
-
-@font-face {
-  font-family: 'SF Pro Display Heavy';
-  src: url("./themes/nextseed/assets/fonts/SFProDisplay-Heavy.eot");
-  src: url("./themes/nextseed/assets/fonts/SFProDisplay-Heavy.eot?#iefix") format('embedded-opentype'), url("./themes/nextseed/assets/fonts/SFProDisplay-Heavy.woff2") format('woff2'), url("./themes/nextseed/assets/fonts/SFProDisplay-Heavy.woff") format('woff'), url("./themes/nextseed/assets/fonts/SFProDisplay-Heavy.ttf") format('truetype'), url("./themes/nextseed/assets/fonts/SFProDisplay-Heavy.svg#SFProDisplay-Heavy") format('svg');
-  font-style: normal;
-  font-weight: 900;
-}
-
 ol.progtrckr {
   margin: 0;
   padding: 1.71428571rem 0 1.85714286rem;
@@ -799,7 +762,6 @@ ol.progtrckr li {
   margin: 0 0.71428571rem 1rem;
   min-width: 60px;
   display: inline-block;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   line-height: 2rem;
   text-align: center;
@@ -894,7 +856,7 @@ ol.progtrckr li.progtrckr-done.error:after {
   vertical-align: baseline;
   background: #E0E1E2 none;
   color: rgba(0, 0, 0, 0.6);
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0em 0.25em 0em 0em;
   padding: 1em 1.5em 1em;
   text-transform: none;
@@ -5332,7 +5294,7 @@ ol.progtrckr li.progtrckr-done.error:after {
 /* Text Container */
 
 .ui.text.container {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   max-width: 700px !important;
   line-height: 1.5;
 }
@@ -5531,7 +5493,6 @@ div.login-form ul.error-messages {
 }
 
 .page-header-section p {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #FFFFFF;
 }
 
@@ -5575,7 +5536,7 @@ div.login-form ul.error-messages {
 }
 
 .page-header-section .search-filters h5 {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #999999;
   margin: 0 0 0.5rem;
 }
@@ -5661,7 +5622,7 @@ div.login-form ul.error-messages {
 
 .account-type {
   display: inline-block;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   text-align: center;
   line-height: 1.5;
   border-radius: 4px;
@@ -5753,7 +5714,6 @@ div.login-form ul.error-messages {
 .toast-message > div {
   min-height: 54px;
   padding: 0.7em 1em;
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   border-radius: 0.28571429rem;
 }
 
@@ -5804,7 +5764,6 @@ a.disabled:focus {
 }
 
 .meta-data {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   font-weight: 400;
   color: #999999;
@@ -7397,7 +7356,7 @@ i.flag.zimbabwe:before {
   border: none;
   margin: calc(2rem -  0.14285714em ) 0em 1.5rem;
   padding: 0em 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
   line-height: 1.28571429em;
   text-transform: none;
@@ -12899,7 +12858,7 @@ img.ui.bordered.image {
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   text-align: left;
   line-height: 1.21428571em;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding: 0.67857143em 1em;
   background: #FFFFFF;
   border: 1px solid rgba(34, 36, 38, 0.15);
@@ -14861,10 +14820,6 @@ a.ui.basic.label:hover {
          Theme Overrides
 *******************************/
 
-.ui.label {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
 /*******************************
          Site Overrides
 *******************************/
@@ -15045,7 +15000,7 @@ ol.ui.list ol li,
 .ui.list > .item .header {
   display: block;
   margin: 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
   color: #999999;
 }
@@ -15975,7 +15930,6 @@ ol.ui.horizontal.list li:before,
 }
 
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #828282;
   border-bottom: 2px solid transparent;
 }
@@ -17898,7 +17852,7 @@ ol.ui.horizontal.list li:before,
 /* Title */
 
 .ui.steps .step .title {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   font-weight: bold;
 }
@@ -18681,7 +18635,7 @@ ol.ui.horizontal.list li:before,
 .ui.form input[type="text"],
 .ui.form input[type="file"],
 .ui.form input[type="url"] {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0em;
   outline: none;
   -webkit-appearance: none;
@@ -19939,7 +19893,6 @@ ol.ui.horizontal.list li:before,
 
 .file-uploader.attached {
   padding-right: 2rem;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #772DF9;
   border: none;
   background: #e0e0e0;
@@ -22306,7 +22259,7 @@ ol.ui.horizontal.list li:before,
   display: -ms-flexbox;
   display: flex;
   margin: 1rem 0em;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   font-weight: normal;
   border: 1px solid rgba(34, 36, 38, 0.15);
@@ -24628,7 +24581,7 @@ Floated Menu / Item
 
 .ui.message .header {
   display: block;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   margin: -0.14285714em 0em 0rem 0em;
 }
@@ -26464,10 +26417,6 @@ Floated Menu / Item
   overflow: auto;
 }
 
-.ui.table {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
 .ui.table thead th {
   padding: 1.42857143rem;
   font-size: 0.85714286rem;
@@ -26524,7 +26473,6 @@ Floated Menu / Item
 }
 
 .ui.table.user-list .user-name {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   display: block;
 }
 
@@ -26533,7 +26481,7 @@ Floated Menu / Item
 }
 
 .ui.table a {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #303030;
   text-decoration: none;
 }
@@ -27034,7 +26982,7 @@ Floated Menu / Item
 .ui.card > .content > .header {
   display: block;
   margin: '';
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: rgba(0, 0, 0, 0.85);
 }
 
@@ -28022,7 +27970,6 @@ a.ui.card:hover,
 
 .ui.card.welcome-card > .content > .header:not(.ui),
 .ui.cards > .card.welcome-card > .content > .header:not(.ui) {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.42857143rem;
   font-weight: 400;
   margin-top: 0;
@@ -28030,7 +27977,7 @@ a.ui.card:hover,
 
 .ui.card.welcome-card > .content > .meta,
 .ui.cards > .card.welcome-card > .content > .meta {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   text-transform: none;
   color: #999999;
@@ -28067,10 +28014,6 @@ a.ui.card:hover,
   text-transform: uppercase;
 }
 
-.bank-details .item .description p {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
 .sticky-notification .ui.card .meta {
   font-size: 0.92857143rem;
   text-transform: none;
@@ -28092,7 +28035,7 @@ a.ui.card:hover,
 
 .ui.cards.steps-card .description i.icon.numbar[data-icon]:before {
   content: attr(data-icon) !important;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   color: #FFFFFF;
 }
@@ -28857,7 +28800,7 @@ a.ui.card:hover,
 .ui.items > .item > .content > .header {
   display: inline-block;
   margin: -0.285714em 0em 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.85);
 }
@@ -29336,7 +29279,7 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .value,
 .ui.statistic > .value {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 2.571428rem;
   font-weight: normal;
   line-height: 1.2em;
@@ -29351,7 +29294,7 @@ a.ui.card:hover,
 
 .ui.statistics .statistic > .label,
 .ui.statistic > .label {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   font-weight: 500;
   color: #828282;
@@ -29948,7 +29891,7 @@ a.ui.card:hover,
 
 .ui.accordion .title:not(.ui) {
   padding: 0.5em 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   color: #303030;
 }
@@ -30229,7 +30172,6 @@ a.ui.card:hover,
 
 .ui.styled.accordion.filing-list .title time,
 .ui.styled.accordion .accordion.filing-list .title time {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.85714286rem;
   margin-left: 0.35714286rem;
   color: #828282;
@@ -30259,7 +30201,7 @@ a.ui.card:hover,
 .ui.styled.accordion .accordion.filing-list .actions .ui.button,
 .ui.styled.accordion.filing-list .actions .ui.buttons .button,
 .ui.styled.accordion .accordion.filing-list .actions .ui.buttons .button {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   font-weight: 400;
   text-transform: none;
@@ -30962,16 +30904,10 @@ a.ui.card:hover,
 .plus:before { content: '\e802'; }
 */
 
-.ui.checkbox label,
-.ui.checkbox + label {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
 .button-radio .ui.radio.checkbox label {
   height: 52px;
   min-width: 160px;
   padding: 15px;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 16px;
   border: #e0e0e0 1px solid;
   border-radius: 0.42857143rem;
@@ -33144,7 +33080,7 @@ select.ui.dropdown {
 
 .ui.modal > .header {
   display: block;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   margin: 0em;
   padding: 1.25rem 3rem;
@@ -33766,14 +33702,10 @@ select.ui.dropdown {
 }
 
 .ui.modal > .header:not(.ui).signup-header p {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 1rem;
   color: #424242;
-}
-
-.ui.modal h4.ui.header {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .ui.modal .content {
@@ -33797,7 +33729,6 @@ select.ui.dropdown {
 }
 
 .ui.modal .content.signup-content .user-type p {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   color: #000000;
 }
@@ -33828,7 +33759,6 @@ select.ui.dropdown {
   padding: 0;
   display: inline-block;
   background: transparent;
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   letter-spacing: 1px;
   color: #999999;
@@ -33842,7 +33772,6 @@ select.ui.dropdown {
 
 .ui.modal .content .ui.huge.input input[type=tel],
 .ui.modal .content .ui.huge.input input[type=email] {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   border: none;
   background: #f2f2f2;
   text-align: center;
@@ -33937,7 +33866,6 @@ select.ui.dropdown {
 .ui.modal .ui.form .field input[type=time],
 .ui.modal .ui.form .field .ui.input input[type=url],
 .ui.modal .ui.form .field input[type=url] {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding-left: 0;
   padding-right: 0;
   border-radius: 0;
@@ -33948,7 +33876,6 @@ select.ui.dropdown {
 
 .ui.modal .ui.form .field .ui.selection.dropdown,
 .ui.modal .ui.form .field .ui.labeled.input .ui.label {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding-left: 0.35714286rem;
   padding-right: 0;
   border-radius: 0;
@@ -33988,7 +33915,6 @@ select.ui.dropdown {
   max-width: 290px;
   margin: 0 auto;
   padding-left: 13px;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   letter-spacing: 38px;
   border: none;
   background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #e0e0e0), color-stop(0%, rgba(0, 0, 0, 0)));
@@ -34266,7 +34192,7 @@ a.ui.nag {
 
 .ui.popup > .header {
   padding: 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   line-height: 1.2;
   font-weight: bold;
@@ -36049,7 +35975,7 @@ a.ui.nag {
 
 .ui.search > .results .result .title {
   margin: -0.14285714em 0em 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
   color: rgba(0, 0, 0, 0.85);
@@ -36075,7 +36001,7 @@ a.ui.nag {
 }
 
 .ui.search > .results > .message .header {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1rem;
   font-weight: bold;
   color: #303030;
@@ -36292,7 +36218,7 @@ a.ui.nag {
   width: 100px;
   white-space: nowrap;
   background: transparent;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   padding: 0.4em 1em;
   font-weight: bold;
@@ -37562,7 +37488,6 @@ body.pushable > .pusher {
 }
 
 .tabular-wrap .ui.vertical.tabular.menu .item {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding: 1.28571429rem 1.42857143rem;
   border-radius: 0 !important;
   border-left: none;
@@ -37607,7 +37532,6 @@ body.pushable > .pusher {
   position: absolute;
   right: 2.14285714rem;
   top: 0;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.85714286rem;
   text-transform: uppercase;
 }
@@ -37639,7 +37563,6 @@ body.pushable > .pusher {
 .account-type-tab > .ui.item.menu.secondary a.item .account-tab {
   width: 100%;
   padding: 1rem;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   border: rgba(34, 36, 38, 0.15) 1px solid;
   border-radius: 0.42857143rem;
@@ -37659,7 +37582,6 @@ body.pushable > .pusher {
 }
 
 .account-type-tab .tab {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1rem;
 }
 

@@ -1139,9 +1139,6 @@
 .table-wrapper {
   overflow: auto;
 }
-.ui.table {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
 .ui.table thead th {
   padding: 1.42857143rem;
   font-size: 0.85714286rem;
@@ -1187,14 +1184,13 @@
   border: 1px solid #e0e0e0;
 }
 .ui.table.user-list .user-name {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   display: block;
 }
 .ui.table.user-list .user-name > a {
   font-family: inherit;
 }
 .ui.table a {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #303030;
   text-decoration: none;
 }

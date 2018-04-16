@@ -24,7 +24,7 @@
 --------------------*/
 
 /* Value */
-@valueFont:@boldFont;
+// @valueFont:@boldFont;
 @valueFontWeight:normal;
 @valueLineHeight:1.2em;
 @valueColor:@dark-bg-color;

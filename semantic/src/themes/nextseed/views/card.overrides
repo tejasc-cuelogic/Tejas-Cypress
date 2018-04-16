@@ -55,7 +55,7 @@
                 margin:0 @18px 0 0;
             }
             >.header:not(.ui){
-                font-family:@boldFont;
+                // font-family:@boldFont;
                 font-size:@20px;
                 font-weight:400;
                 margin-top:0;
@@ -106,7 +106,7 @@
             text-transform:uppercase;
         }
         .description p{
-            font-family:@boldFont;
+            // font-family:@boldFont;
         }
     }
 }

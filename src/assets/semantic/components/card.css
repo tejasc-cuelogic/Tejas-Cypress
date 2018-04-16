@@ -169,7 +169,7 @@
 .ui.card > .content > .header {
   display: block;
   margin: '';
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: rgba(0, 0, 0, 0.85);
 }
 
@@ -1043,14 +1043,13 @@ a.ui.card:hover,
 }
 .ui.card.welcome-card > .content > .header:not(.ui),
 .ui.cards > .card.welcome-card > .content > .header:not(.ui) {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.42857143rem;
   font-weight: 400;
   margin-top: 0;
 }
 .ui.card.welcome-card > .content > .meta,
 .ui.cards > .card.welcome-card > .content > .meta {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   text-transform: none;
   color: #999999;
@@ -1082,9 +1081,6 @@ a.ui.card:hover,
   color: #999999;
   text-transform: uppercase;
 }
-.bank-details .item .description p {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
 .sticky-notification .ui.card .meta {
   font-size: 0.92857143rem;
   text-transform: none;
@@ -1103,7 +1099,7 @@ a.ui.card:hover,
 }
 .ui.cards.steps-card .description i.icon.numbar[data-icon]:before {
   content: attr(data-icon) !important;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   color: #FFFFFF;
 }

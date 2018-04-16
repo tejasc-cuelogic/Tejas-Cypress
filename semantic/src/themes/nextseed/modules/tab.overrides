@@ -9,7 +9,7 @@
         border:none;
         background:@inverse-text;
         .item{
-            font-family:@boldFont;
+            // font-family:@boldFont;
             padding:@18px @20px;
             border-radius:0 !important;
             border-left:none;
@@ -46,7 +46,7 @@
             position:absolute;
             right:@30px;
             top:0;
-            font-family:@boldFont;
+            // font-family:@boldFont;
             font-size:@12px;
             text-transform:uppercase;
             > a{
@@ -70,7 +70,7 @@
             .account-tab{
                 width:100%;
                 padding:1rem;
-                font-family:@boldFont;
+                // font-family:@boldFont;
                 font-size:@16px;
                 border:@borderColor 1px solid;
                 border-radius:@defaultBorderRadius * 1.5;
@@ -90,7 +90,7 @@
         }
     }
     .tab{
-        font-family:@regularFont;
+        // font-family:@regularFont;
         font-size:@14px;
     }
 }

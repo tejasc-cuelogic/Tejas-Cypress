@@ -122,7 +122,7 @@ div.login-form {
 		}
 	}
 	p{
-		font-family:@regularFont;
+		// font-family:@regularFont;
 		color:@inverse-text;
 	}
 	span.filter-count{
@@ -335,7 +335,7 @@ div.login-form {
 	> div{
 		min-height:54px;
 		padding:0.7em 1em;
-		font-family:@regularFont;
+		// font-family:@regularFont;
 		border-radius:@absoluteBorderRadius;
 		button{
 			font-size:@12px;
@@ -377,7 +377,7 @@ a.disabled, a.disabled:hover, a.disabled:focus{
 }
 //	Meta Data
 .meta-data{
-	font-family:@regularFont;
+	// font-family:@regularFont;
 	font-size:@13px;
 	font-weight:400;
 	color:@quaternary-text;

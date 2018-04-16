@@ -179,7 +179,7 @@ display:block;
     }
     &.attached{
         padding-right:2rem;
-        font-family:@boldFont;
+        // font-family:@boldFont;
         color:@link-color;
         border:none;
         background:@border-color;

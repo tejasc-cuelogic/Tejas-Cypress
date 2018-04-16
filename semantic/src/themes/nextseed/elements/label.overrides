@@ -1,6 +1,6 @@
 /*******************************
          Theme Overrides
 *******************************/
-.ui.label{
-    font-family:@boldFont;
-}
+// .ui.label{
+//     font-family:@boldFont;
+// }

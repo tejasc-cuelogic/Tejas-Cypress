@@ -31,7 +31,7 @@
 /* Default Styling */
 .ui.accordion .title:not(.ui) {
   padding: 0.5em 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
   color: #303030;
 }
@@ -296,7 +296,6 @@
 }
 .ui.styled.accordion.filing-list .title time,
 .ui.styled.accordion .accordion.filing-list .title time {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.85714286rem;
   margin-left: 0.35714286rem;
   color: #828282;
@@ -322,7 +321,7 @@
 .ui.styled.accordion .accordion.filing-list .actions .ui.button,
 .ui.styled.accordion.filing-list .actions .ui.buttons .button,
 .ui.styled.accordion .accordion.filing-list .actions .ui.buttons .button {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   font-weight: 400;
   text-transform: none;

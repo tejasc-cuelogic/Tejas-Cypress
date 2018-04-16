@@ -2,37 +2,37 @@
         Global Overrides
 *******************************/
 
-@font-face {
-	font-family: 'SF Pro Display Regular';
-	src: @fallbackSRCRegular;
-	src: @srcRegular;
-	font-style: normal;
-	font-weight: 400;
-}
+// @font-face {
+// 	font-family: 'SF Pro Display Regular';
+// 	src: @fallbackSRCRegular;
+// 	src: @srcRegular;
+// 	font-style: normal;
+// 	font-weight: 400;
+// }
 
-@font-face {
-	font-family: 'SF Pro Display Medium';
-	src: @fallbackSRCMedium;
-	src: @srcMedium;
-	font-style: normal;
-	font-weight: 500;
-}
+// @font-face {
+// 	font-family: 'SF Pro Display Medium';
+// 	src: @fallbackSRCMedium;
+// 	src: @srcMedium;
+// 	font-style: normal;
+// 	font-weight: 500;
+// }
 
-@font-face {
-	font-family: 'SF Pro Display Bold';
-	src: @fallbackSRCBold;
-	src: @srcBold;
-	font-style: normal;
-	font-weight: 700;
-}
+// @font-face {
+// 	font-family: 'SF Pro Display Bold';
+// 	src: @fallbackSRCBold;
+// 	src: @srcBold;
+// 	font-style: normal;
+// 	font-weight: 700;
+// }
 
-@font-face {
-	font-family: 'SF Pro Display Heavy';
-	src: @fallbackSRCHeavy;
-	src: @srcHeavy;
-	font-style: normal;
-	font-weight: 900;
-}
+// @font-face {
+// 	font-family: 'SF Pro Display Heavy';
+// 	src: @fallbackSRCHeavy;
+// 	src: @srcHeavy;
+// 	font-style: normal;
+// 	font-weight: 900;
+// }
 
 
 //	Multistep modal navigation
@@ -45,7 +45,7 @@ ol.progtrckr{
 		margin:0 @10px @14px;
 		min-width:60px;
 		display:inline-block;
-		font-family:@boldFont;
+		// font-family:@boldFont;
 		font-size:@13px;
 		line-height:2rem;
 		text-align:center;

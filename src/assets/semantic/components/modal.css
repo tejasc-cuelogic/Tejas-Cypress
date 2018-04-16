@@ -76,7 +76,7 @@
 
 .ui.modal > .header {
   display: block;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   margin: 0em;
   padding: 1.25rem 3rem;
@@ -624,13 +624,10 @@
   margin-right: auto;
 }
 .ui.modal > .header:not(.ui).signup-header p {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 1rem;
   color: #424242;
-}
-.ui.modal h4.ui.header {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 .ui.modal .content {
   padding-top: 1.42857143rem;
@@ -649,7 +646,6 @@
   margin: 0.5rem 0;
 }
 .ui.modal .content.signup-content .user-type p {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   color: #000000;
 }
@@ -676,7 +672,6 @@
   padding: 0;
   display: inline-block;
   background: transparent;
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   letter-spacing: 1px;
   color: #999999;
@@ -688,7 +683,6 @@
 }
 .ui.modal .content .ui.huge.input input[type=tel],
 .ui.modal .content .ui.huge.input input[type=email] {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   border: none;
   background: #f2f2f2;
   text-align: center;
@@ -770,7 +764,6 @@
 .ui.modal .ui.form .field input[type=time],
 .ui.modal .ui.form .field .ui.input input[type=url],
 .ui.modal .ui.form .field input[type=url] {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding-left: 0;
   padding-right: 0;
   border-radius: 0;
@@ -780,7 +773,6 @@
 }
 .ui.modal .ui.form .field .ui.selection.dropdown,
 .ui.modal .ui.form .field .ui.labeled.input .ui.label {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding-left: 0.35714286rem;
   padding-right: 0;
   border-radius: 0;
@@ -813,7 +805,6 @@
   max-width: 290px;
   margin: 0 auto;
   padding-left: 13px;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   letter-spacing: 38px;
   border: none;
   background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #e0e0e0), color-stop(0%, rgba(0, 0, 0, 0)));

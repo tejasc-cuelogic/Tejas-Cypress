@@ -159,7 +159,7 @@ ol.ui.list ol li,
 .ui.list > .item .header {
   display: block;
   margin: 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
   color: #999999;
 }
@@ -970,7 +970,6 @@ ol.ui.horizontal.list li:before,
   margin-bottom: 2rem;
 }
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #828282;
   border-bottom: 2px solid transparent;
 }

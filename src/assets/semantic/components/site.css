@@ -13,7 +13,7 @@
              Page
 *******************************/
 
-@import url('https://fonts.googleapis.com/css?family=SF Pro Display Heavy:400,700,400italic,700italic&subset=latin');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin');
 html,
 body {
   height: 100%;
@@ -27,7 +27,7 @@ body {
   overflow-x: hidden;
   min-width: 320px;
   background: #FFFFFF;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.571428em;
   color: #303030;
@@ -44,7 +44,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
   margin: calc(2rem -  0.14285714em ) 0em 1.5rem;
   font-weight: 500;
@@ -196,34 +196,6 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
         Global Overrides
 *******************************/
 
-@font-face {
-  font-family: 'SF Pro Display Regular';
-  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.eot");
-  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.eot?#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.woff2") format('woff2'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.woff") format('woff'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.ttf") format('truetype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Regular.svg#SFProDisplay-Regular") format('svg');
-  font-style: normal;
-  font-weight: 400;
-}
-@font-face {
-  font-family: 'SF Pro Display Medium';
-  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.eot");
-  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.eot?#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.woff2") format('woff2'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.woff") format('woff'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.ttf") format('truetype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Medium.svg#SFProDisplay-Medium") format('svg');
-  font-style: normal;
-  font-weight: 500;
-}
-@font-face {
-  font-family: 'SF Pro Display Bold';
-  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.eot");
-  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.eot?#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.woff2") format('woff2'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.woff") format('woff'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.ttf") format('truetype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Bold.svg#SFProDisplay-Bold") format('svg');
-  font-style: normal;
-  font-weight: 700;
-}
-@font-face {
-  font-family: 'SF Pro Display Heavy';
-  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.eot");
-  src: url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.eot?#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.woff2") format('woff2'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.woff") format('woff'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.ttf") format('truetype'), url("./../themes/nextseed/assets/fonts/SFProDisplay-Heavy.svg#SFProDisplay-Heavy") format('svg');
-  font-style: normal;
-  font-weight: 900;
-}
 ol.progtrckr {
   margin: 0;
   padding: 1.71428571rem 0 1.85714286rem;
@@ -234,7 +206,6 @@ ol.progtrckr li {
   margin: 0 0.71428571rem 1rem;
   min-width: 60px;
   display: inline-block;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   line-height: 2rem;
   text-align: center;

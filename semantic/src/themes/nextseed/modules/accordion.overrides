@@ -74,7 +74,7 @@
 				background-color:#F8F8F8;
 			}
 			time{
-				font-family:@regularFont;
+				// font-family:@regularFont;
 				font-size:@12px;
 				margin-left:@5px;
 				color:@tertiary-text;

@@ -100,7 +100,7 @@
 
 /* Text Container */
 .ui.text.container {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   max-width: 700px !important;
   line-height: 1.5;
 }
@@ -266,7 +266,6 @@ div.login-form ul.error-messages {
   color: #7eab1d;
 }
 .page-header-section p {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #FFFFFF;
 }
 .page-header-section span.filter-count {
@@ -303,7 +302,7 @@ div.login-form ul.error-messages {
   }
 }
 .page-header-section .search-filters h5 {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: #999999;
   margin: 0 0 0.5rem;
 }
@@ -376,7 +375,7 @@ div.login-form ul.error-messages {
 }
 .account-type {
   display: inline-block;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   text-align: center;
   line-height: 1.5;
   border-radius: 4px;
@@ -453,7 +452,6 @@ div.login-form ul.error-messages {
 .toast-message > div {
   min-height: 54px;
   padding: 0.7em 1em;
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   border-radius: 0.28571429rem;
 }
 .toast-message > div button {
@@ -496,7 +494,6 @@ a.disabled:focus {
   pointer-events: none !important;
 }
 .meta-data {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   font-weight: 400;
   color: #999999;

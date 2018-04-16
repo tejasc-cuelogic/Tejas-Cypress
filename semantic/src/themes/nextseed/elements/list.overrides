@@ -32,7 +32,7 @@
     .ui.horizontal.list.link{
         margin-bottom:@28px;
         .item{
-            font-family:@boldFont;
+            // font-family:@boldFont;
             color:@tertiary-text;
             border-bottom:2px solid transparent;
             &:hover, &:focus, &.active{
