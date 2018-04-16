@@ -1167,9 +1167,54 @@
 .ui.form.inverted input[type=time],
 .ui.form.inverted input[type=url] {
   border-radius: 0;
-  color: #999999;
+  color: #FFFFFF;
   background-color: transparent;
   border-color: transparent transparent #e0e0e0;
+}
+.ui.form.inverted input:not([type])::-webkit-input-placeholder,
+.ui.form.inverted input[type=date]::-webkit-input-placeholder,
+.ui.form.inverted input[type=datetime-local]::-webkit-input-placeholder,
+.ui.form.inverted input[type=email]::-webkit-input-placeholder,
+.ui.form.inverted input[type=file]::-webkit-input-placeholder,
+.ui.form.inverted input[type=number]::-webkit-input-placeholder,
+.ui.form.inverted input[type=password]::-webkit-input-placeholder,
+.ui.form.inverted input[type=search]::-webkit-input-placeholder,
+.ui.form.inverted input[type=tel]::-webkit-input-placeholder,
+.ui.form.inverted input[type=text]::-webkit-input-placeholder,
+.ui.form.inverted input[type=time]::-webkit-input-placeholder,
+.ui.form.inverted input[type=url]::-webkit-input-placeholder {
+  color: #999999;
+}
+.ui.form.inverted input:not([type]):-ms-input-placeholder,
+.ui.form.inverted input[type=date]:-ms-input-placeholder,
+.ui.form.inverted input[type=datetime-local]:-ms-input-placeholder,
+.ui.form.inverted input[type=email]:-ms-input-placeholder,
+.ui.form.inverted input[type=file]:-ms-input-placeholder,
+.ui.form.inverted input[type=number]:-ms-input-placeholder,
+.ui.form.inverted input[type=password]:-ms-input-placeholder,
+.ui.form.inverted input[type=search]:-ms-input-placeholder,
+.ui.form.inverted input[type=tel]:-ms-input-placeholder,
+.ui.form.inverted input[type=text]:-ms-input-placeholder,
+.ui.form.inverted input[type=time]:-ms-input-placeholder,
+.ui.form.inverted input[type=url]:-ms-input-placeholder {
+  color: #999999;
+}
+.ui.form.inverted input:not([type])::placeholder,
+.ui.form.inverted input[type=date]::placeholder,
+.ui.form.inverted input[type=datetime-local]::placeholder,
+.ui.form.inverted input[type=email]::placeholder,
+.ui.form.inverted input[type=file]::placeholder,
+.ui.form.inverted input[type=number]::placeholder,
+.ui.form.inverted input[type=password]::placeholder,
+.ui.form.inverted input[type=search]::placeholder,
+.ui.form.inverted input[type=tel]::placeholder,
+.ui.form.inverted input[type=text]::placeholder,
+.ui.form.inverted input[type=time]::placeholder,
+.ui.form.inverted input[type=url]::placeholder {
+  color: #999999;
+}
+.ui.form.inverted .icon {
+  color: #999999;
 }
 .ui.form .error:not(.field) {
   font-size: 0.85714286rem;

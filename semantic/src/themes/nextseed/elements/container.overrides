@@ -153,6 +153,36 @@ div.login-form {
 		display:inline-block;
 		vertical-align:middle;
 	}
+	.item.notification{
+		position:relative;
+		display:block;
+		float:right;
+		height:42px;
+		padding:10px 0;
+		.icon{
+			font-size:@22px;
+			color:@tertiary-text;
+			color:@white;
+			height:auto;
+			line-height:1;
+		}
+		span.unread-count{
+			height:18px;
+			min-width:18px;
+			padding:0 5px;
+			border-radius:10px;
+			font-size:@12px;
+			// font-weight:500;
+			color:@inverse-text;
+			line-height:@18px;
+			display:block;
+			text-align:center;
+			background:@highlight-primary;
+			position:absolute;
+			right:-6px;
+			bottom:6px;
+		}
+	}
 }
 .search-filters{
 	background-color:@secondary-text;

@@ -297,6 +297,35 @@ div.login-form ul.error-messages {
   display: inline-block;
   vertical-align: middle;
 }
+.page-header-section .item.notification {
+  position: relative;
+  display: block;
+  float: right;
+  height: 42px;
+  padding: 10px 0;
+}
+.page-header-section .item.notification .icon {
+  font-size: 1.57142857rem;
+  color: #828282;
+  color: #FFFFFF;
+  height: auto;
+  line-height: 1;
+}
+.page-header-section .item.notification span.unread-count {
+  height: 18px;
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 10px;
+  font-size: 0.85714286rem;
+  color: #FFFFFF;
+  line-height: 1.28571429rem;
+  display: block;
+  text-align: center;
+  background: #EB5757;
+  position: absolute;
+  right: -6px;
+  bottom: 6px;
+}
 .search-filters {
   background-color: #4f4f4f;
   padding: 1rem 2.85714286rem;

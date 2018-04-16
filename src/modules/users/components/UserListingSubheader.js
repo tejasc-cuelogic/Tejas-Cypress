@@ -23,8 +23,14 @@ const userListingSubheader = props => (
               FILTERS <Icon name="caret down" />
             </Button>
           </Grid.Column>
-          <Grid.Column width={4} textAlign="right">
+          <Grid.Column width={3} textAlign="right">
             <Button color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
+          </Grid.Column>
+          <Grid.Column floated="right" textAlign="right">
+            <a className="item notification" href="#">
+              <Icon name="bell" />
+              <span className="unread-count">3</span>
+            </a>
           </Grid.Column>
         </Grid.Row>
       </Grid>
