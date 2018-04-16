@@ -124,11 +124,15 @@ export const IDENTITY_QUESTIONS_FORM_VALUES = {
 export const CONFIRM_IDENTITY_DOCUMENTS = {
   photoId: {
     key: 'photoId',
-    nameOfUploadedFile: '',
+    value: '',
+    error: undefined,
+    rule: 'required',
   },
   proofOfResidence: {
     key: 'proofOfResidence',
-    nameOfUploadedFile: '',
+    value: '',
+    error: undefined,
+    rule: 'required',
   },
 };
 

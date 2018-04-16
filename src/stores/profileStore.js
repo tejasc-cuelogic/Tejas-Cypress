@@ -83,8 +83,18 @@ export class ProfileStore {
   }
 
   @action
-  setConfirmIdentityDocuments(field, name) {
-    this.confirmIdentityDocuments[field].nameOfUploadedFile = name;
+  setConfirmIdentityDocuments(field, value) {
+    this.confirmIdentityDocuments[field].value = value;
+  }
+
+  @action
+  setConfirmIdentityDocumentsError(field, error) {
+    this.confirmIdentityDocuments[field].error = error;
+  }
+
+  @computed
+  get canSubmitConfirmIdentityDocumentsForm() {
+    return _.isEmpty(_.filter(this.confirmIdentityDocuments, field => field.error));
   }
 }
 export default new ProfileStore();
