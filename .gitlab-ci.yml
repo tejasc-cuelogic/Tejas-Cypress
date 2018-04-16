@@ -36,6 +36,7 @@ deploying-code-dev:
       - develop
   environment:
     name: dev
+    url:  http://ns-client-dev.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
