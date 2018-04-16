@@ -72,6 +72,7 @@ export default class PersonalInformation extends Component {
                       name={entityAccount.photoId.key}
                       type="file"
                       onChange={this.uploadDocument}
+                      accept=".jpg,.jpeg,.pdf"
                     />
                   </div>
                 }

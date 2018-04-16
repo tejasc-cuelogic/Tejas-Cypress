@@ -47,6 +47,7 @@ export default class FormationDocumemts extends Component {
                       name={entityAccount.entityFormationDocument.key}
                       type="file"
                       onChange={this.uploadDocument}
+                      accept=".jpg,.jpeg,.pdf"
                     />
                   </div>
                 }
@@ -73,6 +74,7 @@ export default class FormationDocumemts extends Component {
                       name={entityAccount.entityOperatingDocument.key}
                       type="file"
                       onChange={this.uploadDocument}
+                      accept=".jpg,.jpeg,.pdf"
                     />
                   </div>
                 }
@@ -99,6 +101,7 @@ export default class FormationDocumemts extends Component {
                       name={entityAccount.einVerification.key}
                       type="file"
                       onChange={this.uploadDocument}
+                      accept=".jpg,.jpeg,.pdf"
                     />
                   </div>
                 }

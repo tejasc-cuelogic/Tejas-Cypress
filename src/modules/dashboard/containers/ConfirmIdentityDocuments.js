@@ -56,6 +56,7 @@ export default class ConfirmIdentityDocuments extends Component {
                         name={confirmIdentityDocuments.photoId.key}
                         type="file"
                         onChange={this.uploadDocument}
+                        accept=".jpg,.jpeg,.pdf"
                       />
                     </div>
                   }
@@ -100,6 +101,7 @@ export default class ConfirmIdentityDocuments extends Component {
                         name={confirmIdentityDocuments.proofOfResidence.key}
                         type="file"
                         onChange={this.uploadDocument}
+                        accept=".jpg,.jpeg,.pdf"
                       />
                     </div>
                   }

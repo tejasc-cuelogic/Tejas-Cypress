@@ -30,6 +30,7 @@ export default class Identity extends Component {
                   name={driversLicence.key}
                   type="file"
                   onChange={this.uploadDocument}
+                  accept=".jpg,.jpeg,.pdf"
                 />
               </div>
             }
