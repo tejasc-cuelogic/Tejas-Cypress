@@ -8,3 +8,4 @@ export { default as userStore } from './userStore';
 export { default as uiStore } from './uiStore';
 export { default as offeringsStore } from './offeringsStore';
 export { default as accountStore } from './accountStore';
+export { default as entityAccountStore } from './user/entityAccountStore';
