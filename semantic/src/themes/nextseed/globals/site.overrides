@@ -36,13 +36,13 @@
 
 
 //	Multistep modal navigation
-ol.progtrckr {
+ol.progtrckr{
 	margin:0;
-	padding:@24px 0 @40px;
+	padding:@24px 0 @26px;
 	list-style-type:none;
 	text-align:center;
-	li {
-		margin:0 @10px;
+	li{
+		margin:0 @10px @14px;
 		min-width:60px;
 		display:inline-block;
 		font-family:@boldFont;
@@ -62,23 +62,25 @@ ol.progtrckr {
 			left:50%;
 			transform:translate(-50%, 0%);
 		}
-		&.progtrckr-todo {
+		&.progtrckr-todo{
 			color:@lighten-text;
 			&:after{
 				background:@lighten-text;
 			}
 		}
-		&.progtrckr-doing {
+		&.progtrckr-doing{
 			color:@white;
 			&:after{
 				background:@white;
 			}
 		}
-		&.progtrckr-done {
+		&.progtrckr-done{
 			color:@theme-primary;
 			&:after{
 				background:@theme-primary;
 			}
+		}
+		&.progtrckr-todo, &.progtrckr-doing, &.progtrckr-done{
 			&.error{
 				color:@highlight-primary;
 				&:after{
@@ -89,13 +91,13 @@ ol.progtrckr {
 	}
 }
 
-@media (max-width:650px) {
-    .progtrckr li span {
+@media (max-width:650px){
+    .progtrckr li span{
 		display:none;
     }
 }
-@media (max-width:650px) {
-    .progtrckr em {
+@media (max-width:650px){
+    .progtrckr em{
 		display:inline;
     }
 }

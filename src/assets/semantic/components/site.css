@@ -226,12 +226,12 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 }
 ol.progtrckr {
   margin: 0;
-  padding: 1.71428571rem 0 2.85714286rem;
+  padding: 1.71428571rem 0 1.85714286rem;
   list-style-type: none;
   text-align: center;
 }
 ol.progtrckr li {
-  margin: 0 0.71428571rem;
+  margin: 0 0.71428571rem 1rem;
   min-width: 60px;
   display: inline-block;
   font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -271,9 +271,13 @@ ol.progtrckr li.progtrckr-done {
 ol.progtrckr li.progtrckr-done:after {
   background: #98CE23;
 }
+ol.progtrckr li.progtrckr-todo.error,
+ol.progtrckr li.progtrckr-doing.error,
 ol.progtrckr li.progtrckr-done.error {
   color: #EB5757;
 }
+ol.progtrckr li.progtrckr-todo.error:after,
+ol.progtrckr li.progtrckr-doing.error:after,
 ol.progtrckr li.progtrckr-done.error:after {
   background: #EB5757;
 }
