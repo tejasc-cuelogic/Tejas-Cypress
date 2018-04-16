@@ -6,7 +6,14 @@ import businessStore from './../stores/businessStore';
 import userStore from './../stores/userStore';
 import profileStore from './../stores/profileStore';
 import accountStore from './../stores/accountStore';
-import { REGISTRATION, PROFILE_DETAILS, CONDITIONAL_REQUIRE, CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE, CONFIRM_PHONE_NUMBER_VERIFICATION_CODE, CONFIRM_IDENTITY_QUESTIONS, LINK_BANK_ACCCOUNT_FORM } from './../constants/validation';
+import { REGISTRATION,
+  PROFILE_DETAILS,
+  CONDITIONAL_REQUIRE,
+  CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE,
+  CONFIRM_PHONE_NUMBER_VERIFICATION_CODE,
+  CONFIRM_IDENTITY_QUESTIONS,
+  LINK_BANK_ACCCOUNT_FORM,
+  CONFIRM_IDENTITY_DOCUMENTS_FORM } from './../constants/validation';
 
 /**
  * @desc Validation class for form inputs
@@ -371,6 +378,33 @@ export class Validation {
         const { errors } = validationService.validate(value);
         // Store errors to store if any or else `undefined` will get set to it
         accountStore.setIndividualAccountError(key, errors && errors[key][0]);
+      }
+    });
+  }
+
+  /**
+   * @desc Validates Confirm Identity Documents Form.
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateConfirmIdentityDocumentsField = (field, value) => {
+    profileStore.setConfirmIdentityDocuments(field, value);
+    const { errors } = validationService.validate(profileStore.confirmIdentityDocuments[field]);
+    profileStore.setConfirmIdentityDocumentsError(field, errors && errors[field][0]);
+  }
+
+  /**
+   * @desc Validates Confirm Identity Documents Form
+   */
+  validateConfirmIdentityDocumentsForm = () => {
+    _.map(profileStore.confirmIdentityDocuments, (value) => {
+      const { key } = value;
+      // Select only required values and exclude others from being checked
+      if (CONFIRM_IDENTITY_DOCUMENTS_FORM.includes(key)) {
+        const { errors } = validationService.validate(value);
+        // Store errors to store if any or else `undefined` will get set to it
+        profileStore.setConfirmIdentityDocumentsError(key, errors && errors[key][0]);
       }
     });
   }
