@@ -96,8 +96,7 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
-      <li className={this.getClassName('progtrckr', i)} onClick={this.handleOnClick} key={i} value={i}>
-        {/* <em>{i + 1}</em> */}
+      <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid}`} onClick={this.handleOnClick} key={i} value={i}>
         {this.props.steps[i].name}
       </li>
     ));
@@ -108,7 +107,7 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/no-static-element-interactions */
       <div onKeyDown={this.handleKeyDown}>
         <Modal size="small" basic open closeIcon className="multistep-modal" closeOnRootNodeClick={false} onClose={() => this.props.setDashboardWizardStep()}>
-          <Header as="h1" textAlign="center">{this.props.step}</Header>
+          <Header as="h1" textAlign="center">{this.props.formTitle}</Header>
           <ol className="progtrckr">
             {this.renderSteps()}
           </ol>
