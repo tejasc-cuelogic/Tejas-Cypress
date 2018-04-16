@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class Home extends Component {
   render() {
-      console.log(process.env);
+    console.log(process.env);
     return (
       <div className="ui vertical segment content">
         <div className="ui container">
