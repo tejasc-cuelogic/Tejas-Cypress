@@ -90,4 +90,3 @@ class EntityAccountStore {
 }
 
 export default new EntityAccountStore();
-
