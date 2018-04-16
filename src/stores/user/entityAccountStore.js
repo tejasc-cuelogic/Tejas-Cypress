@@ -1,4 +1,5 @@
 import { action, observable } from 'mobx';
+import moment from 'moment';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 
@@ -71,9 +72,35 @@ class EntityAccountStore {
     },
   };
 
+  @observable
+  formEntityInfo = {
+    fields: {
+      isEntityTrust: {
+        value: 'yes',
+        key: 'isEntityTrust',
+        error: undefined,
+        rule: 'required',
+        label: '',
+        placeHolder: '',
+      },
+      dateOfTrust: {
+        value: moment(),
+        key: 'dateOfTrust',
+        error: undefined,
+        rule: 'required',
+        label: 'Date of Trust',
+        placeHolder: '',
+      },
+    },
+    meta: {
+      isValid: true,
+      error: '',
+    },
+  };
+
   @action
   finInfoChange = (field, value) => {
-    this.onFieldChange('formFinInfo', field, value);
+    this.onFieldChange('formEntityInfo', field, value);
   };
 
   @action

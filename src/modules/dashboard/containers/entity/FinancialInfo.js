@@ -6,17 +6,14 @@ import validationActions from '../../../../actions/validation';
 import FormRadioInput from '../../../../components/form/FormRadioInput';
 import DatePicker from '../../../../components/form/DatePicker';
 
-@inject('accountStore')
+@inject('accountStore', 'entityAccountStore')
 @observer
 export default class AccountType extends Component {
-  handleChange = (e, { name, value }) => {
-    this.props.accountStore.setEntityAccountDetails(name, value);
-  }
   handleDateChange = (date) => {
     validationActions.validateEntityAccountField('dateOfTrust', date);
   }
   render() {
-    const { entityAccount } = this.props.accountStore;
+    const { formEntityInfo, finInfoChange } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Is entity a trust?</Header>
@@ -25,26 +22,26 @@ export default class AccountType extends Component {
           <Form.Group inline className="button-radio center-align">
             <FormRadioInput
               label="Yes"
-              name={entityAccount.isEntityTrust.key}
+              name={formEntityInfo.fields.isEntityTrust.key}
               value="yes"
-              checked={entityAccount.isEntityTrust.value === 'yes'}
-              changed={this.handleChange}
+              checked={formEntityInfo.fields.isEntityTrust.value === 'yes'}
+              changed={finInfoChange}
             />
             <FormRadioInput
               label="No"
-              name={entityAccount.isEntityTrust.key}
+              name={formEntityInfo.fields.isEntityTrust.key}
               value="no"
-              checked={entityAccount.isEntityTrust.value === 'no'}
-              changed={this.handleChange}
+              checked={formEntityInfo.fields.isEntityTrust.value === 'no'}
+              changed={finInfoChange}
             />
           </Form.Group>
           <div className="field-wrap">
             <DatePicker
-              label={entityAccount.dateOfTrust.label}
-              placeholderText={entityAccount.dateOfTrust.placeHolder}
-              selected={entityAccount.dateOfTrust.value}
+              label={formEntityInfo.fields.dateOfTrust.label}
+              placeholderText={formEntityInfo.fields.dateOfTrust.placeHolder}
+              selected={formEntityInfo.fields.dateOfTrust.value}
               changed={this.handleDateChange}
-              isdisabled={entityAccount.isEntityTrust.value === 'no'}
+              isdisabled={formEntityInfo.fields.isEntityTrust.value === 'no'}
             />
           </div>
         </Form>
