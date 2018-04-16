@@ -7,7 +7,7 @@ import FormInput from '../../../../components/form/FormInput';
 @observer
 export default class FinancialInformation extends Component {
   render() {
-    const { formFinInfo, onFieldChange } = this.props.entityAccountStore;
+    const { formFinInfo, finInfoChange } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Complete financial info about entity</Header>
@@ -21,7 +21,7 @@ export default class FinancialInformation extends Component {
               tooltip="What is your net entity assets?"
               value={formFinInfo.fields.entityNetAssets.value}
               error={formFinInfo.fields.entityNetAssets.error}
-              changed={onFieldChange}
+              changed={finInfoChange}
             />
             <FormInput
               type="text"
@@ -30,7 +30,7 @@ export default class FinancialInformation extends Component {
               tooltip="Other religion CF investments made in prior 12 months"
               value={formFinInfo.fields.cfInvestments.value}
               error={formFinInfo.fields.cfInvestments.error}
-              changed={onFieldChange}
+              changed={finInfoChange}
             />
           </div>
         </Form>
