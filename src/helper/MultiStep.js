@@ -1,6 +1,21 @@
 import React from 'react';
 import { Modal, Header, Button } from 'semantic-ui-react';
 
+const getNavStates = (indx, length) => {
+  const styles = [];
+  /* eslint-disable no-plusplus */
+  for (let i = 0; i < length; i++) {
+    if (i < indx) {
+      styles.push('done');
+    } else if (i === indx) {
+      styles.push('doing');
+    } else {
+      styles.push('todo');
+    }
+  }
+  return { current: indx, styles };
+};
+
 export default class MultiStep extends React.Component {
   constructor(props) {
     super(props);
@@ -8,7 +23,7 @@ export default class MultiStep extends React.Component {
       showPreviousBtn: false,
       showNextBtn: true,
       compState: 0,
-      navState: this.getNavStates(0, this.props.steps.length),
+      navState: getNavStates(0, this.props.steps.length),
     };
     this.hidden = {
       display: 'none',
@@ -19,28 +34,12 @@ export default class MultiStep extends React.Component {
     this.previous = this.previous.bind(this);
   }
 
-  getNavStates(indx, length) {
-    console.log(this);
-    const styles = [];
-    /* eslint-disable no-plusplus */
-    for (let i = 0; i < length; i++) {
-      if (i < indx) {
-        styles.push('done');
-      } else if (i === indx) {
-        styles.push('doing');
-      } else {
-        styles.push('todo');
-      }
-    }
-    return { current: indx, styles };
-  }
-
   getClassName(className, i) {
     return `${className}-${this.state.navState.styles[i]}`;
   }
 
   setNavState(next) {
-    this.setState({ navState: this.getNavStates(next, this.props.steps.length) });
+    this.setState({ navState: getNavStates(next, this.props.steps.length) });
     if (next < this.props.steps.length) {
       this.setState({ compState: next });
     }
@@ -91,6 +90,9 @@ export default class MultiStep extends React.Component {
     }
   }
 
+  /**
+   * @todo Remove eslint-disbable comments and make appripriate changes
+   */
   renderSteps() {
     return this.props.steps.map((s, i) => (
       /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
@@ -116,19 +118,15 @@ export default class MultiStep extends React.Component {
             <Button
               circular
               icon="arrow left"
-              // style={this.state.showPreviousBtn ? {} : this.hidden}
               className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
               onClick={this.previous}
             />
             <Button
               circular
               icon="arrow right"
-              // style={this.state.showNextBtn ? {} : this.hidden}
               className={(this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
               onClick={this.next}
             />
-            {/* <div className="multistep-nav" style={this.props.showNavigation ? {} : this.hidden}>
-            </div> */}
           </Modal.Content>
         </Modal>
       </div>

@@ -16,7 +16,7 @@ export default class AccountCreation extends React.Component {
     [
       { name: 'Financial info', component: <FinancialInformation />, isValid: this.props.accountStore.isValidIraFinancialInformation ? '' : 'error' },
       { name: 'Account type', component: <AccountType />, isValid: '' },
-      { name: 'Funding', component: <Funding />, isValid: 'error' },
+      { name: 'Funding', component: <Funding />, isValid: '' },
       { name: 'Identity', component: <Identity />, isValid: '' },
       { name: 'Summary', component: <Summary />, isValid: '' },
     ];
