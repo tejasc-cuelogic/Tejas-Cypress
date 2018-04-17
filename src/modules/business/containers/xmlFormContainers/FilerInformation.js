@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Card } from 'semantic-ui-react';
+import { Form, Card, Divider, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import validationActions from '../../../../actions/validation';
@@ -120,6 +120,13 @@ export default class FilerInformation extends React.Component {
             disabled={!filerInformation.overrideInternetFlag.value}
           />
         </Card>
+        <Divider hidden />
+        <div className="right-align">
+          <Button as="" size="large" to="">Cancel</Button>
+          <Button color="green" size="large">
+            Save & Next <Icon name="chevron right" />
+          </Button>
+        </div>
       </div>
     );
   }

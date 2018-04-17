@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Card, Header, Form, Button } from 'semantic-ui-react';
+import { Card, Header, Form, Button, Divider, Icon } from 'semantic-ui-react';
 
 import PersonalSignature from '../../components/PersonalSignature';
 import businessActions from '../../../../actions/business';
@@ -72,6 +72,17 @@ export default class Signature extends React.Component {
             <Button color="grey" compact onClick={this.handleAdd}>Add</Button>
           </div>
         </Card>
+        <Divider hidden />
+        <div className="right-align">
+          <Button color="green" size="large" className="pull-left">
+            <Icon name="chevron left" />
+            Back
+          </Button>
+          <Button as="" size="large" to="">Cancel</Button>
+          <Button color="green" size="large">
+            Save
+          </Button>
+        </div>
       </div>
     );
   }
