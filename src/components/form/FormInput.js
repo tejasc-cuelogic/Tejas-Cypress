@@ -22,7 +22,7 @@ const FormInput = props => (
       label={false}
       type={props.type || 'text'}
       error={props.error !== ''}
-      onChange={e => props.changed(e.target.name, e.target.value)}
+      onChange={e => props.changed(e.target.name, e.target.files)}
     />
     {props.error &&
       <FieldError error={props.error} />

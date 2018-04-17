@@ -113,17 +113,69 @@ class EntityAccountStore {
         value: '',
         key: 'photoId',
         error: undefined,
-        rule: '',
-        label: '',
+        rule: 'required',
+        label: 'Upload a Photo ID',
+        sublabel: 'Drivers License or Passport',
         placeHolder: '',
       },
     },
-  }
+    meta: {
+      isValid: true,
+      error: '',
+    },
+  };
+
+  @observable
+  formFormationDocuments = {
+    fields: {
+      entityFormationDocument: {
+        value: '',
+        key: 'entityFormationDocument',
+        error: undefined,
+        rule: 'required',
+        label: 'Entity Formation Document',
+        placeHolder: '',
+      },
+      entityOperatingDocument: {
+        value: '',
+        key: 'entityOperatingDocument',
+        error: undefined,
+        rule: 'required',
+        label: 'Entity Operating Document',
+        placeHolder: '',
+      },
+      einVerification: {
+        value: '',
+        key: 'einVerification',
+        error: undefined,
+        rule: 'required',
+        label: 'EIN Verification',
+        placeHolder: '',
+      },
+    },
+    meta: {
+      isValid: true,
+      error: '',
+    },
+  };
 
   @action
   finInfoChange = (field, value) => {
     this.onFieldChange('formPersonalInfo', field, value);
   };
+
+  @action
+  onFileUpload = (field, files) => {
+    if (files.length) {
+      const uploadFile = files[0];
+      this.onFieldChange('formFormationDocuments', field, uploadFile.name);
+    }
+  }
+
+  @action
+  resetFieldValue = (field) => {
+    this.onFieldChange('formFormationDocuments', field, '');
+  }
 
   @action
   onFieldChange = (currentForm, field, value) => {
