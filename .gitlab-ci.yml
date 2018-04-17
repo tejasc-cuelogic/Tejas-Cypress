@@ -7,6 +7,25 @@ stages:
   - build
   - deploy
   
+#Building code
+building-code-dev:
+  cache:
+    paths:
+    - node_modules/
+  only:
+    refs:
+      - branches
+  tags:
+    - ns-client
+  stage: build
+  script:
+    - echo "current branch = ${CI_COMMIT_REF_NAME}"
+  artifacts:
+    paths:
+    - build/
+    expire_in: 1 day
+
+
 #---------------------------------Dev-------------------------------------------
 
 #Building code
