@@ -35,10 +35,10 @@ export class Account {
       }
     }
 
-    validationActions.validateEntityAccountField('street', residentalStreet);
-    validationActions.validateEntityAccountField('city', city);
-    validationActions.validateEntityAccountField('state', state);
-    validationActions.validateEntityAccountField('zipCode', zipCode);
+    validationActions.validateEntityAccountField('street', residentalStreet.join(''));
+    validationActions.validateEntityAccountField('city', city.join(''));
+    validationActions.validateEntityAccountField('state', state.join(''));
+    validationActions.validateEntityAccountField('zipCode', zipCode.join(''));
   }
 }
 
