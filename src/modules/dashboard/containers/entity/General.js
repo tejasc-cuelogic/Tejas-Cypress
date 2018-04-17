@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import FormInput from '../../../../components/form/FormInput';
+import { US_STATES } from '../../../../constants/account';
+import { FormInput, FormSelect } from '../../../../components/form/FormElements';
 
 @inject('entityAccountStore')
 @observer
 export default class General extends Component {
   render() {
-    const { formGeneralInfo, finInfoChange } = this.props.entityAccountStore;
+    const { formGeneralInfo, genInfoChange } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">General Information</Header>
@@ -20,7 +21,7 @@ export default class General extends Component {
               value={formGeneralInfo.fields.nameOfEntity.value}
               error={formGeneralInfo.fields.nameOfEntity.error}
               placeholder="e.g. Pad Wealth"
-              changed={finInfoChange}
+              changed={genInfoChange}
             />
             <FormInput
               type="text"
@@ -29,7 +30,7 @@ export default class General extends Component {
               value={formGeneralInfo.fields.taxId.value}
               error={formGeneralInfo.fields.taxId.error}
               placeholder="e.g. 12345"
-              changed={finInfoChange}
+              changed={genInfoChange}
             />
             <h5>Entity Address</h5>
             <FormInput
@@ -38,7 +39,7 @@ export default class General extends Component {
               label={formGeneralInfo.fields.street.label}
               value={formGeneralInfo.fields.street.value}
               error={formGeneralInfo.fields.street.error}
-              changed={finInfoChange}
+              changed={genInfoChange}
             />
             <Form.Group widths="equal">
               <FormInput
@@ -47,7 +48,15 @@ export default class General extends Component {
                 label={formGeneralInfo.fields.city.label}
                 value={formGeneralInfo.fields.city.value}
                 error={formGeneralInfo.fields.city.error}
-                changed={finInfoChange}
+                changed={genInfoChange}
+              />
+              <FormSelect
+                name="state"
+                label={formGeneralInfo.fields.state.label}
+                value={formGeneralInfo.fields.state.value}
+                error={formGeneralInfo.fields.state.error}
+                options={US_STATES}
+                changed={genInfoChange}
               />
               <FormInput
                 type="text"
@@ -55,7 +64,7 @@ export default class General extends Component {
                 label={formGeneralInfo.fields.zipCode.label}
                 value={formGeneralInfo.fields.zipCode.value}
                 error={formGeneralInfo.fields.zipCode.error}
-                changed={finInfoChange}
+                changed={genInfoChange}
               />
             </Form.Group>
           </div>

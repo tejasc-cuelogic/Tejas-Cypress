@@ -177,6 +177,10 @@ class EntityAccountStore {
     this.onFieldChange('formFormationDocuments', field, '');
   }
 
+  genInfoChange = (e, { name, value }) => {
+    this.onFieldChange('formGeneralInfo', name, value);
+  };
+
   @action
   onFieldChange = (currentForm, field, value) => {
     const form = currentForm || 'formFinInfo';
