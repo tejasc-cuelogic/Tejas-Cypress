@@ -19636,7 +19636,7 @@ ol.ui.horizontal.list li:before,
 }
 
 .card.editable .actions .button {
-  padding: 0.5rem 1.5rem 0.5rem;
+  padding: 0.5rem 1rem 0.5rem;
   text-transform: uppercase;
 }
 

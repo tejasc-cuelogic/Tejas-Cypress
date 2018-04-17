@@ -66,7 +66,7 @@ class Login extends Component {
             />
             <FieldError error={values.password.error} />
             <div className="center-align">
-              <Button circular primary onClick={() => this.props.setAuthWizardStep('InvestorPersonalDetails')} size="large">Log in</Button>
+              <Button primary onClick={() => this.props.setAuthWizardStep('InvestorPersonalDetails')} size="large">Log in</Button>
             </div>
           </Form>
         </Modal.Content>

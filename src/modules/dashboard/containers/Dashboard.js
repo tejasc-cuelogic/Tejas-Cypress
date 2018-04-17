@@ -59,7 +59,7 @@ class Dashboard extends Component {
                     <Statistic.Value>Verify your identity</Statistic.Value>
                     <Statistic.Label>Complete all required information about you</Statistic.Label>
                   </Statistic>
-                  <Button primary circular as={Link} floated="right"
+                  <Button primary as={Link} floated="right"
                   className="pull-right" to="">Verify me</Button>
                 </Card.Content>
               </Card>

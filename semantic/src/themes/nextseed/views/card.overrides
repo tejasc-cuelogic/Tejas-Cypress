@@ -105,9 +105,9 @@
             color:@quaternary-text;
             text-transform:uppercase;
         }
-        .description p{
-            // font-family:@boldFont;
-        }
+        // .description p{
+        //     font-family:@boldFont;
+        // }
     }
 }
 .sticky-notification{

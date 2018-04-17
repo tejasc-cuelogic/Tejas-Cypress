@@ -103,7 +103,7 @@ export default class NewBusinessForm extends React.Component {
     return (
       <div>
         {!this.props.businessid &&
-          <Button circular primary floated="right" onClick={this.handleOpenModal}>+ New Business</Button>
+          <Button primary floated="right" onClick={this.handleOpenModal}>+ New Business</Button>
         }
         <Modal
           size="small"
