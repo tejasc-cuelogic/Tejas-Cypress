@@ -27792,7 +27792,8 @@ a.ui.card:hover,
          Theme Overrides
 *******************************/
 
-.card.form-card {
+.card.form-card,
+.cards > .card.form-card {
   border-radius: 0.71428571em;
   padding: 2.28571429rem;
   background-color: #ffffff;
@@ -27800,29 +27801,35 @@ a.ui.card:hover,
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.card.form-card h3 {
+.card.form-card h3,
+.cards > .card.form-card h3 {
   font-size: 18px;
   margin-bottom: 1.57142857rem;
 }
 
-.card.form-card h4 {
+.card.form-card h4,
+.cards > .card.form-card h4 {
   font-size: 14px;
   color: #4f4f4f;
 }
 
-.card.form-card h4 .checkbox label {
+.card.form-card h4 .checkbox label,
+.cards > .card.form-card h4 .checkbox label {
   font-weight: normal;
 }
 
-.card.form-card .grid.divided .column {
+.card.form-card .grid.divided .column,
+.cards > .card.form-card .grid.divided .column {
   padding: 0 3.28571429rem;
 }
 
-.card.form-card .grid.divided .column:first-child {
+.card.form-card .grid.divided .column:first-child,
+.cards > .card.form-card .grid.divided .column:first-child {
   padding-left: 1rem;
 }
 
-.card.form-card .grid.divided .column:last-child {
+.card.form-card .grid.divided .column:last-child,
+.cards > .card.form-card .grid.divided .column:last-child {
   padding-right: 1rem;
 }
 
