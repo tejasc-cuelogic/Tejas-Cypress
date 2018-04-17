@@ -18,7 +18,7 @@ const userListingSubheader = props => (
             </Form>
           </Grid.Column>
           <Grid.Column width={3} textAlign="center">
-            <span className="filter-count">0</span>
+            <span className="filter-count">{Object.keys(props.requestState.search).length}</span>
             <Button icon color="green" onClick={props.toggleSearch} className="link-button">
               FILTERS <Icon name="caret down" />
             </Button>
