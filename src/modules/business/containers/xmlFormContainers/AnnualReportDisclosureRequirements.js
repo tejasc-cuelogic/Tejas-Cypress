@@ -2,11 +2,14 @@ import React from 'react';
 // import _ from 'lodash';
 import { Header, Form, Dropdown, Card, Input, Label, Divider, Icon, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom'; // Redirect
 
 import { COUNTRIES } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
+import busiessActions from '../../../../actions/business';
 
 @inject('businessStore')
+@withRouter
 @observer
 export default class AnnualReportDisclosureRequirements extends React.Component {
   handleInputChange = (e, { name, value }) => {
@@ -17,6 +20,16 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
 
   handleSelectChange = (e, { dataidentifier, name, value }) => {
     this.props.businessStore.setCountry(dataidentifier, name, value);
+  }
+
+  handleBusinessCancel = () => {
+    this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+  }
+
+  handleAnnualSubmit = (e) => {
+    e.preventDefault();
+    const { annualReportRequirements } = this.props.businessStore;
+    busiessActions.validateAnnualReportInfo(annualReportRequirements);
   }
 
   render() {
@@ -416,8 +429,8 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             <Icon name="chevron left" />
             Back
           </Button>
-          <Button as="" size="large" to="">Cancel</Button>
-          <Button color="green" size="large">
+          <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
+          <Button color="green" size="large" onClick={this.handleAnnualSubmit}>
             Save & Next <Icon name="chevron right" />
           </Button>
         </div>

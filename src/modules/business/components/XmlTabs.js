@@ -9,7 +9,7 @@ const XmlSubmissionTabs = props => (
       {_.map(props.tabs, tab => (
         <Step
           active={props.xmlActiveTabId === tab.id}
-          disabled={!props.xmlActiveTabId === tab.id}
+          disabled={tab.id > 0 && !props.xmlId}
           onClick={() => props.handleXmlActiveTab(tab.id)}
         >
           <Step.Content>

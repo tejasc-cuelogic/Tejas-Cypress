@@ -3,12 +3,14 @@ import { Form, Card, Divider, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-// import moment from 'moment';
+import { withRouter } from 'react-router-dom'; // Redirect
 
 import { US_STATES, LEGAL_FORM_TYPES } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
+import busiessActions from '../../../../actions/business';
 
 @inject('businessStore')
+@withRouter
 @observer
 export default class IssuerInformation extends React.Component {
   getOtherDescriptionClass = () => this.issuerInformation.legalStatusForm.value !== 'Other'
@@ -26,6 +28,16 @@ export default class IssuerInformation extends React.Component {
 
   handleSelectChange = (e, { dataidentifier, name, value }) => {
     this.props.businessStore.setCountry(dataidentifier, name, value);
+  }
+
+  handleBusinessCancel = () => {
+    this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+  }
+
+  handleIssuerInformationSubmit = (e) => {
+    e.preventDefault();
+    const { issuerInformation } = this.props.businessStore;
+    busiessActions.validateIssuerInfo(issuerInformation);
   }
 
   render() {
@@ -215,8 +227,8 @@ export default class IssuerInformation extends React.Component {
             <Icon name="chevron left" />
             Back
           </Button>
-          <Button as="" size="large" to="">Cancel</Button>
-          <Button color="green" size="large">
+          <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
+          <Button color="green" size="large" onClick={this.handleIssuerInformationSubmit}>
             Save & Next <Icon name="chevron right" />
           </Button>
         </div>

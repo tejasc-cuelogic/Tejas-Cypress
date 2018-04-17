@@ -3,12 +3,14 @@ import { Form, Card, Divider, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import { withRouter } from 'react-router-dom'; // Redirect
 
 import {
   OFFERED_SECURITIES,
   OVER_SUBSCRIPTION_ALLOCATION_TYPES,
 } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
+import busiessActions from '../../../../actions/business';
 
 const LABEL = 'Amount of compensation to be paid to the intermediary,' +
   'whether as a dollar amount or a percentage of the offering amount, ' +
@@ -20,6 +22,7 @@ const LABEL1 = 'Any other financial interest in the issuer held by the intermedi
   'or any arrangement for the intermediary to acquire such an interest';
 
 @inject('businessStore')
+@withRouter
 @observer
 export default class OfferingInformation extends React.Component {
   getSubscriptionDescClass = () => (
@@ -41,6 +44,16 @@ export default class OfferingInformation extends React.Component {
 
   handleDateChange = (date) => {
     validationActions.validateOfferingInfoField('deadlineDate', date);
+  }
+
+  handleBusinessCancel = () => {
+    this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+  }
+
+  handleOfferingInformationSubmit = (e) => {
+    e.preventDefault();
+    const { offeringInformation } = this.props.businessStore;
+    busiessActions.validateOfferingInfo(offeringInformation);
   }
 
   render() {
@@ -202,8 +215,8 @@ export default class OfferingInformation extends React.Component {
             <Icon name="chevron left" />
             Back
           </Button>
-          <Button as="" size="large" to="">Cancel</Button>
-          <Button color="green" size="large">
+          <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
+          <Button color="green" size="large" onClick={this.handleOfferingInformationSubmit}>
             Save & Next <Icon name="chevron right" />
           </Button>
         </div>

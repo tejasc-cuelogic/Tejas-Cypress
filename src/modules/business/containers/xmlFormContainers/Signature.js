@@ -1,12 +1,14 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Card, Header, Form, Button, Divider, Icon } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom'; // Redirect
 
 import PersonalSignature from '../../components/PersonalSignature';
 import businessActions from '../../../../actions/business';
 import validationActions from '../../../../actions/validation';
 
 @inject('businessStore')
+@withRouter
 @observer
 export default class Signature extends React.Component {
   handleChange = (e, { name, value }) => this.props.businessStore.setSignatureInfo(name, value)
@@ -25,6 +27,10 @@ export default class Signature extends React.Component {
     businessActions.addPersonalSignature();
   }
   handleDelete = (e, { dataid }) => this.props.businessStore.deletePersonalSignature(dataid);
+
+  handleBusinessCancel = () => {
+    this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+  }
 
   render() {
     const { signature } = this.props.businessStore;
@@ -78,7 +84,7 @@ export default class Signature extends React.Component {
             <Icon name="chevron left" />
             Back
           </Button>
-          <Button as="" size="large" to="">Cancel</Button>
+          <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
           <Button color="green" size="large">
             Save
           </Button>

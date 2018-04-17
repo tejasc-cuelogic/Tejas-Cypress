@@ -108,6 +108,22 @@ export class BusinessStore {
       _.isEmpty(_.filter(this.annualReportRequirements, field => field.error));
   }
 
+  @computed get canSubmitFilerInfoXmlForm() {
+    return _.isEmpty(_.filter(this.filerInformation, field => field.error));
+  }
+
+  @computed get canSubmitIssuerInfoXmlForm() {
+    return _.isEmpty(_.filter(this.issuerInformation, field => field.error));
+  }
+
+  @computed get canSubmitOfferingInfoXmlForm() {
+    return _.isEmpty(_.filter(this.offeringInformation, field => field.error));
+  }
+
+  @computed get canSubmitAnnualReportXmlForm() {
+    return _.isEmpty(_.filter(this.annualReportRequirements, field => field.error));
+  }
+
   @computed get getSummary() {
     return this.businessList.length || 0;
   }

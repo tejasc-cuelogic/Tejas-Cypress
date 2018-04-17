@@ -28,6 +28,7 @@ export default class XmlForm extends React.Component {
   }
 
   componentDidMount() {
+    this.props.businessStore.setXmlActiveTabId(0);
     this.props.businessStore.setBusinessId(this.props.match.params.businessId);
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
     businessActions.getFiles(this.props.match.params)
@@ -109,7 +110,6 @@ export default class XmlForm extends React.Component {
               xmlActiveTabId={xmlActiveTabId}
             />
             <Grid.Column width={12}>
-              <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
               <Form className="edgar-form">
                 {xmlActiveTabId === 0 && <FilerInformation />}
                 {xmlActiveTabId === 1 && <IssuerInformation />}

@@ -649,28 +649,28 @@ export class Business {
     }
   }
 
-  validateFilerInfo = ({ filerInformation }) => {
+  validateFilerInfo = (filerInformation) => {    
     const newFiler = validationActions.validateXmlFormData(filerInformation);
     const errors = this.newValidationErrors(newFiler);
     businessStore.setFiler(newFiler);
     businessStore.setXmlError(errors);
   }
 
-  validateIssuerInfo = ({ issuerInformation }) => {
+  validateIssuerInfo = (issuerInformation) => {
     const newIssuer = validationActions.validateXmlFormData(issuerInformation);
     const errors = this.newValidationErrors(newIssuer);
     businessStore.setIssuer(newIssuer);
     businessStore.setXmlError(errors);
   }
 
-  validateOfferingInfo = ({ offeringInformation }) => {
+  validateOfferingInfo = (offeringInformation) => {
     const newOffering = validationActions.validateXmlFormData(offeringInformation);
     const errors = this.newValidationErrors(newOffering);
     businessStore.setOffering(newOffering);
     businessStore.setXmlError(errors);
   }
 
-  validateAnnualReportInfo = ({ annualReportRequirements }) => {
+  validateAnnualReportInfo = (annualReportRequirements) => {
     const newAnnualReport = validationActions.validateXmlFormData(annualReportRequirements);
     const errors = this.newValidationErrors(newAnnualReport);
     businessStore.setAnnualReport(newAnnualReport);
