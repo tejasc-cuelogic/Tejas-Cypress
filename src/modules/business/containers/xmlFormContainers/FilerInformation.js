@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Card, Divider, Button, Icon } from 'semantic-ui-react';
+import { Form, Card, Divider, Button, Icon, Popup, Input } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import validationActions from '../../../../actions/validation';
@@ -20,7 +20,23 @@ export default class FilerInformation extends React.Component {
     return (
       <div>
         <Card fluid className="form-card">
-          <Form.Group>
+          <Form.Field>
+            <Popup
+              trigger={
+                <Input
+                  value={this.props.businessStore.offeringUrl}
+                  onChange={this.handleUrlChange}
+                  className="column"
+                  width={16}
+                  placeholder="website URL"
+                />
+              }
+              content="Please enter URL of page, for which screenshot will be generated"
+              on="focus"
+              size="tiny"
+            />
+          </Form.Field>
+          <Form.Group widths="equal">
             <Form.Input
               placeholder="Filer CIK"
               label="Filer CIK"
@@ -30,7 +46,6 @@ export default class FilerInformation extends React.Component {
               onBlur={this.handleOnBlur}
               className="column"
               error={!!filerInformation.filerCik.error}
-              width={8}
             />
             <Form.Input
               placeholder="Filer CCC"
@@ -41,7 +56,6 @@ export default class FilerInformation extends React.Component {
               onBlur={this.handleOnBlur}
               className="column"
               error={!!filerInformation.filerCcc.error}
-              width={8}
             />
           </Form.Group>
           <Form.Group inline>
