@@ -21,6 +21,8 @@ export default class FilerInformation extends React.Component {
       <div>
         <Card fluid className="form-card">
           <Form.Field>
+            { /* eslint-disable jsx-a11y/label-has-for */ }
+            <label>Website URL</label>
             <Popup
               trigger={
                 <Input
