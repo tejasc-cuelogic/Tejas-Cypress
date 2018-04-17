@@ -223,7 +223,7 @@
   .ui.modal > .close {
     top: 1.196428rem;
     right: 1rem;
-    color: #303030;
+    color: #000000;
   }
 }
 
@@ -314,7 +314,7 @@
   right: 1.5rem;
 }
 .ui.inverted.dimmer > .basic.modal {
-  color: #303030;
+  color: #000000;
 }
 .ui.inverted.dimmer > .ui.basic.modal > .header {
   color: rgba(0, 0, 0, 0.85);
@@ -420,7 +420,7 @@
 .ui.fullscreen.modal > .close {
   top: 1.196428rem;
   right: 1rem;
-  color: #303030;
+  color: #000000;
 }
 
 /*--------------
@@ -602,7 +602,7 @@
   top: 0.5rem;
   right: 0.5rem;
   opacity: 0.5;
-  color: #999999;
+  color: #989898;
 }
 .ui.modal > .header:not(.ui).signup-header {
   padding-top: 3rem;
@@ -674,7 +674,7 @@
   background: transparent;
   font-size: 1.14285714rem;
   letter-spacing: 1px;
-  color: #999999;
+  color: #989898;
   text-transform: none;
 }
 .ui.modal .content a.theme-link,
@@ -684,7 +684,7 @@
 .ui.modal .content .ui.huge.input input[type=tel],
 .ui.modal .content .ui.huge.input input[type=email] {
   border: none;
-  background: #f2f2f2;
+  background: #E0E0E0;
   text-align: center;
   margin-bottom: 0.71428571rem;
 }
@@ -699,7 +699,7 @@
   top: 50%;
 }
 .ui.modal .content .ui.button.multistep__btn.disabled {
-  background: #e0e0e0;
+  background: #BDBDBD;
   color: #bdbdbd;
   opacity: 1 !important;
 }
@@ -728,7 +728,7 @@
   border: none;
 }
 .ui.modal .ui.divider {
-  color: #999999;
+  color: #989898;
 }
 .ui.modal .ui.divider:before,
 .ui.modal .ui.divider:after {
@@ -807,9 +807,9 @@
   padding-left: 13px;
   letter-spacing: 38px;
   border: none;
-  background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #e0e0e0), color-stop(0%, rgba(0, 0, 0, 0)));
-  background-image: -webkit-linear-gradient(right, #e0e0e0 75%, rgba(0, 0, 0, 0) 0%);
-  background-image: linear-gradient(to left, #e0e0e0 75%, rgba(0, 0, 0, 0) 0%);
+  background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #BDBDBD), color-stop(0%, rgba(0, 0, 0, 0)));
+  background-image: -webkit-linear-gradient(right, #BDBDBD 75%, rgba(0, 0, 0, 0) 0%);
+  background-image: linear-gradient(to left, #BDBDBD 75%, rgba(0, 0, 0, 0) 0%);
   background-position: bottom;
   background-size: 51px 1px;
   background-repeat: repeat-x;
@@ -818,7 +818,7 @@
 .ui.modal .ui.form label i.icon.help {
   margin-left: 0.5rem;
   font-size: 1rem;
-  color: #999999;
+  color: #989898;
 }
 .ui.modal .ui.form textarea {
   padding-left: 0;
@@ -828,7 +828,7 @@
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
 .ui.modal.basic.multistep-modal {
-  color: #303030;
+  color: #242424;
   will-change: auto;
 }
 .ui.modal.basic.multistep-modal > .close {
@@ -875,7 +875,7 @@
 }
 .summary-wrap .ui.items > .item .ui.image {
   padding: 1.14285714rem;
-  border-right: #f2f2f2 1px solid;
+  border-right: #E0E0E0 1px solid;
 }
 .summary-wrap .ui.items > .item .content {
   padding: 1.14285714rem 1.5rem;

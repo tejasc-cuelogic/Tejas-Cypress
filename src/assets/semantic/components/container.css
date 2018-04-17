@@ -170,7 +170,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(48, 48, 48, 0.3);
+  background-color: rgba(36, 36, 36, 0.3);
   -webkit-transform: scale(0);
           transform: scale(0);
 }
@@ -203,11 +203,11 @@ div.login-form h1.header {
 }
 div.login-form h1.header > span {
   font-size: 1.28571429rem;
-  color: #828282;
+  color: #4F4F4F;
 }
 div.login-form .note {
   text-align: center;
-  color: #828282;
+  color: #4F4F4F;
 }
 div.login-form ul.error-messages {
   list-style-type: none;
@@ -286,7 +286,7 @@ div.login-form ul.error-messages {
   padding: 0.78571429rem 0;
 }
 .page-header-section .search-filters {
-  background-color: #4f4f4f;
+  background-color: #383838;
 }
 .page-header-section .search-filters.webcontent-spacer {
   padding: 1rem 5rem;
@@ -303,7 +303,7 @@ div.login-form ul.error-messages {
 }
 .page-header-section .search-filters h5 {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  color: #999999;
+  color: #989898;
   margin: 0 0 0.5rem;
 }
 .page-header-section .actions {
@@ -314,7 +314,7 @@ div.login-form ul.error-messages {
 }
 .top-cta-section {
   height: 104px;
-  background: #4f4f4f;
+  background: #383838;
 }
 .top-cta-section .sticky-notification {
   position: relative;
@@ -380,8 +380,8 @@ div.login-form ul.error-messages {
   line-height: 1.5;
   border-radius: 4px;
   border-style: solid;
-  border-color: #999999;
-  color: #999999;
+  border-color: #989898;
+  color: #989898;
   position: relative;
 }
 .account-type + .account-type {
@@ -496,7 +496,7 @@ a.disabled:focus {
 .meta-data {
   font-size: 0.92857143rem;
   font-weight: 400;
-  color: #999999;
+  color: #989898;
   margin-left: 2.85714286rem;
 }
 .meta-data > span + span {
@@ -506,7 +506,7 @@ a.disabled:focus {
   color: #27AE60;
 }
 .check-list .item i.icon {
-  color: #e0e0e0;
+  color: #BDBDBD;
 }
 .check-list .item i.icon.check.circle {
   color: #98CE23;

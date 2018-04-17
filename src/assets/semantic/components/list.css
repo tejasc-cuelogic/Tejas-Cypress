@@ -161,7 +161,7 @@ ol.ui.list ol li,
   margin: 0em;
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
-  color: #999999;
+  color: #989898;
 }
 
 /* Description */
@@ -332,7 +332,7 @@ ol.ui.list ol li,
 
 .ui.list .list > a.item:hover .icon,
 .ui.list > a.item:hover .icon {
-  color: #303030;
+  color: #000000;
 }
 
 
@@ -566,7 +566,7 @@ ul.ui.list li:before,
 ul.ui.list li:before,
 .ui.bulleted.list .list > a.item:before,
 .ui.bulleted.list > a.item:before {
-  color: #303030;
+  color: #000000;
 }
 ul.ui.list ul,
 .ui.bulleted.list .list {
@@ -588,7 +588,7 @@ ul.ui.horizontal.bulleted.list li:first-child,
 }
 ul.ui.horizontal.bulleted.list li::before,
 .ui.horizontal.bulleted.list > .item::before {
-  color: #303030;
+  color: #000000;
 }
 ul.ui.horizontal.bulleted.list li:first-child::before,
 .ui.horizontal.bulleted.list > .item:first-child::before {
@@ -628,7 +628,7 @@ ol.ui.list li:before,
   counter-increment: ordered;
   content: counters(ordered, ".") " ";
   text-align: right;
-  color: #303030;
+  color: #000000;
   vertical-align: middle;
   opacity: 0.8;
 }
@@ -970,13 +970,13 @@ ol.ui.horizontal.list li:before,
   margin-bottom: 2rem;
 }
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item {
-  color: #828282;
+  color: #4F4F4F;
   border-bottom: 2px solid transparent;
 }
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item:hover,
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item:focus,
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item.active {
-  color: #303030;
+  color: #242424;
   border-color: #98CE23;
 }
 

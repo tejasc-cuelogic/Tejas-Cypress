@@ -24,7 +24,7 @@
           box-shadow: none;
   border-radius: 0rem;
   text-align: left;
-  color: #303030;
+  color: #000000;
   border-collapse: separate;
   border-spacing: 0px;
 }
@@ -57,7 +57,7 @@
   cursor: auto;
   background: #FFFFFF;
   text-align: inherit;
-  color: #303030;
+  color: #000000;
   padding: 0.92857143em 0.78571429em;
   vertical-align: inherit;
   font-style: none;
@@ -89,7 +89,7 @@
   border-top: 1px solid rgba(34, 36, 38, 0.15);
   background: #F9FAFB;
   text-align: inherit;
-  color: #303030;
+  color: #000000;
   padding: 0.78571429em 0.78571429em;
   vertical-align: middle;
   font-style: normal;
@@ -368,13 +368,13 @@
 
 .ui.table tr.active,
 .ui.table td.active {
-  -webkit-box-shadow: 0px 0px 0px #303030 inset;
-          box-shadow: 0px 0px 0px #303030 inset;
+  -webkit-box-shadow: 0px 0px 0px #000000 inset;
+          box-shadow: 0px 0px 0px #000000 inset;
 }
 .ui.table tr.active,
 .ui.table td.active {
   background: #E0E0E0 !important;
-  color: #303030 !important;
+  color: #000000 !important;
 }
 
 /*--------------
@@ -538,7 +538,7 @@
 .ui.table tr td.selectable.active:hover,
 .ui.selectable.table tr:hover td.active {
   background: #E0E0E0 !important;
-  color: #303030 !important;
+  color: #000000 !important;
 }
 .ui.selectable.table tr.positive:hover,
 .ui.table tr td.selectable.positive:hover,
@@ -887,7 +887,7 @@
   cursor: pointer;
   white-space: nowrap;
   border-left: 0px solid rgba(34, 36, 38, 0.15);
-  color: #303030;
+  color: #000000;
 }
 .ui.sortable.table thead th:first-child {
   border-left: none;
@@ -1148,7 +1148,7 @@
   padding: 0.85714286rem 1.71428571rem;
 }
 .ui.table.sortable thead th {
-  color: #999999;
+  color: #989898;
 }
 .ui.table.striped thead th:hover {
   background: transparent;
@@ -1181,7 +1181,7 @@
 }
 .ui.table.user-list .user-image .ui.avatar.image {
   margin-right: 0;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #BDBDBD;
 }
 .ui.table.user-list .user-name {
   display: block;
@@ -1191,7 +1191,7 @@
 }
 .ui.table a {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  color: #303030;
+  color: #242424;
   text-decoration: none;
 }
 .ui.table a:hover {
@@ -1208,7 +1208,7 @@
   text-decoration: none;
 }
 .ui.table.statment-tables td > i.icon {
-  color: #999999;
+  color: #989898;
   margin-left: 0.42857143rem;
   vertical-align: middle;
 }

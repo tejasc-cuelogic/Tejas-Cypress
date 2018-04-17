@@ -30,7 +30,7 @@ body {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.571428em;
-  color: #303030;
+  color: #000000;
   font-smoothing: antialiased;
 }
 
@@ -125,32 +125,32 @@ a:hover {
 /* Site */
 ::-webkit-selection {
   background-color: #CCE2FF;
-  color: #303030;
+  color: #000000;
 }
 ::-moz-selection {
   background-color: #CCE2FF;
-  color: #303030;
+  color: #000000;
 }
 ::selection {
   background-color: #CCE2FF;
-  color: #303030;
+  color: #000000;
 }
 
 /* Form */
 textarea::-webkit-selection,
 input::-webkit-selection {
   background-color: rgba(100, 100, 100, 0.4);
-  color: #303030;
+  color: #000000;
 }
 textarea::-moz-selection,
 input::-moz-selection {
   background-color: rgba(100, 100, 100, 0.4);
-  color: #303030;
+  color: #000000;
 }
 textarea::selection,
 input::selection {
   background-color: rgba(100, 100, 100, 0.4);
-  color: #303030;
+  color: #000000;
 }
 
 /* Force Simple Scrollbars */
@@ -218,17 +218,17 @@ ol.progtrckr li:after {
   height: 4px;
   border-radius: 0.28571429rem;
   display: block;
-  background: #666666;
+  background: #989898;
   position: absolute;
   left: 50%;
   -webkit-transform: translate(-50%, 0%);
           transform: translate(-50%, 0%);
 }
 ol.progtrckr li.progtrckr-todo {
-  color: #666666;
+  color: #989898;
 }
 ol.progtrckr li.progtrckr-todo:after {
-  background: #666666;
+  background: #989898;
 }
 ol.progtrckr li.progtrckr-doing {
   color: #FFFFFF;

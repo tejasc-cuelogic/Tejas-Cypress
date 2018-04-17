@@ -680,7 +680,7 @@
 
 /* Nested */
 .ui.inverted.segment .segment {
-  color: #303030;
+  color: #000000;
 }
 .ui.inverted.segment .inverted.segment {
   color: rgba(255, 255, 255, 0.9);

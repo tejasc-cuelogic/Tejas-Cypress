@@ -33,7 +33,7 @@
   padding: 0.5em 0em;
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
-  color: #303030;
+  color: #000000;
 }
 
 /* Content */
@@ -134,7 +134,7 @@
 .ui.styled.accordion .accordion .title {
   margin: 0em;
   padding: 0.75em 1em;
-  color: #828282;
+  color: #4F4F4F;
   font-weight: normal;
   border-top: 1px solid rgba(34, 36, 38, 0.15);
   -webkit-transition: background 0.1s ease, color 0.1s ease;
@@ -162,22 +162,22 @@
 .ui.styled.accordion .accordion .title:hover,
 .ui.styled.accordion .accordion .active.title {
   background: transparent;
-  color: #303030;
+  color: #000000;
 }
 .ui.styled.accordion .accordion .title:hover,
 .ui.styled.accordion .accordion .active.title {
   background: transparent;
-  color: #303030;
+  color: #000000;
 }
 
 /* Active */
 .ui.styled.accordion .active.title {
   background: transparent;
-  color: #303030;
+  color: #242424;
 }
 .ui.styled.accordion .accordion .active.title {
   background: transparent;
-  color: #303030;
+  color: #242424;
 }
 
 
@@ -298,7 +298,7 @@
 .ui.styled.accordion .accordion.filing-list .title time {
   font-size: 0.85714286rem;
   margin-left: 0.35714286rem;
-  color: #828282;
+  color: #4F4F4F;
 }
 .ui.styled.accordion.filing-list .content,
 .ui.styled.accordion .accordion.filing-list .content {

@@ -23,7 +23,7 @@
 @labelDistance: @4px;
 @labelMargin: 0em 0em @labelDistance 0em;
 @labelFontSize:@13px;
-@labelFontWeight: 500;
+@labelFontWeight:700;
 @labelTextTransform: none;
 @labelColor:@fullBlack;
 
@@ -31,9 +31,9 @@
 @inputFont: @pageFont;
 @inputWidth: 100%;
 @inputFontSize: 1em;
-@inputPadding: (@inputVerticalPadding + ((1em - @inputLineHeight) / 2)) @inputHorizontalPadding;
-@inputBorder: 1px solid @borderColor;
-@inputBorderRadius: @absoluteBorderRadius;
+@inputPadding: (@inputVerticalPadding + ((1em - @inputLineHeight) / 2)) (@inputHorizontalPadding * 0);
+@inputBorder:none;
+@inputBorderRadius: @absoluteBorderRadius * 0;
 @inputColor: @textColor;
 @inputTransition:
   color @defaultDuration @defaultEasing,
@@ -84,8 +84,8 @@
 
 /* Input Focus */
 @inputFocusBackground: @inputBackground;
-@inputFocusBorderColor: @focusedFormBorderColor;
-@inputFocusColor: @selectedTextColor;
+@inputFocusBorderColor: @theme-primary;
+@inputFocusColor: @fullBlack;
 @inputFocusBoxShadow: @inputFocusPointerSize 0em 0em 0em @selectedBorderColor inset;
 @inputFocusBorderRadius: @inputBorderRadius;
 
