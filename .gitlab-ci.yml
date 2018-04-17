@@ -8,15 +8,15 @@ stages:
   - deploy
   
 #Building code
-building-code-issues:
+building-code-dev:
   cache:
     paths:
     - node_modules/
-   tags:
+  tags:
     - ns-client
   stage: build
   script:
-    - echo "current branch = ${CI_COMMIT_REF_NAME}"
+    - echo "branch name = ${CI_COMMIT_REF_NAME}"
   artifacts:
     paths:
     - build/
