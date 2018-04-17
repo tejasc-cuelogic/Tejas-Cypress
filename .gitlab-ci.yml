@@ -13,6 +13,11 @@ building-code-issues:
   cache:
     paths:
     - node_modules/
+  only:
+    - /^issue.*$/
+  # use special keyword
+  except:
+    - branches
   tags:
     - ns-client
   stage: build
@@ -28,6 +33,11 @@ building-code-issues:
     expire_in: 1 day
 
 deploying-code-issues:
+  only:
+    - /^issue.*$/
+  # use special keyword
+  except:
+    - branches
   environment:
     name: ${CI_COMMIT_REF_NAME}
     url: http://${CI_COMMIT_REF_NAME}.s3-website-us-east-1.amazonaws.com
