@@ -30,6 +30,7 @@ building-code-issues:
 deploying-code-issues:
   environment:
     name: ${CI_COMMIT_REF_NAME}
+    url: http://${CI_COMMIT_REF_NAME}.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
