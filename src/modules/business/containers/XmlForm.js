@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Divider, Button, Grid, Icon, Popup, Message } from 'semantic-ui-react';
+import { Form, Divider, Button, Grid, Icon, Message, Step } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
@@ -97,8 +97,83 @@ export default class XmlForm extends React.Component {
           </Grid>
         </div>
         <div className="content-spacer">
+          <Grid>
+            <Grid.Column width={4}>
+              <Step.Group vertical fluid>
+                <Step active>
+                  <Step.Content>
+                    <Step.Title>Filer Information</Step.Title>
+                  </Step.Content>
+                </Step>
+
+                <Step disabled>
+                  <Step.Content>
+                    <Step.Title>Issuer Information</Step.Title>
+                  </Step.Content>
+                </Step>
+
+                <Step disabled>
+                  <Step.Content>
+                    <Step.Title>Offering Information</Step.Title>
+                  </Step.Content>
+                </Step>
+
+                <Step disabled>
+                  <Step.Content>
+                    <Step.Title>Annual Report Disclosure Requirements</Step.Title>
+                  </Step.Content>
+                </Step>
+
+                <Step disabled>
+                  <Step.Content>
+                    <Step.Title>Documents</Step.Title>
+                  </Step.Content>
+                </Step>
+
+                <Step disabled>
+                  <Step.Content>
+                    <Step.Title>Signature</Step.Title>
+                  </Step.Content>
+                </Step>
+              </Step.Group>
+            </Grid.Column>
+            <Grid.Column width={12}>
+              <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
+              <Form className="edgar-form">
+                <FilerInformation />
+                <Divider hidden />
+                <div className="right-align">
+                  <Button color="green" size="large" className="pull-left">
+                    <Icon name="chevron left" />
+                    Back
+                  </Button>
+                  <Button as={Link} size="large" to="">Cancel</Button>
+                  <Button color="green" size="large">
+                    Save & Next <Icon name="chevron right" />
+                  </Button>
+                </div>
+                <IssuerInformation />
+                <OfferingInformation />
+                <AnnualReportDisclosureRequirements />
+                <FileSelector />
+                <Signature />
+                <Divider hidden />
+                <div className="right-align">
+                  <Button as={Link} size="large" to={`/app/business/${this.props.match.params.businessId}`}>Cancel</Button>
+                  <Button color="green" size="large" onClick={this.handleFormSubmit}>
+                    Submit
+                  </Button>
+                </div>
+                {this.state.errors && this.state.errors.message &&
+                  <Message error textAlign="left">
+                    <ListErrors errors={[this.state.errors.message.errors]} />
+                  </Message>
+                }
+              </Form>
+            </Grid.Column>
+          </Grid>
           <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
-          <Form className="edgar-form">
+          {/* <Form className="edgar-form">
             <Form.Group widths="equal">
               <Popup
                 trigger={
@@ -131,14 +206,15 @@ export default class XmlForm extends React.Component {
               <Button color="green" size="large" onClick={this.handleFormSubmit}>
                 Submit
               </Button>
-              <Button as={Link} size="large" to={`/app/business/${this.props.match.params.businessId}`}>Cancel</Button>
+              <Button as={Link} size="large"
+              to={`/app/business/${this.props.match.params.businessId}`}>Cancel</Button>
             </div>
             {this.state.errors && this.state.errors.message &&
               <Message error textAlign="left">
                 <ListErrors errors={[this.state.errors.message.errors]} />
               </Message>
             }
-          </Form>
+          </Form> */}
         </div>
       </div>
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Form, Header } from 'semantic-ui-react';
+import { Form, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
@@ -47,155 +47,155 @@ export default class OfferingInformation extends React.Component {
     const { offeringInformation } = this.props.businessStore;
     return (
       <div>
-        <Divider section />
-        <Header as="h1">Offering Information</Header>
-        <Form.TextArea
-          label={LABEL}
-          name="compensationAmount"
-          value={offeringInformation.compensationAmount.value}
-          error={!!offeringInformation.compensationAmount.error}
-          onChange={this.handleChange}
-          onBlur={this.handleOnBlur}
-        />
-        <Form.TextArea
-          label={LABEL1}
-          name="financialInterest"
-          value={offeringInformation.financialInterest.value}
-          error={!!offeringInformation.financialInterest.error}
-          onChange={this.handleChange}
-          onBlur={this.handleOnBlur}
-        />
-        <Form.Group widths="equal">
-          <Form.Select
-            fluid
-            search
-            placeholder="Security Type"
-            label="Type of Security Offered"
-            name="securityOfferedType"
-            value={offeringInformation.securityOfferedType.value}
-            error={!!offeringInformation.securityOfferedType.error}
-            options={OFFERED_SECURITIES}
-            onChange={this.handleChange}
-          />
-          <Form.Input
-            placeholder="Other Description"
-            label="Other Description"
-            name="securityOfferedOtherDesc"
-            value={offeringInformation.securityOfferedOtherDesc.value}
-            error={!!offeringInformation.securityOfferedOtherDesc.error}
-            onChange={this.handleChange}
-            onBlur={this.handleOnBlur}
-            disabled={this.getOtherSecurityClass()}
-          />
-          <Form.Input
-            placeholder="No. of securities offered"
-            label="No. of securities offered"
-            name="noOfSecurityOffered"
-            value={offeringInformation.noOfSecurityOffered.value}
-            error={!!offeringInformation.noOfSecurityOffered.error}
-            onChange={this.handleChange}
-            onBlur={this.handleOnBlur}
-            disabled={this.getSecurityOfferedClass()}
-          />
-          <Form.Input
-            placeholder="Price"
-            label="Price"
-            name="price"
-            value={offeringInformation.price.value}
-            error={!!offeringInformation.price.error}
-            onChange={this.handleChange}
-            onBlur={this.handleOnBlur}
-            disabled={this.getSecurityOfferedClass()}
-          />
-          <Form.Input
-            placeholder="Price"
-            label="Price (or Method for Determining Price)"
-            name="priceDeterminationMethod"
-            value={offeringInformation.priceDeterminationMethod.value}
-            error={!!offeringInformation.priceDeterminationMethod.error}
+        <Card fluid className="form-card">
+          <Form.TextArea
+            label={LABEL}
+            name="compensationAmount"
+            value={offeringInformation.compensationAmount.value}
+            error={!!offeringInformation.compensationAmount.error}
             onChange={this.handleChange}
             onBlur={this.handleOnBlur}
           />
-        </Form.Group>
-        <Form.Group>
-          <div className="three wide field">
-            <h5>Is oversubscription Accepted?</h5>
-            <Form.Group inline>
-              <Form.Radio
-                label="Yes"
-                value="Y"
-                name="overSubscriptionAccepted"
-                checked={this.offeringInformation.overSubscriptionAccepted.value === 'Y'}
-                onChange={this.handleChange}
-              />
-              <Form.Radio
-                label="No"
-                value="N"
-                name="overSubscriptionAccepted"
-                checked={this.offeringInformation.overSubscriptionAccepted.value === 'N'}
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-          </div>
-          <Form.Select
-            fluid
-            search
-            label="If yes, disclose how oversubscriptions will be allocated"
-            name="overSubscriptionAllocationType"
-            value={offeringInformation.overSubscriptionAllocationType.value}
-            options={OVER_SUBSCRIPTION_ALLOCATION_TYPES}
-            onChange={this.handleChange}
-            disabled={this.getSubscriptionTypeClass()}
-            error={!!offeringInformation.overSubscriptionAllocationType.error}
-            width={5}
-          />
-          <Form.Input
-            label="Other Description"
-            placeholder="Other Description"
-            name="descOverSubscription"
-            value={offeringInformation.descOverSubscription.value}
-            error={!!offeringInformation.descOverSubscription.error}
+          <Form.TextArea
+            label={LABEL1}
+            name="financialInterest"
+            value={offeringInformation.financialInterest.value}
+            error={!!offeringInformation.financialInterest.error}
             onChange={this.handleChange}
             onBlur={this.handleOnBlur}
-            disabled={!this.getSubscriptionDescClass()}
-            width={4}
           />
-          <Form.Input
-            label="Deadline to reach the Target Offering Amount"
-            name="maximumOfferingAmount"
-            value={offeringInformation.maximumOfferingAmount.value}
-            error={!!offeringInformation.maximumOfferingAmount.error}
-            onChange={this.handleChange}
-            onBlur={this.handleOnBlur}
-            disabled={this.getSubscriptionTypeClass()}
-            width={4}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Input
-            label="Target Offering Amount"
-            name="offeringAmount"
-            value={offeringInformation.offeringAmount.value}
-            error={!!offeringInformation.offeringAmount.error}
-            onChange={this.handleChange}
-            onBlur={this.handleOnBlur}
-            width={3}
-          />
-          <div className="three wide field">
-            { /* eslint-disable jsx-a11y/label-has-for */}
-            <label>Deadline Date</label>
-            <DatePicker
-              showMonthDropdown
-              showYearDropdown
-              id="deadlinedate"
-              placeholderText="Deadline Date"
-              dateFormat="MM-DD-YYYY"
-              minDate={moment()}
-              selected={this.offeringInformation.deadlineDate.value}
-              onChange={this.handleDateChange}
+          <Form.Group widths="equal">
+            <Form.Select
+              fluid
+              search
+              placeholder="Security Type"
+              label="Type of Security Offered"
+              name="securityOfferedType"
+              value={offeringInformation.securityOfferedType.value}
+              error={!!offeringInformation.securityOfferedType.error}
+              options={OFFERED_SECURITIES}
+              onChange={this.handleChange}
             />
-          </div>
-        </Form.Group>
+            <Form.Input
+              placeholder="Other Description"
+              label="Other Description"
+              name="securityOfferedOtherDesc"
+              value={offeringInformation.securityOfferedOtherDesc.value}
+              error={!!offeringInformation.securityOfferedOtherDesc.error}
+              onChange={this.handleChange}
+              onBlur={this.handleOnBlur}
+              disabled={this.getOtherSecurityClass()}
+            />
+            <Form.Input
+              placeholder="No. of securities offered"
+              label="No. of securities offered"
+              name="noOfSecurityOffered"
+              value={offeringInformation.noOfSecurityOffered.value}
+              error={!!offeringInformation.noOfSecurityOffered.error}
+              onChange={this.handleChange}
+              onBlur={this.handleOnBlur}
+              disabled={this.getSecurityOfferedClass()}
+            />
+            <Form.Input
+              placeholder="Price"
+              label="Price"
+              name="price"
+              value={offeringInformation.price.value}
+              error={!!offeringInformation.price.error}
+              onChange={this.handleChange}
+              onBlur={this.handleOnBlur}
+              disabled={this.getSecurityOfferedClass()}
+            />
+            <Form.Input
+              placeholder="Price"
+              label="Price (or Method for Determining Price)"
+              name="priceDeterminationMethod"
+              value={offeringInformation.priceDeterminationMethod.value}
+              error={!!offeringInformation.priceDeterminationMethod.error}
+              onChange={this.handleChange}
+              onBlur={this.handleOnBlur}
+            />
+          </Form.Group>
+          <Form.Group>
+            <div className="three wide field">
+              <h5>Is oversubscription Accepted?</h5>
+              <Form.Group inline>
+                <Form.Radio
+                  label="Yes"
+                  value="Y"
+                  name="overSubscriptionAccepted"
+                  checked={this.offeringInformation.overSubscriptionAccepted.value === 'Y'}
+                  onChange={this.handleChange}
+                />
+                <Form.Radio
+                  label="No"
+                  value="N"
+                  name="overSubscriptionAccepted"
+                  checked={this.offeringInformation.overSubscriptionAccepted.value === 'N'}
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+            </div>
+            <Form.Select
+              fluid
+              search
+              label="If yes, disclose how oversubscriptions will be allocated"
+              name="overSubscriptionAllocationType"
+              value={offeringInformation.overSubscriptionAllocationType.value}
+              options={OVER_SUBSCRIPTION_ALLOCATION_TYPES}
+              onChange={this.handleChange}
+              disabled={this.getSubscriptionTypeClass()}
+              error={!!offeringInformation.overSubscriptionAllocationType.error}
+              width={5}
+            />
+            <Form.Input
+              label="Other Description"
+              placeholder="Other Description"
+              name="descOverSubscription"
+              value={offeringInformation.descOverSubscription.value}
+              error={!!offeringInformation.descOverSubscription.error}
+              onChange={this.handleChange}
+              onBlur={this.handleOnBlur}
+              disabled={!this.getSubscriptionDescClass()}
+              width={4}
+            />
+            <Form.Input
+              label="Deadline to reach the Target Offering Amount"
+              name="maximumOfferingAmount"
+              value={offeringInformation.maximumOfferingAmount.value}
+              error={!!offeringInformation.maximumOfferingAmount.error}
+              onChange={this.handleChange}
+              onBlur={this.handleOnBlur}
+              disabled={this.getSubscriptionTypeClass()}
+              width={4}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Input
+              label="Target Offering Amount"
+              name="offeringAmount"
+              value={offeringInformation.offeringAmount.value}
+              error={!!offeringInformation.offeringAmount.error}
+              onChange={this.handleChange}
+              onBlur={this.handleOnBlur}
+              width={3}
+            />
+            <div className="three wide field">
+              { /* eslint-disable jsx-a11y/label-has-for */}
+              <label>Deadline Date</label>
+              <DatePicker
+                showMonthDropdown
+                showYearDropdown
+                id="deadlinedate"
+                placeholderText="Deadline Date"
+                dateFormat="MM-DD-YYYY"
+                minDate={moment()}
+                selected={this.offeringInformation.deadlineDate.value}
+                onChange={this.handleDateChange}
+              />
+            </div>
+          </Form.Group>
+        </Card>
       </div>
     );
   }
