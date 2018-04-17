@@ -52,7 +52,7 @@ export class Business {
     const {
       businessId,
       filingId,
-      offeringUrl,
+      // offeringUrl,
       annualReportRequirements,
       filerInformation,
       issuerInformation,
@@ -64,7 +64,7 @@ export class Business {
     const payload = {
       businessId,
       filingId,
-      offeringUrl,
+      // offeringUrl,
       filerInformation: this.getFormattedInformation(filerInformation),
       issuerInformation: this.getFormattedInformation(issuerInformation),
       offeringInformation: this.getFormattedInformation(offeringInformation),
@@ -604,7 +604,7 @@ export class Business {
     if (payload) {
       businessStore.setBusinessId(payload.businessId);
       businessStore.setFilingId(payload.filingId);
-      businessStore.setOfferingUrl(payload.offeringUrl);
+      // businessStore.setOfferingUrl(payload.offeringUrl);
       _.map(payload.filerInformation, (value, key) => {
         if (confirmationFlags.includes(key)) {
           businessStore.setFilerInfo(key, (value || false))

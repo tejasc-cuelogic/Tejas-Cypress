@@ -10,6 +10,7 @@ import {
   SIGNATURE,
   NEW_OFFERING_INFORMATION,
   TEMPLATE_VARIABLES,
+  XML_SUBMISSION_TABS,
 } from './../constants/business';
 
 export class BusinessStore {
@@ -24,8 +25,8 @@ export class BusinessStore {
   @observable
   folderId = '';
 
-  @observable
-  offeringUrl = '';
+  // @observable
+  // offeringUrl = '';
 
   @observable
   templateVariables = { ...TEMPLATE_VARIABLES };
@@ -81,6 +82,12 @@ export class BusinessStore {
 
   @observable
   xmlErrors = {};
+
+  @observable
+  xmlSubmissionTabs = [...XML_SUBMISSION_TABS];
+
+  @observable
+  xmlActiveTabId = 0;
 
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
@@ -156,10 +163,10 @@ export class BusinessStore {
     this.folderId = id;
   }
 
-  @action
-  setOfferingUrl(url) {
-    this.offeringUrl = url;
-  }
+  // @action
+  // setOfferingUrl(url) {
+  //   this.offeringUrl = url;
+  // }
 
   @action
   setFiler(filerInformation) {
@@ -357,6 +364,11 @@ export class BusinessStore {
   @action
   removeXmlError(key) {
     this.xmlErrors = _.omit(this.xmlErrors, key);
+  }
+
+  @action
+  setXmlActiveTabId(id) {
+    this.xmlActiveTabId = id;
   }
 }
 

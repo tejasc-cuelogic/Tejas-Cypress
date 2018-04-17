@@ -72,6 +72,12 @@ export const PERSONAL_SIGNATURE = {
 };
 
 export const FILER_INFORMATION = {
+  offeringUrl: {
+    value: '',
+    key: 'offeringUrl',
+    error: undefined,
+    rule: 'required',
+  },
   filerCik: {
     value: '',
     key: 'filerCik',
@@ -914,3 +920,23 @@ export const EDGAR_URL = '/edgar/publish';
 export const XML_URL = '/edgar/primary-data';
 
 export const GRAPHQL = '/graphql';
+
+export const XML_SUBMISSION_TABS = [{
+  id: 0,
+  label: 'Filer Information',
+}, {
+  id: 1,
+  label: 'Issuer Information',
+}, {
+  id: 2,
+  label: 'Offering Information',
+}, {
+  id: 3,
+  label: 'Annual Report Disclosure Requirements',
+}, {
+  id: 4,
+  label: 'Documents',
+}, {
+  id: 5,
+  label: 'Signature',
+}];

@@ -26,8 +26,8 @@ export default class FilerInformation extends React.Component {
             <Popup
               trigger={
                 <Input
-                  value={this.props.businessStore.offeringUrl}
-                  onChange={this.handleUrlChange}
+                  value={this.props.businessStore.filerInformation.offeringUrl.value}
+                  onChange={this.handleChange}
                   className="column"
                   width={16}
                   placeholder="website URL"

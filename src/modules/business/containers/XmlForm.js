@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Grid, Icon, Message, Step } from 'semantic-ui-react';
+import { Form, Grid, Icon, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
 import IssuerInformation from './xmlFormContainers/IssuerInformation';
 import OfferingInformation from './xmlFormContainers/OfferingInformation';
 import AnnualReportDisclosureRequirements from './xmlFormContainers/AnnualReportDisclosureRequirements';
+import XmlTabs from '../components/XmlTabs';
 import Signature from './xmlFormContainers/Signature';
 import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
@@ -39,7 +40,7 @@ export default class XmlForm extends React.Component {
 
   componentWillUnmount() {
     this.props.uiStore.reset();
-    this.props.businessStore.setOfferingUrl('');
+    // this.props.businessStore.setOfferingUrl('');
     this.props.businessStore.clearFiler();
     this.props.businessStore.clearIssuer();
     this.props.businessStore.clearOffering();
@@ -47,8 +48,11 @@ export default class XmlForm extends React.Component {
     this.props.businessStore.clearSignature();
   }
 
-  handleUrlChange = (e, { value }) => {
-    this.props.businessStore.setOfferingUrl(value);
+  // handleUrlChange = (e, { value }) => {
+  //   this.props.businessStore.setOfferingUrl(value);
+  // }
+  handleXmlActiveTab = (id) => {
+    this.props.businessStore.setXmlActiveTabId(id);
   }
 
   handleFormSubmit = (e) => {
@@ -74,7 +78,7 @@ export default class XmlForm extends React.Component {
   };
 
   render() {
-    const { xmlErrors } = this.props.businessStore;
+    const { xmlErrors, xmlSubmissionTabs, xmlActiveTabId } = this.props.businessStore;
     if (this.props.uiStore.inProgress) {
       return (
         <div>
@@ -98,54 +102,21 @@ export default class XmlForm extends React.Component {
         </div>
         <div className="content-spacer">
           <Grid>
-            <Grid.Column width={4}>
-              <Step.Group vertical fluid>
-                <Step active>
-                  <Step.Content>
-                    <Step.Title>Filer Information</Step.Title>
-                  </Step.Content>
-                </Step>
-
-                <Step disabled>
-                  <Step.Content>
-                    <Step.Title>Issuer Information</Step.Title>
-                  </Step.Content>
-                </Step>
-
-                <Step disabled>
-                  <Step.Content>
-                    <Step.Title>Offering Information</Step.Title>
-                  </Step.Content>
-                </Step>
-
-                <Step disabled>
-                  <Step.Content>
-                    <Step.Title>Annual Report Disclosure Requirements</Step.Title>
-                  </Step.Content>
-                </Step>
-
-                <Step disabled>
-                  <Step.Content>
-                    <Step.Title>Documents</Step.Title>
-                  </Step.Content>
-                </Step>
-
-                <Step disabled>
-                  <Step.Content>
-                    <Step.Title>Signature</Step.Title>
-                  </Step.Content>
-                </Step>
-              </Step.Group>
-            </Grid.Column>
+            <XmlTabs
+              tabs={xmlSubmissionTabs}
+              xmlId={this.props.match.params.xmlId}
+              handleXmlActiveTab={this.handleXmlActiveTab}
+              xmlActiveTabId={xmlActiveTabId}
+            />
             <Grid.Column width={12}>
               <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
               <Form className="edgar-form">
-                <FilerInformation />
-                <IssuerInformation />
-                <OfferingInformation />
-                <AnnualReportDisclosureRequirements />
-                <FileSelector />
-                <Signature />
+                {xmlActiveTabId === 0 && <FilerInformation />}
+                {xmlActiveTabId === 1 && <IssuerInformation />}
+                {xmlActiveTabId === 2 && <OfferingInformation />}
+                {xmlActiveTabId === 3 && <AnnualReportDisclosureRequirements />}
+                {xmlActiveTabId === 4 && <FileSelector />}
+                {xmlActiveTabId === 5 && <Signature />}
                 {this.state.errors && this.state.errors.message &&
                   <Message error textAlign="left">
                     <ListErrors errors={[this.state.errors.message.errors]} />
@@ -156,28 +127,6 @@ export default class XmlForm extends React.Component {
           </Grid>
           <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
           {/* <Form className="edgar-form">
-            <Form.Group widths="equal">
-              <Popup
-                trigger={
-                  <Form.Input
-                    label="Website URL"
-                    value={this.props.businessStore.offeringUrl}
-                    onChange={this.handleUrlChange}
-                    className="column"
-                    width={8}
-                  />
-                }
-                content="Please enter URL of page, for which screenshot will be generated"
-                on="focus"
-                size="tiny"
-              />
-            </Form.Group>
-            <FilerInformation />
-            <IssuerInformation />
-            <OfferingInformation />
-            <AnnualReportDisclosureRequirements />
-            <Signature />
-            <FileSelector />
             <Divider section />
             <div
               className="form-footer"
