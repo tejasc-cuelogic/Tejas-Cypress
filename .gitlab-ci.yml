@@ -18,6 +18,10 @@ building-code-issues:
   stage: build
   script:
     - bash scripts/s3BucketCreationScript.sh ${CI_COMMIT_REF_NAME} us-east-1
+    - bash scripts/setEnvironmentVariables.sh us-east-1 dev
+    - npm install
+    - npm run build
+
   artifacts:
     paths:
     - build/
