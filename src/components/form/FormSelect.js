@@ -18,10 +18,11 @@ const FormSelect = props => (
     </label>
     <Form.Select
       fluid
+      search
       {...props}
       label={false}
       error={props.error !== ''}
-      onChange={e => props.changed(e.target.name, e.target.value)}
+      onChange={props.changed}
     />
     {props.error &&
       <FieldError error={props.error} />
