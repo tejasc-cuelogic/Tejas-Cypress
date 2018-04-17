@@ -98,9 +98,31 @@ class EntityAccountStore {
     },
   };
 
+  @observable
+  formPersonalInfo = {
+    fields: {
+      entityTitle: {
+        value: '',
+        key: 'entityTitle',
+        error: undefined,
+        rule: 'required',
+        label: 'What is your title with the Entity',
+        placeHolder: 'e.g. CEO',
+      },
+      photoId: {
+        value: '',
+        key: 'photoId',
+        error: undefined,
+        rule: '',
+        label: '',
+        placeHolder: '',
+      },
+    },
+  }
+
   @action
   finInfoChange = (field, value) => {
-    this.onFieldChange('formEntityInfo', field, value);
+    this.onFieldChange('formPersonalInfo', field, value);
   };
 
   @action

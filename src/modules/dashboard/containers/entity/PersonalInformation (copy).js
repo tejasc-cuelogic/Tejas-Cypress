@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Header, Form, Icon, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-import FormInput from '../../../../components/form/FormInput';
+import FieldError from '../../../../components/common/FieldError';
 import validationActions from '../../../../actions/validation';
 
-@inject('accountStore', 'userStore', 'entityAccountStore')
+@inject('accountStore', 'userStore')
 @observer
 export default class PersonalInformation extends Component {
   handleInputChange = (e, { name, value }) => {
@@ -24,7 +24,6 @@ export default class PersonalInformation extends Component {
   }
 
   render() {
-    const { formPersonalInfo, finInfoChange } = this.props.entityAccountStore;
     const { entityAccount } = this.props.accountStore;
     const { currentUser } = this.props.userStore;
 
@@ -44,14 +43,17 @@ export default class PersonalInformation extends Component {
               value={currentUser.familyName}
               readOnly
             />
-            <FormInput
-              name={formPersonalInfo.fields.entityTitle.key}
-              label={formPersonalInfo.fields.entityTitle.label}
-              value={formPersonalInfo.fields.entityTitle.value}
-              placeholder={formPersonalInfo.fields.entityTitle.placeHolder}
-              error={!!formPersonalInfo.fields.entityTitle.error}
-              changed={finInfoChange}
-            />
+            <Form.Field>
+              <Form.Input
+                label={entityAccount.entityTitle.label}
+                name={entityAccount.entityTitle.key}
+                placeholder={entityAccount.entityTitle.placeHolder}
+                value={entityAccount.entityTitle.value}
+                error={!!entityAccount.entityTitle.error}
+                onChange={this.handleInputChange}
+              />
+              <FieldError error={entityAccount.entityTitle.error} />
+            </Form.Field>
           </div>
           <Grid divided="vertically">
             <Grid.Row>

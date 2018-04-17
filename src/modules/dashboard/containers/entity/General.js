@@ -7,7 +7,7 @@ import FormInput from '../../../../components/form/FormInput';
 @observer
 export default class General extends Component {
   render() {
-    const { formGeneralInfo, onFieldChange } = this.props.entityAccountStore;
+    const { formGeneralInfo, finInfoChange } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">General Information</Header>
@@ -20,7 +20,7 @@ export default class General extends Component {
               value={formGeneralInfo.fields.nameOfEntity.value}
               error={formGeneralInfo.fields.nameOfEntity.error}
               placeholder="e.g. Pad Wealth"
-              changed={onFieldChange}
+              changed={finInfoChange}
             />
             <FormInput
               type="text"
@@ -29,7 +29,7 @@ export default class General extends Component {
               value={formGeneralInfo.fields.taxId.value}
               error={formGeneralInfo.fields.taxId.error}
               placeholder="e.g. 12345"
-              changed={onFieldChange}
+              changed={finInfoChange}
             />
             <h5>Entity Address</h5>
             <FormInput
@@ -38,7 +38,7 @@ export default class General extends Component {
               label={formGeneralInfo.fields.street.label}
               value={formGeneralInfo.fields.street.value}
               error={formGeneralInfo.fields.street.error}
-              changed={onFieldChange}
+              changed={finInfoChange}
             />
             <Form.Group widths="equal">
               <FormInput
@@ -47,7 +47,7 @@ export default class General extends Component {
                 label={formGeneralInfo.fields.city.label}
                 value={formGeneralInfo.fields.city.value}
                 error={formGeneralInfo.fields.city.error}
-                changed={onFieldChange}
+                changed={finInfoChange}
               />
               <FormInput
                 type="text"
@@ -55,7 +55,7 @@ export default class General extends Component {
                 label={formGeneralInfo.fields.zipCode.label}
                 value={formGeneralInfo.fields.zipCode.value}
                 error={formGeneralInfo.fields.zipCode.error}
-                changed={onFieldChange}
+                changed={finInfoChange}
               />
             </Form.Group>
           </div>

@@ -21,15 +21,15 @@ export default class AccountType extends Component {
         <Form error>
           <Form.Group inline className="button-radio center-align">
             <FormRadioInput
-              label="Yes"
               name={formEntityInfo.fields.isEntityTrust.key}
+              label="Yes"
               value="yes"
               checked={formEntityInfo.fields.isEntityTrust.value === 'yes'}
               changed={finInfoChange}
             />
             <FormRadioInput
-              label="No"
               name={formEntityInfo.fields.isEntityTrust.key}
+              label="No"
               value="no"
               checked={formEntityInfo.fields.isEntityTrust.value === 'no'}
               changed={finInfoChange}
