@@ -1,6 +1,6 @@
 import React from 'react';
 // import _ from 'lodash';
-import { Header, Form, Dropdown, Card, Input, Label } from 'semantic-ui-react';
+import { Header, Form, Dropdown, Card, Input, Label, Divider, Icon, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import { COUNTRIES } from '../../../../constants/business';
@@ -410,6 +410,17 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             </Form.Field>
           </Card>
         </Card.Group>
+        <Divider hidden />
+        <div className="right-align">
+          <Button color="green" size="large" className="pull-left">
+            <Icon name="chevron left" />
+            Back
+          </Button>
+          <Button as="" size="large" to="">Cancel</Button>
+          <Button color="green" size="large">
+            Save & Next <Icon name="chevron right" />
+          </Button>
+        </div>
       </div>
     );
   }
