@@ -16,7 +16,7 @@ building-code-issues:
     - ns-client
   stage: build
   script:
-    - echo "branch name = ${CI_COMMIT_REF_NAME}"
+    - bash scripts/s3BucketCreationScript.sh ${CI_COMMIT_REF_NAME} us-east-1
   artifacts:
     paths:
     - build/
