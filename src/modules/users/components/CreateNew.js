@@ -16,7 +16,7 @@ const createNew = () => (
                       Name
                       <Form.Checkbox className="pull-right" label="Different legal name" />
                     </h4>
-                    <Form.Input label="First Name" placeholder="First name" />
+                    <Form.Input placeholder="First name" />
                     <Form.Input placeholder="Middle name" />
                     <Form.Input placeholder="Last name" />
                   </Grid.Column>
