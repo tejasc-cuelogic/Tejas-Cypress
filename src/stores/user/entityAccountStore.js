@@ -77,6 +77,11 @@ class EntityAccountStore {
   };
 
   @action
+  genInfoChange = (e, { name, value }) => {
+    this.onFieldChange('formGeneralInfo', name, value);
+  };
+
+  @action
   onFieldChange = (currentForm, field, value) => {
     const form = currentForm || 'formFinInfo';
     this[form].fields[field].value = value;

@@ -3,7 +3,7 @@ import React from 'react';
 import { Form, Popup, Icon } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
-const FormInput = props => (
+const FormSelect = props => (
   <Form.Field>
     <label>
       {props.label}
@@ -16,11 +16,10 @@ const FormInput = props => (
         />
       }
     </label>
-    <Form.Input
+    <Form.Select
       fluid
       {...props}
       label={false}
-      type={props.type || 'text'}
       error={props.error !== ''}
       onChange={e => props.changed(e.target.name, e.target.value)}
     />
@@ -30,5 +29,4 @@ const FormInput = props => (
   </Form.Field>
 );
 
-export default FormInput;
-
+export default FormSelect;
