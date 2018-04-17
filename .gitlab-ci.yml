@@ -8,7 +8,7 @@ stages:
   - deploy
   
 #Building code
-building-code-dev:
+building-code-issues:
   cache:
     paths:
     - node_modules/
