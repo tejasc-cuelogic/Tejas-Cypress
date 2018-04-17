@@ -95,7 +95,7 @@
 					text-align: left;
 					overflow:hidden;
 					padding:@14px @20px;
-					color:@tertiary-text;
+					color:@inverse-text;
 					&:first-child:before, &:before{
 						display:none;
 						background:none;
@@ -106,6 +106,7 @@
 						margin:0 !important;
 						font-size:@16px !important;
 						line-height:@22px;
+						color:@quaternary-text;
 						position:relative;
 					}
 					span{

@@ -362,7 +362,7 @@
   color: #000000;
   -webkit-box-shadow: none;
           box-shadow: none;
-  border: 1px solid rgba(34, 36, 38, 0.15);
+  border: none;
   border-radius: 0;
   -webkit-transition: width 0.1s ease, -webkit-box-shadow 0.1s ease;
   transition: width 0.1s ease, -webkit-box-shadow 0.1s ease;
@@ -1499,6 +1499,12 @@ select.ui.dropdown {
   content: "\f0da";
 }
 */
+.ui.selection.dropdown {
+  border-bottom: #BDBDBD 1px solid;
+}
+.ui.selection.dropdown > .dropdown.icon {
+  color: #98CE23;
+}
 .notification-box .ui.dropdown .icon.dropdown {
   margin: 0 5px 0 0;
 }

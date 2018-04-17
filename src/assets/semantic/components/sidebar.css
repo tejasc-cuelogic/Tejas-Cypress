@@ -697,7 +697,7 @@ body.pushable > .pusher {
   text-align: left;
   overflow: hidden;
   padding: 1rem 1.42857143rem;
-  color: #4F4F4F;
+  color: #FFFFFF;
 }
 .ui.sidebar.left.push .item:first-child:before,
 .ui.sidebar.left.push .item:before {
@@ -710,6 +710,7 @@ body.pushable > .pusher {
   margin: 0 !important;
   font-size: 1.14285714rem !important;
   line-height: 1.57142857rem;
+  color: #989898;
   position: relative;
 }
 .ui.sidebar.left.push .item span {
