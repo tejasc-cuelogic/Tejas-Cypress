@@ -6,7 +6,8 @@ variables:
 stages:
   - build
   - deploy
-  
+
+#---------------------------------Issues----------------------------------------  
 #Building code
 building-code-issues:
   cache:
@@ -21,6 +22,18 @@ building-code-issues:
     paths:
     - build/
     expire_in: 1 day
+
+deploying-code-issues:
+  environment:
+    name: ${CI_COMMIT_REF_NAME}
+  tags:
+    - ns-client
+  stage: deploy
+  script: 
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://${CI_COMMIT_REF_NAME}/ --recursive
+  dependencies:
+    - building-code-issues
 
 
 #---------------------------------Dev-------------------------------------------
