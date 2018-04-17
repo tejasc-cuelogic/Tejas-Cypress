@@ -1,5 +1,6 @@
 #/bin/bash
-bucketName=$1
+bucketName=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+
 regionName=$2
 isBucketExist=$(aws s3 ls | grep "${bucketName}"| cut -d ' ' -f 3)
 if [ "$isBucketExist" != "" ]; then
