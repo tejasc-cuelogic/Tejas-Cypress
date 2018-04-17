@@ -20,7 +20,7 @@
   margin: calc(2rem -  0.14285714em ) 0em 1.5rem;
   padding: 0em 0em;
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-weight: 500;
+  font-weight: 900;
   line-height: 1.28571429em;
   text-transform: none;
   color: #303030;
@@ -407,21 +407,21 @@ a.ui.inverted.yellow.header:hover {
 /*--- Green ---*/
 
 .ui.green.header {
-  color: #21BA45 !important;
+  color: #98CE23 !important;
 }
 a.ui.green.header:hover {
-  color: #16ab39 !important;
+  color: #8bc018 !important;
 }
 .ui.green.dividing.header {
-  border-bottom: 2px solid #21BA45;
+  border-bottom: 2px solid #98CE23;
 }
 
 /* Inverted */
 .ui.inverted.green.header {
-  color: #2ECC40 !important;
+  color: #98CE23 !important;
 }
 a.ui.inverted.green.header:hover {
-  color: #22be34 !important;
+  color: #8bc018 !important;
 }
 
 /*--- Teal ---*/
