@@ -12,10 +12,7 @@ building-code-dev:
   cache:
     paths:
     - node_modules/
-  only:
-    refs:
-      - branches
-  tags:
+   tags:
     - ns-client
   stage: build
   script:
