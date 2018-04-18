@@ -1,10 +1,12 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
+import moment from 'moment';
 import { Form, Popup, Icon } from 'semantic-ui-react';
+import DatePicker from 'react-datepicker';
 import FieldError from '../common/FieldError';
 
-const FormSelect = props => (
-  <Form.Field width={props.containerwidth || false}>
+const FormDatePicker = props => (
+  <Form.Field>
     <label>
       {props.label}
       {props.tooltip &&
@@ -16,13 +18,16 @@ const FormSelect = props => (
         />
       }
     </label>
-    <Form.Select
-      fluid
-      search
+    <DatePicker
+      showMonthDropdown
+      showYearDropdown
       {...props}
       label={false}
-      error={props.error !== ''}
-      onChange={props.changed}
+      dateFormat="MM-DD-YYYY"
+      maxDate={moment()}
+      onClick={this.changed}
+      onChange={this.changed}
+      disabled={props.isdisabled}
     />
     {props.error &&
       <FieldError error={props.error} />
@@ -30,4 +35,4 @@ const FormSelect = props => (
   </Form.Field>
 );
 
-export default FormSelect;
+export default FormDatePicker;

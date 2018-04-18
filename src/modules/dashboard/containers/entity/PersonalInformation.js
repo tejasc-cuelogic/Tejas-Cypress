@@ -3,7 +3,7 @@ import { Header, Form, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FormInput from '../../../../components/form/FormInput';
-import FileUploaderVertical from '../../../../components/form/FileUploaderVertical';
+import { FileUploaderVertical } from '../../../../components/form/FormElements';
 
 @inject('userStore', 'entityAccountStore')
 @observer

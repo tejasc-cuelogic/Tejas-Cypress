@@ -3,7 +3,7 @@ import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import validationActions from '../../../../actions/validation';
-import { FormRadioInput, DatePicker } from '../../../../components/form/FormElements';
+import { FormRadioInput, FormDatePicker } from '../../../../components/form/FormElements';
 
 @inject('accountStore', 'entityAccountStore')
 @observer
@@ -35,7 +35,7 @@ export default class AccountType extends Component {
             />
           </Form.Group>
           <div className="field-wrap">
-            <DatePicker
+            <FormDatePicker
               label={formEntityInfo.fields.dateOfTrust.label}
               placeholderText={formEntityInfo.fields.dateOfTrust.placeHolder}
               selected={formEntityInfo.fields.dateOfTrust.value}

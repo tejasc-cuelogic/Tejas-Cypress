@@ -41,4 +41,3 @@ const FormInput = observer((props) => {
 });
 
 export default FormInput;
-
