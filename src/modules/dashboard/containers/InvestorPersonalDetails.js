@@ -118,9 +118,7 @@ export default class investorPersonalDetails extends Component {
             <Form.Group widths="equal">
               <MaskedInput
                 name="phoneNumber"
-                label={verifyIdentity01.fields.phoneNumber.label}
-                value={verifyIdentity01.fields.phoneNumber.value}
-                error={verifyIdentity01.fields.phoneNumber.error}
+                fielddata={verifyIdentity01.fields.phoneNumber}
                 mask="999-999-9999"
                 changed={verifyIdentityEleChange}
               />
@@ -133,10 +131,10 @@ export default class investorPersonalDetails extends Component {
                 changed={verifyIdentityEleChange}
               />
             </Form.Group>
-            <FormInput
-              type="text"
+            <MaskedInput
               name="ssn"
               fielddata={verifyIdentity01.fields.ssn}
+              mask="999-999-9999"
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">
