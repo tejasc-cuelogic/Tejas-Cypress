@@ -77,7 +77,7 @@ export default class OfferingInformation extends React.Component {
             onChange={this.handleChange}
             onBlur={this.handleOnBlur}
           />
-          <Form.Group widths="equal">
+          <Form.Group>
             <Form.Select
               fluid
               search
@@ -88,6 +88,7 @@ export default class OfferingInformation extends React.Component {
               error={!!offeringInformation.securityOfferedType.error}
               options={OFFERED_SECURITIES}
               onChange={this.handleChange}
+              width={3}
             />
             <Form.Input
               placeholder="Other Description"
@@ -98,6 +99,7 @@ export default class OfferingInformation extends React.Component {
               onChange={this.handleChange}
               onBlur={this.handleOnBlur}
               disabled={this.getOtherSecurityClass()}
+              width={3}
             />
             <Form.Input
               placeholder="No. of securities offered"
@@ -108,6 +110,7 @@ export default class OfferingInformation extends React.Component {
               onChange={this.handleChange}
               onBlur={this.handleOnBlur}
               disabled={this.getSecurityOfferedClass()}
+              width={3}
             />
             <Form.Input
               placeholder="Price"
@@ -118,6 +121,7 @@ export default class OfferingInformation extends React.Component {
               onChange={this.handleChange}
               onBlur={this.handleOnBlur}
               disabled={this.getSecurityOfferedClass()}
+              width={3}
             />
             <Form.Input
               placeholder="Price"
@@ -127,6 +131,7 @@ export default class OfferingInformation extends React.Component {
               error={!!offeringInformation.priceDeterminationMethod.error}
               onChange={this.handleChange}
               onBlur={this.handleOnBlur}
+              width={4}
             />
           </Form.Group>
           <Form.Group>
@@ -170,7 +175,7 @@ export default class OfferingInformation extends React.Component {
               onChange={this.handleChange}
               onBlur={this.handleOnBlur}
               disabled={!this.getSubscriptionDescClass()}
-              width={4}
+              width={3}
             />
             <Form.Input
               label="Deadline to reach the Target Offering Amount"
@@ -180,7 +185,7 @@ export default class OfferingInformation extends React.Component {
               onChange={this.handleChange}
               onBlur={this.handleOnBlur}
               disabled={this.getSubscriptionTypeClass()}
-              width={4}
+              width={5}
             />
           </Form.Group>
           <Form.Group>
