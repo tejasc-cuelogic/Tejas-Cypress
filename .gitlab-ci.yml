@@ -38,7 +38,7 @@ deploying-code-issues:
     refs:
       - /^issue.*$/
   environment:
-    name: issue/${CURRENT_BRANCH}
+    name: issues/$CI_COMMIT_REF_NAME
     url: http://${CURRENT_BRANCH}.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
