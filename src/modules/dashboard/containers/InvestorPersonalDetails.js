@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
-import { FormInput, FormSelect, FormDatePicker } from '../../../components/form/FormElements';
+import { FormInput, FormSelect, FormDatePicker, MaskedInput } from '../../../components/form/FormElements';
 import validationActions from './../../../actions/validation';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
 import Helper from '../../../helper/utility';
@@ -117,10 +116,12 @@ export default class investorPersonalDetails extends Component {
               />
             </Form.Group>
             <Form.Group widths="equal">
-              <FormInput
-                type="text"
+              <MaskedInput
                 name="phoneNumber"
-                fielddata={verifyIdentity01.fields.phoneNumber}
+                label={verifyIdentity01.fields.phoneNumber.label}
+                value={verifyIdentity01.fields.phoneNumber.value}
+                error={verifyIdentity01.fields.phoneNumber.error}
+                mask="999-999-9999"
                 changed={verifyIdentityEleChange}
               />
               <FormDatePicker
@@ -130,15 +131,6 @@ export default class investorPersonalDetails extends Component {
                 selected={verifyIdentity01.fields.dateOfBirth.value}
                 error={verifyIdentity01.fields.dateOfBirth.error}
                 changed={verifyIdentityEleChange}
-              />
-
-              <DatePicker
-                showMonthDropdown
-                showYearDropdown
-                label="Date of Birth"
-                dateFormat="MM-DD-YYYY"
-                selected={verifyIdentity01.fields.dateOfBirth.value}
-                onChange={this.handleDateChange}
               />
             </Form.Group>
             <FormInput
