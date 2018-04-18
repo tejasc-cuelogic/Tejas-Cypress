@@ -38,6 +38,7 @@ export default class XmlForm extends React.Component {
     this.props.businessStore.clearOffering();
     this.props.businessStore.clearAnnualReport();
     this.props.businessStore.clearSignature();
+    this.props.businessStore.setXmlError();
   }
 
   // handleUrlChange = (e, { value }) => {

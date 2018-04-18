@@ -11,6 +11,10 @@ import busiessActions from '../../../../actions/business';
 @withRouter
 @observer
 export default class FilerInformation extends React.Component {
+  componentWillUnmount() {
+    this.props.businessStore.setXmlError();
+  }
+
   handleChange = (e, { name, value }) => this.props.businessStore.setFilerInfo(name, value)
 
   handleNotificationEmailChange = (chips) => {

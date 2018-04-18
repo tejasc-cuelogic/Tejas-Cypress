@@ -8,6 +8,9 @@ import { withRouter } from 'react-router-dom'; // Redirect
 @withRouter
 @observer
 export default class FileSelector extends React.Component {
+  componentWillUnmount() {
+    this.props.businessStore.setXmlError();
+  }
   handleChange = (e) => {
     this.props.businessStore.toggleRequiredFiles(e.target.textContent);
   };
@@ -41,7 +44,7 @@ export default class FileSelector extends React.Component {
         </Card>
         <Divider hidden />
         <div className="right-align">
-          <Button color="green" size="large" className="pull-left">
+          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(3)}>
             <Icon name="chevron left" />
             Back
           </Button>

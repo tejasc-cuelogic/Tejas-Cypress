@@ -11,6 +11,9 @@ import validationActions from '../../../../actions/validation';
 @withRouter
 @observer
 export default class Signature extends React.Component {
+  componentWillUnmount() {
+    this.props.businessStore.setXmlError();
+  }
   handleChange = (e, { name, value }) => this.props.businessStore.setSignatureInfo(name, value)
 
   handleOnBlur = e => validationActions.validateSignatureInfo(e.target.name)
@@ -80,7 +83,7 @@ export default class Signature extends React.Component {
         </Card>
         <Divider hidden />
         <div className="right-align">
-          <Button color="green" size="large" className="pull-left">
+          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(4)}>
             <Icon name="chevron left" />
             Back
           </Button>

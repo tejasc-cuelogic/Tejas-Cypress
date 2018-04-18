@@ -13,6 +13,9 @@ import busiessActions from '../../../../actions/business';
 @withRouter
 @observer
 export default class IssuerInformation extends React.Component {
+  componentWillUnmount() {
+    this.props.businessStore.setXmlError();
+  }
   getOtherDescriptionClass = () => this.issuerInformation.legalStatusForm.value !== 'Other'
 
   issuerInformation = this.props.businessStore.issuerInformation;
@@ -223,7 +226,7 @@ export default class IssuerInformation extends React.Component {
         </Card>
         <Divider hidden />
         <div className="right-align">
-          <Button color="green" size="large" className="pull-left">
+          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(0)}>
             <Icon name="chevron left" />
             Back
           </Button>

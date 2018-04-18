@@ -12,6 +12,9 @@ import busiessActions from '../../../../actions/business';
 @withRouter
 @observer
 export default class AnnualReportDisclosureRequirements extends React.Component {
+  componentWillUnmount() {
+    this.props.businessStore.setXmlError();
+  }
   handleInputChange = (e, { name, value }) => {
     this.props.businessStore.setAnnualReportInfo(name, value);
   }
@@ -425,7 +428,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
         </Card.Group>
         <Divider hidden />
         <div className="right-align">
-          <Button color="green" size="large" className="pull-left">
+          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(2)}>
             <Icon name="chevron left" />
             Back
           </Button>
