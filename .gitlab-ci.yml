@@ -52,7 +52,10 @@ stop-deploying-code-issues:
   stage: deploy
   variables:
     GIT_STRATEGY: none
+  tags:
+    - ns-client
   script:
+    - python scripts/emptyBucket.py ${CI_COMMIT_REF_SLUG}
     - aws s3api delete-bucket --bucket ${CI_COMMIT_REF_SLUG} --region us-east-1
   when: manual
   environment:
