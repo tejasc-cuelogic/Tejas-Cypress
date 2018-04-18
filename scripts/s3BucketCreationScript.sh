@@ -1,7 +1,8 @@
 #/bin/bash
 bucketName=$1
 regionName=$2
-isBucketExist=$(aws s3 ls | grep "${bucketName}"| cut -d ' ' -f 3)
+
+isBucketExist=$(aws s3 ls | grep -w "${bucketName}"| cut -d ' ' -f 3)
 if [ "$isBucketExist" != "" ]; then
 	echo "${isBucketExist} already exist"
 	exit 0
