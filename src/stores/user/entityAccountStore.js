@@ -11,13 +11,15 @@ class EntityAccountStore {
         value: '',
         label: 'Entity Net Assets',
         error: '',
-        rule: 'required',
+        rule: 'required|numeric',
+        tooltip: 'What is your net entity assets?',
       },
       cfInvestments: {
         value: '',
         label: 'Other religion CF investments made in prior 12 months',
         error: '',
-        rule: 'required',
+        rule: 'required|numeric',
+        tooltip: 'Other religion CF investments made in prior 12 months',
       },
     },
     meta: {
@@ -34,12 +36,14 @@ class EntityAccountStore {
         label: 'Name of Entity',
         error: '',
         rule: 'required',
+        placeHolder: 'e.g. Pad Wealth',
       },
       taxId: {
         value: '',
         label: 'Tax ID',
         error: '',
         rule: 'required',
+        placeHolder: 'e.g. 12345',
       },
       street: {
         value: '',
@@ -116,7 +120,6 @@ class EntityAccountStore {
         rule: 'required',
         label: 'Upload a Photo ID',
         sublabel: 'Drivers License or Passport',
-        placeHolder: '',
       },
     },
     meta: {

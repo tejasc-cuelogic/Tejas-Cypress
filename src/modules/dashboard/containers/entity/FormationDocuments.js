@@ -16,23 +16,17 @@ export default class FormationDocumemts extends Component {
         <Form className="file-uploader-inline">
           <Grid divided="vertically">
             <FileUploaderVertical
-              label={formFormationDocuments.fields.entityFormationDocument.label}
-              name={formFormationDocuments.fields.entityFormationDocument.key}
-              value={formFormationDocuments.fields.entityFormationDocument.value}
+              fielddata={formFormationDocuments.fields.entityFormationDocument}
               uploadDocument={formationDocFileUpload}
               removeUploadedDocument={formationDocResetField}
             />
             <FileUploaderVertical
-              label={formFormationDocuments.fields.entityOperatingDocument.label}
-              name={formFormationDocuments.fields.entityOperatingDocument.key}
-              value={formFormationDocuments.fields.entityOperatingDocument.value}
+              fielddata={formFormationDocuments.fields.entityOperatingDocument}
               uploadDocument={formationDocFileUpload}
               removeUploadedDocument={formationDocResetField}
             />
             <FileUploaderVertical
-              label={formFormationDocuments.fields.einVerification.label}
-              name={formFormationDocuments.fields.einVerification.key}
-              value={formFormationDocuments.fields.einVerification.value}
+              fielddata={formFormationDocuments.fields.einVerification}
               uploadDocument={formationDocFileUpload}
               removeUploadedDocument={formationDocResetField}
             />

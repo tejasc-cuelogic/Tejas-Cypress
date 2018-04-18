@@ -35,19 +35,13 @@ export default class PersonalInformation extends Component {
             />
             <FormInput
               name={formPersonalInfo.fields.entityTitle.key}
-              label={formPersonalInfo.fields.entityTitle.label}
-              value={formPersonalInfo.fields.entityTitle.value}
-              placeholder={formPersonalInfo.fields.entityTitle.placeHolder}
-              error={!!formPersonalInfo.fields.entityTitle.error}
+              fielddata={formPersonalInfo.fields.entityTitle}
               changed={personalInfoChange}
             />
           </div>
           <Grid divided="vertically">
             <FileUploaderVertical
-              name={formPersonalInfo.fields.photoId.key}
-              label={formPersonalInfo.fields.photoId.label}
-              sublabel={formPersonalInfo.fields.photoId.sublabel}
-              value={formPersonalInfo.fields.photoId.value}
+              fielddata={formPersonalInfo.fields.photoId}
               uploadDocument={personalInfoFileUpload}
               removeUploadedDocument={personalInfoResetField}
             />

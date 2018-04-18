@@ -16,20 +16,14 @@ export default class FinancialInformation extends Component {
           <div className="field-wrap">
             <FormInput
               type="text"
+              fielddata={formFinInfo.fields.entityNetAssets}
               name="entityNetAssets"
-              label={formFinInfo.fields.entityNetAssets.label}
-              tooltip="What is your net entity assets?"
-              value={formFinInfo.fields.entityNetAssets.value}
-              error={formFinInfo.fields.entityNetAssets.error}
               changed={finInfoChange}
             />
             <FormInput
               type="text"
               name="cfInvestments"
-              label={formFinInfo.fields.cfInvestments.label}
-              tooltip="Other religion CF investments made in prior 12 months"
-              value={formFinInfo.fields.cfInvestments.value}
-              error={formFinInfo.fields.cfInvestments.error}
+              fielddata={formFinInfo.fields.cfInvestments}
               changed={finInfoChange}
             />
           </div>
