@@ -38,7 +38,7 @@ deploying-code-issues:
     refs:
       - /^issue.*$/
   environment:
-    name: ${CURRENT_BRANCH}
+    name: review/${CURRENT_BRANCH}
     url: http://${CURRENT_BRANCH}.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
