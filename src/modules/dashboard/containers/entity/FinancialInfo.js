@@ -3,8 +3,7 @@ import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import validationActions from '../../../../actions/validation';
-import FormRadioInput from '../../../../components/form/FormRadioInput';
-import DatePicker from '../../../../components/form/DatePicker';
+import { FormRadioInput, FormDatePicker } from '../../../../components/form/FormElements';
 
 @inject('accountStore', 'entityAccountStore')
 @observer
@@ -13,7 +12,7 @@ export default class AccountType extends Component {
     validationActions.validateEntityAccountField('dateOfTrust', date);
   }
   render() {
-    const { formEntityInfo, finInfoChange } = this.props.entityAccountStore;
+    const { formEntityInfo, entityInfoChange } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Is entity a trust?</Header>
@@ -25,18 +24,18 @@ export default class AccountType extends Component {
               label="Yes"
               value="yes"
               checked={formEntityInfo.fields.isEntityTrust.value === 'yes'}
-              changed={finInfoChange}
+              changed={entityInfoChange}
             />
             <FormRadioInput
               name={formEntityInfo.fields.isEntityTrust.key}
               label="No"
               value="no"
               checked={formEntityInfo.fields.isEntityTrust.value === 'no'}
-              changed={finInfoChange}
+              changed={entityInfoChange}
             />
           </Form.Group>
           <div className="field-wrap">
-            <DatePicker
+            <FormDatePicker
               label={formEntityInfo.fields.dateOfTrust.label}
               placeholderText={formEntityInfo.fields.dateOfTrust.placeHolder}
               selected={formEntityInfo.fields.dateOfTrust.value}

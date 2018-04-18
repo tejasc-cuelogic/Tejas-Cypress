@@ -1,5 +1,6 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
+import moment from 'moment';
 import { Form, Popup, Icon } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 import FieldError from '../common/FieldError';
@@ -23,8 +24,10 @@ const FormDatePicker = props => (
       {...props}
       label={false}
       dateFormat="MM-DD-YYYY"
+      maxDate={moment()}
       onClick={this.changed}
       onChange={this.changed}
+      disabled={props.isdisabled}
     />
     {props.error &&
       <FieldError error={props.error} />

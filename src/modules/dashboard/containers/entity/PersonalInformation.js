@@ -3,7 +3,7 @@ import { Header, Form, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FormInput from '../../../../components/form/FormInput';
-import FileUploaderVertical from '../../../../components/form/FileUploaderVertical';
+import { FileUploaderVertical } from '../../../../components/form/FormElements';
 
 @inject('userStore', 'entityAccountStore')
 @observer
@@ -11,9 +11,9 @@ export default class PersonalInformation extends Component {
   render() {
     const {
       formPersonalInfo,
-      finInfoChange,
-      onFileUpload,
-      resetFieldValue,
+      personalInfoChange,
+      personalInfoFileUpload,
+      personalInfoResetField,
     } = this.props.entityAccountStore;
     const { currentUser } = this.props.userStore;
 
@@ -35,21 +35,15 @@ export default class PersonalInformation extends Component {
             />
             <FormInput
               name={formPersonalInfo.fields.entityTitle.key}
-              label={formPersonalInfo.fields.entityTitle.label}
-              value={formPersonalInfo.fields.entityTitle.value}
-              placeholder={formPersonalInfo.fields.entityTitle.placeHolder}
-              error={!!formPersonalInfo.fields.entityTitle.error}
-              changed={finInfoChange}
+              fielddata={formPersonalInfo.fields.entityTitle}
+              changed={personalInfoChange}
             />
           </div>
           <Grid divided="vertically">
             <FileUploaderVertical
-              name={formPersonalInfo.fields.photoId.key}
-              label={formPersonalInfo.fields.photoId.label}
-              sublabel={formPersonalInfo.fields.photoId.sublabel}
-              value={formPersonalInfo.fields.photoId.value}
-              uploadDocument={onFileUpload}
-              removeUploadedDocument={resetFieldValue}
+              fielddata={formPersonalInfo.fields.photoId}
+              uploadDocument={personalInfoFileUpload}
+              removeUploadedDocument={personalInfoResetField}
             />
           </Grid>
         </Form>

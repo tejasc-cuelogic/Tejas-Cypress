@@ -17,53 +17,39 @@ export default class General extends Component {
             <FormInput
               type="text"
               name="nameOfEntity"
-              label={formGeneralInfo.fields.nameOfEntity.label}
-              value={formGeneralInfo.fields.nameOfEntity.value}
-              error={formGeneralInfo.fields.nameOfEntity.error}
-              placeholder="e.g. Pad Wealth"
+              fielddata={formGeneralInfo.fields.nameOfEntity}
               changed={genInfoChange}
             />
             <FormInput
               type="text"
               name="taxId"
-              label={formGeneralInfo.fields.taxId.label}
-              value={formGeneralInfo.fields.taxId.value}
-              error={formGeneralInfo.fields.taxId.error}
-              placeholder="e.g. 12345"
+              fielddata={formGeneralInfo.fields.taxId}
               changed={genInfoChange}
             />
             <h5>Entity Address</h5>
             <FormInput
               type="text"
               name="street"
-              label={formGeneralInfo.fields.street.label}
-              value={formGeneralInfo.fields.street.value}
-              error={formGeneralInfo.fields.street.error}
+              fielddata={formGeneralInfo.fields.street}
               changed={genInfoChange}
             />
             <Form.Group widths="equal">
               <FormInput
                 type="text"
                 name="city"
-                label={formGeneralInfo.fields.city.label}
-                value={formGeneralInfo.fields.city.value}
-                error={formGeneralInfo.fields.city.error}
+                fielddata={formGeneralInfo.fields.city}
                 changed={genInfoChange}
               />
               <FormSelect
                 name="state"
-                label={formGeneralInfo.fields.state.label}
-                value={formGeneralInfo.fields.state.value}
-                error={formGeneralInfo.fields.state.error}
+                fielddata={formGeneralInfo.fields.state}
                 options={US_STATES}
                 changed={genInfoChange}
               />
               <FormInput
                 type="text"
                 name="zipCode"
-                label={formGeneralInfo.fields.zipCode.label}
-                value={formGeneralInfo.fields.zipCode.value}
-                error={formGeneralInfo.fields.zipCode.error}
+                fielddata={formGeneralInfo.fields.zipCode}
                 changed={genInfoChange}
               />
             </Form.Group>
