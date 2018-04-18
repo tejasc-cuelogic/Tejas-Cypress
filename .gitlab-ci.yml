@@ -3,8 +3,6 @@ image: awscli:custom
 variables:
   CI: "false"
 
-before_script:
-  - export CURRENT_BRANCH=$(echo $CI_COMMIT_REF_NAME | tr '[:upper:]' '[:lower:]' | sed "s/\//-/g")  
 stages:
   - build
   - deploy
@@ -22,8 +20,8 @@ building-code-issues:
     - ns-client
   stage: build
   script:
-    - echo "currentbranch = $CURRENT_BRANCH"
-    - bash scripts/s3BucketCreationScript.sh ${CURRENT_BRANCH} us-east-1
+    - echo "currentbranch = $CI_COMMIT_REF_SLUG"
+    - bash scripts/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} us-east-1
     - bash scripts/setEnvironmentVariables.sh us-east-1 dev
     - npm install
     - npm run build
@@ -40,15 +38,27 @@ deploying-code-issues:
   environment:
     name: issues/$CI_COMMIT_REF_NAME
     url: http://$CI_COMMIT_REF_SLUG.s3-website-us-east-1.amazonaws.com
+    on_stop: stop-deploying-code-issues
   tags:
     - ns-client
   stage: deploy
   script: 
     - echo "deploy to s3 bucket"
-    - aws s3 cp build/ s3://${CURRENT_BRANCH}/ --recursive
+    - aws s3 cp build/ s3://${CI_COMMIT_REF_SLUG}/ --recursive
   dependencies:
     - building-code-issues
 
+stop-deploying-code-issues:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - aws s3api delete-bucket --bucket ${CI_COMMIT_REF_SLUG} --region us-east-1
+  when: manual
+  environment:
+    name: issues/$CI_COMMIT_REF_NAME
+    action: stop
+  
 
 #---------------------------------Dev-------------------------------------------
 
