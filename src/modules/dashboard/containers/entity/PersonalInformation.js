@@ -11,9 +11,9 @@ export default class PersonalInformation extends Component {
   render() {
     const {
       formPersonalInfo,
-      finInfoChange,
-      onFileUpload,
-      resetFieldValue,
+      personalInfoChange,
+      personalInfoFileUpload,
+      personalInfoResetField,
     } = this.props.entityAccountStore;
     const { currentUser } = this.props.userStore;
 
@@ -39,7 +39,7 @@ export default class PersonalInformation extends Component {
               value={formPersonalInfo.fields.entityTitle.value}
               placeholder={formPersonalInfo.fields.entityTitle.placeHolder}
               error={!!formPersonalInfo.fields.entityTitle.error}
-              changed={finInfoChange}
+              changed={personalInfoChange}
             />
           </div>
           <Grid divided="vertically">
@@ -48,8 +48,8 @@ export default class PersonalInformation extends Component {
               label={formPersonalInfo.fields.photoId.label}
               sublabel={formPersonalInfo.fields.photoId.sublabel}
               value={formPersonalInfo.fields.photoId.value}
-              uploadDocument={onFileUpload}
-              removeUploadedDocument={resetFieldValue}
+              uploadDocument={personalInfoFileUpload}
+              removeUploadedDocument={personalInfoResetField}
             />
           </Grid>
         </Form>

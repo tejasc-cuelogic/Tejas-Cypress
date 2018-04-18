@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
-import FormInput from '../../../../components/form/FormInput';
+import { FormInput } from '../../../../components/form/FormElements';
 
 @inject('entityAccountStore')
 @observer

@@ -160,25 +160,49 @@ class EntityAccountStore {
   };
 
   @action
-  finInfoChange = (field, value) => {
-    this.onFieldChange('formPersonalInfo', field, value);
+  finInfoChange = (e, { name, value }) => {
+    this.onFieldChange('formFinInfo', name, value);
   };
 
   @action
-  onFileUpload = (field, files) => {
+  personalInfoChange = (e, { name, value }) => {
+    this.onFieldChange('formPersonalInfo', name, value);
+  };
+
+  @action
+  personalInfoFileUpload = (field, files) => {
+    if (files.length) {
+      const uploadFile = files[0];
+      this.onFieldChange('formPersonalInfo', field, uploadFile.name);
+    }
+  };
+
+  @action
+  personalInfoResetField = (field) => {
+    this.onFieldChange('formPersonalInfo', field, '');
+  };
+
+  @action
+  formationDocFileUpload = (field, files) => {
     if (files.length) {
       const uploadFile = files[0];
       this.onFieldChange('formFormationDocuments', field, uploadFile.name);
     }
-  }
+  };
 
   @action
-  resetFieldValue = (field) => {
+  formationDocResetField = (field) => {
     this.onFieldChange('formFormationDocuments', field, '');
-  }
+  };
 
+  @action
   genInfoChange = (e, { name, value }) => {
     this.onFieldChange('formGeneralInfo', name, value);
+  };
+
+  @action
+  entityInfoChange = (e, { name, value }) => {
+    this.onFieldChange('formEntityInfo', name, value);
   };
 
   @action
