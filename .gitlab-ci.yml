@@ -20,6 +20,8 @@ building-code-issues:
     - ns-client
   stage: build
   script:
+    - ls scripts/
+    - chmod +x scripts/emptyBucket.py 
     - echo "currentbranch = $CI_COMMIT_REF_SLUG"
     - bash scripts/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} us-east-1
     - bash scripts/setEnvironmentVariables.sh us-east-1 dev
