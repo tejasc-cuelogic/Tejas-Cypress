@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom'; // Redirect
 import { US_STATES, LEGAL_FORM_TYPES } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
 import busiessActions from '../../../../actions/business';
+import Helper from '../../../../helper/utility';
 
 @inject('businessStore')
 @withRouter
@@ -41,6 +42,18 @@ export default class IssuerInformation extends React.Component {
     e.preventDefault();
     const { issuerInformation } = this.props.businessStore;
     busiessActions.validateIssuerInfo(issuerInformation);
+
+    if (this.props.businessStore.canSubmitIssuerInfoXmlForm) {
+      busiessActions.submitXMLInformation('issuerInformation')
+        .then(() => {
+          this.props.businessStore.setXmlError();
+          this.props.businessStore.setXmlActiveTabId(2);
+          Helper.toast('Issuer information submitted successfully', 'success');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   render() {

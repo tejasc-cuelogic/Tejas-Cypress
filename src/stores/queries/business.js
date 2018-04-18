@@ -28,3 +28,27 @@ export const filerInformationMutation = gql`
       payload
     }
   }`;
+
+export const issuerInformationMutation = gql`
+  mutation upsertIssuerInformation($filingId: String!, $xmlSubmissionId: String!, $issuerInformation: CreateIssuerInformationInput ) {
+    upsertIssuerInformation(filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, issuerInformation: $issuerInformation) {
+      xmlSubmissionId
+      payload
+    }
+  }`;
+
+export const offeringInformationMutation = gql`
+  mutation upsertOfferingInformation($filingId: String!, $xmlSubmissionId: String!, $offeringInformation: CreateOfferingInformationInput ) {
+    upsertOfferingInformation(filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, offeringInformation: $offeringInformation) {
+      xmlSubmissionId
+      payload
+    }
+  }`;
+
+export const annualReportMutation = gql`
+  mutation upsertAnnualReportDisclosureRequirements($filingId: String!, $xmlSubmissionId: String!, $annualReportDisclosureRequirements: CreateAnnualReportDisclosureRequirementsInput ) {
+    upsertAnnualReportDisclosureRequirements(filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, annualReportDisclosureRequirements: $annualReportDisclosureRequirements) {
+      xmlSubmissionId
+      payload
+    }
+  }`;

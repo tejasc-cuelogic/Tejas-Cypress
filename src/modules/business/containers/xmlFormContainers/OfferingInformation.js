@@ -11,6 +11,7 @@ import {
 } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
 import busiessActions from '../../../../actions/business';
+import Helper from '../../../../helper/utility';
 
 const LABEL = 'Amount of compensation to be paid to the intermediary,' +
   'whether as a dollar amount or a percentage of the offering amount, ' +
@@ -57,6 +58,18 @@ export default class OfferingInformation extends React.Component {
     e.preventDefault();
     const { offeringInformation } = this.props.businessStore;
     busiessActions.validateOfferingInfo(offeringInformation);
+
+    if (this.props.businessStore.canSubmitOfferingInfoXmlForm) {
+      busiessActions.submitXMLInformation('offeringInformation')
+        .then(() => {
+          this.props.businessStore.setXmlError();
+          this.props.businessStore.setXmlActiveTabId(3);
+          Helper.toast('Offering information submitted successfully', 'success');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   render() {

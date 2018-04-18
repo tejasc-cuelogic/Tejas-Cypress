@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom'; // Redirect
 import { COUNTRIES } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
 import busiessActions from '../../../../actions/business';
+import Helper from '../../../../helper/utility';
 
 @inject('businessStore')
 @withRouter
@@ -33,6 +34,18 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
     e.preventDefault();
     const { annualReportRequirements } = this.props.businessStore;
     busiessActions.validateAnnualReportInfo(annualReportRequirements);
+
+    if (this.props.businessStore.canSubmitAnnualReportXmlForm) {
+      busiessActions.submitXMLInformation('annualReport')
+        .then(() => {
+          this.props.businessStore.setXmlError();
+          this.props.businessStore.setXmlActiveTabId(4);
+          Helper.toast('Offering information submitted successfully', 'success');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   render() {
@@ -422,6 +435,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
                 onChange={this.handleSelectChange}
                 error={!!annualReportRequirements.issueJurisdictionSecuritiesOffering.error}
                 key={annualReportRequirements.issueJurisdictionSecuritiesOffering.key}
+                value={annualReportRequirements.issueJurisdictionSecuritiesOffering.value}
               />
             </Form.Field>
           </Card>

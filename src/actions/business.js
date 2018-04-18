@@ -4,7 +4,13 @@ import shortid from 'shortid';
 import graphql from 'graphql';
 
 import { GqlClient as client } from '../services/graphql';
-import { listOfferings, getXmlDetails, filerInformationMutation } from '../stores/queries/business';
+import {
+  listOfferings,
+  getXmlDetails,
+  filerInformationMutation,
+  issuerInformationMutation,
+  offeringInformationMutation,
+  annualReportMutation } from '../stores/queries/business';
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
 import {
@@ -81,23 +87,58 @@ export class Business {
   /**
    * Submit filer information
    */
-  submitFilerInformation = () => {
+  submitXMLInformation = (action) => {
     const {
       businessId,
       filingId,
       xmlSubmissionId,
       filerInformation,
+      issuerInformation,
+      offeringInformation,
+      annualReportRequirements,
     } = businessStore;
 
-    const payload = {
-      query: filerInformationMutation,
-      variables: {
-        businessId,
-        filingId,
-        xmlSubmissionId,
-        filerInformation: this.getFormattedInformation(filerInformation),
-      },
+    let payload = {};
+    const ids = {
+      businessId,
+      filingId,
+      xmlSubmissionId,
     };
+
+    if (action === 'filerInformation') {
+      payload = {
+        query: filerInformationMutation,
+        variables: {
+          ...ids,
+          filerInformation: this.getFormattedInformation(filerInformation),
+        },
+      };
+    } else if (action === 'issuerInformation') {
+      payload = {
+        query: issuerInformationMutation,
+        variables: {
+          ...ids,
+          issuerInformation: this.getFormattedInformation(issuerInformation),
+        },
+      };
+    } else if (action === 'offeringInformation') {
+      payload = {
+        query: offeringInformationMutation,
+        variables: {
+          ...ids,
+          offeringInformation: this.getFormattedInformation(offeringInformation),
+        },
+      };
+    } else if (action === 'annualReport') {
+      payload = {
+        query: annualReportMutation,
+        variables: {
+          ...ids,
+          annualReportDisclosureRequirements:
+          this.getFormattedInformation(annualReportRequirements),
+        },
+      };
+    }
 
     return new Promise((res, rej) => {
       ApiService.post(GRAPHQL, payload)

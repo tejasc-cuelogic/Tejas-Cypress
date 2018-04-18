@@ -52,7 +52,7 @@ export default class FilerInformation extends React.Component {
     busiessActions.validateFilerInfo(filerInformation);
 
     if (this.props.businessStore.canSubmitFilerInfoXmlForm) {
-      busiessActions.submitFilerInformation()
+      busiessActions.submitXMLInformation('filerInformation')
         .then((data) => {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(1);
