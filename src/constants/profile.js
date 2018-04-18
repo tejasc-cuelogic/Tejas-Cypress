@@ -12,12 +12,14 @@ export const VERIFY_IDENTITY_STEP_01 = {
     label: 'First Legal Name',
     error: undefined,
     rule: 'required',
+    tooltip: 'Put your first name as listed on your driver license',
   },
   lastLegalName: {
     value: '',
     label: 'Last Legal Name',
     error: undefined,
     rule: 'required',
+    tooltip: 'Put your last name as listed on your driver license',
   },
   residentalStreet: {
     value: '',

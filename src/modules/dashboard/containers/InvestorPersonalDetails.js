@@ -79,54 +79,40 @@ export default class investorPersonalDetails extends Component {
               <FormInput
                 type="text"
                 name="firstLegalName"
-                label={verifyIdentity01.fields.firstLegalName.label}
-                tooltip="Put your first name as listed on your driver license"
-                value={verifyIdentity01.fields.firstLegalName.value}
-                error={verifyIdentity01.fields.firstLegalName.error}
+                fielddata={verifyIdentity01.fields.firstLegalName}
                 changed={verifyIdentityEleChange}
               />
               <FormInput
                 type="text"
                 name="lastLegalName"
-                label={verifyIdentity01.fields.lastLegalName.label}
-                tooltip="Put your last name as listed on your driver license"
-                value={verifyIdentity01.fields.lastLegalName.value}
-                error={verifyIdentity01.fields.lastLegalName.error}
+                fielddata={verifyIdentity01.fields.lastLegalName}
                 changed={verifyIdentityEleChange}
               />
             </Form.Group>
             <FormInput
               type="text"
               name="residentalStreet"
-              label={verifyIdentity01.fields.residentalStreet.label}
+              fielddata={verifyIdentity01.fields.residentalStreet}
               tooltip="Put your last name as listed on your driver license"
-              value={verifyIdentity01.fields.residentalStreet.value}
-              error={verifyIdentity01.fields.residentalStreet.error}
               changed={verifyIdentityEleChange}
             />
             <Form.Group widths="equal">
               <FormInput
                 type="text"
                 name="city"
-                label={verifyIdentity01.fields.city.label}
-                value={verifyIdentity01.fields.city.value}
-                error={verifyIdentity01.fields.city.error}
+                fielddata={verifyIdentity01.fields.city}
                 changed={verifyIdentityEleChange}
               />
               <FormInput
                 type="text"
                 name="state"
-                label={verifyIdentity01.fields.state.label}
-                value={verifyIdentity01.fields.state.value}
-                error={verifyIdentity01.fields.state.error}
+                fielddata={verifyIdentity01.fields.state}
                 changed={verifyIdentityEleChange}
               />
               <FormInput
                 type="text"
                 name="zipCode"
-                label={verifyIdentity01.fields.zipCode.label}
-                value={verifyIdentity01.fields.zipCode.value}
-                error={verifyIdentity01.fields.zipCode.error}
+                fielddata={verifyIdentity01.fields.zipCode}
                 changed={verifyIdentityEleChange}
               />
             </Form.Group>
@@ -134,9 +120,7 @@ export default class investorPersonalDetails extends Component {
               <FormInput
                 type="text"
                 name="phoneNumber"
-                label={verifyIdentity01.fields.phoneNumber.label}
-                value={verifyIdentity01.fields.phoneNumber.value}
-                error={verifyIdentity01.fields.phoneNumber.error}
+                fielddata={verifyIdentity01.fields.phoneNumber}
                 changed={verifyIdentityEleChange}
               />
               <FormDatePicker
@@ -160,9 +144,7 @@ export default class investorPersonalDetails extends Component {
             <FormInput
               type="text"
               name="ssn"
-              label={verifyIdentity01.fields.ssn.label}
-              value={verifyIdentity01.fields.ssn.value}
-              error={verifyIdentity01.fields.ssn.error}
+              fielddata={verifyIdentity01.fields.ssn}
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">
