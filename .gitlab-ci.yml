@@ -25,6 +25,7 @@ building-code-issues:
     - ns-client
   stage: build
   script:
+    - echo "currentbranch= $CURRENT_BRANCH"
     # - bash scripts/s3BucketCreationScript.sh ${CURRENT_BRANCH} us-east-1
     # - bash scripts/setEnvironmentVariables.sh us-east-1 dev
     # - npm install
