@@ -6,8 +6,6 @@ variables:
 before_script:
   - export CURRENT_BRANCH=$(echo $CI_COMMIT_REF_NAME | tr '[:upper:]' '[:lower:]' | sed "s/\//-/g")  
   - echo $CURRENT_BRANCH
-after_script:
-  - export CURRENT_BRANCH=""
 stages:
   - build
   - deploy
