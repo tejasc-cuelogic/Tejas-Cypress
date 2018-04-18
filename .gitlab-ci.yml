@@ -44,6 +44,7 @@ deploying-code-issues:
     - ns-client
   stage: deploy
   before_script:
+    - export CURRENT_BRANCH=$(echo $CI_COMMIT_REF_NAME | tr '[:upper:]' '[:lower:]' | sed "s/\//-/g")  
     - export CURRENT_URL=$(echo $CI_COMMIT_REF_NAME | tr '[:upper:]' '[:lower:]' | sed "s/\//-/g")  
   script: 
     - echo "deploy to s3 bucket"
