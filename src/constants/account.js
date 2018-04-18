@@ -149,6 +149,56 @@ export const IS_ENTITY_TRUST = {
   1: 'no',
 };
 
+export const ENTITY_FIN_INFO = {
+  entityNetAssets: {
+    value: '',
+    label: 'Entity Net Assets',
+    error: '',
+    rule: 'required|numeric',
+    tooltip: 'What is your net entity assets?',
+  },
+  cfInvestments: {
+    value: '',
+    label: 'Other religion CF investments made in prior 12 months',
+    error: '',
+    rule: 'required|numeric',
+    tooltip: 'Other religion CF investments made in prior 12 months',
+  },
+};
+
+export const ENTITY_GEN_INFO = {
+  nameOfEntity: {
+    value: '', label: 'Name of Entity', error: '', rule: 'required', placeHolder: 'e.g. Pad Wealth',
+  },
+  taxId: {
+    value: '', label: 'Tax ID', error: '', rule: 'required', placeHolder: 'e.g. 12345',
+  },
+  street: {
+    value: '', label: 'Street', error: '', rule: 'required|string',
+  },
+  city: {
+    value: '', label: 'City', error: '', rule: 'required|string',
+  },
+  state: {
+    value: '', label: 'State', error: '', rule: 'required|string',
+  },
+  zipCode: {
+    value: '', label: 'ZIP Code', error: '', rule: 'required|numeric',
+  },
+};
+
+export const ENTITY_TRUST_INFO = {
+  isEntityTrust: {
+    value: 'yes',
+    values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
+    error: undefined,
+    rule: 'required',
+  },
+  dateOfTrust: {
+    value: moment(), error: undefined, rule: 'required', label: 'Date of Trust',
+  },
+};
+
 export const ENTITY_ACCOUNT_CREATION = {
   entityNetAssets: {
     value: '',

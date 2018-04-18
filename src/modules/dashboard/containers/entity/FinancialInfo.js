@@ -3,7 +3,7 @@ import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import validationActions from '../../../../actions/validation';
-import { FormRadioInput, FormDatePicker } from '../../../../components/form/FormElements';
+import { FormRadioGroup, FormDatePicker } from '../../../../components/form/FormElements';
 
 @inject('accountStore', 'entityAccountStore')
 @observer
@@ -19,18 +19,9 @@ export default class AccountType extends Component {
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Header>
         <Form error>
           <Form.Group inline className="button-radio center-align">
-            <FormRadioInput
-              name={formEntityInfo.fields.isEntityTrust.key}
-              label="Yes"
-              value="yes"
-              checked={formEntityInfo.fields.isEntityTrust.value === 'yes'}
-              changed={entityInfoChange}
-            />
-            <FormRadioInput
-              name={formEntityInfo.fields.isEntityTrust.key}
-              label="No"
-              value="no"
-              checked={formEntityInfo.fields.isEntityTrust.value === 'no'}
+            <FormRadioGroup
+              fielddata={formEntityInfo.fields.isEntityTrust}
+              name="isEntityTrust"
               changed={entityInfoChange}
             />
           </Form.Group>

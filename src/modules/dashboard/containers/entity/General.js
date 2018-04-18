@@ -14,18 +14,16 @@ export default class General extends Component {
         <Header as="h1" textAlign="center">General Information</Header>
         <Form error>
           <div className="field-wrap">
-            <FormInput
-              type="text"
-              name="nameOfEntity"
-              fielddata={formGeneralInfo.fields.nameOfEntity}
-              changed={genInfoChange}
-            />
-            <FormInput
-              type="text"
-              name="taxId"
-              fielddata={formGeneralInfo.fields.taxId}
-              changed={genInfoChange}
-            />
+            {
+              ['nameOfEntity', 'taxId'].map(field => (
+                <FormInput
+                  type="text"
+                  fielddata={formGeneralInfo.fields[field]}
+                  name={field}
+                  changed={genInfoChange}
+                />
+              ))
+            }
             <h5>Entity Address</h5>
             <FormInput
               type="text"

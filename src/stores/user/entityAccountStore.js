@@ -1,105 +1,26 @@
 import { action, observable } from 'mobx';
-import moment from 'moment';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
+import {
+  ENTITY_FIN_INFO,
+  ENTITY_GEN_INFO,
+  ENTITY_TRUST_INFO,
+} from '../../constants/account';
 
 class EntityAccountStore {
   @observable
   formFinInfo = {
-    fields: {
-      entityNetAssets: {
-        value: '',
-        label: 'Entity Net Assets',
-        error: '',
-        rule: 'required|numeric',
-        tooltip: 'What is your net entity assets?',
-      },
-      cfInvestments: {
-        value: '',
-        label: 'Other religion CF investments made in prior 12 months',
-        error: '',
-        rule: 'required|numeric',
-        tooltip: 'Other religion CF investments made in prior 12 months',
-      },
-    },
-    meta: {
-      isValid: true,
-      error: '',
-    },
+    fields: { ...ENTITY_FIN_INFO }, meta: { isValid: true, error: '' },
   };
 
   @observable
   formGeneralInfo = {
-    fields: {
-      nameOfEntity: {
-        value: '',
-        label: 'Name of Entity',
-        error: '',
-        rule: 'required',
-        placeHolder: 'e.g. Pad Wealth',
-      },
-      taxId: {
-        value: '',
-        label: 'Tax ID',
-        error: '',
-        rule: 'required',
-        placeHolder: 'e.g. 12345',
-      },
-      street: {
-        value: '',
-        label: 'Street',
-        error: '',
-        rule: 'required|string',
-      },
-      city: {
-        value: '',
-        label: 'City',
-        error: '',
-        rule: 'required|string',
-      },
-      state: {
-        value: '',
-        label: 'State',
-        error: '',
-        rule: 'required|string',
-      },
-      zipCode: {
-        value: '',
-        label: 'ZIP Code',
-        error: '',
-        rule: 'required|numeric',
-      },
-    },
-    meta: {
-      isValid: true,
-      error: '',
-    },
+    fields: { ...ENTITY_GEN_INFO }, meta: { isValid: true, error: '' },
   };
 
   @observable
   formEntityInfo = {
-    fields: {
-      isEntityTrust: {
-        value: 'yes',
-        key: 'isEntityTrust',
-        error: undefined,
-        rule: 'required',
-        label: '',
-        placeHolder: '',
-      },
-      dateOfTrust: {
-        value: moment(),
-        key: 'dateOfTrust',
-        error: undefined,
-        rule: 'required',
-        label: 'Date of Trust',
-        placeHolder: '',
-      },
-    },
-    meta: {
-      isValid: true,
-      error: '',
-    },
+    fields: { ...ENTITY_TRUST_INFO }, meta: { isValid: true, error: '' },
   };
 
   @observable
