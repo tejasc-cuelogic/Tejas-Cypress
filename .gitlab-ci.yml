@@ -3,6 +3,9 @@ image: awscli:custom
 variables:
   CI: "false"
 
+before_script:
+  - export CURRENT_BRANCH=$(echo $CI_COMMIT_REF_NAME | tr '[:upper:]' '[:lower:]' | sed "s/\//-/g")  
+
 stages:
   - build
   - deploy
@@ -20,7 +23,7 @@ building-code-issues:
     - ns-client
   stage: build
   script:
-    - bash scripts/s3BucketCreationScript.sh ${CI_COMMIT_REF_NAME} us-east-1
+    - bash scripts/s3BucketCreationScript.sh ${CURRENT_BRANCH} us-east-1
     - bash scripts/setEnvironmentVariables.sh us-east-1 dev
     - npm install
     - npm run build
@@ -35,14 +38,14 @@ deploying-code-issues:
     refs:
       - /^issue.*$/
   environment:
-    name: ${CI_COMMIT_REF_NAME}
-    url: http://${CI_COMMIT_REF_NAME}.s3-website-us-east-1.amazonaws.com
+    name: ${CURRENT_BRANCH}
+    url: http://${CURRENT_BRANCH}.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
   script: 
     - echo "deploy to s3 bucket"
-    - aws s3 cp build/ s3://${CI_COMMIT_REF_NAME}/ --recursive
+    - aws s3 cp build/ s3://${CURRENT_BRANCH}/ --recursive
   dependencies:
     - building-code-issues
 
