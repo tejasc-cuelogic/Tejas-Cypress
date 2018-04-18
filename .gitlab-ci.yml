@@ -57,6 +57,8 @@ stop-deploying-code-issues:
   tags:
     - ns-client
   script:
+    - ls
+    - ls scripts/
     - chmod +x scripts/emptyBucket.py 
     - python scripts/emptyBucket.py ${CI_COMMIT_REF_SLUG}
     - aws s3api delete-bucket --bucket ${CI_COMMIT_REF_SLUG} --region us-east-1
