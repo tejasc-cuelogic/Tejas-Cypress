@@ -1,10 +1,11 @@
-import { observable, action, computed } from 'mobx';
-import _ from 'lodash';
+import { observable, action } from 'mobx';
+import Validator from 'validatorjs';
+import mapValues from 'lodash/mapValues';
 import api from '../ns-api';
 import uiStore from './uiStore';
 
 import {
-  PROFILE_DETAILS,
+  VERIFY_IDENTITY_STEP_01,
   IDENTITY_QUESTIONS_FORM_VALUES,
   CONFIRM_IDENTITY_DOCUMENTS,
 } from '../constants/profile';
@@ -12,7 +13,7 @@ import {
 export class ProfileStore {
   @observable profile = undefined;
 
-  @observable profileDetails = { ...PROFILE_DETAILS }
+  @observable verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: true, error: '' } };
 
   @observable confirmIdentityQuestions = { ...IDENTITY_QUESTIONS_FORM_VALUES }
 
@@ -57,34 +58,21 @@ export class ProfileStore {
     this.profileDetails.ssn.error = undefined;
   }
 
-  @computed
-  get canSubmitProfileDetails() {
-    return _.isEmpty(_.filter(this.profileDetails, field => field.error));
-  }
+  @action
+  verifyIdentityEleChange = (e, { name, value }) => {
+    this.onFieldChange('verifyIdentity01', name, value);
+  };
 
   @action
-  setConfirmIdentityQuestions(field, value) {
-    this.confirmIdentityQuestions[field].value = value;
-  }
-
-  @action
-  setConfirmIdentityQuestionsError(field, error) {
-    this.confirmIdentityQuestions[field].error = error;
-  }
-
-  @computed
-  get canSubmitConfirmIdentityForm() {
-    return _.isEmpty(_.filter(this.confirmIdentityQuestions, field => field.error));
-  }
-
-  @computed
-  get canSubmitPhoneNumberVerification() {
-    return _.isEmpty(this.profileDetails.code.error);
-  }
-
-  @action
-  setConfirmIdentityDocuments(field, name) {
-    this.confirmIdentityDocuments[field].nameOfUploadedFile = name;
-  }
+  onFieldChange = (currentForm, field, value) => {
+    const form = currentForm || 'formFinInfo';
+    this[form].fields[field].value = value;
+    const validation = new Validator(
+      mapValues(this[form].fields, f => f.value),
+      mapValues(this[form].fields, f => f.rule),
+    );
+    this[form].meta.isValid = validation.passes();
+    this[form].fields[field].error = validation.errors.first(field);
+  };
 }
 export default new ProfileStore();

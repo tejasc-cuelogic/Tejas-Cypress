@@ -1,9 +1,10 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { Form, Popup, Icon } from 'semantic-ui-react';
+import DatePicker from 'react-datepicker';
 import FieldError from '../common/FieldError';
 
-const FormInput = props => (
+const FormDatePicker = props => (
   <Form.Field>
     <label>
       {props.label}
@@ -16,13 +17,14 @@ const FormInput = props => (
         />
       }
     </label>
-    <Form.Input
-      fluid
+    <DatePicker
+      showMonthDropdown
+      showYearDropdown
       {...props}
       label={false}
-      type={props.type || 'text'}
-      error={props.error !== ''}
-      onChange={props.changed}
+      dateFormat="MM-DD-YYYY"
+      onClick={this.changed}
+      onChange={this.changed}
     />
     {props.error &&
       <FieldError error={props.error} />
@@ -30,4 +32,4 @@ const FormInput = props => (
   </Form.Field>
 );
 
-export default FormInput;
+export default FormDatePicker;
