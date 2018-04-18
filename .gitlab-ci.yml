@@ -13,6 +13,7 @@ building-code-issues:
   cache:
     paths:
     - node_modules/
+    - scripts/
   only:
     refs:
       - /^issue.*$/
