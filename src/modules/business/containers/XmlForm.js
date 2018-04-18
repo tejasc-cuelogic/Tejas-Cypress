@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Grid, Icon, Message } from 'semantic-ui-react';
+import { Form, Grid, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
@@ -13,20 +13,11 @@ import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
 import Helper from '../../../helper/utility';
-import ListErrors from '../../../components/common/ListErrors';
-// import FieldError from '../../../components/common/FieldError';
 import FormErrors from '../../../components/common/FormErrors';
 
 @inject('businessStore', 'uiStore')
 @observer
 export default class XmlForm extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      errors: [],
-    };
-  }
-
   componentDidMount() {
     this.props.businessStore.setXmlActiveTabId(0);
     this.props.businessStore.setBusinessId(this.props.match.params.businessId);
@@ -62,11 +53,21 @@ export default class XmlForm extends React.Component {
     if (this.props.businessStore.canSubmitXmlForm) {
       businessActions.generateXml()
         .then(() => {
+          this.props.businessStore.setXmlError();
           this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
           Helper.toast('XML form submitted successfully', 'success');
         })
         .catch((err) => {
-          this.setState({ errors: err.response.body.message });
+          const newErrors = { ...this.props.businessStore.xmlErrors };
+          Object.keys(err.response.body.errors).map((key) => {
+            err.response.body.errors[key].map((element) => {
+              newErrors[key] = element;
+              return newErrors;
+            });
+            return err.response.body.errors;
+          });
+          this.props.businessStore.setXmlError(newErrors);
+          // this.setState({ errors: err.response.body.errors });
           Helper.toast('Something went wrong while submitting XML Form, Please try again.', 'error', { position: 'top-center' });
         })
         .finally(() => {
@@ -117,35 +118,10 @@ export default class XmlForm extends React.Component {
                 {xmlActiveTabId === 3 && <AnnualReportDisclosureRequirements />}
                 {xmlActiveTabId === 4 && <FileSelector />}
                 {xmlActiveTabId === 5 && <Signature />}
-                {this.state.errors && this.state.errors.message &&
-                  <Message error textAlign="left">
-                    <ListErrors errors={[this.state.errors.message.errors]} />
-                  </Message>
-                }
               </Form>
             </Grid.Column>
           </Grid>
           <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
-          {/* <Form className="edgar-form">
-            <Divider section />
-            <div
-              className="form-footer"
-              style={{
-                paddingBottom: '40px',
-              }}
-            >
-              <Button color="green" size="large" onClick={this.handleFormSubmit}>
-                Submit
-              </Button>
-              <Button as={Link} size="large"
-              to={`/app/business/${this.props.match.params.businessId}`}>Cancel</Button>
-            </div>
-            {this.state.errors && this.state.errors.message &&
-              <Message error textAlign="left">
-                <ListErrors errors={[this.state.errors.message.errors]} />
-              </Message>
-            }
-          </Form> */}
         </div>
       </div>
     );

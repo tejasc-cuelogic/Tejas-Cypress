@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Card, Divider, Button, Icon, Popup, Input } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
+import Chips from 'react-chips/lib/Chips';
 
 import validationActions from '../../../../actions/validation';
 import busiessActions from '../../../../actions/business';
@@ -12,7 +13,25 @@ import busiessActions from '../../../../actions/business';
 export default class FilerInformation extends React.Component {
   handleChange = (e, { name, value }) => this.props.businessStore.setFilerInfo(name, value)
 
-  handleOnBlur = e => validationActions.validateFilerInfoField(e.target.name)
+  handleNotificationEmailChange = (chips) => {
+    const newErrors = { ...this.props.businessStore.xmlErrors };
+    const pattern = /^([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)@([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)[\\.]([a-zA-Z]{2,9})$/;
+    let isValid = true;
+    chips.map((element) => {
+      isValid = pattern.test(element);
+      return isValid;
+    });
+    if (!isValid) {
+      const errorMessage = 'The notificationEmail format is invalid.';
+      newErrors.notificationEmailElement = errorMessage;
+      this.props.businessStore.setXmlError(newErrors);
+      this.props.businessStore.setFilerError('notificationEmail', errorMessage);
+    } else {
+      this.props.businessStore.removeXmlError('notificationEmailElement');
+    }
+    this.props.businessStore.setFilerInfo('notificationEmail', chips);
+    validationActions.validateFilerInfoField('notificationEmail');
+  }
 
   handleCheckboxChange = (e, { name }) => {
     this.props.businessStore.togglefilerCheckbox(name);
@@ -27,6 +46,8 @@ export default class FilerInformation extends React.Component {
     const { filerInformation } = this.props.businessStore;
     busiessActions.validateFilerInfo(filerInformation);
   }
+
+  handleOnBlur = e => validationActions.validateFilerInfoField(e.target.name)
 
   render() {
     const { filerInformation } = this.props.businessStore;
@@ -141,15 +162,18 @@ export default class FilerInformation extends React.Component {
               onChange={this.handleCheckboxChange}
               onBlur={this.handleOnBlur}
             />
-            <Form.Input
-              label="Enter notification email"
-              name="notificationEmail"
-              value={filerInformation.notificationEmail.value}
-              error={!!filerInformation.notificationEmail.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              disabled={!filerInformation.overrideInternetFlag.value}
-            />
+            <div className={!filerInformation.overrideInternetFlag.value ? 'field disabled' : 'field'} >
+              { /* eslint-disable jsx-a11y/label-has-for */ }
+              <label>
+                Enter notification email
+              </label>
+              <Chips
+                value={filerInformation.notificationEmail.value}
+                error={!!filerInformation.notificationEmail.error}
+                onChange={this.handleNotificationEmailChange}
+                createChipKeys={[9, 13, 32, 188]}
+              />
+            </div>
           </Card>
           <Divider hidden />
           <div className="right-align">
@@ -159,6 +183,7 @@ export default class FilerInformation extends React.Component {
             </Button>
           </div>
         </Form>
+
       </div>
     );
   }

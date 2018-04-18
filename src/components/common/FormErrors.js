@@ -3,7 +3,9 @@ import _ from 'lodash';
 import { observer } from 'mobx-react';
 
 const FormErrors = observer((props) => {
-  if (_.isEmpty(props.xmlErrors)) {
+  const isErrorsObjectEmpty = !_.values(props.xmlErrors).some(error => error !== undefined);
+
+  if (_.isEmpty(props.xmlErrors) || isErrorsObjectEmpty) {
     return null;
   }
   return (

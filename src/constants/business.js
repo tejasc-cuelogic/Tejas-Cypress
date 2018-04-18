@@ -140,10 +140,10 @@ export const FILER_INFORMATION = {
     rule: 'required|email|max:80',
   },
   notificationEmail: {
-    value: '',
+    value: [],
     key: 'notificationEmail',
     error: undefined,
-    rule: 'email|max:80',
+    rule: 'array|max:3',
   },
 };
 
@@ -910,6 +910,7 @@ export const NEW_OFFERING_INFORMATION = {
 };
 
 export const XML_STATUSES = {
+  draft: 'DRAFT',
   created: 'CREATED',
   completed: 'COMPLETED',
   errored: null,

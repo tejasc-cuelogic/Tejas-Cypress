@@ -183,7 +183,7 @@ export class Business {
     const params = { field: 'created', sort: 'desc' };
     const payload = {
       query: `query getBusiness($orderByBusinessFilings:businessfilingOrderBy, $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) { business(id: "${businessId}") { id name description created` +
-        ' filings(orderBy: $orderByBusinessFilings) { filingId filingFolderName businessId created folderId lockedStatus submissions(orderBy: $orderByBusinessFilingSubmission) { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus lockedStatus} } } }',
+        ' filings(orderBy: $orderByBusinessFilings) { filingId filingFolderName businessId created folderId lockedStatus submissions(orderBy: $orderByBusinessFilingSubmission) { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus xmlSubmissionStatus lockedStatus} } } }',
       variables: { orderByBusinessFilings: params, orderByBusinessFilingSubmission: params },
     };
     ApiService.post(GRAPHQL, payload)
@@ -191,7 +191,7 @@ export class Business {
         this.setBusinessDetails(data.body.data.business);
         _.filter(data.body.data.business.filings, (filing) => {
           _.map(filing.submissions, (submission) => {
-            if (submission.jobStatus === XML_STATUSES.created) {
+            if (submission.xmlSubmissionStatus === XML_STATUSES.created) {
               this.createPoll();
             }
           });
@@ -608,7 +608,9 @@ export class Business {
       _.map(payload.filerInformation, (value, key) => {
         if (confirmationFlags.includes(key)) {
           businessStore.setFilerInfo(key, (value || false))
-        } else {
+          businessStore.setFilerInfo(key, (value || ''))
+        }
+        else {
           businessStore.setFilerInfo(key, (value || ''))
         }
       });

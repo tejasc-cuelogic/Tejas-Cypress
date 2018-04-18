@@ -148,4 +148,9 @@
         color:@negativeTextColor;
         margin:-@28px 0 @10px;
     }
+    .field.disabled{
+      input[type=text]{
+        opacity:0;
+      }
+    }
 }
