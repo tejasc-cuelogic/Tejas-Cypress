@@ -5,7 +5,6 @@ variables:
 
 before_script:
   - export CURRENT_BRANCH=$(echo $CI_COMMIT_REF_NAME | tr '[:upper:]' '[:lower:]' | sed "s/\//-/g")  
-  - echo $CURRENT_BRANCH
 stages:
   - build
   - deploy
@@ -23,7 +22,7 @@ building-code-issues:
     - ns-client
   stage: build
   script:
-    - echo "currentbranch= $CURRENT_BRANCH"
+    - echo "currentbranch = $CURRENT_BRANCH"
     - bash scripts/s3BucketCreationScript.sh ${CURRENT_BRANCH} us-east-1
     - bash scripts/setEnvironmentVariables.sh us-east-1 dev
     - npm install
