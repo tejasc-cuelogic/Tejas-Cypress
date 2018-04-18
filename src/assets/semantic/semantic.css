@@ -18077,7 +18077,7 @@ ol.ui.horizontal.list li:before,
 .ui.steps a.active.step:hover::after,
 .ui.steps a.active.step:hover {
   cursor: pointer;
-  background: #DCDDDE;
+  background: '';
   color: #303030;
 }
 
@@ -18334,6 +18334,14 @@ ol.ui.horizontal.list li:before,
   font-family: 'Step';
   content: '\e800';
   /* '' */
+}
+
+/*******************************
+		Custom for NS V.2
+*******************************/
+
+.ui.steps .step .title {
+  margin-bottom: 0;
 }
 
 /*******************************
