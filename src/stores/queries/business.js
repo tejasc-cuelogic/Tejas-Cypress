@@ -10,3 +10,21 @@ export const listOfferings = gql`
       }
     } 
   }`;
+
+export const getXmlDetails = gql`
+  query fetchFilingSubmission($filingId: ID!, $xmlSubmissionId: ID!) {
+    businessFilingSubmission(filingId:$filingId, xmlSubmissionId:$xmlSubmissionId) {
+      payload
+      businessId
+      filingId
+      xmlSubmissionId
+  } 
+}`;
+
+export const filerInformationMutation = gql`
+  mutation upsertFilerInformation($filingId: String!, $xmlSubmissionId: String, $businessId: String!, $filerInformation: CreateFilerInformationInput ) {
+    upsertFilerInformation(filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, businessId: $businessId, filerInformation: $filerInformation) {
+      xmlSubmissionId
+      payload
+    }
+  }`;

@@ -22,6 +22,7 @@ export default class XmlForm extends React.Component {
     this.props.businessStore.setXmlActiveTabId(0);
     this.props.businessStore.setBusinessId(this.props.match.params.businessId);
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
+    this.props.businessStore.setXmlSubmissionId(this.props.match.params.xmlId);
     businessActions.getFiles(this.props.match.params)
       .then(() => {
         if (this.props.match.params.xmlId) {
@@ -81,7 +82,12 @@ export default class XmlForm extends React.Component {
   };
 
   render() {
-    const { xmlErrors, xmlSubmissionTabs, xmlActiveTabId } = this.props.businessStore;
+    const {
+      xmlErrors,
+      xmlSubmissionTabs,
+      xmlActiveTabId,
+      xmlSubmissionId,
+    } = this.props.businessStore;
     if (this.props.uiStore.inProgress) {
       return (
         <div>
@@ -107,7 +113,7 @@ export default class XmlForm extends React.Component {
           <Grid>
             <XmlTabs
               tabs={xmlSubmissionTabs}
-              xmlId={this.props.match.params.xmlId}
+              xmlId={xmlSubmissionId}
               handleXmlActiveTab={this.handleXmlActiveTab}
               xmlActiveTabId={xmlActiveTabId}
             />

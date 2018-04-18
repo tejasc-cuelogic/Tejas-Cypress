@@ -4,7 +4,7 @@ import shortid from 'shortid';
 import graphql from 'graphql';
 
 import { GqlClient as client } from '../services/graphql';
-import { listOfferings } from '../stores/queries/business';
+import { listOfferings, getXmlDetails, filerInformationMutation } from '../stores/queries/business';
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
 import {
@@ -78,6 +78,36 @@ export class Business {
     return ApiService.post(XML_URL, payload);
   }
 
+  /**
+   * Submit filer information
+   */
+  submitFilerInformation = () => {
+    const {
+      businessId,
+      filingId,
+      xmlSubmissionId,
+      filerInformation,
+    } = businessStore;
+
+    const payload = {
+      query: filerInformationMutation,
+      variables: {
+        businessId,
+        filingId,
+        xmlSubmissionId,
+        filerInformation: this.getFormattedInformation(filerInformation),
+      },
+    };
+
+    return new Promise((res, rej) => {
+      ApiService.post(GRAPHQL, payload)
+        .then(data => res(data))
+        .catch(err => rej(err))
+        .finally(() => {
+          uiStore.clearLoaderMessage();
+        });
+    });
+  }
   /**
    *
    */
@@ -321,16 +351,14 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching XML Data');
     const payload = {
-      query: 'query fetchFilingSubmission($filingId: ID!, $xmlSubmissionId: ID!)' +
-        '{businessFilingSubmission(filingId:$filingId, xmlSubmissionId:$xmlSubmissionId){ ' +
-        'payload } }',
+      query: getXmlDetails,
       variables: {
         filingId,
         xmlSubmissionId: xmlId,
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission.payload))
+      .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission))
       .catch(err => console.log(err));
   }
 
@@ -598,14 +626,14 @@ export class Business {
     businessStore.setDocumentList(list);
   }
 
-  setXmlPayload = (payload) => {
+  setXmlPayload = (data) => {    
     const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
     const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
-    if (payload) {
-      businessStore.setBusinessId(payload.businessId);
-      businessStore.setFilingId(payload.filingId);
+    if (data) {
+      businessStore.setBusinessId(data.businessId);
+      businessStore.setFilingId(data.filingId);
       // businessStore.setOfferingUrl(payload.offeringUrl);
-      _.map(payload.filerInformation, (value, key) => {
+      _.map(data.payload.filerInformation, (value, key) => {
         if (confirmationFlags.includes(key)) {
           businessStore.setFilerInfo(key, (value || false))
           businessStore.setFilerInfo(key, (value || ''))
@@ -614,40 +642,42 @@ export class Business {
           businessStore.setFilerInfo(key, (value || ''))
         }
       });
-      _.map(payload.issuerInformation, (value, key) => {
+      _.map(data.payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
           businessStore.setIssuerInfo(key, moment(value, 'MM-DD-YYYY'));
         } else {
           businessStore.setIssuerInfo(key, (value || ''));
         }
       });
-      _.map(payload.offeringInformation, (value, key) => {
+      _.map(data.payload.offeringInformation, (value, key) => {
         if (dateFields.includes(key)) {
           businessStore.setOfferingInfo(key, moment(value, 'MM-DD-YYYY'));
         } else {
           businessStore.setOfferingInfo(key, (value || ''))
         }
       });
-      _.map(payload.annualReportDisclosureRequirements, (value, key) => {
+      _.map(data.payload.annualReportDisclosureRequirements, (value, key) => {
         businessStore.setAnnualReportInfo(key, (value || ''));
       })
-      _.map(payload.signature, (value, key) => {
+      _.map(data.payload.signature, (value, key) => {
         if (key !== 'signaturePersons') {
           businessStore.setSignatureInfo(key, (value || ''));
         }
       })
       businessStore.setNewPersonalSignature([]);
-      _.map(payload.signature.signaturePersons, (signature) => {
-        const id = this.addPersonalSignature();
-        _.map(signature, (value, key) => {
-          if (dateFields.includes(key)) {
-            businessStore.changePersonalSignature(key, id, moment((value || moment().format('MM-DD-YYYY'))));
-          } else {
-            businessStore.changePersonalSignature(key, id, value);
-          }
-        });
-      })
-      _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
+      if (data.payload.signature) {
+         _.map(data.payload.signature.signaturePersons, (signature) => {
+          const id = this.addPersonalSignature();
+          _.map(signature, (value, key) => {
+            if (dateFields.includes(key)) {
+              businessStore.changePersonalSignature(key, id, moment((value || moment().format('MM-DD-YYYY'))));
+            } else {
+              businessStore.changePersonalSignature(key, id, value);
+            }
+          });
+        })
+      }  
+      _.map(data.payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
     }
   }
 

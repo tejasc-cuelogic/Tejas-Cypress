@@ -23,6 +23,9 @@ export class BusinessStore {
   filingId = '';
 
   @observable
+  xmlSubmissionId = '';
+
+  @observable
   folderId = '';
 
   // @observable
@@ -172,6 +175,11 @@ export class BusinessStore {
   @action
   setFilingId(id) {
     this.filingId = id;
+  }
+
+  @action
+  setXmlSubmissionId(id) {
+    this.xmlSubmissionId = id;
   }
 
   @action

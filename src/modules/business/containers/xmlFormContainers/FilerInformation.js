@@ -6,6 +6,7 @@ import Chips from 'react-chips/lib/Chips';
 
 import validationActions from '../../../../actions/validation';
 import busiessActions from '../../../../actions/business';
+import Helper from '../../../../helper/utility';
 
 @inject('businessStore')
 @withRouter
@@ -49,6 +50,20 @@ export default class FilerInformation extends React.Component {
     e.preventDefault();
     const { filerInformation } = this.props.businessStore;
     busiessActions.validateFilerInfo(filerInformation);
+
+    if (this.props.businessStore.canSubmitFilerInfoXmlForm) {
+      busiessActions.submitFilerInformation()
+        .then((data) => {
+          this.props.businessStore.setXmlError();
+          this.props.businessStore.setXmlActiveTabId(1);
+          const { xmlSubmissionId } = data.body.data.upsertFilerInformation;
+          this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
+          Helper.toast('Filer information submitted successfully', 'success');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   handleOnBlur = e => validationActions.validateFilerInfoField(e.target.name)
@@ -67,10 +82,11 @@ export default class FilerInformation extends React.Component {
                   <Input
                     value={filerInformation.offeringUrl.value}
                     onChange={this.handleChange}
+                    name="offeringUrl"
+                    onBlur={this.handleOnBlur}
                     error={!!filerInformation.offeringUrl.error}
                     className="column"
-                    width={16}
-                    placeholder="website URL"
+                    placeholder="Website URL"
                   />
                 }
                 content="Please enter URL of page, for which screenshot will be generated"
