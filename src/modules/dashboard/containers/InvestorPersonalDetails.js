@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
-import { FormInput, FormSelect, FormDatePicker } from '../../../components/form/FormElements';
+import { FormInput, FormSelect, FormDatePicker, MaskedInput } from '../../../components/form/FormElements';
 import validationActions from './../../../actions/validation';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
 import Helper from '../../../helper/utility';
@@ -130,12 +130,12 @@ export default class investorPersonalDetails extends Component {
               />
             </Form.Group>
             <Form.Group widths="equal">
-              <FormInput
-                type="text"
+              <MaskedInput
                 name="phoneNumber"
                 label={verifyIdentity01.fields.phoneNumber.label}
                 value={verifyIdentity01.fields.phoneNumber.value}
                 error={verifyIdentity01.fields.phoneNumber.error}
+                mask="999-999-9999"
                 changed={verifyIdentityEleChange}
               />
               <FormDatePicker

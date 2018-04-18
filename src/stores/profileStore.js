@@ -59,8 +59,8 @@ export class ProfileStore {
   }
 
   @action
-  verifyIdentityEleChange = (e, { name, value }) => {
-    this.onFieldChange('verifyIdentity01', name, value);
+  verifyIdentityEleChange = (e) => {
+    this.onFieldChange('verifyIdentity01', e.target.name, e.target.value);
   };
 
   @action
