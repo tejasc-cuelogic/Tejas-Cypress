@@ -121,13 +121,12 @@ export default class BusinessDetails extends React.Component {
     }
     return (
       <div>
-        <div className="page-header-section webcontent-spacer">
+        <div className="page-header-section">
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
                 <h1>
                   <Button
-                    circular
                     primary
                     floated="right"
                     onClick={this.handleNewFiling}
@@ -139,11 +138,12 @@ export default class BusinessDetails extends React.Component {
                   {business.name.value}
                   <div className="actions">
                     <Button
-                      onClick={this.editBusinessModal}
                       icon
                       circular
                       inverted
-                      primary
+                      color="green"
+                      size="mini"
+                      onClick={this.editBusinessModal}
                     >
                       <Icon name="write" />
                     </Button>{' '}
@@ -152,6 +152,7 @@ export default class BusinessDetails extends React.Component {
                       circular
                       inverted
                       color="red"
+                      size="mini"
                       entity="business"
                       refid={this.props.match.params.businessId}
                       subrefid=""
@@ -170,10 +171,12 @@ export default class BusinessDetails extends React.Component {
                     />
                   </div>
                 </h1>
-                <p>{business.desc.value}</p>
               </Grid.Column>
             </Grid.Row>
           </Grid>
+        </div>
+        <div className="search-filters">
+          <p className="inverse-text">{business.desc.value}</p>
         </div>
         <div className="content-spacer">
           <FillingsList

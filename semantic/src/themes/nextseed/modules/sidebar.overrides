@@ -72,11 +72,11 @@
 	}
 }
 .ui{
-	&.inverted{
-		&.menu{
-			background:#383838;
-		}
-	}
+	// &.inverted{
+	// 	&.menu{
+	// 		background:#383838;
+	// 	}
+	// }
 	&.sidebar{
 		&.left{
 			&.visible.thin{

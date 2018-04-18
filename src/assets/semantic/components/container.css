@@ -152,7 +152,7 @@
 }
 .content-spacer {
   position: relative;
-  padding: 3.71428571rem 5rem;
+  padding: 2.14285714rem 2.85714286rem;
 }
 @media only screen and (max-width: 1199px) {
   .content-spacer {
@@ -180,7 +180,7 @@
   z-index: 1;
 }
 .webcontent-spacer {
-  padding: 1.14285714rem 5rem;
+  padding: 1.42857143rem 2.85714286rem;
 }
 @media only screen and (max-width: 1199px) {
   .webcontent-spacer {
@@ -232,6 +232,9 @@ div.login-form ul.error-messages {
       -ms-flex-pack: center;
           justify-content: center;
 }
+.inverse-text {
+  color: #FFFFFF !important;
+}
 .positive-text {
   color: #98CE23 !important;
 }
@@ -239,26 +242,35 @@ div.login-form ul.error-messages {
   color: #EB5757 !important;
 }
 .page-header-section {
-  background-color: #424242;
+  background-color: #383838;
   position: relative;
+  padding: 1.42857143rem 2.85714286rem;
 }
 @media only screen and (max-width: 1199px) {
   .page-header-section {
     min-height: auto;
+    padding: 1.42857143rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .page-header-section {
+    padding: 1.42857143rem 0.71428571rem;
   }
 }
 .page-header-section h1 {
-  color: #FFFFFF;
   font-size: 2.14285714rem;
+  line-height: 3rem;
+  color: #FFFFFF;
 }
 .page-header-section h1 a.back-link {
   position: absolute;
-  left: -35px;
+  left: -15px;
+  top: -4px;
   color: #98CE23;
 }
 .page-header-section h1 a.back-link > i.icon,
 .page-header-section h1 a.back-link i.icons {
-  font-size: 2rem;
+  font-size: 1.28571429rem;
 }
 .page-header-section h1 a.back-link:hover,
 .page-header-section h1 a.back-link:active,
@@ -278,49 +290,85 @@ div.login-form ul.error-messages {
   font-size: 0.78571429rem;
   line-height: 1.35714286rem;
   font-weight: 700;
-  color: #424242;
+  color: #383838;
   text-align: center;
   border-radius: 3px;
 }
 .page-header-section .ui.button.link-button {
   padding: 0.78571429rem 0;
 }
-.page-header-section .search-filters {
-  background-color: #383838;
-}
-.page-header-section .search-filters.webcontent-spacer {
-  padding: 1rem 5rem;
-}
-@media only screen and (max-width: 1199px) {
-  .page-header-section .search-filters.webcontent-spacer {
-    padding: 0.5rem 1.42857143rem 1rem;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .page-header-section .search-filters.webcontent-spacer {
-    padding: 0.5rem 0.71428571rem 1rem;
-  }
-}
-.page-header-section .search-filters h5 {
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  color: #989898;
-  margin: 0 0 0.5rem;
-}
 .page-header-section .actions {
   font-size: 1.42857143rem;
   margin-left: 1.42857143rem;
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: top;
+}
+.page-header-section .item.notification {
+  position: relative;
+  display: block;
+  float: right;
+  height: 42px;
+  padding: 10px 0;
+  margin-left: 2.14285714rem;
+}
+.page-header-section .item.notification .icon {
+  font-size: 1.57142857rem;
+  color: #4F4F4F;
+  color: #FFFFFF;
+  height: auto;
+  line-height: 1;
+}
+.page-header-section .item.notification span.unread-count {
+  height: 18px;
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 10px;
+  font-size: 0.85714286rem;
+  color: #FFFFFF;
+  line-height: 1.28571429rem;
+  display: block;
+  text-align: center;
+  background: #EB5757;
+  position: absolute;
+  right: -6px;
+  bottom: 6px;
+}
+.search-filters {
+  background-color: #4F4F4F;
+  padding: 1rem 2.85714286rem;
+}
+@media only screen and (max-width: 1199px) {
+  .search-filters {
+    padding: 0.5rem 1.42857143rem 1rem;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .search-filters {
+    padding: 0.5rem 0.71428571rem 1rem;
+  }
+}
+.search-filters h5 {
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: #989898;
+  margin: 0 0 0.5rem;
+}
+.filter-meta {
+  background-color: #383838;
+  padding: 1rem 2.85714286rem;
+}
+.secondary-menu {
+  background-color: #4F4F4F;
+  padding: 0 2.85714286rem;
 }
 .top-cta-section {
   height: 104px;
-  background: #383838;
+  background: #4F4F4F;
 }
 .top-cta-section .sticky-notification {
   position: relative;
   width: 50%;
-  left: 5rem;
-  top: 2rem;
+  left: 2.85714286rem;
+  top: 2.14285714rem;
   z-index: 9;
 }
 .notification-panel {
@@ -352,7 +400,7 @@ div.login-form ul.error-messages {
   padding: 1rem;
   margin-bottom: 1.28571429rem;
   border-radius: 5px 0 0 5px;
-  background-color: #424242;
+  background-color: #383838;
   -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
 }

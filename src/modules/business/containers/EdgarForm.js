@@ -66,7 +66,7 @@ export default class EdgarForm extends React.Component {
     }
     return (
       <div>
-        <div className="page-header-section webcontent-spacer">
+        <div className="page-header-section">
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
@@ -97,14 +97,7 @@ export default class EdgarForm extends React.Component {
                 }
               </Grid>
               <Divider section />
-              <div
-                className="form-footer"
-                style={{
-                paddingBottom: '40px',
-                paddingLeft: '1rem',
-                textAlign: 'center',
-                }}
-              >
+              <div className="center-align">
                 <Button
                   primary
                   disabled={

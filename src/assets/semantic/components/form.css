@@ -1245,7 +1245,7 @@
 }
 .file-uploader.attached {
   padding-right: 2rem;
-  color: #772DF9;
+  color: #772df9;
   border: none;
   background: #BDBDBD;
   overflow: hidden;
@@ -1253,7 +1253,7 @@
   white-space: nowrap;
 }
 .file-uploader.attached > span {
-  color: #772DF9;
+  color: #772df9;
 }
 .file-uploader.attached .icon {
   margin: -0.5rem 0 0 0;

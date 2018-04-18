@@ -17,7 +17,7 @@
 }
 .content-spacer{
 	position:relative;
-	padding:@52px @70px;
+	padding:@30px @40px;
 	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 		padding:@20px;
 	}
@@ -40,7 +40,7 @@
 }
 .webcontent-spacer{
 	// padding:@40px @70px @14px;
-	padding:@16px @70px;
+	padding:@20px @40px;
 	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 		padding:@20px;
 	}
@@ -87,6 +87,9 @@ div.login-form {
 	text-align:center !important;
 	justify-content:center;
 }
+.inverse-text{
+	color:@inverse-text !important;
+}
 .positive-text{
 	color:@theme-primary !important;
 }
@@ -99,22 +102,29 @@ div.login-form {
 //	Page Header Styles
 .page-header-section{
 	// min-height:132px;
-	background-color:@dark-bg-color;
+	background-color:@secondary-text;
 	position:relative;
+	padding:@20px @40px;
 	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
 		min-height:auto;
+		padding:@20px;
+	}
+	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+		padding:@20px @10px;
 	}
 	h1{
 		// @include fontBold;
-		color:@inverse-text;
 		font-size:@30px;
+		line-height:@42px;
+		color:@inverse-text;
 		// font-weight: bold;
 		a.back-link{
 			position:absolute;
-			left:-35px;
+			left:-15px;
+			top:-4px;
 			color:@theme-primary;
 			> i.icon, i.icons{
-				font-size:@28px;
+				font-size:@18px;
 			}
 			&:hover, &:active, &:focus{
 				color:darken(@theme-primary, 8%);
@@ -135,46 +145,86 @@ div.login-form {
 		font-size:@11px;
 		line-height:@19px;
 		font-weight:700;
-		color:@dark-bg-color;
+		color:@secondary-text;
 		text-align:center;
 		border-radius:3px;
 	}
 	.ui.button.link-button{
 		padding:@11px 0;
 	}
-	.search-filters{
-		background-color:@secondary-text;
-		&.webcontent-spacer{
-			padding:@14px @70px;
-			@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
-				padding:@7px @20px @14px;
-			}
-			@media only screen and (max-width : (@tabletBreakpoint - 1px)){
-				padding:@7px @10px @14px;
-			}
-		}
-		h5{
-			// font-size:0.857142em;
-			font-family:@pageFont;
-			color:@quaternary-text;
-			margin:0 0 @7px;
-		}
-	}
 	.actions{
 		font-size:@20px;
 		margin-left:@20px;
 		display:inline-block;
-		vertical-align:middle;
+		vertical-align:top;
+	}
+	.item.notification{
+		position:relative;
+		display:block;
+		float:right;
+		height:42px;
+		padding:10px 0;
+		margin-left:@30px;
+		.icon{
+			font-size:@22px;
+			color:@tertiary-text;
+			color:@white;
+			height:auto;
+			line-height:1;
+		}
+		span.unread-count{
+			height:18px;
+			min-width:18px;
+			padding:0 5px;
+			border-radius:10px;
+			font-size:@12px;
+			// font-weight:500;
+			color:@inverse-text;
+			line-height:@18px;
+			display:block;
+			text-align:center;
+			background:@highlight-primary;
+			position:absolute;
+			right:-6px;
+			bottom:6px;
+		}
 	}
 }
+.search-filters{
+	background-color:@tertiary-text;
+	padding:@14px @40px;
+	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+		padding:@7px @20px @14px;
+	}
+	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+		padding:@7px @10px @14px;
+	}
+	// &.webcontent-spacer{
+	// }
+	h5{
+		// font-size:0.857142em;
+		font-family:@pageFont;
+		color:@quaternary-text;
+		margin:0 0 @7px;
+	}
+}
+.filter-meta{
+	background-color:@secondary-text;
+	padding:@14px @40px;
+}
+.secondary-menu{
+	background-color:@tertiary-text;
+	padding:0 @40px;
+}
+
 .top-cta-section{
 	height:104px;
-	background:@secondary-text;
+	background:@tertiary-text;
 	.sticky-notification{
 		position:relative;
 		width:50%;
-		left:5rem;
-		top:2rem;
+		left:@40px;
+		top:@30px;
 		z-index:9;
 	}
 }
@@ -223,7 +273,7 @@ div.login-form {
 	padding:@14px;
 	margin-bottom:@18px;
 	border-radius:5px 0 0 5px;
-	background-color:@dark-bg-color;
+	background-color:@secondary-text;
 	box-shadow:0 0 20px fade(@fullBlack, 32%);
 	.timestamp{
 		font-size:@13px;

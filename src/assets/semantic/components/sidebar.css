@@ -675,9 +675,6 @@ body.pushable > .pusher {
   line-height: 0;
   margin: 0;
 }
-.ui.inverted.menu {
-  background: #383838;
-}
 .ui.sidebar.left.visible.thin ~ .fixed,
 .ui.sidebar.left.visible.thin ~ .pusher {
   padding-left: 220px;

@@ -57,8 +57,8 @@ const city = [
 ];
 
 const userListingSubheader = () => (
-  <div className="page-header-section">
-    <div className="webcontent-spacer">
+  <div>
+    <div className="page-header-section">
       <Grid stackable>
         <Grid.Row>
           <Grid.Column width={4}>
@@ -69,7 +69,7 @@ const userListingSubheader = () => (
               <Input fluid inverted icon="search" iconPosition="left" placeholder="Type user’s name, e-mail address or ID number" />
             </Form>
           </Grid.Column>
-          <Grid.Column width={2} textAlign="center">
+          <Grid.Column width={3} textAlign="center">
             <span className="filter-count">0</span>
             <Button icon color="green" className="link-button">
               Filters <Icon name="caret down" />
@@ -78,21 +78,18 @@ const userListingSubheader = () => (
           <Grid.Column width={3} textAlign="right">
             <Button primary as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
           </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width={16}>
-            <List horizontal relaxed>
-              <List.Item>Showing <strong>256</strong> records.</List.Item>
-              <List.Item as="a" to="/users/new">No filters applied.</List.Item>
-              <List.Item>65 Individual</List.Item>
-              <List.Item>65 Entity</List.Item>
-              <List.Item>65 IRA</List.Item>
-            </List>
+          <Grid.Column floated="right" textAlign="right">
+            <a className="item notification" href="#">
+              <Icon name="bell" />
+              <span className="unread-count">3</span>
+            </a>
           </Grid.Column>
         </Grid.Row>
       </Grid>
+      {/* <div className="webcontent-spacer">
+      </div> */}
     </div>
-    <div className="search-filters webcontent-spacer">
+    <div className="search-filters">
       <Grid stackable>
         <Grid.Row>
           <Grid.Column width={3}>
@@ -123,6 +120,21 @@ const userListingSubheader = () => (
           <Grid.Column width={3}>
             <h5>City</h5>
             <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={city} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </div>
+    <div className="filter-meta">
+      <Grid stackable>
+        <Grid.Row>
+          <Grid.Column width={16}>
+            <List horizontal relaxed>
+              <List.Item>Showing <strong>256</strong> records.</List.Item>
+              <List.Item as="a" to="/users/new">No filters applied.</List.Item>
+              <List.Item>65 Individual</List.Item>
+              <List.Item>65 Entity</List.Item>
+              <List.Item>65 IRA</List.Item>
+            </List>
           </Grid.Column>
         </Grid.Row>
       </Grid>
