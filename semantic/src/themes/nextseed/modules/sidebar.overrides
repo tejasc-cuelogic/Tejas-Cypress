@@ -26,9 +26,11 @@
 }
 .sidebar{
 	.user-picture{
-		margin:@24px 0;
+		margin:@16px 0;
+		padding:@14px;
 		text-align:center;
 		color:@inverse-text;
+		border-radius:@4px;
 		> img, h2, h3{
 			transition:all .5s ease;
 			white-space:nowrap;
@@ -42,17 +44,15 @@
 				margin:0 auto 10px;
 			}
 			h2{
-				// @include fontMedium;
 				font-size:16px;
+				font-weight:900;
 				margin:0 0 5px;
-				font-weight:normal;
 			}
 			h3{
-				// @include fontMedium;
+				margin:@10px 0 0;
 				font-size:14px;
-				margin:0;
-				font-weight:normal;
-				color:@tertiary-text;
+				font-weight:700;
+				color:@border-color;
 			}
 		}
 	}
@@ -72,12 +72,16 @@
 	}
 }
 .ui{
-	// &.inverted{
-	// 	&.menu{
-	// 		background:#383838;
-	// 	}
-	// }
+	&.inverted.menu{
+		a.item:hover, a.item.active, a.item.active:hover{
+			background-color:@secondary-text;
+		}
+	}
 	&.sidebar{
+		.ui.image.logo{
+			height:36px;
+			max-height:36px;
+		}
 		&.left{
 			&.visible.thin{
 				~.fixed, ~.pusher{
@@ -87,6 +91,7 @@
 			}
 			&.push{
 				width:64px;
+				padding:@18px @14px 0;
 				visibility:visible;
 				transform:translate3D(0,0,0);
 				transition:width .5s ease;
@@ -94,8 +99,10 @@
 					min-width: auto !important;
 					text-align: left;
 					overflow:hidden;
-					padding:@14px @20px;
+					padding:@8px @12px;
 					color:@inverse-text;
+					border-radius:@4px;
+					margin-bottom:@3px;
 					&:first-child:before, &:before{
 						display:none;
 						background:none;
@@ -118,28 +125,29 @@
 						overflow: hidden;
 					}
 					&.collapseIcon{
+						left:0;
 						bottom:0;
 						margin:0;
 						&:before{
 							display:none;
 						}
 					}
-					&.active{
-						background:transparent;
-						color:@theme-primary !important;
-						> i.icon:after{
-							content:"";
-							width:6px;
-							height:6px;
-							border-radius:3px;
-							display:block;
-							background:@theme-primary;
-							position:absolute;
-							left:50%;
-							margin-left:-2px;
-							bottom:-9px;
-						}
-					}
+					// &.active{
+					// 	background:transparent;
+					// 	color:@theme-primary !important;
+					// 	// > i.icon:after{
+					// 	// 	content:"";
+					// 	// 	width:6px;
+					// 	// 	height:6px;
+					// 	// 	border-radius:3px;
+					// 	// 	display:block;
+					// 	// 	background:@theme-primary;
+					// 	// 	position:absolute;
+					// 	// 	left:50%;
+					// 	// 	margin-left:-2px;
+					// 	// 	bottom:-9px;
+					// 	// }
+					// }
 				}
 			}
 		}

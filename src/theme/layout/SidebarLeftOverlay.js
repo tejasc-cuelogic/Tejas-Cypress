@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Button, Image } from 'semantic-ui-react';
 import NotificationPanel from './NotificationPanel';
 import uiStore from '../../stores/uiStore';
 import Randavatar from './../../components/common/Randavatar';
+import Logo from '../../assets/images/nextseed_logo_white_green.svg';
+import LogoSmall from '../../assets/images/ns-logo-small.svg';
 
 @inject('uiStore')
 @observer
@@ -24,10 +26,15 @@ class SidebarLeftPush extends Component {
     return (
       <Sidebar.Pushable>
         <Sidebar as={Menu} animation="push" width="thin" visible={uiStore.layoutState.leftPanel} icon="labeled" vertical inverted>
+          {/* {uiStore.layoutState.leftPanel &&
+            <Image src={Logo} alt="NextSeed.com" />
+          } */}
+          <Image src={uiStore.layoutState.leftPanel ? Logo : LogoSmall} alt="NextSeed.com" className="logo" />
           <div className="user-picture">
             <Randavatar name={this.props.UserInfo.fullname} avatarKey={this.props.UserInfo.avatarKey} size="small" />
             <h2>{this.props.UserInfo.fullname}</h2>
             <h3>Regular User</h3>
+            <h3><Link to="">Settings</Link></h3>
           </div>
           {
             sidebarItems.map(item => (

@@ -635,9 +635,11 @@ body.pushable > .pusher {
   min-height: calc(100vh - 58px);
 }
 .sidebar .user-picture {
-  margin: 1.71428571rem 0;
+  margin: 1.14285714rem 0;
+  padding: 1rem;
   text-align: center;
   color: #FFFFFF;
+  border-radius: 0.28571429rem;
 }
 .sidebar .user-picture > img,
 .sidebar .user-picture h2,
@@ -653,14 +655,14 @@ body.pushable > .pusher {
 }
 .sidebar.visible .user-picture h2 {
   font-size: 16px;
+  font-weight: 900;
   margin: 0 0 5px;
-  font-weight: normal;
 }
 .sidebar.visible .user-picture h3 {
+  margin: 0.71428571rem 0 0;
   font-size: 14px;
-  margin: 0;
-  font-weight: normal;
-  color: #4F4F4F;
+  font-weight: 700;
+  color: #BDBDBD;
 }
 .sidebar:not(.visible) .user-picture {
   margin: 1.71428571rem 0 0.5rem;
@@ -675,6 +677,15 @@ body.pushable > .pusher {
   line-height: 0;
   margin: 0;
 }
+.ui.inverted.menu a.item:hover,
+.ui.inverted.menu a.item.active,
+.ui.inverted.menu a.item.active:hover {
+  background-color: #383838;
+}
+.ui.sidebar .ui.image.logo {
+  height: 36px;
+  max-height: 36px;
+}
 .ui.sidebar.left.visible.thin ~ .fixed,
 .ui.sidebar.left.visible.thin ~ .pusher {
   padding-left: 220px;
@@ -683,6 +694,7 @@ body.pushable > .pusher {
 }
 .ui.sidebar.left.push {
   width: 64px;
+  padding: 1.28571429rem 1rem 0;
   visibility: visible;
   -webkit-transform: translate3D(0, 0, 0);
           transform: translate3D(0, 0, 0);
@@ -693,8 +705,10 @@ body.pushable > .pusher {
   min-width: auto !important;
   text-align: left;
   overflow: hidden;
-  padding: 1rem 1.42857143rem;
+  padding: 0.57142857rem 0.85714286rem;
   color: #FFFFFF;
+  border-radius: 0.28571429rem;
+  margin-bottom: 0.21428571rem;
 }
 .ui.sidebar.left.push .item:first-child:before,
 .ui.sidebar.left.push .item:before {
@@ -719,27 +733,12 @@ body.pushable > .pusher {
   overflow: hidden;
 }
 .ui.sidebar.left.push .item.collapseIcon {
+  left: 0;
   bottom: 0;
   margin: 0;
 }
 .ui.sidebar.left.push .item.collapseIcon:before {
   display: none;
-}
-.ui.sidebar.left.push .item.active {
-  background: transparent;
-  color: #98CE23 !important;
-}
-.ui.sidebar.left.push .item.active > i.icon:after {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 3px;
-  display: block;
-  background: #98CE23;
-  position: absolute;
-  left: 50%;
-  margin-left: -2px;
-  bottom: -9px;
 }
 .ui.sidebar.visible.push {
   width: 220px;
