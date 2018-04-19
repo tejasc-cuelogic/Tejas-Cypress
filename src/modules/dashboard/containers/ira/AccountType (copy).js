@@ -3,6 +3,34 @@ import { Grid, Header, Tab, Menu } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormRadioGroup } from '../../../../components/form/FormElements';
 
+const panes = [
+  {
+    menuItem: <Menu.Item key="traditional"><div className="account-tab">Traditional</div></Menu.Item>,
+    render: () => [
+      <Tab.Pane key="individual">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco laboris
+        </p>
+      </Tab.Pane>,
+    ],
+  },
+  {
+    menuItem: <Menu.Item key="roth"><div className="account-tab">Roth</div></Menu.Item>,
+    render: () => [
+      <Tab.Pane key="roth">
+        <p>
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris Lorem psum dolor sit
+          amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+          ad minim veniam, quis nostrud exercitation ullamco laboris
+        </p>
+      </Tab.Pane>,
+    ],
+  },
+];
+
 @inject('accountStore')
 @observer
 export default class AccountType extends Component {

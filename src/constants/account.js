@@ -144,6 +144,25 @@ export const IRA_ACCOUNT_CREATION = {
   },
 };
 
+export const IRA_FIN_INFO = {
+  networth: {
+    value: '',
+    error: undefined,
+    rule: 'required|numeric',
+    label: 'Your networth',
+    placeHolder: 'Your networth',
+    tooltip: 'Tell us your net worth in $',
+  },
+  annualIncome: {
+    value: '',
+    error: undefined,
+    rule: 'required|numeric',
+    label: 'Your annual income',
+    placeHolder: 'Your annual income',
+    tooltip: 'Tell us your annual income in $',
+  },
+};
+
 export const IS_ENTITY_TRUST = {
   0: 'yes',
   1: 'no',
