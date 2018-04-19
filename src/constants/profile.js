@@ -5,7 +5,7 @@ export const VERIFY_IDENTITY_STEP_01 = {
     value: '',
     label: 'Title',
     error: undefined,
-    rule: 'required',
+    rule: 'string',
   },
   firstLegalName: {
     value: '',

@@ -44,10 +44,8 @@ export default class investorPersonalDetails extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    validationActions.validateProfileDetailsForm();
-    if (this.props.profileStore.canSubmitProfileDetails) {
-      this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation');
-    }
+    this.props.profileStore.submitInvestorPersonalDetails();
+    // this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation');
   }
 
   render() {
@@ -138,7 +136,7 @@ export default class investorPersonalDetails extends Component {
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">
-              <Button size="large" className="very relaxed" disabled={!verifyIdentity01.meta.isValid}>Verify my identity</Button>
+              <Button size="large" className="very relaxed" >Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>
