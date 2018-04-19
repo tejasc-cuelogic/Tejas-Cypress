@@ -24,10 +24,10 @@
 		// }
 	}
 }
-.sidebar{
+.ui.sidebar{
 	.user-picture{
 		margin:@16px 0;
-		padding:@14px;
+		padding:@14px 0;
 		text-align:center;
 		color:@inverse-text;
 		border-radius:@4px;
@@ -37,23 +37,50 @@
 			overflow:hidden;
 		}
 	}
-	&.visible{
-		.user-picture{
-			> img{
-				max-width:90px;
-				margin:0 auto 10px;
-			}
-			h2{
-				font-size:16px;
-				font-weight:900;
-				margin:0 0 5px;
-			}
-			h3{
-				margin:@10px 0 0;
-				font-size:14px;
-				font-weight:700;
-				color:@border-color;
-			}
+	&.visible .user-picture{
+		&:hover{
+			background-color:@secondary-text;
+		}
+		> img{
+			max-width:90px;
+			margin:0 auto 10px;
+		}
+		h2{
+			font-size:16px;
+			font-weight:900;
+			margin:0 0 5px;
+		}
+		h3{
+			margin:@10px 0 0;
+			font-size:14px;
+			font-weight:700;
+			color:@border-color;
+		}
+	}
+	~ .ui.button.collapseIcon{
+		width:220px;
+		margin:0;
+		border-radius:0;
+		background-color:@tertiary-text;
+		color:@quaternary-text;
+		text-align:left;
+		position:absolute;
+		left:0;
+		bottom:0;
+		z-index:999;
+		transition:width .5s ease;
+		// &:before{
+		// 	display:none;
+		// }
+		.icon{
+			float:left;
+			margin:0 !important;
+			font-size:@18px;
+		}
+		span{
+			margin-left:@30px;
+			display:block;
+			overflow:hidden;
 		}
 	}
 	&:not(.visible){
@@ -69,93 +96,107 @@
 				margin:0;
 			}
 		}
+		&.left.push .item{
+			overflow:visible;
+			margin-bottom:@6px;
+			>.label{
+				margin:0;
+				position:absolute;
+				top:-5px;
+				right:-5px;
+			}
+		}
+		~ .ui.button.collapseIcon{
+			width:64px;
+			span{
+				display:none;
+			}
+		}
 	}
 }
-.ui{
-	&.inverted.menu{
-		a.item:hover, a.item.active, a.item.active:hover{
-			background-color:@secondary-text;
+.ui.inverted.menu{
+	a.item:hover, a.item.active, a.item.active:hover{
+		background-color:@secondary-text;
+	}
+}
+.ui.sidebar{
+	.ui.image.logo{
+		height:38px;
+		max-height:38px;
+	}
+	&.left.visible.thin{
+		~.fixed, ~.pusher{
+			padding-left:220px;
+			transform:translate3D(0,0,0);
 		}
 	}
-	&.sidebar{
-		.ui.image.logo{
-			height:36px;
-			max-height:36px;
-		}
-		&.left{
-			&.visible.thin{
-				~.fixed, ~.pusher{
-					padding-left:220px;
-					transform:translate3D(0,0,0);
-				}
+	&.left.push{
+		width:64px;
+		height:auto !important;
+		bottom:43px;
+		padding:@18px @13px 0;
+		visibility:visible;
+		transform:translate3D(0,0,0);
+		transition:width .5s ease;
+		.item {
+			min-width: auto;
+			text-align: left;
+			overflow:hidden;
+			padding:@8px @9px;
+			color:@inverse-text;
+			border-radius:@4px !important;
+			margin-bottom:@3px;
+			&:first-of-type{
+				margin-bottom:@30px;
 			}
-			&.push{
-				width:64px;
-				padding:@18px @14px 0;
-				visibility:visible;
-				transform:translate3D(0,0,0);
-				transition:width .5s ease;
-				.item {
-					min-width: auto !important;
-					text-align: left;
-					overflow:hidden;
-					padding:@8px @12px;
-					color:@inverse-text;
-					border-radius:@4px;
-					margin-bottom:@3px;
-					&:first-child:before, &:before{
-						display:none;
-						background:none;
-					}
-					>.icon:not(.dropdown){
-						float:left;
-						height:auto;
-						margin:0 !important;
-						font-size:@16px !important;
-						line-height:@22px;
-						color:@quaternary-text;
-						position:relative;
-					}
-					span{
-						opacity:0;
-						display:block;
-						line-height:@22px;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-						overflow: hidden;
-					}
-					&.collapseIcon{
-						left:0;
-						bottom:0;
-						margin:0;
-						&:before{
-							display:none;
-						}
-					}
-					// &.active{
-					// 	background:transparent;
-					// 	color:@theme-primary !important;
-					// 	// > i.icon:after{
-					// 	// 	content:"";
-					// 	// 	width:6px;
-					// 	// 	height:6px;
-					// 	// 	border-radius:3px;
-					// 	// 	display:block;
-					// 	// 	background:@theme-primary;
-					// 	// 	position:absolute;
-					// 	// 	left:50%;
-					// 	// 	margin-left:-2px;
-					// 	// 	bottom:-9px;
-					// 	// }
-					// }
-				}
+			&:first-child:before, &:before{
+				display:none;
+				background:none;
 			}
+			>.icon:not(.dropdown){
+				float:left;
+				// height:auto;
+				// margin:0;
+				font-size:@16px;
+				line-height:@22px;
+				color:@quaternary-text;
+				// position:relative;
+			}
+			span{
+				opacity:0;
+				display:block;
+				line-height:@22px;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+			// &.collapseIcon{
+			// }
+			// &.active{
+			// 	background:transparent;
+			// 	color:@theme-primary !important;
+			// 	// > i.icon:after{
+			// 	// 	content:"";
+			// 	// 	width:6px;
+			// 	// 	height:6px;
+			// 	// 	border-radius:3px;
+			// 	// 	display:block;
+			// 	// 	background:@theme-primary;
+			// 	// 	position:absolute;
+			// 	// 	left:50%;
+			// 	// 	margin-left:-2px;
+			// 	// 	bottom:-9px;
+			// 	// }
+			// }
 		}
-		&.visible.push{
-			width:220px;
-			.item span{
+	}
+	&.visible.push{
+		width:220px;
+		.item{
+			padding:@8px @12px;
+			span{
 				opacity:1;
-				margin-left:35px;
+				margin-left:@30px;
 				max-width:153px;
 			}
 		}

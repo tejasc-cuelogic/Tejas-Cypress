@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Sidebar, Menu, Icon, Button, Image } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Button, Image, Label } from 'semantic-ui-react';
 import NotificationPanel from './NotificationPanel';
 import uiStore from '../../stores/uiStore';
 import Randavatar from './../../components/common/Randavatar';
@@ -15,17 +15,19 @@ class SidebarLeftPush extends Component {
 
   render() {
     const sidebarItems = [
-      { icon: 'block layout', displayName: 'Home', to: 'dashboard' },
-      { icon: 'gift', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },
-      { icon: 'users', displayName: 'User Management', to: 'users' },
       { icon: 'mail', displayName: 'Messages', to: 'messages' },
+      { icon: 'block layout', displayName: 'Home', to: 'dashboard' },
+      { icon: 'users', displayName: 'Manage users', to: 'users' },
+      { icon: 'rss', displayName: 'Manage blog', to: 'users' },
+      { icon: 'question', displayName: 'Manage FAQ', to: 'users' },
+      { icon: 'gift', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },
       { icon: 'money', displayName: 'Banking', to: 'banking' },
       { icon: 'settings', displayName: 'Settings', to: 'settings' },
     ];
 
     return (
       <Sidebar.Pushable>
-        <Sidebar as={Menu} animation="push" width="thin" visible={uiStore.layoutState.leftPanel} icon="labeled" vertical inverted>
+        <Sidebar as={Menu} animation="push" width="thin" visible={uiStore.layoutState.leftPanel} icon vertical inverted>
           {/* {uiStore.layoutState.leftPanel &&
             <Image src={Logo} alt="NextSeed.com" />
           } */}
@@ -40,15 +42,16 @@ class SidebarLeftPush extends Component {
             sidebarItems.map(item => (
               <Menu.Item key={item.to} name="home" as={NavLink} to={`/app/${item.to}`}>
                 <Icon name={item.icon} />
+                <Label circular color="red" size="mini" horizontal>3</Label>
                 <span>{item.displayName}</span>
               </Menu.Item>
             ))
           }
-          <Button onClick={this.toggleVisibility} className="item collapseIcon">
-            <i className={`angle ${(uiStore.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
-            <span>Collapse</span>
-          </Button>
         </Sidebar>
+        <Button onClick={this.toggleVisibility} className="item collapseIcon">
+          <i className={`angle ${(uiStore.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
+          <span>Collapse</span>
+        </Button>
         <Sidebar.Pusher>
           {this.props.children}
         </Sidebar.Pusher>

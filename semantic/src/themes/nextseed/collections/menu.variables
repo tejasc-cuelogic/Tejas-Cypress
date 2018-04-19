@@ -113,7 +113,7 @@
 @verticalImageWidth: auto;
 
 /* Label */
-@labelOffset: -0.15em;
+@labelOffset:@2px;
 @labelBackground: #999999;
 @labelTextColor: @white;
 
@@ -376,8 +376,9 @@
 ---------------*/
 
 /* Inverted */
+@dimmerColor: rgba(0, 0, 0, 0.4);
 @invertedBackground:@tertiary-text;
-@invertedBoxShadow: none;
+@invertedBoxShadow: 0px 0px 5px @dimmerColor;
 @invertedBorder: 0px solid transparent;
 @invertedHeaderBackground: transparent;
 
