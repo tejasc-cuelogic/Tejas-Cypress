@@ -52,9 +52,9 @@
             color:@secondary-text;
         }
     }
-    h4.ui.header{
-        // font-family:@regularFont;
-    }
+    // h4.ui.header{
+    //     font-family:@regularFont;
+    // }
     .content{
         padding-top:@20px;
         &.login-modal{
@@ -132,8 +132,8 @@
             position:absolute;
             top:50%;
             &.disabled{
-                background:@border-color;
-                color:@inverse-text-darken;
+                background:@border-light;
+                color:@border-color;
                 opacity:1 !important;
             }
             >.icon{
@@ -171,55 +171,55 @@
             margin-bottom:@14px;
         }
         .field{
-            margin:0 0 @28px;
-            .ui.input input, input{
-                &:not([type]),
-                &[type=date],
-                &[type=datetime-local],
-                &[type=email],
-                &[type=file],
-                &[type=number],
-                &[type=password],
-                &[type=search],
-                &[type=tel],
-                &[type=text],
-                &[type=time],
-                &[type=url]{
-                    // font-family:@regularFont;
-                    padding-left:0;
-                    padding-right:0;
-                    border-radius:0;
-                    background-color:transparent;
-                    border:none;
-                    border-bottom:@borderColor 1px solid;
-                }
-            }
-            .ui.selection.dropdown, .ui.labeled.input .ui.label{
-                // font-family:@regularFont;
-                padding-left:@5px;
-                padding-right:0;
-                border-radius:0;
-                border:none;
-                border-bottom:@borderColor 1px solid;
-            }
-            .ui.labeled.input .ui.label{
-                font-weight:400;
-                padding-left:0;
-                padding-right:@12px;
-                background-color:transparent;
-            }
-            .ui.selection.dropdown{
-                .icon{
-                    padding-right:@5px;
-                }
-                &.active .menu{
-                    border:none;
-                    >.item{
-                        padding-left:@5px !important;
-                        padding-right:@5px !important;
-                    }
-                }
-            }
+            // margin:0 0 @28px;
+            // .ui.input input, input{
+            //     &:not([type]),
+            //     &[type=date],
+            //     &[type=datetime-local],
+            //     &[type=email],
+            //     &[type=file],
+            //     &[type=number],
+            //     &[type=password],
+            //     &[type=search],
+            //     &[type=tel],
+            //     &[type=text],
+            //     &[type=time],
+            //     &[type=url]{
+            //         // font-family:@regularFont;
+            //         padding-left:0;
+            //         padding-right:0;
+            //         border-radius:0;
+            //         background-color:transparent;
+            //         border:none;
+            //         border-bottom:@borderColor 1px solid;
+            //     }
+            // }
+            // .ui.selection.dropdown, .ui.labeled.input .ui.label{
+            //     // font-family:@regularFont;
+            //     padding-left:@5px;
+            //     padding-right:0;
+            //     border-radius:0;
+            //     border:none;
+            //     border-bottom:@borderColor 1px solid;
+            // }
+            // .ui.labeled.input .ui.label{
+            //     font-weight:400;
+            //     padding-left:0;
+            //     padding-right:@12px;
+            //     background-color:transparent;
+            // }
+            // .ui.selection.dropdown{
+            //     .icon{
+            //         padding-right:@5px;
+            //     }
+            //     &.active .menu{
+            //         border:none;
+            //         >.item{
+            //             padding-left:@5px !important;
+            //             padding-right:@5px !important;
+            //         }
+            //     }
+            // }
             &.otp-field{
                 margin:3rem 0;
                 label{

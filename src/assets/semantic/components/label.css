@@ -1305,6 +1305,15 @@ a.ui.basic.label:hover {
          Theme Overrides
 *******************************/
 
+.ui.labeled.input:not([class*="corner labeled"]) .label:first-child {
+  padding-left: 0;
+}
+.ui.labeled.input > .label {
+  background-color: transparent;
+  border-radius: 0;
+  border: none;
+  border-bottom: #BDBDBD 1px solid;
+}
 
 
 /*******************************

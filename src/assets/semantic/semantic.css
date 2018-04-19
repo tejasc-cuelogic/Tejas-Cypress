@@ -14772,6 +14772,17 @@ a.ui.basic.label:hover {
          Theme Overrides
 *******************************/
 
+.ui.labeled.input:not([class*="corner labeled"]) .label:first-child {
+  padding-left: 0;
+}
+
+.ui.labeled.input > .label {
+  background-color: transparent;
+  border-radius: 0;
+  border: none;
+  border-bottom: #BDBDBD 1px solid;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -19843,6 +19854,7 @@ ol.ui.horizontal.list li:before,
   position: relative;
   color: #98CE23;
   line-height: 2rem;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -33771,8 +33783,8 @@ select.ui.dropdown {
 }
 
 .ui.modal .content .ui.button.multistep__btn.disabled {
-  background: #BDBDBD;
-  color: #bdbdbd;
+  background: #E0E0E0;
+  color: #BDBDBD;
   opacity: 1 !important;
 }
 
@@ -33817,71 +33829,6 @@ select.ui.dropdown {
 
 .ui.modal .ui.form .fields .field {
   margin-bottom: 1rem;
-}
-
-.ui.modal .ui.form .field {
-  margin: 0 0 2rem;
-}
-
-.ui.modal .ui.form .field .ui.input input:not([type]),
-.ui.modal .ui.form .field input:not([type]),
-.ui.modal .ui.form .field .ui.input input[type=date],
-.ui.modal .ui.form .field input[type=date],
-.ui.modal .ui.form .field .ui.input input[type=datetime-local],
-.ui.modal .ui.form .field input[type=datetime-local],
-.ui.modal .ui.form .field .ui.input input[type=email],
-.ui.modal .ui.form .field input[type=email],
-.ui.modal .ui.form .field .ui.input input[type=file],
-.ui.modal .ui.form .field input[type=file],
-.ui.modal .ui.form .field .ui.input input[type=number],
-.ui.modal .ui.form .field input[type=number],
-.ui.modal .ui.form .field .ui.input input[type=password],
-.ui.modal .ui.form .field input[type=password],
-.ui.modal .ui.form .field .ui.input input[type=search],
-.ui.modal .ui.form .field input[type=search],
-.ui.modal .ui.form .field .ui.input input[type=tel],
-.ui.modal .ui.form .field input[type=tel],
-.ui.modal .ui.form .field .ui.input input[type=text],
-.ui.modal .ui.form .field input[type=text],
-.ui.modal .ui.form .field .ui.input input[type=time],
-.ui.modal .ui.form .field input[type=time],
-.ui.modal .ui.form .field .ui.input input[type=url],
-.ui.modal .ui.form .field input[type=url] {
-  padding-left: 0;
-  padding-right: 0;
-  border-radius: 0;
-  background-color: transparent;
-  border: none;
-  border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
-}
-
-.ui.modal .ui.form .field .ui.selection.dropdown,
-.ui.modal .ui.form .field .ui.labeled.input .ui.label {
-  padding-left: 0.35714286rem;
-  padding-right: 0;
-  border-radius: 0;
-  border: none;
-  border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
-}
-
-.ui.modal .ui.form .field .ui.labeled.input .ui.label {
-  font-weight: 400;
-  padding-left: 0;
-  padding-right: 0.85714286rem;
-  background-color: transparent;
-}
-
-.ui.modal .ui.form .field .ui.selection.dropdown .icon {
-  padding-right: 0.35714286rem;
-}
-
-.ui.modal .ui.form .field .ui.selection.dropdown.active .menu {
-  border: none;
-}
-
-.ui.modal .ui.form .field .ui.selection.dropdown.active .menu > .item {
-  padding-left: 0.35714286rem !important;
-  padding-right: 0.35714286rem !important;
 }
 
 .ui.modal .ui.form .field.otp-field {

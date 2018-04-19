@@ -177,6 +177,7 @@ display:block;
     position:relative;
     color:@theme-primary;
     line-height:@28px;
+    font-weight:700;
     text-align:center;
     .icon{
         margin-right:@6px;
@@ -195,7 +196,6 @@ display:block;
     }
     &.attached{
         padding-right:2rem;
-        // font-family:@boldFont;
         color:@link-color;
         border:none;
         background:@border-color;

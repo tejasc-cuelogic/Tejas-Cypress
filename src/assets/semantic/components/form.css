@@ -1226,6 +1226,7 @@
   position: relative;
   color: #98CE23;
   line-height: 2rem;
+  font-weight: 700;
   text-align: center;
 }
 .file-uploader .icon {

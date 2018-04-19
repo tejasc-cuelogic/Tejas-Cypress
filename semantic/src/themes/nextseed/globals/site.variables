@@ -1042,7 +1042,7 @@
 @quaternary-text:#989898;
 // @lighten-text:lighten(@primary-text, 21%);                  //  #666666           (when base = 303030)
 @inverse-text:#FFFFFF;
-@inverse-text-darken:darken(@inverse-text, 26%);            //  #BDBDBD           (when base = FFFFFF)
+// @inverse-text-darken:darken(@inverse-text, 26%);            //  #BDBDBD           (when base = FFFFFF)
 @inverse-secondary-text:darken(@inverse-text, 51%);					//  #7D7D7D           (when base = FFFFFF)
 
 @link-color:#772df9;

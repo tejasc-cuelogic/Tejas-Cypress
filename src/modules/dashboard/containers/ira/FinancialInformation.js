@@ -38,7 +38,7 @@ export default class FinancialInformation extends React.Component {
                   error={!!iraAccount.networth.error}
                   onChange={this.handleInputChange}
                   maxLength={10}
-                  labelPosition="right"
+                  labelPosition="left"
                   type="text"
                 >
                   <Label basic>$</Label>
