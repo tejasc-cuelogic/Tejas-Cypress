@@ -37157,6 +37157,11 @@ body.pushable > .pusher {
   min-height: calc(100vh - 58px);
 }
 
+.ui.sidebar .ui.image.logo {
+  height: 38px;
+  max-height: 38px;
+}
+
 .ui.sidebar .user-picture {
   margin: 1.14285714rem 0;
   padding: 1rem 0;
@@ -37196,33 +37201,6 @@ body.pushable > .pusher {
   color: #BDBDBD;
 }
 
-.ui.sidebar ~ .ui.button.collapseIcon {
-  width: 220px;
-  margin: 0;
-  border-radius: 0;
-  background-color: #FFFFFF;
-  color: #989898;
-  text-align: left;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  z-index: 999;
-  -webkit-transition: width .5s ease;
-  transition: width .5s ease;
-}
-
-.ui.sidebar ~ .ui.button.collapseIcon .icon {
-  float: left;
-  margin: 0 !important;
-  font-size: 1.28571429rem;
-}
-
-.ui.sidebar ~ .ui.button.collapseIcon span {
-  margin-left: 2.14285714rem;
-  display: block;
-  overflow: hidden;
-}
-
 .ui.sidebar:not(.visible) .user-picture {
   margin: 1.71428571rem 0 0.5rem;
 }
@@ -37252,23 +37230,11 @@ body.pushable > .pusher {
 }
 
 .ui.sidebar:not(.visible) ~ .ui.button.collapseIcon {
-  width: 64px;
+  width: 63px;
 }
 
 .ui.sidebar:not(.visible) ~ .ui.button.collapseIcon span {
   display: none;
-}
-
-.ui.sidebar .ui.image.logo {
-  height: 38px;
-  max-height: 38px;
-}
-
-.ui.sidebar.left.visible.thin ~ .fixed,
-.ui.sidebar.left.visible.thin ~ .pusher {
-  padding-left: 220px;
-  -webkit-transform: translate3D(0, 0, 0);
-  transform: translate3D(0, 0, 0);
 }
 
 .ui.sidebar.left.push {
@@ -37339,6 +37305,40 @@ body.pushable > .pusher {
   opacity: 1;
   margin-left: 2.14285714rem;
   max-width: 153px;
+}
+
+.ui.sidebar ~ .ui.button.collapseIcon {
+  width: 219px;
+  margin: 0;
+  border-radius: 0;
+  background-color: #FFFFFF;
+  color: #989898;
+  text-align: left;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 999;
+  -webkit-transition: width .5s ease;
+  transition: width .5s ease;
+}
+
+.ui.sidebar ~ .ui.button.collapseIcon .icon {
+  float: left;
+  margin: 0 !important;
+  font-size: 1.28571429rem;
+}
+
+.ui.sidebar ~ .ui.button.collapseIcon span {
+  margin-left: 2.14285714rem;
+  display: block;
+  overflow: hidden;
+}
+
+.ui.sidebar.left.visible.thin ~ .fixed,
+.ui.sidebar.left.visible.thin ~ .pusher {
+  padding-left: 220px;
+  -webkit-transform: translate3D(0, 0, 0);
+  transform: translate3D(0, 0, 0);
 }
 
 .ui.sidebar.inverted.menu .user-picture {
