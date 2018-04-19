@@ -23,6 +23,8 @@ building-code-issues:
   script:
     - echo "currentbranch = $CI_COMMIT_REF_SLUG"
     - bash scripts/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} us-east-1
+    - ls -al scripts/S3PublicReadAccessPolicy.json
+    - cat scripts/S3PublicReadAccessPolicy.json
     - bash scripts/setEnvironmentVariables.sh us-east-1 dev
     - npm install
     - npm run build
