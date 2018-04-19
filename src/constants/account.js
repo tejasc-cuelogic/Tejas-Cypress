@@ -199,6 +199,27 @@ export const ENTITY_TRUST_INFO = {
   },
 };
 
+export const ENTITY_PERSONAL_INFO = {
+  entityTitle: {
+    value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
+  },
+  photoId: {
+    value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID', sublabel: 'Drivers License or Passport',
+  },
+};
+
+export const ENTITY_FORMATION_DOCS = {
+  entityFormationDocument: {
+    value: '', error: undefined, rule: 'required', label: 'Entity Formation Document',
+  },
+  entityOperatingDocument: {
+    value: '', error: undefined, rule: 'required', label: 'Entity Operating Document',
+  },
+  einVerification: {
+    value: '', error: undefined, rule: 'required', label: 'EIN Verification',
+  },
+};
+
 export const ENTITY_ACCOUNT_CREATION = {
   entityNetAssets: {
     value: '',

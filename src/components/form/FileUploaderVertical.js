@@ -5,7 +5,6 @@ import { Grid, Icon } from 'semantic-ui-react';
 
 const FileUploaderVertical = observer((props) => {
   const {
-    key,
     label,
     sublabel,
     value,
@@ -23,7 +22,7 @@ const FileUploaderVertical = observer((props) => {
           <div className="file-uploader">
             <Icon name="upload" /> Choose a file <span>or drag it here</span>
             <input
-              name={key}
+              name={props.name}
               type="file"
               onChange={e => props.uploadDocument(e.target.name, e.target.files)}
             />
@@ -32,7 +31,7 @@ const FileUploaderVertical = observer((props) => {
         {value !== '' &&
         <div className="file-uploader attached">
             {value}
-          <Icon name="remove" onClick={() => props.removeUploadedDocument(key)} />
+          <Icon name="remove" onClick={() => props.removeUploadedDocument(props.name)} />
         </div>
         }
       </Grid.Column>
