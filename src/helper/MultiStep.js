@@ -19,8 +19,7 @@ export default class MultiStep extends React.Component {
     this.previous = this.previous.bind(this);
   }
 
-  getNavStates(indx, length) {
-    console.log(this);
+  getNavStates = (indx, length) => {
     const styles = [];
     /* eslint-disable no-plusplus */
     for (let i = 0; i < length; i++) {

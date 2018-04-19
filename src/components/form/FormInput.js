@@ -25,7 +25,7 @@ const FormInput = observer((props) => {
         }
       </label>
       <Form.Input
-        fluid
+        labeled
         {...props}
         label={false}
         type={props.type || 'text'}

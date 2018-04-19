@@ -14,18 +14,16 @@ export default class FinancialInformation extends Component {
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
         <Form error>
           <div className="field-wrap">
-            <FormInput
-              type="text"
-              fielddata={formFinInfo.fields.entityNetAssets}
-              name="entityNetAssets"
-              changed={finInfoChange}
-            />
-            <FormInput
-              type="text"
-              name="cfInvestments"
-              fielddata={formFinInfo.fields.cfInvestments}
-              changed={finInfoChange}
-            />
+            {
+              ['entityNetAssets', 'cfInvestments'].map(field => (
+                <FormInput
+                  type="text"
+                  fielddata={formFinInfo.fields[field]}
+                  name={field}
+                  changed={finInfoChange}
+                />
+              ))
+            }
           </div>
         </Form>
       </div>

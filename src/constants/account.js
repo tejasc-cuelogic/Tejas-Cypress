@@ -144,9 +144,149 @@ export const IRA_ACCOUNT_CREATION = {
   },
 };
 
+export const IRA_ACC_TYPES = {
+  accountType: {
+    value: 0,
+    values: [
+      {
+        label: 'Traditional',
+        value: 0,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Traditional!,
+        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+      },
+      {
+        label: 'Roth',
+        value: 1,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Roth!,
+        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+export const IRA_FUNDING = {
+  fundingOption: {
+    value: 0,
+    values: [
+      {
+        label: 'Check',
+        value: 0,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Check!,
+        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+      },
+      {
+        label: 'IRA Transfer',
+        value: 1,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for IRA Transfer!,
+        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+      },
+      {
+        label: 'Direct Rollover',
+        value: 2,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Direct Rollover!,
+        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+export const IRA_FIN_INFO = {
+  networth: {
+    value: '',
+    error: undefined,
+    rule: 'required|numeric',
+    label: 'Your networth',
+    placeHolder: 'Your networth',
+    tooltip: 'Tell us your net worth in $',
+  },
+  annualIncome: {
+    value: '',
+    error: undefined,
+    rule: 'required|numeric',
+    label: 'Your annual income',
+    placeHolder: 'Your annual income',
+    tooltip: 'Tell us your annual income in $',
+  },
+};
+
 export const IS_ENTITY_TRUST = {
   0: 'yes',
   1: 'no',
+};
+
+export const ENTITY_FIN_INFO = {
+  entityNetAssets: {
+    value: '',
+    label: 'Entity Net Assets',
+    error: '',
+    rule: 'required|numeric',
+    tooltip: 'What is your net entity assets?',
+  },
+  cfInvestments: {
+    value: '',
+    label: 'Other religion CF investments made in prior 12 months',
+    error: '',
+    rule: 'required|numeric',
+    tooltip: 'Other religion CF investments made in prior 12 months',
+  },
+};
+
+export const ENTITY_GEN_INFO = {
+  nameOfEntity: {
+    value: '', label: 'Name of Entity', error: '', rule: 'required', placeHolder: 'e.g. Pad Wealth',
+  },
+  taxId: {
+    value: '', label: 'Tax ID', error: '', rule: 'required', placeHolder: 'e.g. 12345',
+  },
+  street: {
+    value: '', label: 'Street', error: '', rule: 'required|string',
+  },
+  city: {
+    value: '', label: 'City', error: '', rule: 'required|string',
+  },
+  state: {
+    value: '', label: 'State', error: '', rule: 'required|string',
+  },
+  zipCode: {
+    value: '', label: 'ZIP Code', error: '', rule: 'required|numeric',
+  },
+};
+
+export const ENTITY_TRUST_INFO = {
+  isEntityTrust: {
+    value: 'yes',
+    values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
+    error: undefined,
+    rule: 'required',
+  },
+  dateOfTrust: {
+    value: moment(), error: undefined, rule: 'required', label: 'Date of Trust',
+  },
+};
+
+export const ENTITY_PERSONAL_INFO = {
+  entityTitle: {
+    value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
+  },
+  photoId: {
+    value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID', sublabel: 'Drivers License or Passport',
+  },
+};
+
+export const ENTITY_FORMATION_DOCS = {
+  entityFormationDocument: {
+    value: '', error: undefined, rule: 'required', label: 'Entity Formation Document',
+  },
+  entityOperatingDocument: {
+    value: '', error: undefined, rule: 'required', label: 'Entity Operating Document',
+  },
+  einVerification: {
+    value: '', error: undefined, rule: 'required', label: 'EIN Verification',
+  },
 };
 
 export const ENTITY_ACCOUNT_CREATION = {

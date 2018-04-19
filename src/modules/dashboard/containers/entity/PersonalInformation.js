@@ -34,13 +34,14 @@ export default class PersonalInformation extends Component {
               readOnly
             />
             <FormInput
-              name={formPersonalInfo.fields.entityTitle.key}
+              name="entityTitle"
               fielddata={formPersonalInfo.fields.entityTitle}
               changed={personalInfoChange}
             />
           </div>
           <Grid divided="vertically">
             <FileUploaderVertical
+              name="photoId"
               fielddata={formPersonalInfo.fields.photoId}
               uploadDocument={personalInfoFileUpload}
               removeUploadedDocument={personalInfoResetField}
