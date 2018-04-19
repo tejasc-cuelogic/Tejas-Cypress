@@ -1,13 +1,12 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import Aux from 'react-aux';
 import { Form } from 'semantic-ui-react';
 
 const FormRadioGroup = observer((props) => {
   const { values, value } = props.fielddata;
   return (
-    <Aux>
+    <Form.Group inline className="button-radio center-align">
       {
         values.map(radio => (
           <Form.Radio
@@ -21,7 +20,7 @@ const FormRadioGroup = observer((props) => {
           />
         ))
       }
-    </Aux>
+    </Form.Group>
   );
 });
 

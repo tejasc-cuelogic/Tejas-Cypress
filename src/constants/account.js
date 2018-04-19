@@ -144,6 +144,56 @@ export const IRA_ACCOUNT_CREATION = {
   },
 };
 
+export const IRA_ACC_TYPES = {
+  accountType: {
+    value: 0,
+    values: [
+      {
+        label: 'Traditional',
+        value: 0,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Traditional!,
+        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+      },
+      {
+        label: 'Roth',
+        value: 1,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Roth!,
+        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+export const IRA_FUNDING = {
+  fundingOption: {
+    value: 0,
+    values: [
+      {
+        label: 'Check',
+        value: 0,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Check!,
+        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+      },
+      {
+        label: 'IRA Transfer',
+        value: 1,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for IRA Transfer!,
+        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+      },
+      {
+        label: 'Direct Rollover',
+        value: 2,
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Direct Rollover!,
+        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
 export const IRA_FIN_INFO = {
   networth: {
     value: '',

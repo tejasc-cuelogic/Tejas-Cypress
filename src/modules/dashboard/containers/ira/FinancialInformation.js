@@ -18,6 +18,7 @@ export default class FinancialInformation extends React.Component {
               {
                 ['networth', 'annualIncome'].map(field => (
                   <FormInput
+                    key={field}
                     type="text"
                     fielddata={formFinInfo.fields[field]}
                     name={field}
