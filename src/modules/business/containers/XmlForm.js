@@ -123,8 +123,8 @@ export default class XmlForm extends React.Component {
                 {xmlActiveTabId === 1 && <IssuerInformation />}
                 {xmlActiveTabId === 2 && <OfferingInformation />}
                 {xmlActiveTabId === 3 && <AnnualReportDisclosureRequirements />}
-                {xmlActiveTabId === 4 && <FileSelector />}
-                {xmlActiveTabId === 5 && <Signature />}
+                {xmlActiveTabId === 4 && <Signature />}
+                {xmlActiveTabId === 5 && <FileSelector />}
               </Form>
             </Grid.Column>
           </Grid>

@@ -936,8 +936,8 @@ export const XML_SUBMISSION_TABS = [{
   label: 'Annual Report Disclosure Requirements',
 }, {
   id: 4,
-  label: 'Documents',
+  label: 'Signature',
 }, {
   id: 5,
-  label: 'Signature',
+  label: 'Documents',
 }];

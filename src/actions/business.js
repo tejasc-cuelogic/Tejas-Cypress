@@ -10,6 +10,8 @@ import {
   filerInformationMutation,
   issuerInformationMutation,
   offeringInformationMutation,
+  signatureMutation,
+  documentListMutation,
   annualReportMutation } from '../stores/queries/business';
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
@@ -96,11 +98,12 @@ export class Business {
       issuerInformation,
       offeringInformation,
       annualReportRequirements,
+      signature,
+      documentList,
     } = businessStore;
 
     let payload = {};
     const ids = {
-      businessId,
       filingId,
       xmlSubmissionId,
     };
@@ -109,6 +112,7 @@ export class Business {
       payload = {
         query: filerInformationMutation,
         variables: {
+          businessId,
           ...ids,
           filerInformation: this.getFormattedInformation(filerInformation),
         },
@@ -138,8 +142,26 @@ export class Business {
           this.getFormattedInformation(annualReportRequirements),
         },
       };
+    } else if (action === 'signature') {
+      payload = {
+        query: signatureMutation,
+        variables: {
+          ...ids,
+          signature: this.getFormattedSignature(signature),
+        },
+      };
+    } else if (action === 'documentList') {
+      payload = {
+        query: documentListMutation,
+        variables: {
+          ...ids,
+          documentList: _.map(_.filter(documentList, document => document.checked), document => ({
+            name: document.name,
+            id: document.id,
+          })),
+        },
+      };
     }
-
     return new Promise((res, rej) => {
       ApiService.post(GRAPHQL, payload)
         .then(data => res(data))
@@ -705,6 +727,7 @@ export class Business {
           businessStore.setSignatureInfo(key, (value || ''));
         }
       })
+      
       businessStore.setNewPersonalSignature([]);
       if (data.payload.signature) {
          _.map(data.payload.signature.signaturePersons, (signature) => {
@@ -717,7 +740,11 @@ export class Business {
             }
           });
         })
-      }  
+      }
+      
+      if (businessStore.signature.signaturePersons.length === 0) {
+        this.addPersonalSignature();
+      }
       _.map(data.payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
     }
   }
@@ -748,6 +775,53 @@ export class Business {
     const errors = this.newValidationErrors(newAnnualReport);
     businessStore.setAnnualReport(newAnnualReport);
     businessStore.setXmlError(errors);
+  }
+
+  validateSignatureInfo = (signature) => {
+    
+    const newSignature = validationActions.validateXmlFormData({
+      issuer: signature.issuer,
+      issuerSignature: signature.issuerSignature,
+      issuerTitle: signature.issuerTitle,
+    });
+       
+    const errors = this.newValidationErrors(newSignature);
+    newSignature['signaturePersons'] = signature.signaturePersons;
+    businessStore.setSignature(newSignature);
+    businessStore.setXmlError(errors);
+
+    this.validatePersonSign(signature.signaturePersons);
+  }
+
+  validatePersonSign = (signaturePersons) => {
+    
+    _.map(signaturePersons, (field) => {
+      let personErrors = [];
+      let personSignatureData = validationActions.validateXmlFormData({
+        personSignature: field.personSignature,
+        personTitle: field.personTitle,
+        signatureDate: field.signatureDate,
+      });
+      personErrors = this.newValidationErrors(personSignatureData);      
+      businessStore.setXmlError(personErrors);      
+    });
+    businessStore.setNewPersonalSignature
+  }
+
+  validateDocumentList = (documentList) => {
+    const documentCount = documentList.length;
+    let documnetCurrentCount = 0;
+    _.map(documentList, (document) => {
+      if (document.checked === false) {
+        documnetCurrentCount++;
+      }
+    });
+
+    if (documentCount === documnetCurrentCount) {
+      businessStore.setXmlError({
+        documentListError:'Please select at least one document.'
+      });
+    }    
   }
 
   newValidationErrors = (data) => {

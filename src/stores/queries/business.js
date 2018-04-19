@@ -52,3 +52,19 @@ export const annualReportMutation = gql`
       payload
     }
   }`;
+
+export const signatureMutation = gql`
+mutation upsertSignature($filingId: String!, $xmlSubmissionId: String!, $signature: CreateSignatureInput ) {
+  upsertSignature(filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, signature: $signature) {
+    xmlSubmissionId
+    payload
+  }
+}`;
+
+export const documentListMutation = gql`
+  mutation upsertDocumentList($filingId: String!, $xmlSubmissionId: String!, $documentList: [CreateDocumentInput] ) {
+    upsertDocumentList(filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, documentList: $documentList) {
+      xmlSubmissionId
+      payload
+    }
+  }`;

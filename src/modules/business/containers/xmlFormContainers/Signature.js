@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom'; // Redirect
 import PersonalSignature from '../../components/PersonalSignature';
 import businessActions from '../../../../actions/business';
 import validationActions from '../../../../actions/validation';
+import Helper from '../../../../helper/utility';
 
 @inject('businessStore')
 @withRouter
@@ -16,10 +17,11 @@ export default class Signature extends React.Component {
   }
   handleChange = (e, { name, value }) => this.props.businessStore.setSignatureInfo(name, value)
 
-  handleOnBlur = e => validationActions.validateSignatureInfo(e.target.name)
+  handleOnBlur = e => validationActions.validateSignatureInfo(e.target.name);
 
   handlePersonalSignatureChange = (e, { name, value, dataid }) => {
     this.props.businessStore.changePersonalSignature(name, dataid, value);
+    validationActions.validatePersonalSig(name, dataid);
   }
 
   handleDateChange = (e, test) => {
@@ -33,6 +35,24 @@ export default class Signature extends React.Component {
 
   handleBusinessCancel = () => {
     this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+  }
+
+  handleSignatureSubmit = (e) => {
+    e.preventDefault();
+    const { signature } = this.props.businessStore;
+    businessActions.validateSignatureInfo(signature);
+
+    if (this.props.businessStore.canSubmitSigntureForm) {
+      businessActions.submitXMLInformation('signature')
+        .then(() => {
+          this.props.businessStore.setXmlError();
+          this.props.businessStore.setXmlActiveTabId(5);
+          Helper.toast('Signature information submitted successfully', 'success');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   render() {
@@ -83,13 +103,13 @@ export default class Signature extends React.Component {
         </Card>
         <Divider hidden />
         <div className="right-align">
-          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(4)}>
+          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(3)}>
             <Icon name="chevron left" />
             Back
           </Button>
           <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
-          <Button color="green" size="large">
-            Save
+          <Button color="green" size="large" onClick={this.handleSignatureSubmit}>
+            Save & Next <Icon name="chevron right" />
           </Button>
         </div>
       </div>

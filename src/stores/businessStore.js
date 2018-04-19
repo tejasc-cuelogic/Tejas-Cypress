@@ -127,6 +127,10 @@ export class BusinessStore {
     return _.isEmpty(_.filter(this.annualReportRequirements, field => field.error));
   }
 
+  @computed get canSubmitSigntureForm() {
+    return _.isEmpty(_.filter(this.signature, field => field.error));
+  }
+
   @computed get getSummary() {
     return this.businessList.length || 0;
   }
@@ -165,6 +169,10 @@ export class BusinessStore {
   toggleRequiredFiles(key) {
     _.filter(this.documentList, document => document.name === key)[0].checked =
       !_.filter(this.documentList, document => document.name === key)[0].checked;
+    
+    if (_.filter(this.documentList, document => document.name === key)[0].checked) {
+      this.removeXmlError('documentListError');
+    } 
   }
 
   @action
@@ -278,6 +286,11 @@ export class BusinessStore {
   }
 
   @action
+  setSignature(signature) {
+    this.signature = signature;
+  }
+
+  @action
   setSignatureInfo(field, value) {
     this.signature[field].value = value;
   }
@@ -299,7 +312,7 @@ export class BusinessStore {
   */
   @action
   changePersonalSignature(field, id, value) {
-    _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].value = value;
+    _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].value = value;    
   }
 
   @action

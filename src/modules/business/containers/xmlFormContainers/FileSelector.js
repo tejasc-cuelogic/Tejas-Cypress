@@ -4,6 +4,9 @@ import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 
+import busiessActions from '../../../../actions/business';
+import Helper from '../../../../helper/utility';
+
 @inject('businessStore')
 @withRouter
 @observer
@@ -11,12 +14,30 @@ export default class FileSelector extends React.Component {
   componentWillUnmount() {
     this.props.businessStore.setXmlError();
   }
+
   handleChange = (e) => {
     this.props.businessStore.toggleRequiredFiles(e.target.textContent);
   };
 
   handleBusinessCancel = () => {
     this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+  }
+
+  handleFileSelectorSubmit = (e) => {
+    e.preventDefault();
+    const { documentList } = this.props.businessStore;
+    busiessActions.validateDocumentList(documentList);
+    if (this.props.businessStore.xmlErrors
+      && this.props.businessStore.xmlErrors.documentListError === undefined) {
+      busiessActions.submitXMLInformation('documentList')
+        .then(() => {
+          this.props.businessStore.setXmlError();
+          Helper.toast('Document selection submitted successfully', 'success');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   render() {
@@ -44,13 +65,13 @@ export default class FileSelector extends React.Component {
         </Card>
         <Divider hidden />
         <div className="right-align">
-          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(3)}>
+          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(4)}>
             <Icon name="chevron left" />
             Back
           </Button>
           <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
-          <Button color="green" size="large">
-            Save & Next <Icon name="chevron right" />
+          <Button color="green" size="large" onClick={this.handleFileSelectorSubmit}>
+            Save
           </Button>
         </div>
       </div>

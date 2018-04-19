@@ -10,7 +10,7 @@ const FormErrors = observer((props) => {
   }
   return (
     <div className="field-error-message">
-      { _.map(props.xmlErrors, error => <p>{error}</p>) }
+      { _.map(props.xmlErrors, error => <p key={error}>{error}</p>) }
     </div>
   );
 });

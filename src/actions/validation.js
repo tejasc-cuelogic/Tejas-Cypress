@@ -117,11 +117,12 @@ export class Validation {
    * @desc validates Personal Signature and sets error to store if any
    * @param $field @type String - Field name that needs to be validated
    * @param $id @type String - Uniq Dom id of that field
-   * @param $value @type String/Object - value that user entered in input element
    * @return null
    */
-  validatePersonalSignature = (field, id, value) => {
-    businessStore.changePersonalSignature(field, id, value);
+  validatePersonalSig = (field, id) => {
+    const persig = _.filter(businessStore.signature.signaturePersons, person => person.id === id);
+    const { errors } = validationService.validate(persig[0][field]);
+    this.formValidationErrors(errors, field);
   }
 
   /**

@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'; // Redirect
 import Chips from 'react-chips/lib/Chips';
 
 import validationActions from '../../../../actions/validation';
-import busiessActions from '../../../../actions/business';
+import businessActions from '../../../../actions/business';
 import Helper from '../../../../helper/utility';
 
 @inject('businessStore')
@@ -49,10 +49,10 @@ export default class FilerInformation extends React.Component {
   handleFilerInformationSubmit = (e) => {
     e.preventDefault();
     const { filerInformation } = this.props.businessStore;
-    busiessActions.validateFilerInfo(filerInformation);
+    businessActions.validateFilerInfo(filerInformation);
 
     if (this.props.businessStore.canSubmitFilerInfoXmlForm) {
-      busiessActions.submitXMLInformation('filerInformation')
+      businessActions.submitXMLInformation('filerInformation')
         .then((data) => {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(1);
