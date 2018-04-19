@@ -29,7 +29,7 @@
 		margin:@16px 0;
 		padding:@14px 0;
 		text-align:center;
-		color:@inverse-text;
+		color:@secondary-text;
 		border-radius:@4px;
 		> img, h2, h3{
 			transition:all .5s ease;
@@ -39,7 +39,7 @@
 	}
 	&.visible .user-picture{
 		&:hover{
-			background-color:@secondary-text;
+			background-color:@light-bg-color;
 		}
 		> img{
 			max-width:90px;
@@ -61,7 +61,7 @@
 		width:220px;
 		margin:0;
 		border-radius:0;
-		background-color:@tertiary-text;
+		background-color:@white;
 		color:@quaternary-text;
 		text-align:left;
 		position:absolute;
@@ -114,11 +114,6 @@
 		}
 	}
 }
-.ui.inverted.menu{
-	a.item:hover, a.item.active, a.item.active:hover{
-		background-color:@secondary-text;
-	}
-}
 .ui.sidebar{
 	.ui.image.logo{
 		height:38px;
@@ -132,9 +127,7 @@
 	}
 	&.left.push{
 		width:64px;
-		height:auto !important;
-		bottom:43px;
-		padding:@18px @13px 0;
+		padding:@18px @13px @43px;
 		visibility:visible;
 		transform:translate3D(0,0,0);
 		transition:width .5s ease;
@@ -143,7 +136,7 @@
 			text-align: left;
 			overflow:hidden;
 			padding:@8px @9px;
-			color:@inverse-text;
+			// color:@inverse-text;
 			border-radius:@4px !important;
 			margin-bottom:@3px;
 			&:first-of-type{
@@ -159,7 +152,6 @@
 				// margin:0;
 				font-size:@16px;
 				line-height:@22px;
-				color:@quaternary-text;
 				// position:relative;
 			}
 			span{
@@ -170,24 +162,12 @@
 				white-space: nowrap;
 				overflow: hidden;
 			}
-			// &.collapseIcon{
-			// }
-			// &.active{
-			// 	background:transparent;
-			// 	color:@theme-primary !important;
-			// 	// > i.icon:after{
-			// 	// 	content:"";
-			// 	// 	width:6px;
-			// 	// 	height:6px;
-			// 	// 	border-radius:3px;
-			// 	// 	display:block;
-			// 	// 	background:@theme-primary;
-			// 	// 	position:absolute;
-			// 	// 	left:50%;
-			// 	// 	margin-left:-2px;
-			// 	// 	bottom:-9px;
-			// 	// }
-			// }
+			&:hover, &:focus, &.active{
+				background-color:@light-bg-color;
+				>.icon:not(.dropdown){
+					color:@theme-primary;
+				}
+			}
 		}
 	}
 	&.visible.push{
@@ -200,6 +180,29 @@
 				max-width:153px;
 			}
 		}
+	}
+}
+
+.ui.sidebar.inverted.menu{
+	.user-picture{
+		color:@inverse-text;
+	}
+	&.visible .user-picture{
+		&:hover{
+			background-color:@secondary-text;
+		}
+	}
+	&.left.push .item{
+		&:hover, &.active, &.active:hover{
+			background-color:@secondary-text;
+		}
+		>.icon:not(.dropdown){
+			color:@quaternary-text;
+		}
+	}
+	~ .ui.button.collapseIcon{
+		background-color:@tertiary-text;
+		color:@quaternary-text;
 	}
 }
 

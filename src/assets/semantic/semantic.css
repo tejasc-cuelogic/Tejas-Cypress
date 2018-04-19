@@ -23525,7 +23525,7 @@ Floated Menu / Item
 .ui.icon.menu .item {
   height: auto;
   text-align: center;
-  color: #1B1C1D;
+  color: #4F4F4F;
 }
 
 /* Icon */
@@ -37161,7 +37161,7 @@ body.pushable > .pusher {
   margin: 1.14285714rem 0;
   padding: 1rem 0;
   text-align: center;
-  color: #FFFFFF;
+  color: #383838;
   border-radius: 0.28571429rem;
 }
 
@@ -37175,7 +37175,7 @@ body.pushable > .pusher {
 }
 
 .ui.sidebar.visible .user-picture:hover {
-  background-color: #383838;
+  background-color: #F7F7F7;
 }
 
 .ui.sidebar.visible .user-picture > img {
@@ -37200,7 +37200,7 @@ body.pushable > .pusher {
   width: 220px;
   margin: 0;
   border-radius: 0;
-  background-color: #4F4F4F;
+  background-color: #FFFFFF;
   color: #989898;
   text-align: left;
   position: absolute;
@@ -37259,12 +37259,6 @@ body.pushable > .pusher {
   display: none;
 }
 
-.ui.inverted.menu a.item:hover,
-.ui.inverted.menu a.item.active,
-.ui.inverted.menu a.item.active:hover {
-  background-color: #383838;
-}
-
 .ui.sidebar .ui.image.logo {
   height: 38px;
   max-height: 38px;
@@ -37279,9 +37273,7 @@ body.pushable > .pusher {
 
 .ui.sidebar.left.push {
   width: 64px;
-  height: auto !important;
-  bottom: 43px;
-  padding: 1.28571429rem 0.92857143rem 0;
+  padding: 1.28571429rem 0.92857143rem 3.07142857rem;
   visibility: visible;
   -webkit-transform: translate3D(0, 0, 0);
   transform: translate3D(0, 0, 0);
@@ -37294,7 +37286,6 @@ body.pushable > .pusher {
   text-align: left;
   overflow: hidden;
   padding: 0.57142857rem 0.64285714rem;
-  color: #FFFFFF;
   border-radius: 0.28571429rem !important;
   margin-bottom: 0.21428571rem;
 }
@@ -37313,7 +37304,6 @@ body.pushable > .pusher {
   float: left;
   font-size: 1.14285714rem;
   line-height: 1.57142857rem;
-  color: #989898;
 }
 
 .ui.sidebar.left.push .item span {
@@ -37323,6 +37313,18 @@ body.pushable > .pusher {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.ui.sidebar.left.push .item:hover,
+.ui.sidebar.left.push .item:focus,
+.ui.sidebar.left.push .item.active {
+  background-color: #F7F7F7;
+}
+
+.ui.sidebar.left.push .item:hover > .icon:not(.dropdown),
+.ui.sidebar.left.push .item:focus > .icon:not(.dropdown),
+.ui.sidebar.left.push .item.active > .icon:not(.dropdown) {
+  color: #98CE23;
 }
 
 .ui.sidebar.visible.push {
@@ -37337,6 +37339,29 @@ body.pushable > .pusher {
   opacity: 1;
   margin-left: 2.14285714rem;
   max-width: 153px;
+}
+
+.ui.sidebar.inverted.menu .user-picture {
+  color: #FFFFFF;
+}
+
+.ui.sidebar.inverted.menu.visible .user-picture:hover {
+  background-color: #383838;
+}
+
+.ui.sidebar.inverted.menu.left.push .item:hover,
+.ui.sidebar.inverted.menu.left.push .item.active,
+.ui.sidebar.inverted.menu.left.push .item.active:hover {
+  background-color: #383838;
+}
+
+.ui.sidebar.inverted.menu.left.push .item > .icon:not(.dropdown) {
+  color: #989898;
+}
+
+.ui.sidebar.inverted.menu ~ .ui.button.collapseIcon {
+  background-color: #4F4F4F;
+  color: #989898;
 }
 
 /*******************************
