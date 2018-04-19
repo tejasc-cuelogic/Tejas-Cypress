@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
-import graphql from 'mobx-apollo';
+// import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../services/graphql';
 import { verifyCIPUser } from '../stores/queries/profile';
 
@@ -81,27 +81,27 @@ export class ProfileStore {
   };
 
   submitInvestorPersonalDetails = () => {
-    graphql({
-      client,
-      mutation: verifyCIPUser,
-      variables: {
-        userId: userStore.currentUser.sub,
-        user: {
-          firstLegalName: this.verifyIdentity01.fields.firstLegalName.value,
-          lastLegalName: this.verifyIdentity01.fields.lastLegalName.value,
-          dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
-          ssn: this.verifyIdentity01.fields.ssn.value,
-          legalAddress: {
-            street1: this.verifyIdentity01.fields.residentalStreet.value,
-            city: this.verifyIdentity01.fields.city.value,
-            state: this.verifyIdentity01.fields.state.value,
-            zipCode: this.verifyIdentity01.fields.zipCode.value,
+    client
+      .mutate({
+        mutation: verifyCIPUser,
+        variables: {
+          userId: userStore.currentUser.sub,
+          user: {
+            firstLegalName: this.verifyIdentity01.fields.firstLegalName.value,
+            lastLegalName: this.verifyIdentity01.fields.lastLegalName.value,
+            dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
+            ssn: this.verifyIdentity01.fields.ssn.value,
+            legalAddress: {
+              street1: this.verifyIdentity01.fields.residentalStreet.value,
+              city: this.verifyIdentity01.fields.city.value,
+              state: this.verifyIdentity01.fields.state.value,
+              zipCode: this.verifyIdentity01.fields.zipCode.value,
+            },
           },
         },
-      },
-    })
+      })
       .then(data => console.log(data))
-      .catch(err => console.log(err));
+      .catch(error => console.log(error));
   }
 }
 export default new ProfileStore();
