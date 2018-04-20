@@ -10,10 +10,10 @@ export const USER_TYPES_META = [
 
 export const USER_LIST_META = [
   ['profilepic', '', false],
-  ['firstName', 'Full Name', true],
+  ['firstName', 'Full Name', false],
   ['city', 'Residence City', false],
   ['number', 'Phone Number', false],
-  ['accountType', 'Account Types', true],
+  ['accountType', 'Account Types', false],
   ['createdDate', 'Account Creation', true],
   ['lastLoginDate', 'Last Login', true],
   ['actions', '', false],
