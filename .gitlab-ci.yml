@@ -147,6 +147,7 @@ deploying-code-qa:
       - qa
   environment:
     name: qa
+    url:  http://ns-client-qa.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
@@ -184,7 +185,8 @@ deploying-code-prod:
     refs:
       - master
   environment:
-    name: production
+    name: prod
+    url:  http://ns-client-prod.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
