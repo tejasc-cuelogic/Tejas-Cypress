@@ -14,8 +14,11 @@ building-code-issues:
     paths:
     - node_modules/
   only:
-    refs:
-      - /^issue.*$/
+    - branches
+  except:
+    - master
+    - develop
+    - qa
   tags:
     - ns-client
   stage: build
@@ -33,8 +36,11 @@ building-code-issues:
 
 deploying-code-issues:
   only:
-    refs:
-      - /^issue.*$/
+    - branches
+  except:
+    - master
+    - develop
+    - qa
   environment:
     name: issues/$CI_COMMIT_REF_NAME
     url: http://$CI_COMMIT_REF_SLUG.s3-website-us-east-1.amazonaws.com
