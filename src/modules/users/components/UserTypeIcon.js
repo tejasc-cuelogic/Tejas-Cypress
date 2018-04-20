@@ -1,23 +1,22 @@
 import React from 'react';
+import Aux from 'react-aux';
 
 const UserTypeIcon = (props) => {
   const classes = ['account-type', 'small'];
-  let userType = null;
-  if (props.user.accountType) {
-    userType = props.user.accountType.charAt(0);
-    classes.push(props.user.accountType.toLowerCase());
-  }
-
-  if (props.user.accredited) {
+  if (props.user.accreditation === 'yes') {
     classes.push('accredited');
   }
 
   return (
-    <div
-      className={classes.join(' ')}
-    >
-      {userType}
-    </div>
+    <Aux>
+      {
+        props.user.accountType.map(type => (
+          <div key={type} className={`${classes.join(' ')} ${type}`}>
+            {type.toUpperCase().charAt(0)}
+          </div>
+        ))
+      }
+    </Aux>
   );
 };
 

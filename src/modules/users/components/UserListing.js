@@ -60,13 +60,22 @@ class UserListing extends Component {
                     <span className="user-name"><Link to={`/app/users/${user.id}/profile`}>{`${user.firstName} ${user.lastName}`}</Link></span>
                     {user.email}
                   </Table.Cell>
-                  <Table.Cell>{`${user.city}, MI (${user.zipCode})`}</Table.Cell>
-                  <Table.Cell>{user.phoneNumber}</Table.Cell>
+                  <Table.Cell>
+                    {user.legalDetails && user.legalDetails.legalAddress &&
+                      `${user.legalDetails.legalAddress.city}, ${user.legalDetails.legalAddress.state} (${user.legalDetails.legalAddress.zipCode})`
+                    }
+                  </Table.Cell>
+                  <Table.Cell>
+                    {user.contactDetails && user.contactDetails.phone &&
+                      user.contactDetails.phone.number &&
+                      `${user.contactDetails.phone.number}`
+                    }
+                  </Table.Cell>
                   <Table.Cell>
                     <UserTypeIcon user={user} />
                   </Table.Cell>
-                  <Table.Cell><DateTimeFormat fromNow datetime={user.lastLogin} /></Table.Cell>
-                  <Table.Cell><DateTimeFormat fromNow datetime={user.createdAt} /></Table.Cell>
+                  <Table.Cell><DateTimeFormat fromNow datetime={user.createdDate} /></Table.Cell>
+                  <Table.Cell><DateTimeFormat fromNow datetime={user.lastLoginDate} /></Table.Cell>
                   <Table.Cell><Link to={`/app/users/${user.id}/profile`} className="action">view profile</Link></Table.Cell>
                 </Table.Row>
               ))}

@@ -11,10 +11,10 @@ export const DropdownFilter = props => (
       name={props.keyName || camelCase(props.name)}
       onChange={props.change}
       className="inverted"
-      value={toJS(props.value) || []}
+      value={toJS(props.value) || ((props.isMultiple) ? [] : '')}
       placeholder="Select Filter"
       fluid
-      multiple
+      multiple={props.isMultiple}
       selection
       options={props.options}
     />

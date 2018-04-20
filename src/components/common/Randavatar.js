@@ -17,7 +17,7 @@ const UserTypeColor = {
 const randavatar = (props) => {
   const options = {
     ...optionsDefault,
-    ...{ foreground: UserTypeColor[props.accountType.toUpperCase()] },
+    ...{ foreground: UserTypeColor[props.accountType[0].toUpperCase()] },
   };
   const imgContent = (props.avatarKey && props.avatarKey.length > 15) ?
     new Identicon(props.avatarKey, options).toString() : '';
