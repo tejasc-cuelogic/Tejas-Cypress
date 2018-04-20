@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
+import moment from 'moment';
 import map from 'lodash/map';
 import isArray from 'lodash/isArray';
 import { GqlClient as client } from '../../services/graphql';
@@ -30,7 +31,15 @@ export class UserListingStore {
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
     const params = [];
-    map(filters, (val, key) => { params.push({ field: key, value: isArray(val) ? val.join(',') : val }); });
+    map(filters, (val, key) => {
+      if (key !== 'startDate' && key !== 'endDate') {
+        params.push({ field: key, value: isArray(val) ? val.join(',') : val });
+      }
+    });
+    if (filters.startDate && filters.endDate) {
+      const dateObj = `${moment(filters.startDate).format('YYYY-MM-DD')},${moment(filters.endDate).format('YYYY-MM-DD')}`;
+      params.push({ field: 'createdDate', value: dateObj });
+    }
 
     this.usersData = graphql({
       client,
@@ -100,13 +109,21 @@ export class UserListingStore {
 
   @action
   setInitiateSrch = (name, value) => {
-    const srchParams = { ...this.requestState.search };
-    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-      srchParams[name] = value;
+    if (name === 'startDate' || name === 'endDate') {
+      this.requestState.search[name] = value;
+      if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
+        const srchParams = { ...this.requestState.search };
+        this.initiateSearch(srchParams);
+      }
     } else {
-      delete srchParams[name];
+      const srchParams = { ...this.requestState.search };
+      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+        srchParams[name] = value;
+      } else {
+        delete srchParams[name];
+      }
+      this.initiateSearch(srchParams);
     }
-    this.initiateSearch(srchParams);
   }
 
   @action

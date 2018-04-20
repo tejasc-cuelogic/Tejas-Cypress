@@ -10,9 +10,15 @@ import UserListing from './../components/UserListing';
 class Users extends Component {
   setSearchParam = (e, { name, value }) => this.props.userListingStore.setInitiateSrch(name, value);
 
-  dateFilter = (e) => {
-    if (e.target.value !== '' && e.target.name !== '') {
-      this.props.userListingStore.setInitiateSrch(e.target.name, e.target.value);
+  dateFilterStart = (date) => {
+    if (date) {
+      this.props.userListingStore.setInitiateSrch('startDate', date);
+    }
+  }
+
+  dateFilterEnd = (date) => {
+    if (date) {
+      this.props.userListingStore.setInitiateSrch('endDate', date);
     }
   }
 
@@ -45,7 +51,8 @@ class Users extends Component {
           toggleSearch={this.toggleSearch}
           executeSearch={this.executeSearch}
           setSearchParam={this.setSearchParam}
-          dateFilter={this.dateFilter}
+          dateFilterStart={this.dateFilterStart}
+          dateFilterEnd={this.dateFilterEnd}
           removeFilter={this.removeFilter}
         />
         <UserListing
