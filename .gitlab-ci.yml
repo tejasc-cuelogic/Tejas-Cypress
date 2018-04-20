@@ -84,7 +84,7 @@ building-code-dev:
     paths:
     - node_modules/
   only:
-    develop
+    - develop
   tags:
     - ns-client
   stage: build
@@ -100,7 +100,7 @@ building-code-dev:
 #Deploying code to s3 bucket
 deploying-code-dev:
   only:
-    develop
+    - develop
   environment:
     name: dev
     url:  http://ns-client-dev.s3-website-us-east-1.amazonaws.com
