@@ -10,7 +10,7 @@ const userModuleSubheader = () => (
           <Grid.Column width={16}>
             <h1>
               <Responsive {...Responsive.onlyComputer}>
-                <Link to="/app/users" className="back-link"><Icon name="long arrow left" /></Link>
+                <Link to="/app/users" className="back-link"><Icon name="ns-arrow-left" /></Link>
               </Responsive>
               James Wright
             </h1>

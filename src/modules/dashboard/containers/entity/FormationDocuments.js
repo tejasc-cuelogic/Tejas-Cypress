@@ -42,7 +42,7 @@ export default class FormationDocumemts extends Component {
               <Grid.Column width={9}>
                 {entityAccount.entityFormationDocument.value === '' &&
                   <div className="file-uploader">
-                    <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                    <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
                     <input
                       name={entityAccount.entityFormationDocument.key}
                       type="file"
@@ -54,7 +54,7 @@ export default class FormationDocumemts extends Component {
                 {entityAccount.entityFormationDocument.value !== '' &&
                 <div className="file-uploader attached">
                     {entityAccount.entityFormationDocument.value}
-                  <Icon name="remove" onClick={this.removeEntityFormationDocument} />
+                  <Icon name="ns-remove" onClick={this.removeEntityFormationDocument} />
                 </div>
                 }
               </Grid.Column>
@@ -69,7 +69,7 @@ export default class FormationDocumemts extends Component {
               <Grid.Column width={9}>
                 {entityAccount.entityOperatingDocument.value === '' &&
                   <div className="file-uploader">
-                    <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                    <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
                     <input
                       name={entityAccount.entityOperatingDocument.key}
                       type="file"
@@ -81,7 +81,7 @@ export default class FormationDocumemts extends Component {
                 {entityAccount.entityOperatingDocument.value !== '' &&
                   <div className="file-uploader attached">
                     {entityAccount.entityOperatingDocument.value}
-                    <Icon name="remove" onClick={this.removeEntityOperatingDocument} />
+                    <Icon name="ns-remove" onClick={this.removeEntityOperatingDocument} />
                   </div>
                 }
               </Grid.Column>
@@ -96,7 +96,7 @@ export default class FormationDocumemts extends Component {
               <Grid.Column width={9}>
                 {entityAccount.einVerification.value === '' &&
                   <div className="file-uploader">
-                    <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                    <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
                     <input
                       name={entityAccount.einVerification.key}
                       type="file"
@@ -108,7 +108,7 @@ export default class FormationDocumemts extends Component {
                 {entityAccount.einVerification.value !== '' &&
                   <div className="file-uploader attached">
                     {entityAccount.einVerification.value}
-                    <Icon name="remove" onClick={this.removeEinVerification} />
+                    <Icon name="ns-remove" onClick={this.removeEinVerification} />
                   </div>
                 }
               </Grid.Column>

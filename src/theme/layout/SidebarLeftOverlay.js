@@ -15,14 +15,14 @@ class SidebarLeftPush extends Component {
 
   render() {
     const sidebarItems = [
-      { icon: 'mail', displayName: 'Messages', to: 'messages' },
-      { icon: 'block layout', displayName: 'Home', to: 'dashboard' },
-      { icon: 'users', displayName: 'Manage users', to: 'users' },
-      // { icon: 'rss', displayName: 'Manage blog', to: 'users' },
-      // { icon: 'question', displayName: 'Manage FAQ', to: 'users' },
-      { icon: 'gift', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },
-      { icon: 'money', displayName: 'Banking', to: 'banking' },
-      { icon: 'settings', displayName: 'Settings', to: 'settings' },
+      { icon: 'ns-envelope', displayName: 'Messages', to: 'messages' },
+      { icon: 'ns-dashboard', displayName: 'Home', to: 'dashboard' },
+      { icon: 'ns-users', displayName: 'Manage users', to: 'users' },
+      // { icon: 'ns-rss-feed', displayName: 'Manage blog', to: 'users' },
+      // { icon: 'ns-help', displayName: 'Manage FAQ', to: 'users' },
+      { icon: 'ns-comments-edit', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },
+      { icon: 'ns-wallet', displayName: 'Banking', to: 'banking' },
+      { icon: 'ns-article', displayName: 'Settings', to: 'settings' },
     ];
 
     return (
@@ -72,7 +72,7 @@ class SidebarLeftPush extends Component {
       //         animation="overlay"
       //         width="thin"
       //         visible={uiStore.layoutState.leftPanel}
-      //         icon="labeled"
+      //         icon
       //         vertical
       //         inverted
       //       >

@@ -134,7 +134,7 @@ export default class BusinessDetails extends React.Component {
                     + Add Filing
                   </Button>
                   <NewBusinessForm businessid={this.props.match.params.businessId} />
-                  <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
+                  <Link to="/app/business" className="back-link"><Icon name="ns-arrow-left" /></Link>
                   {business.name.value}
                   <div className="actions">
                     <Button
@@ -145,7 +145,7 @@ export default class BusinessDetails extends React.Component {
                       size="mini"
                       onClick={this.editBusinessModal}
                     >
-                      <Icon name="write" />
+                      <Icon name="ns-pencil" />
                     </Button>{' '}
                     <Button
                       icon
@@ -158,7 +158,7 @@ export default class BusinessDetails extends React.Component {
                       subrefid=""
                       onClick={this.confirmDelete}
                     >
-                      <Icon name="trash" />
+                      <Icon name="ns-trash" />
                     </Button>
                     <Confirm
                       header="Confirm"

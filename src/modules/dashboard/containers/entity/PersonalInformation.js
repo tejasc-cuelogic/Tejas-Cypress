@@ -67,7 +67,7 @@ export default class PersonalInformation extends Component {
               <Grid.Column width={9}>
                 {entityAccount.photoId.value === '' &&
                   <div className="file-uploader">
-                    <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                    <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
                     <input
                       name={entityAccount.photoId.key}
                       type="file"
@@ -79,7 +79,7 @@ export default class PersonalInformation extends Component {
                 {entityAccount.photoId.value !== '' &&
                 <div className="file-uploader attached">
                     {entityAccount.photoId.value}
-                  <Icon name="remove" onClick={this.removeUploadedPhotoId} />
+                  <Icon name="ns-remove" onClick={this.removeUploadedPhotoId} />
                 </div>
                 }
               </Grid.Column>

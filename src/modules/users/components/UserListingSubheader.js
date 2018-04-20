@@ -66,13 +66,13 @@ const userListingSubheader = () => (
           </Grid.Column>
           <Grid.Column width={5}>
             <Form inverted>
-              <Input fluid inverted icon="search" iconPosition="left" placeholder="Type user’s name, e-mail address or ID number" />
+              <Input fluid inverted icon="ns-search" iconPosition="left" placeholder="Type user’s name, e-mail address or ID number" />
             </Form>
           </Grid.Column>
           <Grid.Column width={3} textAlign="center">
             <span className="filter-count">0</span>
             <Button icon color="green" className="link-button">
-              Filters <Icon name="caret down" />
+              Filters <Icon name="ns-caret-down" />
             </Button>
           </Grid.Column>
           <Grid.Column width={3} textAlign="right">
@@ -80,7 +80,7 @@ const userListingSubheader = () => (
           </Grid.Column>
           <Grid.Column floated="right" textAlign="right">
             <a className="item notification" href="#">
-              <Icon name="bell" />
+              <Icon name="ns-bell" />
               <span className="unread-count">3</span>
             </a>
           </Grid.Column>
@@ -109,10 +109,10 @@ const userListingSubheader = () => (
             <Form>
               <Form.Group widths="equal">
                 <Form.Field>
-                  <Input fluid icon="calendar outline" iconPosition="left" placeholder="01/01/2017" />
+                  <Input fluid icon="ns-calendar outline" iconPosition="left" placeholder="01/01/2017" />
                 </Form.Field>
                 <Form.Field>
-                  <Input fluid icon="calendar outline" iconPosition="left" placeholder="01/01/2018" />
+                  <Input fluid icon="ns-calendar outline" iconPosition="left" placeholder="01/01/2018" />
                 </Form.Field>
               </Form.Group>
             </Form>

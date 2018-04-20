@@ -3409,6 +3409,9 @@ i.icon[class*="ns-"] {
 .ns-circle-line:before {
   content: "\e91c";
 }
+.ns-close:before {
+  content: "\e94b";
+}
 .ns-close-circle:before {
   content: "\e92d";
 }
@@ -3442,7 +3445,7 @@ i.icon[class*="ns-"] {
 .ns-entity:before {
   content: "\e93d";
 }
-.ns-envelop:before {
+.ns-envelope:before {
   content: "\e925";
 }
 .ns-facebook:before {
@@ -3453,6 +3456,9 @@ i.icon[class*="ns-"] {
 }
 .ns-food:before {
   content: "\e940";
+}
+.ns-help:before {
+  content: "\e949";
 }
 .ns-help-circle:before {
   content: "\e926";
@@ -3502,6 +3508,9 @@ i.icon[class*="ns-"] {
 .ns-replay:before {
   content: "\e946";
 }
+.ns-rss-feed:before {
+  content: "\e94a";
+}
 .ns-search:before {
   content: "\e931";
 }
@@ -3525,6 +3534,9 @@ i.icon[class*="ns-"] {
 }
 .ns-twitter:before {
   content: "\e947";
+}
+.ns-unlock:before {
+  content: "\e948";
 }
 .ns-upload:before {
   content: "\e938";

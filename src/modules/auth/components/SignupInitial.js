@@ -13,14 +13,14 @@ const signupInitial = props => (
         <Grid.Row columns={2}>
           <Grid.Column>
             <div className="user-type">
-              <Icon name="money" size="huge" />
+              <Icon name="ns-investor" size="huge" />
               <h3>Invester</h3>
               <p>Invest in existing businesses and get revenue</p>
             </div>
           </Grid.Column>
           <Grid.Column>
             <div className="user-type">
-              <Icon name="money" size="huge" />
+              <Icon name="ns-business" size="huge" />
               <h3>Business</h3>
               <p>Apply for funding with your business</p>
             </div>

@@ -3680,10 +3680,6 @@
          Theme Overrides
 *******************************/
 
-.ui.button,
-.ui.buttons .button {
-  letter-spacing: 1px;
-}
 .ui.button + .button,
 .ui.buttons .button + .button {
   margin-left: 0.71428571rem;
@@ -3715,6 +3711,18 @@
 .ui.button.link-button.green:active,
 .ui.buttons .button.link-button.green:active {
   color: #98CE23;
+}
+.ui.button.link-button.red,
+.ui.buttons .button.link-button.red {
+  color: #EB5757;
+}
+.ui.button.link-button.red:hover,
+.ui.buttons .button.link-button.red:hover,
+.ui.button.link-button.red:focus,
+.ui.buttons .button.link-button.red:focus,
+.ui.button.link-button.red:active,
+.ui.buttons .button.link-button.red:active {
+  color: #e62929;
 }
 .ui.button.relaxed,
 .ui.buttons .button.relaxed {

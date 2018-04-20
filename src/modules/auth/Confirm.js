@@ -42,7 +42,7 @@ export default class Confirm extends React.Component {
                   <div stacked>
                     <Form.Input
                       fluid
-                      icon="envelope"
+                      icon="ns-envelope"
                       iconPosition="left"
                       placeholder="E-mail address"
                       value={values.email}
@@ -50,7 +50,7 @@ export default class Confirm extends React.Component {
                     />
                     <Form.Input
                       fluid
-                      icon="lock"
+                      icon="ns-lock"
                       iconPosition="left"
                       placeholder="Verification Code"
                       name="code"

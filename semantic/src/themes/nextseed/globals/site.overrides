@@ -158,7 +158,7 @@ div.login-form {
 			top:-4px;
 			color:@theme-primary;
 			> i.icon, i.icons{
-				font-size:@18px;
+				font-size:@14px;
 			}
 			&:hover, &:active, &:focus{
 				color:darken(@theme-primary, 8%);

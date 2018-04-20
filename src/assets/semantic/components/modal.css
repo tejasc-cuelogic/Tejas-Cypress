@@ -757,7 +757,7 @@
   background-repeat: repeat-x;
   background-position-x: 35px;
 }
-.ui.modal .ui.form label i.icon.help {
+.ui.modal .ui.form label i.ns-help-circle {
   margin-left: 0.5rem;
   font-size: 1rem;
   color: #989898;

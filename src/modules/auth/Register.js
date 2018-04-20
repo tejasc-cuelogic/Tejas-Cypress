@@ -50,7 +50,7 @@ export default class Register extends React.Component {
                   <div stacked="true">
                     <Form.Input
                       fluid
-                      icon="user"
+                      icon="ns-user"
                       iconPosition="left"
                       placeholder="First Name"
                       name="givenName"
@@ -61,7 +61,7 @@ export default class Register extends React.Component {
                     <FieldError error={values.givenName.error} />
                     <Form.Input
                       fluid
-                      icon="user"
+                      icon="ns-user"
                       iconPosition="left"
                       placeholder="Last Name"
                       name="familyName"
@@ -72,7 +72,7 @@ export default class Register extends React.Component {
                     <FieldError error={values.familyName.error} />
                     <Form.Input
                       fluid
-                      icon="envelope"
+                      icon="ns-envelope"
                       iconPosition="left"
                       placeholder="Email"
                       name="email"
@@ -83,7 +83,7 @@ export default class Register extends React.Component {
                     <FieldError error={values.email.error} />
                     <Form.Input
                       fluid
-                      icon="lock"
+                      icon="ns-lock"
                       iconPosition="left"
                       type="password"
                       placeholder="Password"
@@ -95,7 +95,7 @@ export default class Register extends React.Component {
                     <FieldError error={values.password.error} />
                     <Form.Input
                       fluid
-                      icon="lock"
+                      icon="ns-lock"
                       iconPosition="left"
                       type="password"
                       placeholder="Verify Password"

@@ -327,7 +327,7 @@ div.login-form ul.error-messages {
 }
 .page-header-section h1 a.back-link > i.icon,
 .page-header-section h1 a.back-link i.icons {
-  font-size: 1.28571429rem;
+  font-size: 1rem;
 }
 .page-header-section h1 a.back-link:hover,
 .page-header-section h1 a.back-link:active,

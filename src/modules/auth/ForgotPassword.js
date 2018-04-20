@@ -46,7 +46,7 @@ export default class ForgotPassword extends React.Component {
                   <div stacked>
                     <Form.Input
                       fluid
-                      icon="envelope"
+                      icon="ns-envelope"
                       iconPosition="left"
                       placeholder="E-mail address"
                       name="email"

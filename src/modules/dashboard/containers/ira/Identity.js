@@ -34,7 +34,7 @@ export default class Identity extends Component {
               <Grid.Column width={9}>
                 {driversLicence.value === '' &&
                   <div className="file-uploader">
-                    <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                    <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
                     <input
                       name={driversLicence.key}
                       type="file"
@@ -46,7 +46,7 @@ export default class Identity extends Component {
                 {driversLicence.value !== '' &&
                   <div className="file-uploader attached">
                     <span title={driversLicence.value}>{driversLicence.value}</span>
-                    <Icon name="remove" onClick={this.removeUploadedDriversLicence} />
+                    <Icon name="ns-remove" onClick={this.removeUploadedDriversLicence} />
                   </div>
                 }
               </Grid.Column>

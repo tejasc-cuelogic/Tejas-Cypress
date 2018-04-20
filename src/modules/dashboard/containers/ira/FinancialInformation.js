@@ -25,7 +25,7 @@ export default class FinancialInformation extends React.Component {
                 <label>
                   {iraAccount.networth.label}
                   <Popup
-                    trigger={<Icon name="help circle outline" />}
+                    trigger={<Icon name="ns-help-circle outline" />}
                     content="Tell us your net worth in $"
                     position="top center"
                     className="center-align"
@@ -50,7 +50,7 @@ export default class FinancialInformation extends React.Component {
                 <label>
                   {iraAccount.annualIncome.label}
                   <Popup
-                    trigger={<Icon name="help circle outline" />}
+                    trigger={<Icon name="ns-help-circle outline" />}
                     content="Tell us your annual income in $"
                     position="top center"
                     className="center-align"

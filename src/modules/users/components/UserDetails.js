@@ -14,7 +14,7 @@ const userDetails = () => (
               {/* <Link to="/edit" className="negative">Cancel</Link>
               <Button primary size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
-              <Link to="/edit"><Icon name="pencil" />Edit</Link>
+              <Link to="/edit"><Icon name="ns-pencil" />Edit</Link>
             </div>
             <Form>
               <Grid columns={2} divided stackable>
@@ -90,7 +90,7 @@ const userDetails = () => (
             <div className="actions">
               <Link to="/edit" className="negative">Cancel</Link>
               <Button primary size="mini" to="/app/users/new"><Icon name="check" />Save</Button>
-              {/* <Link to="/edit"><Icon name="pencil" />Edit</Link> */}
+              {/* <Link to="/edit"><Icon name="ns-pencil" />Edit</Link> */}
             </div>
             <Form>
               <Form.Group>
@@ -119,7 +119,7 @@ const userDetails = () => (
               {/* <Link to="/edit" className="negative">Cancel</Link>
               <Button primary size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
-              <Link to="/edit"><Icon name="pencil" />Edit</Link>
+              <Link to="/edit"><Icon name="ns-pencil" />Edit</Link>
             </div>
             <Form>
               <Form.Group>
@@ -150,7 +150,7 @@ const userDetails = () => (
               {/* <Link to="/edit" className="negative">Cancel</Link>
               <Button primary size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
-              <Link to="/edit"><Icon name="pencil" />Edit</Link>
+              <Link to="/edit"><Icon name="ns-pencil" />Edit</Link>
             </div>
             <Form>
               <Grid columns={2} divided stackable>
@@ -259,7 +259,7 @@ const userDetails = () => (
               {/* <Link to="/edit" className="negative">Cancel</Link>
               <Button primary size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
-              <Link to="/edit"><Icon name="pencil" />Edit</Link>
+              <Link to="/edit"><Icon name="ns-pencil" />Edit</Link>
             </div>
             <Form>
               <Form.Group>

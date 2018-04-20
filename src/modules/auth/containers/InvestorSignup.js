@@ -52,7 +52,7 @@ class InvestorSignup extends Component {
     return (
       <Modal size="mini" open onClose={() => this.props.setAuthWizardStep()}>
         <Modal.Header className="center-align signup-header">
-          <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon name="arrow left" /></Link>
+          <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon name="ns-arrow-left" /></Link>
           <Header as="h2">
             Sign Up as&nbsp;
             {(this.props.authStore.signupFlow.type === 'investor') ? 'Investor' : 'Business Owner'}

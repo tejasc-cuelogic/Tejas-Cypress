@@ -912,7 +912,7 @@ div.login-form ul.error-messages {
 
 .page-header-section h1 a.back-link > i.icon,
 .page-header-section h1 a.back-link i.icons {
-  font-size: 1.28571429rem;
+  font-size: 1rem;
 }
 
 .page-header-section h1 a.back-link:hover,
@@ -5523,11 +5523,6 @@ ol.progtrckr li.progtrckr-done.error:after {
          Theme Overrides
 *******************************/
 
-.ui.button,
-.ui.buttons .button {
-  letter-spacing: 1px;
-}
-
 .ui.button + .button,
 .ui.buttons .button + .button {
   margin-left: 0.71428571rem;
@@ -5563,6 +5558,20 @@ ol.progtrckr li.progtrckr-done.error:after {
 .ui.button.link-button.green:active,
 .ui.buttons .button.link-button.green:active {
   color: #98CE23;
+}
+
+.ui.button.link-button.red,
+.ui.buttons .button.link-button.red {
+  color: #EB5757;
+}
+
+.ui.button.link-button.red:hover,
+.ui.buttons .button.link-button.red:hover,
+.ui.button.link-button.red:focus,
+.ui.buttons .button.link-button.red:focus,
+.ui.button.link-button.red:active,
+.ui.buttons .button.link-button.red:active {
+  color: #e62929;
 }
 
 .ui.button.relaxed,
@@ -12575,6 +12584,10 @@ i.icon[class*="ns-"] {
   content: "\e91c";
 }
 
+.ns-close:before {
+  content: "\e94b";
+}
+
 .ns-close-circle:before {
   content: "\e92d";
 }
@@ -12619,7 +12632,7 @@ i.icon[class*="ns-"] {
   content: "\e93d";
 }
 
-.ns-envelop:before {
+.ns-envelope:before {
   content: "\e925";
 }
 
@@ -12633,6 +12646,10 @@ i.icon[class*="ns-"] {
 
 .ns-food:before {
   content: "\e940";
+}
+
+.ns-help:before {
+  content: "\e949";
 }
 
 .ns-help-circle:before {
@@ -12699,6 +12716,10 @@ i.icon[class*="ns-"] {
   content: "\e946";
 }
 
+.ns-rss-feed:before {
+  content: "\e94a";
+}
+
 .ns-search:before {
   content: "\e931";
 }
@@ -12729,6 +12750,10 @@ i.icon[class*="ns-"] {
 
 .ns-twitter:before {
   content: "\e947";
+}
+
+.ns-unlock:before {
+  content: "\e948";
 }
 
 .ns-upload:before {
@@ -34155,7 +34180,7 @@ select.ui.dropdown {
   background-position-x: 35px;
 }
 
-.ui.modal .ui.form label i.icon.help {
+.ui.modal .ui.form label i.ns-help-circle {
   margin-left: 0.5rem;
   font-size: 1rem;
   color: #989898;

@@ -44,7 +44,7 @@ export default class Login extends React.Component {
                 <Form>
                   <div stacked>
                     <Button color="facebook" fluid>
-                      <Icon name="facebook" /> LOG IN WITH FACEBOOK
+                      <Icon name="ns-facebook" /> LOG IN WITH FACEBOOK
                     </Button>
                   </div>
                 </Form>
@@ -53,7 +53,7 @@ export default class Login extends React.Component {
                   <div stacked>
                     <Form.Input
                       fluid
-                      icon="envelope"
+                      icon="ns-envelope"
                       iconPosition="left"
                       placeholder="E-mail address"
                       name="email"
@@ -62,7 +62,7 @@ export default class Login extends React.Component {
                     />
                     <Form.Input
                       fluid
-                      icon="lock"
+                      icon="ns-lock"
                       iconPosition="left"
                       placeholder="Password"
                       type="password"

@@ -15,7 +15,7 @@ const PageHeaderSection = observer((props) => {
           </Grid.Column>
           <Grid.Column width={4} floated="right" textAlign="right">
             <a className="item notification" href="#">
-              <Icon name="bell" />
+              <Icon name="ns-bell" />
               <span className="unread-count">3</span>
             </a>
             <Button primary floated="right">Invest Now</Button>

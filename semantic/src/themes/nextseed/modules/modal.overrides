@@ -241,7 +241,7 @@
             }
         }
         label{
-            i.icon.help{
+            i.ns-help-circle{
                 margin-left:@7px;
                 font-size:@14px;
                 color:@quaternary-text;

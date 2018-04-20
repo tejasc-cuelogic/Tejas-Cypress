@@ -24,7 +24,7 @@ class signupInitial extends Component {
               {userTypes.map(type => (
                 <Grid.Column onClick={() => this.chooseType(type.value)} key={type.key}>
                   <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
-                    <Icon name="money" size="huge" />
+                    <Icon name={type.icon} size="huge" />
                     <h3>{type.text}</h3>
                     <p>{type.desc}</p>
                   </div>

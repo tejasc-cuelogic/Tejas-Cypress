@@ -102,6 +102,7 @@
 @ns-chevron-up: "\e91a";
 @ns-chevron-up-compact: "\e91b";
 @ns-circle-line: "\e91c";
+@ns-close: "\e94b";
 @ns-close-circle: "\e92d";
 @ns-coments-info: "\e91d";
 @ns-comments-edit: "\e93c";
@@ -113,10 +114,11 @@
 @ns-download: "\e923";
 @ns-ellipsis: "\e924";
 @ns-entity: "\e93d";
-@ns-envelop: "\e925";
+@ns-envelope: "\e925";
 @ns-facebook: "\e93e";
 @ns-file: "\e93f";
 @ns-food: "\e940";
+@ns-help: "\e949";
 @ns-help-circle: "\e926";
 @ns-image: "\e927";
 @ns-individual: "\e941";
@@ -133,6 +135,7 @@
 @ns-pdf: "\e92f";
 @ns-pencil: "\e930";
 @ns-replay: "\e946";
+@ns-rss-feed: "\e94a";
 @ns-search: "\e931";
 @ns-setting: "\e932";
 @ns-statement: "\e933";
@@ -141,6 +144,7 @@
 @ns-times-circle: "\e936";
 @ns-trash: "\e937";
 @ns-twitter: "\e947";
+@ns-unlock: "\e948";
 @ns-upload: "\e938";
 @ns-users: "\e939";
 @ns-view: "\e93a";
