@@ -83,7 +83,6 @@ export const INDIVIDUAL_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|numeric|digits:10',
     label: 'Enter your bank routing number',
-    placeHolder: '',
   },
   bankAccountNumber: {
     value: '',
@@ -91,7 +90,6 @@ export const INDIVIDUAL_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|numeric|digits:12',
     label: 'Enter your bank account number',
-    placeHolder: '',
   },
 };
 
@@ -121,7 +119,6 @@ export const IRA_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|string',
     label: 'Choose an account type',
-    placeHolder: '',
   },
   fundingOption: {
     value: {
@@ -132,7 +129,6 @@ export const IRA_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|string',
     label: 'Choose funding option',
-    placeHolder: '',
   },
   driversLicence: {
     value: '',
@@ -140,7 +136,6 @@ export const IRA_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required',
     label: '',
-    placeHolder: '',
   },
 };
 
@@ -222,14 +217,14 @@ export const ENTITY_FIN_INFO = {
   entityNetAssets: {
     value: '',
     label: 'Entity Net Assets',
-    error: '',
+    error: undefined,
     rule: 'required|numeric',
     tooltip: 'What is your net entity assets?',
   },
   cfInvestments: {
     value: '',
     label: 'Other religion CF investments made in prior 12 months',
-    error: '',
+    error: undefined,
     rule: 'required|numeric',
     tooltip: 'Other religion CF investments made in prior 12 months',
   },
@@ -237,22 +232,22 @@ export const ENTITY_FIN_INFO = {
 
 export const ENTITY_GEN_INFO = {
   nameOfEntity: {
-    value: '', label: 'Name of Entity', error: '', rule: 'required', placeHolder: 'e.g. Pad Wealth',
+    value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
   },
   taxId: {
-    value: '', label: 'Tax ID', error: '', rule: 'required', placeHolder: 'e.g. 12345',
+    value: '', label: 'Tax ID', error: undefined, rule: 'required', placeHolder: 'e.g. 12345',
   },
   street: {
-    value: '', label: 'Street', error: '', rule: 'required|string',
+    value: '', label: 'Street', error: undefined, rule: 'required|string',
   },
   city: {
-    value: '', label: 'City', error: '', rule: 'required|string',
+    value: '', label: 'City', error: undefined, rule: 'required|string',
   },
   state: {
-    value: '', label: 'State', error: '', rule: 'required|string',
+    value: '', label: 'State', error: undefined, rule: 'required|string',
   },
   zipCode: {
-    value: '', label: 'ZIP Code', error: '', rule: 'required|numeric',
+    value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric',
   },
 };
 
@@ -296,7 +291,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|numeric',
     label: 'Entity Net Assets',
-    placeHolder: '',
   },
   cfInvestments: {
     value: '',
@@ -304,7 +298,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|numeric',
     label: 'Other religion CF investments made in prior 12 months',
-    placeHolder: '',
   },
   nameOfEntity: {
     value: '',
@@ -328,7 +321,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|string',
     label: 'Street',
-    placeHolder: '',
   },
   city: {
     value: '',
@@ -336,7 +328,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|string',
     label: 'City',
-    placeHolder: '',
   },
   state: {
     value: '',
@@ -344,7 +335,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|string',
     label: 'State',
-    placeHolder: '',
   },
   zipCode: {
     value: '',
@@ -352,7 +342,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required|numeric',
     label: 'ZIP Code',
-    placeHolder: '',
   },
   isEntityTrust: {
     value: 'yes',
@@ -360,7 +349,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required',
     label: '',
-    placeHolder: '',
   },
   dateOfTrust: {
     value: moment(),
@@ -368,7 +356,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: 'required',
     label: 'Date of Trust',
-    placeHolder: '',
   },
   entityTitle: {
     value: '',
@@ -384,7 +371,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: '',
     label: '',
-    placeHolder: '',
   },
   entityFormationDocument: {
     value: '',
@@ -392,7 +378,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: '',
     label: 'Entity Formation Document',
-    placeHolder: '',
   },
   entityOperatingDocument: {
     value: '',
@@ -400,7 +385,6 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: '',
     label: 'Entity Operating Document',
-    placeHolder: '',
   },
   einVerification: {
     value: '',
@@ -408,6 +392,5 @@ export const ENTITY_ACCOUNT_CREATION = {
     error: undefined,
     rule: '',
     label: 'EIN Verification',
-    placeHolder: '',
   },
 };

@@ -25,11 +25,12 @@ const FormInput = observer((props) => {
         }
       </label>
       <Form.Input
+        fluid
         labeled
         {...props}
         label={false}
         type={props.type || 'text'}
-        error={error}
+        error={!!error}
         placeholder={placeHolder}
         onChange={props.changed}
       />

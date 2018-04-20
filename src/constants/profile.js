@@ -65,6 +65,15 @@ export const VERIFY_IDENTITY_STEP_01 = {
   },
 };
 
+export const VERIFY_IDENTITY_STEP_04 = {
+  code: {
+    value: '',
+    label: 'Enter your verification code here:',
+    error: undefined,
+    rule: 'required|numeric',
+  },
+};
+
 export const PROFILE_DETAILS_TITLE = [
   { key: 'Mr', value: 'Mr', text: 'Mr' },
   { key: 'Ms', value: 'Ms', text: 'Ms' },

@@ -10,15 +10,8 @@ import Helper from '../../../helper/utility';
 @inject('profileStore', 'uiStore', 'userStore')
 @observer
 export default class investorPersonalDetails extends Component {
-  componentWillMount() {
-    // const { currentUser } = this.props.userStore;
-    // this.props.profileStore.setProfileDetails('firstLegalName', currentUser.givenName);
-    // this.props.profileStore.setProfileDetails('lastLegalName', currentUser.familyName);
-  }
-
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
-    // this.props.profileStore.resetProfileDetails();
   }
 
   handleInputChange = (e, { name, value }) =>
@@ -44,12 +37,21 @@ export default class investorPersonalDetails extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.profileStore.submitInvestorPersonalDetails();
-    // this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation');
+    this.props.profileStore.submitInvestorPersonalDetails().then(() => {
+      const { message, questions, softFailId } = this.props.profileStore.verifyIdentityResponse;
+      if (message === 'FAIL' && questions) {
+        this.props.profileStore.setIdentityQuestions(questions);
+        this.props.profileStore.setSoftFailId(softFailId);
+        this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation');
+      } else if (message === 'PASS') {
+        this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+      }
+    });
   }
 
   render() {
-    const { verifyIdentity01, verifyIdentityEleChange } = this.props.profileStore;
+    const { verifyIdentity01, verifyIdentityEleChange, verifyIdentitySelChange } =
+    this.props.profileStore;
     const welcomeMsg = `Hello ${this.props.userStore.currentUser.givenName}!`;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
@@ -71,7 +73,7 @@ export default class investorPersonalDetails extends Component {
                 value={verifyIdentity01.fields.title.value}
                 error={verifyIdentity01.fields.title.error}
                 options={PROFILE_DETAILS_TITLE}
-                changed={verifyIdentityEleChange}
+                changed={verifyIdentitySelChange}
               />
               <FormInput
                 type="text"

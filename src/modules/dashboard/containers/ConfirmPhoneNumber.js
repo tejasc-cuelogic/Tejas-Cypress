@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
-import InputMask from 'react-input-mask';
+import { FormInput, MaskedInput } from '../../../components/form/FormElements';
 
 import validationActions from '../../../actions/validation';
-import FieldError from '../../../components/common/FieldError';
 
 @inject('profileStore', 'uiStore')
 @observer
 export default class ConfirmPhoneNumber extends Component {
+  componentWillMount() {
+    this.props.profileStore.startPhoneVerification().then((result) => {
+      console.log(result);
+    });
+  }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
@@ -17,22 +21,14 @@ export default class ConfirmPhoneNumber extends Component {
   handleInputChange = (e, { name, value }) =>
     validationActions.validateProfileDetailsField(name, value);
 
-  restrictInputAfterMaxLength = (e) => {
-    if (e.target.value.toString().length === 6) {
-      e.preventDefault();
-    }
-  }
-
-  handleSubmitForm = (e) => {
+  handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
-    validationActions.validateConfirmPhoneNumberForm();
-    if (this.props.profileStore.canSubmitPhoneNumberVerification) {
-      this.props.setDashboardWizardStep('');
-    }
+    this.props.profileStore.confirmPhoneNumber();
   }
 
   render() {
-    const { profileDetails } = this.props.profileStore;
+    const { verifyIdentity01, verifyIdentity04, verifyPhoneNumberEleChange } =
+    this.props.profileStore;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
@@ -43,30 +39,26 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Content className="signup-content center-align">
           <div className="field">
             <div className="ui huge input">
-              <InputMask
+              <MaskedInput
+                value="66123456781"
                 type="tel"
-                value={profileDetails.phoneNumber.value}
+                name="phoneNumber"
+                fielddata={verifyIdentity01.fields.phoneNumber}
                 mask="+9 999-999-9999"
-                maskChar=" "
-                alwaysShowMask
                 readOnly
+                hidelabel
               />
             </div>
           </div>
           <p><Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>Change phone number</Link></p>
-          <Form error onSubmit={this.handleSubmitForm}>
-            <Form.Input
+          <Form error onSubmit={this.handleConfirmPhoneNumber}>
+            <FormInput
               size="huge"
-              label="Enter verification code here:"
               className="otp-field"
-              name={profileDetails.code.key}
-              value={profileDetails.code.value}
-              onChange={this.handleInputChange}
-              error={!!profileDetails.code.error}
               maxLength={6}
-              onKeyPress={this.restrictInputAfterMaxLength}
+              fielddata={verifyIdentity04.fields.code}
+              onChange={verifyPhoneNumberEleChange}
             />
-            <FieldError error={profileDetails.code.error} />
             <div className="center-align">
               <Button color="green" size="large" className="very relaxed">Confirm</Button>
             </div>
