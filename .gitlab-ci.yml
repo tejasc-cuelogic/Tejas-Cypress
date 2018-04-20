@@ -14,7 +14,8 @@ building-code-issues:
     paths:
     - node_modules/
   only:
-    - branches
+    refs:
+      - branches
   except:
     - master
     - develop
@@ -36,7 +37,8 @@ building-code-issues:
 
 deploying-code-issues:
   only:
-    - branches
+    refs:
+      - branches
   except:
     - master
     - develop
@@ -56,7 +58,8 @@ deploying-code-issues:
 
 stop-deploying-code-issues:
   only:
-    - branches
+    refs:
+      - branches
   except:
     - master
     - develop
@@ -84,7 +87,8 @@ building-code-dev:
     paths:
     - node_modules/
   only:
-    - develop
+    refs:
+      - develop
   tags:
     - ns-client
   stage: build
@@ -100,7 +104,8 @@ building-code-dev:
 #Deploying code to s3 bucket
 deploying-code-dev:
   only:
-    - develop
+    refs:
+      - develop
   environment:
     name: dev
     url:  http://ns-client-dev.s3-website-us-east-1.amazonaws.com
