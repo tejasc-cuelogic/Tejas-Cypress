@@ -6,7 +6,70 @@ variables:
 stages:
   - build
   - deploy
+
+#---------------------------------Issues----------------------------------------  
+#Building code
+building-code-issues:
+  cache:
+    paths:
+    - node_modules/
+  only:
+    - branches
+  except:
+    - master
+    - develop
+    - qa
+  tags:
+    - ns-client
+  stage: build
+  script:
+    - bash scripts/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} us-east-1
+    - bash scripts/setEnvironmentVariables.sh us-east-1 dev
+    - npm install
+    - npm run build
+
+  artifacts:
+    paths:
+    - build/
+    - scripts/
+    expire_in: 1 day
+
+deploying-code-issues:
+  only:
+    - branches
+  except:
+    - master
+    - develop
+    - qa
+  environment:
+    name: issues/$CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_SLUG.s3-website-us-east-1.amazonaws.com
+    on_stop: stop-deploying-code-issues
+  tags:
+    - ns-client
+  stage: deploy
+  script: 
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://${CI_COMMIT_REF_SLUG}/ --recursive
+  dependencies:
+    - building-code-issues
+
+stop-deploying-code-issues:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - ns-client
+  script:
+    - chmod +x scripts/emptyBucket.py 
+    - python scripts/emptyBucket.py -b ${CI_COMMIT_REF_SLUG}
+    - aws s3api delete-bucket --bucket ${CI_COMMIT_REF_SLUG} --region us-east-1
+  when: manual
+  environment:
+    name: issues/$CI_COMMIT_REF_NAME
+    action: stop
   
+
 #---------------------------------Dev-------------------------------------------
 
 #Building code
@@ -36,6 +99,7 @@ deploying-code-dev:
       - develop
   environment:
     name: dev
+    url:  http://ns-client-dev.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
