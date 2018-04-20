@@ -109,6 +109,9 @@ export class AccountStore {
 
   @computed
   get fullAddress() {
+    /**
+     * @todo Push all values in array and use join for display.
+     */
     let address = '';
     if (this.entityAccount.street.value !== '') {
       address = this.entityAccount.street.value;
