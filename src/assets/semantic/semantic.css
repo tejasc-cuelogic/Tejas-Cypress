@@ -12760,6 +12760,10 @@ i.icon[class*="ns-"] {
   content: "\e938";
 }
 
+.ns-user:before {
+  content: "\e94c";
+}
+
 .ns-users:before {
   content: "\e939";
 }

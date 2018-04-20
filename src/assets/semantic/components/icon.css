@@ -3541,6 +3541,9 @@ i.icon[class*="ns-"] {
 .ns-upload:before {
   content: "\e938";
 }
+.ns-user:before {
+  content: "\e94c";
+}
 .ns-users:before {
   content: "\e939";
 }

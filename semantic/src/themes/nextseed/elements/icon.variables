@@ -146,6 +146,7 @@
 @ns-twitter: "\e947";
 @ns-unlock: "\e948";
 @ns-upload: "\e938";
+@ns-user: "\e94c";
 @ns-users: "\e939";
 @ns-view: "\e93a";
 @ns-wallet: "\e93b";

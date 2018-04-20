@@ -1221,6 +1221,9 @@ i.icon[class*="ns-"]{
 .ns-upload:before{
     content: @ns-upload;
 }
+.ns-user:before{
+    content: @ns-user; 
+}
 .ns-users:before{
     content: @ns-users;
 }
