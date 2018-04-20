@@ -46,7 +46,7 @@ export default class Identity extends Component {
                 {driversLicence.value !== '' &&
                   <div className="file-uploader attached">
                     <span title={driversLicence.value}>{driversLicence.value}</span>
-                    <Icon name="ns-remove" onClick={this.removeUploadedDriversLicence} />
+                    <Icon name="ns-close" size="small" onClick={this.removeUploadedDriversLicence} />
                   </div>
                 }
               </Grid.Column>

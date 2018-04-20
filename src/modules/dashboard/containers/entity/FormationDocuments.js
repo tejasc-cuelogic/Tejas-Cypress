@@ -54,7 +54,7 @@ export default class FormationDocumemts extends Component {
                 {entityAccount.entityFormationDocument.value !== '' &&
                 <div className="file-uploader attached">
                     {entityAccount.entityFormationDocument.value}
-                  <Icon name="ns-remove" onClick={this.removeEntityFormationDocument} />
+                  <Icon name="ns-close" size="small" onClick={this.removeEntityFormationDocument} />
                 </div>
                 }
               </Grid.Column>
@@ -81,7 +81,7 @@ export default class FormationDocumemts extends Component {
                 {entityAccount.entityOperatingDocument.value !== '' &&
                   <div className="file-uploader attached">
                     {entityAccount.entityOperatingDocument.value}
-                    <Icon name="ns-remove" onClick={this.removeEntityOperatingDocument} />
+                    <Icon name="ns-close" size="small" onClick={this.removeEntityOperatingDocument} />
                   </div>
                 }
               </Grid.Column>
@@ -108,7 +108,7 @@ export default class FormationDocumemts extends Component {
                 {entityAccount.einVerification.value !== '' &&
                   <div className="file-uploader attached">
                     {entityAccount.einVerification.value}
-                    <Icon name="ns-remove" onClick={this.removeEinVerification} />
+                    <Icon name="ns-close" size="small" onClick={this.removeEinVerification} />
                   </div>
                 }
               </Grid.Column>

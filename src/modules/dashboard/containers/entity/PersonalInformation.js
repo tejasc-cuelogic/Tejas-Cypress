@@ -79,7 +79,7 @@ export default class PersonalInformation extends Component {
                 {entityAccount.photoId.value !== '' &&
                 <div className="file-uploader attached">
                     {entityAccount.photoId.value}
-                  <Icon name="ns-remove" onClick={this.removeUploadedPhotoId} />
+                  <Icon name="ns-close" size="small" onClick={this.removeUploadedPhotoId} />
                 </div>
                 }
               </Grid.Column>

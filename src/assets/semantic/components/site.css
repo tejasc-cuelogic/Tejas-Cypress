@@ -457,7 +457,7 @@ div.login-form ul.error-messages {
   padding: 1rem;
   margin-bottom: 1.28571429rem;
   border-radius: 5px 0 0 5px;
-  background-color: #383838;
+  background-color: #4F4F4F;
   -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
 }

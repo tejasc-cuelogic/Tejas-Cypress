@@ -73,7 +73,7 @@ export default class ConfirmIdentityDocuments extends Component {
                     <span title={confirmIdentityDocuments.photoId.value}>
                       {confirmIdentityDocuments.photoId.value}
                     </span>
-                    <Icon name="ns-close" onClick={this.removeUploadedPhotoId} />
+                    <Icon name="ns-close" size="small" onClick={this.removeUploadedPhotoId} />
                   </div>
                   }
                 </Grid.Column>
@@ -120,7 +120,7 @@ export default class ConfirmIdentityDocuments extends Component {
                       <span title={confirmIdentityDocuments.proofOfResidence.value}>
                         {confirmIdentityDocuments.proofOfResidence.value}
                       </span>
-                      <Icon name="ns-close" onClick={this.removeUploadedProofOfResidence} />
+                      <Icon name="ns-close" size="small" onClick={this.removeUploadedProofOfResidence} />
                     </div>
                   }
                 </Grid.Column>

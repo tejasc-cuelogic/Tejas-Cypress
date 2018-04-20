@@ -17,7 +17,7 @@ const panes = [
             </span>
           </h2>
           <div className="main actions">
-            <Link to=""><Icon name="ns-trash large" />Delete Account</Link>
+            <Link to=""><Icon name="ns-trash" />Delete Account</Link>
           </div>
           <List horizontal link>
             <List.Item as="a" active>Overview</List.Item>

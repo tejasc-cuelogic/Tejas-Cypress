@@ -259,19 +259,18 @@
 }
 
 /* Dropdown Icon */
-.ui.accordion .title .angle.icon,
-.ui.accordion .accordion .title .angle.icon {
+.ui.accordion .title .ns-chevron-down.icon,
+.ui.accordion .accordion .title .ns-chevron-down.icon {
   margin: 0;
-  height: 19px;
-  font-size: 1.57142857rem;
+  height: 1.5rem;
   color: #98CE23;
-  line-height: 1.35714286rem;
+  line-height: 1.5rem;
   position: absolute;
   right: 0;
   top: 7px;
 }
-.ui.accordion .title.active .angle.icon,
-.ui.accordion .accordion .title.active .angle.icon {
+.ui.accordion .title.active .ns-chevron-down.icon,
+.ui.accordion .accordion .title.active .ns-chevron-down.icon {
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
 }
