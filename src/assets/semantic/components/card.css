@@ -1035,6 +1035,7 @@ a.ui.card:hover,
 .ui.cards > .card.welcome-card > .content i.icon.pull-left {
   width: auto;
   margin: 0 1rem 0 0;
+  color: #98CE23;
 }
 .ui.card.welcome-card > .content .ui.mini.image,
 .ui.cards > .card.welcome-card > .content .ui.mini.image {

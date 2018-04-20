@@ -989,3 +989,234 @@ i.icon.s15:before { content: "\f2cd"; }
 i.icon.bath:before { content: "\f2cd"; }
 i.icon.times.rectangle:before { content: "\f2d3"; }
 i.icon.times.rectangle.outline:before { content: "\f2d4"; }
+
+//  NextSeed V2 custom Icons
+@font-face {
+	font-family: 'nextseed';
+	src: @nsFallbackSRC;
+	src: @nsSrc;
+	font-style: normal;
+	font-weight: 400;
+}
+i.icon[class*="ns-"]{
+    font-family:'nextseed';
+}
+
+.ns-activity-arrow:before{
+    content: @ns-activity-arrow;
+}
+.ns-arrow-down:before{
+    content: @ns-arrow-down;
+}
+.ns-arrow-left:before{
+    content: @ns-arrow-left;
+}
+.ns-arrow-right:before{
+    content: @ns-arrow-right;
+}
+.ns-arrow-up:before{
+    content: @ns-arrow-up;
+}
+.ns-article:before{
+    content: @ns-article;
+}
+.ns-author:before{
+    content: @ns-author;
+}
+.ns-bag:before{
+    content: @ns-bag;
+}
+.ns-bar-chart:before{
+    content: @ns-bar-chart;
+}
+.ns-bell:before{
+    content: @ns-bell;
+}
+.ns-box:before{
+    content: @ns-box;
+}
+.ns-business:before{
+    content: @ns-business;
+}
+.ns-calendar:before{
+    content: @ns-calendar;
+}
+.ns-caret-down:before{
+    content: @ns-caret-down;
+}
+.ns-caret-left:before{
+    content: @ns-caret-left;
+}
+.ns-caret-right:before{
+    content: @ns-caret-right;
+}
+.ns-caret-up:before{
+    content: @ns-caret-up;
+}
+.ns-category:before{
+    content: @ns-category;
+}
+.ns-category-line:before{
+    content: @ns-category-line;
+}
+.ns-check-circle:before{
+    content: @ns-check-circle;
+}
+.ns-chevron-down:before{
+    content: @ns-chevron-down;
+}
+.ns-chevron-down-compact:before{
+    content: @ns-chevron-down-compact;
+}
+.ns-chevron-left:before{
+    content: @ns-chevron-left;
+}
+.ns-chevron-left-compact:before{
+    content: @ns-chevron-left-compact;
+}
+.ns-chevron-right:before{
+    content: @ns-chevron-right;
+}
+.ns-chevron-right-compact:before{
+    content: @ns-chevron-right-compact;
+}
+.ns-chevron-up:before{
+    content: @ns-chevron-up;
+}
+.ns-chevron-up-compact:before{
+    content: @ns-chevron-up-compact;
+}
+.ns-circle-line:before{
+    content: @ns-circle-line;
+}
+.ns-close-circle:before{
+    content: @ns-close-circle;
+}
+.ns-coments-info:before{
+    content: @ns-coments-info;
+}
+.ns-comments-edit:before{
+    content: @ns-comments-edit;
+}
+.ns-compas:before{
+    content: @ns-compas;
+}
+.ns-credit-card:before{
+    content: @ns-credit-card;
+}
+.ns-dashboard:before{
+    content: @ns-dashboard;
+}
+.ns-dashboard-circle:before{
+    content: @ns-dashboard-circle;
+}
+.ns-doller-circle:before{
+    content: @ns-doller-circle;
+}
+.ns-download:before{
+    content: @ns-download;
+}
+.ns-ellipsis:before{
+    content: @ns-ellipsis;
+}
+.ns-entity:before{
+    content: @ns-entity;
+}
+.ns-envelop:before{
+    content: @ns-envelop;
+}
+.ns-facebook:before{
+    content: @ns-facebook;
+}
+.ns-file:before{
+    content: @ns-file;
+}
+.ns-food:before{
+    content: @ns-food;
+}
+.ns-help-circle:before{
+    content: @ns-help-circle;
+}
+.ns-image:before{
+    content: @ns-image;
+}
+.ns-individual:before{
+    content: @ns-individual;
+}
+.ns-info-circle:before{
+    content: @ns-info-circle;
+}
+.ns-investor:before{
+    content: @ns-investor;
+}
+.ns-ira:before{
+    content: @ns-ira;
+}
+.ns-line-chart:before{
+    content: @ns-line-chart;
+}
+.ns-link:before{
+    content: @ns-link;
+}
+.ns-lock:before{
+    content: @ns-lock;
+}
+.ns-long-arrow-left:before{
+    content: @ns-long-arrow-left;
+}
+.ns-nextseed-icon:before{
+    content: @ns-nextseed-icon;
+}
+.ns-nextseed-icon-line:before{
+    content: @ns-nextseed-icon-line;
+}
+.ns-offering:before{
+    content: @ns-offering;
+}
+.ns-pdf:before{
+    content: @ns-pdf;
+}
+.ns-pencil:before{
+    content: @ns-pencil;
+}
+.ns-replay:before{
+    content: @ns-replay;
+}
+.ns-search:before{
+    content: @ns-search;
+}
+.ns-setting:before{
+    content: @ns-setting;
+}
+.ns-statement:before{
+    content: @ns-statement;
+}
+.ns-tags:before{
+    content: @ns-tags;
+}
+.ns-times-box:before{
+    content: @ns-times-box;
+}
+.ns-times-circle:before{
+    content: @ns-times-circle;
+}
+.ns-trash:before{
+    content: @ns-trash;
+}
+.ns-twitter:before{
+    content: @ns-twitter;
+}
+.ns-upload:before{
+    content: @ns-upload;
+}
+.ns-users:before{
+    content: @ns-users;
+}
+.ns-view:before{
+    content: @ns-view;
+}
+.ns-wallet:before{
+    content: @ns-wallet;
+}
+  
+  

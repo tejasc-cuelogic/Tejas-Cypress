@@ -12447,6 +12447,306 @@ i.icon.times.rectangle.outline:before {
   content: "\f2d4";
 }
 
+@font-face {
+  font-family: 'nextseed';
+  src: url("./themes/nextseed/assets/fonts/nextseed.eot?n09i5h");
+  src: url("./themes/nextseed/assets/fonts/nextseed.eot?n09i5h#iefix") format('embedded-opentype'), url("./themes/nextseed/assets/fonts/nextseed.ttf?n09i5h") format('truetype'), url("./themes/nextseed/assets/fonts/nextseed.woff?n09i5h") format('woff'), url("./themes/nextseed/assets/fonts/nextseed.svg?n09i5h#nextseed") format('svg');
+  font-style: normal;
+  font-weight: 400;
+}
+
+i.icon[class*="ns-"] {
+  font-family: 'nextseed';
+}
+
+.ns-activity-arrow:before {
+  content: "\e900";
+}
+
+.ns-arrow-down:before {
+  content: "\e901";
+}
+
+.ns-arrow-left:before {
+  content: "\e902";
+}
+
+.ns-arrow-right:before {
+  content: "\e903";
+}
+
+.ns-arrow-up:before {
+  content: "\e904";
+}
+
+.ns-article:before {
+  content: "\e905";
+}
+
+.ns-author:before {
+  content: "\e906";
+}
+
+.ns-bag:before {
+  content: "\e907";
+}
+
+.ns-bar-chart:before {
+  content: "\e908";
+}
+
+.ns-bell:before {
+  content: "\e909";
+}
+
+.ns-box:before {
+  content: "\e90a";
+}
+
+.ns-business:before {
+  content: "\e90b";
+}
+
+.ns-calendar:before {
+  content: "\e90c";
+}
+
+.ns-caret-down:before {
+  content: "\e90d";
+}
+
+.ns-caret-left:before {
+  content: "\e90e";
+}
+
+.ns-caret-right:before {
+  content: "\e90f";
+}
+
+.ns-caret-up:before {
+  content: "\e910";
+}
+
+.ns-category:before {
+  content: "\e911";
+}
+
+.ns-category-line:before {
+  content: "\e912";
+}
+
+.ns-check-circle:before {
+  content: "\e913";
+}
+
+.ns-chevron-down:before {
+  content: "\e914";
+}
+
+.ns-chevron-down-compact:before {
+  content: "\e915";
+}
+
+.ns-chevron-left:before {
+  content: "\e916";
+}
+
+.ns-chevron-left-compact:before {
+  content: "\e917";
+}
+
+.ns-chevron-right:before {
+  content: "\e918";
+}
+
+.ns-chevron-right-compact:before {
+  content: "\e919";
+}
+
+.ns-chevron-up:before {
+  content: "\e91a";
+}
+
+.ns-chevron-up-compact:before {
+  content: "\e91b";
+}
+
+.ns-circle-line:before {
+  content: "\e91c";
+}
+
+.ns-close-circle:before {
+  content: "\e92d";
+}
+
+.ns-coments-info:before {
+  content: "\e91d";
+}
+
+.ns-comments-edit:before {
+  content: "\e93c";
+}
+
+.ns-compas:before {
+  content: "\e91e";
+}
+
+.ns-credit-card:before {
+  content: "\e91f";
+}
+
+.ns-dashboard:before {
+  content: "\e920";
+}
+
+.ns-dashboard-circle:before {
+  content: "\e921";
+}
+
+.ns-doller-circle:before {
+  content: "\e922";
+}
+
+.ns-download:before {
+  content: "\e923";
+}
+
+.ns-ellipsis:before {
+  content: "\e924";
+}
+
+.ns-entity:before {
+  content: "\e93d";
+}
+
+.ns-envelop:before {
+  content: "\e925";
+}
+
+.ns-facebook:before {
+  content: "\e93e";
+}
+
+.ns-file:before {
+  content: "\e93f";
+}
+
+.ns-food:before {
+  content: "\e940";
+}
+
+.ns-help-circle:before {
+  content: "\e926";
+}
+
+.ns-image:before {
+  content: "\e927";
+}
+
+.ns-individual:before {
+  content: "\e941";
+}
+
+.ns-info-circle:before {
+  content: "\e928";
+}
+
+.ns-investor:before {
+  content: "\e929";
+}
+
+.ns-ira:before {
+  content: "\e942";
+}
+
+.ns-line-chart:before {
+  content: "\e92a";
+}
+
+.ns-link:before {
+  content: "\e943";
+}
+
+.ns-lock:before {
+  content: "\e92b";
+}
+
+.ns-long-arrow-left:before {
+  content: "\e92c";
+}
+
+.ns-nextseed-icon:before {
+  content: "\e944";
+}
+
+.ns-nextseed-icon-line:before {
+  content: "\e945";
+}
+
+.ns-offering:before {
+  content: "\e92e";
+}
+
+.ns-pdf:before {
+  content: "\e92f";
+}
+
+.ns-pencil:before {
+  content: "\e930";
+}
+
+.ns-replay:before {
+  content: "\e946";
+}
+
+.ns-search:before {
+  content: "\e931";
+}
+
+.ns-setting:before {
+  content: "\e932";
+}
+
+.ns-statement:before {
+  content: "\e933";
+}
+
+.ns-tags:before {
+  content: "\e934";
+}
+
+.ns-times-box:before {
+  content: "\e935";
+}
+
+.ns-times-circle:before {
+  content: "\e936";
+}
+
+.ns-trash:before {
+  content: "\e937";
+}
+
+.ns-twitter:before {
+  content: "\e947";
+}
+
+.ns-upload:before {
+  content: "\e938";
+}
+
+.ns-users:before {
+  content: "\e939";
+}
+
+.ns-view:before {
+  content: "\e93a";
+}
+
+.ns-wallet:before {
+  content: "\e93b";
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -27945,6 +28245,7 @@ a.ui.card:hover,
 .ui.cards > .card.welcome-card > .content i.icon.pull-left {
   width: auto;
   margin: 0 1rem 0 0;
+  color: #98CE23;
 }
 
 .ui.card.welcome-card > .content .ui.mini.image,
@@ -37215,6 +37516,7 @@ body.pushable > .pusher {
 
 .ui.sidebar.left.push .item > .icon:not(.dropdown) {
   float: left;
+  height: auto;
   font-size: 1.14285714rem;
   line-height: 1.57142857rem;
 }
@@ -37297,6 +37599,7 @@ body.pushable > .pusher {
 }
 
 .ui.sidebar.inverted.menu.left.push .item:hover,
+.ui.sidebar.inverted.menu.left.push .item:focus,
 .ui.sidebar.inverted.menu.left.push .item.active,
 .ui.sidebar.inverted.menu.left.push .item.active:hover {
   background-color: #383838;

@@ -113,6 +113,7 @@
 			}
 			>.icon:not(.dropdown){
 				float:left;
+				height:auto;
 				font-size:@16px;
 				line-height:@22px;
 			}
@@ -184,7 +185,7 @@
 		}
 	}
 	&.left.push .item{
-		&:hover, &.active, &.active:hover{
+		&:hover, &:focus, &.active, &.active:hover{
 			background-color:@secondary-text;
 		}
 		>.icon:not(.dropdown){

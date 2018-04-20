@@ -49,6 +49,7 @@
             i.icon.pull-left{
                 width:auto;
                 margin:0 1rem 0 0;
+                color:@theme-primary;
             }
             .ui.mini.image{
                 width:54px;
