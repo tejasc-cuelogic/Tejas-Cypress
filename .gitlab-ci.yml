@@ -55,6 +55,12 @@ deploying-code-issues:
     - building-code-issues
 
 stop-deploying-code-issues:
+  only:
+    - branches
+  except:
+    - master
+    - develop
+    - qa
   stage: deploy
   variables:
     GIT_STRATEGY: none
