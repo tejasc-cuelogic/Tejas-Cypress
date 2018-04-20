@@ -49,12 +49,12 @@
             font-family:@pageFont;
             font-weight:500;
             font-size:@14px;
-            color:@dark-bg-color;
+            color:@secondary-text;
         }
     }
-    h4.ui.header{
-        font-family:@regularFont;
-    }
+    // h4.ui.header{
+    //     font-family:@regularFont;
+    // }
     .content{
         padding-top:@20px;
         &.login-modal{
@@ -74,7 +74,7 @@
                     margin:@7px 0;
                 }
                 p{
-                    font-family:@regularFont;
+                    // font-family:@regularFont;
                     font-size:@13px;
                     color:@fullBlack;
                 }
@@ -105,7 +105,7 @@
             padding:0;
             display:inline-block;
             background:transparent;
-            font-family:@regularFont;
+            // font-family:@regularFont;
             font-size:@16px;
             letter-spacing:1px;
             color:@quaternary-text;
@@ -116,7 +116,7 @@
         }
         .ui.huge.input{
             input[type=tel], input[type=email]{
-                font-family:@boldFont;
+                // font-family:@boldFont;
                 border:none;
                 background:@border-light;
                 text-align:center;
@@ -132,8 +132,8 @@
             position:absolute;
             top:50%;
             &.disabled{
-                background:@border-color;
-                color:@inverse-text-darken;
+                background:@border-light;
+                color:@border-color;
                 opacity:1 !important;
             }
             >.icon{
@@ -171,55 +171,55 @@
             margin-bottom:@14px;
         }
         .field{
-            margin:0 0 @28px;
-            .ui.input input, input{
-                &:not([type]),
-                &[type=date],
-                &[type=datetime-local],
-                &[type=email],
-                &[type=file],
-                &[type=number],
-                &[type=password],
-                &[type=search],
-                &[type=tel],
-                &[type=text],
-                &[type=time],
-                &[type=url]{
-                    font-family:@regularFont;
-                    padding-left:0;
-                    padding-right:0;
-                    border-radius:0;
-                    background-color:transparent;
-                    border:none;
-                    border-bottom:@borderColor 1px solid;
-                }
-            }
-            .ui.selection.dropdown, .ui.labeled.input .ui.label{
-                font-family:@regularFont;
-                padding-left:@5px;
-                padding-right:0;
-                border-radius:0;
-                border:none;
-                border-bottom:@borderColor 1px solid;
-            }
-            .ui.labeled.input .ui.label{
-                font-weight:400;
-                padding-left:0;
-                padding-right:@12px;
-                background-color:transparent;
-            }
-            .ui.selection.dropdown{
-                .icon{
-                    padding-right:@5px;
-                }
-                &.active .menu{
-                    border:none;
-                    >.item{
-                        padding-left:@5px !important;
-                        padding-right:@5px !important;
-                    }
-                }
-            }
+            // margin:0 0 @28px;
+            // .ui.input input, input{
+            //     &:not([type]),
+            //     &[type=date],
+            //     &[type=datetime-local],
+            //     &[type=email],
+            //     &[type=file],
+            //     &[type=number],
+            //     &[type=password],
+            //     &[type=search],
+            //     &[type=tel],
+            //     &[type=text],
+            //     &[type=time],
+            //     &[type=url]{
+            //         // font-family:@regularFont;
+            //         padding-left:0;
+            //         padding-right:0;
+            //         border-radius:0;
+            //         background-color:transparent;
+            //         border:none;
+            //         border-bottom:@borderColor 1px solid;
+            //     }
+            // }
+            // .ui.selection.dropdown, .ui.labeled.input .ui.label{
+            //     // font-family:@regularFont;
+            //     padding-left:@5px;
+            //     padding-right:0;
+            //     border-radius:0;
+            //     border:none;
+            //     border-bottom:@borderColor 1px solid;
+            // }
+            // .ui.labeled.input .ui.label{
+            //     font-weight:400;
+            //     padding-left:0;
+            //     padding-right:@12px;
+            //     background-color:transparent;
+            // }
+            // .ui.selection.dropdown{
+            //     .icon{
+            //         padding-right:@5px;
+            //     }
+            //     &.active .menu{
+            //         border:none;
+            //         >.item{
+            //             padding-left:@5px !important;
+            //             padding-right:@5px !important;
+            //         }
+            //     }
+            // }
             &.otp-field{
                 margin:3rem 0;
                 label{
@@ -229,7 +229,7 @@
                     max-width:290px;
                     margin:0 auto;
                     padding-left:13px;
-                    font-family:@boldFont;
+                    // font-family:@boldFont;
                     letter-spacing:38px;
                     border:none;
                     background-image: linear-gradient(to left, @border-color 75%, rgba(0, 0, 0, 0) 0%);
@@ -241,7 +241,7 @@
             }
         }
         label{
-            i.icon.help{
+            i.ns-help-circle{
                 margin-left:@7px;
                 font-size:@14px;
                 color:@quaternary-text;

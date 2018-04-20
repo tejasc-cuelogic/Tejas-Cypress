@@ -57,7 +57,7 @@ export default class ConfirmIdentityDocuments extends Component {
                 <Grid.Column width={9}>
                   {confirmIdentityDocuments.photoId.value === '' &&
                     <div className="file-uploader">
-                      <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                      <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
                       <input
                         name={confirmIdentityDocuments.photoId.key}
                         type="file"
@@ -73,7 +73,7 @@ export default class ConfirmIdentityDocuments extends Component {
                     <span title={confirmIdentityDocuments.photoId.value}>
                       {confirmIdentityDocuments.photoId.value}
                     </span>
-                    <Icon name="remove" onClick={this.removeUploadedPhotoId} />
+                    <Icon name="ns-close" onClick={this.removeUploadedPhotoId} />
                   </div>
                   }
                 </Grid.Column>
@@ -82,7 +82,7 @@ export default class ConfirmIdentityDocuments extends Component {
                 <Grid.Column width={7}>
                   <label>
                     <h3>Proof of Residence
-                      <Popup className="test" trigger={<Icon name="help circle outline" />} position="top center" flowing hoverable>
+                      <Popup className="test" trigger={<Icon name="ns-help-circle outline" />} position="top center" flowing hoverable>
                         <Popup.Content>
                           <p><b>Acceptable documents:</b></p>
                           <List bulleted>
@@ -104,7 +104,7 @@ export default class ConfirmIdentityDocuments extends Component {
                 <Grid.Column width={9}>
                   {confirmIdentityDocuments.proofOfResidence.value === '' &&
                     <div className="file-uploader">
-                      <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                      <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
                       <input
                         name={confirmIdentityDocuments.proofOfResidence.key}
                         type="file"
@@ -120,7 +120,7 @@ export default class ConfirmIdentityDocuments extends Component {
                       <span title={confirmIdentityDocuments.proofOfResidence.value}>
                         {confirmIdentityDocuments.proofOfResidence.value}
                       </span>
-                      <Icon name="remove" onClick={this.removeUploadedProofOfResidence} />
+                      <Icon name="ns-close" onClick={this.removeUploadedProofOfResidence} />
                     </div>
                   }
                 </Grid.Column>
@@ -128,7 +128,7 @@ export default class ConfirmIdentityDocuments extends Component {
             </Grid>
             <Divider section hidden />
             <div className="center-align">
-              <Button color="green" size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitConfirmIdentityDocumentsForm}>Verify my identity</Button>
+              <Button primary size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitConfirmIdentityDocumentsForm}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I`ll finish this letter</Button>

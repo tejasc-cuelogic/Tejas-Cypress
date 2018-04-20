@@ -68,7 +68,7 @@ export default class ConfirmPhoneNumber extends Component {
             />
             <FieldError error={profileDetails.code.error} />
             <div className="center-align">
-              <Button color="green" size="large" className="very relaxed">Confirm</Button>
+              <Button primary size="large" className="very relaxed">Confirm</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>Resend the code to my phone</Button>

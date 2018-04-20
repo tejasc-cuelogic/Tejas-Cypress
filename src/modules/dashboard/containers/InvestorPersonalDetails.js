@@ -125,7 +125,7 @@ export default class investorPersonalDetails extends Component {
               <label>
                 Residental Street
                 <Popup
-                  trigger={<Icon name="help circle outline" />}
+                  trigger={<Icon name="ns-help-circle outline" />}
                   content="Put your residental address as listed on your driver license"
                   position="top center"
                   className="center-align"

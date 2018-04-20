@@ -121,43 +121,44 @@ export default class BusinessDetails extends React.Component {
     }
     return (
       <div>
-        <div className="page-header-section webcontent-spacer">
+        <div className="page-header-section">
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
                 <h1>
                   <Button
-                    circular
-                    color="green"
+                    primary
                     floated="right"
                     onClick={this.handleNewFiling}
                   >
                     + Add Filing
                   </Button>
                   <NewBusinessForm businessid={this.props.match.params.businessId} />
-                  <Link to="/app/business" className="back-link"><Icon name="long arrow left" /></Link>
+                  <Link to="/app/business" className="back-link"><Icon name="ns-arrow-left" /></Link>
                   {business.name.value}
                   <div className="actions">
                     <Button
-                      onClick={this.editBusinessModal}
                       icon
                       circular
                       inverted
                       color="green"
+                      size="mini"
+                      onClick={this.editBusinessModal}
                     >
-                      <Icon name="write" />
+                      <Icon name="ns-pencil" />
                     </Button>{' '}
                     <Button
                       icon
                       circular
                       inverted
                       color="red"
+                      size="mini"
                       entity="business"
                       refid={this.props.match.params.businessId}
                       subrefid=""
                       onClick={this.confirmDelete}
                     >
-                      <Icon name="trash" />
+                      <Icon name="ns-trash" />
                     </Button>
                     <Confirm
                       header="Confirm"
@@ -170,10 +171,12 @@ export default class BusinessDetails extends React.Component {
                     />
                   </div>
                 </h1>
-                <p>{business.desc.value}</p>
               </Grid.Column>
             </Grid.Row>
           </Grid>
+        </div>
+        <div className="search-filters">
+          <p className="inverse-text">{business.desc.value}</p>
         </div>
         <div className="content-spacer">
           <FillingsList

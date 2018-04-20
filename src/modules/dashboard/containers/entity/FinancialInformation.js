@@ -24,7 +24,7 @@ export default class FinancialInformation extends Component {
               <label>
                 {entityAccount.entityNetAssets.label}
                 <Popup
-                  trigger={<Icon name="help circle outline" />}
+                  trigger={<Icon name="ns-help-circle outline" />}
                   content="What is your net entity assets?"
                   position="top center"
                   className="center-align"
@@ -48,7 +48,7 @@ export default class FinancialInformation extends Component {
               <label>
                 {entityAccount.cfInvestments.label}
                 <Popup
-                  trigger={<Icon name="help circle outline" />}
+                  trigger={<Icon name="ns-help-circle outline" />}
                   content={entityAccount.cfInvestments.label}
                   position="top center"
                   className="center-align"

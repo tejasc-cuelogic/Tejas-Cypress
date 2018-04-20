@@ -43,7 +43,7 @@ import { Button, Card } from 'semantic-ui-react';
 
 const AccountSetupChecklist = props => (
   <Card.Description>
-    <Button color="green" content="Let's start it!" className="relaxed" onClick={() => props.setDashboardWizardSetup('InvestmentChooseType')} />
+    <Button primary content="Let's start it!" className="relaxed" onClick={() => props.setDashboardWizardSetup('InvestmentChooseType')} />
     {/* <List relaxed className="check-list">
       {checklistMeta.map((item, index) => (
         <List.Item key={item.item}>

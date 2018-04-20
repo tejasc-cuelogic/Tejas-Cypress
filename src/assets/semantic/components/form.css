@@ -57,7 +57,7 @@
   margin: 0em 0em 0.28571429rem 0em;
   color: #000000;
   font-size: 0.92857143rem;
-  font-weight: 500;
+  font-weight: 700;
   text-transform: none;
 }
 
@@ -99,18 +99,18 @@
 .ui.form input[type="text"],
 .ui.form input[type="file"],
 .ui.form input[type="url"] {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0em;
   outline: none;
   -webkit-appearance: none;
   tap-highlight-color: rgba(255, 255, 255, 0);
   line-height: 1.21428571em;
-  padding: 0.67857143em 1em;
+  padding: 0.67857143em 0em;
   font-size: 1em;
-  background: #FFFFFF;
-  border: 1px solid rgba(34, 36, 38, 0.15);
-  color: #303030;
-  border-radius: 0.28571429rem;
+  background: transparent;
+  border: none;
+  color: #000000;
+  border-radius: 0rem;
   -webkit-box-shadow: 0em 0em 0em 0em transparent inset;
           box-shadow: 0em 0em 0em 0em transparent inset;
   -webkit-transition: color 0.1s ease, border-color 0.1s ease;
@@ -123,11 +123,11 @@
   -webkit-appearance: none;
   tap-highlight-color: rgba(255, 255, 255, 0);
   padding: 0.78571429em 1em;
-  background: #FFFFFF;
-  border: 1px solid rgba(34, 36, 38, 0.15);
+  background: transparent;
+  border: none;
   outline: none;
-  color: #303030;
-  border-radius: 0.28571429rem;
+  color: #000000;
+  border-radius: 0rem;
   -webkit-box-shadow: 0em 0em 0em 0em transparent inset;
           box-shadow: 0em 0em 0em 0em transparent inset;
   -webkit-transition: color 0.1s ease, border-color 0.1s ease;
@@ -163,12 +163,12 @@
   height: auto;
   width: 100%;
   background: #FFFFFF;
-  border: 1px solid rgba(34, 36, 38, 0.15);
-  border-radius: 0.28571429rem;
+  border: none;
+  border-radius: 0rem;
   -webkit-box-shadow: 0em 0em 0em 0em transparent inset;
           box-shadow: 0em 0em 0em 0em transparent inset;
   padding: 0.62em 1em;
-  color: #303030;
+  color: #000000;
   -webkit-transition: color 0.1s ease, border-color 0.1s ease;
   transition: color 0.1s ease, border-color 0.1s ease;
 }
@@ -314,22 +314,22 @@
 
 /* browsers require these rules separate */
 .ui.form ::-webkit-input-placeholder {
-  color: #efefef;
+  color: #bfbfbf;
 }
 .ui.form :-ms-input-placeholder {
-  color: #efefef;
+  color: #bfbfbf;
 }
 .ui.form ::-moz-placeholder {
-  color: #efefef;
+  color: #bfbfbf;
 }
 .ui.form :focus::-webkit-input-placeholder {
-  color: #a3a3a3;
+  color: #737373;
 }
 .ui.form :focus:-ms-input-placeholder {
-  color: #a3a3a3;
+  color: #737373;
 }
 .ui.form :focus::-moz-placeholder {
-  color: #a3a3a3;
+  color: #737373;
 }
 
 /* Error Placeholder */
@@ -368,18 +368,18 @@
 .ui.form input[type="text"]:focus,
 .ui.form input[type="file"]:focus,
 .ui.form input[type="url"]:focus {
-  color: rgba(0, 0, 0, 0.95);
-  border-color: #85B7D9;
-  border-radius: 0.28571429rem;
-  background: #FFFFFF;
+  color: #000000;
+  border-color: #98CE23;
+  border-radius: 0rem;
+  background: transparent;
   -webkit-box-shadow: 0px 0em 0em 0em rgba(34, 36, 38, 0.35) inset;
           box-shadow: 0px 0em 0em 0em rgba(34, 36, 38, 0.35) inset;
 }
 .ui.form textarea:focus {
-  color: rgba(0, 0, 0, 0.95);
-  border-color: #85B7D9;
-  border-radius: 0.28571429rem;
-  background: #FFFFFF;
+  color: #000000;
+  border-color: #98CE23;
+  border-radius: 0rem;
+  background: transparent;
   -webkit-box-shadow: 0px 0em 0em 0em rgba(34, 36, 38, 0.35) inset;
           box-shadow: 0px 0em 0em 0em rgba(34, 36, 38, 0.35) inset;
   -webkit-appearance: none;
@@ -733,9 +733,9 @@
 .ui.inverted.form input[type="text"],
 .ui.inverted.form input[type="file"],
 .ui.inverted.form input[type="url"] {
-  background: #FFFFFF;
+  background: transparent;
   border-color: rgba(255, 255, 255, 0.1);
-  color: #303030;
+  color: #000000;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -757,7 +757,7 @@
   margin: 0em 0em 0.28571429rem 0em;
   color: #000000;
   font-size: 0.92857143rem;
-  font-weight: 500;
+  font-weight: 700;
   text-transform: none;
 }
 .ui.form .grouped.fields .field,
@@ -991,7 +991,7 @@
   margin-bottom: 0em;
   vertical-align: baseline;
   font-size: 0.92857143rem;
-  font-weight: 500;
+  font-weight: 700;
   color: #000000;
   text-transform: none;
 }
@@ -1072,6 +1072,20 @@
          Theme Overrides
 *******************************/
 
+.ui.form input:not([type]),
+.ui.form input[type=date],
+.ui.form input[type=datetime-local],
+.ui.form input[type=email],
+.ui.form input[type=file],
+.ui.form input[type=number],
+.ui.form input[type=password],
+.ui.form input[type=search],
+.ui.form input[type=tel],
+.ui.form input[type=text],
+.ui.form input[type=time],
+.ui.form input[type=url] {
+  border-bottom: #BDBDBD 1px solid;
+}
 .card.editable {
   position: relative;
 }
@@ -1084,7 +1098,7 @@
   right: 30px;
 }
 .card.editable .actions .button {
-  padding: 0.5rem 1.5rem 0.5rem;
+  padding: 0.5rem 1rem 0.5rem;
   text-transform: uppercase;
 }
 .card.editable .actions a {
@@ -1104,7 +1118,7 @@
   color: #7eab1d;
 }
 .card.editable .actions a.negative {
-  color: #999999;
+  color: #989898;
 }
 .card.editable .actions a.negative:hover,
 .card.editable .actions a.negative:focus,
@@ -1125,7 +1139,7 @@
   font-size: 0.92857143rem;
   font-weight: 400;
   line-height: 1.42857143rem;
-  color: #999999;
+  color: #989898;
   padding: 0.5em 0;
   background-color: transparent;
 }
@@ -1143,7 +1157,7 @@
 .card.editable .ui.form input[type=url] {
   font-weight: 500;
   line-height: 1.42857143rem;
-  color: #303030;
+  color: #242424;
   padding: 0.5em 0;
   border-width: 0;
   background-color: transparent;
@@ -1170,9 +1184,9 @@
 .ui.form.inverted input[type=time],
 .ui.form.inverted input[type=url] {
   border-radius: 0;
-  color: #999999;
+  color: #989898;
   background-color: transparent;
-  border-color: transparent transparent #828282;
+  border-color: transparent transparent #4F4F4F;
 }
 .ui.form .error:not(.field) {
   color: #EB5757;
@@ -1212,6 +1226,7 @@
   position: relative;
   color: #98CE23;
   line-height: 2rem;
+  font-weight: 700;
   text-align: center;
 }
 .file-uploader .icon {
@@ -1231,21 +1246,20 @@
 }
 .file-uploader.attached {
   padding-right: 2rem;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  color: #772DF9;
+  color: #772df9;
   border: none;
-  background: #e0e0e0;
+  background: #BDBDBD;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .file-uploader.attached > span {
-  color: #772DF9;
+  color: #772df9;
 }
 .file-uploader.attached .icon {
   margin: -0.5rem 0 0 0;
   line-height: 1rem;
-  color: #828282;
+  color: #4F4F4F;
   position: absolute;
   right: 0.5rem;
   top: 50%;

@@ -17,7 +17,7 @@ const panes = [
             </span>
           </h2>
           <div className="main actions">
-            <Link to=""><Icon name="trash large" />Delete Account</Link>
+            <Link to=""><Icon name="ns-trash large" />Delete Account</Link>
           </div>
           <List horizontal link>
             <List.Item as="a" active>Overview</List.Item>
@@ -33,7 +33,7 @@ const panes = [
                     <Statistic.Label>
                       Total Balance
                       <Popup
-                        trigger={<Icon name="help circle outline" />}
+                        trigger={<Icon name="ns-help-circle outline" />}
                         content="Your total Balance as of today"
                         position="top center"
                         className="center-align"
@@ -51,7 +51,7 @@ const panes = [
                     <Statistic.Label>
                       Total invested amount
                       <Popup
-                        trigger={<Icon name="help circle outline" />}
+                        trigger={<Icon name="ns-help-circle outline" />}
                         content="Your total invested amount till date"
                         position="top center"
                         className="center-align"
@@ -69,7 +69,7 @@ const panes = [
                     <Statistic.Label>
                       Total revenue
                       <Popup
-                        trigger={<Icon name="help circle outline" />}
+                        trigger={<Icon name="ns-help-circle outline" />}
                         content="Your total revenue on investments till date"
                         position="top center"
                         className="center-align"
@@ -87,7 +87,7 @@ const panes = [
               <Card fluid raised className="editable">
                 <Card.Content>
                   <div className="actions">
-                    <Link to=""><Icon name="pencil" />Edit</Link>
+                    <Link to=""><Icon name="ns-pencil" />Edit</Link>
                   </div>
                   <Card.Header>
                     Account status
@@ -100,7 +100,7 @@ const panes = [
               <Card fluid raised className="editable">
                 <Card.Content>
                   <div className="actions">
-                    <Link to=""><Icon name="pencil" />Edit</Link>
+                    <Link to=""><Icon name="ns-pencil" />Edit</Link>
                   </div>
                   <Card.Header>
                     Accreditation
@@ -304,7 +304,7 @@ const panes = [
                               <Icon name="file pdf outline large" />
                             </Table.Cell>
                             <Table.Cell collapsing>
-                              <Link to="" className="action"><Icon name="pencil large" /></Link>
+                              <Link to="" className="action"><Icon name="ns-pencil large" /></Link>
                             </Table.Cell>
                           </Table.Row>
                           <Table.Row>
@@ -314,7 +314,7 @@ const panes = [
                               <Icon name="file pdf outline large" />
                             </Table.Cell>
                             <Table.Cell collapsing>
-                              <Link to="" className="action"><Icon name="pencil large" /></Link>
+                              <Link to="" className="action"><Icon name="ns-pencil large" /></Link>
                             </Table.Cell>
                           </Table.Row>
                         </Table.Body>
@@ -340,7 +340,7 @@ const panes = [
                               <Icon name="file pdf outline large" />
                             </Table.Cell>
                             <Table.Cell collapsing>
-                              <Link to="" className="action"><Icon name="pencil large" /></Link>
+                              <Link to="" className="action"><Icon name="ns-pencil large" /></Link>
                             </Table.Cell>
                           </Table.Row>
                           <Table.Row>
@@ -350,7 +350,7 @@ const panes = [
                               <Icon name="file pdf outline large" />
                             </Table.Cell>
                             <Table.Cell collapsing>
-                              <Link to="" className="action"><Icon name="pencil large" /></Link>
+                              <Link to="" className="action"><Icon name="ns-pencil large" /></Link>
                             </Table.Cell>
                           </Table.Row>
                         </Table.Body>

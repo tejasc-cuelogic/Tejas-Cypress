@@ -71,7 +71,7 @@ const InvestmentChooseType = props => (
       </Grid>
       <Button
         circular
-        icon="arrow right"
+        icon="ns-arrow-right"
         className="multistep__btn next active"
         onClick={() => props.setDashboardWizardStep(props.routeOnInvestmentTypeSelection)}
       />

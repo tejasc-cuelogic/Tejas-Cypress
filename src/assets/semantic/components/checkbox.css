@@ -90,7 +90,7 @@
   height: 17px;
   text-align: center;
   opacity: 0;
-  color: #303030;
+  color: #000000;
   -webkit-transition: border 0.1s ease, opacity 0.1s ease, -webkit-transform 0.1s ease, -webkit-box-shadow 0.1s ease;
   transition: border 0.1s ease, opacity 0.1s ease, -webkit-transform 0.1s ease, -webkit-box-shadow 0.1s ease;
   transition: border 0.1s ease, opacity 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
@@ -105,7 +105,7 @@
 /* Inside */
 .ui.checkbox label,
 .ui.checkbox + label {
-  color: #303030;
+  color: #000000;
   -webkit-transition: color 0.1s ease;
   transition: color 0.1s ease;
 }
@@ -310,7 +310,7 @@
   border-radius: 500rem;
   -webkit-transform: scale(0.46666667);
           transform: scale(0.46666667);
-  background-color: #303030;
+  background-color: #000000;
 }
 
 /* Focus */
@@ -475,7 +475,7 @@
 .ui.toggle.checkbox label {
   min-height: 1.5rem;
   padding-left: 4.5rem;
-  color: #303030;
+  color: #000000;
 }
 .ui.toggle.checkbox label {
   padding-top: 0.15em;
@@ -549,7 +549,7 @@
 }
 .ui.toggle.checkbox input:checked ~ .box:before,
 .ui.toggle.checkbox input:checked ~ label:before {
-  background-color: #2185D0 !important;
+  background-color: #98CE23 !important;
 }
 .ui.toggle.checkbox input:checked ~ .box:after,
 .ui.toggle.checkbox input:checked ~ label:after {
@@ -565,7 +565,7 @@
 }
 .ui.toggle.checkbox input:focus:checked ~ .box:before,
 .ui.toggle.checkbox input:focus:checked ~ label:before {
-  background-color: #0d71bb !important;
+  background-color: #84b90f !important;
 }
 
 
@@ -624,17 +624,12 @@
 .dash:before  { content: '\e801'; }
 .plus:before { content: '\e802'; }
 */
-.ui.checkbox label,
-.ui.checkbox + label {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
 .button-radio .ui.radio.checkbox label {
   height: 52px;
   min-width: 160px;
   padding: 15px;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 16px;
-  border: #e0e0e0 1px solid;
+  border: #BDBDBD 1px solid;
   border-radius: 0.42857143rem;
 }
 .button-radio .ui.radio.checkbox label:before,

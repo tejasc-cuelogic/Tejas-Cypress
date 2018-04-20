@@ -1,6 +1,22 @@
 /*******************************
          Theme Overrides
 *******************************/
+.ui.form{
+    input:not([type]),
+    input[type=date],
+    input[type=datetime-local],
+    input[type=email],
+    input[type=file],
+    input[type=number],
+    input[type=password],
+    input[type=search],
+    input[type=tel],
+    input[type=text],
+    input[type=time],
+    input[type=url]{
+        border-bottom:@border-color 1px solid;
+    }
+}
 .card{
     &.editable{
         position:relative;
@@ -12,7 +28,7 @@
             top:20px;
             right:30px;
             .button{
-                padding:0.5rem 1.5rem 0.5rem;
+                padding:0.5rem 1rem 0.5rem;
                 text-transform:uppercase;
             }
             a{
@@ -161,6 +177,7 @@ display:block;
     position:relative;
     color:@theme-primary;
     line-height:@28px;
+    font-weight:700;
     text-align:center;
     .icon{
         margin-right:@6px;
@@ -179,7 +196,6 @@ display:block;
     }
     &.attached{
         padding-right:2rem;
-        font-family:@boldFont;
         color:@link-color;
         border:none;
         background:@border-color;

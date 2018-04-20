@@ -24,7 +24,7 @@ class signupInitial extends Component {
               {userTypes.map(type => (
                 <Grid.Column onClick={() => this.chooseType(type.value)} key={type.key}>
                   <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
-                    <Icon name="money" size="huge" />
+                    <Icon name={type.icon} size="huge" />
                     <h3>{type.text}</h3>
                     <p>{type.desc}</p>
                   </div>
@@ -33,7 +33,7 @@ class signupInitial extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <Button color="green" size="large" className="very relaxed" onClick={() => this.props.setAuthWizardStep('InvestorSignup')} content="Start" />
+                <Button primary size="large" className="very relaxed" onClick={() => this.props.setAuthWizardStep('InvestorSignup')} content="Start" />
               </Grid.Column>
             </Grid.Row>
           </Grid>

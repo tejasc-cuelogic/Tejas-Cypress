@@ -5,7 +5,7 @@ export class UiStore {
   modalStatus = false;
   appLoader = false;
   @observable layoutState = {
-    leftPanel: false,
+    leftPanel: true,
     notificationPanel: false,
   };
   @observable submitButtonDisabled = false;

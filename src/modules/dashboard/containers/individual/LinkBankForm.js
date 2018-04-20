@@ -28,7 +28,7 @@ export default class LinkBankForm extends Component {
               <label>
                 {individualAccount.bankRoutingNumber.label}
                 <Popup
-                  trigger={<Icon name="help circle outline" />}
+                  trigger={<Icon name="ns-help-circle outline" />}
                   content="Put your 10 digit bank routing number"
                   position="top center"
                   className="center-align"
@@ -47,7 +47,7 @@ export default class LinkBankForm extends Component {
               <label>
                 {individualAccount.bankAccountNumber.label}
                 <Popup
-                  trigger={<Icon name="help circle outline" />}
+                  trigger={<Icon name="ns-help-circle outline" />}
                   content="Put your 12 digit bank account number"
                   position="top center"
                   className="center-align"
@@ -64,7 +64,7 @@ export default class LinkBankForm extends Component {
             </Form.Field>
           </div>
           <div className="center-align">
-            <Button color="green" size="large">Confirm</Button>
+            <Button primary size="large">Confirm</Button>
           </div>
           <div className="center-align">
             <Button className="theme-link" onClick={() => this.props.accountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
