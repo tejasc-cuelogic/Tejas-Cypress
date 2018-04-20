@@ -56,7 +56,7 @@ deploying-code-issues:
   dependencies:
     - building-code-issues
 
-stop-deploying-code-issues:
+deleting-code-issues:
   only:
     refs:
       - branches
