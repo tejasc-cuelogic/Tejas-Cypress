@@ -1,30 +1,20 @@
 import React, { Component } from 'react';
-import { Header, Form, Icon, Grid } from 'semantic-ui-react';
+import { Header, Form, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-import FieldError from '../../../../components/common/FieldError';
-import validationActions from '../../../../actions/validation';
+import FormInput from '../../../../components/form/FormInput';
+import { FileUploaderVertical } from '../../../../components/form/FormElements';
 
-@inject('accountStore', 'userStore')
+@inject('userStore', 'entityAccountStore')
 @observer
 export default class PersonalInformation extends Component {
-  handleInputChange = (e, { name, value }) => {
-    validationActions.validateEntityAccountField(name, value);
-  }
-
-  uploadDocument = (e) => {
-    if (e.target.files.length) {
-      const uploadFile = e.target.files[0];
-      this.props.accountStore.setEntityAccountDetails(e.target.name, uploadFile.name);
-    }
-  }
-
-  removeUploadedPhotoId = () => {
-    this.props.accountStore.setEntityAccountDetails('photoId', '');
-  }
-
   render() {
-    const { entityAccount } = this.props.accountStore;
+    const {
+      formPersonalInfo,
+      personalInfoChange,
+      personalInfoFileUpload,
+      personalInfoResetField,
+    } = this.props.entityAccountStore;
     const { currentUser } = this.props.userStore;
 
     return (
@@ -43,22 +33,16 @@ export default class PersonalInformation extends Component {
               value={currentUser.familyName}
               readOnly
             />
-            <Form.Field>
-              <Form.Input
-                label={entityAccount.entityTitle.label}
-                name={entityAccount.entityTitle.key}
-                placeholder={entityAccount.entityTitle.placeHolder}
-                value={entityAccount.entityTitle.value}
-                error={!!entityAccount.entityTitle.error}
-                onChange={this.handleInputChange}
-              />
-              <FieldError error={entityAccount.entityTitle.error} />
-            </Form.Field>
+            <FormInput
+              name="entityTitle"
+              fielddata={formPersonalInfo.fields.entityTitle}
+              changed={personalInfoChange}
+            />
           </div>
           <Grid divided="vertically">
-            <Grid.Row>
+            {/* <Grid.Row>
               <Grid.Column width={7}>
-                {/* eslint-disable jsx-a11y/label-has-for */}
+                {/* eslint-disable jsx-a11y/label-has-for * /}
                 <label>
                   <h3>Upload a Photo ID</h3>
                   Driving Liscence or passport
@@ -83,15 +67,14 @@ export default class PersonalInformation extends Component {
                 </div>
                 }
               </Grid.Column>
-            </Grid.Row>
+            </Grid.Row> */}
+            <FileUploaderVertical
+              name="photoId"
+              fielddata={formPersonalInfo.fields.photoId}
+              uploadDocument={personalInfoFileUpload}
+              removeUploadedDocument={personalInfoResetField}
+            />
           </Grid>
-
-          {/* <Form.Field>
-            <label>
-              <h3>Upload a Photo ID</h3>
-              Driving Liscence or passport
-            </label>
-          </Form.Field> */}
         </Form>
       </div>
     );

@@ -1,18 +1,13 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Input, Popup, Icon, Label } from 'semantic-ui-react';
+import { Header, Form } from 'semantic-ui-react';
+import { FormInput } from '../../../../components/form/FormElements';
 
-import validationActions from '../../../../actions/validation';
-import FieldError from '../../../../components/common/FieldError';
-
-@inject('accountStore')
+@inject('iraAccountStore')
 @observer
 export default class FinancialInformation extends React.Component {
-  handleInputChange = (e, { name, value }) => {
-    validationActions.validateIraAccountField(name, value);
-  }
   render() {
-    const { iraAccount } = this.props.accountStore;
+    const { formFinInfo, finInfoChange } = this.props.iraAccountStore;
     return (
       <div>
         <div>
@@ -20,8 +15,8 @@ export default class FinancialInformation extends React.Component {
           <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
           <Form error>
             <div className="field-wrap">
-              <Form.Field>
-                { /*  eslint-disable jsx-a11y/label-has-for */ }
+              {/* <Form.Field>
+                { /*  eslint-disable jsx-a1 1y/label-has-for * / }
                 <label>
                   {iraAccount.networth.label}
                   <Popup
@@ -53,24 +48,19 @@ export default class FinancialInformation extends React.Component {
                     trigger={<Icon name="ns-help-circle outline" />}
                     content="Tell us your annual income in $"
                     position="top center"
-                    className="center-align"
+                    className="center-align" */}
+              {
+                ['networth', 'annualIncome'].map(field => (
+                  <FormInput
+                    key={field}
+                    type="text"
+                    fielddata={formFinInfo.fields[field]}
+                    name={field}
+                    changed={finInfoChange}
+                    prefix="$"
                   />
-                </label>
-                <Input
-                  name={iraAccount.annualIncome.key}
-                  placeholder={iraAccount.annualIncome.placeHolder}
-                  value={iraAccount.annualIncome.value}
-                  error={!!iraAccount.annualIncome.error}
-                  onChange={this.handleInputChange}
-                  maxLength={12}
-                  labelPosition="right"
-                  type="text"
-                >
-                  <Label basic>$</Label>
-                  <input />
-                </Input>
-                <FieldError error={iraAccount.annualIncome.error} />
-              </Form.Field>
+                ))
+              }
             </div>
           </Form>
         </div>

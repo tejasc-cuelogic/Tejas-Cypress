@@ -1,82 +1,76 @@
 import moment from 'moment';
 
-export const PROFILE_DETAILS = {
+export const VERIFY_IDENTITY_STEP_01 = {
   title: {
     value: '',
-    key: 'title',
-    error: undefined,
-    rule: 'required',
     label: 'Title',
+    error: undefined,
+    rule: 'string',
   },
   firstLegalName: {
     value: '',
-    key: 'firstLegalName',
+    label: 'First Legal Name',
     error: undefined,
     rule: 'required',
-    label: 'First Legal Name',
+    tooltip: 'Put your first name as listed on your driver license',
   },
   lastLegalName: {
     value: '',
-    key: 'lastLegalName',
+    label: 'Last Legal Name',
     error: undefined,
     rule: 'required',
-    label: 'Last Legal Name',
+    tooltip: 'Put your last name as listed on your driver license',
   },
   residentalStreet: {
     value: '',
-    key: 'residentalStreet',
+    label: 'Residental Street',
     error: undefined,
     rule: 'required',
-    label: 'Residental Street',
   },
   city: {
     value: '',
-    key: 'city',
+    label: 'City',
     error: undefined,
     rule: 'required',
-    label: 'City',
   },
   state: {
     value: '',
-    key: 'state',
+    label: 'State',
     error: undefined,
     rule: 'required',
-    label: 'State',
   },
   zipCode: {
     value: '',
-    key: 'zipCode',
-    error: undefined,
-    rule: 'required|numeric',
     label: 'Zip Code',
+    error: undefined,
+    rule: 'required',
   },
   phoneNumber: {
     value: '',
-    key: 'phoneNumber',
+    label: 'Phone Number',
     error: undefined,
     rule: 'required',
-    label: 'Phone Number',
   },
   dateOfBirth: {
     value: moment(),
-    key: 'dateOfBirth',
+    label: 'Date of Birth',
     error: undefined,
     rule: 'required',
-    label: 'Date of Birth',
   },
   ssn: {
     value: '',
-    key: 'ssn',
-    error: undefined,
-    rule: 'required',
     label: 'SSN',
+    error: undefined,
+    rule: 'required|numeric',
   },
+};
+
+export const VERIFY_IDENTITY_STEP_04 = {
   code: {
     value: '',
-    key: 'code',
+    label: 'Enter your verification code here:',
     error: undefined,
-    rule: 'required|numeric|digits:6',
-    label: 'Enter verification code here:',
+    rule: 'required|numeric',
   },
 };
 

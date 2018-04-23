@@ -1,26 +1,21 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Input, Popup, Icon, Label } from 'semantic-ui-react';
+import { Header, Form } from 'semantic-ui-react';
+import { FormInput } from '../../../../components/form/FormElements';
 
-import validationActions from '../../../../actions/validation';
-import FieldError from '../../../../components/common/FieldError';
-
-@inject('accountStore')
+@inject('entityAccountStore')
 @observer
 export default class FinancialInformation extends Component {
-  handleInputChange = (e, { name, value }) => {
-    validationActions.validateEntityAccountField(name, value);
-  }
   render() {
-    const { entityAccount } = this.props.accountStore;
+    const { formFinInfo, finInfoChange } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Complete financial info about entity</Header>
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
         <Form error>
           <div className="field-wrap">
-            <Form.Field>
-              { /*  eslint-disable jsx-a11y/label-has-for */ }
+            {/* <Form.Field>
+              { /*  eslint-disable jsx-a11y/label-has-for * / }
               <label>
                 {entityAccount.entityNetAssets.label}
                 <Popup
@@ -51,23 +46,17 @@ export default class FinancialInformation extends Component {
                   trigger={<Icon name="ns-help-circle outline" />}
                   content={entityAccount.cfInvestments.label}
                   position="top center"
-                  className="center-align"
+                  className="center-align" */}
+            {
+              ['entityNetAssets', 'cfInvestments'].map(field => (
+                <FormInput
+                  type="text"
+                  fielddata={formFinInfo.fields[field]}
+                  name={field}
+                  changed={finInfoChange}
                 />
-              </label>
-              <Input
-                name={entityAccount.cfInvestments.key}
-                placeholder={entityAccount.cfInvestments.placeHolder}
-                value={entityAccount.cfInvestments.value}
-                error={!!entityAccount.cfInvestments.error}
-                onChange={this.handleInputChange}
-                labelPosition="right"
-                type="text"
-              >
-                <Label basic>$</Label>
-                <input />
-              </Input>
-              <FieldError error={entityAccount.cfInvestments.error} />
-            </Form.Field>
+              ))
+            }
           </div>
         </Form>
       </div>
