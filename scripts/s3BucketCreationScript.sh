@@ -7,7 +7,7 @@ if [ "$isBucketExist" != "" ]; then
 	echo "${isBucketExist} already exist"
 	exit 0
 else
-	echo "bucket ${bucketName} don't exist."
+	echo "bucket ${bucketName} does not exist."
 	aws s3api create-bucket --bucket ${bucketName} --region ${regionName} && echo "Bucket ${bucketName} successfully created in region ${regionName}."
 	sed -i "s/Bucket-Name/${bucketName}/" scripts/S3PublicReadAccessPolicy.json && echo "Policy created."
 	aws s3api put-bucket-policy --bucket ${bucketName} --policy file://scripts/S3PublicReadAccessPolicy.json && echo "Policy attached."

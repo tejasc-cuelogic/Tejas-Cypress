@@ -44,7 +44,7 @@ deploying-code-issues:
     - develop
     - qa
   environment:
-    name: issues/$CI_COMMIT_REF_NAME
+    name: $CI_COMMIT_REF_NAME
     url: http://$CI_COMMIT_REF_SLUG.s3-website-us-east-1.amazonaws.com
     on_stop: deleting-code-issues
   tags:
@@ -82,7 +82,7 @@ deleting-code-issues:
 #---------------------------------Dev-------------------------------------------
 
 #Building code
-building-code-dev:
+build:dev:
   cache:
     paths:
     - node_modules/
@@ -102,7 +102,7 @@ building-code-dev:
     expire_in: 1 day
 
 #Deploying code to s3 bucket
-deploying-code-dev:
+deploy:dev:
   only:
     refs:
       - develop
