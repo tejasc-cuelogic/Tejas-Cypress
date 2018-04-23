@@ -34173,15 +34173,16 @@ select.ui.dropdown {
   margin-bottom: 1rem;
 }
 
-.ui.modal .ui.form .field.otp-field {
+.ui.modal .ui.form .field .otp-field {
   margin: 3rem 0;
 }
 
-.ui.modal .ui.form .field.otp-field label {
+.ui.modal .ui.form .field .otp-field label {
   font-size: 1rem;
 }
 
-.ui.modal .ui.form .field.otp-field .ui.input > input {
+.ui.modal .ui.form .field .otp-field .ui.input > input,
+.ui.modal .ui.form .field .otp-field > input {
   max-width: 290px;
   margin: 0 auto;
   padding-left: 13px;
@@ -34194,6 +34195,13 @@ select.ui.dropdown {
   background-size: 51px 1px;
   background-repeat: repeat-x;
   background-position-x: 35px;
+}
+
+.ui.modal .ui.form .field .otp-field .ui.input > input:focus,
+.ui.modal .ui.form .field .otp-field > input:focus {
+  background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #98CE23), color-stop(0%, rgba(0, 0, 0, 0)));
+  background-image: -webkit-linear-gradient(right, #98CE23 75%, rgba(0, 0, 0, 0) 0%);
+  background-image: linear-gradient(to left, #98CE23 75%, rgba(0, 0, 0, 0) 0%);
 }
 
 .ui.modal .ui.form label i.icon {

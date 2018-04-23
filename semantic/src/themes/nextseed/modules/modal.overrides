@@ -225,12 +225,12 @@
             //         }
             //     }
             // }
-            &.otp-field{
+            .otp-field{
                 margin:3rem 0;
                 label{
                     font-size:@14px;
                 }
-                .ui.input > input{
+                .ui.input > input, > input{
                     max-width:290px;
                     margin:0 auto;
                     padding-left:13px;
@@ -242,6 +242,9 @@
                     background-size: 51px 1px;
                     background-repeat: repeat-x;
                     background-position-x: 35px;
+                    &:focus{
+                        background-image: linear-gradient(to left, @theme-primary 75%, rgba(0, 0, 0, 0) 0%);
+                    }
                 }
             }
         }

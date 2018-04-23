@@ -1,25 +1,17 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../components/form/FormElements';
 
-import validationActions from '../../../actions/validation';
+import ListErrors from '../../../components/common/ListErrors';
 
 @inject('profileStore', 'uiStore')
 @observer
 export default class ConfirmPhoneNumber extends Component {
-  componentWillMount() {
-    this.props.profileStore.startPhoneVerification().then((result) => {
-      console.log(result);
-    });
-  }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
-
-  handleInputChange = (e, { name, value }) =>
-    validationActions.validateProfileDetailsField(name, value);
 
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
@@ -29,16 +21,22 @@ export default class ConfirmPhoneNumber extends Component {
   render() {
     const { verifyIdentity01, verifyIdentity04, verifyPhoneNumberEleChange } =
     this.props.profileStore;
+    const { errors } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
           <Header as="h2">Confirm your phone number</Header>
           <Divider />
           <p>We are about to text a verification code to:</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <MaskedInput
-            value="66123456781"
+            value={verifyIdentity01.fields.phoneNumber.value}
             type="tel"
             name="phoneNumber"
             fielddata={verifyIdentity01.fields.phoneNumber}
@@ -52,7 +50,7 @@ export default class ConfirmPhoneNumber extends Component {
             <FormInput
               size="huge"
               className="otp-field"
-              maxLength={6}
+              maxLength={4}
               fielddata={verifyIdentity04.fields.code}
               onChange={verifyPhoneNumberEleChange}
             />
@@ -60,7 +58,7 @@ export default class ConfirmPhoneNumber extends Component {
               <Button primary size="large" className="very relaxed">Confirm</Button>
             </div>
             <div className="center-align">
-              <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>Resend the code to my phone</Button>
+              <Button className="cancel-link" onClick={() => this.props.profileStore.startPhoneVerification()}>Resend the code to my phone</Button>
             </div>
           </Form>
         </Modal.Content>
