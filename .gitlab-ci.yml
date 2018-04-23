@@ -9,7 +9,7 @@ stages:
 
 #---------------------------------Issues----------------------------------------  
 #Building code
-building-code-issues:
+build:review:
   cache:
     paths:
     - node_modules/
@@ -54,7 +54,7 @@ deploying-code-issues:
     - echo "deploy to s3 bucket"
     - aws s3 cp build/ s3://${CI_COMMIT_REF_SLUG}/ --recursive
   dependencies:
-    - building-code-issues
+    - build:review
 
 deleting-code-issues:
   only:
@@ -121,7 +121,7 @@ deploy:dev:
 #---------------------------------Qa--------------------------------------------
 
 #Building code
-building-code-qa:
+build:qa:
   cache:
     paths:
     - node_modules/
@@ -141,7 +141,7 @@ building-code-qa:
     expire_in: 1 day
 
 #Deploying code to s3 bucket
-deploying-code-qa:
+deploy:qa:
   only:
     refs:
       - qa
@@ -155,12 +155,12 @@ deploying-code-qa:
     - echo "deploy to s3 bucket"
     - aws s3 cp build/ s3://ns-client-qa/ --recursive
   dependencies:
-    - building-code-qa
+    - build:qa
 
 #---------------------------------Production------------------------------------
 
 #Building code
-building-code-prod:
+build:prod:
   cache:
     paths:
     - node_modules/
@@ -180,7 +180,7 @@ building-code-prod:
     expire_in: 1 day
 
 #Deploying code to s3 bucket
-deploying-code-prod:
+deploy:prod:
   only:
     refs:
       - master
@@ -194,4 +194,4 @@ deploying-code-prod:
     - echo "deploy to s3 bucket"
     - aws s3 cp build/ s3://ns-client-prod/ --recursive
   dependencies:
-    - building-code-prod
+    - build:prod
