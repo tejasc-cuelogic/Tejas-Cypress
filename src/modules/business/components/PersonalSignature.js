@@ -8,7 +8,7 @@ const PersonalSignature = observer(props => (
   <div>
     <div>
       {props.signaturePersons.map(personData => (
-        <div key={personData.id}>
+        <div key={personData.id + moment()}>
           <Form.Group widths="3">
             <div className="field">
               { /* eslint-disable jsx-a11y/label-has-for */ }

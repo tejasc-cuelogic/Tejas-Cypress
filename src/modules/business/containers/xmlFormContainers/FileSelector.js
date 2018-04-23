@@ -30,8 +30,12 @@ export default class FileSelector extends React.Component {
     if (this.props.businessStore.xmlErrors
       && this.props.businessStore.xmlErrors.documentListError === undefined) {
       busiessActions.submitXMLInformation('documentList')
-        .then(() => {
+        .then((data) => {
           this.props.businessStore.setXmlError();
+          if (this.props.businessStore.xmlSubmissionId === 'undefined') {
+            const { xmlSubmissionId } = data.body.data.upsertFilerInformation;
+            this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
+          }
           Helper.toast('Document selection submitted successfully', 'success');
         })
         .catch((err) => {

@@ -44,9 +44,13 @@ export default class Signature extends React.Component {
 
     if (this.props.businessStore.canSubmitSigntureForm) {
       businessActions.submitXMLInformation('signature')
-        .then(() => {
+        .then((data) => {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(5);
+          if (this.props.businessStore.xmlSubmissionId === 'undefined') {
+            const { xmlSubmissionId } = data.body.data.upsertFilerInformation;
+            this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
+          }
           Helper.toast('Signature information submitted successfully', 'success');
         })
         .catch((err) => {

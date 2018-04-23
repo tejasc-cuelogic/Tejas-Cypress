@@ -12,7 +12,6 @@ const XmlSubmissionTabs = observer((props) => {
           <Step
             key={tab.id}
             active={props.xmlActiveTabId === tab.id}
-            disabled={tab.id > 0 && !props.xmlId}
             onClick={() => props.handleXmlActiveTab(tab.id)}
           >
             <Step.Content>

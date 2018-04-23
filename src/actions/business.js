@@ -104,22 +104,22 @@ export class Business {
 
     let payload = {};
     const ids = {
+      businessId,
       filingId,
       xmlSubmissionId,
     };
 
     if (action === 'filerInformation') {
       payload = {
-        query: filerInformationMutation,
+        mutation: filerInformationMutation,
         variables: {
-          businessId,
           ...ids,
           filerInformation: this.getFormattedInformation(filerInformation),
         },
       };
     } else if (action === 'issuerInformation') {
       payload = {
-        query: issuerInformationMutation,
+        mutation: issuerInformationMutation,
         variables: {
           ...ids,
           issuerInformation: this.getFormattedInformation(issuerInformation),
@@ -127,7 +127,7 @@ export class Business {
       };
     } else if (action === 'offeringInformation') {
       payload = {
-        query: offeringInformationMutation,
+        mutation: offeringInformationMutation,
         variables: {
           ...ids,
           offeringInformation: this.getFormattedInformation(offeringInformation),
@@ -135,7 +135,7 @@ export class Business {
       };
     } else if (action === 'annualReport') {
       payload = {
-        query: annualReportMutation,
+        mutation: annualReportMutation,
         variables: {
           ...ids,
           annualReportDisclosureRequirements:
@@ -144,7 +144,7 @@ export class Business {
       };
     } else if (action === 'signature') {
       payload = {
-        query: signatureMutation,
+        mutation: signatureMutation,
         variables: {
           ...ids,
           signature: this.getFormattedSignature(signature),
@@ -152,7 +152,7 @@ export class Business {
       };
     } else if (action === 'documentList') {
       payload = {
-        query: documentListMutation,
+        mutation: documentListMutation,
         variables: {
           ...ids,
           documentList: _.map(_.filter(documentList, document => document.checked), document => ({
@@ -162,13 +162,12 @@ export class Business {
         },
       };
     }
-    return new Promise((res, rej) => {
-      ApiService.post(GRAPHQL, payload)
-        .then(data => res(data))
-        .catch(err => rej(err))
-        .finally(() => {
-          uiStore.clearLoaderMessage();
-        });
+
+    return new Promise((resolve, reject) => {
+      client
+        .mutate(payload)
+        .then(data => resolve(data))
+        .catch(error => reject(error));
     });
   }
   /**
@@ -699,7 +698,7 @@ export class Business {
       _.map(data.payload.filerInformation, (value, key) => {
         if (confirmationFlags.includes(key)) {
           businessStore.setFilerInfo(key, (value || false))
-          businessStore.setFilerInfo(key, (value || ''))
+          // businessStore.setFilerInfo(key, (value || ''))
         }
         else {
           businessStore.setFilerInfo(key, (value || ''))
@@ -729,8 +728,11 @@ export class Business {
       })
       
       businessStore.setNewPersonalSignature([]);
+      
       if (data.payload.signature) {
+        console.log(data.payload.signature.signaturePersons);
          _.map(data.payload.signature.signaturePersons, (signature) => {
+           console.log(signature);
           const id = this.addPersonalSignature();
           _.map(signature, (value, key) => {
             if (dateFields.includes(key)) {
@@ -795,17 +797,22 @@ export class Business {
 
   validatePersonSign = (signaturePersons) => {
     
+    let personSignatureData = [];
+    
     _.map(signaturePersons, (field) => {
-      let personErrors = [];
-      let personSignatureData = validationActions.validateXmlFormData({
+      
+      personSignatureData.push(validationActions.validateXmlFormData({
         personSignature: field.personSignature,
         personTitle: field.personTitle,
         signatureDate: field.signatureDate,
-      });
-      personErrors = this.newValidationErrors(personSignatureData);      
-      businessStore.setXmlError(personErrors);      
+      }));
+
+      const personErrors = this.newValidationErrors(personSignatureData, true);
+      businessStore.setXmlError(personErrors);
     });
-    businessStore.setNewPersonalSignature
+    
+    businessStore.setNewPersonalSignature(personSignatureData);
+    
   }
 
   validateDocumentList = (documentList) => {
@@ -824,10 +831,19 @@ export class Business {
     }    
   }
 
-  newValidationErrors = (data) => {
+  newValidationErrors = (data, isArray = false) => {    
     const xmlErrors = { ...businessStore.xmlErrors };
-    const errors = _.mapValues(data, input => input.error);
-    return _.merge(xmlErrors, errors);
+        
+    if (isArray) {      
+      let errors = {};      
+      _.map(data, (key) => {        
+        errors = _.mapValues(key, input =>  input.error);                
+      })      
+      return _.merge(xmlErrors, errors);
+    } else {
+      const errors = _.mapValues(data, input => input.error);      
+      return _.merge(xmlErrors, errors);
+    }    
   }
   // Private Methods ends here
 }

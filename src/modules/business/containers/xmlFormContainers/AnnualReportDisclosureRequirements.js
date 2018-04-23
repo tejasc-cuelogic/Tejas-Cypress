@@ -37,9 +37,13 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
 
     if (this.props.businessStore.canSubmitAnnualReportXmlForm) {
       busiessActions.submitXMLInformation('annualReport')
-        .then(() => {
+        .then((data) => {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(4);
+          if (this.props.businessStore.xmlSubmissionId === 'undefined') {
+            const { xmlSubmissionId } = data.upsertFilerInformation;
+            this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
+          }
           Helper.toast('Offering information submitted successfully', 'success');
         })
         .catch((err) => {

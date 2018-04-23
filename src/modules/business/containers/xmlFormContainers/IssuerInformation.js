@@ -45,9 +45,13 @@ export default class IssuerInformation extends React.Component {
 
     if (this.props.businessStore.canSubmitIssuerInfoXmlForm) {
       busiessActions.submitXMLInformation('issuerInformation')
-        .then(() => {
+        .then((data) => {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(2);
+          if (this.props.businessStore.xmlSubmissionId === 'undefined') {
+            const { xmlSubmissionId } = data.upsertFilerInformation;
+            this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
+          }
           Helper.toast('Issuer information submitted successfully', 'success');
         })
         .catch((err) => {
