@@ -18,7 +18,11 @@ export default class Private extends React.Component {
 
   render() {
     const User = { ...this.props.userStore.currentUser };
-    const UserInfo = { fullname: `${User.givenName} ${User.familyName}`, avatarKey: User.sub, accountType: User.roles[0] };
+    const UserInfo = {
+      fullname: `${User.givenName} ${User.familyName}`,
+      avatarKey: User.sub,
+      accountType: User.roles ? User.roles[0] : '',
+    };
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <div>
