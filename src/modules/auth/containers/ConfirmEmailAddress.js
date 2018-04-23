@@ -49,6 +49,7 @@ export default class ConfirmEmailAddress extends Component {
             value={values.email.value}
             fielddata={values.email}
             readOnly
+            className="display-only"
           />
           <p><Link to="/app/dashboard" onClick={() => this.props.setAuthWizardStep('InvestorSignup')}>Change email address</Link></p>
           <Form error onSubmit={this.handleSubmitForm}>

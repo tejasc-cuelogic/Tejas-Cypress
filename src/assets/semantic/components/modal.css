@@ -688,6 +688,8 @@
 .ui.modal .content .button.theme-link {
   color: #98CE23;
 }
+.ui.modal .content .display-only input[type=tel],
+.ui.modal .content .display-only input[type=email],
 .ui.modal .content input[type=tel].display-only,
 .ui.modal .content input[type=email].display-only {
   padding: 1rem 1.42857143rem;

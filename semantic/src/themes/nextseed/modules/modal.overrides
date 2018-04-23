@@ -116,17 +116,15 @@
         a.theme-link, .button.theme-link{
             color:@theme-primary;
         }
-        input[type=tel], input[type=email]{
-            &.display-only{
-                // font-family:@boldFont;
-                padding:@14px @20px;
-                margin-bottom:@10px;
-                font-size:@20px;
-                text-align:center;
-                border:none;
-                border-radius:@4px;
-                background:@border-light;
-            }
+        .display-only input[type=tel], .display-only input[type=email], input[type=tel].display-only, input[type=email].display-only{
+            // font-family:@boldFont;
+            padding:@14px @20px;
+            margin-bottom:@10px;
+            font-size:@20px;
+            text-align:center;
+            border:none;
+            border-radius:@4px;
+            background:@border-light;
         }
         .ui.button.multistep__btn{
             background:@white;
