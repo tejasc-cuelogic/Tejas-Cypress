@@ -2,13 +2,13 @@ import { observable, action, computed } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
-// import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../services/graphql';
 import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification } from '../stores/queries/profile';
 
 import api from '../ns-api';
 import uiStore from './uiStore';
 import userStore from './userStore';
+import Helper from '../helper/utility';
 
 import {
   VERIFY_IDENTITY_STEP_01,
@@ -20,13 +20,9 @@ import {
 export class ProfileStore {
   @observable profile = undefined;
 
-  @observable verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: false, error: '' } };
+  @observable verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: false, error: '' }, response: {} };
 
-  @observable verifyIdentityResponse = {};
-
-  @observable softFailId = '';
-
-  @observable verifyIdentity02 = [];
+  @observable verifyIdentity02 = { fields: [], meta: { isValid: false, error: '' } };
 
   @observable verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
 
@@ -85,31 +81,35 @@ export class ProfileStore {
 
   @action
   setVerifyIdentityResponse = (response) => {
-    this.verifyIdentityResponse = response;
+    this.verifyIdentity01.response = response;
   }
 
   @action
-  setIdentityQuestions = (questions) => {
-    const questionsList = _.map(questions);
-    const identityQuestions = questionsList.map(value => ({
+  setIdentityQuestions = () => {
+    const { questions } = this.verifyIdentity01.response;
+    const identityQuestions = questions.map(value => ({
       label: value.prompt, key: value.type, value: '', rule: 'required', error: undefined, placeHolder: 'Type Answer',
     }));
-    this.verifyIdentity02 = identityQuestions;
-  }
-
-  @action
-  setSoftFailId = (id) => {
-    this.softFailId = id;
+    this.verifyIdentity02.fields = identityQuestions;
   }
 
   @action
   identityQuestionAnswerChange = (e, { name, value }) => {
-    const changedAnswer = _.find(this.verifyIdentity02, { key: name });
+    const changedAnswer = _.find(this.verifyIdentity02.fields, { key: name });
     changedAnswer.value = value;
+
+    const validation = new Validator(
+      mapValues(_.keyBy(this.verifyIdentity02.fields, 'key'), f => f.value),
+      mapValues(_.keyBy(this.verifyIdentity02.fields, 'key'), f => f.rule),
+    );
+    this.verifyIdentity02.meta.isValid = validation.passes();
+    changedAnswer.error = validation.errors.first(changedAnswer.key);
   }
 
   /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Submitting Personal Details');
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -131,21 +131,23 @@ export class ProfileStore {
           },
         })
         .then((data) => {
-          console.log(data);
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
           resolve();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
           reject();
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
         });
     });
   }
 
   getFormattedIdentityQuestionsAnswers = () => {
     const formattedIdentityQuestionsAnswers =
-    _.flatMap(this.verifyIdentity02, n => [{ type: n.key }, { text: n.value }]);
-    console.log(formattedIdentityQuestionsAnswers);
+    _.flatMap(this.verifyIdentity02.fields, n => [{ type: n.key }, { text: n.value }]);
     return formattedIdentityQuestionsAnswers;
   }
 
@@ -165,6 +167,8 @@ export class ProfileStore {
   }
 
   submitConfirmIdentityQuestions = () => {
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Submitting Confirm Identity Questions');
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -172,18 +176,22 @@ export class ProfileStore {
           variables: {
             userId: userStore.currentUser.sub,
             cipAnswers: {
-              id: this.softFailId,
+              id: this.verifyIdentity01.response.softFailId,
               answers: this.getFormattedIdentityQuestionsAnswers,
             },
           },
         })
-        .then((data) => {
-          console.log(data);
+        .then(() => {
+          Helper.toast('Identity questions submitted.', 'success');
           resolve();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
           reject();
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
         });
     });
   }
@@ -195,38 +203,57 @@ export class ProfileStore {
           mutation: startUserPhoneVerification,
           variables: {
             phoneDetails: {
-              phoneNumber: '7588368463',
+              phoneNumber: this.verifyIdentity01.fields.phoneNumber.value,
               countryCode: '91',
             },
             method: 'sms',
           },
         })
-        .then((data) => {
-          console.log(data);
+        .then(() => {
+          Helper.toast('Verification code sent to user.', 'success');
           resolve();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
           reject();
         });
     });
   }
 
-  // verifyIdentity04.fields.code
   confirmPhoneNumber = () => {
-    client
-      .mutate({
-        mutation: checkUserPhoneVerificationCode,
-        variables: {
-          phoneDetails: {
-            phoneNumber: '7588368463',
-            countryCode: '91',
+    uiStore.setProgress();
+    uiStore.setLoaderMessage('Confirming Phone Number');
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: checkUserPhoneVerificationCode,
+          variables: {
+            phoneDetails: {
+              phoneNumber: this.verifyIdentity01.fields.phoneNumber.value,
+              countryCode: '91',
+            },
+            verificationCode: this.verifyIdentity04.fields.code.value,
           },
-          verificationCode: this.verifyIdentity04.fields.code.value,
-        },
-      })
-      .then(data => console.log(data))
-      .catch(error => console.log(error));
+        })
+        .then(() => {
+          Helper.toast('Phone number is confirmed.', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
+    });
   }
+
+  simpleErr = err => ({
+    statusCode: err.statusCode,
+    code: err.code,
+    message: err.message,
+  });
 }
 export default new ProfileStore();
