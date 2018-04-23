@@ -10,8 +10,9 @@ import { FormInput } from '../../../components/form/FormElements';
 export default class ConfirmIdentityForm extends Component {
   handleIdentityQuestionsSubmit = (e) => {
     e.preventDefault();
-    this.props.profileStore.submitConfirmIdentityQuestions().then((result) => {
-      console.log(result);
+    this.props.profileStore.submitConfirmIdentityQuestions().then(() => {
+      this.props.profileStore.startPhoneVerification();
+      this.props.setDashboardWizardStep('ConfirmPhoneNumber');
     });
   }
 
@@ -30,16 +31,17 @@ export default class ConfirmIdentityForm extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.handleIdentityQuestionsSubmit}>
-            {_.map(verifyIdentity02, field => (
+            {_.map(verifyIdentity02.fields, field => (
               <FormInput
                 fluid
                 fielddata={field}
                 name={field.key}
+                key={field.key}
                 changed={identityQuestionAnswerChange}
               />
             ))}
             <div className="center-align">
-              <Button color="green" size="large" className="relaxed">Verify my identity</Button>
+              <Button color="green" size="large" className="relaxed" disabled={!verifyIdentity02.meta.isValid}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>
