@@ -66,87 +66,10 @@ export default class investorPersonalDetails extends Component {
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
-              {/* <Form.Field width={6}>
-                {/* <Label basic color="red" pointing="below">
-                {profileDetails.title.error}</Label> * /}
-                <Form.Select
-                  fluid
-                  label={profileDetails.title.label}
-                  name={profileDetails.title.key}
-                  value={profileDetails.title.value}
-                  onChange={this.handleInputChange}
-                  error={!!profileDetails.title.error}
-                  options={PROFILE_DETAILS_TITLE}
-                />
-                <FieldError error={profileDetails.title.error} />
-              </Form.Field>
-              <Form.Field>
-                {/* eslint-disable jsx-a11y/label-has-for * /}
-                <Popup
-                  trigger={<label>First Legal Name</label>}
-                  content="Put your first name as listed on your driver license"
-                  position="top center"
-                  className="center-align"
-                />
-                {/* <Label basic color="red" pointing="below">
-                {profileDetails.firstLegalName.error}</Label> * /}
-                <Input
-                  fluid
-                  placeholder={profileDetails.firstLegalName.label}
-                  name={profileDetails.firstLegalName.key}
-                  value={profileDetails.firstLegalName.value}
-                  onChange={this.handleInputChange}
-                  error={!!profileDetails.firstLegalName.error}
-                />
-                <FieldError error={profileDetails.firstLegalName.error} />
-              </Form.Field>
-              <Form.Field>
-                <Popup
-                  trigger={<label>Last Legal Name</label>}
-                  content="Put your last name as listed on your driver license"
-                  position="top center"
-                  className="center-align"
-                />
-                {/* <Label basic color="red" pointing="below">
-                {profileDetails.lastLegalName.error}</Label> * /}
-                <Input
-                  fluid
-                  placeholder={profileDetails.lastLegalName.label}
-                  name={profileDetails.lastLegalName.key}
-                  value={profileDetails.lastLegalName.value}
-                  onChange={this.handleInputChange}
-                  error={!!profileDetails.lastLegalName.error}
-                />
-                <FieldError error={profileDetails.lastLegalName.error} />
-              </Form.Field>
-            </Form.Group>
-            <Form.Field>
-              <label>
-                Residental Street
-                <Popup
-                  trigger={<Icon name="ns-help-circle outline" />}
-                  content="Put your residental address as listed on your driver license"
-                  position="top center"
-                  className="center-align"
-                />
-              </label>
-              {/* <Label basic color="red" pointing="below">
-              {profileDetails.residentalStreet.error}</Label> * /}
-              <Autocomplete
-                onPlaceSelected={(place) => {
-                  profileActions.setAddressFieldsOnGoogleAutocomplete(place);
-                }}
-                types={['address']}
-                placeholder={profileDetails.residentalStreet.label}
-                name={profileDetails.residentalStreet.key}
-                value={profileDetails.residentalStreet.value}
-                onChange={this.handleAutocompleteInputChange} */}
               <FormSelect
                 containerwidth={6}
                 name="title"
-                label={verifyIdentity01.fields.title.label}
-                value={verifyIdentity01.fields.title.value}
-                error={verifyIdentity01.fields.title.error}
+                fielddata={verifyIdentity01.fields.title}
                 options={PROFILE_DETAILS_TITLE}
                 changed={verifyIdentitySelChange}
               />
@@ -213,7 +136,7 @@ export default class investorPersonalDetails extends Component {
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">
-              <Button size="large" className="very relaxed" >Verify my identity</Button>
+              <Button size="large" color="green" className="very relaxed" >Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>

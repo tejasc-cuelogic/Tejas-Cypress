@@ -37,19 +37,16 @@ export default class ConfirmPhoneNumber extends Component {
           <p>We are about to text a verification code to:</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          <div className="field">
-            <div className="ui huge input">
-              <MaskedInput
-                value="66123456781"
-                type="tel"
-                name="phoneNumber"
-                fielddata={verifyIdentity01.fields.phoneNumber}
-                mask="+9 999-999-9999"
-                readOnly
-                hidelabel
-              />
-            </div>
-          </div>
+          <MaskedInput
+            value="66123456781"
+            type="tel"
+            name="phoneNumber"
+            fielddata={verifyIdentity01.fields.phoneNumber}
+            mask="+9 999-999-9999"
+            readOnly
+            hidelabel
+            className="display-only"
+          />
           <p><Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>Change phone number</Link></p>
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <FormInput

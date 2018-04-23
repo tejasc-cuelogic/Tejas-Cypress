@@ -605,7 +605,7 @@
   color: #989898;
 }
 .ui.modal > .header:not(.ui).signup-header {
-  padding-top: 3rem;
+  padding-top: 2rem;
   border: none;
 }
 .ui.modal > .header:not(.ui).signup-header .back-link {
@@ -629,11 +629,18 @@
   font-size: 1rem;
   color: #383838;
 }
+.ui.modal h4.ui.header {
+  font-weight: 400;
+}
 .ui.modal .content {
   padding-top: 1.42857143rem;
 }
 .ui.modal .content.login-modal {
   margin: 0 auto;
+}
+.ui.modal .content.signup-content {
+  padding-top: 0;
+  padding-bottom: 2rem;
 }
 .ui.modal .content.signup-content .user-type {
   height: 100%;
@@ -681,12 +688,15 @@
 .ui.modal .content .button.theme-link {
   color: #98CE23;
 }
-.ui.modal .content .ui.huge.input input[type=tel],
-.ui.modal .content .ui.huge.input input[type=email] {
-  border: none;
-  background: #E0E0E0;
-  text-align: center;
+.ui.modal .content input[type=tel].display-only,
+.ui.modal .content input[type=email].display-only {
+  padding: 1rem 1.42857143rem;
   margin-bottom: 0.71428571rem;
+  font-size: 1.42857143rem;
+  text-align: center;
+  border: none;
+  border-radius: 0.28571429rem;
+  background: #E0E0E0;
 }
 .ui.modal .content .ui.button.multistep__btn {
   background: #FFFFFF;
@@ -757,7 +767,7 @@
   background-repeat: repeat-x;
   background-position-x: 35px;
 }
-.ui.modal .ui.form label i.ns-help-circle {
+.ui.modal .ui.form label i.icon {
   margin-left: 0.5rem;
   font-size: 1rem;
   color: #989898;
@@ -798,9 +808,22 @@
   padding: 1.78571429rem 4.28571429rem;
   background: #fafafa;
 }
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap h5 {
+  margin-bottom: 0.71428571rem;
+}
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap > .fields:last-child,
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap .field:last-child {
   margin-bottom: 0;
+}
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .field.readonly label,
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .field.readonly input {
+  color: #989898;
+  border-color: transparent;
+}
+.ui.modal.basic.multistep-modal .multistep.content .option-details {
+  padding: 1rem 0;
+  line-height: 1.57142857rem;
+  text-align: center;
 }
 .ui.modal.basic.multistep-modal .multistep.content .summary-wrap {
   text-align: center;

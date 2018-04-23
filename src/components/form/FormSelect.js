@@ -1,12 +1,12 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
-import { Form, Popup, Icon } from 'semantic-ui-react';
+import { Form, Popup, Icon, Select } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
 const FormSelect = props => (
-  <Form.Field width={props.containerwidth || false}>
+  <Form.Field width={props.containerwidth || false} error={props.error !== ''}>
     <label>
-      {props.label}
+      {props.fielddata.label}
       {props.tooltip &&
         <Popup
           trigger={<Icon name="help circle outline" />}
@@ -16,7 +16,7 @@ const FormSelect = props => (
         />
       }
     </label>
-    <Form.Select
+    <Select
       fluid
       search
       {...props}

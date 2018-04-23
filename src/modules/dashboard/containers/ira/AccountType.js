@@ -17,7 +17,7 @@ export default class AccountType extends Component {
       <div>
         <Header as="h1" textAlign="center">What type of IRA account you want to create?</Header>
         <Header as="h4" textAlign="center">Choose an account type</Header>
-        <Form error>
+        <Form error className="account-type-tab">
           <FormRadioGroup
             fielddata={formAccTypes.fields.accountType}
             name="accountType"

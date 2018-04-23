@@ -260,7 +260,7 @@
 .ui.form .field .prompt.label {
   white-space: normal;
   background: #FFFFFF !important;
-  border: 1px solid #E0B4B4 !important;
+  border: 1px solid #EB5757 !important;
   color: #EB5757 !important;
 }
 .ui.form .inline.fields .field .prompt,
@@ -479,10 +479,10 @@
 .ui.form .field.error input[type="text"],
 .ui.form .field.error input[type="file"],
 .ui.form .field.error input[type="url"] {
-  background: #FFF6F6;
-  border-color: #E0B4B4;
+  background: transparent;
+  border-color: #EB5757;
   color: #EB5757;
-  border-radius: '';
+  border-radius: 0;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -500,8 +500,8 @@
 .ui.form .field.error input[type="text"]:focus,
 .ui.form .field.error input[type="file"]:focus,
 .ui.form .field.error input[type="url"]:focus {
-  background: #FFF6F6;
-  border-color: #E0B4B4;
+  background: transparent;
+  border-color: #EB5757;
   color: #EB5757;
   -webkit-appearance: none;
   -webkit-box-shadow: none;
@@ -522,20 +522,20 @@
 .ui.form .field.error .ui.dropdown,
 .ui.form .field.error .ui.dropdown .text,
 .ui.form .field.error .ui.dropdown .item {
-  background: #FFF6F6;
+  background: transparent;
   color: #EB5757;
 }
 .ui.form .fields.error .field .ui.dropdown,
 .ui.form .field.error .ui.dropdown {
-  border-color: #E0B4B4 !important;
+  border-color: #EB5757 !important;
 }
 .ui.form .fields.error .field .ui.dropdown:hover,
 .ui.form .field.error .ui.dropdown:hover {
-  border-color: #E0B4B4 !important;
+  border-color: #EB5757 !important;
 }
 .ui.form .fields.error .field .ui.dropdown:hover .menu,
 .ui.form .field.error .ui.dropdown:hover .menu {
-  border-color: #E0B4B4;
+  border-color: #EB5757;
 }
 .ui.form .fields.error .field .ui.multiple.selection.dropdown > .label,
 .ui.form .field.error .ui.multiple.selection.dropdown > .label {
@@ -575,8 +575,8 @@
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) label:before,
 .ui.form .fields.error .field .checkbox:not(.toggle):not(.slider) .box:before,
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) .box:before {
-  background: #FFF6F6;
-  border-color: #E0B4B4;
+  background: transparent;
+  border-color: #EB5757;
 }
 .ui.form .fields.error .field .checkbox label:after,
 .ui.form .field.error .checkbox label:after,
@@ -781,7 +781,7 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
-  margin: 0em -0.5em 1em;
+  margin: 0em -0.5em;
 }
 .ui.form .fields > .field {
   -webkit-box-flex: 0;
@@ -1215,7 +1215,8 @@
   display: block;
 }
 .ui.form p.field-error {
-  font-size: 0.92857143rem;
+  font-size: 0.85714286rem;
+  line-height: 1rem;
   color: #EB5757;
 }
 .file-uploader {

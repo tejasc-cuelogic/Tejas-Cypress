@@ -26,11 +26,13 @@ export default class PersonalInformation extends Component {
             <Form.Input
               label="Authorized Signatory’s First Legal Name"
               value={currentUser.givenName}
+              className="readonly"
               readOnly
             />
             <Form.Input
               label="Authorized Signatory’s Last Legal Name"
               value={currentUser.familyName}
+              className="readonly"
               readOnly
             />
             <FormInput
@@ -39,35 +41,7 @@ export default class PersonalInformation extends Component {
               changed={personalInfoChange}
             />
           </div>
-          <Grid divided="vertically">
-            {/* <Grid.Row>
-              <Grid.Column width={7}>
-                {/* eslint-disable jsx-a11y/label-has-for * /}
-                <label>
-                  <h3>Upload a Photo ID</h3>
-                  Driving Liscence or passport
-                </label>
-              </Grid.Column>
-              <Grid.Column width={9}>
-                {entityAccount.photoId.value === '' &&
-                  <div className="file-uploader">
-                    <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
-                    <input
-                      name={entityAccount.photoId.key}
-                      type="file"
-                      onChange={this.uploadDocument}
-                      accept=".jpg,.jpeg,.pdf"
-                    />
-                  </div>
-                }
-                {entityAccount.photoId.value !== '' &&
-                <div className="file-uploader attached">
-                    {entityAccount.photoId.value}
-                  <Icon name="ns-close" size="small" onClick={this.removeUploadedPhotoId} />
-                </div>
-                }
-              </Grid.Column>
-            </Grid.Row> */}
+          <Grid>
             <FileUploaderVertical
               name="photoId"
               fielddata={formPersonalInfo.fields.photoId}

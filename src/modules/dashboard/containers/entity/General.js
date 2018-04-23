@@ -9,6 +9,7 @@ import { FormInput, FormSelect } from '../../../../components/form/FormElements'
 export default class General extends Component {
   render() {
     const { formGeneralInfo, genInfoChange } = this.props.entityAccountStore;
+    console.log(formGeneralInfo.fields.state);
     return (
       <div>
         <Header as="h1" textAlign="center">General Information</Header>

@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon } from 'semantic-ui-react';
+import { Form, Popup, Icon, Input } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
 const FormInput = observer((props) => {
@@ -12,7 +12,7 @@ const FormInput = observer((props) => {
     placeHolder,
   } = props.fielddata;
   return (
-    <Form.Field>
+    <Form.Field error={!!error}>
       <label>
         {label}
         {tooltip &&
@@ -24,13 +24,12 @@ const FormInput = observer((props) => {
           />
         }
       </label>
-      <Form.Input
+      <Input
         fluid
         labeled
         {...props}
-        label={false}
+        label={props.prefix || false}
         type={props.type || 'text'}
-        error={!!error}
         placeholder={placeHolder}
         onChange={props.changed}
       />

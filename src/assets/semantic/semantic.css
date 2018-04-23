@@ -19104,7 +19104,7 @@ ol.ui.horizontal.list li:before,
 .ui.form .field .prompt.label {
   white-space: normal;
   background: #FFFFFF !important;
-  border: 1px solid #E0B4B4 !important;
+  border: 1px solid #EB5757 !important;
   color: #EB5757 !important;
 }
 
@@ -19346,10 +19346,10 @@ ol.ui.horizontal.list li:before,
 .ui.form .field.error input[type="text"],
 .ui.form .field.error input[type="file"],
 .ui.form .field.error input[type="url"] {
-  background: #FFF6F6;
-  border-color: #E0B4B4;
+  background: transparent;
+  border-color: #EB5757;
   color: #EB5757;
-  border-radius: '';
+  border-radius: 0;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -19368,8 +19368,8 @@ ol.ui.horizontal.list li:before,
 .ui.form .field.error input[type="text"]:focus,
 .ui.form .field.error input[type="file"]:focus,
 .ui.form .field.error input[type="url"]:focus {
-  background: #FFF6F6;
-  border-color: #E0B4B4;
+  background: transparent;
+  border-color: #EB5757;
   color: #EB5757;
   -webkit-appearance: none;
   -webkit-box-shadow: none;
@@ -19391,23 +19391,23 @@ ol.ui.horizontal.list li:before,
 .ui.form .field.error .ui.dropdown,
 .ui.form .field.error .ui.dropdown .text,
 .ui.form .field.error .ui.dropdown .item {
-  background: #FFF6F6;
+  background: transparent;
   color: #EB5757;
 }
 
 .ui.form .fields.error .field .ui.dropdown,
 .ui.form .field.error .ui.dropdown {
-  border-color: #E0B4B4 !important;
+  border-color: #EB5757 !important;
 }
 
 .ui.form .fields.error .field .ui.dropdown:hover,
 .ui.form .field.error .ui.dropdown:hover {
-  border-color: #E0B4B4 !important;
+  border-color: #EB5757 !important;
 }
 
 .ui.form .fields.error .field .ui.dropdown:hover .menu,
 .ui.form .field.error .ui.dropdown:hover .menu {
-  border-color: #E0B4B4;
+  border-color: #EB5757;
 }
 
 .ui.form .fields.error .field .ui.multiple.selection.dropdown > .label,
@@ -19452,8 +19452,8 @@ ol.ui.horizontal.list li:before,
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) label:before,
 .ui.form .fields.error .field .checkbox:not(.toggle):not(.slider) .box:before,
 .ui.form .field.error .checkbox:not(.toggle):not(.slider) .box:before {
-  background: #FFF6F6;
-  border-color: #E0B4B4;
+  background: transparent;
+  border-color: #EB5757;
 }
 
 .ui.form .fields.error .field .checkbox label:after,
@@ -19669,7 +19669,7 @@ ol.ui.horizontal.list li:before,
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
-  margin: 0em -0.5em 1em;
+  margin: 0em -0.5em;
 }
 
 .ui.form .fields > .field {
@@ -20171,7 +20171,8 @@ ol.ui.horizontal.list li:before,
 }
 
 .ui.form p.field-error {
-  font-size: 0.92857143rem;
+  font-size: 0.85714286rem;
+  line-height: 1rem;
   color: #EB5757;
 }
 
@@ -34001,7 +34002,7 @@ select.ui.dropdown {
 }
 
 .ui.modal > .header:not(.ui).signup-header {
-  padding-top: 3rem;
+  padding-top: 2rem;
   border: none;
 }
 
@@ -34030,12 +34031,21 @@ select.ui.dropdown {
   color: #383838;
 }
 
+.ui.modal h4.ui.header {
+  font-weight: 400;
+}
+
 .ui.modal .content {
   padding-top: 1.42857143rem;
 }
 
 .ui.modal .content.login-modal {
   margin: 0 auto;
+}
+
+.ui.modal .content.signup-content {
+  padding-top: 0;
+  padding-bottom: 2rem;
 }
 
 .ui.modal .content.signup-content .user-type {
@@ -34092,12 +34102,15 @@ select.ui.dropdown {
   color: #98CE23;
 }
 
-.ui.modal .content .ui.huge.input input[type=tel],
-.ui.modal .content .ui.huge.input input[type=email] {
-  border: none;
-  background: #E0E0E0;
-  text-align: center;
+.ui.modal .content input[type=tel].display-only,
+.ui.modal .content input[type=email].display-only {
+  padding: 1rem 1.42857143rem;
   margin-bottom: 0.71428571rem;
+  font-size: 1.42857143rem;
+  text-align: center;
+  border: none;
+  border-radius: 0.28571429rem;
+  background: #E0E0E0;
 }
 
 .ui.modal .content .ui.button.multistep__btn {
@@ -34183,7 +34196,7 @@ select.ui.dropdown {
   background-position-x: 35px;
 }
 
-.ui.modal .ui.form label i.ns-help-circle {
+.ui.modal .ui.form label i.icon {
   margin-left: 0.5rem;
   font-size: 1rem;
   color: #989898;
@@ -34231,9 +34244,25 @@ select.ui.dropdown {
   background: #fafafa;
 }
 
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap h5 {
+  margin-bottom: 0.71428571rem;
+}
+
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap > .fields:last-child,
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap .field:last-child {
   margin-bottom: 0;
+}
+
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .field.readonly label,
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .field.readonly input {
+  color: #989898;
+  border-color: transparent;
+}
+
+.ui.modal.basic.multistep-modal .multistep.content .option-details {
+  padding: 1rem 0;
+  line-height: 1.57142857rem;
+  text-align: center;
 }
 
 .ui.modal.basic.multistep-modal .multistep.content .summary-wrap {

@@ -22,7 +22,7 @@ export default class Identity extends Component {
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</Header>
         <Divider section hidden />
         <Form className="file-uploader-inline">
-          <Grid divided="vertically">
+          <Grid>
             <Grid.Row>
               <Grid.Column width={7}>
                 {/* eslint-disable jsx-a11y/label-has-for */}

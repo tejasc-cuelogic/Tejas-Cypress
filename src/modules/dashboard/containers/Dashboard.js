@@ -26,6 +26,7 @@ class Dashboard extends Component {
       label: 'Complete all required information about yourself',
       linkText: 'Verify me',
       linkPath: 'InvestorPersonalDetails',
+      // linkPath: 'ConfirmEmailAddress',
     };
     return (
       <div>

@@ -17,7 +17,7 @@
 @fieldMargin: 0em 0em @rowDistance;
 
 /* Fields */
-@fieldsMargin: 0em -(@gutterWidth / 2) @rowDistance;
+@fieldsMargin: 0em -(@gutterWidth / 2);
 
 /* Form Label */
 @labelDistance: @4px;
@@ -101,8 +101,8 @@
 
 /* Errored Input */
 @formErrorColor: @negativeTextColor;
-@formErrorBorder: @negativeBorderColor;
-@formErrorBackground: @negativeBackgroundColor;
+@formErrorBorder: @negativeTextColor;
+@formErrorBackground: transparent;
 
 /* AutoFill */
 @inputAutoFillBackground: #FFFFF0;
@@ -114,7 +114,7 @@
 
 
 /* Input Error */
-@inputErrorBorderRadius: '';
+@inputErrorBorderRadius:0;
 @inputErrorBoxShadow: none;
 
 /* Dropdown Error */
@@ -125,9 +125,9 @@
 @dropdownErrorLabelColor: @errorTextColor;
 
 /* Focused Error */
-@inputErrorFocusBackground: @negativeBackgroundColor;
+@inputErrorFocusBackground:transparent;
 @inputErrorFocusColor: @negativeTextColor;
-@inputErrorFocusBorder: @negativeBorderColor;
+@inputErrorFocusBorder: @negativeTextColor;
 @inputErrorFocusBoxShadow: none;
 
 /* Placeholder Error */
