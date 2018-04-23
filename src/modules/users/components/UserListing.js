@@ -48,7 +48,7 @@ class UserListing extends Component {
               onBottomVisible={() => console.log('This will call API')}
             >
               {_.map(this.props.listData, user => (
-                <Table.Row className={(user.status === 'LOCKED') ? 'locked' : ''} key={user.id}>
+                <Table.Row className={(user.accountStatus === 'locked') ? 'locked' : ''} key={user.id}>
                   <Table.Cell collapsing>
                     {!user.profilepic &&
                       <div className="user-image">

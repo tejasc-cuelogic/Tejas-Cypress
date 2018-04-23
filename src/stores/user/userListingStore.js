@@ -87,7 +87,7 @@ export class UserListingStore {
 
   @computed get sortInfo() {
     const info = { ...this.requestState.sort };
-    info.direction = (info.direction === 'DESC') ? 'descending' : 'ascending';
+    info.direction = (info.direction === 'desc') ? 'descending' : 'ascending';
     return info;
   }
 

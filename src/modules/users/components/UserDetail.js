@@ -12,6 +12,8 @@ const userDetails = (props) => {
     );
   }
 
+  const { legalName, legalAddress } = props.details.legalDetails;
+  const { phone } = props.details.contactDetails;
   return (
     <div className="content-spacer">
       <div className={`overlay ${(props.editCard) ? 'editing' : ''}`} />
@@ -60,7 +62,7 @@ const userDetails = (props) => {
                             <Label>First Name</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" value={props.details.legalDetails.legalName.firstLegalName} readOnly />
+                            <Input type="text" value={(legalName) ? legalName.firstLegalName : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -76,7 +78,7 @@ const userDetails = (props) => {
                             <Label>Last Name</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalName.lastLegalName} readOnly />
+                            <Input type="text" defaultValue={legalName ? legalName.lastLegalName : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                       </div>
@@ -150,7 +152,7 @@ const userDetails = (props) => {
                             <Label>Street 1</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalAddress.street1} readOnly />
+                            <Input type="text" defaultValue={legalAddress ? legalAddress.street1 : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -158,7 +160,7 @@ const userDetails = (props) => {
                             <Label>Street 2</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalAddress.street2} readOnly />
+                            <Input type="text" defaultValue={legalAddress ? legalAddress.street2 : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -166,7 +168,7 @@ const userDetails = (props) => {
                             <Label>City</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalAddress.city} readOnly />
+                            <Input type="text" defaultValue={legalAddress ? legalAddress.city : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -174,7 +176,7 @@ const userDetails = (props) => {
                             <Label>State</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalAddress.state} readOnly />
+                            <Input type="text" defaultValue={legalAddress ? legalAddress.state : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -182,7 +184,7 @@ const userDetails = (props) => {
                             <Label>ZIP code</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalAddress.zipCode} readOnly />
+                            <Input type="text" defaultValue={legalAddress ? legalAddress.zipCode : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                       </div>
@@ -195,7 +197,7 @@ const userDetails = (props) => {
                             <Label>Street 1</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalAddress.street1} readOnly />
+                            <Input type="text" defaultValue={legalAddress ? legalAddress.street1 : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -203,7 +205,7 @@ const userDetails = (props) => {
                             <Label>Street 2</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalAddress.street2} readOnly />
+                            <Input type="text" defaultValue={legalAddress ? legalAddress.street2 : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -211,7 +213,7 @@ const userDetails = (props) => {
                             <Label>City</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalAddress.city} readOnly />
+                            <Input type="text" defaultValue={legalAddress ? legalAddress.city : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -219,7 +221,7 @@ const userDetails = (props) => {
                             <Label>State</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalAddress.state} readOnly />
+                            <Input type="text" defaultValue={legalAddress ? legalAddress.state : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                         <Form.Group>
@@ -227,7 +229,7 @@ const userDetails = (props) => {
                             <Label>ZIP code</Label>
                           </Form.Field>
                           <Form.Field width={8}>
-                            <Input type="text" defaultValue={props.details.legalDetails.legalAddress.zipCode} readOnly />
+                            <Input type="text" defaultValue={legalAddress ? legalAddress.zipCode : ''} readOnly />
                           </Form.Field>
                         </Form.Group>
                       </div>
@@ -248,7 +250,7 @@ const userDetails = (props) => {
                     <Label>Phone number</Label>
                   </Form.Field>
                   <Form.Field width={8}>
-                    <Input type="tel" defaultValue={props.details.contactDetails.phone.number} readOnly />
+                    <Input type="tel" defaultValue={(phone) ? phone.number : ''} readOnly />
                   </Form.Field>
                 </Form.Group>
               </Form>
