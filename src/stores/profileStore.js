@@ -68,6 +68,11 @@ export class ProfileStore {
   };
 
   @action
+  verifyIdentityDateChange = (date) => {
+    this.onFieldChange('dateOfBirth', date);
+  };
+
+  @action
   onFieldChange = (currentForm, field, value) => {
     const form = currentForm || 'formFinInfo';
     this[form].fields[field].value = value;

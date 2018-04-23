@@ -61,7 +61,7 @@ export const VERIFY_IDENTITY_STEP_01 = {
     value: '',
     label: 'SSN',
     error: undefined,
-    rule: 'required|numeric',
+    rule: 'required',
   },
 };
 
