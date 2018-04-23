@@ -35,7 +35,7 @@ build:review:
     - scripts/
     expire_in: 1 day
 
-deploying-code-issues:
+deploy:review:
   only:
     refs:
       - branches
@@ -46,7 +46,7 @@ deploying-code-issues:
   environment:
     name: $CI_COMMIT_REF_NAME
     url: http://$CI_COMMIT_REF_SLUG.s3-website-us-east-1.amazonaws.com
-    on_stop: deleting-code-issues
+    on_stop: delete:review
   tags:
     - ns-client
   stage: deploy
@@ -56,7 +56,7 @@ deploying-code-issues:
   dependencies:
     - build:review
 
-deleting-code-issues:
+delete:review:
   only:
     refs:
       - branches
