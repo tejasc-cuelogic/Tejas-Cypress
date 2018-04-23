@@ -21,7 +21,7 @@ const FormSelect = props => (
       search
       {...props}
       label={false}
-      error={props.error !== ''}
+      error={!!props.error}
       onChange={props.changed}
     />
     {props.error &&

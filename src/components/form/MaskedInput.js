@@ -29,8 +29,8 @@ const MaskedInput = observer((props) => {
         alwaysShowMask
         maskChar=" "
       />
-      {props.error &&
-        <FieldError error={props.error} />
+      {error &&
+        <FieldError error={error} />
       }
     </Form.Field>
   );

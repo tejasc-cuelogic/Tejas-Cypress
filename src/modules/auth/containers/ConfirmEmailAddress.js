@@ -6,6 +6,7 @@ import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 import validationActions from '../../../actions/validation';
 import authActions from '../../../actions/auth';
 import FieldError from '../../../components/common/FieldError';
+import { FormInput } from '../../../components/form/FormElements';
 
 @inject('authStore', 'uiStore')
 @observer
@@ -41,23 +42,20 @@ export default class ConfirmEmailAddress extends Component {
           <p>Please check the verification code in the email we sent to:</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          <Form.Input
+          <FormInput
             fluid
             size="huge"
             type="email"
             value={values.email.value}
+            fielddata={values.email}
             readOnly
           />
           <p><Link to="/app/dashboard" onClick={() => this.props.setAuthWizardStep('InvestorSignup')}>Change email address</Link></p>
           <Form error onSubmit={this.handleSubmitForm}>
-            <Form.Input
+            <FormInput
               size="huge"
-              label="Enter verification code here:"
               className="otp-field"
-              maxLength={6}
-              name={values.code.key}
-              value={values.code.value}
-              error={!!values.code.error}
+              fielddata={values.code}
               onChange={this.handleInputChange}
             />
             <FieldError error={values.code.error} />

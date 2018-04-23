@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 import { FormInput, FormSelect, FormDatePicker, MaskedInput } from '../../../components/form/FormElements';
-import validationActions from './../../../actions/validation';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
 import Helper from '../../../helper/utility';
 
@@ -12,27 +11,6 @@ import Helper from '../../../helper/utility';
 export default class investorPersonalDetails extends Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
-  }
-
-  handleInputChange = (e, { name, value }) =>
-    validationActions.validateProfileDetailsField(name, value);
-
-  handleAutocompleteInputChange = e =>
-    validationActions.validateProfileDetailsField(e.target.name, e.target.value);
-
-  handleDateChange = (date) => {
-    // validationActions.validateProfileDetailsField('dateOfBirth', date);
-    console.log('non-raw', date);
-  }
-
-  handleChangeRaw = (date) => {
-    console.log(date, 'changeRaw');
-  }
-
-  handleMaskedInputChange = (e) => {
-    const maskedInputValue = e.target.value;
-    const unMaskedInputValue = Helper.unMaskInput(maskedInputValue);
-    validationActions.validateProfileDetailsField(e.target.name, unMaskedInputValue);
   }
 
   handleSubmitForm = (e) => {
@@ -54,8 +32,12 @@ export default class investorPersonalDetails extends Component {
   }
 
   render() {
-    const { verifyIdentity01, verifyIdentityEleChange, verifyIdentitySelChange } =
-    this.props.profileStore;
+    const {
+      verifyIdentity01,
+      verifyIdentityEleChange,
+      verifyIdentitySelChange,
+      verifyIdentityDateChange,
+    } = this.props.profileStore;
     const welcomeMsg = `Hello ${this.props.userStore.currentUser.givenName}!`;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
@@ -130,7 +112,7 @@ export default class investorPersonalDetails extends Component {
                 label={verifyIdentity01.fields.dateOfBirth.label}
                 selected={verifyIdentity01.fields.dateOfBirth.value}
                 error={verifyIdentity01.fields.dateOfBirth.error}
-                changed={verifyIdentityEleChange}
+                changed={verifyIdentityDateChange}
               />
             </Form.Group>
             <MaskedInput
@@ -140,7 +122,7 @@ export default class investorPersonalDetails extends Component {
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">
-              <Button size="large" color="green" className="very relaxed" >Verify my identity</Button>
+              <Button size="large" color="green" className="very relaxed" disabled={!verifyIdentity01.meta.isValid}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>
