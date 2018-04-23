@@ -8,6 +8,10 @@ import UserListing from './../components/UserListing';
 @inject('userListingStore')
 @observer
 class Users extends Component {
+  componentWillMount() {
+    this.props.userListingStore.initRequest();
+  }
+
   setSearchParam = (e, { name, value }) => this.props.userListingStore.setInitiateSrch(name, value);
 
   dateFilterStart = (date) => {

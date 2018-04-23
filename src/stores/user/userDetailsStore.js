@@ -1,18 +1,18 @@
 /* eslint-disable class-methods-use-this */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../services/GqlClient2';
+import { GqlClient as client } from '../../services/graphql';
 import { userDetailsQuery } from '../queries/users';
-import { RANDOM_USER } from '../../constants/user';
 import Helper from '../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
-  @observable userDetail = RANDOM_USER();
   @observable editCard = 0;
 
   @computed get userDetails() {
-    return (this.currentUser.data && toJS(this.currentUser.data.User)) || {};
+    const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
+    console.log(details, 'details');
+    return details;
   }
 
   @action

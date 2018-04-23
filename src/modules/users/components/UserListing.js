@@ -82,7 +82,7 @@ class UserListing extends Component {
               {this.statusRow(this.props)}
             </Visibility>
           </Table>
-          <button onClick={this.props.loadMore}>loadMore {(this.props.loading) ? '- loading' : ''}</button>
+          { /* <button onClick={this.props.loadMore}>loadMore</button> */ }
         </div>
       </Aux>
     );

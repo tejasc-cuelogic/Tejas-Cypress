@@ -19,8 +19,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: commonStore.token ? `Bearer ${window.localStorage.getItem('myauth')}` :
-        `Bearer ${window.localStorage.getItem('myauth')}`,
+      authorization: commonStore.token ? `Bearer ${commonStore.token}` : '',
     },
   };
 });

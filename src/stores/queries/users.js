@@ -38,18 +38,40 @@ export const allUsersQuery = gql`
 `;
 
 export const userDetailsQuery = gql`
-  query userDetails($id: ID) {
-    User(id: $id) {
-      id
-      firstName
-      lastName
-      email
-      accountType
-      accredited
-      lastLogin
-      createdAt
+query getUserDetails($id: ID!) {
+  user(id: $id) {
+    id
+    firstName
+    lastName
+    email
+    accountType
+    accountStatus
+    accreditation
+    createdDate
+    lastLoginDate
+    contactDetails {
+      phone {
+        number
+      }
     }
+    legalDetails {
+      legalName {
+        firstLegalName
+        lastLegalName
+      }
+      dateOfBirth
+      ssn
+      legalAddress {
+        street1
+        street2
+        city
+        state
+        zipCode
+      }
+    }
+    accountStatus 
   }
+}
 `;
 
 export const createUserMutation = gql`
