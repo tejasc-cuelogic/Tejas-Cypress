@@ -4,10 +4,10 @@ regionName=$2
 
 isBucketExist=$(aws s3 ls | grep -w "${bucketName}"| cut -d ' ' -f 3)
 if [ "$isBucketExist" != "" ]; then
-	echo "${isBucketExist} already exist"
+	echo "Bucket ${isBucketExist} already exist"
 	exit 0
 else
-	echo "bucket ${bucketName} don't exist."
+	echo "Bucket ${bucketName} does not exist."
 	aws s3api create-bucket --bucket ${bucketName} --region ${regionName} && echo "Bucket ${bucketName} successfully created in region ${regionName}."
 	sed -i "s/Bucket-Name/${bucketName}/" scripts/S3PublicReadAccessPolicy.json && echo "Policy created."
 	aws s3api put-bucket-policy --bucket ${bucketName} --policy file://scripts/S3PublicReadAccessPolicy.json && echo "Policy attached."
