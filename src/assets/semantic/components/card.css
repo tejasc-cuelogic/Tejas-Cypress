@@ -169,7 +169,7 @@
 .ui.card > .content > .header {
   display: block;
   margin: '';
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   color: rgba(0, 0, 0, 0.85);
 }
 
@@ -244,7 +244,7 @@
 .ui.cards > .card > .content > .description,
 .ui.card > .content > .description {
   clear: both;
-  color: #303030;
+  color: #242424;
 }
 
 /*--------------
@@ -291,7 +291,7 @@
 /* Generic */
 .ui.cards > .card > .content a:not(.ui),
 .ui.card > .content a:not(.ui) {
-  color: #772DF9;
+  color: #772df9;
   -webkit-transition: color 0.1s ease;
   transition: color 0.1s ease;
 }
@@ -317,7 +317,7 @@
 }
 .ui.cards > .card .meta > a:not(.ui):hover,
 .ui.card .meta > a:not(.ui):hover {
-  color: #303030;
+  color: #000000;
 }
 
 /*--------------
@@ -564,14 +564,14 @@ a.ui.card:hover,
 .ui.green.cards > .card,
 .ui.cards > .green.card,
 .ui.green.card {
-  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #21BA45, 0px 1px 3px 0px #D4D4D5;
-          box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #21BA45, 0px 1px 3px 0px #D4D4D5;
+  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #98CE23, 0px 1px 3px 0px #D4D4D5;
+          box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #98CE23, 0px 1px 3px 0px #D4D4D5;
 }
 .ui.green.cards > .card:hover,
 .ui.cards > .green.card:hover,
 .ui.green.card:hover {
-  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #16ab39, 0px 1px 3px 0px #BCBDBD;
-          box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #16ab39, 0px 1px 3px 0px #BCBDBD;
+  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #8bc018, 0px 1px 3px 0px #BCBDBD;
+          box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #8bc018, 0px 1px 3px 0px #BCBDBD;
 }
 
 /* Teal */
@@ -1002,7 +1002,7 @@ a.ui.card:hover,
 }
 .card.form-card h4 {
   font-size: 14px;
-  color: #4f4f4f;
+  color: #383838;
 }
 .card.form-card h4 .checkbox label {
   font-weight: normal;
@@ -1035,6 +1035,7 @@ a.ui.card:hover,
 .ui.cards > .card.welcome-card > .content i.icon.pull-left {
   width: auto;
   margin: 0 1rem 0 0;
+  color: #98CE23;
 }
 .ui.card.welcome-card > .content .ui.mini.image,
 .ui.cards > .card.welcome-card > .content .ui.mini.image {
@@ -1043,28 +1044,27 @@ a.ui.card:hover,
 }
 .ui.card.welcome-card > .content > .header:not(.ui),
 .ui.cards > .card.welcome-card > .content > .header:not(.ui) {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.42857143rem;
   font-weight: 400;
   margin-top: 0;
 }
 .ui.card.welcome-card > .content > .meta,
 .ui.cards > .card.welcome-card > .content > .meta {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   text-transform: none;
-  color: #999999;
+  color: #989898;
   letter-spacing: 1px;
   margin: 0.5rem 0 0;
 }
 .ui.card > .content:not(:first-child),
 .ui.cards > .card > .content:not(:first-child) {
-  border-top-color: #f2f2f2;
+  border-top-color: #E0E0E0;
 }
 .ui.card .meta {
   margin-bottom: 1rem;
   font-size: 1rem;
-  color: #999999;
+  color: #989898;
   text-transform: uppercase;
 }
 .ui.card > .content > .header + .description:not(:last-child),
@@ -1079,11 +1079,8 @@ a.ui.card:hover,
 }
 .bank-details .item .meta {
   font-size: 0.85714286rem;
-  color: #999999;
+  color: #989898;
   text-transform: uppercase;
-}
-.bank-details .item .description p {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 .sticky-notification .ui.card .meta {
   font-size: 0.92857143rem;
@@ -1103,12 +1100,12 @@ a.ui.card:hover,
 }
 .ui.cards.steps-card .description i.icon.numbar[data-icon]:before {
   content: attr(data-icon) !important;
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   color: #FFFFFF;
 }
 .ui.cards.steps-card .description.disabled {
-  color: #e0e0e0;
+  color: #BDBDBD;
 }
 .ui.cards.steps-card .description.disabled i.icon.numbar {
   background: #F7F7F7;

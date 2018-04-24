@@ -13,7 +13,7 @@ const FormInput = observer((props) => {
     value,
   } = props.fielddata;
   return (
-    <Form.Field>
+    <Form.Field className={props.containerclassname || false} error={!!error}>
       <label>
         {label}
         {tooltip &&
@@ -30,8 +30,8 @@ const FormInput = observer((props) => {
         labeled
         {...props}
         value={value}
+        label={props.prefix || false}
         type={props.type || 'text'}
-        error={!!error}
         placeholder={placeHolder}
         onChange={props.changed}
       />

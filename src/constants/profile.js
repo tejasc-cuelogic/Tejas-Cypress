@@ -83,11 +83,15 @@ export const PROFILE_DETAILS_TITLE = [
 export const CONFIRM_IDENTITY_DOCUMENTS = {
   photoId: {
     key: 'photoId',
-    nameOfUploadedFile: '',
+    value: '',
+    error: undefined,
+    rule: 'required',
   },
   proofOfResidence: {
     key: 'proofOfResidence',
-    nameOfUploadedFile: '',
+    value: '',
+    error: undefined,
+    rule: 'required',
   },
 };
 

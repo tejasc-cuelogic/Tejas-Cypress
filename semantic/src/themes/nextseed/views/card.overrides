@@ -49,13 +49,14 @@
             i.icon.pull-left{
                 width:auto;
                 margin:0 1rem 0 0;
+                color:@theme-primary;
             }
             .ui.mini.image{
                 width:54px;
                 margin:0 @18px 0 0;
             }
             >.header:not(.ui){
-                font-family:@boldFont;
+                // font-family:@boldFont;
                 font-size:@20px;
                 font-weight:400;
                 margin-top:0;
@@ -105,9 +106,9 @@
             color:@quaternary-text;
             text-transform:uppercase;
         }
-        .description p{
-            font-family:@boldFont;
-        }
+        // .description p{
+        //     font-family:@boldFont;
+        // }
     }
 }
 .sticky-notification{

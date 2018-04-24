@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
@@ -136,6 +136,21 @@ export class ProfileStore {
     const formattedIdentityQuestionsAnswers =
     _.flatMap(this.verifyIdentity02.fields, n => [{ type: n.key }, { text: n.value }]);
     return formattedIdentityQuestionsAnswers;
+  }
+
+  @action
+  setConfirmIdentityDocuments(field, value) {
+    this.confirmIdentityDocuments[field].value = value;
+  }
+
+  @action
+  setConfirmIdentityDocumentsError(field, error) {
+    this.confirmIdentityDocuments[field].error = error;
+  }
+
+  @computed
+  get canSubmitConfirmIdentityDocumentsForm() {
+    return _.isEmpty(_.filter(this.confirmIdentityDocuments, field => field.error));
   }
 
   submitConfirmIdentityQuestions = () => {

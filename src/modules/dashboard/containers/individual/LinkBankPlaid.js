@@ -30,7 +30,7 @@ export default class LinkBankPlaid extends Component {
           </div>
         </div>
         <div className="center-align">
-          <Button className="theme-link" color="green" onClick={() => this.props.accountStore.setBankLinkInterface('form')}>or enter it manually</Button>
+          <Button className="theme-link" primary onClick={() => this.props.accountStore.setBankLinkInterface('form')}>or enter it manually</Button>
         </div>
       </div>
     );

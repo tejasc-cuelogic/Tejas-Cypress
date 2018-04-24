@@ -3,13 +3,16 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List } from 'semantic-ui-react';
 
+import validationActions from '../../../actions/validation';
+import FieldError from '../../../components/common/FieldError';
+
 @inject('profileStore')
 @observer
 export default class ConfirmIdentityDocuments extends Component {
   uploadDocument = (e) => {
     if (e.target.files.length) {
       const uploadFile = e.target.files[0];
-      this.props.profileStore.setConfirmIdentityDocuments(e.target.name, uploadFile.name);
+      validationActions.validateConfirmIdentityDocumentsField(e.target.name, uploadFile.name);
     }
   }
 
@@ -23,7 +26,10 @@ export default class ConfirmIdentityDocuments extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+    validationActions.validateConfirmIdentityDocumentsForm();
+    if (this.props.profileStore.canSubmitConfirmIdentityDocumentsForm) {
+      this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+    }
   }
   render() {
     const { confirmIdentityDocuments } = this.props.profileStore;
@@ -49,22 +55,25 @@ export default class ConfirmIdentityDocuments extends Component {
                   </label>
                 </Grid.Column>
                 <Grid.Column width={9}>
-                  {confirmIdentityDocuments.photoId.nameOfUploadedFile === '' &&
+                  {confirmIdentityDocuments.photoId.value === '' &&
                     <div className="file-uploader">
-                      <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                      <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
                       <input
                         name={confirmIdentityDocuments.photoId.key}
                         type="file"
                         onChange={this.uploadDocument}
+                        accept=".jpg,.jpeg,.pdf"
+                        error={!!confirmIdentityDocuments.photoId.error}
                       />
                     </div>
                   }
-                  {confirmIdentityDocuments.photoId.nameOfUploadedFile !== '' &&
+                  <FieldError error={confirmIdentityDocuments.photoId.error} />
+                  {confirmIdentityDocuments.photoId.value !== '' &&
                   <div className="file-uploader attached">
-                    <span title={confirmIdentityDocuments.photoId.nameOfUploadedFile}>
-                      {confirmIdentityDocuments.photoId.nameOfUploadedFile}
+                    <span title={confirmIdentityDocuments.photoId.value}>
+                      {confirmIdentityDocuments.photoId.value}
                     </span>
-                    <Icon name="remove" onClick={this.removeUploadedPhotoId} />
+                    <Icon name="ns-close" size="small" onClick={this.removeUploadedPhotoId} />
                   </div>
                   }
                 </Grid.Column>
@@ -73,7 +82,7 @@ export default class ConfirmIdentityDocuments extends Component {
                 <Grid.Column width={7}>
                   <label>
                     <h3>Proof of Residence
-                      <Popup className="test" trigger={<Icon name="help circle outline" />} position="top center" flowing hoverable>
+                      <Popup className="test" trigger={<Icon name="ns-help-circle outline" />} position="top center" flowing hoverable>
                         <Popup.Content>
                           <p><b>Acceptable documents:</b></p>
                           <List bulleted>
@@ -93,22 +102,25 @@ export default class ConfirmIdentityDocuments extends Component {
                   </label>
                 </Grid.Column>
                 <Grid.Column width={9}>
-                  {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile === '' &&
+                  {confirmIdentityDocuments.proofOfResidence.value === '' &&
                     <div className="file-uploader">
-                      <Icon name="upload" /> Choose a file <span>or drag it here</span>
+                      <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
                       <input
                         name={confirmIdentityDocuments.proofOfResidence.key}
                         type="file"
                         onChange={this.uploadDocument}
+                        accept=".jpg,.jpeg,.pdf"
+                        error={!!confirmIdentityDocuments.proofOfResidence.error}
                       />
                     </div>
                   }
-                  {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile !== '' &&
+                  <FieldError error={confirmIdentityDocuments.proofOfResidence.error} />
+                  {confirmIdentityDocuments.proofOfResidence.value !== '' &&
                     <div className="file-uploader attached">
-                      <span title={confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile}>
-                        {confirmIdentityDocuments.proofOfResidence.nameOfUploadedFile}
+                      <span title={confirmIdentityDocuments.proofOfResidence.value}>
+                        {confirmIdentityDocuments.proofOfResidence.value}
                       </span>
-                      <Icon name="remove" onClick={this.removeUploadedProofOfResidence} />
+                      <Icon name="ns-close" size="small" onClick={this.removeUploadedProofOfResidence} />
                     </div>
                   }
                 </Grid.Column>
@@ -116,7 +128,7 @@ export default class ConfirmIdentityDocuments extends Component {
             </Grid>
             <Divider section hidden />
             <div className="center-align">
-              <Button color="green" size="large" className="very relaxed">Verify my identity</Button>
+              <Button primary size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitConfirmIdentityDocumentsForm}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I`ll finish this letter</Button>

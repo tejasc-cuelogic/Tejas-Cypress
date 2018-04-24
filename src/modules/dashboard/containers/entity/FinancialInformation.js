@@ -21,6 +21,7 @@ export default class FinancialInformation extends Component {
                   fielddata={formFinInfo.fields[field]}
                   name={field}
                   changed={finInfoChange}
+                  prefix="$"
                 />
               ))
             }

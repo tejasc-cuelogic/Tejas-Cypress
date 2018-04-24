@@ -121,7 +121,7 @@ export default class investorPersonalDetails extends Component {
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">
-              <Button size="large" className="very relaxed" disabled={!verifyIdentity01.meta.isValid}>Verify my identity</Button>
+              <Button size="large" color="green" className="very relaxed" disabled={!verifyIdentity01.meta.isValid}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>

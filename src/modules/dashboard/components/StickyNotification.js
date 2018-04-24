@@ -13,7 +13,7 @@ const StickyNotification = props => (
             <Statistic.Value>{props.stepinfo.value}</Statistic.Value>
             <Statistic.Label>{props.stepinfo.label}</Statistic.Label>
           </Statistic>
-          <Button color="green" as={Link} floated="right" className="pull-right" onClick={() => props.setDashboardWizardSetup(props.stepinfo.linkPath)} to="/app/dashboard">{props.stepinfo.linkText}</Button>
+          <Button primary as={Link} floated="right" className="pull-right" onClick={() => props.setDashboardWizardSetup(props.stepinfo.linkPath)} to="/app/dashboard">{props.stepinfo.linkText}</Button>
         </Card.Content>
       </Card>
     </div>

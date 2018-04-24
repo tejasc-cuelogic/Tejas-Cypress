@@ -24,10 +24,10 @@
 --------------------*/
 
 /* Value */
-@valueFont:@boldFont;
+// @valueFont:@boldFont;
 @valueFontWeight:normal;
 @valueLineHeight:1.2em;
-@valueColor:@dark-bg-color;
+@valueColor:@secondary-text;
 @valueTextTransform: uppercase;
 
 /* Label */

@@ -35,30 +35,27 @@ export default class ConfirmPhoneNumber extends Component {
           <p>We are about to text a verification code to:</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          <div className="field">
-            <div className="ui huge input">
-              <MaskedInput
-                value={verifyIdentity01.fields.phoneNumber.value}
-                type="tel"
-                name="phoneNumber"
-                fielddata={verifyIdentity01.fields.phoneNumber}
-                mask="+9 999-999-9999"
-                readOnly
-                hidelabel
-              />
-            </div>
-          </div>
+          <MaskedInput
+            value={verifyIdentity01.fields.phoneNumber.value}
+            type="tel"
+            name="phoneNumber"
+            fielddata={verifyIdentity01.fields.phoneNumber}
+            mask="+9 999-999-9999"
+            readOnly
+            hidelabel
+            className="display-only"
+          />
           <p><Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>Change phone number</Link></p>
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <FormInput
               size="huge"
-              className="otp-field"
+              containerclassname="otp-field"
               maxLength={4}
               fielddata={verifyIdentity04.fields.code}
               onChange={verifyPhoneNumberEleChange}
             />
             <div className="center-align">
-              <Button color="green" size="large" className="very relaxed">Confirm</Button>
+              <Button primary size="large" className="very relaxed">Confirm</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.profileStore.startPhoneVerification()}>Resend the code to my phone</Button>

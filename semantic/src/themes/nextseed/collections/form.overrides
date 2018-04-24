@@ -1,6 +1,22 @@
 /*******************************
          Theme Overrides
 *******************************/
+.ui.form{
+    input:not([type]),
+    input[type=date],
+    input[type=datetime-local],
+    input[type=email],
+    input[type=file],
+    input[type=number],
+    input[type=password],
+    input[type=search],
+    input[type=tel],
+    input[type=text],
+    input[type=time],
+    input[type=url]{
+        border-bottom:@border-color 1px solid;
+    }
+}
 .card{
     &.editable{
         position:relative;
@@ -12,7 +28,7 @@
             top:20px;
             right:30px;
             .button{
-                padding:0.5rem 1.5rem 0.5rem;
+                padding:0.5rem 1rem 0.5rem;
                 text-transform:uppercase;
             }
             a{
@@ -146,7 +162,8 @@ display:block;
 
 .ui.form{
     p.field-error{
-        font-size:@13px;
+        font-size:@12px;
+        line-height:@14px;
         color:@highlight-primary;
         // margin:-@28px 0 @10px;
     }
@@ -161,11 +178,13 @@ display:block;
     position:relative;
     color:@theme-primary;
     line-height:@28px;
+    font-weight:700;
     text-align:center;
     .icon{
+        height:auto;
         margin-right:@6px;
     }
-    > span{
+    span{
         color:@fullBlack;
     }
     input[type=file]{
@@ -178,27 +197,51 @@ display:block;
         cursor:pointer;
     }
     &.attached{
-        padding-right:2rem;
-        font-family:@boldFont;
         color:@link-color;
         border:none;
-        background:@border-color;
+        background:@border-light;
         overflow:hidden;
         text-overflow:ellipsis;
         white-space:nowrap;
         > span{
             color:@link-color;
         }
-        .icon{
-            margin:-@7px 0 0 0;
-            line-height:@14px;
-            color:@tertiary-text;
-            position:absolute;
-            right:@7px;
-            top:50%;
-            cursor:pointer;
+        .remove{
+            margin:0 0 0 @7px;
+            color:@quaternary-text;
+            position:relative;
+            z-index:9;
+            &:hover{
+                color:@tertiary-text;
+            }
         }
     }
 }
-// .file-uploader-inline{
-// }
+.file-uploader-large{
+    .file-uploader{
+        width:250px;
+        height:140px;
+        margin:0 auto;
+        display:table;
+        > div{
+            display:table-cell;
+            vertical-align:middle;
+        }
+        .icon{
+            display:block;
+            margin:0 auto;
+        }
+        input[type=file]{
+            height:138px;
+        }
+        &.attached{
+            display:block;
+        }
+    }
+}
+
+.field.error{
+    .ui.labeled .ui.label{
+        border-color:@negativeTextColor;
+    }
+}

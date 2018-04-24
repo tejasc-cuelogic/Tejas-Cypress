@@ -30,7 +30,7 @@ const XmlSubmission = observer((props) => {
                       (xmlSubmission.jobStatus === 'COMPLETED')
                         ? (
                           <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
-                            <Icon name="download" />
+                            <Icon name="ns-download" />
                           </a>
                         ) : <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
                     }
@@ -44,8 +44,8 @@ const XmlSubmission = observer((props) => {
                       lockedstatus={xmlSubmission.lockedStatus}
                       onClick={props.confirmDelete}
                     >
-                      {xmlSubmission.lockedStatus === true && <Icon name="lock" />}
-                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="unlock alternate" />}
+                      {xmlSubmission.lockedStatus === true && <Icon name="ns-lock" />}
+                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="ns-unlock alternate" />}
                     </Button>
 
                     <Button
@@ -58,7 +58,7 @@ const XmlSubmission = observer((props) => {
                       subrefid={xmlSubmission.xmlSubmissionId}
                       onClick={props.confirmDelete}
                     >
-                      <Icon name="trash" />
+                      <Icon name="ns-trash" />
                     </Button>
                   </Table.Cell>
                 </Table.Row>

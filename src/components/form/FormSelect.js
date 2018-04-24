@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon } from 'semantic-ui-react';
+import { Form, Popup, Icon, Select } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
 const FormSelect = observer((props) => {
@@ -19,7 +19,7 @@ const FormSelect = observer((props) => {
           />
         }
       </label>
-      <Form.Select
+      <Select
         fluid
         {...props}
         label={false}

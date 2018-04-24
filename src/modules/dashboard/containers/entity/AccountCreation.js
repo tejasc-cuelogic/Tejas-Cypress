@@ -11,20 +11,20 @@ import Summary from './Summary';
 
 const steps =
   [
-    { name: 'Financial info', component: <FinancialInformation /> },
-    { name: 'General', component: <General /> },
-    { name: 'Financial info', component: <FinancilInfo /> },
-    { name: 'Personal info', component: <PersonalInformation /> },
-    { name: 'Formation doc', component: <FormationDocuments /> },
-    { name: 'Link bank', component: <LinkBankAccount /> },
-    { name: 'Summary', component: <Summary /> },
+    { name: 'Financial info', component: <FinancialInformation />, isValid: '' },
+    { name: 'General', component: <General />, isValid: '' },
+    { name: 'Financial info', component: <FinancilInfo />, isValid: '' },
+    { name: 'Personal info', component: <PersonalInformation />, isValid: '' },
+    { name: 'Formation doc', component: <FormationDocuments />, isValid: '' },
+    { name: 'Link bank', component: <LinkBankAccount />, isValid: '' },
+    { name: 'Summary', component: <Summary />, isValid: '' },
   ];
 
 export default class AccountCreation extends React.Component {
   render() {
     return (
       <div className="step-progress">
-        <MuliStep steps={steps} step="Entity Account Creation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
+        <MuliStep steps={steps} formTitle="Entity Account Creation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
       </div>
     );
   }

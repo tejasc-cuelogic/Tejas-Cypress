@@ -3,7 +3,7 @@ import { Header, Form, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FormInput from '../../../../components/form/FormInput';
-import { FileUploaderVertical } from '../../../../components/form/FormElements';
+import { FileUploader } from '../../../../components/form/FormElements';
 
 @inject('userStore', 'entityAccountStore')
 @observer
@@ -26,11 +26,13 @@ export default class PersonalInformation extends Component {
             <Form.Input
               label="Authorized Signatory’s First Legal Name"
               value={currentUser.givenName}
+              className="readonly"
               readOnly
             />
             <Form.Input
               label="Authorized Signatory’s Last Legal Name"
               value={currentUser.familyName}
+              className="readonly"
               readOnly
             />
             <FormInput
@@ -39,8 +41,8 @@ export default class PersonalInformation extends Component {
               changed={personalInfoChange}
             />
           </div>
-          <Grid divided="vertically">
-            <FileUploaderVertical
+          <Grid>
+            <FileUploader
               name="photoId"
               fielddata={formPersonalInfo.fields.photoId}
               uploadDocument={personalInfoFileUpload}

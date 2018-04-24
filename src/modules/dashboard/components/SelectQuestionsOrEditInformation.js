@@ -13,7 +13,7 @@ const selectQuestionsOrEditInformation = props => (
     </Modal.Header>
     <Modal.Content className="signup-content">
       <div className="center-align">
-        <Button color="green" size="large" onClick={() => props.setDashboardWizardStep('ConfirmIdentityForm')}>Answer challenge questions</Button>
+        <Button primary size="large" className="relaxed" onClick={() => props.setDashboardWizardStep('ConfirmIdentityForm')}>Answer challenge questions</Button>
       </div>
       <div className="center-align">
         <Button className="cancel-link" onClick={() => props.setDashboardWizardStep('InvestorPersonalDetails')}>Correct Information</Button>

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Grid, Card, Header, Item, Responsive, Divider } from 'semantic-ui-react';
-import Thumb from '../../../assets/images/ns-logo-small.svg';
+import { Grid, Card, Header, Icon, Responsive, Divider } from 'semantic-ui-react';
 
 import PageHeaderSection from '../../../components/common/PageHeaderSection';
 import StickyNotification from '../components/StickyNotification';
@@ -27,6 +26,7 @@ class Dashboard extends Component {
       label: 'Complete all required information about yourself',
       linkText: 'Verify me',
       linkPath: 'InvestorPersonalDetails',
+      // linkPath: 'ConfirmPhoneNumber',
     };
     return (
       <div>
@@ -59,14 +59,14 @@ class Dashboard extends Component {
                     <Statistic.Value>Verify your identity</Statistic.Value>
                     <Statistic.Label>Complete all required information about you</Statistic.Label>
                   </Statistic>
-                  <Button color="green" as={Link} floated="right"
-                  className="rounded pull-right" to="">Verify me</Button>
+                  <Button primary as={Link} floated="right"
+                  className="pull-right" to="">Verify me</Button>
                 </Card.Content>
               </Card>
             </div> */}
           </Responsive>
         </div>
-        <Divider hidden />
+        <Divider section hidden />
         <div className="content-spacer">
           <Header as="h3">Welcome to NextSeed!</Header>
           <Grid stackable>
@@ -74,8 +74,7 @@ class Dashboard extends Component {
               <Grid.Column computer={8} largeScreen={8} widescreen={5}>
                 <Card fluid raised className="welcome-card">
                   <Card.Content>
-                    <Item.Image size="mini" floated="left" src={Thumb} />
-                    {/* <Icon size="huge" name="thin circle" className="pull-left" /> */}
+                    <Icon size="huge" name="ns-nextseed-icon" className="pull-left" />
                     <Card.Header>
                       Would you like to start the process of new account creation?
                     </Card.Header>

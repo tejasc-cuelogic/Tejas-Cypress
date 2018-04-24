@@ -15,15 +15,6 @@ export default class Summary extends Component {
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
         <div className="field-wrap">
           <div className="table-wrapper">
-            {/* Entity net assest - {entityAccount.entityNetAssets.value}
-            Other CF Investments - {entityAccount.cfInvestments.value}
-            Entitys name - {entityAccount.nameOfEntity.value}
-            Tax ID - {entityAccount.taxId.value}
-            Entity Address - {entityAccount.street.value}, {entityAccount.city.value},
-            {entityAccount.state.value}, {entityAccount.zipCode.value}
-            Is Entity a trust? - {entityAccount.isEntityTrust.value.type}
-            Title with the entity - {entityAccount.entityTitle.value}
-            Bank account - test */}
             <Table compact basic fixed>
               <Table.Body>
                 <Table.Row>
@@ -80,7 +71,7 @@ export default class Summary extends Component {
           </div>
         </div>
         <div className="center-align">
-          <Button color="green" size="large">Create the account</Button>
+          <Button primary size="large">Create the account</Button>
         </div>
       </div>
     );

@@ -76,7 +76,7 @@
 
 .ui.modal > .header {
   display: block;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: #FFFFFF;
   margin: 0em;
   padding: 1.25rem 3rem;
@@ -223,7 +223,7 @@
   .ui.modal > .close {
     top: 1.196428rem;
     right: 1rem;
-    color: #303030;
+    color: #000000;
   }
 }
 
@@ -314,7 +314,7 @@
   right: 1.5rem;
 }
 .ui.inverted.dimmer > .basic.modal {
-  color: #303030;
+  color: #000000;
 }
 .ui.inverted.dimmer > .ui.basic.modal > .header {
   color: rgba(0, 0, 0, 0.85);
@@ -420,7 +420,7 @@
 .ui.fullscreen.modal > .close {
   top: 1.196428rem;
   right: 1rem;
-  color: #303030;
+  color: #000000;
 }
 
 /*--------------
@@ -602,10 +602,10 @@
   top: 0.5rem;
   right: 0.5rem;
   opacity: 0.5;
-  color: #999999;
+  color: #989898;
 }
 .ui.modal > .header:not(.ui).signup-header {
-  padding-top: 3rem;
+  padding-top: 2rem;
   border: none;
 }
 .ui.modal > .header:not(.ui).signup-header .back-link {
@@ -624,19 +624,23 @@
   margin-right: auto;
 }
 .ui.modal > .header:not(.ui).signup-header p {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 1rem;
-  color: #424242;
+  color: #383838;
 }
 .ui.modal h4.ui.header {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: 400;
 }
 .ui.modal .content {
   padding-top: 1.42857143rem;
 }
 .ui.modal .content.login-modal {
   margin: 0 auto;
+}
+.ui.modal .content.signup-content {
+  padding-top: 0;
+  padding-bottom: 2rem;
 }
 .ui.modal .content.signup-content .user-type {
   height: 100%;
@@ -649,7 +653,6 @@
   margin: 0.5rem 0;
 }
 .ui.modal .content.signup-content .user-type p {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   color: #000000;
 }
@@ -676,23 +679,26 @@
   padding: 0;
   display: inline-block;
   background: transparent;
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714rem;
   letter-spacing: 1px;
-  color: #999999;
+  color: #989898;
   text-transform: none;
 }
 .ui.modal .content a.theme-link,
 .ui.modal .content .button.theme-link {
   color: #98CE23;
 }
-.ui.modal .content .ui.huge.input input[type=tel],
-.ui.modal .content .ui.huge.input input[type=email] {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  border: none;
-  background: #f2f2f2;
-  text-align: center;
+.ui.modal .content .display-only input[type=tel],
+.ui.modal .content .display-only input[type=email],
+.ui.modal .content input[type=tel].display-only,
+.ui.modal .content input[type=email].display-only {
+  padding: 1rem 1.42857143rem;
   margin-bottom: 0.71428571rem;
+  font-size: 1.42857143rem;
+  text-align: center;
+  border: none;
+  border-radius: 0.28571429rem;
+  background: #E0E0E0;
 }
 .ui.modal .content .ui.button.multistep__btn {
   background: #FFFFFF;
@@ -705,8 +711,8 @@
   top: 50%;
 }
 .ui.modal .content .ui.button.multistep__btn.disabled {
-  background: #e0e0e0;
-  color: #bdbdbd;
+  background: #E0E0E0;
+  color: #BDBDBD;
   opacity: 1 !important;
 }
 .ui.modal .content .ui.button.multistep__btn > .icon {
@@ -734,7 +740,7 @@
   border: none;
 }
 .ui.modal .ui.divider {
-  color: #999999;
+  color: #989898;
 }
 .ui.modal .ui.divider:before,
 .ui.modal .ui.divider:after {
@@ -742,66 +748,6 @@
 }
 .ui.modal .ui.form .fields .field {
   margin-bottom: 1rem;
-}
-.ui.modal .ui.form .field {
-  margin: 0 0 2rem;
-}
-.ui.modal .ui.form .field .ui.input input:not([type]),
-.ui.modal .ui.form .field input:not([type]),
-.ui.modal .ui.form .field .ui.input input[type=date],
-.ui.modal .ui.form .field input[type=date],
-.ui.modal .ui.form .field .ui.input input[type=datetime-local],
-.ui.modal .ui.form .field input[type=datetime-local],
-.ui.modal .ui.form .field .ui.input input[type=email],
-.ui.modal .ui.form .field input[type=email],
-.ui.modal .ui.form .field .ui.input input[type=file],
-.ui.modal .ui.form .field input[type=file],
-.ui.modal .ui.form .field .ui.input input[type=number],
-.ui.modal .ui.form .field input[type=number],
-.ui.modal .ui.form .field .ui.input input[type=password],
-.ui.modal .ui.form .field input[type=password],
-.ui.modal .ui.form .field .ui.input input[type=search],
-.ui.modal .ui.form .field input[type=search],
-.ui.modal .ui.form .field .ui.input input[type=tel],
-.ui.modal .ui.form .field input[type=tel],
-.ui.modal .ui.form .field .ui.input input[type=text],
-.ui.modal .ui.form .field input[type=text],
-.ui.modal .ui.form .field .ui.input input[type=time],
-.ui.modal .ui.form .field input[type=time],
-.ui.modal .ui.form .field .ui.input input[type=url],
-.ui.modal .ui.form .field input[type=url] {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  padding-left: 0;
-  padding-right: 0;
-  border-radius: 0;
-  background-color: transparent;
-  border: none;
-  border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
-}
-.ui.modal .ui.form .field .ui.selection.dropdown,
-.ui.modal .ui.form .field .ui.labeled.input .ui.label {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  padding-left: 0.35714286rem;
-  padding-right: 0;
-  border-radius: 0;
-  border: none;
-  border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
-}
-.ui.modal .ui.form .field .ui.labeled.input .ui.label {
-  font-weight: 400;
-  padding-left: 0;
-  padding-right: 0.85714286rem;
-  background-color: transparent;
-}
-.ui.modal .ui.form .field .ui.selection.dropdown .icon {
-  padding-right: 0.35714286rem;
-}
-.ui.modal .ui.form .field .ui.selection.dropdown.active .menu {
-  border: none;
-}
-.ui.modal .ui.form .field .ui.selection.dropdown.active .menu > .item {
-  padding-left: 0.35714286rem !important;
-  padding-right: 0.35714286rem !important;
 }
 .ui.modal .ui.form .field.otp-field {
   margin: 3rem 0;
@@ -813,21 +759,25 @@
   max-width: 290px;
   margin: 0 auto;
   padding-left: 13px;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   letter-spacing: 38px;
   border: none;
-  background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #e0e0e0), color-stop(0%, rgba(0, 0, 0, 0)));
-  background-image: -webkit-linear-gradient(right, #e0e0e0 75%, rgba(0, 0, 0, 0) 0%);
-  background-image: linear-gradient(to left, #e0e0e0 75%, rgba(0, 0, 0, 0) 0%);
+  background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #BDBDBD), color-stop(0%, rgba(0, 0, 0, 0)));
+  background-image: -webkit-linear-gradient(right, #BDBDBD 75%, rgba(0, 0, 0, 0) 0%);
+  background-image: linear-gradient(to left, #BDBDBD 75%, rgba(0, 0, 0, 0) 0%);
   background-position: bottom;
   background-size: 51px 1px;
   background-repeat: repeat-x;
   background-position-x: 35px;
 }
-.ui.modal .ui.form label i.icon.help {
+.ui.modal .ui.form .field.otp-field .ui.input > input:focus {
+  background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #98CE23), color-stop(0%, rgba(0, 0, 0, 0)));
+  background-image: -webkit-linear-gradient(right, #98CE23 75%, rgba(0, 0, 0, 0) 0%);
+  background-image: linear-gradient(to left, #98CE23 75%, rgba(0, 0, 0, 0) 0%);
+}
+.ui.modal .ui.form label i.icon {
   margin-left: 0.5rem;
   font-size: 1rem;
-  color: #999999;
+  color: #989898;
 }
 .ui.modal .ui.form textarea {
   padding-left: 0;
@@ -837,7 +787,7 @@
   border-bottom: rgba(34, 36, 38, 0.15) 1px solid;
 }
 .ui.modal.basic.multistep-modal {
-  color: #303030;
+  color: #242424;
   will-change: auto;
 }
 .ui.modal.basic.multistep-modal > .close {
@@ -865,9 +815,31 @@
   padding: 1.78571429rem 4.28571429rem;
   background: #fafafa;
 }
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap h5 {
+  margin-bottom: 0.71428571rem;
+}
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap > .fields:last-child,
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap .field:last-child {
   margin-bottom: 0;
+}
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .field.readonly label,
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .field.readonly input {
+  color: #989898;
+  border-color: transparent;
+}
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .table-wrapper table {
+  color: #989898;
+}
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .table-wrapper table td > b {
+  color: #000000;
+}
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .table-wrapper table b {
+  font-weight: 700;
+}
+.ui.modal.basic.multistep-modal .multistep.content .option-details {
+  padding: 1rem 0;
+  line-height: 1.57142857rem;
+  text-align: center;
 }
 .ui.modal.basic.multistep-modal .multistep.content .summary-wrap {
   text-align: center;
@@ -884,7 +856,7 @@
 }
 .summary-wrap .ui.items > .item .ui.image {
   padding: 1.14285714rem;
-  border-right: #f2f2f2 1px solid;
+  border-right: #E0E0E0 1px solid;
 }
 .summary-wrap .ui.items > .item .content {
   padding: 1.14285714rem 1.5rem;

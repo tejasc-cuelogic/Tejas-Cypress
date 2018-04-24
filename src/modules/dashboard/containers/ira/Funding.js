@@ -17,7 +17,7 @@ export default class Funding extends Component {
       <div>
         <Header as="h1" textAlign="center">How would you like to fund your IRA?</Header>
         <Header as="h4" textAlign="center">Choose funding option</Header>
-        <Form error>
+        <Form error className="account-type-tab">
           <FormRadioGroup
             fielddata={formFunding.fields.fundingOption}
             name="fundingOption"

@@ -97,7 +97,7 @@ const createNew = () => (
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <Button color="green" primary>Create User</Button>
+            <Button primary>Create User</Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>

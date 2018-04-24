@@ -49,18 +49,19 @@ export default class ConfirmEmailAddress extends Component {
             value={values.email.value}
             fielddata={values.email}
             readOnly
+            className="display-only"
           />
           <p><Link to="/app/dashboard" onClick={() => this.props.setAuthWizardStep('InvestorSignup')}>Change email address</Link></p>
           <Form error onSubmit={this.handleSubmitForm}>
             <FormInput
               size="huge"
-              className="otp-field"
+              containerclassname="otp-field"
               fielddata={values.code}
               onChange={this.handleInputChange}
             />
             <FieldError error={values.code.error} />
             <div className="center-align">
-              <Button color="green" size="large" className="very relaxed" disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
+              <Button primary size="large" className="very relaxed" disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setAuthWizardStep()}>Resend the code to my email</Button>

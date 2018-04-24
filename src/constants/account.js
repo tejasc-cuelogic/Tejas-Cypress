@@ -196,7 +196,6 @@ export const IRA_FIN_INFO = {
     rule: 'required|numeric',
     label: 'Your networth',
     placeHolder: 'Your networth',
-    tooltip: 'Tell us your net worth in $',
   },
   annualIncome: {
     value: '',
@@ -204,7 +203,6 @@ export const IRA_FIN_INFO = {
     rule: 'required|numeric',
     label: 'Your annual income',
     placeHolder: 'Your annual income',
-    tooltip: 'Tell us your annual income in $',
   },
 };
 
@@ -219,14 +217,12 @@ export const ENTITY_FIN_INFO = {
     label: 'Entity Net Assets',
     error: undefined,
     rule: 'required|numeric',
-    tooltip: 'What is your net entity assets?',
   },
   cfInvestments: {
     value: '',
     label: 'Other religion CF investments made in prior 12 months',
     error: undefined,
     rule: 'required|numeric',
-    tooltip: 'Other religion CF investments made in prior 12 months',
   },
 };
 
