@@ -12,7 +12,7 @@ const FormInput = observer((props) => {
     placeHolder,
   } = props.fielddata;
   return (
-    <Form.Field error={!!error}>
+    <Form.Field className={props.containerclassname || false} error={!!error}>
       <label>
         {label}
         {tooltip &&

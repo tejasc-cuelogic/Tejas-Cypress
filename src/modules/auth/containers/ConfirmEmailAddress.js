@@ -55,7 +55,7 @@ export default class ConfirmEmailAddress extends Component {
           <Form error onSubmit={this.handleSubmitForm}>
             <FormInput
               size="huge"
-              className="otp-field"
+              containerclassname="otp-field"
               fielddata={values.code}
               onChange={this.handleInputChange}
             />

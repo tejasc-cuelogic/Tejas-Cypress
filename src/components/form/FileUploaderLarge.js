@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Icon } from 'semantic-ui-react';
+import { Form, Icon, Button } from 'semantic-ui-react';
 
-const FileUploaderInline = observer((props) => {
+const FileUploaderLarge = observer((props) => {
   const {
     value,
   } = props.fielddata;
@@ -10,7 +10,7 @@ const FileUploaderInline = observer((props) => {
     <Form.Field>
       {value === '' &&
         <div className="file-uploader">
-          <Icon name="upload" /> Choose a file <span>or drag it here</span>
+          <div><Icon name="ns-upload" /> Choose a file <span>or drag it here</span></div>
           <input
             name={props.name}
             type="file"
@@ -21,11 +21,11 @@ const FileUploaderInline = observer((props) => {
       {value !== '' &&
         <div className="file-uploader attached">
           <span title={value}>{value}</span>
-          <Icon name="remove" onClick={() => props.removeUploadedDocument(props.name)} />
+          <Button size="tiny" compact className="remove pull-right" onClick={() => props.removeUploadedDocument(props.name)}>Remove</Button>
         </div>
       }
     </Form.Field>
   );
 });
 
-export default FileUploaderInline;
+export default FileUploaderLarge;

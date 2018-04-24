@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Form, Grid, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FileUploaderVertical } from '../../../../components/form/FormElements';
+import { FileUploader } from '../../../../components/form/FormElements';
 
 @inject('entityAccountStore')
 @observer
@@ -18,7 +18,7 @@ export default class FormationDocumemts extends Component {
           <Grid divided="vertically">
             {
               ['entityFormationDocument', 'entityOperatingDocument', 'einVerification'].map(field => (
-                <FileUploaderVertical
+                <FileUploader
                   name={field}
                   fielddata={formFormationDocuments.fields[field]}
                   uploadDocument={formationDocFileUpload}

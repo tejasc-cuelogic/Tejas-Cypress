@@ -181,9 +181,10 @@ display:block;
     font-weight:700;
     text-align:center;
     .icon{
+        height:auto;
         margin-right:@6px;
     }
-    > span{
+    span{
         color:@fullBlack;
     }
     input[type=file]{
@@ -196,26 +197,45 @@ display:block;
         cursor:pointer;
     }
     &.attached{
-        padding-right:2rem;
         color:@link-color;
         border:none;
-        background:@border-color;
+        background:@border-light;
         overflow:hidden;
         text-overflow:ellipsis;
         white-space:nowrap;
         > span{
             color:@link-color;
         }
-        .icon{
-            margin:-@7px 0 0 0;
-            line-height:@14px;
-            color:@tertiary-text;
-            position:absolute;
-            right:@7px;
-            top:50%;
-            cursor:pointer;
+        .remove{
+            margin:0 0 0 @7px;
+            color:@quaternary-text;
+            position:relative;
+            z-index:9;
+            &:hover{
+                color:@tertiary-text;
+            }
         }
     }
 }
-// .file-uploader-inline{
-// }
+.file-uploader-large{
+    .file-uploader{
+        width:250px;
+        height:140px;
+        margin:0 auto;
+        display:table;
+        > div{
+            display:table-cell;
+            vertical-align:middle;
+        }
+        .icon{
+            display:block;
+            margin:0 auto;
+        }
+        input[type=file]{
+            height:138px;
+        }
+        &.attached{
+            display:block;
+        }
+    }
+}

@@ -1,9 +1,9 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Grid, Icon } from 'semantic-ui-react';
+import { Grid, Icon, Button } from 'semantic-ui-react';
 
-const FileUploaderVertical = observer((props) => {
+const FileUploader = observer((props) => {
   const {
     label,
     sublabel,
@@ -20,7 +20,7 @@ const FileUploaderVertical = observer((props) => {
       <Grid.Column width={9}>
         {value === '' &&
           <div className="file-uploader">
-            <Icon name="upload" /> Choose a file <span>or drag it here</span>
+            <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
             <input
               name={props.name}
               type="file"
@@ -30,8 +30,8 @@ const FileUploaderVertical = observer((props) => {
         }
         {value !== '' &&
         <div className="file-uploader attached">
-            {value}
-          <Icon name="remove" onClick={() => props.removeUploadedDocument(props.name)} />
+          <Button size="tiny" compact className="remove pull-right" onClick={() => props.removeUploadedDocument(props.name)}>Remove</Button>
+          <span title={value}>{value}</span>
         </div>
         }
       </Grid.Column>
@@ -39,4 +39,4 @@ const FileUploaderVertical = observer((props) => {
   );
 });
 
-export default FileUploaderVertical;
+export default FileUploader;

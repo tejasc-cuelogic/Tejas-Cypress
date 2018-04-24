@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FileUploaderInline } from '../../../../components/form/FormElements';
+import { FileUploaderLarge } from '../../../../components/form/FormElements';
 
 @inject('accountStore')
 @observer
@@ -22,7 +22,7 @@ export default class Identity extends Component {
         <Header as="h1" textAlign="center">Confirm your identity and upload your drivers license</Header>
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</Header>
         <Divider section hidden />
-        <Form className="file-uploader-inline">
+        <Form className="file-uploader-large">
           {/* <Grid>
             <Grid.Row>
               <Grid.Column width={7}>
@@ -54,7 +54,7 @@ export default class Identity extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid> */}
-          <FileUploaderInline
+          <FileUploaderLarge
             name={driversLicence.key}
             fielddata={driversLicence}
             uploadDocument={this.uploadDocument}

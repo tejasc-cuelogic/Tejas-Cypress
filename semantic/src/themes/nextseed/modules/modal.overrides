@@ -223,12 +223,12 @@
             //         }
             //     }
             // }
-            .otp-field{
+            &.otp-field{
                 margin:3rem 0;
                 label{
                     font-size:@14px;
                 }
-                .ui.input > input, > input{
+                .ui.input > input{
                     max-width:290px;
                     margin:0 auto;
                     padding-left:13px;

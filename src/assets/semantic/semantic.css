@@ -20189,10 +20189,11 @@ ol.ui.horizontal.list li:before,
 }
 
 .file-uploader .icon {
+  height: auto;
   margin-right: 0.42857143rem;
 }
 
-.file-uploader > span {
+.file-uploader span {
   color: #000000;
 }
 
@@ -20207,10 +20208,9 @@ ol.ui.horizontal.list li:before,
 }
 
 .file-uploader.attached {
-  padding-right: 2rem;
   color: #772df9;
   border: none;
-  background: #BDBDBD;
+  background: #E0E0E0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -20220,14 +20220,40 @@ ol.ui.horizontal.list li:before,
   color: #772df9;
 }
 
-.file-uploader.attached .icon {
-  margin: -0.5rem 0 0 0;
-  line-height: 1rem;
+.file-uploader.attached .remove {
+  margin: 0 0 0 0.5rem;
+  color: #989898;
+  position: relative;
+  z-index: 9;
+}
+
+.file-uploader.attached .remove:hover {
   color: #4F4F4F;
-  position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  cursor: pointer;
+}
+
+.file-uploader-large .file-uploader {
+  width: 250px;
+  height: 140px;
+  margin: 0 auto;
+  display: table;
+}
+
+.file-uploader-large .file-uploader > div {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.file-uploader-large .file-uploader .icon {
+  display: block;
+  margin: 0 auto;
+}
+
+.file-uploader-large .file-uploader input[type=file] {
+  height: 138px;
+}
+
+.file-uploader-large .file-uploader.attached {
+  display: block;
 }
 
 /*******************************
@@ -34175,16 +34201,15 @@ select.ui.dropdown {
   margin-bottom: 1rem;
 }
 
-.ui.modal .ui.form .field .otp-field {
+.ui.modal .ui.form .field.otp-field {
   margin: 3rem 0;
 }
 
-.ui.modal .ui.form .field .otp-field label {
+.ui.modal .ui.form .field.otp-field label {
   font-size: 1rem;
 }
 
-.ui.modal .ui.form .field .otp-field .ui.input > input,
-.ui.modal .ui.form .field .otp-field > input {
+.ui.modal .ui.form .field.otp-field .ui.input > input {
   max-width: 290px;
   margin: 0 auto;
   padding-left: 13px;
@@ -34199,8 +34224,7 @@ select.ui.dropdown {
   background-position-x: 35px;
 }
 
-.ui.modal .ui.form .field .otp-field .ui.input > input:focus,
-.ui.modal .ui.form .field .otp-field > input:focus {
+.ui.modal .ui.form .field.otp-field .ui.input > input:focus {
   background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #98CE23), color-stop(0%, rgba(0, 0, 0, 0)));
   background-image: -webkit-linear-gradient(right, #98CE23 75%, rgba(0, 0, 0, 0) 0%);
   background-image: linear-gradient(to left, #98CE23 75%, rgba(0, 0, 0, 0) 0%);

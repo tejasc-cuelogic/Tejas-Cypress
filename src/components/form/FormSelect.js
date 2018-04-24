@@ -18,7 +18,6 @@ const FormSelect = props => (
     </label>
     <Select
       fluid
-      search
       {...props}
       label={false}
       error={!!props.error}

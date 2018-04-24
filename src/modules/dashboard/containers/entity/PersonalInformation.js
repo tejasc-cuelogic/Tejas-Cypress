@@ -3,7 +3,7 @@ import { Header, Form, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FormInput from '../../../../components/form/FormInput';
-import { FileUploaderVertical } from '../../../../components/form/FormElements';
+import { FileUploader } from '../../../../components/form/FormElements';
 
 @inject('userStore', 'entityAccountStore')
 @observer
@@ -42,7 +42,7 @@ export default class PersonalInformation extends Component {
             />
           </div>
           <Grid>
-            <FileUploaderVertical
+            <FileUploader
               name="photoId"
               fielddata={formPersonalInfo.fields.photoId}
               uploadDocument={personalInfoFileUpload}

@@ -49,7 +49,7 @@ export default class ConfirmPhoneNumber extends Component {
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <FormInput
               size="huge"
-              className="otp-field"
+              containerclassname="otp-field"
               maxLength={4}
               fielddata={verifyIdentity04.fields.code}
               onChange={verifyPhoneNumberEleChange}
