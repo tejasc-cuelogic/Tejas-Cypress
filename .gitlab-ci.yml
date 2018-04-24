@@ -6,11 +6,83 @@ variables:
 stages:
   - build
   - deploy
+
+#---------------------------------Review----------------------------------------  
+#Building code
+build:review:
+  cache:
+    paths:
+    - node_modules/
+  only:
+    refs:
+      - branches
+  except:
+    - master
+    - develop
+    - qa
+  tags:
+    - ns-client
+  stage: build
+  script:
+    - bash scripts/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} us-east-1
+    - bash scripts/setEnvironmentVariables.sh us-east-1 dev
+    - npm install
+    - npm run build
+
+  artifacts:
+    paths:
+    - build/
+    - scripts/
+    expire_in: 1 day
+
+deploy:review:
+  only:
+    refs:
+      - branches
+  except:
+    - master
+    - develop
+    - qa
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_SLUG.s3-website-us-east-1.amazonaws.com
+    on_stop: delete:review
+  tags:
+    - ns-client
+  stage: deploy
+  script: 
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://${CI_COMMIT_REF_SLUG}/ --recursive
+  dependencies:
+    - build:review
+
+delete:review:
+  only:
+    refs:
+      - branches
+  except:
+    - master
+    - develop
+    - qa
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - ns-client
+  script:
+    - chmod +x scripts/emptyBucket.py 
+    - python scripts/emptyBucket.py -b ${CI_COMMIT_REF_SLUG}
+    - aws s3api delete-bucket --bucket ${CI_COMMIT_REF_SLUG} --region us-east-1
+  when: manual
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    action: stop
   
+
 #---------------------------------Dev-------------------------------------------
 
 #Building code
-building-code-dev:
+build:dev:
   cache:
     paths:
     - node_modules/
@@ -30,12 +102,13 @@ building-code-dev:
     expire_in: 1 day
 
 #Deploying code to s3 bucket
-deploying-code-dev:
+deploy:dev:
   only:
     refs:
       - develop
   environment:
     name: dev
+    url:  http://ns-client-dev.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
@@ -43,12 +116,12 @@ deploying-code-dev:
     - echo "deploy to s3 bucket"
     - aws s3 cp build/ s3://ns-client-dev/ --recursive
   dependencies:
-    - building-code-dev
+    - build:dev
 
 #---------------------------------Qa--------------------------------------------
 
 #Building code
-building-code-qa:
+build:qa:
   cache:
     paths:
     - node_modules/
@@ -68,12 +141,13 @@ building-code-qa:
     expire_in: 1 day
 
 #Deploying code to s3 bucket
-deploying-code-qa:
+deploy:qa:
   only:
     refs:
       - qa
   environment:
     name: qa
+    url:  http://ns-client-qa.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
@@ -81,12 +155,12 @@ deploying-code-qa:
     - echo "deploy to s3 bucket"
     - aws s3 cp build/ s3://ns-client-qa/ --recursive
   dependencies:
-    - building-code-qa
+    - build:qa
 
 #---------------------------------Production------------------------------------
 
 #Building code
-building-code-prod:
+build:prod:
   cache:
     paths:
     - node_modules/
@@ -106,12 +180,13 @@ building-code-prod:
     expire_in: 1 day
 
 #Deploying code to s3 bucket
-deploying-code-prod:
+deploy:prod:
   only:
     refs:
       - master
   environment:
-    name: production
+    name: prod
+    url:  http://ns-client-prod.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
@@ -119,4 +194,4 @@ deploying-code-prod:
     - echo "deploy to s3 bucket"
     - aws s3 cp build/ s3://ns-client-prod/ --recursive
   dependencies:
-    - building-code-prod
+    - build:prod
