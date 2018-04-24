@@ -2,41 +2,76 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions
 export const allUsersQuery = gql`
-  query allUsers($first: Int!, $skip: Int!, $orderBy: UserOrderBy, $filters: UserFilter) {
-    allUsers(first: $first, skip: $skip, orderBy: $orderBy, filter: $filters) {
-      id
-      firstName
-      lastName
-      email
-      city
-      state
-      zipCode
-      phoneNumber
-      accountType
-      accredited
-      lastLogin
-      createdAt
-      status
-    }
-    _allUsersMeta(filter: $filters) {
-      count
+  query getUsers($search: String, $orderBy: userOrderBy, $filters: [UserFilter]) {
+    users(search: $search, orderBy: $orderBy, filters: $filters) {
+      resultCount
+      totalCount
+      lek {
+        id
+      }
+      users {
+        id
+        firstName
+        lastName
+        email
+        accountType
+        accreditation
+        createdDate
+        lastLoginDate
+        contactDetails {
+          phone {
+            number
+          }
+        }
+        legalDetails {
+          legalAddress {
+            city
+            state
+            zipCode
+          }
+        }
+        accountStatus
+      }
+      
     }
   }
 `;
 
 export const userDetailsQuery = gql`
-  query userDetails($id: ID) {
-    User(id: $id) {
-      id
-      firstName
-      lastName
-      email
-      accountType
-      accredited
-      lastLogin
-      createdAt
+query getUserDetails($id: ID!) {
+  user(id: $id) {
+    id
+    firstName
+    lastName
+    email
+    accountType
+    accountStatus
+    accreditation
+    createdDate
+    lastLoginDate
+    contactDetails {
+      phone {
+        number
+      }
     }
+    legalDetails {
+      legalName {
+        firstLegalName
+        lastLegalName
+      }
+      dateOfBirth
+      ssn
+      legalAddress {
+        street1
+        street2
+        city
+        state
+        zipCode
+      }
+    }
+    accountStatus 
   }
+}
 `;
 
 export const createUserMutation = gql`

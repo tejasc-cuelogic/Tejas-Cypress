@@ -1,65 +1,49 @@
 /* eslint-disable class-methods-use-this */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
+import moment from 'moment';
+import map from 'lodash/map';
 import isArray from 'lodash/isArray';
-import { GqlClient as client } from '../../services/GqlClient2';
+import { GqlClient as client } from '../../services/graphql';
 import { allUsersQuery } from '../queries/users';
 
 export class UserListingStore {
   @observable usersData = [];
   @observable filters = true;
   @observable requestState = {
-    first: 10,
-    skip: 0,
+    lek: null,
     filters: false,
     sort: {
-      by: 'lastLogin',
-      direction: 'DESC',
+      by: 'lastLoginDate',
+      direction: 'desc',
     },
     search: {
 
     },
   };
 
-  constructor() {
-    this.initRequest();
-  }
-
   initRequest = () => {
     const { keyword } = this.requestState.search;
     const filters = toJS({ ...this.requestState.search });
-    Object.keys(filters).forEach((key) => {
-      const ele = toJS(filters[key]);
-      if (isArray(ele)) {
-        if (ele.length > 0) {
-          filters[`${key}_in`] = ele;
-        } else {
-          delete this.requestState.search[key];
-        }
-        delete filters[key];
-      } else {
-        filters[key] = (key.indexOf('_lte') !== -1) ? `${filters[key]}T23:59:59` : filters[key];
+    delete filters.keyword;
+    const params = [];
+    map(filters, (val, key) => {
+      if (key !== 'startDate' && key !== 'endDate') {
+        params.push({ field: key, value: isArray(val) ? val.join(',') : val });
       }
     });
-
-    filters.keyword = undefined;
-
-    if (keyword) {
-      filters.OR = [
-        { firstName: keyword },
-        { lastName: keyword },
-        { email_contains: keyword },
-      ];
+    if (filters.startDate && filters.endDate) {
+      const dateObj = `${moment(filters.startDate).format('YYYY-MM-DD')},${moment(filters.endDate).format('YYYY-MM-DD')}`;
+      params.push({ field: 'createdDate', value: dateObj });
     }
 
     this.usersData = graphql({
       client,
       query: allUsersQuery,
       variables: {
-        first: this.requestState.first,
-        skip: this.requestState.skip,
-        orderBy: `${this.requestState.sort.by}_${this.requestState.sort.direction}`,
-        filters,
+        search: keyword,
+        orderBy: { field: this.requestState.sort.by, sort: this.requestState.sort.direction },
+        filters: params || [],
       },
     });
   }
@@ -69,12 +53,24 @@ export class UserListingStore {
   }
 
   @computed get users() {
-    return (this.allUsers.data && toJS(this.allUsers.data.allUsers)) || [];
+    return (this.allUsers.data
+      && this.allUsers.data.users
+      && toJS(this.allUsers.data.users.users)
+    ) || [];
   }
 
   @computed get allUsersMeta() {
-    return (this.allUsers.data && this.allUsers.data._allUsersMeta) ?
-      this.allUsers.data._allUsersMeta.count : 0;
+    return (this.allUsers.data
+      && this.allUsers.data.users
+      && toJS(this.allUsers.data.users.totalCount)
+    ) || [];
+  }
+
+  @computed get canLoadMore() {
+    return (this.allUsers.data
+      && this.allUsers.data.users
+      && toJS(this.allUsers.data.users.lek)
+    ) ? this.allUsers.data.users.lek.id : null;
   }
 
   @computed get error() {
@@ -86,13 +82,12 @@ export class UserListingStore {
   }
 
   @computed get count() {
-    return (this.allUsers.data && this.allUsers.data.allUsers) ?
-      this.allUsers.data.allUsers.length : 0;
+    return this.users.length || 0;
   }
 
   @computed get sortInfo() {
     const info = { ...this.requestState.sort };
-    info.direction = (info.direction === 'DESC') ? 'descending' : 'ascending';
+    info.direction = (info.direction === 'desc') ? 'descending' : 'ascending';
     return info;
   }
 
@@ -103,16 +98,28 @@ export class UserListingStore {
 
   @action
   initiateSearch = (srchParams) => {
-    this.requestState.skip = 0; // reset
+    this.requestState.lek = null;
     this.requestState.search = srchParams;
     this.initRequest();
   }
 
   @action
   setInitiateSrch = (name, value) => {
-    const srchParams = { ...this.requestState.search };
-    srchParams[name] = value;
-    this.initiateSearch(srchParams);
+    if (name === 'startDate' || name === 'endDate') {
+      this.requestState.search[name] = value;
+      if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
+        const srchParams = { ...this.requestState.search };
+        this.initiateSearch(srchParams);
+      }
+    } else {
+      const srchParams = { ...this.requestState.search };
+      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+        srchParams[name] = value;
+      } else {
+        delete srchParams[name];
+      }
+      this.initiateSearch(srchParams);
+    }
   }
 
   @action
@@ -126,18 +133,17 @@ export class UserListingStore {
     // https://blog.graph.cool/designing-powerful-apis-with-graphql-query-parameters-8c44a04658a9
     if (sortable) {
       this.requestState.sort.by = by;
-      this.requestState.sort.direction = this.requestState.sort.direction === 'ASC' ? 'DESC' : 'ASC';
+      this.requestState.sort.direction = this.requestState.sort.direction === 'asc' ? 'desc' : 'asc';
       this.initRequest();
     }
   }
 
   @action
   loadMore = () => {
-    if (this.allUsersMeta > this.users.length) {
-      this.requestState.skip = this.users.length;
+    if (this.canLoadMore !== null) {
       this.allUsers.loading = true;
       this.allUsers.ref.fetchMore({
-        variables: { skip: this.requestState.skip },
+        variables: { lek: this.requestState.canLoadMore },
         updateQuery: (previousResult, { fetchMoreResult }) => ({
           allUsers: [...previousResult.allUsers, ...fetchMoreResult.allUsers],
         }),

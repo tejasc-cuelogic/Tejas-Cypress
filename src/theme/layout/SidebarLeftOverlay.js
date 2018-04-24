@@ -20,14 +20,15 @@ class SidebarLeftPush extends Component {
       { icon: 'money', displayName: 'Banking', to: 'banking' },
       { icon: 'settings', displayName: 'Settings', to: 'settings' },
     ];
+    const UserInfo = { ...this.props.UserInfo };
 
     return (
       <Sidebar.Pushable>
         <Sidebar as={Menu} animation="push" width="thin" visible={uiStore.layoutState.leftPanel} icon="labeled" vertical inverted>
           <div className="user-picture">
-            <Randavatar name={this.props.UserInfo.fullname} avatarKey={this.props.UserInfo.avatarKey} size="small" />
-            <h2>{this.props.UserInfo.fullname}</h2>
-            <h3>Regular User</h3>
+            <Randavatar name={UserInfo.fullname} accountType={UserInfo.accountType} avatarKey={UserInfo.avatarKey} size="small" />
+            <h2>{UserInfo.fullname}</h2>
+            <h3>{UserInfo.accountType}</h3>
           </div>
           {
             sidebarItems.map(item => (

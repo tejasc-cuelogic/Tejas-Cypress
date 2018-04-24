@@ -137,17 +137,17 @@ export const privateRoutes = [
   {
     path: '/app/users/:userId/:section',
     component: UserDetails,
-    auth: BusinessAuthorization,
+    auth: AdminAuthorization,
   },
   {
     path: '/app/users/new',
     component: Users,
-    auth: BusinessAuthorization,
+    auth: AdminAuthorization,
   },
   {
     path: '/app/users',
     component: Users,
-    auth: BusinessAuthorization,
+    auth: AdminAuthorization,
   },
   {
     path: '/app/settings',

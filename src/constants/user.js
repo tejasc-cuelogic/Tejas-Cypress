@@ -10,12 +10,12 @@ export const USER_TYPES_META = [
 
 export const USER_LIST_META = [
   ['profilepic', '', false],
-  ['firstName', 'Full Name', true],
-  ['residence_city', 'Residence City', false],
-  ['phone', 'Phone', false],
-  ['accountType', 'Type', true],
-  ['lastLogin', 'Last Login', true],
-  ['createdAt', 'Account Creation', true],
+  ['firstName', 'Full Name', false],
+  ['city', 'Residence City', false],
+  ['number', 'Phone Number', false],
+  ['accountType', 'Account Types', false],
+  ['createdDate', 'Account Creation', true],
+  ['lastLoginDate', 'Last Login', true],
   ['actions', '', false],
 ];
 
@@ -24,23 +24,23 @@ export const USER_DETAIL_SECTIONS = ['Profile', 'Accounts', 'Activity', 'Investm
 // Filters
 export const FILTER_META = {
   accountType: [
-    { text: 'Admin', value: 'ADMIN' },
-    { text: 'Business', value: 'BUSINESS' },
-    { text: 'IRA', value: 'IRA' },
-    { text: 'Individual', value: 'INDIVIDUAL' },
-    { text: 'Entity', value: 'ENTITY' },
+    { text: 'Admin', value: 'admin' },
+    { text: 'Business', value: 'bowner' },
+    { text: 'IRA', value: 'ira' },
+    { text: 'Individual', value: 'individual' },
+    { text: 'Entity', value: 'entity' },
   ],
-  status: [
-    { text: 'Unlocked', value: 'UNLOCKED' },
-    { text: 'Locked', value: 'LOCKED' },
+  accountStatus: [
+    { text: 'Unlocked', value: 'unlocked' },
+    { text: 'Locked', value: 'locked' },
   ],
-  accredited: [
-    { text: 'Accridiated', value: 'YES' },
-    { text: 'Non-Accridiated', value: 'NO' },
+  accreditation: [
+    { text: 'Accridiated', value: 'yes' },
+    { text: 'Non-Accridiated', value: 'no' },
   ],
   city: [
-    { text: 'Loveland', value: 'Loveland' },
-    { text: 'Moscow', value: 'Moscow' },
+    { text: 'Greenfields', value: 'greenfields' },
+    { text: 'Bartley', value: 'bartley' },
   ],
 };
 /* eslint-disable */

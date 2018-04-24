@@ -13,7 +13,7 @@ class UserDetails extends Component {
 
   render() {
     const {
-      userDetails, userDetail, editCard, setEditCard, save,
+      userDetails, editCard, setEditCard, save,
     } = this.props.userDetailsStore;
     return (
       <Aux>
@@ -25,8 +25,7 @@ class UserDetails extends Component {
         <UserDetail
           editCard={editCard}
           setEditCard={setEditCard}
-          user={userDetails}
-          details={userDetail}
+          details={userDetails}
           save={save}
         />
       </Aux>
