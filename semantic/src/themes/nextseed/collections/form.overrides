@@ -239,3 +239,9 @@ display:block;
         }
     }
 }
+
+.field.error{
+    .ui.labeled .ui.label{
+        border-color:@negativeTextColor;
+    }
+}

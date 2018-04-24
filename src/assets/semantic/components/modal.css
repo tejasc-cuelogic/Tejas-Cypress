@@ -827,6 +827,15 @@
   color: #989898;
   border-color: transparent;
 }
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .table-wrapper table {
+  color: #989898;
+}
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .table-wrapper table td > b {
+  color: #000000;
+}
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .table-wrapper table b {
+  font-weight: 700;
+}
 .ui.modal.basic.multistep-modal .multistep.content .option-details {
   padding: 1rem 0;
   line-height: 1.57142857rem;

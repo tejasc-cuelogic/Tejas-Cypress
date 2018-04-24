@@ -302,6 +302,15 @@
                     border-color:transparent;
                 }
             }
+            .table-wrapper table{
+                color:@quaternary-text;
+                td > b{
+                    color:@fullBlack;
+                }
+                b{
+                    font-weight:700;
+                }
+            }
         }
         .option-details{
             padding:@14px 0;

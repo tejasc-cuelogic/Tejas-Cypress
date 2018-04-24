@@ -20256,6 +20256,10 @@ ol.ui.horizontal.list li:before,
   display: block;
 }
 
+.field.error .ui.labeled .ui.label {
+  border-color: #EB5757;
+}
+
 /*******************************
          Site Overrides
 *******************************/
@@ -34291,6 +34295,18 @@ select.ui.dropdown {
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap .field.readonly input {
   color: #989898;
   border-color: transparent;
+}
+
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .table-wrapper table {
+  color: #989898;
+}
+
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .table-wrapper table td > b {
+  color: #000000;
+}
+
+.ui.modal.basic.multistep-modal .multistep.content .field-wrap .table-wrapper table b {
+  font-weight: 700;
 }
 
 .ui.modal.basic.multistep-modal .multistep.content .option-details {
