@@ -5,7 +5,7 @@
     overflow:auto;
 }
 .ui.table{
-    font-family:@regularFont;
+    // font-family:@regularFont;
     thead th{
         // padding:@20px;
         font-size:@13px;
@@ -69,7 +69,7 @@
             }
         }
         .user-name{
-            font-family:@boldFont;
+            // font-family:@boldFont;
             display:block;
             > a{
                 font-family:inherit;

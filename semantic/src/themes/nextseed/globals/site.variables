@@ -13,57 +13,74 @@
 /*-------------------
        Fonts
 --------------------*/
+@fontName          : 'Lato';
+@fontSmoothing     : antialiased;
 
-@fontName: 'SF Pro Display Regular';
-@fontFileName: 'SFProDisplay';
-@fallbackSRCRegular: url("@{fontPath}/@{fontFileName}-Regular.eot");
-@srcRegular:
- url("@{fontPath}/@{fontFileName}-Regular.eot?#iefix") format('embedded-opentype'),
- url("@{fontPath}/@{fontFileName}-Regular.woff2") format('woff2'),
- url("@{fontPath}/@{fontFileName}-Regular.woff") format('woff'),
- url("@{fontPath}/@{fontFileName}-Regular.ttf") format('truetype'),
- url("@{fontPath}/@{fontFileName}-Regular.svg#SFProDisplay-Regular") format('svg')
-;
+@headerFont        : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont          : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
-@fontName: 'SF Pro Display Medium';
-@fontFileName: 'SFProDisplay';
-@fallbackSRCMedium: url("@{fontPath}/@{fontFileName}-Medium.eot");
-@srcMedium:
- url("@{fontPath}/@{fontFileName}-Medium.eot?#iefix") format('embedded-opentype'),
- url("@{fontPath}/@{fontFileName}-Medium.woff2") format('woff2'),
- url("@{fontPath}/@{fontFileName}-Medium.woff") format('woff'),
- url("@{fontPath}/@{fontFileName}-Medium.ttf") format('truetype'),
- url("@{fontPath}/@{fontFileName}-Medium.svg#SFProDisplay-Medium") format('svg')
-;
+@googleFontName    : @fontName;
+@importGoogleFonts : true;
+@googleFontSizes   : '400,700,400italic,700italic';
+@googleSubset      : 'latin';
 
-@fontName: 'SF Pro Display Bold';
-@fontFileName: 'SFProDisplay';
-@fallbackSRCBold: url("@{fontPath}/@{fontFileName}-Bold.eot");
-@srcBold:
- url("@{fontPath}/@{fontFileName}-Bold.eot?#iefix") format('embedded-opentype'),
- url("@{fontPath}/@{fontFileName}-Bold.woff2") format('woff2'),
- url("@{fontPath}/@{fontFileName}-Bold.woff") format('woff'),
- url("@{fontPath}/@{fontFileName}-Bold.ttf") format('truetype'),
- url("@{fontPath}/@{fontFileName}-Bold.svg#SFProDisplay-Bold") format('svg')
-;
+@googleProtocol    : 'https://';
+@googleFontRequest : '@{googleFontName}:@{googleFontSizes}&subset=@{googleSubset}';
 
-@fontName: 'SF Pro Display Heavy';
-@fontFileName: 'SFProDisplay';
-@fallbackSRCHeavy: url("@{fontPath}/@{fontFileName}-Heavy.eot");
-@srcHeavy:
- url("@{fontPath}/@{fontFileName}-Heavy.eot?#iefix") format('embedded-opentype'),
- url("@{fontPath}/@{fontFileName}-Heavy.woff2") format('woff2'),
- url("@{fontPath}/@{fontFileName}-Heavy.woff") format('woff'),
- url("@{fontPath}/@{fontFileName}-Heavy.ttf") format('truetype'),
- url("@{fontPath}/@{fontFileName}-Heavy.svg#SFProDisplay-Heavy") format('svg')
-;
 
-@headerFont 	:"SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@pageFont   	:"SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@bold              : bold;
+@normal            : normal;
 
-@regularFont	:"SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@boldFont		:"SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@heavyFont		:"SF Pro Display Heavy", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+// @fontName: 'SF Pro Display Regular';
+// @fontFileName: 'SFProDisplay';
+// @fallbackSRCRegular: url("@{fontPath}/@{fontFileName}-Regular.eot");
+// @srcRegular:
+//  url("@{fontPath}/@{fontFileName}-Regular.eot?#iefix") format('embedded-opentype'),
+//  url("@{fontPath}/@{fontFileName}-Regular.woff2") format('woff2'),
+//  url("@{fontPath}/@{fontFileName}-Regular.woff") format('woff'),
+//  url("@{fontPath}/@{fontFileName}-Regular.ttf") format('truetype'),
+//  url("@{fontPath}/@{fontFileName}-Regular.svg#SFProDisplay-Regular") format('svg')
+// ;
+
+// @fontName: 'SF Pro Display Medium';
+// @fontFileName: 'SFProDisplay';
+// @fallbackSRCMedium: url("@{fontPath}/@{fontFileName}-Medium.eot");
+// @srcMedium:
+//  url("@{fontPath}/@{fontFileName}-Medium.eot?#iefix") format('embedded-opentype'),
+//  url("@{fontPath}/@{fontFileName}-Medium.woff2") format('woff2'),
+//  url("@{fontPath}/@{fontFileName}-Medium.woff") format('woff'),
+//  url("@{fontPath}/@{fontFileName}-Medium.ttf") format('truetype'),
+//  url("@{fontPath}/@{fontFileName}-Medium.svg#SFProDisplay-Medium") format('svg')
+// ;
+
+// @fontName: 'SF Pro Display Bold';
+// @fontFileName: 'SFProDisplay';
+// @fallbackSRCBold: url("@{fontPath}/@{fontFileName}-Bold.eot");
+// @srcBold:
+//  url("@{fontPath}/@{fontFileName}-Bold.eot?#iefix") format('embedded-opentype'),
+//  url("@{fontPath}/@{fontFileName}-Bold.woff2") format('woff2'),
+//  url("@{fontPath}/@{fontFileName}-Bold.woff") format('woff'),
+//  url("@{fontPath}/@{fontFileName}-Bold.ttf") format('truetype'),
+//  url("@{fontPath}/@{fontFileName}-Bold.svg#SFProDisplay-Bold") format('svg')
+// ;
+
+// @fontName: 'SF Pro Display Heavy';
+// @fontFileName: 'SFProDisplay';
+// @fallbackSRCHeavy: url("@{fontPath}/@{fontFileName}-Heavy.eot");
+// @srcHeavy:
+//  url("@{fontPath}/@{fontFileName}-Heavy.eot?#iefix") format('embedded-opentype'),
+//  url("@{fontPath}/@{fontFileName}-Heavy.woff2") format('woff2'),
+//  url("@{fontPath}/@{fontFileName}-Heavy.woff") format('woff'),
+//  url("@{fontPath}/@{fontFileName}-Heavy.ttf") format('truetype'),
+//  url("@{fontPath}/@{fontFileName}-Heavy.svg#SFProDisplay-Heavy") format('svg')
+// ;
+
+// @headerFont 	:"SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+// @pageFont   	:"SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+// @regularFont	:"SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+// @boldFont		:"SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+// @heavyFont		:"SF Pro Display Heavy", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
 /*-------------------
       Base Sizes
@@ -92,7 +109,7 @@
     Brand Colors
 --------------------*/
 
-@primaryColor        : @blue;
+@primaryColor        : @theme-primary;
 @secondaryColor      : @black;
 
 @lightPrimaryColor   : @lightBlue;
@@ -102,7 +119,7 @@
   Page Heading
 ---------------*/
 
-@headerFontWeight : 500;
+@headerFontWeight : 900;
 @headerLineHeight : unit((18 / 14), em);
 
 @h1 : unit((28 / 14), rem);
@@ -117,7 +134,7 @@
 ---------------*/
 
 /* This adjusts the default form input across all elements */
-@inputBackground        : @white;
+@inputBackground        : transparent;
 @inputVerticalPadding   : @relative11px;
 @inputHorizontalPadding : @relative14px;
 @inputPadding           : @inputVerticalPadding @inputHorizontalPadding;
@@ -167,7 +184,7 @@
 @pageOverflowX       : hidden;
 
 @lineHeight          : 1.571428em;
-@textColor           : @primary-text;
+@textColor           : @fullBlack;
 
 /*-------------------
       Paragraph
@@ -262,11 +279,11 @@
 --------------------*/
 
 /*---  Colors  ---*/
-@red              : #DB2828;
+@red              : @highlight-primary;
 @orange           : #F2711C;
 @yellow           : #FBBD08;
 @olive            : #B5CC18;
-@green            : #21BA45;
+@green            : @theme-primary;
 @teal             : #00B5AD;
 @blue             : #2185D0;
 @violet           : #6435C9;
@@ -281,7 +298,7 @@
 @lightOrange      : #FF851B;
 @lightYellow      : #FFE21F;
 @lightOlive       : #D9E778;
-@lightGreen       : #2ECC40;
+@lightGreen       : @theme-primary;
 @lightTeal        : #6DFFFF;
 @lightBlue        : #54C8FF;
 @lightViolet      : #A291FB;
@@ -400,7 +417,7 @@
 @negativeBackgroundColor : #FFF6F6;
 @negativeBorderColor     : #E0B4B4;
 @negativeHeaderColor     : #912D2B;
-@negativeTextColor       : #9F3A38;
+@negativeTextColor       : @highlight-primary;
 
 /* Info */
 @infoColor              : #31CCEC;
@@ -645,6 +662,7 @@
 @63px : unit( (63 / @emSize), rem);
 @64px : unit( (64 / @emSize), rem);
 @70px : unit( (70 / @emSize), rem);
+@80px : unit( (80 / @emSize), rem);
 
 @relative1px  : unit( (1 / @emSize), em);
 @relative2px  : unit( (2 / @emSize), em);
@@ -1005,8 +1023,8 @@
 -------------------------------*/
 
 //  THEME BASE COLORS
-@theme-primary:#A9D943;
-@theme-primary-darken:darken(@theme-primary, 15%);					//  #81AD23 ~ 85B02B
+@theme-primary:#98CE23;
+@theme-primary-darken:darken(@theme-primary, 8%);					//  #81AD23 ~ 85B02B
 
 //  BACKGROUND COLORS
 @dark-bg-color:#424242;
@@ -1018,15 +1036,20 @@
 @lighter-bg-color:lighten(@light-bg-color, 4%);			  			//  #FFFFFF           (when base = F7F7F7)
 
 //  TEXT COLORS
-@primary-text:#303030;
-@secondary-text:lighten(@primary-text, 12%);			    			//  #4F4F4F           (when base = 303030)
-@tertiary-text:lighten(@primary-text, 32%);					     		//  #828282           (when base = 303030)
-@quaternary-text:lighten(@primary-text, 41%);				     		//  #999999 ~ 989898  (when base = 303030)
+@primary-text:#242424;
+@secondary-text:#383838;
+@tertiary-text:#4F4F4F;
+@quaternary-text:#989898;
+// @lighten-text:lighten(@primary-text, 21%);                  //  #666666           (when base = 303030)
 @inverse-text:#FFFFFF;
-@inverse-secondary-text:darken(@inverse-text, 51%);					//  #7D7D7D           (when base = 303030)
+// @inverse-text-darken:darken(@inverse-text, 26%);            //  #BDBDBD           (when base = FFFFFF)
+@inverse-secondary-text:darken(@inverse-text, 51%);					//  #7D7D7D           (when base = FFFFFF)
 
-@border-color:lighten(@primary-text, 69%);                  //  #E0E0E0           (when base = 303030)
-@border-light:lighten(@primary-text, 76%);                  //  #F2F2F2           (when base = 303030)
+@link-color:#772df9;
+@link-color-darken:darken(@link-color, 10%);
+
+@border-color:#BDBDBD;
+@border-light:#E0E0E0;
 
 //  HIGHLIGHT COLORS
 @highlight-primary:#EB5757;										          	//  Red

@@ -5,7 +5,7 @@ export class UiStore {
   modalStatus = false;
   appLoader = false;
   @observable layoutState = {
-    leftPanel: false,
+    leftPanel: true,
     notificationPanel: false,
   };
   @observable submitButtonDisabled = false;
@@ -27,6 +27,7 @@ export class UiStore {
   @observable openAccordion = [];
   @observable dropdownLoader = false;
   @observable authWizardStep = undefined;
+  @observable dashboardStep = undefined;
 
   @action
   setModalStatus(status) {
@@ -85,6 +86,11 @@ export class UiStore {
   @action
   setAuthWizardStep(step) {
     this.authWizardStep = step;
+  }
+
+  @action
+  setDashboardWizardStep(step) {
+    this.dashboardStep = step;
   }
 
   @action

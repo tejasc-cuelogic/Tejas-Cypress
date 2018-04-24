@@ -31,9 +31,9 @@
 /* Default Styling */
 .ui.accordion .title:not(.ui) {
   padding: 0.5em 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
-  color: #303030;
+  color: #000000;
 }
 
 /* Content */
@@ -134,7 +134,7 @@
 .ui.styled.accordion .accordion .title {
   margin: 0em;
   padding: 0.75em 1em;
-  color: #828282;
+  color: #4F4F4F;
   font-weight: normal;
   border-top: 1px solid rgba(34, 36, 38, 0.15);
   -webkit-transition: background 0.1s ease, color 0.1s ease;
@@ -162,22 +162,22 @@
 .ui.styled.accordion .accordion .title:hover,
 .ui.styled.accordion .accordion .active.title {
   background: transparent;
-  color: #303030;
+  color: #000000;
 }
 .ui.styled.accordion .accordion .title:hover,
 .ui.styled.accordion .accordion .active.title {
   background: transparent;
-  color: #303030;
+  color: #000000;
 }
 
 /* Active */
 .ui.styled.accordion .active.title {
   background: transparent;
-  color: #303030;
+  color: #242424;
 }
 .ui.styled.accordion .accordion .active.title {
   background: transparent;
-  color: #303030;
+  color: #242424;
 }
 
 
@@ -259,19 +259,18 @@
 }
 
 /* Dropdown Icon */
-.ui.accordion .title .angle.icon,
-.ui.accordion .accordion .title .angle.icon {
+.ui.accordion .title .ns-chevron-down.icon,
+.ui.accordion .accordion .title .ns-chevron-down.icon {
   margin: 0;
-  height: 19px;
-  font-size: 1.57142857rem;
-  color: #A9D943;
-  line-height: 1.35714286rem;
+  height: 1.5rem;
+  color: #98CE23;
+  line-height: 1.5rem;
   position: absolute;
   right: 0;
   top: 7px;
 }
-.ui.accordion .title.active .angle.icon,
-.ui.accordion .accordion .title.active .angle.icon {
+.ui.accordion .title.active .ns-chevron-down.icon,
+.ui.accordion .accordion .title.active .ns-chevron-down.icon {
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
 }
@@ -296,10 +295,9 @@
 }
 .ui.styled.accordion.filing-list .title time,
 .ui.styled.accordion .accordion.filing-list .title time {
-  font-family: "SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.85714286rem;
   margin-left: 0.35714286rem;
-  color: #828282;
+  color: #4F4F4F;
 }
 .ui.styled.accordion.filing-list .content,
 .ui.styled.accordion .accordion.filing-list .content {
@@ -322,7 +320,7 @@
 .ui.styled.accordion .accordion.filing-list .actions .ui.button,
 .ui.styled.accordion.filing-list .actions .ui.buttons .button,
 .ui.styled.accordion .accordion.filing-list .actions .ui.buttons .button {
-  font-family: "SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 0.92857143rem;
   font-weight: 400;
   text-transform: none;

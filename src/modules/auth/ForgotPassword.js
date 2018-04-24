@@ -46,7 +46,7 @@ export default class ForgotPassword extends React.Component {
                   <div stacked>
                     <Form.Input
                       fluid
-                      icon="envelope"
+                      icon="ns-envelope"
                       iconPosition="left"
                       placeholder="E-mail address"
                       name="email"
@@ -57,7 +57,7 @@ export default class ForgotPassword extends React.Component {
                     <FieldError error={values.email.error} />
                     <Button
                       fluid
-                      color="green"
+                      primary
                       size="large"
                       disabled={this.props.authStore.canSendMail}
                     >

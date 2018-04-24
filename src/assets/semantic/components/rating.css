@@ -68,7 +68,7 @@
 .ui.rating .icon.selected,
 .ui.rating .icon.selected.active {
   background: transparent;
-  color: #303030;
+  color: #000000;
 }
 
 /*-------------------

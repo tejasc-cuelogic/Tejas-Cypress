@@ -3,36 +3,51 @@
 *******************************/
 
 // .page-header-section{
-    .ui.horizontal.list{
-        .item{
-            font-size:@12px;
-            color:@inverse-text;
-        }
-        a.item{
-            color:@inverse-secondary-text;
-            &:hover, &:focus, &.active{
-                color:@theme-primary;
-            }
-        }
-        &.link{
-            > a.item{
-                font-size:@12px;
-                margin-left:@28px;
-                text-transform:uppercase;
-                color:@inverse-secondary-text;
-                &:hover, &:focus, &.active{
-                    color:@theme-primary;
-                }
-            }
+.ui.horizontal.list{
+    .item{
+        font-size:@12px;
+        color:@inverse-text;
+    }
+    a.item{
+        color:@inverse-secondary-text;
+        &:hover, &:focus, &.active{
+            color:@theme-primary;
         }
     }
+    // &.link{
+    //     > a.item{
+    //         font-size:@12px;
+    //         margin-left:@28px;
+    //         text-transform:uppercase;
+    //         color:@inverse-secondary-text;
+    //         &:hover, &:focus, &.active{
+    //             color:@theme-primary;
+    //         }
+    //     }
+    // }
+}
 // }
+.secondary-menu{
+	.ui.horizontal.celled.list{
+		.list>.item, >.item{
+			font-size:@14px;
+			font-weight:900;
+			padding:@16px @20px !important;
+            border-left:@tertiary-text 1px solid;
+            color:@white;
+            &:hover, &:focus, &.active{
+                color:@link-color;
+                background-color:@lighten-bg-color;
+            }
+		}
+	}
+}
 
 .tabular-wrap .ui.segment{
     .ui.horizontal.list.link{
         margin-bottom:@28px;
         .item{
-            font-family:@boldFont;
+            // font-family:@boldFont;
             color:@tertiary-text;
             border-bottom:2px solid transparent;
             &:hover, &:focus, &.active{
