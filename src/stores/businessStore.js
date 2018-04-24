@@ -132,8 +132,9 @@ export class BusinessStore {
   }
 
   @computed get canSubmitSignaturePersonsForm() {
-    return _.isUndefined(_.map(this.signature.signaturePersons, signaturePerson =>
-      _.filter(signaturePerson, field => field.error)));
+    console.log(this.signature.signaturePersons);
+    return _.map(this.signature.signaturePersons, signaturePerson =>
+      _.isEmpty(_.filter(signaturePerson, field => field.error)));
   }
 
   @computed get getSummary() {

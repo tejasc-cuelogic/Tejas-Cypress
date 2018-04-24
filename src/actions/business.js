@@ -839,12 +839,13 @@ export class Business {
   newValidationErrors = (data, isArray = false) => {    
     const xmlErrors = { ...businessStore.xmlErrors };
         
-    if (isArray) {      
+    if (isArray) {
       let errors = {};      
       _.map(data, (key) => {        
-        errors = _.mapValues(key, input =>  input.error);                
+        errors = _.mapValues(key, input =>  input.error);
+        _.merge(xmlErrors, errors);
       })      
-      return _.merge(xmlErrors, errors);
+      return xmlErrors;
     } else {
       const errors = _.mapValues(data, input => input.error);      
       return _.merge(xmlErrors, errors);

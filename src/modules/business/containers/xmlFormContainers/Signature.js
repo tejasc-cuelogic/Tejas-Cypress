@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Card, Header, Form, Button, Divider, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom'; // Redirect
+import _ from 'lodash';
 
 import PersonalSignature from '../../components/PersonalSignature';
 import businessActions from '../../../../actions/business';
@@ -42,7 +43,8 @@ export default class Signature extends React.Component {
     const { signature } = this.props.businessStore;
     businessActions.validateSignatureInfo(signature);
 
-    if (this.props.businessStore.canSubmitSigntureForm) {
+    if (this.props.businessStore.canSubmitSigntureForm &&
+      !_.includes(this.props.businessStore.canSubmitSignaturePersonsForm, false)) {
       businessActions.submitXMLInformation('signature')
         .then((data) => {
           this.props.businessStore.setXmlError();
