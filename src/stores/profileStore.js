@@ -51,7 +51,7 @@ export class ProfileStore {
 
   @action
   verifyIdentityDateChange = (date) => {
-    this.onFieldChange('dateOfBirth', date);
+    this.onFieldChange('verifyIdentity01', 'dateOfBirth', date);
   };
 
   @action

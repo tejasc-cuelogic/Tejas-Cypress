@@ -55,9 +55,7 @@ export default class investorPersonalDetails extends Component {
               <FormSelect
                 containerwidth={6}
                 name="title"
-                label={verifyIdentity01.fields.title.label}
-                value={verifyIdentity01.fields.title.value}
-                error={verifyIdentity01.fields.title.error}
+                fielddata={verifyIdentity01.fields.title}
                 options={PROFILE_DETAILS_TITLE}
                 changed={verifyIdentitySelChange}
               />
@@ -111,9 +109,8 @@ export default class investorPersonalDetails extends Component {
               <FormDatePicker
                 type="text"
                 name="dateOfBirth"
-                label={verifyIdentity01.fields.dateOfBirth.label}
+                fielddata={verifyIdentity01.fields.dateOfBirth}
                 selected={verifyIdentity01.fields.dateOfBirth.value}
-                error={verifyIdentity01.fields.dateOfBirth.error}
                 changed={verifyIdentityDateChange}
               />
             </Form.Group>

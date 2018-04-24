@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon } from 'semantic-ui-react';
+import { Form, Popup, Icon, Input } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
 const FormInput = observer((props) => {
@@ -25,11 +25,10 @@ const FormInput = observer((props) => {
           />
         }
       </label>
-      <Form.Input
+      <Input
         fluid
         labeled
         {...props}
-        label={false}
         value={value}
         type={props.type || 'text'}
         error={!!error}

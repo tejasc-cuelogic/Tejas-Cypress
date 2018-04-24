@@ -23,10 +23,9 @@ const MaskedInput = observer((props) => {
       </label>
       <InputMask
         {...props}
-        label={false}
         value={value}
         onChange={props.changed}
-        error={error}
+        error={!!error}
         alwaysShowMask
         maskChar=" "
       />
