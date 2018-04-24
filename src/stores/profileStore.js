@@ -13,7 +13,6 @@ import Helper from '../helper/utility';
 import {
   VERIFY_IDENTITY_STEP_01,
   VERIFY_IDENTITY_STEP_04,
-  IDENTITY_QUESTIONS_FORM_VALUES,
   CONFIRM_IDENTITY_DOCUMENTS,
 } from '../constants/profile';
 
@@ -26,8 +25,6 @@ export class ProfileStore {
 
   @observable verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
 
-  @observable confirmIdentityQuestions = { ...IDENTITY_QUESTIONS_FORM_VALUES };
-
   @observable confirmIdentityDocuments = { ...CONFIRM_IDENTITY_DOCUMENTS };
 
   @action loadProfile(username) {
@@ -35,21 +32,6 @@ export class ProfileStore {
     api.User.get(username)
       .then(action((profile) => { this.profile = profile; }))
       .finally(action(() => { uiStore.setProgress(false); }));
-  }
-
-  @action
-  setProfileDetails(field, value) {
-    this.profileDetails[field].value = value;
-  }
-
-  @action
-  setProfileError(field, error) {
-    this.profileDetails[field].error = error;
-  }
-
-  @action
-  resetProfileDetails() {
-    this.verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: false, error: '' } };
   }
 
   @action

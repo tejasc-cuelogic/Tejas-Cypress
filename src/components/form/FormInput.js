@@ -10,6 +10,7 @@ const FormInput = observer((props) => {
     error,
     tooltip,
     placeHolder,
+    value,
   } = props.fielddata;
   return (
     <Form.Field>
@@ -29,6 +30,7 @@ const FormInput = observer((props) => {
         labeled
         {...props}
         label={false}
+        value={value}
         type={props.type || 'text'}
         error={!!error}
         placeholder={placeHolder}

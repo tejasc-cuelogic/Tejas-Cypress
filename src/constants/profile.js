@@ -80,41 +80,6 @@ export const PROFILE_DETAILS_TITLE = [
   { key: 'Mrs', value: 'Mrs', text: 'Mrs' },
 ];
 
-export const IDENTITY_QUESTIONS_FORM_VALUES = {
-  question1: {
-    value: '',
-    key: 'question1',
-    error: undefined,
-    rule: 'required',
-    label: 'In which city is Baker Street?',
-    placeHolder: 'Type answer',
-  },
-  question2: {
-    value: '',
-    key: 'question2',
-    error: undefined,
-    rule: 'required',
-    label: 'From whom did you purchase the property at Baker Street 221?',
-    placeHolder: 'Type answer',
-  },
-  question3: {
-    value: '',
-    key: 'question3',
-    error: undefined,
-    rule: 'required',
-    label: 'In which country have you lived?',
-    placeHolder: 'Type answer',
-  },
-  question4: {
-    value: '',
-    key: 'question4',
-    error: undefined,
-    rule: 'required',
-    label: 'Between 1979 and 1980, in which state you have lived?',
-    placeHolder: 'Type answer',
-  },
-};
-
 export const CONFIRM_IDENTITY_DOCUMENTS = {
   photoId: {
     key: 'photoId',
