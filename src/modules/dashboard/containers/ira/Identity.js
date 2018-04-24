@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Header, Form, Icon, Divider, Grid } from 'semantic-ui-react';
+import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { FileUploaderInline } from '../../../../components/form/FormElements';
 
 @inject('accountStore')
 @observer
 export default class Identity extends Component {
-  uploadDocument = (e) => {
-    if (e.target.files.length) {
-      const uploadFile = e.target.files[0];
-      this.props.accountStore.setIraAccountDetails(e.target.name, uploadFile.name);
+  uploadDocument = (name, files) => {
+    if (files.length) {
+      const uploadFile = files[0];
+      this.props.accountStore.setIraAccountDetails(name, uploadFile.name);
     }
   }
   removeUploadedDriversLicence = () => {
@@ -22,10 +23,10 @@ export default class Identity extends Component {
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</Header>
         <Divider section hidden />
         <Form className="file-uploader-inline">
-          <Grid>
+          {/* <Grid>
             <Grid.Row>
               <Grid.Column width={7}>
-                {/* eslint-disable jsx-a11y/label-has-for */}
+                {/* eslint-disable jsx-a11y/label-has-for * /}
                 <label>
                   <h3>Upload a Photo ID</h3>
                   Driving Liscence or passport
@@ -46,12 +47,19 @@ export default class Identity extends Component {
                 {driversLicence.value !== '' &&
                   <div className="file-uploader attached">
                     <span title={driversLicence.value}>{driversLicence.value}</span>
-                    <Icon name="ns-close" size="small" onClick={this.removeUploadedDriversLicence} />
+                    <Icon name="ns-close" size="small"
+                    onClick={this.removeUploadedDriversLicence} />
                   </div>
                 }
               </Grid.Column>
             </Grid.Row>
-          </Grid>
+          </Grid> */}
+          <FileUploaderInline
+            name={driversLicence.key}
+            fielddata={driversLicence}
+            uploadDocument={this.uploadDocument}
+            removeUploadedDocument={this.removeUploadedDriversLicence}
+          />
         </Form>
         <Divider section hidden />
         <p className="center-align">As a regulated financial service company operating in the US we are periodically
