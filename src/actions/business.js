@@ -10,9 +10,10 @@ import {
   filerInformationMutation,
   issuerInformationMutation,
   offeringInformationMutation,
+  annualReportMutation,
   signatureMutation,
   documentListMutation,
-  annualReportMutation } from '../stores/queries/business';
+  xmlSubmissionMutation } from '../stores/queries/business';
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
 import {
@@ -159,6 +160,13 @@ export class Business {
             name: document.name,
             id: document.id,
           })),
+        },
+      };
+    } else if (action === 'xmlSubmission') {
+      payload = {
+        mutation: xmlSubmissionMutation,
+        variables: {
+          ...ids,
         },
       };
     }
@@ -729,10 +737,8 @@ export class Business {
       
       businessStore.setNewPersonalSignature([]);
       
-      if (data.payload.signature) {
-        console.log(data.payload.signature.signaturePersons);
-         _.map(data.payload.signature.signaturePersons, (signature) => {
-           console.log(signature);
+      if (data.payload.signature) {        
+         _.map(data.payload.signature.signaturePersons, (signature) => {           
           const id = this.addPersonalSignature();
           _.map(signature, (value, key) => {
             if (dateFields.includes(key)) {
@@ -812,7 +818,6 @@ export class Business {
     });
     
     businessStore.setNewPersonalSignature(personSignatureData);
-    
   }
 
   validateDocumentList = (documentList) => {

@@ -44,6 +44,16 @@ export default class FileSelector extends React.Component {
     }
   }
 
+  handleXmlSubmissionSubmit = () => {
+    busiessActions.submitXMLInformation('xmlSubmission')
+      .then(() => {
+        Helper.toast('Xml submission submitted successfully', 'success');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
     return (
       <div>
@@ -76,6 +86,9 @@ export default class FileSelector extends React.Component {
           <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
           <Button color="green" size="large" onClick={this.handleFileSelectorSubmit}>
             Save
+          </Button>
+          <Button color="red" size="large" onClick={this.handleXmlSubmissionSubmit}>
+            Submit
           </Button>
         </div>
       </div>

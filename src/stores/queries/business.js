@@ -68,3 +68,11 @@ export const documentListMutation = gql`
       payload
     }
   }`;
+
+export const xmlSubmissionMutation = gql`
+  mutation upsertXmlInformation($businessId: String!, $filingId: String!, $xmlSubmissionId: String) {
+    upsertXmlInformation(businessId: $businessId, filingId:$filingId, xmlSubmissionId: $xmlSubmissionId) {
+      xmlSubmissionId
+      xmlSubmissionStatus
+    }
+  }`;

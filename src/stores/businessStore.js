@@ -131,6 +131,11 @@ export class BusinessStore {
     return _.isEmpty(_.filter(this.signature, field => field.error));
   }
 
+  @computed get canSubmitSignaturePersonsForm() {
+    return _.isUndefined(_.map(this.signature.signaturePersons, signaturePerson =>
+      _.filter(signaturePerson, field => field.error)));
+  }
+
   @computed get getSummary() {
     return this.businessList.length || 0;
   }
