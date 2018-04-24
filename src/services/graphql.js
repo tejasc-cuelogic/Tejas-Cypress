@@ -1,22 +1,25 @@
-import request from 'superagent';
+/* eslint-disable arrow-body-style  */
+import fetch from 'isomorphic-fetch';
 import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-client-preset';
-import { getMainDefinition } from 'apollo-utilities';
-import { split } from 'apollo-link';
-
+import { setContext } from 'apollo-link-context';
+import commonStore from './../stores/commonStore';
 import { API_ROOT } from '../constants/common';
 import { GRAPHQL } from '../constants/business';
 
-global.request = request;
+global.fetch = fetch;
 
 const uri = `${API_ROOT}${GRAPHQL}`;
 
-export const GqlClient = new ApolloClient({
-  link: split(
-    ({ query }) => {
-      const { kind, operation } = getMainDefinition(query);
-      return kind === 'OperationDefinition' && operation === 'subscription';
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      authorization: commonStore.token ? `Bearer ${commonStore.token}` : '',
     },
-    new HttpLink({ uri }),
-  ),
+  };
+});
+
+export const GqlClient = new ApolloClient({
+  link: authLink.concat(new HttpLink({ uri })),
   cache: new InMemoryCache(),
 });
