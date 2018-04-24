@@ -22,6 +22,7 @@ export class UserListingStore {
     },
   };
 
+  @action
   initRequest = () => {
     const { keyword } = this.requestState.search;
     const filters = toJS({ ...this.requestState.search });
