@@ -49,7 +49,7 @@ const notificationPanel = (props) => {
                   <Accordion.Title index={0} onClick={this.handleClick}>
                     <strong>{notification.who}</strong> {notification.operation}
                     <strong> {notification.module}</strong>
-                    <Icon name="ns-caret-down" />
+                    <Icon name="ns-chevron-down" />
                   </Accordion.Title>
                   <Accordion.Content active={activeIndex === 0}>
                     <p>Lorem ipsum doller sit amit, Pokeology has achieved minimum raise</p>

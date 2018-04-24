@@ -1063,7 +1063,7 @@ div.login-form ul.error-messages {
   padding: 1rem;
   margin-bottom: 1.28571429rem;
   border-radius: 5px 0 0 5px;
-  background-color: #383838;
+  background-color: #4F4F4F;
   -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.32);
 }
@@ -30444,11 +30444,11 @@ a.ui.card:hover,
 
 /* Dropdown Icon */
 
-.ui.accordion .title .angle.icon,
-.ui.accordion .accordion .title .angle.icon {
+.ui.accordion .title .ns-chevron-down.icon,
+.ui.accordion .accordion .title .ns-chevron-down.icon {
   margin: 0;
   height: 19px;
-  font-size: 1.57142857rem;
+  font-size: 1rem;
   color: #98CE23;
   line-height: 1.35714286rem;
   position: absolute;
@@ -30456,8 +30456,8 @@ a.ui.card:hover,
   top: 7px;
 }
 
-.ui.accordion .title.active .angle.icon,
-.ui.accordion .accordion .title.active .angle.icon {
+.ui.accordion .title.active .ns-chevron-down.icon,
+.ui.accordion .accordion .title.active .ns-chevron-down.icon {
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
