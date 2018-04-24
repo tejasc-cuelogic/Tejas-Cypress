@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Visibility, Card } from 'semantic-ui-react';
+import { Table, Visibility } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
