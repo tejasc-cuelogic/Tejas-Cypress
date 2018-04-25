@@ -45,7 +45,7 @@ export class ProfileStore {
   };
 
   @action
-  verifyPhoneNumberEleChange = (e, { name, value }) => {
+  verifyVerificationCodeChange = (e, { name, value }) => {
     this.onFieldChange('verifyIdentity04', name, value);
   };
 

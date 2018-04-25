@@ -19,7 +19,7 @@ export default class ConfirmPhoneNumber extends Component {
   }
 
   render() {
-    const { verifyIdentity01, verifyIdentity04, verifyPhoneNumberEleChange } =
+    const { verifyIdentity01, verifyIdentity04, verifyVerificationCodeChange } =
     this.props.profileStore;
     const { errors } = this.props.uiStore;
     return (
@@ -48,11 +48,12 @@ export default class ConfirmPhoneNumber extends Component {
           <p><Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>Change phone number</Link></p>
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <FormInput
+              name="code"
               size="huge"
               containerclassname="otp-field"
               maxLength={4}
               fielddata={verifyIdentity04.fields.code}
-              onChange={verifyPhoneNumberEleChange}
+              changed={verifyVerificationCodeChange}
             />
             <div className="center-align">
               <Button primary size="large" className="very relaxed">Confirm</Button>

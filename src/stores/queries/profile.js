@@ -97,3 +97,15 @@ export const checkUserPhoneVerificationCode = gql`
       success
     }
  }`;
+
+export const updateUserCIPInfo = gql`
+  mutation updateUserCIPInfo($userId: String! $user: userCIPInput $phoneDetails: phoneInput!) {
+    updateUserCIPInfo(userId: $userId user: $user phoneDetails: $phoneDetails) {
+      id
+      email
+      firstName
+      lastName
+      lastLoginDate
+      accreditation
+    }
+  }`;

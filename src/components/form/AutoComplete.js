@@ -9,6 +9,7 @@ const AutoComplete = observer((props) => {
   const {
     label,
     error,
+    value,
   } = props.fielddata;
   return (
     <Form.Field error={!!error}>
@@ -20,6 +21,7 @@ const AutoComplete = observer((props) => {
         onPlaceSelected={(place) => {
           props.onplaceselected(place);
         }}
+        value={value}
         types={['address']}
         onChange={props.changed}
         placeholder=""
