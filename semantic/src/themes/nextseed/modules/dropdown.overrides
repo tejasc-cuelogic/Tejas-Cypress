@@ -67,13 +67,17 @@
 	>.dropdown.icon{
 		color:@theme-primary;
 	}
-	~ .filter-effect{
+	~ .dropdown-effect{
 		position:absolute;
 		top:-5px;
 		left:0;
 		right:0;
 		z-index:1;
 		border-radius:@4px;
+		color:@fullBlack;
+		padding:@6px @14px;
+		font-size:0;
+		font-weight:700;
 	}
 	&.active{
 		.menu{
@@ -84,11 +88,17 @@
 				background:transparent;
 			}
 		}
-		~ .filter-effect{
+		~ .dropdown-effect{
+			font-size:13px;
 			height:300px;
 			background-color:@white;
-			box-shadow:0 0 16px rgba(0,0,0,.25);
+			box-shadow:0 0 20px @veryStrongTransparentBlack;
 		}
+	}
+}
+.ui.form .fields .field{
+	.ui.selection.dropdown ~ .dropdown-effect{
+		padding:@6px @7px;
 	}
 }
 .ui.dropdown.inverted>.text{

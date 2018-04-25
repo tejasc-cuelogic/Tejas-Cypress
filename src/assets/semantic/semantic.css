@@ -19406,7 +19406,7 @@ ol.ui.horizontal.list li:before,
 
 .ui.form .fields.error .field .ui.multiple.selection.dropdown > .label,
 .ui.form .field.error .ui.multiple.selection.dropdown > .label {
-  background-color: #EACBCB;
+  background-color: transparent;
   color: #EB5757;
 }
 
@@ -19414,21 +19414,21 @@ ol.ui.horizontal.list li:before,
 
 .ui.form .fields.error .field .ui.dropdown .menu .item:hover,
 .ui.form .field.error .ui.dropdown .menu .item:hover {
-  background-color: #FBE7E7;
+  background-color: transparent;
 }
 
 /* Selected */
 
 .ui.form .fields.error .field .ui.dropdown .menu .selected.item,
 .ui.form .field.error .ui.dropdown .menu .selected.item {
-  background-color: #FBE7E7;
+  background-color: transparent;
 }
 
 /* Active */
 
 .ui.form .fields.error .field .ui.dropdown .menu .active.item,
 .ui.form .field.error .ui.dropdown .menu .active.item {
-  background-color: #FDCFCF !important;
+  background-color: transparent !important;
 }
 
 /*--------------------
@@ -20000,6 +20000,10 @@ ol.ui.horizontal.list li:before,
          Theme Overrides
 *******************************/
 
+.ui.form .field {
+  position: relative;
+}
+
 .ui.form input:not([type]),
 .ui.form input[type=date],
 .ui.form input[type=datetime-local],
@@ -20109,8 +20113,6 @@ ol.ui.horizontal.list li:before,
 
 .ui.form .field > label {
   display: inline-block;
-  position: relative;
-  z-index: 2;
 }
 
 .ui.form .error:not(.field) {
@@ -33173,13 +33175,17 @@ select.ui.dropdown {
   color: #98CE23;
 }
 
-.ui.selection.dropdown ~ .filter-effect {
+.ui.selection.dropdown ~ .dropdown-effect {
   position: absolute;
   top: -5px;
   left: 0;
   right: 0;
   z-index: 1;
   border-radius: 0.28571429rem;
+  color: #000000;
+  padding: 0.42857143rem 1rem;
+  font-size: 0;
+  font-weight: 700;
 }
 
 .ui.selection.dropdown.active .menu {
@@ -33192,11 +33198,16 @@ select.ui.dropdown {
   background: transparent;
 }
 
-.ui.selection.dropdown.active ~ .filter-effect {
+.ui.selection.dropdown.active ~ .dropdown-effect {
+  font-size: 13px;
   height: 300px;
   background-color: #FFFFFF;
-  -webkit-box-shadow: 0 0 16px rgba(0, 0, 0, 0.25);
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.ui.form .fields .field .ui.selection.dropdown ~ .dropdown-effect {
+  padding: 0.42857143rem 0.5rem;
 }
 
 .ui.dropdown.inverted > .text {

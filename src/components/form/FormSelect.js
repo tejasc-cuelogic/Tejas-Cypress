@@ -23,6 +23,7 @@ const FormSelect = props => (
       error={!!props.error}
       onChange={props.changed}
     />
+    <div className="dropdown-effect">{props.fielddata.label}</div>
     {props.error &&
       <FieldError error={props.error} />
     }

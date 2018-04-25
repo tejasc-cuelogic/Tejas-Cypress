@@ -21,7 +21,7 @@ export const DropdownFilter = props => (
       selection
       options={props.options}
     />
-    <div className="filter-effect" />
+    <div className="dropdown-effect">{props.name}</div>
   </Grid.Column>
 );
 

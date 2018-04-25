@@ -1505,13 +1505,17 @@ select.ui.dropdown {
 .ui.selection.dropdown > .dropdown.icon {
   color: #98CE23;
 }
-.ui.selection.dropdown ~ .filter-effect {
+.ui.selection.dropdown ~ .dropdown-effect {
   position: absolute;
   top: -5px;
   left: 0;
   right: 0;
   z-index: 1;
   border-radius: 0.28571429rem;
+  color: #000000;
+  padding: 0.42857143rem 1rem;
+  font-size: 0;
+  font-weight: 700;
 }
 .ui.selection.dropdown.active .menu {
   border: none;
@@ -1521,11 +1525,15 @@ select.ui.dropdown {
   border: none;
   background: transparent;
 }
-.ui.selection.dropdown.active ~ .filter-effect {
+.ui.selection.dropdown.active ~ .dropdown-effect {
+  font-size: 13px;
   height: 300px;
   background-color: #FFFFFF;
-  -webkit-box-shadow: 0 0 16px rgba(0, 0, 0, 0.25);
-          box-shadow: 0 0 16px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.ui.form .fields .field .ui.selection.dropdown ~ .dropdown-effect {
+  padding: 0.42857143rem 0.5rem;
 }
 .ui.dropdown.inverted > .text {
   color: #FFFFFF;

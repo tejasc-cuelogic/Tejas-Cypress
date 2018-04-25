@@ -19,6 +19,7 @@ const FormDropDown = props => (
     <Dropdown
       {...props}
     />
+    <div className="dropdown-effect">{props.label}</div>
     {props.error &&
       <FieldError error={props.error} />
     }

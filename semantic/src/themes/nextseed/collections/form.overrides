@@ -2,6 +2,9 @@
          Theme Overrides
 *******************************/
 .ui.form{
+    .field{
+        position:relative;
+    }
     input:not([type]),
     input[type=date],
     input[type=datetime-local],
@@ -98,8 +101,6 @@
 .ui.form{
     .field>label{
         display:inline-block;
-        position:relative;
-        z-index:2;
     }
     // &.inverted{
     //     label{
