@@ -31,9 +31,22 @@ const XmlSubmission = observer((props) => {
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                   <Table.Cell>
                     {
+                      xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed &&
+                      xmlSubmission.xmlSubmissionDownloadUrl &&
+                        <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
+                          <Icon name="download" />
+                        </a>
+                    }
+                    {
+                      xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed &&
+                      !xmlSubmission.xmlSubmissionDownloadUrl &&
+                      <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
+                    }
+                    {
+                      xmlSubmission.xmlSubmissionStatus === XML_STATUSES.draft &&
                       <Button
                         icon
-                        className={xmlSubmission.xmlSubmissionStatus === XML_STATUSES.draft ? 'link-button disabled' : 'link-button active'}
+                        className="link-button disabled"
                         href={xmlSubmission.xmlSubmissionDownloadUrl}
                         download
                       >
