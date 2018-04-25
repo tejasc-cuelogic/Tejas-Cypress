@@ -126,7 +126,7 @@ export class ProfileStore {
               firstLegalName: this.verifyIdentity01.fields.firstLegalName.value,
               lastLegalName: this.verifyIdentity01.fields.lastLegalName.value,
               dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
-              ssn: '112223333',
+              ssn: Helper.unMaskInput(this.verifyIdentity01.fields.ssn.value),
               legalAddress: {
                 street1: this.verifyIdentity01.fields.residentalStreet.value,
                 city: this.verifyIdentity01.fields.city.value,
