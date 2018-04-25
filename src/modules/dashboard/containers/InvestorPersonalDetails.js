@@ -73,18 +73,11 @@ export default class investorPersonalDetails extends Component {
                 changed={verifyIdentityEleChange}
               />
             </Form.Group>
-            <FormInput
-              type="text"
-              name="residentalStreet"
-              fielddata={verifyIdentity01.fields.residentalStreet}
-              tooltip="Put your last name as listed on your driver license"
-              changed={verifyIdentityEleChange}
-            />
             <AutoComplete
-              type="text"
               name="residentalStreet"
               fielddata={verifyIdentity01.fields.residentalStreet}
               onplaceselected={profileActions.setAddressFieldsOnGoogleAutocomplete}
+              changed={verifyIdentityEleChange}
             />
             <Form.Group widths="equal">
               <FormInput

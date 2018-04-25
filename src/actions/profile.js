@@ -1,4 +1,4 @@
-import validationActions from '../actions/validation';
+import profileStore from '../stores/profileStore';
 
 export class Profile {
   setAddressFieldsOnGoogleAutocomplete = (place) => {
@@ -31,10 +31,10 @@ export class Profile {
       }
     }
 
-    validationActions.validateProfileDetailsField('residentalStreet', residentalStreet.join(', '));
-    validationActions.validateProfileDetailsField('city', city.join(''));
-    validationActions.validateProfileDetailsField('state', state.join(''));
-    validationActions.validateProfileDetailsField('zipCode', zipCode.join(''));
+    profileStore.onFieldChange('verifyIdentity01', 'residentalStreet', residentalStreet.join(', '));
+    profileStore.onFieldChange('verifyIdentity01', 'city', city.join(''));
+    profileStore.onFieldChange('verifyIdentity01', 'state', state.join(''));
+    profileStore.onFieldChange('verifyIdentity01', 'zipCode', zipCode.join(''));
   }
 }
 

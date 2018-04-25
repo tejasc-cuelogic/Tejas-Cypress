@@ -9,7 +9,7 @@ import FieldError from '../common/FieldError';
 const MaskedInput = observer((props) => {
   const { label, error, value } = props.fielddata;
   return (
-    <Form.Field>
+    <Form.Field error={!!error}>
       <label>
         {!props.hidelabel && label}
         {props.tooltip &&
