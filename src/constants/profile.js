@@ -1,4 +1,11 @@
 import moment from 'moment';
+import Validator from 'validatorjs';
+
+/* eslint-disable no-unused-vars */
+/* eslint-disable arrow-body-style */
+Validator.register('maskedInput', (value, requirement, attribute) => {
+  return value.match(/^\d{3}-\d{3}-\d{4}$/);
+}, 'The :attribute is not in the format XXX-XXX-XXXX.');
 
 export const VERIFY_IDENTITY_STEP_01 = {
   title: {
@@ -49,7 +56,7 @@ export const VERIFY_IDENTITY_STEP_01 = {
     value: '',
     label: 'Phone Number',
     error: undefined,
-    rule: 'required',
+    rule: 'required|maskedInput',
   },
   dateOfBirth: {
     value: moment(),
@@ -61,7 +68,7 @@ export const VERIFY_IDENTITY_STEP_01 = {
     value: '',
     label: 'SSN',
     error: undefined,
-    rule: 'required',
+    rule: 'required|maskedInput',
   },
 };
 

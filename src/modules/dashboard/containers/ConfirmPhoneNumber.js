@@ -40,7 +40,7 @@ export default class ConfirmPhoneNumber extends Component {
             type="tel"
             name="phoneNumber"
             fielddata={verifyIdentity01.fields.phoneNumber}
-            mask="+9 999-999-9999"
+            mask="999-999-9999"
             readOnly
             hidelabel
             className="display-only"
