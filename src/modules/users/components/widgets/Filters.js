@@ -21,6 +21,7 @@ export const DropdownFilter = props => (
       selection
       options={props.options}
     />
+    <div className="filter-effect" />
   </Grid.Column>
 );
 
@@ -33,9 +34,9 @@ export const DateRangeFilter = props => (
           <DatePicker
             showMonthDropdown
             showYearDropdown
-            dateFormat="MM-DD-YYYY"
+            dateFormat="MM/DD/YYYY"
             selected={props.filters.startDate}
-            placeholderText="MM-DD-YYYY"
+            placeholderText="MM/DD/YYYY"
             maxDate={moment()}
             onChange={props.changeStart}
           />
@@ -44,9 +45,9 @@ export const DateRangeFilter = props => (
           <DatePicker
             showMonthDropdown
             showYearDropdown
-            dateFormat="MM-DD-YYYY"
+            dateFormat="MM/DD/YYYY"
             selected={props.filters.endDate}
-            placeholderText="MM-DD-YYYY"
+            placeholderText="MM/DD/YYYY"
             maxDate={moment()}
             onChange={props.changeEnd}
           />

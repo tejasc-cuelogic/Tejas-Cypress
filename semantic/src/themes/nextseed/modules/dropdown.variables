@@ -26,10 +26,10 @@
 @textTransition: none;
 
 /* Menu */
-@menuBackground: #FFFFFF;
-@menuMargin: 0em;
+@menuBackground:transparent;
+@menuMargin:@2px 0 0;
 @menuPadding: 0em 0em;
-@menuTop: 100%;
+@menuTop: ~"calc(100% + "(@menuBorderWidth * 2)~")";
 @menuTextAlign: left;
 
 @menuBorderWidth: 1px;
@@ -54,7 +54,7 @@
 @itemDivider: none;
 @itemColor: @textColor;
 @itemVerticalPadding: @mini;
-@itemHorizontalPadding: @large;
+@itemHorizontalPadding: 0;
 @itemPadding: @itemVerticalPadding @itemHorizontalPadding;
 @itemFontWeight: normal;
 @itemLineHeight: 1em;
@@ -133,8 +133,8 @@
 @selectionMinHeight: @inputLineHeight + (@selectionVerticalPadding * 2) - @selectionBorderEmWidth;
 @selectionBackground: @inputBackground;
 @selectionDisplay: inline-block;
-@selectionIconDistance: (@inputHorizontalPadding / 2) + @glyphWidth;
-@selectionPadding: @selectionVerticalPadding @selectionIconDistance @selectionVerticalPadding 0;
+@selectionIconDistance: @glyphWidth;
+@selectionPadding: @selectionVerticalPadding @selectionIconDistance @selectionVerticalPadding @selectionHorizontalPadding;
 @selectionZIndex: 10;
 
 @selectionItemDivider: 1px solid @solidInternalBorderColor;
@@ -146,7 +146,7 @@
 @selectVisibility: visible;
 @selectHeight: 38px;
 
-@selectionTextColor: @textColor;
+@selectionTextColor: @secondary-text;
 
 @selectionTextUnderlayIconOpacity: @disabledOpacity;
 @selectionTextUnderlayColor: @inputPlaceholderFocusColor;
@@ -159,12 +159,12 @@
 @selectionIconOpacity: 0.8;
 @selectionIconZIndex: 3;
 @selectionIconHitbox: @selectionVerticalPadding;
-@selectionIconMargin: -@selectionIconHitbox;
+@selectionIconMargin: -@selectionIconHitbox 0 -@selectionIconHitbox -@selectionIconHitbox;
 @selectionIconPadding: (@selectionIconHitbox / @dropdownIconSize) 0 (@selectionIconHitbox / @dropdownIconSize) (@selectionIconHitbox / @dropdownIconSize);
 @selectionIconTransition: opacity @defaultDuration @defaultEasing;
 
 @selectionMenuBorderRadius: 0em 0em @borderRadius @borderRadius;
-@selectionMenuBoxShadow: @raisedShadow;
+@selectionMenuBoxShadow:none;
 @selectionMenuItemBoxShadow: none;
 
 @selectionItemHorizontalPadding: @itemHorizontalPadding;
@@ -195,15 +195,15 @@
 /* Focus */
 @selectionFocusBorderColor: @theme-primary;
 @selectionFocusBoxShadow: none;
-@selectionFocusMenuBoxShadow: @raisedShadow;
+@selectionFocusMenuBoxShadow:none;
 
 /* Visible */
 @selectionVisibleTextFontWeight: normal;
 @selectionVisibleTextColor: @hoveredTextColor;
 
 @selectionVisibleBorderColor: @theme-primary;
-@selectionVisibleBoxShadow: @raisedShadow;
-@selectionVisibleMenuBoxShadow: @raisedShadow;
+@selectionVisibleBoxShadow:none;
+@selectionVisibleMenuBoxShadow:none;
 
 /* Visible Hover */
 @selectionActiveHoverBorderColor: @theme-primary;

@@ -98,6 +98,8 @@
 .ui.form{
     .field>label{
         display:inline-block;
+        position:relative;
+        z-index:2;
     }
     // &.inverted{
     //     label{
