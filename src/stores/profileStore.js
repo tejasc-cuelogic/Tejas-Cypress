@@ -34,6 +34,9 @@ export class ProfileStore {
       .finally(action(() => { uiStore.setProgress(false); }));
   }
 
+  /**
+   * @desc Handle functions for Verify Identity Form 1 fields.
+   */
   @action
   verifyIdentityEleChange = (e) => {
     this.onFieldChange('verifyIdentity01', e.target.name, e.target.value);
@@ -45,25 +48,8 @@ export class ProfileStore {
   };
 
   @action
-  verifyVerificationCodeChange = (e, { name, value }) => {
-    this.onFieldChange('verifyIdentity04', name, value);
-  };
-
-  @action
   verifyIdentityDateChange = (date) => {
     this.onFieldChange('verifyIdentity01', 'dateOfBirth', date);
-  };
-
-  @action
-  onFieldChange = (currentForm, field, value) => {
-    const form = currentForm || 'formFinInfo';
-    this[form].fields[field].value = value;
-    const validation = new Validator(
-      mapValues(this[form].fields, f => f.value),
-      mapValues(this[form].fields, f => f.rule),
-    );
-    this[form].meta.isValid = validation.passes();
-    this[form].fields[field].error = validation.errors.first(field);
   };
 
   @action
@@ -71,6 +57,9 @@ export class ProfileStore {
     this.verifyIdentity01.response = response;
   }
 
+  /**
+   * @desc Functions for Verify Identity Form 2.
+   */
   @action
   setIdentityQuestions = () => {
     const { questions } = this.verifyIdentity01.response;
@@ -93,6 +82,36 @@ export class ProfileStore {
     changedAnswer.error = validation.errors.first(changedAnswer.key);
   }
 
+  @computed
+  get getFormattedIdentityQuestionsAnswers() {
+    const formattedIdentityQuestionsAnswers =
+    _.flatMap(this.verifyIdentity02.fields, n => [{ type: n.key, text: n.value }]);
+    return formattedIdentityQuestionsAnswers;
+  }
+
+  /**
+   * @desc Handle function for Verify Identity Form 4 field.
+   */
+  @action
+  verifyVerificationCodeChange = (e, { name, value }) => {
+    this.onFieldChange('verifyIdentity04', name, value);
+  };
+
+  /**
+   * @desc Generic function for on change of each form field.
+   */
+  @action
+  onFieldChange = (currentForm, field, value) => {
+    const form = currentForm || 'formFinInfo';
+    this[form].fields[field].value = value;
+    const validation = new Validator(
+      mapValues(this[form].fields, f => f.value),
+      mapValues(this[form].fields, f => f.rule),
+    );
+    this[form].meta.isValid = validation.passes();
+    this[form].fields[field].error = validation.errors.first(field);
+  };
+
   /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
     uiStore.setProgress();
@@ -107,7 +126,7 @@ export class ProfileStore {
               firstLegalName: this.verifyIdentity01.fields.firstLegalName.value,
               lastLegalName: this.verifyIdentity01.fields.lastLegalName.value,
               dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
-              ssn: this.verifyIdentity01.fields.ssn.value,
+              ssn: '112223333',
               legalAddress: {
                 street1: this.verifyIdentity01.fields.residentalStreet.value,
                 city: this.verifyIdentity01.fields.city.value,
@@ -132,12 +151,6 @@ export class ProfileStore {
     });
   }
 
-  getFormattedIdentityQuestionsAnswers = () => {
-    const formattedIdentityQuestionsAnswers =
-    _.flatMap(this.verifyIdentity02.fields, n => [{ type: n.key }, { text: n.value }]);
-    return formattedIdentityQuestionsAnswers;
-  }
-
   @action
   setConfirmIdentityDocuments(field, value) {
     this.confirmIdentityDocuments[field].value = value;
@@ -154,6 +167,7 @@ export class ProfileStore {
   }
 
   submitConfirmIdentityQuestions = () => {
+    console.log(this.getFormattedIdentityQuestionsAnswers);
     uiStore.setProgress();
     uiStore.setLoaderMessage('Submitting Confirm Identity Questions');
     return new Promise((resolve, reject) => {
@@ -168,9 +182,9 @@ export class ProfileStore {
             },
           },
         })
-        .then(() => {
+        .then((result) => {
           Helper.toast('Identity questions submitted.', 'success');
-          resolve();
+          resolve(result);
         })
         .catch((err) => {
           uiStore.setErrors(this.simpleErr(err));
@@ -190,7 +204,7 @@ export class ProfileStore {
           mutation: startUserPhoneVerification,
           variables: {
             phoneDetails: {
-              phoneNumber: this.verifyIdentity01.fields.phoneNumber.value,
+              phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
               countryCode: '91',
             },
             method: 'sms',
@@ -216,7 +230,7 @@ export class ProfileStore {
           mutation: checkUserPhoneVerificationCode,
           variables: {
             phoneDetails: {
-              phoneNumber: this.verifyIdentity01.fields.phoneNumber.value,
+              phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
               countryCode: '91',
             },
             verificationCode: this.verifyIdentity04.fields.code.value,

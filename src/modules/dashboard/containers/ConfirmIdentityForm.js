@@ -10,9 +10,12 @@ import { FormInput } from '../../../components/form/FormElements';
 export default class ConfirmIdentityForm extends Component {
   handleIdentityQuestionsSubmit = (e) => {
     e.preventDefault();
-    this.props.profileStore.submitConfirmIdentityQuestions().then(() => {
-      this.props.profileStore.startPhoneVerification();
-      this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+    this.props.profileStore.submitConfirmIdentityQuestions().then((result) => {
+      /* eslint-disable no-underscore-dangle */
+      if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
+        this.props.profileStore.startPhoneVerification();
+        this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+      }
     });
   }
 
@@ -22,7 +25,7 @@ export default class ConfirmIdentityForm extends Component {
       <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">We need to confirm your identity</Header>
-          <Link to="" className="back-link"><Icon name="ns-arrow-left" /></Link>
+          <Link to="/app/dashboard" className="back-link" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}><Icon name="ns-arrow-left" /></Link>
           <Divider />
           <p>
             Please answer the questions below or<br />

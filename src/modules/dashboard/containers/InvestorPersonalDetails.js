@@ -117,7 +117,7 @@ export default class investorPersonalDetails extends Component {
             <MaskedInput
               name="ssn"
               fielddata={verifyIdentity01.fields.ssn}
-              mask="999-999-9999"
+              mask="999-999-999"
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">

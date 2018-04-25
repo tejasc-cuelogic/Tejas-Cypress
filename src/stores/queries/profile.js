@@ -79,7 +79,7 @@ export const verifyCIPAnswers = gql`
   }`;
 
 export const startUserPhoneVerification = gql`
-  mutation _startUserPhoneVerification($phoneDetails: phoneInput! $method: String!) {
+  mutation _startUserPhoneVerification($phoneDetails: phoneInput! $method: PhoneVerificationMethodsEnum!) {
     startUserPhoneVerification(phoneDetails: $phoneDetails method: $method) {
       carrier
       is_cellphone

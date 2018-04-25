@@ -15,7 +15,9 @@ export default class ConfirmPhoneNumber extends Component {
 
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
-    this.props.profileStore.confirmPhoneNumber();
+    this.props.profileStore.confirmPhoneNumber().then(() => {
+      this.props.setDashboardWizardStep();
+    });
   }
 
   render() {
@@ -51,12 +53,12 @@ export default class ConfirmPhoneNumber extends Component {
               name="code"
               size="huge"
               containerclassname="otp-field"
-              maxLength={4}
+              maxLength={6}
               fielddata={verifyIdentity04.fields.code}
               changed={verifyVerificationCodeChange}
             />
             <div className="center-align">
-              <Button primary size="large" className="very relaxed">Confirm</Button>
+              <Button primary size="large" className="very relaxed" disabled={!verifyIdentity04.meta.isValid}>Confirm</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.profileStore.startPhoneVerification()}>Resend the code to my phone</Button>
