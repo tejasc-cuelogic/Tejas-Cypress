@@ -31,7 +31,7 @@
 @inputFont: @pageFont;
 @inputWidth: 100%;
 @inputFontSize: 1em;
-@inputPadding: (@inputVerticalPadding + ((1em - @inputLineHeight) / 2)) (@inputHorizontalPadding * 0);
+@inputPadding: (@inputVerticalPadding + ((1em - @inputLineHeight) / 2)) @inputHorizontalPadding;
 @inputBorder:none;
 @inputBorderRadius: @absoluteBorderRadius * 0;
 @inputColor: @textColor;
@@ -155,10 +155,10 @@
 
 /* Inverted */
 @invertedInputBackground: @inputBackground;
-@invertedInputBorderColor: @whiteBorderColor;
+@invertedInputBorderColor: @border-color;
 @invertedInputBoxShadow: @inputBoxShadow;
-@invertedInputColor: @inputColor;
-@invertedLabelColor: @invertedTextColor;
+@invertedInputColor: @white;
+@invertedLabelColor: @quaternary-text;
 @invertedInputBoxShadow: none;
 
 /*-------------------

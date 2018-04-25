@@ -1,3 +1,4 @@
+/*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { toJS } from 'mobx';
 import { Grid, Dropdown, Form, Label, Icon, List } from 'semantic-ui-react';
@@ -7,8 +8,8 @@ import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
 
 export const DropdownFilter = props => (
-  <Grid.Column width={3}>
-    <h5>{props.name}</h5>
+  <Grid.Column width={3} className="field">
+    <label>{props.name}</label>
     <Dropdown
       name={props.keyName || camelCase(props.name)}
       onChange={props.change}
@@ -24,8 +25,8 @@ export const DropdownFilter = props => (
 );
 
 export const DateRangeFilter = props => (
-  <Grid.Column width={4}>
-    <h5>{props.label}</h5>
+  <Grid.Column width={4} className="field">
+    <label>{props.label}</label>
     <Form>
       <Form.Group widths="equal">
         <Form.Field>

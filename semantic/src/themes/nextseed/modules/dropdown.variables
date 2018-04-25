@@ -128,13 +128,13 @@
 
 @selectionMinWidth: 14em;
 @selectionVerticalPadding: @inputVerticalPadding;
-@selectionHorizontalPadding:0;
+@selectionHorizontalPadding: @inputHorizontalPadding;
 @selectionBorderEmWidth:  @relative1px;
 @selectionMinHeight: @inputLineHeight + (@selectionVerticalPadding * 2) - @selectionBorderEmWidth;
 @selectionBackground: @inputBackground;
 @selectionDisplay: inline-block;
-@selectionIconDistance: @selectionHorizontalPadding + @glyphWidth;
-@selectionPadding: @selectionVerticalPadding @selectionIconDistance @selectionVerticalPadding @selectionHorizontalPadding;
+@selectionIconDistance: (@inputHorizontalPadding / 2) + @glyphWidth;
+@selectionPadding: @selectionVerticalPadding @selectionIconDistance @selectionVerticalPadding 0;
 @selectionZIndex: 10;
 
 @selectionItemDivider: 1px solid @solidInternalBorderColor;
@@ -160,7 +160,7 @@
 @selectionIconZIndex: 3;
 @selectionIconHitbox: @selectionVerticalPadding;
 @selectionIconMargin: -@selectionIconHitbox;
-@selectionIconPadding: @selectionIconHitbox / @dropdownIconSize;
+@selectionIconPadding: (@selectionIconHitbox / @dropdownIconSize) 0 (@selectionIconHitbox / @dropdownIconSize) (@selectionIconHitbox / @dropdownIconSize);
 @selectionIconTransition: opacity @defaultDuration @defaultEasing;
 
 @selectionMenuBorderRadius: 0em 0em @borderRadius @borderRadius;
@@ -189,11 +189,11 @@
 @selectionWidescreenMaxMenuHeight: (@selectionItemHeight * @selectionWidescreenMaxItems);
 
 /* Hover */
-@selectionHoverBorderColor: @selectedBorderColor;
+@selectionHoverBorderColor: @theme-primary;
 @selectionHoverBoxShadow: none;
 
 /* Focus */
-@selectionFocusBorderColor: @focusedFormMutedBorderColor;
+@selectionFocusBorderColor: @theme-primary;
 @selectionFocusBoxShadow: none;
 @selectionFocusMenuBoxShadow: @raisedShadow;
 
@@ -201,12 +201,12 @@
 @selectionVisibleTextFontWeight: normal;
 @selectionVisibleTextColor: @hoveredTextColor;
 
-@selectionVisibleBorderColor: @focusedFormMutedBorderColor;
+@selectionVisibleBorderColor: @theme-primary;
 @selectionVisibleBoxShadow: @raisedShadow;
 @selectionVisibleMenuBoxShadow: @raisedShadow;
 
 /* Visible Hover */
-@selectionActiveHoverBorderColor: @focusedFormMutedBorderColor;
+@selectionActiveHoverBorderColor: @theme-primary;
 @selectionActiveHoverBoxShadow: @selectionVisibleBoxShadow;
 @selectionActiveHoverMenuBoxShadow: @selectionVisibleMenuBoxShadow;
 
@@ -245,14 +245,14 @@
 
 /* Split Actual Padding Between Child and Parent (allows for label spacing) */
 @multipleSelectionVerticalPadding: (@searchSelectionVerticalPadding * (1/3));
-@multipleSelectionLeftPadding: @relative5px;
+@multipleSelectionLeftPadding:0;
 @multipleSelectionRightPadding: @selectionIconDistance;
 @multipleSelectionPadding: @multipleSelectionVerticalPadding @multipleSelectionRightPadding @multipleSelectionVerticalPadding @multipleSelectionLeftPadding;
 
 /* Child Elements */
 @multipleSelectionChildVerticalMargin: (@searchSelectionVerticalPadding * (2/3));
 @multipleSelectionChildLeftMargin: (@inputHorizontalPadding - @multipleSelectionLeftPadding);
-@multipleSelectionChildMargin: @multipleSelectionChildVerticalMargin 0em @multipleSelectionChildVerticalMargin @multipleSelectionChildLeftMargin;
+@multipleSelectionChildMargin: @multipleSelectionChildVerticalMargin 0em;
 @multipleSelectionChildLineHeight: @relative17px;
 @multipleSelectionSearchStartWidth: (@glyphWidth * 2);
 
@@ -284,7 +284,7 @@
 @hoveredZIndex: @menuZIndex + 2;
 
 /* Default Text */
-@defaultTextColor:@tertiary-text;
+@defaultTextColor:@quaternary-text;
 @defaultTextFocusColor: @inputPlaceholderFocusColor;
 
 /* Loading */

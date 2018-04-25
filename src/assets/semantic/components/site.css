@@ -404,11 +404,6 @@ div.login-form ul.error-messages {
     padding: 0.5rem 0.71428571rem 1rem;
   }
 }
-.search-filters h5 {
-  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  color: #989898;
-  margin: 0 0 0.5rem;
-}
 .filter-meta {
   background-color: #383838;
   padding: 1rem 2.85714286rem;

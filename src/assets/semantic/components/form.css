@@ -105,7 +105,7 @@
   -webkit-appearance: none;
   tap-highlight-color: rgba(255, 255, 255, 0);
   line-height: 1.21428571em;
-  padding: 0.67857143em 0em;
+  padding: 0.67857143em 0;
   font-size: 1em;
   background: transparent;
   border: none;
@@ -122,7 +122,7 @@
   margin: 0em;
   -webkit-appearance: none;
   tap-highlight-color: rgba(255, 255, 255, 0);
-  padding: 0.78571429em 1em;
+  padding: 0.78571429em 0;
   background: transparent;
   border: none;
   outline: none;
@@ -167,7 +167,7 @@
   border-radius: 0rem;
   -webkit-box-shadow: 0em 0em 0em 0em transparent inset;
           box-shadow: 0em 0em 0em 0em transparent inset;
-  padding: 0.62em 1em;
+  padding: 0.62em 0;
   color: #000000;
   -webkit-transition: color 0.1s ease, border-color 0.1s ease;
   transition: color 0.1s ease, border-color 0.1s ease;
@@ -717,7 +717,7 @@
 .ui.inverted.form .inline.fields .field > p,
 .ui.inverted.form .inline.field > label,
 .ui.inverted.form .inline.field > p {
-  color: rgba(255, 255, 255, 0.9);
+  color: #989898;
 }
 
 /* Inverted Field */
@@ -734,8 +734,8 @@
 .ui.inverted.form input[type="file"],
 .ui.inverted.form input[type="url"] {
   background: transparent;
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #000000;
+  border-color: #BDBDBD;
+  color: #FFFFFF;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -1166,72 +1166,6 @@
 /*  Inverted Form  */
 .ui.form .field > label {
   display: inline-block;
-}
-.ui.form.inverted label {
-  font-weight: 400;
-  color: #FFFFFF;
-}
-.ui.form.inverted input:not([type]),
-.ui.form.inverted input[type=date],
-.ui.form.inverted input[type=datetime-local],
-.ui.form.inverted input[type=email],
-.ui.form.inverted input[type=file],
-.ui.form.inverted input[type=number],
-.ui.form.inverted input[type=password],
-.ui.form.inverted input[type=search],
-.ui.form.inverted input[type=tel],
-.ui.form.inverted input[type=text],
-.ui.form.inverted input[type=time],
-.ui.form.inverted input[type=url] {
-  border-radius: 0;
-  color: #FFFFFF;
-  background-color: transparent;
-  border-color: transparent transparent #BDBDBD;
-}
-.ui.form.inverted input:not([type])::-webkit-input-placeholder,
-.ui.form.inverted input[type=date]::-webkit-input-placeholder,
-.ui.form.inverted input[type=datetime-local]::-webkit-input-placeholder,
-.ui.form.inverted input[type=email]::-webkit-input-placeholder,
-.ui.form.inverted input[type=file]::-webkit-input-placeholder,
-.ui.form.inverted input[type=number]::-webkit-input-placeholder,
-.ui.form.inverted input[type=password]::-webkit-input-placeholder,
-.ui.form.inverted input[type=search]::-webkit-input-placeholder,
-.ui.form.inverted input[type=tel]::-webkit-input-placeholder,
-.ui.form.inverted input[type=text]::-webkit-input-placeholder,
-.ui.form.inverted input[type=time]::-webkit-input-placeholder,
-.ui.form.inverted input[type=url]::-webkit-input-placeholder {
-  color: #989898;
-}
-.ui.form.inverted input:not([type]):-ms-input-placeholder,
-.ui.form.inverted input[type=date]:-ms-input-placeholder,
-.ui.form.inverted input[type=datetime-local]:-ms-input-placeholder,
-.ui.form.inverted input[type=email]:-ms-input-placeholder,
-.ui.form.inverted input[type=file]:-ms-input-placeholder,
-.ui.form.inverted input[type=number]:-ms-input-placeholder,
-.ui.form.inverted input[type=password]:-ms-input-placeholder,
-.ui.form.inverted input[type=search]:-ms-input-placeholder,
-.ui.form.inverted input[type=tel]:-ms-input-placeholder,
-.ui.form.inverted input[type=text]:-ms-input-placeholder,
-.ui.form.inverted input[type=time]:-ms-input-placeholder,
-.ui.form.inverted input[type=url]:-ms-input-placeholder {
-  color: #989898;
-}
-.ui.form.inverted input:not([type])::placeholder,
-.ui.form.inverted input[type=date]::placeholder,
-.ui.form.inverted input[type=datetime-local]::placeholder,
-.ui.form.inverted input[type=email]::placeholder,
-.ui.form.inverted input[type=file]::placeholder,
-.ui.form.inverted input[type=number]::placeholder,
-.ui.form.inverted input[type=password]::placeholder,
-.ui.form.inverted input[type=search]::placeholder,
-.ui.form.inverted input[type=tel]::placeholder,
-.ui.form.inverted input[type=text]::placeholder,
-.ui.form.inverted input[type=time]::placeholder,
-.ui.form.inverted input[type=url]::placeholder {
-  color: #989898;
-}
-.ui.form.inverted .icon {
-  color: #989898;
 }
 .ui.form .error:not(.field) {
   color: #EB5757;

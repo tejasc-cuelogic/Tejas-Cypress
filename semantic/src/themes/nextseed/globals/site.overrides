@@ -235,12 +235,12 @@ div.login-form {
 	}
 	// &.webcontent-spacer{
 	// }
-	h5{
-		// font-size:0.857142em;
-		font-family:@pageFont;
-		color:@quaternary-text;
-		margin:0 0 @7px;
-	}
+	// h5{
+	// 	// font-size:0.857142em;
+	// 	font-family:@pageFont;
+	// 	color:@quaternary-text;
+	// 	margin:0 0 @7px;
+	// }
 }
 .filter-meta{
 	background-color:@secondary-text;

@@ -99,35 +99,35 @@
     .field>label{
         display:inline-block;
     }
-    &.inverted{
-        label{
-            font-weight:400;
-            color:@inverse-text;
-        }
-        input:not([type]),
-        input[type=date],
-        input[type=datetime-local],
-        input[type=email],
-        input[type=file],
-        input[type=number],
-        input[type=password],
-        input[type=search],
-        input[type=tel],
-        input[type=text],
-        input[type=time],
-        input[type=url]{
-            border-radius:0;
-            color:@white;
-            background-color:transparent;
-            border-color:transparent transparent @border-color;
-            &::placeholder{
-                color:@quaternary-text;
-            }
-        }
-        .icon{
-            color:@quaternary-text;
-        }
-    }
+    // &.inverted{
+    //     label{
+    //         font-weight:400;
+    //         color:@inverse-text;
+    //     }
+    //     input:not([type]),
+    //     input[type=date],
+    //     input[type=datetime-local],
+    //     input[type=email],
+    //     input[type=file],
+    //     input[type=number],
+    //     input[type=password],
+    //     input[type=search],
+    //     input[type=tel],
+    //     input[type=text],
+    //     input[type=time],
+    //     input[type=url]{
+    //         border-radius:0;
+    //         color:@white;
+    //         background-color:transparent;
+    //         border-color:transparent transparent @border-color;
+    //         &::placeholder{
+    //             color:@quaternary-text;
+    //         }
+    //     }
+    //     .icon{
+    //         color:@quaternary-text;
+    //     }
+    // }
     .error:not(.field){
         // font-size:@12px;
         color:@negativeTextColor;
