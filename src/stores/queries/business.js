@@ -24,55 +24,72 @@ export const getXmlDetails = gql`
 export const filerInformationMutation = gql`
   mutation upsertXmlInformation($businessId: String!, $filingId: String!, $xmlSubmissionId: String, $filerInformation: CreateFilerInformationInput ) {
     upsertXmlInformation(businessId: $businessId, filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, filerInformation: $filerInformation) {
-      xmlSubmissionId
-      payload
+      ... on BusinessFilingSubmission {
+        payload
+        xmlSubmissionId
+      }
     }
   }`;
 
 export const issuerInformationMutation = gql`
   mutation upsertXmlInformation($businessId: String!, $filingId: String!, $xmlSubmissionId: String, $issuerInformation: CreateIssuerInformationInput ) {
     upsertXmlInformation(businessId: $businessId, filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, issuerInformation: $issuerInformation) {
-      xmlSubmissionId
-      payload
+      ... on BusinessFilingSubmission {
+        payload
+        xmlSubmissionId
+      }
     }
   }`;
 
 export const offeringInformationMutation = gql`
   mutation upsertXmlInformation($businessId: String!, $filingId: String!, $xmlSubmissionId: String, $offeringInformation: CreateOfferingInformationInput ) {
     upsertXmlInformation(businessId: $businessId, filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, offeringInformation: $offeringInformation) {
-      xmlSubmissionId
-      payload
+      ... on BusinessFilingSubmission {
+        payload
+        xmlSubmissionId
+      }
     }
   }`;
 
 export const annualReportMutation = gql`
   mutation upsertXmlInformation($businessId: String!, $filingId: String!, $xmlSubmissionId: String, $annualReportDisclosureRequirements: CreateAnnualReportDisclosureRequirementsInput ) {
     upsertXmlInformation(businessId: $businessId, filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, annualReportDisclosureRequirements: $annualReportDisclosureRequirements) {
-      xmlSubmissionId
-      payload
+      ... on BusinessFilingSubmission {
+        payload
+        xmlSubmissionId
+      }
     }
   }`;
 
 export const signatureMutation = gql`
 mutation upsertXmlInformation($businessId: String!, $filingId: String!, $xmlSubmissionId: String, $signature: CreateSignatureInput ) {
   upsertXmlInformation(businessId: $businessId, filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, signature: $signature) {
-    xmlSubmissionId
-    payload
+    ... on BusinessFilingSubmission {
+      payload
+      xmlSubmissionId
+    }
   }
 }`;
 
 export const documentListMutation = gql`
   mutation upsertXmlInformation($businessId: String!, $filingId: String!, $xmlSubmissionId: String, $documentList: [CreateDocumentInput] ) {
     upsertXmlInformation(businessId: $businessId, filingId:$filingId, xmlSubmissionId: $xmlSubmissionId, documentList: $documentList) {
-      xmlSubmissionId
-      payload
+      ... on BusinessFilingSubmission {
+        payload
+        xmlSubmissionId
+      }
     }
   }`;
 
 export const xmlSubmissionMutation = gql`
   mutation upsertXmlInformation($businessId: String!, $filingId: String!, $xmlSubmissionId: String) {
     upsertXmlInformation(businessId: $businessId, filingId:$filingId, xmlSubmissionId: $xmlSubmissionId) {
-      xmlSubmissionId
-      xmlSubmissionStatus
+      ... on BusinessFilingSubmission {        
+        xmlSubmissionId
+      }
+      
+      ... on XmlSubmissionErrorOutput {
+        errors
+      }
     }
   }`;
