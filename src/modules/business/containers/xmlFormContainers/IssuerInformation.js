@@ -49,7 +49,7 @@ export default class IssuerInformation extends React.Component {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(2);
           if (this.props.businessStore.xmlSubmissionId === 'undefined') {
-            const { xmlSubmissionId } = data.upsertFilerInformation;
+            const { xmlSubmissionId } = data.upsertXmlInformation;
             this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
           }
           Helper.toast('Issuer information submitted successfully', 'success');

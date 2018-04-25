@@ -65,7 +65,7 @@ export default class OfferingInformation extends React.Component {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(3);
           if (this.props.businessStore.xmlSubmissionId === 'undefined') {
-            const { xmlSubmissionId } = data.body.data.upsertFilerInformation;
+            const { xmlSubmissionId } = data.upsertXmlInformation;
             this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
           }
           Helper.toast('Offering information submitted successfully', 'success');

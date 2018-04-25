@@ -50,7 +50,7 @@ export default class Signature extends React.Component {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(5);
           if (this.props.businessStore.xmlSubmissionId === 'undefined') {
-            const { xmlSubmissionId } = data.body.data.upsertFilerInformation;
+            const { xmlSubmissionId } = data.upsertXmlInformation;
             this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
           }
           Helper.toast('Signature information submitted successfully', 'success');

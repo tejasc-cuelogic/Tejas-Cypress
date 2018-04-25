@@ -57,7 +57,7 @@ export default class FilerInformation extends React.Component {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(1);
           if (this.props.businessStore.xmlSubmissionId === 'undefined') {
-            const { xmlSubmissionId } = data.upsertFilerInformation;
+            const { xmlSubmissionId } = data.upsertXmlInformation;
             this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
           }
           Helper.toast('Filer information submitted successfully', 'success');
@@ -76,7 +76,7 @@ export default class FilerInformation extends React.Component {
       <div>
         <Card fluid className="form-card">
           <Form.Field>
-            { /* eslint-disable jsx-a11y/label-has-for */ }
+            { /* eslint-disable jsx-a11y/label-has-for */}
             <label>Website URL</label>
             <Popup
               trigger={
@@ -149,53 +149,59 @@ export default class FilerInformation extends React.Component {
               onChange={this.handleCheckboxChange}
             />
           </Form.Group>
-          <Form.Input
-            placeholder="Name"
-            label="Name"
-            name="contactName"
-            value={filerInformation.contactName.value}
-            error={!!filerInformation.contactName.error}
-            onChange={this.handleChange}
-            onBlur={this.handleOnBlur}
-          />
-          <Form.Input
-            placeholder="Phone Number"
-            label="Phone Number"
-            name="contactPhone"
-            value={filerInformation.contactPhone.value}
-            error={!!filerInformation.contactPhone.error}
-            onChange={this.handleChange}
-            onBlur={this.handleOnBlur}
-          />
-          <Form.Input
-            placeholder="Email"
-            label="Email"
-            name="contactEmail"
-            value={filerInformation.contactEmail.value}
-            error={!!filerInformation.contactEmail.error}
-            onChange={this.handleChange}
-            onBlur={this.handleOnBlur}
-          />
-          <Form.Checkbox
-            label="Notify via Filing Website only?"
-            name="overrideInternetFlag"
-            checked={filerInformation.overrideInternetFlag.value}
-            onChange={this.handleCheckboxChange}
-            onBlur={this.handleOnBlur}
-          />
-          <div className={!filerInformation.overrideInternetFlag.value ? 'field disabled' : 'field'} >
-            { /* eslint-disable jsx-a11y/label-has-for */ }
-            <label>
-              Enter notification email
-            </label>
-            <Chips
-              value={filerInformation.notificationEmail.value}
-              error={!!filerInformation.notificationEmail.error}
-              onChange={this.handleNotificationEmailChange}
-              createChipKeys={[9, 13, 32, 188]}
-            />
-          </div>
         </Card>
+        <Card.Group itemsPerRow={2}>
+          <Card fluid className="form-card">
+            <Form.Input
+              placeholder="Name"
+              label="Name"
+              name="contactName"
+              value={filerInformation.contactName.value}
+              error={!!filerInformation.contactName.error}
+              onChange={this.handleChange}
+              onBlur={this.handleOnBlur}
+            />
+            <Form.Input
+              placeholder="Phone Number"
+              label="Phone Number"
+              name="contactPhone"
+              value={filerInformation.contactPhone.value}
+              error={!!filerInformation.contactPhone.error}
+              onChange={this.handleChange}
+              onBlur={this.handleOnBlur}
+            />
+            <Form.Input
+              placeholder="Email"
+              label="Email"
+              name="contactEmail"
+              value={filerInformation.contactEmail.value}
+              error={!!filerInformation.contactEmail.error}
+              onChange={this.handleChange}
+              onBlur={this.handleOnBlur}
+            />
+          </Card>
+          <Card fluid className="form-card">
+            <Form.Checkbox
+              label="Notify via Filing Website only?"
+              name="overrideInternetFlag"
+              checked={filerInformation.overrideInternetFlag.value}
+              onChange={this.handleCheckboxChange}
+              onBlur={this.handleOnBlur}
+            />
+            <div className={!filerInformation.overrideInternetFlag.value ? 'field disabled' : 'field'} >
+              { /* eslint-disable jsx-a11y/label-has-for */}
+              <label>
+                Enter notification email
+              </label>
+              <Chips
+                value={filerInformation.notificationEmail.value}
+                error={!!filerInformation.notificationEmail.error}
+                onChange={this.handleNotificationEmailChange}
+                createChipKeys={[9, 13, 32, 188]}
+              />
+            </div>
+          </Card>
+        </Card.Group>
         <Divider hidden />
         <div className="right-align">
           <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
