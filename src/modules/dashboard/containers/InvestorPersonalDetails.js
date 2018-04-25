@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
-import { FormInput, FormSelect, FormDatePicker, MaskedInput } from '../../../components/form/FormElements';
+import { FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete } from '../../../components/form/FormElements';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
+import profileActions from '../../../actions/profile';
 import Helper from '../../../helper/utility';
 
 @inject('profileStore', 'uiStore', 'userStore')
@@ -78,6 +79,12 @@ export default class investorPersonalDetails extends Component {
               fielddata={verifyIdentity01.fields.residentalStreet}
               tooltip="Put your last name as listed on your driver license"
               changed={verifyIdentityEleChange}
+            />
+            <AutoComplete
+              type="text"
+              name="residentalStreet"
+              fielddata={verifyIdentity01.fields.residentalStreet}
+              onplaceselected={profileActions.setAddressFieldsOnGoogleAutocomplete}
             />
             <Form.Group widths="equal">
               <FormInput
