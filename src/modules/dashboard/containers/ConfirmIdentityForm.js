@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import { Modal, Button, Header, Form, Divider, Icon } from 'semantic-ui-react';
 import { FormInput } from '../../../components/form/FormElements';
+import Helper from '../../../helper/utility';
 
-@inject('profileStore')
+@inject('profileStore', 'uiStore')
 @observer
 export default class ConfirmIdentityForm extends Component {
   handleIdentityQuestionsSubmit = (e) => {
@@ -13,8 +14,11 @@ export default class ConfirmIdentityForm extends Component {
     this.props.profileStore.submitConfirmIdentityQuestions().then((result) => {
       /* eslint-disable no-underscore-dangle */
       if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
+        Helper.toast('Identity questions verified.', 'success');
         this.props.profileStore.startPhoneVerification();
         this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+      } else {
+        Helper.toast('Identity questions not verified.', 'error');
       }
     });
   }
@@ -44,7 +48,7 @@ export default class ConfirmIdentityForm extends Component {
               />
             ))}
             <div className="center-align">
-              <Button color="green" size="large" className="relaxed" disabled={!verifyIdentity02.meta.isValid}>Verify my identity</Button>
+              <Button loading={this.props.uiStore.inProgress} color="green" size="large" className="relaxed" disabled={!verifyIdentity02.meta.isValid}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>

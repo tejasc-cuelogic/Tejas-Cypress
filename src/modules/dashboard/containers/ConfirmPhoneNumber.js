@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../components/form/FormElements';
 
-import ListErrors from '../../../components/common/ListErrors';
+import Helper from '../../../helper/utility';
 
 @inject('profileStore', 'uiStore')
 @observer
@@ -16,22 +16,20 @@ export default class ConfirmPhoneNumber extends Component {
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
     this.props.profileStore.confirmPhoneNumber().then(() => {
+      Helper.toast('Phone number is confirmed.', 'success');
       this.props.setDashboardWizardStep();
     });
   }
 
   render() {
-    const { verifyIdentity01, verifyIdentity04, verifyVerificationCodeChange } =
-    this.props.profileStore;
-    const { errors } = this.props.uiStore;
+    const {
+      verifyIdentity01,
+      verifyIdentity04,
+      verifyVerificationCodeChange,
+    } = this.props.profileStore;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
           <Header as="h2">Confirm your phone number</Header>
           <Divider />
           <p>We are about to text a verification code to:</p>
@@ -47,7 +45,7 @@ export default class ConfirmPhoneNumber extends Component {
             hidelabel
             className="display-only"
           />
-          <p><Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>Change phone number</Link></p>
+          <p><Link to="/app/dashboard" onClick={this.handleChangePhoneNumber}>Change phone number</Link></p>
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <FormInput
               name="code"
@@ -58,7 +56,7 @@ export default class ConfirmPhoneNumber extends Component {
               changed={verifyVerificationCodeChange}
             />
             <div className="center-align">
-              <Button primary size="large" className="very relaxed" disabled={!verifyIdentity04.meta.isValid}>Confirm</Button>
+              <Button loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!verifyIdentity04.meta.isValid}>Confirm</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.profileStore.startPhoneVerification()}>Resend the code to my phone</Button>

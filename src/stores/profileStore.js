@@ -3,7 +3,7 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import { GqlClient as client } from '../services/graphql';
-import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification } from '../stores/queries/profile';
+import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
 
 import api from '../ns-api';
 import uiStore from './uiStore';
@@ -115,7 +115,6 @@ export class ProfileStore {
   /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
     uiStore.setProgress();
-    uiStore.setLoaderMessage('Submitting Personal Details');
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -146,7 +145,6 @@ export class ProfileStore {
         })
         .finally(() => {
           uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
         });
     });
   }
@@ -167,9 +165,7 @@ export class ProfileStore {
   }
 
   submitConfirmIdentityQuestions = () => {
-    console.log(this.getFormattedIdentityQuestionsAnswers);
     uiStore.setProgress();
-    uiStore.setLoaderMessage('Submitting Confirm Identity Questions');
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -183,7 +179,6 @@ export class ProfileStore {
           },
         })
         .then((result) => {
-          Helper.toast('Identity questions submitted.', 'success');
           resolve(result);
         })
         .catch((err) => {
@@ -192,7 +187,6 @@ export class ProfileStore {
         })
         .finally(() => {
           uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
         });
     });
   }
@@ -223,7 +217,6 @@ export class ProfileStore {
 
   confirmPhoneNumber = () => {
     uiStore.setProgress();
-    uiStore.setLoaderMessage('Confirming Phone Number');
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -237,7 +230,29 @@ export class ProfileStore {
           },
         })
         .then(() => {
-          Helper.toast('Phone number is confirmed.', 'success');
+          client
+            .mutate({
+              mutation: updateUserCIPInfo,
+              variables: {
+                userId: userStore.currentUser.sub,
+                user: {
+                  firstLegalName: this.verifyIdentity01.fields.firstLegalName.value,
+                  lastLegalName: this.verifyIdentity01.fields.lastLegalName.value,
+                  dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
+                  ssn: Helper.unMaskInput(this.verifyIdentity01.fields.ssn.value),
+                  legalAddress: {
+                    street1: this.verifyIdentity01.fields.residentalStreet.value,
+                    city: this.verifyIdentity01.fields.city.value,
+                    state: this.verifyIdentity01.fields.state.value,
+                    zipCode: this.verifyIdentity01.fields.zipCode.value,
+                  },
+                },
+                phoneDetails: {
+                  phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+                  countryCode: '91',
+                },
+              },
+            });
           resolve();
         })
         .catch((err) => {
@@ -246,7 +261,6 @@ export class ProfileStore {
         })
         .finally(() => {
           uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
         });
     });
   }
