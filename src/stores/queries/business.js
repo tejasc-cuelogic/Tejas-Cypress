@@ -18,6 +18,7 @@ export const getXmlDetails = gql`
       businessId
       filingId
       xmlSubmissionId
+      xmlSubmissionStatus
   } 
 }`;
 

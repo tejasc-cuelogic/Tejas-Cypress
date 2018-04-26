@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom'; // Redirect
 import {
   OFFERED_SECURITIES,
   OVER_SUBSCRIPTION_ALLOCATION_TYPES,
+  XML_STATUSES,
 } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
 import busiessActions from '../../../../actions/business';
@@ -77,7 +78,7 @@ export default class OfferingInformation extends React.Component {
   }
 
   render() {
-    const { offeringInformation } = this.props.businessStore;
+    const { offeringInformation, xmlSubmissionStatus } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
@@ -241,9 +242,12 @@ export default class OfferingInformation extends React.Component {
             Back
           </Button>
           <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
-          <Button color="green" size="large" onClick={this.handleOfferingInformationSubmit}>
-            Save & Next <Icon name="chevron right" />
-          </Button>
+          {
+            xmlSubmissionStatus !== XML_STATUSES.completed &&
+            <Button color="green" size="large" onClick={this.handleOfferingInformationSubmit}>
+              Save & Next <Icon name="chevron right" />
+            </Button>
+          }
         </div>
       </div>
     );

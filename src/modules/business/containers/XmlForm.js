@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Grid, Icon } from 'semantic-ui-react';
+import { Form, Grid, Icon, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
@@ -14,6 +14,9 @@ import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
 import Helper from '../../../helper/utility';
 import FormErrors from '../../../components/common/FormErrors';
+import {
+  XML_STATUSES,
+} from '../../../constants/business';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -87,6 +90,7 @@ export default class XmlForm extends React.Component {
       xmlSubmissionTabs,
       xmlActiveTabId,
       xmlSubmissionId,
+      xmlSubmissionStatus,
     } = this.props.businessStore;
     if (this.props.uiStore.inProgress) {
       return (
@@ -104,6 +108,16 @@ export default class XmlForm extends React.Component {
                 <h1>
                   <Link to={`/app/business/${this.props.match.params.businessId}`} className="back-link"><Icon name="long arrow left" /></Link>
                   XML Form
+                  {
+                    xmlSubmissionStatus === XML_STATUSES.completed &&
+                    <Button
+                      circular
+                      color="green"
+                      floated="right"
+                    >
+                      Copy XML Submission
+                    </Button>
+                  }
                 </h1>
               </Grid.Column>
             </Grid.Row>

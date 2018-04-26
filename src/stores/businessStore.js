@@ -92,6 +92,9 @@ export class BusinessStore {
   @observable
   xmlActiveTabId = 0;
 
+  @observable
+  xmlSubmissionStatus = '';
+
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
   }
@@ -308,6 +311,11 @@ export class BusinessStore {
   @action
   clearSignature() {
     this.signature = { ...SIGNATURE }
+  }
+
+  @action
+  setXmlSubmissionStatus(status) {
+    this.xmlSubmissionStatus = status;
   }
 
   /**

@@ -699,9 +699,11 @@ export class Business {
   setXmlPayload = (data) => {    
     const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
     const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
+    
     if (data) {
       businessStore.setBusinessId(data.businessId);
       businessStore.setFilingId(data.filingId);
+      businessStore.setXmlSubmissionStatus(data.xmlSubmissionStatus);
       // businessStore.setOfferingUrl(payload.offeringUrl);
       _.map(data.payload.filerInformation, (value, key) => {
         if (confirmationFlags.includes(key)) {
@@ -757,35 +759,43 @@ export class Business {
     }
   }
 
-  validateFilerInfo = (filerInformation) => {    
+  validateFilerInfo = (filerInformation, setError = true) => {    
     const newFiler = validationActions.validateXmlFormData(filerInformation);
     const errors = this.newValidationErrors(newFiler);
     businessStore.setFiler(newFiler);
-    businessStore.setXmlError(errors);
+    if (setError) {
+      businessStore.setXmlError(errors);
+    }    
   }
 
-  validateIssuerInfo = (issuerInformation) => {
+  validateIssuerInfo = (issuerInformation, setError = true) => {
     const newIssuer = validationActions.validateXmlFormData(issuerInformation);
     const errors = this.newValidationErrors(newIssuer);
     businessStore.setIssuer(newIssuer);
-    businessStore.setXmlError(errors);
+    if (setError) {
+      businessStore.setXmlError(errors);
+    }
   }
 
-  validateOfferingInfo = (offeringInformation) => {
+  validateOfferingInfo = (offeringInformation, setError = true) => {
     const newOffering = validationActions.validateXmlFormData(offeringInformation);
     const errors = this.newValidationErrors(newOffering);
     businessStore.setOffering(newOffering);
-    businessStore.setXmlError(errors);
+    if (setError) {
+      businessStore.setXmlError(errors);
+    }
   }
 
-  validateAnnualReportInfo = (annualReportRequirements) => {
+  validateAnnualReportInfo = (annualReportRequirements, setError = true) => {
     const newAnnualReport = validationActions.validateXmlFormData(annualReportRequirements);
     const errors = this.newValidationErrors(newAnnualReport);
     businessStore.setAnnualReport(newAnnualReport);
-    businessStore.setXmlError(errors);
+    if (setError) {
+      businessStore.setXmlError(errors);
+    }
   }
 
-  validateSignatureInfo = (signature) => {
+  validateSignatureInfo = (signature, setError = true) => {
     
     const newSignature = validationActions.validateXmlFormData({
       issuer: signature.issuer,
@@ -796,12 +806,13 @@ export class Business {
     const errors = this.newValidationErrors(newSignature);
     newSignature['signaturePersons'] = signature.signaturePersons;
     businessStore.setSignature(newSignature);
-    businessStore.setXmlError(errors);
-
-    this.validatePersonSign(signature.signaturePersons);
+    if (setError) {
+      businessStore.setXmlError(errors);
+    }
+    this.validatePersonSign(signature.signaturePersons, setError);
   }
 
-  validatePersonSign = (signaturePersons) => {
+  validatePersonSign = (signaturePersons, setError = true) => {
     
     let personSignatureData = [];
     
@@ -814,14 +825,16 @@ export class Business {
       }));
 
       const personErrors = this.newValidationErrors(personSignatureData, true);
-      businessStore.setXmlError(personErrors);
+      if (setError) {
+        businessStore.setXmlError(personErrors);
+      }
     });
     
     businessStore.setNewPersonalSignature(personSignatureData);
   }
 
   validateDocumentList = (documentList) => {
-    const documentCount = documentList.length;
+    const documentCount = documentList.length;    
     let documnetCurrentCount = 0;
     _.map(documentList, (document) => {
       if (document.checked === false) {
@@ -830,16 +843,18 @@ export class Business {
     });
 
     if (documentCount === documnetCurrentCount) {
-      businessStore.setXmlError({
+      const errorMessage = {
         documentListError:'Please select at least one document.'
-      });
+      };
+      businessStore.setXmlError(errorMessage);
+      return errorMessage;
     }    
   }
 
-  newValidationErrors = (data, isArray = false) => {    
+  newValidationErrors = (data, isMultiple = false) => {    
     const xmlErrors = { ...businessStore.xmlErrors };
         
-    if (isArray) {
+    if (isMultiple) {
       let errors = {};      
       _.map(data, (key) => {        
         errors = _.mapValues(key, input =>  input.error);
@@ -850,6 +865,50 @@ export class Business {
       const errors = _.mapValues(data, input => input.error);      
       return _.merge(xmlErrors, errors);
     }    
+  }
+
+  validateAllXmlSubmission = () => {
+    return new Promise((resolve, reject) => {
+      this.validateFilerInfo(businessStore.filerInformation, false);
+      this.validateIssuerInfo(businessStore.issuerInformation, false);
+      this.validateOfferingInfo(businessStore.offeringInformation, false);
+      this.validateAnnualReportInfo(businessStore.annualReportRequirements, false);
+      this.validateSignatureInfo(businessStore.signature, false);
+      const errorMessage = this.validateDocumentList(businessStore.documentList);      
+
+      let errors = {};
+      if (!businessStore.canSubmitFilerInfoXmlForm) {
+        errors['filerStep'] = 'Please complete the Filer Information step.';
+      } 
+      
+      if (!businessStore.canSubmitIssuerInfoXmlForm) {
+        errors['issuerStep'] = 'Please complete the Issuer Information step.';
+      } 
+      
+      if (!businessStore.canSubmitOfferingInfoXmlForm) {
+        errors['offerStep'] = 'Please complete the Offering Information step.';
+      } 
+      
+      if (!businessStore.canSubmitAnnualReportXmlForm) {
+        errors['annualStep'] = 'Please complete the Annual Report Disclosure Requirements step.';
+      }
+
+      if (!businessStore.canSubmitSigntureForm ||
+        _.includes(businessStore.canSubmitSignaturePersonsForm, false)) {
+        errors['signatureStep'] = 'Please complete the Signature Information step.';
+      }
+      
+      if (errorMessage) {
+        errors['documentStep'] = errorMessage.documentListError;
+      }
+      // Check if error is preset then send the errors
+      if (!_.isEmpty(errors)) {
+        businessStore.setXmlError(errors);
+        reject (errors);
+      } else {
+        resolve(true);
+      }
+   });
   }
   // Private Methods ends here
 }

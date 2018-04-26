@@ -7,6 +7,9 @@ import Chips from 'react-chips/lib/Chips';
 import validationActions from '../../../../actions/validation';
 import businessActions from '../../../../actions/business';
 import Helper from '../../../../helper/utility';
+import {
+  XML_STATUSES,
+} from '../../../../constants/business';
 
 @inject('businessStore')
 @withRouter
@@ -71,7 +74,7 @@ export default class FilerInformation extends React.Component {
   handleOnBlur = e => validationActions.validateFilerInfoField(e.target.name)
 
   render() {
-    const { filerInformation } = this.props.businessStore;
+    const { filerInformation, xmlSubmissionStatus } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
@@ -205,9 +208,12 @@ export default class FilerInformation extends React.Component {
         <Divider hidden />
         <div className="right-align">
           <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
-          <Button color="green" size="large" onClick={this.handleFilerInformationSubmit}>
-            Save & Next <Icon name="chevron right" />
-          </Button>
+          {
+            xmlSubmissionStatus !== XML_STATUSES.completed &&
+            <Button color="green" size="large" onClick={this.handleFilerInformationSubmit}>
+              Save & Next <Icon name="chevron right" />
+            </Button>
+          }
         </div>
       </div>
     );

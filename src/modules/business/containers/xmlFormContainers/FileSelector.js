@@ -4,8 +4,11 @@ import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 
-import busiessActions from '../../../../actions/business';
+import businessActions from '../../../../actions/business';
 import Helper from '../../../../helper/utility';
+import {
+  XML_STATUSES,
+} from '../../../../constants/business';
 
 @inject('businessStore')
 @withRouter
@@ -26,10 +29,10 @@ export default class FileSelector extends React.Component {
   handleFileSelectorSubmit = (e) => {
     e.preventDefault();
     const { documentList } = this.props.businessStore;
-    busiessActions.validateDocumentList(documentList);
+    businessActions.validateDocumentList(documentList);
     if (this.props.businessStore.xmlErrors
       && this.props.businessStore.xmlErrors.documentListError === undefined) {
-      busiessActions.submitXMLInformation('documentList')
+      businessActions.submitXMLInformation('documentList')
         .then((data) => {
           this.props.businessStore.setXmlError();
           if (this.props.businessStore.xmlSubmissionId === undefined) {
@@ -45,8 +48,15 @@ export default class FileSelector extends React.Component {
   }
 
   handleXmlSubmissionSubmit = () => {
-    busiessActions.submitXMLInformation('xmlSubmission')
+    businessActions.validateAllXmlSubmission()
+      .then((success) => {
+        if (success) {
+          return businessActions.submitXMLInformation('xmlSubmission');
+        }
+        return Helper.toast('Something went wrong', 'error');
+      })
       .then(() => {
+        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
         Helper.toast('Xml submission submitted successfully', 'success');
       })
       .catch((err) => {
@@ -84,12 +94,18 @@ export default class FileSelector extends React.Component {
             Back
           </Button>
           <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
-          <Button color="green" size="large" onClick={this.handleFileSelectorSubmit}>
-            Save
-          </Button>
-          <Button color="red" size="large" onClick={this.handleXmlSubmissionSubmit}>
-            Submit
-          </Button>
+          {
+            this.props.businessStore.xmlSubmissionStatus !== XML_STATUSES.completed &&
+            <Button color="green" size="large" onClick={this.handleFileSelectorSubmit}>
+              Save
+            </Button>
+          }
+          {
+            this.props.businessStore.xmlSubmissionStatus !== XML_STATUSES.completed &&
+            <Button color="red" size="large" onClick={this.handleXmlSubmissionSubmit}>
+              Submit
+            </Button>
+          }
         </div>
       </div>
     );

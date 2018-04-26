@@ -4,7 +4,7 @@ import { Header, Form, Dropdown, Card, Input, Label, Divider, Icon, Button } fro
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 
-import { COUNTRIES } from '../../../../constants/business';
+import { COUNTRIES, XML_STATUSES } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
 import busiessActions from '../../../../actions/business';
 import Helper from '../../../../helper/utility';
@@ -53,7 +53,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
   }
 
   render() {
-    const { annualReportRequirements } = this.props.businessStore;
+    const { annualReportRequirements, xmlSubmissionStatus } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
@@ -451,9 +451,12 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             Back
           </Button>
           <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
-          <Button color="green" size="large" onClick={this.handleAnnualSubmit}>
-            Save & Next <Icon name="chevron right" />
-          </Button>
+          {
+            xmlSubmissionStatus !== XML_STATUSES.completed &&
+            <Button color="green" size="large" onClick={this.handleAnnualSubmit}>
+              Save & Next <Icon name="chevron right" />
+            </Button>
+          }
         </div>
       </div>
     );
