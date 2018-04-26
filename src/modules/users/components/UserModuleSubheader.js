@@ -14,6 +14,17 @@ const userModuleSubheader = props => (
                 <Link to="/app/users" className="back-link"><Icon name="ns-arrow-left" /></Link>
               </Responsive>
               {props.fullname}
+              <List horizontal>
+                <List.Item>
+                  <List.Icon circular color="red" name="ns-lock" />
+                  <List.Content verticalAlign="middle">
+                    <List.Description>
+                      Account locked <br />
+                      <Link to="">Unlock</Link>
+                    </List.Description>
+                  </List.Content>
+                </List.Item>
+              </List>
             </h1>
           </Grid.Column>
         </Grid.Row>

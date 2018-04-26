@@ -195,6 +195,11 @@ strong {
  * Add the correct font weight in Chrome, Edge, and Safari.
  */
 
+b,
+strong {
+  font-weight: bold;
+}
+
 /**
  * 1. Correct the inheritance and scaling of font size in all browsers.
  * 2. Correct the odd `em` font sizing in all browsers.
@@ -16233,6 +16238,31 @@ ol.ui.horizontal.list li:before,
   border-color: #98CE23;
 }
 
+.page-header-section .ui.list.horizontal {
+  margin-left: 1rem;
+  vertical-align: middle;
+}
+
+.page-header-section .ui.list .item {
+  padding: 0;
+  font-size: 1rem;
+}
+
+.page-header-section .ui.list .list > .item .description,
+.page-header-section .ui.list > .item .description {
+  color: #FFFFFF;
+}
+
+.page-header-section .ui.list i.circular.icon.red {
+  -webkit-box-shadow: 0 0 0 0.1em #EB5757;
+  box-shadow: 0 0 0 0.1em #EB5757;
+}
+
+.page-header-section .ui.list i.circular.icon.green {
+  -webkit-box-shadow: 0 0 0 0.1em #98CE23;
+  box-shadow: 0 0 0 0.1em #98CE23;
+}
+
 /*******************************
     User Variable Overrides
 *******************************/
@@ -20002,6 +20032,10 @@ ol.ui.horizontal.list li:before,
 
 .ui.form .field {
   position: relative;
+}
+
+.ui.form .fields .field {
+  margin-bottom: 1rem;
 }
 
 .ui.form input:not([type]),
@@ -28345,6 +28379,11 @@ a.ui.card:hover,
   margin: 0.5rem 0 0;
 }
 
+.ui.card.card-spacer,
+.ui.cards > .card.card-spacer {
+  padding: 1.57142857rem;
+}
+
 .ui.card > .content:not(:first-child),
 .ui.cards > .card > .content:not(:first-child) {
   border-top-color: #E0E0E0;
@@ -29006,6 +29045,31 @@ a.ui.card:hover,
 /*******************************
          Theme Overrides
 *******************************/
+
+.ui.feed.activities {
+  margin: 0;
+}
+
+.ui.feed.activities > .event {
+  padding: 1.5em 1.5em;
+  border-top: #E0E0E0 1px solid;
+}
+
+.ui.feed.activities > .event > .content .date {
+  font-size: 0.85714286rem;
+  color: #989898;
+}
+
+.ui.feed.activities > .event > .content .date .ui.label.horizontal {
+  margin: 0 .5em;
+  background-color: #772df9;
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+
+.ui.feed.activities > .event > .content .extra.text {
+  max-width: none;
+}
 
 /*******************************
     User Variable Overrides
@@ -33214,7 +33278,7 @@ select.ui.dropdown {
 
 .ui.selection.dropdown.active ~ .dropdown-effect {
   font-size: 13px;
-  height: 300px;
+  height: 380px;
   background-color: #FFFFFF;
   -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -34252,10 +34316,6 @@ select.ui.dropdown {
 .ui.modal .ui.divider:before,
 .ui.modal .ui.divider:after {
   background: none;
-}
-
-.ui.modal .ui.form .fields .field {
-  margin-bottom: 1rem;
 }
 
 .ui.modal .ui.form .field.otp-field {

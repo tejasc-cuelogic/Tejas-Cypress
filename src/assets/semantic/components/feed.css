@@ -287,6 +287,26 @@
          Theme Overrides
 *******************************/
 
+.ui.feed.activities {
+  margin: 0;
+}
+.ui.feed.activities > .event {
+  padding: 1.5em 1.5em;
+  border-top: #E0E0E0 1px solid;
+}
+.ui.feed.activities > .event > .content .date {
+  font-size: 0.85714286rem;
+  color: #989898;
+}
+.ui.feed.activities > .event > .content .date .ui.label.horizontal {
+  margin: 0 .5em;
+  background-color: #772df9;
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+.ui.feed.activities > .event > .content .extra.text {
+  max-width: none;
+}
 
 
 /*******************************

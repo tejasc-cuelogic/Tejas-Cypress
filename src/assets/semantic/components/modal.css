@@ -746,9 +746,6 @@
 .ui.modal .ui.divider:after {
   background: none;
 }
-.ui.modal .ui.form .fields .field {
-  margin-bottom: 1rem;
-}
 .ui.modal .ui.form .field.otp-field {
   margin: 3rem 0;
 }

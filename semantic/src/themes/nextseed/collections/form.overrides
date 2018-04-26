@@ -5,6 +5,9 @@
     .field{
         position:relative;
     }
+    .fields .field{
+        margin-bottom:@14px;
+    }
     input:not([type]),
     input[type=date],
     input[type=datetime-local],

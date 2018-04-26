@@ -1075,6 +1075,9 @@
 .ui.form .field {
   position: relative;
 }
+.ui.form .fields .field {
+  margin-bottom: 1rem;
+}
 .ui.form input:not([type]),
 .ui.form input[type=date],
 .ui.form input[type=datetime-local],

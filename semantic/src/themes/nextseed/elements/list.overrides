@@ -57,3 +57,27 @@
         }
     }
 }
+
+.page-header-section{
+    .ui.list{
+        &.horizontal{
+            margin-left:@14px;
+            vertical-align:middle;
+        }
+        .item{
+            padding:0;
+            font-size:@14px;
+        }
+        .list>.item .description, >.item .description{
+            color:@white;
+        }
+        i.circular.icon{
+            &.red{
+                box-shadow:0 0 0 0.1em @red;
+            }
+            &.green{
+                box-shadow:0 0 0 0.1em @green;
+            }
+        }
+    }
+}

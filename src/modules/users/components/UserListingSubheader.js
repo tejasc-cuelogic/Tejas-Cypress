@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import { Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
 import { DropdownFilter, DateRangeFilter, AppliedFilters } from './widgets/Filters';
 import { FILTER_META } from './../../../constants/user';
+// import { FormInput } from '../../../components/form/FormElements';
+
+// const zipCode = {
+//   label: 'Zip Code',
+//   error: undefined,
+// };
 
 const userListingSubheader = props => (
   <div>
@@ -48,6 +54,13 @@ const userListingSubheader = props => (
             <DateRangeFilter filters={props.requestState.search} label="Creation date" name="createdAt" changeStart={props.dateFilterStart} changeEnd={props.dateFilterEnd} />
             <DropdownFilter isMultiple value={props.requestState.search.city} name="City" change={props.setSearchParam} options={FILTER_META.city} />
           </Grid.Row>
+          {/* <Grid.Row>
+            <DropdownFilter value={props.requestState.search.state} name="State"
+            change={props.setSearchParam} options={FILTER_META.state} isMultiple />
+            <FormInput type="text" name="zip code" fielddata={zipCode} />
+            <DropdownFilter value={props.requestState.search.accreditation} name="Accreditation"
+            change={props.setSearchParam} options={FILTER_META.accreditation} />
+          </Grid.Row> */}
         </Grid>
       </Form>
     </div>

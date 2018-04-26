@@ -985,6 +985,26 @@ ol.ui.horizontal.list li:before,
   color: #242424;
   border-color: #98CE23;
 }
+.page-header-section .ui.list.horizontal {
+  margin-left: 1rem;
+  vertical-align: middle;
+}
+.page-header-section .ui.list .item {
+  padding: 0;
+  font-size: 1rem;
+}
+.page-header-section .ui.list .list > .item .description,
+.page-header-section .ui.list > .item .description {
+  color: #FFFFFF;
+}
+.page-header-section .ui.list i.circular.icon.red {
+  -webkit-box-shadow: 0 0 0 0.1em #EB5757;
+          box-shadow: 0 0 0 0.1em #EB5757;
+}
+.page-header-section .ui.list i.circular.icon.green {
+  -webkit-box-shadow: 0 0 0 0.1em #98CE23;
+          box-shadow: 0 0 0 0.1em #98CE23;
+}
 
 
 /*******************************

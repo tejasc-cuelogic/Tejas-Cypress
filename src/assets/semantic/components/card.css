@@ -1069,6 +1069,10 @@ a.ui.card:hover,
   letter-spacing: 1px;
   margin: 0.5rem 0 0;
 }
+.ui.card.card-spacer,
+.ui.cards > .card.card-spacer {
+  padding: 1.57142857rem;
+}
 .ui.card > .content:not(:first-child),
 .ui.cards > .card > .content:not(:first-child) {
   border-top-color: #E0E0E0;

@@ -76,6 +76,9 @@
             }
         }
     }
+    &.card-spacer{
+        padding:@22px;
+    }
 }
 
 .ui.card>.content:not(:first-child),
