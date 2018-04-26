@@ -147,13 +147,13 @@ deploy:qa:
       - qa
   environment:
     name: qa
-    url:  http://ns-client-qa.s3-website-us-east-1.amazonaws.com
+    url:  http://qa.nextseed.qa.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
   script: 
     - echo "deploy to s3 bucket"
-    - aws s3 cp build/ s3://ns-client-qa/ --recursive
+    - aws s3 cp build/ s3://qa.nextseed.qa/ --recursive
   dependencies:
     - build:qa
 
