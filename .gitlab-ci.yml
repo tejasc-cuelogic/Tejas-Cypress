@@ -108,7 +108,7 @@ deploy:dev:
       - develop
   environment:
     name: dev
-    url:  http://ns-client-dev.s3-website-us-east-1.amazonaws.com
+    url:  http://dev.nextseed.qa.s3-website-us-east-1.amazonaws.com
   tags:
     - ns-client
   stage: deploy
