@@ -67,7 +67,7 @@
 @nsSrc:
   url("@{fontPath}/@{nsFontName}.eot?n09i5h#iefix") format('embedded-opentype'),
   url("@{fontPath}/@{nsFontName}.ttf?n09i5h") format('truetype'),
-  // url("@{fontPath}/@{nsFontName}.woff2?n09i5h") format('woff2'),
+  url("@{fontPath}/@{nsFontName}.woff2?n09i5h") format('woff2'),
   url("@{fontPath}/@{nsFontName}.woff?n09i5h") format('woff'),
   url("@{fontPath}/@{nsFontName}.svg?n09i5h#nextseed") format('svg')
 ;

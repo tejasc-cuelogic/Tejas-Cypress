@@ -12453,7 +12453,7 @@ i.icon.times.rectangle.outline:before {
 @font-face {
   font-family: 'nextseed';
   src: url("./themes/nextseed/assets/fonts/nextseed.eot?n09i5h");
-  src: url("./themes/nextseed/assets/fonts/nextseed.eot?n09i5h#iefix") format('embedded-opentype'), url("./themes/nextseed/assets/fonts/nextseed.ttf?n09i5h") format('truetype'), url("./themes/nextseed/assets/fonts/nextseed.woff?n09i5h") format('woff'), url("./themes/nextseed/assets/fonts/nextseed.svg?n09i5h#nextseed") format('svg');
+  src: url("./themes/nextseed/assets/fonts/nextseed.eot?n09i5h#iefix") format('embedded-opentype'), url("./themes/nextseed/assets/fonts/nextseed.ttf?n09i5h") format('truetype'), url("./themes/nextseed/assets/fonts/nextseed.woff2?n09i5h") format('woff2'), url("./themes/nextseed/assets/fonts/nextseed.woff?n09i5h") format('woff'), url("./themes/nextseed/assets/fonts/nextseed.svg?n09i5h#nextseed") format('svg');
   font-style: normal;
   font-weight: 400;
 }
@@ -20143,6 +20143,20 @@ ol.ui.horizontal.list li:before,
 .react-datepicker-wrapper,
 .react-datepicker-wrapper .react-datepicker__input-container {
   display: block;
+}
+
+.react-datepicker-wrapper .react-datepicker__input-container:before {
+  content: "\e90c";
+  font-family: 'nextseed';
+  color: #989898;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translate(0%, -50%);
+  transform: translate(0%, -50%);
+}
+
+.react-datepicker-wrapper .react-datepicker__input-container > input {
+  padding-left: 2rem !important;
 }
 
 .ui.form p.field-error {

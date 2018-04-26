@@ -3315,7 +3315,7 @@ i.icon.times.rectangle.outline:before {
 @font-face {
   font-family: 'nextseed';
   src: url("./../themes/nextseed/assets/fonts/nextseed.eot?n09i5h");
-  src: url("./../themes/nextseed/assets/fonts/nextseed.eot?n09i5h#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/nextseed.ttf?n09i5h") format('truetype'), url("./../themes/nextseed/assets/fonts/nextseed.woff?n09i5h") format('woff'), url("./../themes/nextseed/assets/fonts/nextseed.svg?n09i5h#nextseed") format('svg');
+  src: url("./../themes/nextseed/assets/fonts/nextseed.eot?n09i5h#iefix") format('embedded-opentype'), url("./../themes/nextseed/assets/fonts/nextseed.ttf?n09i5h") format('truetype'), url("./../themes/nextseed/assets/fonts/nextseed.woff2?n09i5h") format('woff2'), url("./../themes/nextseed/assets/fonts/nextseed.woff?n09i5h") format('woff'), url("./../themes/nextseed/assets/fonts/nextseed.svg?n09i5h#nextseed") format('svg');
   font-style: normal;
   font-weight: 400;
 }
