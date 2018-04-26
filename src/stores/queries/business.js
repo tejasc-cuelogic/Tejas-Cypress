@@ -86,8 +86,7 @@ export const xmlSubmissionMutation = gql`
     upsertXmlInformation(businessId: $businessId, filingId:$filingId, xmlSubmissionId: $xmlSubmissionId) {
       ... on BusinessFilingSubmission {        
         xmlSubmissionId
-      }
-      
+      }      
       ... on XmlSubmissionErrorOutput {
         errors
       }

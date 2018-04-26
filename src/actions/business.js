@@ -174,7 +174,7 @@ export class Business {
     return new Promise((resolve, reject) => {
       client
         .mutate(payload)
-        .then(data => resolve(data))
+        .then(data => resolve(data.data))
         .catch(error => reject(error));
     });
   }

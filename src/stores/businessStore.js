@@ -132,7 +132,6 @@ export class BusinessStore {
   }
 
   @computed get canSubmitSignaturePersonsForm() {
-    console.log(this.signature.signaturePersons);
     return _.map(this.signature.signaturePersons, signaturePerson =>
       _.isEmpty(_.filter(signaturePerson, field => field.error)));
   }

@@ -56,7 +56,7 @@ export default class FilerInformation extends React.Component {
         .then((data) => {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(1);
-          if (this.props.businessStore.xmlSubmissionId === 'undefined') {
+          if (this.props.businessStore.xmlSubmissionId === undefined) {
             const { xmlSubmissionId } = data.upsertXmlInformation;
             this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
           }

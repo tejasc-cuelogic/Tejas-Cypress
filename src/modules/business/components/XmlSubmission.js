@@ -38,7 +38,7 @@ const XmlSubmission = observer((props) => {
                         </a>
                     }
                     {
-                      xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed &&
+                      xmlSubmission.xmlSubmissionStatus === XML_STATUSES.created &&
                       !xmlSubmission.xmlSubmissionDownloadUrl &&
                       <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
                     }

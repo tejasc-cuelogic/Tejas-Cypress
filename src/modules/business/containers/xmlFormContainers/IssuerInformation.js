@@ -48,7 +48,7 @@ export default class IssuerInformation extends React.Component {
         .then((data) => {
           this.props.businessStore.setXmlError();
           this.props.businessStore.setXmlActiveTabId(2);
-          if (this.props.businessStore.xmlSubmissionId === 'undefined') {
+          if (this.props.businessStore.xmlSubmissionId === undefined) {
             const { xmlSubmissionId } = data.upsertXmlInformation;
             this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
           }
