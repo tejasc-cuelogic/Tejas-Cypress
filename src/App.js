@@ -50,6 +50,7 @@ class App extends Component {
     }
     return (
       <div>
+        <h1>QA ENV</h1>
         <Layout>
           <Switch>
             <Route exact path="/app/*" component={Private} />
