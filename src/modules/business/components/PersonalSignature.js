@@ -21,6 +21,7 @@ const PersonalSignature = observer(props => (
                 placeholder={personData.personSignature.label}
                 name={personData.personSignature.key}
                 value={personData.personSignature.value}
+                error={!!personData.personSignature.error}
                 onChange={props.handleChange}
               >
                 <Button icon="remove" color="red" dataid={personData.id} onClick={props.handleDeleteClick} />
@@ -33,6 +34,7 @@ const PersonalSignature = observer(props => (
               placeholder={personData.personTitle.label}
               name={personData.personTitle.key}
               value={personData.personTitle.value}
+              error={!!personData.personTitle.error}
               onChange={props.handleChange}
             />
             <div className="field">
@@ -48,6 +50,7 @@ const PersonalSignature = observer(props => (
                 dateFormat="MM-DD-YYYY"
                 selected={personData.signatureDate.value}
                 onChange={props.handleDateChange}
+                error={!!personData.signatureDate.error}
               />
             </div>
           </Form.Group>

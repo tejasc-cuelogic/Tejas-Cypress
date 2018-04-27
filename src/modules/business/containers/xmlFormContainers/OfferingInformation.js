@@ -123,7 +123,7 @@ export default class OfferingInformation extends React.Component {
               width={3}
             />
             <Form.Input
-              placeholder="No. of securities offered"
+              placeholder="0.00"
               label="No. of securities offered"
               name="noOfSecurityOffered"
               value={offeringInformation.noOfSecurityOffered.value}
@@ -134,7 +134,7 @@ export default class OfferingInformation extends React.Component {
               width={3}
             />
             <Form.Input
-              placeholder="Price"
+              placeholder="0.00000"
               label="Price"
               name="price"
               value={offeringInformation.price.value}
@@ -145,7 +145,7 @@ export default class OfferingInformation extends React.Component {
               width={3}
             />
             <Form.Input
-              placeholder="Price"
+              placeholder="0.00"
               label="Price (or Method for Determining Price)"
               name="priceDeterminationMethod"
               value={offeringInformation.priceDeterminationMethod.value}
@@ -178,6 +178,7 @@ export default class OfferingInformation extends React.Component {
             <Form.Select
               fluid
               search
+              placeholder="Select options"
               label="If yes, disclose how oversubscriptions will be allocated"
               name="overSubscriptionAllocationType"
               value={offeringInformation.overSubscriptionAllocationType.value}
@@ -199,6 +200,7 @@ export default class OfferingInformation extends React.Component {
               width={3}
             />
             <Form.Input
+              placeholder="0.00"
               label="Deadline to reach the Target Offering Amount"
               name="maximumOfferingAmount"
               value={offeringInformation.maximumOfferingAmount.value}
@@ -211,6 +213,7 @@ export default class OfferingInformation extends React.Component {
           </Form.Group>
           <Form.Group>
             <Form.Input
+              placeholder="0.00"
               label="Target Offering Amount"
               name="offeringAmount"
               value={offeringInformation.offeringAmount.value}

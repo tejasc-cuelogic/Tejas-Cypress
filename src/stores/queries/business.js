@@ -93,3 +93,11 @@ export const xmlSubmissionMutation = gql`
       }
     }
   }`;
+
+
+export const cloneXmlSubmissionMutation = gql`
+  mutation cloneXmlSubmission($filingId: String!, $xmlSubmissionId: String!) {
+    cloneXmlSubmission(filingId:$filingId, xmlSubmissionId: $xmlSubmissionId) {
+      xmlSubmissionId
+    }
+  }`;

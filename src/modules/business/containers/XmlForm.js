@@ -84,6 +84,20 @@ export default class XmlForm extends React.Component {
     }
   };
 
+  handleXmlSubmissionCopy = () => {
+    this.props.uiStore.setProgress();
+    this.props.uiStore.setLoaderMessage('Copy the XML submission');
+
+    businessActions.copyXMLInformation()
+      .then(() => {
+        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        Helper.toast('Copy XML submission successfully', 'success');
+      })
+      .catch((error) => {
+        console.log('Copy XML submission Error', error);
+      });
+  };
+
   render() {
     const {
       xmlErrors,
@@ -114,6 +128,7 @@ export default class XmlForm extends React.Component {
                       circular
                       color="green"
                       floated="right"
+                      onClick={this.handleXmlSubmissionCopy}
                     >
                       Copy XML Submission
                     </Button>

@@ -57,10 +57,10 @@ export default class FileSelector extends React.Component {
       })
       .then(() => {
         this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-        Helper.toast('Xml submission submitted successfully', 'success');
+        Helper.toast('XML form submitted successfully', 'success');
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((errors) => {
+        this.props.businessStore.setXmlError(errors);
       });
   }
 

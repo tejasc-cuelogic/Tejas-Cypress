@@ -13,7 +13,8 @@ import {
   annualReportMutation,
   signatureMutation,
   documentListMutation,
-  xmlSubmissionMutation } from '../stores/queries/business';
+  xmlSubmissionMutation,
+  cloneXmlSubmissionMutation } from '../stores/queries/business';
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
 import {
@@ -88,7 +89,7 @@ export class Business {
   }
 
   /**
-   * Submit filer information
+   * Submit XML submission
    */
   submitXMLInformation = (action) => {
     const {
@@ -163,6 +164,8 @@ export class Business {
         },
       };
     } else if (action === 'xmlSubmission') {
+      uiStore.setProgress();
+      uiStore.setLoaderMessage('Submiting XML submission');
       payload = {
         mutation: xmlSubmissionMutation,
         variables: {
@@ -171,6 +174,30 @@ export class Business {
       };
     }
 
+    return new Promise((resolve, reject) => {
+      client
+        .mutate(payload)
+        .then(data => resolve(data.data))
+        .catch(error => reject(error));
+    });
+  }
+
+  /**
+   * Copy XML submission
+   */
+  copyXMLInformation = () => {
+    const {
+      filingId,
+      xmlSubmissionId,
+    } = businessStore;
+
+    const payload = {
+      mutation: cloneXmlSubmissionMutation,
+      variables: {
+        filingId,
+        xmlSubmissionId,
+      },
+    };
     return new Promise((resolve, reject) => {
       client
         .mutate(payload)
@@ -816,18 +843,19 @@ export class Business {
     
     let personSignatureData = [];
     
-    _.map(signaturePersons, (field) => {
+    _.map(signaturePersons, (field, index) => {
       
       personSignatureData.push(validationActions.validateXmlFormData({
         personSignature: field.personSignature,
         personTitle: field.personTitle,
         signatureDate: field.signatureDate,
       }));
-
+      
       const personErrors = this.newValidationErrors(personSignatureData, true);
       if (setError) {
         businessStore.setXmlError(personErrors);
       }
+      personSignatureData[index].id = field.id;
     });
     
     businessStore.setNewPersonalSignature(personSignatureData);
@@ -902,8 +930,7 @@ export class Business {
         errors['documentStep'] = errorMessage.documentListError;
       }
       // Check if error is preset then send the errors
-      if (!_.isEmpty(errors)) {
-        businessStore.setXmlError(errors);
+      if (!_.isEmpty(errors)) {        
         reject (errors);
       } else {
         resolve(true);

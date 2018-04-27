@@ -107,6 +107,7 @@ export default class IssuerInformation extends React.Component {
               dataidentifier="issuerInformation"
               options={US_STATES}
               value={issuerInformation.jurisdictionOrganization.value}
+              error={!!issuerInformation.jurisdictionOrganization.error}
               onChange={this.handleSelectChange}
             />
             <div className="nine wide field">
@@ -168,6 +169,7 @@ export default class IssuerInformation extends React.Component {
               dataidentifier="issuerInformation"
               options={US_STATES}
               value={issuerInformation.stateOrCountry.value}
+              error={!!issuerInformation.stateOrCountry.error}
               onChange={this.handleSelectChange}
               width={8}
             />
