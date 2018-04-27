@@ -6,8 +6,9 @@ variables:
 stages:
   - build
   - deploy
+  - cleanup
 
-#---------------------------------Issues----------------------------------------  
+#---------------------------------Review----------------------------------------  
 #Building code
 build:review:
   cache:
@@ -24,15 +25,15 @@ build:review:
     - ns-client
   stage: build
   script:
-    - bash scripts/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} us-east-1
-    - bash scripts/setEnvironmentVariables.sh us-east-1 dev
+    - bash scripts/cicd/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} us-east-1
+    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 dev
     - npm install
     - npm run build
 
   artifacts:
     paths:
     - build/
-    - scripts/
+    - scripts/cicd/
     expire_in: 1 day
 
 deploy:review:
@@ -70,8 +71,8 @@ delete:review:
   tags:
     - ns-client
   script:
-    - chmod +x scripts/emptyBucket.py 
-    - python scripts/emptyBucket.py -b ${CI_COMMIT_REF_SLUG}
+    - chmod +x scripts/cicd/emptyBucket.py 
+    - python scripts/cicd/emptyBucket.py -b ${CI_COMMIT_REF_SLUG}
     - aws s3api delete-bucket --bucket ${CI_COMMIT_REF_SLUG} --region us-east-1
   when: manual
   environment:
@@ -93,7 +94,7 @@ build:dev:
     - ns-client
   stage: build
   script:
-    - bash scripts/setEnvironmentVariables.sh us-east-1 dev
+    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 dev
     - npm install
     - npm run build
   artifacts:
@@ -132,7 +133,7 @@ build:qa:
     - ns-client
   stage: build
   script: 
-    - bash scripts/setEnvironmentVariables.sh us-east-1 qa
+    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 qa
     - npm install
     - npm run build
   artifacts:
@@ -171,7 +172,7 @@ build:prod:
     - ns-client
   stage: build
   script: 
-    - bash scripts/setEnvironmentVariables.sh us-east-1 prod
+    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 prod
     - npm install
     - npm run build
   artifacts:
