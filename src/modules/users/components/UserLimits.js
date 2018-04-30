@@ -405,8 +405,8 @@ const panes = [
   },
 ];
 
-const userAccounts = () => (
+const userLimits = () => (
   <Tab className="tabular-wrap compact" menu={{ fluid: true, vertical: true, tabular: 'left' }} panes={panes} renderActiveOnly={false} />
 );
 
-export default userAccounts;
+export default userLimits;

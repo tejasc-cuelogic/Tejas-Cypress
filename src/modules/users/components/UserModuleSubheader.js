@@ -38,7 +38,7 @@ const userModuleSubheader = props => (
               className={(props.section.toLowerCase() === section.toLowerCase()) ? 'active' : ''}
               key={section}
               as="a"
-              href={`/app/users/1/${section}`}
+              href={`/app/users/${props.id}/${section}`}
             >
               {section}
             </List.Item>
