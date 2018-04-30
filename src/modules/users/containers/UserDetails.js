@@ -9,6 +9,7 @@ import UserPortfolio from './../components/UserPortfolio';
 import UserTransactions from './../components/UserTransactions';
 import UserStatements from './../components/UserStatements';
 import UserMessages from './../components/UserMessages';
+import UserBonusRewards from './../components/UserBonusRewards';
 
 @inject('userDetailsStore')
 @observer
@@ -18,7 +19,6 @@ class UserDetails extends Component {
   }
 
   render() {
-    console.log(this.props.match.params.section);
     const {
       userDetails, editCard, setEditCard, save,
     } = this.props.userDetailsStore;
@@ -54,6 +54,9 @@ class UserDetails extends Component {
         }
         {this.props.match.params.section === 'Messages' &&
         <UserMessages />
+        }
+        {this.props.match.params.section === 'Bonus rewards' &&
+        <UserBonusRewards />
         }
       </Aux>
     );
