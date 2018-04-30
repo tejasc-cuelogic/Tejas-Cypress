@@ -1086,6 +1086,8 @@ a.ui.card:hover,
 .ui.card [class*="horizontally padded"].ui.grid .content {
   padding: 1.5rem;
   margin: 0 -1rem;
+}
+.ui.card [class*="horizontally padded"].ui.grid .content:not(:last-child) {
   border-bottom: #E0E0E0 1px solid;
 }
 .ui.card > .content > .header + .description:not(:last-child),

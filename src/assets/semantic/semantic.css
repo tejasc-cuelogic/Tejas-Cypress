@@ -1254,6 +1254,26 @@ a.disabled:focus {
   color: #98CE23;
 }
 
+dl.dl-horizontal {
+  margin: 0;
+}
+
+dl.dl-horizontal dt {
+  float: left;
+  width: 170px;
+  font-weight: 700;
+}
+
+dl.dl-horizontal dd {
+  margin-left: 180px;
+  margin-bottom: 0.71428571rem;
+  color: #989898;
+}
+
+dl.dl-horizontal dd:last-of-type {
+  margin-bottom: 0;
+}
+
 ol.progtrckr {
   margin: 0;
   padding: 1.71428571rem 0 1.85714286rem;
@@ -28399,6 +28419,9 @@ a.ui.card:hover,
 .ui.card [class*="horizontally padded"].ui.grid .content {
   padding: 1.5rem;
   margin: 0 -1rem;
+}
+
+.ui.card [class*="horizontally padded"].ui.grid .content:not(:last-child) {
   border-bottom: #E0E0E0 1px solid;
 }
 

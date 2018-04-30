@@ -98,7 +98,9 @@
         .content{
             padding:1.5rem;
             margin:0 -1rem;
-            border-bottom:@border-light 1px solid;
+            &:not(:last-child){
+                border-bottom:@border-light 1px solid;
+            }
         }
     }
 }
