@@ -72,14 +72,8 @@ const userBeneficiaries = () => {
                       </dl>
                     </Card.Content>
                     <Card.Content>
-                      <Grid columns="equal">
-                        <Grid.Column>
-                          <Button fluid inverted color="green">Edit</Button>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Button fluid inverted color="red">Remove</Button>
-                        </Grid.Column>
-                      </Grid>
+                      <Button size="mini" color="green" className="ghost-button">Edit</Button>
+                      <Button size="mini" color="red" className="ghost-button">Remove</Button>
                     </Card.Content>
                   </Grid.Column>
                 </Grid.Row>
@@ -110,14 +104,8 @@ const userBeneficiaries = () => {
                       </dl>
                     </Card.Content>
                     <Card.Content>
-                      <Grid columns="equal">
-                        <Grid.Column>
-                          <Button fluid inverted color="green">Edit</Button>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Button fluid inverted color="red">Remove</Button>
-                        </Grid.Column>
-                      </Grid>
+                      <Button size="mini" color="green" className="ghost-button">Edit</Button>
+                      <Button size="mini" color="red" className="ghost-button">Remove</Button>
                     </Card.Content>
                   </Grid.Column>
                 </Grid.Row>

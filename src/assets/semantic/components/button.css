@@ -3724,6 +3724,43 @@
 .ui.buttons .button.link-button.red:active {
   color: #e62929;
 }
+.ui.button.ghost-button,
+.ui.buttons .button.ghost-button {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.ui.button.ghost-button.mini,
+.ui.buttons .button.ghost-button.mini {
+  font-size: 1rem;
+  padding: 0.5em 1em;
+}
+.ui.button.ghost-button.green,
+.ui.buttons .button.ghost-button.green {
+  color: #98CE23;
+}
+.ui.button.ghost-button.green:hover,
+.ui.buttons .button.ghost-button.green:hover,
+.ui.button.ghost-button.green:focus,
+.ui.buttons .button.ghost-button.green:focus,
+.ui.button.ghost-button.green:active,
+.ui.buttons .button.ghost-button.green:active {
+  color: #FFFFFF;
+  background-color: #98CE23;
+}
+.ui.button.ghost-button.red,
+.ui.buttons .button.ghost-button.red {
+  color: #EB5757;
+}
+.ui.button.ghost-button.red:hover,
+.ui.buttons .button.ghost-button.red:hover,
+.ui.button.ghost-button.red:focus,
+.ui.buttons .button.ghost-button.red:focus,
+.ui.button.ghost-button.red:active,
+.ui.buttons .button.ghost-button.red:active {
+  color: #FFFFFF;
+  background-color: #EB5757;
+}
 .ui.button.relaxed,
 .ui.buttons .button.relaxed {
   padding-left: 3rem;

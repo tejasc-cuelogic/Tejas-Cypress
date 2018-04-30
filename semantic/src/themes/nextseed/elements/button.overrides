@@ -44,6 +44,28 @@
                 }
             }
         }
+        &.ghost-button{
+            background-color:transparent;
+            box-shadow:none;
+            &.mini{
+                font-size:@14px;
+                padding:0.5em 1em;
+            }
+            &.green{
+                color:@theme-primary;
+                &:hover, &:focus, &:active{
+                    color:@white;
+                    background-color:@theme-primary;
+                }
+            }
+            &.red{
+                color:@highlight-primary;
+                &:hover, &:focus, &:active{
+                    color:@white;
+                    background-color:@highlight-primary;
+                }
+            }
+        }
     }
     // &.inverted{
     //     &.button, &.buttons .button{
