@@ -10,9 +10,9 @@
         // padding:@20px;
         font-size:@13px;
     }
-    td{
-        padding:@12px @24px;
-    }
+    // td{
+    //     padding:@12px @24px;
+    // }
     &.sortable{
         thead th{
             color:@tertiary-text;

@@ -58,7 +58,7 @@
   background: #FFFFFF;
   text-align: inherit;
   color: #000000;
-  padding: 0.92857143em 0.78571429em;
+  padding: 0.85714286rem 1.42857143rem;
   vertical-align: inherit;
   font-style: none;
   font-weight: 500;
@@ -90,7 +90,7 @@
   background: #F9FAFB;
   text-align: inherit;
   color: #000000;
-  padding: 0.78571429em 0.78571429em;
+  padding: 0.85714286rem 1.42857143rem;
   vertical-align: middle;
   font-style: normal;
   font-weight: 500;
@@ -124,7 +124,7 @@
 
 /* Table Cells */
 .ui.table td {
-  padding: 0.78571429em 0.78571429em;
+  padding: 0.85714286rem 1.42857143rem;
   text-align: inherit;
 }
 
@@ -518,7 +518,7 @@
 .ui.table tbody tr td.selectable > a:not(.ui) {
   display: block;
   color: inherit;
-  padding: 0.78571429em 0.78571429em;
+  padding: 0.85714286rem 1.42857143rem;
 }
 
 /* Other States */
@@ -1141,9 +1141,6 @@
 }
 .ui.table thead th {
   font-size: 0.92857143rem;
-}
-.ui.table td {
-  padding: 0.85714286rem 1.71428571rem;
 }
 .ui.table.sortable thead th {
   color: #4F4F4F;
