@@ -14,7 +14,7 @@ export default class investorPersonalDetails extends Component {
     this.props.uiStore.clearErrors();
   }
 
-  handleSubmitForm = (e) => {
+  handleSubmitInvestorDetails = (e) => {
     e.preventDefault();
     this.props.profileStore.submitInvestorPersonalDetails().then(() => {
       const { message, questions } = this.props.profileStore.verifyIdentity01.response;
@@ -29,14 +29,16 @@ export default class investorPersonalDetails extends Component {
       } else {
         Helper.toast('User verification hard-failed!', 'error');
       }
-    });
+    })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   render() {
     const {
       verifyIdentity01,
       verifyIdentityEleChange,
-      verifyIdentitySelChange,
       verifyIdentityDateChange,
     } = this.props.profileStore;
     const welcomeMsg = `Hello ${this.props.userStore.currentUser.givenName}!`;
@@ -51,27 +53,25 @@ export default class investorPersonalDetails extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form error onSubmit={this.handleSubmitForm}>
+          <Form error onSubmit={this.handleSubmitInvestorDetails}>
             <Form.Group widths="equal">
               <FormSelect
                 containerwidth={6}
                 name="title"
                 fielddata={verifyIdentity01.fields.title}
                 options={PROFILE_DETAILS_TITLE}
-                changed={verifyIdentitySelChange}
-              />
-              <FormInput
-                type="text"
-                name="firstLegalName"
-                fielddata={verifyIdentity01.fields.firstLegalName}
                 changed={verifyIdentityEleChange}
               />
-              <FormInput
-                type="text"
-                name="lastLegalName"
-                fielddata={verifyIdentity01.fields.lastLegalName}
-                changed={verifyIdentityEleChange}
-              />
+              {
+                ['firstLegalName', 'lastLegalName'].map(field => (
+                  <FormInput
+                    type="text"
+                    name={field}
+                    fielddata={verifyIdentity01.fields[field]}
+                    changed={verifyIdentityEleChange}
+                  />
+                ))
+              }
             </Form.Group>
             <AutoComplete
               name="residentalStreet"
@@ -80,24 +80,16 @@ export default class investorPersonalDetails extends Component {
               changed={verifyIdentityEleChange}
             />
             <Form.Group widths="equal">
-              <FormInput
-                type="text"
-                name="city"
-                fielddata={verifyIdentity01.fields.city}
-                changed={verifyIdentityEleChange}
-              />
-              <FormInput
-                type="text"
-                name="state"
-                fielddata={verifyIdentity01.fields.state}
-                changed={verifyIdentityEleChange}
-              />
-              <FormInput
-                type="text"
-                name="zipCode"
-                fielddata={verifyIdentity01.fields.zipCode}
-                changed={verifyIdentityEleChange}
-              />
+              {
+                ['city', 'state', 'zipCode'].map(field => (
+                  <FormInput
+                    type="text"
+                    name={field}
+                    fielddata={verifyIdentity01.fields[field]}
+                    changed={verifyIdentityEleChange}
+                  />
+                ))
+              }
             </Form.Group>
             <Form.Group widths="equal">
               <MaskedInput

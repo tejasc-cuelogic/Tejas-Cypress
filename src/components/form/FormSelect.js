@@ -22,7 +22,6 @@ const FormSelect = observer((props) => {
       <Select
         fluid
         {...props}
-        label={false}
         value={value}
         error={!!error}
         onChange={props.changed}

@@ -38,13 +38,10 @@ export class ProfileStore {
    * @desc Handle functions for Verify Identity Form 1 fields.
    */
   @action
-  verifyIdentityEleChange = (e) => {
-    this.onFieldChange('verifyIdentity01', e.target.name, e.target.value);
-  };
-
-  @action
-  verifyIdentitySelChange = (e, { name, value }) => {
-    this.onFieldChange('verifyIdentity01', name, value);
+  verifyIdentityEleChange = (e, result) => {
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('verifyIdentity01', fieldName, fieldValue);
   };
 
   @action
@@ -55,6 +52,32 @@ export class ProfileStore {
   @action
   setVerifyIdentityResponse = (response) => {
     this.verifyIdentity01.response = response;
+  }
+
+  @computed
+  get formattedUserInfo() {
+    const userInfo = {
+      firstLegalName: this.verifyIdentity01.fields.firstLegalName.value,
+      lastLegalName: this.verifyIdentity01.fields.lastLegalName.value,
+      dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
+      ssn: Helper.unMaskInput(this.verifyIdentity01.fields.ssn.value),
+      legalAddress: {
+        street1: this.verifyIdentity01.fields.residentalStreet.value,
+        city: this.verifyIdentity01.fields.city.value,
+        state: this.verifyIdentity01.fields.state.value,
+        zipCode: this.verifyIdentity01.fields.zipCode.value,
+      },
+    };
+    return userInfo;
+  }
+
+  @computed
+  get formattedPhoneDetails() {
+    const phoneDetails = {
+      phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+      countryCode: '91',
+    };
+    return phoneDetails;
   }
 
   /**
@@ -83,7 +106,7 @@ export class ProfileStore {
   }
 
   @computed
-  get getFormattedIdentityQuestionsAnswers() {
+  get formattedIdentityQuestionsAnswers() {
     const formattedIdentityQuestionsAnswers =
     _.flatMap(this.verifyIdentity02.fields, n => [{ type: n.key, text: n.value }]);
     return formattedIdentityQuestionsAnswers;
@@ -112,7 +135,6 @@ export class ProfileStore {
     this[form].fields[field].error = validation.errors.first(field);
   };
 
-  /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -121,31 +143,12 @@ export class ProfileStore {
           mutation: verifyCIPUser,
           variables: {
             userId: userStore.currentUser.sub,
-            user: {
-              firstLegalName: this.verifyIdentity01.fields.firstLegalName.value,
-              lastLegalName: this.verifyIdentity01.fields.lastLegalName.value,
-              dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
-              ssn: Helper.unMaskInput(this.verifyIdentity01.fields.ssn.value),
-              legalAddress: {
-                street1: this.verifyIdentity01.fields.residentalStreet.value,
-                city: this.verifyIdentity01.fields.city.value,
-                state: this.verifyIdentity01.fields.state.value,
-                zipCode: this.verifyIdentity01.fields.zipCode.value,
-              },
-            },
+            user: this.formattedUserInfo,
           },
         })
-        .then((data) => {
-          this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
-          reject();
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
+        .then(data => this.setVerifyIdentityResponse(data.data.verifyCIPIdentity), resolve())
+        .catch(err => console.log(err), reject())
+        .finally(() => uiStore.setProgress(false));
     });
   }
 
@@ -174,44 +177,29 @@ export class ProfileStore {
             userId: userStore.currentUser.sub,
             cipAnswers: {
               id: this.verifyIdentity01.response.softFailId,
-              answers: this.getFormattedIdentityQuestionsAnswers,
+              answers: this.formattedIdentityQuestionsAnswers,
             },
           },
         })
-        .then((result) => {
-          resolve(result);
-        })
-        .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
-          reject();
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
+        .then(result => resolve(result))
+        .catch(err => uiStore.setErrors(this.simpleErr(err)), reject())
+        .finally(() => uiStore.setProgress(false));
     });
   }
 
+  /* eslint-disable arrow-body-style */
   startPhoneVerification = () => {
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: startUserPhoneVerification,
           variables: {
-            phoneDetails: {
-              phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-              countryCode: '91',
-            },
+            phoneDetails: this.formattedPhoneDetails,
             method: 'sms',
           },
         })
-        .then(() => {
-          Helper.toast('Verification code sent to user.', 'success');
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
-          reject();
-        });
+        .then(() => Helper.toast('Verification code sent to user.', 'success'), resolve())
+        .catch(err => uiStore.setErrors(this.simpleErr(err)), reject());
     });
   }
 
@@ -222,36 +210,26 @@ export class ProfileStore {
         .mutate({
           mutation: checkUserPhoneVerificationCode,
           variables: {
-            phoneDetails: {
-              phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-              countryCode: '91',
-            },
+            phoneDetails: this.formattedPhoneDetails,
             verificationCode: this.verifyIdentity04.fields.code.value,
           },
         })
-        .then(() => {
+        .then((result) => {
+          console.log(result);
           client
             .mutate({
               mutation: updateUserCIPInfo,
               variables: {
                 userId: userStore.currentUser.sub,
-                user: {
-                  firstLegalName: this.verifyIdentity01.fields.firstLegalName.value,
-                  lastLegalName: this.verifyIdentity01.fields.lastLegalName.value,
-                  dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
-                  ssn: Helper.unMaskInput(this.verifyIdentity01.fields.ssn.value),
-                  legalAddress: {
-                    street1: this.verifyIdentity01.fields.residentalStreet.value,
-                    city: this.verifyIdentity01.fields.city.value,
-                    state: this.verifyIdentity01.fields.state.value,
-                    zipCode: this.verifyIdentity01.fields.zipCode.value,
-                  },
-                },
-                phoneDetails: {
-                  phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-                  countryCode: '91',
-                },
+                user: this.formattedUserInfo,
+                phoneDetails: this.formattedPhoneDetails,
               },
+            })
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((err) => {
+              console.log(err);
             });
           resolve();
         })
