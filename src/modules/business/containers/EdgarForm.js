@@ -100,17 +100,13 @@ export default class EdgarForm extends React.Component {
               <div
                 className="form-footer"
                 style={{
-                paddingBottom: '40px',
-                paddingLeft: '1rem',
-                textAlign: 'center',
+                  paddingBottom: '40px',
+                  paddingLeft: '1rem',
+                  textAlign: 'center',
                 }}
               >
                 <Button
                   color="green"
-                  disabled={
-                    !this.props.businessStore.canSubmitEdgarForm ||
-                      this.props.uiStore.submitButtonDisabled
-                  }
                   onClick={this.handleSubmit}
                   primary
                 >

@@ -14,6 +14,13 @@ export const FORM_VALUES = [
   { name: 'termination_date', placeholder: 'Termination Date' },
   { name: 'offer_date', placeholder: 'Offer Date' },
   { name: 'interest_rate', placeholder: 'Interest Rate' },
+  { name: 'entity_name', placeholder: 'Entity Name' },
+  { name: 'name_of_investor_sig', placeholder: 'Name of investor sig' },
+  { name: 'investor_address_1', placeholder: 'Investor address 1' },
+  { name: 'investor_address_2', placeholder: 'Investor address 2' },
+  { name: 'investor_address_3', placeholder: 'Investor address 3' },
+  { name: 'principal', placeholder: 'Principal' },
+  { name: 'ivsdate', placeholder: 'Investor date' },
 ];
 
 export const DOCFILE_TYPES = [];
@@ -44,6 +51,13 @@ export const TEMPLATE_VARIABLES = {
   state_of_formation: '',
   type_of_business: '',
   termination_date: '',
+  entity_name: '',
+  name_of_investor_sig: '',
+  investor_address_1: '',
+  investor_address_2: '',
+  investor_address_3: '',
+  principal: '',
+  ivsdate: '',
 };
 
 export const PERSONAL_SIGNATURE = {

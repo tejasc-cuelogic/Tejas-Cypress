@@ -182,7 +182,7 @@ export class Business {
     }
     const params = { field: 'created', sort: 'desc' };
     const payload = {
-      query: `query getBusiness($orderByBusinessFilings:businessfilingOrderBy, $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) { business(id: "${businessId}") { id name description created` +
+      query: `query getBusiness($orderByBusinessFilings:businessfilingOrderBy, $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) { business(id: "${businessId}") { id name description folderId created` +
         ' filings(orderBy: $orderByBusinessFilings) { filingId filingFolderName businessId created folderId lockedStatus submissions(orderBy: $orderByBusinessFilingSubmission) { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus lockedStatus} } } }',
       variables: { orderByBusinessFilings: params, orderByBusinessFilingSubmission: params },
     };
