@@ -1083,6 +1083,10 @@ a.ui.card:hover,
   color: #989898;
   text-transform: uppercase;
 }
+.ui.card [class*="horizontally padded"].ui.grid .content {
+  padding: 1.5rem;
+  margin: 0 -1rem;
+}
 .ui.card > .content > .header + .description:not(:last-child),
 .ui.cards > .card > .content > .header + .description:not(:last-child),
 .ui.card > .content > .meta + .description:not(:last-child),

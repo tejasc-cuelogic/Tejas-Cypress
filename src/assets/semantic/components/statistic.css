@@ -104,7 +104,7 @@
 .ui.statistic > .value {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 2.571428rem;
-  font-weight: normal;
+  font-weight: 500;
   line-height: 1.2em;
   color: #383838;
   text-transform: uppercase;
@@ -561,6 +561,10 @@
          Theme Overrides
 *******************************/
 
+.ui.statistic {
+  position: relative;
+  padding-left: 1.14285714em;
+}
 .ui.statistic:before {
   content: "";
   width: 3px;

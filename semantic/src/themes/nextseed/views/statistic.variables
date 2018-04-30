@@ -25,7 +25,7 @@
 
 /* Value */
 // @valueFont:@boldFont;
-@valueFontWeight:normal;
+@valueFontWeight:500;
 @valueLineHeight:1.2em;
 @valueColor:@secondary-text;
 @valueTextTransform: uppercase;

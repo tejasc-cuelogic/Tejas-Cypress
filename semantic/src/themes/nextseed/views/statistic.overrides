@@ -2,6 +2,8 @@
          Theme Overrides
 *******************************/
 .ui.statistic{
+    position:relative;
+    padding-left:@relative16px;
     &:before{
         content:"";
         width:3px;

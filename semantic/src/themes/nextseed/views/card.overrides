@@ -94,6 +94,12 @@
         color:@quaternary-text;
         text-transform:uppercase;
     }
+    [class*="horizontally padded"].ui.grid{
+        .content{
+            padding:1.5rem;
+            margin:0 -1rem;
+        }
+    }
 }
 .ui{
     &.card, &.cards>.card{

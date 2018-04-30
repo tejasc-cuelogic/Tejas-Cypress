@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Form, Label, Card, Header, Button, Checkbox, Feed } from 'semantic-ui-react';
+import { Grid, Form, Label, Card, Header, Button, Checkbox, Feed, Divider, Statistic, Popup, Icon, Input } from 'semantic-ui-react';
 import Spinner from '../../../theme/ui/Spinner';
 // import ToggleEdit from './ToggleEdit';
 import { US_STATES } from '../../../constants/account'; //  added Temperarily to update UI as per new layout
@@ -24,7 +24,7 @@ const userDetails = (props) => {
   const { phone } = props.details.contactDetails;
   return (
     <div className="content-spacer">
-      <div className={`overlay ${(props.editCard) ? 'editing' : ''}`} />
+      {/* <div className={`overlay ${(props.editCard) ? 'editing' : ''}`} /> */}
       <Grid columns={1} stackable>
         <Grid.Row>
           <Grid.Column width={8}>
@@ -409,6 +409,76 @@ const userDetails = (props) => {
             </div>
           </Grid.Column>
         </Grid.Row> */}
+      </Grid>
+      <Divider section />
+      <Header as="h3">Regulation Crowdfunding Limits</Header>
+      <Grid columns={1} stackable>
+        <Grid.Row>
+          <Grid.Column width={8}>
+            <Card fluid>
+              <Grid divided padded="horizontally">
+                <Grid.Row>
+                  <Grid.Column width={6}>
+                    <Card.Content>
+                      <Statistic size="tiny">
+                        <Statistic.Label>
+                          Your current investment limit
+                          <Popup
+                            trigger={<Icon name="ns-help-circle outline" />}
+                            content="Your current investment limit as of today"
+                            position="top center"
+                            className="center-align"
+                          />
+                        </Statistic.Label>
+                        <Statistic.Value>$80,200</Statistic.Value>
+                      </Statistic>
+                    </Card.Content>
+                  </Grid.Column>
+                  <Grid.Column width={10}>
+                    <Card.Content>
+                      <Form>
+                        <Form.Field>
+                          {/* eslint-disable jsx-a11y/label-has-for */}
+                          <label>Annual income</label>
+                          <Input
+                            label={{ basic: true, content: '$' }}
+                            labelPosition="left"
+                            fluid
+                            placeholder="Annual income"
+                            defaultValue="80,000"
+                          />
+                        </Form.Field>
+                        <Form.Field>
+                          <label>Net Worth</label>
+                          <Input
+                            label={{ basic: true, content: '$' }}
+                            labelPosition="left"
+                            fluid
+                            placeholder="Net Worth"
+                            defaultValue="50,000"
+                          />
+                        </Form.Field>
+                        <Form.Field>
+                          <label>
+                            Other Regulation Crowdfunding investments made in prior 12 months
+                          </label>
+                          <Input
+                            label={{ basic: true, content: '$' }}
+                            labelPosition="left"
+                            fluid
+                            placeholder="Other Regulation Crowdfunding investments made in prior 12 months"
+                            defaultValue="0"
+                          />
+                        </Form.Field>
+                        <Button inverted disabled color="green">Update financial info</Button>
+                      </Form>
+                    </Card.Content>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Card>
+          </Grid.Column>
+        </Grid.Row>
       </Grid>
     </div>
   );
