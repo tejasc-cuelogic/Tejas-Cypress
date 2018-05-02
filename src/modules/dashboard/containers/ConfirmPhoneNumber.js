@@ -52,7 +52,7 @@ export default class ConfirmPhoneNumber extends Component {
             hidelabel
             className="display-only"
           />
-          <p><Link to="/app/dashboard" >Change phone number</Link></p>
+          <p><Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')} >Change phone number</Link></p>
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <FormInput
               name="code"

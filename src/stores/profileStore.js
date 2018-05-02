@@ -135,8 +135,10 @@ export class ProfileStore {
     this[form].fields[field].error = validation.errors.first(field);
   };
 
+  /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
     uiStore.setProgress();
+    uiStore.setLoaderMessage('Submitting Personal Details');
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -146,9 +148,18 @@ export class ProfileStore {
             user: this.formattedUserInfo,
           },
         })
-        .then(data => this.setVerifyIdentityResponse(data.data.verifyCIPIdentity), resolve())
-        .catch(err => console.log(err), reject())
-        .finally(() => uiStore.setProgress(false));
+        .then((data) => {
+          this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject();
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+          uiStore.clearLoaderMessage();
+        });
     });
   }
 

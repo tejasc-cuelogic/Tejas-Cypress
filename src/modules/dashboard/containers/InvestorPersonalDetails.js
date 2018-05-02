@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete } from '../../../components/form/FormElements';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
 import profileActions from '../../../actions/profile';
 import Helper from '../../../helper/utility';
+import CipErrors from '../../../components/common/CipErrors';
 
 @inject('profileStore', 'uiStore', 'userStore')
 @observer
@@ -53,6 +54,11 @@ export default class investorPersonalDetails extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
+          {this.props.profileStore.verifyIdentity01.response.qualifiers &&
+          <Message error textAlign="left">
+            <CipErrors errorsList={this.props.profileStore.verifyIdentity01.response.qualifiers} />
+          </Message>
+          }
           <Form error onSubmit={this.handleSubmitInvestorDetails}>
             <Form.Group widths="equal">
               <FormSelect
