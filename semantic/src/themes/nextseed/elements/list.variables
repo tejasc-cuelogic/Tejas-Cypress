@@ -52,7 +52,7 @@
 
 /* Header */
 @itemHeaderFontFamily: @headerFont;
-@itemHeaderFontWeight: 500;
+@itemHeaderFontWeight: 400;
 @itemHeaderColor: @quaternary-text;
 
 /* Description */

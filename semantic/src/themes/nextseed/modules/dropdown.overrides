@@ -75,7 +75,8 @@
 		z-index:1;
 		border-radius:@4px;
 		color:@fullBlack;
-		padding:@6px @14px;
+		padding:0;
+		height:0;
 		font-size:0;
 		font-weight:700;
 	}
@@ -89,8 +90,9 @@
 			}
 		}
 		~ .dropdown-effect{
-			font-size:13px;
 			height:380px;
+			padding:@6px @14px;
+			font-size:13px;
 			background-color:@white;
 			box-shadow:0 0 20px @veryStrongTransparentBlack;
 		}

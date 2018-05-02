@@ -5,14 +5,9 @@
     overflow:auto;
 }
 .ui.table{
-    // font-family:@regularFont;
     thead th{
-        // padding:@20px;
         font-size:@13px;
     }
-    // td{
-    //     padding:@12px @24px;
-    // }
     &.sortable{
         thead th{
             color:@tertiary-text;
@@ -100,6 +95,22 @@
             color:@quaternary-text;
             margin-left:@6px;
             vertical-align:middle;
+        }
+    }
+    &.investment-details{
+        thead th{
+            font-size:@12px;
+            color:@quaternary-text;
+        }
+        tbody{
+            font-weight:700;
+            // i.icon{
+            //     color:@border-color;
+            // }
+        }
+        i.ns-individual, i.ns-ira, i.ns-entity{
+            font-size:20px;
+            color:@highlight-tertiary;
         }
     }
 }
