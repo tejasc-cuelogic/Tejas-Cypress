@@ -65,6 +65,7 @@ export default class investorPersonalDetails extends Component {
               {
                 ['firstLegalName', 'lastLegalName'].map(field => (
                   <FormInput
+                    key={field}
                     type="text"
                     name={field}
                     fielddata={verifyIdentity01.fields[field]}
@@ -83,6 +84,7 @@ export default class investorPersonalDetails extends Component {
               {
                 ['city', 'state', 'zipCode'].map(field => (
                   <FormInput
+                    key={field}
                     type="text"
                     name={field}
                     fielddata={verifyIdentity01.fields[field]}
