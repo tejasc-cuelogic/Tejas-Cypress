@@ -109,6 +109,9 @@ export default class EdgarForm extends React.Component {
                   color="green"
                   onClick={this.handleSubmit}
                   primary
+                  disabled={
+                    this.props.match.params.filingId
+                  }
                 >
                   Generate Docx
                 </Button>
