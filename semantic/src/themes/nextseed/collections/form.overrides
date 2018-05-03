@@ -2,6 +2,12 @@
          Theme Overrides
 *******************************/
 .ui.form{
+    .field{
+        position:relative;
+    }
+    .fields .field{
+        margin-bottom:@14px;
+    }
     input:not([type]),
     input[type=date],
     input[type=datetime-local],
@@ -13,7 +19,8 @@
     input[type=tel],
     input[type=text],
     input[type=time],
-    input[type=url]{
+    input[type=url],
+    textarea{
         border-bottom:@border-color 1px solid;
     }
 }
@@ -98,6 +105,7 @@
 .ui.form{
     .field>label{
         display:inline-block;
+        line-height:@18px;
     }
     &.inverted{
         label{
@@ -167,11 +175,11 @@ display:block;
         color:@highlight-primary;
         // margin:-@28px 0 @10px;
     }
-    .field.disabled{
-      input[type=text]{
-        opacity:0;
-      }
-    }
+    // .field.disabled{
+    //   input[type=text]{
+    //     opacity:0;
+    //   }
+    // }
 }
 
 // .ui.modal .ui.form.file-uploader-inline{
