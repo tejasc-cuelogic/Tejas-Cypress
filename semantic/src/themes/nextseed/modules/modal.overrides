@@ -170,9 +170,6 @@
         }
     }
     .ui.form{
-        .fields .field{
-            margin-bottom:@14px;
-        }
         .field{
             // margin:0 0 @28px;
             // .ui.input input, input{

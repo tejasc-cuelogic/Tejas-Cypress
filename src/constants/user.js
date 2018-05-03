@@ -19,7 +19,7 @@ export const USER_LIST_META = [
   ['actions', '', false],
 ];
 
-export const USER_DETAIL_SECTIONS = ['Profile', 'Accounts', 'Activity', 'Investments', 'Transactions', 'Statements', 'Referrals', 'Messages'];
+export const USER_DETAIL_SECTIONS = ['Profile', 'Limits', 'Beneficiaries', 'Portfolio', 'Transactions', 'Statements', 'Bonus rewards', 'Messages'];
 
 // Filters
 export const FILTER_META = {
@@ -41,6 +41,17 @@ export const FILTER_META = {
   city: [
     { text: 'Greenfields', value: 'greenfields' },
     { text: 'Bartley', value: 'bartley' },
+  ],
+  state: [
+    { text: 'Alabama', value: 'alabama' },
+    { text: 'Alaska', value: 'alaska' },
+    { text: 'Arizona', value: 'arizona' },
+    { text: 'Arkansas', value: 'arkansas' },
+    { text: 'California', value: 'california' },
+    { text: 'Colorado', value: 'colorado' },
+    { text: 'Connecticut', value: 'connecticut' },
+    { text: 'Delaware', value: 'delaware' },
+    { text: 'West Virginia', value: 'west virginia' },
   ],
 };
 /* eslint-disable */

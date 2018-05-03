@@ -5,6 +5,9 @@
     .field{
         position:relative;
     }
+    .fields .field{
+        margin-bottom:@14px;
+    }
     input:not([type]),
     input[type=date],
     input[type=datetime-local],
@@ -266,5 +269,23 @@
 .field.error{
     .ui.labeled .ui.label{
         border-color:@negativeTextColor;
+    }
+}
+
+.ui.form.select-option{
+    .field{
+        padding:0 @14px;
+        // background-color:@white;
+        // border-radius:@4px;
+        // box-shadow:0 0 20px @veryStrongTransparentBlack;
+        >label{
+            display:none;
+        }
+        .ui.selection.dropdown{
+            border:none;
+        }
+        .dropdown-effect{
+            top:0;
+        }
     }
 }
