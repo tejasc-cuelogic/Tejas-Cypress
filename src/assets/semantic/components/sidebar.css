@@ -626,7 +626,7 @@ body.pushable > .pusher {
 .pushable > .sidebar ~ .pusher {
   -webkit-transition: all .5s ease;
   transition: all .5s ease;
-  height: calc(100vh - 58px);
+  height: 100vh;
   overflow-y: auto;
   background-color: #fafafa;
 }
