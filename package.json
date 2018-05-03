@@ -103,7 +103,7 @@
     "whatwg-fetch": "2.0.3"
   },
   "scripts": {
-    "build-assets": "cd ./semantic && gulp build-assets &&  cd ..",
+    "build-assets": "cd ./semantic && gulp build &&  cd ..",
     "start": "node scripts/start.js",
     "build-js": "node scripts/build.js",
     "build": "npm-run-all build-assets build-js",
