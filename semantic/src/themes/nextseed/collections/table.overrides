@@ -104,13 +104,18 @@
         }
         tbody{
             font-weight:700;
-            // i.icon{
-            //     color:@border-color;
-            // }
+            i.offering-icon{
+                color:@border-color;
+            }
         }
         i.ns-individual, i.ns-ira, i.ns-entity{
             font-size:20px;
             color:@highlight-tertiary;
+        }
+        tfoot th{
+            background-color:@white;
+            font-weight:700;
+            color:@quaternary-text;
         }
     }
 }

@@ -241,7 +241,7 @@ const userPortfolio = () => {
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" color="grey" /> MUHU Hot Pot</Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> MUHU Hot Pot</Table.Cell>
                     <Table.Cell>Houston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$20,000</Table.Cell>
@@ -254,7 +254,7 @@ const userPortfolio = () => {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" color="grey" /> Intero Ristorante</Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Intero Ristorante</Table.Cell>
                     <Table.Cell>New York</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$1,500</Table.Cell>
@@ -267,7 +267,7 @@ const userPortfolio = () => {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" color="grey" /> The Brewers Table</Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> The Brewers Table</Table.Cell>
                     <Table.Cell>San Francisco</Table.Cell>
                     <Table.Cell>Rev Share</Table.Cell>
                     <Table.Cell textAlign="right">$12,000</Table.Cell>
@@ -280,7 +280,7 @@ const userPortfolio = () => {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" color="grey" /> Smiley Transportat</Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Smiley Transportat</Table.Cell>
                     <Table.Cell>Boston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$4,000</Table.Cell>
@@ -292,13 +292,190 @@ const userPortfolio = () => {
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
+                <Table.Footer>
+                  <Table.Row>
+                    <Table.HeaderCell />
+                    <Table.HeaderCell colSpan="3">Total:</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="right">$33,900</Table.HeaderCell>
+                    <Table.HeaderCell colSpan="3" />
+                  </Table.Row>
+                </Table.Footer>
               </Table>
-              { /* <button onClick={this.props.loadMore}>loadMore</button> */ }
             </div>
           </Accordion.Content>
         </Accordion>
-        {/* <Card fluid>
-        </Card> */}
+        <Accordion fluid styled className="card-style">
+          <Accordion.Title active>
+            <Icon name="ns-chevron-up" />
+            Active
+          </Accordion.Title>
+          <Accordion.Content active>
+            <div className="table-wrapper">
+              <Table className="investment-details">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell />
+                    <Table.HeaderCell>Offering</Table.HeaderCell>
+                    <Table.HeaderCell>Location</Table.HeaderCell>
+                    <Table.HeaderCell>Investment Type</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="right">Invested Amount</Table.HeaderCell>
+                    <Table.HeaderCell>Status</Table.HeaderCell>
+                    <Table.HeaderCell width={2}>% to goal</Table.HeaderCell>
+                    <Table.HeaderCell />
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> MUHU Hot Pot</Table.Cell>
+                    <Table.Cell>Houston</Table.Cell>
+                    <Table.Cell>Term Note</Table.Cell>
+                    <Table.Cell textAlign="right">$20,000</Table.Cell>
+                    <Table.Cell>Live</Table.Cell>
+                    <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
+                    <Table.Cell collapsing>
+                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
+                      <Button color="green" className="link-button" icon="ns-replay" />
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Intero Ristorante</Table.Cell>
+                    <Table.Cell>New York</Table.Cell>
+                    <Table.Cell>Term Note</Table.Cell>
+                    <Table.Cell textAlign="right">$1,500</Table.Cell>
+                    <Table.Cell>Processing</Table.Cell>
+                    <Table.Cell collapsing><Progress percent={50} size="small" color="violet" label="50%" /></Table.Cell>
+                    <Table.Cell collapsing>
+                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
+                      <Button color="green" className="link-button" icon="ns-replay" />
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> The Brewers Table</Table.Cell>
+                    <Table.Cell>San Francisco</Table.Cell>
+                    <Table.Cell>Rev Share</Table.Cell>
+                    <Table.Cell textAlign="right">$12,000</Table.Cell>
+                    <Table.Cell>Processing</Table.Cell>
+                    <Table.Cell collapsing><Progress percent={5} size="small" color="violet" label="5%" /></Table.Cell>
+                    <Table.Cell collapsing>
+                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
+                      <Button color="green" className="link-button" icon="ns-replay" />
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Smiley Transportat</Table.Cell>
+                    <Table.Cell>Boston</Table.Cell>
+                    <Table.Cell>Term Note</Table.Cell>
+                    <Table.Cell textAlign="right">$4,000</Table.Cell>
+                    <Table.Cell>Live</Table.Cell>
+                    <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
+                    <Table.Cell collapsing>
+                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
+                      <Button color="green" className="link-button" icon="ns-replay" />
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+                <Table.Footer>
+                  <Table.Row>
+                    <Table.HeaderCell />
+                    <Table.HeaderCell colSpan="3">Total:</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="right">$33,900</Table.HeaderCell>
+                    <Table.HeaderCell colSpan="3" />
+                  </Table.Row>
+                </Table.Footer>
+              </Table>
+            </div>
+          </Accordion.Content>
+        </Accordion>
+        <Accordion fluid styled className="card-style">
+          <Accordion.Title active>
+            <Icon name="ns-chevron-up" />
+            Completed
+          </Accordion.Title>
+          <Accordion.Content active>
+            <div className="table-wrapper">
+              <Table className="investment-details">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell />
+                    <Table.HeaderCell>Offering</Table.HeaderCell>
+                    <Table.HeaderCell>Location</Table.HeaderCell>
+                    <Table.HeaderCell>Investment Type</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="right">Invested Amount</Table.HeaderCell>
+                    <Table.HeaderCell>Status</Table.HeaderCell>
+                    <Table.HeaderCell width={2}>% to goal</Table.HeaderCell>
+                    <Table.HeaderCell />
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> MUHU Hot Pot</Table.Cell>
+                    <Table.Cell>Houston</Table.Cell>
+                    <Table.Cell>Term Note</Table.Cell>
+                    <Table.Cell textAlign="right">$20,000</Table.Cell>
+                    <Table.Cell>Live</Table.Cell>
+                    <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
+                    <Table.Cell collapsing>
+                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
+                      <Button color="green" className="link-button" icon="ns-replay" />
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Intero Ristorante</Table.Cell>
+                    <Table.Cell>New York</Table.Cell>
+                    <Table.Cell>Term Note</Table.Cell>
+                    <Table.Cell textAlign="right">$1,500</Table.Cell>
+                    <Table.Cell>Processing</Table.Cell>
+                    <Table.Cell collapsing><Progress percent={50} size="small" color="violet" label="50%" /></Table.Cell>
+                    <Table.Cell collapsing>
+                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
+                      <Button color="green" className="link-button" icon="ns-replay" />
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> The Brewers Table</Table.Cell>
+                    <Table.Cell>San Francisco</Table.Cell>
+                    <Table.Cell>Rev Share</Table.Cell>
+                    <Table.Cell textAlign="right">$12,000</Table.Cell>
+                    <Table.Cell>Processing</Table.Cell>
+                    <Table.Cell collapsing><Progress percent={5} size="small" color="violet" label="5%" /></Table.Cell>
+                    <Table.Cell collapsing>
+                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
+                      <Button color="green" className="link-button" icon="ns-replay" />
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Smiley Transportat</Table.Cell>
+                    <Table.Cell>Boston</Table.Cell>
+                    <Table.Cell>Term Note</Table.Cell>
+                    <Table.Cell textAlign="right">$4,000</Table.Cell>
+                    <Table.Cell>Live</Table.Cell>
+                    <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
+                    <Table.Cell collapsing>
+                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
+                      <Button color="green" className="link-button" icon="ns-replay" />
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+                <Table.Footer>
+                  <Table.Row>
+                    <Table.HeaderCell />
+                    <Table.HeaderCell colSpan="3">Total:</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="right">$33,900</Table.HeaderCell>
+                    <Table.HeaderCell colSpan="3" />
+                  </Table.Row>
+                </Table.Footer>
+              </Table>
+            </div>
+          </Accordion.Content>
+        </Accordion>
       </div>
     </div>
   );
