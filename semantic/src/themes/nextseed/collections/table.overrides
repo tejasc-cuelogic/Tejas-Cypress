@@ -111,6 +111,7 @@
         i.ns-individual, i.ns-ira, i.ns-entity{
             font-size:20px;
             color:@highlight-tertiary;
+            vertical-align:middle;
         }
         tfoot th{
             background-color:@white;
