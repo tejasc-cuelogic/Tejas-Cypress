@@ -22,7 +22,7 @@ export default class ConfirmIdentityForm extends Component {
       <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">We need to confirm your identity</Header>
-          <Link to="" className="back-link"><Icon name="ns-arrow-left" /></Link>
+          <Link to="" className="back-link"><Icon className="ns-arrow-left" /></Link>
           <Divider />
           <p>
             Please answer the questions below or<br />

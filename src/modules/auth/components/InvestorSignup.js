@@ -33,7 +33,7 @@ class InvestorSignup extends Component {
     return (
       <Modal size="tiny" open>
         <Modal.Header className="center-align signup-header">
-          <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon name="ns-arrow-left" /></Link>
+          <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon className="ns-arrow-left" /></Link>
           <Header as="h2">Sign Up as Investor</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">

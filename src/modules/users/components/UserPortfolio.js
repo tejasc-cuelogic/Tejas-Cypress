@@ -34,7 +34,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Deposits
                       <Popup
-                        trigger={<Icon name="ns-help-circle" />}
+                        trigger={<Icon className="ns-help-circle" />}
                         content="Your Deposits as of today"
                         position="top center"
                         className="center-align"
@@ -50,7 +50,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Withdrawals
                       <Popup
-                        trigger={<Icon name="ns-help-circle" />}
+                        trigger={<Icon className="ns-help-circle" />}
                         content="Your Withdrawals as of today"
                         position="top center"
                         className="center-align"
@@ -66,7 +66,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Payments
                       <Popup
-                        trigger={<Icon name="ns-help-circle" />}
+                        trigger={<Icon className="ns-help-circle" />}
                         content="Your Payments as of today"
                         position="top center"
                         className="center-align"
@@ -82,7 +82,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Time-Weighted Return
                       <Popup
-                        trigger={<Icon name="ns-help-circle" />}
+                        trigger={<Icon className="ns-help-circle" />}
                         content="Your Time-Weighted Return as of today"
                         position="top center"
                         className="center-align"
@@ -98,7 +98,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Investment limit
                       <Popup
-                        trigger={<Icon name="ns-help-circle" />}
+                        trigger={<Icon className="ns-help-circle" />}
                         content="Your Investment limit as of today"
                         position="top center"
                         className="center-align"
@@ -156,7 +156,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Total Balance
                       <Popup
-                        trigger={<Icon name="ns-help-circle" />}
+                        trigger={<Icon className="ns-help-circle" />}
                         content="Your Total Balance as of today"
                         position="top center"
                         className="center-align"
@@ -172,7 +172,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Total Deposit
                       <Popup
-                        trigger={<Icon name="ns-help-circle" />}
+                        trigger={<Icon className="ns-help-circle" />}
                         content="Your Total Deposit as of today"
                         position="top center"
                         className="center-align"
@@ -188,7 +188,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Net Payments
                       <Popup
-                        trigger={<Icon name="ns-help-circle" />}
+                        trigger={<Icon className="ns-help-circle" />}
                         content="Your Net Payments as of today"
                         position="top center"
                         className="center-align"
@@ -204,7 +204,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       TNAR
                       <Popup
-                        trigger={<Icon name="ns-help-circle" />}
+                        trigger={<Icon className="ns-help-circle" />}
                         content="Your TNAR as of today"
                         position="top center"
                         className="center-align"
@@ -220,7 +220,7 @@ const userPortfolio = () => {
         <Header as="h3">Investments</Header>
         <Accordion fluid styled className="card-style">
           <Accordion.Title active>
-            <Icon name="ns-chevron-up" />
+            <Icon className="ns-chevron-up" />
             Pending
           </Accordion.Title>
           <Accordion.Content active>
@@ -240,8 +240,8 @@ const userPortfolio = () => {
                 </Table.Header>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> MUHU Hot Pot</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> MUHU Hot Pot</Table.Cell>
                     <Table.Cell>Houston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$20,000</Table.Cell>
@@ -249,12 +249,12 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Intero Ristorante</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> Intero Ristorante</Table.Cell>
                     <Table.Cell>New York</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$1,500</Table.Cell>
@@ -262,12 +262,12 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={50} size="small" color="violet" label="50%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> The Brewers Table</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> The Brewers Table</Table.Cell>
                     <Table.Cell>San Francisco</Table.Cell>
                     <Table.Cell>Rev Share</Table.Cell>
                     <Table.Cell textAlign="right">$12,000</Table.Cell>
@@ -275,12 +275,12 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={5} size="small" color="violet" label="5%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Smiley Transportat</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> Smiley Transportat</Table.Cell>
                     <Table.Cell>Boston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$4,000</Table.Cell>
@@ -288,7 +288,7 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -306,7 +306,7 @@ const userPortfolio = () => {
         </Accordion>
         <Accordion fluid styled className="card-style">
           <Accordion.Title active>
-            <Icon name="ns-chevron-up" />
+            <Icon className="ns-chevron-up" />
             Active
           </Accordion.Title>
           <Accordion.Content active>
@@ -326,8 +326,8 @@ const userPortfolio = () => {
                 </Table.Header>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> MUHU Hot Pot</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> MUHU Hot Pot</Table.Cell>
                     <Table.Cell>Houston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$20,000</Table.Cell>
@@ -335,12 +335,12 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Intero Ristorante</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> Intero Ristorante</Table.Cell>
                     <Table.Cell>New York</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$1,500</Table.Cell>
@@ -348,12 +348,12 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={50} size="small" color="violet" label="50%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> The Brewers Table</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> The Brewers Table</Table.Cell>
                     <Table.Cell>San Francisco</Table.Cell>
                     <Table.Cell>Rev Share</Table.Cell>
                     <Table.Cell textAlign="right">$12,000</Table.Cell>
@@ -361,12 +361,12 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={5} size="small" color="violet" label="5%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Smiley Transportat</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> Smiley Transportat</Table.Cell>
                     <Table.Cell>Boston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$4,000</Table.Cell>
@@ -374,7 +374,7 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -392,7 +392,7 @@ const userPortfolio = () => {
         </Accordion>
         <Accordion fluid styled className="card-style">
           <Accordion.Title active>
-            <Icon name="ns-chevron-up" />
+            <Icon className="ns-chevron-up" />
             Completed
           </Accordion.Title>
           <Accordion.Content active>
@@ -412,8 +412,8 @@ const userPortfolio = () => {
                 </Table.Header>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> MUHU Hot Pot</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> MUHU Hot Pot</Table.Cell>
                     <Table.Cell>Houston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$20,000</Table.Cell>
@@ -421,12 +421,12 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Intero Ristorante</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> Intero Ristorante</Table.Cell>
                     <Table.Cell>New York</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$1,500</Table.Cell>
@@ -434,12 +434,12 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={50} size="small" color="violet" label="50%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> The Brewers Table</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> The Brewers Table</Table.Cell>
                     <Table.Cell>San Francisco</Table.Cell>
                     <Table.Cell>Rev Share</Table.Cell>
                     <Table.Cell textAlign="right">$12,000</Table.Cell>
@@ -447,12 +447,12 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={5} size="small" color="violet" label="5%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
-                    <Table.Cell><Icon name="ns-food" className="offering-icon" /> Smiley Transportat</Table.Cell>
+                    <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
+                    <Table.Cell><Icon className="ns-food offering-icon" /> Smiley Transportat</Table.Cell>
                     <Table.Cell>Boston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
                     <Table.Cell textAlign="right">$4,000</Table.Cell>
@@ -460,7 +460,7 @@ const userPortfolio = () => {
                     <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                      <Button color="green" className="link-button" icon="ns-replay" />
+                      <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>

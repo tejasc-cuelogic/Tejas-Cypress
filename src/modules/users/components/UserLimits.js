@@ -19,7 +19,7 @@ const userLimits = () => (
                       <Statistic.Label>
                         Your current investment limit
                         <Popup
-                          trigger={<Icon name="ns-help-circle" />}
+                          trigger={<Icon className="ns-help-circle" />}
                           content="Your current investment limit as of today"
                           position="top center"
                           className="center-align"

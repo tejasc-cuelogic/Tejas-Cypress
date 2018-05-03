@@ -20,13 +20,13 @@ const userListingSubheader = props => (
           </Grid.Column>
           <Grid.Column width={5}>
             <Form inverted>
-              <Input fluid onKeyPress={props.executeSearch} inverted icon="ns-search" iconPosition="left" placeholder="Type user’s name, e-mail address, city, state, zip code or phone number" />
+              <Input fluid onKeyPress={props.executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Type user’s name, e-mail address, city, state, zip code or phone number" />
             </Form>
           </Grid.Column>
           <Grid.Column width={3} textAlign="center">
             <span className="filter-count">{Object.keys(props.requestState.search).length}</span>
             <Button icon color="green" onClick={props.toggleSearch} className="link-button">
-              Filters <Icon name="ns-caret-down" />
+              Filters <Icon className="ns-caret-down" />
             </Button>
           </Grid.Column>
           <Grid.Column width={3} textAlign="right">
@@ -34,7 +34,7 @@ const userListingSubheader = props => (
           </Grid.Column>
           <Grid.Column floated="right" textAlign="right">
             <a className="item notification" href="#">
-              <Icon name="ns-bell" />
+              <Icon className="ns-bell" />
               <span className="unread-count">3</span>
             </a>
           </Grid.Column>

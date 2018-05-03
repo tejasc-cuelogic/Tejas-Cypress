@@ -11,12 +11,12 @@ const userModuleSubheader = props => (
           <Grid.Column width={16}>
             <h1>
               <Responsive {...Responsive.onlyComputer}>
-                <Link to="/app/users" className="back-link"><Icon name="ns-arrow-left" /></Link>
+                <Link to="/app/users" className="back-link"><Icon className="ns-arrow-left" /></Link>
               </Responsive>
               {props.fullname}
               <List horizontal>
                 <List.Item>
-                  <List.Icon circular color="red" name="ns-lock" />
+                  <List.Icon circular color="red" className="ns-lock" />
                   <List.Content verticalAlign="middle">
                     <List.Description>
                       Account locked <br />

@@ -43,7 +43,7 @@ export default class ResetPassword extends React.Component {
                   <div stacked>
                     <Form.Input
                       fluid
-                      icon="ns-lock"
+                      icon={{ className: 'ns-lock' }}
                       iconPosition="left"
                       placeholder="Password"
                       name="password"
@@ -55,7 +55,7 @@ export default class ResetPassword extends React.Component {
                     <FieldError error={values.password.error} />
                     <Form.Input
                       fluid
-                      icon="ns-lock"
+                      icon={{ className: 'ns-lock' }}
                       iconPosition="left"
                       placeholder="Verify Password"
                       name="verify"
@@ -67,7 +67,7 @@ export default class ResetPassword extends React.Component {
                     <FieldError error={values.verify.error} />
                     <Form.Input
                       fluid
-                      icon="ns-lock"
+                      icon={{ className: 'ns-lock' }}
                       iconPosition="left"
                       placeholder="Verification Code"
                       name="code"

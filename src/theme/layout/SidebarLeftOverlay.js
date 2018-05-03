@@ -42,7 +42,7 @@ class SidebarLeftPush extends Component {
           {
             sidebarItems.map(item => (
               <Menu.Item key={item.to} name="home" as={NavLink} to={`/app/${item.to}`}>
-                <Icon name={item.icon} />
+                <Icon className={item.icon} />
                 <Label circular color="red" size="mini" horizontal>3</Label>
                 <span>{item.displayName}</span>
               </Menu.Item>
