@@ -79,7 +79,7 @@ export const verifyCIPAnswers = gql`
   }`;
 
 export const startUserPhoneVerification = gql`
-  mutation _startUserPhoneVerification($phoneDetails: phoneInput! $method: String!) {
+  mutation _startUserPhoneVerification($phoneDetails: phoneInput! $method: PhoneVerificationMethodsEnum!) {
     startUserPhoneVerification(phoneDetails: $phoneDetails method: $method) {
       carrier
       is_cellphone
@@ -97,3 +97,15 @@ export const checkUserPhoneVerificationCode = gql`
       success
     }
  }`;
+
+export const updateUserCIPInfo = gql`
+  mutation updateUserCIPInfo($userId: String! $user: userCIPInput! $phoneDetails: phoneInput!) {
+    updateUserCIPInfo(userId: $userId user: $user phoneDetails: $phoneDetails) {
+      id
+      email
+      firstName
+      lastName
+      lastLoginDate
+      accreditation
+    }
+  }`;

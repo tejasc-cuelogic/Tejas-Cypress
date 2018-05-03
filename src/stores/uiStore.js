@@ -28,6 +28,7 @@ export class UiStore {
   @observable dropdownLoader = false;
   @observable authWizardStep = undefined;
   @observable dashboardStep = undefined;
+  @observable editMode = false;
 
   @action
   setModalStatus(status) {
@@ -141,6 +142,11 @@ export class UiStore {
   clearActionLoader() {
     this.inProgress = false;
     this.loaderMessage = '';
+  }
+
+  @action
+  setEditMode = (isEditMode) => {
+    this.editMode = isEditMode;
   }
 
   @action

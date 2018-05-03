@@ -4,15 +4,22 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import { Modal, Button, Header, Form, Divider, Icon } from 'semantic-ui-react';
 import { FormInput } from '../../../components/form/FormElements';
+import Helper from '../../../helper/utility';
 
-@inject('profileStore')
+@inject('profileStore', 'uiStore')
 @observer
 export default class ConfirmIdentityForm extends Component {
   handleIdentityQuestionsSubmit = (e) => {
     e.preventDefault();
-    this.props.profileStore.submitConfirmIdentityQuestions().then(() => {
-      this.props.profileStore.startPhoneVerification();
-      this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+    this.props.profileStore.submitConfirmIdentityQuestions().then((result) => {
+      /* eslint-disable no-underscore-dangle */
+      if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
+        Helper.toast('Identity questions verified.', 'success');
+        this.props.profileStore.startPhoneVerification();
+        this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+      } else {
+        Helper.toast('Identity questions not verified.', 'error');
+      }
     });
   }
 
@@ -22,7 +29,7 @@ export default class ConfirmIdentityForm extends Component {
       <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">We need to confirm your identity</Header>
-          <Link to="" className="back-link"><Icon name="ns-arrow-left" /></Link>
+          <Link to="/app/dashboard" className="back-link" onClick={() => this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation')}><Icon name="ns-arrow-left" /></Link>
           <Divider />
           <p>
             Please answer the questions below or<br />
@@ -41,7 +48,7 @@ export default class ConfirmIdentityForm extends Component {
               />
             ))}
             <div className="center-align">
-              <Button color="green" size="large" className="relaxed" disabled={!verifyIdentity02.meta.isValid}>Verify my identity</Button>
+              <Button loading={this.props.uiStore.inProgress} color="green" size="large" className="relaxed" disabled={!verifyIdentity02.meta.isValid}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>

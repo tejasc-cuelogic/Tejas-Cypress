@@ -206,6 +206,16 @@ export const IRA_FIN_INFO = {
   },
 };
 
+export const IRA_IDENTITY = {
+  driversLicence: {
+    value: '',
+    key: 'driversLicence',
+    error: undefined,
+    rule: 'required',
+    label: '',
+  },
+};
+
 export const IS_ENTITY_TRUST = {
   0: 'yes',
   1: 'no',

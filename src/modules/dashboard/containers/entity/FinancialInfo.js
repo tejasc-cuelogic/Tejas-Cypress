@@ -25,7 +25,7 @@ export default class AccountType extends Component {
           />
           <div className="field-wrap">
             <FormDatePicker
-              label={formEntityInfo.fields.dateOfTrust.label}
+              fielddata={formEntityInfo.fields.dateOfTrust}
               placeholderText={formEntityInfo.fields.dateOfTrust.placeHolder}
               selected={formEntityInfo.fields.dateOfTrust.value}
               changed={this.handleDateChange}
