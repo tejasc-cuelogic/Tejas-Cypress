@@ -55,7 +55,7 @@ export default class investorPersonalDetails extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           {this.props.profileStore.verifyIdentity01.response.qualifiers &&
-          <Message error textAlign="left">
+          <Message error>
             <CipErrors errorsList={this.props.profileStore.verifyIdentity01.response.qualifiers} />
           </Message>
           }

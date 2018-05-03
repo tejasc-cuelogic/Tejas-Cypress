@@ -138,7 +138,6 @@ export class ProfileStore {
   /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
     uiStore.setProgress();
-    uiStore.setLoaderMessage('Submitting Personal Details');
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -158,7 +157,6 @@ export class ProfileStore {
         })
         .finally(() => {
           uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
         });
     });
   }
@@ -192,9 +190,16 @@ export class ProfileStore {
             },
           },
         })
-        .then(result => resolve(result))
-        .catch(err => uiStore.setErrors(this.simpleErr(err)), reject())
-        .finally(() => uiStore.setProgress(false));
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject();
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
     });
   }
 
@@ -225,8 +230,7 @@ export class ProfileStore {
             verificationCode: this.verifyIdentity04.fields.code.value,
           },
         })
-        .then((result) => {
-          console.log(result);
+        .then(() => {
           client
             .mutate({
               mutation: updateUserCIPInfo,
@@ -235,12 +239,6 @@ export class ProfileStore {
                 user: this.formattedUserInfo,
                 phoneDetails: this.formattedPhoneDetails,
               },
-            })
-            .then((data) => {
-              console.log(data);
-            })
-            .catch((err) => {
-              console.log(err);
             });
           resolve();
         })
