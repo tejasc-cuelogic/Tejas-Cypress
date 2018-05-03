@@ -34,7 +34,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Deposits
                       <Popup
-                        trigger={<Icon name="ns-help-circle outline" />}
+                        trigger={<Icon name="ns-help-circle" />}
                         content="Your Deposits as of today"
                         position="top center"
                         className="center-align"
@@ -50,7 +50,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Withdrawals
                       <Popup
-                        trigger={<Icon name="ns-help-circle outline" />}
+                        trigger={<Icon name="ns-help-circle" />}
                         content="Your Withdrawals as of today"
                         position="top center"
                         className="center-align"
@@ -66,7 +66,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Payments
                       <Popup
-                        trigger={<Icon name="ns-help-circle outline" />}
+                        trigger={<Icon name="ns-help-circle" />}
                         content="Your Payments as of today"
                         position="top center"
                         className="center-align"
@@ -82,7 +82,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Time-Weighted Return
                       <Popup
-                        trigger={<Icon name="ns-help-circle outline" />}
+                        trigger={<Icon name="ns-help-circle" />}
                         content="Your Time-Weighted Return as of today"
                         position="top center"
                         className="center-align"
@@ -98,7 +98,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Investment limit
                       <Popup
-                        trigger={<Icon name="ns-help-circle outline" />}
+                        trigger={<Icon name="ns-help-circle" />}
                         content="Your Investment limit as of today"
                         position="top center"
                         className="center-align"
@@ -156,7 +156,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Total Balance
                       <Popup
-                        trigger={<Icon name="ns-help-circle outline" />}
+                        trigger={<Icon name="ns-help-circle" />}
                         content="Your Total Balance as of today"
                         position="top center"
                         className="center-align"
@@ -172,7 +172,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Total Deposit
                       <Popup
-                        trigger={<Icon name="ns-help-circle outline" />}
+                        trigger={<Icon name="ns-help-circle" />}
                         content="Your Total Deposit as of today"
                         position="top center"
                         className="center-align"
@@ -188,7 +188,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       Net Payments
                       <Popup
-                        trigger={<Icon name="ns-help-circle outline" />}
+                        trigger={<Icon name="ns-help-circle" />}
                         content="Your Net Payments as of today"
                         position="top center"
                         className="center-align"
@@ -204,7 +204,7 @@ const userPortfolio = () => {
                     <Statistic.Label>
                       TNAR
                       <Popup
-                        trigger={<Icon name="ns-help-circle outline" />}
+                        trigger={<Icon name="ns-help-circle" />}
                         content="Your TNAR as of today"
                         position="top center"
                         className="center-align"
@@ -240,7 +240,7 @@ const userPortfolio = () => {
                 </Table.Header>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> MUHU Hot Pot</Table.Cell>
                     <Table.Cell>Houston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
@@ -253,7 +253,7 @@ const userPortfolio = () => {
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> Intero Ristorante</Table.Cell>
                     <Table.Cell>New York</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
@@ -266,7 +266,7 @@ const userPortfolio = () => {
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> The Brewers Table</Table.Cell>
                     <Table.Cell>San Francisco</Table.Cell>
                     <Table.Cell>Rev Share</Table.Cell>
@@ -279,7 +279,7 @@ const userPortfolio = () => {
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> Smiley Transportat</Table.Cell>
                     <Table.Cell>Boston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
@@ -326,7 +326,7 @@ const userPortfolio = () => {
                 </Table.Header>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> MUHU Hot Pot</Table.Cell>
                     <Table.Cell>Houston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
@@ -339,7 +339,7 @@ const userPortfolio = () => {
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> Intero Ristorante</Table.Cell>
                     <Table.Cell>New York</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
@@ -352,7 +352,7 @@ const userPortfolio = () => {
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> The Brewers Table</Table.Cell>
                     <Table.Cell>San Francisco</Table.Cell>
                     <Table.Cell>Rev Share</Table.Cell>
@@ -365,7 +365,7 @@ const userPortfolio = () => {
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> Smiley Transportat</Table.Cell>
                     <Table.Cell>Boston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
@@ -412,7 +412,7 @@ const userPortfolio = () => {
                 </Table.Header>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> MUHU Hot Pot</Table.Cell>
                     <Table.Cell>Houston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
@@ -425,7 +425,7 @@ const userPortfolio = () => {
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> Intero Ristorante</Table.Cell>
                     <Table.Cell>New York</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
@@ -438,7 +438,7 @@ const userPortfolio = () => {
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> The Brewers Table</Table.Cell>
                     <Table.Cell>San Francisco</Table.Cell>
                     <Table.Cell>Rev Share</Table.Cell>
@@ -451,7 +451,7 @@ const userPortfolio = () => {
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell collapsing><Icon name="ns-ira" /></Table.Cell>
+                    <Table.Cell collapsing><Icon name="ns-individual-line" /></Table.Cell>
                     <Table.Cell><Icon name="ns-food" className="offering-icon" /> Smiley Transportat</Table.Cell>
                     <Table.Cell>Boston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>

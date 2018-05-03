@@ -23,31 +23,31 @@ const userTransactions = () => {
                   <Table.Body>
                     <Table.Row>
                       <Table.Cell>03-24-2018</Table.Cell>
-                      <Table.Cell><Icon name="ns-individual" /> Individual</Table.Cell>
+                      <Table.Cell><Icon name="ns-individual-line" /> Individual</Table.Cell>
                       <Table.Cell>Automatic Deposit</Table.Cell>
                       <Table.Cell textAlign="right">$500.00</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell>02-26-2018</Table.Cell>
-                      <Table.Cell><Icon name="ns-entity" /> Entity</Table.Cell>
+                      <Table.Cell><Icon name="ns-entity-line" /> Entity</Table.Cell>
                       <Table.Cell>Withdrawal</Table.Cell>
                       <Table.Cell textAlign="right">$500.00</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell>01-23-2018</Table.Cell>
-                      <Table.Cell><Icon name="ns-individual" /> Individual</Table.Cell>
+                      <Table.Cell><Icon name="ns-individual-line" /> Individual</Table.Cell>
                       <Table.Cell>Withdrawal</Table.Cell>
                       <Table.Cell textAlign="right">$500.00</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell>01-15-2018</Table.Cell>
-                      <Table.Cell><Icon name="ns-individual" /> Entity</Table.Cell>
+                      <Table.Cell><Icon name="ns-individual-line" /> Entity</Table.Cell>
                       <Table.Cell>Automatic Deposit</Table.Cell>
                       <Table.Cell textAlign="right">$500.00</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                       <Table.Cell>03-24-2018</Table.Cell>
-                      <Table.Cell><Icon name="ns-individual" /> Individual</Table.Cell>
+                      <Table.Cell><Icon name="ns-individual-line" /> Individual</Table.Cell>
                       <Table.Cell>Automatic Deposit</Table.Cell>
                       <Table.Cell textAlign="right">$500.00</Table.Cell>
                     </Table.Row>

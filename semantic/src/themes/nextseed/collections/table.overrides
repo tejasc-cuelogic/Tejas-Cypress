@@ -108,7 +108,7 @@
                 color:@border-color;
             }
         }
-        i.ns-individual, i.ns-ira, i.ns-entity{
+        i.ns-individual-line, i.ns-ira-line, i.ns-entity-line{
             font-size:20px;
             color:@highlight-tertiary;
             vertical-align:middle;

@@ -82,7 +82,7 @@ export default class ConfirmIdentityDocuments extends Component {
                 <Grid.Column width={7}>
                   <label>
                     <h3>Proof of Residence
-                      <Popup className="test" trigger={<Icon name="ns-help-circle outline" />} position="top center" flowing hoverable>
+                      <Popup className="test" trigger={<Icon name="ns-help-circle" />} position="top center" flowing hoverable>
                         <Popup.Content>
                           <p><b>Acceptable documents:</b></p>
                           <List bulleted>
