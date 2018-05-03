@@ -51,7 +51,7 @@
 @selectColor: @inputColor;
 
 /* Text Area */
-@textAreaPadding: @inputVerticalPadding @inputHorizontalPadding;
+@textAreaPadding: @inputVerticalPadding 0;
 @textAreaHeight: 12em;
 @textAreaResize: vertical;
 @textAreaLineHeight: 1.2857;

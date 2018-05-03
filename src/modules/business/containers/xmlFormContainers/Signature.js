@@ -106,6 +106,7 @@ export default class Signature extends React.Component {
             handleDeleteClick={this.handleDelete}
             handleDateChange={this.handleDateChange}
           />
+          <Divider hidden />
           <div>
             <Button color="grey" compact onClick={this.handleAdd}>Add</Button>
           </div>

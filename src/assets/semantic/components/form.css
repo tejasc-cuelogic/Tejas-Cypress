@@ -122,7 +122,7 @@
   margin: 0em;
   -webkit-appearance: none;
   tap-highlight-color: rgba(255, 255, 255, 0);
-  padding: 0.78571429em 1em;
+  padding: 0.78571429em 0;
   background: transparent;
   border: none;
   outline: none;
@@ -1072,6 +1072,12 @@
          Theme Overrides
 *******************************/
 
+.ui.form .field {
+  position: relative;
+}
+.ui.form .fields .field {
+  margin-bottom: 1rem;
+}
 .ui.form input:not([type]),
 .ui.form input[type=date],
 .ui.form input[type=datetime-local],
@@ -1083,7 +1089,8 @@
 .ui.form input[type=tel],
 .ui.form input[type=text],
 .ui.form input[type=time],
-.ui.form input[type=url] {
+.ui.form input[type=url],
+.ui.form textarea {
   border-bottom: #BDBDBD 1px solid;
 }
 .card.editable {
@@ -1166,6 +1173,7 @@
 /*  Inverted Form  */
 .ui.form .field > label {
   display: inline-block;
+  line-height: 1.28571429rem;
 }
 .ui.form.inverted label {
   font-weight: 400;
