@@ -21,10 +21,15 @@ import Dashboard from './dashboard/containers/Dashboard';
 import Users from './users/containers/Users';
 import XmlForm from './business/containers/XmlForm';
 import BusinessDetails from './business/containers/BusinessDetails';
+import Summary from '../modules/summary/containers/Summary';
+import RewardsWallet from '../modules/rewardsWallet/containers/RewardsWallet';
+import Referrals from '../modules/referrals/containers/Referrals';
+import Education from '../modules/education/containers/Education';
 import {
   AdminAuthorization,
   BusinessAuthorization,
   UserAuthorization,
+  InvestorAuthorization,
 } from '../components/common/Authorization';
 
 export const publicRoutes = [
@@ -173,5 +178,25 @@ export const privateRoutes = [
     component: Dashboard,
     exact: true,
     auth: UserAuthorization,
+  },
+  {
+    path: '/app/summary',
+    component: Summary,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/rewardswallet',
+    component: RewardsWallet,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/referrals',
+    component: Referrals,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/education',
+    component: Education,
+    auth: InvestorAuthorization,
   },
 ];

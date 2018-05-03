@@ -14,15 +14,23 @@ class SidebarLeftPush extends Component {
   toggleVisibility = () => uiStore.updateLayoutState('leftPanel');
 
   render() {
+    // const sidebarItems = [
+    //   { icon: 'ns-envelope', displayName: 'Messages', to: 'messages' },
+    //   { icon: 'ns-dashboard', displayName: 'Home', to: 'dashboard' },
+    //   { icon: 'ns-users', displayName: 'Manage users', to: 'users' },
+    //   // { icon: 'ns-rss-feed', displayName: 'Manage blog', to: 'users' },
+    //   // { icon: 'ns-help', displayName: 'Manage FAQ', to: 'users' },
+    //   { icon: 'ns-comments-edit', displayName: 'Bonus Rewards Fulfillment',
+    //    to: 'bonus-reward-fulfillment' },
+    //   { icon: 'ns-wallet', displayName: 'Banking', to: 'banking' },
+    //   { icon: 'ns-article', displayName: 'Settings', to: 'settings' },
+    // ];
+
     const sidebarItems = [
-      { icon: 'ns-envelope', displayName: 'Messages', to: 'messages' },
-      { icon: 'ns-dashboard', displayName: 'Home', to: 'dashboard' },
-      { icon: 'ns-users', displayName: 'Manage users', to: 'users' },
-      // { icon: 'ns-rss-feed', displayName: 'Manage blog', to: 'users' },
-      // { icon: 'ns-help', displayName: 'Manage FAQ', to: 'users' },
-      { icon: 'ns-comments-edit', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },
-      { icon: 'ns-wallet', displayName: 'Banking', to: 'banking' },
-      { icon: 'ns-article', displayName: 'Settings', to: 'settings' },
+      { icon: 'ns-envelope', displayName: 'Summary', to: 'summary' },
+      { icon: 'ns-envelope', displayName: 'Rewards wallet', to: 'rewardswallet' },
+      { icon: 'ns-envelope', displayName: 'Referrals', to: 'referrals' },
+      { icon: 'ns-envelope', displayName: 'Education', to: 'education' },
     ];
 
     return (
