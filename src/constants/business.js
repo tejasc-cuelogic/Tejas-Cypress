@@ -923,21 +923,21 @@ export const XML_URL = '/edgar/primary-data';
 export const GRAPHQL = '/graphql';
 
 export const XML_SUBMISSION_TABS = [{
-  id: 0,
+  name: 'filer',
   label: 'Filer Information',
 }, {
-  id: 1,
+  name: 'issuer',
   label: 'Issuer Information',
 }, {
-  id: 2,
+  name: 'offering',
   label: 'Offering Information',
 }, {
-  id: 3,
+  name: 'annual',
   label: 'Annual Report Disclosure Requirements',
 }, {
-  id: 4,
+  name: 'signature',
   label: 'Signature',
 }, {
-  id: 5,
+  name: 'doc',
   label: 'Documents',
 }];

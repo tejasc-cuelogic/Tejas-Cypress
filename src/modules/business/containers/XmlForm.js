@@ -22,7 +22,7 @@ import {
 @observer
 export default class XmlForm extends React.Component {
   componentDidMount() {
-    this.props.businessStore.setXmlActiveTabId(0);
+    this.props.businessStore.setXmlActiveTabName('filer');
     this.props.businessStore.setBusinessId(this.props.match.params.businessId);
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
     this.props.businessStore.setXmlSubmissionId(this.props.match.params.xmlId);
@@ -30,6 +30,8 @@ export default class XmlForm extends React.Component {
       .then(() => {
         if (this.props.match.params.xmlId) {
           businessActions.fetchXmlDetails(this.props.match.params);
+        } else {
+          this.props.businessStore.setXmlSubmissionStatus(XML_STATUSES.draft);
         }
       });
   }
@@ -48,8 +50,8 @@ export default class XmlForm extends React.Component {
   // handleUrlChange = (e, { value }) => {
   //   this.props.businessStore.setOfferingUrl(value);
   // }
-  handleXmlActiveTab = (id) => {
-    this.props.businessStore.setXmlActiveTabId(id);
+  handleXmlActiveTab = (name) => {
+    this.props.businessStore.setXmlActiveTabName(name);
   }
 
   handleFormSubmit = (e) => {
@@ -102,7 +104,7 @@ export default class XmlForm extends React.Component {
     const {
       xmlErrors,
       xmlSubmissionTabs,
-      xmlActiveTabId,
+      xmlActiveTabName,
       xmlSubmissionId,
       xmlSubmissionStatus,
     } = this.props.businessStore;
@@ -125,12 +127,31 @@ export default class XmlForm extends React.Component {
                   {
                     xmlSubmissionStatus === XML_STATUSES.completed &&
                     <Button
-                      circular
                       color="green"
                       floated="right"
                       onClick={this.handleXmlSubmissionCopy}
                     >
                       Copy XML Submission
+                    </Button>
+                  }
+                  {
+                    xmlSubmissionStatus !== XML_STATUSES.completed &&
+                    <Button
+                      color="red"
+                      size="large"
+                      floated="right"
+                    >
+                      Submit
+                    </Button>
+                  }
+                  {
+                    xmlSubmissionStatus !== XML_STATUSES.completed &&
+                    <Button
+                      color="green"
+                      size="large"
+                      floated="right"
+                    >
+                      Save
                     </Button>
                   }
                 </h1>
@@ -144,16 +165,16 @@ export default class XmlForm extends React.Component {
               tabs={xmlSubmissionTabs}
               xmlId={xmlSubmissionId}
               handleXmlActiveTab={this.handleXmlActiveTab}
-              xmlActiveTabId={xmlActiveTabId}
+              xmlActiveTabName={xmlActiveTabName}
             />
             <Grid.Column width={12}>
               <Form className="edgar-form">
-                {xmlActiveTabId === 0 && <FilerInformation />}
-                {xmlActiveTabId === 1 && <IssuerInformation />}
-                {xmlActiveTabId === 2 && <OfferingInformation />}
-                {xmlActiveTabId === 3 && <AnnualReportDisclosureRequirements />}
-                {xmlActiveTabId === 4 && <Signature />}
-                {xmlActiveTabId === 5 && <FileSelector />}
+                {xmlActiveTabName === 'filer' && <FilerInformation />}
+                {xmlActiveTabName === 'issuer' && <IssuerInformation />}
+                {xmlActiveTabName === 'offering' && <OfferingInformation />}
+                {xmlActiveTabName === 'annual' && <AnnualReportDisclosureRequirements />}
+                {xmlActiveTabName === 'signature' && <Signature />}
+                {xmlActiveTabName === 'doc' && <FileSelector />}
               </Form>
             </Grid.Column>
           </Grid>

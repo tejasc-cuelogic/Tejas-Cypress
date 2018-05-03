@@ -112,7 +112,12 @@ export default class Signature extends React.Component {
         </Card>
         <Divider hidden />
         <div className="right-align">
-          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(3)}>
+          <Button
+            color="green"
+            size="large"
+            className="pull-left"
+            onClick={() => this.props.businessStore.setXmlActiveTabId(3)}
+          >
             <Icon name="chevron left" />
             Back
           </Button>

@@ -90,7 +90,7 @@ export class BusinessStore {
   xmlSubmissionTabs = [...XML_SUBMISSION_TABS];
 
   @observable
-  xmlActiveTabId = 0;
+  xmlActiveTabName = 'filer';
 
   @observable
   xmlSubmissionStatus = '';
@@ -417,8 +417,8 @@ export class BusinessStore {
   }
 
   @action
-  setXmlActiveTabId(id) {
-    this.xmlActiveTabId = id;
+  setXmlActiveTabName(name) {
+    this.xmlActiveTabName = name;
   }
 }
 
