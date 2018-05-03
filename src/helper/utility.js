@@ -25,23 +25,9 @@ export class Utility {
     }
   }
 
-  /**
-   * @desc To Convert Comma Separated String To Array
-   */
-  convertCommaSeparatedStringToArray = (string) => {
-    const convertedArray = string.split(',').map(item => item.trim());
-    return convertedArray;
-  }
-
-  /**
-   * @desc To Convert Array to Comma Seprated String
-   */
-  convertArrayToCommaSeparatedString = (array) => {
-    if (array instanceof Array) {
-      return array.join(', ');
-    }
-    return '';
-  }
+  unMaskInput = maskedInput => (
+    maskedInput.split('-').join('')
+  )
 }
 
 export default new Utility();

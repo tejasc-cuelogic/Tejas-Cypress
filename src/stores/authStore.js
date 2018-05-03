@@ -67,8 +67,9 @@ export class AuthStore {
     code: {
       value: '',
       error: undefined,
-      rule: 'required|numeric|digits:6',
+      rule: 'required|numeric|',
       key: 'code',
+      label: 'Enter verification code here:',
     },
     role: {
       value: '',
@@ -141,6 +142,11 @@ export class AuthStore {
     this.values.code.error = undefined;
     this.values.role.value = '';
     this.values.role.error = undefined;
+  }
+
+  @computed
+  get canSubmitEmailAddressVerification() {
+    return _.isEmpty(this.values.code.error);
   }
 
   @action

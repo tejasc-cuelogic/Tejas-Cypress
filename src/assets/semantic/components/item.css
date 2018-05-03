@@ -140,7 +140,7 @@
 .ui.items > .item > .content > .header {
   display: inline-block;
   margin: -0.285714em 0em 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.85);
 }
@@ -186,7 +186,7 @@
   max-width: auto;
   font-size: 1em;
   line-height: 1.571428em;
-  color: #303030;
+  color: #000000;
 }
 
 /*--------------
@@ -241,7 +241,7 @@
   color: rgba(0, 0, 0, 0.85);
 }
 .ui.items > .item > .content > a.header:hover {
-  color: #81ad23;
+  color: #7eab1d;
 }
 
 /* Meta */
@@ -249,7 +249,7 @@
   color: rgba(0, 0, 0, 0.4);
 }
 .ui.items > .item .meta > a:not(.ui):hover {
-  color: #303030;
+  color: #000000;
 }
 
 /*--------------
@@ -452,7 +452,7 @@
 }
 .ui.items a.item:hover .content .header,
 .ui.link.items > .item:hover .content .header {
-  color: #81ad23;
+  color: #7eab1d;
 }
 
 /*--------------

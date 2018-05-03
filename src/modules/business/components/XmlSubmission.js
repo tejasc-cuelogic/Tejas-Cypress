@@ -63,8 +63,8 @@ const XmlSubmission = observer((props) => {
                       lockedstatus={xmlSubmission.lockedStatus}
                       onClick={props.confirmDelete}
                     >
-                      {xmlSubmission.lockedStatus === true && <Icon name="lock" />}
-                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="unlock alternate" />}
+                      {xmlSubmission.lockedStatus === true && <Icon name="ns-lock" />}
+                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="ns-unlock alternate" />}
                     </Button>
 
                     <Button
@@ -77,7 +77,7 @@ const XmlSubmission = observer((props) => {
                       subrefid={xmlSubmission.xmlSubmissionId}
                       onClick={props.confirmDelete}
                     >
-                      <Icon name="trash" />
+                      <Icon name="ns-trash" />
                     </Button>
                   </Table.Cell>
                 </Table.Row>

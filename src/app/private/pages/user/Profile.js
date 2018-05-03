@@ -63,7 +63,7 @@ export default class Profile extends React.Component {
               ))
             }
           </Form.Group>
-          <Button color="green" onClick={this.handleSubmit}>Save</Button>
+          <Button primary onClick={this.handleSubmit}>Save</Button>
         </Form>
       </div>
     );

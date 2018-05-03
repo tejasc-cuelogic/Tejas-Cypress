@@ -128,12 +128,12 @@
 
 @selectionMinWidth: 14em;
 @selectionVerticalPadding: @inputVerticalPadding;
-@selectionHorizontalPadding: @inputHorizontalPadding;
+@selectionHorizontalPadding:0;
 @selectionBorderEmWidth:  @relative1px;
 @selectionMinHeight: @inputLineHeight + (@selectionVerticalPadding * 2) - @selectionBorderEmWidth;
 @selectionBackground: @inputBackground;
 @selectionDisplay: inline-block;
-@selectionIconDistance: @inputHorizontalPadding + @glyphWidth;
+@selectionIconDistance: @selectionHorizontalPadding + @glyphWidth;
 @selectionPadding: @selectionVerticalPadding @selectionIconDistance @selectionVerticalPadding @selectionHorizontalPadding;
 @selectionZIndex: 10;
 
@@ -153,8 +153,8 @@
 
 @selectionBoxShadow: none;
 @selectionBorderColor: @borderColor;
-@selectionBorder: 1px solid @selectionBorderColor;
-@selectionBorderRadius: @borderRadius;
+@selectionBorder:none;
+@selectionBorderRadius: 0;
 
 @selectionIconOpacity: 0.8;
 @selectionIconZIndex: 3;

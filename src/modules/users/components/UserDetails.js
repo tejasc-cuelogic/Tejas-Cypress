@@ -12,9 +12,9 @@ const userDetails = () => (
             <h3>Names</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
-              <Button circular color="green" size="mini"
+              <Button primary size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
-              <Link to="/edit"><Icon name="pencil" />Edit</Link>
+              <Link to="/edit"><Icon name="ns-pencil" />Edit</Link>
             </div>
             <Form>
               <Grid columns={2} divided stackable>
@@ -89,8 +89,8 @@ const userDetails = () => (
             <h3>DOB & SSN</h3>
             <div className="actions">
               <Link to="/edit" className="negative">Cancel</Link>
-              <Button circular color="green" size="mini" to="/app/users/new"><Icon name="check" />Save</Button>
-              {/* <Link to="/edit"><Icon name="pencil" />Edit</Link> */}
+              <Button primary size="mini" to="/app/users/new"><Icon name="check" />Save</Button>
+              {/* <Link to="/edit"><Icon name="ns-pencil" />Edit</Link> */}
             </div>
             <Form>
               <Form.Group>
@@ -117,9 +117,9 @@ const userDetails = () => (
             <h3>Email & Password</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
-              <Button circular color="green" size="mini"
+              <Button primary size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
-              <Link to="/edit"><Icon name="pencil" />Edit</Link>
+              <Link to="/edit"><Icon name="ns-pencil" />Edit</Link>
             </div>
             <Form>
               <Form.Group>
@@ -148,9 +148,9 @@ const userDetails = () => (
             <h3>Addresses</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
-              <Button circular color="green" size="mini"
+              <Button primary size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
-              <Link to="/edit"><Icon name="pencil" />Edit</Link>
+              <Link to="/edit"><Icon name="ns-pencil" />Edit</Link>
             </div>
             <Form>
               <Grid columns={2} divided stackable>
@@ -257,9 +257,9 @@ const userDetails = () => (
             <h3>Phone Numbers</h3>
             <div className="actions">
               {/* <Link to="/edit" className="negative">Cancel</Link>
-              <Button circular color="green" size="mini"
+              <Button primary size="mini"
               to="/app/users/new"><Icon name="check" />Save</Button> */}
-              <Link to="/edit"><Icon name="pencil" />Edit</Link>
+              <Link to="/edit"><Icon name="ns-pencil" />Edit</Link>
             </div>
             <Form>
               <Form.Group>

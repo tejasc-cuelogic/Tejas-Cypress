@@ -13,7 +13,7 @@ class signupInitial extends Component {
     const userTypes = USER_TYPES_META.slice();
     const selectedType = this.props.authStore.signupFlow.type;
     return (
-      <Modal size="tiny" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
+      <Modal size="tiny" open onClose={() => this.props.setAuthWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">How can NextSeed Help you?</Header>
           <p>Do you want to invest or apply for funding?</p>
@@ -24,7 +24,7 @@ class signupInitial extends Component {
               {userTypes.map(type => (
                 <Grid.Column onClick={() => this.chooseType(type.value)} key={type.key}>
                   <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
-                    <Icon name="money" size="huge" />
+                    <Icon name={type.icon} size="huge" />
                     <h3>{type.text}</h3>
                     <p>{type.desc}</p>
                   </div>
@@ -33,7 +33,7 @@ class signupInitial extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <Button circular color="green" onClick={() => this.props.setAuthWizardStep('InvestorSignup')} content="Start" />
+                <Button primary size="large" className="very relaxed" onClick={() => this.props.setAuthWizardStep('InvestorSignup')} content="Start" />
               </Grid.Column>
             </Grid.Row>
           </Grid>

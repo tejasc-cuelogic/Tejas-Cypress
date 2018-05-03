@@ -208,7 +208,7 @@
 
 /* Divided Horizontal */
 @horizontalCelledSpacing: (@horizontalSpacing / 2);
-@horizontalCelledLineHeight: 0.6;
+@horizontalCelledLineHeight:@16px;
 
 /* Relaxed */
 @relaxedItemVerticalPadding: @relative6px;

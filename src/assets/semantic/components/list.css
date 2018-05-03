@@ -159,9 +159,9 @@ ol.ui.list ol li,
 .ui.list > .item .header {
   display: block;
   margin: 0em;
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 500;
-  color: #999999;
+  color: #989898;
 }
 
 /* Description */
@@ -181,11 +181,11 @@ ol.ui.list ol li,
 .ui.list .list > a.item,
 .ui.list > a.item {
   cursor: pointer;
-  color: #A9D943;
+  color: #98CE23;
 }
 .ui.list .list > a.item:hover,
 .ui.list > a.item:hover {
-  color: #81ad23;
+  color: #7eab1d;
 }
 
 /* Linked Item Icons */
@@ -198,11 +198,11 @@ ol.ui.list ol li,
 .ui.list .list > .item a.header,
 .ui.list > .item a.header {
   cursor: pointer;
-  color: #A9D943 !important;
+  color: #98CE23 !important;
 }
 .ui.list .list > .item a.header:hover,
 .ui.list > .item a.header:hover {
-  color: #81ad23 !important;
+  color: #7eab1d !important;
 }
 
 /* Floated Content */
@@ -332,7 +332,7 @@ ol.ui.list ol li,
 
 .ui.list .list > a.item:hover .icon,
 .ui.list > a.item:hover .icon {
-  color: #303030;
+  color: #000000;
 }
 
 
@@ -366,7 +366,7 @@ ol.ui.list ol li,
 }
 .ui.inverted.list .list > a.item:hover,
 .ui.inverted.list > a.item:hover {
-  color: #81ad23;
+  color: #7eab1d;
 }
 
 /* Linking Content */
@@ -374,7 +374,7 @@ ol.ui.list ol li,
   color: rgba(255, 255, 255, 0.9) !important;
 }
 .ui.inverted.list .item a:not(.ui):hover {
-  color: #81ad23 !important;
+  color: #7eab1d !important;
 }
 
 /*-------------------
@@ -566,7 +566,7 @@ ul.ui.list li:before,
 ul.ui.list li:before,
 .ui.bulleted.list .list > a.item:before,
 .ui.bulleted.list > a.item:before {
-  color: #303030;
+  color: #000000;
 }
 ul.ui.list ul,
 .ui.bulleted.list .list {
@@ -588,7 +588,7 @@ ul.ui.horizontal.bulleted.list li:first-child,
 }
 ul.ui.horizontal.bulleted.list li::before,
 .ui.horizontal.bulleted.list > .item::before {
-  color: #303030;
+  color: #000000;
 }
 ul.ui.horizontal.bulleted.list li:first-child::before,
 .ui.horizontal.bulleted.list > .item:first-child::before {
@@ -628,7 +628,7 @@ ol.ui.list li:before,
   counter-increment: ordered;
   content: counters(ordered, ".") " ";
   text-align: right;
-  color: #303030;
+  color: #000000;
   vertical-align: middle;
   opacity: 0.8;
 }
@@ -824,7 +824,7 @@ ol.ui.horizontal.list li:before,
   margin: 0em;
   padding-left: 0.5em;
   padding-right: 0.5em;
-  line-height: 0.6;
+  line-height: 1.14285714rem;
 }
 .ui.horizontal.celled.list .list > .item:last-child,
 .ui.horizontal.celled.list > .item:last-child {
@@ -953,32 +953,37 @@ ol.ui.horizontal.list li:before,
 .ui.horizontal.list a.item:hover,
 .ui.horizontal.list a.item:focus,
 .ui.horizontal.list a.item.active {
-  color: #A9D943;
+  color: #98CE23;
 }
-.ui.horizontal.list.link > a.item {
-  font-size: 0.85714286rem;
-  margin-left: 2rem;
-  text-transform: uppercase;
-  color: #7d7d7d;
+.secondary-menu .ui.horizontal.celled.list .list > .item,
+.secondary-menu .ui.horizontal.celled.list > .item {
+  font-size: 1rem;
+  font-weight: 900;
+  padding: 1.14285714rem 1.42857143rem !important;
+  border-left: #4F4F4F 1px solid;
+  color: #FFFFFF;
 }
-.ui.horizontal.list.link > a.item:hover,
-.ui.horizontal.list.link > a.item:focus,
-.ui.horizontal.list.link > a.item.active {
-  color: #A9D943;
+.secondary-menu .ui.horizontal.celled.list .list > .item:hover,
+.secondary-menu .ui.horizontal.celled.list > .item:hover,
+.secondary-menu .ui.horizontal.celled.list .list > .item:focus,
+.secondary-menu .ui.horizontal.celled.list > .item:focus,
+.secondary-menu .ui.horizontal.celled.list .list > .item.active,
+.secondary-menu .ui.horizontal.celled.list > .item.active {
+  color: #772df9;
+  background-color: #fafafa;
 }
 .tabular-wrap .ui.segment .ui.horizontal.list.link {
   margin-bottom: 2rem;
 }
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item {
-  font-family: "SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  color: #828282;
+  color: #4F4F4F;
   border-bottom: 2px solid transparent;
 }
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item:hover,
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item:focus,
 .tabular-wrap .ui.segment .ui.horizontal.list.link .item.active {
-  color: #303030;
-  border-color: #A9D943;
+  color: #242424;
+  border-color: #98CE23;
 }
 
 

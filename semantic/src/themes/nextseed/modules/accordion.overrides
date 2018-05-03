@@ -43,18 +43,17 @@
 .ui.accordion,
 .ui.accordion .accordion{
 	.title{
-		.angle.icon {
+		.ns-chevron-down.icon {
 			margin:0;
-			height:19px;
-			font-size:@22px;
+			height:@21px;
 			color:@theme-primary;
-			line-height:@19px;
+			line-height:@21px;
 			position:absolute;
 			right:0;
 			top:7px;
 		}
 		&.active{
-			.angle.icon{
+			.ns-chevron-down.icon{
 				transform:rotate(180deg);
 			}
 		}
@@ -74,7 +73,7 @@
 				background-color:#F8F8F8;
 			}
 			time{
-				font-family:@regularFont;
+				// font-family:@regularFont;
 				font-size:@12px;
 				margin-left:@5px;
 				color:@tertiary-text;

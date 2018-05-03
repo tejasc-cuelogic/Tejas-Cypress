@@ -75,7 +75,7 @@ const LoggedInView = (props) => {
 class NavBar extends React.Component {
   render() {
     return (
-      <Menu color="green" inverted fixed="top">
+      <Menu primary inverted fixed="top">
         <Container>
           <Menu.Item as={Link} to="/" header>
             NextSeed

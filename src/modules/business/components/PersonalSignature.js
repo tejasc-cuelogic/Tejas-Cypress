@@ -24,7 +24,7 @@ const PersonalSignature = observer(props => (
                 error={!!personData.personSignature.error}
                 onChange={props.handleChange}
               >
-                <Button icon="remove" color="red" dataid={personData.id} onClick={props.handleDeleteClick} />
+                <Button icon="ns-close" color="red" dataid={personData.id} onClick={props.handleDeleteClick} />
                 <input />
               </Input>
             </div>
