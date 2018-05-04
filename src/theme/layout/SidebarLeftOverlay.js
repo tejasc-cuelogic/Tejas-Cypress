@@ -28,11 +28,11 @@ class SidebarLeftPush extends Component {
 
     const sidebarItems = [
       { icon: 'ns-envelope', displayName: 'Messages', to: 'messages' },
-      { icon: 'ns-envelope', displayName: 'Summary', to: 'summary' },
-      { icon: 'ns-envelope', displayName: 'Individual', to: 'individual' },
-      { icon: 'ns-envelope', displayName: 'Rewards wallet', to: 'rewardswallet' },
-      { icon: 'ns-envelope', displayName: 'Referrals', to: 'referrals' },
-      { icon: 'ns-envelope', displayName: 'Education', to: 'education' },
+      { icon: 'ns-dashboard', displayName: 'Summary', to: 'summary' },
+      { icon: 'ns-individual', displayName: 'Individual', to: 'individual' },
+      { icon: 'ns-wallet', displayName: 'Rewards wallet', to: 'rewardswallet' },
+      { icon: 'ns-comments-edit', displayName: 'Referrals', to: 'referrals' },
+      { icon: 'ns-article', displayName: 'Education', to: 'education' },
     ];
     const UserInfo = { ...this.props.UserInfo };
 
