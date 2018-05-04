@@ -95,6 +95,16 @@ export class BusinessStore {
   @observable
   xmlSubmissionStatus = '';
 
+  @observable
+  xmlSubStepsStatus = {
+    filer: false,
+    issuer: false,
+    offering: false,
+    annual: false,
+    signature: false,
+    doc: false,
+  };
+
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
   }
@@ -141,6 +151,10 @@ export class BusinessStore {
 
   @computed get getSummary() {
     return this.businessList.length || 0;
+  }
+
+  @computed get checkStepsStatus() {
+    return _.includes(this.xmlSubStepsStatus, true);
   }
 
   @action

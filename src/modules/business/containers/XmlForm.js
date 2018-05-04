@@ -140,6 +140,7 @@ export default class XmlForm extends React.Component {
                       color="red"
                       size="large"
                       floated="right"
+                      disabled={!this.props.businessStore.checkStepsStatus}
                     >
                       Submit
                     </Button>
@@ -150,6 +151,9 @@ export default class XmlForm extends React.Component {
                       color="green"
                       size="large"
                       floated="right"
+                      disabled={
+                        !this.props.businessStore.xmlSubStepsStatus[xmlActiveTabName]
+                      }
                     >
                       Save
                     </Button>
