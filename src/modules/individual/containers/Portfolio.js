@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Card, Grid, Statistic, Popup, Icon, Table, Accordion, Progress, Button, Divider } from 'semantic-ui-react';
+import InvestmentDetails from './InvestmentDetails';
 
+@inject('uiStore')
+@observer
 export default class Portfolio extends Component {
   render() {
     return (
       <div className="content-spacer">
+        <InvestmentDetails />
         <Card fluid className="investment-summary">
           <Card.Content>
             <Card.Header><Icon className="ns-individual-line" /> Individual</Card.Header>
@@ -106,7 +111,7 @@ export default class Portfolio extends Component {
                   <Table.Row>
                     <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
                     <Table.Cell>
-                      <Icon className="ns-food offering-icon" /> <Link to="">MUHU Hot Pot</Link>
+                      <Icon className="ns-food offering-icon" /> <Link to="/app/individual" onClick={() => this.props.uiStore.setModalStatus('InvestmentDetails')}>MUHU Hot Pot</Link>
                     </Table.Cell>
                     <Table.Cell>Houston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
@@ -200,7 +205,7 @@ export default class Portfolio extends Component {
                   <Table.Row>
                     <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
                     <Table.Cell>
-                      <Icon className="ns-food offering-icon" /> <Link to="">MUHU Hot Pot</Link>
+                      <Icon className="ns-food offering-icon" /> <Link to="/app/individual" onClick={() => this.props.uiStore.setModalStatus('InvestmentDetails')}>MUHU Hot Pot</Link>
                     </Table.Cell>
                     <Table.Cell>Houston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
@@ -290,7 +295,7 @@ export default class Portfolio extends Component {
                   <Table.Row>
                     <Table.Cell collapsing><Icon className="ns-individual-line" /></Table.Cell>
                     <Table.Cell>
-                      <Icon className="ns-food offering-icon" /> <Link to="">MUHU Hot Pot</Link>
+                      <Icon className="ns-food offering-icon" /> <Link to="/app/individual" onClick={() => this.props.uiStore.setModalStatus('InvestmentDetails')}>MUHU Hot Pot</Link>
                     </Table.Cell>
                     <Table.Cell>Houston</Table.Cell>
                     <Table.Cell>Term Note</Table.Cell>
