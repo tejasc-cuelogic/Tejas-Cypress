@@ -862,7 +862,7 @@ export class Business {
     businessStore.setNewPersonalSignature(personSignatureData);
   }
 
-  validateDocumentList = (documentList) => {
+  validateDocumentList = (documentList, setError = true) => {
     const documentCount = documentList.length;    
     let documnetCurrentCount = 0;
     _.map(documentList, (document) => {
@@ -875,7 +875,9 @@ export class Business {
       const errorMessage = {
         documentListError:'Please select at least one document.'
       };
-      businessStore.setXmlError(errorMessage);
+      if (setError) {
+        businessStore.setXmlError(errorMessage);
+      }
       return errorMessage;
     }    
   }
@@ -902,7 +904,7 @@ export class Business {
     this.validateOfferingInfo(businessStore.offeringInformation, false);
     this.validateAnnualReportInfo(businessStore.annualReportRequirements, false);
     this.validateSignatureInfo(businessStore.signature, false);
-    const errorMessage = this.validateDocumentList(businessStore.documentList);      
+    const errorMessage = this.validateDocumentList(businessStore.documentList, false);      
     
     if (businessStore.canSubmitFilerInfoXmlForm) {
       businessStore.setXmlSubStepsStatus('filer', true);
