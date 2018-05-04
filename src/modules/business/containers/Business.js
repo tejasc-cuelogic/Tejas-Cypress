@@ -36,13 +36,13 @@ class Business extends Component {
               </Grid.Column>
               <Grid.Column width={5}>
                 <Form inverted>
-                  <Input fluid inverted icon="ns-search" iconPosition="left" placeholder="Type Business’s name, description" />
+                  <Input fluid inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Type Business’s name, description" />
                 </Form>
               </Grid.Column>
               <Grid.Column width={2} textAlign="center">
                 <span className="filter-count">0</span>
                 <Button icon color="green" className="link-button">
-                  Filters <Icon name="ns-caret-down" />
+                  Filters <Icon className="ns-caret-down" />
                 </Button>
               </Grid.Column>
               <Grid.Column width={3} textAlign="right">
@@ -75,11 +75,11 @@ class Business extends Component {
                 <Form>
                   <Form.Group widths="equal">
                     <Form.Field>
-                      <Input fluid icon="ns-calendar" iconPosition="left"
+                      <Input fluid icon={{ className: 'ns-calendar' }} iconPosition="left"
                       placeholder="01/01/2017" />
                     </Form.Field>
                     <Form.Field>
-                      <Input fluid icon="ns-calendar" iconPosition="left"
+                      <Input fluid icon={{ className: 'ns-calendar' }} iconPosition="left"
                       placeholder="01/01/2018" />
                     </Form.Field>
                   </Form.Group>

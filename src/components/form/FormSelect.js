@@ -26,6 +26,7 @@ const FormSelect = observer((props) => {
         error={!!error}
         onChange={props.changed}
       />
+      <div className="dropdown-effect">{props.fielddata.label}</div>
       {error &&
         <FieldError error={error} />
       }

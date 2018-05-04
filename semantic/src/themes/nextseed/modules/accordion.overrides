@@ -110,6 +110,27 @@
 			}
 		}
 	}
+	&.card-style{
+		border-radius:@6px;
+		box-shadow:0 0 10px rgba(0,0,0,.1);
+		&:not(:last-child){
+			margin-bottom:@35px;
+		}
+		.title{
+			font-weight:700;
+			color:@fullBlack;
+			&.active{
+				border-bottom:@border-light 1px solid;
+			}
+			> .icon{
+				margin-right:@14px;
+				color:@link-color;
+			}
+		}
+		.content{
+			padding:0;
+		}
+	}
 }
 // .ui.styled.accordion, .ui.styled.accordion .accordion{
 // 	.active.title, .active.content{

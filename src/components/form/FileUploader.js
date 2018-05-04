@@ -20,7 +20,7 @@ const FileUploader = observer((props) => {
       <Grid.Column width={9}>
         {value === '' &&
           <div className="file-uploader">
-            <Icon name="ns-upload" /> Choose a file <span>or drag it here</span>
+            <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
             <input
               name={props.name}
               type="file"

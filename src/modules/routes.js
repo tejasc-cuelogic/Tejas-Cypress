@@ -19,6 +19,7 @@ import Banking from './banking/containers/Banking';
 import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './users/containers/Users';
+import UserDetails from './users/containers/UserDetails';
 import XmlForm from './business/containers/XmlForm';
 import BusinessDetails from './business/containers/BusinessDetails';
 import Summary from '../modules/summary/containers/Summary';
@@ -140,18 +141,18 @@ export const privateRoutes = [
   },
   {
     path: '/app/users/:userId/:section',
-    component: Users,
-    auth: BusinessAuthorization,
+    component: UserDetails,
+    auth: AdminAuthorization,
   },
   {
     path: '/app/users/new',
     component: Users,
-    auth: BusinessAuthorization,
+    auth: AdminAuthorization,
   },
   {
     path: '/app/users',
     component: Users,
-    auth: BusinessAuthorization,
+    auth: AdminAuthorization,
   },
   {
     path: '/app/settings',

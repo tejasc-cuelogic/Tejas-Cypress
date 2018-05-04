@@ -2,6 +2,8 @@
          Theme Overrides
 *******************************/
 .ui.statistic{
+    position:relative;
+    padding-left:@relative16px;
     &:before{
         content:"";
         width:3px;
@@ -9,6 +11,9 @@
         background:@theme-primary;
         position:absolute;
         left:0;
+    }
+    i.icon{
+        margin:0 0 0 @7px;
     }
 }
 .tabular-wrap, .sticky-notification{

@@ -136,7 +136,7 @@
 /* This adjusts the default form input across all elements */
 @inputBackground        : transparent;
 @inputVerticalPadding   : @relative11px;
-@inputHorizontalPadding : @relative14px;
+@inputHorizontalPadding : 0;
 @inputPadding           : @inputVerticalPadding @inputHorizontalPadding;
 
 /* Input Text Color */
@@ -286,7 +286,7 @@
 @green            : @theme-primary;
 @teal             : #00B5AD;
 @blue             : #2185D0;
-@violet           : #6435C9;
+@violet           : @link-color;
 @purple           : #A333C8;
 @pink             : #E03997;
 @brown            : #A5673F;
@@ -1044,6 +1044,7 @@
 @inverse-text:#FFFFFF;
 // @inverse-text-darken:darken(@inverse-text, 26%);            //  #BDBDBD           (when base = FFFFFF)
 @inverse-secondary-text:darken(@inverse-text, 51%);					//  #7D7D7D           (when base = FFFFFF)
+@inverse-darken:darken(@inverse-text, 5%);                    //  #F2F2F2         (when base = FFFFFF)
 
 @link-color:#772df9;
 @link-color-darken:darken(@link-color, 10%);

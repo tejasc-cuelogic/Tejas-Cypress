@@ -10,7 +10,7 @@ const FileUploaderLarge = observer((props) => {
     <Form.Field>
       {value === '' &&
         <div className="file-uploader">
-          <div><Icon name="ns-upload" /> Choose a file <span>or drag it here</span></div>
+          <div><Icon className="ns-upload" /> Choose a file <span>or drag it here</span></div>
           <input
             name={props.name}
             type="file"

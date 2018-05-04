@@ -32,6 +32,7 @@ class SidebarLeftPush extends Component {
       { icon: 'ns-envelope', displayName: 'Referrals', to: 'referrals' },
       { icon: 'ns-envelope', displayName: 'Education', to: 'education' },
     ];
+    const UserInfo = { ...this.props.UserInfo };
 
     return (
       <Sidebar.Pushable>
@@ -41,15 +42,15 @@ class SidebarLeftPush extends Component {
           } */}
           <Image src={uiStore.layoutState.leftPanel ? Logo : LogoSmall} alt="NextSeed.com" className="logo" />
           <div className="user-picture">
-            <Randavatar name={this.props.UserInfo.fullname} avatarKey={this.props.UserInfo.avatarKey} size="small" />
-            <h2>{this.props.UserInfo.fullname}</h2>
-            <h3>Regular User</h3>
+            <Randavatar name={UserInfo.fullname} accountType={UserInfo.accountType} avatarKey={UserInfo.avatarKey} size="small" />
+            <h2>{UserInfo.fullname}</h2>
+            <h3>{UserInfo.accountType}</h3>
             <h3><Link to="">Settings</Link></h3>
           </div>
           {
             sidebarItems.map(item => (
               <Menu.Item key={item.to} name="home" as={NavLink} to={`/app/${item.to}`}>
-                <Icon name={item.icon} />
+                <Icon className={item.icon} />
                 <Label circular color="red" size="mini" horizontal>3</Label>
                 <span>{item.displayName}</span>
               </Menu.Item>
