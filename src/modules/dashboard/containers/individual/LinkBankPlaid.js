@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import PlaidLink from 'react-plaid-link';
-import { Header, Button } from 'semantic-ui-react';
+// import PlaidLink from 'react-plaid-link';
+import { Header, Button, Item, Input } from 'semantic-ui-react';
+import Banklogo from '../../../../assets/images/boa-logo.jpg';
 
-@inject('accountStore')
+@inject('individualAccountStore')
 @observer
 export default class LinkBankPlaid extends Component {
   handleOnSuccess = (token, metadata) => {
@@ -11,22 +12,30 @@ export default class LinkBankPlaid extends Component {
     console.log(token, metadata);
   }
   render() {
+    const { formBankSearch, bankSearchChange } = this.props.individualAccountStore;
+    console.log(formBankSearch);
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
         <Header as="h4" textAlign="center">Select your bank from the list</Header>
         <div className="row">
+          <Input
+            fluid
+            name={formBankSearch.fields.bankName.key}
+            value={formBankSearch.fields.bankName.value}
+            placeholder="Search"
+            onChange={bankSearchChange}
+          />
           <div className="six columns">
-            <PlaidLink
-              clientName="Plaid Client"
-              env="sandbox"
-              product={['auth']}
-              publicKey="614be98f819e9bd8d0db9abec1c08a"
-              apiVersion="v2"
-              onSuccess={this.handleOnSuccess}
-            >
-              Open Plaid Link button
-            </PlaidLink>
+            <Item.Image size="small" src={Banklogo} />
+            <Item.Image size="small" src={Banklogo} />
+            <Item.Image size="small" src={Banklogo} />
+            <Item.Image size="small" src={Banklogo} />
+            <Item.Image size="small" src={Banklogo} />
+            <Item.Image size="small" src={Banklogo} />
+            <Item.Image size="small" src={Banklogo} />
+            <Item.Image size="small" src={Banklogo} />
+            <Item.Image size="small" src={Banklogo} />
           </div>
         </div>
         <div className="center-align">

@@ -139,6 +139,43 @@ export const IRA_ACCOUNT_CREATION = {
   },
 };
 
+export const IND_LINK_ACC_MANUALLY = {
+  bankRoutingNumber: {
+    value: '',
+    key: 'bankRoutingNumber',
+    error: undefined,
+    rule: 'required|numeric|digits:10',
+    label: 'Enter your bank routing number',
+  },
+  bankAccountNumber: {
+    value: '',
+    key: 'bankAccountNumber',
+    error: undefined,
+    rule: 'required|numeric|digits:12',
+    label: 'Enter your bank account number',
+  },
+};
+
+export const IND_ADD_FUND = {
+  value: {
+    value: '',
+    key: 'value',
+    error: undefined,
+    rule: 'required|numeric|digits:10',
+    label: 'Value',
+  },
+};
+
+export const IND_BANK_ACC_SEARCH = {
+  bankName: {
+    value: '',
+    key: 'bankName',
+    error: undefined,
+    rule: 'required|string',
+    label: '',
+  },
+};
+
 export const IRA_ACC_TYPES = {
   accountType: {
     value: 0,
