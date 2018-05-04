@@ -1,13 +1,11 @@
 import React from 'react';
 // import _ from 'lodash';
-import { Header, Form, Dropdown, Card, Input, Label, Divider, Icon, Button } from 'semantic-ui-react';
+import { Header, Form, Dropdown, Card, Input, Label } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 
-import { COUNTRIES, XML_STATUSES } from '../../../../constants/business';
+import { COUNTRIES } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
-import busiessActions from '../../../../actions/business';
-import Helper from '../../../../helper/utility';
 
 @inject('businessStore')
 @withRouter
@@ -30,30 +28,8 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
     this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
   }
 
-  handleAnnualSubmit = (e) => {
-    e.preventDefault();
-    const { annualReportRequirements } = this.props.businessStore;
-    busiessActions.validateAnnualReportInfo(annualReportRequirements);
-
-    if (this.props.businessStore.canSubmitAnnualReportXmlForm) {
-      busiessActions.submitXMLInformation('annualReport')
-        .then((data) => {
-          this.props.businessStore.setXmlError();
-          this.props.businessStore.setXmlActiveTabId(4);
-          if (this.props.businessStore.xmlSubmissionId === undefined) {
-            const { xmlSubmissionId } = data.upsertXmlInformation;
-            this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
-          }
-          Helper.toast('Offering information submitted successfully', 'success');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
-
   render() {
-    const { annualReportRequirements, xmlSubmissionStatus } = this.props.businessStore;
+    const { annualReportRequirements } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
@@ -444,20 +420,6 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             </Form.Field>
           </Card>
         </Card.Group>
-        <Divider hidden />
-        <div className="right-align">
-          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(2)}>
-            <Icon name="chevron left" />
-            Back
-          </Button>
-          <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
-          {
-            xmlSubmissionStatus !== XML_STATUSES.completed &&
-            <Button color="green" size="large" onClick={this.handleAnnualSubmit}>
-              Save & Next <Icon name="chevron right" />
-            </Button>
-          }
-        </div>
       </div>
     );
   }

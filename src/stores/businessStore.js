@@ -154,7 +154,7 @@ export class BusinessStore {
   }
 
   @computed get checkStepsStatus() {
-    return _.includes(this.xmlSubStepsStatus, true);
+    return _.every(this.xmlSubStepsStatus, key => key === true);
   }
 
   @action
@@ -434,6 +434,17 @@ export class BusinessStore {
   setXmlActiveTabName(name) {
     this.xmlActiveTabName = name;
   }
-}
+  
+  @action
+  setXmlSubStepsStatus(stepname, isValue) {
+    this.xmlSubStepsStatus[stepname] = isValue;
+  }
 
+  @action
+  clearXmlSubStepsStatus() {    
+    _.forEach(this.xmlSubStepsStatus, (value, key) => {
+      this.xmlSubStepsStatus[key] = false;
+    });
+  }
+}
 export default new BusinessStore();

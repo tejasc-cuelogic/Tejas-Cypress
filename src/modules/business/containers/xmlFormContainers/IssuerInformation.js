@@ -1,14 +1,12 @@
 import React from 'react';
-import { Form, Card, Divider, Button, Icon } from 'semantic-ui-react';
+import { Form, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom'; // Redirect
 
-import { US_STATES, LEGAL_FORM_TYPES, XML_STATUSES } from '../../../../constants/business';
+import { US_STATES, LEGAL_FORM_TYPES } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
-import busiessActions from '../../../../actions/business';
-import Helper from '../../../../helper/utility';
 
 
 @inject('businessStore')
@@ -39,30 +37,8 @@ export default class IssuerInformation extends React.Component {
     this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
   }
 
-  handleIssuerInformationSubmit = (e) => {
-    e.preventDefault();
-    const { issuerInformation } = this.props.businessStore;
-    busiessActions.validateIssuerInfo(issuerInformation);
-
-    if (this.props.businessStore.canSubmitIssuerInfoXmlForm) {
-      busiessActions.submitXMLInformation('issuerInformation')
-        .then((data) => {
-          this.props.businessStore.setXmlError();
-          this.props.businessStore.setXmlActiveTabId(2);
-          if (this.props.businessStore.xmlSubmissionId === undefined) {
-            const { xmlSubmissionId } = data.upsertXmlInformation;
-            this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
-          }
-          Helper.toast('Issuer information submitted successfully', 'success');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
-
   render() {
-    const { issuerInformation, xmlSubmissionStatus } = this.props.businessStore;
+    const { issuerInformation } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
@@ -244,20 +220,6 @@ export default class IssuerInformation extends React.Component {
             />
           </Form.Group>
         </Card>
-        <Divider hidden />
-        <div className="right-align">
-          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(0)}>
-            <Icon name="chevron left" />
-            Back
-          </Button>
-          <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
-          {
-            xmlSubmissionStatus !== XML_STATUSES.completed &&
-            <Button color="green" size="large" onClick={this.handleIssuerInformationSubmit}>
-              Save & Next <Icon name="chevron right" />
-            </Button>
-          }
-        </div>
       </div>
     );
   }

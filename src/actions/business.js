@@ -782,7 +782,8 @@ export class Business {
       if (businessStore.signature.signaturePersons.length === 0) {
         this.addPersonalSignature();
       }
-      _.map(data.payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
+      _.map(data.payload.documentList, document => businessStore.toggleRequiredFiles(document.name));
+      this.checkandUpdateValidationStepsStaus();
     }
   }
 
@@ -895,47 +896,38 @@ export class Business {
     }    
   }
 
-  validateAllXmlSubmission = () => {
-    return new Promise((resolve, reject) => {
-      this.validateFilerInfo(businessStore.filerInformation, false);
-      this.validateIssuerInfo(businessStore.issuerInformation, false);
-      this.validateOfferingInfo(businessStore.offeringInformation, false);
-      this.validateAnnualReportInfo(businessStore.annualReportRequirements, false);
-      this.validateSignatureInfo(businessStore.signature, false);
-      const errorMessage = this.validateDocumentList(businessStore.documentList);      
+  checkandUpdateValidationStepsStaus = () => {    
+    this.validateFilerInfo(businessStore.filerInformation, false);
+    this.validateIssuerInfo(businessStore.issuerInformation, false);
+    this.validateOfferingInfo(businessStore.offeringInformation, false);
+    this.validateAnnualReportInfo(businessStore.annualReportRequirements, false);
+    this.validateSignatureInfo(businessStore.signature, false);
+    const errorMessage = this.validateDocumentList(businessStore.documentList);      
+    
+    if (businessStore.canSubmitFilerInfoXmlForm) {
+      businessStore.setXmlSubStepsStatus('filer', true);
+    } 
+    
+    if (businessStore.canSubmitIssuerInfoXmlForm) {
+      businessStore.setXmlSubStepsStatus('issuer', true);
+    } 
+    
+    if (businessStore.canSubmitOfferingInfoXmlForm) {
+      businessStore.setXmlSubStepsStatus('offering', true);
+    } 
+    
+    if (businessStore.canSubmitAnnualReportXmlForm) {
+      businessStore.setXmlSubStepsStatus('annual', true);
+    }
 
-      let errors = {};
-      if (!businessStore.canSubmitFilerInfoXmlForm) {
-        errors['filerStep'] = 'Please complete the Filer Information step.';
-      } 
-      
-      if (!businessStore.canSubmitIssuerInfoXmlForm) {
-        errors['issuerStep'] = 'Please complete the Issuer Information step.';
-      } 
-      
-      if (!businessStore.canSubmitOfferingInfoXmlForm) {
-        errors['offerStep'] = 'Please complete the Offering Information step.';
-      } 
-      
-      if (!businessStore.canSubmitAnnualReportXmlForm) {
-        errors['annualStep'] = 'Please complete the Annual Report Disclosure Requirements step.';
-      }
-
-      if (!businessStore.canSubmitSigntureForm ||
-        _.includes(businessStore.canSubmitSignaturePersonsForm, false)) {
-        errors['signatureStep'] = 'Please complete the Signature Information step.';
-      }
-      
-      if (errorMessage) {
-        errors['documentStep'] = errorMessage.documentListError;
-      }
-      // Check if error is preset then send the errors
-      if (!_.isEmpty(errors)) {        
-        reject (errors);
-      } else {
-        resolve(true);
-      }
-   });
+    if (businessStore.canSubmitSigntureForm ||
+      _.includes(businessStore.canSubmitSignaturePersonsForm, true)) {
+        businessStore.setXmlSubStepsStatus('signature', true);
+    }
+    
+    if (!errorMessage) {
+      businessStore.setXmlSubStepsStatus('doc', true);
+    }   
   }
   // Private Methods ends here
 }

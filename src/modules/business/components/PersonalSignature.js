@@ -8,7 +8,7 @@ const PersonalSignature = observer(props => (
   <div>
     {props.signaturePersons.map(personData => (
       <Form.Group widths="3" key={personData.id}>
-        <div className="field">
+        <Form.Field error={!!personData.personSignature.error}>
           { /* eslint-disable jsx-a11y/label-has-for */ }
           <label>{personData.personSignature.label}</label>
           <Input
@@ -19,13 +19,13 @@ const PersonalSignature = observer(props => (
             placeholder={personData.personSignature.label}
             name={personData.personSignature.key}
             value={personData.personSignature.value}
-            error={!!personData.personSignature.error}
             onChange={props.handleChange}
+            onBlur={e => props.handleOnBlurSigPer(e, personData.id)}
           >
             <Button icon="ns-close" color="red" dataid={personData.id} onClick={props.handleDeleteClick} />
             <input />
           </Input>
-        </div>
+        </Form.Field>
         <Form.Input
           dataid={personData.id}
           label={personData.personTitle.label}
@@ -34,6 +34,7 @@ const PersonalSignature = observer(props => (
           value={personData.personTitle.value}
           error={!!personData.personTitle.error}
           onChange={props.handleChange}
+          onBlur={e => props.handleOnBlurSigPer(e, personData.id)}
         />
         <div className="field">
           { /* eslint-disable jsx-a11y/label-has-for */ }
@@ -47,7 +48,6 @@ const PersonalSignature = observer(props => (
             maxDate={moment()}
             dateFormat="MM-DD-YYYY"
             selected={personData.signatureDate.value}
-            onChange={props.handleDateChange}
             error={!!personData.signatureDate.error}
           />
         </div>

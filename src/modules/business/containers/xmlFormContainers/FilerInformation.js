@@ -1,15 +1,10 @@
 import React from 'react';
-import { Form, Card, Divider, Button, Icon, Popup, Input } from 'semantic-ui-react';
+import { Form, Card, Popup, Input } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 import Chips from 'react-chips/lib/Chips';
 
 import validationActions from '../../../../actions/validation';
-import businessActions from '../../../../actions/business';
-import Helper from '../../../../helper/utility';
-import {
-  XML_STATUSES,
-} from '../../../../constants/business';
 
 @inject('businessStore')
 @withRouter
@@ -49,36 +44,16 @@ export default class FilerInformation extends React.Component {
     this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
   }
 
-  handleFilerInformationSubmit = (e) => {
-    e.preventDefault();
-    const { filerInformation } = this.props.businessStore;
-    businessActions.validateFilerInfo(filerInformation);
-
-    if (this.props.businessStore.canSubmitFilerInfoXmlForm) {
-      businessActions.submitXMLInformation('filerInformation')
-        .then((data) => {
-          this.props.businessStore.setXmlError();
-          this.props.businessStore.setXmlActiveTabName('issuer');
-          if (this.props.businessStore.xmlSubmissionId === undefined) {
-            const { xmlSubmissionId } = data.upsertXmlInformation;
-            this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
-          }
-          Helper.toast('Filer information submitted successfully', 'success');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
-
   handleOnBlur = e => validationActions.validateFilerInfoField(e.target.name)
 
   render() {
-    const { filerInformation, xmlSubmissionStatus } = this.props.businessStore;
+    const { filerInformation } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
-          <Form.Field>
+          <Form.Field
+            error={!!filerInformation.offeringUrl.error}
+          >
             { /* eslint-disable jsx-a11y/label-has-for */}
             <label>Website URL</label>
             <Popup
@@ -88,7 +63,6 @@ export default class FilerInformation extends React.Component {
                   onChange={this.handleChange}
                   name="offeringUrl"
                   onBlur={this.handleOnBlur}
-                  error={!!filerInformation.offeringUrl.error}
                   className="column"
                   placeholder="Website URL"
                 />
@@ -205,16 +179,6 @@ export default class FilerInformation extends React.Component {
             </div>
           </Card>
         </Card.Group>
-        <Divider hidden />
-        <div className="right-align">
-          <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
-          {
-            xmlSubmissionStatus !== XML_STATUSES.completed &&
-            <Button color="green" size="large" onClick={this.handleFilerInformationSubmit}>
-              Save & Next <Icon name="chevron right" />
-            </Button>
-          }
-        </div>
       </div>
     );
   }

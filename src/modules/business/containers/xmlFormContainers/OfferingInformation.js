@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Card, Divider, Button, Icon } from 'semantic-ui-react';
+import { Form, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
@@ -8,11 +8,8 @@ import { withRouter } from 'react-router-dom'; // Redirect
 import {
   OFFERED_SECURITIES,
   OVER_SUBSCRIPTION_ALLOCATION_TYPES,
-  XML_STATUSES,
 } from '../../../../constants/business';
 import validationActions from '../../../../actions/validation';
-import busiessActions from '../../../../actions/business';
-import Helper from '../../../../helper/utility';
 
 const LABEL = 'Amount of compensation to be paid to the intermediary,' +
   'whether as a dollar amount or a percentage of the offering amount, ' +
@@ -55,30 +52,8 @@ export default class OfferingInformation extends React.Component {
     this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
   }
 
-  handleOfferingInformationSubmit = (e) => {
-    e.preventDefault();
-    const { offeringInformation } = this.props.businessStore;
-    busiessActions.validateOfferingInfo(offeringInformation);
-
-    if (this.props.businessStore.canSubmitOfferingInfoXmlForm) {
-      busiessActions.submitXMLInformation('offeringInformation')
-        .then((data) => {
-          this.props.businessStore.setXmlError();
-          this.props.businessStore.setXmlActiveTabId(3);
-          if (this.props.businessStore.xmlSubmissionId === undefined) {
-            const { xmlSubmissionId } = data.upsertXmlInformation;
-            this.props.businessStore.setXmlSubmissionId(xmlSubmissionId);
-          }
-          Helper.toast('Offering information submitted successfully', 'success');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
-
   render() {
-    const { offeringInformation, xmlSubmissionStatus } = this.props.businessStore;
+    const { offeringInformation } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
@@ -238,20 +213,6 @@ export default class OfferingInformation extends React.Component {
             </div>
           </Form.Group>
         </Card>
-        <Divider hidden />
-        <div className="right-align">
-          <Button color="green" size="large" className="pull-left" onClick={() => this.props.businessStore.setXmlActiveTabId(1)}>
-            <Icon name="chevron left" />
-            Back
-          </Button>
-          <Button size="large" onClick={this.handleBusinessCancel}>Cancel</Button>
-          {
-            xmlSubmissionStatus !== XML_STATUSES.completed &&
-            <Button color="green" size="large" onClick={this.handleOfferingInformationSubmit}>
-              Save & Next <Icon name="chevron right" />
-            </Button>
-          }
-        </div>
       </div>
     );
   }
