@@ -8,6 +8,35 @@
     .fields .field{
         margin-bottom:@14px;
     }
+    .field.otp-field{
+        margin:3rem 0;
+        label{
+            font-size:@14px;
+        }
+        .ui.input > input{
+            max-width:290px;
+            margin:0 auto;
+            padding-left:13px;
+            // font-family:@boldFont;
+            letter-spacing:38px;
+            border:none;
+            background-image: linear-gradient(to left, @border-color 75%, rgba(0, 0, 0, 0) 0%);
+            background-position: bottom;
+            background-size: 51px 1px;
+            background-repeat: repeat-x;
+            background-position-x: 35px;
+            &:focus{
+                background-image: linear-gradient(to left, @theme-primary 75%, rgba(0, 0, 0, 0) 0%);
+            }
+        }
+    }
+    label{
+        i.icon{
+            margin-left:@7px;
+            font-size:@14px;
+            color:@quaternary-text;
+        }
+    }
     input:not([type]),
     input[type=date],
     input[type=datetime-local],
@@ -286,6 +315,7 @@
         }
         .dropdown-effect{
             top:0;
+            border-radius:@6px;
         }
     }
 }

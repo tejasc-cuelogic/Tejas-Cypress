@@ -12,6 +12,9 @@
         position:absolute;
         left:0;
     }
+    i.icon{
+        margin:0 0 0 @7px;
+    }
 }
 .tabular-wrap, .sticky-notification{
     .ui.statistic{
