@@ -103,11 +103,18 @@ export default class XmlForm extends React.Component {
     }
   };
 
+  addAndRemoveErrorClass = (currentStep, errClass) => {
+    const { xmlSubmissionTabs } = this.props.businessStore;
+    const index = _.findIndex(xmlSubmissionTabs, ['name', currentStep]);
+    this.props.businessStore.setXmlSubmissionTab(index, errClass);
+  }
+
   handleFilerInformationSubmit = (currentStepName, nextTabName) => {
     const { filerInformation } = this.props.businessStore;
     businessActions.validateFilerInfo(filerInformation);
 
     if (this.props.businessStore.canSubmitFilerInfoXmlForm) {
+      this.addAndRemoveErrorClass(currentStepName, '');
       businessActions.submitXMLInformation('filerInformation')
         .then((data) => {
           this.updateBusinessStore({
@@ -120,6 +127,8 @@ export default class XmlForm extends React.Component {
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      this.addAndRemoveErrorClass(currentStepName, 'tab-error');
     }
   };
 
@@ -128,6 +137,7 @@ export default class XmlForm extends React.Component {
     businessActions.validateIssuerInfo(issuerInformation);
 
     if (this.props.businessStore.canSubmitIssuerInfoXmlForm) {
+      this.addAndRemoveErrorClass(currentStepName, '');
       businessActions.submitXMLInformation('issuerInformation')
         .then((data) => {
           this.updateBusinessStore({
@@ -140,6 +150,8 @@ export default class XmlForm extends React.Component {
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      this.addAndRemoveErrorClass(currentStepName, 'tab-error');
     }
   }
 
@@ -148,6 +160,7 @@ export default class XmlForm extends React.Component {
     businessActions.validateOfferingInfo(offeringInformation);
 
     if (this.props.businessStore.canSubmitOfferingInfoXmlForm) {
+      this.addAndRemoveErrorClass(currentStepName, '');
       businessActions.submitXMLInformation('offeringInformation')
         .then((data) => {
           this.updateBusinessStore({
@@ -160,6 +173,8 @@ export default class XmlForm extends React.Component {
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      this.addAndRemoveErrorClass(currentStepName, 'tab-error');
     }
   }
 
@@ -168,6 +183,7 @@ export default class XmlForm extends React.Component {
     businessActions.validateAnnualReportInfo(annualReportRequirements);
 
     if (this.props.businessStore.canSubmitAnnualReportXmlForm) {
+      this.addAndRemoveErrorClass(currentStepName, '');
       businessActions.submitXMLInformation('annualReport')
         .then((data) => {
           this.updateBusinessStore({
@@ -180,6 +196,8 @@ export default class XmlForm extends React.Component {
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      this.addAndRemoveErrorClass(currentStepName, 'tab-error');
     }
   }
 
@@ -189,6 +207,7 @@ export default class XmlForm extends React.Component {
 
     if (this.props.businessStore.canSubmitSigntureForm &&
       !_.includes(this.props.businessStore.canSubmitSignaturePersonsForm, false)) {
+      this.addAndRemoveErrorClass(currentStepName, '');
       businessActions.submitXMLInformation('signature')
         .then((data) => {
           this.updateBusinessStore({
@@ -201,6 +220,8 @@ export default class XmlForm extends React.Component {
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      this.addAndRemoveErrorClass(currentStepName, 'tab-error');
     }
   }
 
@@ -209,6 +230,7 @@ export default class XmlForm extends React.Component {
     businessActions.validateDocumentList(documentList);
     if (this.props.businessStore.xmlErrors
       && this.props.businessStore.xmlErrors.documentListError === undefined) {
+      this.addAndRemoveErrorClass(currentStepName, '');
       businessActions.submitXMLInformation('documentList')
         .then((data) => {
           this.updateBusinessStore({
@@ -221,6 +243,8 @@ export default class XmlForm extends React.Component {
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      this.addAndRemoveErrorClass(currentStepName, 'tab-error');
     }
   }
 

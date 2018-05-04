@@ -18709,6 +18709,10 @@ ol.ui.horizontal.list li:before,
   margin-bottom: 0;
 }
 
+.ui.steps .step.tab-error .title {
+  color: #EB5757 !important;
+}
+
 /*******************************
          Site Overrides
 *******************************/

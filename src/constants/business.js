@@ -925,19 +925,25 @@ export const GRAPHQL = '/graphql';
 export const XML_SUBMISSION_TABS = [{
   name: 'filer',
   label: 'Filer Information',
+  errorClass: '',
 }, {
   name: 'issuer',
   label: 'Issuer Information',
+  errorClass: '',
 }, {
   name: 'offering',
   label: 'Offering Information',
+  errorClass: '',
 }, {
   name: 'annual',
   label: 'Annual Report Disclosure Requirements',
+  errorClass: '',
 }, {
   name: 'signature',
   label: 'Signature',
+  errorClass: '',
 }, {
   name: 'doc',
   label: 'Documents',
+  errorClass: '',
 }];

@@ -13,6 +13,7 @@ const XmlSubmissionTabs = observer((props) => {
             key={tab.id}
             active={props.xmlActiveTabName === tab.name}
             onClick={() => props.handleXmlActiveTab(tab.name)}
+            className={tab.errorClass}
           >
             <Step.Content>
               <Step.Title>{tab.label}</Step.Title>

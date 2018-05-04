@@ -446,5 +446,10 @@ export class BusinessStore {
       this.xmlSubStepsStatus[key] = false;
     });
   }
+
+  @action
+  setXmlSubmissionTab(index, value) {
+    this.xmlSubmissionTabs[index].errorClass = value;
+  }
 }
 export default new BusinessStore();
