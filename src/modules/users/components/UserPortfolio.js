@@ -26,9 +26,9 @@ const userPortfolio = () => {
       <div className="content-spacer secondary-section">
         <Header as="h3">All accounts overview</Header>
         <Card fluid>
-          <Grid divided stackable padded="horizontally" doubling>
+          <Grid divided stackable padded="horizontally" columns={5} doubling>
             <Grid.Row>
-              <Grid.Column mobile={1} tablet={8} computer={3}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny">
                     <Statistic.Label>
@@ -44,7 +44,7 @@ const userPortfolio = () => {
                   </Statistic>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={1} tablet={8} computer={3}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny">
                     <Statistic.Label>
@@ -60,7 +60,7 @@ const userPortfolio = () => {
                   </Statistic>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={1} tablet={8} computer={3}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny">
                     <Statistic.Label>
@@ -76,7 +76,7 @@ const userPortfolio = () => {
                   </Statistic>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={1} tablet={8} computer={4}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny">
                     <Statistic.Label>
@@ -92,7 +92,7 @@ const userPortfolio = () => {
                   </Statistic>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={1} tablet={8} computer={3}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny">
                     <Statistic.Label>
@@ -148,9 +148,9 @@ const userPortfolio = () => {
         </Grid>
         <Divider hidden />
         <Card fluid>
-          <Grid divided stackable padded="horizontally" doubling>
+          <Grid divided stackable padded="horizontally" columns={4} doubling>
             <Grid.Row>
-              <Grid.Column mobile={1} tablet={8} computer={4}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny" className="basic">
                     <Statistic.Label>
@@ -166,7 +166,7 @@ const userPortfolio = () => {
                   </Statistic>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={1} tablet={8} computer={4}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny" className="basic">
                     <Statistic.Label>
@@ -182,7 +182,7 @@ const userPortfolio = () => {
                   </Statistic>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={1} tablet={8} computer={4}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny" className="basic">
                     <Statistic.Label>
@@ -198,7 +198,7 @@ const userPortfolio = () => {
                   </Statistic>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={1} tablet={8} computer={4}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny" className="basic">
                     <Statistic.Label>
@@ -225,7 +225,7 @@ const userPortfolio = () => {
           </Accordion.Title>
           <Accordion.Content active>
             <div className="table-wrapper">
-              <Table className="investment-details">
+              <Table singleLine className="investment-details">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell />
@@ -311,7 +311,7 @@ const userPortfolio = () => {
           </Accordion.Title>
           <Accordion.Content active>
             <div className="table-wrapper">
-              <Table className="investment-details">
+              <Table singleLine className="investment-details">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell />
@@ -393,7 +393,7 @@ const userPortfolio = () => {
           </Accordion.Title>
           <Accordion.Content active>
             <div className="table-wrapper">
-              <Table className="investment-details">
+              <Table singleLine className="investment-details">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell />

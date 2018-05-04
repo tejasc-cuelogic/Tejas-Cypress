@@ -257,3 +257,16 @@
         }
     }
 }
+
+//  Investment details Modal styles
+.ui.inverted.dimmer{
+    >.ui.modal{
+        box-shadow:none;
+        will-change:auto;
+        background-color:transparent;
+        >.content{
+            padding:@35px @14px;
+            background-color:transparent;
+        }
+    }
+}

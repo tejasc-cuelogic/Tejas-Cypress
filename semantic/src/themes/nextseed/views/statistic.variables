@@ -28,14 +28,14 @@
 @valueFontWeight:700;
 @valueLineHeight:1.2em;
 @valueColor:@fullBlack;
-@valueTextTransform: uppercase;
+@valueTextTransform: none;
 
 /* Label */
-@labelSize: @relativeMedium;
+@labelSize: @relative14px;
 @topLabelDistance: 0rem;
 @bottomLabelDistance: 0rem;
 @labelFont:@pageFont;
-@labelFontWeight:500;
+@labelFontWeight:400;
 @labelColor:@quaternary-text;
 @labelLineHeight: @relativeLarge;
 @labelTextTransform: none;

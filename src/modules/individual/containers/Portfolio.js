@@ -16,9 +16,9 @@ export default class Portfolio extends Component {
             <Card.Header><Icon className="ns-individual-line" /> Individual</Card.Header>
           </Card.Content>
           <Divider className="only-border" />
-          <Grid divided padded="horizontally">
+          <Grid divided padded="horizontally" columns={4} doubling>
             <Grid.Row>
-              <Grid.Column mobile={1} tablet={8} computer={4}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny" className="basic">
                     <Statistic.Label>
@@ -35,7 +35,7 @@ export default class Portfolio extends Component {
                   </Statistic>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={1} tablet={8} computer={4}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny" className="basic">
                     <Statistic.Label>
@@ -51,7 +51,7 @@ export default class Portfolio extends Component {
                   </Statistic>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={1} tablet={8} computer={4}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny" className="basic">
                     <Statistic.Label>
@@ -67,7 +67,7 @@ export default class Portfolio extends Component {
                   </Statistic>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={1} tablet={8} computer={4}>
+              <Grid.Column>
                 <Card.Content>
                   <Statistic size="tiny" className="basic">
                     <Statistic.Label>
@@ -94,7 +94,7 @@ export default class Portfolio extends Component {
           </Accordion.Title>
           <Accordion.Content active>
             <div className="table-wrapper">
-              <Table className="investment-details">
+              <Table singleLine className="investment-details">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell />
@@ -188,7 +188,7 @@ export default class Portfolio extends Component {
           </Accordion.Title>
           <Accordion.Content active>
             <div className="table-wrapper">
-              <Table className="investment-details">
+              <Table singleLine className="investment-details">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell />
@@ -278,7 +278,7 @@ export default class Portfolio extends Component {
           </Accordion.Title>
           <Accordion.Content active>
             <div className="table-wrapper">
-              <Table className="investment-details">
+              <Table singleLine className="investment-details">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell />
