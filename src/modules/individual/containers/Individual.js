@@ -15,9 +15,7 @@ export default class Individual extends Component {
             <List celled horizontal inverted>
               {
                 routes.map(route => (
-                  <List.Item
-                    as="a"
-                  >
+                  <List.Item>
                     <NavLink to={route.path}>{route.name}</NavLink>
                   </List.Item>
                 ))

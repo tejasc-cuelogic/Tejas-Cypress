@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Grid, List, Icon, Responsive } from 'semantic-ui-react';
 import { USER_DETAIL_SECTIONS } from '../../../constants/user';
 
@@ -34,13 +34,8 @@ const userModuleSubheader = props => (
       <List celled horizontal inverted>
         {
           USER_DETAIL_SECTIONS.map(section => (
-            <List.Item
-              className={(props.section.toLowerCase() === section.toLowerCase()) ? 'active' : ''}
-              key={section}
-              as="a"
-              href={`/app/users/${props.id}/${section}`}
-            >
-              {section}
+            <List.Item key={section}>
+              <NavLink to={`/app/users/${props.id}/${section}`} className={(props.section.toLowerCase() === section.toLowerCase()) ? 'active' : ''}>{section}</NavLink>
             </List.Item>
           ))
         }
