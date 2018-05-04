@@ -152,7 +152,7 @@ const userPortfolio = () => {
             <Grid.Row>
               <Grid.Column mobile={1} tablet={8} computer={4}>
                 <Card.Content>
-                  <Statistic size="tiny">
+                  <Statistic size="tiny" className="basic">
                     <Statistic.Label>
                       Total Balance
                       <Popup
@@ -168,7 +168,7 @@ const userPortfolio = () => {
               </Grid.Column>
               <Grid.Column mobile={1} tablet={8} computer={4}>
                 <Card.Content>
-                  <Statistic size="tiny">
+                  <Statistic size="tiny" className="basic">
                     <Statistic.Label>
                       Total Deposit
                       <Popup
@@ -184,7 +184,7 @@ const userPortfolio = () => {
               </Grid.Column>
               <Grid.Column mobile={1} tablet={8} computer={4}>
                 <Card.Content>
-                  <Statistic size="tiny">
+                  <Statistic size="tiny" className="basic">
                     <Statistic.Label>
                       Net Payments
                       <Popup
@@ -200,7 +200,7 @@ const userPortfolio = () => {
               </Grid.Column>
               <Grid.Column mobile={1} tablet={8} computer={4}>
                 <Card.Content>
-                  <Statistic size="tiny">
+                  <Statistic size="tiny" className="basic">
                     <Statistic.Label>
                       TNAR
                       <Popup
@@ -334,7 +334,6 @@ const userPortfolio = () => {
                     <Table.Cell>Live</Table.Cell>
                     <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
                     <Table.Cell collapsing>
-                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
                       <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
@@ -347,7 +346,6 @@ const userPortfolio = () => {
                     <Table.Cell>Processing</Table.Cell>
                     <Table.Cell collapsing><Progress percent={50} size="small" color="violet" label="50%" /></Table.Cell>
                     <Table.Cell collapsing>
-                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
                       <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
@@ -360,7 +358,6 @@ const userPortfolio = () => {
                     <Table.Cell>Processing</Table.Cell>
                     <Table.Cell collapsing><Progress percent={5} size="small" color="violet" label="5%" /></Table.Cell>
                     <Table.Cell collapsing>
-                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
                       <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
@@ -373,7 +370,6 @@ const userPortfolio = () => {
                     <Table.Cell>Live</Table.Cell>
                     <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
                     <Table.Cell collapsing>
-                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
                       <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
@@ -420,7 +416,6 @@ const userPortfolio = () => {
                     <Table.Cell>Live</Table.Cell>
                     <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
                     <Table.Cell collapsing>
-                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
                       <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
@@ -433,7 +428,6 @@ const userPortfolio = () => {
                     <Table.Cell>Processing</Table.Cell>
                     <Table.Cell collapsing><Progress percent={50} size="small" color="violet" label="50%" /></Table.Cell>
                     <Table.Cell collapsing>
-                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
                       <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
@@ -446,7 +440,6 @@ const userPortfolio = () => {
                     <Table.Cell>Processing</Table.Cell>
                     <Table.Cell collapsing><Progress percent={5} size="small" color="violet" label="5%" /></Table.Cell>
                     <Table.Cell collapsing>
-                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
                       <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>
@@ -459,7 +452,6 @@ const userPortfolio = () => {
                     <Table.Cell>Live</Table.Cell>
                     <Table.Cell collapsing><Progress percent={25} size="small" color="violet" label="25%" /></Table.Cell>
                     <Table.Cell collapsing>
-                      <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
                       <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
                     </Table.Cell>
                   </Table.Row>

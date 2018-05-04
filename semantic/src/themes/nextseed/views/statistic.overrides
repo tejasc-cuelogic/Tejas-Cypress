@@ -2,6 +2,18 @@
          Theme Overrides
 *******************************/
 .ui.statistic{
+    i.icon{
+        margin:0 0 0 @7px;
+    }
+    a.label{
+        font-weight:700;
+        color:@theme-primary;
+    }
+    >.label~.value{
+        margin:0.15em 0;
+    }
+}
+.ui.statistic:not(.basic){
     position:relative;
     padding-left:@relative16px;
     &:before{
@@ -11,9 +23,6 @@
         background:@theme-primary;
         position:absolute;
         left:0;
-    }
-    i.icon{
-        margin:0 0 0 @7px;
     }
 }
 .tabular-wrap, .sticky-notification{

@@ -3,7 +3,7 @@
 *******************************/
 
 @checkboxSize: 16px;
-@checkboxColor: @white;
+@checkboxColor: @textColor;
 @checkboxLineHeight: @checkboxSize;
 
 
@@ -54,7 +54,7 @@
 @labelFocusColor: @selectedTextColor;
 
 /* Active */
-@labelActiveColor: @white;
+@labelActiveColor: @textColor;
 @checkboxActiveBackground: @theme-primary;
 @checkboxActiveBorderColor: @selectedBorderColor;
 @checkboxActiveCheckColor: @white;
