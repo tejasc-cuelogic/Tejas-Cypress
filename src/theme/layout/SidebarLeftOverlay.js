@@ -27,7 +27,9 @@ class SidebarLeftPush extends Component {
     // ];
 
     const sidebarItems = [
+      { icon: 'ns-envelope', displayName: 'Messages', to: 'messages' },
       { icon: 'ns-envelope', displayName: 'Summary', to: 'summary' },
+      { icon: 'ns-envelope', displayName: 'Individual', to: 'individual' },
       { icon: 'ns-envelope', displayName: 'Rewards wallet', to: 'rewardswallet' },
       { icon: 'ns-envelope', displayName: 'Referrals', to: 'referrals' },
       { icon: 'ns-envelope', displayName: 'Education', to: 'education' },

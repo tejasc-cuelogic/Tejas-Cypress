@@ -25,6 +25,7 @@ import Summary from '../modules/summary/containers/Summary';
 import RewardsWallet from '../modules/rewardsWallet/containers/RewardsWallet';
 import Referrals from '../modules/referrals/containers/Referrals';
 import Education from '../modules/education/containers/Education';
+import Individual from '../modules/individual/containers/Individual';
 import {
   AdminAuthorization,
   BusinessAuthorization,
@@ -182,6 +183,12 @@ export const privateRoutes = [
   {
     path: '/app/summary',
     component: Summary,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/individual',
+    exact: false,
+    component: Individual,
     auth: InvestorAuthorization,
   },
   {
