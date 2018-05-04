@@ -1,4 +1,9 @@
 import validationActions from '../actions/validation';
+import {
+  PLAID_URL,
+} from '../constants/common';
+import ExternalApiService from '../services/externalApi';
+import indAccountStore from '../stores/user/individualAccountStore';
 
 export class Account {
   /**
@@ -39,6 +44,25 @@ export class Account {
     validationActions.validateEntityAccountField('city', city.join(''));
     validationActions.validateEntityAccountField('state', state.join(''));
     validationActions.validateEntityAccountField('zipCode', zipCode.join(''));
+  }
+
+  bankSearch = () => {
+    console.log('in call');
+    const params = {
+      url: PLAID_URL,
+      payload: {
+        public_key: 'ca61661fcb15b5e735eabae68771b6',
+        query: indAccountStore.formBankSearch.fields.bankName.value,
+        products: ['auth'],
+        options: {
+          include_display_data: true,
+        },
+      },
+      contentType: 'application/json',
+    };
+    ExternalApiService.post(params)
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
   }
 }
 

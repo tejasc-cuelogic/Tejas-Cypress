@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-// import PlaidLink from 'react-plaid-link';
 import { Header, Button, Item, Input } from 'semantic-ui-react';
+import accountActions from '../../../../actions/account';
 import Banklogo from '../../../../assets/images/boa-logo.jpg';
 
 @inject('individualAccountStore')
@@ -13,7 +13,6 @@ export default class LinkBankPlaid extends Component {
   }
   render() {
     const { formBankSearch, bankSearchChange } = this.props.individualAccountStore;
-    console.log(formBankSearch);
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -25,6 +24,7 @@ export default class LinkBankPlaid extends Component {
             value={formBankSearch.fields.bankName.value}
             placeholder="Search"
             onChange={bankSearchChange}
+            onBlur={accountActions.bankSearch}
           />
           <div className="six columns">
             <Item.Image size="small" src={Banklogo} />
