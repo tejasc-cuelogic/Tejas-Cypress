@@ -12,13 +12,13 @@
 /* Checkmark */
 .ui.checkbox label:after,
 .ui.checkbox .box:after {
-	font-family: 'Checkbox';
+	font-family: 'nextseed';
 }
 
 /* Checked */
 .ui.checkbox input:checked ~ .box:after,
 .ui.checkbox input:checked ~ label:after {
-	content: '\e800';
+	content: '\e94b';
 }
 
 /* Indeterminate */
@@ -36,11 +36,6 @@
 */
 
 //  NextSeed V-2 
-.ui.checkbox{
-	label, +label{
-		// font-family:@regularFont;
-	}
-}
 
 //  Button style radio buttons
 .button-radio{
@@ -49,7 +44,6 @@
 			height:52px;
 			min-width:160px;
 			padding:15px;
-			// font-family:@boldFont;
 			font-size:16px;
 			border:@border-color 1px solid;
 			border-radius:@6px;
