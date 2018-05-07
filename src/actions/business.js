@@ -96,7 +96,7 @@ export class Business {
       businessId,
       filingId,
       xmlSubmissionId,
-      filerInformation,
+      formFilerInfo,
       issuerInformation,
       offeringInformation,
       annualReportRequirements,
@@ -116,7 +116,7 @@ export class Business {
         mutation: filerInformationMutation,
         variables: {
           ...ids,
-          filerInformation: this.getFormattedInformation(filerInformation),
+          filerInformation: this.getFormattedInformation(formFilerInfo.fields),
         },
       };
     } else if (action === 'issuerInformation') {
@@ -787,8 +787,8 @@ export class Business {
     }
   }
 
-  validateFilerInfo = (filerInformation, setError = true) => {    
-    const newFiler = validationActions.validateXmlFormData(filerInformation);
+  validateFilerInfo = (filerInformation, setError = true) => {
+    const newFiler = validationActions.validateXmlFormData(filerInformation);    
     const errors = this.newValidationErrors(newFiler);
     businessStore.setFiler(newFiler);
     if (setError) {
@@ -899,15 +899,17 @@ export class Business {
   }
 
   checkandUpdateValidationStepsStaus = () => {    
-    this.validateFilerInfo(businessStore.filerInformation, false);
+    this.validateFilerInfo(businessStore.formFilerInfo.fields, false);
     this.validateIssuerInfo(businessStore.issuerInformation, false);
     this.validateOfferingInfo(businessStore.offeringInformation, false);
     this.validateAnnualReportInfo(businessStore.annualReportRequirements, false);
     this.validateSignatureInfo(businessStore.signature, false);
     const errorMessage = this.validateDocumentList(businessStore.documentList, false);      
-    
+
     if (businessStore.canSubmitFilerInfoXmlForm) {
+
       businessStore.setXmlSubStepsStatus('filer', true);
+      businessStore.updateStatusFlag('formFilerInfo', 'meta', true);
     } 
     
     if (businessStore.canSubmitIssuerInfoXmlForm) {

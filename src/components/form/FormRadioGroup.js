@@ -6,7 +6,7 @@ import { Form } from 'semantic-ui-react';
 const FormRadioGroup = observer((props) => {
   const { values, value } = props.fielddata;
   return (
-    <Form.Group inline className="button-radio center-align">
+    <Form.Group inline className=" center-align">
       {
         values.map(radio => (
           <Form.Radio

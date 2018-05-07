@@ -58,7 +58,7 @@ export default class XmlForm extends React.Component {
 
     if (xmlSubmissionStatus === XML_STATUSES.completed
       || xmlSubmissionStatus === XML_STATUSES.created) {
-      this.rediurectToNextstep(nextTabName);
+      this.redirectToNextstep(nextTabName);
     } else if (xmlSubmissionStatus === XML_STATUSES.draft) {
       switch (XML_SUBMISSION_TABS[stepIndex].name) {
         case 'filer': {
@@ -89,13 +89,13 @@ export default class XmlForm extends React.Component {
     }
   };
 
-  rediurectToNextstep = (nextTabName) => {
+  redirectToNextstep = (nextTabName) => {
     this.props.businessStore.setXmlActiveTabName(nextTabName);
   };
 
   updateBusinessStore = (params) => {
     this.props.businessStore.setXmlError();
-    this.rediurectToNextstep(params.nextTabName);
+    this.redirectToNextstep(params.nextTabName);
     this.props.businessStore.setXmlSubStepsStatus(params.currentStepName, true);
     if (this.props.businessStore.xmlSubmissionId === undefined) {
       const { xmlSubmissionId } = params.data.upsertXmlInformation;
@@ -110,8 +110,8 @@ export default class XmlForm extends React.Component {
   }
 
   handleFilerInformationSubmit = (currentStepName, nextTabName) => {
-    const { filerInformation } = this.props.businessStore;
-    businessActions.validateFilerInfo(filerInformation);
+    const { formFilerInfo } = this.props.businessStore;
+    businessActions.validateFilerInfo(formFilerInfo.fields);
 
     if (this.props.businessStore.canSubmitFilerInfoXmlForm) {
       this.addAndRemoveErrorClass(currentStepName, '');
@@ -358,7 +358,7 @@ export default class XmlForm extends React.Component {
                       size="large"
                       floated="right"
                       disabled={
-                        !this.props.businessStore.xmlSubStepsStatus[xmlActiveTabName]
+                        !this.props.businessStore.formFilerInfo.meta.isValid
                       }
                       onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
                     >

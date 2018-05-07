@@ -75,75 +75,121 @@ export const FILER_INFORMATION = {
   offeringUrl: {
     value: '',
     key: 'offeringUrl',
+    label: 'Website URL',
     error: undefined,
-    rule: 'required',
+    rule: 'required|url',
+    placeHolder: 'Website URL',
+    tooltip: 'Please enter URL of page, for which screenshot will be generated',
+    errors: {
+      required: 'The Website URL field is required.',
+      url: 'Provide valid Website URL',
+    },
   },
   filerCik: {
     value: '',
     key: 'filerCik',
+    label: 'Filer Cik',
     error: undefined,
     rule: 'required|max:10',
     content: 'Please enter CIK of filer',
+    errors: {
+      required: 'The Filer Cik field is required.',
+      max: 'The Filer Cik is too long. Max length is :max.',
+    },
   },
   filerCcc: {
     value: '',
     key: 'filerCcc',
+    label: 'Filer Ccc',
     error: undefined,
     rule: 'required|max:8',
+    errors: {
+      required: 'The Filer Ccc field is required.',
+      max: 'The Filer Ccc is too long. Max length is :max.',
+    },
   },
   fileNumber: {
     value: '',
     key: 'fileNumber',
+    label: 'File number',
     error: undefined,
     rule: 'max:17',
   },
   liveTestFlag: {
     value: 'TEST',
     key: 'liveTestFlag',
+    values: [{ label: 'Live', value: 'LIVE' }, { label: 'Test', value: 'TEST' }],
+    label: 'Live Test Flag',
     error: undefined,
     rule: 'required|in:LIVE,TEST',
   },
   confirmingCopyFlag: {
     value: false,
     key: 'confirmingCopyFlag',
+    label: 'Confirming Copy Flag',
     error: undefined,
     rule: 'required|boolean',
+    errors: {
+      required: 'The Confirming Copy Flag field is required.',
+    },
   },
   returnCopyFlag: {
     value: false,
     key: 'returnCopyFlag',
+    label: 'Return Copy Flag',
     error: undefined,
     rule: 'required|boolean',
+    errors: {
+      required: 'The Return Copy Flag field is required.',
+    },
   },
   overrideInternetFlag: {
     value: false,
     key: 'overrideInternetFlag',
+    label: 'overrideInternetFlag',
     error: undefined,
     rule: 'required|boolean',
   },
   contactName: {
     value: '',
     key: 'contactName',
+    label: 'Name',
     error: undefined,
     rule: 'required|max:30',
+    errors: {
+      required: 'The Contact Name field is required.',
+    },
   },
   contactPhone: {
     value: '',
     key: 'contactPhone',
+    label: 'Phone Number',
     error: undefined,
     rule: 'required|max:20',
+    errors: {
+      required: 'The Phone Number field is required.',
+    },
   },
   contactEmail: {
     value: '',
     key: 'contactEmail',
+    label: 'Email',
     error: undefined,
     rule: 'required|email|max:80',
+    errors: {
+      required: 'The Email field is required.',
+      email: 'Provide proper Email',
+    },
   },
   notificationEmail: {
     value: [],
     key: 'notificationEmail',
+    label: 'Enter notification email',
     error: undefined,
     rule: 'array|max:3',
+    errors: {
+      max: 'Only 3 notification emails you can add.',
+    },
   },
 };
 

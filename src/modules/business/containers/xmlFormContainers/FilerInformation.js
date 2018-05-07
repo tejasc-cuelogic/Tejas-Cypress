@@ -1,10 +1,12 @@
 import React from 'react';
-import { Form, Card, Popup, Input } from 'semantic-ui-react';
+import { Form, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 import Chips from 'react-chips/lib/Chips';
 
 import validationActions from '../../../../actions/validation';
+import FieldError from './../../../../components/common/FieldError';
+import { FormInput, FormRadioGroup } from './../../../../components/form/FormElements';
 
 @inject('businessStore')
 @withRouter
@@ -33,150 +35,108 @@ export default class FilerInformation extends React.Component {
       this.props.businessStore.removeXmlError('notificationEmailElement');
     }
     this.props.businessStore.setFilerInfo('notificationEmail', chips);
-    validationActions.validateFilerInfoField('notificationEmail');
+    this.props.businessStore.onFieldChange('formFilerInfo', 'notificationEmail', chips);
   }
 
   handleCheckboxChange = (e, { name }) => {
     this.props.businessStore.togglefilerCheckbox(name);
   }
 
-  handleBusinessCancel = () => {
-    this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-  }
-
   handleOnBlur = e => validationActions.validateFilerInfoField(e.target.name)
 
   render() {
-    const { filerInformation } = this.props.businessStore;
+    const { formFilerInfo, filerInfoChange } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
-          <Form.Field
-            error={!!filerInformation.offeringUrl.error}
-          >
-            { /* eslint-disable jsx-a11y/label-has-for */}
-            <label>Website URL</label>
-            <Popup
-              trigger={
-                <Input
-                  value={filerInformation.offeringUrl.value}
-                  onChange={this.handleChange}
-                  name="offeringUrl"
-                  onBlur={this.handleOnBlur}
-                  className="column"
-                  placeholder="Website URL"
-                />
-              }
-              content="Please enter URL of page, for which screenshot will be generated"
-              on="focus"
-              size="tiny"
-            />
-          </Form.Field>
+          <FormInput
+            type="text"
+            fielddata={formFilerInfo.fields.offeringUrl}
+            name="offeringUrl"
+            changed={filerInfoChange}
+          />
           <Form.Group widths="equal">
-            <Form.Input
-              placeholder="Filer CIK"
-              label="Filer CIK"
+            <FormInput
+              type="text"
+              fielddata={formFilerInfo.fields.filerCik}
               name="filerCik"
-              value={filerInformation.filerCik.value}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              className="column"
-              error={!!filerInformation.filerCik.error}
+              changed={filerInfoChange}
             />
-            <Form.Input
-              placeholder="Filer CCC"
-              label="Filer CCC"
+            <FormInput
+              type="text"
+              fielddata={formFilerInfo.fields.filerCcc}
               name="filerCcc"
-              value={filerInformation.filerCcc.value}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              className="column"
-              error={!!filerInformation.filerCcc.error}
+              changed={filerInfoChange}
             />
           </Form.Group>
           <Form.Group inline>
-            <Form.Radio
-              label="Live"
-              value="LIVE"
+            { /* eslint-disable jsx-a11y/label-has-for */}
+            <label>
+              Is this Live or Test filing?
+            </label>
+            <FormRadioGroup
+              fielddata={formFilerInfo.fields.liveTestFlag}
               name="liveTestFlag"
-              checked={filerInformation.liveTestFlag.value === 'LIVE'}
-              error={!!filerInformation.liveTestFlag.error}
-              onChange={this.handleChange}
-            />
-            <Form.Radio
-              label="Test"
-              value="TEST"
-              name="liveTestFlag"
-              checked={filerInformation.liveTestFlag.value === 'TEST'}
-              error={!!filerInformation.liveTestFlag.error}
-              onChange={this.handleChange}
+              changed={filerInfoChange}
             />
           </Form.Group>
           <Form.Group inline>
             <Form.Checkbox
               label="Would you like a Return Copy?"
               name="returnCopyFlag"
-              checked={filerInformation.returnCopyFlag.value}
+              checked={formFilerInfo.fields.returnCopyFlag.value}
               onChange={this.handleCheckboxChange}
             />
             <Form.Checkbox
               label="Is this an electronic copy of an official filing submitted in paper format in connection with a hardship exemption?"
               name="confirmingCopyFlag"
-              checked={filerInformation.confirmingCopyFlag.value}
+              checked={formFilerInfo.fields.confirmingCopyFlag.value}
               onChange={this.handleCheckboxChange}
             />
           </Form.Group>
         </Card>
         <Card.Group itemsPerRow={2}>
           <Card fluid className="form-card">
-            <Form.Input
-              placeholder="Name"
-              label="Name"
+            <FormInput
+              type="text"
+              fielddata={formFilerInfo.fields.contactName}
               name="contactName"
-              value={filerInformation.contactName.value}
-              error={!!filerInformation.contactName.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
+              changed={filerInfoChange}
             />
-            <Form.Input
-              placeholder="Phone Number"
-              label="Phone Number"
+            <FormInput
+              type="text"
+              fielddata={formFilerInfo.fields.contactPhone}
               name="contactPhone"
-              value={filerInformation.contactPhone.value}
-              error={!!filerInformation.contactPhone.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
+              changed={filerInfoChange}
             />
-            <Form.Input
-              placeholder="Email"
-              label="Email"
+            <FormInput
+              type="email"
+              fielddata={formFilerInfo.fields.contactEmail}
               name="contactEmail"
-              value={filerInformation.contactEmail.value}
-              error={!!filerInformation.contactEmail.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
+              changed={filerInfoChange}
             />
           </Card>
           <Card fluid className="form-card">
             <Form.Checkbox
               label="Notify via Filing Website only?"
               name="overrideInternetFlag"
-              checked={filerInformation.overrideInternetFlag.value}
+              checked={formFilerInfo.fields.overrideInternetFlag.value}
               onChange={this.handleCheckboxChange}
-              onBlur={this.handleOnBlur}
             />
-            <div className={!filerInformation.overrideInternetFlag.value ? 'field disabled' : 'field'} >
+            <div className={!formFilerInfo.fields.overrideInternetFlag.value ? 'field disabled' : 'field'} >
               { /* eslint-disable jsx-a11y/label-has-for */}
               <label>
                 Enter notification email
               </label>
               <Chips
-                value={filerInformation.notificationEmail.value}
-                error={!!filerInformation.notificationEmail.error}
+                value={formFilerInfo.fields.notificationEmail.value}
                 onChange={this.handleNotificationEmailChange}
                 createChipKeys={[9, 13, 32, 188]}
               />
             </div>
+            {formFilerInfo.fields.notificationEmail.error &&
+              <FieldError error={formFilerInfo.fields.notificationEmail.error} />
+            }
           </Card>
         </Card.Group>
       </div>

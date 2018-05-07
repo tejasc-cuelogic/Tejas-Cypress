@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import _ from 'lodash';
+import Validator from 'validatorjs';
 
 import {
   FORM_VALUES,
@@ -57,7 +58,9 @@ export class BusinessStore {
   };
 
   @observable
-  filerInformation = { ...FILER_INFORMATION }
+  formFilerInfo = {
+    fields: { ...FILER_INFORMATION }, meta: { isValid: false, error: '' },
+  };
 
   @observable
   issuerInformation = { ...ISSUER_INFORMATION }
@@ -125,7 +128,7 @@ export class BusinessStore {
   }
 
   @computed get canSubmitFilerInfoXmlForm() {
-    return _.isEmpty(_.filter(this.filerInformation, field => field.error));
+    return _.isEmpty(_.filter(this.formFilerInfo.fields, field => field.error));
   }
 
   @computed get canSubmitIssuerInfoXmlForm() {
@@ -156,6 +159,29 @@ export class BusinessStore {
   @computed get checkStepsStatus() {
     return _.every(this.xmlSubStepsStatus, key => key === true);
   }
+
+  @action
+  updateStatusFlag = (stepDetails, key, value) => {
+    this[stepDetails][key].isValid = value;
+  };
+
+  @action
+  filerInfoChange = (e, { name, value }) => {
+    this.onFieldChange('formFilerInfo', name, value);
+  };
+
+  @action
+  onFieldChange = (currentForm, field, value) => {
+    const form = currentForm || 'formFinInfo';
+    this[form].fields[field].value = value;
+    const validation = new Validator(
+      _.mapValues(this[form].fields, f => f.value),
+      _.mapValues(this[form].fields, f => f.rule),
+      this[form].fields[field].errors,
+    );
+    this[form].meta.isValid = validation.passes();
+    this[form].fields[field].error = validation.errors.first(field);
+  };
 
   @action
   setTemplateVariableByKey(key, value) {
@@ -224,27 +250,29 @@ export class BusinessStore {
 
   @action
   setFiler(filerInformation) {
-    this.filerInformation = filerInformation;
+    this.formFilerInfo.fields = filerInformation;
   }
 
   @action
   setFilerInfo(field, value) {
-    this.filerInformation[field].value = value;
+    this.formFilerInfo.fields[field].value = value;
   }
 
   @action
   setFilerError(field, error) {
-    this.filerInformation[field].error = error;
+    this.formFilerInfo.fields[field].error = error;
   }
 
   @action
   clearFiler() {
-    this.filerInformation = { ...FILER_INFORMATION };
+    this.formFilerInfo = {
+      fields: { ...FILER_INFORMATION }, meta: { isValid: false, error: '' },
+    };
   }
 
   @action
   togglefilerCheckbox(name) {
-    this.filerInformation[name].value = !this.filerInformation[name].value;
+    this.formFilerInfo.fields[name].value = !this.formFilerInfo.fields[name].value;
   }
 
   @action

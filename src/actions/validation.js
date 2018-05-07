@@ -59,7 +59,7 @@ export class Validation {
    * @return null
    */
   validateFilerInfoField = (field) => {
-    const { errors } = validationService.validate(businessStore.filerInformation[field]);
+    const { errors } = validationService.validate(businessStore.formFilerInfo.fields[field]);
     this.formValidationErrors(errors, field);
     businessStore.setFilerError(field, errors && errors[field][0]);
   }
