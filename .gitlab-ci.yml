@@ -1,0 +1,198 @@
+image: awscli:custom
+
+variables:
+  CI: "false"
+
+stages:
+  - build
+  - deploy
+  - cleanup
+
+#---------------------------------Review----------------------------------------  
+#Building code
+build:review:
+  cache:
+    paths:
+    - node_modules/
+  only:
+    refs:
+      - branches
+  except:
+    - master
+    - develop
+    - qa
+  tags:
+    - ns-client
+  stage: build
+  script:
+    - bash scripts/cicd/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} us-east-1
+    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 dev
+    - npm install
+    - npm run build
+
+  artifacts:
+    paths:
+    - build/
+    - scripts/cicd/
+    expire_in: 1 day
+
+deploy:review:
+  only:
+    refs:
+      - branches
+  except:
+    - master
+    - develop
+    - qa
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_SLUG.s3-website-us-east-1.amazonaws.com
+    on_stop: delete:review
+  tags:
+    - ns-client
+  stage: deploy
+  script: 
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://${CI_COMMIT_REF_SLUG}/ --recursive
+  dependencies:
+    - build:review
+
+delete:review:
+  only:
+    refs:
+      - branches
+  except:
+    - master
+    - develop
+    - qa
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - ns-client
+  script:
+    - chmod +x scripts/cicd/emptyBucket.py 
+    - python scripts/cicd/emptyBucket.py -b ${CI_COMMIT_REF_SLUG}
+    - aws s3api delete-bucket --bucket ${CI_COMMIT_REF_SLUG} --region us-east-1
+  when: manual
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    action: stop
+  
+
+#---------------------------------Dev-------------------------------------------
+
+#Building code
+build:dev:
+  cache:
+    paths:
+    - node_modules/
+  only:
+    refs:
+      - develop
+  tags:
+    - ns-client
+  stage: build
+  script:
+    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 dev
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+    - build/
+    expire_in: 1 day
+
+#Deploying code to s3 bucket
+deploy:dev:
+  only:
+    refs:
+      - develop
+  environment:
+    name: dev
+    url:  http://dev.nextseed.qa.s3-website-us-east-1.amazonaws.com
+  tags:
+    - ns-client
+  stage: deploy
+  script: 
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://dev.nextseed.qa/ --recursive
+  dependencies:
+    - build:dev
+
+#---------------------------------Qa--------------------------------------------
+
+#Building code
+build:qa:
+  cache:
+    paths:
+    - node_modules/
+  only:
+    refs:
+      - qa
+  tags:
+    - ns-client
+  stage: build
+  script: 
+    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 qa
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+    - build/
+    expire_in: 1 day
+
+#Deploying code to s3 bucket
+deploy:qa:
+  only:
+    refs:
+      - qa
+  environment:
+    name: qa
+    url:  http://qa.nextseed.qa.s3-website-us-east-1.amazonaws.com
+  tags:
+    - ns-client
+  stage: deploy
+  script: 
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://qa.nextseed.qa/ --recursive
+  dependencies:
+    - build:qa
+
+#---------------------------------Production------------------------------------
+
+#Building code
+build:prod:
+  cache:
+    paths:
+    - node_modules/
+  only:
+    refs:
+      - master
+  tags:
+    - ns-client
+  stage: build
+  script: 
+    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 prod
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+    - build/
+    expire_in: 1 day
+
+#Deploying code to s3 bucket
+deploy:prod:
+  only:
+    refs:
+      - master
+  environment:
+    name: prod
+    url:  http://ns-client-prod.s3-website-us-east-1.amazonaws.com
+  tags:
+    - ns-client
+  stage: deploy
+  script: 
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://ns-client-prod/ --recursive
+  dependencies:
+    - build:prod

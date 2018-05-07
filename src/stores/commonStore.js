@@ -6,9 +6,7 @@ export class CommonStore {
   @observable appLoaded = false;
 
   constructor() {
-    console.log('in the common store constructor');
     reaction(
-      () => console.log('calling reaction'),
       () => this.token,
       (token) => {
         if (token) {
