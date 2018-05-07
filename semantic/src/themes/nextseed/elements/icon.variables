@@ -104,6 +104,7 @@
 @ns-circle-line: "\e91c";
 @ns-close: "\e94b";
 @ns-close-circle: "\e92d";
+@ns-close-light: "\e950";
 @ns-coments-info: "\e91d";
 @ns-comments-edit: "\e93c";
 @ns-compas: "\e91e";
@@ -114,6 +115,7 @@
 @ns-download: "\e923";
 @ns-ellipsis: "\e924";
 @ns-entity: "\e93d";
+@ns-entity-line: "\e94d";
 @ns-envelope: "\e925";
 @ns-facebook: "\e93e";
 @ns-file: "\e93f";
@@ -122,9 +124,11 @@
 @ns-help-circle: "\e926";
 @ns-image: "\e927";
 @ns-individual: "\e941";
+@ns-individual-line: "\e94e";
 @ns-info-circle: "\e928";
 @ns-investor: "\e929";
 @ns-ira: "\e942";
+@ns-ira-line: "\e94f";
 @ns-line-chart: "\e92a";
 @ns-link: "\e943";
 @ns-lock: "\e92b";

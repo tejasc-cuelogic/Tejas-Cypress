@@ -12592,6 +12592,10 @@ i.icon[class*="ns-"] {
   content: "\e92d";
 }
 
+.ns-close-light:before {
+  content: "\e950";
+}
+
 .ns-coments-info:before {
   content: "\e91d";
 }
@@ -12632,6 +12636,10 @@ i.icon[class*="ns-"] {
   content: "\e93d";
 }
 
+.ns-entity-line:before {
+  content: "\e94d";
+}
+
 .ns-envelope:before {
   content: "\e925";
 }
@@ -12664,6 +12672,10 @@ i.icon[class*="ns-"] {
   content: "\e941";
 }
 
+.ns-individual-line:before {
+  content: "\e94e";
+}
+
 .ns-info-circle:before {
   content: "\e928";
 }
@@ -12674,6 +12686,10 @@ i.icon[class*="ns-"] {
 
 .ns-ira:before {
   content: "\e942";
+}
+
+.ns-ira-line:before {
+  content: "\e94f";
 }
 
 .ns-line-chart:before {
