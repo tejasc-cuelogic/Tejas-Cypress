@@ -17,10 +17,6 @@ export default class Signature extends React.Component {
     this.props.businessStore.changePersonalSignature(name, dataid, value);
   }
 
-  handleDateChange = (e, test) => {
-    console.log(test);
-    // this.props.businessStore.changePersonalSignature(test);
-  }
   handleAdd = () => {
     businessActions.addPersonalSignature();
   }
@@ -65,7 +61,6 @@ export default class Signature extends React.Component {
           handleChange={this.handlePersonalSignatureChange}
           handleAddClick={this.handleAdd}
           handleDeleteClick={this.handleDelete}
-          handleDateChange={this.handleDateChange}
         />
         <Button color="grey" compact onClick={this.handleAdd}>Add</Button>
         <Divider hidden />

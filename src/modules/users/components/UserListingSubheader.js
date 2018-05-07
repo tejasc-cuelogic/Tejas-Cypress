@@ -79,15 +79,13 @@ const userListingSubheader = () => (
             <Button primary as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
           </Grid.Column>
           <Grid.Column floated="right" textAlign="right">
-            <a className="item notification" href="#">
+            <span className="item notification">
               <Icon name="ns-bell" />
               <span className="unread-count">3</span>
-            </a>
+            </span>
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      {/* <div className="webcontent-spacer">
-      </div> */}
     </div>
     <div className="search-filters">
       <Grid stackable>

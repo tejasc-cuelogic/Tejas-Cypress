@@ -635,12 +635,13 @@ body.pushable > .pusher {
   min-height: calc(100vh - 58px);
 }
 .ui.sidebar .ui.image.logo {
-  height: 38px;
-  max-height: 38px;
+  height: 30px;
+  max-height: 30px;
+  margin: 0 auto;
 }
 .ui.sidebar .user-picture {
-  margin: 1.14285714rem 0;
-  padding: 1rem 0;
+  margin: 1rem 0;
+  padding: 0.71428571rem 0;
   text-align: center;
   color: #383838;
   border-radius: 0.28571429rem;
@@ -657,16 +658,16 @@ body.pushable > .pusher {
   background-color: #F7F7F7;
 }
 .ui.sidebar.visible .user-picture > img {
-  max-width: 90px;
+  max-width: 58px;
   margin: 0 auto 10px;
 }
 .ui.sidebar.visible .user-picture h2 {
   font-size: 16px;
   font-weight: 900;
-  margin: 0 0 5px;
+  margin: 0 0 0.35714286rem;
 }
 .ui.sidebar.visible .user-picture h3 {
-  margin: 0.71428571rem 0 0;
+  margin: 0.35714286rem 0 0;
   font-size: 14px;
   font-weight: 700;
   color: #BDBDBD;

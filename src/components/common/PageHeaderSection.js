@@ -19,8 +19,6 @@ const PageHeaderSection = observer((props) => {
               <span className="unread-count">3</span>
             </a>
             <Button primary floated="right">Invest Now</Button>
-            {/* </Grid.Column>
-            <Grid.Column floated="right" textAlign="right"> */}
           </Grid.Column>
         </Grid.Row>
       </Grid>
