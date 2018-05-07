@@ -53,7 +53,7 @@ export default class FormationDocumemts extends Component {
                 }
                 {entityAccount.entityFormationDocument.value !== '' &&
                 <div className="file-uploader attached">
-                    {entityAccount.entityFormationDocument.value}
+                  {entityAccount.entityFormationDocument.value}
                   <Icon name="ns-remove" onClick={this.removeEntityFormationDocument} />
                 </div>
                 }

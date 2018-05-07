@@ -78,7 +78,7 @@ export default class PersonalInformation extends Component {
                 }
                 {entityAccount.photoId.value !== '' &&
                 <div className="file-uploader attached">
-                    {entityAccount.photoId.value}
+                  {entityAccount.photoId.value}
                   <Icon name="ns-remove" onClick={this.removeUploadedPhotoId} />
                 </div>
                 }
