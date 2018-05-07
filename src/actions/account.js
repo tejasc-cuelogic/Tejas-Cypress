@@ -61,7 +61,7 @@ export class Account {
       contentType: 'application/json',
     };
     ExternalApiService.post(params)
-      .then(data => console.log(data))
+      .then(data => console.log(data.body.institutions))
       .catch(err => console.log(err));
   }
 }
