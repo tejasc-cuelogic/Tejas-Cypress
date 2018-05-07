@@ -104,13 +104,13 @@ export const ALL_NAV_ITEMS = [
     accessibleTo: ['ira', 'individual', 'entity', 'investor'],
   },
   {
-    icon: 'chain',
+    icon: 'ns-comments-edit',
     title: 'Referrals',
     to: 'referrals',
     accessibleTo: ['ira', 'individual', 'entity', 'investor'],
   },
   {
-    icon: 'book',
+    icon: 'ns-article',
     title: 'Education',
     to: 'education',
     accessibleTo: ['ira', 'individual', 'entity', 'investor', 'bowner'],
