@@ -1095,6 +1095,9 @@ i.icon[class*="ns-"]{
 .ns-close-circle:before{
     content:@ns-close-circle;
 }
+.ns-close-light:before{
+    content:@ns-close-light; 
+}
 .ns-coments-info:before{
     content:@ns-coments-info;
 }
