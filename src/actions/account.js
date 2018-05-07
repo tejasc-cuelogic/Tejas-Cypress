@@ -1,7 +1,8 @@
 import validationActions from '../actions/validation';
 import {
   PLAID_URL,
-} from '../constants/common';
+  PLAID_PUBLIC_KEY,
+} from '../constants/account';
 import ExternalApiService from '../services/externalApi';
 import indAccountStore from '../stores/user/individualAccountStore';
 
@@ -47,11 +48,10 @@ export class Account {
   }
 
   bankSearch = () => {
-    console.log('in call');
     const params = {
       url: PLAID_URL,
       payload: {
-        public_key: 'ca61661fcb15b5e735eabae68771b6',
+        public_key: PLAID_PUBLIC_KEY,
         query: indAccountStore.formBankSearch.fields.bankName.value,
         products: ['auth'],
         options: {

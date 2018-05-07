@@ -1,5 +1,9 @@
 import moment from 'moment';
 
+export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
+
+export const PLAID_PUBLIC_KEY = process.env.REACT_APP_PLAID_PUBLIC_KEY;
+
 export const INVESTMENT_ACCOUNT_TYPES = {
   0: 'individual',
   1: 'ira',
