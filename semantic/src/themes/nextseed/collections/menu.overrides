@@ -8,3 +8,21 @@
         }
     }
 }
+.transaction-detials{
+    .ui.attached.inverted.menu{
+        margin:0;
+        width:100%;
+        max-width:100%;
+    }
+    .ui.inverted.menu .item{
+        padding:@16px @25px;
+        font-weight:700;
+        &:before{
+            background-color:@tertiary-text;
+        }
+        &.active{
+            background-color:@white;
+            color:@link-color !important;
+        }
+    }
+}
