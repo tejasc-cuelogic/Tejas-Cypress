@@ -11,7 +11,6 @@ export class UserDetailsStore {
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
-    console.log(details, 'details');
     return details;
   }
 

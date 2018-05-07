@@ -14,13 +14,11 @@ const PageHeaderSection = observer((props) => {
             <h1>{props.title}</h1>
           </Grid.Column>
           <Grid.Column width={4} floated="right" textAlign="right">
-            <a className="item notification" href="#">
+            <span className="item notification">
               <Icon className="ns-bell" />
               <span className="unread-count">3</span>
-            </a>
+            </span>
             <Button primary floated="right">Invest Now</Button>
-            {/* </Grid.Column>
-            <Grid.Column floated="right" textAlign="right"> */}
           </Grid.Column>
         </Grid.Row>
       </Grid>
