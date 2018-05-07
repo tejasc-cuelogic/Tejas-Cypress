@@ -1,4 +1,5 @@
 import React from 'react';
+import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
@@ -18,7 +19,7 @@ export default class Private extends React.Component {
 
   render() {
     const User = { ...this.props.userStore.currentUser };
-    const UserInfo = { fullname: `${User.givenName} ${User.familyName}`, avatarKey: User.sub };
+    const UserInfo = { fullname: `${User.givenName} ${User.familyName}`, avatarKey: User.sub, roles: toJS(User.roles) };
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <div>
