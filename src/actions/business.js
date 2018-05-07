@@ -791,9 +791,9 @@ export class Business {
     const newFiler = validationActions.validateXmlFormData(filerInformation);    
     const errors = this.newValidationErrors(newFiler);
     businessStore.setFiler(newFiler);
-    if (setError) {
-      businessStore.setXmlError(errors);
-    }    
+    // if (setError) {
+    //   businessStore.setXmlError(errors);
+    // }    
   }
 
   validateIssuerInfo = (issuerInformation, setError = true) => {

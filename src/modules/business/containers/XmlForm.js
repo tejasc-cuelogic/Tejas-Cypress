@@ -47,6 +47,7 @@ export default class XmlForm extends React.Component {
     this.props.businessStore.clearAnnualReport();
     this.props.businessStore.clearSignature();
     this.props.businessStore.setXmlError();
+    this.props.businessStore.clearXmlTabsValue();
   }
 
   handleValidationToActiveTab = (nextTabName) => {
@@ -313,6 +314,10 @@ export default class XmlForm extends React.Component {
       xmlSubmissionId,
       xmlSubmissionStatus,
     } = this.props.businessStore;
+    let saveButtonStatus = '';
+    if (xmlActiveTabName === 'filer') {
+      saveButtonStatus = !this.props.businessStore.formFilerInfo.meta.isValid;
+    }
     if (this.props.uiStore.inProgress) {
       return (
         <div>
@@ -358,7 +363,7 @@ export default class XmlForm extends React.Component {
                       size="large"
                       floated="right"
                       disabled={
-                        !this.props.businessStore.formFilerInfo.meta.isValid
+                        saveButtonStatus
                       }
                       onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
                     >

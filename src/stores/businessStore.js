@@ -177,7 +177,7 @@ export class BusinessStore {
     const validation = new Validator(
       _.mapValues(this[form].fields, f => f.value),
       _.mapValues(this[form].fields, f => f.rule),
-      this[form].fields[field].errors,
+      this[form].fields[field].customErrors,
     );
     this[form].meta.isValid = validation.passes();
     this[form].fields[field].error = validation.errors.first(field);
@@ -478,6 +478,13 @@ export class BusinessStore {
   @action
   setXmlSubmissionTab(index, value) {
     this.xmlSubmissionTabs[index].errorClass = value;
+  }
+
+  @action
+  clearXmlTabsValue() {    
+    _.forEach(this.xmlSubmissionTabs, (value, key) => {      
+      this.xmlSubmissionTabs[key].errorClass = '';
+    });
   }
 }
 export default new BusinessStore();

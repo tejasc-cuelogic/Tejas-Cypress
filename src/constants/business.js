@@ -80,7 +80,7 @@ export const FILER_INFORMATION = {
     rule: 'required|url',
     placeHolder: 'Website URL',
     tooltip: 'Please enter URL of page, for which screenshot will be generated',
-    errors: {
+    customErrors: {
       required: 'The Website URL field is required.',
       url: 'Provide valid Website URL',
     },
@@ -92,7 +92,7 @@ export const FILER_INFORMATION = {
     error: undefined,
     rule: 'required|max:10',
     content: 'Please enter CIK of filer',
-    errors: {
+    customErrors: {
       required: 'The Filer Cik field is required.',
       max: 'The Filer Cik is too long. Max length is :max.',
     },
@@ -103,7 +103,7 @@ export const FILER_INFORMATION = {
     label: 'Filer Ccc',
     error: undefined,
     rule: 'required|max:8',
-    errors: {
+    customErrors: {
       required: 'The Filer Ccc field is required.',
       max: 'The Filer Ccc is too long. Max length is :max.',
     },
@@ -129,7 +129,7 @@ export const FILER_INFORMATION = {
     label: 'Confirming Copy Flag',
     error: undefined,
     rule: 'required|boolean',
-    errors: {
+    customErrors: {
       required: 'The Confirming Copy Flag field is required.',
     },
   },
@@ -139,7 +139,7 @@ export const FILER_INFORMATION = {
     label: 'Return Copy Flag',
     error: undefined,
     rule: 'required|boolean',
-    errors: {
+    customErrors: {
       required: 'The Return Copy Flag field is required.',
     },
   },
@@ -156,7 +156,7 @@ export const FILER_INFORMATION = {
     label: 'Name',
     error: undefined,
     rule: 'required|max:30',
-    errors: {
+    customErrors: {
       required: 'The Contact Name field is required.',
     },
   },
@@ -166,7 +166,7 @@ export const FILER_INFORMATION = {
     label: 'Phone Number',
     error: undefined,
     rule: 'required|max:20',
-    errors: {
+    customErrors: {
       required: 'The Phone Number field is required.',
     },
   },
@@ -176,7 +176,7 @@ export const FILER_INFORMATION = {
     label: 'Email',
     error: undefined,
     rule: 'required|email|max:80',
-    errors: {
+    customErrors: {
       required: 'The Email field is required.',
       email: 'Provide proper Email',
     },
@@ -187,7 +187,7 @@ export const FILER_INFORMATION = {
     label: 'Enter notification email',
     error: undefined,
     rule: 'array|max:3',
-    errors: {
+    customErrors: {
       max: 'Only 3 notification emails you can add.',
     },
   },
