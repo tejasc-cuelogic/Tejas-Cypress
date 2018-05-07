@@ -21,7 +21,7 @@ const FileUploaderLarge = observer((props) => {
       {value !== '' &&
         <div className="file-uploader attached">
           <span title={value}>{value}</span>
-          <Button size="tiny" compact className="remove pull-right" onClick={() => props.removeUploadedDocument(props.name)}>Remove</Button>
+          <Button size="tiny" compact className="remove pull-right" onClick={e => props.uploadDocument(e.target.name, '')}>Remove</Button>
         </div>
       }
     </Form.Field>

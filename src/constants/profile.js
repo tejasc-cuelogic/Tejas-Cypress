@@ -1,4 +1,15 @@
 import moment from 'moment';
+import Validator from 'validatorjs';
+
+/* eslint-disable no-unused-vars */
+/* eslint-disable arrow-body-style */
+Validator.register('maskedPhoneNumber', (value, requirement, attribute) => {
+  return value.match(/^\d{3}-\d{3}-\d{4}$/);
+}, 'The :attribute is not in the format XXX-XXX-XXXX.');
+
+Validator.register('maskedSSN', (value, requirement, attribute) => {
+  return value.match(/^\d{3}-\d{3}-\d{3}$/);
+}, 'The :attribute is not in the format XXX-XXX-XXX.');
 
 export const VERIFY_IDENTITY_STEP_01 = {
   title: {
@@ -49,7 +60,7 @@ export const VERIFY_IDENTITY_STEP_01 = {
     value: '',
     label: 'Phone Number',
     error: undefined,
-    rule: 'required',
+    rule: 'required|maskedPhoneNumber',
   },
   dateOfBirth: {
     value: moment(),
@@ -61,7 +72,7 @@ export const VERIFY_IDENTITY_STEP_01 = {
     value: '',
     label: 'SSN',
     error: undefined,
-    rule: 'required',
+    rule: 'required|maskedSSN',
   },
 };
 
@@ -79,41 +90,6 @@ export const PROFILE_DETAILS_TITLE = [
   { key: 'Ms', value: 'Ms', text: 'Ms' },
   { key: 'Mrs', value: 'Mrs', text: 'Mrs' },
 ];
-
-export const IDENTITY_QUESTIONS_FORM_VALUES = {
-  question1: {
-    value: '',
-    key: 'question1',
-    error: undefined,
-    rule: 'required',
-    label: 'In which city is Baker Street?',
-    placeHolder: 'Type answer',
-  },
-  question2: {
-    value: '',
-    key: 'question2',
-    error: undefined,
-    rule: 'required',
-    label: 'From whom did you purchase the property at Baker Street 221?',
-    placeHolder: 'Type answer',
-  },
-  question3: {
-    value: '',
-    key: 'question3',
-    error: undefined,
-    rule: 'required',
-    label: 'In which country have you lived?',
-    placeHolder: 'Type answer',
-  },
-  question4: {
-    value: '',
-    key: 'question4',
-    error: undefined,
-    rule: 'required',
-    label: 'Between 1979 and 1980, in which state you have lived?',
-    placeHolder: 'Type answer',
-  },
-};
 
 export const CONFIRM_IDENTITY_DOCUMENTS = {
   photoId: {

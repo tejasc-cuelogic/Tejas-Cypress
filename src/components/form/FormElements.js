@@ -7,3 +7,4 @@ export { default as FileUploader } from './FileUploader';
 export { default as FileUploaderLarge } from './FileUploaderLarge';
 export { default as FormDatePicker } from './FormDatePicker';
 export { default as MaskedInput } from './MaskedInput';
+export { default as AutoComplete } from './AutoComplete';

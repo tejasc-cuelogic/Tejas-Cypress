@@ -7,9 +7,9 @@ import FieldError from '../common/FieldError';
 
 /* eslint-disable arrow-body-style */
 const MaskedInput = observer((props) => {
-  const { label, error } = props.fielddata;
+  const { label, error, value } = props.fielddata;
   return (
-    <Form.Field>
+    <Form.Field error={!!error}>
       <label>
         {!props.hidelabel && label}
         {props.tooltip &&
@@ -23,9 +23,9 @@ const MaskedInput = observer((props) => {
       </label>
       <InputMask
         {...props}
-        label={false}
+        value={value}
         onChange={props.changed}
-        error={error}
+        error={!!error}
         alwaysShowMask
         maskChar=" "
       />

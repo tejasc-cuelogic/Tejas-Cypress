@@ -3,7 +3,7 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import { GqlClient as client } from '../services/graphql';
-import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification } from '../stores/queries/profile';
+import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
 
 import api from '../ns-api';
 import uiStore from './uiStore';
@@ -13,7 +13,6 @@ import Helper from '../helper/utility';
 import {
   VERIFY_IDENTITY_STEP_01,
   VERIFY_IDENTITY_STEP_04,
-  IDENTITY_QUESTIONS_FORM_VALUES,
   CONFIRM_IDENTITY_DOCUMENTS,
 } from '../constants/profile';
 
@@ -26,8 +25,6 @@ export class ProfileStore {
 
   @observable verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
 
-  @observable confirmIdentityQuestions = { ...IDENTITY_QUESTIONS_FORM_VALUES };
-
   @observable confirmIdentityDocuments = { ...CONFIRM_IDENTITY_DOCUMENTS };
 
   @action loadProfile(username) {
@@ -37,51 +34,19 @@ export class ProfileStore {
       .finally(action(() => { uiStore.setProgress(false); }));
   }
 
+  /**
+   * @desc Handle functions for Verify Identity Form 1 fields.
+   */
   @action
-  setProfileDetails(field, value) {
-    this.profileDetails[field].value = value;
-  }
-
-  @action
-  setProfileError(field, error) {
-    this.profileDetails[field].error = error;
-  }
-
-  @action
-  resetProfileDetails() {
-    this.verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: false, error: '' } };
-  }
-
-  @action
-  verifyIdentityEleChange = (e) => {
-    this.onFieldChange('verifyIdentity01', e.target.name, e.target.value);
-  };
-
-  @action
-  verifyIdentitySelChange = (e, { name, value }) => {
-    this.onFieldChange('verifyIdentity01', name, value);
-  };
-
-  @action
-  verifyPhoneNumberEleChange = (e, { name, value }) => {
-    this.onFieldChange('verifyIdentity04', name, value);
+  verifyIdentityEleChange = (e, result) => {
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('verifyIdentity01', fieldName, fieldValue);
   };
 
   @action
   verifyIdentityDateChange = (date) => {
-    this.onFieldChange('dateOfBirth', date);
-  };
-
-  @action
-  onFieldChange = (currentForm, field, value) => {
-    const form = currentForm || 'formFinInfo';
-    this[form].fields[field].value = value;
-    const validation = new Validator(
-      mapValues(this[form].fields, f => f.value),
-      mapValues(this[form].fields, f => f.rule),
-    );
-    this[form].meta.isValid = validation.passes();
-    this[form].fields[field].error = validation.errors.first(field);
+    this.onFieldChange('verifyIdentity01', 'dateOfBirth', date);
   };
 
   @action
@@ -89,6 +54,35 @@ export class ProfileStore {
     this.verifyIdentity01.response = response;
   }
 
+  @computed
+  get formattedUserInfo() {
+    const userInfo = {
+      firstLegalName: this.verifyIdentity01.fields.firstLegalName.value,
+      lastLegalName: this.verifyIdentity01.fields.lastLegalName.value,
+      dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
+      ssn: Helper.unMaskInput(this.verifyIdentity01.fields.ssn.value),
+      legalAddress: {
+        street1: this.verifyIdentity01.fields.residentalStreet.value,
+        city: this.verifyIdentity01.fields.city.value,
+        state: this.verifyIdentity01.fields.state.value,
+        zipCode: this.verifyIdentity01.fields.zipCode.value,
+      },
+    };
+    return userInfo;
+  }
+
+  @computed
+  get formattedPhoneDetails() {
+    const phoneDetails = {
+      phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+      countryCode: '91',
+    };
+    return phoneDetails;
+  }
+
+  /**
+   * @desc Functions for Verify Identity Form 2.
+   */
   @action
   setIdentityQuestions = () => {
     const { questions } = this.verifyIdentity01.response;
@@ -111,28 +105,46 @@ export class ProfileStore {
     changedAnswer.error = validation.errors.first(changedAnswer.key);
   }
 
+  @computed
+  get formattedIdentityQuestionsAnswers() {
+    const formattedIdentityQuestionsAnswers =
+    _.flatMap(this.verifyIdentity02.fields, n => [{ type: n.key, text: n.value }]);
+    return formattedIdentityQuestionsAnswers;
+  }
+
+  /**
+   * @desc Handle function for Verify Identity Form 4 field.
+   */
+  @action
+  verifyVerificationCodeChange = (e, { name, value }) => {
+    this.onFieldChange('verifyIdentity04', name, value);
+  };
+
+  /**
+   * @desc Generic function for on change of each form field.
+   */
+  @action
+  onFieldChange = (currentForm, field, value) => {
+    const form = currentForm || 'formFinInfo';
+    this[form].fields[field].value = value;
+    const validation = new Validator(
+      mapValues(this[form].fields, f => f.value),
+      mapValues(this[form].fields, f => f.rule),
+    );
+    this[form].meta.isValid = validation.passes();
+    this[form].fields[field].error = validation.errors.first(field);
+  };
+
   /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
     uiStore.setProgress();
-    uiStore.setLoaderMessage('Submitting Personal Details');
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: verifyCIPUser,
           variables: {
             userId: userStore.currentUser.sub,
-            user: {
-              firstLegalName: this.verifyIdentity01.fields.firstLegalName.value,
-              lastLegalName: this.verifyIdentity01.fields.lastLegalName.value,
-              dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
-              ssn: this.verifyIdentity01.fields.ssn.value,
-              legalAddress: {
-                street1: this.verifyIdentity01.fields.residentalStreet.value,
-                city: this.verifyIdentity01.fields.city.value,
-                state: this.verifyIdentity01.fields.state.value,
-                zipCode: this.verifyIdentity01.fields.zipCode.value,
-              },
-            },
+            user: this.formattedUserInfo,
           },
         })
         .then((data) => {
@@ -145,15 +157,8 @@ export class ProfileStore {
         })
         .finally(() => {
           uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
         });
     });
-  }
-
-  getFormattedIdentityQuestionsAnswers = () => {
-    const formattedIdentityQuestionsAnswers =
-    _.flatMap(this.verifyIdentity02.fields, n => [{ type: n.key }, { text: n.value }]);
-    return formattedIdentityQuestionsAnswers;
   }
 
   @action
@@ -173,7 +178,6 @@ export class ProfileStore {
 
   submitConfirmIdentityQuestions = () => {
     uiStore.setProgress();
-    uiStore.setLoaderMessage('Submitting Confirm Identity Questions');
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -182,13 +186,12 @@ export class ProfileStore {
             userId: userStore.currentUser.sub,
             cipAnswers: {
               id: this.verifyIdentity01.response.softFailId,
-              answers: this.getFormattedIdentityQuestionsAnswers,
+              answers: this.formattedIdentityQuestionsAnswers,
             },
           },
         })
-        .then(() => {
-          Helper.toast('Identity questions submitted.', 'success');
-          resolve();
+        .then((result) => {
+          resolve(result);
         })
         .catch((err) => {
           uiStore.setErrors(this.simpleErr(err));
@@ -196,52 +199,47 @@ export class ProfileStore {
         })
         .finally(() => {
           uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
         });
     });
   }
 
+  /* eslint-disable arrow-body-style */
   startPhoneVerification = () => {
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: startUserPhoneVerification,
           variables: {
-            phoneDetails: {
-              phoneNumber: this.verifyIdentity01.fields.phoneNumber.value,
-              countryCode: '91',
-            },
+            phoneDetails: this.formattedPhoneDetails,
             method: 'sms',
           },
         })
-        .then(() => {
-          Helper.toast('Verification code sent to user.', 'success');
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
-          reject();
-        });
+        .then(() => Helper.toast('Verification code sent to user.', 'success'), resolve())
+        .catch(err => uiStore.setErrors(this.simpleErr(err)), reject());
     });
   }
 
   confirmPhoneNumber = () => {
     uiStore.setProgress();
-    uiStore.setLoaderMessage('Confirming Phone Number');
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: checkUserPhoneVerificationCode,
           variables: {
-            phoneDetails: {
-              phoneNumber: this.verifyIdentity01.fields.phoneNumber.value,
-              countryCode: '91',
-            },
+            phoneDetails: this.formattedPhoneDetails,
             verificationCode: this.verifyIdentity04.fields.code.value,
           },
         })
         .then(() => {
-          Helper.toast('Phone number is confirmed.', 'success');
+          client
+            .mutate({
+              mutation: updateUserCIPInfo,
+              variables: {
+                userId: userStore.currentUser.sub,
+                user: this.formattedUserInfo,
+                phoneDetails: this.formattedPhoneDetails,
+              },
+            });
           resolve();
         })
         .catch((err) => {
@@ -250,7 +248,6 @@ export class ProfileStore {
         })
         .finally(() => {
           uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
         });
     });
   }

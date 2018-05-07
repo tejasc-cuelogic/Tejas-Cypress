@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
-import { FormInput, FormSelect, FormDatePicker, MaskedInput } from '../../../components/form/FormElements';
+import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
+import { FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete } from '../../../components/form/FormElements';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
+import profileActions from '../../../actions/profile';
 import Helper from '../../../helper/utility';
+import CipErrors from '../../../components/common/CipErrors';
 
 @inject('profileStore', 'uiStore', 'userStore')
 @observer
@@ -13,7 +15,7 @@ export default class investorPersonalDetails extends Component {
     this.props.uiStore.clearErrors();
   }
 
-  handleSubmitForm = (e) => {
+  handleSubmitInvestorDetails = (e) => {
     e.preventDefault();
     this.props.profileStore.submitInvestorPersonalDetails().then(() => {
       const { message, questions } = this.props.profileStore.verifyIdentity01.response;
@@ -28,14 +30,16 @@ export default class investorPersonalDetails extends Component {
       } else {
         Helper.toast('User verification hard-failed!', 'error');
       }
-    });
+    })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   render() {
     const {
       verifyIdentity01,
       verifyIdentityEleChange,
-      verifyIdentitySelChange,
       verifyIdentityDateChange,
     } = this.props.profileStore;
     const welcomeMsg = `Hello ${this.props.userStore.currentUser.givenName}!`;
@@ -50,54 +54,50 @@ export default class investorPersonalDetails extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form error onSubmit={this.handleSubmitForm}>
+          {this.props.profileStore.verifyIdentity01.response.qualifiers &&
+          <Message error>
+            <CipErrors errorsList={this.props.profileStore.verifyIdentity01.response.qualifiers} />
+          </Message>
+          }
+          <Form error onSubmit={this.handleSubmitInvestorDetails}>
             <Form.Group widths="equal">
               <FormSelect
                 containerwidth={6}
                 name="title"
                 fielddata={verifyIdentity01.fields.title}
                 options={PROFILE_DETAILS_TITLE}
-                changed={verifyIdentitySelChange}
-              />
-              <FormInput
-                type="text"
-                name="firstLegalName"
-                fielddata={verifyIdentity01.fields.firstLegalName}
                 changed={verifyIdentityEleChange}
               />
-              <FormInput
-                type="text"
-                name="lastLegalName"
-                fielddata={verifyIdentity01.fields.lastLegalName}
-                changed={verifyIdentityEleChange}
-              />
+              {
+                ['firstLegalName', 'lastLegalName'].map(field => (
+                  <FormInput
+                    key={field}
+                    type="text"
+                    name={field}
+                    fielddata={verifyIdentity01.fields[field]}
+                    changed={verifyIdentityEleChange}
+                  />
+                ))
+              }
             </Form.Group>
-            <FormInput
-              type="text"
+            <AutoComplete
               name="residentalStreet"
               fielddata={verifyIdentity01.fields.residentalStreet}
-              tooltip="Put your last name as listed on your driver license"
+              onplaceselected={profileActions.setAddressFieldsOnGoogleAutocomplete}
               changed={verifyIdentityEleChange}
             />
             <Form.Group widths="equal">
-              <FormInput
-                type="text"
-                name="city"
-                fielddata={verifyIdentity01.fields.city}
-                changed={verifyIdentityEleChange}
-              />
-              <FormInput
-                type="text"
-                name="state"
-                fielddata={verifyIdentity01.fields.state}
-                changed={verifyIdentityEleChange}
-              />
-              <FormInput
-                type="text"
-                name="zipCode"
-                fielddata={verifyIdentity01.fields.zipCode}
-                changed={verifyIdentityEleChange}
-              />
+              {
+                ['city', 'state', 'zipCode'].map(field => (
+                  <FormInput
+                    key={field}
+                    type="text"
+                    name={field}
+                    fielddata={verifyIdentity01.fields[field]}
+                    changed={verifyIdentityEleChange}
+                  />
+                ))
+              }
             </Form.Group>
             <Form.Group widths="equal">
               <MaskedInput
@@ -109,20 +109,19 @@ export default class investorPersonalDetails extends Component {
               <FormDatePicker
                 type="text"
                 name="dateOfBirth"
-                label={verifyIdentity01.fields.dateOfBirth.label}
+                fielddata={verifyIdentity01.fields.dateOfBirth}
                 selected={verifyIdentity01.fields.dateOfBirth.value}
-                error={verifyIdentity01.fields.dateOfBirth.error}
                 changed={verifyIdentityDateChange}
               />
             </Form.Group>
             <MaskedInput
               name="ssn"
               fielddata={verifyIdentity01.fields.ssn}
-              mask="999-999-9999"
+              mask="999-999-999"
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">
-              <Button size="large" color="green" className="very relaxed" disabled={!verifyIdentity01.meta.isValid}>Verify my identity</Button>
+              <Button loading={this.props.uiStore.inProgress} size="large" color="green" className="very relaxed" disabled={!verifyIdentity01.meta.isValid}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>

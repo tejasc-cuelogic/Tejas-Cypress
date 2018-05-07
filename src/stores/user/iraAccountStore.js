@@ -6,6 +6,7 @@ import {
   IRA_FIN_INFO,
   IRA_ACC_TYPES,
   IRA_FUNDING,
+  IRA_IDENTITY,
 } from '../../constants/account';
 
 class IraAccountStore {
@@ -24,6 +25,11 @@ class IraAccountStore {
     fields: { ...IRA_FUNDING }, meta: { isValid: true, error: '' },
   };
 
+  @observable
+  formIdentity = {
+    fields: { ...IRA_IDENTITY }, meta: { isValid: true, error: '' },
+  }
+
   @action
   fundingChange = (e, { name, value }) => {
     this.onFieldChange('formFunding', name, value);
@@ -37,6 +43,15 @@ class IraAccountStore {
   @action
   AccTypesChange = (e, { name, value }) => {
     this.onFieldChange('formAccTypes', name, value);
+  };
+
+  @action
+  identityChange = (name, files) => {
+    let uploadedFile = '';
+    if (typeof files !== 'undefined' && files.length) {
+      uploadedFile = files[0].name;
+      this.onFieldChange('formIdentity', name, uploadedFile);
+    }
   };
 
   @action

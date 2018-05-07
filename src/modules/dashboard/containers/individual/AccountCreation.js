@@ -3,10 +3,12 @@ import React from 'react';
 import MuliStep from '../../../../helper/MultiStep';
 import LinkBankAccountPlaid from './LinkBankAccountPlaid';
 import CreateAccount from './CreateAccount';
+import AddFunds from './AddFunds';
 
 const steps =
   [
     { name: 'Link Bank', component: <LinkBankAccountPlaid />, isValid: '' },
+    { name: 'Add funds', component: <AddFunds />, isValid: '' },
     { name: 'Summary', component: <CreateAccount />, isValid: '' },
   ];
 
