@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Modal, Header, Card, Grid, Statistic, Popup, Icon, Tab, Table } from 'semantic-ui-react';
+import { Modal, Header, Card, Grid, Statistic, Popup, Icon, Tab, Table, List } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 const panes = [
@@ -117,7 +117,37 @@ const panes = [
         </div>
       </Tab.Pane>),
   },
-  { menuItem: 'Updates', render: () => <Tab.Pane attached="bottom">Tab 2 Content</Tab.Pane> },
+  {
+    menuItem: 'Updates',
+    render: () => (
+      <Tab.Pane attached="bottom">
+        <Grid padded="horizontally">
+          <Grid.Column width={4}>
+            <h3>Recent</h3>
+            <List relaxed className="update-list">
+              <List.Item>
+                <List.Content>
+                  <List.Description as="a">Updated 10 mins ago</List.Description>
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content>
+                  <List.Description as="a">Updated 22 mins ago</List.Description>
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content>
+                  <List.Description as="a">Updated 34 mins ago</List.Description>
+                </List.Content>
+              </List.Item>
+            </List>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <h3>Details</h3>
+          </Grid.Column>
+        </Grid>
+      </Tab.Pane>),
+  },
   { menuItem: 'Bonus Rewards', render: () => <Tab.Pane attached="bottom">Tab 3 Content</Tab.Pane> },
 ];
 
