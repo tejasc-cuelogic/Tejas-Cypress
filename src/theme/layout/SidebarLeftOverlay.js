@@ -24,7 +24,7 @@ class SidebarLeftPush extends Component {
             <h3>{this.props.UserInfo.roles[0]}</h3>
             {GetNavItem('settings', this.props.UserInfo.roles)}
           </div>
-          <SidebarNav roles={this.props.UserInfo.roles} />
+          <SidebarNav handleLogOut={this.props.handleLogOut} roles={this.props.UserInfo.roles} />
         </Sidebar>
         <Button onClick={this.toggleVisibility} className="item collapseIcon">
           <i className={`angle ${(uiStore.layoutState.leftPanel) ? 'left' : 'right'} icon`} />

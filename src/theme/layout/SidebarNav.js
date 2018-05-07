@@ -15,7 +15,7 @@ export const SidebarNav = (props) => {
     <Aux>
       {
         navItems.map(item => (
-          <Menu.Item key={item.to} name="home" as={NavLink} to={`/app/page/${item.to}`}>
+          <Menu.Item key={item.to} name={item.to} as={NavLink} to={`/app/page/${item.to}`}>
             <Icon name={item.icon} />
             {item.to === 'messages' &&
               <Label circular color="red" size="mini" horizontal>3</Label>
@@ -24,6 +24,10 @@ export const SidebarNav = (props) => {
           </Menu.Item>
         ))
       }
+      <Menu.Item key="logout" name="logout" onClick={props.handleLogOut}>
+        <Icon name="sign out" />
+        <span>Logout</span>
+      </Menu.Item>
     </Aux>
   );
 };
