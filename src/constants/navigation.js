@@ -71,7 +71,7 @@ export const ALL_NAV_ITEMS = [
     subPanel: 0,
   },
   {
-    icon: 'ns-individual-line',
+    icon: 'ns-individual',
     title: 'Individual',
     heading: 'Individual Account',
     to: 'account-details/individual',
@@ -80,7 +80,7 @@ export const ALL_NAV_ITEMS = [
     ...INVESTER_ACC_SUB_NAV_ITEMS,
   },
   {
-    icon: 'ns-ira-line',
+    icon: 'ns-ira',
     title: 'IRA',
     heading: 'IRA Account',
     to: 'account-details/ira',
@@ -89,7 +89,7 @@ export const ALL_NAV_ITEMS = [
     ...INVESTER_ACC_SUB_NAV_ITEMS,
   },
   {
-    icon: 'ns-entity-line',
+    icon: 'ns-entity',
     title: 'Entity',
     heading: 'Entity Account',
     to: 'account-details/entity',

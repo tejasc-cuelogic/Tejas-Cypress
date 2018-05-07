@@ -5,7 +5,8 @@ import NotificationPanel from './NotificationPanel';
 import uiStore from '../../stores/uiStore';
 import { SidebarNav, GetNavItem } from './SidebarNav';
 import Randavatar from './../../components/common/Randavatar';
-import Logo from '../../assets/images/nextseed_logo_white_green.svg';
+import LogoWhite from '../../assets/images/nextseed_logo_white_green.svg';
+import LogoColor from '../../assets/images/nextseed_logo_color.svg';
 import LogoSmall from '../../assets/images/ns-logo-small.svg';
 
 @inject('uiStore')
@@ -16,8 +17,22 @@ class SidebarLeftPush extends Component {
   render() {
     return (
       <Sidebar.Pushable>
-        <Sidebar as={Menu} animation="push" width="thin" visible={uiStore.layoutState.leftPanel} icon vertical inverted>
-          <Image src={uiStore.layoutState.leftPanel ? Logo : LogoSmall} alt="NextSeed.com" className="logo" />
+        <Sidebar
+          as={Menu}
+          animation="push"
+          width="thin"
+          visible={uiStore.layoutState.leftPanel}
+          icon
+          vertical
+          inverted={(this.props.UserInfo.roles[0] !== 'investor')}
+        >
+          <Image
+            src={((uiStore.layoutState.leftPanel) ?
+              (this.props.UserInfo.roles[0] !== 'investor' ? LogoWhite : LogoColor) :
+              LogoSmall)}
+            alt="NextSeed.com"
+            className="logo"
+          />
           <div className="user-picture">
             <Randavatar name={this.props.UserInfo.fullname} avatarKey={this.props.UserInfo.avatarKey} size="small" />
             <h2>{this.props.UserInfo.fullname}</h2>
