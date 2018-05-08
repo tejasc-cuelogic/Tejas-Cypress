@@ -33,17 +33,14 @@ const userListingSubheader = props => (
             <Button color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
           </Grid.Column>
           <Grid.Column floated="right" textAlign="right">
-            <a className="item notification" href="#">
+            <span className="item notification">
               <Icon className="ns-bell" />
               <span className="unread-count">3</span>
-            </a>
+            </span>
           </Grid.Column>
         </Grid.Row>
       </Grid>
     </div>
-    {/* <Transition.Group animation="slide down" duration="500">
-      {props.filters && */}
-    {/* <div className={props.filters ? 'demo' : 'demo collapsed'}> */}
     <div style={{ display: props.filters ? '' : 'none' }} className="search-filters">
       <Form inverted>
         <Grid stackable>
@@ -64,9 +61,6 @@ const userListingSubheader = props => (
         </Grid>
       </Form>
     </div>
-    {/* </div> */}
-    {/* }
-    </Transition.Group> */}
     <div className="filter-meta">
       <Grid stackable>
         <Grid.Row>
