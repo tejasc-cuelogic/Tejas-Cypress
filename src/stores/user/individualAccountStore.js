@@ -4,6 +4,7 @@ import mapValues from 'lodash/mapValues';
 import {
   IND_ADD_FUND,
   IND_BANK_ACC_SEARCH,
+  IND_BANK_LIST,
 } from '../../constants/account';
 
 class IndividualAccountStore {
@@ -16,6 +17,9 @@ class IndividualAccountStore {
   formBankSearch = {
     fields: { ...IND_BANK_ACC_SEARCH }, meta: { isValid: true, error: '' },
   };
+
+  @observable
+  bankListing = { ...IND_BANK_LIST };
 
   @action
   addFundChange = (e, { name, value }) => {

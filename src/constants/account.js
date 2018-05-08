@@ -180,6 +180,65 @@ export const IND_BANK_ACC_SEARCH = {
   },
 };
 
+export const IND_BANK_LIST = [
+  {
+    name: 'BB&T',
+    institutionID: 'ins_2',
+  },
+  {
+    name: 'Bank of America',
+    institutionID: 'ins_1',
+  },
+  {
+    name: 'Capital One',
+    institutionID: 'ins_9',
+  },
+  {
+    name: 'Charles Schwab',
+    institutionID: 'ins_11',
+  },
+  {
+    name: 'Chase',
+    institutionID: 'ins_3',
+  },
+  {
+    name: 'Citi',
+    institutionID: 'ins_5',
+  },
+  {
+    name: 'Fidelity',
+    institutionID: 'ins_12',
+  },
+  {
+    name: 'Navy Federal',
+    institutionID: 'ins_15',
+  },
+  {
+    name: 'PNC',
+    institutionID: 'ins_13',
+  },
+  {
+    name: 'SunTrust',
+    institutionID: 'ins_16',
+  },
+  {
+    name: 'TD Bank',
+    institutionID: 'ins_14',
+  },
+  {
+    name: 'US Bank',
+    institutionID: 'ins_6',
+  },
+  {
+    name: 'USAA',
+    institutionID: 'ins_7',
+  },
+  {
+    name: 'Wells Fargo',
+    institutionID: 'ins_4',
+  },
+];
+
 export const IRA_ACC_TYPES = {
   accountType: {
     value: 0,
@@ -441,3 +500,4 @@ export const ENTITY_ACCOUNT_CREATION = {
     label: 'EIN Verification',
   },
 };
+
