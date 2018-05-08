@@ -576,5 +576,16 @@ ol.progtrckr{
     }
 }
   
-
+.update-details{
+	h3.ui.header{
+		margin-bottom:@7px;
+	}
+	h5.ui.header{
+		font-size:@12px;
+		margin-top:@7px;
+	}
+	.ui.embed{
+		margin-bottom:@28px;
+	}
+}
 

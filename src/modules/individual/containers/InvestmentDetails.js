@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Modal, Header, Card, Grid, Statistic, Popup, Icon, Tab, Table, List } from 'semantic-ui-react';
+import { Modal, Header, Card, Grid, Statistic, Popup, Icon, Tab, Table, List, Embed } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import videoPoster from '../../../assets/images/683547643.webp';
 
 const panes = [
   {
@@ -123,7 +124,7 @@ const panes = [
       <Tab.Pane attached="bottom">
         <Grid padded="horizontally" relaxed="very">
           <Grid.Column width={4} className="update-list">
-            <h3>Recent</h3>
+            <Header as="h3">Recent</Header>
             <List relaxed="very">
               <List.Item as="a">Jan 23th 2018</List.Item>
               <List.Item as="a" className="active">Dec 17th 2017</List.Item>
@@ -137,9 +138,35 @@ const panes = [
               <List.Item as="a">Dec 17th 2017</List.Item>
             </List>
           </Grid.Column>
-          <Grid.Column width={2} only="computer" />
-          <Grid.Column width={12} computer={8}>
-            <h3>Details</h3>
+          <Grid.Column width={1} only="computer" />
+          <Grid.Column width={12} computer={10} className="update-details">
+            <Header as="h3">Featurette on Ben McPherson and BOH Pasta</Header>
+            <Header as="h6">Dec 17th 2017</Header>
+            <Embed
+              id="255991323"
+              placeholder={videoPoster}
+              source="vimeo"
+            />
+            <p>Check out our chef featurette video on Ben McPherson, Founder of Krisp Bird &
+              Batter. He was inspired by trips with his father to Italy and is bringing the
+              concept of BOH Pasta to the Bravery Chef Hall.
+            </p>
+            <p>“In Naples, Italy is where I found my passion for food” states Ben. “BOH Pasta
+              will use a simple technique with the best ingredients.”
+            </p>
+            <p>We are so excited to have him on our team!</p>
+            <p>Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui,
+              non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et
+              ligula. Ut molestie a, ultricies porta urna. Vestibulum commodo volutpat a, convallis
+              ac, laoreet enim. Phasellus fermentum in, dolor. Pellentesque facilisis.
+            </p>
+            <p>Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac
+              turpis velit, rhoncus eu, luctus et interdum adipiscing wisi. Aliquam erat ac ipsum.
+              Integer aliquam purus
+            </p>
+            <p>Quisque lorem tortor fringilla sed, vestibulum id, eleifend justo vel bibendum
+              sapien massa ac turpis faucibus
+            </p>
           </Grid.Column>
         </Grid>
       </Tab.Pane>),

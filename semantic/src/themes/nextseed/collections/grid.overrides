@@ -10,7 +10,9 @@
     }
 }
 
-.ui.grid>.column.update-list{
-    padding-top:@28px;
-    padding-bottom:@28px;
+.ui.grid>.column{
+    &.update-list, &.update-details{
+        padding-top:@28px;
+        padding-bottom:@28px;
+    }
 }
