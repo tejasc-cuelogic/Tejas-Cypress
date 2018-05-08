@@ -29,22 +29,17 @@
 }
 .secondary-menu{
 	.ui.horizontal.celled.list{
-		.list>.item, >.item{
-            padding:0;
-            border:none;
-            a:not(.ui){
-                font-size:@14px;
-                font-weight:900;
-                padding:@16px @20px !important;
-                border-left:@tertiary-text 1px solid;
-                color:@white;
-                display:block;
-                &:hover, &:focus, &.active{
-                    color:@link-color !important;
-                    background-color:@lighten-bg-color;
-                }
+        a.item{
+            font-size:@14px;
+            font-weight:900;
+            padding:@16px @20px !important;
+            border-left:@tertiary-text 1px solid;
+            color:@white;
+            &:hover, &:focus, &.active{
+                color:@link-color !important;
+                background-color:@lighten-bg-color;
             }
-		}
+        }
 	}
 }
 
