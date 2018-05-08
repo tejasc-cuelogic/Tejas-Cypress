@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Grid, Button, Icon } from 'semantic-ui-react';
+import { Grid, Button, Icon, Responsive } from 'semantic-ui-react';
 import { GetNavMeta } from '../../theme/layout/SidebarNav';
 import SecondaryMenu from '../../theme/layout/SecondaryMenu';
 
 class PrivateHOC extends Component {
   render() {
-    const pathInfo = this.props.location.pathname.split('/app/page/');
+    const pathInfo = this.props.location.pathname.split('/app/');
     const pageMeta = GetNavMeta(pathInfo[1]);
     return (
       <Aux>
@@ -27,14 +27,19 @@ class PrivateHOC extends Component {
               </Grid.Row>
             </Grid>
           </div>
+          {this.props.StickyNotification &&
+            <div className="top-cta-section">
+              <Responsive {...Responsive.onlyComputer}>
+                {this.props.StickyNotification}
+              </Responsive>
+            </div>
+          }
           {pageMeta.subPanel === 1 &&
             <SecondaryMenu active={pathInfo[pathInfo.length - 1]} parent={`page/${pageMeta.to}`} navItems={pageMeta.subNavigations} />
           }
         </div>
         <div className="content-spacer">
-          <Grid columns={1} stackable>
-            {this.props.children}
-          </Grid>
+          {this.props.children}
         </div>
       </Aux>
     );
