@@ -16,6 +16,7 @@ import Settings from './../modules/settings/containers/Settings';
 import CaseStudies from './caseStudies/containers/CaseStudies';
 import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
 import Banking from './banking/containers/Banking';
+import Base from './basemodule/Base';
 import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './users/containers/Users';
@@ -207,4 +208,10 @@ export const privateRoutes = [
     component: Education,
     auth: InvestorAuthorization,
   },
+  {
+    path: '/app/page/:pageId',
+    component: Base,
+    auth: UserAuthorization,
+  },
 ];
+

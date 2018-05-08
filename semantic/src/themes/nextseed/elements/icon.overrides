@@ -1098,6 +1098,9 @@ i.icon[class*="ns-"]{
 .ns-close-light:before{
     content:@ns-close-light; 
 }
+.ns-close-light:before{
+    content:@ns-close-light; 
+}
 .ns-coments-info:before{
     content:@ns-coments-info;
 }
@@ -1131,6 +1134,9 @@ i.icon[class*="ns-"]{
 .ns-entity-line:before{
     content:@ns-entity-line; 
 }
+.ns-entity-line:before{
+    content:@ns-entity-line; 
+}
 .ns-envelope:before{
     content:@ns-envelope;
 }
@@ -1158,6 +1164,9 @@ i.icon[class*="ns-"]{
 .ns-individual-line:before{
     content:@ns-individual-line; 
 }
+.ns-individual-line:before{
+    content:@ns-individual-line; 
+}
 .ns-info-circle:before{
     content:@ns-info-circle;
 }
@@ -1166,6 +1175,9 @@ i.icon[class*="ns-"]{
 }
 .ns-ira:before{
     content:@ns-ira;
+}
+.ns-ira-line:before{
+    content:@ns-ira-line; 
 }
 .ns-ira-line:before{
     content:@ns-ira-line; 
