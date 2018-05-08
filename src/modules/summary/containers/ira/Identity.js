@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FileUploaderLarge } from '../../../../components/form/FormElements';
+import { FileUploaderLarge } from '../../../../theme/form/FormElements';
 
 @inject('iraAccountStore')
 @observer

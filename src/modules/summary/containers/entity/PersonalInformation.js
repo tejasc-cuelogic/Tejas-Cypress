@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Header, Form, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-import FormInput from '../../../../components/form/FormInput';
-import { FileUploader } from '../../../../components/form/FormElements';
+import { FormInput, FileUploader } from '../../../../theme/form/FormElements';
 
 @inject('userStore', 'entityAccountStore')
 @observer

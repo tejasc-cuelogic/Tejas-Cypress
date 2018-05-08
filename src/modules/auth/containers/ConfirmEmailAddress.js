@@ -6,7 +6,7 @@ import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 import validationActions from '../../../actions/validation';
 import authActions from '../../../actions/auth';
 import FieldError from '../../../components/common/FieldError';
-import { FormInput } from '../../../components/form/FormElements';
+import { FormInput } from '../../../theme/form/FormElements';
 
 @inject('authStore', 'uiStore')
 @observer

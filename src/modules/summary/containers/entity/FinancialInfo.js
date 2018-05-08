@@ -3,7 +3,7 @@ import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import validationActions from '../../../../actions/validation';
-import { FormRadioGroup, FormDatePicker } from '../../../../components/form/FormElements';
+import { FormRadioGroup, FormDatePicker } from '../../../../theme/form/FormElements';
 
 @inject('accountStore', 'entityAccountStore')
 @observer
