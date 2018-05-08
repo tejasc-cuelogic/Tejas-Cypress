@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 import Chips from 'react-chips/lib/Chips';
 
-import validationActions from '../../../../actions/validation';
 import FieldError from './../../../../components/common/FieldError';
 import { FormInput, FormRadioGroup } from './../../../../components/form/FormElements';
 
@@ -41,8 +40,6 @@ export default class FilerInformation extends React.Component {
   handleCheckboxChange = (e, { name }) => {
     this.props.businessStore.togglefilerCheckbox(name);
   }
-
-  handleOnBlur = e => validationActions.validateFilerInfoField(e.target.name)
 
   render() {
     const { formFilerInfo, filerInfoChange } = this.props.businessStore;
@@ -133,10 +130,10 @@ export default class FilerInformation extends React.Component {
                 onChange={this.handleNotificationEmailChange}
                 createChipKeys={[9, 13, 32, 188]}
               />
+              {formFilerInfo.fields.notificationEmail.error &&
+                <FieldError error={formFilerInfo.fields.notificationEmail.error} />
+              }
             </div>
-            {formFilerInfo.fields.notificationEmail.error &&
-              <FieldError error={formFilerInfo.fields.notificationEmail.error} />
-            }
           </Card>
         </Card.Group>
       </div>

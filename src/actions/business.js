@@ -38,7 +38,7 @@ export class Business {
   addPersonalSignature = () => {
     const personalSignature = { ...PERSONAL_SIGNATURE };
     personalSignature.id = shortid.generate();
-    const signaturePersons = [...businessStore.signature.signaturePersons];
+    const signaturePersons = [...businessStore.formSignatureInfo.fields.signaturePersons];
     signaturePersons.push(personalSignature);
     businessStore.setNewPersonalSignature(signaturePersons);
     return personalSignature.id;
@@ -97,10 +97,10 @@ export class Business {
       filingId,
       xmlSubmissionId,
       formFilerInfo,
-      issuerInformation,
-      offeringInformation,
-      annualReportRequirements,
-      signature,
+      formIssuerInfo,
+      formOfferingInfo,
+      formAnnualInfo,
+      formSignatureInfo,
       documentList,
     } = businessStore;
 
@@ -124,7 +124,7 @@ export class Business {
         mutation: issuerInformationMutation,
         variables: {
           ...ids,
-          issuerInformation: this.getFormattedInformation(issuerInformation),
+          issuerInformation: this.getFormattedInformation(formIssuerInfo.fields),
         },
       };
     } else if (action === 'offeringInformation') {
@@ -132,7 +132,7 @@ export class Business {
         mutation: offeringInformationMutation,
         variables: {
           ...ids,
-          offeringInformation: this.getFormattedInformation(offeringInformation),
+          offeringInformation: this.getFormattedInformation(formOfferingInfo.fields),
         },
       };
     } else if (action === 'annualReport') {
@@ -141,7 +141,7 @@ export class Business {
         variables: {
           ...ids,
           annualReportDisclosureRequirements:
-          this.getFormattedInformation(annualReportRequirements),
+          this.getFormattedInformation(formAnnualInfo.fields),
         },
       };
     } else if (action === 'signature') {
@@ -149,7 +149,7 @@ export class Business {
         mutation: signatureMutation,
         variables: {
           ...ids,
-          signature: this.getFormattedSignature(signature),
+          signature: this.getFormattedSignature(formSignatureInfo.fields),
         },
       };
     } else if (action === 'documentList') {
@@ -727,18 +727,16 @@ export class Business {
     const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
     const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
     
-    if (data) {
+    if (data) {      
       businessStore.setBusinessId(data.businessId);
       businessStore.setFilingId(data.filingId);
       businessStore.setXmlSubmissionStatus(data.xmlSubmissionStatus);
-      // businessStore.setOfferingUrl(payload.offeringUrl);
       _.map(data.payload.filerInformation, (value, key) => {
         if (confirmationFlags.includes(key)) {
-          businessStore.setFilerInfo(key, (value || false))
-          // businessStore.setFilerInfo(key, (value || ''))
+          businessStore.setFilerInfo(key, (value || false));          
         }
         else {
-          businessStore.setFilerInfo(key, (value || ''))
+          businessStore.setFilerInfo(key, (value || ''));
         }
       });
       _.map(data.payload.issuerInformation, (value, key) => {
@@ -779,7 +777,7 @@ export class Business {
         })
       }
       
-      if (businessStore.signature.signaturePersons.length === 0) {
+      if (businessStore.formSignatureInfo.fields.signaturePersons.length === 0) {
         this.addPersonalSignature();
       }
       _.map(data.payload.documentList, document => businessStore.toggleRequiredFiles(document.name));
@@ -800,27 +798,27 @@ export class Business {
     const newIssuer = validationActions.validateXmlFormData(issuerInformation);
     const errors = this.newValidationErrors(newIssuer);
     businessStore.setIssuer(newIssuer);
-    if (setError) {
-      businessStore.setXmlError(errors);
-    }
+    // if (setError) {      
+    //   businessStore.setXmlError(errors);      
+    // }
   }
 
   validateOfferingInfo = (offeringInformation, setError = true) => {
     const newOffering = validationActions.validateXmlFormData(offeringInformation);
     const errors = this.newValidationErrors(newOffering);
     businessStore.setOffering(newOffering);
-    if (setError) {
-      businessStore.setXmlError(errors);
-    }
+    // if (setError) {
+    //   businessStore.setXmlError(errors);
+    // }
   }
 
   validateAnnualReportInfo = (annualReportRequirements, setError = true) => {
     const newAnnualReport = validationActions.validateXmlFormData(annualReportRequirements);
     const errors = this.newValidationErrors(newAnnualReport);
     businessStore.setAnnualReport(newAnnualReport);
-    if (setError) {
-      businessStore.setXmlError(errors);
-    }
+    // if (setError) {
+    //   businessStore.setXmlError(errors);
+    // }
   }
 
   validateSignatureInfo = (signature, setError = true) => {
@@ -834,9 +832,9 @@ export class Business {
     const errors = this.newValidationErrors(newSignature);
     newSignature['signaturePersons'] = signature.signaturePersons;
     businessStore.setSignature(newSignature);
-    if (setError) {
-      businessStore.setXmlError(errors);
-    }
+    // if (setError) {
+    //   businessStore.setXmlError(errors);
+    // }
     this.validatePersonSign(signature.signaturePersons, setError);
   }
 
@@ -853,9 +851,9 @@ export class Business {
       }));
       
       const personErrors = this.newValidationErrors(personSignatureData, true);
-      if (setError) {
-        businessStore.setXmlError(personErrors);
-      }
+      // if (setError) {
+      //   businessStore.setXmlError(personErrors);
+      // }
       personSignatureData[index].id = field.id;
     });
     
@@ -900,33 +898,36 @@ export class Business {
 
   checkandUpdateValidationStepsStaus = () => {    
     this.validateFilerInfo(businessStore.formFilerInfo.fields, false);
-    this.validateIssuerInfo(businessStore.issuerInformation, false);
-    this.validateOfferingInfo(businessStore.offeringInformation, false);
-    this.validateAnnualReportInfo(businessStore.annualReportRequirements, false);
-    this.validateSignatureInfo(businessStore.signature, false);
+    this.validateIssuerInfo(businessStore.formIssuerInfo.fields, false);
+    this.validateOfferingInfo(businessStore.formOfferingInfo.fields, false);
+    this.validateAnnualReportInfo(businessStore.formAnnualInfo.fields, false);
+    this.validateSignatureInfo(businessStore.formSignatureInfo.fields, false);
     const errorMessage = this.validateDocumentList(businessStore.documentList, false);      
 
-    if (businessStore.canSubmitFilerInfoXmlForm) {
-
+    if (businessStore.canSubmitFilerInfoXmlForm) {      
       businessStore.setXmlSubStepsStatus('filer', true);
       businessStore.updateStatusFlag('formFilerInfo', 'meta', true);
     } 
     
-    if (businessStore.canSubmitIssuerInfoXmlForm) {
+    if (businessStore.canSubmitIssuerInfoXmlForm) {      
       businessStore.setXmlSubStepsStatus('issuer', true);
+      businessStore.updateStatusFlag('formIssuerInfo', 'meta', true);
     } 
     
     if (businessStore.canSubmitOfferingInfoXmlForm) {
       businessStore.setXmlSubStepsStatus('offering', true);
+      businessStore.updateStatusFlag('formOfferingInfo', 'meta', true);
     } 
     
     if (businessStore.canSubmitAnnualReportXmlForm) {
       businessStore.setXmlSubStepsStatus('annual', true);
+      businessStore.updateStatusFlag('formAnnualInfo', 'meta', true);
     }
 
     if (businessStore.canSubmitSigntureForm ||
       _.includes(businessStore.canSubmitSignaturePersonsForm, true)) {
         businessStore.setXmlSubStepsStatus('signature', true);
+        businessStore.updateStatusFlag('formSignatureInfo', 'meta', true);
     }
     
     if (!errorMessage) {

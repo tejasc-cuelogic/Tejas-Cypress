@@ -1,13 +1,11 @@
 import React from 'react';
 import { Form, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import DatePicker from 'react-datepicker';
-import moment from 'moment';
 import { withRouter } from 'react-router-dom'; // Redirect
+import moment from 'moment';
 
 import { US_STATES, LEGAL_FORM_TYPES } from '../../../../constants/business';
-import validationActions from '../../../../actions/validation';
-
+import { FormInput, FormSelect, FormDatePicker } from './../../../../components/form/FormElements';
 
 @inject('businessStore')
 @withRouter
@@ -16,207 +14,137 @@ export default class IssuerInformation extends React.Component {
   componentWillUnmount() {
     this.props.businessStore.setXmlError();
   }
-  getOtherDescriptionClass = () => this.issuerInformation.legalStatusForm.value !== 'Other'
 
-  issuerInformation = this.props.businessStore.issuerInformation;
+  getOtherDescriptionClass = () => this.props.businessStore.formIssuerInfo.fields.legalStatusForm.value !== 'Other'
 
-  handleChange = (e, { name, value }) => this.props.businessStore.setIssuerInfo(name, value)
-
-  handleOnBlur = e => validationActions.validateIssuerInfoField(e.target.name)
-
-  /* eslint-disable no-underscore-dangle */
-  handleDateChange = (date) => {
-    validationActions.validateIssuerInfoField('dateIncorporation', date);
-  }
-
-  handleSelectChange = (e, { dataidentifier, name, value }) => {
-    this.props.businessStore.setCountry(dataidentifier, name, value);
-  }
-
-  handleBusinessCancel = () => {
-    this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+  handleSelectChange = (e, {
+    dataidentifier,
+    dataname,
+    name,
+    value,
+  }) => {
+    this.props.businessStore.setCountry(dataidentifier, dataname, name, value);
   }
 
   render() {
-    const { issuerInformation } = this.props.businessStore;
+    const { formIssuerInfo, issuerInfoChange, verifyDateIncorporation } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
-          <Form.Input
-            placeholder="Name of Issuer"
-            label="Name of Issuer"
+          <FormInput
+            type="text"
+            fielddata={formIssuerInfo.fields.nameOfIssuer}
             name="nameOfIssuer"
-            value={issuerInformation.nameOfIssuer.value}
-            error={!!issuerInformation.nameOfIssuer.error}
-            onChange={this.handleChange}
-            onBlur={this.handleOnBlur}
+            changed={issuerInfoChange}
           />
           <h4>Legal Status of Issuer</h4>
           <Form.Group widths="equal">
-            <Form.Select
-              fluid
-              search
-              placeholder="Form"
-              label="Form"
+            <FormSelect
+              fielddata={formIssuerInfo.fields.legalStatusForm}
               name="legalStatusForm"
-              value={issuerInformation.legalStatusForm.value}
-              error={!!issuerInformation.legalStatusForm.error}
-              onChange={this.handleChange}
+              changed={issuerInfoChange}
               options={LEGAL_FORM_TYPES}
             />
-            <Form.Input
-              placeholder="Other Description"
-              label="Other Description"
+            <FormInput
+              type="text"
+              fielddata={formIssuerInfo.fields.legalStatusOtherDesc}
               name="legalStatusOtherDesc"
+              changed={issuerInfoChange}
               disabled={this.getOtherDescriptionClass()}
-              value={issuerInformation.legalStatusOtherDesc.value}
-              error={!!issuerInformation.legalStatusOtherDesc.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
             />
-            <Form.Select
-              fluid
-              search
-              placeholder="Jurisdiction of Incorporation/Organization"
-              label="Jurisdiction of Incorporation/Organization"
+            <FormSelect
+              fielddata={formIssuerInfo.fields.jurisdictionOrganization}
               name="jurisdictionOrganization"
-              dataidentifier="issuerInformation"
+              dataidentifier="formIssuerInfo"
+              dataname="fields"
+              changed={this.handleSelectChange}
               options={US_STATES}
-              value={issuerInformation.jurisdictionOrganization.value}
-              error={!!issuerInformation.jurisdictionOrganization.error}
-              onChange={this.handleSelectChange}
             />
-            <div className="nine wide field">
-              { /* eslint-disable jsx-a11y/label-has-for */ }
-              <label>Date Incorporation</label>
-              <DatePicker
-                showMonthDropdown
-                showYearDropdown
-                placeholderText="Date of Incorporation/Organization"
-                dateFormat="MM-DD-YYYY"
-                maxDate={moment()}
-                selected={issuerInformation.dateIncorporation.value}
-                onChange={this.handleDateChange}
-              />
-            </div>
+            <FormDatePicker
+              type="text"
+              name="dateIncorporation"
+              maxDate={moment()}
+              fielddata={formIssuerInfo.fields.dateIncorporation}
+              selected={formIssuerInfo.fields.dateIncorporation.value}
+              changed={verifyDateIncorporation}
+            />
           </Form.Group>
         </Card>
         <Card fluid className="form-card">
           <h4>Physical Address of issuer</h4>
-          <Form.Group>
-            <Form.Input
-              placeholder="Address Line 1"
-              label="Address Line 1"
+          <Form.Group widths="equal">
+            <FormInput
+              type="text"
+              fielddata={formIssuerInfo.fields.street1}
               name="street1"
-              value={issuerInformation.street1.value}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              error={!!issuerInformation.street1.error}
-              width={8}
+              changed={issuerInfoChange}
             />
-            <Form.Input
-              placeholder="Address Line 2"
-              label="Address Line 2"
+            <FormInput
+              type="text"
+              fielddata={formIssuerInfo.fields.street2}
               name="street2"
-              value={issuerInformation.street2.value}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              error={!!issuerInformation.street2.error}
-              width={8}
+              changed={issuerInfoChange}
             />
           </Form.Group>
-          <Form.Group>
-            <Form.Input
-              placeholder="City"
-              label="City"
+          <Form.Group widths="equal">
+            <FormInput
+              type="text"
+              fielddata={formIssuerInfo.fields.city}
               name="city"
-              value={issuerInformation.city.value}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              error={!!issuerInformation.city.error}
-              width={8}
+              changed={issuerInfoChange}
             />
-            <Form.Select
-              fluid
-              search
-              placeholder="State/Country"
-              label="State/Country"
+            <FormSelect
+              fielddata={formIssuerInfo.fields.stateOrCountry}
               name="stateOrCountry"
-              dataidentifier="issuerInformation"
+              dataidentifier="formIssuerInfo"
+              dataname="fields"
+              changed={this.handleSelectChange}
               options={US_STATES}
-              value={issuerInformation.stateOrCountry.value}
-              error={!!issuerInformation.stateOrCountry.error}
-              onChange={this.handleSelectChange}
-              width={8}
             />
           </Form.Group>
-          <Form.Group>
-            <Form.Input
-              placeholder="Zip"
-              label="Mailing Zip/ Zip Code"
+          <Form.Group widths="equal">
+            <FormInput
+              type="text"
+              fielddata={formIssuerInfo.fields.zipCode}
               name="zipCode"
-              value={issuerInformation.zipCode.value}
-              error={!!issuerInformation.zipCode.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              width={8}
+              changed={issuerInfoChange}
             />
-            <Form.Input
-              placeholder="Website of Issuer"
-              label="Website of Issuer"
+            <FormInput
+              type="text"
+              fielddata={formIssuerInfo.fields.issuerWebsite}
               name="issuerWebsite"
-              value={issuerInformation.issuerWebsite.value}
-              error={!!issuerInformation.issuerWebsite.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              width={8}
+              changed={issuerInfoChange}
             />
           </Form.Group>
         </Card>
         <Card fluid className="form-card">
           <h4>Intermediary through which the Offering will be Conducted</h4>
-          <Form.Group>
-            <Form.Input
-              placeholder="CIK Number of Intermediary"
-              label="CIK"
+          <Form.Group widths="equal">
+            <FormInput
+              type="text"
+              fielddata={formIssuerInfo.fields.commissionCik}
               name="commissionCik"
-              value={issuerInformation.commissionCik.value}
-              error={!!issuerInformation.commissionCik.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              width={8}
+              changed={issuerInfoChange}
             />
-            <Form.Input
-              placeholder="Company Name"
-              label="Company Name"
+            <FormInput
+              type="text"
+              fielddata={formIssuerInfo.fields.companyName}
               name="companyName"
-              value={issuerInformation.companyName.value}
-              error={!!issuerInformation.companyName.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              width={8}
+              changed={issuerInfoChange}
             />
           </Form.Group>
-          <Form.Group>
-            <Form.Input
-              placeholder="Commission File Numbe"
-              label="Commission File Numbe"
+          <Form.Group widths="equal">
+            <FormInput
+              type="text"
+              fielddata={formIssuerInfo.fields.commissionFileNumber}
               name="commissionFileNumber"
-              value={issuerInformation.commissionFileNumber.value}
-              error={!!issuerInformation.companyName.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              width={8}
+              changed={issuerInfoChange}
             />
-            <Form.Input
-              placeholder="CRD Number"
-              label="CRD Number"
+            <FormInput
+              type="text"
+              fielddata={formIssuerInfo.fields.crdNumber}
               name="crdNumber"
-              value={issuerInformation.crdNumber.value}
-              error={!!issuerInformation.crdNumber.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-              width={8}
+              changed={issuerInfoChange}
             />
           </Form.Group>
         </Card>

@@ -112,7 +112,7 @@ export default class XmlForm extends React.Component {
 
   handleFilerInformationSubmit = (currentStepName, nextTabName) => {
     const { formFilerInfo } = this.props.businessStore;
-    businessActions.validateFilerInfo(formFilerInfo.fields);
+    businessActions.validateFilerInfo(formFilerInfo.fields, false);
 
     if (this.props.businessStore.canSubmitFilerInfoXmlForm) {
       this.addAndRemoveErrorClass(currentStepName, '');
@@ -134,8 +134,8 @@ export default class XmlForm extends React.Component {
   };
 
   handleIssuerInformationSubmit = (currentStepName, nextTabName) => {
-    const { issuerInformation } = this.props.businessStore;
-    businessActions.validateIssuerInfo(issuerInformation);
+    const { formIssuerInfo } = this.props.businessStore;
+    businessActions.validateIssuerInfo(formIssuerInfo.fields, false);
 
     if (this.props.businessStore.canSubmitIssuerInfoXmlForm) {
       this.addAndRemoveErrorClass(currentStepName, '');
@@ -157,8 +157,8 @@ export default class XmlForm extends React.Component {
   }
 
   handleOfferingInformationSubmit = (currentStepName, nextTabName) => {
-    const { offeringInformation } = this.props.businessStore;
-    businessActions.validateOfferingInfo(offeringInformation);
+    const { formOfferingInfo } = this.props.businessStore;
+    businessActions.validateOfferingInfo(formOfferingInfo.fields, false);
 
     if (this.props.businessStore.canSubmitOfferingInfoXmlForm) {
       this.addAndRemoveErrorClass(currentStepName, '');
@@ -180,8 +180,8 @@ export default class XmlForm extends React.Component {
   }
 
   handleAnnualSubmit = (currentStepName, nextTabName) => {
-    const { annualReportRequirements } = this.props.businessStore;
-    businessActions.validateAnnualReportInfo(annualReportRequirements);
+    const { formAnnualInfo } = this.props.businessStore;
+    businessActions.validateAnnualReportInfo(formAnnualInfo.fields, false);
 
     if (this.props.businessStore.canSubmitAnnualReportXmlForm) {
       this.addAndRemoveErrorClass(currentStepName, '');
@@ -203,8 +203,8 @@ export default class XmlForm extends React.Component {
   }
 
   handleSignatureSubmit = (currentStepName, nextTabName) => {
-    const { signature } = this.props.businessStore;
-    businessActions.validateSignatureInfo(signature);
+    const { formSignatureInfo } = this.props.businessStore;
+    businessActions.validateSignatureInfo(formSignatureInfo.fields);
 
     if (this.props.businessStore.canSubmitSigntureForm &&
       !_.includes(this.props.businessStore.canSubmitSignaturePersonsForm, false)) {
@@ -306,6 +306,23 @@ export default class XmlForm extends React.Component {
       });
   };
 
+  checkStepWiseStatus = (xmlActiveTabName) => {
+    let saveButtonStatus = false;
+    if (xmlActiveTabName === 'filer') {
+      saveButtonStatus = !this.props.businessStore.formFilerInfo.meta.isValid;
+    } else if (xmlActiveTabName === 'issuer') {
+      saveButtonStatus = !this.props.businessStore.formFilerInfo.meta.isValid;
+    } else if (xmlActiveTabName === 'offering') {
+      saveButtonStatus = !this.props.businessStore.formOfferingInfo.meta.isValid;
+    } else if (xmlActiveTabName === 'annual') {
+      saveButtonStatus = !this.props.businessStore.formAnnualInfo.meta.isValid;
+    } else if (xmlActiveTabName === 'signature') {
+      saveButtonStatus = !this.props.businessStore.formSignatureInfo.meta.isValid;
+    }
+
+    return saveButtonStatus;
+  };
+
   render() {
     const {
       xmlErrors,
@@ -314,10 +331,6 @@ export default class XmlForm extends React.Component {
       xmlSubmissionId,
       xmlSubmissionStatus,
     } = this.props.businessStore;
-    let saveButtonStatus = '';
-    if (xmlActiveTabName === 'filer') {
-      saveButtonStatus = !this.props.businessStore.formFilerInfo.meta.isValid;
-    }
     if (this.props.uiStore.inProgress) {
       return (
         <div>
@@ -362,9 +375,7 @@ export default class XmlForm extends React.Component {
                       color="green"
                       size="large"
                       floated="right"
-                      disabled={
-                        saveButtonStatus
-                      }
+                      disabled={this.checkStepWiseStatus(xmlActiveTabName)}
                       onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
                     >
                       Save

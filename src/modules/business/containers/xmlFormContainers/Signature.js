@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom'; // Redirect
 import PersonalSignature from '../../components/PersonalSignature';
 import businessActions from '../../../../actions/business';
 import validationActions from '../../../../actions/validation';
+import { FormInput } from './../../../../components/form/FormElements';
 
 @inject('businessStore')
 @withRouter
@@ -36,13 +37,31 @@ export default class Signature extends React.Component {
   }
 
   render() {
-    const { signature } = this.props.businessStore;
+    const { formSignatureInfo, signatureInfoChange } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
           <Header as="h3" textAlign="left">Issuer Signature</Header>
           <Form.Group widths="3">
-            <Form.Input
+            <FormInput
+              type="text"
+              fielddata={formSignatureInfo.fields.issuer}
+              name="issuer"
+              changed={signatureInfoChange}
+            />
+            <FormInput
+              type="text"
+              fielddata={formSignatureInfo.fields.issuerSignature}
+              name="issuerSignature"
+              changed={signatureInfoChange}
+            />
+            <FormInput
+              type="text"
+              fielddata={formSignatureInfo.fields.issuerTitle}
+              name="issuerTitle"
+              changed={signatureInfoChange}
+            />
+            {/* <Form.Input
               label={signature.issuer.label}
               name={signature.issuer.key}
               value={signature.issuer.value}
@@ -65,13 +84,13 @@ export default class Signature extends React.Component {
               error={!!signature.issuerTitle.error}
               onChange={this.handleChange}
               onBlur={this.handleOnBlur}
-            />
+            /> */}
           </Form.Group>
         </Card>
         <Card fluid className="form-card">
           <Header as="h3" textAlign="left">Personal Signatures</Header>
           <PersonalSignature
-            signaturePersons={signature.signaturePersons}
+            signaturePersons={formSignatureInfo.fields.signaturePersons}
             handleChange={this.handlePersonalSignatureChange}
             handleAddClick={this.handleAdd}
             handleDeleteClick={this.handleDelete}

@@ -73,8 +73,8 @@ export class Validation {
    */
   validateIssuerInfoField = (field) => {
     const { errors } = validationService.validate(
-      businessStore.issuerInformation[field],
-      businessStore.issuerInformation[CONDITIONAL_REQUIRE[field]],
+      businessStore.formIssuerInfo.fields[field],
+      businessStore.formIssuerInfo.fields[CONDITIONAL_REQUIRE[field]],
     );
     this.formValidationErrors(errors, field);
     businessStore.setIssuerError(field, errors && errors[field][0]);
