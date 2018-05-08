@@ -47,7 +47,6 @@ class UserListing extends Component {
                 <Visibility
                   as="tbody"
                   continuous
-                  onBottomVisible={() => console.log('This will call API')}
                 >
                   {_.map(this.props.listData, user => (
                     <Table.Row className={(user.accountStatus === 'locked') ? 'locked' : ''} key={user.id}>
@@ -88,7 +87,6 @@ class UserListing extends Component {
                   {this.statusRow(this.props)}
                 </Visibility>
               </Table>
-              { /* <button onClick={this.props.loadMore}>loadMore</button> */ }
             </div>
           </Card>
         </div>
