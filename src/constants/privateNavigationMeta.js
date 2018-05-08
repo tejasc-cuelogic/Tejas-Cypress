@@ -110,6 +110,20 @@ export const ALL_NAV_ITEMS = [
     accessibleTo: ['ira', 'individual', 'entity', 'investor'],
   },
   {
+    icon: 'gift',
+    title: 'Offering',
+    to: 'offering',
+    accessibleTo: ['bowner'],
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Overview', to: 'overview' },
+      { title: 'Offering', to: 'Overview' },
+      { title: 'Investors', to: 'investors' },
+      { title: 'Comments', to: 'comments' },
+      { title: 'Updates', to: 'updates' },
+    ],
+  },
+  {
     icon: 'ns-article',
     title: 'Education',
     to: 'education',
