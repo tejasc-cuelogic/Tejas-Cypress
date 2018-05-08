@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import GridListing from '../../../theme/ui/GridListing';
+import GridListing from '../../../../theme/ui/GridListing';
 import CStudyDetails from '../components/CStudyDetails';
 
 class CaseStudies extends Component {
