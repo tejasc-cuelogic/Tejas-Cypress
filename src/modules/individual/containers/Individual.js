@@ -43,8 +43,8 @@ export default class Individual extends Component {
           <Route exact path="/app/individual" component={Portfolio} />
           { /* eslint-disable arrow-body-style */ }
           {routes.map((route) => {
-              return <Route key={route.path} path={route.path} component={route.component} />;
-              })
+            return <Route key={route.path} path={route.path} component={route.component} />;
+          })
           }
         </Switch>
       </div>
