@@ -66,7 +66,6 @@ class Dashboard extends Component {
             </div> */}
           </Responsive>
         </div>
-        <Divider section hidden />
         <div className="content-spacer">
           <Header as="h3">Welcome to NextSeed!</Header>
           <Grid stackable>

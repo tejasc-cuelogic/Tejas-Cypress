@@ -257,6 +257,7 @@ div.login-form {
 
 .top-cta-section{
 	height:104px;
+	margin-bottom:@50px;
 	background:@tertiary-text;
 	.sticky-notification{
 		position:relative;
