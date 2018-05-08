@@ -14,7 +14,6 @@ build
 npm-debug.log
 .idea
 .eslintrc
-
 src/assets/app.css
 
 # semantic ui based theme (less)

@@ -1,58 +1,154 @@
 import React, { Component } from 'react';
-import { Modal, Header, Card, Grid, Statistic, Popup, Icon, Tab } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Modal, Header, Card, Grid, Statistic, Popup, Icon, Tab, Table, List } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 const panes = [
   {
-    menuItem: 'Tab 1',
+    menuItem: 'Transactions',
     render: () => (
       <Tab.Pane attached="bottom">
-        <h1>Check out our chef featurette video on Ben McPherson, Founder of Krisp Bird & Batter.
-        He was inspired by trips with his father to Italy and is bringing the concept of BOH
-          to the Bravery Chef Hall.In Naples, Italy is where I found my passion for food” states
-          “BOH Pasta will use a simple technique with the best ingredients.We are so excited to
-          him on our team!Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a
-          dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur
-          Ut molestie a, ultricies porta urna. Vestibulum commodo volutpat a, convallis ac,
-          Phasellus fermentum in, dolor. Pellentesque facilisis.Nulla imperdiet sit amet magna.
-          dapibus, mauris nec malesuada fames ac turpis velit, rhoncus eu, luctus et interdum
-          Aliquam erat ac ipsum. Integer aliquam purusQuisque lorem tortor fringilla sed,
-          eleifend justo vel bibendum sapien massa ac turpis faucibus
-          He was inspired by trips with his father to Italy and is bringing the concept of BOH
-          to the Bravery Chef Hall.In Naples, Italy is where I found my passion for food” states
-          “BOH Pasta will use a simple technique with the best ingredients.We are so excited to
-          him on our team!Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a
-          dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur
-          Ut molestie a, ultricies porta urna. Vestibulum commodo volutpat a, convallis ac,
-          Phasellus fermentum in, dolor. Pellentesque facilisis.Nulla imperdiet sit amet magna.
-          dapibus, mauris nec malesuada fames ac turpis velit, rhoncus eu, luctus et interdum
-          Aliquam erat ac ipsum. Integer aliquam purusQuisque lorem tortor fringilla sed,
-          eleifend justo vel bibendum sapien massa ac turpis faucibus
-          He was inspired by trips with his father to Italy and is bringing the concept of BOH
-          to the Bravery Chef Hall.In Naples, Italy is where I found my passion for food” states
-          “BOH Pasta will use a simple technique with the best ingredients.We are so excited to
-          him on our team!Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a
-          dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur
-          Ut molestie a, ultricies porta urna. Vestibulum commodo volutpat a, convallis ac,
-          Phasellus fermentum in, dolor. Pellentesque facilisis.Nulla imperdiet sit amet magna.
-          dapibus, mauris nec malesuada fames ac turpis velit, rhoncus eu, luctus et interdum
-          Aliquam erat ac ipsum. Integer aliquam purusQuisque lorem tortor fringilla sed,
-          eleifend justo vel bibendum sapien massa ac turpis faucibus
-          He was inspired by trips with his father to Italy and is bringing the concept of BOH
-          to the Bravery Chef Hall.In Naples, Italy is where I found my passion for food” states
-          “BOH Pasta will use a simple technique with the best ingredients.We are so excited to
-          him on our team!Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a
-          dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur
-          Ut molestie a, ultricies porta urna. Vestibulum commodo volutpat a, convallis ac,
-          Phasellus fermentum in, dolor. Pellentesque facilisis.Nulla imperdiet sit amet magna.
-          dapibus, mauris nec malesuada fames ac turpis velit, rhoncus eu, luctus et interdum
-          Aliquam erat ac ipsum. Integer aliquam purusQuisque lorem tortor fringilla sed,
-          eleifend justo vel bibendum sapien massa ac turpis faucibus
-        </h1>
+        <div className="table-wrapper">
+          <Table singleLine className="investment-details" textAlign="right">
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell textAlign="left">Payment date</Table.HeaderCell>
+                <Table.HeaderCell>Payment Received</Table.HeaderCell>
+                <Table.HeaderCell>Interest Paid</Table.HeaderCell>
+                <Table.HeaderCell>Principal<br />Paid</Table.HeaderCell>
+                <Table.HeaderCell>Service Fees</Table.HeaderCell>
+                <Table.HeaderCell>Net Payment<br />Received</Table.HeaderCell>
+                <Table.HeaderCell width={2}>Net Payment<br />Received</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell collapsing textAlign="left">01-24-2018</Table.Cell>
+                <Table.Cell className="positive-text">$5000</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell collapsing>$20,000</Table.Cell>
+                <Table.Cell collapsing>$340</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell collapsing textAlign="left">01-24-2018</Table.Cell>
+                <Table.Cell className="positive-text">$5000</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell collapsing>$20,000</Table.Cell>
+                <Table.Cell collapsing>$340</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell collapsing textAlign="left">01-24-2018</Table.Cell>
+                <Table.Cell className="positive-text">$5000</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell collapsing>$20,000</Table.Cell>
+                <Table.Cell collapsing>$340</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell collapsing textAlign="left">01-24-2018</Table.Cell>
+                <Table.Cell className="positive-text">$5000</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell collapsing>$20,000</Table.Cell>
+                <Table.Cell collapsing>$340</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell collapsing textAlign="left">01-24-2018</Table.Cell>
+                <Table.Cell className="positive-text">$5000</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell collapsing>$20,000</Table.Cell>
+                <Table.Cell collapsing>$340</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell collapsing textAlign="left">01-24-2018</Table.Cell>
+                <Table.Cell className="positive-text">$5000</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell collapsing>$20,000</Table.Cell>
+                <Table.Cell collapsing>$340</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell collapsing textAlign="left">01-24-2018</Table.Cell>
+                <Table.Cell className="positive-text">$5000</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell collapsing>$20,000</Table.Cell>
+                <Table.Cell collapsing>$340</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell collapsing textAlign="left">01-24-2018</Table.Cell>
+                <Table.Cell className="positive-text">$5000</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell collapsing>$20,000</Table.Cell>
+                <Table.Cell collapsing>$340</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell collapsing textAlign="left">01-24-2018</Table.Cell>
+                <Table.Cell className="positive-text">$5000</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell collapsing>$20,000</Table.Cell>
+                <Table.Cell collapsing>$340</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell collapsing textAlign="left">01-24-2018</Table.Cell>
+                <Table.Cell className="positive-text">$5000</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell>$3,020.20</Table.Cell>
+                <Table.Cell collapsing>$20,000</Table.Cell>
+                <Table.Cell collapsing>$340</Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
+        </div>
       </Tab.Pane>),
   },
-  { menuItem: 'Tab 2', render: () => <Tab.Pane attached="bottom">Tab 2 Content</Tab.Pane> },
-  { menuItem: 'Tab 3', render: () => <Tab.Pane attached="bottom">Tab 3 Content</Tab.Pane> },
+  {
+    menuItem: 'Updates',
+    render: () => (
+      <Tab.Pane attached="bottom">
+        <Grid padded="horizontally">
+          <Grid.Column width={4}>
+            <h3>Recent</h3>
+            <List relaxed className="update-list">
+              <List.Item>
+                <List.Content>
+                  <List.Description as="a">Updated 10 mins ago</List.Description>
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content>
+                  <List.Description as="a">Updated 22 mins ago</List.Description>
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content>
+                  <List.Description as="a">Updated 34 mins ago</List.Description>
+                </List.Content>
+              </List.Item>
+            </List>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <h3>Details</h3>
+          </Grid.Column>
+        </Grid>
+      </Tab.Pane>),
+  },
+  { menuItem: 'Bonus Rewards', render: () => <Tab.Pane attached="bottom">Tab 3 Content</Tab.Pane> },
 ];
 
 @inject('uiStore')
@@ -64,8 +160,12 @@ class InvestmentDetails extends Component {
   render() {
     return (
       <Modal closeIcon size="large" dimmer="inverted" open={this.props.uiStore.modalStatus === 'InvestmentDetails'} onClose={this.handleCloseModal}>
-        <Modal.Content>
-          <Header as="h2">The Brewers Table</Header>
+        <Modal.Content className="transaction-detials">
+          <Header as="h2">
+            The Brewers Table
+            <span className="title-meta"><Icon className="ns-individual-line" />Individual investment</span>
+            <span className="title-meta"><Link to="">View offering page</Link></span>
+          </Header>
           <Card fluid>
             <Grid divided stackable padded="horizontally" doubling columns={5}>
               <Grid.Row>

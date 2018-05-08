@@ -46,6 +46,8 @@
 		.ns-chevron-down.icon {
 			margin:0;
 			height:@21px;
+			// height:19px;
+			// font-size:@14px;
 			color:@theme-primary;
 			line-height:@21px;
 			position:absolute;
@@ -73,7 +75,6 @@
 				background-color:#F8F8F8;
 			}
 			time{
-				// font-family:@regularFont;
 				font-size:@12px;
 				margin-left:@5px;
 				color:@tertiary-text;
@@ -132,8 +133,3 @@
 		}
 	}
 }
-// .ui.styled.accordion, .ui.styled.accordion .accordion{
-// 	.active.title, .active.content{
-// 		background-color:@lighten-bg-color;
-// 	}
-// }
