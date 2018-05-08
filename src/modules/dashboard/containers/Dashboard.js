@@ -74,7 +74,7 @@ class Dashboard extends Component {
               <Grid.Column computer={8} largeScreen={8} widescreen={5}>
                 <Card fluid raised className="welcome-card">
                   <Card.Content>
-                    <Icon size="huge" name="ns-nextseed-icon" className="pull-left" />
+                    <Icon size="huge" className="ns-nextseed-icon pull-left" />
                     <Card.Header>
                       Would you like to start the process of new account creation?
                     </Card.Header>

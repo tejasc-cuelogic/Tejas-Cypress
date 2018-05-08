@@ -57,6 +57,9 @@
 		padding:@20px @10px;
 	}
 }
+.secondary-section{
+	background-color:@inverse-darken;
+}
 .overlay{
 	position:absolute;
 	top:0;
@@ -235,12 +238,12 @@ div.login-form {
 	}
 	// &.webcontent-spacer{
 	// }
-	h5{
-		// font-size:0.857142em;
-		font-family:@pageFont;
-		color:@quaternary-text;
-		margin:0 0 @7px;
-	}
+	// h5{
+	// 	// font-size:0.857142em;
+	// 	font-family:@pageFont;
+	// 	color:@quaternary-text;
+	// 	margin:0 0 @7px;
+	// }
 }
 .filter-meta{
 	background-color:@secondary-text;
@@ -486,6 +489,23 @@ a.disabled, a.disabled:hover, a.disabled:focus{
 	}
 }
 
+// dl dt horizontal
+dl.dl-horizontal{
+	margin:0;
+	dt{
+		float:left;
+		width:170px;
+		font-weight:700;
+	}
+	dd{
+		margin-left:180px;
+		margin-bottom:@10px;
+		color:@quaternary-text;
+		&:last-of-type{
+			margin-bottom:0;
+		}
+	}
+}
 
 //	Multistep modal navigation
 ol.progtrckr{

@@ -1,62 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Button, Form, Input, Icon, List, Dropdown } from 'semantic-ui-react';
+import { Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
+import { DropdownFilter, DateRangeFilter, AppliedFilters } from './widgets/Filters';
+import { FILTER_META } from './../../../constants/user';
+// import { FormInput } from '../../../components/form/FormElements';
 
-// TODO: This is mock data for dropdown
-const accountType = [
-  {
-    text: 'Admin',
-    value: 'Admin',
-  },
-  {
-    text: 'Business',
-    value: 'Business',
-  },
-  {
-    text: 'IRA',
-    value: 'IRA',
-  },
-  {
-    text: 'Individual',
-    value: 'Individual',
-  },
-  {
-    text: 'Entity',
-    value: 'Entity',
-  },
-];
-const status = [
-  {
-    text: 'Unlocked',
-    value: 'Unlocked',
-  },
-  {
-    text: 'Locked',
-    value: 'Locked',
-  },
-];
-const accridiation = [
-  {
-    text: 'Accridiated',
-    value: 'Accridiated',
-  },
-  {
-    text: 'Non-Accridiated',
-    value: 'Non-Accridiated',
-  },
-];
-const city = [
-  {
-    text: 'Alabama',
-    value: 'Alabama',
-  },
-  {
-    text: 'New York',
-    value: 'New York',
-  },
-];
+// const zipCode = {
+//   label: 'Zip Code',
+//   error: undefined,
+// };
 
-const userListingSubheader = () => (
+const userListingSubheader = props => (
   <div>
     <div className="page-header-section">
       <Grid stackable>
@@ -66,74 +20,62 @@ const userListingSubheader = () => (
           </Grid.Column>
           <Grid.Column width={5}>
             <Form inverted>
-              <Input fluid inverted icon="ns-search" iconPosition="left" placeholder="Type user’s name, e-mail address or ID number" />
+              <Input fluid onKeyPress={props.executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Type user’s name, e-mail address, city, state, zip code or phone number" />
             </Form>
           </Grid.Column>
           <Grid.Column width={3} textAlign="center">
-            <span className="filter-count">0</span>
-            <Button icon color="green" className="link-button">
-              Filters <Icon name="ns-caret-down" />
+            <span className="filter-count">{Object.keys(props.requestState.search).length}</span>
+            <Button icon color="green" onClick={props.toggleSearch} className="link-button">
+              Filters <Icon className="ns-caret-down" />
             </Button>
           </Grid.Column>
           <Grid.Column width={3} textAlign="right">
-            <Button primary as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
+            <Button color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
           </Grid.Column>
           <Grid.Column floated="right" textAlign="right">
             <a className="item notification" href="#">
-              <Icon name="ns-bell" />
+              <Icon className="ns-bell" />
               <span className="unread-count">3</span>
             </a>
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      {/* <div className="webcontent-spacer">
-      </div> */}
     </div>
-    <div className="search-filters">
-      <Grid stackable>
-        <Grid.Row>
-          <Grid.Column width={3}>
-            <h5>Account Type</h5>
-            <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={accountType} />
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <h5>Status</h5>
-            <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={status} />
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <h5>Accridiation</h5>
-            <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={accridiation} />
-          </Grid.Column>
-          <Grid.Column width={4}>
-            <h5>Creation date</h5>
-            <Form>
-              <Form.Group widths="equal">
-                <Form.Field>
-                  <Input fluid icon="ns-calendar outline" iconPosition="left" placeholder="01/01/2017" />
-                </Form.Field>
-                <Form.Field>
-                  <Input fluid icon="ns-calendar outline" iconPosition="left" placeholder="01/01/2018" />
-                </Form.Field>
-              </Form.Group>
-            </Form>
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <h5>City</h5>
-            <Dropdown className="inverted" placeholder="Select Filter" fluid multiple selection options={city} />
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+    {/* <Transition.Group animation="slide down" duration="500">
+      {props.filters && */}
+    {/* <div className={props.filters ? 'demo' : 'demo collapsed'}> */}
+    <div style={{ display: props.filters ? '' : 'none' }} className="search-filters">
+      <Form inverted>
+        <Grid stackable>
+          <Grid.Row>
+            <DropdownFilter value={props.requestState.search.accountType} name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} isMultiple />
+            <DropdownFilter value={props.requestState.search.accountStatus} name="Status" keyName="accountStatus" change={props.setSearchParam} options={FILTER_META.accountStatus} />
+            <DropdownFilter value={props.requestState.search.accreditation} name="Accreditation" change={props.setSearchParam} options={FILTER_META.accreditation} />
+            <DateRangeFilter filters={props.requestState.search} label="Creation date" name="createdAt" changeStart={props.dateFilterStart} changeEnd={props.dateFilterEnd} />
+            <DropdownFilter isMultiple value={props.requestState.search.city} name="City" change={props.setSearchParam} options={FILTER_META.city} />
+          </Grid.Row>
+          {/* <Grid.Row>
+            <DropdownFilter value={props.requestState.search.state} name="State"
+            change={props.setSearchParam} options={FILTER_META.state} isMultiple />
+            <FormInput type="text" name="zip code" fielddata={zipCode} />
+            <DropdownFilter value={props.requestState.search.accreditation} name="Accreditation"
+            change={props.setSearchParam} options={FILTER_META.accreditation} />
+          </Grid.Row> */}
+        </Grid>
+      </Form>
     </div>
+    {/* </div> */}
+    {/* }
+    </Transition.Group> */}
     <div className="filter-meta">
       <Grid stackable>
         <Grid.Row>
           <Grid.Column width={16}>
             <List horizontal relaxed>
-              <List.Item>Showing <strong>256</strong> records.</List.Item>
-              <List.Item as="a" to="/users/new">No filters applied.</List.Item>
-              <List.Item>65 Individual</List.Item>
-              <List.Item>65 Entity</List.Item>
-              <List.Item>65 IRA</List.Item>
+              <List.Item>
+                {`Showing ${props.summary.count} filtered records out of total ${props.summary.total}.`}
+              </List.Item>
+              <AppliedFilters filters={props.requestState.search} click={props.removeFilter} />
             </List>
           </Grid.Column>
         </Grid.Row>

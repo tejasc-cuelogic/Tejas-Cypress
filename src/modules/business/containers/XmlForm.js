@@ -89,7 +89,7 @@ export default class XmlForm extends React.Component {
             <Grid.Row>
               <Grid.Column width={16}>
                 <h1>
-                  <Link to={`/app/business/${this.props.match.params.businessId}`} className="back-link"><Icon name="ns-arrow-left" /></Link>
+                  <Link to={`/app/business/${this.props.match.params.businessId}`} className="back-link"><Icon className="ns-arrow-left" /></Link>
                   XML Form
                 </h1>
               </Grid.Column>

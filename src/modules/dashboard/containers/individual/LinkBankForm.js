@@ -28,7 +28,7 @@ export default class LinkBankForm extends Component {
               <label>
                 {individualAccount.bankRoutingNumber.label}
                 <Popup
-                  trigger={<Icon name="ns-help-circle outline" />}
+                  trigger={<Icon className="ns-help-circle" />}
                   content="Put your 10 digit bank routing number"
                   position="top center"
                   className="center-align"
@@ -47,7 +47,7 @@ export default class LinkBankForm extends Component {
               <label>
                 {individualAccount.bankAccountNumber.label}
                 <Popup
-                  trigger={<Icon name="ns-help-circle outline" />}
+                  trigger={<Icon className="ns-help-circle" />}
                   content="Put your 12 digit bank account number"
                   position="top center"
                   className="center-align"

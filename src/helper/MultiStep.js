@@ -117,13 +117,13 @@ export default class MultiStep extends React.Component {
             {this.props.steps[this.state.compState].component}
             <Button
               circular
-              icon="ns-arrow-left"
+              icon={{ className: 'ns-arrow-left' }}
               className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
               onClick={this.previous}
             />
             <Button
               circular
-              icon="ns-arrow-right"
+              icon={{ className: 'ns-arrow-right' }}
               className={(this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
               onClick={this.next}
             />

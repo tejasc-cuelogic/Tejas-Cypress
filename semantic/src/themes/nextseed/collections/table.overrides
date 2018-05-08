@@ -5,18 +5,16 @@
     overflow:auto;
 }
 .ui.table{
-    // font-family:@regularFont;
     thead th{
-        padding:@20px;
-        font-size:@12px;
-        text-transform:uppercase;
-    }
-    td{
-        padding:@12px @24px;
+        font-size:@13px;
     }
     &.sortable{
         thead th{
-            color:@quaternary-text;
+            color:@tertiary-text;
+            &:after{
+                font-size:@16px;
+                color:@theme-primary;
+            }
         }
     }
     &.striped{
@@ -37,18 +35,20 @@
     }
     &.user-list{
         tr.locked{
+            color:@inverse-secondary-text;
             .user-image:after{
                 content:"\F023";
                 font-family:"Icons";
                 font-size:20px;
                 color:@highlight-primary;
-                text-shadow:0px 0px 8px @inverse-text;
+                // text-shadow:0px 0px 8px @inverse-text;
+                text-shadow:-2px 2px 0px @inverse-text, 2px 2px 0px @inverse-text, 2px -2px 0px @inverse-text, -2px -2px 0px @inverse-text, 0px -2px 0px @inverse-text;
                 position:absolute;
                 bottom:-4px;
                 right:-4px;
                 z-index:1;
             }
-            .user-status{
+            .user-status a{
                 color:@highlight-primary;
             }
         }
@@ -57,6 +57,10 @@
             .ui.avatar.image{
                 margin-right:0;
                 border:1px solid @border-color;
+                &.mini{
+                    width:35px;
+                    height:auto;
+                }
             }
         }
         .user-name{
@@ -91,6 +95,28 @@
             color:@quaternary-text;
             margin-left:@6px;
             vertical-align:middle;
+        }
+    }
+    &.investment-details{
+        thead th{
+            font-size:@12px;
+            color:@quaternary-text;
+        }
+        tbody{
+            font-weight:700;
+            i.offering-icon{
+                color:@border-color;
+            }
+        }
+        i.ns-individual-line, i.ns-ira-line, i.ns-entity-line{
+            font-size:20px;
+            color:@highlight-tertiary;
+            vertical-align:middle;
+        }
+        tfoot th{
+            background-color:@white;
+            font-weight:700;
+            color:@quaternary-text;
         }
     }
 }
