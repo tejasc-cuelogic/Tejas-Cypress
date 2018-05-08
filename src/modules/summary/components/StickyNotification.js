@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { Responsive, Card, Statistic, Button } from 'semantic-ui-react';
 
@@ -13,7 +12,7 @@ const StickyNotification = props => (
             <Statistic.Value>{props.stepinfo.value}</Statistic.Value>
             <Statistic.Label>{props.stepinfo.label}</Statistic.Label>
           </Statistic>
-          <Button primary as={Link} floated="right" className="pull-right" onClick={() => props.setDashboardWizardSetup(props.stepinfo.linkPath)} to="/app/summary">{props.stepinfo.linkText}</Button>
+          <Button primary floated="right" className="pull-right" onClick={() => props.setDashboardWizardSetup(props.stepinfo.linkPath)}>{props.stepinfo.linkText}</Button>
         </Card.Content>
       </Card>
     </div>
