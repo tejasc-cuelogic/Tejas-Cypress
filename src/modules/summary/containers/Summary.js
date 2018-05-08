@@ -5,7 +5,7 @@ import Aux from 'react-aux';
 import { Grid, Card, Header, Icon, Responsive, Divider } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
-import PageHeaderSection from '../../../components/common/PageHeaderSection';
+import PageHeaderSection from '../../../theme/common/PageHeaderSection';
 import StickyNotification from '../components/StickyNotification';
 import AccountSetupChecklist from '../components/AccountSetupChecklist';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';

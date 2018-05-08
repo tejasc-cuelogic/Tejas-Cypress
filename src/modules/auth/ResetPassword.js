@@ -3,8 +3,8 @@ import { observer, inject } from 'mobx-react';
 import { Button, Message, Form, Grid, Header, Divider } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 
-import ListErrors from '../../components/common/ListErrors';
-import FieldError from '../../components/common/FieldError';
+import ListErrors from '../../theme/common/ListErrors';
+import FieldError from '../../theme/common/FieldError';
 import authActions from '../../actions/auth';
 import validationActions from '../../actions/validation';
 

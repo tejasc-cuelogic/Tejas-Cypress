@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 
-import FieldError from '../../../components/common/FieldError';
+import FieldError from '../../../theme/common/FieldError';
 import authActions from '../../../actions/auth';
 import validationActions from '../../../actions/validation';
 

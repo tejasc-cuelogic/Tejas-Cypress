@@ -7,7 +7,7 @@ import {
   AdminAuthorization,
   BusinessAuthorization,
   UserAuthorization,
-} from './../../components/common/Authorization';
+} from './../../theme/common/Authorization';
 
 export default [
   {

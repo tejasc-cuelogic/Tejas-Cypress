@@ -2,8 +2,8 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Item, Container } from 'semantic-ui-react';
-import LoadingSpinner from '../../../components/common/LoadingSpinner';
-import RedError from '../../../components/common/RedError';
+import LoadingSpinner from '../../../theme/common/LoadingSpinner';
+import RedError from '../../../theme/common/RedError';
 
 @inject('offeringsStore', 'userStore')
 @withRouter

@@ -6,7 +6,7 @@ import { FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete } from
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
 import profileActions from '../../../actions/profile';
 import Helper from '../../../helper/utility';
-import CipErrors from '../../../components/common/CipErrors';
+import CipErrors from '../../../theme/common/CipErrors';
 
 @inject('profileStore', 'uiStore', 'userStore')
 @observer

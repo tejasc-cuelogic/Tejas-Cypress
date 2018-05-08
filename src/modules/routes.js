@@ -33,7 +33,7 @@ import {
   BusinessAuthorization,
   UserAuthorization,
   InvestorAuthorization,
-} from '../components/common/Authorization';
+} from '../theme/common/Authorization';
 
 export const publicRoutes = [
   {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Input, Button, Popup, Icon } from 'semantic-ui-react';
 
-import FieldError from '../../../../components/common/FieldError';
+import FieldError from '../../../../theme/common/FieldError';
 import validationActions from '../../../../actions/validation';
 
 @inject('accountStore')

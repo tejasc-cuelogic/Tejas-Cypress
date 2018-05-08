@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
-import FieldError from '../../../components/common/FieldError';
+import FieldError from '../../../theme/common/FieldError';
 
 @inject('profileStore')
 @observer
