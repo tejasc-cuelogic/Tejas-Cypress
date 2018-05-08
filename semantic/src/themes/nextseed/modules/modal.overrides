@@ -55,7 +55,7 @@
     h4.ui.header{
         font-weight:400;
     }
-    .content{
+    > .content{
         padding-top:@20px;
         &.login-modal{
             // max-width:404px;
@@ -265,7 +265,7 @@
         will-change:auto;
         background-color:transparent;
         >.content{
-            padding:@35px @14px;
+            padding:@35px @28px;
             background-color:transparent;
         }
     }

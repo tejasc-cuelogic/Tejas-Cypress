@@ -81,3 +81,75 @@
         }
     }
 }
+
+.update-list{
+	background-color:@light-bg-color;
+    .ui.list{
+        margin-left:@5px;
+        // position:relative;
+        border-left:red 1px solid;
+        // &:before{
+        //     content:"";
+        //     width:1px;
+        //     height:~"calc(100% - 16px)";
+        //     background-color:@border-color;
+        //     position:absolute;
+        //     top:8px;
+        //     left:0;
+        // }
+        .item{
+            padding-left:@21px;
+            font-size:@13px;
+            font-weight:700;
+            line-height:@16px;
+            color:@quaternary-text;
+            position:relative;
+            &:before{
+                content:"";
+                width:9px;
+                height:9px;
+                border-radius:@5px;
+                background-color:@quaternary-text;
+                position:absolute;
+                left:-1px;
+                top:50%;
+                z-index:2;
+                transform:translate(-50%, -50%);
+                border:2px solid white;
+                box-shadow:0px 0px 4px 1px @quaternary-text;
+            }
+            &:hover, &.active{
+                color:@primary-text;
+                &:before{
+                    background-color:@link-color;
+                    box-shadow:0 0 4px 1px @link-color;
+                }
+            }
+            &:first-child:after, &:last-child:after{
+                height:50%;
+                width:1px;
+                visibility:visible;
+                position:absolute;
+                left:-1px;
+                z-index:1;
+                background-color:@light-bg-color;
+            }
+            &:first-child{
+                &:before{
+                    top:~"calc(50% - 6px)";
+                }
+                &:after{
+                    top:0;
+                }
+            }
+            &:last-child{
+                &:before{
+                    top:~"calc(50% + 6px)";
+                }
+                &:after{
+                    bottom:0;
+                }
+            }
+        }
+    }
+}

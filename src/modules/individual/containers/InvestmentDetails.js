@@ -121,28 +121,24 @@ const panes = [
     menuItem: 'Updates',
     render: () => (
       <Tab.Pane attached="bottom">
-        <Grid padded="horizontally">
-          <Grid.Column width={4}>
+        <Grid padded="horizontally" relaxed="very">
+          <Grid.Column width={4} className="update-list">
             <h3>Recent</h3>
-            <List relaxed className="update-list">
-              <List.Item>
-                <List.Content>
-                  <List.Description as="a">Updated 10 mins ago</List.Description>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Description as="a">Updated 22 mins ago</List.Description>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Description as="a">Updated 34 mins ago</List.Description>
-                </List.Content>
-              </List.Item>
+            <List relaxed="very">
+              <List.Item as="a">Jan 23th 2018</List.Item>
+              <List.Item as="a" className="active">Dec 17th 2017</List.Item>
+              <List.Item as="a">Dec 17th 2017</List.Item>
+              <List.Item as="a">Dec 17th 2017</List.Item>
+              <List.Item as="a">Dec 17th 2017</List.Item>
+              <List.Item as="a">Dec 17th 2017</List.Item>
+              <List.Item as="a">Dec 17th 2017</List.Item>
+              <List.Item as="a">Dec 17th 2017</List.Item>
+              <List.Item as="a">Dec 17th 2017</List.Item>
+              <List.Item as="a">Dec 17th 2017</List.Item>
             </List>
           </Grid.Column>
-          <Grid.Column width={12}>
+          <Grid.Column width={2} only="computer" />
+          <Grid.Column width={12} computer={8}>
             <h3>Details</h3>
           </Grid.Column>
         </Grid>

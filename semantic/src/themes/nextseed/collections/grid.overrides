@@ -9,3 +9,8 @@
         }
     }
 }
+
+.ui.grid>.column.update-list{
+    padding-top:@28px;
+    padding-bottom:@28px;
+}
