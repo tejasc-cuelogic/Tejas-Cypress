@@ -57,6 +57,9 @@
 		padding:@20px @10px;
 	}
 }
+.inner-content-spacer{
+	padding:@20px;
+}
 .secondary-section{
 	background-color:@inverse-darken;
 }

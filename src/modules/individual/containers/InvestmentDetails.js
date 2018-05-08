@@ -171,7 +171,52 @@ const panes = [
         </Grid>
       </Tab.Pane>),
   },
-  { menuItem: 'Bonus Rewards', render: () => <Tab.Pane attached="bottom">Tab 3 Content</Tab.Pane> },
+  {
+    menuItem: 'Bonus Rewards',
+    render: () => (
+      <Tab.Pane attached="bottom">
+        <div className="inner-content-spacer">
+          <Header as="h3">Your investment</Header>
+          <Grid columns="equal" textAlign="center" className="investment-scale">
+            <Grid.Row>
+              <Grid.Column className="crossed">
+                <Popup
+                  trigger={<span>$500</span>}
+                  position="bottom center"
+                  wide
+                  on="click"
+                >
+                  <Header as="h3">Invest $500 or more</Header>
+                  <Header as="h5">Cooking Class</Header>
+                  <List bulleted>
+                    <List.Item>$50 Gift Card</List.Item>
+                    <List.Item>Invitation for 2 to the Launch Party</List.Item>
+                  </List>
+                </Popup>
+              </Grid.Column>
+              <Grid.Column>
+                $1,000
+              </Grid.Column>
+              <Grid.Column>
+                $2,500
+              </Grid.Column>
+              <Grid.Column>
+                $5,000
+              </Grid.Column>
+              <Grid.Column>
+                $10,000
+              </Grid.Column>
+              <Grid.Column>
+                $25,000
+              </Grid.Column>
+              <Grid.Column>
+                $50,000
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </div>
+      </Tab.Pane>),
+  },
 ];
 
 @inject('uiStore')
