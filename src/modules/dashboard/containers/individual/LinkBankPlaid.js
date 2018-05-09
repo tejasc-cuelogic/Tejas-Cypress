@@ -6,10 +6,6 @@ import { Header, Button } from 'semantic-ui-react';
 @inject('accountStore')
 @observer
 export default class LinkBankPlaid extends Component {
-  handleOnSuccess = (token, metadata) => {
-    // send token to client server
-    console.log(token, metadata);
-  }
   render() {
     return (
       <div>
