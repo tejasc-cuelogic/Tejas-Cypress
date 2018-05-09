@@ -206,26 +206,6 @@ export const IND_BANK_LIST = [
     institutionID: 'ins_5',
   },
   {
-    name: 'Fidelity',
-    institutionID: 'ins_12',
-  },
-  {
-    name: 'Navy Federal',
-    institutionID: 'ins_15',
-  },
-  {
-    name: 'PNC',
-    institutionID: 'ins_13',
-  },
-  {
-    name: 'SunTrust',
-    institutionID: 'ins_16',
-  },
-  {
-    name: 'TD Bank',
-    institutionID: 'ins_14',
-  },
-  {
     name: 'US Bank',
     institutionID: 'ins_6',
   },

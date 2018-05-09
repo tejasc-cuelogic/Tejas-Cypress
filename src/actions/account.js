@@ -5,6 +5,7 @@ import {
 } from '../constants/account';
 import ExternalApiService from '../services/externalApi';
 import indAccountStore from '../stores/user/individualAccountStore';
+// import Plaid from '../helper/link-initialize';
 
 export class Account {
   /**
@@ -61,8 +62,39 @@ export class Account {
       contentType: 'application/json',
     };
     ExternalApiService.post(params)
-      .then(data => console.log(data.body.institutions))
+      .then(data => indAccountStore.setBankListing(data.body.institutions))
       .catch(err => console.log(err));
+  }
+
+  bankSelect = (institutionId) => {
+    console.log(institutionId);
+    /* eslint-disable no-undef */
+    const linkHandler = Plaid.create({
+      env: 'sandbox',
+      clientName: 'NS',
+      key: PLAID_PUBLIC_KEY,
+      product: ['auth, transactions'],
+      onLoad: () => {
+        // The Link module finished loading.
+      },
+      onSuccess: (publicToken, metadata) => {
+        console.log(publicToken, metadata);
+        // Send the public_token to your app server here.
+        // The metadata object contains info about the institution the
+        // user selected and the account ID, if selectAccount is enabled.
+      },
+      onExit: (err, metadata) => {
+        console.log(metadata);
+        // The user exited the Link flow.
+        if (err != null) {
+          // The user encountered a Plaid API error prior to exiting.
+        }
+        // metadata contains information about the institution
+        // that the user selected and the most recent API request IDs.
+        // Storing this information can be helpful for support.
+      },
+    });
+    linkHandler.open(institutionId);
   }
 }
 

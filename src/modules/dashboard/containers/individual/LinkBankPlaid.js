@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Button, Item, Input } from 'semantic-ui-react';
+import _ from 'lodash';
+import { Link } from 'react-router-dom';
+import PlaidLink from 'react-plaid-link';
+import { Header, Button, Item, Input, List } from 'semantic-ui-react';
 import accountActions from '../../../../actions/account';
-import Banklogo from '../../../../assets/images/boa-logo.jpg';
+import {
+  PLAID_PUBLIC_KEY,
+} from '../../../../constants/account';
+// import Banklogo from '../../../../assets/images/boa-logo.jpg';
 
 @inject('individualAccountStore')
 @observer
@@ -12,7 +18,7 @@ export default class LinkBankPlaid extends Component {
     console.log(token, metadata);
   }
   render() {
-    const { formBankSearch, bankSearchChange } = this.props.individualAccountStore;
+    const { formBankSearch, bankSearchChange, bankListing } = this.props.individualAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -26,16 +32,35 @@ export default class LinkBankPlaid extends Component {
             onChange={bankSearchChange}
             onBlur={accountActions.bankSearch}
           />
-          <div className="six columns">
-            <Item.Image size="small" src={Banklogo} />
-            <Item.Image size="small" src={Banklogo} />
-            <Item.Image size="small" src={Banklogo} />
-            <Item.Image size="small" src={Banklogo} />
-            <Item.Image size="small" src={Banklogo} />
-            <Item.Image size="small" src={Banklogo} />
-            <Item.Image size="small" src={Banklogo} />
-            <Item.Image size="small" src={Banklogo} />
-            <Item.Image size="small" src={Banklogo} />
+          <PlaidLink
+            clientName="NS"
+            env="sandbox"
+            product={['auth', 'transactions']}
+            publicKey={PLAID_PUBLIC_KEY}
+            // publicKey="ca61661fcb15b5e735eabae68771b6"
+            onExit={this.handleOnExit}
+            onSuccess={this.handleOnSuccess}
+          >
+            Open Link and connect your bank!
+          </PlaidLink>
+          <div className="">
+            {
+              <List celled vertical inverted>
+                {
+                  _.map(bankListing, bankData => (
+                    <Link
+                      key={bankData.institution_id}
+                      as="a"
+                      to="/app/dashboard"
+                      onClick={() => accountActions.bankSelect(bankData.institution_id)}
+                    >
+                      {bankData.logo !== null && <Item.Image size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
+                      <span>{bankData.name}</span>
+                    </Link>
+                  ))
+                }
+              </List>
+            }
           </div>
         </div>
         <div className="center-align">
