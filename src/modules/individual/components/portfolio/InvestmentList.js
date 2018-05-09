@@ -43,7 +43,7 @@ const InvestmentList = (props) => {
                     <Table.Cell />
                     <Table.Cell>
                       <Icon className={`ns-${data.type} offering-icon`} />
-                      <Link to="/app/individual-account" onClick={() => this.props.uiStore.setModalStatus('InvestmentDetails')}>{data.name}</Link>
+                      <Link to={`${props.match.url}/investment-details/1`}>{data.name}</Link>
                     </Table.Cell>
                     <Table.Cell>{data.location}</Table.Cell>
                     <Table.Cell>{data.investmentType}</Table.Cell>

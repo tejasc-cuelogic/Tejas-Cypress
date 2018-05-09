@@ -222,12 +222,14 @@ const panes = [
 @inject('uiStore')
 @observer
 class InvestmentDetails extends Component {
-  handleCloseModal = () => {
-    this.props.uiStore.setModalStatus(false);
-  }
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    this.props.history.goBack();
+  };
+
   render() {
     return (
-      <Modal closeIcon size="large" dimmer="inverted" open={this.props.uiStore.modalStatus === 'InvestmentDetails'} onClose={this.handleCloseModal}>
+      <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal}>
         <Modal.Content className="transaction-detials">
           <Header as="h2">
             The Brewers Table
