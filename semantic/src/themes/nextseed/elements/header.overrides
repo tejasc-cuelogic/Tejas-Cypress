@@ -52,3 +52,7 @@
         }
     }
 }
+
+.ui.header + .ui.header{
+    margin-top:@7px;
+}

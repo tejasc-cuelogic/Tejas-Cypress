@@ -79,6 +79,16 @@
     &.card-spacer{
         padding:@22px;
     }
+    .content .action-meta{
+        display:inline-block;
+        font-size:@12px;
+        vertical-align:top;
+        margin-left:@10px;
+        color:@quaternary-text;
+        >b{
+            color:@fullBlack;
+        }
+    }
 }
 
 .ui.card>.content:not(:first-child),
