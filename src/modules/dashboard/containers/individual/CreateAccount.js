@@ -1,9 +1,15 @@
 import React from 'react';
+import { inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Button, Item } from 'semantic-ui-react';
 import Banklogo from '../../../../assets/images/boa-logo.jpg';
 
+@inject('individualAccountStore')
 export default class CreateAccount extends React.Component {
+  finalizeAccount = (e) => {
+    e.preventDefault();
+    this.props.individualAccountStore.finalizeAccount();
+  }
   render() {
     return (
       <div>
@@ -16,7 +22,7 @@ export default class CreateAccount extends React.Component {
               <Item>
                 <Item.Image size="small" src={Banklogo} />
                 <Item.Content verticalAlign="middle" className="right-align">
-                  <Link to="" className="link"><b>Change</b></Link>
+                  <Link to="/app/dashboard" className="link"><b>Change</b></Link>
                   <Item.Description>
                     <h5>...5648</h5>
                   </Item.Description>
@@ -26,7 +32,7 @@ export default class CreateAccount extends React.Component {
           </div>
         </div>
         <div className="center-align">
-          <Button primary size="large">Create the account</Button>
+          <Button primary size="large" onClick={this.finalizeAccount}>Create the account</Button>
         </div>
       </div>
     );

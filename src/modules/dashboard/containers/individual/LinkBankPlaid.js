@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
-import PlaidLink from 'react-plaid-link';
-import { Header, Button, Item, Input, List } from 'semantic-ui-react';
+// import PlaidLink from 'react-plaid-link';
+import { Header, Button, Item, List } from 'semantic-ui-react';
 import accountActions from '../../../../actions/account';
-import {
-  PLAID_PUBLIC_KEY,
-} from '../../../../constants/account';
+// import {
+//   PLAID_PUBLIC_KEY,
+// } from '../../../../constants/account';
+import LinkBankForm from './LinkBankForm';
+import { FormInput } from '../../../../components/form/FormElements';
 // import Banklogo from '../../../../assets/images/boa-logo.jpg';
 
 @inject('individualAccountStore')
@@ -18,21 +20,27 @@ export default class LinkBankPlaid extends Component {
     console.log(token, metadata);
   }
   render() {
-    const { formBankSearch, bankSearchChange, bankListing } = this.props.individualAccountStore;
+    const {
+      bankLinkInterface,
+      formBankSearch,
+      bankSearchChange,
+      bankListing,
+    } = this.props.individualAccountStore;
+    if (bankLinkInterface === 'form') {
+      return <LinkBankForm />;
+    }
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
         <Header as="h4" textAlign="center">Select your bank from the list</Header>
         <div className="row">
-          <Input
-            fluid
-            name={formBankSearch.fields.bankName.key}
-            value={formBankSearch.fields.bankName.value}
-            placeholder="Search"
-            onChange={bankSearchChange}
+          <FormInput
+            name="bankName"
+            fielddata={formBankSearch.fields.bankName}
+            changed={bankSearchChange}
             onBlur={accountActions.bankSearch}
           />
-          <PlaidLink
+          {/* <PlaidLink
             clientName="NS"
             env="sandbox"
             product={['auth', 'transactions']}
@@ -42,7 +50,7 @@ export default class LinkBankPlaid extends Component {
             onSuccess={this.handleOnSuccess}
           >
             Open Link and connect your bank!
-          </PlaidLink>
+          </PlaidLink> */}
           <div className="">
             {
               <List celled vertical inverted>
@@ -64,7 +72,7 @@ export default class LinkBankPlaid extends Component {
           </div>
         </div>
         <div className="center-align">
-          <Button className="theme-link" primary onClick={() => this.props.accountStore.setBankLinkInterface('form')}>or enter it manually</Button>
+          <Button className="theme-link" primary onClick={() => this.props.individualAccountStore.setBankLinkInterface('form')}>or enter it manually</Button>
         </div>
       </div>
     );

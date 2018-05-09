@@ -49,21 +49,26 @@ export class Account {
   }
 
   bankSearch = () => {
-    const params = {
-      url: PLAID_URL,
-      payload: {
-        public_key: PLAID_PUBLIC_KEY,
-        query: indAccountStore.formBankSearch.fields.bankName.value,
-        products: ['auth'],
-        options: {
-          include_display_data: true,
+    const { value } = indAccountStore.formBankSearch.fields.bankName;
+    if (value !== '') {
+      const params = {
+        url: PLAID_URL,
+        payload: {
+          public_key: PLAID_PUBLIC_KEY,
+          query: value,
+          products: ['auth'],
+          options: {
+            include_display_data: true,
+          },
         },
-      },
-      contentType: 'application/json',
-    };
-    ExternalApiService.post(params)
-      .then(data => indAccountStore.setBankListing(data.body.institutions))
-      .catch(err => console.log(err));
+        contentType: 'application/json',
+      };
+      ExternalApiService.post(params)
+        .then(data => indAccountStore.setBankListing(data.body.institutions))
+        .catch(err => console.log(err));
+    } else {
+      // reset bank listing, call store function to reset bank listing
+    }
   }
 
   bankSelect = (institutionId) => {
@@ -78,7 +83,8 @@ export class Account {
         // The Link module finished loading.
       },
       onSuccess: (publicToken, metadata) => {
-        console.log(publicToken, metadata);
+        indAccountStore.setPlaidAccDetails(metadata);
+        indAccountStore.createAccount();
         // Send the public_token to your app server here.
         // The metadata object contains info about the institution the
         // user selected and the account ID, if selectAccount is enabled.
