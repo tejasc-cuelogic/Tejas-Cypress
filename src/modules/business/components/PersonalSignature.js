@@ -22,7 +22,10 @@ const PersonalSignature = observer(props => (
             onChange={props.handleChange}
             onBlur={e => props.handleOnBlurSigPer(e, personData.id)}
           >
-            <Button icon="ns-close" color="red" dataid={personData.id} onClick={props.handleDeleteClick} />
+            {
+              props.xmlSubmissionStatus === 'DRAFT' &&
+              <Button icon="ns-close" color="red" dataid={personData.id} onClick={props.handleDeleteClick} />
+            }
             <input />
           </Input>
         </Form.Field>

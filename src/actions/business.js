@@ -19,7 +19,6 @@ import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
 import {
   EDGAR_URL,
-  XML_URL,
   GRAPHQL,
   PERSONAL_SIGNATURE,
   FILES,
@@ -53,39 +52,6 @@ export class Business {
     uiStore.setLoaderMessage('Generating Docx File');
     uiStore.toggleSubmitButton();
     return ApiService.post(EDGAR_URL, { templateVariables, documentList: FILES });
-  }
-
-  /**
-  * @desc Make an API Call to server to generate XML for final submittion
-  */
-  generateXml = () => {
-    const {
-      businessId,
-      filingId,
-      // offeringUrl,
-      annualReportRequirements,
-      filerInformation,
-      issuerInformation,
-      offeringInformation,
-      signature,
-      documentList,
-    } = businessStore;
-
-    const payload = {
-      businessId,
-      filingId,
-      // offeringUrl,
-      filerInformation: this.getFormattedInformation(filerInformation),
-      issuerInformation: this.getFormattedInformation(issuerInformation),
-      offeringInformation: this.getFormattedInformation(offeringInformation),
-      annualReportDisclosureRequirements: this.getFormattedInformation(annualReportRequirements),
-      signature: this.getFormattedSignature(signature),
-      documentList: _.filter(documentList, document => document.checked),
-    };
-
-    uiStore.setProgress();
-    uiStore.setLoaderMessage('Submitting XML Form');
-    return ApiService.post(XML_URL, payload);
   }
 
   /**
@@ -204,15 +170,6 @@ export class Business {
         .then(data => resolve(data.data))
         .catch(error => reject(error));
     });
-  }
-  /**
-   *
-   */
-  validateXmlForm = () => {
-    this.validateFilerInfo(businessStore);
-    this.validateIssuerInfo(businessStore);
-    this.validateOfferingInfo(businessStore);
-    this.validateAnnualReportInfo(businessStore);
   }
 
   /**
@@ -789,36 +746,60 @@ export class Business {
     const newFiler = validationActions.validateXmlFormData(filerInformation);    
     const errors = this.newValidationErrors(newFiler);
     businessStore.setFiler(newFiler);
-    // if (setError) {
-    //   businessStore.setXmlError(errors);
-    // }    
+    // check form is valid or not 
+    if (!setError) {
+      if (businessStore.canSubmitFilerInfoXmlForm) {
+        businessStore.setXmlSubStepsStatus('filer', true);
+        businessStore.updateStatusFlag('formFilerInfo', 'meta', true);
+      } else {
+        businessStore.clearFiler();
+      }
+    }
   }
 
   validateIssuerInfo = (issuerInformation, setError = true) => {
     const newIssuer = validationActions.validateXmlFormData(issuerInformation);
     const errors = this.newValidationErrors(newIssuer);
     businessStore.setIssuer(newIssuer);
-    // if (setError) {      
-    //   businessStore.setXmlError(errors);      
-    // }
+    // check form is valid or not 
+    if (!setError) {
+      if (businessStore.canSubmitIssuerInfoXmlForm) {      
+        businessStore.setXmlSubStepsStatus('issuer', true);
+        businessStore.updateStatusFlag('formIssuerInfo', 'meta', true);
+      } else {
+        businessStore.clearIssuer();
+      }
+    }
   }
 
   validateOfferingInfo = (offeringInformation, setError = true) => {
     const newOffering = validationActions.validateXmlFormData(offeringInformation);
     const errors = this.newValidationErrors(newOffering);
     businessStore.setOffering(newOffering);
-    // if (setError) {
-    //   businessStore.setXmlError(errors);
-    // }
+    // check form is valid or not 
+    if (!setError) {
+      if (businessStore.canSubmitOfferingInfoXmlForm) {
+        businessStore.setXmlSubStepsStatus('offering', true);
+        businessStore.updateStatusFlag('formOfferingInfo', 'meta', true);
+      } else {
+        businessStore.clearOffering();
+      }
+    }
   }
 
   validateAnnualReportInfo = (annualReportRequirements, setError = true) => {
     const newAnnualReport = validationActions.validateXmlFormData(annualReportRequirements);
     const errors = this.newValidationErrors(newAnnualReport);
     businessStore.setAnnualReport(newAnnualReport);
-    // if (setError) {
-    //   businessStore.setXmlError(errors);
-    // }
+    // check form is valid or not 
+    if (!setError) {
+      if (businessStore.canSubmitAnnualReportXmlForm) {
+        businessStore.setXmlSubStepsStatus('annual', true);
+        businessStore.updateStatusFlag('formAnnualInfo', 'meta', true);
+      } else {
+        businessStore.clearAnnualReport();
+      }
+    }
   }
 
   validateSignatureInfo = (signature, setError = true) => {
@@ -832,32 +813,34 @@ export class Business {
     const errors = this.newValidationErrors(newSignature);
     newSignature['signaturePersons'] = signature.signaturePersons;
     businessStore.setSignature(newSignature);
-    // if (setError) {
-    //   businessStore.setXmlError(errors);
-    // }
     this.validatePersonSign(signature.signaturePersons, setError);
   }
 
   validatePersonSign = (signaturePersons, setError = true) => {
-    
     let personSignatureData = [];
-    
-    _.map(signaturePersons, (field, index) => {
-      
+    _.map(signaturePersons, (field, index) => {      
       personSignatureData.push(validationActions.validateXmlFormData({
         personSignature: field.personSignature,
         personTitle: field.personTitle,
         signatureDate: field.signatureDate,
       }));
       
-      const personErrors = this.newValidationErrors(personSignatureData, true);
-      // if (setError) {
-      //   businessStore.setXmlError(personErrors);
-      // }
+      this.newValidationErrors(personSignatureData, true);      
       personSignatureData[index].id = field.id;
     });
     
     businessStore.setNewPersonalSignature(personSignatureData);
+
+    if (!setError) {
+      // check form is valid or not 
+      if (businessStore.canSubmitSigntureForm ||
+        _.includes(businessStore.canSubmitSignaturePersonsForm, true)) {
+          businessStore.setXmlSubStepsStatus('signature', true);
+          businessStore.updateStatusFlag('formSignatureInfo', 'meta', true);
+      } else {
+        businessStore.clearSignature();
+      }
+    }
   }
 
   validateDocumentList = (documentList, setError = true) => {
@@ -904,31 +887,15 @@ export class Business {
     this.validateSignatureInfo(businessStore.formSignatureInfo.fields, false);
     const errorMessage = this.validateDocumentList(businessStore.documentList, false);      
 
-    if (businessStore.canSubmitFilerInfoXmlForm) {      
-      businessStore.setXmlSubStepsStatus('filer', true);
-      businessStore.updateStatusFlag('formFilerInfo', 'meta', true);
-    } 
     
-    if (businessStore.canSubmitIssuerInfoXmlForm) {      
-      businessStore.setXmlSubStepsStatus('issuer', true);
-      businessStore.updateStatusFlag('formIssuerInfo', 'meta', true);
-    } 
     
-    if (businessStore.canSubmitOfferingInfoXmlForm) {
-      businessStore.setXmlSubStepsStatus('offering', true);
-      businessStore.updateStatusFlag('formOfferingInfo', 'meta', true);
-    } 
+     
     
-    if (businessStore.canSubmitAnnualReportXmlForm) {
-      businessStore.setXmlSubStepsStatus('annual', true);
-      businessStore.updateStatusFlag('formAnnualInfo', 'meta', true);
-    }
+    
+    
+    
 
-    if (businessStore.canSubmitSigntureForm ||
-      _.includes(businessStore.canSubmitSignaturePersonsForm, true)) {
-        businessStore.setXmlSubStepsStatus('signature', true);
-        businessStore.updateStatusFlag('formSignatureInfo', 'meta', true);
-    }
+    
     
     if (!errorMessage) {
       businessStore.setXmlSubStepsStatus('doc', true);

@@ -202,7 +202,7 @@ export class BusinessStore {
 
   @action
   signatureInfoChange = (e, { name, value }) => {
-    this.onFieldChange('formSignatureInfo', name, value);
+    this.onFieldSigChange(name, value);
   };
 
   @action
@@ -212,11 +212,28 @@ export class BusinessStore {
     const validation = new Validator(
       _.mapValues(this[form].fields, f => f.value),
       _.mapValues(this[form].fields, f => f.rule),
-      this[form].fields[field].customErrors,
+      _.mapValues(this[form].fields, f => f.customErrors),
     );
     this[form].meta.isValid = validation.passes();
     this[form].fields[field].error = validation.errors.first(field);
   };
+
+  @action
+  onFieldSigChange = (field, value) => {
+    this.formSignatureInfo.fields[field].value = value;
+    const newSigInfo = {
+      issuer: this.formSignatureInfo.fields.issuer,
+      issuerSignature: this.formSignatureInfo.fields.issuerSignature,
+      issuerTitle: this.formSignatureInfo.fields.issuerTitle,
+    };
+    const validation = new Validator(
+      _.mapValues(newSigInfo, f => f.value),
+      _.mapValues(newSigInfo, f => f.rule),
+      _.mapValues(newSigInfo, f => f.customErrors),
+    );
+    this.formSignatureInfo.meta.isValid = validation.passes();
+    this.formSignatureInfo.fields[field].error = validation.errors.first(field);
+  }
 
   @action
   setTemplateVariableByKey(key, value) {

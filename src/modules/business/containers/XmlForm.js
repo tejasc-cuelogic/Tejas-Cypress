@@ -14,7 +14,6 @@ import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
 import Helper from '../../../helper/utility';
-import FormErrors from '../../../components/common/FormErrors';
 import {
   XML_STATUSES,
   XML_SUBMISSION_TABS,
@@ -112,7 +111,7 @@ export default class XmlForm extends React.Component {
 
   handleFilerInformationSubmit = (currentStepName, nextTabName) => {
     const { formFilerInfo } = this.props.businessStore;
-    businessActions.validateFilerInfo(formFilerInfo.fields, false);
+    businessActions.validateFilerInfo(formFilerInfo.fields);
 
     if (this.props.businessStore.canSubmitFilerInfoXmlForm) {
       this.addAndRemoveErrorClass(currentStepName, '');
@@ -126,7 +125,13 @@ export default class XmlForm extends React.Component {
           Helper.toast('Filer information submitted successfully', 'success');
         })
         .catch((err) => {
-          console.log(err);
+          if (err) {
+            Helper.toast(
+              'Something went wrong while saving filer information, Please try again.',
+              'error',
+              { position: 'top-center' },
+            );
+          }
         });
     } else {
       this.addAndRemoveErrorClass(currentStepName, 'tab-error');
@@ -135,7 +140,7 @@ export default class XmlForm extends React.Component {
 
   handleIssuerInformationSubmit = (currentStepName, nextTabName) => {
     const { formIssuerInfo } = this.props.businessStore;
-    businessActions.validateIssuerInfo(formIssuerInfo.fields, false);
+    businessActions.validateIssuerInfo(formIssuerInfo.fields);
 
     if (this.props.businessStore.canSubmitIssuerInfoXmlForm) {
       this.addAndRemoveErrorClass(currentStepName, '');
@@ -149,7 +154,13 @@ export default class XmlForm extends React.Component {
           Helper.toast('Issuer information submitted successfully', 'success');
         })
         .catch((err) => {
-          console.log(err);
+          if (err) {
+            Helper.toast(
+              'Something went wrong while saving issuer information, Please try again.',
+              'error',
+              { position: 'top-center' },
+            );
+          }
         });
     } else {
       this.addAndRemoveErrorClass(currentStepName, 'tab-error');
@@ -158,7 +169,7 @@ export default class XmlForm extends React.Component {
 
   handleOfferingInformationSubmit = (currentStepName, nextTabName) => {
     const { formOfferingInfo } = this.props.businessStore;
-    businessActions.validateOfferingInfo(formOfferingInfo.fields, false);
+    businessActions.validateOfferingInfo(formOfferingInfo.fields);
 
     if (this.props.businessStore.canSubmitOfferingInfoXmlForm) {
       this.addAndRemoveErrorClass(currentStepName, '');
@@ -172,7 +183,13 @@ export default class XmlForm extends React.Component {
           Helper.toast('Offering information submitted successfully', 'success');
         })
         .catch((err) => {
-          console.log(err);
+          if (err) {
+            Helper.toast(
+              'Something went wrong while saving offering information, Please try again.',
+              'error',
+              { position: 'top-center' },
+            );
+          }
         });
     } else {
       this.addAndRemoveErrorClass(currentStepName, 'tab-error');
@@ -181,7 +198,7 @@ export default class XmlForm extends React.Component {
 
   handleAnnualSubmit = (currentStepName, nextTabName) => {
     const { formAnnualInfo } = this.props.businessStore;
-    businessActions.validateAnnualReportInfo(formAnnualInfo.fields, false);
+    businessActions.validateAnnualReportInfo(formAnnualInfo.fields);
 
     if (this.props.businessStore.canSubmitAnnualReportXmlForm) {
       this.addAndRemoveErrorClass(currentStepName, '');
@@ -195,7 +212,13 @@ export default class XmlForm extends React.Component {
           Helper.toast('Annual report disclosure requirements submitted successfully', 'success');
         })
         .catch((err) => {
-          console.log(err);
+          if (err) {
+            Helper.toast(
+              'Something went wrong while saving Annual report disclosure requirements, Please try again.',
+              'error',
+              { position: 'top-center' },
+            );
+          }
         });
     } else {
       this.addAndRemoveErrorClass(currentStepName, 'tab-error');
@@ -219,7 +242,13 @@ export default class XmlForm extends React.Component {
           Helper.toast('Signature information submitted successfully', 'success');
         })
         .catch((err) => {
-          console.log(err);
+          if (err) {
+            Helper.toast(
+              'Something went wrong while saving signature information, Please try again.',
+              'error',
+              { position: 'top-center' },
+            );
+          }
         });
     } else {
       this.addAndRemoveErrorClass(currentStepName, 'tab-error');
@@ -242,7 +271,13 @@ export default class XmlForm extends React.Component {
           Helper.toast('Document selection submitted successfully', 'success');
         })
         .catch((err) => {
-          console.log(err);
+          if (err) {
+            Helper.toast(
+              'Something went wrong while document selection, Please try again.',
+              'error',
+              { position: 'top-center' },
+            );
+          }
         });
     } else {
       this.addAndRemoveErrorClass(currentStepName, 'tab-error');
@@ -260,38 +295,6 @@ export default class XmlForm extends React.Component {
       });
   }
 
-  handleFormSubmit = (e) => {
-    e.preventDefault();
-    businessActions.validateXmlForm();
-    if (this.props.businessStore.canSubmitXmlForm) {
-      businessActions.generateXml()
-        .then(() => {
-          this.props.businessStore.setXmlError();
-          this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-          Helper.toast('XML form submitted successfully', 'success');
-        })
-        .catch((err) => {
-          const newErrors = { ...this.props.businessStore.xmlErrors };
-          Object.keys(err.response.body.errors).map((key) => {
-            err.response.body.errors[key].map((element) => {
-              newErrors[key] = element;
-              return newErrors;
-            });
-            return err.response.body.errors;
-          });
-          this.props.businessStore.setXmlError(newErrors);
-          // this.setState({ errors: err.response.body.errors });
-          Helper.toast('Something went wrong while submitting XML Form, Please try again.', 'error', { position: 'top-center' });
-        })
-        .finally(() => {
-          this.props.uiStore.setProgress(false);
-          this.props.uiStore.clearLoaderMessage();
-        });
-    } else {
-      Helper.toast('Form has validation errors', 'error', { position: 'top-center' });
-    }
-  };
-
   handleXmlSubmissionCopy = () => {
     this.props.uiStore.setProgress();
     this.props.uiStore.setLoaderMessage('Copy the XML submission');
@@ -302,7 +305,13 @@ export default class XmlForm extends React.Component {
         Helper.toast('Copy XML submission successfully', 'success');
       })
       .catch((error) => {
-        console.log('Copy XML submission Error', error);
+        if (error) {
+          Helper.toast(
+            'Something went wrong while Copy XML submission, Please try again.',
+            'error',
+            { position: 'top-center' },
+          );
+        }
       });
   };
 
@@ -311,13 +320,17 @@ export default class XmlForm extends React.Component {
     if (xmlActiveTabName === 'filer') {
       saveButtonStatus = !this.props.businessStore.formFilerInfo.meta.isValid;
     } else if (xmlActiveTabName === 'issuer') {
-      saveButtonStatus = !this.props.businessStore.formFilerInfo.meta.isValid;
+      saveButtonStatus = !this.props.businessStore.formIssuerInfo.meta.isValid;
     } else if (xmlActiveTabName === 'offering') {
       saveButtonStatus = !this.props.businessStore.formOfferingInfo.meta.isValid;
     } else if (xmlActiveTabName === 'annual') {
       saveButtonStatus = !this.props.businessStore.formAnnualInfo.meta.isValid;
     } else if (xmlActiveTabName === 'signature') {
       saveButtonStatus = !this.props.businessStore.formSignatureInfo.meta.isValid;
+    } else if (xmlActiveTabName === 'doc') {
+      const documents = _.filter(this.props.businessStore.documentList, document =>
+        document.checked === true);
+      saveButtonStatus = (documents.length === 0);
     }
 
     return saveButtonStatus;
@@ -325,7 +338,6 @@ export default class XmlForm extends React.Component {
 
   render() {
     const {
-      xmlErrors,
       xmlSubmissionTabs,
       xmlActiveTabName,
       xmlSubmissionId,
@@ -405,7 +417,6 @@ export default class XmlForm extends React.Component {
               </Form>
             </Grid.Column>
           </Grid>
-          <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
         </div>
       </div>
     );

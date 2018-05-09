@@ -7,6 +7,9 @@ import PersonalSignature from '../../components/PersonalSignature';
 import businessActions from '../../../../actions/business';
 import validationActions from '../../../../actions/validation';
 import { FormInput } from './../../../../components/form/FormElements';
+import {
+  XML_STATUSES,
+} from '../../../../constants/business';
 
 @inject('businessStore')
 @withRouter
@@ -15,9 +18,6 @@ export default class Signature extends React.Component {
   componentWillUnmount() {
     this.props.businessStore.setXmlError();
   }
-  handleChange = (e, { name, value }) => this.props.businessStore.setSignatureInfo(name, value)
-
-  handleOnBlur = e => validationActions.validateSignatureInfo(e.target.name);
 
   handlePersonalSignatureChange = (e, { name, value, dataid }) => {
     this.props.businessStore.changePersonalSignature(name, dataid, value);
@@ -30,6 +30,7 @@ export default class Signature extends React.Component {
   handleAdd = () => {
     businessActions.addPersonalSignature();
   }
+
   handleDelete = (e, { dataid }) => this.props.businessStore.deletePersonalSignature(dataid);
 
   handleBusinessCancel = () => {
@@ -37,7 +38,11 @@ export default class Signature extends React.Component {
   }
 
   render() {
-    const { formSignatureInfo, signatureInfoChange } = this.props.businessStore;
+    const {
+      formSignatureInfo,
+      signatureInfoChange,
+      xmlSubmissionStatus,
+    } = this.props.businessStore;
     return (
       <div>
         <Card fluid className="form-card">
@@ -61,30 +66,6 @@ export default class Signature extends React.Component {
               name="issuerTitle"
               changed={signatureInfoChange}
             />
-            {/* <Form.Input
-              label={signature.issuer.label}
-              name={signature.issuer.key}
-              value={signature.issuer.value}
-              error={!!signature.issuer.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-            />
-            <Form.Input
-              label={signature.issuerSignature.label}
-              name={signature.issuerSignature.key}
-              value={signature.issuerSignature.value}
-              error={!!signature.issuerSignature.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-            />
-            <Form.Input
-              label={signature.issuerTitle.label}
-              name={signature.issuerTitle.key}
-              value={signature.issuerTitle.value}
-              error={!!signature.issuerTitle.error}
-              onChange={this.handleChange}
-              onBlur={this.handleOnBlur}
-            /> */}
           </Form.Group>
         </Card>
         <Card fluid className="form-card">
@@ -95,11 +76,15 @@ export default class Signature extends React.Component {
             handleAddClick={this.handleAdd}
             handleDeleteClick={this.handleDelete}
             handleOnBlurSigPer={this.handlePersonalSignatureOnBlur}
+            xmlSubmissionStatus={xmlSubmissionStatus}
           />
           <Divider hidden />
-          <div>
-            <Button color="grey" compact onClick={this.handleAdd}>Add</Button>
-          </div>
+          {
+            xmlSubmissionStatus === XML_STATUSES.draft &&
+            <div>
+              <Button color="grey" compact onClick={this.handleAdd}>Add</Button>
+            </div>
+          }
         </Card>
       </div>
     );

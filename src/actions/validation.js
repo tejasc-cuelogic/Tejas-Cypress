@@ -129,7 +129,8 @@ export class Validation {
    * @return null
    */
   validatePersonalSig = (field, id) => {
-    const persig = _.filter(businessStore.signature.signaturePersons, person => person.id === id);
+    const persig = _.filter(businessStore.formSignatureInfo.fields.signaturePersons, person =>
+      person.id === id);
     const { errors } = validationService.validate(persig[0][field]);
     this.formValidationErrors(errors, field);
     businessStore.setPersonalSignatureError(field, id, errors && errors[field][0]);
