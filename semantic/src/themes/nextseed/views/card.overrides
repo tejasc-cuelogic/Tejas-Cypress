@@ -81,7 +81,7 @@
     }
     .content .action-meta{
         display:inline-block;
-        font-size:@14px;
+        font-size:@12px;
         vertical-align:top;
         margin-left:@10px;
         color:@quaternary-text;

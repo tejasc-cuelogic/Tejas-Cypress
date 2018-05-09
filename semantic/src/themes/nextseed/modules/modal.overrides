@@ -155,6 +155,9 @@
                 }
             }
         }
+        &.reward-deatils{
+            padding:@14px;
+        }
     }
     .actions{
         font-size:@14px;
@@ -176,6 +179,21 @@
             border-radius:0;
             border:none;
             border-bottom:@borderColor 1px solid;
+        }
+    }
+    &.reward-modal{
+        .header:not(.ui){
+            padding:@25px @42px;
+        }
+        .content + .content{
+            border-top:@borderColor 1px solid;
+        }
+        .ui.list.link-list{
+            margin:@14px 0 @30px;
+            .item{
+                padding-top:@7px;
+                padding-bottom:@7px;
+            }
         }
     }
 }

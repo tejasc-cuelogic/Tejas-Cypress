@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Modal, Header, Card, Grid, Statistic, Popup, Icon, Tab, Table, List, Embed, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import videoPoster from '../../../assets/images/683547643.webp';
+import RedeemRewards from './RedeemRewards';
 
 const panes = [
   {
@@ -321,7 +322,9 @@ const panes = [
                 <Card.Description>
                   Lorem ipsum dolor sit amet enim. Etiam ullamcorper.
                 </Card.Description>
-                <Button color="green">Redeem Reward</Button>
+                <RedeemRewards />
+                {/* <Button color="green" onClick={() =>
+                this.props.uiStore.setModalStatus('RedeemRewards')}>Redeem Reward</Button> */}
               </Card.Content>
             </Card>
             <Card>
