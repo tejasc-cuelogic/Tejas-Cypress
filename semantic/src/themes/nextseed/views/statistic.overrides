@@ -2,6 +2,20 @@
          Theme Overrides
 *******************************/
 .ui.statistic{
+    i.icon{
+        margin:0 0 0 @7px;
+    }
+    a.label{
+        font-weight:700;
+        color:@theme-primary;
+    }
+    >.label~.value{
+        margin:0.15em 0;
+    }
+}
+.ui.statistic:not(.basic){
+    position:relative;
+    padding-left:@relative16px;
     &:before{
         content:"";
         width:3px;

@@ -12,9 +12,9 @@ import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
 import Helper from '../../../helper/utility';
-import ListErrors from '../../../components/common/ListErrors';
-// import FieldError from '../../../components/common/FieldError';
-import FormErrors from '../../../components/common/FormErrors';
+import ListErrors from '../../../theme/common/ListErrors';
+// import FieldError from '../../../theme/common/FieldError';
+import FormErrors from '../../../theme/common/FormErrors';
 
 @inject('businessStore', 'uiStore')
 @observer
@@ -84,12 +84,12 @@ export default class XmlForm extends React.Component {
     }
     return (
       <div>
-        <div className="page-header-section webcontent-spacer">
+        <div className="page-header-section">
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
                 <h1>
-                  <Link to={`/app/business/${this.props.match.params.businessId}`} className="back-link"><Icon name="long arrow left" /></Link>
+                  <Link to={`/app/business/${this.props.match.params.businessId}`} className="back-link"><Icon className="ns-arrow-left" /></Link>
                   XML Form
                 </h1>
               </Grid.Column>
@@ -122,13 +122,8 @@ export default class XmlForm extends React.Component {
             <Signature />
             <FileSelector />
             <Divider section />
-            <div
-              className="form-footer"
-              style={{
-                paddingBottom: '40px',
-              }}
-            >
-              <Button color="green" size="large" onClick={this.handleFormSubmit}>
+            <div className="center-align">
+              <Button primary size="large" onClick={this.handleFormSubmit}>
                 Submit
               </Button>
               <Button as={Link} size="large" to={`/app/business/${this.props.match.params.businessId}`}>Cancel</Button>

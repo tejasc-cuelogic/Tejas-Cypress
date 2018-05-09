@@ -3,7 +3,7 @@ import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Form, Button, Modal } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import FieldError from '../../../components/common/FieldError';
+import FieldError from '../../../theme/common/FieldError';
 import validationActions from '../../../actions/validation';
 import businessActions from '../../../actions/business';
 import Helper from '../../../helper/utility';
@@ -90,7 +90,7 @@ export default class NewBusinessForm extends React.Component {
 
   handleOpenModal = () => {
     this.props.businessStore.resetNewOfferingInfo();
-    this.props.uiStore.setModalStatus(true);
+    this.props.uiStore.setModalStatus('BusinessForm');
     this.props.businessStore.setEditBusinessMode(false);
   }
 
@@ -103,11 +103,11 @@ export default class NewBusinessForm extends React.Component {
     return (
       <div>
         {!this.props.businessid &&
-          <Button circular color="green" floated="right" onClick={this.handleOpenModal}>+ New Business</Button>
+          <Button primary floated="right" onClick={this.handleOpenModal}>+ New Business</Button>
         }
         <Modal
           size="small"
-          open={this.props.uiStore.modalStatus}
+          open={this.props.uiStore.modalStatus === 'BusinessForm'}
           closeIcon
           onOpen={this.handleOpenModal}
           onClose={this.handleCloseModal}
@@ -169,7 +169,7 @@ export default class NewBusinessForm extends React.Component {
           <Modal.Actions>
             { editBusinessMode === false &&
             <Button
-              color="green"
+              primary
               disabled={
                 !this.props.businessStore.canSubmitNewOfferingForm ||
                   this.props.uiStore.submitButtonDisabled
@@ -180,7 +180,7 @@ export default class NewBusinessForm extends React.Component {
             </Button>}
             { editBusinessMode === true &&
             <Button
-              color="green"
+              primary
               disabled={
                 !((this.state.name.value !== '' && this.state.desc.value !== '') ||
                   this.props.uiStore.submitButtonDisabled)

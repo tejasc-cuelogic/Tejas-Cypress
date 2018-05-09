@@ -24,11 +24,13 @@ class Layout extends Component {
   render() {
     return (
       <div>
-        <Header
-          showSecondaryHeader={false}
-          currentUser={this.props.userStore.currentUser}
-          handleLogOut={this.handleLogOut}
-        />
+        {!this.props.userStore.currentUser &&
+          <Header
+            showSecondaryHeader={false}
+            currentUser={this.props.userStore.currentUser}
+            handleLogOut={this.handleLogOut}
+          />
+        }
         {this.props.children}
 
         {this.props.uiStore.authWizardStep &&

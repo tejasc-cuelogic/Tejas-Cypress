@@ -1,77 +1,75 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import upperFirst from 'lodash/upperFirst';
-import Loadable from 'react-loadable';
-import UserListing from './../components/UserListing';
-import CreateNew from './../components/CreateNew';
-// import UserDetails from './../components/UserDetails';
-// import UserAccounts from './../components/UserAccounts';
-import UserModuleSubheader from './../components/UserModuleSubheader';
+import Aux from 'react-aux';
+import { USER_LIST_META } from '../../../constants/user';
 import UserListingSubheader from './../components/UserListingSubheader';
-import adminActions from './../../../actions/admin';
+import UserListing from './../components/UserListing';
 
-@inject('adminStore', 'userStore')
+@inject('userListingStore')
 @observer
 class Users extends Component {
-  componentDidMount() {
-    this.searchUsers();
+  componentWillMount() {
+    this.props.userListingStore.initRequest();
   }
 
-  searchUsers = () => {
-    adminActions.listUsers({ filter: '' });
+  setSearchParam = (e, { name, value }) => this.props.userListingStore.setInitiateSrch(name, value);
+
+  dateFilterStart = (date) => {
+    if (date) {
+      this.props.userListingStore.setInitiateSrch('startDate', date);
+    }
   }
 
-  headerMeta = [
-    ['profilepic', '', false],
-    ['full_name', 'Full Name', true],
-    ['residence_city', 'Residence City', true],
-    ['phone', 'Phone', true],
-    ['type', 'Type', true],
-    ['last_login', 'Last Login', true],
-    ['account_creation', 'Account Creation', true],
-    ['actions', '', false],
-  ];
+  dateFilterEnd = (date) => {
+    if (date) {
+      this.props.userListingStore.setInitiateSrch('endDate', date);
+    }
+  }
+
+  toggleSearch = () => this.props.userListingStore.toggleSearch();
+
+  loadMore = () => this.props.userListingStore.loadMore();
+
+  removeFilter = name => this.props.userListingStore.removeFilter(name);
+
+  sortHandler = (by, sortable) => {
+    this.props.userListingStore.initiateSort(by, sortable);
+  };
+
+  executeSearch = (e) => {
+    if (e.charCode === 13) {
+      this.props.userListingStore.setInitiateSrch('keyword', e.target.value);
+    }
+  }
 
   render() {
-    let content = null;
-    if (this.props.location.pathname === '/app/users/new') {
-      content = (
-        <Aux>
-          <UserModuleSubheader />
-          <CreateNew />
-        </Aux>
-      );
-    } else if (this.props.match.params.userId) {
-      const loadSection = upperFirst(this.props.match.params.section) || 'UserDetails';
-      const UserSection = Loadable({
-        loader: () => import(`../components/${loadSection}`),
-        loading() {
-          return <div>Loading...</div>;
-        },
-      });
-      content = (
-        <Aux>
-          <UserModuleSubheader />
-          <UserSection />
-        </Aux>
-      );
-    } else if (this.props.adminStore && this.props.adminStore.usersList) {
-      content = (
-        <Aux>
-          <UserListingSubheader />
-          <UserListing
-            header={this.headerMeta}
-            listData={this.props.adminStore.usersList}
-            hasPagination
-          />
-        </Aux>
-      );
-    } else {
-      content = <div>loading..</div>;
-    }
-
-    return content;
+    const {
+      users, loading, error, usersSummary,
+    } = this.props.userListingStore;
+    return (
+      <Aux>
+        <UserListingSubheader
+          summary={usersSummary}
+          filters={this.props.userListingStore.filters}
+          requestState={this.props.userListingStore.requestState}
+          toggleSearch={this.toggleSearch}
+          executeSearch={this.executeSearch}
+          setSearchParam={this.setSearchParam}
+          dateFilterStart={this.dateFilterStart}
+          dateFilterEnd={this.dateFilterEnd}
+          removeFilter={this.removeFilter}
+        />
+        <UserListing
+          loading={loading}
+          error={error}
+          header={USER_LIST_META}
+          listData={users}
+          sortHandler={this.sortHandler}
+          loadMore={this.loadMore}
+          sortState={this.props.userListingStore.sortInfo}
+        />
+      </Aux>
+    );
   }
 }
 

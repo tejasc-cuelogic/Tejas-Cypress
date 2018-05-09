@@ -24,6 +24,10 @@ export class Utility {
       toast(`${msg}`, _.merge({}, this.options, optionsOverride));
     }
   }
+
+  unMaskInput = maskedInput => (
+    maskedInput.split('-').join('')
+  )
 }
 
 export default new Utility();

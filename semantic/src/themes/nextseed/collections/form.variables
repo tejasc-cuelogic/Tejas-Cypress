@@ -17,23 +17,23 @@
 @fieldMargin: 0em 0em @rowDistance;
 
 /* Fields */
-@fieldsMargin: 0em -(@gutterWidth / 2) @rowDistance;
+@fieldsMargin: 0em -(@gutterWidth / 2);
 
 /* Form Label */
 @labelDistance: @4px;
 @labelMargin: 0em 0em @labelDistance 0em;
-@labelFontSize:1rem;
-@labelFontWeight: 500;
+@labelFontSize:@13px;
+@labelFontWeight:700;
 @labelTextTransform: none;
-@labelColor: @quaternary-text;
+@labelColor:@fullBlack;
 
 /* Input */
 @inputFont: @pageFont;
 @inputWidth: 100%;
 @inputFontSize: 1em;
 @inputPadding: (@inputVerticalPadding + ((1em - @inputLineHeight) / 2)) @inputHorizontalPadding;
-@inputBorder: 1px solid @borderColor;
-@inputBorderRadius: @absoluteBorderRadius;
+@inputBorder:none;
+@inputBorderRadius: @absoluteBorderRadius * 0;
 @inputColor: @textColor;
 @inputTransition:
   color @defaultDuration @defaultEasing,
@@ -84,8 +84,8 @@
 
 /* Input Focus */
 @inputFocusBackground: @inputBackground;
-@inputFocusBorderColor: @focusedFormBorderColor;
-@inputFocusColor: @selectedTextColor;
+@inputFocusBorderColor: @theme-primary;
+@inputFocusColor: @fullBlack;
 @inputFocusBoxShadow: @inputFocusPointerSize 0em 0em 0em @selectedBorderColor inset;
 @inputFocusBorderRadius: @inputBorderRadius;
 
@@ -101,8 +101,8 @@
 
 /* Errored Input */
 @formErrorColor: @negativeTextColor;
-@formErrorBorder: @negativeBorderColor;
-@formErrorBackground: @negativeBackgroundColor;
+@formErrorBorder: @negativeTextColor;
+@formErrorBackground: transparent;
 
 /* AutoFill */
 @inputAutoFillBackground: #FFFFF0;
@@ -114,20 +114,20 @@
 
 
 /* Input Error */
-@inputErrorBorderRadius: '';
+@inputErrorBorderRadius:0;
 @inputErrorBoxShadow: none;
 
 /* Dropdown Error */
-@dropdownErrorHoverBackground: #FBE7E7;
+@dropdownErrorHoverBackground:transparent;
 @dropdownErrorSelectedBackground: @dropdownErrorHoverBackground;
-@dropdownErrorActiveBackground: #FDCFCF;
-@dropdownErrorLabelBackground: #EACBCB;
+@dropdownErrorActiveBackground:transparent;
+@dropdownErrorLabelBackground:transparent;
 @dropdownErrorLabelColor: @errorTextColor;
 
 /* Focused Error */
-@inputErrorFocusBackground: @negativeBackgroundColor;
+@inputErrorFocusBackground:transparent;
 @inputErrorFocusColor: @negativeTextColor;
-@inputErrorFocusBorder: @negativeBorderColor;
+@inputErrorFocusBorder: @negativeTextColor;
 @inputErrorFocusBoxShadow: none;
 
 /* Placeholder Error */
@@ -155,10 +155,10 @@
 
 /* Inverted */
 @invertedInputBackground: @inputBackground;
-@invertedInputBorderColor: @whiteBorderColor;
+@invertedInputBorderColor: @border-color;
 @invertedInputBoxShadow: @inputBoxShadow;
-@invertedInputColor: @inputColor;
-@invertedLabelColor: @invertedTextColor;
+@invertedInputColor: @white;
+@invertedLabelColor: @quaternary-text;
 @invertedInputBoxShadow: none;
 
 /*-------------------

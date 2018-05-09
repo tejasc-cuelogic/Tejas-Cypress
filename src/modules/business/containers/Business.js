@@ -28,7 +28,7 @@ class Business extends Component {
     }
     return (
       <div>
-        <div className="page-header-section webcontent-spacer">
+        <div className="page-header-section">
           <Grid stackable>
             <Grid.Row>
               <Grid.Column width={6}>
@@ -36,19 +36,65 @@ class Business extends Component {
               </Grid.Column>
               <Grid.Column width={5}>
                 <Form inverted>
-                  <Input fluid inverted icon="search" iconPosition="left" placeholder="Type Business’s name, description" />
+                  <Input fluid inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Type Business’s name, description" />
                 </Form>
               </Grid.Column>
               <Grid.Column width={2} textAlign="center">
                 <span className="filter-count">0</span>
                 <Button icon color="green" className="link-button">
-                  FILTERS <Icon name="caret down" />
+                  Filters <Icon className="ns-caret-down" />
                 </Button>
               </Grid.Column>
               <Grid.Column width={3} textAlign="right">
                 <NewBusinessForm />
               </Grid.Column>
             </Grid.Row>
+          </Grid>
+        </div>
+        {/* Filters will be here for Business Listing */}
+        {/* <div className="search-filters">
+          <Grid stackable>
+            <Grid.Row>
+              <Grid.Column width={3}>
+                <h5>Account Type</h5>
+                <Dropdown className="inverted" placeholder="Select Filter"
+                fluid multiple selection options={accountType} />
+              </Grid.Column>
+              <Grid.Column width={3}>
+                <h5>Status</h5>
+                <Dropdown className="inverted" placeholder="Select Filter"
+                fluid multiple selection options={status} />
+              </Grid.Column>
+              <Grid.Column width={3}>
+                <h5>Accridiation</h5>
+                <Dropdown className="inverted" placeholder="Select Filter"
+                fluid multiple selection options={accridiation} />
+              </Grid.Column>
+              <Grid.Column width={4}>
+                <h5>Creation date</h5>
+                <Form>
+                  <Form.Group widths="equal">
+                    <Form.Field>
+                      <Input fluid icon={{ className: 'ns-calendar' }} iconPosition="left"
+                      placeholder="01/01/2017" />
+                    </Form.Field>
+                    <Form.Field>
+                      <Input fluid icon={{ className: 'ns-calendar' }} iconPosition="left"
+                      placeholder="01/01/2018" />
+                    </Form.Field>
+                  </Form.Group>
+                </Form>
+              </Grid.Column>
+              <Grid.Column width={3}>
+                <h5>City</h5>
+                <Dropdown className="inverted" placeholder="Select Filter" fluid
+                multiple selection options={city} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </div> */}
+        <div className="filter-meta">
+          <Grid stackable>
             <Grid.Row>
               <Grid.Column width={16}>
                 <List horizontal relaxed>

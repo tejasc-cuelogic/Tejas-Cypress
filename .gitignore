@@ -14,7 +14,6 @@ build
 npm-debug.log
 .idea
 .eslintrc
-
 src/assets/app.css
 
 # semantic ui based theme (less)
@@ -23,4 +22,4 @@ src/assets/semantic/*
 # Ignore ESLint file
 .eslintrc
 
-.env
+.env.local
