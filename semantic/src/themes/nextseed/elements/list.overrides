@@ -86,17 +86,7 @@
 	background-color:@light-bg-color;
     .ui.list{
         margin-left:@5px;
-        // position:relative;
-        border-left:red 1px solid;
-        // &:before{
-        //     content:"";
-        //     width:1px;
-        //     height:~"calc(100% - 16px)";
-        //     background-color:@border-color;
-        //     position:absolute;
-        //     top:8px;
-        //     left:0;
-        // }
+        border-left:@border-color 1px solid;
         .item{
             padding-left:@21px;
             font-size:@13px;
