@@ -1026,6 +1026,9 @@ i.icon[class*="ns-"]{
 .ns-bag:before{
     content:@ns-bag;
 }
+.ns-bar:before{
+    content:@ns-bar; 
+}
 .ns-bar-chart:before{
     content:@ns-bar-chart;
 }
@@ -1146,6 +1149,9 @@ i.icon[class*="ns-"]{
 .ns-file:before{
     content:@ns-file;
 }
+.ns-fitness:before{
+    content:@ns-fitness; 
+}
 .ns-food:before{
     content:@ns-food;
 }
@@ -1154,6 +1160,9 @@ i.icon[class*="ns-"]{
 }
 .ns-help-circle:before{
     content:@ns-help-circle;
+}
+.ns-hospitality:before{
+    content:@ns-hospitality; 
 }
 .ns-image:before{
     content:@ns-image;
