@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Modal, Header, Card, Grid, Statistic, Popup, Icon, Tab, Table, List, Embed } from 'semantic-ui-react';
+import { Modal, Header, Card, Grid, Statistic, Popup, Icon, Tab, Table, List, Embed, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import videoPoster from '../../../assets/images/683547643.webp';
 
@@ -140,8 +140,8 @@ const panes = [
           </Grid.Column>
           <Grid.Column width={1} only="computer" />
           <Grid.Column width={12} computer={10} className="update-details">
-            <Header as="h3">Featurette on Ben McPherson and BOH Pasta</Header>
-            <Header as="h6">Dec 17th 2017</Header>
+            <Header as="h3" className="mb-half">Featurette on Ben McPherson and BOH Pasta</Header>
+            <Header as="h5">Dec 17th 2017</Header>
             <Embed
               id="255991323"
               placeholder={videoPoster}
@@ -178,42 +178,163 @@ const panes = [
         <div className="inner-content-spacer">
           <Header as="h3">Your investment</Header>
           <Grid columns="equal" textAlign="center" className="investment-scale">
+            <div className="invested">
+              <span className="investment-progress" style={{ width: '58%' }} />
+              <div className="amount" style={{ left: '58%' }}>Your investment <span>$7000</span></div>
+            </div>
             <Grid.Row>
               <Grid.Column className="crossed">
                 <Popup
                   trigger={<span>$500</span>}
                   position="bottom center"
+                  className="reward-info"
                   wide
-                  on="click"
                 >
-                  <Header as="h3">Invest $500 or more</Header>
-                  <Header as="h5">Cooking Class</Header>
-                  <List bulleted>
-                    <List.Item>$50 Gift Card</List.Item>
-                    <List.Item>Invitation for 2 to the Launch Party</List.Item>
-                  </List>
+                  <Popup.Content>
+                    <Header as="h3" className="mb-half">Invest $500 or more</Header>
+                    <Header as="h5">Cooking Class</Header>
+                    <List bulleted>
+                      <List.Item>$50 Gift Card</List.Item>
+                      <List.Item>Invitation for 2 to the Launch Party</List.Item>
+                    </List>
+                  </Popup.Content>
+                </Popup>
+              </Grid.Column>
+              <Grid.Column className="crossed">
+                <Popup
+                  trigger={<span>$1000</span>}
+                  position="bottom center"
+                  className="reward-info"
+                  wide
+                >
+                  <Popup.Content>
+                    <Header as="h3" className="mb-half">Invest $1000 or more</Header>
+                    <Header as="h5">Cooking Class</Header>
+                    <List bulleted>
+                      <List.Item>$50 Gift Card</List.Item>
+                      <List.Item>Invitation for 2 to the Launch Party</List.Item>
+                    </List>
+                  </Popup.Content>
+                </Popup>
+              </Grid.Column>
+              <Grid.Column className="crossed">
+                <Popup
+                  trigger={<span>$2,500</span>}
+                  position="bottom center"
+                  className="reward-info"
+                  wide
+                >
+                  <Popup.Content>
+                    <Header as="h3" className="mb-half">Invest $2,500 or more</Header>
+                    <Header as="h5">Cooking Class</Header>
+                    <List bulleted>
+                      <List.Item>$50 Gift Card</List.Item>
+                      <List.Item>Invitation for 2 to the Launch Party</List.Item>
+                    </List>
+                  </Popup.Content>
+                </Popup>
+              </Grid.Column>
+              <Grid.Column className="crossed">
+                <Popup
+                  trigger={<span>$5,000</span>}
+                  position="bottom center"
+                  className="reward-info"
+                  wide
+                >
+                  <Popup.Content>
+                    <Header as="h3" className="mb-half">Invest $5,000 or more</Header>
+                    <Header as="h5">Cooking Class</Header>
+                    <List bulleted>
+                      <List.Item>$50 Gift Card</List.Item>
+                      <List.Item>Invitation for 2 to the Launch Party</List.Item>
+                    </List>
+                  </Popup.Content>
                 </Popup>
               </Grid.Column>
               <Grid.Column>
-                $1,000
+                <Popup
+                  trigger={<span>$10,000</span>}
+                  position="bottom center"
+                  className="reward-info"
+                  wide
+                >
+                  <Popup.Content>
+                    <Header as="h3" className="mb-half">Invest $10,000 or more</Header>
+                    <Header as="h5">Cooking Class</Header>
+                    <List bulleted>
+                      <List.Item>$50 Gift Card</List.Item>
+                      <List.Item>Invitation for 2 to the Launch Party</List.Item>
+                    </List>
+                  </Popup.Content>
+                </Popup>
               </Grid.Column>
               <Grid.Column>
-                $2,500
+                <Popup
+                  trigger={<span>$25,000</span>}
+                  position="bottom center"
+                  className="reward-info"
+                  wide
+                >
+                  <Popup.Content>
+                    <Header as="h3" className="mb-half">Invest $25,000 or more</Header>
+                    <Header as="h5">Cooking Class</Header>
+                    <List bulleted>
+                      <List.Item>$50 Gift Card</List.Item>
+                      <List.Item>Invitation for 2 to the Launch Party</List.Item>
+                    </List>
+                  </Popup.Content>
+                </Popup>
               </Grid.Column>
               <Grid.Column>
-                $5,000
-              </Grid.Column>
-              <Grid.Column>
-                $10,000
-              </Grid.Column>
-              <Grid.Column>
-                $25,000
-              </Grid.Column>
-              <Grid.Column>
-                $50,000
+                <Popup
+                  trigger={<span>$50,000</span>}
+                  position="bottom center"
+                  className="reward-info"
+                  wide
+                >
+                  <Popup.Content>
+                    <Header as="h3" className="mb-half">Invest $50,000 or more</Header>
+                    <Header as="h5">Cooking Class</Header>
+                    <List bulleted>
+                      <List.Item>$50 Gift Card</List.Item>
+                      <List.Item>Invitation for 2 to the Launch Party</List.Item>
+                    </List>
+                  </Popup.Content>
+                </Popup>
               </Grid.Column>
             </Grid.Row>
           </Grid>
+          <Header as="h3">Your rewards</Header>
+          <Card.Group itemsPerRow={3}>
+            <Card>
+              <Card.Content>
+                <Card.Header>$50 Gift Card</Card.Header>
+                <Card.Description>
+                  Lorem ipsum dolor sit amet enim. Etiam ullamcorper.
+                </Card.Description>
+                <Button color="green">Redeem Reward</Button>
+              </Card.Content>
+            </Card>
+            <Card>
+              <Card.Content>
+                <Card.Header>Invitation to the Launch Party</Card.Header>
+                <Card.Description>
+                  Lorem ipsum dolor sit amet enim. Etiam ullamcorper.
+                </Card.Description>
+                <Button color="green">Redeem Reward</Button>
+              </Card.Content>
+            </Card>
+            <Card>
+              <Card.Content>
+                <Card.Header>Cooking Classes</Card.Header>
+                <Card.Description>
+                  Lorem ipsum dolor sit amet enim. Etiam ullamcorper.
+                </Card.Description>
+                <Button inverted color="green">Download voucher</Button>
+                <div className="action-meta">Exp. date<br /><b>02-20-2019</b></div>
+              </Card.Content>
+            </Card>
+          </Card.Group>
         </div>
       </Tab.Pane>),
   },

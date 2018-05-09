@@ -110,7 +110,15 @@ div.login-form {
 	}
 }
 
+//	Heading font sizes
+h6{
+	font-size:@13px;
+}
+
 // Helper classes
+.mb-half{
+	margin-bottom:@7px !important;
+}
 .pull-left{
 	float:left !important;
 }
@@ -270,21 +278,6 @@ div.login-form {
 		z-index:9;
 	}
 }
-// .actions{
-// 	font-size:@16px;
-// 	a{
-// 		color:@inverse-secondary-text;
-// 		&:hover{
-// 			color:lighten(@inverse-secondary-text, 15%);
-// 		}
-// 		&.danger{
-// 			color:@highlight-primary;
-// 			&:hover{
-// 				color:darken(@highlight-primary, 15%);
-// 			}
-// 		}
-// 	}
-// }
 
 //	Notification panel
 .notification-panel{
@@ -580,15 +573,95 @@ ol.progtrckr{
 }
   
 .update-details{
-	h3.ui.header{
-		margin-bottom:@7px;
-	}
-	h5.ui.header{
-		font-size:@12px;
-		margin-top:@7px;
-	}
 	.ui.embed{
 		margin-bottom:@28px;
 	}
 }
-
+.ui.grid.investment-scale{
+	margin-bottom:@40px;
+	.invested{
+		margin:0 ~"calc(100% / 7 / 2)";
+		padding:0 !important;
+		width:100%;
+		min-height:40px;
+		position:relative;
+		.investment-progress{
+			content:"";
+			height:3px;
+			// width:58%;
+			background:lighten(@link-color, 20%);
+			display:block;
+			position:absolute;
+			bottom:-41px;
+			z-index:1;
+		}
+		>.amount{
+			min-width:calc(100% / 7);
+			padding:0 1rem;
+			position:absolute;
+			left:0;
+			z-index:3;
+			transform:translate(-50%, 0%);
+			font-size:@13px;
+			font-weight:700;
+			color:@quaternary-text;
+			>span{
+				font-size:@14px;
+				color:@link-color;
+				display:block;
+			}
+			&:after{
+				content:"";
+				width:13px;
+				height:13px;
+				border-radius:@8px;
+				background-color:@link-color;
+				position:absolute;
+				left:50%;
+				bottom:-55px;
+				transform:translate(-50%, -50%);
+				border:3px solid white;
+				box-shadow:0px 0px 4px 1px @link-color;
+			}
+		}
+	}
+	.column{
+		position:relative;
+		padding-top:@50px;
+		font-weight:700;
+		color:@border-color;
+		&:before{
+			content:"";
+			height:1px;
+			width:100%;
+			position:absolute;
+			left:50%;
+			top:25px;
+			background-color:@border-color;
+		}
+		&:after{
+			content:"";
+			width:9px;
+			height:9px;
+			border-radius:@5px;
+			background-color:@quaternary-text;
+			position:absolute;
+			left:50%;
+			top:25px;
+			z-index:2;
+			transform:translate(-50%, -50%);
+			border:2px solid white;
+			box-shadow:0px 0px 4px 1px @quaternary-text;
+		}
+		&:last-child:before{
+			display:none;
+		}
+		&.crossed{
+			color:@link-color;
+			&:after{
+				background-color:lighten(@link-color, 20%);
+				box-shadow:0px 0px 4px 1px @link-color;
+			}
+		}
+	}
+}
