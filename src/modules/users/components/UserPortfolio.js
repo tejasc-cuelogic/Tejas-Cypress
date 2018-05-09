@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Card, Grid, Statistic, Popup, Icon, Form, List, Radio, Divider, Table, Accordion, Progress, Button } from 'semantic-ui-react';
-import { FormDropDown } from '../../../components/form/FormElements';
+import { FormDropDown } from '../../../theme/form/FormElements';
 
 /* eslint-disable arrow-body-style */
 const options = [

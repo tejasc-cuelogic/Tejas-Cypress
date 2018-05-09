@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import GridListing from '../../../theme/ui/GridListing';
+import GridListing from '../../../../theme/ui/GridListing';
 import BlogPost from '../components/BlogPost';
 
 class Blog extends Component {

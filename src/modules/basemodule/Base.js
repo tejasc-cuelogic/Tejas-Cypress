@@ -4,7 +4,6 @@ import PrivateLayout from '../../containers/common/PrivateHOC';
 class Base extends Component {
   render() {
     const pathInfo = this.props.location.pathname.split('/app/page/');
-    console.log(pathInfo[1]);
     return (
       <PrivateLayout {...this.props}>
         <div

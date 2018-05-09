@@ -3,8 +3,8 @@ import { Table, Visibility, Card } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import DateTimeFormat from './../../../components/common/DateTimeFormat';
-import Randavatar from './../../../components/common/Randavatar';
+import DateTimeFormat from './../../../theme/common/DateTimeFormat';
+import Randavatar from './../../../theme/common/Randavatar';
 import UserTypeIcon from './UserTypeIcon';
 
 class UserListing extends Component {

@@ -4,7 +4,7 @@ import { Sidebar, Menu, Button, Image } from 'semantic-ui-react';
 import NotificationPanel from './NotificationPanel';
 import uiStore from '../../stores/uiStore';
 import { SidebarNav, GetNavItem } from './SidebarNav';
-import Randavatar from './../../components/common/Randavatar';
+import Randavatar from './../../theme/common/Randavatar';
 import LogoWhite from '../../assets/images/nextseed_logo_white_green.svg';
 import LogoColor from '../../assets/images/nextseed_logo_color.svg';
 import LogoSmall from '../../assets/images/ns-logo-small.svg';

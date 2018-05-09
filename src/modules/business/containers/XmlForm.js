@@ -12,9 +12,9 @@ import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
 import Helper from '../../../helper/utility';
-import ListErrors from '../../../components/common/ListErrors';
-// import FieldError from '../../../components/common/FieldError';
-import FormErrors from '../../../components/common/FormErrors';
+import ListErrors from '../../../theme/common/ListErrors';
+// import FieldError from '../../../theme/common/FieldError';
+import FormErrors from '../../../theme/common/FormErrors';
 
 @inject('businessStore', 'uiStore')
 @observer

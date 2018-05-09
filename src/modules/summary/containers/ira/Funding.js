@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import find from 'lodash/find';
-import { FormRadioGroup } from '../../../../components/form/FormElements';
+import { FormRadioGroup } from '../../../../theme/form/FormElements';
 
 @inject('iraAccountStore')
 @observer

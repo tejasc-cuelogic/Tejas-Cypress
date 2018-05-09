@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import { Modal, Button, Header, Form, Divider, Icon } from 'semantic-ui-react';
-import { FormInput } from '../../../components/form/FormElements';
+import { FormInput } from '../../../theme/form/FormElements';
 import Helper from '../../../helper/utility';
 
 @inject('profileStore', 'uiStore')

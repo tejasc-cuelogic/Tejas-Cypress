@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Menu, Icon, Label } from 'semantic-ui-react';
 import _ from 'lodash';
-import { ALL_NAV_ITEMS } from '../../constants/navigation';
+import { ALL_NAV_ITEMS } from '../../constants/privateNavigationMeta';
 
 export const SidebarNav = (props) => {
   const { roles } = props;

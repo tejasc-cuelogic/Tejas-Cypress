@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Table, Button, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Banklogo from '../../../../assets/images/boa-logo.jpg';
-import DateTimeFormat from '../../../../components/common/DateTimeFormat';
+import DateTimeFormat from '../../../../theme/common/DateTimeFormat';
 
 @inject('accountStore')
 @observer

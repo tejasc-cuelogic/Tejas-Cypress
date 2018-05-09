@@ -1,19 +1,19 @@
-import About from './about/containers/About';
-import Agreements from './agreements/containers/Agreements';
-import Blog from './blog/containers/Blog';
+import About from './public/about/containers/About';
+import Agreements from './public/agreements/containers/Agreements';
+import Blog from './public/blog/containers/Blog';
+import Home from './public/home/containers/Home';
+import Invest from './public/invest/containers/Invest';
+import Offering from './public/offering/containers/Offering';
+import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import Business from '../modules/business/containers/Business';
 import ChangePassword from '../modules/auth/ChangePassword';
 import Confirm from '../modules/auth/Confirm';
 import EdgarForm from '../modules/business/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
-import Home from './home/containers/Home';
-import Invest from './invest/containers/Invest';
 import Login from '../modules/auth/Login';
-import Offering from './offering/containers/Offering';
 import Register from '../modules/auth/Register';
 import ResetPassword from '../modules/auth/ResetPassword';
 import Settings from './../modules/settings/containers/Settings';
-import CaseStudies from './caseStudies/containers/CaseStudies';
 import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
 import Banking from './banking/containers/Banking';
 import Base from './basemodule/Base';
@@ -33,7 +33,7 @@ import {
   BusinessAuthorization,
   UserAuthorization,
   InvestorAuthorization,
-} from '../components/common/Authorization';
+} from '../theme/common/Authorization';
 
 export const publicRoutes = [
   {

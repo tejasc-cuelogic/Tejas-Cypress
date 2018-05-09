@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { FormInput, MaskedInput } from '../../../components/form/FormElements';
+import { FormInput, MaskedInput } from '../../../theme/form/FormElements';
 
 import Helper from '../../../helper/utility';
-import ListErrors from '../../../components/common/ListErrors';
+import ListErrors from '../../../theme/common/ListErrors';
 
 @inject('profileStore', 'uiStore')
 @observer

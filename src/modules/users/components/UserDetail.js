@@ -4,7 +4,7 @@ import { Grid, Form, Label, Card, Header, Button, Checkbox, Feed } from 'semanti
 import Spinner from '../../../theme/ui/Spinner';
 // import ToggleEdit from './ToggleEdit';
 import { US_STATES } from '../../../constants/account'; //  added Temperarily to update UI as per new layout
-import { FormSelect } from '../../../components/form/FormElements';
+import { FormSelect } from '../../../theme/form/FormElements';
 
 const states = {
   label: 'State',

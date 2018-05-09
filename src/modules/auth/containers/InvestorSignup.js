@@ -3,8 +3,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
 import authActions from '../../../actions/auth';
-import ListErrors from '../../../components/common/ListErrors';
-import FieldError from '../../../components/common/FieldError';
+import ListErrors from '../../../theme/common/ListErrors';
+import FieldError from '../../../theme/common/FieldError';
 import validationActions from '../../../actions/validation';
 
 @inject('authStore', 'uiStore')

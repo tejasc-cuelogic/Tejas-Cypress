@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete } from '../../../components/form/FormElements';
+import { FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete } from '../../../theme/form/FormElements';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
 import profileActions from '../../../actions/profile';
 import Helper from '../../../helper/utility';
-import CipErrors from '../../../components/common/CipErrors';
+import CipErrors from '../../../theme/common/CipErrors';
 
 @inject('profileStore', 'uiStore', 'userStore')
 @observer
