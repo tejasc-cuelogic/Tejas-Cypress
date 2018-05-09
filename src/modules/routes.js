@@ -188,7 +188,7 @@ export const privateRoutes = [
     auth: InvestorAuthorization,
   },
   {
-    path: '/app/individual',
+    path: '/app/individual-account',
     exact: false,
     component: Individual,
     auth: InvestorAuthorization,

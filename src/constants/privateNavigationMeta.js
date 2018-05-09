@@ -74,7 +74,7 @@ export const ALL_NAV_ITEMS = [
     icon: 'ns-individual',
     title: 'Individual',
     heading: 'Individual Account',
-    to: 'account-details/individual',
+    to: 'individual-account',
     accessibleTo: ['individual', 'investor'],
     subPanel: 1,
     ...INVESTER_ACC_SUB_NAV_ITEMS,
