@@ -104,7 +104,7 @@ class IndividualAccountStore {
         })
         .then(result => this.setNsAccId(result.data.createIndividualAccount.accountId), resolve())
         .catch(action((err) => {
-          console.log(err);
+          console.log(err, typeof err);
           uiStore.setErrors(this.simpleErr(err));
           reject();
         }));
@@ -123,7 +123,10 @@ class IndividualAccountStore {
           },
         })
         .then(data => console.log(data), resolve())
-        .catch(err => console.log(err), reject());
+        .catch(action((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject();
+        }));
     });
   }
 

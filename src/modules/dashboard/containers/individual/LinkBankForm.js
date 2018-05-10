@@ -17,6 +17,7 @@ export default class LinkBankForm extends Component {
         console.log('in catch');
       });
   }
+
   render() {
     const { errors } = this.props.uiStore;
     const { formLinkBankManually, linkBankManuallyChange } = this.props.individualAccountStore;
