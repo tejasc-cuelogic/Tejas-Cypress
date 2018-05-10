@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { Modal, Card } from 'semantic-ui-react';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
+import Transactions from '../components/portfolio/Transactions';
+import Updates from '../components/portfolio/Updates';
+import BonusRewards from '../components/portfolio/BonusRewards';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 
 const summaryDetails = {
@@ -26,9 +30,9 @@ const summaryDetails = {
 };
 
 const navItems = [
-  { title: 'Transactions', to: 'transactions' },
-  { title: 'Updates', to: 'updates' },
-  { title: 'Bonus Rewards', to: 'bonus-rewards' },
+  { title: 'Transactions', to: 'transactions', component: Transactions },
+  { title: 'Updates', to: 'updates', component: Updates },
+  { title: 'Bonus Rewards', to: 'bonus-rewards', component: BonusRewards },
 ];
 
 class InvestmentDetails extends Component {
@@ -44,9 +48,14 @@ class InvestmentDetails extends Component {
           <SummaryHeader details={summaryDetails} />
           <Card fluid>
             <SecondaryMenu match={this.props.match} navItems={navItems} />
-            <div className="table-wrapper">
-              content goes here !!
-            </div>
+            <Switch>
+              <Route exact path={this.props.match.url} component={Transactions} />
+              {
+                navItems.map(item => (
+                  <Route path={`${this.props.match.url}/${item.to}`} component={item.component} />
+                ))
+              }
+            </Switch>
           </Card>
         </Modal.Content>
       </Modal>
