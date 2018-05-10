@@ -35,7 +35,7 @@ class PrivateHOC extends Component {
             </div>
           }
           {pageMeta.subPanel === 1 &&
-            <SecondaryMenu match={this.props.match} navItems={pageMeta.subNavigations} />
+            <SecondaryMenu match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} />
           }
         </div>
         <div className="content-spacer">

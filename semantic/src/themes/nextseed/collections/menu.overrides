@@ -9,20 +9,21 @@
     }
 }
 .transaction-detials{
-    .ui.attached.inverted.menu{
-        margin:0;
-        width:100%;
-        max-width:100%;
-    }
     .ui.inverted.menu .item{
         padding:@16px @25px;
-        font-weight:700;
         &:before{
             background-color:@tertiary-text;
         }
-        &.active{
+        &:hover, &:focus, &.active{
             background-color:@white;
             color:@link-color !important;
         }
     }
 }
+
+.ui.menu.secondary-menu{
+    a.item{
+        padding:@16px @20px;
+    }
+}
+

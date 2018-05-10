@@ -93,11 +93,12 @@
 
 .ui.card>.content:not(:first-child),
 .ui.cards>.card>.content:not(:first-child){
-    // padding-top:0;
-    // border-top:none;
     border-top-color:@border-light;
 }
 .ui.card{
+    >:first-child{
+        overflow:hidden;
+    }
     .meta{
         margin-bottom:1rem;
         font-size:@14px;

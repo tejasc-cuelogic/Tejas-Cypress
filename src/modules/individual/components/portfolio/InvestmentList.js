@@ -31,7 +31,6 @@ const InvestmentList = (props) => {
           <Table singleLine className="investment-details">
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell />
                 {listHeader.map(cell => <Table.HeaderCell textAlign={cell === 'Invested Amount' ? 'right' : ''}>{cell}</Table.HeaderCell>)}
                 <Table.HeaderCell />
               </Table.Row>
@@ -40,7 +39,6 @@ const InvestmentList = (props) => {
               {
                 investments.map(data => (
                   <Table.Row key={data.name}>
-                    <Table.Cell />
                     <Table.Cell>
                       <Icon className={`ns-${data.type} offering-icon`} />
                       <Link to={`${props.match.url}/investment-details/1`}>{data.name}</Link>
