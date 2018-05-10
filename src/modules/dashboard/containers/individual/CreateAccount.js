@@ -31,11 +31,11 @@ export default class CreateAccount extends React.Component {
                   <Item.Description>
                     <h5>{nsAccId}</h5>
                   </Item.Description>
-                  Funds that will be added
-                  ${formAddFunds.fields.value.value}
                 </Item.Content>
               </Item>
             </Item.Group>
+            <Header as="h3" textAlign="center">Funds that will be added</Header>
+            <p className="center-align">${formAddFunds.fields.value.value}</p>
           </div>
         </div>
         <div className="center-align">
