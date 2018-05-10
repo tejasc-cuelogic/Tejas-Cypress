@@ -2,7 +2,9 @@ import React from 'react';
 import { Form, Button, Input } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import moment from 'moment';
-import DatePicker from 'react-datepicker';
+import FieldError from './../../../components/common/FieldError';
+
+import { FormInput, FormDatePicker } from './../../../components/form/FormElements';
 
 const PersonalSignature = observer(props => (
   <div>
@@ -28,30 +30,25 @@ const PersonalSignature = observer(props => (
             }
             <input />
           </Input>
+          {personData.personSignature.error &&
+            <FieldError error={personData.personSignature.error} />
+          }
         </Form.Field>
-        <Form.Input
+        <FormInput
           dataid={personData.id}
-          label={personData.personTitle.label}
-          placeholder={personData.personTitle.label}
-          name={personData.personTitle.key}
-          value={personData.personTitle.value}
-          error={!!personData.personTitle.error}
-          onChange={props.handleChange}
+          type="text"
+          fielddata={personData.personTitle}
+          name="personTitle"
+          changed={props.handleChange}
           onBlur={e => props.handleOnBlurSigPer(e, personData.id)}
         />
         <div className="field">
-          { /* eslint-disable jsx-a11y/label-has-for */ }
-          <label>Signature Date</label>
-          <DatePicker
-            showMonthDropdown
-            showYearDropdown
-            dataid={personData.id}
-            placeholderText="Signature Date"
-            name={personData.signatureDate.key}
+          <FormDatePicker
+            name="signatureDate"
+            id="signatureDate"
             maxDate={moment()}
-            dateFormat="MM-DD-YYYY"
+            fielddata={personData.signatureDate}
             selected={personData.signatureDate.value}
-            error={!!personData.signatureDate.error}
           />
         </div>
       </Form.Group>

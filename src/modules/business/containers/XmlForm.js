@@ -326,7 +326,8 @@ export default class XmlForm extends React.Component {
     } else if (xmlActiveTabName === 'annual') {
       saveButtonStatus = !this.props.businessStore.formAnnualInfo.meta.isValid;
     } else if (xmlActiveTabName === 'signature') {
-      saveButtonStatus = !this.props.businessStore.formSignatureInfo.meta.isValid;
+      saveButtonStatus = (!this.props.businessStore.formSignatureInfo.meta.isValid
+        || this.props.businessStore.formSignatureInfo.fields.signaturePersons.length === 0);
     } else if (xmlActiveTabName === 'doc') {
       const documents = _.filter(this.props.businessStore.documentList, document =>
         document.checked === true);

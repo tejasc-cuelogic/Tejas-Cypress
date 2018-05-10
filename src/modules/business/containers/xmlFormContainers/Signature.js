@@ -33,10 +33,6 @@ export default class Signature extends React.Component {
 
   handleDelete = (e, { dataid }) => this.props.businessStore.deletePersonalSignature(dataid);
 
-  handleBusinessCancel = () => {
-    this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-  }
-
   render() {
     const {
       formSignatureInfo,

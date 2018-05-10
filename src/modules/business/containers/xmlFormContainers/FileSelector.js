@@ -16,10 +16,6 @@ export default class FileSelector extends React.Component {
     this.props.businessStore.toggleRequiredFiles(e.target.textContent);
   };
 
-  handleBusinessCancel = () => {
-    this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
-  }
-
   render() {
     return (
       <div>

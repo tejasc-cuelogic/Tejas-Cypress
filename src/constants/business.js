@@ -73,7 +73,7 @@ export const PERSONAL_SIGNATURE = {
     error: undefined,
     rule: 'required',
     key: 'signatureDate',
-    label: 'Date',
+    label: 'Signature Date',
     customErrors: {
       required: 'The Date field is required.',
     },
