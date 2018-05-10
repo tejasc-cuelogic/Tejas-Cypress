@@ -680,7 +680,6 @@
   display: inline-block;
   background: transparent;
   font-size: 1.14285714rem;
-  letter-spacing: 1px;
   color: #989898;
   text-transform: none;
 }
@@ -809,6 +808,23 @@
   border-radius: 0.71428571rem;
   position: relative;
   padding: 3.57142857rem 5rem;
+}
+.ui.modal.basic.multistep-modal .multistep.content .bank-list {
+  padding: 2rem 0;
+}
+.ui.modal.basic.multistep-modal .multistep.content .bank-list a.bank-link {
+  height: 100%;
+  padding: 0.71428571rem;
+  font-size: 0.92857143rem;
+  line-height: 1.14285714rem;
+  color: #000000;
+  text-align: center;
+  display: block;
+  border-radius: 0.28571429rem;
+  border: #E0E0E0 1px solid;
+}
+.ui.modal.basic.multistep-modal .multistep.content .bank-list a.bank-link > img {
+  margin-bottom: 0.71428571rem;
 }
 .ui.modal.basic.multistep-modal .multistep.content .field-wrap {
   margin: 2.14285714rem auto;
