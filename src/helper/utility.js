@@ -28,6 +28,8 @@ export class Utility {
   unMaskInput = maskedInput => (
     maskedInput.split('-').join('')
   )
+
+  CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
 }
 
 export default new Utility();

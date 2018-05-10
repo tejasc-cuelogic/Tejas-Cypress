@@ -1,50 +1,72 @@
 import React from 'react';
-import { Card, Grid, Popup, Divider, Statistic, Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import Aux from 'react-aux';
+import { Card, Grid, Popup, Divider, Statistic, Icon, Header } from 'semantic-ui-react';
+import Helper from '../../../../helper/utility';
+/*
+  type =>
+  0 / undefined: display as it is
+  1: amount so prefix $ sign
+  2: date representation
+*/
 
-const details = {
-  accountType: 'individual',
-  summary: [
-    { title: 'Total Balance', amount: 400.0, info: 'Your Total Balance as of today' },
-    { title: 'Total Deposit', amount: 250.0, info: 'Your Total Deposit as of today' },
-    { title: 'Net Payments', amount: 100.0, info: 'Your Net Payments as of today' },
-    { title: 'TNAR', amount: 50.0, info: 'Your TNAR as of today' },
-  ],
-};
+const showValue = props => ((props.type === 1) ?
+  (Helper.CurrencyFormat(props.content)) :
+  ((props.type === 2) ? `date ${props.content}` : props.content));
 
-const SummaryHeader = () => (
-  <Card fluid className="investment-summary">
+const SummaryTitle = props => ((props.details.businessName) ? (
+  <Header as="h2">
+    The Brewers Table
+    <span className="title-meta"><Icon className="ns-individual-line" />Individual investment</span>
+    <span className="title-meta"><Link to="">View offering page</Link></span>
+  </Header>
+) : (
+  <Aux>
     <Card.Content>
-      <Card.Header><Icon className={`ns-${details.accountType}-line`} />{details.accountType}</Card.Header>
+      <Card.Header><Icon className={`ns-${props.details.accountType}-line`} />{props.details.accountType}</Card.Header>
     </Card.Content>
     <Divider className="only-border" />
-    <Grid divided padded="horizontally" columns={4} doubling>
-      <Grid.Row>
-        {
-          details.summary.map(row => (
-            <Grid.Column>
-              <Card.Content>
-                <Statistic size="tiny" className="basic">
-                  <Statistic.Label>
-                    {row.title}
-                    <Popup
-                      trigger={<Icon className="ns-help-circle" />}
-                      content={row.info}
-                      position="top center"
-                      className="center-align"
-                    />
-                  </Statistic.Label>
-                  <Statistic.Value>${row.amount}</Statistic.Value>
-                  {row.title === 'Total Balance' &&
-                    <Statistic.Label as="a">Deposit funds</Statistic.Label>
-                  }
-                </Statistic>
-              </Card.Content>
-            </Grid.Column>
-          ))
-        }
-      </Grid.Row>
-    </Grid>
-  </Card>
+  </Aux>
+));
+
+const SummaryHeader = props => (
+  <Aux>
+    {props.details.businessName &&
+      <SummaryTitle {...props} />
+    }
+    <Card fluid className={props.details.className || ''}>
+      {!props.details.businessName &&
+        <SummaryTitle {...props} />
+      }
+      <Grid divided padded="horizontally" columns={props.details.summary.length} doubling>
+        <Grid.Row>
+          {
+            props.details.summary.map(row => (
+              <Grid.Column>
+                <Card.Content>
+                  <Statistic size="tiny">
+                    <Statistic.Label>
+                      {row.title}
+                      <Popup
+                        trigger={<Icon className="ns-help-circle" />}
+                        content={row.info}
+                        position="top center"
+                        className="center-align"
+                      />
+                    </Statistic.Label>
+                    <Statistic.Value>{showValue(row)}</Statistic.Value>
+                    {row.title === 'Total Balance' &&
+                      <Statistic.Label as="a">Deposit funds</Statistic.Label>
+                    }
+                  </Statistic>
+                </Card.Content>
+              </Grid.Column>
+            ))
+          }
+        </Grid.Row>
+      </Grid>
+    </Card>
+  </Aux>
 );
 
 export default SummaryHeader;
