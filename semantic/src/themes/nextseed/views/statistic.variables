@@ -78,7 +78,7 @@
 @miniHorizontalValueSize: 1.5rem;
 
 @tinyTextValueSize: 1rem;
-@tinyValueSize: 2rem;
+@tinyValueSize: @24px;
 @tinyHorizontalValueSize: 2rem;
 
 @smallTextValueSize: 1rem;

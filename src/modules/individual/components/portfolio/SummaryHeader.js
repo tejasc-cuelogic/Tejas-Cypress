@@ -25,7 +25,7 @@ const SummaryTitle = props => ((props.details.businessName) ? (
     <Card.Content>
       <Card.Header><Icon className={`ns-${props.details.accountType}-line`} />{props.details.accountType}</Card.Header>
     </Card.Content>
-    <Divider className="only-border" />
+    <Divider horizontal className="only-border" />
   </Aux>
 ));
 
@@ -38,7 +38,7 @@ const SummaryHeader = props => (
       {!props.details.businessName &&
         <SummaryTitle {...props} />
       }
-      <Grid divided padded="horizontally" columns={props.details.summary.length} doubling>
+      <Grid celled="internally" columns={props.details.summary.length} doubling>
         <Grid.Row>
           {
             props.details.summary.map(row => (

@@ -2,6 +2,16 @@
          Theme Overrides
 *******************************/
 .ui.statistic{
+    position:relative;
+    padding-left:@relative16px;
+    &:before{
+        content:"";
+        width:3px;
+        height:100%;
+        background:@theme-primary;
+        position:absolute;
+        left:0;
+    }
     i.icon{
         margin:0 0 0 @7px;
     }
@@ -13,18 +23,14 @@
         margin:0.15em 0;
     }
 }
-.ui.statistic:not(.basic){
-    position:relative;
-    padding-left:@relative16px;
+.investment-summary .ui.statistic{
+    padding-left:0;
     &:before{
-        content:"";
-        width:3px;
-        height:100%;
-        background:@theme-primary;
-        position:absolute;
-        left:0;
+        display:none;
     }
 }
+// div.*:not(.investment-summary){
+// }
 .tabular-wrap, .sticky-notification{
     .ui.statistic{
         position:relative;

@@ -62,8 +62,8 @@ const InvestmentList = (props) => {
             </Table.Body>
             <Table.Footer>
               <Table.Row>
-                <Table.HeaderCell />
-                <Table.HeaderCell colSpan="3">Total:</Table.HeaderCell>
+                <Table.HeaderCell colSpan="2" />
+                <Table.HeaderCell>Total:</Table.HeaderCell>
                 <Table.HeaderCell textAlign="right">$33,900</Table.HeaderCell>
                 <Table.HeaderCell colSpan="3" />
               </Table.Row>
