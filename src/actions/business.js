@@ -214,7 +214,7 @@ export class Business {
       query: 'mutation createBusiness($newBusiness: CreateBusinessInput){createBusiness(newBusiness:$newBusiness){id name created description}}',
       variables: {
         newBusiness: {
-          name: '',
+          name: businessStore.newOfferingInformation.businessName.value,
           description: businessStore.newOfferingInformation.businessDescription.value,
         },
       },
