@@ -1,6 +1,6 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
-import { Form, Popup, Icon } from 'semantic-ui-react';
+import { Form, Popup, Icon, Dropdown } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
 const FormDropDown = props => (
@@ -16,13 +16,8 @@ const FormDropDown = props => (
         />
       }
     </label>
-    <Form.Select
-      fluid
-      search
+    <Dropdown
       {...props}
-      label={false}
-      error={!!props.error}
-      onChange={props.changed}
     />
     {props.error &&
       <FieldError error={props.error} />
