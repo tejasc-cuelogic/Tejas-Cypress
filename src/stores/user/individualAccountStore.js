@@ -3,6 +3,7 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import userStore from '../userStore';
+import uiStore from '../uiStore';
 import {
   IND_ADD_FUND,
   IND_BANK_ACC_SEARCH,
@@ -102,7 +103,11 @@ class IndividualAccountStore {
           },
         })
         .then(result => this.setNsAccId(result.data.createIndividualAccount.accountId), resolve())
-        .catch(err => console.log(err), reject());
+        .catch(action((err) => {
+          console.log(err);
+          uiStore.setErrors(this.simpleErr(err));
+          reject();
+        }));
     });
   }
 
@@ -121,5 +126,11 @@ class IndividualAccountStore {
         .catch(err => console.log(err), reject());
     });
   }
+
+  simpleErr = err => ({
+    statusCode: err.statusCode,
+    code: err.code,
+    message: err.message,
+  });
 }
 export default new IndividualAccountStore();

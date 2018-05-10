@@ -1,21 +1,34 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Button } from 'semantic-ui-react';
+import { Header, Form, Button, Message } from 'semantic-ui-react';
 import FormInput from '../../../../components/form/FormInput';
+import Helper from '../../../../helper/utility';
+import ListErrors from '../../../../components/common/ListErrors';
 
-@inject('individualAccountStore')
+@inject('individualAccountStore', 'uiStore')
 @observer
 export default class LinkBankForm extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.individualAccountStore.createAccount();
+    this.props.individualAccountStore.createAccount().then(() => {
+      Helper.toast('Account has been created.', 'success');
+    })
+      .catch(() => {
+        console.log('in catch');
+      });
   }
   render() {
+    const { errors } = this.props.uiStore;
     const { formLinkBankManually, linkBankManuallyChange } = this.props.individualAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
         <Header as="h4" textAlign="center">We need this information to lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
+        {errors &&
+          <Message error>
+            <ListErrors errors={[errors.message]} />
+          </Message>
+        }
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
             {

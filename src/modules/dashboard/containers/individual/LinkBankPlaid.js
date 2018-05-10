@@ -2,23 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
-// import PlaidLink from 'react-plaid-link';
 import { Header, Button, Item, List } from 'semantic-ui-react';
 import accountActions from '../../../../actions/account';
-// import {
-//   PLAID_PUBLIC_KEY,
-// } from '../../../../constants/account';
 import LinkBankForm from './LinkBankForm';
 import { FormInput } from '../../../../components/form/FormElements';
-// import Banklogo from '../../../../assets/images/boa-logo.jpg';
 
 @inject('individualAccountStore')
 @observer
 export default class LinkBankPlaid extends Component {
-  handleOnSuccess = (token, metadata) => {
-    // send token to client server
-    console.log(token, metadata);
-  }
   render() {
     const {
       bankLinkInterface,
@@ -40,17 +31,6 @@ export default class LinkBankPlaid extends Component {
             changed={bankSearchChange}
             onBlur={accountActions.bankSearch}
           />
-          {/* <PlaidLink
-            clientName="NS"
-            env="sandbox"
-            product={['auth', 'transactions']}
-            publicKey={PLAID_PUBLIC_KEY}
-            // publicKey="ca61661fcb15b5e735eabae68771b6"
-            onExit={this.handleOnExit}
-            onSuccess={this.handleOnSuccess}
-          >
-            Open Link and connect your bank!
-          </PlaidLink> */}
           <div className="">
             {
               <List celled vertical inverted>

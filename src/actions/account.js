@@ -72,7 +72,6 @@ export class Account {
   }
 
   bankSelect = (institutionId) => {
-    console.log(institutionId);
     /* eslint-disable no-undef */
     const linkHandler = Plaid.create({
       env: 'sandbox',
@@ -83,6 +82,7 @@ export class Account {
         // The Link module finished loading.
       },
       onSuccess: (publicToken, metadata) => {
+        console.log(metadata);
         indAccountStore.setPlaidAccDetails(metadata);
         indAccountStore.createAccount();
         // Send the public_token to your app server here.

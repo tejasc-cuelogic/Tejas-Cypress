@@ -3,14 +3,19 @@ import { inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Button, Item } from 'semantic-ui-react';
 import Banklogo from '../../../../assets/images/boa-logo.jpg';
+import Helper from '../../../../helper/utility';
 
 @inject('individualAccountStore')
 export default class CreateAccount extends React.Component {
   finalizeAccount = (e) => {
     e.preventDefault();
-    this.props.individualAccountStore.finalizeAccount();
+    this.props.individualAccountStore.finalizeAccount().then(() => {
+      Helper.toast('Individual account has been finalized.', 'success');
+    });
   }
   render() {
+    const { nsAccId } = this.props.individualAccountStore;
+    const { formAddFunds } = this.props.individualAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -24,8 +29,10 @@ export default class CreateAccount extends React.Component {
                 <Item.Content verticalAlign="middle" className="right-align">
                   <Link to="/app/dashboard" className="link"><b>Change</b></Link>
                   <Item.Description>
-                    <h5>...5648</h5>
+                    <h5>{nsAccId}</h5>
                   </Item.Description>
+                  Funds that will be added
+                  ${formAddFunds.fields.value.value}
                 </Item.Content>
               </Item>
             </Item.Group>
