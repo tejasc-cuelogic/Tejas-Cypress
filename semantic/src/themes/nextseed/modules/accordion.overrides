@@ -34,8 +34,10 @@
 /* Accordion Title */
 .ui.accordion{
 	.title:not(.ui){
+		margin:0;
 		position:relative;
 		padding-right:30px;
+		font-weight:700;
 	}
 }
 

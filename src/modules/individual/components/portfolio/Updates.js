@@ -20,7 +20,7 @@ const summary = [
 ];
 
 const Updates = props => (
-  <Grid padded="horizontally" relaxed="very">
+  <Grid padded relaxed="very">
     <Grid.Column width={4} className="update-list">
       <UpdatesTimeline match={props.match} heading="Recent" list={summary} />
     </Grid.Column>

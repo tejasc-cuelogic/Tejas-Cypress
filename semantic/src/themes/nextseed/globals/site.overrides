@@ -144,7 +144,10 @@ h6{
 .negative-text{
 	color:@highlight-primary !important;
 }
-
+.intro-text{
+	color:@quaternary-text;
+	margin-bottom:@28px;
+}
 //	Admin Page Content Styles	//
 
 //	Page Header Styles

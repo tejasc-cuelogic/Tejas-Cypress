@@ -96,8 +96,9 @@
     border-top-color:@border-light;
 }
 .ui.card{
-    >:first-child{
-        overflow:hidden;
+    overflow:hidden;
+    .ui.menu{
+        margin:0;
     }
     .meta{
         margin-bottom:1rem;
@@ -118,6 +119,18 @@
             font-size:24px;
             color:@highlight-tertiary;
             vertical-align:top;
+        }
+    }
+    &.linked-bank{
+        .item{
+            .extra{
+                margin-bottom:@7px;
+                color:@quaternary-text;
+            }
+            .header{
+                font-weight:700;
+                color:@fullBlack;
+            }
         }
     }
 }
