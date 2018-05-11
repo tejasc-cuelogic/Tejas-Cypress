@@ -48,6 +48,9 @@
     }
 }
 .ui.card, .ui.cards>.card{
+    .header{
+        text-transform:capitalize;
+    }
     &.welcome-card{
         >.content{
             padding:@25px;
@@ -98,6 +101,7 @@
 .ui.card{
     .ui.menu{
         margin:0;
+        overflow:hidden;
     }
     .meta{
         margin-bottom:1rem;
