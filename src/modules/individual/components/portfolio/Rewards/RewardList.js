@@ -1,0 +1,32 @@
+import React from 'react';
+import { Card, Button } from 'semantic-ui-react';
+
+const RewardList = ({ list }) => (
+  <Card.Group itemsPerRow={list.length}>
+    {
+      list.map(card => (
+        <Card>
+          <Card.Content>
+            <Card.Header>{card.title}</Card.Header>
+            <Card.Description>
+              {card.description}
+            </Card.Description>
+            {card.action === 'redeem' &&
+              <Button color="green">Redeem Reward</Button>
+            }
+
+            {card.action === 'voucher' &&
+              <Button inverted color="green">Download voucher</Button>
+            }
+
+            {card.expiry &&
+              <div className="action-meta">Exp. date<br /><b>{card.expiry}</b></div>
+            }
+          </Card.Content>
+        </Card>
+      ))
+    }
+  </Card.Group>
+);
+
+export default RewardList;
