@@ -30,7 +30,6 @@ class FaqWidget extends React.Component {
                       onClick={this.toggleAction}
                     >
                       <Icon name="dropdown" />{faq.title}
-                      Lorem ipsum dolor sit amet enim ullamcorper?
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === faq.id}>
                       <p>{faq.description}</p>
