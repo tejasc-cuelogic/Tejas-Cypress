@@ -3,7 +3,7 @@ import { inject } from 'mobx-react';
 import { Header, Card, Grid, Form } from 'semantic-ui-react';
 import { FillTable } from '../../../theme/table/NSTable';
 import { DateRangeFilter, DropdownFilter } from '../../users/components/widgets/Filters';
-import { FILTER_META } from './../../../constants/user';
+import { TRANSACTION_TYPES } from './../../../constants/user';
 
 const result = {
   columns: [
@@ -38,8 +38,14 @@ export default class Transactions extends Component {
             <Card fluid>
               <Card.Content>
                 <Form>
-                  <DateRangeFilter filters={this.props.userListingStore.requestState.search} label="Creation date" name="createdAt" changeStart={this.props.dateFilterStart} changeEnd={this.props.dateFilterEnd} />
-                  <DropdownFilter value={this.props.userListingStore.requestState.search.accountType} name="Account Type" change={this.props.setSearchParam} options={FILTER_META.accountType} isMultiple />
+                  <Grid>
+                    <Grid.Row>
+                      <DateRangeFilter width={16} filters={this.props.userListingStore.requestState.search} label="Date Range" name="createdAt" changeStart={this.props.dateFilterStart} changeEnd={this.props.dateFilterEnd} />
+                    </Grid.Row>
+                    <Grid.Row>
+                      <DropdownFilter width={16} value={this.props.userListingStore.requestState.search.accountType} name="Transaction Type" change={this.props.setSearchParam} options={TRANSACTION_TYPES} isMultiple />
+                    </Grid.Row>
+                  </Grid>
                 </Form>
               </Card.Content>
             </Card>

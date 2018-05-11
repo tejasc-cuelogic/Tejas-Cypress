@@ -60,3 +60,12 @@ export const USER_POOL = {"id":"5acc7be47498ac534eed4f84","email":"pickettbryan@
 export const RANDOM_USER = () => {
   return USER_POOL;
 }
+
+export const TRANSACTION_TYPES = [
+  { text: 'Deposit', value: 'Deposit' },
+  { text: 'Withdrawal', value: 'Withdrawal' },
+  { text: 'Repayment', value: 'Repayment' },
+  { text: 'Interest', value: 'Interest' },
+  { text: 'Accured', value: 'Accured' },
+  { text: 'Referral Credits', value: 'ReferralCredits' },
+];
