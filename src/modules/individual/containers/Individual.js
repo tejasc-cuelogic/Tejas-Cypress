@@ -2,11 +2,17 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import Portfolio from './Portfolio';
+import TransferFunds from './TransferFunds';
 import BankAccount from './BankAccount';
+import Activity from './Activity';
+import Statements from './Statements';
 
 const navItems = [
   { to: 'portfolio', component: Portfolio },
+  { to: 'transfer-funds', component: TransferFunds },
   { to: 'bank-accounts', component: BankAccount },
+  { to: 'activity', component: Activity },
+  { to: 'statements', component: Statements },
 ];
 
 export default class Individual extends Component {

@@ -11,11 +11,17 @@ export const SidebarNav = (props) => {
     ALL_NAV_ITEMS,
     n => n.to !== 'settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
   );
+  const actuals = ['individual-account'];
   return (
     <Aux>
       {
         navItems.map(item => (
-          <Menu.Item key={item.to} name={item.to} as={NavLink} to={`/app/page/${item.to}`}>
+          <Menu.Item
+            key={item.to}
+            name={item.to}
+            as={NavLink}
+            to={(actuals.includes(item.to)) ? `/app/${item.to}` : `/app/page/${item.to}`}
+          >
             <Icon name={item.icon} />
             {item.to === 'messages' &&
               <Label circular color="red" size="mini" horizontal>3</Label>
