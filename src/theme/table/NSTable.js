@@ -12,3 +12,26 @@ export const THeader = ({ columns }) => (
     </Table.Row>
   </Table.Header>
 );
+
+export const FillTable = props => (
+  <div className="table-wrapper">
+    <Table singleLine className="investment-details">
+      <THeader columns={props.result.columns} />
+      <Table.Body>
+        {
+          props.result.rows.map(row => (
+            <Table.Row>
+              {
+                props.result.columns.map(col => (
+                  <Table.Cell key={col.field} textAlign={col.textAlign}>
+                    {row[col.field]}
+                  </Table.Cell>
+                ))
+              }
+            </Table.Row>
+          ))
+        }
+      </Table.Body>
+    </Table>
+  </div>
+);
