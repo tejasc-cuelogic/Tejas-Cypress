@@ -5,6 +5,7 @@ import { Route } from 'react-router-dom';
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import Portfolio from './Portfolio';
 import BankAccount from './BankAccount';
+import TransferFunds from './TransferFunds';
 
 // @withRouter
 export default class Individual extends Component {
@@ -12,8 +13,9 @@ export default class Individual extends Component {
     const { match } = this.props;
     return (
       <PrivateLayout {...this.props}>
-        <Route exact path={match.url} component={Portfolio} />
+        <Route exact path={`${match.url}/portfolio`} component={Portfolio} />
         <Route exact path={`${match.url}/bank-accounts`} component={BankAccount} />
+        <Route exact path={`${match.url}/transfer-funds`} component={TransferFunds} />
       </PrivateLayout>
     );
   }
