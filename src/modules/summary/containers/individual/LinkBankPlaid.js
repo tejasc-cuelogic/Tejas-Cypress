@@ -8,7 +8,7 @@ import LinkBankForm from './LinkBankForm';
 import { FormInput } from '../../../../theme/form/FormElements';
 import defaultBankLogo from '../../../../assets/images/banks/default.png';
 import { IND_BANK_LIST } from '../../../../constants/account';
-import ImageLoader from '../../../../components/common/ImageLoader';
+import ImageLoader from '../../../../theme/common/ImageLoader';
 
 @inject('individualAccountStore')
 @withRouter

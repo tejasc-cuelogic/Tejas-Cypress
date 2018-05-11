@@ -1,18 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Card, Button } from 'semantic-ui-react';
 
-const RewardList = ({ list }) => (
+const RewardList = ({ match, list }) => (
   <Card.Group itemsPerRow={list.length}>
     {
       list.map(card => (
-        <Card>
+        <Card key={card.id}>
           <Card.Content>
             <Card.Header>{card.title}</Card.Header>
             <Card.Description>
               {card.description}
             </Card.Description>
             {card.action === 'redeem' &&
-              <Button color="green">Redeem Reward</Button>
+              <Button as={Link} to={`${match.url}/redeem/${card.id}`} color="green">Redeem Reward</Button>
             }
 
             {card.action === 'voucher' &&
