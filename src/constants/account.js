@@ -183,40 +183,36 @@ export const IND_BANK_ACC_SEARCH = {
 
 export const IND_BANK_LIST = [
   {
-    name: 'BB&T',
-    institutionID: 'ins_2',
-  },
-  {
-    name: 'Bank of America',
-    institutionID: 'ins_1',
-  },
-  {
-    name: 'Capital One',
-    institutionID: 'ins_9',
-  },
-  {
-    name: 'Charles Schwab',
-    institutionID: 'ins_11',
-  },
-  {
-    name: 'Chase',
+    // name: 'Chase',
     institutionID: 'ins_3',
   },
   {
-    name: 'Citi',
+    // name: 'Bank of America',
+    institutionID: 'ins_1',
+  },
+  {
+    // name: 'wells fargo',
+    institutionID: 'ins_4',
+  },
+  {
+    // name: 'Citi',
     institutionID: 'ins_5',
   },
   {
-    name: 'US Bank',
+    // name: 'US Bank',
     institutionID: 'ins_6',
   },
   {
-    name: 'USAA',
-    institutionID: 'ins_7',
+    // name: 'Capital One',
+    institutionID: 'ins_9',
   },
   {
-    name: 'Wells Fargo',
-    institutionID: 'ins_4',
+    // name: 'PNC',
+    institutionID: 'ins_13',
+  },
+  {
+    // name: 'USAA',
+    institutionID: 'ins_7',
   },
 ];
 
