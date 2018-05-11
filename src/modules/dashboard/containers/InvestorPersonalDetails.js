@@ -37,7 +37,6 @@ export default class investorPersonalDetails extends Component {
   }
 
   render() {
-    console.log(this.props.profileStore.verifyIdentity01.response);
     const {
       verifyIdentity01,
       verifyIdentityEleChange,
