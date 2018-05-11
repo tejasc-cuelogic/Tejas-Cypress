@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
-// import { List, Grid, Icon, Button } from 'semantic-ui-react';
-// import routes from '../routes';
+import { Route, Switch } from 'react-router-dom';
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import Portfolio from './Portfolio';
 import BankAccount from './BankAccount';
 
-// @withRouter
+const navItems = [
+  { to: 'portfolio', component: Portfolio },
+  { to: 'bank-accounts', component: BankAccount },
+];
+
 export default class Individual extends Component {
   render() {
     const { match } = this.props;
     return (
       <PrivateLayout {...this.props}>
-        <Route path={match.url} component={Portfolio} />
-        <Route exact path={`${match.url}/bank-accounts`} component={BankAccount} />
+        <Switch>
+          <Route exact path={match.url} component={Portfolio} />
+          {
+            navItems.map(item => (
+              <Route path={`${match.url}/${item.to}`} component={item.component} />
+            ))
+          }
+        </Switch>
       </PrivateLayout>
     );
   }
