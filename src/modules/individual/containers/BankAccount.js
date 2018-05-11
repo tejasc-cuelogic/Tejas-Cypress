@@ -12,7 +12,7 @@ export default class BankAccount extends Component {
         </p>
         <Grid>
           <Grid.Row>
-            <Grid.Column width={6}>
+            <Grid.Column widescreen={6} largeScreen={10} computer={10} tablet={13} mobile={16}>
               <Card fluid>
                 <Card.Content>
                   <Header as="h3">You haven’t linked bank account yet</Header>
@@ -26,7 +26,7 @@ export default class BankAccount extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={8}>
+            <Grid.Column widescreen={8} largeScreen={12} computer={13} tablet={16} mobile={16}>
               <Card fluid className="linked-bank">
                 <Card.Content>
                   <Grid columns="equal">
@@ -70,7 +70,7 @@ export default class BankAccount extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={6}>
+            <Grid.Column widescreen={6} largeScreen={10} computer={10} tablet={13} mobile={16}>
               <Card fluid>
                 <Card.Content>
                   <Header as="h3">Bank Account FAQs</Header>

@@ -15,7 +15,7 @@
 @itemBackground: none;
 @fontWeight: 700;
 @borderWidth: 1px;
-@border: @borderWidth solid @borderColor;
+@border:none;
 @boxShadow: @subtleShadow;
 @borderRadius:0;
 @minHeight: (@itemVerticalPadding * 2) + 1em;
