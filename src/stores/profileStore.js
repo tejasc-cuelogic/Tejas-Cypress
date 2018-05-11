@@ -92,17 +92,14 @@ export class ProfileStore {
     _.forEach(questions, (question) => {
       optionsArray = [];
       _.forEach(question.choices, (choice) => {
-        optionsArray.push({ key: choice.text });
+        optionsArray.push({ key: choice.text, value: choice.text, text: choice.text });
       });
       questionObj.label = question.prompt;
       questionObj.key = question.type;
       questionObj.options = optionsArray;
     });
     questionsArray.push(questionObj);
-    const identityQuestions = questions.map(value => ({
-      label: value.prompt, key: value.type, value: '', rule: 'required', error: undefined, placeHolder: 'Type Answer',
-    }));
-    this.verifyIdentity02.fields = identityQuestions;
+    this.verifyIdentity02.fields = questionsArray;
   }
 
   @action
