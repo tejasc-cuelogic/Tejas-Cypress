@@ -185,6 +185,9 @@
         .header:not(.ui){
             padding:@25px @42px;
         }
+        .sub.header{
+            padding:@5px 0;
+        }
         .content + .content{
             border-top:@borderColor 1px solid;
         }

@@ -284,7 +284,7 @@
 @yellow           : #FBBD08;
 @olive            : #B5CC18;
 @green            : @theme-primary;
-@teal             : #00B5AD;
+@teal             : @highlight-tertiary;
 @blue             : #2185D0;
 @violet           : @link-color;
 @purple           : #A333C8;
