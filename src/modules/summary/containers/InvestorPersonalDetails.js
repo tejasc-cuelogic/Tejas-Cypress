@@ -22,7 +22,7 @@ export default class investorPersonalDetails extends Component {
       if (message === 'FAIL' && questions) {
         Helper.toast('User verification soft-failed!', 'error');
         this.props.profileStore.setIdentityQuestions();
-        this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation');
+        this.props.setDashboardWizardStep('ConfirmIdentityForm');
       } else if (message === 'PASS') {
         Helper.toast('User verification passed!', 'success');
         this.props.profileStore.startPhoneVerification();
@@ -37,6 +37,7 @@ export default class investorPersonalDetails extends Component {
   }
 
   render() {
+    console.log(this.props.profileStore.verifyIdentity01.response);
     const {
       verifyIdentity01,
       verifyIdentityEleChange,
@@ -117,7 +118,7 @@ export default class investorPersonalDetails extends Component {
             <MaskedInput
               name="ssn"
               fielddata={verifyIdentity01.fields.ssn}
-              mask="999-999-999"
+              mask="999-99-9999"
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">

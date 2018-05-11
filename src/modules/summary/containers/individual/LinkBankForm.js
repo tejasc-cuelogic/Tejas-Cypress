@@ -1,73 +1,52 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Input, Button, Popup, Icon } from 'semantic-ui-react';
+import { Header, Form, Button, Message } from 'semantic-ui-react';
+import { FormInput } from '../../../../theme/form/FormElements';
+import Helper from '../../../../helper/utility';
+import ListErrors from '../../../../theme/common/ListErrors';
 
-import FieldError from '../../../../theme/common/FieldError';
-import validationActions from '../../../../actions/validation';
-
-@inject('accountStore')
+@inject('individualAccountStore', 'uiStore')
 @observer
 export default class LinkBankForm extends Component {
-  handleInputChange = (e, { name, value }) => {
-    validationActions.validateIndividualAccountField(name, value);
-  }
   handleSubmitForm = (e) => {
     e.preventDefault();
-    validationActions.validateLinkBankAccountForm();
+    this.props.individualAccountStore.createAccount().then(() => {
+      Helper.toast('Account has been created.', 'success');
+    })
+      .catch(() => {
+        console.log('in catch');
+      });
   }
+
   render() {
-    const { individualAccount } = this.props.accountStore;
+    const { errors } = this.props.uiStore;
+    const { formLinkBankManually, linkBankManuallyChange } = this.props.individualAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
         <Header as="h4" textAlign="center">We need this information to lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
+        {errors &&
+          <Message error>
+            <ListErrors errors={[errors.message]} />
+          </Message>
+        }
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
-            <Form.Field>
-              { /*  eslint-disable jsx-a11y/label-has-for */ }
-              <label>
-                {individualAccount.bankRoutingNumber.label}
-                <Popup
-                  trigger={<Icon className="ns-help-circle" />}
-                  content="Put your 10 digit bank routing number"
-                  position="top center"
-                  className="center-align"
+            {
+              ['bankRoutingNumber', 'bankAccountNumber'].map(field => (
+                <FormInput
+                  key={field}
+                  name={field}
+                  fielddata={formLinkBankManually.fields[field]}
+                  changed={linkBankManuallyChange}
                 />
-              </label>
-              <Input
-                name={individualAccount.bankRoutingNumber.key}
-                value={individualAccount.bankRoutingNumber.value}
-                error={!!individualAccount.bankRoutingNumber.error}
-                onChange={this.handleInputChange}
-                maxLength={10}
-              />
-              <FieldError error={individualAccount.bankRoutingNumber.error} />
-            </Form.Field>
-            <Form.Field>
-              <label>
-                {individualAccount.bankAccountNumber.label}
-                <Popup
-                  trigger={<Icon className="ns-help-circle" />}
-                  content="Put your 12 digit bank account number"
-                  position="top center"
-                  className="center-align"
-                />
-              </label>
-              <Input
-                name={individualAccount.bankAccountNumber.key}
-                value={individualAccount.bankAccountNumber.value}
-                error={!!individualAccount.bankAccountNumber.error}
-                onChange={this.handleInputChange}
-                maxLength={12}
-              />
-              <FieldError error={individualAccount.bankAccountNumber.error} />
-            </Form.Field>
+            ))}
           </div>
           <div className="center-align">
-            <Button primary size="large">Confirm</Button>
+            <Button primary size="large" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button className="theme-link" onClick={() => this.props.accountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
+            <Button className="theme-link" onClick={() => this.props.individualAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
           </div>
         </Form>
       </div>

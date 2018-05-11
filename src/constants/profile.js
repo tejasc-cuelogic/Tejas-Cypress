@@ -8,8 +8,8 @@ Validator.register('maskedPhoneNumber', (value, requirement, attribute) => {
 }, 'The :attribute is not in the format XXX-XXX-XXXX.');
 
 Validator.register('maskedSSN', (value, requirement, attribute) => {
-  return value.match(/^\d{3}-\d{3}-\d{3}$/);
-}, 'The :attribute is not in the format XXX-XXX-XXX.');
+  return value.match(/^\d{3}-\d{2}-\d{4}$/);
+}, 'The :attribute is not in the format XXX-XX-XXXX.');
 
 export const VERIFY_IDENTITY_STEP_01 = {
   title: {

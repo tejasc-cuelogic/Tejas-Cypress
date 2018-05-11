@@ -1,5 +1,9 @@
 import moment from 'moment';
 
+export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
+
+export const PLAID_PUBLIC_KEY = process.env.REACT_APP_PLAID_PUBLIC_KEY;
+
 export const INVESTMENT_ACCOUNT_TYPES = {
   0: 'individual',
   1: 'ira',
@@ -138,6 +142,79 @@ export const IRA_ACCOUNT_CREATION = {
     label: '',
   },
 };
+
+export const IND_LINK_BANK_MANUALLY = {
+  bankRoutingNumber: {
+    value: '',
+    error: undefined,
+    rule: 'required|numeric|digits:10',
+    label: 'Enter your bank routing number',
+    tooltip: 'Put your 10 digit bank routing number',
+  },
+  bankAccountNumber: {
+    value: '',
+    error: undefined,
+    rule: 'required|numeric|digits:12',
+    label: 'Enter your bank account number',
+    tooltip: 'Put your 12 digit bank account number',
+  },
+};
+
+export const IND_ADD_FUND = {
+  value: {
+    value: '',
+    key: 'value',
+    error: undefined,
+    rule: 'required|numeric',
+    label: 'Value',
+  },
+};
+
+export const IND_BANK_ACC_SEARCH = {
+  bankName: {
+    value: '',
+    key: 'bankName',
+    error: undefined,
+    rule: 'string',
+    label: '',
+    placeHolder: 'Search',
+  },
+};
+
+export const IND_BANK_LIST = [
+  {
+    // name: 'Chase',
+    institutionID: 'ins_3',
+  },
+  {
+    // name: 'Bank of America',
+    institutionID: 'ins_1',
+  },
+  {
+    // name: 'wells fargo',
+    institutionID: 'ins_4',
+  },
+  {
+    // name: 'Citi',
+    institutionID: 'ins_5',
+  },
+  {
+    // name: 'US Bank',
+    institutionID: 'ins_6',
+  },
+  {
+    // name: 'Capital One',
+    institutionID: 'ins_9',
+  },
+  {
+    // name: 'PNC',
+    institutionID: 'ins_13',
+  },
+  {
+    // name: 'USAA',
+    institutionID: 'ins_7',
+  },
+];
 
 export const IRA_ACC_TYPES = {
   accountType: {
@@ -400,3 +477,4 @@ export const ENTITY_ACCOUNT_CREATION = {
     label: 'EIN Verification',
   },
 };
+

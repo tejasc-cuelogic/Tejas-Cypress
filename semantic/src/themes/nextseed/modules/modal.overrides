@@ -109,7 +109,7 @@
             background:transparent;
             // font-family:@regularFont;
             font-size:@16px;
-            letter-spacing:1px;
+            // letter-spacing:1px;
             color:@quaternary-text;
             text-transform:none;
         }
@@ -221,6 +221,23 @@
         border-radius:@10px;
         position:relative;
         padding:@50px @70px;
+        .bank-list{
+            padding:@28px 0;
+            a.bank-link{
+                height:100%;
+                padding:@10px;
+                font-size:@13px;
+                line-height:@16px;
+                color:@fullBlack;
+                text-align:center;
+                display:block;
+                border-radius:@4px;
+                border:@border-light 1px solid;
+                >img{
+                    margin-bottom:@10px;
+                }
+            }
+        }
         .field-wrap{
             margin:@30px auto;
             padding:@25px @60px;
