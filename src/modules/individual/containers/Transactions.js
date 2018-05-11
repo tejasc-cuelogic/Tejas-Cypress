@@ -1,8 +1,26 @@
 import React, { Component } from 'react';
 import { inject } from 'mobx-react';
-import { Header, Table, Card, Grid, Form } from 'semantic-ui-react';
+import { Header, Card, Grid, Form } from 'semantic-ui-react';
+import { FillTable } from '../../../theme/table/NSTable';
 import { DateRangeFilter, DropdownFilter } from '../../users/components/widgets/Filters';
 import { FILTER_META } from './../../../constants/user';
+
+const result = {
+  columns: [
+    {
+      title: 'Date', field: 'date',
+    },
+    {
+      title: 'Description', field: 'description', className: 'positive-text',
+    },
+    {
+      title: 'Amount', field: 'amount', textAlign: 'right',
+    },
+  ],
+  rows: Array(5).fill({
+    date: '3/24/18', description: 'Automatic Deposit', amount: 3020,
+  }),
+};
 
 @inject('userListingStore')
 export default class Transactions extends Component {
@@ -13,44 +31,7 @@ export default class Transactions extends Component {
         <Grid>
           <Grid.Column widescreen={12} largeScreen={11} computer={10} tablet={10} mobile={16}>
             <Card fluid>
-              <div className="table-wrapper">
-                <Table singleLine className="investment-details">
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>Date</Table.HeaderCell>
-                      <Table.HeaderCell>Description</Table.HeaderCell>
-                      <Table.HeaderCell textAlign="right">Amount</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>3/24/18</Table.Cell>
-                      <Table.Cell>Automatic Deposit</Table.Cell>
-                      <Table.Cell textAlign="right">$500.00</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>2/26/18</Table.Cell>
-                      <Table.Cell>Withdrawal</Table.Cell>
-                      <Table.Cell textAlign="right">$500.00</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>1/23/18</Table.Cell>
-                      <Table.Cell>Withdrawal</Table.Cell>
-                      <Table.Cell textAlign="right">$500.00</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>1/15/18</Table.Cell>
-                      <Table.Cell>Automatic Deposit</Table.Cell>
-                      <Table.Cell textAlign="right">$500.00</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>3/24/18</Table.Cell>
-                      <Table.Cell>Automatic Deposit</Table.Cell>
-                      <Table.Cell textAlign="right">$500.00</Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
-              </div>
+              <FillTable result={result} />
             </Card>
           </Grid.Column>
           <Grid.Column widescreen={4} largeScreen={5} computer={6} tablet={6} mobile={16}>
