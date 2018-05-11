@@ -12,3 +12,4 @@ export { default as userDetailsStore } from './user/userDetailsStore';
 export { default as accountStore } from './accountStore';
 export { default as entityAccountStore } from './user/entityAccountStore';
 export { default as iraAccountStore } from './user/iraAccountStore';
+export { default as individualAccountStore } from './user/individualAccountStore';

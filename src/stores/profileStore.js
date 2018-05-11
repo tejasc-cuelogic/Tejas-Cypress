@@ -86,10 +86,20 @@ export class ProfileStore {
   @action
   setIdentityQuestions = () => {
     const { questions } = this.verifyIdentity01.response;
-    const identityQuestions = questions.map(value => ({
-      label: value.prompt, key: value.type, value: '', rule: 'required', error: undefined, placeHolder: 'Type Answer',
-    }));
-    this.verifyIdentity02.fields = identityQuestions;
+    const questionObj = { rule: 'required', error: undefined };
+    const questionsArray = [];
+    let optionsArray = [];
+    _.forEach(questions, (question) => {
+      optionsArray = [];
+      _.forEach(question.choices, (choice) => {
+        optionsArray.push({ key: choice.text, value: choice.text, text: choice.text });
+      });
+      questionObj.label = question.prompt;
+      questionObj.key = question.type;
+      questionObj.options = optionsArray;
+    });
+    questionsArray.push(questionObj);
+    this.verifyIdentity02.fields = questionsArray;
   }
 
   @action
