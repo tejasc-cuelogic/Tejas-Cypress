@@ -67,7 +67,7 @@ export class Account {
         .then(data => indAccountStore.setBankListing(data.body.institutions))
         .catch(err => console.log(err));
     } else {
-      // reset bank listing, call store function to reset bank listing
+      indAccountStore.setBankListing([]);
     }
   }
 

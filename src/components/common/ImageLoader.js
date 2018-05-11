@@ -15,7 +15,7 @@ export default class ImageLoader extends Component {
   render() {
     return (
       /* eslint-disable */
-      <Image centered size="small" src={require(`../../assets/images/${this.props.imagePath}`)} />
+      <Image centered size="large" src={require(`../../assets/images/${this.props.imagePath}`)} />
       // <LoadImg {...this.props} />
     );
   }
