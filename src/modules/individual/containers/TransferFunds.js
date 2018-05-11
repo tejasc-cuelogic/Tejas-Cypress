@@ -8,12 +8,12 @@ export default class TransferFunds extends Component {
         <Header as="h3">Transfer funds</Header>
         <Grid>
           <Grid.Row>
-            <Grid.Column widescreen={8} largeScreen={12} computer={13} tablet={16} mobile={16}>
+            <Grid.Column widescreen={8} largeScreen={11} computer={13} tablet={16} mobile={16}>
               <Card fluid>
                 <Card.Content>
-                  <Grid columns="equal">
+                  <Grid>
                     <Grid.Row>
-                      <Grid.Column>
+                      <Grid.Column width={6}>
                         <Statistic size="tiny">
                           <Statistic.Label>
                             Available cash
@@ -27,7 +27,7 @@ export default class TransferFunds extends Component {
                           <Statistic.Value>$15,405.23</Statistic.Value>
                         </Statistic>
                       </Grid.Column>
-                      <Grid.Column textAlign="right" verticalAlign="middle">
+                      <Grid.Column width={10} textAlign="right" verticalAlign="middle">
                         <Button primary content="Add funds" />
                         <Button inverted color="green" content="Withdraw funds" />
                       </Grid.Column>
@@ -38,10 +38,10 @@ export default class TransferFunds extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column widescreen={6} largeScreen={10} computer={10} tablet={13} mobile={16}>
+            <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
               <Card fluid>
                 <Card.Content>
-                  <Header as="h3">Bank Account FAQs</Header>
+                  <Header as="h3">Transfer Funds FAQs</Header>
                   <Accordion>
                     <Accordion.Title active>
                       <Icon name="dropdown" />
