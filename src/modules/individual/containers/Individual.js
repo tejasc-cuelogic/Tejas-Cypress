@@ -12,7 +12,7 @@ export default class Individual extends Component {
     const { match } = this.props;
     return (
       <PrivateLayout {...this.props}>
-        <Route exact path={match.url} component={Portfolio} />
+        <Route path={match.url} component={Portfolio} />
         <Route exact path={`${match.url}/bank-accounts`} component={BankAccount} />
       </PrivateLayout>
     );
