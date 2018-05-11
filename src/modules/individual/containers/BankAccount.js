@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
+import { inject } from 'mobx-react';
 import { Header, Grid, Card, Divider, Button } from 'semantic-ui-react';
-// import AccountDetailsView from '../components/bankaccount/AccountDetailsView';
+import _ from 'lodash';
+import AccountDetailsView from '../components/bankaccount/AccountDetailsView';
 import { FaqWidget } from '../../../theme/common/ImportCommon';
 import LinkBankAccount from './LinkBankAccount';
 
@@ -31,6 +33,7 @@ const data = {
   ],
 };
 
+@inject('individualAccountStore')
 export default class BankAccount extends Component {
   render() {
     return (
@@ -43,6 +46,7 @@ export default class BankAccount extends Component {
           nec malesuada fames ac turpis
         </p>
         <Grid>
+          {_.isEmpty(this.props.individualAccountStore.plaidAccDetails) &&
           <Grid.Row>
             <Grid.Column widescreen={6} largeScreen={10} computer={10} tablet={13} mobile={16}>
               <Card fluid>
@@ -57,7 +61,10 @@ export default class BankAccount extends Component {
               </Card>
             </Grid.Column>
           </Grid.Row>
-          {/* <AccountDetailsView accountDetails={data.accountDetails} /> */}
+          }
+          {!_.isEmpty(this.props.individualAccountStore.plaidAccDetails) &&
+            <AccountDetailsView accountDetails={data.accountDetails} />
+          }
           <Grid.Row>
             <Grid.Column widescreen={6} largeScreen={10} computer={10} tablet={13} mobile={16}>
               <FaqWidget heading="Bank Account" faqs={data.faqs} />
