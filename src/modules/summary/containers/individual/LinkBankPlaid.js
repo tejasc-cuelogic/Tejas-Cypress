@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter, Link } from 'react-router-dom';
 import _ from 'lodash';
-import { Link } from 'react-router-dom';
 import { Header, Button, Image, Grid } from 'semantic-ui-react';
 import accountActions from '../../../../actions/account';
 import LinkBankForm from './LinkBankForm';
@@ -11,6 +11,7 @@ import { IND_BANK_LIST } from '../../../../constants/account';
 import ImageLoader from '../../../../components/common/ImageLoader';
 
 @inject('individualAccountStore')
+@withRouter
 @observer
 export default class LinkBankPlaid extends Component {
   render() {
@@ -43,7 +44,7 @@ export default class LinkBankPlaid extends Component {
                       key={bankData.institution_id}
                       as="a"
                       className="bank-link"
-                      to="/app/dashboard"
+                      to={this.props.match.url}
                       onClick={() => accountActions.bankSelect(bankData.institution_id)}
                     >
                       {bankData.logo !== null && <Image centered size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
@@ -60,7 +61,7 @@ export default class LinkBankPlaid extends Component {
                       key={bankData.institutionID}
                       as="a"
                       className="bank-link"
-                      to="/app/dashboard"
+                      to={this.props.match.url}
                       onClick={() => accountActions.bankSelect(bankData.institutionID)}
                     >
                       {/* eslint-disable global-require */}
