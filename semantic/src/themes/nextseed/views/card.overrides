@@ -96,7 +96,6 @@
     border-top-color:@border-light;
 }
 .ui.card{
-    overflow:hidden;
     .ui.menu{
         margin:0;
     }

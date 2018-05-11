@@ -24,7 +24,7 @@ export default class TransferFunds extends Component {
                               className="center-align"
                             />
                           </Statistic.Label>
-                          <Statistic.Value>$15.405,23</Statistic.Value>
+                          <Statistic.Value>$15,405.23</Statistic.Value>
                         </Statistic>
                       </Grid.Column>
                       <Grid.Column textAlign="right" verticalAlign="middle">
