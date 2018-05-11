@@ -303,4 +303,7 @@
             vertical-align:top;
         }
     }
+    .ui.card .update-list{
+        border-bottom-left-radius:@6px;
+    }
 }
