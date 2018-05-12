@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { Modal, Button, Header, Form, Divider, Icon } from 'semantic-ui-react';
 import { FormSelect } from '../../../theme/form/FormElements';
 import Helper from '../../../helper/utility';
 
 @inject('profileStore', 'uiStore')
+@withRouter
 @observer
 export default class ConfirmIdentityForm extends Component {
   handleIdentityQuestionsSubmit = (e) => {
@@ -29,11 +30,11 @@ export default class ConfirmIdentityForm extends Component {
       <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">We need to confirm your identity</Header>
-          <Link to="/app/dashboard" className="back-link" onClick={() => this.props.setDashboardWizardStep('SelectQuestionsOrEditInformation')}><Icon name="ns-arrow-left" /></Link>
+          <Link to={this.props.match.url} className="back-link" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}><Icon name="ns-arrow-left" /></Link>
           <Divider />
           <p>
             Please answer the questions below or<br />
-            <Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>update your address</Link>
+            <Link to={this.props.match.url} onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>update your address</Link>
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
@@ -43,6 +44,7 @@ export default class ConfirmIdentityForm extends Component {
                 fluid
                 fielddata={field}
                 name={field.key}
+                value={field.value}
                 options={field.options}
                 changed={identityQuestionAnswerChange}
               />
