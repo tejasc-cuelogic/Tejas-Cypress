@@ -668,3 +668,25 @@ ol.progtrckr{
 		}
 	}
 }
+
+// Rechart Styles
+svg:not(:root).recharts-surface{
+	overflow:visible;
+}
+.recharts-wrapper{
+	.recharts-legend-wrapper{
+		z-index:-1;
+	}
+	tspan{
+		font-size:16px;
+		font-weight:bold;
+	}
+	.chartLegends li{
+		font-size:22px;
+		span{
+			font-size:13px;
+			color:@fullBlack;
+			vertical-align:top;
+		}
+	}
+}

@@ -25,21 +25,23 @@ const REGION = [
   { name: 'West', value: 1730 },
 ];
 
-const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85'];
+const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'];
 
 const PortfolioAllocations = () => (
   <Aux>
     <Header as="h3">Portfolio Allocations</Header>
-    <Grid columns="equal" celled="internally">
-      <Grid.Column style={{ paddingLeft: '0px' }}>
-        <ChartPie title="Investment Type" data={INVESTMENT_TYPE} colors={COLORS} />
-      </Grid.Column>
-      <Grid.Column style={{ paddingLeft: '0px' }}>
-        <ChartPie title="Industry" data={INDUSTRY} colors={COLORS} />
-      </Grid.Column>
-      <Grid.Column style={{ paddingLeft: '0px' }}>
-        <ChartPie title="Boston 25%" data={REGION} colors={COLORS} />
-      </Grid.Column>
+    <Grid columns={3} celled="internally">
+      <Grid.Row>
+        <Grid.Column widescreen={5} largeScreen={5} computer={16} mobile={16}>
+          <ChartPie title="Investment Type" data={INVESTMENT_TYPE} colors={COLORS} />
+        </Grid.Column>
+        <Grid.Column widescreen={5} largeScreen={5} computer={16} mobile={16}>
+          <ChartPie title="Industry" data={INDUSTRY} colors={COLORS} />
+        </Grid.Column>
+        <Grid.Column widescreen={5} largeScreen={5} computer={16} mobile={16}>
+          <ChartPie title="Boston 25%" data={REGION} colors={COLORS} />
+        </Grid.Column>
+      </Grid.Row>
     </Grid>
   </Aux>
 );
