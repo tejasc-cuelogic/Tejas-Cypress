@@ -57,7 +57,7 @@ export default class IssuerInformation extends React.Component {
               name="jurisdictionOrganization"
               dataidentifier="formIssuerInfo"
               dataname="fields"
-              changed={this.handleSelectChange}
+              changed={issuerInfoChange}
               options={US_STATES}
             />
             <FormDatePicker
@@ -98,7 +98,7 @@ export default class IssuerInformation extends React.Component {
               name="stateOrCountry"
               dataidentifier="formIssuerInfo"
               dataname="fields"
-              changed={this.handleSelectChange}
+              changed={issuerInfoChange}
               options={US_STATES}
             />
           </Form.Group>

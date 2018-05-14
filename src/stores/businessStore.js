@@ -125,13 +125,6 @@ export class BusinessStore {
     return (this.business.name.value !== '' && this.business.desc.value !== '');
   }
 
-  @computed get canSubmitXmlForm() {
-    return _.isEmpty(_.filter(this.filerInformation, field => field.error)) &&
-      _.isEmpty(_.filter(this.issuerInformation, field => field.error)) &&
-      _.isEmpty(_.filter(this.offeringInformation, field => field.error)) &&
-      _.isEmpty(_.filter(this.annualReportRequirements, field => field.error));
-  }
-
   @computed get canSubmitFilerInfoXmlForm() {
     return _.isEmpty(_.filter(this.formFilerInfo.fields, field => field.error));
   }

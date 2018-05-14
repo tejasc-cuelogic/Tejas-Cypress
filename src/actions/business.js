@@ -887,16 +887,6 @@ export class Business {
     this.validateSignatureInfo(businessStore.formSignatureInfo.fields, false);
     const errorMessage = this.validateDocumentList(businessStore.documentList, false);      
 
-    
-    
-     
-    
-    
-    
-    
-
-    
-    
     if (!errorMessage) {
       businessStore.setXmlSubStepsStatus('doc', true);
     }   
