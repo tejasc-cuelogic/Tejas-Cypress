@@ -94,9 +94,9 @@ class IndividualAccountStore {
           mutation: createUserAccountIndividual,
           variables: {
             userId: userStore.currentUser.sub,
-            plaidPublicToken: _.isEmpty(this.accountDetails) ? '' : this.accountDetails.public_token,
-            plaidAccountId: _.isEmpty(this.accountDetails) ? '' : this.accountDetails.account_id,
-            bankName: _.isEmpty(this.accountDetails) ? '' : this.accountDetails.institution.name,
+            plaidPublicToken: _.isEmpty(this.plaidAccDetails) ? '' : this.plaidAccDetails.public_token,
+            plaidAccountId: _.isEmpty(this.plaidAccDetails) ? '' : this.plaidAccDetails.account_id,
+            bankName: _.isEmpty(this.plaidAccDetails) ? '' : this.plaidAccDetails.institution.name,
             accountNumber: this.formLinkBankManually.fields.bankAccountNumber.value,
             routingNumber: this.formLinkBankManually.fields.bankRoutingNumber.value,
             accountType: 'individual',

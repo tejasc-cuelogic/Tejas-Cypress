@@ -1,5 +1,6 @@
 import validationActions from '../actions/validation';
 import {
+  PLAID_ENV,
   PLAID_URL,
   PLAID_PUBLIC_KEY,
 } from '../constants/account';
@@ -77,7 +78,7 @@ export class Account {
   bankSelect = (institutionId) => {
     /* eslint-disable no-undef */
     const linkHandler = Plaid.create({
-      env: 'sandbox',
+      env: PLAID_ENV,
       clientName: 'NS',
       key: PLAID_PUBLIC_KEY,
       product: ['auth, transactions'],

@@ -7,7 +7,6 @@ import accountActions from '../../../../actions/account';
 import LinkBankForm from './LinkBankForm';
 import defaultBankLogo from '../../../../assets/images/banks/default.png';
 import { IND_BANK_LIST } from '../../../../constants/account';
-import ImageLoader from '../../../../theme/common/ImageLoader';
 
 @inject('individualAccountStore', 'uiStore')
 @withRouter
@@ -46,9 +45,8 @@ export default class LinkBankPlaid extends Component {
             <Grid columns={3}>
               {
                 _.map(bankListing, bankData => (
-                  <Grid.Column>
+                  <Grid.Column key={bankData.institution_id}>
                     <Link
-                      key={bankData.institution_id}
                       as="a"
                       className="bank-link"
                       to={this.props.match.url}
@@ -63,16 +61,16 @@ export default class LinkBankPlaid extends Component {
               }
               {typeof bankListing === 'undefined' &&
                 _.map(IND_BANK_LIST, bankData => (
-                  <Grid.Column>
+                  <Grid.Column key={bankData.institutionID}>
                     <Link
-                      key={bankData.institutionID}
                       as="a"
                       className="bank-link"
                       to={this.props.match.url}
                       onClick={() => accountActions.bankSelect(bankData.institutionID)}
                     >
+                      {/* eslint-disable import/no-dynamic-require */}
                       {/* eslint-disable global-require */}
-                      <ImageLoader imagePath={`banks/${bankData.institutionID}.png`} />
+                      <Image centered size="large" src={require(`../../../../assets/images/banks/${bankData.institutionID}.png`)} />
                     </Link>
                   </Grid.Column>
                 ))

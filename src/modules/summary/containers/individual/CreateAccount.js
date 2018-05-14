@@ -1,26 +1,24 @@
 import React from 'react';
-import { inject } from 'mobx-react';
-import { Link } from 'react-router-dom';
-import { Header, Button, Item, Message } from 'semantic-ui-react';
-import Banklogo from '../../../../assets/images/boa-logo.jpg';
+import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
+import { Header, Button, Message, Table } from 'semantic-ui-react';
 import ListErrors from '../../../../theme/common/ListErrors';
 import Helper from '../../../../helper/utility';
 
-@inject('individualAccountStore', 'uiStore')
+@inject('individualAccountStore', 'uiStore', 'userStore')
+@withRouter
+@observer
 export default class CreateAccount extends React.Component {
   finalizeAccount = (e) => {
     e.preventDefault();
     this.props.individualAccountStore.finalizeAccount().then(() => {
       Helper.toast('Individual account has been finalized.', 'success');
-    })
-      .catch(() => {
-        console.log('in catch');
-      });
+    });
   }
   render() {
     const { errors } = this.props.uiStore;
-    const { nsAccId } = this.props.individualAccountStore;
-    const { formAddFunds } = this.props.individualAccountStore;
+    const { currentUser } = this.props.userStore;
+    const { nsAccId, formAddFunds, plaidAccDetails } = this.props.individualAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -32,20 +30,28 @@ export default class CreateAccount extends React.Component {
         }
         <div className="summary-wrap">
           <div className="field-wrap">
-            <Header as="h3" textAlign="center">Linked Bank Account</Header>
-            <Item.Group>
-              <Item>
-                <Item.Image size="small" src={Banklogo} />
-                <Item.Content verticalAlign="middle" className="right-align">
-                  <Link to="/app/dashboard" className="link"><b>Change</b></Link>
-                  <Item.Description>
-                    <h5>{nsAccId}</h5>
-                  </Item.Description>
-                </Item.Content>
-              </Item>
-            </Item.Group>
-            <Header as="h3" textAlign="center">Funds that will be added</Header>
-            <p className="center-align">${formAddFunds.fields.value.value}</p>
+            <div className="table-wrapper">
+              <Table compact basic>
+                <Table.Body>
+                  <Table.Row>
+                    <Table.Cell><b>Investor Name</b></Table.Cell>
+                    <Table.Cell>{currentUser.givenName}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell><b>Bank Name</b></Table.Cell>
+                    <Table.Cell>{plaidAccDetails.institution.name}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell><b>Bank Account</b></Table.Cell>
+                    <Table.Cell>{nsAccId}</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell><b>Your initial deposit</b></Table.Cell>
+                    <Table.Cell>{formAddFunds.fields.value.value !== '' ? `$${formAddFunds.fields.value.value}` : ''}</Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table>
+            </div>
           </div>
         </div>
         <div className="center-align">
