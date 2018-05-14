@@ -38,7 +38,7 @@ const renderActiveShape = (props) => {
         startAngle={startAngle}
         endAngle={endAngle}
         innerRadius={outerRadius - 1}
-        outerRadius={outerRadius + 9}
+        outerRadius={outerRadius + 7}
         fill={fill}
       />
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
@@ -85,10 +85,10 @@ export default class ChartPie extends Component {
             activeIndex={this.state.activeIndex}
             activeShape={renderActiveShape}
             data={data}
-            cx={114}
+            cx={150}
             cy={140}
             innerRadius={82}
-            outerRadius={105}
+            outerRadius={103}
             type="circle"
             fill="#8884d8"
             paddingAngle={0}
