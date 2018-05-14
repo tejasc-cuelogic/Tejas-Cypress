@@ -23,6 +23,12 @@ const renderActiveShape = (props) => {
 
   return (
     <g>
+      <defs>
+        <filter x="-10%" y="-10%" width="120%" height="120%" id="solid">
+          <feFlood floodColor="#fafafa" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+      </defs>
       <Sector
         cx={cx}
         cy={cy}
@@ -43,8 +49,8 @@ const renderActiveShape = (props) => {
       />
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
       <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-      <text x={ex + ((cos >= 0 ? 1 : -1) * 12)} y={ey} textAnchor={textAnchor} fill="#333">{payload.name}</text>
-      <text x={ex + ((cos >= 0 ? 1 : -1) * 12)} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+      <text x={ex + ((cos >= 0 ? 1 : -1) * 12)} y={ey} textAnchor={textAnchor} fill="#333" filter="url(#solid)">{payload.name}</text>
+      <text x={ex + ((cos >= 0 ? 1 : -1) * 12)} y={ey} dy={18} textAnchor={textAnchor} fill="#999" filter="url(#solid)">
         {`${Helper.CurrencyFormat(value)} (${(percent * 100).toFixed(2)}%)`}
       </text>
     </g>
@@ -68,7 +74,7 @@ export default class ChartPie extends Component {
       <ul className="chartLegends">
         {
           payload.map(entry => (
-            <li style={{ color: entry.color }} key={`item-${entry.value}`}><span>{entry.value}</span></li>
+            <li style={{ color: entry.color }} key={`item-${entry.value}`}><span>{entry.icon} {entry.value}</span></li>
           ))
         }
       </ul>
@@ -78,27 +84,30 @@ export default class ChartPie extends Component {
   render() {
     const { data, title, colors } = this.props;
     return (
-      <ResponsiveContainer width="100%" height={280}>
+      <ResponsiveContainer height={220}>
         <PieChart>
           <Legend layout="vertical" verticalAlign="middle" align="right" content={this.renderLegend} />
           <Pie
             activeIndex={this.state.activeIndex}
             activeShape={renderActiveShape}
             data={data}
-            cx={150}
-            cy={140}
-            innerRadius={82}
-            outerRadius={103}
+            // cx={200}
+            // cy={110}
+            innerRadius="85%"
+            outerRadius="100%"
+            startAngle={0}
+            endAngle={360}
             type="circle"
             fill="#8884d8"
             paddingAngle={0}
             onMouseEnter={this.onPieEnter}
+            icon={this.props.icon}
           >
             {
               data.map((entry, index) => <Cell fill={colors[index % colors.length]} />)
             }
             <Label value={title} offset={0} position="center" />
-            <Tooltip />
+            <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#cd0000' }} />
           </Pie>
         </PieChart>
       </ResponsiveContainer>

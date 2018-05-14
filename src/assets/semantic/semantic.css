@@ -1485,6 +1485,29 @@ ol.progtrckr li.progtrckr-done.error:after {
   box-shadow: 0px 0px 4px 1px #772df9;
 }
 
+svg:not(:root).recharts-surface {
+  overflow: visible;
+}
+
+.recharts-wrapper .recharts-legend-wrapper {
+  z-index: -1;
+}
+
+.recharts-wrapper tspan {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.recharts-wrapper .chartLegends li {
+  font-size: 22px;
+}
+
+.recharts-wrapper .chartLegends li span {
+  font-size: 13px;
+  color: #000000;
+  vertical-align: top;
+}
+
 /*******************************
          Site Overrides
 *******************************/
