@@ -82,11 +82,10 @@ delete:review:
 
 #---------------------------------Dev-------------------------------------------
 
+
 #Building code
 build:dev:
-  cache:
-    paths:
-    - node_modules/
+  
   only:
     refs:
       - develop
