@@ -148,7 +148,7 @@ deploy:qa:
       - qa
   environment:
     name: qa
-    url: $QA_URL
+    url: http://$QA_URL
   tags:
     - ns-client
   stage: deploy
@@ -187,7 +187,7 @@ deploy:prod:
       - master
   environment:
     name: prod
-    url:  $PROD_URL
+    url: http://$PROD_URL
   tags:
     - ns-client
   stage: deploy
