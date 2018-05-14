@@ -36,6 +36,11 @@ export const verifyCIPUser = gql`
         message
         summary
       }
+
+      ... on UserCIPFail {
+        key
+        message
+      }
     }
   }`;
 

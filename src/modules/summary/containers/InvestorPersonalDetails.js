@@ -17,13 +17,16 @@ export default class investorPersonalDetails extends Component {
 
   handleSubmitInvestorDetails = (e) => {
     e.preventDefault();
+    /* eslint-disable camelcase */
     this.props.profileStore.submitInvestorPersonalDetails().then(() => {
-      const { message, questions } = this.props.profileStore.verifyIdentity01.response;
-      if (message === 'FAIL' && questions) {
+      const { key, questions } = this.props.profileStore.verifyIdentity01.response;
+      if (key === 'id.error') {
+        Helper.toast('User verification failed!', 'error');
+      } else if (key === 'id.failure' && questions) {
         Helper.toast('User verification soft-failed!', 'error');
         this.props.profileStore.setIdentityQuestions();
         this.props.setDashboardWizardStep('ConfirmIdentityForm');
-      } else if (message === 'PASS') {
+      } else if (key === 'id.success') {
         Helper.toast('User verification passed!', 'success');
         this.props.profileStore.startPhoneVerification();
         this.props.setDashboardWizardStep('ConfirmPhoneNumber');
