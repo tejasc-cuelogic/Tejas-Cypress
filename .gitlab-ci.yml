@@ -81,7 +81,7 @@ delete:review:
   
 
 #---------------------------------Dev-------------------------------------------
-.build_template: &build_defination
+.build_template: &build_definition
   only:
     refs:
       - develop
