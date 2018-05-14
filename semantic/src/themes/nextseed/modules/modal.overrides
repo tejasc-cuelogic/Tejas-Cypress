@@ -116,15 +116,33 @@
         a.theme-link, .button.theme-link{
             color:@theme-primary;
         }
-        .display-only input[type=tel], .display-only input[type=email], input[type=tel].display-only, input[type=email].display-only{
+        .display-only input[type=tel]:read-only,
+        .display-only input[type=email]:read-only,
+        input[type=tel]:read-only.display-only,
+        input[type=email]:read-only.display-only,
+        .display-only input[type=tel],
+        .display-only input[type=email],
+        input[type=tel].display-only,
+        input[type=email].display-only{
             // font-family:@boldFont;
             padding:@14px @20px;
             margin-bottom:@10px;
             font-size:@20px;
             text-align:center;
             border:none;
-            border-radius:@4px;
+            border-bottom:@border-light 1px solid;
+            // border-radius:@4px;
             background:@border-light;
+        }
+        .display-only input[type=tel]:not(:read-only),
+        .display-only input[type=email]:not(:read-only),
+        input[type=tel].display-only:not(:read-only),
+        input[type=email].display-only:not(:read-only){
+            background-color:@white;
+            &:focus{
+                border-color:@theme-primary;
+                outline:none;
+            }
         }
         .ui.button.multistep__btn{
             background:@white;
