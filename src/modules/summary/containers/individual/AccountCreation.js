@@ -1,15 +1,15 @@
 import React from 'react';
 
 import MuliStep from '../../../../helper/MultiStep';
-import LinkBankAccountPlaid from './LinkBankAccountPlaid';
-import CreateAccount from './CreateAccount';
+import LinkBankPlaid from './LinkBankPlaid';
+import Summary from './Summary';
 import AddFunds from './AddFunds';
 
 const steps =
   [
-    { name: 'Link Bank', component: <LinkBankAccountPlaid />, isValid: '' },
+    { name: 'Link Bank', component: <LinkBankPlaid />, isValid: '' },
     { name: 'Add funds', component: <AddFunds />, isValid: '' },
-    { name: 'Summary', component: <CreateAccount />, isValid: '' },
+    { name: 'Summary', component: <Summary />, isValid: '' },
   ];
 
 export default class AccountCreation extends React.Component {
