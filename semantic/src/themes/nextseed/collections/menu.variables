@@ -220,22 +220,22 @@
 @secondaryItemColor: @unselectedTextColor;
 
 @secondaryHoverItemBackground: @transparentBlack;
-@secondaryHoverItemColor: @selectedTextColor;
+@secondaryHoverItemColor:@link-color;
 
 @secondaryActiveItemBackground: @transparentBlack;
-@secondaryActiveItemColor: @selectedTextColor;
+@secondaryActiveItemColor:@link-color;
 @secondaryActiveHoverItemBackground: @transparentBlack;
-@secondaryActiveHoverItemColor: @selectedTextColor;
+@secondaryActiveHoverItemColor:@link-color;
 
 @secondaryActiveHoveredItemBackground: @transparentBlack;
-@secondaryActiveHoveredItemColor: @selectedTextColor;
+@secondaryActiveHoveredItemColor:@link-color;
 
 @secondaryHeaderBackground: none transparent;
 @secondaryHeaderBorder: none;
 
 @secondaryItemVerticalSpacing: @secondaryItemSpacing;
 @secondaryVerticalItemMargin: 0em 0em @secondaryItemVerticalSpacing;
-@secondaryVerticalItemBorderRadius: @defaultBorderRadius;
+@secondaryVerticalItemBorderRadius:0;
 
 @secondaryMenuSubMenuMargin: 0em -@secondaryItemHorizontalPadding;
 @secondaryMenuSubMenuItemMargin: 0em;

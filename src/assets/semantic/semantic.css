@@ -4679,7 +4679,7 @@ ol.progtrckr li.progtrckr-done.error:after {
 
 .ui.teal.buttons .button,
 .ui.teal.button {
-  background-color: #00B5AD;
+  background-color: #27AE60;
   color: #FFFFFF;
   text-shadow: none;
   background-image: none;
@@ -4692,21 +4692,21 @@ ol.progtrckr li.progtrckr-done.error:after {
 
 .ui.teal.buttons .button:hover,
 .ui.teal.button:hover {
-  background-color: #009c95;
+  background-color: #1c9f54;
   color: #FFFFFF;
   text-shadow: none;
 }
 
 .ui.teal.buttons .button:focus,
 .ui.teal.button:focus {
-  background-color: #008c86;
+  background-color: #15984c;
   color: #FFFFFF;
   text-shadow: none;
 }
 
 .ui.teal.buttons .button:active,
 .ui.teal.button:active {
-  background-color: #00827c;
+  background-color: #1e8449;
   color: #FFFFFF;
   text-shadow: none;
 }
@@ -4715,7 +4715,7 @@ ol.progtrckr li.progtrckr-done.error:after {
 .ui.teal.buttons .active.button:active,
 .ui.teal.active.button,
 .ui.teal.button .active.button:active {
-  background-color: #009c95;
+  background-color: #19a253;
   color: #FFFFFF;
   text-shadow: none;
 }
@@ -4724,40 +4724,40 @@ ol.progtrckr li.progtrckr-done.error:after {
 
 .ui.basic.teal.buttons .button,
 .ui.basic.teal.button {
-  -webkit-box-shadow: 0px 0px 0px 2px #00B5AD inset !important;
-  box-shadow: 0px 0px 0px 2px #00B5AD inset !important;
-  color: #00B5AD !important;
+  -webkit-box-shadow: 0px 0px 0px 2px #27AE60 inset !important;
+  box-shadow: 0px 0px 0px 2px #27AE60 inset !important;
+  color: #27AE60 !important;
 }
 
 .ui.basic.teal.buttons .button:hover,
 .ui.basic.teal.button:hover {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #009c95 inset !important;
-  box-shadow: 0px 0px 0px 1px #009c95 inset !important;
-  color: #009c95 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #1c9f54 inset !important;
+  box-shadow: 0px 0px 0px 1px #1c9f54 inset !important;
+  color: #1c9f54 !important;
 }
 
 .ui.basic.teal.buttons .button:focus,
 .ui.basic.teal.button:focus {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #008c86 inset !important;
-  box-shadow: 0px 0px 0px 1px #008c86 inset !important;
-  color: #009c95 !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #15984c inset !important;
+  box-shadow: 0px 0px 0px 1px #15984c inset !important;
+  color: #1c9f54 !important;
 }
 
 .ui.basic.teal.buttons .active.button,
 .ui.basic.teal.active.button {
   background: transparent !important;
-  -webkit-box-shadow: 0px 0px 0px 1px #009c95 inset !important;
-  box-shadow: 0px 0px 0px 1px #009c95 inset !important;
-  color: #00827c !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #19a253 inset !important;
+  box-shadow: 0px 0px 0px 1px #19a253 inset !important;
+  color: #1e8449 !important;
 }
 
 .ui.basic.teal.buttons .button:active,
 .ui.basic.teal.button:active {
-  -webkit-box-shadow: 0px 0px 0px 1px #00827c inset !important;
-  box-shadow: 0px 0px 0px 1px #00827c inset !important;
-  color: #00827c !important;
+  -webkit-box-shadow: 0px 0px 0px 1px #1e8449 inset !important;
+  box-shadow: 0px 0px 0px 1px #1e8449 inset !important;
+  color: #1e8449 !important;
 }
 
 .ui.buttons:not(.vertical) > .basic.teal.button:not(:first-child) {
@@ -7558,9 +7558,9 @@ i.flag.zimbabwe:before {
 .ui.header > .icon {
   display: table-cell;
   opacity: 1;
-  font-size: 1.5em;
+  font-size: 1.25em;
   padding-top: 0em;
-  vertical-align: middle;
+  vertical-align: top;
 }
 
 /* With Text Node */
@@ -7985,15 +7985,15 @@ a.ui.inverted.green.header:hover {
 /*--- Teal ---*/
 
 .ui.teal.header {
-  color: #00B5AD !important;
+  color: #27AE60 !important;
 }
 
 a.ui.teal.header:hover {
-  color: #009c95 !important;
+  color: #1c9f54 !important;
 }
 
 .ui.teal.dividing.header {
-  border-bottom: 2px solid #00B5AD;
+  border-bottom: 2px solid #27AE60;
 }
 
 /* Inverted */
@@ -8698,7 +8698,7 @@ i.inverted.circular.green.icon {
 /* Teal */
 
 i.teal.icon {
-  color: #00B5AD !important;
+  color: #27AE60 !important;
 }
 
 i.inverted.teal.icon {
@@ -8707,7 +8707,7 @@ i.inverted.teal.icon {
 
 i.inverted.bordered.teal.icon,
 i.inverted.circular.teal.icon {
-  background-color: #00B5AD !important;
+  background-color: #27AE60 !important;
   color: #FFFFFF !important;
 }
 
@@ -14708,8 +14708,8 @@ a.ui.basic.green.label:hover {
 
 .ui.teal.labels .label,
 .ui.teal.label {
-  background-color: #00B5AD !important;
-  border-color: #00B5AD !important;
+  background-color: #27AE60 !important;
+  border-color: #27AE60 !important;
   color: #FFFFFF !important;
 }
 
@@ -14717,8 +14717,8 @@ a.ui.basic.green.label:hover {
 
 .ui.teal.labels .label:hover,
 a.ui.teal.label:hover {
-  background-color: #009c95 !important;
-  border-color: #009c95 !important;
+  background-color: #1c9f54 !important;
+  border-color: #1c9f54 !important;
   color: #FFFFFF !important;
 }
 
@@ -14732,22 +14732,22 @@ a.ui.teal.label:hover {
 /* Ribbon */
 
 .ui.teal.ribbon.label {
-  border-color: #00827c !important;
+  border-color: #1e8449 !important;
 }
 
 /* Basic */
 
 .ui.basic.teal.label {
   background-color: #FFFFFF !important;
-  color: #00B5AD !important;
-  border-color: #00B5AD !important;
+  color: #27AE60 !important;
+  border-color: #27AE60 !important;
 }
 
 .ui.basic.teal.labels a.label:hover,
 a.ui.basic.teal.label:hover {
   background-color: #FFFFFF !important;
-  color: #009c95 !important;
-  border-color: #009c95 !important;
+  color: #1c9f54 !important;
+  border-color: #1c9f54 !important;
 }
 
 /*--- Blue ---*/
@@ -18063,11 +18063,11 @@ ol.ui.horizontal.list li:before,
 /* Teal */
 
 .ui.teal.segment:not(.inverted) {
-  border-top: 2px solid #00B5AD !important;
+  border-top: 2px solid #27AE60 !important;
 }
 
 .ui.inverted.teal.segment {
-  background-color: #00B5AD !important;
+  background-color: #27AE60 !important;
   color: #FFFFFF !important;
 }
 
@@ -22250,7 +22250,7 @@ ol.ui.horizontal.list li:before,
 .ui.grid > .teal.row,
 .ui.grid > .teal.column,
 .ui.grid > .row > .teal.column {
-  background-color: #00B5AD !important;
+  background-color: #27AE60 !important;
   color: #FFFFFF;
 }
 
@@ -23916,7 +23916,7 @@ Floated Menu / Item
 .ui.secondary.menu .link.item:hover,
 .ui.secondary.menu a.item:hover {
   background: rgba(0, 0, 0, 0.05);
-  color: rgba(0, 0, 0, 0.95);
+  color: #772df9;
 }
 
 /* Active */
@@ -23925,7 +23925,7 @@ Floated Menu / Item
   -webkit-box-shadow: none;
   box-shadow: none;
   background: rgba(0, 0, 0, 0.05);
-  color: rgba(0, 0, 0, 0.95);
+  color: #772df9;
   border-radius: 0.28571429rem;
 }
 
@@ -23935,7 +23935,7 @@ Floated Menu / Item
   -webkit-box-shadow: none;
   box-shadow: none;
   background: rgba(0, 0, 0, 0.05);
-  color: rgba(0, 0, 0, 0.95);
+  color: #772df9;
 }
 
 /* Inverted */
@@ -23991,7 +23991,7 @@ Floated Menu / Item
 .ui.secondary.vertical.menu > .item {
   border: none;
   margin: 0em 0em 0.35714286em;
-  border-radius: 0.28571429rem !important;
+  border-radius: 0 !important;
 }
 
 .ui.secondary.vertical.menu > .header.item {
@@ -24473,8 +24473,8 @@ Floated Menu / Item
 
 .ui.menu .teal.active.item,
 .ui.teal.menu .active.item {
-  border-color: #00B5AD !important;
-  color: #00B5AD !important;
+  border-color: #27AE60 !important;
+  color: #27AE60 !important;
 }
 
 .ui.menu .blue.active.item,
@@ -24725,7 +24725,7 @@ Floated Menu / Item
 
 .ui.inverted.menu .teal.active.item,
 .ui.inverted.teal.menu {
-  background-color: #00B5AD;
+  background-color: #27AE60;
 }
 
 .ui.inverted.teal.menu .item:before {
@@ -25289,6 +25289,14 @@ Floated Menu / Item
 
 .ui.menu.pagination.right.floated {
   margin: 1rem;
+}
+
+.ui.menu.secondary.vertical {
+  width: auto;
+}
+
+.ui.menu.secondary.vertical .item {
+  padding: 0.92857143rem 1.14285714rem;
 }
 
 .transaction-detials .ui.inverted.menu .item {
@@ -26662,11 +26670,11 @@ Floated Menu / Item
 /* Teal */
 
 .ui.teal.table {
-  border-top: 0.2em solid #00B5AD;
+  border-top: 0.2em solid #27AE60;
 }
 
 .ui.inverted.teal.table {
-  background-color: #00B5AD !important;
+  background-color: #27AE60 !important;
   color: #FFFFFF !important;
 }
 
@@ -28237,15 +28245,15 @@ a.ui.card:hover,
 .ui.teal.cards > .card,
 .ui.cards > .teal.card,
 .ui.teal.card {
-  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #00B5AD, 0px 1px 3px 0px #D4D4D5;
-  box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #00B5AD, 0px 1px 3px 0px #D4D4D5;
+  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #27AE60, 0px 1px 3px 0px #D4D4D5;
+  box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #27AE60, 0px 1px 3px 0px #D4D4D5;
 }
 
 .ui.teal.cards > .card:hover,
 .ui.cards > .teal.card:hover,
 .ui.teal.card:hover {
-  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #009c95, 0px 1px 3px 0px #BCBDBD;
-  box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #009c95, 0px 1px 3px 0px #BCBDBD;
+  -webkit-box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #1c9f54, 0px 1px 3px 0px #BCBDBD;
+  box-shadow: 0px 0px 0px 1px #D4D4D5, 0px 2px 0px 0px #1c9f54, 0px 1px 3px 0px #BCBDBD;
 }
 
 /* Blue */
@@ -28778,6 +28786,11 @@ a.ui.card:hover,
   padding: 1em 1em;
 }
 
+.ui.card .header,
+.ui.cards > .card .header {
+  text-transform: capitalize;
+}
+
 .ui.card.welcome-card > .content,
 .ui.cards > .card.welcome-card > .content {
   padding: 1.78571429rem;
@@ -28837,12 +28850,9 @@ a.ui.card:hover,
   border-top-color: #E0E0E0;
 }
 
-.ui.card {
-  overflow: hidden;
-}
-
 .ui.card .ui.menu {
   margin: 0;
+  overflow: hidden;
 }
 
 .ui.card .meta {
@@ -30455,7 +30465,7 @@ a.ui.card:hover,
 .ui.teal.statistics .statistic > .value,
 .ui.statistics .teal.statistic > .value,
 .ui.teal.statistic > .value {
-  color: #00B5AD;
+  color: #27AE60;
 }
 
 .ui.blue.statistics .statistic > .value,
@@ -31057,6 +31067,7 @@ a.ui.card:hover,
   position: relative;
   padding-right: 30px;
   font-weight: 700;
+  text-transform: capitalize;
 }
 
 /* Dropdown Icon */
@@ -34877,6 +34888,10 @@ select.ui.dropdown {
   padding: 1.78571429rem 3rem;
 }
 
+.ui.modal.reward-modal .sub.header {
+  padding: 0.35714286rem 0;
+}
+
 .ui.modal.reward-modal .content + .content {
   border-top: rgba(34, 36, 38, 0.15) 1px solid;
 }
@@ -35010,7 +35025,7 @@ select.ui.dropdown {
 }
 
 .ui.inverted.dimmer > .ui.modal > .content {
-  padding: 2.5rem 2rem;
+  padding: 2.5rem 0;
   background-color: transparent;
 }
 
@@ -35029,6 +35044,10 @@ select.ui.dropdown {
 
 .transaction-detials .title-meta a {
   vertical-align: top;
+}
+
+.transaction-detials .ui.card .update-list {
+  border-bottom-left-radius: 0.42857143rem;
 }
 
 /*******************************
@@ -36491,7 +36510,7 @@ a.ui.nag {
 /* Teal */
 
 .ui.teal.progress .bar {
-  background-color: #00B5AD;
+  background-color: #27AE60;
 }
 
 .ui.teal.inverted.progress .bar {

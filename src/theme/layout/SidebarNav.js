@@ -11,7 +11,7 @@ export const SidebarNav = (props) => {
     ALL_NAV_ITEMS,
     n => n.to !== 'settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
   );
-  const actuals = ['individual-account'];
+  const actuals = ['individual-account', 'summary'];
   return (
     <Aux>
       {

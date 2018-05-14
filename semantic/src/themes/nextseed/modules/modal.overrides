@@ -185,6 +185,9 @@
         .header:not(.ui){
             padding:@25px @42px;
         }
+        .sub.header{
+            padding:@5px 0;
+        }
         .content + .content{
             border-top:@borderColor 1px solid;
         }
@@ -300,7 +303,7 @@
         will-change:auto;
         background-color:transparent;
         >.content{
-            padding:@35px @28px;
+            padding:@35px 0;
             background-color:transparent;
         }
     }
@@ -319,5 +322,8 @@
         a{
             vertical-align:top;
         }
+    }
+    .ui.card .update-list{
+        border-bottom-left-radius:@6px;
     }
 }

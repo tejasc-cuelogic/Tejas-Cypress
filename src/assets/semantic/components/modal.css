@@ -758,6 +758,9 @@
 .ui.modal.reward-modal .header:not(.ui) {
   padding: 1.78571429rem 3rem;
 }
+.ui.modal.reward-modal .sub.header {
+  padding: 0.35714286rem 0;
+}
 .ui.modal.reward-modal .content + .content {
   border-top: rgba(34, 36, 38, 0.15) 1px solid;
 }
@@ -867,7 +870,7 @@
   background-color: transparent;
 }
 .ui.inverted.dimmer > .ui.modal > .content {
-  padding: 2.5rem 2rem;
+  padding: 2.5rem 0;
   background-color: transparent;
 }
 .transaction-detials .title-meta {
@@ -883,6 +886,9 @@
 }
 .transaction-detials .title-meta a {
   vertical-align: top;
+}
+.transaction-detials .ui.card .update-list {
+  border-bottom-left-radius: 0.42857143rem;
 }
 
 

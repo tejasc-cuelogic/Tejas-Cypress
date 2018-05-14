@@ -8,7 +8,7 @@ import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
 
 export const DropdownFilter = props => (
-  <Grid.Column width={3} className="field">
+  <Grid.Column width={props.width || 3} className="field">
     <label>{props.name}</label>
     <Dropdown
       name={props.keyName || camelCase(props.name)}
@@ -26,7 +26,7 @@ export const DropdownFilter = props => (
 );
 
 export const DateRangeFilter = props => (
-  <Grid.Column width={4} className="field">
+  <Grid.Column width={props.width || 4} className="field">
     <label>{props.label}</label>
     <Form>
       <Form.Group widths="equal">

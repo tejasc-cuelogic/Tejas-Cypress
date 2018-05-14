@@ -1,11 +1,12 @@
 import React from 'react';
 // import { Route } from 'react-router-dom';
 import Aux from 'react-aux';
+import _ from 'lodash';
 import { Grid, Popup, Header, List } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 
 const data = {
-  invested: 12000,
+  invested: 7500,
   milestones: [
     {
       amount: 500,
@@ -66,8 +67,16 @@ const data = {
   ],
 };
 
+const calcSmartProgress = (milestones, amount) => {
+  const pIndex = _.findLastIndex(milestones, m => m.amount <= amount);
+  return ((pIndex / (milestones.length - 1)) * 100) +
+    (((amount - milestones[pIndex].amount) /
+      (milestones[pIndex + 1].amount - milestones[pIndex].amount)) *
+        (100 / (milestones.length - 1)));
+};
+
 const InvestmentTimeline = (props) => {
-  const progress = (data.invested / data.milestones[data.milestones.length - 1].amount) * 100;
+  const progress = calcSmartProgress(data.milestones, data.invested);
   return (
     <Aux>
       <Header as="h3">{props.title}</Header>
@@ -79,7 +88,7 @@ const InvestmentTimeline = (props) => {
         <Grid.Row>
           {
             data.milestones.map(milestone => (
-              <Grid.Column className="crossed">
+              <Grid.Column className="crossed" >
                 <Popup
                   trigger={<span>{Helper.CurrencyFormat(milestone.amount)}</span>}
                   position="bottom center"

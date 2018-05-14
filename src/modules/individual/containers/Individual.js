@@ -4,14 +4,14 @@ import PrivateLayout from '../../../containers/common/PrivateHOC';
 import Portfolio from './Portfolio';
 import TransferFunds from './TransferFunds';
 import BankAccount from './BankAccount';
-import Activity from './Activity';
+import Transactions from './Transactions';
 import Statements from './Statements';
 
 const navItems = [
   { to: 'portfolio', component: Portfolio },
   { to: 'transfer-funds', component: TransferFunds },
   { to: 'bank-accounts', component: BankAccount },
-  { to: 'activity', component: Activity },
+  { to: 'activity', component: Transactions },
   { to: 'statements', component: Statements },
 ];
 

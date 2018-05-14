@@ -24,29 +24,9 @@ const result = {
       title: 'Net Payment Received', field: 'netReceived',
     },
   ],
-  rows: [
-    {
-      payDate: '01-24-2018', received: 5000, interest: 3020, principal: 3020, fees: 3020, netReceived: 20000,
-    },
-    {
-      payDate: '01-24-2018', received: 5000, interest: 3020, principal: 3020, fees: 3020, netReceived: 20000,
-    },
-    {
-      payDate: '01-24-2018', received: 5000, interest: 3020, principal: 3020, fees: 3020, netReceived: 20000,
-    },
-    {
-      payDate: '01-24-2018', received: 5000, interest: 3020, principal: 3020, fees: 3020, netReceived: 20000,
-    },
-    {
-      payDate: '01-24-2018', received: 5000, interest: 3020, principal: 3020, fees: 3020, netReceived: 20000,
-    },
-    {
-      payDate: '01-24-2018', received: 5000, interest: 3020, principal: 3020, fees: 3020, netReceived: 20000,
-    },
-    {
-      payDate: '01-24-2018', received: 5000, interest: 3020, principal: 3020, fees: 3020, netReceived: 20000,
-    },
-  ],
+  rows: Array(12).fill({
+    payDate: '01-24-2018', received: 5000, interest: 3020, principal: 3020, fees: 3020, netReceived: 20000,
+  }),
 };
 
 const Transactions = () => (

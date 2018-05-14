@@ -30,12 +30,12 @@ export default class TransferFunds extends Component {
         <Header as="h3">Transfer funds</Header>
         <Grid>
           <Grid.Row>
-            <Grid.Column widescreen={8} largeScreen={12} computer={13} tablet={16} mobile={16}>
+            <Grid.Column widescreen={8} largeScreen={11} computer={13} tablet={16} mobile={16}>
               <AvailableCashTransfer match={this.props.match} cash={data.availableCash} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column widescreen={6} largeScreen={10} computer={10} tablet={13} mobile={16}>
+            <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
               <FaqWidget heading="Transfer Funds" faqs={data.faqs} />
             </Grid.Column>
           </Grid.Row>
