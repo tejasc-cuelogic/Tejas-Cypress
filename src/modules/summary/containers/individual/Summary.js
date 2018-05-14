@@ -8,7 +8,7 @@ import Helper from '../../../../helper/utility';
 @inject('individualAccountStore', 'uiStore', 'userStore')
 @withRouter
 @observer
-export default class CreateAccount extends React.Component {
+export default class Summary extends React.Component {
   finalizeAccount = (e) => {
     e.preventDefault();
     this.props.individualAccountStore.finalizeAccount().then(() => {
