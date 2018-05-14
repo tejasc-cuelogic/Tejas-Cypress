@@ -109,7 +109,7 @@ deploy:dev:
       - develop
   environment:
     name: dev
-    url: $DEV_URL
+    url: http://$DEV_URL
   tags:
     - ns-client
   stage: deploy
