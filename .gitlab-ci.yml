@@ -46,7 +46,7 @@ deploy:review:
     - qa
   environment:
     name: $CI_COMMIT_REF_NAME
-    url: $REVIEW_ENVIRONMENT_URL
+    url: http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com
     on_stop: delete:review
   tags:
     - ns-client
@@ -94,7 +94,7 @@ build:dev:
     - ns-client
   stage: build
   script:
-    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 dev
+    - bash scripts/cicd/setEnvironmentVariables.sh $REGION dev
     - npm install
     - npm run build
   artifacts:
@@ -109,13 +109,13 @@ deploy:dev:
       - develop
   environment:
     name: dev
-    url:  http://dev.nextseed.qa.s3-website-us-east-1.amazonaws.com
+    url: $DEV_URL
   tags:
     - ns-client
   stage: deploy
   script: 
     - echo "deploy to s3 bucket"
-    - aws s3 cp build/ s3://dev.nextseed.qa/ --recursive
+    - aws s3 cp build/ s3://$DEV_URL/ --recursive
   dependencies:
     - build:dev
 
@@ -133,7 +133,7 @@ build:qa:
     - ns-client
   stage: build
   script: 
-    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 qa
+    - bash scripts/cicd/setEnvironmentVariables.sh $REGION qa
     - npm install
     - npm run build
   artifacts:
@@ -148,13 +148,13 @@ deploy:qa:
       - qa
   environment:
     name: qa
-    url:  http://qa.nextseed.qa.s3-website-us-east-1.amazonaws.com
+    url: $QA_URL
   tags:
     - ns-client
   stage: deploy
   script: 
     - echo "deploy to s3 bucket"
-    - aws s3 cp build/ s3://qa.nextseed.qa/ --recursive
+    - aws s3 cp build/ s3://$QA_URL/ --recursive
   dependencies:
     - build:qa
 
@@ -172,7 +172,7 @@ build:prod:
     - ns-client
   stage: build
   script: 
-    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 prod
+    - bash scripts/cicd/setEnvironmentVariables.sh $REGION prod
     - npm install
     - npm run build
   artifacts:
@@ -187,7 +187,7 @@ deploy:prod:
       - master
   environment:
     name: prod
-    url:  http://ns-client-prod.s3-website-us-east-1.amazonaws.com
+    url:  $PROD_URL
   tags:
     - ns-client
   stage: deploy
