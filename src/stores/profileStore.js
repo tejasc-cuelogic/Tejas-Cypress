@@ -75,7 +75,7 @@ export class ProfileStore {
   get formattedPhoneDetails() {
     const phoneDetails = {
       phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-      countryCode: '91',
+      countryCode: '1',
     };
     return phoneDetails;
   }
@@ -86,10 +86,10 @@ export class ProfileStore {
   @action
   setIdentityQuestions = () => {
     const { questions } = this.verifyIdentity01.response;
-    const questionObj = { rule: 'required', error: undefined };
     const questionsArray = [];
     let optionsArray = [];
     _.forEach(questions, (question) => {
+      const questionObj = { rule: 'required', error: undefined };
       optionsArray = [];
       _.forEach(question.choices, (choice) => {
         optionsArray.push({ key: choice.text, value: choice.text, text: choice.text });
@@ -97,8 +97,9 @@ export class ProfileStore {
       questionObj.label = question.prompt;
       questionObj.key = question.type;
       questionObj.options = optionsArray;
+      questionObj.value = '';
+      questionsArray.push(questionObj);
     });
-    questionsArray.push(questionObj);
     this.verifyIdentity02.fields = questionsArray;
   }
 
