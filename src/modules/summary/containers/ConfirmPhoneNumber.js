@@ -53,38 +53,25 @@ export default class ConfirmPhoneNumber extends Component {
               <ListErrors errors={[errors.message]} />
             </Message>
           }
-          {editMode ?
-            <MaskedInput
-              name="phoneNumber"
-              fielddata={verifyIdentity01.fields.phoneNumber}
-              mask="999-999-9999"
-              changed={verifyIdentityEleChange}
-            /> :
-            <MaskedInput
-              value={verifyIdentity01.fields.phoneNumber.value}
-              type="tel"
-              name="phoneNumber"
-              fielddata={verifyIdentity01.fields.phoneNumber}
-              mask="999-999-9999"
-              readOnly
-              hidelabel
-              className="display-only"
-            />
-          }
+          <MaskedInput
+            value={verifyIdentity01.fields.phoneNumber.value}
+            type="tel"
+            name="phoneNumber"
+            fielddata={verifyIdentity01.fields.phoneNumber}
+            mask="999-999-9999"
+            readOnly={!editMode}
+            changed={verifyIdentityEleChange}
+            hidelabel
+            className="display-only"
+          />
           {editMode ?
             <p>
-              <Link
-                to={this.props.match.url}
-                onClick={this.startPhoneVerification}
-              >
+              <Link to={this.props.match.url} onClick={this.startPhoneVerification}>
                 Confirm Phone number
               </Link>
             </p> :
             <p>
-              <Link
-                to={this.props.match.url}
-                onClick={this.handleChangePhoneNumber}
-              >
+              <Link to={this.props.match.url} onClick={this.handleChangePhoneNumber}>
                 Change phone number
               </Link>
             </p>
