@@ -81,25 +81,27 @@ delete:review:
   
 
 #---------------------------------Dev-------------------------------------------
-
-
-#Building code
-build:dev:
-  
+.build_template: &build_defination
   only:
     refs:
       - develop
   tags:
     - ns-client
   stage: build
-  script:
-    - bash scripts/cicd/setEnvironmentVariables.sh $REGION dev
-    - npm install
-    - npm run build
   artifacts:
     paths:
     - build/
     expire_in: 1 day
+
+
+#Building code
+build:dev:
+  <<: *build_definition
+  script:
+    - bash scripts/cicd/setEnvironmentVariables.sh $REGION dev
+    - npm install
+    - npm run build
+  
 
 #Deploying code to s3 bucket
 deploy:dev:
