@@ -1,10 +1,10 @@
 const INVESTER_ACC_SUB_NAV_ITEMS = {
   subNavigations: [
-    { title: 'Portfolio', to: 'portfolio' },
-    { title: 'Transfer Funds', to: 'transfer-funds' },
-    { title: 'Bank Accounts', to: 'bank-accounts' },
-    { title: 'Activity', to: 'activity' },
-    { title: 'Statements', to: 'statements' },
+    { title: 'Portfolio', to: 'portfolio', component: 'Portfolio' },
+    { title: 'Transfer Funds', to: 'transfer-funds', component: 'TransferFunds' },
+    { title: 'Bank Accounts', to: 'bank-accounts', component: 'BankAccount' },
+    { title: 'Activity', to: 'activity', component: 'Transactions' },
+    { title: 'Statements', to: 'statements', component: 'Statements' },
   ],
 };
 

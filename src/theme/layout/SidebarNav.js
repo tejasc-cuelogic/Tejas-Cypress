@@ -45,4 +45,7 @@ export const GetNavItem = (item, roles) => {
       <h3><Link to={`/app/page/${result.to}`}>{result.title}</Link></h3> : false;
 };
 
-export const GetNavMeta = item => _.find(ALL_NAV_ITEMS, i => item.includes(i.to));
+export const GetNavMeta = (item) => {
+  const navMeta = _.find(ALL_NAV_ITEMS, i => item.includes(i.to));
+  return navMeta;
+};
