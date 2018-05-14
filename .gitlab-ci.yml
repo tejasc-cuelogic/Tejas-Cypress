@@ -93,6 +93,12 @@ delete:review:
     - build/
     expire_in: 1 day
 
+.deploy_template: &deploy_defination
+  tags:
+    - ns-client
+  stage: deploy
+
+
 
 #Building code
 build:dev:
@@ -105,15 +111,13 @@ build:dev:
 
 #Deploying code to s3 bucket
 deploy:dev:
+  <<: *deploy_defination
   only:
     refs:
       - develop
   environment:
     name: dev
     url: http://$DEV_URL
-  tags:
-    - ns-client
-  stage: deploy
   script: 
     - echo "deploy to s3 bucket"
     - aws s3 cp build/ s3://$DEV_URL/ --recursive
@@ -124,9 +128,6 @@ deploy:dev:
 
 #Building code
 build:qa:
-  cache:
-    paths:
-    - node_modules/
   only:
     refs:
       - qa
@@ -163,9 +164,6 @@ deploy:qa:
 
 #Building code
 build:prod:
-  cache:
-    paths:
-    - node_modules/
   only:
     refs:
       - master
