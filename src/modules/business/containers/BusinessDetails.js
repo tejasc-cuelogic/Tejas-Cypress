@@ -160,6 +160,15 @@ export default class BusinessDetails extends React.Component {
                     >
                       <Icon name="ns-trash" />
                     </Button>
+                    <Button
+                      icon
+                      circular
+                      inverted
+                      color="theme-primary"
+                      onClick={() => window.open(`${process.env.REACT_APP_BOX_URL}/folder/${business.folderId}`, '_blank')}
+                    >
+                      <Icon name="external" />
+                    </Button>
                     <Confirm
                       header="Confirm"
                       content="Are you sure you want to delete business and its associated data?"

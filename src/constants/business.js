@@ -4,16 +4,23 @@ import shortid from 'shortid';
 export const FORM_VALUES = [
   { name: 'name_of_business', placeholder: 'Business Name' },
   { name: 'shorthand_name', placeholder: 'Shorthand Name' },
-  { name: 'type_of_business', placeholder: 'Business Type' },
+  { name: 'type_of_business', placeholder: 'Business Type (legal types)' },
   { name: 'state_of_formation', placeholder: 'State of Formation' },
-  { name: 'investment_multiple', placeholder: 'Investment Multiple' },
-  { name: 'revenue_share_percentage', placeholder: 'Percent Share in revenue' },
+  { name: 'investment_multiple', placeholder: 'Investment Multiple (Rev Share Only)' },
+  { name: 'revenue_share_percentage', placeholder: 'Revenue Share Percentage (Rev Share Only)' },
   { name: 'minimum_offering_amount', placeholder: 'Minimum offering amount' },
   { name: 'offering_amount', placeholder: 'Offering Amount' },
   { name: 'maturity_date', placeholder: 'Maturity Date' },
   { name: 'termination_date', placeholder: 'Termination Date' },
   { name: 'offer_date', placeholder: 'Offer Date' },
-  { name: 'interest_rate', placeholder: 'Interest Rate' },
+  { name: 'interest_rate', placeholder: 'Interest Rate (Term Only)' },
+  { name: 'entity_name', placeholder: 'Entity Name' },
+  { name: 'name_of_investor_sig', placeholder: 'Name of investor sig' },
+  { name: 'investor_address_1', placeholder: 'Investor address 1' },
+  { name: 'investor_address_2', placeholder: 'Investor address 2' },
+  { name: 'investor_address_3', placeholder: 'Investor address 3' },
+  { name: 'principal', placeholder: 'Principal' },
+  { name: 'ivsdate', placeholder: 'Investor date' },
 ];
 
 export const DOCFILE_TYPES = [];
@@ -44,6 +51,13 @@ export const TEMPLATE_VARIABLES = {
   state_of_formation: '',
   type_of_business: '',
   termination_date: '',
+  entity_name: '',
+  name_of_investor_sig: '',
+  investor_address_1: '',
+  investor_address_2: '',
+  investor_address_3: '',
+  principal: '',
+  ivsdate: '',
 };
 
 export const PERSONAL_SIGNATURE = {

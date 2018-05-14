@@ -27,6 +27,9 @@ function settingEnv(){
 	REACT_APP_API_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/api\/url/ { print $3 }')
 	sed -i.bak "s#^\(REACT_APP_API_URL=\).*#\1${REACT_APP_API_URL}#" .env
 
+	REACT_APP_BOX_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/box\/url/ { print $3 }')				
+	sed -i.bak "s#^\(REACT_APP_BOX_URL=\).*#\1${REACT_APP_BOX_URL}#" .env
+
 	cat .env
 }
 

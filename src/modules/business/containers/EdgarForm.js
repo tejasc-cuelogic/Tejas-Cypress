@@ -97,14 +97,21 @@ export default class EdgarForm extends React.Component {
                 }
               </Grid>
               <Divider section />
-              <div className="center-align">
+              <div
+                className="form-footer"
+                style={{
+                  paddingBottom: '40px',
+                  paddingLeft: '1rem',
+                  textAlign: 'center',
+                }}
+              >
                 <Button
+                  color="green"
+                  onClick={this.handleSubmit}
                   primary
                   disabled={
-                    !this.props.businessStore.canSubmitEdgarForm ||
-                      this.props.uiStore.submitButtonDisabled
+                    this.props.match.params.filingId
                   }
-                  onClick={this.handleSubmit}
                 >
                   Generate Docx
                 </Button>
