@@ -31,7 +31,7 @@ class IndividualAccountStore {
   };
 
   @observable
-  bankListing = [];
+  bankListing = undefined;
 
   @observable
   plaidAccDetails = {};

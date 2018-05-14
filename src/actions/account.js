@@ -5,7 +5,7 @@ import {
 } from '../constants/account';
 import ExternalApiService from '../services/externalApi';
 import indAccountStore from '../stores/user/individualAccountStore';
-// import Plaid from '../helper/link-initialize';
+import uiStore from '../stores/uiStore';
 
 export class Account {
   /**
@@ -49,6 +49,7 @@ export class Account {
   }
 
   bankSearch = () => {
+    uiStore.setProgress();
     const { value } = indAccountStore.formBankSearch.fields.bankName;
     if (value !== '') {
       const params = {
@@ -65,9 +66,11 @@ export class Account {
       };
       ExternalApiService.post(params)
         .then(data => indAccountStore.setBankListing(data.body.institutions))
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
+        .finally(() => uiStore.setProgress(false));
     } else {
-      indAccountStore.setBankListing([]);
+      indAccountStore.setBankListing();
+      uiStore.setProgress(false);
     }
   }
 

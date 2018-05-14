@@ -2,15 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import _ from 'lodash';
-import { Header, Button, Image, Grid } from 'semantic-ui-react';
+import { Header, Button, Image, Grid, Form, Loader, Input } from 'semantic-ui-react';
 import accountActions from '../../../../actions/account';
 import LinkBankForm from './LinkBankForm';
-import { FormInput } from '../../../../theme/form/FormElements';
 import defaultBankLogo from '../../../../assets/images/banks/default.png';
 import { IND_BANK_LIST } from '../../../../constants/account';
 import ImageLoader from '../../../../theme/common/ImageLoader';
 
-@inject('individualAccountStore')
+@inject('individualAccountStore', 'uiStore')
 @withRouter
 @observer
 export default class LinkBankPlaid extends Component {
@@ -21,6 +20,7 @@ export default class LinkBankPlaid extends Component {
       bankSearchChange,
       bankListing,
     } = this.props.individualAccountStore;
+    const { inProgress } = this.props.uiStore;
     if (bankLinkInterface === 'form') {
       return <LinkBankForm />;
     }
@@ -28,12 +28,19 @@ export default class LinkBankPlaid extends Component {
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
         <Header as="h4" textAlign="center">Select your bank from the list</Header>
-        <FormInput
-          name="bankName"
-          fielddata={formBankSearch.fields.bankName}
-          changed={bankSearchChange}
-          onBlur={accountActions.bankSearch}
-        />
+        <Form>
+          <Input
+            fluid
+            placeholder="Search"
+            name="bankName"
+            icon={{ className: 'ns-search' }}
+            iconPosition="left"
+            value={formBankSearch.fields.bankName.value}
+            onChange={bankSearchChange}
+            onKeyUp={accountActions.bankSearch}
+          />
+        </Form>
+        <Loader active={inProgress} inline="centered" />
         <div className="bank-list">
           {
             <Grid columns={3}>
@@ -54,7 +61,7 @@ export default class LinkBankPlaid extends Component {
                   </Grid.Column>
                 ))
               }
-              {bankListing.length === 0 &&
+              {typeof bankListing === 'undefined' &&
                 _.map(IND_BANK_LIST, bankData => (
                   <Grid.Column>
                     <Link
