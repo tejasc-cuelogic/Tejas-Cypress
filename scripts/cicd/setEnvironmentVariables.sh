@@ -34,11 +34,9 @@ function settingEnv(){
 	sed -i.bak "s#^\(REACT_APP_PLAID_URL=\).*#\1${REACT_APP_PLAID_URL}#" .env
 
 	REACT_APP_PLAID_PUBLIC_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/plaid\/publicKey/ { print $3 }')
-	echo $REACT_APP_PLAID_PUBLIC_KEY
 	sed -i.bak "s/^\(REACT_APP_PLAID_PUBLIC_KEY=\).*/\1${REACT_APP_PLAID_PUBLIC_KEY}/" .env
 
 	REACT_APP_PLAID_ENV=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/plaid\/env/ { print $3 }')
-	echo $REACT_APP_PLAID_ENV
 	sed -i.bak "s/^\(REACT_APP_PLAID_ENV=\).*/\1${REACT_APP_PLAID_ENV}/" .env
 
 
