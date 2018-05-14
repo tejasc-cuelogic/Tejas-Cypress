@@ -61,6 +61,7 @@ export class Account {
           products: ['auth'],
           options: {
             include_display_data: true,
+            limit: 40,
           },
         },
         contentType: 'application/json',
