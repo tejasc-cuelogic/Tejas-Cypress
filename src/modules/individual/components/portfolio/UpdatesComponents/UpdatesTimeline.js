@@ -9,7 +9,7 @@ const UpdatesTimeline = props => (
     <List relaxed="very">
       {
         props.list.map(item => (
-          <List.Item to={`${props.match.url}/${item.id}`} as={NavLink}>{item.date}</List.Item>
+          <List.Item key={item.id} to={`${props.match.url}/${item.id}`} as={NavLink}>{item.date}</List.Item>
         ))
       }
     </List>

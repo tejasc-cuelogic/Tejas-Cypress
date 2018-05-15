@@ -3,7 +3,7 @@ const INVESTER_ACC_SUB_NAV_ITEMS = {
     { title: 'Portfolio', to: 'portfolio', component: 'Portfolio' },
     { title: 'Transfer Funds', to: 'transfer-funds', component: 'TransferFunds' },
     { title: 'Bank Accounts', to: 'bank-accounts', component: 'BankAccount' },
-    { title: 'Activity', to: 'activity', component: 'Transactions' },
+    { title: 'Transactions', to: 'transactions', component: 'Transactions' },
     { title: 'Statements', to: 'statements', component: 'Statements' },
   ],
 };

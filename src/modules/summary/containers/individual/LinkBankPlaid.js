@@ -12,6 +12,10 @@ import { IND_BANK_LIST } from '../../../../constants/account';
 @withRouter
 @observer
 export default class LinkBankPlaid extends Component {
+  componentWillUnmount() {
+    this.props.individualAccountStore.setBankLinkInterface('list');
+  }
+
   render() {
     const {
       bankLinkInterface,

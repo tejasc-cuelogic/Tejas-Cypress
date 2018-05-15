@@ -88,11 +88,10 @@ export default class ChartPie extends Component {
         <PieChart>
           <Legend layout="vertical" verticalAlign="middle" align="right" content={this.renderLegend} />
           <Pie
+            dataKey="value"
             activeIndex={this.state.activeIndex}
             activeShape={renderActiveShape}
             data={data}
-            // cx={200}
-            // cy={110}
             innerRadius="85%"
             outerRadius="100%"
             startAngle={0}
@@ -104,7 +103,9 @@ export default class ChartPie extends Component {
             icon={this.props.icon}
           >
             {
-              data.map((entry, index) => <Cell fill={colors[index % colors.length]} />)
+              data.map((entry, index) => (
+                <Cell key={colors[index % colors.length]} fill={colors[index % colors.length]} />
+              ))
             }
             <Label value={title} offset={0} position="center" />
             <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#cd0000' }} />

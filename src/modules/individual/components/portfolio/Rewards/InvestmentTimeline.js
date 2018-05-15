@@ -88,7 +88,7 @@ const InvestmentTimeline = (props) => {
         <Grid.Row>
           {
             data.milestones.map(milestone => (
-              <Grid.Column className="crossed" >
+              <Grid.Column className="crossed" key={`m_${milestone.amount}`} >
                 <Popup
                   trigger={<span>{Helper.CurrencyFormat(milestone.amount)}</span>}
                   position="bottom center"
@@ -101,7 +101,7 @@ const InvestmentTimeline = (props) => {
                     <List bulleted>
                       {
                         milestone.reward.highlights.map(h => (
-                          <List.Item>{h}</List.Item>
+                          <List.Item key={`m_${h}`}>{h}</List.Item>
                         ))
                       }
                     </List>

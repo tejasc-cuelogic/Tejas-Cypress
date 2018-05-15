@@ -15,7 +15,7 @@ export default class LinkBankAccount extends Component {
       },
     });
     return (
-      <Modal open closeIcon onClose={this.handleCloseModal} size="small">
+      <Modal open closeIcon onClose={this.handleCloseModal} size="small" closeOnDimmerClick={false}>
         <Modal.Content className="relaxed">
           <LoadableLinkBank />
         </Modal.Content>

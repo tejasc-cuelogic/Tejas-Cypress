@@ -37,7 +37,10 @@ export default class Portfolio extends Component {
         <InvestmentList listOf="pending" match={match} />
         <InvestmentList listOf="active" match={match} />
         <InvestmentList listOf="completed" match={match} />
-        <Route path={`${match.url}/investment-details/:id`} component={InvestmentDetails} />
+        <Route
+          path={`${match.url}/investment-details/:id`}
+          render={props => <InvestmentDetails refLink={match.url} {...props} />}
+        />
       </Aux>
     );
   }
