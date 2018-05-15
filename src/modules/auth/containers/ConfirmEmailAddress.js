@@ -40,11 +40,6 @@ export default class ConfirmEmailAddress extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your email address</Header>
           <Divider />
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
           <p>Please check the verification code in the email we sent to:</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
@@ -58,6 +53,11 @@ export default class ConfirmEmailAddress extends Component {
             className="display-only"
           />
           <p><Link to="/app/dashboard" onClick={() => this.props.setAuthWizardStep('InvestorSignup')}>Change email address</Link></p>
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
           <Form error onSubmit={this.handleSubmitForm}>
             <FormInput
               name="code"
@@ -69,7 +69,7 @@ export default class ConfirmEmailAddress extends Component {
             />
             <FieldError error={values.code.error} />
             <div className="center-align">
-              <Button primary size="large" className="very relaxed" disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
+              <Button primary size="large" className="very relaxed" loading={this.props.uiStore.inProgress} disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>
             <div className="center-align">
               <Button type="button" className="cancel-link" onClick={() => authActions.resendConfirmationCode()}>Resend the code to my email</Button>
