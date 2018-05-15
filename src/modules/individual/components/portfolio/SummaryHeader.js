@@ -16,9 +16,11 @@ const showValue = props => ((props.type === 1) ?
 
 const SummaryTitle = props => ((props.details.businessName) ? (
   <Header as="h2">
-    The Brewers Table
+    {props.details.businessName}
     <span className="title-meta"><Icon className="ns-individual-line" />Individual investment</span>
-    <span className="title-meta"><Link to="">View offering page</Link></span>
+    <span className="title-meta">
+      <Link target="_blank" to={props.details.url}>View offering page</Link>
+    </span>
   </Header>
 ) : (
   <Aux>

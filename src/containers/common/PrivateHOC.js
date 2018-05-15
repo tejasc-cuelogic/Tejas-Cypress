@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
+import { toJS } from 'mobx';
+import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Grid, Button, Icon, Responsive } from 'semantic-ui-react';
 import { GetNavMeta } from '../../theme/layout/SidebarNav';
 import SecondaryMenu from '../../theme/layout/SecondaryMenu';
 
+@inject('userStore', 'uiStore')
+@observer
 class PrivateHOC extends Component {
   render() {
     const pathInfo = this.props.location.pathname.split('/app/');
     const pageMeta = GetNavMeta(pathInfo[1]);
+    const { roles } = toJS(this.props.userStore.currentUser);
     return (
       <Aux>
         <div>
@@ -22,7 +27,9 @@ class PrivateHOC extends Component {
                     <Icon name="ns-bell" />
                     <span className="unread-count">3</span>
                   </span>
-                  <Button primary floated="right">Invest Now</Button>
+                  {roles.includes('investor') &&
+                    <Button primary floated="right">Invest Now</Button>
+                  }
                 </Grid.Column>
               </Grid.Row>
             </Grid>
