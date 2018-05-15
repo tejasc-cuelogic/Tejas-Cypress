@@ -69,7 +69,6 @@ export class Business {
       formSignatureInfo,
       formDocumentInfo,
     } = businessStore;
-    console.log(formDocumentInfo);
     let payload = {};
     const ids = {
       businessId,
