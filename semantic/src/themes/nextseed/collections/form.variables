@@ -105,10 +105,10 @@
 @formErrorBackground: transparent;
 
 /* AutoFill */
-@inputAutoFillBackground: #FFFFF0;
-@inputAutoFillBorder: #E5DFA1;
-@inputAutoFillFocusBackground: @inputAutoFillBackground;
-@inputAutoFillFocusBorder: #D5C315;
+@inputAutoFillBackground:@white;
+@inputAutoFillBorder:@border-color;
+@inputAutoFillFocusBackground:@white;
+@inputAutoFillFocusBorder:@theme-primary;
 @inputAutoFillErrorBackground: #FFFAF0;
 @inputAutoFillErrorBorder: #E0B4B4;
 
