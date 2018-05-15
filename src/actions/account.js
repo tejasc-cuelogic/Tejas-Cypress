@@ -67,7 +67,6 @@ export class Account {
       };
       ExternalApiService.post(params)
         .then(data => indAccountStore.setBankListing(data.body.institutions))
-        .catch(err => console.log(err))
         .finally(() => uiStore.setProgress(false));
     } else {
       indAccountStore.setBankListing();
@@ -92,8 +91,7 @@ export class Account {
         // The metadata object contains info about the institution the
         // user selected and the account ID, if selectAccount is enabled.
       },
-      onExit: (err, metadata) => {
-        console.log(metadata);
+      onExit: (err) => {
         // The user exited the Link flow.
         if (err != null) {
           // The user encountered a Plaid API error prior to exiting.

@@ -40,8 +40,9 @@ export const SidebarNav = (props) => {
 
 export const GetNavItem = (item, roles) => {
   const result = _.find(ALL_NAV_ITEMS, i => i.to === item);
-  return (result &&
-    (result.accessibleTo.length === 0 || _.intersection(result.accessibleTo, roles).length > 0)) ?
+  return (
+    result && (result.accessibleTo.length === 0 ||
+    _.intersection(result.accessibleTo, roles).length > 0)) ?
       <h3><Link to={`/app/page/${result.to}`}>{result.title}</Link></h3> : false;
 };
 
