@@ -130,6 +130,12 @@ div.login-form {
 .negative-text{
 	color:@highlight-primary !important;
 }
+a.text-link{
+	color:@tertiary-text;
+	&:hover, &:active, &.active{
+		color:@primary-text;
+	}
+}
 
 //	Admin Page Content Styles	//
 

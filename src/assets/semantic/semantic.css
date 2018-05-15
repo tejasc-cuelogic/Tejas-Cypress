@@ -878,6 +878,16 @@ div.login-form ul.error-messages {
   color: #EB5757 !important;
 }
 
+a.text-link {
+  color: #4F4F4F;
+}
+
+a.text-link:hover,
+a.text-link:active,
+a.text-link.active {
+  color: #242424;
+}
+
 .page-header-section {
   background-color: #383838;
   position: relative;

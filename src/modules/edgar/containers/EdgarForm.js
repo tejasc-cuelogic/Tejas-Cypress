@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Form, Button, Grid, Divider, Icon } from 'semantic-ui-react';
+import { Form, Button, Grid, Divider, Icon, Card } from 'semantic-ui-react';
 import shortid from 'shortid';
 import '../../../assets/custom.css';
 
@@ -79,45 +79,40 @@ export default class EdgarForm extends React.Component {
           </Grid>
         </div>
         <div className="content-spacer">
-          <Grid stackable className="edgar-form">
-            <Form>
-              <Grid>
-                {formValues.map(data => (
-                  <Form.Input
-                    placeholder={data.placeholder}
-                    className="column"
-                    label={data.placeholder}
-                    name={data.name}
-                    value={templateVariables[data.name]}
-                    onChange={this.handleInputChange}
-                    width={data.width || 8}
-                    key={`${key}_${data.name}`}
-                    disabled={data.name === 'name_of_business'}
-                  />))
-                }
-              </Grid>
-              <Divider section />
-              <div
-                className="form-footer"
-                style={{
-                  paddingBottom: '40px',
-                  paddingLeft: '1rem',
-                  textAlign: 'center',
-                }}
-              >
-                <Button
-                  color="green"
-                  onClick={this.handleSubmit}
-                  primary
-                  disabled={
-                    this.props.match.params.filingId
+          <Card fluid>
+            <Card.Content>
+              <Form>
+                <Grid stackable className="edgar-form">
+                  {formValues.map(data => (
+                    <Form.Input
+                      placeholder={data.placeholder}
+                      className="column"
+                      label={data.placeholder}
+                      name={data.name}
+                      value={templateVariables[data.name]}
+                      onChange={this.handleInputChange}
+                      width={data.width || 8}
+                      key={`${key}_${data.name}`}
+                      disabled={data.name === 'name_of_business'}
+                    />))
                   }
-                >
-                  Generate Docx
-                </Button>
-              </div>
-            </Form>
-          </Grid>
+                </Grid>
+                <Divider hidden section />
+                <div className="form-footer">
+                  <Button
+                    color="green"
+                    onClick={this.handleSubmit}
+                    primary
+                    disabled={
+                      this.props.match.params.filingId
+                    }
+                  >
+                    Generate Docx
+                  </Button>
+                </div>
+              </Form>
+            </Card.Content>
+          </Card>
         </div>
       </div>
     );

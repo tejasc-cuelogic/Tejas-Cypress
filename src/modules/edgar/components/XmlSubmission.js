@@ -23,7 +23,7 @@ const XmlSubmission = observer((props) => {
             {
               props.xmlSubmissions.map(xmlSubmission => (
                 <Table.Row key={xmlSubmission.xmlSubmissionId}>
-                  <Table.Cell>
+                  <Table.Cell selectable>
                     <Link to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}>
                       {xmlSubmission.folderName}
                     </Link>
