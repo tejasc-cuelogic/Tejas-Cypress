@@ -46,10 +46,10 @@ const Redeem = props => (
       />
       <List horizontal divided relaxed="very" className="link-list">
         <List.Item>
-          <Link to="">Change email address</Link>
+          <Link to={props.location}>Change email address</Link>
         </List.Item>
         <List.Item>
-          <Link to="">Resend message</Link>
+          <Link to={props.location}>Resend message</Link>
         </List.Item>
       </List>
       <Form error onSubmit={this.handleSubmitForm}>

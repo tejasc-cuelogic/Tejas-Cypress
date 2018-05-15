@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Grid, List, Icon, Responsive } from 'semantic-ui-react';
+import { Grid, List, Icon, Menu, Responsive } from 'semantic-ui-react';
 import { USER_DETAIL_SECTIONS } from '../../../constants/user';
 
 const userModuleSubheader = props => (
@@ -31,15 +31,20 @@ const userModuleSubheader = props => (
       </Grid>
     </div>
     <div className="secondary-menu">
-      <List celled horizontal inverted>
+      <Menu celled="true" horizontal="true" inverted>
         {
           USER_DETAIL_SECTIONS.map(section => (
-            <List.Item key={section}>
-              <NavLink to={`/app/users/${props.id}/${section}`} className={(props.section.toLowerCase() === section.toLowerCase()) ? 'active' : ''}>{section}</NavLink>
-            </List.Item>
+            <Menu.Item
+              key={section}
+              as={NavLink}
+              className={(props.section.toLowerCase() === section.toLowerCase()) ? 'active' : ''}
+              to={`/app/users/${props.id}/${section}`}
+            >
+              {section}
+            </Menu.Item>
           ))
         }
-      </List>
+      </Menu>
     </div>
   </div>
 );

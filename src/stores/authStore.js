@@ -23,7 +23,7 @@ export class AuthStore {
   @observable cognitoUserSession = null;
   @observable isUserLoggedIn = false;
   @observable signupFlow = {
-    type: 'investor',
+    type: '',
   };
 
   @observable

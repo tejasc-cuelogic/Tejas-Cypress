@@ -127,7 +127,7 @@ class InvestorSignup extends Component {
             />
             <FieldError error={values.verify.error} />
             <div className="center-align">
-              <Button primary size="large" className="very relaxed" disabled={!this.props.authStore.canRegister}>Register</Button>
+              <Button primary size="large" className="very relaxed" loading={this.props.uiStore.inProgress} disabled={!this.props.authStore.canRegister}>Register</Button>
             </div>
           </Form>
         </Modal.Content>

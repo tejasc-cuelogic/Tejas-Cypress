@@ -7,6 +7,7 @@ import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 
 const summaryDetails = {
   accountType: 'individual',
+  url: 'https://www.nextseed.com/offerings/chapman-kirby/',
   businessName: 'The Brewers Table',
   summary: [
     {
