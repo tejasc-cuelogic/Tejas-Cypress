@@ -246,9 +246,6 @@
         position:relative;
         padding:@50px @70px;
         .field-wrap{
-            margin:@30px auto;
-            padding:@25px @60px;
-            background:@lighten-bg-color;
             h5{
                 margin-bottom:@10px;
             }
@@ -285,6 +282,11 @@
             }
         }
     }
+}
+.field-wrap{
+    margin:@30px auto;
+    padding:@25px @60px;
+    background:@lighten-bg-color;
 }
 .bank-list{
     padding:@28px 0;
