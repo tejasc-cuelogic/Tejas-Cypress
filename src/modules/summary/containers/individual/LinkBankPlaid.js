@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import _ from 'lodash';
-import { Header, Button, Image, Grid, Form, Loader, Input } from 'semantic-ui-react';
+import { Header, Button, Image, Grid, Form, Loader, Input, Dimmer } from 'semantic-ui-react';
 import accountActions from '../../../../actions/account';
 import LinkBankForm from './LinkBankForm';
 import defaultBankLogo from '../../../../assets/images/banks/default.png';
@@ -39,8 +39,10 @@ export default class LinkBankPlaid extends Component {
             onKeyUp={accountActions.bankSearch}
           />
         </Form>
-        <Loader active={inProgress} inline="centered" />
         <div className="bank-list">
+          <Dimmer>
+            <Loader active={inProgress} />
+          </Dimmer>
           {
             <Grid columns={3}>
               {
