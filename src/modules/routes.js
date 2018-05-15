@@ -1,10 +1,10 @@
 import About from './about/containers/About';
 import Agreements from './agreements/containers/Agreements';
 import Blog from './blog/containers/Blog';
-import Business from '../modules/business/containers/Business';
+import Edgar from '../modules/edgar/containers/Business';
 import ChangePassword from '../modules/auth/ChangePassword';
 import Confirm from '../modules/auth/Confirm';
-import EdgarForm from '../modules/business/containers/EdgarForm';
+import EdgarForm from '../modules/edgar/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
 import Home from './home/containers/Home';
 import Invest from './invest/containers/Invest';
@@ -19,8 +19,9 @@ import Banking from './banking/containers/Banking';
 import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './users/containers/Users';
-import XmlForm from './business/containers/XmlForm';
-import BusinessDetails from './business/containers/BusinessDetails';
+import XmlForm from './edgar/containers/XmlForm';
+import BusinessDetails from './edgar/containers/BusinessDetails';
+import Business from '../modules/business/containers/Business';
 import {
   AdminAuthorization,
   BusinessAuthorization,
@@ -103,33 +104,39 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   {
-    path: '/app/business/:businessId/edgar/:filingId',
+    path: '/app/business',
+    component: Business,
+    auth: BusinessAuthorization,
+    exact: true,
+  },
+  {
+    path: '/app/edgar/:businessId/edgar/:filingId',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/:businessId/edgar',
+    path: '/app/edgar/:businessId/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/:businessId/filing/:filingId/xml/:xmlId',
+    path: '/app/edgar/:businessId/filing/:filingId/xml/:xmlId',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/business/:businessId/filing/:filingId/xml',
+    path: '/app/edgar/:businessId/filing/:filingId/xml',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/business/:businessId',
+    path: '/app/edgar/:businessId',
     component: BusinessDetails,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business',
-    component: Business,
+    path: '/app/edgar',
+    component: Edgar,
     auth: BusinessAuthorization,
     exact: true,
   },

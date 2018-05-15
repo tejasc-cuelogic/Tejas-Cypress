@@ -21,10 +21,10 @@ const BusinessList = observer(props => (
           props.businessList.map(business => (
             <Table.Row key={business.id}>
               <Table.Cell />
-              <Table.Cell singleLine><Link to={`/app/business/${business.id}`}>{business.name}</Link></Table.Cell>
+              <Table.Cell singleLine><Link to={`/app/edgar/${business.id}`}>{business.name}</Link></Table.Cell>
               <Table.Cell singleLine><DateTimeFormat datetime={business.created} /></Table.Cell>
               <Table.Cell>{business.description || 'N/A'}</Table.Cell>
-              <Table.Cell singleLine><Link to={`/app/business/${business.id}`} className="action">view filing</Link></Table.Cell>
+              <Table.Cell singleLine><Link to={`/app/edgar/${business.id}`} className="action">view filing</Link></Table.Cell>
             </Table.Row>
           ))
         }

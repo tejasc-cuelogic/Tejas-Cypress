@@ -14,6 +14,7 @@ import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
 import Helper from '../../../helper/utility';
+import FormErrors from '../../../components/common/FormErrors';
 import {
   XML_STATUSES,
   XML_SUBMISSION_TABS,
@@ -53,6 +54,12 @@ export default class XmlForm extends React.Component {
     const {
       xmlActiveTabName,
       xmlSubmissionStatus,
+      formFilerInfo,
+      formIssuerInfo,
+      formOfferingInfo,
+      formAnnualInfo,
+      formSignatureInfo,
+      formDocumentInfo,
     } = this.props.businessStore;
     const stepIndex = _.findIndex(XML_SUBMISSION_TABS, ['name', xmlActiveTabName]);
 
@@ -62,27 +69,51 @@ export default class XmlForm extends React.Component {
     } else if (xmlSubmissionStatus === XML_STATUSES.draft) {
       switch (XML_SUBMISSION_TABS[stepIndex].name) {
         case 'filer': {
-          this.handleFilerInformationSubmit(xmlActiveTabName, nextTabName);
+          if (!formFilerInfo.meta.isDirty) {
+            this.redirectToNextstep(nextTabName);
+          } else {
+            this.handleFilerInformationSubmit(xmlActiveTabName, nextTabName);
+          }
           break;
         }
         case 'issuer': {
-          this.handleIssuerInformationSubmit(xmlActiveTabName, nextTabName);
+          if (!formIssuerInfo.meta.isDirty) {
+            this.redirectToNextstep(nextTabName);
+          } else {
+            this.handleIssuerInformationSubmit(xmlActiveTabName, nextTabName);
+          }
           break;
         }
         case 'offering': {
-          this.handleOfferingInformationSubmit(xmlActiveTabName, nextTabName);
+          if (!formOfferingInfo.meta.isDirty) {
+            this.redirectToNextstep(nextTabName);
+          } else {
+            this.handleOfferingInformationSubmit(xmlActiveTabName, nextTabName);
+          }
           break;
         }
         case 'annual': {
-          this.handleAnnualSubmit(xmlActiveTabName, nextTabName);
+          if (!formAnnualInfo.meta.isDirty) {
+            this.redirectToNextstep(nextTabName);
+          } else {
+            this.handleAnnualSubmit(xmlActiveTabName, nextTabName);
+          }
           break;
         }
         case 'signature': {
-          this.handleSignatureSubmit(xmlActiveTabName, nextTabName);
+          if (!formSignatureInfo.meta.isDirty) {
+            this.redirectToNextstep(nextTabName);
+          } else {
+            this.handleSignatureSubmit(xmlActiveTabName, nextTabName);
+          }
           break;
         }
         default: {
-          this.handleFileSelectorSubmit(xmlActiveTabName, nextTabName);
+          if (!formDocumentInfo.meta.isDirty) {
+            this.redirectToNextstep(nextTabName);
+          } else {
+            this.handleFileSelectorSubmit(xmlActiveTabName, nextTabName);
+          }
           break;
         }
       }
@@ -256,8 +287,8 @@ export default class XmlForm extends React.Component {
   }
 
   handleFileSelectorSubmit = (currentStepName, nextTabName) => {
-    const { documentList } = this.props.businessStore;
-    businessActions.validateDocumentList(documentList);
+    const { formDocumentInfo } = this.props.businessStore;
+    businessActions.validateDocumentList(formDocumentInfo.documentList);
     if (this.props.businessStore.xmlErrors
       && this.props.businessStore.xmlErrors.documentListError === undefined) {
       this.addAndRemoveErrorClass(currentStepName, '');
@@ -287,7 +318,7 @@ export default class XmlForm extends React.Component {
   handleXmlSubmissionSubmit = () => {
     businessActions.submitXMLInformation('xmlSubmission')
       .then(() => {
-        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
         Helper.toast('XML form submitted successfully', 'success');
       })
       .catch((errors) => {
@@ -301,7 +332,7 @@ export default class XmlForm extends React.Component {
 
     businessActions.copyXMLInformation()
       .then(() => {
-        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
         Helper.toast('Copy XML submission successfully', 'success');
       })
       .catch((error) => {
@@ -329,9 +360,12 @@ export default class XmlForm extends React.Component {
       saveButtonStatus = (!this.props.businessStore.formSignatureInfo.meta.isValid
         || this.props.businessStore.formSignatureInfo.fields.signaturePersons.length === 0);
     } else if (xmlActiveTabName === 'doc') {
-      const documents = _.filter(this.props.businessStore.documentList, document =>
+      const documents = _.filter(this.props.businessStore.formDocumentInfo.documentList, document =>
         document.checked === true);
       saveButtonStatus = (documents.length === 0);
+      if (documents.length === 0) {
+        this.props.businessStore.formDocumentInfo.meta.isDirty = false;
+      }
     }
 
     return saveButtonStatus;
@@ -339,6 +373,7 @@ export default class XmlForm extends React.Component {
 
   render() {
     const {
+      xmlErrors,
       xmlSubmissionTabs,
       xmlActiveTabName,
       xmlSubmissionId,
@@ -358,7 +393,7 @@ export default class XmlForm extends React.Component {
             <Grid.Row>
               <Grid.Column width={16}>
                 <h1>
-                  <Link to={`/app/business/${this.props.match.params.businessId}`} className="back-link"><Icon name="ns-arrow-left" /></Link>
+                  <Link to={`/app/edgar/${this.props.match.params.businessId}`} className="back-link"><Icon name="ns-arrow-left" /></Link>
                   XML Form
                   {
                     xmlSubmissionStatus === XML_STATUSES.completed &&
@@ -417,6 +452,7 @@ export default class XmlForm extends React.Component {
                 {xmlActiveTabName === 'doc' && <FileSelector />}
               </Form>
             </Grid.Column>
+            <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
           </Grid>
         </div>
       </div>

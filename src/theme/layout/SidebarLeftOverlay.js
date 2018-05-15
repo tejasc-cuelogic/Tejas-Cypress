@@ -23,6 +23,7 @@ class SidebarLeftPush extends Component {
       { icon: 'ns-comments-edit', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },
       { icon: 'ns-wallet', displayName: 'Banking', to: 'banking' },
       { icon: 'ns-article', displayName: 'Settings', to: 'settings' },
+      { icon: 'browser', displayName: 'Edgar', to: 'edgar' },
     ];
 
     return (

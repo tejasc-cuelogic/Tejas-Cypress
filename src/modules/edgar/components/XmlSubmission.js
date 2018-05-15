@@ -11,7 +11,7 @@ import {
 
 const XmlSubmission = observer((props) => {
   const { businessId, filingId } = props;
-  const xmlUrl = `/app/business/${businessId}/filing/${filingId}/xml`;
+  const xmlUrl = `/app/edgar/${businessId}/filing/${filingId}/xml`;
   if (!_.isEmpty(props.xmlSubmissions)) {
     return (
       <Accordion.Content active={props.active} key={props.filingId}>
@@ -33,7 +33,7 @@ const XmlSubmission = observer((props) => {
                     {
                       xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed &&
                       xmlSubmission.xmlSubmissionDownloadUrl &&
-                        <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
+                        <a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" download className="ui button icon link-button">
                           <Icon name="download" />
                         </a>
                     }

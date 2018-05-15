@@ -67,9 +67,9 @@ export class Business {
       formOfferingInfo,
       formAnnualInfo,
       formSignatureInfo,
-      documentList,
+      formDocumentInfo,
     } = businessStore;
-
+    console.log(formDocumentInfo);
     let payload = {};
     const ids = {
       businessId,
@@ -123,10 +123,13 @@ export class Business {
         mutation: documentListMutation,
         variables: {
           ...ids,
-          documentList: _.map(_.filter(documentList, document => document.checked), document => ({
-            name: document.name,
-            id: document.id,
-          })),
+          documentList: _.map(
+            _.filter(formDocumentInfo.documentList, document => document.checked),
+            document => ({
+              name: document.name,
+              id: document.id,
+            }),
+          ),
         },
       };
     } else if (action === 'xmlSubmission') {
@@ -885,7 +888,7 @@ export class Business {
     this.validateOfferingInfo(businessStore.formOfferingInfo.fields, false);
     this.validateAnnualReportInfo(businessStore.formAnnualInfo.fields, false);
     this.validateSignatureInfo(businessStore.formSignatureInfo.fields, false);
-    const errorMessage = this.validateDocumentList(businessStore.documentList, false);      
+    const errorMessage = this.validateDocumentList(businessStore.formDocumentInfo.documentList, false);      
 
     if (!errorMessage) {
       businessStore.setXmlSubStepsStatus('doc', true);

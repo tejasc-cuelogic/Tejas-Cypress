@@ -56,31 +56,34 @@ export class BusinessStore {
 
   @observable
   formFilerInfo = {
-    fields: { ...FILER_INFORMATION }, meta: { isValid: false, error: '' },
+    fields: { ...FILER_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formIssuerInfo = {
-    fields: { ...ISSUER_INFORMATION }, meta: { isValid: false, error: '' },
+    fields: { ...ISSUER_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formOfferingInfo = {
-    fields: { ...OFFERING_INFORMATION }, meta: { isValid: false, error: '' },
+    fields: { ...OFFERING_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formAnnualInfo = {
-    fields: { ...ANNUAL_REPORT_REQUIREMENTS }, meta: { isValid: false, error: '' },
+    fields: { ...ANNUAL_REPORT_REQUIREMENTS }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formSignatureInfo = {
-    fields: { ...SIGNATURE }, meta: { isValid: false, error: '' },
+    fields: { ...SIGNATURE }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
-  documentList = [];
+  formDocumentInfo = {
+    documentList: [],
+    meta: { isDirty: false },
+  }
 
   @observable
   offeringList = [];
@@ -208,6 +211,7 @@ export class BusinessStore {
       _.mapValues(this[form].fields, f => f.customErrors),
     );
     this[form].meta.isValid = validation.passes();
+    this[form].meta.isDirty = true;
     this[form].fields[field].error = validation.errors.first(field);
   };
 
@@ -225,6 +229,7 @@ export class BusinessStore {
       _.mapValues(newSigInfo, f => f.customErrors),
     );
     this.formSignatureInfo.meta.isValid = validation.passes();
+    this.formSignatureInfo.meta.isDirty = true;
     this.formSignatureInfo.fields[field].error = validation.errors.first(field);
   }
 
@@ -245,13 +250,13 @@ export class BusinessStore {
 
   @action
   setDocumentList(list) {
-    this.documentList = list;
+    this.formDocumentInfo.documentList = list;
   }
 
   @action
   setDocument(name, value) {
     /*eslint-disable*/
-    _.forEach(this.documentList, (document) => {
+    _.forEach(this.formDocumentInfo.documentList, (document) => {
       if (document.name === name) {
         document.checked = value;
       }
@@ -260,12 +265,13 @@ export class BusinessStore {
 
   @action
   toggleRequiredFiles(key) {
-    _.filter(this.documentList, document => document.name === key)[0].checked =
-      !_.filter(this.documentList, document => document.name === key)[0].checked;
+    _.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked =
+      !_.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked;
     
-    if (_.filter(this.documentList, document => document.name === key)[0].checked) {
+    if (_.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked) {
+      this.formDocumentInfo.meta.isDirty = true;
       this.removeXmlError('documentListError');
-    } 
+    }
   }
 
   @action
@@ -306,7 +312,7 @@ export class BusinessStore {
   @action
   clearFiler() {
     this.formFilerInfo = {
-      fields: { ...FILER_INFORMATION }, meta: { isValid: false, error: '' },
+      fields: { ...FILER_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
     };
   }
 
@@ -333,7 +339,7 @@ export class BusinessStore {
   @action
   clearIssuer() {
     this.formIssuerInfo = {
-      fields: { ...ISSUER_INFORMATION }, meta: { isValid: false, error: '' },
+      fields: { ...ISSUER_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
     };
   }
 
@@ -355,7 +361,7 @@ export class BusinessStore {
   @action
   clearOffering() {
     this.formOfferingInfo = {
-      fields: { ...OFFERING_INFORMATION }, meta: { isValid: false, error: '' },
+      fields: { ...OFFERING_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
     };
   }
 
@@ -377,7 +383,7 @@ export class BusinessStore {
   @action
   clearAnnualReport() {
     this.formAnnualInfo = {
-      fields: { ...ANNUAL_REPORT_REQUIREMENTS }, meta: { isValid: false, error: '' },
+      fields: { ...ANNUAL_REPORT_REQUIREMENTS }, meta: { isValid: false, error: '', isDirty: false },
     };
   }
 
@@ -399,7 +405,7 @@ export class BusinessStore {
   @action
   clearSignature() {
     this.formSignatureInfo = {
-      fields: { ...SIGNATURE }, meta: { isValid: false, error: '' },
+      fields: { ...SIGNATURE }, meta: { isValid: false, error: '', isDirty: false },
     };
   }
 
