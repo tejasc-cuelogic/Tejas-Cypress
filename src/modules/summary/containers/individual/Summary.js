@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
+import _ from 'lodash';
 import ListErrors from '../../../../theme/common/ListErrors';
 import Helper from '../../../../helper/utility';
 
@@ -39,7 +40,7 @@ export default class Summary extends React.Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Name</b></Table.Cell>
-                    <Table.Cell>{plaidAccDetails.institution.name}</Table.Cell>
+                    <Table.Cell>{ _.isEmpty(plaidAccDetails) ? '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
