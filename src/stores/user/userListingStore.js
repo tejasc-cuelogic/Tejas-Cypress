@@ -9,7 +9,7 @@ import { allUsersQuery } from '../queries/users';
 
 export class UserListingStore {
   @observable usersData = [];
-  @observable filters = true;
+  @observable filters = false;
   @observable requestState = {
     lek: null,
     filters: false,
