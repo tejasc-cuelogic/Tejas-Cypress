@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import _ from 'lodash';
-import { Modal, Button, Header, Form, Divider, Icon } from 'semantic-ui-react';
+import { Modal, Grid, Button, Header, Form, Divider, Icon } from 'semantic-ui-react';
 import { FormSelect } from '../../../theme/form/FormElements';
 import Helper from '../../../helper/utility';
 
@@ -38,17 +38,22 @@ export default class ConfirmIdentityForm extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
+          <Divider hidden />
           <Form error onSubmit={this.handleIdentityQuestionsSubmit}>
-            {_.map(verifyIdentity02.fields, field => (
-              <FormSelect
-                fluid
-                fielddata={field}
-                name={field.key}
-                value={field.value}
-                options={field.options}
-                changed={identityQuestionAnswerChange}
-              />
-            ))}
+            <Grid>
+              {_.map(verifyIdentity02.fields, field => (
+                <FormSelect
+                  fluid
+                  fielddata={field}
+                  name={field.key}
+                  value={field.value}
+                  options={field.options}
+                  changed={identityQuestionAnswerChange}
+                  containerwidth={16}
+                />
+              ))}
+            </Grid>
+            <Divider hidden />
             <div className="center-align">
               <Button loading={this.props.uiStore.inProgress} color="green" size="large" className="relaxed" disabled={!verifyIdentity02.meta.isValid}>Verify my identity</Button>
             </div>
