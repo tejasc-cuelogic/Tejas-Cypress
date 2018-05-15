@@ -33,10 +33,7 @@ export default class investorPersonalDetails extends Component {
       } else {
         Helper.toast('User verification hard-failed!', 'error');
       }
-    })
-      .catch((err) => {
-        console.log(err);
-      });
+    });
   }
 
   render() {
