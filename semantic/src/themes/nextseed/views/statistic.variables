@@ -25,18 +25,18 @@
 
 /* Value */
 // @valueFont:@boldFont;
-@valueFontWeight:normal;
+@valueFontWeight:700;
 @valueLineHeight:1.2em;
-@valueColor:@secondary-text;
-@valueTextTransform: uppercase;
+@valueColor:@fullBlack;
+@valueTextTransform: none;
 
 /* Label */
-@labelSize: @relativeMedium;
+@labelSize: @relative14px;
 @topLabelDistance: 0rem;
 @bottomLabelDistance: 0rem;
 @labelFont:@pageFont;
-@labelFontWeight:500;
-@labelColor:@tertiary-text;
+@labelFontWeight:400;
+@labelColor:@quaternary-text;
 @labelLineHeight: @relativeLarge;
 @labelTextTransform: none;
 
@@ -78,7 +78,7 @@
 @miniHorizontalValueSize: 1.5rem;
 
 @tinyTextValueSize: 1rem;
-@tinyValueSize: 2rem;
+@tinyValueSize: @24px;
 @tinyHorizontalValueSize: 2rem;
 
 @smallTextValueSize: 1rem;

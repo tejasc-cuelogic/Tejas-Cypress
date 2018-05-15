@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import DateTimeFormat from './../../../components/common/DateTimeFormat';
+import DateTimeFormat from './../../../theme/common/DateTimeFormat';
 
 const BusinessList = observer(props => (
   <div className="table-wrapper">

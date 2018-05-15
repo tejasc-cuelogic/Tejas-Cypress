@@ -49,6 +49,7 @@
 		> img{
 			max-width:58px;
 			margin:0 auto 10px;
+			border:1px solid @trackBackground;
 		}
 		h2{
 			font-size:16px;

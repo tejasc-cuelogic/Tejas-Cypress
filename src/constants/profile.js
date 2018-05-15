@@ -1,82 +1,87 @@
 import moment from 'moment';
+import Validator from 'validatorjs';
 
-export const PROFILE_DETAILS = {
+/* eslint-disable no-unused-vars */
+/* eslint-disable arrow-body-style */
+Validator.register('maskedPhoneNumber', (value, requirement, attribute) => {
+  return value.match(/^\d{3}-\d{3}-\d{4}$/);
+}, 'The :attribute is not in the format XXX-XXX-XXXX.');
+
+Validator.register('maskedSSN', (value, requirement, attribute) => {
+  return value.match(/^\d{3}-\d{2}-\d{4}$/);
+}, 'The :attribute is not in the format XXX-XX-XXXX.');
+
+export const VERIFY_IDENTITY_STEP_01 = {
   title: {
     value: '',
-    key: 'title',
-    error: undefined,
-    rule: 'required',
     label: 'Title',
+    error: undefined,
+    rule: 'string',
   },
   firstLegalName: {
     value: '',
-    key: 'firstLegalName',
+    label: 'First Legal Name',
     error: undefined,
     rule: 'required',
-    label: 'First Legal Name',
+    tooltip: 'Put your first name as listed on your driver license',
   },
   lastLegalName: {
     value: '',
-    key: 'lastLegalName',
+    label: 'Last Legal Name',
     error: undefined,
     rule: 'required',
-    label: 'Last Legal Name',
+    tooltip: 'Put your last name as listed on your driver license',
   },
   residentalStreet: {
     value: '',
-    key: 'residentalStreet',
+    label: 'Residental Street',
     error: undefined,
     rule: 'required',
-    label: 'Residental Street',
   },
   city: {
     value: '',
-    key: 'city',
+    label: 'City',
     error: undefined,
     rule: 'required',
-    label: 'City',
   },
   state: {
     value: '',
-    key: 'state',
+    label: 'State',
     error: undefined,
     rule: 'required',
-    label: 'State',
   },
   zipCode: {
     value: '',
-    key: 'zipCode',
-    error: undefined,
-    rule: 'required|numeric',
     label: 'Zip Code',
+    error: undefined,
+    rule: 'required',
   },
   phoneNumber: {
     value: '',
-    key: 'phoneNumber',
-    error: undefined,
-    rule: 'required',
     label: 'Phone Number',
+    error: undefined,
+    rule: 'required|maskedPhoneNumber',
   },
   dateOfBirth: {
     value: moment(),
-    key: 'dateOfBirth',
+    label: 'Date of Birth',
     error: undefined,
     rule: 'required',
-    label: 'Date of Birth',
   },
   ssn: {
     value: '',
-    key: 'ssn',
-    error: undefined,
-    rule: 'required',
     label: 'SSN',
+    error: undefined,
+    rule: 'required|maskedSSN',
   },
+};
+
+export const VERIFY_IDENTITY_STEP_04 = {
   code: {
     value: '',
-    key: 'code',
+    label: 'Enter your verification code here:',
     error: undefined,
-    rule: 'required|numeric|digits:6',
-    label: 'Enter verification code here:',
+    rule: 'required|numeric',
   },
 };
 
@@ -85,41 +90,6 @@ export const PROFILE_DETAILS_TITLE = [
   { key: 'Ms', value: 'Ms', text: 'Ms' },
   { key: 'Mrs', value: 'Mrs', text: 'Mrs' },
 ];
-
-export const IDENTITY_QUESTIONS_FORM_VALUES = {
-  question1: {
-    value: '',
-    key: 'question1',
-    error: undefined,
-    rule: 'required',
-    label: 'In which city is Baker Street?',
-    placeHolder: 'Type answer',
-  },
-  question2: {
-    value: '',
-    key: 'question2',
-    error: undefined,
-    rule: 'required',
-    label: 'From whom did you purchase the property at Baker Street 221?',
-    placeHolder: 'Type answer',
-  },
-  question3: {
-    value: '',
-    key: 'question3',
-    error: undefined,
-    rule: 'required',
-    label: 'In which country have you lived?',
-    placeHolder: 'Type answer',
-  },
-  question4: {
-    value: '',
-    key: 'question4',
-    error: undefined,
-    rule: 'required',
-    label: 'Between 1979 and 1980, in which state you have lived?',
-    placeHolder: 'Type answer',
-  },
-};
 
 export const CONFIRM_IDENTITY_DOCUMENTS = {
   photoId: {

@@ -67,7 +67,7 @@
 @nsSrc:
   url("@{fontPath}/@{nsFontName}.eot?n09i5h#iefix") format('embedded-opentype'),
   url("@{fontPath}/@{nsFontName}.ttf?n09i5h") format('truetype'),
-  // url("@{fontPath}/@{nsFontName}.woff2?n09i5h") format('woff2'),
+  url("@{fontPath}/@{nsFontName}.woff2?n09i5h") format('woff2'),
   url("@{fontPath}/@{nsFontName}.woff?n09i5h") format('woff'),
   url("@{fontPath}/@{nsFontName}.svg?n09i5h#nextseed") format('svg')
 ;
@@ -81,6 +81,7 @@
 @ns-article: "\e905";
 @ns-author: "\e906";
 @ns-bag: "\e907";
+@ns-bar: "\e951";
 @ns-bar-chart: "\e908";
 @ns-bell: "\e909";
 @ns-box: "\e90a";
@@ -119,9 +120,11 @@
 @ns-envelope: "\e925";
 @ns-facebook: "\e93e";
 @ns-file: "\e93f";
+@ns-fitness: "\e952";
 @ns-food: "\e940";
 @ns-help: "\e949";
 @ns-help-circle: "\e926";
+@ns-hospitality: "\e953";
 @ns-image: "\e927";
 @ns-individual: "\e941";
 @ns-individual-line: "\e94e";

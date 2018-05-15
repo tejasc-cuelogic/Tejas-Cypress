@@ -1,3 +1,23 @@
 /*******************************
             Progress
 *******************************/
+.investment-details{
+    .ui.progress{
+        width:60px;
+        margin:0 45px 0 0;
+        border-radius:@10px;
+        .bar{
+            min-width:auto;
+            border-radius:@10px;
+        }
+        .label{
+            margin:0 0 0 @14px;
+            width:auto;
+            height:14px;
+            line-height:14px;
+            text-align:right;
+            top:0;
+            left:100%;
+        }
+    }
+}

@@ -3,9 +3,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import authActions from './../../../actions/auth';
-import ListErrors from '../../../components/common/ListErrors';
+import ListErrors from '../../../theme/common/ListErrors';
 import validationActions from '../../../actions/validation';
-import FieldError from '../../../components/common/FieldError';
+import FieldError from '../../../theme/common/FieldError';
 
 @inject('authStore', 'uiStore', 'userStore')
 @withRouter

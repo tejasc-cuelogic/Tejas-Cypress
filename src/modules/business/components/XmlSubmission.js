@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Accordion, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import _ from 'lodash';
-import DateTimeFormat from './../../../components/common/DateTimeFormat';
+import DateTimeFormat from './../../../theme/common/DateTimeFormat';
 
 const XmlSubmission = observer((props) => {
   const { businessId, filingId } = props;
@@ -30,7 +30,7 @@ const XmlSubmission = observer((props) => {
                       (xmlSubmission.jobStatus === 'COMPLETED')
                         ? (
                           <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
-                            <Icon name="ns-download" />
+                            <Icon className="ns-download" />
                           </a>
                         ) : <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
                     }
@@ -44,8 +44,8 @@ const XmlSubmission = observer((props) => {
                       lockedstatus={xmlSubmission.lockedStatus}
                       onClick={props.confirmDelete}
                     >
-                      {xmlSubmission.lockedStatus === true && <Icon name="ns-lock" />}
-                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="ns-unlock alternate" />}
+                      {xmlSubmission.lockedStatus === true && <Icon className="ns-lock" />}
+                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon className="ns-unlock alternate" />}
                     </Button>
 
                     <Button
@@ -58,7 +58,7 @@ const XmlSubmission = observer((props) => {
                       subrefid={xmlSubmission.xmlSubmissionId}
                       onClick={props.confirmDelete}
                     >
-                      <Icon name="ns-trash" />
+                      <Icon className="ns-trash" />
                     </Button>
                   </Table.Cell>
                 </Table.Row>

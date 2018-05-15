@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { Button, Form, Grid, Header, Message, Divider } from 'semantic-ui-react';
 import authActions from '../../actions/auth';
 
-import ListErrors from '../../components/common/ListErrors';
-import FieldError from '../../components/common/FieldError';
+import ListErrors from '../../theme/common/ListErrors';
+import FieldError from '../../theme/common/FieldError';
 import validationActions from '../../actions/validation';
 
 @inject('authStore', 'uiStore')
@@ -46,7 +46,7 @@ export default class ForgotPassword extends React.Component {
                   <div stacked>
                     <Form.Input
                       fluid
-                      icon="ns-envelope"
+                      icon={{ className: 'ns-envelope' }}
                       iconPosition="left"
                       placeholder="E-mail address"
                       name="email"

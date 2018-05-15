@@ -2,44 +2,44 @@
          Theme Overrides
 *******************************/
 
-// .page-header-section{
-.ui.horizontal.list{
-    .item{
-        font-size:@12px;
-        color:@inverse-text;
-    }
-    a.item{
-        color:@inverse-secondary-text;
-        &:hover, &:focus, &.active{
-            color:@theme-primary;
+.filter-meta{
+    .ui.horizontal.list{
+        .item{
+            font-size:@12px;
+            color:@inverse-text;
         }
+        a.item{
+            color:@inverse-secondary-text;
+            &:hover, &:focus, &.active{
+                color:@theme-primary;
+            }
+        }
+        // &.link{
+        //     > a.item{
+        //         font-size:@12px;
+        //         margin-left:@28px;
+        //         text-transform:uppercase;
+        //         color:@inverse-secondary-text;
+        //         &:hover, &:focus, &.active{
+        //             color:@theme-primary;
+        //         }
+        //     }
+        // }
     }
-    // &.link{
-    //     > a.item{
-    //         font-size:@12px;
-    //         margin-left:@28px;
-    //         text-transform:uppercase;
-    //         color:@inverse-secondary-text;
-    //         &:hover, &:focus, &.active{
-    //             color:@theme-primary;
-    //         }
-    //     }
-    // }
 }
-// }
 .secondary-menu{
 	.ui.horizontal.celled.list{
-		.list>.item, >.item{
-			font-size:@14px;
-			font-weight:900;
-			padding:@16px @20px !important;
+        a.item{
+            font-size:@14px;
+            font-weight:900;
+            padding:@16px @20px !important;
             border-left:@tertiary-text 1px solid;
             color:@white;
             &:hover, &:focus, &.active{
-                color:@link-color;
+                color:@link-color !important;
                 background-color:@lighten-bg-color;
             }
-		}
+        }
 	}
 }
 
@@ -53,6 +53,92 @@
             &:hover, &:focus, &.active{
                 color:@primary-text;
                 border-color:@theme-primary;
+            }
+        }
+    }
+}
+
+.page-header-section{
+    .ui.list{
+        &.horizontal{
+            margin-left:@14px;
+            vertical-align:middle;
+        }
+        .item{
+            padding:0;
+            font-size:@14px;
+        }
+        .list>.item .description, >.item .description{
+            color:@white;
+        }
+        i.circular.icon{
+            &.red{
+                box-shadow:0 0 0 0.1em @red;
+            }
+            &.green{
+                box-shadow:0 0 0 0.1em @green;
+            }
+        }
+    }
+}
+
+.update-list{
+	background-color:@light-bg-color;
+    .ui.list{
+        margin-left:@5px;
+        border-left:@border-color 1px solid;
+        .item{
+            padding-left:@21px;
+            font-size:@13px;
+            font-weight:700;
+            line-height:@16px;
+            color:@quaternary-text;
+            position:relative;
+            &:before{
+                content:"";
+                width:9px;
+                height:9px;
+                border-radius:@5px;
+                background-color:@quaternary-text;
+                position:absolute;
+                left:-1px;
+                top:50%;
+                z-index:2;
+                transform:translate(-50%, -50%);
+                border:2px solid white;
+                box-shadow:0px 0px 4px 1px @quaternary-text;
+            }
+            &:hover, &.active{
+                color:@primary-text;
+                &:before{
+                    background-color:@link-color;
+                    box-shadow:0 0 4px 1px @link-color;
+                }
+            }
+            &:first-child:after, &:last-child:after{
+                height:50%;
+                width:1px;
+                visibility:visible;
+                position:absolute;
+                left:-1px;
+                z-index:1;
+                background-color:@light-bg-color;
+            }
+            &:first-child{
+                &:before{
+                    top:~"calc(50% - 6px)";
+                }
+                &:after{
+                    top:0;
+                }
+            }
+            &:last-child{
+                &:before{
+                    top:~"calc(50% + 6px)";
+                }
+                &:after{
+                    bottom:0;
+                }
             }
         }
     }
