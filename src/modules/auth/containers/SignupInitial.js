@@ -26,14 +26,14 @@ class signupInitial extends Component {
                   <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
                     <Icon name={type.icon} size="huge" />
                     <h3>{type.text}</h3>
-                    <p>{type.desc}</p>
+                    <p>{selectedType === type.value ? type.desc : ''}</p>
                   </div>
                 </Grid.Column>
               ))}
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <Button primary size="large" className="very relaxed" onClick={() => this.props.setAuthWizardStep('InvestorSignup')} content="Start" />
+                {selectedType ? <Button primary size="large" className="very relaxed" onClick={() => this.props.setAuthWizardStep('InvestorSignup')} content="Start" /> : ''}
               </Grid.Column>
             </Grid.Row>
           </Grid>
