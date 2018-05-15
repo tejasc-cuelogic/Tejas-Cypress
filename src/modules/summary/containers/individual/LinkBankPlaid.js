@@ -44,7 +44,7 @@ export default class LinkBankPlaid extends Component {
           />
         </Form>
         <div className="bank-list">
-          <Dimmer>
+          <Dimmer active={inProgress}>
             <Loader active={inProgress} />
           </Dimmer>
           {
