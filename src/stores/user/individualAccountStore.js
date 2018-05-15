@@ -121,7 +121,7 @@ class IndividualAccountStore {
             funds: this.formAddFunds.fields.value.value,
           },
         })
-        .then(data => console.log(data), resolve())
+        .then(() => resolve())
         .catch(action((err) => {
           uiStore.setErrors(this.simpleErr(err));
           reject();

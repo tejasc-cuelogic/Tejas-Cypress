@@ -12,10 +12,7 @@ export default class LinkBankForm extends Component {
     e.preventDefault();
     this.props.individualAccountStore.createAccount().then(() => {
       Helper.toast('Account has been created.', 'success');
-    })
-      .catch(() => {
-        console.log('in catch');
-      });
+    });
   }
 
   render() {
@@ -40,7 +37,8 @@ export default class LinkBankForm extends Component {
                   fielddata={formLinkBankManually.fields[field]}
                   changed={linkBankManuallyChange}
                 />
-            ))}
+              ))
+            }
           </div>
           <div className="center-align">
             <Button primary size="large" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
