@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import snakeCase from 'lodash/snakeCase';
 import Aux from 'react-aux';
 import { Card, Grid, Popup, Divider, Statistic, Icon, Header } from 'semantic-ui-react';
 import Helper from '../../../../helper/utility';
@@ -44,7 +45,7 @@ const SummaryHeader = props => (
         <Grid.Row>
           {
             props.details.summary.map(row => (
-              <Grid.Column>
+              <Grid.Column key={snakeCase(row.title)}>
                 <Card.Content>
                   <Statistic size="tiny">
                     <Statistic.Label>

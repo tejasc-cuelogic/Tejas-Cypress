@@ -36,7 +36,7 @@ const Transactions = () => (
       <Table.Body>
         {
           result.rows.map(row => (
-            <Table.Row>
+            <Table.Row key={Helper.guid()}>
               <Table.Cell collapsing textAlign="left">{row.payDate}</Table.Cell>
               <Table.Cell className="positive-text">{Helper.CurrencyFormat(row.received)}</Table.Cell>
               <Table.Cell>{Helper.CurrencyFormat(row.received)}</Table.Cell>

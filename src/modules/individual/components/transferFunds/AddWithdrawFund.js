@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Icon, Input, Divider } from 'semantic-ui-react';
 
-const AddWithdrawFund = ({ match, history }) => (
+const AddWithdrawFund = ({ match, history, location }) => (
   <Modal
     dimmer
     open
@@ -17,7 +17,7 @@ const AddWithdrawFund = ({ match, history }) => (
     <Modal.Content>
       <Header as="h5">
         <Header.Subheader>Bank account</Header.Subheader>
-        Bank of America ...7545 <Link to="">Change</Link>
+        Bank of America ...7545 <Link to={location}>Change</Link>
       </Header>
       <Form error onSubmit={this.handleSubmitForm}>
         <Form.Field>

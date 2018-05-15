@@ -17,6 +17,7 @@ class SecondaryMenu extends Component {
         {
           this.props.navItems.map(item => (
             <Menu.Item
+              key={item.to}
               as={NavLink}
               to={`${this.props.match.url}/${item.to}`}
             >
