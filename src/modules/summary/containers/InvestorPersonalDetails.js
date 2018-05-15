@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete } from '../../../theme/form/FormElements';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
@@ -9,6 +9,7 @@ import Helper from '../../../helper/utility';
 import CipErrors from '../../../theme/common/CipErrors';
 
 @inject('profileStore', 'uiStore', 'userStore')
+@withRouter
 @observer
 export default class investorPersonalDetails extends Component {
   componentWillUnmount() {
@@ -52,8 +53,8 @@ export default class investorPersonalDetails extends Component {
           <Header as="h2">{welcomeMsg}</Header>
           <p>You’re almost at your personal dashboard</p>
           <Divider />
-          <p><Link to="">Federal regulations</Link> require us to collect some more info
-            to enable you to fully use your account
+          <p><Link to={this.props.match.url}>Federal regulations</Link>
+          require us to collect some more info to enable you to fully use your account
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">

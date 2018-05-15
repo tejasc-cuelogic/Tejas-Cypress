@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
 import authActions from '../../../actions/auth';
 import FieldError from '../../../theme/common/FieldError';
 import { FormInput } from '../../../theme/form/FormElements';
+import ListErrors from '../../../theme/common/ListErrors';
 
 @inject('authStore', 'uiStore')
 @observer
@@ -23,7 +24,6 @@ export default class ConfirmEmailAddress extends Component {
     e.preventDefault();
     validationActions.validateConfirmEmailAddressForm();
     if (this.props.authStore.canSubmitEmailAddressVerification) {
-      this.props.setAuthWizardStep('Login');
       authActions.confirmCode()
         .then(() => {
           this.props.setAuthWizardStep('Login');
@@ -34,11 +34,17 @@ export default class ConfirmEmailAddress extends Component {
 
   render() {
     const { values } = this.props.authStore;
+    const { errors } = this.props.uiStore;
     return (
       <Modal size="mini" open onClose={() => this.props.setAuthWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your email address</Header>
           <Divider />
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
           <p>Please check the verification code in the email we sent to:</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
@@ -54,17 +60,19 @@ export default class ConfirmEmailAddress extends Component {
           <p><Link to="/app/dashboard" onClick={() => this.props.setAuthWizardStep('InvestorSignup')}>Change email address</Link></p>
           <Form error onSubmit={this.handleSubmitForm}>
             <FormInput
+              name="code"
               size="huge"
               containerclassname="otp-field"
               fielddata={values.code}
-              onChange={this.handleInputChange}
+              maxLength={6}
+              changed={this.handleInputChange}
             />
             <FieldError error={values.code.error} />
             <div className="center-align">
               <Button primary size="large" className="very relaxed" disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Button className="cancel-link" onClick={() => this.props.setAuthWizardStep()}>Resend the code to my email</Button>
+              <Button type="button" className="cancel-link" onClick={() => authActions.resendConfirmationCode()}>Resend the code to my email</Button>
             </div>
           </Form>
         </Modal.Content>

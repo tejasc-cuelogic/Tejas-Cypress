@@ -445,6 +445,32 @@ export class Auth {
     newData.roles = (data.roles) ? JSON.parse(data.roles) : [];
     return newData;
   };
+
+  /**
+   * @desc to resend confirmation code to user-email address
+   * @return null
+   */
+  resendConfirmationCode = () => {
+    uiStore.setProgress();
+    const { email } = authStore.values;
+    this.cognitoUser = new AWSCognito.CognitoUser({
+      Username: email.value,
+      Pool: this.userPool,
+    });
+    return new Promise((res, rej) => {
+      this.cognitoUser.resendConfirmationCode(err => (err ? rej(err) : res()));
+    })
+      .then(() => {
+        Helper.toast('Successfully re-sent confirmation code', 'success');
+      })
+      .catch((err) => {
+        uiStore.setErrors(this.simpleErr(err));
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
 }
 
 export default new Auth();
