@@ -50,7 +50,7 @@ class InvestmentDetails extends Component {
 
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.goBack();
+    this.props.history.replace(this.props.refLink);
   };
 
   render() {
@@ -65,7 +65,7 @@ class InvestmentDetails extends Component {
               <Route exact path={match.url} component={getModule(navItems[0].component)} />
               {
                 navItems.map(item => (
-                  <Route path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+                  <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
                 ))
               }
             </Switch>

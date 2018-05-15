@@ -31,7 +31,11 @@ const InvestmentList = (props) => {
           <Table singleLine className="investment-details">
             <Table.Header>
               <Table.Row>
-                {listHeader.map(cell => <Table.HeaderCell textAlign={cell === 'Invested Amount' ? 'right' : ''}>{cell}</Table.HeaderCell>)}
+                {
+                  listHeader.map(cell => (
+                    <Table.HeaderCell key={cell.split(' ')[0]} textAlign={cell === 'Invested Amount' ? 'right' : ''}>{cell}</Table.HeaderCell>
+                  ))
+                }
                 <Table.HeaderCell />
               </Table.Row>
             </Table.Header>

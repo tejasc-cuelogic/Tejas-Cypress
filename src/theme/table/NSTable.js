@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
+import Helper from '../../helper/utility';
 
 export const THeader = ({ columns }) => (
   <Table.Header>
@@ -20,7 +21,7 @@ export const FillTable = props => (
       <Table.Body>
         {
           props.result.rows.map(row => (
-            <Table.Row>
+            <Table.Row key={Helper.guid()}>
               {
                 props.result.columns.map(col => (
                   <Table.Cell key={col.field} textAlign={col.textAlign}>
