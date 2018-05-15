@@ -22,7 +22,7 @@ export const SidebarNav = (props) => {
             as={NavLink}
             to={(actuals.includes(item.to)) ? `/app/${item.to}` : `/app/page/${item.to}`}
           >
-            <Icon name={item.icon} />
+            <Icon className={item.icon} />
             {item.to === 'messages' &&
               <Label circular color="red" size="mini" horizontal>3</Label>
             }
