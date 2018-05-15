@@ -67,7 +67,7 @@ export class AuthStore {
     code: {
       value: '',
       error: undefined,
-      rule: 'required|numeric|',
+      rule: 'required|numeric',
       key: 'code',
       label: 'Enter verification code here:',
     },
