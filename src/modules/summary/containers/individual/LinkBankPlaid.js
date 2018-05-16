@@ -58,9 +58,11 @@ export default class LinkBankPlaid extends Component {
                       to={this.props.match.url}
                       onClick={() => accountActions.bankSelect(bankData.institution_id)}
                     >
-                      {bankData.logo !== null && <Image centered size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
-                      {bankData.logo === null && <Image centered size="mini" src={defaultBankLogo} />}
-                      <span>{bankData.name}</span>
+                      <span>
+                        {bankData.logo !== null && <Image centered size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
+                        {bankData.logo === null && <Image centered size="mini" src={defaultBankLogo} />}
+                        <span>{bankData.name}</span>
+                      </span>
                     </Link>
                   </Grid.Column>
                 ))
