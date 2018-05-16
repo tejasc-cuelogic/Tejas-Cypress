@@ -24,7 +24,7 @@ class PrivateHOC extends Component {
                 </Grid.Column>
                 <Grid.Column width={4} floated="right" textAlign="right">
                   <span className="item notification">
-                    <Icon name="ns-bell" />
+                    <Icon className="ns-bell" />
                     <span className="unread-count">3</span>
                   </span>
                   {roles.includes('investor') &&

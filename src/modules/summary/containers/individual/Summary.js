@@ -14,12 +14,13 @@ export default class Summary extends React.Component {
     e.preventDefault();
     this.props.individualAccountStore.finalizeAccount().then(() => {
       Helper.toast('Individual account has been finalized.', 'success');
-    });
+    })
+      .catch(() => {});
   }
   render() {
     const { errors } = this.props.uiStore;
     const { currentUser } = this.props.userStore;
-    const { nsAccId, formAddFunds, plaidAccDetails } = this.props.individualAccountStore;
+    const { formAddFunds, plaidAccDetails } = this.props.individualAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -44,11 +45,11 @@ export default class Summary extends React.Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
-                    <Table.Cell>{nsAccId}</Table.Cell>
+                    <Table.Cell>{plaidAccDetails.account_id}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your initial deposit</b></Table.Cell>
-                    <Table.Cell>{formAddFunds.fields.value.value !== '' ? `$${formAddFunds.fields.value.value}` : ''}</Table.Cell>
+                    <Table.Cell>{formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` : ''}</Table.Cell>
                   </Table.Row>
                 </Table.Body>
               </Table>

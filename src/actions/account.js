@@ -7,6 +7,7 @@ import {
 import ExternalApiService from '../services/externalApi';
 import indAccountStore from '../stores/user/individualAccountStore';
 import uiStore from '../stores/uiStore';
+import Helper from '../helper/utility';
 
 export class Account {
   /**
@@ -49,29 +50,31 @@ export class Account {
     validationActions.validateEntityAccountField('zipCode', zipCode.join(''));
   }
 
-  bankSearch = () => {
-    uiStore.setProgress();
-    const { value } = indAccountStore.formBankSearch.fields.bankName;
-    if (value !== '') {
-      const params = {
-        url: PLAID_URL,
-        payload: {
-          public_key: PLAID_PUBLIC_KEY,
-          query: value,
-          products: ['auth'],
-          options: {
-            include_display_data: true,
-            limit: 9,
+  bankSearch = (e) => {
+    if (e.charCode === 13) {
+      uiStore.setProgress();
+      const { value } = indAccountStore.formBankSearch.fields.bankName;
+      if (value !== '') {
+        const params = {
+          url: PLAID_URL,
+          payload: {
+            public_key: PLAID_PUBLIC_KEY,
+            query: value,
+            products: ['auth'],
+            options: {
+              include_display_data: true,
+              limit: 9,
+            },
           },
-        },
-        contentType: 'application/json',
-      };
-      ExternalApiService.post(params)
-        .then(data => indAccountStore.setBankListing(data.body.institutions))
-        .finally(() => uiStore.setProgress(false));
-    } else {
-      indAccountStore.setBankListing();
-      uiStore.setProgress(false);
+          contentType: 'application/json',
+        };
+        ExternalApiService.post(params)
+          .then(data => indAccountStore.setBankListing(data.body.institutions))
+          .finally(() => uiStore.setProgress(false));
+      } else {
+        indAccountStore.setBankListing();
+        uiStore.setProgress(false);
+      }
     }
   }
 
@@ -91,11 +94,14 @@ export class Account {
         // Send the public_token to your app server here.
         // The metadata object contains info about the institution the
         // user selected and the account ID, if selectAccount is enabled.
+        Helper.toast(`Bank ${metadata.institution.name} with account id ${metadata.account_id} successfully linked.`, 'success');
+        indAccountStore.setStepToBeRendered(1);
       },
       onExit: (err) => {
         // The user exited the Link flow.
         if (err != null) {
           // The user encountered a Plaid API error prior to exiting.
+          Helper.toast('Something went wrong.', 'error');
         }
         // metadata contains information about the institution
         // that the user selected and the most recent API request IDs.
