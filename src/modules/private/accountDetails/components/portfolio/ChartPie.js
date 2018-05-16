@@ -13,7 +13,7 @@ const renderActiveShape = (props) => {
 
   return (
     <g>
-      <text x={cx} y={cy + 20} dy={8} textAnchor="middle">{(percent * 100).toFixed(2)}%</text>
+      <text x={cx} y={cy + 20} dy={13} textAnchor="middle" className="datavalue">{(percent * 100).toFixed(2)}%</text>
       <Sector
         cx={cx}
         cy={cy}
