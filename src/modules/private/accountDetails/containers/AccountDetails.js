@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import PrivateLayout from '../../../containers/common/PrivateHOC';
-import { GetNavMeta } from '../../../theme/layout/SidebarNav';
+import PrivateLayout from '../../../../containers/common/PrivateHOC';
+import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 
 const getModule = component => Loadable({
   loader: () => import(`./${component}`),
@@ -11,7 +11,7 @@ const getModule = component => Loadable({
   },
 });
 
-export default class Individual extends Component {
+export default class AccountDetails extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/portfolio`);
@@ -19,7 +19,7 @@ export default class Individual extends Component {
   }
   render() {
     const { match } = this.props;
-    const navItems = GetNavMeta(match.path).subNavigations;
+    const navItems = GetNavMeta(match.url).subNavigations;
     return (
       <PrivateLayout {...this.props}>
         <Switch>

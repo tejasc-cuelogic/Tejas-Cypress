@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Form, Icon, Input, Divider } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Input, Divider } from 'semantic-ui-react';
+import { AccTypeTitle } from '../../../../../theme/common/ImportCommon';
 
 const AddWithdrawFund = ({ match, history, location }) => (
   <Modal
@@ -12,7 +13,7 @@ const AddWithdrawFund = ({ match, history, location }) => (
     className="reward-modal"
   >
     <Modal.Header>
-      <Header as="h2"><Icon className="ns-individual-line" color="teal" /> {(match.params.action === 'add' ? 'Add' : 'Withdraw')} funds</Header>
+      <Header as="h2"><AccTypeTitle noText /> {(match.params.action === 'add' ? 'Add' : 'Withdraw')} funds</Header>
     </Modal.Header>
     <Modal.Content>
       <Header as="h5">
