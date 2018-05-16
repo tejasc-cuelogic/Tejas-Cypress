@@ -7,7 +7,7 @@ stages:
   - build
   - deploy
   - cleanup
-#---------------------------------Template--------------------------------------
+#---------------------------------Anchors--------------------------------------
 .build_template: &build_definition
   tags:
     - ns-client
