@@ -116,6 +116,12 @@ h6{
 	color:@quaternary-text;
 	margin-bottom:@28px;
 }
+a.link{
+	color:@link-color;
+	&:hover{
+		color:darken(@link-color, 10%);
+	}
+}
 //	Admin Page Content Styles	//
 
 //	Page Header Styles
@@ -473,7 +479,7 @@ a.disabled, a.disabled:hover, a.disabled:focus{
 
 // dl dt horizontal
 dl.dl-horizontal{
-	margin:0;
+	margin:0 0 @30px;
 	dt{
 		float:left;
 		width:170px;
