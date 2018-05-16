@@ -228,6 +228,7 @@ export class BusinessStore {
       _.mapValues(newSigInfo, f => f.rule),
       _.mapValues(newSigInfo, f => f.customErrors),
     );
+    console.log('sig ', validation.passes());
     this.formSignatureInfo.meta.isValid = validation.passes();
     this.formSignatureInfo.meta.isDirty = true;
     this.formSignatureInfo.fields[field].error = validation.errors.first(field);
@@ -421,7 +422,26 @@ export class BusinessStore {
   */
   @action
   changePersonalSignature(field, id, value) {
-    _.filter(this.formSignatureInfo.fields.signaturePersons, person => person.id === id)[0][field].value = value;    
+    _.filter(this.formSignatureInfo.fields.signaturePersons, person => person.id === id)[0][field].value = value;
+
+    let fieldValue = value;
+    let fieldRule = _.filter(this.formSignatureInfo.fields.signaturePersons, person => person.id === id)[0][field].rule;
+    let fieldCustomError = _.filter(this.formSignatureInfo.fields.signaturePersons, person => person.id === id)[0][field].customErrors;
+
+    const validation = new Validator(
+      fieldValue,
+      fieldRule,
+      fieldCustomError,
+    );
+    
+    validation.passes();
+    
+    this.formSignatureInfo.meta.isDirty = true;
+    if (!fieldValue) {
+      this.setPersonalSignatureError(field, id, validation.errors.first());
+    } else {
+      this.setPersonalSignatureError(field, id, '');
+    }
   }
 
   @action

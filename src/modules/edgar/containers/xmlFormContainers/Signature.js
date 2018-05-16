@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom'; // Redirect
 import PersonalSignature from '../../components/PersonalSignature';
 import businessActions from '../../../../actions/business';
 import validationActions from '../../../../actions/validation';
-import { FormInput } from './../../../../components/form/FormElements';
+import { FormInput } from './../../../../theme/form/FormElements';
 import {
   XML_STATUSES,
 } from '../../../../constants/business';

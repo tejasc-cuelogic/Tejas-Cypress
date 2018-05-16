@@ -2,9 +2,9 @@ import React from 'react';
 import { Form, Button, Input } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import moment from 'moment';
-import FieldError from './../../../components/common/FieldError';
+import FieldError from './../../../theme/common/FieldError';
 
-import { FormInput, FormDatePicker } from './../../../components/form/FormElements';
+import { FormInput, FormDatePicker } from './../../../theme/form/FormElements';
 
 const PersonalSignature = observer(props => (
   <div>
@@ -22,7 +22,6 @@ const PersonalSignature = observer(props => (
             name={personData.personSignature.key}
             value={personData.personSignature.value}
             onChange={props.handleChange}
-            onBlur={e => props.handleOnBlurSigPer(e, personData.id)}
           >
             {
               props.xmlSubmissionStatus === 'DRAFT' &&
@@ -40,7 +39,6 @@ const PersonalSignature = observer(props => (
           fielddata={personData.personTitle}
           name="personTitle"
           changed={props.handleChange}
-          onBlur={e => props.handleOnBlurSigPer(e, personData.id)}
         />
         <div className="field">
           <FormDatePicker

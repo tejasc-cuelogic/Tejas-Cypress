@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid } from 'semantic-ui-react';
 
-import ListErrors from './../../../components/common/ListErrors';
+import ListErrors from './../../../theme/common/ListErrors';
 import SettingsForm from './../components/SettingsForm';
 import authActions from './../../../actions/auth';
 // import userActions from './../../../../actions/user';

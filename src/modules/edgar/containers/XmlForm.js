@@ -14,7 +14,7 @@ import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
 import Helper from '../../../helper/utility';
-import FormErrors from '../../../components/common/FormErrors';
+import FormErrors from '../../../theme/common/FormErrors';
 import {
   XML_STATUSES,
   XML_SUBMISSION_TABS,
@@ -153,6 +153,7 @@ export default class XmlForm extends React.Component {
             nextTabName,
             data,
           });
+          this.props.businessStore.formFilerInfo.meta.isDirty = false;
           Helper.toast('Filer information submitted successfully', 'success');
         })
         .catch((err) => {
@@ -182,6 +183,7 @@ export default class XmlForm extends React.Component {
             nextTabName,
             data,
           });
+          this.props.businessStore.formIssuerInfo.meta.isDirty = false;
           Helper.toast('Issuer information submitted successfully', 'success');
         })
         .catch((err) => {
@@ -211,6 +213,7 @@ export default class XmlForm extends React.Component {
             nextTabName,
             data,
           });
+          this.props.businessStore.formOfferingInfo.meta.isDirty = false;
           Helper.toast('Offering information submitted successfully', 'success');
         })
         .catch((err) => {
@@ -240,6 +243,7 @@ export default class XmlForm extends React.Component {
             nextTabName,
             data,
           });
+          this.props.businessStore.formAnnualInfo.meta.isDirty = false;
           Helper.toast('Annual report disclosure requirements submitted successfully', 'success');
         })
         .catch((err) => {
@@ -270,6 +274,7 @@ export default class XmlForm extends React.Component {
             nextTabName,
             data,
           });
+          this.props.businessStore.formSignatureInfo.meta.isDirty = false;
           Helper.toast('Signature information submitted successfully', 'success');
         })
         .catch((err) => {
@@ -299,6 +304,7 @@ export default class XmlForm extends React.Component {
             nextTabName,
             data,
           });
+          this.props.businessStore.formDocumentInfo.meta.isDirty = false;
           Helper.toast('Document selection submitted successfully', 'success');
         })
         .catch((err) => {

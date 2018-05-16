@@ -26,10 +26,10 @@
 @textTransition: none;
 
 /* Menu */
-@menuBackground: #FFFFFF;
-@menuMargin: 0em;
+@menuBackground:transparent;
+@menuMargin:@2px 0 0;
 @menuPadding: 0em 0em;
-@menuTop: 100%;
+@menuTop: ~"calc(100% + "(@menuBorderWidth * 2)~")";
 @menuTextAlign: left;
 
 @menuBorderWidth: 1px;
@@ -54,7 +54,7 @@
 @itemDivider: none;
 @itemColor: @textColor;
 @itemVerticalPadding: @mini;
-@itemHorizontalPadding: @large;
+@itemHorizontalPadding: 0;
 @itemPadding: @itemVerticalPadding @itemHorizontalPadding;
 @itemFontWeight: normal;
 @itemLineHeight: 1em;
@@ -128,12 +128,12 @@
 
 @selectionMinWidth: 14em;
 @selectionVerticalPadding: @inputVerticalPadding;
-@selectionHorizontalPadding:0;
+@selectionHorizontalPadding: @inputHorizontalPadding;
 @selectionBorderEmWidth:  @relative1px;
 @selectionMinHeight: @inputLineHeight + (@selectionVerticalPadding * 2) - @selectionBorderEmWidth;
 @selectionBackground: @inputBackground;
 @selectionDisplay: inline-block;
-@selectionIconDistance: @selectionHorizontalPadding + @glyphWidth;
+@selectionIconDistance: @glyphWidth;
 @selectionPadding: @selectionVerticalPadding @selectionIconDistance @selectionVerticalPadding @selectionHorizontalPadding;
 @selectionZIndex: 10;
 
@@ -146,7 +146,7 @@
 @selectVisibility: visible;
 @selectHeight: 38px;
 
-@selectionTextColor: @textColor;
+@selectionTextColor: @secondary-text;
 
 @selectionTextUnderlayIconOpacity: @disabledOpacity;
 @selectionTextUnderlayColor: @inputPlaceholderFocusColor;
@@ -159,12 +159,12 @@
 @selectionIconOpacity: 0.8;
 @selectionIconZIndex: 3;
 @selectionIconHitbox: @selectionVerticalPadding;
-@selectionIconMargin: -@selectionIconHitbox;
-@selectionIconPadding: @selectionIconHitbox / @dropdownIconSize;
+@selectionIconMargin: -@selectionIconHitbox 0 -@selectionIconHitbox -@selectionIconHitbox;
+@selectionIconPadding: (@selectionIconHitbox / @dropdownIconSize) 0 (@selectionIconHitbox / @dropdownIconSize) (@selectionIconHitbox / @dropdownIconSize);
 @selectionIconTransition: opacity @defaultDuration @defaultEasing;
 
 @selectionMenuBorderRadius: 0em 0em @borderRadius @borderRadius;
-@selectionMenuBoxShadow: @raisedShadow;
+@selectionMenuBoxShadow:none;
 @selectionMenuItemBoxShadow: none;
 
 @selectionItemHorizontalPadding: @itemHorizontalPadding;
@@ -189,24 +189,24 @@
 @selectionWidescreenMaxMenuHeight: (@selectionItemHeight * @selectionWidescreenMaxItems);
 
 /* Hover */
-@selectionHoverBorderColor: @selectedBorderColor;
+@selectionHoverBorderColor: @theme-primary;
 @selectionHoverBoxShadow: none;
 
 /* Focus */
-@selectionFocusBorderColor: @focusedFormMutedBorderColor;
+@selectionFocusBorderColor: @theme-primary;
 @selectionFocusBoxShadow: none;
-@selectionFocusMenuBoxShadow: @raisedShadow;
+@selectionFocusMenuBoxShadow:none;
 
 /* Visible */
 @selectionVisibleTextFontWeight: normal;
 @selectionVisibleTextColor: @hoveredTextColor;
 
-@selectionVisibleBorderColor: @focusedFormMutedBorderColor;
-@selectionVisibleBoxShadow: @raisedShadow;
-@selectionVisibleMenuBoxShadow: @raisedShadow;
+@selectionVisibleBorderColor: @theme-primary;
+@selectionVisibleBoxShadow:none;
+@selectionVisibleMenuBoxShadow:none;
 
 /* Visible Hover */
-@selectionActiveHoverBorderColor: @focusedFormMutedBorderColor;
+@selectionActiveHoverBorderColor: @theme-primary;
 @selectionActiveHoverBoxShadow: @selectionVisibleBoxShadow;
 @selectionActiveHoverMenuBoxShadow: @selectionVisibleMenuBoxShadow;
 
@@ -245,14 +245,14 @@
 
 /* Split Actual Padding Between Child and Parent (allows for label spacing) */
 @multipleSelectionVerticalPadding: (@searchSelectionVerticalPadding * (1/3));
-@multipleSelectionLeftPadding: @relative5px;
+@multipleSelectionLeftPadding:0;
 @multipleSelectionRightPadding: @selectionIconDistance;
 @multipleSelectionPadding: @multipleSelectionVerticalPadding @multipleSelectionRightPadding @multipleSelectionVerticalPadding @multipleSelectionLeftPadding;
 
 /* Child Elements */
 @multipleSelectionChildVerticalMargin: (@searchSelectionVerticalPadding * (2/3));
 @multipleSelectionChildLeftMargin: (@inputHorizontalPadding - @multipleSelectionLeftPadding);
-@multipleSelectionChildMargin: @multipleSelectionChildVerticalMargin 0em @multipleSelectionChildVerticalMargin @multipleSelectionChildLeftMargin;
+@multipleSelectionChildMargin: @multipleSelectionChildVerticalMargin 0em;
 @multipleSelectionChildLineHeight: @relative17px;
 @multipleSelectionSearchStartWidth: (@glyphWidth * 2);
 
@@ -284,7 +284,7 @@
 @hoveredZIndex: @menuZIndex + 2;
 
 /* Default Text */
-@defaultTextColor: @inputPlaceholderColor;
+@defaultTextColor:@quaternary-text;
 @defaultTextFocusColor: @inputPlaceholderFocusColor;
 
 /* Loading */

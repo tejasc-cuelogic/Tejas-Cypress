@@ -23,7 +23,7 @@ export class AuthStore {
   @observable cognitoUserSession = null;
   @observable isUserLoggedIn = false;
   @observable signupFlow = {
-    type: 'investor',
+    type: '',
   };
 
   @observable
@@ -67,7 +67,7 @@ export class AuthStore {
     code: {
       value: '',
       error: undefined,
-      rule: 'required|numeric|',
+      rule: 'required|numeric',
       key: 'code',
       label: 'Enter verification code here:',
     },

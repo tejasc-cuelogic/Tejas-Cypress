@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Invest extends Component {
+class Business extends Component {
   render() {
     return (
       <div className="ui vertical segment content">
@@ -24,4 +24,4 @@ class Invest extends Component {
   }
 }
 
-export default Invest;
+export default Business;

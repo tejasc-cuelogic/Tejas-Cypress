@@ -8,6 +8,34 @@
     .fields .field{
         margin-bottom:@14px;
     }
+    .field.otp-field{
+        margin:3rem 0;
+        label{
+            font-size:@14px;
+        }
+        .ui.input > input{
+            max-width:290px;
+            margin:0 auto;
+            padding-left:13px;
+            letter-spacing:38px;
+            border:none;
+            background-image: linear-gradient(to left, @border-color 75%, rgba(0, 0, 0, 0) 0%);
+            background-position: bottom;
+            background-size: 51px 1px;
+            background-repeat: repeat-x;
+            background-position-x: 35px;
+            &:focus{
+                background-image: linear-gradient(to left, @theme-primary 75%, rgba(0, 0, 0, 0) 0%);
+            }
+        }
+    }
+    label{
+        i.icon{
+            margin-left:@7px;
+            font-size:@14px;
+            color:@quaternary-text;
+        }
+    }
     input:not([type]),
     input[type=date],
     input[type=datetime-local],
@@ -108,10 +136,6 @@
         line-height:@18px;
     }
     &.inverted{
-        label{
-            font-weight:400;
-            color:@inverse-text;
-        }
         input:not([type]),
         input[type=date],
         input[type=datetime-local],
@@ -124,14 +148,15 @@
         input[type=text],
         input[type=time],
         input[type=url]{
-            border-radius:0;
-            color:@quaternary-text;
-            background-color:transparent;
-            border-color:transparent transparent @tertiary-text;
+            &:focus{
+                border-color:@theme-primary;
+            }
+            &::placeholder{
+                color:@quaternary-text;
+            }
         }
     }
     .error:not(.field){
-        // font-size:@12px;
         color:@negativeTextColor;
     }
 }
@@ -164,8 +189,22 @@
     }
 }
 
-.react-datepicker-wrapper, .react-datepicker-wrapper .react-datepicker__input-container{
-display:block;
+.react-datepicker-wrapper,
+.react-datepicker-wrapper .react-datepicker__input-container{
+    display:block;
+}
+.react-datepicker-wrapper .react-datepicker__input-container{
+    &:before{
+        content:"\e90c";
+        font-family:'nextseed';
+        color:@quaternary-text;
+        position:absolute;
+        top:50%;
+        transform:translate(0%,-50%);
+    }
+    > input{
+        padding-left:@28px !important;
+    }
 }
 
 .ui.form{
@@ -173,7 +212,6 @@ display:block;
         font-size:@12px;
         line-height:@14px;
         color:@highlight-primary;
-        // margin:-@28px 0 @10px;
     }
     // .field.disabled{
     //   input[type=text]{
@@ -256,5 +294,21 @@ display:block;
 .field.error{
     .ui.labeled .ui.label{
         border-color:@negativeTextColor;
+    }
+}
+
+.ui.form.select-option{
+    .field{
+        padding:0 @14px;
+        >label{
+            display:none;
+        }
+        .ui.selection.dropdown{
+            border:none;
+        }
+        .dropdown-effect{
+            top:0;
+            border-radius:@6px;
+        }
     }
 }

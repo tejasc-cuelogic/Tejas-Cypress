@@ -23,4 +23,8 @@ src/assets/semantic/*
 # Ignore ESLint file
 .eslintrc
 
+.env
+
 .env.local
+
+package-lock.json

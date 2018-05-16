@@ -105,7 +105,7 @@
   -webkit-appearance: none;
   tap-highlight-color: rgba(255, 255, 255, 0);
   line-height: 1.21428571em;
-  padding: 0.67857143em 0em;
+  padding: 0.67857143em 0;
   font-size: 1em;
   background: transparent;
   border: none;
@@ -167,7 +167,7 @@
   border-radius: 0rem;
   -webkit-box-shadow: 0em 0em 0em 0em transparent inset;
           box-shadow: 0em 0em 0em 0em transparent inset;
-  padding: 0.62em 1em;
+  padding: 0.62em 0;
   color: #000000;
   -webkit-transition: color 0.1s ease, border-color 0.1s ease;
   transition: color 0.1s ease, border-color 0.1s ease;
@@ -288,16 +288,16 @@
 ---------------------*/
 
 .ui.form .field.field input:-webkit-autofill {
-  -webkit-box-shadow: 0px 0px 0px 100px #FFFFF0 inset !important;
-          box-shadow: 0px 0px 0px 100px #FFFFF0 inset !important;
-  border-color: #E5DFA1 !important;
+  -webkit-box-shadow: 0px 0px 0px 100px #FFFFFF inset !important;
+          box-shadow: 0px 0px 0px 100px #FFFFFF inset !important;
+  border-color: #BDBDBD !important;
 }
 
 /* Focus */
 .ui.form .field.field input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0px 0px 0px 100px #FFFFF0 inset !important;
-          box-shadow: 0px 0px 0px 100px #FFFFF0 inset !important;
-  border-color: #D5C315 !important;
+  -webkit-box-shadow: 0px 0px 0px 100px #FFFFFF inset !important;
+          box-shadow: 0px 0px 0px 100px #FFFFFF inset !important;
+  border-color: #98CE23 !important;
 }
 
 /* Error */
@@ -539,26 +539,26 @@
 }
 .ui.form .fields.error .field .ui.multiple.selection.dropdown > .label,
 .ui.form .field.error .ui.multiple.selection.dropdown > .label {
-  background-color: #EACBCB;
+  background-color: transparent;
   color: #EB5757;
 }
 
 /* Hover */
 .ui.form .fields.error .field .ui.dropdown .menu .item:hover,
 .ui.form .field.error .ui.dropdown .menu .item:hover {
-  background-color: #FBE7E7;
+  background-color: transparent;
 }
 
 /* Selected */
 .ui.form .fields.error .field .ui.dropdown .menu .selected.item,
 .ui.form .field.error .ui.dropdown .menu .selected.item {
-  background-color: #FBE7E7;
+  background-color: transparent;
 }
 
 /* Active */
 .ui.form .fields.error .field .ui.dropdown .menu .active.item,
 .ui.form .field.error .ui.dropdown .menu .active.item {
-  background-color: #FDCFCF !important;
+  background-color: transparent !important;
 }
 
 /*--------------------
@@ -717,7 +717,7 @@
 .ui.inverted.form .inline.fields .field > p,
 .ui.inverted.form .inline.field > label,
 .ui.inverted.form .inline.field > p {
-  color: rgba(255, 255, 255, 0.9);
+  color: #989898;
 }
 
 /* Inverted Field */
@@ -734,8 +734,8 @@
 .ui.inverted.form input[type="file"],
 .ui.inverted.form input[type="url"] {
   background: transparent;
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #000000;
+  border-color: #BDBDBD;
+  color: #FFFFFF;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -998,7 +998,7 @@
 
 /* Grouped Inline Label */
 .ui.form .inline.fields > label {
-  margin: 0.035714em 1em 0em 0em;
+  margin: 0.035714em 1em 1em 0em;
 }
 
 /* Inline Input */
@@ -1077,6 +1077,36 @@
 }
 .ui.form .fields .field {
   margin-bottom: 1rem;
+}
+.ui.form .field.otp-field {
+  margin: 3rem 0;
+}
+.ui.form .field.otp-field label {
+  font-size: 1rem;
+}
+.ui.form .field.otp-field .ui.input > input {
+  max-width: 290px;
+  margin: 0 auto;
+  padding-left: 13px;
+  letter-spacing: 38px;
+  border: none;
+  background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #BDBDBD), color-stop(0%, rgba(0, 0, 0, 0)));
+  background-image: -webkit-linear-gradient(right, #BDBDBD 75%, rgba(0, 0, 0, 0) 0%);
+  background-image: linear-gradient(to left, #BDBDBD 75%, rgba(0, 0, 0, 0) 0%);
+  background-position: bottom;
+  background-size: 51px 1px;
+  background-repeat: repeat-x;
+  background-position-x: 35px;
+}
+.ui.form .field.otp-field .ui.input > input:focus {
+  background-image: -webkit-gradient(linear, right top, left top, color-stop(75%, #98CE23), color-stop(0%, rgba(0, 0, 0, 0)));
+  background-image: -webkit-linear-gradient(right, #98CE23 75%, rgba(0, 0, 0, 0) 0%);
+  background-image: linear-gradient(to left, #98CE23 75%, rgba(0, 0, 0, 0) 0%);
+}
+.ui.form label i.icon {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  color: #989898;
 }
 .ui.form input:not([type]),
 .ui.form input[type=date],
@@ -1175,26 +1205,61 @@
   display: inline-block;
   line-height: 1.28571429rem;
 }
-.ui.form.inverted label {
-  font-weight: 400;
-  color: #FFFFFF;
+.ui.form.inverted input:not([type]):focus,
+.ui.form.inverted input[type=date]:focus,
+.ui.form.inverted input[type=datetime-local]:focus,
+.ui.form.inverted input[type=email]:focus,
+.ui.form.inverted input[type=file]:focus,
+.ui.form.inverted input[type=number]:focus,
+.ui.form.inverted input[type=password]:focus,
+.ui.form.inverted input[type=search]:focus,
+.ui.form.inverted input[type=tel]:focus,
+.ui.form.inverted input[type=text]:focus,
+.ui.form.inverted input[type=time]:focus,
+.ui.form.inverted input[type=url]:focus {
+  border-color: #98CE23;
 }
-.ui.form.inverted input:not([type]),
-.ui.form.inverted input[type=date],
-.ui.form.inverted input[type=datetime-local],
-.ui.form.inverted input[type=email],
-.ui.form.inverted input[type=file],
-.ui.form.inverted input[type=number],
-.ui.form.inverted input[type=password],
-.ui.form.inverted input[type=search],
-.ui.form.inverted input[type=tel],
-.ui.form.inverted input[type=text],
-.ui.form.inverted input[type=time],
-.ui.form.inverted input[type=url] {
-  border-radius: 0;
+.ui.form.inverted input:not([type])::-webkit-input-placeholder,
+.ui.form.inverted input[type=date]::-webkit-input-placeholder,
+.ui.form.inverted input[type=datetime-local]::-webkit-input-placeholder,
+.ui.form.inverted input[type=email]::-webkit-input-placeholder,
+.ui.form.inverted input[type=file]::-webkit-input-placeholder,
+.ui.form.inverted input[type=number]::-webkit-input-placeholder,
+.ui.form.inverted input[type=password]::-webkit-input-placeholder,
+.ui.form.inverted input[type=search]::-webkit-input-placeholder,
+.ui.form.inverted input[type=tel]::-webkit-input-placeholder,
+.ui.form.inverted input[type=text]::-webkit-input-placeholder,
+.ui.form.inverted input[type=time]::-webkit-input-placeholder,
+.ui.form.inverted input[type=url]::-webkit-input-placeholder {
   color: #989898;
-  background-color: transparent;
-  border-color: transparent transparent #4F4F4F;
+}
+.ui.form.inverted input:not([type]):-ms-input-placeholder,
+.ui.form.inverted input[type=date]:-ms-input-placeholder,
+.ui.form.inverted input[type=datetime-local]:-ms-input-placeholder,
+.ui.form.inverted input[type=email]:-ms-input-placeholder,
+.ui.form.inverted input[type=file]:-ms-input-placeholder,
+.ui.form.inverted input[type=number]:-ms-input-placeholder,
+.ui.form.inverted input[type=password]:-ms-input-placeholder,
+.ui.form.inverted input[type=search]:-ms-input-placeholder,
+.ui.form.inverted input[type=tel]:-ms-input-placeholder,
+.ui.form.inverted input[type=text]:-ms-input-placeholder,
+.ui.form.inverted input[type=time]:-ms-input-placeholder,
+.ui.form.inverted input[type=url]:-ms-input-placeholder {
+  color: #989898;
+}
+.ui.form.inverted input:not([type])::placeholder,
+.ui.form.inverted input[type=date]::placeholder,
+.ui.form.inverted input[type=datetime-local]::placeholder,
+.ui.form.inverted input[type=email]::placeholder,
+.ui.form.inverted input[type=file]::placeholder,
+.ui.form.inverted input[type=number]::placeholder,
+.ui.form.inverted input[type=password]::placeholder,
+.ui.form.inverted input[type=search]::placeholder,
+.ui.form.inverted input[type=tel]::placeholder,
+.ui.form.inverted input[type=text]::placeholder,
+.ui.form.inverted input[type=time]::placeholder,
+.ui.form.inverted input[type=url]::placeholder {
+  color: #989898;
 }
 .ui.form .error:not(.field) {
   color: #EB5757;
@@ -1221,6 +1286,18 @@
 .react-datepicker-wrapper,
 .react-datepicker-wrapper .react-datepicker__input-container {
   display: block;
+}
+.react-datepicker-wrapper .react-datepicker__input-container:before {
+  content: "\e90c";
+  font-family: 'nextseed';
+  color: #989898;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translate(0%, -50%);
+          transform: translate(0%, -50%);
+}
+.react-datepicker-wrapper .react-datepicker__input-container > input {
+  padding-left: 2rem !important;
 }
 .ui.form p.field-error {
   font-size: 0.85714286rem;
@@ -1296,6 +1373,19 @@
 }
 .field.error .ui.labeled .ui.label {
   border-color: #EB5757;
+}
+.ui.form.select-option .field {
+  padding: 0 1rem;
+}
+.ui.form.select-option .field > label {
+  display: none;
+}
+.ui.form.select-option .field .ui.selection.dropdown {
+  border: none;
+}
+.ui.form.select-option .field .dropdown-effect {
+  top: 0;
+  border-radius: 0.42857143rem;
 }
 
 

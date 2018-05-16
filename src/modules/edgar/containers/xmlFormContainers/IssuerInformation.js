@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'; // Redirect
 import moment from 'moment';
 
 import { US_STATES, LEGAL_FORM_TYPES } from '../../../../constants/business';
-import { FormInput, FormSelect, FormDatePicker } from './../../../../components/form/FormElements';
+import { FormInput, FormSelect, FormDatePicker } from './../../../../theme/form/FormElements';
 
 @inject('businessStore')
 @withRouter

@@ -1,4 +1,12 @@
 import validationActions from '../actions/validation';
+import {
+  PLAID_ENV,
+  PLAID_URL,
+  PLAID_PUBLIC_KEY,
+} from '../constants/account';
+import ExternalApiService from '../services/externalApi';
+import indAccountStore from '../stores/user/individualAccountStore';
+import uiStore from '../stores/uiStore';
 
 export class Account {
   /**
@@ -39,6 +47,62 @@ export class Account {
     validationActions.validateEntityAccountField('city', city.join(''));
     validationActions.validateEntityAccountField('state', state.join(''));
     validationActions.validateEntityAccountField('zipCode', zipCode.join(''));
+  }
+
+  bankSearch = () => {
+    uiStore.setProgress();
+    const { value } = indAccountStore.formBankSearch.fields.bankName;
+    if (value !== '') {
+      const params = {
+        url: PLAID_URL,
+        payload: {
+          public_key: PLAID_PUBLIC_KEY,
+          query: value,
+          products: ['auth'],
+          options: {
+            include_display_data: true,
+            limit: 9,
+          },
+        },
+        contentType: 'application/json',
+      };
+      ExternalApiService.post(params)
+        .then(data => indAccountStore.setBankListing(data.body.institutions))
+        .finally(() => uiStore.setProgress(false));
+    } else {
+      indAccountStore.setBankListing();
+      uiStore.setProgress(false);
+    }
+  }
+
+  bankSelect = (institutionId) => {
+    /* eslint-disable no-undef */
+    const linkHandler = Plaid.create({
+      env: PLAID_ENV,
+      clientName: 'NS',
+      key: PLAID_PUBLIC_KEY,
+      product: ['auth, transactions'],
+      onLoad: () => {
+        // The Link module finished loading.
+      },
+      onSuccess: (publicToken, metadata) => {
+        indAccountStore.setPlaidAccDetails(metadata);
+        indAccountStore.createAccount();
+        // Send the public_token to your app server here.
+        // The metadata object contains info about the institution the
+        // user selected and the account ID, if selectAccount is enabled.
+      },
+      onExit: (err) => {
+        // The user exited the Link flow.
+        if (err != null) {
+          // The user encountered a Plaid API error prior to exiting.
+        }
+        // metadata contains information about the institution
+        // that the user selected and the most recent API request IDs.
+        // Storing this information can be helpful for support.
+      },
+    });
+    linkHandler.open(institutionId);
   }
 }
 

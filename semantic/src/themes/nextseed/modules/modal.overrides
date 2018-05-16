@@ -55,7 +55,7 @@
     h4.ui.header{
         font-weight:400;
     }
-    .content{
+    > .content{
         padding-top:@20px;
         &.login-modal{
             // max-width:404px;
@@ -109,22 +109,40 @@
             background:transparent;
             // font-family:@regularFont;
             font-size:@16px;
-            letter-spacing:1px;
+            // letter-spacing:1px;
             color:@quaternary-text;
             text-transform:none;
         }
         a.theme-link, .button.theme-link{
             color:@theme-primary;
         }
-        .display-only input[type=tel], .display-only input[type=email], input[type=tel].display-only, input[type=email].display-only{
+        .display-only input[type=tel]:read-only,
+        .display-only input[type=email]:read-only,
+        input[type=tel]:read-only.display-only,
+        input[type=email]:read-only.display-only,
+        .display-only input[type=tel],
+        .display-only input[type=email],
+        input[type=tel].display-only,
+        input[type=email].display-only{
             // font-family:@boldFont;
             padding:@14px @20px;
             margin-bottom:@10px;
             font-size:@20px;
             text-align:center;
             border:none;
-            border-radius:@4px;
+            border-bottom:@border-light 1px solid;
+            // border-radius:@4px;
             background:@border-light;
+        }
+        .display-only input[type=tel]:not(:read-only),
+        .display-only input[type=email]:not(:read-only),
+        input[type=tel].display-only:not(:read-only),
+        input[type=email].display-only:not(:read-only){
+            background-color:@white;
+            &:focus{
+                border-color:@theme-primary;
+                outline:none;
+            }
         }
         .ui.button.multistep__btn{
             background:@white;
@@ -155,6 +173,12 @@
                 }
             }
         }
+        &.reward-deatils{
+            padding:@14px;
+        }
+        &.relaxed{
+            padding:@50px @70px;
+        }
     }
     .actions{
         font-size:@14px;
@@ -170,95 +194,30 @@
         }
     }
     .ui.form{
-        .fields .field{
-            margin-bottom:@14px;
-        }
-        .field{
-            // margin:0 0 @28px;
-            // .ui.input input, input{
-            //     &:not([type]),
-            //     &[type=date],
-            //     &[type=datetime-local],
-            //     &[type=email],
-            //     &[type=file],
-            //     &[type=number],
-            //     &[type=password],
-            //     &[type=search],
-            //     &[type=tel],
-            //     &[type=text],
-            //     &[type=time],
-            //     &[type=url]{
-            //         // font-family:@regularFont;
-            //         padding-left:0;
-            //         padding-right:0;
-            //         border-radius:0;
-            //         background-color:transparent;
-            //         border:none;
-            //         border-bottom:@borderColor 1px solid;
-            //     }
-            // }
-            // .ui.selection.dropdown, .ui.labeled.input .ui.label{
-            //     // font-family:@regularFont;
-            //     padding-left:@5px;
-            //     padding-right:0;
-            //     border-radius:0;
-            //     border:none;
-            //     border-bottom:@borderColor 1px solid;
-            // }
-            // .ui.labeled.input .ui.label{
-            //     font-weight:400;
-            //     padding-left:0;
-            //     padding-right:@12px;
-            //     background-color:transparent;
-            // }
-            // .ui.selection.dropdown{
-            //     .icon{
-            //         padding-right:@5px;
-            //     }
-            //     &.active .menu{
-            //         border:none;
-            //         >.item{
-            //             padding-left:@5px !important;
-            //             padding-right:@5px !important;
-            //         }
-            //     }
-            // }
-            &.otp-field{
-                margin:3rem 0;
-                label{
-                    font-size:@14px;
-                }
-                .ui.input > input{
-                    max-width:290px;
-                    margin:0 auto;
-                    padding-left:13px;
-                    // font-family:@boldFont;
-                    letter-spacing:38px;
-                    border:none;
-                    background-image: linear-gradient(to left, @border-color 75%, rgba(0, 0, 0, 0) 0%);
-                    background-position: bottom;
-                    background-size: 51px 1px;
-                    background-repeat: repeat-x;
-                    background-position-x: 35px;
-                    &:focus{
-                        background-image: linear-gradient(to left, @theme-primary 75%, rgba(0, 0, 0, 0) 0%);
-                    }
-                }
-            }
-        }
-        label{
-            i.icon{
-                margin-left:@7px;
-                font-size:@14px;
-                color:@quaternary-text;
-            }
-        }
         textarea{
             padding-left:0;
             padding-right:0;
             border-radius:0;
             border:none;
             border-bottom:@borderColor 1px solid;
+        }
+    }
+    &.reward-modal{
+        .header:not(.ui){
+            padding:@25px @42px;
+        }
+        .sub.header{
+            padding:@5px 0;
+        }
+        .content + .content{
+            border-top:@borderColor 1px solid;
+        }
+        .ui.list.link-list{
+            margin:@14px 0 @30px;
+            .item{
+                padding-top:@7px;
+                padding-bottom:@7px;
+            }
         }
     }
 }
@@ -287,9 +246,6 @@
         position:relative;
         padding:@50px @70px;
         .field-wrap{
-            margin:@30px auto;
-            padding:@25px @60px;
-            background:@lighten-bg-color;
             h5{
                 margin-bottom:@10px;
             }
@@ -327,6 +283,29 @@
         }
     }
 }
+.field-wrap{
+    margin:@30px auto;
+    padding:@25px @60px;
+    background:@lighten-bg-color;
+}
+.bank-list{
+    padding:@28px 0;
+    position:relative;
+    a.bank-link{
+        height:100%;
+        padding:@10px;
+        font-size:@13px;
+        line-height:@16px;
+        color:@fullBlack;
+        text-align:center;
+        display:block;
+        border-radius:@4px;
+        border:@border-light 1px solid;
+        >img{
+            margin-bottom:@10px;
+        }
+    }
+}
 .summary-wrap{
     .ui.items > .item{
         background:@white;
@@ -338,5 +317,37 @@
         .content{
             padding:@16px @21px;
         }
+    }
+}
+
+//  Investment details Modal styles
+.ui.inverted.dimmer{
+    >.ui.modal{
+        box-shadow:none;
+        will-change:auto;
+        background-color:transparent;
+        >.content{
+            padding:@35px 0;
+            background-color:transparent;
+        }
+    }
+}
+.transaction-detials{
+    .title-meta{
+        margin-left:1.5rem;
+        font-size:0.5833334em;
+        color:@tertiary-text;
+        vertical-align:top;
+        i.icon{
+            font-size:1.428571em;
+            line-height:1;
+            color:@highlight-tertiary;
+        }
+        a{
+            vertical-align:top;
+        }
+    }
+    .ui.card .update-list{
+        border-bottom-left-radius:@6px;
     }
 }

@@ -3,7 +3,7 @@ import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Form, Button, Modal } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import FieldError from '../../../components/common/FieldError';
+import FieldError from '../../../theme/common/FieldError';
 import validationActions from '../../../actions/validation';
 import businessActions from '../../../actions/business';
 import Helper from '../../../helper/utility';

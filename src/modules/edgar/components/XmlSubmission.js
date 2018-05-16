@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Accordion, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import _ from 'lodash';
-import DateTimeFormat from './../../../components/common/DateTimeFormat';
+import DateTimeFormat from './../../../theme/common/DateTimeFormat';
 
 import {
   XML_STATUSES,
@@ -23,7 +23,7 @@ const XmlSubmission = observer((props) => {
             {
               props.xmlSubmissions.map(xmlSubmission => (
                 <Table.Row key={xmlSubmission.xmlSubmissionId}>
-                  <Table.Cell>
+                  <Table.Cell selectable>
                     <Link to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}>
                       {xmlSubmission.folderName}
                     </Link>

@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Button } from 'semantic-ui-react';
 
-import ProfileDetails from './../../../components/common/ProfileDetails';
+import ProfileDetails from './../../../theme/common/ProfileDetails';
 import userActions from '../../../actions/user';
 
 @inject('userStore')

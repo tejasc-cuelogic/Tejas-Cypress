@@ -4,8 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 import Chips from 'react-chips/lib/Chips';
 
-import FieldError from './../../../../components/common/FieldError';
-import { FormInput, FormRadioGroup } from './../../../../components/form/FormElements';
+import FieldError from './../../../../theme/common/FieldError';
+import { FormInput, FormRadioGroup } from './../../../../theme/form/FormElements';
 
 @inject('businessStore')
 @withRouter
