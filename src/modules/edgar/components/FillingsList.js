@@ -26,6 +26,7 @@ const FillingsList = observer((props) => {
                   <Link
                     to={(`${process.env.REACT_APP_BOX_URL}/folder/${filing.folderId}`)}
                     target="_blank"
+                    className="text-link"
                   >
                     Documents
                   </Link>
