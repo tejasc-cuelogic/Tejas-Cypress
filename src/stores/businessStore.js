@@ -265,12 +265,14 @@ export class BusinessStore {
   }
 
   @action
-  toggleRequiredFiles(key) {
+  toggleRequiredFiles(key, isDirtyUpdate) {
     _.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked =
       !_.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked;
     
     if (_.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked) {
-      this.formDocumentInfo.meta.isDirty = true;
+      if (isDirtyUpdate) {
+        this.formDocumentInfo.meta.isDirty = true;
+      }
       this.removeXmlError('documentListError');
     }
   }
@@ -421,7 +423,7 @@ export class BusinessStore {
   *       finding out and entry with and given ID and then modifying value in it...
   */
   @action
-  changePersonalSignature(field, id, value) {
+  changePersonalSignature(field, id, value, isDirtyUpdate) {
     _.filter(this.formSignatureInfo.fields.signaturePersons, person => person.id === id)[0][field].value = value;
 
     let fieldValue = value;
@@ -435,8 +437,10 @@ export class BusinessStore {
     );
     
     validation.passes();
+    if (isDirtyUpdate) {
+      this.formSignatureInfo.meta.isDirty = true;
+    }
     
-    this.formSignatureInfo.meta.isDirty = true;
     if (!fieldValue) {
       this.setPersonalSignatureError(field, id, validation.errors.first());
     } else {

@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom'; // Redirect
 
 import PersonalSignature from '../../components/PersonalSignature';
 import businessActions from '../../../../actions/business';
-import validationActions from '../../../../actions/validation';
 import { FormInput } from './../../../../theme/form/FormElements';
 import {
   XML_STATUSES,
@@ -20,11 +19,7 @@ export default class Signature extends React.Component {
   }
 
   handlePersonalSignatureChange = (e, { name, value, dataid }) => {
-    this.props.businessStore.changePersonalSignature(name, dataid, value);
-  }
-
-  handlePersonalSignatureOnBlur = (e, dataId) => {
-    validationActions.validatePersonalSig(e.target.name, dataId);
+    this.props.businessStore.changePersonalSignature(name, dataid, value, true);
   }
 
   handleAdd = () => {

@@ -13,7 +13,7 @@ export default class FileSelector extends React.Component {
   }
 
   handleChange = (e) => {
-    this.props.businessStore.toggleRequiredFiles(e.target.textContent);
+    this.props.businessStore.toggleRequiredFiles(e.target.textContent, true);
   };
 
   render() {

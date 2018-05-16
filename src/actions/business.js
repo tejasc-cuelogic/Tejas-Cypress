@@ -728,9 +728,9 @@ export class Business {
           const id = this.addPersonalSignature();
           _.map(signature, (value, key) => {
             if (dateFields.includes(key)) {
-              businessStore.changePersonalSignature(key, id, moment((value || moment().format('MM-DD-YYYY'))));
+              businessStore.changePersonalSignature(key, id, moment((value || moment().format('MM-DD-YYYY'))), false);
             } else {
-              businessStore.changePersonalSignature(key, id, value);
+              businessStore.changePersonalSignature(key, id, value, false);
             }
           });
         })
@@ -739,7 +739,7 @@ export class Business {
       if (businessStore.formSignatureInfo.fields.signaturePersons.length === 0) {
         this.addPersonalSignature();
       }
-      _.map(data.payload.documentList, document => businessStore.toggleRequiredFiles(document.name));
+      _.map(data.payload.documentList, document => businessStore.toggleRequiredFiles(document.name, false));
       this.checkandUpdateValidationStepsStaus();
     }
   }
