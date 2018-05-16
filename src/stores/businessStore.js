@@ -228,7 +228,7 @@ export class BusinessStore {
       _.mapValues(newSigInfo, f => f.rule),
       _.mapValues(newSigInfo, f => f.customErrors),
     );
-    console.log('sig ', validation.passes());
+
     this.formSignatureInfo.meta.isValid = validation.passes();
     this.formSignatureInfo.meta.isDirty = true;
     this.formSignatureInfo.fields[field].error = validation.errors.first(field);
