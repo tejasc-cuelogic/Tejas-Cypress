@@ -7,6 +7,9 @@ import { FormInput } from '../../../../theme/form/FormElements';
 @inject('individualAccountStore')
 @observer
 export default class AddFunds extends Component {
+  componentDidMount() {
+    this.props.individualAccountStore.setStepToBeRendered(1);
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.individualAccountStore.setStepToBeRendered(2);
@@ -30,7 +33,7 @@ export default class AddFunds extends Component {
             <Button primary size="large" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button className="theme-link" onClick={() => this.props.individualAccountStore.setStepToBeRendered(2)}>I dnt want to deposit any money now</Button>
+            <Button className="theme-link" onClick={() => this.props.individualAccountStore.setStepToBeRendered(2)}>I don`t want to deposit any money now</Button>
           </div>
         </Form>
       </div>
