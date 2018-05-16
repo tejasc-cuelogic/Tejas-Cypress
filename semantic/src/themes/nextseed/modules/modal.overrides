@@ -28,7 +28,7 @@
         color:@quaternary-text;
     }
     >.header:not(.ui).signup-header{
-        padding-top:@42px;
+        padding-top:@28px;
         border:none;
         .back-link{
             font-size:@16px;
@@ -40,14 +40,22 @@
         .ui.header{
             margin:0 0 @7px;
         }
+        .ui.divider{
+            max-width:140px;
+            margin-left:auto;
+            margin-right:auto;
+        }
         p{
             font-family:@pageFont;
             font-weight:500;
             font-size:@14px;
-            color:@dark-bg-color;
+            color:@secondary-text;
         }
     }
-    .content{
+    h4.ui.header{
+        font-weight:400;
+    }
+    > .content{
         padding-top:@20px;
         &.login-modal{
             // max-width:404px;
@@ -56,6 +64,8 @@
         &.signup-content{
             // max-width:548px;
             // margin:0 auto;
+            padding-top:0;
+            padding-bottom:@28px;
             .user-type{
                 height:100%;
                 padding:@14px;
@@ -66,7 +76,7 @@
                     margin:@7px 0;
                 }
                 p{
-                    font-family:@regularFont;
+                    // font-family:@regularFont;
                     font-size:@13px;
                     color:@fullBlack;
                 }
@@ -80,25 +90,94 @@
         }
         .ui{
             &.button, &.buttons .button{
-                letter-spacing:1px;
-                &:not(.circular){
-                    border-radius:0;
-                }
+                // letter-spacing:1px;
+                // &:not(.circular){
+                //     border-radius:0;
+                // }
                 &.large{
+                    min-width:160px;
                     font-size:@14px;
                 }
-                &.circular{
-                    min-width:160px;
+                // &.circular{
+                // }
+            }
+        }
+        a.cancel-link, .button.cancel-link, a.theme-link, .button.theme-link{
+            margin:1.5rem 0 0;
+            padding:0;
+            display:inline-block;
+            background:transparent;
+            // font-family:@regularFont;
+            font-size:@16px;
+            // letter-spacing:1px;
+            color:@quaternary-text;
+            text-transform:none;
+        }
+        a.theme-link, .button.theme-link{
+            color:@theme-primary;
+        }
+        .display-only input[type=tel]:read-only,
+        .display-only input[type=email]:read-only,
+        input[type=tel]:read-only.display-only,
+        input[type=email]:read-only.display-only,
+        .display-only input[type=tel],
+        .display-only input[type=email],
+        input[type=tel].display-only,
+        input[type=email].display-only{
+            // font-family:@boldFont;
+            padding:@14px @20px;
+            margin-bottom:@10px;
+            font-size:@20px;
+            text-align:center;
+            border:none;
+            border-bottom:@border-light 1px solid;
+            // border-radius:@4px;
+            background:@border-light;
+        }
+        .display-only input[type=tel]:not(:read-only),
+        .display-only input[type=email]:not(:read-only),
+        input[type=tel].display-only:not(:read-only),
+        input[type=email].display-only:not(:read-only){
+            background-color:@white;
+            &:focus{
+                border-color:@theme-primary;
+                outline:none;
+            }
+        }
+        .ui.button.multistep__btn{
+            background:@white;
+            color:@theme-primary;
+            letter-spacing:0;
+            box-shadow:0 0 16px 2px fade(@fullBlack, 15%) !important;
+            margin:0;
+            position:absolute;
+            top:50%;
+            &.disabled{
+                background:@border-light;
+                color:@border-color;
+                opacity:1 !important;
+            }
+            >.icon{
+                width:auto;
+            }
+            &.prev{
+                left:0;
+                transform:translate(-50%, -50%);
+            }
+            &.next{
+                right:0;
+                transform:translate(50%, -50%);
+                &.active{
+                    background:@theme-primary;
+                    color:@white;
                 }
             }
         }
-        a.cancel-link{
-            margin:1.5rem 0 0;
-            display:inline-block;
-            font-family:@regularFont;
-            font-size:@16px;
-            letter-spacing:1px;
-            color:@quaternary-text;
+        &.reward-deatils{
+            padding:@14px;
+        }
+        &.relaxed{
+            padding:@50px @70px;
         }
     }
     .actions{
@@ -115,25 +194,6 @@
         }
     }
     .ui.form{
-        .fields .field{
-            margin-bottom:@14px;
-        }
-        .field{
-            margin:0 0 @28px;
-            .ui.input input{
-                font-family:@boldFont;
-                padding-left:0;
-                padding-right:0;
-                border-radius:0;
-                border:none;
-                border-bottom:@borderColor 1px solid;
-            }
-            > label{
-                i.icon.help{
-                    margin-left:@7px;
-                }
-            }
-        }
         textarea{
             padding-left:0;
             padding-right:0;
@@ -142,5 +202,152 @@
             border-bottom:@borderColor 1px solid;
         }
     }
+    &.reward-modal{
+        .header:not(.ui){
+            padding:@25px @42px;
+        }
+        .sub.header{
+            padding:@5px 0;
+        }
+        .content + .content{
+            border-top:@borderColor 1px solid;
+        }
+        .ui.list.link-list{
+            margin:@14px 0 @30px;
+            .item{
+                padding-top:@7px;
+                padding-bottom:@7px;
+            }
+        }
+    }
 }
 
+//  Multistep form Modal styles
+.ui.modal.basic.multistep-modal{
+    color:@primary-text;
+    will-change:auto;
+    >.close{
+        height:30px;
+        width:30px;
+        line-height:30px;
+        padding:0;
+        margin:0;
+        background:@white;
+        border-radius:@15px;
+        top:1rem;
+        right:1rem;
+    }
+    .ui.header{
+        border:none;
+    }
+    .multistep.content{
+        background:@white;
+        border-radius:@10px;
+        position:relative;
+        padding:@50px @70px;
+        .field-wrap{
+            h5{
+                margin-bottom:@10px;
+            }
+            >.fields:last-child, .field:last-child{
+                margin-bottom:0;
+            }
+            .field.readonly{
+                label, input{
+                    color:@quaternary-text;
+                    border-color:transparent;
+                }
+            }
+            .table-wrapper table{
+                color:@quaternary-text;
+                td > b{
+                    color:@fullBlack;
+                }
+                b{
+                    font-weight:700;
+                }
+            }
+        }
+        .option-details{
+            padding:@14px 0;
+            line-height:@22px;
+            text-align:center;
+        }
+        .summary-wrap{
+            text-align:center;
+            margin-bottom:@30px;
+            .field-wrap{
+                display:inline-block;
+                padding:@30px;
+            }
+        }
+    }
+}
+.field-wrap{
+    margin:@30px auto;
+    padding:@25px @60px;
+    background:@lighten-bg-color;
+}
+.bank-list{
+    padding:@28px 0;
+    position:relative;
+    a.bank-link{
+        height:100%;
+        padding:@10px;
+        font-size:@13px;
+        line-height:@16px;
+        color:@fullBlack;
+        text-align:center;
+        display:block;
+        border-radius:@4px;
+        border:@border-light 1px solid;
+        >img{
+            margin-bottom:@10px;
+        }
+    }
+}
+.summary-wrap{
+    .ui.items > .item{
+        background:@white;
+        box-shadow:0 0 10px 2px fade(@fullBlack, 8%);
+        .ui.image{
+            padding:@16px;
+            border-right:@border-light 1px solid;
+        }
+        .content{
+            padding:@16px @21px;
+        }
+    }
+}
+
+//  Investment details Modal styles
+.ui.inverted.dimmer{
+    >.ui.modal{
+        box-shadow:none;
+        will-change:auto;
+        background-color:transparent;
+        >.content{
+            padding:@35px 0;
+            background-color:transparent;
+        }
+    }
+}
+.transaction-detials{
+    .title-meta{
+        margin-left:1.5rem;
+        font-size:0.5833334em;
+        color:@tertiary-text;
+        vertical-align:top;
+        i.icon{
+            font-size:1.428571em;
+            line-height:1;
+            color:@highlight-tertiary;
+        }
+        a{
+            vertical-align:top;
+        }
+    }
+    .ui.card .update-list{
+        border-bottom-left-radius:@6px;
+    }
+}

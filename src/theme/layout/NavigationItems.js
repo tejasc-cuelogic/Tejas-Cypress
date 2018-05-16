@@ -19,7 +19,7 @@ const UserNavigation = (props) => {
           </Dropdown.Menu>
         </Dropdown>
         <a className="item notification" href="#" onClick={toggleNotification}>
-          <Icon name="bell" />
+          <Icon className="ns-bell" />
           <span className="unread-count">3</span>
         </a>
       </Aux>

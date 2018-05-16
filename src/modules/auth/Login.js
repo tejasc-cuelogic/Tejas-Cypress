@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { Button, Form, Grid, Header, Message, Icon, Divider } from 'semantic-ui-react';
 import authActions from './../../actions/auth';
-import ListErrors from '../../components/common/ListErrors';
+import ListErrors from '../../theme/common/ListErrors';
 
 @inject('authStore', 'uiStore', 'userStore')
 @withRouter
@@ -44,7 +44,7 @@ export default class Login extends React.Component {
                 <Form>
                   <div stacked>
                     <Button color="facebook" fluid>
-                      <Icon name="facebook" /> LOG IN WITH FACEBOOK
+                      <Icon className="ns-facebook" /> LOG IN WITH FACEBOOK
                     </Button>
                   </div>
                 </Form>
@@ -53,7 +53,7 @@ export default class Login extends React.Component {
                   <div stacked>
                     <Form.Input
                       fluid
-                      icon="envelope"
+                      icon={{ className: 'ns-envelope' }}
                       iconPosition="left"
                       placeholder="E-mail address"
                       name="email"
@@ -62,7 +62,7 @@ export default class Login extends React.Component {
                     />
                     <Form.Input
                       fluid
-                      icon="lock"
+                      icon={{ className: 'ns-lock' }}
                       iconPosition="left"
                       placeholder="Password"
                       type="password"
@@ -72,7 +72,7 @@ export default class Login extends React.Component {
                     />
                     <Button
                       fluid
-                      color="green"
+                      primary
                       size="large"
                     >
                       Log in with Email

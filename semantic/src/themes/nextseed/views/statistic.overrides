@@ -2,6 +2,8 @@
          Theme Overrides
 *******************************/
 .ui.statistic{
+    position:relative;
+    padding-left:@relative16px;
     &:before{
         content:"";
         width:3px;
@@ -10,7 +12,25 @@
         position:absolute;
         left:0;
     }
+    i.icon{
+        margin:0 0 0 @7px;
+    }
+    a.label{
+        font-weight:700;
+        color:@theme-primary;
+    }
+    >.label~.value{
+        margin:0.15em 0;
+    }
 }
+.investment-summary .ui.statistic{
+    padding-left:0;
+    &:before{
+        display:none;
+    }
+}
+// div.*:not(.investment-summary){
+// }
 .tabular-wrap, .sticky-notification{
     .ui.statistic{
         position:relative;
