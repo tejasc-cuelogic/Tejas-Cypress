@@ -4,8 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { Button, Grid, Header, Form, Message, Divider } from 'semantic-ui-react';
 
 import authActions from '../../actions/auth';
-import ListErrors from '../../components/common/ListErrors';
-import FieldError from '../../components/common/FieldError';
+import ListErrors from '../../theme/common/ListErrors';
+import FieldError from '../../theme/common/FieldError';
 import validationActions from '../../actions/validation';
 
 @inject('authStore', 'uiStore')
@@ -50,7 +50,7 @@ export default class Register extends React.Component {
                   <div stacked="true">
                     <Form.Input
                       fluid
-                      icon="user"
+                      icon={{ className: 'ns-user' }}
                       iconPosition="left"
                       placeholder="First Name"
                       name="givenName"
@@ -61,7 +61,7 @@ export default class Register extends React.Component {
                     <FieldError error={values.givenName.error} />
                     <Form.Input
                       fluid
-                      icon="user"
+                      icon={{ className: 'ns-user' }}
                       iconPosition="left"
                       placeholder="Last Name"
                       name="familyName"
@@ -72,7 +72,7 @@ export default class Register extends React.Component {
                     <FieldError error={values.familyName.error} />
                     <Form.Input
                       fluid
-                      icon="envelope"
+                      icon={{ className: 'ns-envelope' }}
                       iconPosition="left"
                       placeholder="Email"
                       name="email"
@@ -83,7 +83,7 @@ export default class Register extends React.Component {
                     <FieldError error={values.email.error} />
                     <Form.Input
                       fluid
-                      icon="lock"
+                      icon={{ className: 'ns-lock' }}
                       iconPosition="left"
                       type="password"
                       placeholder="Password"
@@ -95,7 +95,7 @@ export default class Register extends React.Component {
                     <FieldError error={values.password.error} />
                     <Form.Input
                       fluid
-                      icon="lock"
+                      icon={{ className: 'ns-lock' }}
                       iconPosition="left"
                       type="password"
                       placeholder="Verify Password"
@@ -116,7 +116,7 @@ export default class Register extends React.Component {
                     <FieldError error={values.role.error} />
                     <Button
                       fluid
-                      color="green"
+                      primary
                       disabled={!this.props.authStore.canRegister}
                       size="large"
                     >

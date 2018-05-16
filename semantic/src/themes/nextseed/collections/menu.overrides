@@ -7,4 +7,29 @@
             margin:1rem;
         }
     }
+    &.secondary.vertical{
+        width:auto;
+        .item{
+            padding:@13px @16px;
+        }
+    }
 }
+.transaction-detials{
+    .ui.inverted.menu .item{
+        padding:@16px @25px;
+        &:before{
+            background-color:@tertiary-text;
+        }
+        &:hover, &:focus, &.active{
+            background-color:@white;
+            color:@link-color !important;
+        }
+    }
+}
+
+.ui.menu.secondary-menu{
+    a.item{
+        padding:@16px @20px;
+    }
+}
+

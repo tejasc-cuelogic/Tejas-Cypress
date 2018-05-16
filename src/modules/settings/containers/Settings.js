@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid } from 'semantic-ui-react';
 
-import ListErrors from './../../../components/common/ListErrors';
+import ListErrors from './../../../theme/common/ListErrors';
 import SettingsForm from './../components/SettingsForm';
 import authActions from './../../../actions/auth';
 // import userActions from './../../../../actions/user';
@@ -18,7 +18,7 @@ class Settings extends React.Component {
   render() {
     return (
       <div>
-        <div className="page-header-section webcontent-spacer">
+        <div className="page-header-section">
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>

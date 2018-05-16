@@ -37,7 +37,7 @@ export default class ChangePassword extends React.Component {
               <div stacked>
                 <Form.Input
                   fluid
-                  icon="lock"
+                  icon={{ className: 'ns-lock' }}
                   iconPosition="left"
                   type="password"
                   placeholder="New Password"
@@ -45,7 +45,7 @@ export default class ChangePassword extends React.Component {
                 />
                 <Form.Input
                   fluid
-                  icon="lock"
+                  icon={{ className: 'ns-lock' }}
                   iconPosition="left"
                   type="password"
                   placeholder="Confirm Password"
@@ -53,7 +53,7 @@ export default class ChangePassword extends React.Component {
                 />
                 <Button
                   fluid
-                  color="green"
+                  primary
                   onClick={this.handleClick}
                 >
                   Change Password

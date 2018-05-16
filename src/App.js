@@ -8,7 +8,7 @@ import Private from './containers/common/Private';
 import Public from './containers/common/Public';
 import authActions from './actions/auth';
 import Spinner from './theme/ui/Spinner';
-import ListErrors from './components/common/ListErrors';
+import ListErrors from './theme/common/ListErrors';
 /**
  * Main App
  */
