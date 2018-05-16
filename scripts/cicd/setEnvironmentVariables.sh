@@ -9,7 +9,7 @@ if [ "$environment" = "" ]; then
 	echo "Second parameter should be environment name."
 	exit 1
 fi 
-aws ssm get-parameters-by-path --recursive --path "/ns-client/$environment/" --region $region --output json| jq -r '.Parameters| .[] | .Name + " = " + .Value +""  ' > Env.txt || echo "Aws ssm command not executed properly in setEnvironemtVariables.sh script. Try again." ; exit 1
+aws ssm get-parameters-by-path --recursive --path "/ns-client/" --region $region --output json| jq -r '.Parameters| .[] | .Name + " = " + .Value +""  ' > Env.txt || echo "aws ssm command not executed properly in setEnvironmentVariables.sh script. Try again."; exit 1
 function settingEnv(){
 	
 	REACT_APP_AWS_REGION=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/aws\/region/ { print $3 }')
