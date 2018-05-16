@@ -43,11 +43,11 @@ export const GetNavItem = (item, roles) => {
   return (
     result && (
       result.accessibleTo.length === 0 ||
-      _.intersection(result.accessibleTo, roles).length > 0)) ?
+      _.intersection(result.accessibleTo, roles).length > 0)) ? (
         <h3>
           <Link to={`/app/page/${result.to}`}>{result.title}</Link>
         </h3>
-    : false;
+    ) : false;
 };
 
 export const GetNavMeta = (item) => {
