@@ -46,19 +46,22 @@ build:review:
     - sh scripts/cicd/setEnvironmentVariables.sh $REGION dev
     - npm install
     - npm run build 
+
+#Deploying code to s3 bucket
 deploy:review:
   <<: *review_defination
+  stage: deploy
   environment:
     name: $CI_COMMIT_REF_NAME
     url: http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com
     on_stop: delete:review
-  stage: deploy
   script: 
     - echo "deploy to s3 bucket"
     - aws s3 cp build/ s3://${CI_COMMIT_REF_SLUG}/ --recursive
   dependencies:
     - build:review
 
+#Deleting S3 bucket
 delete:review:
   <<: *review_defination
   stage: deploy
@@ -72,8 +75,7 @@ delete:review:
   environment:
     name: $CI_COMMIT_REF_NAME
     action: stop
-  
-
+ 
 #---------------------------------Dev-------------------------------------------
 
 #Building code
@@ -86,7 +88,6 @@ build:dev:
     - sh scripts/cicd/setEnvironmentVariables.sh $REGION dev
     - npm install
     - npm run build
-  
 
 #Deploying code to s3 bucket
 deploy:dev:
@@ -115,7 +116,6 @@ build:qa:
     - sh scripts/cicd/setEnvironmentVariables.sh $REGION qa
     - npm install
     - npm run build
-  
 
 #Deploying code to s3 bucket
 deploy:qa:
