@@ -26,8 +26,8 @@ build:review:
     - ns-client
   stage: build
   script:
-    - bash scripts/cicd/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} $REGION
-    - bash scripts/cicd/setEnvironmentVariables.sh $REGION dev
+    - sh scripts/cicd/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} $REGION
+    - sh scripts/cicd/setEnvironmentVariables.sh $REGION dev
     - npm install
     - npm run build
 
@@ -105,7 +105,7 @@ delete:review:
 build:dev:
   <<: *build_definition
   script:
-    - bash scripts/cicd/setEnvironmentVariables.sh $REGION dev
+    - sh scripts/cicd/setEnvironmentVariables.sh $REGION dev
     - npm install
     - npm run build
   
@@ -136,7 +136,7 @@ build:qa:
     - ns-client
   stage: build
   script: 
-    - bash scripts/cicd/setEnvironmentVariables.sh $REGION qa
+    - sh scripts/cicd/setEnvironmentVariables.sh $REGION qa
     - npm install
     - npm run build
   artifacts:
@@ -172,7 +172,7 @@ build:prod:
     - ns-client
   stage: build
   script: 
-    - bash scripts/cicd/setEnvironmentVariables.sh $REGION prod
+    - sh scripts/cicd/setEnvironmentVariables.sh $REGION prod
     - npm install
     - npm run build
   artifacts:
