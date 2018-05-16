@@ -35,24 +35,17 @@ stages:
 #---------------------------------Review----------------------------------------  
 #Building code
 build:review:
+  <<: *build_definition
   <<: *review_defination
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
     - node_modules/
-  stage: build
   script:
     - sh scripts/cicd/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} $REGION
     - sh scripts/cicd/setEnvironmentVariables.sh $REGION dev
     - npm install
-    - npm run build
-
-  artifacts:
-    paths:
-    - build/
-    - scripts/cicd/
-    expire_in: 1 day
-
+    - npm run build 
 deploy:review:
   <<: *review_defination
   environment:
@@ -68,6 +61,7 @@ deploy:review:
 
 delete:review:
   <<: *review_defination
+  stage: deploy
   variables:
     GIT_STRATEGY: none
   script:
