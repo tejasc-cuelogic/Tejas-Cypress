@@ -291,18 +291,26 @@
 .bank-list{
     padding:@28px 0;
     position:relative;
+    min-height:362px;
     a.bank-link{
         height:100%;
+        width:100%;
         padding:@10px;
         font-size:@13px;
         line-height:@16px;
         color:@fullBlack;
         text-align:center;
-        display:block;
+        display:table;
         border-radius:@4px;
         border:@border-light 1px solid;
-        >img{
-            margin-bottom:@10px;
+        >span{
+            width:100%;
+            display:table-cell;
+            vertical-align:middle;
+            span{
+                display:block;
+                margin-top:@10px;
+            }
         }
     }
 }
