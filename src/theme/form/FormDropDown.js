@@ -4,7 +4,7 @@ import { Form, Popup, Icon, Dropdown } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
 const FormDropDown = props => (
-  <Form.Field width={props.containerwidth || false}>
+  <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''}>
     <label>
       {props.label}
       {props.tooltip &&

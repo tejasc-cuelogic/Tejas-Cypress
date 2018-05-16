@@ -4,6 +4,11 @@
 .ui.form{
     .field{
         position:relative;
+        &.dropdown-field{
+            margin-left:-@14px;
+            margin-right:-@14px;
+            padding:0 @14px;
+        }
     }
     .fields .field{
         margin-bottom:@14px;

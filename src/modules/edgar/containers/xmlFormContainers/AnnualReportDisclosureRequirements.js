@@ -188,6 +188,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
               multiple
               search
               selection
+              containerclassname="dropdown-field"
               value={formAnnualInfo.fields.issueJurisdictionSecuritiesOffering.value}
               name="issueJurisdictionSecuritiesOffering"
               options={COUNTRIES}
