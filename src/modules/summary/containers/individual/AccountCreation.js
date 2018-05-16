@@ -1,4 +1,5 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
 
 import MuliStep from '../../../../helper/MultiStep';
 import LinkBankPlaid from './LinkBankPlaid';
@@ -12,11 +13,13 @@ const steps =
     { name: 'Summary', component: <Summary />, isValid: '' },
   ];
 
+@inject('individualAccountStore')
+@observer
 export default class AccountCreation extends React.Component {
   render() {
     return (
       <div className="step-progress">
-        <MuliStep formTitle="Individual Account Creation" steps={steps} setDashboardWizardStep={this.props.setDashboardWizardStep} />
+        <MuliStep stepToBeRendered={this.props.individualAccountStore.stepToBeRendered} formTitle="Individual Account Creation" steps={steps} setDashboardWizardStep={this.props.setDashboardWizardStep} />
       </div>
     );
   }

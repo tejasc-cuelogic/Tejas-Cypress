@@ -29,7 +29,7 @@ export default class AddFunds extends Component {
             <Button primary size="large" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button className="theme-link">I dnt want to deposit any money now</Button>
+            <Button className="theme-link" onClick={() => this.props.individualAccountStore.setStepToBeRendered(2)}>I dnt want to deposit any money now</Button>
           </div>
         </Form>
       </div>
