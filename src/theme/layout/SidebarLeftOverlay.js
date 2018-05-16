@@ -38,7 +38,7 @@ class SidebarLeftPush extends Component {
             <Randavatar name={UserInfo.fullname} accountType={UserInfo.accountType} avatarKey={UserInfo.avatarKey} size="small" />
             <h2>{UserInfo.fullname}</h2>
             <h3>{UserInfo.accountType}</h3>
-            {GetNavItem('settings', UserInfo.roles)}
+            {GetNavItem('profile-settings', UserInfo.roles)}
           </div>
           <SidebarNav handleLogOut={this.props.handleLogOut} roles={UserInfo.roles} />
         </Sidebar>
