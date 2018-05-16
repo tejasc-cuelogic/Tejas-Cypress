@@ -11,7 +11,7 @@ export const SidebarNav = (props) => {
     ALL_NAV_ITEMS,
     n => n.to !== 'settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
   );
-  const actuals = ['individual-account', 'summary', 'users'];
+  const actuals = ['account-details', 'summary', 'users'];
   return (
     <Aux>
       {
@@ -20,7 +20,7 @@ export const SidebarNav = (props) => {
             key={item.to}
             name={item.to}
             as={NavLink}
-            to={(actuals.includes(item.to)) ? `/app/${item.to}` : `/app/page/${item.to}`}
+            to={(actuals.includes(item.to.split('/')[0])) ? `/app/${item.to}` : `/app/page/${item.to}`}
           >
             <Icon className={item.icon} />
             {item.to === 'messages' &&

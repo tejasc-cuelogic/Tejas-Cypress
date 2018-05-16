@@ -27,7 +27,7 @@ import Summary from '../modules/summary/containers/Summary';
 import RewardsWallet from '../modules/rewardsWallet/containers/RewardsWallet';
 import Referrals from '../modules/referrals/containers/Referrals';
 import Education from '../modules/education/containers/Education';
-import Individual from '../modules/individual/containers/Individual';
+import AccountDetails from './private/accountDetails/containers/AccountDetails';
 import {
   AdminAuthorization,
   BusinessAuthorization,
@@ -188,9 +188,9 @@ export const privateRoutes = [
     auth: InvestorAuthorization,
   },
   {
-    path: '/app/individual-account',
+    path: '/app/account-details/:accountType(individual|ira|entity)',
     exact: false,
-    component: Individual,
+    component: AccountDetails,
     auth: InvestorAuthorization,
   },
   {
