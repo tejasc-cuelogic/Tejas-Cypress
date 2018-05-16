@@ -20,6 +20,7 @@ export default class ConfirmIdentityForm extends Component {
         this.props.setDashboardWizardStep('ConfirmPhoneNumber');
       } else {
         Helper.toast('Identity questions not verified.', 'error');
+        this.props.setDashboardWizardStep('ConfirmIdentityDocuments');
       }
     });
   }

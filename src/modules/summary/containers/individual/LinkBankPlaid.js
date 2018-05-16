@@ -40,13 +40,18 @@ export default class LinkBankPlaid extends Component {
             iconPosition="left"
             value={formBankSearch.fields.bankName.value}
             onChange={bankSearchChange}
-            onKeyUp={accountActions.bankSearch}
+            onKeyPress={accountActions.bankSearch}
           />
         </Form>
         <div className="bank-list">
           <Dimmer active={inProgress}>
             <Loader active={inProgress} />
           </Dimmer>
+          {typeof bankListing !== 'undefined' && bankListing.length === 0 &&
+            <Grid column={1} textAlign="center">
+              <Grid.Column>No results found.</Grid.Column>
+            </Grid>
+          }
           {
             <Grid columns={3}>
               {

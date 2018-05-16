@@ -9,6 +9,7 @@ import { FormInput } from '../../../../theme/form/FormElements';
 export default class AddFunds extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.individualAccountStore.setStepToBeRendered(2);
   }
   render() {
     const { formAddFunds, addFundChange } = this.props.individualAccountStore;
