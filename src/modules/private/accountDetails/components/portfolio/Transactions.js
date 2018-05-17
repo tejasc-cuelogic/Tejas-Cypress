@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
-import { THeader } from '../../../../theme/table/NSTable';
-import Helper from '../../../../helper/utility';
+import { THeader } from '../../../../../theme/table/NSTable';
+import Helper from '../../../../../helper/utility';
 
 const result = {
   columns: [

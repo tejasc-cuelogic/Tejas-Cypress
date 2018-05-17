@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import snakeCase from 'lodash/snakeCase';
 import Aux from 'react-aux';
 import { Card, Grid, Popup, Divider, Statistic, Icon, Header } from 'semantic-ui-react';
-import Helper from '../../../../helper/utility';
+import { AccTypeTitle } from '../../../../../theme/common/ImportCommon';
+import Helper from '../../../../../helper/utility';
 /*
   type =>
   0 / undefined: display as it is
@@ -18,7 +19,7 @@ const showValue = props => ((props.type === 1) ?
 const SummaryTitle = props => ((props.details.businessName) ? (
   <Header as="h2">
     {props.details.businessName}
-    <span className="title-meta"><Icon className="ns-individual-line" />Individual investment</span>
+    <span className="title-meta"><AccTypeTitle moreText="investment" /></span>
     <span className="title-meta">
       <Link target="_blank" to={props.details.url}>View offering page</Link>
     </span>
@@ -26,7 +27,7 @@ const SummaryTitle = props => ((props.details.businessName) ? (
 ) : (
   <Aux>
     <Card.Content>
-      <Card.Header><Icon className={`ns-${props.details.accountType}-line`} />{props.details.accountType}</Card.Header>
+      <Card.Header><AccTypeTitle /></Card.Header>
     </Card.Content>
     <Divider horizontal className="only-border" />
   </Aux>

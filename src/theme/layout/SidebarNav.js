@@ -9,9 +9,9 @@ export const SidebarNav = (props) => {
   const { roles } = props;
   const navItems = _.filter(
     ALL_NAV_ITEMS,
-    n => n.to !== 'settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
+    n => n.to !== 'profile-settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
   );
-  const actuals = ['individual-account', 'summary', 'users', 'edgar'];
+  const actuals = ['account-details', 'summary', 'users', 'profile-settings', 'edgar'];
   return (
     <Aux>
       {
@@ -20,9 +20,9 @@ export const SidebarNav = (props) => {
             key={item.to}
             name={item.to}
             as={NavLink}
-            to={(actuals.includes(item.to)) ? `/app/${item.to}` : `/app/page/${item.to}`}
+            to={(actuals.includes(item.to.split('/')[0])) ? `/app/${item.to}` : `/app/page/${item.to}`}
           >
-            <Icon name={item.icon} />
+            <Icon className={item.icon} />
             {item.to === 'messages' &&
               <Label circular color="red" size="mini" horizontal>3</Label>
             }

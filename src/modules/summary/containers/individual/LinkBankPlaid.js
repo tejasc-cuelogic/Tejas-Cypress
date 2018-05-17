@@ -12,10 +12,6 @@ import { IND_BANK_LIST } from '../../../../constants/account';
 @withRouter
 @observer
 export default class LinkBankPlaid extends Component {
-  componentWillUnmount() {
-    this.props.individualAccountStore.setBankLinkInterface('list');
-  }
-
   render() {
     const {
       bankLinkInterface,
@@ -40,13 +36,18 @@ export default class LinkBankPlaid extends Component {
             iconPosition="left"
             value={formBankSearch.fields.bankName.value}
             onChange={bankSearchChange}
-            onKeyUp={accountActions.bankSearch}
+            onKeyPress={accountActions.bankSearch}
           />
         </Form>
         <div className="bank-list">
           <Dimmer active={inProgress}>
             <Loader active={inProgress} />
           </Dimmer>
+          {typeof bankListing !== 'undefined' && bankListing.length === 0 &&
+            <Grid column={1} textAlign="center">
+              <Grid.Column>No results found.</Grid.Column>
+            </Grid>
+          }
           {
             <Grid columns={3}>
               {
@@ -58,9 +59,11 @@ export default class LinkBankPlaid extends Component {
                       to={this.props.match.url}
                       onClick={() => accountActions.bankSelect(bankData.institution_id)}
                     >
-                      {bankData.logo !== null && <Image centered size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
-                      {bankData.logo === null && <Image centered size="mini" src={defaultBankLogo} />}
-                      <span>{bankData.name}</span>
+                      <span>
+                        {bankData.logo !== null && <Image centered size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
+                        {bankData.logo === null && <Image centered size="mini" src={defaultBankLogo} />}
+                        <span>{bankData.name}</span>
+                      </span>
                     </Link>
                   </Grid.Column>
                 ))

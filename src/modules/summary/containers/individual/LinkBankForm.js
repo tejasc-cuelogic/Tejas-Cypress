@@ -11,7 +11,7 @@ export default class LinkBankForm extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.individualAccountStore.createAccount().then(() => {
-      Helper.toast('Account has been created.', 'success');
+      Helper.toast('Bank account has been linked.', 'success');
     });
   }
 

@@ -39,7 +39,7 @@ const PortfolioAllocations = () => (
           <ChartPie title="Industry" data={INDUSTRY} colors={COLORS} />
         </Grid.Column>
         <Grid.Column widescreen={5} largeScreen={5} computer={16} mobile={16}>
-          <ChartPie title="Boston 25%" data={REGION} colors={COLORS} />
+          <ChartPie title="Region" data={REGION} colors={COLORS} />
         </Grid.Column>
       </Grid.Row>
     </Grid>

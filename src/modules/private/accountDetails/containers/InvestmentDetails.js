@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { Modal, Card } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
-import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
+import SecondaryMenu from '../../../../theme/layout/SecondaryMenu';
 
 const summaryDetails = {
   accountType: 'individual',

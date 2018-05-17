@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import { Header, Grid, Card, Divider, Button } from 'semantic-ui-react';
 import _ from 'lodash';
 import AccountDetailsView from '../components/bankaccount/AccountDetailsView';
-import { FaqWidget } from '../../../theme/common/ImportCommon';
+import { FaqWidget } from '../../../../theme/common/ImportCommon';
 import LinkBankAccount from './LinkBankAccount';
 
 const data = {
@@ -35,6 +35,10 @@ const data = {
 
 @inject('individualAccountStore')
 export default class BankAccount extends Component {
+  handleLinkBankInterface = () => {
+    this.props.individualAccountStore.setBankLinkInterface('list');
+  }
+
   render() {
     return (
       <div>
@@ -55,7 +59,7 @@ export default class BankAccount extends Component {
                   <p>Link your bank account to be able to invest in offerings.</p>
                   <Divider hidden />
                   <Card.Description>
-                    <Button as={Link} to={`${this.props.match.url}/link-bank-account`} primary content="Link bank account" />
+                    <Button as={Link} onClick={() => this.handleLinkBankInterface()} to={`${this.props.match.url}/link-bank-account`} primary content="Link bank account" />
                   </Card.Description>
                 </Card.Content>
               </Card>

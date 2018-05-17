@@ -684,9 +684,13 @@ svg:not(:root).recharts-surface{
 	.recharts-legend-wrapper{
 		z-index:-1;
 	}
+	.recharts-pie-sector .datavalue{
+		font-size:@20px;
+		font-weight:700;
+	}
 	tspan{
-		font-size:16px;
-		font-weight:bold;
+		font-size:18px;
+		font-weight:700;
 	}
 	.chartLegends li{
 		font-size:22px;

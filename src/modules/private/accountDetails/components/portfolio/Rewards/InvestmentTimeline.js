@@ -3,7 +3,7 @@ import React from 'react';
 import Aux from 'react-aux';
 import _ from 'lodash';
 import { Grid, Popup, Header, List } from 'semantic-ui-react';
-import Helper from '../../../../../helper/utility';
+import Helper from '../../../../../../helper/utility';
 
 const data = {
   invested: 7500,

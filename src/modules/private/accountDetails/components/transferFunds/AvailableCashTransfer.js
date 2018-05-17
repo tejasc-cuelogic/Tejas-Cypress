@@ -2,7 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Route, Link } from 'react-router-dom';
 import { Grid, Card, Button, Statistic, Popup, Icon } from 'semantic-ui-react';
-import Helper from '../../../../helper/utility';
+import Helper from '../../../../../helper/utility';
 import AddWithdrawFund from './AddWithdrawFund';
 
 const AvailableCashTransfer = props => (

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
-import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
-import { FaqWidget } from '../../../theme/common/ImportCommon';
+import SecondaryMenu from '../../../../theme/layout/SecondaryMenu';
+import { FaqWidget } from '../../../../theme/common/ImportCommon';
 
 const faqs = [
   {

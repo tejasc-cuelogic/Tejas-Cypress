@@ -39,6 +39,14 @@ class IndividualAccountStore {
   @observable
   nsAccId = '';
 
+  @observable
+  stepToBeRendered = '';
+
+  @action
+  setStepToBeRendered(step) {
+    this.stepToBeRendered = step;
+  }
+
   @action
   setBankLinkInterface(mode) {
     this.bankLinkInterface = mode;
