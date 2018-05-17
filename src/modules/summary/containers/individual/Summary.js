@@ -20,7 +20,12 @@ export default class Summary extends React.Component {
   render() {
     const { errors } = this.props.uiStore;
     const { currentUser } = this.props.userStore;
-    const { formAddFunds, plaidAccDetails } = this.props.individualAccountStore;
+    const {
+      nsAccId,
+      formAddFunds,
+      plaidAccDetails,
+      formLinkBankManually,
+    } = this.props.individualAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -33,7 +38,7 @@ export default class Summary extends React.Component {
         <div className="summary-wrap">
           <div className="field-wrap">
             <div className="table-wrapper">
-              <Table compact basic>
+              <Table compact basic fixed singleLine>
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell><b>Investor Name</b></Table.Cell>
@@ -41,15 +46,18 @@ export default class Summary extends React.Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Name</b></Table.Cell>
-                    <Table.Cell>{ _.isEmpty(plaidAccDetails) ? '' : plaidAccDetails.institution.name}</Table.Cell>
+                    <Table.Cell>{_.isEmpty(plaidAccDetails) ? '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
-                    <Table.Cell>{plaidAccDetails.account_id}</Table.Cell>
+                    <Table.Cell>{_.isEmpty(plaidAccDetails) ?
+                      formLinkBankManually.fields.bankAccountNumber.value :
+                      plaidAccDetails.account_id}
+                    </Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your initial deposit</b></Table.Cell>
-                    <Table.Cell>{formAddFunds.fields.value.value !== Helper.CurrencyFormat(0) ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` : ''}</Table.Cell>
+                    <Table.Cell>{formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` : Helper.CurrencyFormat(0)}</Table.Cell>
                   </Table.Row>
                 </Table.Body>
               </Table>
@@ -57,7 +65,7 @@ export default class Summary extends React.Component {
           </div>
         </div>
         <div className="center-align">
-          <Button primary size="large" onClick={this.finalizeAccount}>Create the account</Button>
+          <Button primary size="large" disabled={nsAccId === '' && typeof plaidAccDetails.account_id === 'undefined' && !this.props.individualAccountStore.isValidAddFunds} onClick={this.finalizeAccount}>Create the account</Button>
         </div>
       </div>
     );
