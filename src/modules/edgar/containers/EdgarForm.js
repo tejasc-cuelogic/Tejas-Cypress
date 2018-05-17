@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Form, Button, Grid, Divider, Icon } from 'semantic-ui-react';
+import { Form, Button, Grid, Divider, Icon, Card } from 'semantic-ui-react';
 import shortid from 'shortid';
 import '../../../assets/custom.css';
 
@@ -38,7 +38,7 @@ export default class EdgarForm extends React.Component {
   handleSubmit = () => {
     businessActions.generateDocxFile()
       .then((data) => {
-        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
         Helper.toast(`.docx file with id ${data.body.requestId} created successfully`, 'success');
       })
       .finally(() => {
@@ -71,7 +71,7 @@ export default class EdgarForm extends React.Component {
             <Grid.Row>
               <Grid.Column width={16}>
                 <h1>
-                  <Link to={`/app/business/${this.props.match.params.businessId}`} className="back-link"><Icon className="ns-arrow-left" /></Link>
+                  <Link to={`/app/edgar/${this.props.match.params.businessId}`} className="back-link"><Icon name="ns-arrow-left" /></Link>
                   Edgar Form
                 </h1>
               </Grid.Column>
@@ -79,38 +79,40 @@ export default class EdgarForm extends React.Component {
           </Grid>
         </div>
         <div className="content-spacer">
-          <Grid stackable className="edgar-form">
-            <Form>
-              <Grid>
-                {formValues.map(data => (
-                  <Form.Input
-                    placeholder={data.placeholder}
-                    className="column"
-                    label={data.placeholder}
-                    name={data.name}
-                    value={templateVariables[data.name]}
-                    onChange={this.handleInputChange}
-                    width={data.width || 8}
-                    key={`${key}_${data.name}`}
-                    disabled={data.name === 'name_of_business'}
-                  />))
-                }
-              </Grid>
-              <Divider section />
-              <div className="center-align">
-                <Button
-                  primary
-                  disabled={
-                    !this.props.businessStore.canSubmitEdgarForm ||
-                      this.props.uiStore.submitButtonDisabled
+          <Card fluid>
+            <Card.Content>
+              <Form>
+                <Grid stackable className="edgar-form">
+                  {formValues.map(data => (
+                    <Form.Input
+                      placeholder={data.placeholder}
+                      className="column"
+                      label={data.placeholder}
+                      name={data.name}
+                      value={templateVariables[data.name]}
+                      onChange={this.handleInputChange}
+                      width={data.width || 8}
+                      key={`${key}_${data.name}`}
+                      disabled={data.name === 'name_of_business'}
+                    />))
                   }
-                  onClick={this.handleSubmit}
-                >
-                  Generate Docx
-                </Button>
-              </div>
-            </Form>
-          </Grid>
+                </Grid>
+                <Divider hidden section />
+                <div className="form-footer">
+                  <Button
+                    color="green"
+                    onClick={this.handleSubmit}
+                    primary
+                    disabled={
+                      this.props.match.params.filingId
+                    }
+                  >
+                    Generate Docx
+                  </Button>
+                </div>
+              </Form>
+            </Card.Content>
+          </Card>
         </div>
       </div>
     );

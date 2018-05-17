@@ -5,9 +5,18 @@ import { Form, Popup, Icon, Select } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
 const FormSelect = observer((props) => {
-  const { label, value, error } = props.fielddata;
+  const {
+    label,
+    value,
+    error,
+    placeHolder,
+  } = props.fielddata;
+  let width = '';
+  if (props.containerwidth) {
+    width = props.containerwidth;
+  }
   return (
-    <Form.Field width={props.containerwidth || false}>
+    <Form.Field {...width}>
       <label>
         {label}
         {props.tooltip &&
@@ -25,6 +34,7 @@ const FormSelect = observer((props) => {
         value={value}
         error={!!error}
         onChange={props.changed}
+        placeholder={placeHolder}
       />
       <div className="dropdown-effect">{props.fielddata.label}</div>
       {error &&

@@ -22,6 +22,7 @@ export default class Funding extends Component {
             fielddata={formFunding.fields.fundingOption}
             name="fundingOption"
             changed={fundingChange}
+            containerclassname="button-radio center-align"
           />
           <div className="option-details">
             {this.getOptionDetails()}

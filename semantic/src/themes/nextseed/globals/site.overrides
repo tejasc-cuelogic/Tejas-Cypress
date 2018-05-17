@@ -148,6 +148,13 @@ h6{
 	color:@quaternary-text;
 	margin-bottom:@28px;
 }
+a.text-link{
+	color:@tertiary-text;
+	&:hover, &:active, &.active{
+		color:@primary-text;
+	}
+}
+
 //	Admin Page Content Styles	//
 
 //	Page Header Styles

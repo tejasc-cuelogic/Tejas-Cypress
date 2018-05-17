@@ -78,7 +78,7 @@ export default class NewBusinessForm extends React.Component {
   handleSubmitForm = () => {
     businessActions.createBusiness()
       .then((data) => {
-        this.props.history.push(`/app/business/${data.body.data.createBusiness.id}`);
+        this.props.history.push(`/app/edgar/${data.body.data.createBusiness.id}`);
         this.props.uiStore.setModalStatus(false);
         Helper.toast(`New business ${data.body.data.createBusiness.name} has been created successfully`, 'success');
       })
@@ -137,6 +137,18 @@ export default class NewBusinessForm extends React.Component {
                 onChange={this.handleOnChange}
               />
               <FieldError error={newOfferingInformation.businessDescription.error} />
+              <div className="center-align">
+                <Button
+                  primary
+                  disabled={
+                    !this.props.businessStore.canSubmitNewOfferingForm ||
+                      this.props.uiStore.submitButtonDisabled
+                  }
+                  onClick={this.handleSubmitForm}
+                >
+                  Submit
+                </Button>
+              </div>
             </Form>
             }
             {editBusinessMode &&
@@ -162,33 +174,21 @@ export default class NewBusinessForm extends React.Component {
                 onChange={this.handleOnChangeOnEdit}
               />
               <FieldError error={this.state.desc.error} />
+              <div className="center-align">
+                <Button
+                  primary
+                  disabled={
+                    !((this.state.name.value !== '' && this.state.desc.value !== '') ||
+                      this.props.uiStore.submitButtonDisabled)
+                  }
+                  onClick={this.handleEditBusiness}
+                >
+                  Submit
+                </Button>
+              </div>
             </Form>
             }
           </Modal.Content>
-          <Modal.Actions>
-            { editBusinessMode === false &&
-            <Button
-              primary
-              disabled={
-                !this.props.businessStore.canSubmitNewOfferingForm ||
-                  this.props.uiStore.submitButtonDisabled
-              }
-              onClick={this.handleSubmitForm}
-            >
-              Submit
-            </Button>}
-            { editBusinessMode === true &&
-            <Button
-              primary
-              disabled={
-                !((this.state.name.value !== '' && this.state.desc.value !== '') ||
-                  this.props.uiStore.submitButtonDisabled)
-              }
-              onClick={this.handleEditBusiness}
-            >
-              Submit
-            </Button>}
-          </Modal.Actions>
         </Modal>
       </div>
 

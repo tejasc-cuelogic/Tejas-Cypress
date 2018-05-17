@@ -5,10 +5,10 @@ import Home from './public/home/containers/Home';
 import Invest from './public/invest/containers/Invest';
 import Offering from './public/offering/containers/Offering';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
-import Business from '../modules/business/containers/Business';
+import Edgar from './edgar/containers/Business';
 import ChangePassword from '../modules/auth/ChangePassword';
 import Confirm from '../modules/auth/Confirm';
-import EdgarForm from '../modules/business/containers/EdgarForm';
+import EdgarForm from '../modules/edgar/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
 import Login from '../modules/auth/Login';
 import Register from '../modules/auth/Register';
@@ -21,14 +21,15 @@ import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './users/containers/Users';
 import UserDetails from './users/containers/UserDetails';
-import XmlForm from './business/containers/XmlForm';
-import BusinessDetails from './business/containers/BusinessDetails';
+import XmlForm from './edgar/containers/XmlForm';
+import BusinessDetails from './edgar/containers/BusinessDetails';
 import Summary from '../modules/summary/containers/Summary';
 import RewardsWallet from '../modules/rewardsWallet/containers/RewardsWallet';
 import Referrals from '../modules/referrals/containers/Referrals';
 import Education from '../modules/education/containers/Education';
 import AccountDetails from './private/accountDetails/containers/AccountDetails';
 import ProfileSettings from './private/profileSettings/containers/ProfileSettings';
+import Business from '../modules/business/containers/Business';
 import {
   AdminAuthorization,
   BusinessAuthorization,
@@ -112,33 +113,39 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   {
-    path: '/app/business/:businessId/edgar/:filingId',
+    path: '/app/business',
+    component: Business,
+    auth: BusinessAuthorization,
+    exact: true,
+  },
+  {
+    path: '/app/edgar/:businessId/edgar/:filingId',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/:businessId/edgar',
+    path: '/app/edgar/:businessId/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/:businessId/filing/:filingId/xml/:xmlId',
+    path: '/app/edgar/:businessId/filing/:filingId/xml/:xmlId',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/business/:businessId/filing/:filingId/xml',
+    path: '/app/edgar/:businessId/filing/:filingId/xml',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/business/:businessId',
+    path: '/app/edgar/:businessId',
     component: BusinessDetails,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business',
-    component: Business,
+    path: '/app/edgar',
+    component: Edgar,
     auth: BusinessAuthorization,
     exact: true,
   },
