@@ -19,8 +19,9 @@ import Banking from './banking/containers/Banking';
 import Base from './basemodule/Base';
 import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
-import Users from './users/containers/Users';
-import UserDetails from './users/containers/UserDetails';
+import Users from './private/users/containers/Users';
+import UserDetails from './private/users/containers/UserDetails';
+import ProfileSettings from './private/users/containers/ProfileSettings';
 import XmlForm from './business/containers/XmlForm';
 import BusinessDetails from './business/containers/BusinessDetails';
 import Summary from '../modules/summary/containers/Summary';
@@ -28,7 +29,6 @@ import RewardsWallet from '../modules/rewardsWallet/containers/RewardsWallet';
 import Referrals from '../modules/referrals/containers/Referrals';
 import Education from '../modules/education/containers/Education';
 import AccountDetails from './private/accountDetails/containers/AccountDetails';
-import ProfileSettings from './private/profileSettings/containers/ProfileSettings';
 import {
   AdminAuthorization,
   BusinessAuthorization,

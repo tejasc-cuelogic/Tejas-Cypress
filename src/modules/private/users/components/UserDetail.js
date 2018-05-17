@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Form, Label, Card, Header, Button, Checkbox, Feed } from 'semantic-ui-react';
-import Spinner from '../../../theme/ui/Spinner';
-// import ToggleEdit from './ToggleEdit';
-import { US_STATES } from '../../../constants/account'; //  added Temperarily to update UI as per new layout
-import { FormSelect } from '../../../theme/form/FormElements';
+import Spinner from '../../../../theme/ui/Spinner';
+import { US_STATES } from '../../../../constants/account'; //  added Temperarily to update UI as per new layout
+import { FormSelect } from '../../../../theme/form/FormElements';
 
 const states = {
   label: 'State',
