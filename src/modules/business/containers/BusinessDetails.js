@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Icon, Button, Grid, Confirm } from 'semantic-ui-react';
+import { Icon, Header, Button, Grid, Confirm } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import FillingsList from '../components/FillingsList';
@@ -125,7 +125,7 @@ export default class BusinessDetails extends React.Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <h1>
+                <Header as="h1">
                   <Button
                     primary
                     floated="right"
@@ -170,7 +170,7 @@ export default class BusinessDetails extends React.Component {
                       className="deletion"
                     />
                   </div>
-                </h1>
+                </Header>
               </Grid.Column>
             </Grid.Row>
           </Grid>

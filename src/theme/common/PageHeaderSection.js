@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Grid, Icon, Button } from 'semantic-ui-react';
+import { Grid, Header, Icon, Button } from 'semantic-ui-react';
 
 const PageHeaderSection = observer((props) => {
   if (!props.title) {
@@ -11,7 +11,7 @@ const PageHeaderSection = observer((props) => {
       <Grid>
         <Grid.Row>
           <Grid.Column width={6}>
-            <h1>{props.title}</h1>
+            <Header as="h1">{props.title}</Header>
           </Grid.Column>
           <Grid.Column width={4} floated="right" textAlign="right">
             <span className="item notification">

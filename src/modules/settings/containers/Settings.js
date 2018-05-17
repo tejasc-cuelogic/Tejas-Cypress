@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 
 import ListErrors from './../../../theme/common/ListErrors';
 import SettingsForm from './../components/SettingsForm';
@@ -22,7 +22,7 @@ class Settings extends React.Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <h1>Your Settings</h1>
+                <Header as="h1">Your Settings</Header>
               </Grid.Column>
             </Grid.Row>
           </Grid>

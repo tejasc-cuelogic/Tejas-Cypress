@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
+import { Grid, Header, Button, Form, Input, Icon, List } from 'semantic-ui-react';
 import { DropdownFilter, DateRangeFilter, AppliedFilters } from './widgets/Filters';
 import { FILTER_META } from './../../../../constants/user';
 // import { FormInput } from '../../../theme/form/FormElements';
@@ -16,7 +16,7 @@ const userListingSubheader = props => (
       <Grid stackable>
         <Grid.Row>
           <Grid.Column width={4}>
-            <h1>Manage Users</h1>
+            <Header as="h1">Manage Users</Header>
           </Grid.Column>
           <Grid.Column width={5}>
             <Form inverted>

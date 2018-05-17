@@ -26,7 +26,7 @@ export default class Beneficiaries extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column width={8}>
+            <Grid.Column widescreen={8} largeScreen={8} computer={10} tablet={13} mobile={16}>
               <Card fluid>
                 <Grid divided padded="horizontally">
                   <Grid.Row>

@@ -201,7 +201,7 @@ a.link{
 			color:@tertiary-text;
 			color:@white;
 			height:auto;
-			line-height:1;
+			line-height:2;
 		}
 		span.unread-count{
 			height:18px;
