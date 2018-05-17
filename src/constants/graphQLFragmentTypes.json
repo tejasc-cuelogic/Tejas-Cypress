@@ -1,0 +1,1 @@
+{"__schema":{"types":[{"kind":"UNION","name":"XmlSubmissionOutput","possibleTypes":[{"name":"BusinessFilingSubmission"},{"name":"XmlSubmissionErrorOutput"}]},{"kind":"UNION","name":"UserCIPOutput","possibleTypes":[{"name":"UserCIPSoftFail"},{"name":"UserCIPHardFail"},{"name":"UserCIPPass"},{"name":"UserCIPFail"}]}]}}

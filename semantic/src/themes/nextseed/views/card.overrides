@@ -1,7 +1,7 @@
 /*******************************
          Theme Overrides
 *******************************/
-.card.form-card{
+.card.form-card, .cards>.card.form-card{
     border-radius:@relative10px;
     padding:@32px;
     background-color:@lighter-bg-color;
@@ -29,6 +29,11 @@
         }
     }
 }
+.ui.stackable.cards>.card{
+    @media only screen and (max-width : (@tabletBreakpoint - 1px)){
+        padding:@32px !important;
+    }
+}
 
 .ui.card.flexible{
     width:auto;
@@ -43,20 +48,30 @@
     }
 }
 .ui.card, .ui.cards>.card{
+    .header{
+        text-transform:capitalize;
+    }
     &.welcome-card{
         >.content{
+            padding:@25px;
             i.icon.pull-left{
                 width:auto;
-                margin:0 0.5rem 0 0;
+                margin:0 1rem 0 0;
+                color:@theme-primary;
+            }
+            .ui.mini.image{
+                width:54px;
+                margin:0 @18px 0 0;
             }
             >.header:not(.ui){
-                font-family:@regularFont;
-                font-size:@24px;
+                // font-family:@boldFont;
+                font-size:@20px;
                 font-weight:400;
+                margin-top:0;
             }
             >.meta{
                 font-family:@pageFont;
-                font-size:@14px;
+                font-size:@16px;
                 text-transform:none;
                 color:@quaternary-text;
                 letter-spacing:1px;
@@ -64,20 +79,62 @@
             }
         }
     }
+    &.card-spacer{
+        padding:@22px;
+    }
+    .content .action-meta{
+        display:inline-block;
+        font-size:@12px;
+        vertical-align:top;
+        margin-left:@10px;
+        color:@quaternary-text;
+        >b{
+            color:@fullBlack;
+        }
+    }
 }
 
 .ui.card>.content:not(:first-child),
 .ui.cards>.card>.content:not(:first-child){
-    // padding-top:0;
-    // border-top:none;
     border-top-color:@border-light;
 }
 .ui.card{
+    .ui.menu{
+        margin:0;
+        overflow:hidden;
+    }
     .meta{
         margin-bottom:1rem;
         font-size:@14px;
         color:@quaternary-text;
         text-transform:uppercase;
+    }
+    [class*="horizontally padded"].ui.grid{
+        .content{
+            padding:@14px 0;
+            &:not(:last-child){
+                border-bottom:@border-light 1px solid;
+            }
+        }
+    }
+    &.investment-summary{
+        .header i.icon{
+            font-size:24px;
+            color:@highlight-tertiary;
+            vertical-align:top;
+        }
+    }
+    &.linked-bank{
+        .item{
+            .extra{
+                margin-bottom:@7px;
+                color:@quaternary-text;
+            }
+            .header{
+                font-weight:700;
+                color:@fullBlack;
+            }
+        }
     }
 }
 .ui{
@@ -99,14 +156,41 @@
             color:@quaternary-text;
             text-transform:uppercase;
         }
-        .description p{
-            font-family:@boldFont;
-        }
+        // .description p{
+        //     font-family:@boldFont;
+        // }
     }
 }
 .sticky-notification{
     .ui.card .meta{
         font-size:@13px;
         text-transform:none;
+    }
+}
+
+.ui.cards.steps-card{
+    .description{
+        font-size:16px;
+        i.icon.numbar{
+            height:26px;
+            width:26px;
+            line-height:26px;
+            background:@theme-primary;
+            padding:0;
+            margin:0 .75rem 0 0;
+            border-radius:50%;
+            &[data-icon]:before{
+                content:attr(data-icon) !important;
+                font-family:@pageFont;
+                font-size:@16px;
+                color:@inverse-text;
+            }
+        }
+        &.disabled{
+            color:@border-color;
+            i.icon.numbar{
+                background:@light-bg-color;
+            }
+        }
     }
 }

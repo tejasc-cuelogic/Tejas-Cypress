@@ -4,7 +4,16 @@ import validationService from './../services/validation';
 import authStore from './../stores/authStore';
 import businessStore from './../stores/businessStore';
 import userStore from './../stores/userStore';
-import { REGISTRATION, CONDITIONAL_REQUIRE } from './../constants/validation';
+import profileStore from './../stores/profileStore';
+import accountStore from './../stores/accountStore';
+import { REGISTRATION,
+  PROFILE_DETAILS,
+  CONDITIONAL_REQUIRE,
+  CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE,
+  CONFIRM_PHONE_NUMBER_VERIFICATION_CODE,
+  CONFIRM_IDENTITY_QUESTIONS,
+  LINK_BANK_ACCCOUNT_FORM,
+  CONFIRM_IDENTITY_DOCUMENTS_FORM } from './../constants/validation';
 
 /**
  * @desc Validation class for form inputs
@@ -50,7 +59,7 @@ export class Validation {
    * @return null
    */
   validateFilerInfoField = (field) => {
-    const { errors } = validationService.validate(businessStore.filerInformation[field]);
+    const { errors } = validationService.validate(businessStore.formFilerInfo.fields[field]);
     this.formValidationErrors(errors, field);
     businessStore.setFilerError(field, errors && errors[field][0]);
   }
@@ -64,8 +73,8 @@ export class Validation {
    */
   validateIssuerInfoField = (field) => {
     const { errors } = validationService.validate(
-      businessStore.issuerInformation[field],
-      businessStore.issuerInformation[CONDITIONAL_REQUIRE[field]],
+      businessStore.formIssuerInfo.fields[field],
+      businessStore.formIssuerInfo.fields[CONDITIONAL_REQUIRE[field]],
     );
     this.formValidationErrors(errors, field);
     businessStore.setIssuerError(field, errors && errors[field][0]);
@@ -117,11 +126,14 @@ export class Validation {
    * @desc validates Personal Signature and sets error to store if any
    * @param $field @type String - Field name that needs to be validated
    * @param $id @type String - Uniq Dom id of that field
-   * @param $value @type String/Object - value that user entered in input element
    * @return null
    */
-  validatePersonalSignature = (field, id, value) => {
-    businessStore.changePersonalSignature(field, id, value);
+  validatePersonalSig = (field, id) => {
+    const persig = _.filter(businessStore.formSignatureInfo.fields.signaturePersons, person =>
+      person.id === id);
+    const { errors } = validationService.validate(persig[0][field]);
+    this.formValidationErrors(errors, field);
+    businessStore.setPersonalSignatureError(field, id, errors && errors[field][0]);
   }
 
   /**
@@ -222,23 +234,170 @@ export class Validation {
       newErrors[field] = errors[field][0];
       businessStore.setXmlError(newErrors);
     } else {
-      businessStore.removeXmlError(field);
+      /* eslint-disable no-lonely-if */
+      if (field !== 'notificationEmailElement') {
+        businessStore.removeXmlError(field);
+      }
     }
   }
 
   /**
-  * @desc Validates fields on login
-  * @param string $field - field on form that need to be validated
-  * @param string $value - value that need to be set to field
+   * @desc Validates fields on profile details
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateProfileDetailsField = (field, value) => {
+    profileStore.setProfileDetails(field, value);
+    const { errors } = validationService.validate(profileStore.profileDetails[field]);
+    profileStore.setProfileError(field, errors && errors[field][0]);
+  }
+
+  /**
+  * @desc Validated complete Profile details form after clicking submit button
   * @return null
   */
-  validateLoginField = (field, value) => {
-    // First set value to authStore
-    authStore.setValue(field, value);
-    // Vaidate whether field value is valid
-    const { errors } = validationService.validate(authStore.values[field]);
-    // Set errors if any to store or else `undefined` will get set to variable.
-    authStore.setError(field, errors && errors[field][0]);
+  validateProfileDetailsForm = () => {
+    _.map(profileStore.profileDetails, (value) => {
+      const { key } = value;
+      // Select only required values and exclude others from being checked
+      if (PROFILE_DETAILS.includes(key)) {
+        const { errors } = validationService.validate(value);
+        // Store errors to store if any or else `undefined` will get set to it
+        profileStore.setProfileError(key, errors && errors[key][0]);
+      }
+    });
+  }
+
+  /**
+   * @desc Validates Confirm Email Address Form after Form Submission
+   */
+  validateConfirmEmailAddressForm = () => {
+    const { key } = authStore.values.code;
+    // Select only required values and exclude others from being checked
+    if (CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE.includes(key)) {
+      const { errors } =
+      validationService.validate(authStore.values.code);
+      // Store errors to store if any or else `undefined` will get set to it
+      authStore.setError('code', errors && errors[key][0]);
+    }
+  }
+
+  /**
+   * @desc Validates Confirm Phone Number Form after Form Submission
+   */
+  validateConfirmPhoneNumberForm = () => {
+    const { key } = profileStore.profileDetails.code;
+    // Select only required values and exclude others from being checked
+    if (CONFIRM_PHONE_NUMBER_VERIFICATION_CODE.includes(key)) {
+      const { errors } =
+      validationService.validate(profileStore.profileDetails.code);
+      // Store errors to store if any or else `undefined` will get set to it
+      profileStore.setProfileError('code', errors && errors[key][0]);
+    }
+  }
+
+  /**
+   * @desc Validates Comfirm Identity Form fields
+   */
+  validateConfirmidentityFormFields = (field, value) => {
+    profileStore.setConfirmIdentityQuestions(field, value);
+    const { errors } = validationService.validate(profileStore.confirmIdentityQuestions[field]);
+    profileStore.setConfirmIdentityQuestionsError(field, errors && errors[field][0]);
+  }
+
+  /**
+  * @desc Validated Confirm Identity form after clicking submit button
+  * @return null
+  */
+  validateConfirmIdentityForm = () => {
+    _.map(profileStore.confirmIdentityQuestions, (value) => {
+      const { key } = value;
+      // Select only required values and exclude others from being checked
+      if (CONFIRM_IDENTITY_QUESTIONS.includes(key)) {
+        const { errors } = validationService.validate(value);
+        // Store errors to store if any or else `undefined` will get set to it
+        profileStore.setConfirmIdentityQuestionsError(key, errors && errors[key][0]);
+      }
+    });
+  }
+
+  /**
+   * @desc validates Individual Account's fields on change.
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateIndividualAccountField = (field, value) => {
+    accountStore.setIndividualAccountDetails(field, value);
+    const { errors } = validationService.validate(accountStore.individualAccount[field]);
+    accountStore.setIndividualAccountError(field, errors && errors[field][0]);
+  }
+
+  /**
+   * @desc validates IRA Account's fields on change.
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateIraAccountField = (field, value) => {
+    accountStore.setIraAccountDetails(field, value);
+    const { errors } = validationService.validate(accountStore.iraAccount[field]);
+    accountStore.setIraAccountError(field, errors && errors[field][0]);
+  }
+
+  /**
+   * @desc validates Entity Account's fields on change.
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateEntityAccountField = (field, value) => {
+    accountStore.setEntityAccountDetails(field, value);
+    const { errors } = validationService.validate(accountStore.entityAccount[field]);
+    accountStore.setEntityAccountError(field, errors && errors[field][0]);
+  }
+
+  /**
+   * @desc Validates Link Bank Account Form for Individual
+   */
+  validateLinkBankAccountForm = () => {
+    _.map(accountStore.individualAccount, (value) => {
+      const { key } = value;
+      // Select only required values and exclude others from being checked
+      if (LINK_BANK_ACCCOUNT_FORM.includes(key)) {
+        const { errors } = validationService.validate(value);
+        // Store errors to store if any or else `undefined` will get set to it
+        accountStore.setIndividualAccountError(key, errors && errors[key][0]);
+      }
+    });
+  }
+
+  /**
+   * @desc Validates Confirm Identity Documents Form.
+   * @param string $field - field on form that need to be validated
+   * @param string $value - value that need to be set to field
+   * @return null
+   */
+  validateConfirmIdentityDocumentsField = (field, value) => {
+    profileStore.setConfirmIdentityDocuments(field, value);
+    const { errors } = validationService.validate(profileStore.confirmIdentityDocuments[field]);
+    profileStore.setConfirmIdentityDocumentsError(field, errors && errors[field][0]);
+  }
+
+  /**
+   * @desc Validates Confirm Identity Documents Form
+   */
+  validateConfirmIdentityDocumentsForm = () => {
+    _.map(profileStore.confirmIdentityDocuments, (value) => {
+      const { key } = value;
+      // Select only required values and exclude others from being checked
+      if (CONFIRM_IDENTITY_DOCUMENTS_FORM.includes(key)) {
+        const { errors } = validationService.validate(value);
+        // Store errors to store if any or else `undefined` will get set to it
+        profileStore.setConfirmIdentityDocumentsError(key, errors && errors[key][0]);
+      }
+    });
   }
 
   // Private Methods ends here

@@ -93,8 +93,8 @@
 @likeActiveColor: #FF2733;
 
 /* Links */
-@contentLinkColor:@theme-primary;
-@contentLinkHoverColor:@theme-primary-darken;
+@contentLinkColor:@link-color;
+@contentLinkHoverColor:@link-color-darken;
 @contentLinkTransition: color @defaultDuration @defaultEasing;
 
 @headerLinkColor: @headerColor;

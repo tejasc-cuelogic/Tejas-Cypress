@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Button } from 'semantic-ui-react';
 
-import ProfileDetails from './../../../components/common/ProfileDetails';
+import ProfileDetails from './../../../theme/common/ProfileDetails';
 import userActions from '../../../actions/user';
 
 @inject('userStore')
@@ -18,7 +18,7 @@ class SettingsForm extends React.Component {
           userData={this.props.userStore.currentUser}
           handleChange={this.handleChange}
         />
-        <Button onClick={this.handleClick} color="green">
+        <Button onClick={this.handleClick} primary>
           Update Profile
         </Button>
       </Form>

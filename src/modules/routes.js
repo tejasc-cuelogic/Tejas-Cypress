@@ -1,31 +1,41 @@
-import About from './about/containers/About';
-import Agreements from './agreements/containers/Agreements';
-import Blog from './blog/containers/Blog';
-import Business from '../modules/business/containers/Business';
+import About from './public/about/containers/About';
+import Agreements from './public/agreements/containers/Agreements';
+import Blog from './public/blog/containers/Blog';
+import Home from './public/home/containers/Home';
+import Invest from './public/invest/containers/Invest';
+import Offering from './public/offering/containers/Offering';
+import CaseStudies from './public/caseStudies/containers/CaseStudies';
+import Edgar from './edgar/containers/Business';
 import ChangePassword from '../modules/auth/ChangePassword';
 import Confirm from '../modules/auth/Confirm';
-import EdgarForm from '../modules/business/containers/EdgarForm';
+import EdgarForm from '../modules/edgar/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
-import Home from './home/containers/Home';
-import Invest from './invest/containers/Invest';
 import Login from '../modules/auth/Login';
-import Offering from './offering/containers/Offering';
 import Register from '../modules/auth/Register';
 import ResetPassword from '../modules/auth/ResetPassword';
 import Settings from './../modules/settings/containers/Settings';
-import CaseStudies from './caseStudies/containers/CaseStudies';
 import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
 import Banking from './banking/containers/Banking';
+import Base from './basemodule/Base';
 import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './users/containers/Users';
-import XmlForm from './business/containers/XmlForm';
-import BusinessDetails from './business/containers/BusinessDetails';
+import UserDetails from './users/containers/UserDetails';
+import XmlForm from './edgar/containers/XmlForm';
+import BusinessDetails from './edgar/containers/BusinessDetails';
+import Summary from '../modules/summary/containers/Summary';
+import RewardsWallet from '../modules/rewardsWallet/containers/RewardsWallet';
+import Referrals from '../modules/referrals/containers/Referrals';
+import Education from '../modules/education/containers/Education';
+import AccountDetails from './private/accountDetails/containers/AccountDetails';
+import ProfileSettings from './private/profileSettings/containers/ProfileSettings';
+import Business from '../modules/business/containers/Business';
 import {
   AdminAuthorization,
   BusinessAuthorization,
   UserAuthorization,
-} from '../components/common/Authorization';
+  InvestorAuthorization,
+} from '../theme/common/Authorization';
 
 export const publicRoutes = [
   {
@@ -103,50 +113,56 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   {
-    path: '/app/business/:businessId/edgar/:filingId',
-    component: EdgarForm,
-    auth: BusinessAuthorization,
-  },
-  {
-    path: '/app/business/:businessId/edgar',
-    component: EdgarForm,
-    auth: BusinessAuthorization,
-  },
-  {
-    path: '/app/business/:businessId/filing/:filingId/xml/:xmlId',
-    component: XmlForm,
-    auth: AdminAuthorization,
-  },
-  {
-    path: '/app/business/:businessId/filing/:filingId/xml',
-    component: XmlForm,
-    auth: AdminAuthorization,
-  },
-  {
-    path: '/app/business/:businessId',
-    component: BusinessDetails,
-    auth: BusinessAuthorization,
-  },
-  {
     path: '/app/business',
     component: Business,
     auth: BusinessAuthorization,
     exact: true,
   },
   {
-    path: '/app/users/:userId/:section',
-    component: Users,
+    path: '/app/edgar/:businessId/edgar/:filingId',
+    component: EdgarForm,
     auth: BusinessAuthorization,
+  },
+  {
+    path: '/app/edgar/:businessId/edgar',
+    component: EdgarForm,
+    auth: BusinessAuthorization,
+  },
+  {
+    path: '/app/edgar/:businessId/filing/:filingId/xml/:xmlId',
+    component: XmlForm,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/edgar/:businessId/filing/:filingId/xml',
+    component: XmlForm,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/edgar/:businessId',
+    component: BusinessDetails,
+    auth: BusinessAuthorization,
+  },
+  {
+    path: '/app/edgar',
+    component: Edgar,
+    auth: BusinessAuthorization,
+    exact: true,
+  },
+  {
+    path: '/app/users/:userId/:section',
+    component: UserDetails,
+    auth: AdminAuthorization,
   },
   {
     path: '/app/users/new',
     component: Users,
-    auth: BusinessAuthorization,
+    auth: AdminAuthorization,
   },
   {
     path: '/app/users',
     component: Users,
-    auth: BusinessAuthorization,
+    auth: AdminAuthorization,
   },
   {
     path: '/app/settings',
@@ -174,4 +190,42 @@ export const privateRoutes = [
     exact: true,
     auth: UserAuthorization,
   },
+  {
+    path: '/app/summary',
+    component: Summary,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/account-details/:accountType(individual|ira|entity)',
+    exact: false,
+    component: AccountDetails,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/profile-settings',
+    exact: false,
+    component: ProfileSettings,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/rewardswallet',
+    component: RewardsWallet,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/referrals',
+    component: Referrals,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/education',
+    component: Education,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/page/:pageId',
+    component: Base,
+    auth: UserAuthorization,
+  },
 ];
+

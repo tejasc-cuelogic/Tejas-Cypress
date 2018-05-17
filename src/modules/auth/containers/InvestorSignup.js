@@ -3,17 +3,17 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
 import authActions from '../../../actions/auth';
-import ListErrors from '../../../components/common/ListErrors';
-import FieldError from '../../../components/common/FieldError';
+import ListErrors from '../../../theme/common/ListErrors';
+import FieldError from '../../../theme/common/FieldError';
 import validationActions from '../../../actions/validation';
 
 @inject('authStore', 'uiStore')
 @withRouter
 @observer
 class InvestorSignup extends Component {
-  componentWillUnmount() {
+  componentWillMount() {
     this.props.uiStore.clearErrors();
-    this.props.authStore.reset();
+    // this.props.authStore.reset();
   }
 
   getNameError = (firstName, lastName) => {
@@ -35,8 +35,7 @@ class InvestorSignup extends Component {
           if (this.props.authStore.newPasswordRequired) {
             this.props.history.push('/change-password');
           } else {
-            this.props.authStore.reset();
-            this.props.history.replace('/app/dashboard');
+            this.props.setAuthWizardStep('ConfirmEmailAddress');
           }
         })
         .catch(() => { });
@@ -51,9 +50,9 @@ class InvestorSignup extends Component {
     values.role.value = this.props.authStore.signupFlow.type;
 
     return (
-      <Modal size="tiny" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
+      <Modal size="mini" open onClose={() => this.props.setAuthWizardStep()}>
         <Modal.Header className="center-align signup-header">
-          <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon name="arrow left" /></Link>
+          <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon className="ns-arrow-left" /></Link>
           <Header as="h2">
             Sign Up as&nbsp;
             {(this.props.authStore.signupFlow.type === 'investor') ? 'Investor' : 'Business Owner'}
@@ -128,7 +127,7 @@ class InvestorSignup extends Component {
             />
             <FieldError error={values.verify.error} />
             <div className="center-align">
-              <Button circular color="green" disabled={!this.props.authStore.canRegister} size="large">Register</Button>
+              <Button primary size="large" className="very relaxed" loading={this.props.uiStore.inProgress} disabled={!this.props.authStore.canRegister}>Register</Button>
             </div>
           </Form>
         </Modal.Content>

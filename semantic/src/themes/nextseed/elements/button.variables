@@ -22,11 +22,11 @@
 @textTransform: none;
 @tapColor: transparent;
 @fontFamily: @pageFont;
-@fontWeight: 500;
+@fontWeight: 900;
 @textColor: rgba(0, 0, 0, 0.6);
 @textShadow: none;
 @invertedTextShadow: @textShadow;
-@borderRadius: @defaultBorderRadius;
+@borderRadius: @6px;
 @verticalAlign: baseline;
 
 /* Internal Shadow */
@@ -193,13 +193,13 @@
 
 /* Basic */
 @basicBorderRadius: @borderRadius;
-@basicBorderSize: 1px;
+@basicBorderSize: 2px;
 @basicTextColor: @textColor;
 @basicColoredBorderSize: 1px;
 
 @basicBackground: transparent none;
 @basicFontWeight: normal;
-@basicBorder: 1px solid @borderColor;
+@basicBorder: 2px solid @borderColor;
 @basicBoxShadow: 0px 0px 0px @basicBorderSize @borderColor inset;
 @basicLoadingColor: @offWhite;
 @basicTextTransform: none;

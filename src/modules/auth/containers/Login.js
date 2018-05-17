@@ -3,9 +3,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import authActions from './../../../actions/auth';
-import ListErrors from '../../../components/common/ListErrors';
+import ListErrors from '../../../theme/common/ListErrors';
 import validationActions from '../../../actions/validation';
-import FieldError from '../../../components/common/FieldError';
+import FieldError from '../../../theme/common/FieldError';
 
 @inject('authStore', 'uiStore', 'userStore')
 @withRouter
@@ -36,8 +36,8 @@ class Login extends Component {
     const { errors } = this.props.uiStore;
 
     return (
-      <Modal size="tiny" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
-        <Modal.Header className="center-align">
+      <Modal size="mini" open onClose={() => this.props.setAuthWizardStep()}>
+        <Modal.Header className="center-align signup-header">
           <Header as="h2">Log in to NextSeed</Header>
         </Modal.Header>
         <Modal.Content className="signup-modal">
@@ -75,11 +75,11 @@ class Login extends Component {
             />
             <FieldError error={values.password.error} />
             <div className="center-align">
-              <Button circular color="green" size="large" disabled={canLogin}>Log in</Button>
+              <Button primary size="large" className="very relaxed" loading={this.props.uiStore.inProgress} disabled={canLogin}>Log in</Button>
             </div>
           </Form>
         </Modal.Content>
-        <Modal.Actions>
+        <Modal.Actions className="signup-actions">
           <p>Dont have an account? <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')}>Sign up</Link></p>
         </Modal.Actions>
       </Modal>

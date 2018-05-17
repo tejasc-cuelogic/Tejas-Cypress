@@ -4,12 +4,21 @@ import shortid from 'shortid';
 import graphql from 'graphql';
 
 import { GqlClient as client } from '../services/graphql';
-import { listOfferings } from '../stores/queries/business';
+import {
+  listOfferings,
+  getXmlDetails,
+  filerInformationMutation,
+  issuerInformationMutation,
+  offeringInformationMutation,
+  annualReportMutation,
+  signatureMutation,
+  documentListMutation,
+  xmlSubmissionMutation,
+  cloneXmlSubmissionMutation } from '../stores/queries/business';
 import businessStore from './../stores/businessStore';
 import uiStore from './../stores/uiStore';
 import {
   EDGAR_URL,
-  XML_URL,
   GRAPHQL,
   PERSONAL_SIGNATURE,
   FILES,
@@ -28,7 +37,7 @@ export class Business {
   addPersonalSignature = () => {
     const personalSignature = { ...PERSONAL_SIGNATURE };
     personalSignature.id = shortid.generate();
-    const signaturePersons = [...businessStore.signature.signaturePersons];
+    const signaturePersons = [...businessStore.formSignatureInfo.fields.signaturePersons];
     signaturePersons.push(personalSignature);
     businessStore.setNewPersonalSignature(signaturePersons);
     return personalSignature.id;
@@ -46,46 +55,123 @@ export class Business {
   }
 
   /**
-  * @desc Make an API Call to server to generate XML for final submittion
-  */
-  generateXml = () => {
+   * Submit XML submission
+   */
+  submitXMLInformation = (action) => {
     const {
       businessId,
       filingId,
-      offeringUrl,
-      annualReportRequirements,
-      filerInformation,
-      issuerInformation,
-      offeringInformation,
-      signature,
-      documentList,
+      xmlSubmissionId,
+      formFilerInfo,
+      formIssuerInfo,
+      formOfferingInfo,
+      formAnnualInfo,
+      formSignatureInfo,
+      formDocumentInfo,
     } = businessStore;
-
-    const payload = {
+    let payload = {};
+    const ids = {
       businessId,
       filingId,
-      offeringUrl,
-      filerInformation: this.getFormattedInformation(filerInformation),
-      issuerInformation: this.getFormattedInformation(issuerInformation),
-      offeringInformation: this.getFormattedInformation(offeringInformation),
-      annualReportDisclosureRequirements: this.getFormattedInformation(annualReportRequirements),
-      signature: this.getFormattedSignature(signature),
-      documentList: _.filter(documentList, document => document.checked),
+      xmlSubmissionId,
     };
 
-    uiStore.setProgress();
-    uiStore.setLoaderMessage('Submitting XML Form');
-    return ApiService.post(XML_URL, payload);
+    if (action === 'filerInformation') {
+      payload = {
+        mutation: filerInformationMutation,
+        variables: {
+          ...ids,
+          filerInformation: this.getFormattedInformation(formFilerInfo.fields),
+        },
+      };
+    } else if (action === 'issuerInformation') {
+      payload = {
+        mutation: issuerInformationMutation,
+        variables: {
+          ...ids,
+          issuerInformation: this.getFormattedInformation(formIssuerInfo.fields),
+        },
+      };
+    } else if (action === 'offeringInformation') {
+      payload = {
+        mutation: offeringInformationMutation,
+        variables: {
+          ...ids,
+          offeringInformation: this.getFormattedInformation(formOfferingInfo.fields),
+        },
+      };
+    } else if (action === 'annualReport') {
+      payload = {
+        mutation: annualReportMutation,
+        variables: {
+          ...ids,
+          annualReportDisclosureRequirements:
+          this.getFormattedInformation(formAnnualInfo.fields),
+        },
+      };
+    } else if (action === 'signature') {
+      payload = {
+        mutation: signatureMutation,
+        variables: {
+          ...ids,
+          signature: this.getFormattedSignature(formSignatureInfo.fields),
+        },
+      };
+    } else if (action === 'documentList') {
+      payload = {
+        mutation: documentListMutation,
+        variables: {
+          ...ids,
+          documentList: _.map(
+            _.filter(formDocumentInfo.documentList, document => document.checked),
+            document => ({
+              name: document.name,
+              id: document.id,
+            }),
+          ),
+        },
+      };
+    } else if (action === 'xmlSubmission') {
+      uiStore.setProgress();
+      uiStore.setLoaderMessage('Submiting XML submission');
+      payload = {
+        mutation: xmlSubmissionMutation,
+        variables: {
+          ...ids,
+        },
+      };
+    }
+
+    return new Promise((resolve, reject) => {
+      client
+        .mutate(payload)
+        .then(data => resolve(data.data))
+        .catch(error => reject(error));
+    });
   }
 
   /**
-   *
+   * Copy XML submission
    */
-  validateXmlForm = () => {
-    this.validateFilerInfo(businessStore);
-    this.validateIssuerInfo(businessStore);
-    this.validateOfferingInfo(businessStore);
-    this.validateAnnualReportInfo(businessStore);
+  copyXMLInformation = () => {
+    const {
+      filingId,
+      xmlSubmissionId,
+    } = businessStore;
+
+    const payload = {
+      mutation: cloneXmlSubmissionMutation,
+      variables: {
+        filingId,
+        xmlSubmissionId,
+      },
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate(payload)
+        .then(data => resolve(data.data))
+        .catch(error => reject(error));
+    });
   }
 
   /**
@@ -182,8 +268,8 @@ export class Business {
     }
     const params = { field: 'created', sort: 'desc' };
     const payload = {
-      query: `query getBusiness($orderByBusinessFilings:businessfilingOrderBy, $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) { business(id: "${businessId}") { id name description created` +
-        ' filings(orderBy: $orderByBusinessFilings) { filingId filingFolderName businessId created folderId lockedStatus submissions(orderBy: $orderByBusinessFilingSubmission) { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus lockedStatus} } } }',
+      query: `query getBusiness($orderByBusinessFilings:businessfilingOrderBy, $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) { business(id: "${businessId}") { id name description folderId created` +
+        ' filings(orderBy: $orderByBusinessFilings) { filingId filingFolderName businessId created folderId lockedStatus submissions(orderBy: $orderByBusinessFilingSubmission) { xmlSubmissionId created xmlSubmissionDownloadUrl folderName jobStatus xmlSubmissionStatus lockedStatus} } } }',
       variables: { orderByBusinessFilings: params, orderByBusinessFilingSubmission: params },
     };
     ApiService.post(GRAPHQL, payload)
@@ -191,7 +277,7 @@ export class Business {
         this.setBusinessDetails(data.body.data.business);
         _.filter(data.body.data.business.filings, (filing) => {
           _.map(filing.submissions, (submission) => {
-            if (submission.jobStatus === XML_STATUSES.created) {
+            if (submission.xmlSubmissionStatus === XML_STATUSES.created) {
               this.createPoll();
             }
           });
@@ -321,16 +407,14 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching XML Data');
     const payload = {
-      query: 'query fetchFilingSubmission($filingId: ID!, $xmlSubmissionId: ID!)' +
-        '{businessFilingSubmission(filingId:$filingId, xmlSubmissionId:$xmlSubmissionId){ ' +
-        'payload } }',
+      query: getXmlDetails,
       variables: {
         filingId,
         xmlSubmissionId: xmlId,
       },
     };
     ApiService.post(GRAPHQL, payload)
-      .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission.payload))
+      .then(data => this.setXmlPayload(data.body.data.businessFilingSubmission))
       .catch(err => console.log(err));
   }
 
@@ -598,89 +682,216 @@ export class Business {
     businessStore.setDocumentList(list);
   }
 
-  setXmlPayload = (payload) => {
+  setXmlPayload = (data) => {    
     const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
     const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
-    if (payload) {
-      businessStore.setBusinessId(payload.businessId);
-      businessStore.setFilingId(payload.filingId);
-      businessStore.setOfferingUrl(payload.offeringUrl);
-      _.map(payload.filerInformation, (value, key) => {
+    
+    if (data) {      
+      businessStore.setBusinessId(data.businessId);
+      businessStore.setFilingId(data.filingId);
+      businessStore.setXmlSubmissionStatus(data.xmlSubmissionStatus);
+      _.map(data.payload.filerInformation, (value, key) => {
         if (confirmationFlags.includes(key)) {
-          businessStore.setFilerInfo(key, (value || false))
-        } else {
-          businessStore.setFilerInfo(key, (value || ''))
+          businessStore.setFilerInfo(key, (value || false));          
+        }
+        else {
+          businessStore.setFilerInfo(key, (value || ''));
         }
       });
-      _.map(payload.issuerInformation, (value, key) => {
+      _.map(data.payload.issuerInformation, (value, key) => {
         if (dateFields.includes(key)) {
           businessStore.setIssuerInfo(key, moment(value, 'MM-DD-YYYY'));
         } else {
           businessStore.setIssuerInfo(key, (value || ''));
         }
       });
-      _.map(payload.offeringInformation, (value, key) => {
+      _.map(data.payload.offeringInformation, (value, key) => {
         if (dateFields.includes(key)) {
           businessStore.setOfferingInfo(key, moment(value, 'MM-DD-YYYY'));
         } else {
           businessStore.setOfferingInfo(key, (value || ''))
         }
       });
-      _.map(payload.annualReportDisclosureRequirements, (value, key) => {
+      _.map(data.payload.annualReportDisclosureRequirements, (value, key) => {
         businessStore.setAnnualReportInfo(key, (value || ''));
       })
-      _.map(payload.signature, (value, key) => {
+      _.map(data.payload.signature, (value, key) => {
         if (key !== 'signaturePersons') {
           businessStore.setSignatureInfo(key, (value || ''));
         }
       })
+      
       businessStore.setNewPersonalSignature([]);
-      _.map(payload.signature.signaturePersons, (signature) => {
-        const id = this.addPersonalSignature();
-        _.map(signature, (value, key) => {
-          if (dateFields.includes(key)) {
-            businessStore.changePersonalSignature(key, id, moment((value || moment().format('MM-DD-YYYY'))));
-          } else {
-            businessStore.changePersonalSignature(key, id, value);
-          }
-        });
-      })
-      _.map(payload.documentList, document => businessStore.toggleRequiredFiles(document.name))
+      
+      if (data.payload.signature) {        
+         _.map(data.payload.signature.signaturePersons, (signature) => {           
+          const id = this.addPersonalSignature();
+          _.map(signature, (value, key) => {
+            if (dateFields.includes(key)) {
+              businessStore.changePersonalSignature(key, id, moment((value || moment().format('MM-DD-YYYY'))), false);
+            } else {
+              businessStore.changePersonalSignature(key, id, value, false);
+            }
+          });
+        })
+      }
+      
+      if (businessStore.formSignatureInfo.fields.signaturePersons.length === 0) {
+        this.addPersonalSignature();
+      }
+      _.map(data.payload.documentList, document => businessStore.toggleRequiredFiles(document.name, false));
+      this.checkandUpdateValidationStepsStaus();
     }
   }
 
-  validateFilerInfo = ({ filerInformation }) => {
-    const newFiler = validationActions.validateXmlFormData(filerInformation);
+  validateFilerInfo = (filerInformation, setError = true) => {
+    const newFiler = validationActions.validateXmlFormData(filerInformation);    
     const errors = this.newValidationErrors(newFiler);
     businessStore.setFiler(newFiler);
-    businessStore.setXmlError(errors);
+    // check form is valid or not 
+    if (!setError) {
+      if (businessStore.canSubmitFilerInfoXmlForm) {
+        businessStore.setXmlSubStepsStatus('filer', true);
+        businessStore.updateStatusFlag('formFilerInfo', 'meta', true);
+      } else {
+        businessStore.clearFiler();
+      }
+    }
   }
 
-  validateIssuerInfo = ({ issuerInformation }) => {
+  validateIssuerInfo = (issuerInformation, setError = true) => {
     const newIssuer = validationActions.validateXmlFormData(issuerInformation);
     const errors = this.newValidationErrors(newIssuer);
     businessStore.setIssuer(newIssuer);
-    businessStore.setXmlError(errors);
+    // check form is valid or not 
+    if (!setError) {
+      if (businessStore.canSubmitIssuerInfoXmlForm) {      
+        businessStore.setXmlSubStepsStatus('issuer', true);
+        businessStore.updateStatusFlag('formIssuerInfo', 'meta', true);
+      } else {
+        businessStore.clearIssuer();
+      }
+    }
   }
 
-  validateOfferingInfo = ({ offeringInformation }) => {
+  validateOfferingInfo = (offeringInformation, setError = true) => {
     const newOffering = validationActions.validateXmlFormData(offeringInformation);
     const errors = this.newValidationErrors(newOffering);
     businessStore.setOffering(newOffering);
-    businessStore.setXmlError(errors);
+    // check form is valid or not 
+    if (!setError) {
+      if (businessStore.canSubmitOfferingInfoXmlForm) {
+        businessStore.setXmlSubStepsStatus('offering', true);
+        businessStore.updateStatusFlag('formOfferingInfo', 'meta', true);
+      } else {
+        businessStore.clearOffering();
+      }
+    }
   }
 
-  validateAnnualReportInfo = ({ annualReportRequirements }) => {
+  validateAnnualReportInfo = (annualReportRequirements, setError = true) => {
     const newAnnualReport = validationActions.validateXmlFormData(annualReportRequirements);
     const errors = this.newValidationErrors(newAnnualReport);
     businessStore.setAnnualReport(newAnnualReport);
-    businessStore.setXmlError(errors);
+    // check form is valid or not 
+    if (!setError) {
+      if (businessStore.canSubmitAnnualReportXmlForm) {
+        businessStore.setXmlSubStepsStatus('annual', true);
+        businessStore.updateStatusFlag('formAnnualInfo', 'meta', true);
+      } else {
+        businessStore.clearAnnualReport();
+      }
+    }
   }
 
-  newValidationErrors = (data) => {
+  validateSignatureInfo = (signature, setError = true) => {
+    
+    const newSignature = validationActions.validateXmlFormData({
+      issuer: signature.issuer,
+      issuerSignature: signature.issuerSignature,
+      issuerTitle: signature.issuerTitle,
+    });
+       
+    const errors = this.newValidationErrors(newSignature);
+    newSignature['signaturePersons'] = signature.signaturePersons;
+    businessStore.setSignature(newSignature);
+    this.validatePersonSign(signature.signaturePersons, setError);
+  }
+
+  validatePersonSign = (signaturePersons, setError = true) => {
+    let personSignatureData = [];
+    _.map(signaturePersons, (field, index) => {      
+      personSignatureData.push(validationActions.validateXmlFormData({
+        personSignature: field.personSignature,
+        personTitle: field.personTitle,
+        signatureDate: field.signatureDate,
+      }));
+      
+      this.newValidationErrors(personSignatureData, true);      
+      personSignatureData[index].id = field.id;
+    });
+    
+    businessStore.setNewPersonalSignature(personSignatureData);
+
+    if (!setError) {
+      // check form is valid or not 
+      if (businessStore.canSubmitSigntureForm ||
+        _.includes(businessStore.canSubmitSignaturePersonsForm, true)) {
+          businessStore.setXmlSubStepsStatus('signature', true);
+          businessStore.updateStatusFlag('formSignatureInfo', 'meta', true);
+      } else {
+        businessStore.clearSignature();
+      }
+    }
+  }
+
+  validateDocumentList = (documentList, setError = true) => {
+    const documentCount = documentList.length;    
+    let documnetCurrentCount = 0;
+    _.map(documentList, (document) => {
+      if (document.checked === false) {
+        documnetCurrentCount++;
+      }
+    });
+
+    if (documentCount === documnetCurrentCount) {
+      const errorMessage = {
+        documentListError:'Please select at least one document.'
+      };
+      if (setError) {
+        businessStore.setXmlError(errorMessage);
+      }
+      return errorMessage;
+    }    
+  }
+
+  newValidationErrors = (data, isMultiple = false) => {    
     const xmlErrors = { ...businessStore.xmlErrors };
-    const errors = _.mapValues(data, input => input.error);
-    return _.merge(xmlErrors, errors);
+        
+    if (isMultiple) {
+      let errors = {};      
+      _.map(data, (key) => {        
+        errors = _.mapValues(key, input =>  input.error);
+        _.merge(xmlErrors, errors);
+      })      
+      return xmlErrors;
+    } else {
+      const errors = _.mapValues(data, input => input.error);      
+      return _.merge(xmlErrors, errors);
+    }    
+  }
+
+  checkandUpdateValidationStepsStaus = () => {    
+    this.validateFilerInfo(businessStore.formFilerInfo.fields, false);
+    this.validateIssuerInfo(businessStore.formIssuerInfo.fields, false);
+    this.validateOfferingInfo(businessStore.formOfferingInfo.fields, false);
+    this.validateAnnualReportInfo(businessStore.formAnnualInfo.fields, false);
+    this.validateSignatureInfo(businessStore.formSignatureInfo.fields, false);
+    const errorMessage = this.validateDocumentList(businessStore.formDocumentInfo.documentList, false);      
+
+    if (!errorMessage) {
+      businessStore.setXmlSubStepsStatus('doc', true);
+    }   
   }
   // Private Methods ends here
 }
