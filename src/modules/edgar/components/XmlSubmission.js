@@ -5,9 +5,13 @@ import { Accordion, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import _ from 'lodash';
 import DateTimeFormat from './../../../theme/common/DateTimeFormat';
 
+import {
+  XML_STATUSES,
+} from '../../../constants/business';
+
 const XmlSubmission = observer((props) => {
   const { businessId, filingId } = props;
-  const xmlUrl = `/app/business/${businessId}/filing/${filingId}/xml`;
+  const xmlUrl = `/app/edgar/${businessId}/filing/${filingId}/xml`;
   if (!_.isEmpty(props.xmlSubmissions)) {
     return (
       <Accordion.Content active={props.active} key={props.filingId}>
@@ -19,7 +23,7 @@ const XmlSubmission = observer((props) => {
             {
               props.xmlSubmissions.map(xmlSubmission => (
                 <Table.Row key={xmlSubmission.xmlSubmissionId}>
-                  <Table.Cell>
+                  <Table.Cell selectable>
                     <Link to={`${xmlUrl}/${xmlSubmission.xmlSubmissionId}`}>
                       {xmlSubmission.folderName}
                     </Link>
@@ -27,25 +31,40 @@ const XmlSubmission = observer((props) => {
                   <Table.Cell><DateTimeFormat datetime={xmlSubmission.created} /></Table.Cell>
                   <Table.Cell>
                     {
-                      (xmlSubmission.jobStatus === 'COMPLETED')
-                        ? (
-                          <a href={xmlSubmission.xmlSubmissionDownloadUrl} download className="ui button icon link-button">
-                            <Icon className="ns-download" />
-                          </a>
-                        ) : <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
+                      xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed &&
+                      xmlSubmission.xmlSubmissionDownloadUrl &&
+                        <a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" download className="ui button icon link-button">
+                          <Icon name="download" />
+                        </a>
+                    }
+                    {
+                      xmlSubmission.xmlSubmissionStatus === XML_STATUSES.created &&
+                      !xmlSubmission.xmlSubmissionDownloadUrl &&
+                      <a download className="ui button icon link-button"><Icon name="circle notched loading" /></a>
+                    }
+                    {
+                      xmlSubmission.xmlSubmissionStatus === XML_STATUSES.draft &&
+                      <Button
+                        icon
+                        className="link-button disabled"
+                        href={xmlSubmission.xmlSubmissionDownloadUrl}
+                        download
+                      >
+                        <Icon name="download" />
+                      </Button>
                     }
                     <Button
                       icon
                       color={xmlSubmission.lockedStatus === true ? 'red' : 'green'}
-                      className="link-button"
+                      className={xmlSubmission.xmlSubmissionStatus === XML_STATUSES.draft ? 'link-button disabled' : 'link-button active'}
                       entity="lockunlock"
                       refid={filingId}
                       subrefid={xmlSubmission.xmlSubmissionId}
                       lockedstatus={xmlSubmission.lockedStatus}
                       onClick={props.confirmDelete}
                     >
-                      {xmlSubmission.lockedStatus === true && <Icon className="ns-lock" />}
-                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon className="ns-unlock alternate" />}
+                      {xmlSubmission.lockedStatus === true && <Icon name="ns-lock" />}
+                      {(xmlSubmission.lockedStatus === null || xmlSubmission.lockedStatus === false) && <Icon name="ns-unlock alternate" />}
                     </Button>
 
                     <Button
@@ -58,7 +77,7 @@ const XmlSubmission = observer((props) => {
                       subrefid={xmlSubmission.xmlSubmissionId}
                       onClick={props.confirmDelete}
                     >
-                      <Icon className="ns-trash" />
+                      <Icon name="ns-trash" />
                     </Button>
                   </Table.Cell>
                 </Table.Row>

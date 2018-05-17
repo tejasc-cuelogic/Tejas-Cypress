@@ -11,7 +11,7 @@ export const SidebarNav = (props) => {
     ALL_NAV_ITEMS,
     n => n.to !== 'profile-settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
   );
-  const actuals = ['account-details', 'summary', 'users', 'profile-settings'];
+  const actuals = ['account-details', 'summary', 'users', 'profile-settings', 'edgar'];
   return (
     <Aux>
       {
@@ -40,10 +40,11 @@ export const SidebarNav = (props) => {
 
 export const GetNavItem = (item, roles) => {
   const result = _.find(ALL_NAV_ITEMS, i => i.to === item);
+  const link = <h3><Link to={`/app/page/${result.to}`}>{result.title}</Link></h3>;
   return (
-    result && (result.accessibleTo.length === 0 ||
-    _.intersection(result.accessibleTo, roles).length > 0)) ?
-      <h3><Link to={`/app/${result.to}`}>{result.title}</Link></h3> : false;
+    result && (
+      result.accessibleTo.length === 0 ||
+      _.intersection(result.accessibleTo, roles).length > 0)) ? link : false;
 };
 
 export const GetNavMeta = (item) => {

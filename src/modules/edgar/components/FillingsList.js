@@ -23,7 +23,14 @@ const FillingsList = observer((props) => {
                   {filing.filingFolderName}, <DateTimeFormat datetime={filing.created} />
                 </span>
                 <div className="actions">
-                  <Link to={`/app/business/${props.businessId}/edgar/${filing.filingId}`}>
+                  <Link
+                    to={(`${process.env.REACT_APP_BOX_URL}/folder/${filing.folderId}`)}
+                    target="_blank"
+                    className="text-link"
+                  >
+                    Documents
+                  </Link>
+                  <Link to={`/app/edgar/${props.businessId}/edgar/${filing.filingId}`}>
                     View
                   </Link>
                   <Button
