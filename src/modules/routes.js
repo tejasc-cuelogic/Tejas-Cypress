@@ -19,8 +19,9 @@ import Banking from './banking/containers/Banking';
 import Base from './basemodule/Base';
 import Messages from './messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
-import Users from './users/containers/Users';
-import UserDetails from './users/containers/UserDetails';
+import Users from './private/users/containers/Users';
+import UserDetails from './private/users/containers/UserDetails';
+import ProfileSettings from './private/users/containers/ProfileSettings';
 import XmlForm from './business/containers/XmlForm';
 import BusinessDetails from './business/containers/BusinessDetails';
 import Summary from '../modules/summary/containers/Summary';
@@ -191,6 +192,12 @@ export const privateRoutes = [
     path: '/app/account-details/:accountType(individual|ira|entity)',
     exact: false,
     component: AccountDetails,
+    auth: InvestorAuthorization,
+  },
+  {
+    path: '/app/profile-settings',
+    exact: false,
+    component: ProfileSettings,
     auth: InvestorAuthorization,
   },
   {

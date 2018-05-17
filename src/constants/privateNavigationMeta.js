@@ -15,15 +15,15 @@ subPanel => 0: none, 1: subnavigation, 2: has search panel
 export const ALL_NAV_ITEMS = [
   {
     title: 'Settings',
-    to: 'settings',
+    to: 'profile-settings',
     heading: 'Profile Settings',
     subPanel: 1,
     accessibleTo: [],
     subNavigations: [
-      { title: 'Profile Data', to: 'profile-data' },
-      { title: 'Investment limits', to: 'investment-limits' },
-      { title: 'Security', to: 'security' },
-      { title: 'Beneficiaries', to: 'beneficiaries' },
+      { title: 'Profile Data', to: 'profile-data', component: 'ProfileData' },
+      { title: 'Investment limits', to: 'investment-limits', component: 'InvestmentLimits' },
+      { title: 'Security', to: 'security', component: 'Security' },
+      { title: 'Beneficiaries', to: 'beneficiaries', component: 'Beneficiaries' },
     ],
   },
   {

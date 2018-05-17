@@ -2,38 +2,6 @@
         Global Overrides
 *******************************/
 
-// @font-face {
-// 	font-family: 'SF Pro Display Regular';
-// 	src: @fallbackSRCRegular;
-// 	src: @srcRegular;
-// 	font-style: normal;
-// 	font-weight: 400;
-// }
-
-// @font-face {
-// 	font-family: 'SF Pro Display Medium';
-// 	src: @fallbackSRCMedium;
-// 	src: @srcMedium;
-// 	font-style: normal;
-// 	font-weight: 500;
-// }
-
-// @font-face {
-// 	font-family: 'SF Pro Display Bold';
-// 	src: @fallbackSRCBold;
-// 	src: @srcBold;
-// 	font-style: normal;
-// 	font-weight: 700;
-// }
-
-// @font-face {
-// 	font-family: 'SF Pro Display Heavy';
-// 	src: @fallbackSRCHeavy;
-// 	src: @srcHeavy;
-// 	font-style: normal;
-// 	font-weight: 900;
-// }
-
 .content-wrapper{
 	min-height:~"calc(100vh - 58px)";
 }
@@ -50,10 +18,10 @@
 .content-spacer{
 	position:relative;
 	padding:@30px @40px;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+	@media only screen and (max-width : @largestSmallMonitor){
 		padding:@20px;
 	}
-	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
 	}
 }
@@ -79,10 +47,10 @@
 .webcontent-spacer{
 	// padding:@40px @70px @14px;
 	padding:@20px @40px;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+	@media only screen and (max-width : @largestSmallMonitor){
 		padding:@20px;
 	}
-	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
 	}
 }
@@ -148,6 +116,12 @@ h6{
 	color:@quaternary-text;
 	margin-bottom:@28px;
 }
+a.link{
+	color:@link-color;
+	&:hover{
+		color:darken(@link-color, 10%);
+	}
+}
 //	Admin Page Content Styles	//
 
 //	Page Header Styles
@@ -156,19 +130,21 @@ h6{
 	background-color:@secondary-text;
 	position:relative;
 	padding:@20px @40px;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+	@media only screen and (max-width : @largestSmallMonitor){
 		min-height:auto;
 		padding:@20px;
 	}
-	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
 	}
-	h1{
-		// @include fontBold;
+	h1.ui.header{
 		font-size:@30px;
 		line-height:@42px;
 		color:@inverse-text;
-		// font-weight: bold;
+		@media only screen and (max-width : @largestSmallMonitor){
+			font-size:@16px;
+			line-height:@22px;
+		}
 		a.back-link{
 			position:absolute;
 			left:-15px;
@@ -214,9 +190,12 @@ h6{
 		display:block;
 		float:right;
 		height:42px;
-		padding:10px 0;
+		// padding:10px 0;
 		margin-left:@30px;
 		cursor:pointer;
+		@media only screen and (max-width : @largestSmallMonitor){
+			height:22px;
+		}
 		.icon{
 			font-size:@22px;
 			color:@tertiary-text;
@@ -245,10 +224,10 @@ h6{
 .search-filters{
 	background-color:@tertiary-text;
 	padding:@14px @40px;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+	@media only screen and (max-width : @largestSmallMonitor){
 		padding:@7px @20px @14px;
 	}
-	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+	@media only screen and (max-width : @largestMobileScreen){
 		padding:@7px @10px @14px;
 	}
 	// &.webcontent-spacer{
@@ -267,18 +246,26 @@ h6{
 .secondary-menu{
 	background-color:@tertiary-text;
 	padding:0 @40px;
+	@media only screen and (max-width : @largestLargeMonitor){
+		padding:0 @20px;
+	}
+	@media only screen and (max-width : @largestMobileScreen){
+		padding:0 @10px;
+	}
 }
 
 .top-cta-section{
 	height:104px;
+	padding:@20px @40px;
 	margin-bottom:@50px;
 	background:@tertiary-text;
 	.sticky-notification{
 		position:relative;
 		width:50%;
-		left:@40px;
-		top:@30px;
 		z-index:9;
+		@media only screen and (max-width : @largestLargeMonitor){
+			width:100%;
+		}
 	}
 }
 
@@ -492,7 +479,7 @@ a.disabled, a.disabled:hover, a.disabled:focus{
 
 // dl dt horizontal
 dl.dl-horizontal{
-	margin:0;
+	margin:0 0 @30px;
 	dt{
 		float:left;
 		width:170px;

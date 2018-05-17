@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
 import { DropdownFilter, DateRangeFilter, AppliedFilters } from './widgets/Filters';
-import { FILTER_META } from './../../../constants/user';
+import { FILTER_META } from './../../../../constants/user';
 // import { FormInput } from '../../../theme/form/FormElements';
 
 // const zipCode = {

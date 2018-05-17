@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Grid, List, Icon, Menu, Responsive } from 'semantic-ui-react';
-import { USER_DETAIL_SECTIONS } from '../../../constants/user';
+import { USER_DETAIL_SECTIONS } from '../../../../constants/user';
 
 const userModuleSubheader = props => (
   <div>

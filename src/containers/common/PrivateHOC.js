@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Grid, Button, Icon, Responsive } from 'semantic-ui-react';
+import { Header, Button, Icon, Responsive } from 'semantic-ui-react';
 import { GetNavMeta } from '../../theme/layout/SidebarNav';
 import SecondaryMenu from '../../theme/layout/SecondaryMenu';
 
@@ -17,7 +17,25 @@ class PrivateHOC extends Component {
       <Aux>
         <div>
           <div className="page-header-section">
-            <Grid>
+            <Header as="h1">
+              <div className="pull-right">
+                <span className="item notification">
+                  <Icon className="ns-bell" />
+                  <span className="unread-count">3</span>
+                </span>
+                {roles.includes('investor') &&
+                  <Responsive
+                    {...Responsive.onlyLargeScreen}
+                    as={Button}
+                    content="Invest Now"
+                    primary
+                    floated="right"
+                  />
+                }
+              </div>
+              {pageMeta.heading || pageMeta.title}
+            </Header>
+            {/* <Grid>
               <Grid.Row>
                 <Grid.Column width={6}>
                   <h1>{pageMeta.heading || pageMeta.title}</h1>
@@ -28,11 +46,13 @@ class PrivateHOC extends Component {
                     <span className="unread-count">3</span>
                   </span>
                   {roles.includes('investor') &&
-                    <Button primary floated="right">Invest Now</Button>
+                    <Responsive minWidth={1025}>
+                      <Button primary floated="right">Invest Now</Button>
+                    </Responsive>
                   }
                 </Grid.Column>
               </Grid.Row>
-            </Grid>
+            </Grid> */}
           </div>
           {this.props.StickyNotification &&
             <div className="top-cta-section">
