@@ -12,11 +12,12 @@ const states = {
   error: undefined,
 };
 
-@inject('userDetailsStore', 'userStore', 'profileStore')
+@inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore')
 @observer
 export default class ProfileData extends Component {
   componentWillMount() {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+    this.props.profileStore.setProfileInfo(this.props.userStore.currentUser);
   }
   render() {
     const { email, legalDetails } = this.props.userDetailsStore.userDetails;
@@ -35,23 +36,27 @@ export default class ProfileData extends Component {
                       name={field}
                       value={updateProfileInfo.fields[field].value}
                       fielddata={updateProfileInfo.fields[field]}
-                      onChange={updateProfileInfoChange}
+                      changed={updateProfileInfoChange}
                     />
                   ))}
                 </Form.Group>
                 <MaskedInput
-                  action={{ color: 'green', className: 'link-button', content: 'Change' }}
-                  // value={updateProfileInfo.fields.phoneNumber.value}
+                  action
+                  actionlabel="Change"
+                  actionclass="link-button"
+                  actioncolor="green"
                   name="phoneNumber"
                   fielddata={updateProfileInfo.fields.phoneNumber}
                   mask="999-999-9999"
-                  onChange={updateProfileInfoChange}
+                  changed={updateProfileInfoChange}
                 />
                 <FormInput
-                  action={{ color: 'green', className: 'link-button', content: 'Change' }}
+                  action={{
+                    color: 'green', className: 'link-button', content: 'Change', onClick: () => this.props.uiStore.setAuthWizardStep('ConfirmEmailAddress'),
+                }}
                   name="email"
                   fielddata={updateProfileInfo.fields.email}
-                  onChange={updateProfileInfoChange}
+                  changed={updateProfileInfoChange}
                 />
                 <Header as="h4">Mailing Address</Header>
                 <Form.Input fluid label="Residendial Street" placeholder="Residendial Street" value="123, East Street, Place" />

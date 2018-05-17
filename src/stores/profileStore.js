@@ -270,11 +270,18 @@ export class ProfileStore {
    * @desc Handle function for update profile info change.
    */
   @action
-  updateprofileInfoChange = (e, result) => {
+  updateProfileInfoChange = (e, result) => {
     const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
     const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
     this.onFieldChange('updateProfileInfo', fieldName, fieldValue);
   };
+
+  @action
+  setProfileInfo = (currentUser) => {
+    this.onFieldChange('updateProfileInfo', 'firstName', currentUser.givenName);
+    this.onFieldChange('updateProfileInfo', 'lastName', currentUser.familyName);
+    this.onFieldChange('updateProfileInfo', 'email', currentUser.email);
+  }
 
   simpleErr = err => ({
     statusCode: err.statusCode,

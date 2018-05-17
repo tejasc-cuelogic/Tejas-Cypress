@@ -5,7 +5,6 @@ import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react
 
 import validationActions from '../../../actions/validation';
 import authActions from '../../../actions/auth';
-import FieldError from '../../../theme/common/FieldError';
 import { FormInput } from '../../../theme/form/FormElements';
 import ListErrors from '../../../theme/common/ListErrors';
 
@@ -36,7 +35,7 @@ export default class ConfirmEmailAddress extends Component {
     const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open onClose={() => this.props.setAuthWizardStep()}>
+      <Modal size="mini" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your email address</Header>
           <Divider />
@@ -67,7 +66,6 @@ export default class ConfirmEmailAddress extends Component {
               maxLength={6}
               changed={this.handleInputChange}
             />
-            <FieldError error={values.code.error} />
             <div className="center-align">
               <Button primary size="large" className="very relaxed" loading={this.props.uiStore.inProgress} disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>

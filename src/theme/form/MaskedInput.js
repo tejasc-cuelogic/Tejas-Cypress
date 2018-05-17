@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon } from 'semantic-ui-react';
+import { Form, Popup, Icon, Button } from 'semantic-ui-react';
 import InputMask from 'react-input-mask';
 import FieldError from '../common/FieldError';
 
@@ -21,14 +21,29 @@ const MaskedInput = observer((props) => {
           />
         }
       </label>
-      <InputMask
-        {...props}
-        value={value}
-        onChange={props.changed}
-        error={!!error}
-        alwaysShowMask
-        maskChar=" "
-      />
+      {props.action ?
+        <div className="ui action input">
+          <InputMask
+            {...props}
+            value={value}
+            onChange={props.changed}
+            error={!!error}
+            alwaysShowMask
+            maskChar=" "
+          />
+          <Button className={props.actionclass} color={props.actioncolor}>
+            {props.actionlabel}
+          </Button>
+        </div> :
+        <InputMask
+          {...props}
+          value={value}
+          onChange={props.changed}
+          error={!!error}
+          alwaysShowMask
+          maskChar=" "
+        />
+      }
       {error &&
         <FieldError error={error} />
       }
