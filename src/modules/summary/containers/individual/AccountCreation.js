@@ -16,6 +16,9 @@ const steps =
 @inject('individualAccountStore')
 @observer
 export default class AccountCreation extends React.Component {
+  componentWillUnmount() {
+    this.props.individualAccountStore.setStepToBeRendered(0);
+  }
   render() {
     return (
       <div className="step-progress">

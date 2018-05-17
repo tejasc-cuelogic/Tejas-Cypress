@@ -22,17 +22,3 @@
 	padding-left: 20px;
 	padding-top: 5px;
 } */
-
-.recharts-wrapper tspan {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.chartLegends li {
-	font-size: 30px;
-}
-
-.chartLegends li span {
-	font-size: 16px;
-	color: #000;
-}
