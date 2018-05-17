@@ -11,6 +11,7 @@ import userStore from './userStore';
 import Helper from '../helper/utility';
 
 import {
+  UPDATE_PROFILE_INFO,
   VERIFY_IDENTITY_STEP_01,
   VERIFY_IDENTITY_STEP_04,
   CONFIRM_IDENTITY_DOCUMENTS,
@@ -26,6 +27,8 @@ export class ProfileStore {
   @observable verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
 
   @observable confirmIdentityDocuments = { ...CONFIRM_IDENTITY_DOCUMENTS };
+
+  @observable updateProfileInfo = { fields: { ...UPDATE_PROFILE_INFO }, meta: { isValid: false, error: '' } };
 
   @action loadProfile(username) {
     uiStore.setProgress(true);
@@ -262,6 +265,16 @@ export class ProfileStore {
         });
     });
   }
+
+  /**
+   * @desc Handle function for update profile info change.
+   */
+  @action
+  updateprofileInfoChange = (e, result) => {
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('updateProfileInfo', fieldName, fieldValue);
+  };
 
   simpleErr = err => ({
     statusCode: err.statusCode,
