@@ -479,7 +479,10 @@ a.disabled, a.disabled:hover, a.disabled:focus{
 
 // dl dt horizontal
 dl.dl-horizontal{
-	margin:0 0 @30px;
+	margin:0;
+	&:not(:last-child){
+		margin-bottom:@30px;
+	}
 	dt{
 		float:left;
 		width:170px;

@@ -281,7 +281,7 @@
 
 /*---  Colors  ---*/
 @red              : @highlight-primary;
-@orange           : #F2711C;
+@orange           : @highlight-secondary;
 @yellow           : #FBBD08;
 @olive            : #B5CC18;
 @green            : @theme-primary;

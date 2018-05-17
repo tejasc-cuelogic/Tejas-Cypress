@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import { Header, Card, Grid, Form } from 'semantic-ui-react';
 import { FillTable } from '../../../../theme/table/NSTable';
-import { DateRangeFilter, DropdownFilter } from '../../../users/components/widgets/Filters';
+import { DateRangeFilter, DropdownFilter } from '../../users/components/widgets/Filters';
 import { TRANSACTION_TYPES } from './../../../../constants/user';
 
 const result = {

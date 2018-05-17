@@ -34,14 +34,10 @@ const userBeneficiaries = () => {
                       </dl>
                     </Card.Content>
                     <Card.Content>
-                      <Grid columns="equal">
-                        <Grid.Column>
-                          <Button fluid inverted color="green">Approve</Button>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Button fluid inverted color="red">Decline</Button>
-                        </Grid.Column>
-                      </Grid>
+                      <Button.Group fluid>
+                        <Button inverted color="green">Approve</Button>
+                        <Button inverted color="red">Decline</Button>
+                      </Button.Group>
                     </Card.Content>
                   </Grid.Column>
                 </Grid.Row>
