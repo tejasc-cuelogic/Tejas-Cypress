@@ -111,7 +111,7 @@
     }
     [class*="horizontally padded"].ui.grid{
         .content{
-            padding:@14px;
+            padding:@21px;
             margin:0 -@14px;
             &:not(:last-child){
                 border-bottom:@border-light 1px solid;
