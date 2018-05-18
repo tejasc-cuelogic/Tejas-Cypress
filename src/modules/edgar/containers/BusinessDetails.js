@@ -20,7 +20,7 @@ export default class BusinessDetails extends React.Component {
 
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
 
-  handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`);
+  handleNewFiling = () => this.props.history.push(`/app/edgar/${this.props.match.params.businessId}/edgar`);
 
   editBusinessModal = () => {
     this.props.businessStore.setEditBusinessMode(true);
