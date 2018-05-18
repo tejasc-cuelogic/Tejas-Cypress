@@ -20,7 +20,8 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.profileStore.confirmPhoneNumber().then(() => {
       Helper.toast('Phone number is confirmed.', 'success');
       this.props.setDashboardWizardStep();
-    });
+    })
+      .catch(() => {});
   }
 
   handleChangePhoneNumber = () => {

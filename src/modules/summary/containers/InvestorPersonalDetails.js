@@ -35,7 +35,8 @@ export default class investorPersonalDetails extends Component {
         Helper.toast('User verification hard-failed!', 'error');
         this.props.setDashboardWizardStep('ConfirmIdentityDocuments');
       }
-    });
+    })
+      .catch(() => { });
   }
 
   render() {
