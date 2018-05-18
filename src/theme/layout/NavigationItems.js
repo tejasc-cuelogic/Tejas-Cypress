@@ -44,7 +44,7 @@ const navigationItems = props => (
       <Menu.Menu position="right">
         <Menu.Item as={NavLink} to="/offerings" activeClassName="active" >Browse Deals</Menu.Item>
         <Menu.Item as={NavLink} to="/invest">For Investers</Menu.Item>
-        <Menu.Item as={NavLink} to="/app/business">For Businesses</Menu.Item>
+        <Menu.Item as={NavLink} to="/business">For Businesses</Menu.Item>
         <Dropdown item simple text="Learn">
           <Dropdown.Menu>
             <Dropdown.Item as={NavLink} to="/about/team" >Team</Dropdown.Item>
