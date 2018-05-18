@@ -12,7 +12,7 @@ import {
 class IraAccountStore {
   @observable
   formFinInfo = {
-    fields: { ...IRA_FIN_INFO }, meta: { isValid: true, error: '' },
+    fields: { ...IRA_FIN_INFO }, meta: { isValid: false, error: '' },
   };
 
   @observable
@@ -27,7 +27,7 @@ class IraAccountStore {
 
   @observable
   formIdentity = {
-    fields: { ...IRA_IDENTITY }, meta: { isValid: true, error: '' },
+    fields: { ...IRA_IDENTITY }, meta: { isValid: false, error: '' },
   }
 
   @action
@@ -50,8 +50,8 @@ class IraAccountStore {
     let uploadedFile = '';
     if (typeof files !== 'undefined' && files.length) {
       uploadedFile = files[0].name;
-      this.onFieldChange('formIdentity', name, uploadedFile);
     }
+    this.onFieldChange('formIdentity', name, uploadedFile);
   };
 
   @action
@@ -65,6 +65,11 @@ class IraAccountStore {
     this[form].meta.isValid = validation.passes();
     this[form].fields[field].error = validation.errors.first(field);
   };
+
+  // @computed
+  // get isValidIraForm() {
+  //   return this.formFinInfo.meta.isValid && this.formAccTypes.meta.isValid
+  // }
 }
 
 export default new IraAccountStore();

@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { Header, Table, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import Helper from '../../../../helper/utility';
 
 @inject('iraAccountStore')
 @observer
 export default class Summary extends Component {
   render() {
-    const { formFinInfo, formAccTypes, formFunding } = this.props.iraAccountStore;
+    const {
+      formFinInfo,
+      formAccTypes,
+      formFunding,
+      formIdentity,
+    } = this.props.iraAccountStore;
     const accountType = _.find(
       formAccTypes.fields.accountType.values,
       { value: formAccTypes.fields.accountType.value },
@@ -35,17 +41,22 @@ export default class Summary extends Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your networth</b></Table.Cell>
-                    <Table.Cell>{formFinInfo.fields.networth.value !== '' ? `$${formFinInfo.fields.networth.value}` : ''}</Table.Cell>
+                    <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.networth.value ?
+                      formFinInfo.fields.networth.value : 0)}
+                    </Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your annual income</b></Table.Cell>
-                    <Table.Cell>{formFinInfo.fields.annualIncome.value !== '' ? `$${formFinInfo.fields.annualIncome.value}` : ''}</Table.Cell>
+                    <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.annualIncome.value ?
+                      formFinInfo.fields.annualIncome.value : 0)}
+                    </Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Drivers licence</b></Table.Cell>
                     <Table.Cell>
-                      <span className="positive-text"><b>Uploaded</b></span>
-                      <span className="negative-text"><b>Not Uploaded</b></span>
+                      {formIdentity.fields.driversLicence.value ?
+                        <span className="positive-text"><b>Uploaded</b></span> :
+                        <span className="negative-text"><b>Not Uploaded</b></span>}
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>

@@ -278,6 +278,7 @@ export const IRA_FIN_INFO = {
     rule: 'required|numeric',
     label: 'Your networth',
     placeHolder: 'Your networth',
+    maxLength: 15,
   },
   annualIncome: {
     value: '',
@@ -285,6 +286,7 @@ export const IRA_FIN_INFO = {
     rule: 'required|numeric',
     label: 'Your annual income',
     placeHolder: 'Your annual income',
+    maxLength: 15,
   },
 };
 
