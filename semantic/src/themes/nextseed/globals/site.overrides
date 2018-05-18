@@ -485,11 +485,11 @@ dl.dl-horizontal{
 	}
 	dt{
 		float:left;
-		width:170px;
+		width:150px;
 		font-weight:700;
 	}
 	dd{
-		margin-left:180px;
+		margin-left:150px;
 		margin-bottom:@10px;
 		color:@quaternary-text;
 		&:last-of-type{

@@ -14,9 +14,9 @@ export default class InvestmentLimits extends Component {
         <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis</p>
         <Grid columns={1} stackable>
           <Grid.Row>
-            <Grid.Column width={8}>
+            <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
               <Card fluid>
-                <Grid divided padded="horizontally">
+                <Grid stackable celled="internally" padded="horizontally">
                   <Grid.Row>
                     <Grid.Column width={6}>
                       <Card.Content>
@@ -69,7 +69,7 @@ export default class InvestmentLimits extends Component {
         <p className="intro-text">Aliquam erat ac ipsum. Integer aliquam purus. Quisque lorem tortor fringilla sed, vestibulum ideoso</p>
         <Grid columns={1} stackable>
           <Grid.Row>
-            <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
+            <Grid.Column widescreen={6} largeScreen={8} computer={13} tablet={16} mobile={16}>
               <Card fluid>
                 <Card.Content>
                   <Header as="h3">Are you accredited investor?</Header>

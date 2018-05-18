@@ -12,7 +12,7 @@ export default class Beneficiaries extends Component {
         <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis</p>
         <Grid columns={1} stackable>
           <Grid.Row>
-            <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
+            <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
               <Card fluid>
                 <Card.Content>
                   <Header as="h3">You have no beneficiaries yet</Header>
@@ -26,9 +26,9 @@ export default class Beneficiaries extends Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column widescreen={8} largeScreen={8} computer={10} tablet={13} mobile={16}>
+            <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
               <Card fluid>
-                <Grid divided padded="horizontally">
+                <Grid stackable celled="internally" padded="horizontally">
                   <Grid.Row>
                     <Grid.Column width={8}>
                       <Card.Content>
@@ -59,7 +59,7 @@ export default class Beneficiaries extends Component {
                 </Grid>
               </Card>
               <Card fluid>
-                <Grid divided padded="horizontally">
+                <Grid stackable celled="internally" padded="horizontally">
                   <Grid.Row>
                     <Grid.Column width={8}>
                       <Card.Content>
