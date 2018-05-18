@@ -11,9 +11,9 @@ import ListErrors from '../../../theme/common/ListErrors';
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
-  componentWillUnmount() {
-    this.props.uiStore.clearErrors();
-  }
+  // componentWillUnmount() {
+  //   this.props.uiStore.clearErrors();
+  // }
 
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
@@ -51,7 +51,7 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Content className="signup-content center-align">
           {errors &&
             <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
+              <ListErrors errors={[errors]} />
             </Message>
           }
           <MaskedInput
