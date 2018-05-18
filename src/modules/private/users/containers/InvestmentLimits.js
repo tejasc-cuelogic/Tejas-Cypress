@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
 import { Card, Statistic, Popup, Icon, Grid, Header, Form, Button, Divider } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form/FormElements';
+import VerifyAccreditation from './VerifyAccreditation';
 
 @inject('profileStore')
 @observer
@@ -10,6 +11,7 @@ export default class InvestmentLimits extends Component {
   render() {
     return (
       <div>
+        <Route exact path={`${this.props.match.url}/verify-accreditation`} component={VerifyAccreditation} />
         <Header as="h3">Regulation Crowdfunding Limits</Header>
         <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis</p>
         <Grid columns={1} stackable>
@@ -76,7 +78,7 @@ export default class InvestmentLimits extends Component {
                   <p>Verify your accreditation now</p>
                   <Divider hidden />
                   <Card.Description>
-                    <Button as={Link} to={`${this.props.match.url}/add-beneficiaries`} primary content="Verify accreditation" />
+                    <Button as={Link} to={`${this.props.match.url}/verify-accreditation`} primary content="Verify accreditation" />
                   </Card.Description>
                 </Card.Content>
               </Card>
