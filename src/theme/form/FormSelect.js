@@ -16,7 +16,7 @@ const FormSelect = observer((props) => {
     width = props.containerwidth;
   }
   return (
-    <Form.Field {...width}>
+    <Form.Field width={width}>
       <label>
         {label}
         {props.tooltip &&
