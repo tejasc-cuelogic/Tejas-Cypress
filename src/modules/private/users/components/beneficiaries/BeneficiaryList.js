@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Grid, Button, Header } from 'semantic-ui-react';
+import { Card, Grid, Button } from 'semantic-ui-react';
 import DateTimeFormat from '../../../../../theme/common/DateTimeFormat';
 
+const statuses = ['Rejected', 'Pending Approval', 'Approved'];
 const BeneficiaryList = props => (
   <Grid.Row>
-    <Grid.Column widescreen={9} largeScreen={9} computer={10} tablet={13} mobile={16}>
+    <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
       {
         props.beneficiaries.map(b => (
           <Card fluid>
@@ -33,8 +34,15 @@ const BeneficiaryList = props => (
                     </dl>
                   </Card.Content>
                   <Card.Content>
-                    <Header as="h6" color="orange">Pending Approval</Header>
-                    <Button as="h6" onClick={() => props.delete(b.id)} color="red">Remove Beneficiary</Button>
+                    <span as="h2" color="orange">{statuses[(b.status + 1)]}</span>
+                    <Button
+                      size="mini"
+                      color="red"
+                      className={`ghost-button ${props.deleting === b.id ? 'loading' : ''}`}
+                      onClick={() => props.delete(b.id)}
+                    >
+                        Remove Beneficiary
+                    </Button>
                   </Card.Content>
                 </Grid.Column>
               </Grid.Row>

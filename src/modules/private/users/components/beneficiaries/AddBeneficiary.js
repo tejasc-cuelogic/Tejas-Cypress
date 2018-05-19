@@ -4,7 +4,7 @@ import { Modal, Header, Divider, Form, Button } from 'semantic-ui-react';
 import { FormInput, AutoComplete, FormDatePicker } from '../../../../../theme/form/FormElements';
 import Helper from '../../../../../helper/utility';
 
-@inject('userDetailsStore')
+@inject('userDetailsStore', 'uiStore')
 @observer
 export default class AddBeneficiary extends Component {
   handleCloseModal = (e) => {
@@ -82,7 +82,7 @@ export default class AddBeneficiary extends Component {
               }
             </Form.Group>
             <div className="center-align">
-              <Button disabled={!BENEFICIARY_META.meta.isValid} size="large" color="green" className="very relaxed">Submit to approval</Button>
+              <Button loading={this.props.uiStore.inProgress} disabled={!BENEFICIARY_META.meta.isValid} size="large" color="green" className="very relaxed">Submit to approval</Button>
             </div>
           </Form>
         </Modal.Content>

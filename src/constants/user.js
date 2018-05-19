@@ -1,4 +1,4 @@
-import moment from 'moment';
+// import moment from 'moment';
 
 export const USER_ROLES = ['admin', 'bowner', 'investor'];
 export const USER_TYPES_META = [
@@ -87,7 +87,7 @@ export const BENEFICIARY_FRM = {
     rule: 'required',
   },
   dob: {
-    value: moment(),
+    value: null,
     label: 'Date of Birth',
     error: undefined,
     rule: 'required',

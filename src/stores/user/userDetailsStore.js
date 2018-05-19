@@ -4,6 +4,7 @@ import graphql from 'mobx-apollo';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../services/graphql';
+import uiStore from '../uiStore';
 import { BENEFICIARY_FRM } from '../../constants/user';
 import { userDetailsQuery } from '../queries/users';
 import { allBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../queries/beneficiaries';
@@ -14,6 +15,7 @@ export class UserDetailsStore {
   @observable beneficiariesData = [];
   @observable editCard = 0;
   @observable BENEFICIARY_META = { fields: { ...BENEFICIARY_FRM }, meta: { isValid: false, error: '' } };
+  @observable deleting = 0;
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
@@ -50,6 +52,10 @@ export class UserDetailsStore {
     });
   }
 
+  @action beneficiaryReset = () => {
+    this.BENEFICIARY_META = { fields: { ...BENEFICIARY_FRM }, meta: { isValid: false, error: '' } };
+  }
+
   @computed get beneficiaries() {
     return (this.beneficiariesData.data
       && this.beneficiariesData.data.allBeneficiaries
@@ -68,6 +74,7 @@ export class UserDetailsStore {
   @action
   createBeneficiary = () => {
     const beneficiary = mapValues(this.BENEFICIARY_META.fields, f => f.value);
+    uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -84,19 +91,23 @@ export class UserDetailsStore {
           },
           refetchQueries: [{ query: allBeneficiaries }],
         })
-        .then((data) => {
-          console.log(data);
-          resolve();
-        })
-        .catch((err) => {
-          console.log(err);
-          reject();
+        .then(() => resolve())
+        .catch(() => reject())
+        .finally(() => {
+          this.beneficiaryReset();
+          uiStore.setProgress(false);
         });
     });
   }
 
   @action
-  deleteBeneficiary = id =>
+  setDelStatus = (status) => {
+    this.deleting = status;
+  }
+
+  @action
+  deleteBeneficiary = (id) => {
+    this.deleting = id;
     client
       .mutate({
         mutation: deleteBeneficiary,
@@ -104,7 +115,9 @@ export class UserDetailsStore {
         refetchQueries: [{ query: allBeneficiaries }],
       })
       .then(() => Helper.toast('Beneficiary deleted!', 'success'))
-      .catch(error => Helper.toast(`Error while deleting Beneficiary- ${error}`, 'warn'));
+      .catch(error => Helper.toast(`Error while deleting Beneficiary- ${error}`, 'warn'))
+      .finally(() => this.setDelStatus(0));
+  }
 
   @action
   beneficiaryEleChange = (e, result) => {

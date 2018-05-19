@@ -15,24 +15,28 @@ export default class Beneficiaries extends Component {
 
   render() {
     const {
-      beneficiaries, bLoading, bErr, deleteBeneficiary,
+      beneficiaries, bLoading, bErr, deleteBeneficiary, deleting,
     } = this.props.userDetailsStore;
     return (
       <div>
         <Route exact path={`${this.props.match.url}/add-beneficiary`} render={props => <AddBeneficiary refLink={this.props.match.url} {...props} />} />
         <Header as="h3">Beneficiaries</Header>
         <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis</p>
-        <Grid columns={1} stackable>
-          {(bErr || (!bLoading && beneficiaries.length === 0)) ?
-            <NoBeneficiary match={this.props.match} /> :
-            <BeneficiaryList
-              match={this.props.match}
-              delete={deleteBeneficiary}
-              beneficiaries={beneficiaries}
-              loading={bLoading}
-            />
-          }
-        </Grid>
+        {bLoading ? <div>loading...</div> : (
+          <Grid columns={1} stackable>
+            {(bErr || beneficiaries.length === 0) ?
+              <NoBeneficiary match={this.props.match} /> :
+              <BeneficiaryList
+                match={this.props.match}
+                delete={deleteBeneficiary}
+                beneficiaries={beneficiaries}
+                deleting={deleting}
+                loading={bLoading}
+              />
+            }
+          </Grid>
+          )
+        }
       </div>
     );
   }

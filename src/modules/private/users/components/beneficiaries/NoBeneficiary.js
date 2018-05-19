@@ -4,7 +4,7 @@ import { Card, Grid, Button, Header, Divider } from 'semantic-ui-react';
 
 const NoBeneficiary = props => (
   <Grid.Row>
-    <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
+    <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
       <Card fluid>
         <Card.Content>
           <Header as="h3">You have no beneficiaries yet</Header>
