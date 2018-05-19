@@ -11,7 +11,7 @@ const NoBeneficiary = props => (
           <p>Add your first beneficiary and lorem ipsum dolor sit amet lorem ipsum dolor</p>
           <Divider hidden />
           <Card.Description>
-            <Button as={Link} to={`${props.match.url}/add-beneficiaries`} primary content="Add new beneficiary" />
+            <Button as={Link} to={`${props.match.url}/add-beneficiary`} primary content="Add new beneficiary" />
           </Card.Description>
         </Card.Content>
       </Card>

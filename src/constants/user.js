@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const USER_ROLES = ['admin', 'bowner', 'investor'];
 export const USER_TYPES_META = [
   {
@@ -69,3 +71,55 @@ export const TRANSACTION_TYPES = [
   { text: 'Accured', value: 'Accured' },
   { text: 'Referral Credits', value: 'ReferralCredits' },
 ];
+
+
+export const BENEFICIARY_FRM = {
+  firstName: {
+    value: '',
+    label: 'First name',
+    error: undefined,
+    rule: 'required',
+  },
+  lastName: {
+    value: '',
+    label: 'Last Name',
+    error: undefined,
+    rule: 'required',
+  },
+  dob: {
+    value: moment(),
+    label: 'Date of Birth',
+    error: undefined,
+    rule: 'required',
+  },
+  relationship: {
+    value: '',
+    label: 'Relationship to Account Holder',
+    error: undefined,
+    rule: 'required',
+  },
+  residentalStreet: {
+    value: '',
+    label: 'Residental Street',
+    error: undefined,
+    rule: 'required',
+  },
+  city: {
+    value: '',
+    label: 'City',
+    error: undefined,
+    rule: 'required',
+  },
+  state: {
+    value: '',
+    label: 'State',
+    error: undefined,
+    rule: 'required',
+  },
+  zipCode: {
+    value: '',
+    label: 'Zip Code',
+    error: undefined,
+    rule: 'required|numeric',
+  },
+};

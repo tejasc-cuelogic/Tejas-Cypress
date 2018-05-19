@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Grid, Button, Header } from 'semantic-ui-react';
+import DateTimeFormat from '../../../../../theme/common/DateTimeFormat';
 
 const BeneficiaryList = props => (
   <Grid.Row>
-    <Grid.Column widescreen={8} largeScreen={8} computer={10} tablet={13} mobile={16}>
+    <Grid.Column widescreen={9} largeScreen={9} computer={10} tablet={13} mobile={16}>
       {
         props.beneficiaries.map(b => (
           <Card fluid>
@@ -14,11 +15,11 @@ const BeneficiaryList = props => (
                   <Card.Content>
                     <dl className="dl-horizontal">
                       <dt>Names</dt>
-                      <dd>{b.firstName}</dd>
+                      <dd>{`${b.firstName} ${b.lastName}`}</dd>
                       <dt>DOB</dt>
-                      <dd>12-02-1961</dd>
+                      <dd><DateTimeFormat datetime={b.dob} /></dd>
                       <dt>Relationship</dt>
-                      <dd>Wife</dd>
+                      <dd>{b.relationship}</dd>
                     </dl>
                   </Card.Content>
                 </Grid.Column>
@@ -26,13 +27,14 @@ const BeneficiaryList = props => (
                   <Card.Content>
                     <dl className="dl-horizontal">
                       <dt>Legal Address</dt>
-                      <dd>Baker Street 221B<br />
-                        New York, NY, 1001
+                      <dd>
+                        {`${b.residentalStreet}`}<br />{`${b.city} ${b.state} ${b.zipCode}`}
                       </dd>
                     </dl>
                   </Card.Content>
                   <Card.Content>
                     <Header as="h6" color="orange">Pending Approval</Header>
+                    <Button as="h6" onClick={() => props.delete(b.id)} color="red">Remove Beneficiary</Button>
                   </Card.Content>
                 </Grid.Column>
               </Grid.Row>
@@ -40,7 +42,7 @@ const BeneficiaryList = props => (
           </Card>
         ))
       }
-      <Button as={Link} to={`${props.match.url}/add-beneficiaries`} color="green" className="relaxed">Add new beneficiary</Button>
+      <Button as={Link} to={`${props.match.url}/add-beneficiary`} color="green" className="relaxed">Add new beneficiary</Button>
     </Grid.Column>
   </Grid.Row>
 );

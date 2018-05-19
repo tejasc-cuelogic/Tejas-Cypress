@@ -7,7 +7,24 @@ export const allBeneficiaries = gql`
       firstName
       lastName
       relationship
-      street
+      residentalStreet
+      city
+      state
+      zipCode
+      dob
+      status
+    }
+  }
+`;
+
+export const createBeneficiaryMutation = gql`
+  mutation createBeneficiary($firstName: String!, $lastName: String!, $relationship: String!, $residentalStreet: String!, $city: String!, $state: String!, $zipCode: Int!, $dob: String!, ) {
+    createBeneficiary(firstName: $firstName, lastName: $lastName, relationship: $relationship, residentalStreet: $residentalStreet, city: $city, state: $state, zipCode: $zipCode, dob: $dob) {
+      id
+      firstName
+      lastName
+      relationship
+      residentalStreet
       city
       state
       zipCode
@@ -16,18 +33,10 @@ export const allBeneficiaries = gql`
   }
 `;
 
-export const createBeneficiaryMutation = gql`
-  mutation createBeneficiary($firstName: String!, $lastName: String!, $relationship: String!, $street: String!, $city: String!, $state: String!, $zipCode: String!, $dob: DateTime!, ) {
-    createBeneficiary(firstName: $firstName, lastName: $lastName, relationship: $relationship, street: $street, city: $city, state: $state, zipCode: $zipCode, dob: $dob) {
+export const deleteBeneficiary = gql`
+  mutation deleteBeneficiary($id:  ID! ) {
+    deleteBeneficiary(id: $id) {
       id
-      firstName
-      lastName
-      relationship
-      street
-      city
-      state
-      zipCode
-      dob
     }
   }
 `;
