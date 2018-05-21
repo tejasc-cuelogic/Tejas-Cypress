@@ -17,9 +17,9 @@ export default class FinancialInformation extends Component {
             {
               ['entityNetAssets', 'cfInvestments'].map(field => (
                 <FormInput
-                  type="text"
-                  fielddata={formFinInfo.fields[field]}
                   name={field}
+                  fielddata={formFinInfo.fields[field]}
+                  maxLength={formFinInfo.fields[field].maxLength}
                   changed={finInfoChange}
                   prefix="$"
                 />

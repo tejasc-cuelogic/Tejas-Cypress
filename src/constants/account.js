@@ -311,12 +311,14 @@ export const ENTITY_FIN_INFO = {
     label: 'Entity Net Assets',
     error: undefined,
     rule: 'required|numeric',
+    maxLength: 15,
   },
   cfInvestments: {
     value: '',
     label: 'Other religion CF investments made in prior 12 months',
     error: undefined,
     rule: 'required|numeric',
+    maxLength: 15,
   },
 };
 

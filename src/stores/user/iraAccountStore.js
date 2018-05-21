@@ -31,6 +31,14 @@ class IraAccountStore {
     fields: { ...IRA_IDENTITY }, meta: { isValid: true, error: '' },
   }
 
+  @observable
+  stepToBeRendered = 0;
+
+  @action
+  setStepToBeRendered(step) {
+    this.stepToBeRendered = step;
+  }
+
   @action
   fundingChange = (e, { name, value }) => {
     this.onFieldChange('formFunding', name, value);
