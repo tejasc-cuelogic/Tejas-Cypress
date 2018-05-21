@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Grid, Card, Header, Icon, Responsive, Divider } from 'semantic-ui-react';
+import { Grid, Card, Header, Icon, Responsive, Divider, List } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import PageHeaderSection from '../../../theme/common/PageHeaderSection';
@@ -47,10 +47,16 @@ class Summary extends Component {
               <Grid.Column computer={8} largeScreen={8} widescreen={5}>
                 <Card fluid raised className="welcome-card">
                   <Card.Content>
-                    <Icon size="huge" className="ns-nextseed-icon pull-left" />
-                    <Card.Header>
-                      Would you like to start the process of new account creation?
-                    </Card.Header>
+                    <List divided relaxed="very">
+                      <List.Item>
+                        <List.Icon className="ns-nextseed-icon" size="huge" verticalAlign="middle" />
+                        <List.Content verticalAlign="middle">
+                          <List.Header>
+                            Would you like to start the process of new account creation?
+                          </List.Header>
+                        </List.Content>
+                      </List.Item>
+                    </List>
                     <Divider hidden />
                     <AccountSetupChecklist
                       setDashboardWizardSetup={this.setDashboardWizardSetup}

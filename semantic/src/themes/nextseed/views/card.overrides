@@ -48,25 +48,29 @@
     }
 }
 .ui.card, .ui.cards>.card{
-    .header{
+    .ui.header{
         text-transform:capitalize;
     }
     &.welcome-card{
         >.content{
             padding:@25px;
-            i.icon.pull-left{
-                width:auto;
-                margin:0 1rem 0 0;
-                color:@theme-primary;
+            .item{
+                i.icon{
+                    width:auto;
+                    margin:0 1rem 0 0;
+                    color:@theme-primary;
+                }
+                .header:not(.ui){
+                    margin-top:0;
+                    font-size:@20px;
+                    line-height:@24px;
+                    font-weight:400;
+                    color:@fullBlack;
+                }
             }
             .ui.mini.image{
                 width:54px;
                 margin:0 @18px 0 0;
-            }
-            >.header:not(.ui){
-                font-size:@20px;
-                font-weight:400;
-                margin-top:0;
             }
             >.meta{
                 font-family:@pageFont;

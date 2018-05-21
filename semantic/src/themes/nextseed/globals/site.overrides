@@ -252,9 +252,11 @@ a.link{
 	background:@tertiary-text;
 	.sticky-notification{
 		position:relative;
-		width:50%;
 		z-index:9;
-		@media only screen and (max-width : @largestLargeMonitor){
+		@media only screen and (min-width : @largeMonitorBreakpoint){
+			width:60%;
+		}
+		@media only screen and (max-width : @largestTabletScreen){
 			width:100%;
 		}
 	}
