@@ -574,7 +574,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'totalAssetMostRecentFiscalYear',
     label: 'Most Recent Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Most Recent Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -585,7 +585,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'totalAssetPriorFiscalYear',
     label: 'Prior Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Prior Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -596,7 +596,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'cashEquiMostRecentFiscalYear',
     label: 'Most Recent Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Most Recent Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -607,7 +607,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'cashEquiPriorFiscalYear',
     label: 'Prior Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Prior Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -618,7 +618,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'actReceivedMostRecentFiscalYear',
     label: 'Most Recent Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Most Recent Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -629,7 +629,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'actReceivedPriorFiscalYear',
     label: 'Prior Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Prior Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -640,7 +640,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'shortTermDebtMostRecentFiscalYear',
     label: 'Most Recent Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Most Recent Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -651,7 +651,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'shortTermDebtPriorFiscalYear',
     label: 'Prior Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Prior Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -662,7 +662,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'longTermDebtMostRecentFiscalYear',
     label: 'Most Recent Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Most Recent Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -673,7 +673,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'longTermDebtPriorFiscalYear',
     label: 'Prior Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Prior Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -684,7 +684,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'revenueMostRecentFiscalYear',
     label: 'Most Recent Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Most Recent Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -695,7 +695,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'revenuePriorFiscalYear',
     label: 'Prior Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Prior Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -706,7 +706,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'costGoodsSoldMostRecentFiscalYear',
     label: 'Most Recent Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Most Recent Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -717,7 +717,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'costGoodsSoldPriorFiscalYear',
     label: 'Prior Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Prior Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -728,7 +728,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'taxPaidMostRecentFiscalYear',
     label: 'Most Recent Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Most Recent Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -739,7 +739,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'taxPaidPriorFiscalYear',
     label: 'Prior Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Prior Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -750,7 +750,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'netIncomeMostRecentFiscalYear',
     label: 'Most Recent Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Most Recent Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -761,7 +761,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'netIncomePriorFiscalYear',
     label: 'Prior Fiscal Year-end',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The Prior Fiscal Year-end field is required.',
       numeric: 'Please provide numeric values.',
     },
   },
@@ -772,7 +772,7 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     key: 'issueJurisdictionSecuritiesOffering',
     label: 'Using the list below, select the jurisdictions in which the issuer intends to offer the securities',
     customErrors: {
-      required: 'The Current Number of Employees field is required.',
+      required: 'The States And Jurisdictions field is required.',
     },
   },
 };
