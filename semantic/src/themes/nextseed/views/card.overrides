@@ -82,14 +82,21 @@
     &.card-spacer{
         padding:@22px;
     }
-    .content .action-meta{
-        display:inline-block;
-        font-size:@12px;
-        vertical-align:top;
-        margin-left:@10px;
-        color:@quaternary-text;
-        >b{
-            color:@fullBlack;
+    .content{
+        .status{
+            margin:0;
+            padding:0.5rem 1rem;
+            display:inline-block;
+        }
+        .action-meta{
+            display:inline-block;
+            font-size:@12px;
+            vertical-align:top;
+            margin-left:@10px;
+            color:@quaternary-text;
+            >b{
+                color:@fullBlack;
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Grid, Button } from 'semantic-ui-react';
+import { Card, Grid, Button, Header } from 'semantic-ui-react';
 import DateTimeFormat from '../../../../../theme/common/DateTimeFormat';
 
 const statuses = ['Rejected', 'Pending Approval', 'Approved'];
@@ -10,7 +10,7 @@ const BeneficiaryList = props => (
       {
         props.beneficiaries.map(b => (
           <Card fluid>
-            <Grid divided padded="horizontally">
+            <Grid stackable celled="internally" padded="horizontally">
               <Grid.Row>
                 <Grid.Column width={8}>
                   <Card.Content>
@@ -34,7 +34,7 @@ const BeneficiaryList = props => (
                     </dl>
                   </Card.Content>
                   <Card.Content>
-                    <span as="h2" color="orange">{statuses[(b.status + 1)]}</span>
+                    <Header as="h6" color="orange" className="status">{statuses[(b.status + 1)]}</Header>
                     <Button
                       size="mini"
                       color="red"
