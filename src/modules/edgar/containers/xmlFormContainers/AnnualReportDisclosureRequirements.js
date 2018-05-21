@@ -185,6 +185,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
           <Card fluid className="form-card">
             <Header as="h3">Select States and Jurisdictions</Header>
             <FormDropDown
+              fielddata={formAnnualInfo.fields.issueJurisdictionSecuritiesOffering}
               multiple
               search
               selection
