@@ -30,7 +30,7 @@
     }
 }
 .ui.stackable.cards>.card{
-    @media only screen and (max-width : (@tabletBreakpoint - 1px)){
+    @media only screen and (max-width : @largestMobileScreen){
         padding:@32px !important;
     }
 }
@@ -64,7 +64,6 @@
                 margin:0 @18px 0 0;
             }
             >.header:not(.ui){
-                // font-family:@boldFont;
                 font-size:@20px;
                 font-weight:400;
                 margin-top:0;
@@ -167,9 +166,6 @@
             color:@quaternary-text;
             text-transform:uppercase;
         }
-        // .description p{
-        //     font-family:@boldFont;
-        // }
     }
 }
 .sticky-notification{
