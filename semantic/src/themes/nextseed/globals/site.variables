@@ -1045,8 +1045,8 @@
 // @lighten-text:lighten(@primary-text, 21%);                  //  #666666           (when base = 303030)
 @inverse-text:#FFFFFF;
 // @inverse-text-darken:darken(@inverse-text, 26%);            //  #BDBDBD           (when base = FFFFFF)
-@inverse-secondary-text:darken(@inverse-text, 51%);					//  #7D7D7D           (when base = FFFFFF)
-@inverse-darken:darken(@inverse-text, 5%);                    //  #F2F2F2         (when base = FFFFFF)
+@inverse-secondary-text:darken(@inverse-text, 51%);				     //  #7D7D7D           (when base = FFFFFF)
+@inverse-darken:darken(@inverse-text, 5%);                     //  #F2F2F2         (when base = FFFFFF)
 
 @link-color:#772df9;
 @link-color-darken:darken(@link-color, 10%);

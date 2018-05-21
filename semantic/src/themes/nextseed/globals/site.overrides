@@ -1,7 +1,6 @@
 /*******************************
         Global Overrides
 *******************************/
-
 .content-wrapper{
 	min-height:~"calc(100vh - 58px)";
 }
@@ -45,7 +44,6 @@
 	}
 }
 .webcontent-spacer{
-	// padding:@40px @70px @14px;
 	padding:@20px @40px;
 	@media only screen and (max-width : @largestSmallMonitor){
 		padding:@20px;
@@ -126,16 +124,17 @@ a.link{
 
 //	Page Header Styles
 .page-header-section{
-	// min-height:132px;
 	background-color:@secondary-text;
 	position:relative;
 	padding:@20px @40px;
 	@media only screen and (max-width : @largestSmallMonitor){
 		min-height:auto;
 		padding:@20px;
+		padding-left:@60px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
+		padding-left:@60px;
 	}
 	h1.ui.header{
 		font-size:@30px;
@@ -159,7 +158,6 @@ a.link{
 		}
 	}
 	p{
-		// font-family:@regularFont;
 		color:@inverse-text;
 	}
 	span.filter-count{
@@ -190,7 +188,6 @@ a.link{
 		display:block;
 		float:right;
 		height:42px;
-		// padding:10px 0;
 		margin-left:@30px;
 		cursor:pointer;
 		@media only screen and (max-width : @largestSmallMonitor){
@@ -201,7 +198,7 @@ a.link{
 			color:@tertiary-text;
 			color:@white;
 			height:auto;
-			line-height:2;
+			line-height:1;
 		}
 		span.unread-count{
 			height:18px;
@@ -209,7 +206,6 @@ a.link{
 			padding:0 5px;
 			border-radius:10px;
 			font-size:@12px;
-			// font-weight:500;
 			color:@inverse-text;
 			line-height:@18px;
 			display:block;
@@ -218,6 +214,9 @@ a.link{
 			position:absolute;
 			right:-6px;
 			bottom:6px;
+			@media only screen and (max-width : @largestSmallMonitor){
+				bottom:-4px;
+			}
 		}
 	}
 }
@@ -230,14 +229,6 @@ a.link{
 	@media only screen and (max-width : @largestMobileScreen){
 		padding:@7px @10px @14px;
 	}
-	// &.webcontent-spacer{
-	// }
-	// h5{
-	// 	// font-size:0.857142em;
-	// 	font-family:@pageFont;
-	// 	color:@quaternary-text;
-	// 	margin:0 0 @7px;
-	// }
 }
 .filter-meta{
 	background-color:@secondary-text;
@@ -410,7 +401,6 @@ a.link{
 	> div{
 		min-height:54px;
 		padding:0.7em 1em;
-		// font-family:@regularFont;
 		border-radius:@absoluteBorderRadius;
 		button{
 			font-size:@12px;
@@ -452,7 +442,6 @@ a.disabled, a.disabled:hover, a.disabled:focus{
 }
 //	Meta Data
 .meta-data{
-	// font-family:@regularFont;
 	font-size:@13px;
 	font-weight:400;
 	color:@quaternary-text;
@@ -508,7 +497,6 @@ ol.progtrckr{
 		margin:0 @10px @14px;
 		min-width:60px;
 		display:inline-block;
-		// font-family:@boldFont;
 		font-size:@13px;
 		line-height:2rem;
 		text-align:center;
@@ -581,7 +569,6 @@ ol.progtrckr{
 		.investment-progress{
 			content:"";
 			height:3px;
-			// width:58%;
 			background:lighten(@link-color, 20%);
 			display:block;
 			position:absolute;
