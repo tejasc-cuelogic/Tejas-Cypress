@@ -122,6 +122,13 @@ a.link{
 		color:darken(@link-color, 10%);
 	}
 }
+a.text-link{
+	color:@tertiary-text;
+	&:hover, &:active, &.active{
+		color:@primary-text;
+	}
+}
+
 //	Admin Page Content Styles	//
 
 //	Page Header Styles

@@ -33,8 +33,10 @@ export default class investorPersonalDetails extends Component {
         this.props.setDashboardWizardStep('ConfirmPhoneNumber');
       } else {
         Helper.toast('User verification hard-failed!', 'error');
+        this.props.setDashboardWizardStep('ConfirmIdentityDocuments');
       }
-    });
+    })
+      .catch(() => { });
   }
 
   render() {

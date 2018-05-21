@@ -11,15 +11,24 @@ import AccountSetupChecklist from '../components/AccountSetupChecklist';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 
-@inject('uiStore', 'accountStore')
+@inject('uiStore', 'accountStore', 'individualAccountStore')
 @observer
 class Summary extends Component {
   setDashboardWizardSetup = (step) => {
     this.props.uiStore.setDashboardWizardStep(step);
+    this.restoreStep();
   }
 
   handleAccoutTypeChange = (e, { activeIndex }) => {
     this.props.accountStore.setAccountType(activeIndex);
+    this.restoreStep();
+  }
+
+  restoreStep = () => {
+    if (this.props.accountStore.accountType.activeIndex === 0) {
+      this.props.individualAccountStore.setStepToBeRendered(0);
+      this.props.individualAccountStore.setBankLinkInterface('list');
+    }
   }
 
   render() {
@@ -28,7 +37,6 @@ class Summary extends Component {
       label: 'Complete all required information about yourself',
       linkText: 'Verify me',
       linkPath: 'InvestorPersonalDetails',
-      // linkPath: 'ConfirmPhoneNumber',
     };
     return (
       <Aux>

@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
@@ -56,6 +56,17 @@ class IndividualAccountStore {
   addFundChange = (e, { name, value }) => {
     this.onFieldChange('formAddFunds', name, value);
   };
+
+  @computed
+  get isValidAddFunds() {
+    return _.isEmpty(this.formAddFunds.fields.value.error);
+  }
+
+  @computed
+  get isValidLinkBankAccountForm() {
+    return _.isEmpty(this.formLinkBankManually.fields.bankRoutingNumber.error) &&
+    _.isEmpty(this.formLinkBankManually.fields.bankAccountNumber.error);
+  }
 
   @action
   bankSearchChange = (e, { name, value }) => {

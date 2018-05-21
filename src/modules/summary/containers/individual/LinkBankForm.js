@@ -12,6 +12,7 @@ export default class LinkBankForm extends Component {
     e.preventDefault();
     this.props.individualAccountStore.createAccount().then(() => {
       Helper.toast('Bank account has been linked.', 'success');
+      this.props.individualAccountStore.setStepToBeRendered(1);
     });
   }
 
@@ -36,6 +37,7 @@ export default class LinkBankForm extends Component {
                   name={field}
                   fielddata={formLinkBankManually.fields[field]}
                   changed={linkBankManuallyChange}
+                  maxLength={formLinkBankManually.fields[field].maxLength}
                 />
               ))
             }

@@ -1,42 +1,37 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Select } from 'semantic-ui-react';
+import { Form, Popup, Icon, TextArea } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
-const FormSelect = observer((props) => {
+const FormTextarea = observer((props) => {
   const {
     label,
-    value,
     error,
+    tooltip,
     placeHolder,
+    value,
   } = props.fielddata;
-  let width = '';
-  if (props.containerwidth) {
-    width = props.containerwidth;
-  }
   return (
-    <Form.Field width={width}>
+    <Form.Field className={props.containerclassname || ''} error={!!error}>
       <label>
         {label}
-        {props.tooltip &&
+        {tooltip &&
           <Popup
             trigger={<Icon name="help circle outline" />}
-            content={props.tooltip}
+            content={tooltip}
             position="top center"
             className="center-align"
           />
         }
       </label>
-      <Select
-        fluid
+      <TextArea
         {...props}
         value={value}
-        error={!!error}
-        onChange={props.changed}
+        label={label}
         placeholder={placeHolder}
+        onChange={props.changed}
       />
-      <div className="dropdown-effect">{props.fielddata.label}</div>
       {error &&
         <FieldError error={error} />
       }
@@ -44,4 +39,4 @@ const FormSelect = observer((props) => {
   );
 });
 
-export default FormSelect;
+export default FormTextarea;

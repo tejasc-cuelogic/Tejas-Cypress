@@ -4,6 +4,7 @@ import graphql from 'mobx-apollo';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../services/graphql';
+import { GqlClient as client2 } from '../../services/graphqlCool';
 import uiStore from '../uiStore';
 import { BENEFICIARY_FRM, FIN_INFO } from '../../constants/user';
 import { userDetailsQuery } from '../queries/users';
@@ -50,7 +51,7 @@ export class UserDetailsStore {
   @action
   getBeneficiaries = () => {
     this.beneficiariesData = graphql({
-      client,
+      client: client2,
       query: allBeneficiaries,
     });
   }
@@ -83,7 +84,7 @@ export class UserDetailsStore {
     const beneficiary = mapValues(this.BENEFICIARY_META.fields, f => f.value);
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
-      client
+      client2
         .mutate({
           mutation: createBeneficiaryMutation,
           variables: {
@@ -115,7 +116,7 @@ export class UserDetailsStore {
   @action
   deleteBeneficiary = (id) => {
     this.deleting = id;
-    client
+    client2
       .mutate({
         mutation: deleteBeneficiary,
         variables: { id },
@@ -176,7 +177,7 @@ export class UserDetailsStore {
   @action
   getFinancialLimit = () => {
     this.financialLimit = graphql({
-      client,
+      client: client2,
       query: finLimit,
       onFetch: (data) => {
         Object.keys(this.FIN_INFO.fields).map((f) => {
@@ -193,7 +194,7 @@ export class UserDetailsStore {
     const data = mapValues(this.FIN_INFO.fields, f => parseInt(f.value, 10));
     const currentLimit = Helper.getInvestmentLimit(data);
     uiStore.setProgress();
-    client
+    client2
       .mutate({
         mutation: updateFinLimit,
         variables: {

@@ -20,7 +20,7 @@ export default class BusinessDetails extends React.Component {
 
   handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
 
-  handleNewFiling = () => this.props.history.push(`/app/business/${this.props.match.params.businessId}/edgar`);
+  handleNewFiling = () => this.props.history.push(`/app/edgar/${this.props.match.params.businessId}/edgar`);
 
   editBusinessModal = () => {
     this.props.businessStore.setEditBusinessMode(true);
@@ -60,7 +60,7 @@ export default class BusinessDetails extends React.Component {
     this.props.uiStore.setConfirmBox('', '');
     businessActions.deleteBusiness(this.props.match.params.businessId)
       .then(() => {
-        this.props.history.push('/app/business');
+        this.props.history.push('/app/edgar');
         Helper.toast('Business deleted successfully', 'success');
       }).catch(() => {
         Helper.toast('Something went wrong while deleting business Please try again.', 'error', { position: 'top-center' });
@@ -70,13 +70,13 @@ export default class BusinessDetails extends React.Component {
   handleDeleteFiling = () => {
     if (this.props.uiStore.confirmBox.metaData.isAnyFilingLocked) {
       this.handleDeleteCancel();
-      this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+      this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
     } else {
       const filingId = this.props.uiStore.confirmBox.subRefId;
       businessActions.deleteFiling(this.props.match.params.businessId, filingId)
         .then(() => {
           this.handleDeleteCancel();
-          this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+          this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
           Helper.toast('Filing deleted successfully', 'success');
         }).catch(() => {
           Helper.toast('Something went wrong while deleting filing Please try again.', 'error', { position: 'top-center' });
@@ -89,7 +89,7 @@ export default class BusinessDetails extends React.Component {
     const xmlSubmissionId = this.props.uiStore.confirmBox.subRefId;
     businessActions.deleteXmlSubmission(filingId, xmlSubmissionId).then(() => {
       this.handleDeleteCancel();
-      this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+      this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
       Helper.toast('XML Submission deleted successfully', 'success');
     }).catch(() => {
       Helper.toast('Something went wrong while deleting XMl submission Please try again.', 'error', { position: 'top-center' });
@@ -105,7 +105,7 @@ export default class BusinessDetails extends React.Component {
     businessActions.lockUnlockXmlSubmission(businessId, filingId, xmlSubmissionId, lockStatus)
       .then(() => {
         this.handleDeleteCancel();
-        this.props.history.push(`/app/business/${this.props.match.params.businessId}`);
+        this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
         Helper.toast(`XML submission ${status} successfully`, 'success');
       });
   }
@@ -134,7 +134,7 @@ export default class BusinessDetails extends React.Component {
                     + Add Filing
                   </Button>
                   <NewBusinessForm businessid={this.props.match.params.businessId} />
-                  <Link to="/app/business" className="back-link"><Icon className="ns-arrow-left" /></Link>
+                  <Link to="/app/edgar" className="back-link"><Icon name="ns-arrow-left" /></Link>
                   {business.name.value}
                   <div className="actions">
                     <Button
@@ -145,7 +145,7 @@ export default class BusinessDetails extends React.Component {
                       size="mini"
                       onClick={this.editBusinessModal}
                     >
-                      <Icon className="ns-pencil" />
+                      <Icon name="ns-pencil" />
                     </Button>{' '}
                     <Button
                       icon
@@ -158,7 +158,17 @@ export default class BusinessDetails extends React.Component {
                       subrefid=""
                       onClick={this.confirmDelete}
                     >
-                      <Icon className="ns-trash" />
+                      <Icon name="ns-trash" />
+                    </Button>
+                    <Button
+                      icon
+                      circular
+                      inverted
+                      size="mini"
+                      color="theme-primary"
+                      onClick={() => window.open(`${process.env.REACT_APP_BOX_URL}/folder/${business.folderId}`, '_blank')}
+                    >
+                      <Icon name="external" />
                     </Button>
                     <Confirm
                       header="Confirm"

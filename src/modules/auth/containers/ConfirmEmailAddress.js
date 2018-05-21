@@ -5,11 +5,10 @@ import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react
 
 import validationActions from '../../../actions/validation';
 import authActions from '../../../actions/auth';
-import FieldError from '../../../theme/common/FieldError';
 import { FormInput } from '../../../theme/form/FormElements';
 import ListErrors from '../../../theme/common/ListErrors';
 
-@inject('authStore', 'uiStore')
+@inject('authStore', 'uiStore', 'profileStore')
 @observer
 export default class ConfirmEmailAddress extends Component {
   componentWillUnmount() {
@@ -26,6 +25,7 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.authStore.canSubmitEmailAddressVerification) {
       authActions.confirmCode()
         .then(() => {
+          this.props.authStore.reset();
           this.props.setAuthWizardStep('Login');
         })
         .catch(() => { });
@@ -67,7 +67,6 @@ export default class ConfirmEmailAddress extends Component {
               maxLength={6}
               changed={this.handleInputChange}
             />
-            <FieldError error={values.code.error} />
             <div className="center-align">
               <Button primary size="large" className="very relaxed" loading={this.props.uiStore.inProgress} disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>

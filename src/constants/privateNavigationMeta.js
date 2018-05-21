@@ -147,4 +147,10 @@ export const ALL_NAV_ITEMS = [
     to: 'events',
     accessibleTo: ['bowner'],
   },
+  {
+    icon: 'browser',
+    title: 'Edgar',
+    to: 'edgar',
+    accessibleTo: ['admin'],
+  },
 ];

@@ -59,7 +59,7 @@ export class Validation {
    * @return null
    */
   validateFilerInfoField = (field) => {
-    const { errors } = validationService.validate(businessStore.filerInformation[field]);
+    const { errors } = validationService.validate(businessStore.formFilerInfo.fields[field]);
     this.formValidationErrors(errors, field);
     businessStore.setFilerError(field, errors && errors[field][0]);
   }
@@ -73,8 +73,8 @@ export class Validation {
    */
   validateIssuerInfoField = (field) => {
     const { errors } = validationService.validate(
-      businessStore.issuerInformation[field],
-      businessStore.issuerInformation[CONDITIONAL_REQUIRE[field]],
+      businessStore.formIssuerInfo.fields[field],
+      businessStore.formIssuerInfo.fields[CONDITIONAL_REQUIRE[field]],
     );
     this.formValidationErrors(errors, field);
     businessStore.setIssuerError(field, errors && errors[field][0]);
@@ -126,11 +126,14 @@ export class Validation {
    * @desc validates Personal Signature and sets error to store if any
    * @param $field @type String - Field name that needs to be validated
    * @param $id @type String - Uniq Dom id of that field
-   * @param $value @type String/Object - value that user entered in input element
    * @return null
    */
-  validatePersonalSignature = (field, id, value) => {
-    businessStore.changePersonalSignature(field, id, value);
+  validatePersonalSig = (field, id) => {
+    const persig = _.filter(businessStore.formSignatureInfo.fields.signaturePersons, person =>
+      person.id === id);
+    const { errors } = validationService.validate(persig[0][field]);
+    this.formValidationErrors(errors, field);
+    businessStore.setPersonalSignatureError(field, id, errors && errors[field][0]);
   }
 
   /**
@@ -231,7 +234,10 @@ export class Validation {
       newErrors[field] = errors[field][0];
       businessStore.setXmlError(newErrors);
     } else {
-      businessStore.removeXmlError(field);
+      /* eslint-disable no-lonely-if */
+      if (field !== 'notificationEmailElement') {
+        businessStore.removeXmlError(field);
+      }
     }
   }
 

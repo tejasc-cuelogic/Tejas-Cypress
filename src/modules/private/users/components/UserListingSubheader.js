@@ -1,14 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Button, Form, Input, Icon, List } from 'semantic-ui-react';
-import { DropdownFilter, DateRangeFilter, AppliedFilters } from './widgets/Filters';
-import { FILTER_META } from './../../../../constants/user';
-// import { FormInput } from '../../../theme/form/FormElements';
-
-// const zipCode = {
-//   label: 'Zip Code',
-//   error: undefined,
-// };
+import { Header, Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
+import { DropdownFilter, DateRangeFilter, AppliedFilters } from '../../../../theme/form/Filters';
+import { FILTER_META } from '../../../../constants/user';
 
 const userListingSubheader = props => (
   <div>
@@ -45,11 +39,21 @@ const userListingSubheader = props => (
       <Form inverted>
         <Grid stackable>
           <Grid.Row>
-            <DropdownFilter value={props.requestState.search.accountType} name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} isMultiple />
-            <DropdownFilter value={props.requestState.search.accountStatus} name="Status" keyName="accountStatus" change={props.setSearchParam} options={FILTER_META.accountStatus} />
-            <DropdownFilter value={props.requestState.search.accreditation} name="Accreditation" change={props.setSearchParam} options={FILTER_META.accreditation} />
-            <DateRangeFilter filters={props.requestState.search} label="Creation date" name="createdAt" changeStart={props.dateFilterStart} changeEnd={props.dateFilterEnd} />
-            <DropdownFilter isMultiple value={props.requestState.search.city} name="City" change={props.setSearchParam} options={FILTER_META.city} />
+            <Grid.Column width={3}>
+              <DropdownFilter value={props.requestState.search.accountType} name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} isMultiple />
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <DropdownFilter value={props.requestState.search.accountStatus} name="Status" keyName="accountStatus" change={props.setSearchParam} options={FILTER_META.accountStatus} />
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <DropdownFilter value={props.requestState.search.accreditation} name="Accreditation" change={props.setSearchParam} options={FILTER_META.accreditation} />
+            </Grid.Column>
+            <Grid.Column width={4}>
+              <DateRangeFilter filters={props.requestState.search} label="Creation date" name="createdAt" changeStart={props.dateFilterStart} changeEnd={props.dateFilterEnd} />
+            </Grid.Column>
+            <Grid.Column width={3}>
+              <DropdownFilter isMultiple value={props.requestState.search.city} name="City" change={props.setSearchParam} options={FILTER_META.city} />
+            </Grid.Column>
           </Grid.Row>
           {/* <Grid.Row>
             <DropdownFilter value={props.requestState.search.state} name="State"

@@ -51,7 +51,7 @@
 @selectColor: @inputColor;
 
 /* Text Area */
-@textAreaPadding: @inputVerticalPadding @inputHorizontalPadding;
+@textAreaPadding: @inputVerticalPadding 0;
 @textAreaHeight: 12em;
 @textAreaResize: vertical;
 @textAreaLineHeight: 1.2857;
@@ -186,7 +186,7 @@
 @inlineLabelFontWeight: @labelFontWeight;
 @inlineLabelTextTransform: @labelTextTransform;
 
-@groupedInlineLabelMargin: 0.035714em 1em 0em 0em;
+@groupedInlineLabelMargin: 0.035714em 1em 1em 0em;
 
 /*-------------------
        Groups
