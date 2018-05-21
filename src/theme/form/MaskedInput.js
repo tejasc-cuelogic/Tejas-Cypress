@@ -31,7 +31,11 @@ const MaskedInput = observer((props) => {
             alwaysShowMask
             maskChar=" "
           />
-          <Button className={props.actionclass} color={props.actioncolor}>
+          <Button
+            className={props.actionclass}
+            color={props.actioncolor}
+            onClick={() => props.clickonaction()}
+          >
             {props.actionlabel}
           </Button>
         </div> :

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
 import { FormSelect, FormInput, MaskedInput } from '../../../../theme/form/FormElements';
 import { US_STATES } from '../../../../constants/account'; //  added Temperarily to update UI as per new layout
 
 import UserVerifiedDetails from '../components/UserVerifiedDetails';
+import NewPhoneNumber from './NewPhoneNumber';
+import NewEmailAddress from './NewEmailAddress';
 
 const states = {
   label: 'State',
@@ -19,11 +21,16 @@ export default class ProfileData extends Component {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
     this.props.profileStore.setProfileInfo(this.props.userStore.currentUser);
   }
+  navigateToNewPhoneNumber = () => {
+    this.props.history.replace(`${this.props.match.url}/new-phone-number`);
+  }
   render() {
     const { email, legalDetails } = this.props.userDetailsStore.userDetails;
     const { updateProfileInfo, updateProfileInfoChange } = this.props.profileStore;
     return (
       <Grid columns={1} stackable>
+        <Route exact path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
+        <Route exact path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
         <Grid.Row>
           <Grid.Column width={8}>
             <Card fluid className="form-card">
@@ -49,11 +56,15 @@ export default class ProfileData extends Component {
                   fielddata={updateProfileInfo.fields.phoneNumber}
                   mask="999-999-9999"
                   changed={updateProfileInfoChange}
+                  clickonaction={this.navigateToNewPhoneNumber}
                 />
                 <FormInput
                   action={{
-                    color: 'green', className: 'link-button', content: 'Change', onClick: () => this.props.uiStore.setAuthWizardStep('ConfirmEmailAddress'),
-                }}
+                    // color: 'green', className: 'link-button',
+                    // content: 'Change',
+                    // onClick: () => this.props.uiStore.setAuthWizardStep('ConfirmEmailAddress'),
+                    color: 'green', className: 'link-button', content: 'Change', onClick: () => this.props.history.replace(`${this.props.match.url}/new-email-address`),
+                  }}
                   name="email"
                   fielddata={updateProfileInfo.fields.email}
                   changed={updateProfileInfoChange}
