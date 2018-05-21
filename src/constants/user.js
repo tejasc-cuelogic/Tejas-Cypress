@@ -123,3 +123,33 @@ export const BENEFICIARY_FRM = {
     rule: 'required|numeric',
   },
 };
+
+export const FIN_INFO = {
+  annualIncome: {
+    value: '',
+    label: 'Annual Income',
+    error: undefined,
+    rule: 'required|numeric',
+    tooltip: 'Mention your Annual Income here',
+  },
+  netWorth: {
+    value: '',
+    label: 'Net Worth',
+    error: undefined,
+    rule: 'required|numeric',
+    tooltip: 'Mention your Net Worth here',
+  },
+  otherInvestments: {
+    value: '',
+    label: 'Other Regulation Crowdfunding investments made in prior 12 months',
+    error: undefined,
+    rule: 'required|numeric',
+    tooltip: 'Other Crowdfunding investments',
+  },
+  currentLimit: {
+    value: '',
+    label: 'Your current investment limit',
+    error: undefined,
+    rule: 'numeric',
+  },
+};

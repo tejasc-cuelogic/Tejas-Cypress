@@ -5,17 +5,20 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../services/graphql';
 import uiStore from '../uiStore';
-import { BENEFICIARY_FRM } from '../../constants/user';
+import { BENEFICIARY_FRM, FIN_INFO } from '../../constants/user';
 import { userDetailsQuery } from '../queries/users';
 import { allBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../queries/beneficiaries';
+import { finLimit, updateFinLimit } from '../queries/financialLimits';
 import Helper from '../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
   @observable beneficiariesData = [];
+  @observable financialLimit = {};
   @observable editCard = 0;
   @observable BENEFICIARY_META = { fields: { ...BENEFICIARY_FRM }, meta: { isValid: false, error: '' } };
   @observable deleting = 0;
+  @observable FIN_INFO = { fields: { ...FIN_INFO }, meta: { isValid: false, error: '' } };
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
@@ -69,6 +72,10 @@ export class UserDetailsStore {
 
   @computed get bLoading() {
     return this.beneficiariesData.loading;
+  }
+
+  @computed get fLoading() {
+    return this.financialLimit.loading;
   }
 
   @action
@@ -132,15 +139,26 @@ export class UserDetailsStore {
   };
 
   @action
+  finInfoEleChange = (e, result) => {
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('FIN_INFO', fieldName, fieldValue);
+  };
+
+  @action
   onFieldChange = (currentForm, field, value) => {
     const form = currentForm || 'formFinInfo';
-    this[form].fields[field].value = value;
+    if (field && value) {
+      this[form].fields[field].value = value;
+    }
     const validation = new Validator(
       mapValues(this[form].fields, f => f.value),
       mapValues(this[form].fields, f => f.rule),
     );
     this[form].meta.isValid = validation.passes();
-    this[form].fields[field].error = validation.errors.first(field);
+    if (field && value) {
+      this[form].fields[field].error = validation.errors.first(field);
+    }
   };
 
   @action
@@ -150,6 +168,44 @@ export class UserDetailsStore {
     this.onFieldChange('BENEFICIARY_META', 'city', data.city);
     this.onFieldChange('BENEFICIARY_META', 'state', data.state);
     this.onFieldChange('BENEFICIARY_META', 'zipCode', data.zipCode);
+  }
+
+  /*
+  Financial Limits
+  */
+  @action
+  getFinancialLimit = () => {
+    this.financialLimit = graphql({
+      client,
+      query: finLimit,
+      onFetch: (data) => {
+        Object.keys(this.FIN_INFO.fields).map((f) => {
+          this.FIN_INFO.fields[f].value = data.FinancialLimits[f];
+          return this.FIN_INFO.fields[f];
+        });
+        this.onFieldChange('FIN_INFO');
+      },
+    });
+  }
+
+  @action
+  updateFinInfo = () => {
+    const data = mapValues(this.FIN_INFO.fields, f => parseInt(f.value, 10));
+    const currentLimit = Helper.getInvestmentLimit(data);
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: updateFinLimit,
+        variables: {
+          annualIncome: data.annualIncome,
+          netWorth: data.netWorth,
+          otherInvestments: data.otherInvestments,
+          currentLimit,
+        },
+      })
+      .then(() => Helper.toast('Updated Financial Info!', 'success'))
+      .catch(error => Helper.toast(`Error while updating Financial Info- ${error}`, 'warn'))
+      .finally(() => uiStore.setProgress(false));
   }
 }
 
