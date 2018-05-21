@@ -54,6 +54,7 @@ export default class FinancialInfo extends Component {
                           <FormInput
                             key={field}
                             type="text"
+                            prefix="$"
                             name={field}
                             fielddata={FIN_INFO.fields[field]}
                             changed={finInfoEleChange}
