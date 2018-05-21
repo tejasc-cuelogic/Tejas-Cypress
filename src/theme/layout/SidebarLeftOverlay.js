@@ -30,6 +30,7 @@ class SidebarLeftPush extends Component {
               icon
               vertical
               inverted={(UserInfo.roles[0] !== 'investor')}
+              className={UserInfo.roles[0]}
             >
               <Image
                 src={((uiStore.layoutState.leftPanel) ?
@@ -67,6 +68,7 @@ class SidebarLeftPush extends Component {
               icon
               vertical
               inverted={(UserInfo.roles[0] !== 'investor')}
+              className={UserInfo.roles[0]}
             >
               <Image
                 src={(UserInfo.roles[0] !== 'investor' ? LogoWhite : LogoColor)}
