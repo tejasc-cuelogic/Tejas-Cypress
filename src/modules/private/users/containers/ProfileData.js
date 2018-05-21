@@ -31,7 +31,6 @@ export default class ProfileData extends Component {
                 />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable jsx-a11y/label-has-for */}
                 <label>Email</label>
                 <Input
                   action={{ color: 'green', className: 'link-button', content: 'Change' }}

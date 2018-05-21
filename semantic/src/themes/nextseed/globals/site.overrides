@@ -120,7 +120,7 @@ a.link{
 		color:darken(@link-color, 10%);
 	}
 }
-//	Admin Page Content Styles	//
+//	Admin Page Content Styles
 
 //	Page Header Styles
 .page-header-section{

@@ -28,7 +28,6 @@ class Settings extends React.Component {
           </Grid>
         </div>
         <div className="login-form content-spacer">
-          {/* <Header as="h1" textAlign="center">Your Settings</Header> */}
           <Grid
             textAlign="center"
             verticalAlign="middle"
@@ -39,13 +38,6 @@ class Settings extends React.Component {
                 currentUser={this.props.userStore.currentUser}
                 onSubmitForm={user => this.props.userStore.updateUser(user)}
               />
-              {/* <hr /> */}
-              {/* <button
-                className="btn btn-outline-danger"
-                onClick={this.handleClickLogout}
-              >
-                Or click here to logout.
-              </button> */}
             </Grid.Column>
           </Grid>
         </div>

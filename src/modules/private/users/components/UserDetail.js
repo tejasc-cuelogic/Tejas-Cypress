@@ -23,7 +23,6 @@ const userDetails = (props) => {
   const { phone } = props.details.contactDetails;
   return (
     <div className="content-spacer">
-      {/* <div className={`overlay ${(props.editCard) ? 'editing' : ''}`} /> */}
       <Grid columns={1} stackable>
         <Grid.Row>
           <Grid.Column width={8}>

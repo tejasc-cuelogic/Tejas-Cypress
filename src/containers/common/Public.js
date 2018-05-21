@@ -19,10 +19,6 @@ export default class Public extends React.Component {
             />
           ))}
         </Switch>
-        {/* <div className="ui vertical segment content">
-          <div className="ui container">
-          </div>
-        </div> */}
         <Footer />
       </div>
     );
