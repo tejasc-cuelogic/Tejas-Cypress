@@ -32,6 +32,11 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.uiStore.setEditMode(false);
   }
 
+  handleCloseModal = () => {
+    this.props.uiStore.setDashboardWizardStep();
+    this.props.history.goBack();
+  }
+
   render() {
     const {
       verifyIdentity01,
@@ -41,7 +46,7 @@ export default class ConfirmPhoneNumber extends Component {
     } = this.props.profileStore;
     const { errors, editMode } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your phone number</Header>
           <Divider />

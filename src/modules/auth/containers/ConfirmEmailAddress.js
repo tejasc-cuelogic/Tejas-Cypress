@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
@@ -8,7 +8,8 @@ import authActions from '../../../actions/auth';
 import { FormInput } from '../../../theme/form/FormElements';
 import ListErrors from '../../../theme/common/ListErrors';
 
-@inject('authStore', 'uiStore')
+@inject('authStore', 'uiStore', 'userStore')
+@withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
   componentWillUnmount() {
@@ -32,6 +33,7 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   render() {
+    const changeEmailAddressLink = typeof this.props.userStore.currentUser === 'undefined' ? 'InvestorSignup' : '';
     const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
@@ -51,7 +53,14 @@ export default class ConfirmEmailAddress extends Component {
             readOnly
             className="display-only"
           />
-          <p><Link to="/app/dashboard" onClick={() => this.props.setAuthWizardStep('InvestorSignup')}>Change email address</Link></p>
+          <p>
+            <Link
+              to={this.props.location.pathname}
+              onClick={() => this.props.setAuthWizardStep(changeEmailAddressLink)}
+            >
+            Change email address
+            </Link>
+          </p>
           {errors &&
             <Message error textAlign="left">
               <ListErrors errors={[errors.message]} />

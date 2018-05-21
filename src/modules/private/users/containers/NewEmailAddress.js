@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import _ from 'lodash';
 import { Header, Modal, Button, Form } from 'semantic-ui-react';
-// import { FormInput } from '../../../../theme/form/FormElements';
 import FieldError from '../../../../theme/common/FieldError';
 import validationActions from '../../../../actions/validation';
 
@@ -14,7 +14,7 @@ export default class NewEmailAddress extends Component {
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.goBack();
+    this.props.history.push('/app/profile-settings/profile-data');
   }
   render() {
     const { values } = this.props.authStore;
@@ -37,7 +37,7 @@ export default class NewEmailAddress extends Component {
             />
             <FieldError error={values.email.error} />
             <div className="center-align">
-              <Button loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed">Change Email Address</Button>
+              <Button disabled={typeof values.email.error !== 'undefined' || _.isEmpty(values.email.value)} loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed">Change Email Address</Button>
             </div>
           </Form>
         </Modal.Content>

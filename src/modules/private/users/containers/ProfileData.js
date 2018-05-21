@@ -29,8 +29,8 @@ export default class ProfileData extends Component {
     const { updateProfileInfo, updateProfileInfoChange } = this.props.profileStore;
     return (
       <Grid columns={1} stackable>
-        <Route exact path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
-        <Route exact path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
+        <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
+        <Route path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
         <Grid.Row>
           <Grid.Column width={8}>
             <Card fluid className="form-card">
