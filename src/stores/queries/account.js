@@ -45,3 +45,22 @@ export const finalizeIndividualAccount = gql`
       accountDetails
     }
   }`;
+
+export const createAccount = gql`
+  mutation _createAccount($userId: String! $accountAttributes: String! $status: String! $accountType: String!) {
+    createInvestorAccount(
+      userId: $userId
+      accountAttributes: $accountAttributes
+      status: $status
+      accountType: $accountType
+    ) {
+      userId
+      accountId
+      accountType
+      status
+      startedDate
+      finishedDate
+      accountDetails
+    }
+    
+  }`;

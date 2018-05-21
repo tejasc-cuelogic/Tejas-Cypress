@@ -23,7 +23,7 @@ export default class AccountCreation extends React.Component {
 
     return (
       <div className="step-progress">
-        <MuliStep steps={steps} formTitle="IRA Account Creation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
+        <MuliStep createAccount={this.props.iraAccountStore.createAccount} steps={steps} formTitle="IRA Account Creation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
       </div>
     );
   }

@@ -88,6 +88,7 @@ export default class MultiStep extends React.Component {
 
   next() {
     this.setNavState(this.state.compState + 1);
+    this.props.createAccount();
   }
 
   previous() {

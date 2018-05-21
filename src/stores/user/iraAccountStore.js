@@ -3,6 +3,10 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 
+import { GqlClient as client } from '../../services/graphql';
+import { createAccount } from '../../stores/queries/account';
+import uiStore from '../uiStore';
+import userStore from '../userStore';
 import {
   IRA_FIN_INFO,
   IRA_ACC_TYPES,
@@ -85,6 +89,83 @@ class IraAccountStore {
   get isValidIraForm() {
     return this.formFinInfo.meta.isValid && this.formAccTypes.meta.isValid
     && this.formFunding.meta.isValid && this.formIdentity.meta.isValid;
+  }
+
+  @computed
+  get formStatus() {
+    return this.isValidIraForm ? 'submit' : 'draft';
+  }
+
+  @computed
+  get accountAttributes() {
+    const accountType = _.find(
+      this.formAccTypes.fields.accountType.values,
+      { value: this.formAccTypes.fields.accountType.value },
+    );
+    const fundingOption = _.find(
+      this.formFunding.fields.fundingOption.values,
+      { value: this.formFunding.fields.fundingOption.value },
+    );
+    return {
+      netWorth: this.formFinInfo.fields.netWorth.value,
+      annualIncome: this.formFinInfo.fields.annualIncome.value,
+      iraAccountType: accountType,
+      fundingType: fundingOption,
+      identityDoc: 'xyz',
+    };
+  }
+
+  createAccount = () => {
+    alert('here');
+    // uiStore.setProgress();
+    // return new Promise((resolve, reject) => {
+    //   client
+    //     .mutate({
+    //       mutation: createAccount,
+    //       variables: {
+    //         userId: userStore.currentUser.sub,
+    //         accountAttributes: {},
+    //         status: this.formStatus,
+    //         accountType: 'ira',
+    //       },
+    //     })
+    //     .then((result) => {
+    //       resolve(result);
+    //     })
+    //     .catch((err) => {
+    //       uiStore.setErrors(this.simpleErr(err));
+    //       reject();
+    //     })
+    //     .finally(() => {
+    //       uiStore.setProgress(false);
+    //     });
+    // });
+  }
+
+  createUserAccount = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createAccount,
+          variables: {
+            userId: userStore.currentUser.sub,
+            accountAttributes: {},
+            status: '',
+            accountType: 'ira',
+          },
+        })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject();
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 }
 
