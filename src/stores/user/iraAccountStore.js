@@ -1,6 +1,7 @@
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
+import _ from 'lodash';
 
 import {
   IRA_FIN_INFO,
@@ -27,7 +28,7 @@ class IraAccountStore {
 
   @observable
   formIdentity = {
-    fields: { ...IRA_IDENTITY }, meta: { isValid: false, error: '' },
+    fields: { ...IRA_IDENTITY }, meta: { isValid: true, error: '' },
   }
 
   @action
@@ -66,10 +67,17 @@ class IraAccountStore {
     this[form].fields[field].error = validation.errors.first(field);
   };
 
-  // @computed
-  // get isValidIraForm() {
-  //   return this.formFinInfo.meta.isValid && this.formAccTypes.meta.isValid
-  // }
+  @computed
+  get isValidIraFinancialInfo() {
+    return _.isEmpty(this.formFinInfo.fields.networth.error) &&
+    _.isEmpty(this.formFinInfo.fields.annualIncome.error);
+  }
+
+  @computed
+  get isValidIraForm() {
+    return this.formFinInfo.meta.isValid && this.formAccTypes.meta.isValid
+    && this.formFunding.meta.isValid && this.formIdentity.meta.isValid;
+  }
 }
 
 export default new IraAccountStore();

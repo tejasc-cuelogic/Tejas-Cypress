@@ -35,7 +35,9 @@ export default class MultiStep extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setNavState(nextProps.stepToBeRendered);
+    if (typeof nextProps.stepToBeRendered !== 'undefined') {
+      this.setNavState(nextProps.stepToBeRendered);
+    }
   }
 
   getClassName(className, i) {

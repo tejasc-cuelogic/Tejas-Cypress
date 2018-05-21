@@ -8,13 +8,13 @@ import Funding from './Funding';
 import Identity from './Identity';
 import Summary from './Summary';
 
-@inject('accountStore')
+@inject('iraAccountStore')
 @observer
 export default class AccountCreation extends React.Component {
   render() {
     const steps =
     [
-      { name: 'Financial info', component: <FinancialInformation />, isValid: this.props.accountStore.isValidIraFinancialInformation ? '' : 'error' },
+      { name: 'Financial info', component: <FinancialInformation />, isValid: this.props.iraAccountStore.isValidIraFinancialInfo ? '' : 'error' },
       { name: 'Account type', component: <AccountType />, isValid: '' },
       { name: 'Funding', component: <Funding />, isValid: '' },
       { name: 'Identity', component: <Identity />, isValid: '' },
