@@ -113,38 +113,52 @@ class IraAccountStore {
       { value: this.formFunding.fields.fundingOption.value },
     );
     return {
-      netWorth: this.formFinInfo.fields.netWorth.value,
+      netWorth: this.formFinInfo.fields.networth.value,
       annualIncome: this.formFinInfo.fields.annualIncome.value,
-      iraAccountType: accountType,
-      fundingType: fundingOption,
+      iraAccountType: accountType.label,
+      fundingType: fundingOption.label,
       identityDoc: this.formIdentity.fields.driversLicence.value,
     };
   }
 
-  createAccount = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: createAccount,
-          variables: {
-            userId: userStore.currentUser.sub,
-            accountAttributes: this.accountAttributes,
-            status: this.formStatus,
-            accountType: 'ira',
-          },
-        })
-        .then((result) => {
-          resolve(result);
-        })
-        .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
-          reject();
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
+  @action
+  createAccount = (currentStep) => {
+    console.log(this.formStatus);
+    currentStep.validate();
+    console.log(currentStep.isValid);
+    if (currentStep.isValid !== 'error') {
+      uiStore.setProgress();
+      return new Promise((resolve, reject) => {
+        client
+          .mutate({
+            mutation: createAccount,
+            variables: {
+              userId: userStore.currentUser.sub,
+              accountAttributes: this.accountAttributes,
+              status: 'draft',
+              accountType: 'ira',
+            },
+          })
+          .then((result) => {
+            switch (currentStep.name) {
+              case 'Financial info':
+                this.formFinInfo.meta.isDirty = false;
+                break;
+              default:
+                break;
+            }
+            resolve(result);
+          })
+          .catch((err) => {
+            uiStore.setErrors((err));
+            reject();
+          })
+          .finally(() => {
+            uiStore.setProgress(false);
+          });
+      });
+    }
+    return true;
   }
 }
 

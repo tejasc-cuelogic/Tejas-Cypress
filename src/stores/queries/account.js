@@ -47,7 +47,7 @@ export const finalizeIndividualAccount = gql`
   }`;
 
 export const createAccount = gql`
-  mutation _createAccount($userId: String! $accountAttributes: String! $status: String! $accountType: String!) {
+  mutation _createAccount($userId: String! $accountAttributes: AccountInputType! $status: AccountCreationStatusEnum! $accountType: UserAccountTypeEnum!) {
     createInvestorAccount(
       userId: $userId
       accountAttributes: $accountAttributes
