@@ -11,10 +11,10 @@ import {
 } from '../../constants/account';
 
 import { GqlClient as client } from '../../services/graphql';
-import { createAccount } from '../../stores/queries/account';
+import { createAccount, updateAccount } from '../../stores/queries/account';
 import uiStore from '../uiStore';
 import userStore from '../userStore';
-// import userDetailsStore from '../user/userDetailsStore';
+import userDetailsStore from '../user/userDetailsStore';
 import Helper from '../../helper/utility';
 
 class EntityAccountStore {
@@ -119,6 +119,16 @@ class EntityAccountStore {
   }
 
   @computed
+  get isValidEntityGeneralInfo() {
+    return _.isEmpty(this.formGeneralInfo.fields.nameOfEntity.error) &&
+    _.isEmpty(this.formGeneralInfo.fields.taxId.error) &&
+    _.isEmpty(this.formGeneralInfo.fields.street.error) &&
+    _.isEmpty(this.formGeneralInfo.fields.city.error) &&
+    _.isEmpty(this.formGeneralInfo.fields.state.error) &&
+    _.isEmpty(this.formGeneralInfo.fields.zipCode.error);
+  }
+
+  @computed
   get accountAttributes() {
     return {
       netAssets: this.formFinInfo.fields.entityNetAssets.value,
@@ -134,11 +144,11 @@ class EntityAccountStore {
         trustDate: this.formEntityInfo.fields.dateOfTrust.value,
         /* eslint-disable no-dupe-keys */
         address: {
-          street1: 'str1',
+          street1: this.formGeneralInfo.fields.street.value,
           street2: 'str2',
-          city: 'atlanta',
-          state: 'GA',
-          zipCode: '30318',
+          city: this.formGeneralInfo.fields.city.value,
+          state: this.formGeneralInfo.fields.state.value,
+          zipCode: this.formGeneralInfo.fields.zipCode.value,
         },
         legalInfo: {
           legalFirstName: 'legal first name',
@@ -158,30 +168,60 @@ class EntityAccountStore {
         currentStep.validate();
         isValidCurrentStep = this.isValidEntityFinancialInfo;
         break;
+      case 'General':
+        currentStep.validate();
+        isValidCurrentStep = this.isValidEntityGeneralInfo;
+        break;
       default:
         break;
     }
     if (isValidCurrentStep) {
+      let mutation = createAccount;
+      let variables = {
+        userId: userStore.currentUser.sub,
+        accountAttributes: this.accountAttributes,
+        status: formStatus,
+        accountType: 'entity',
+      };
+      let actionPerformed = 'submitted';
+      if (typeof userDetailsStore.currentUser.data !== 'undefined') {
+        const accountDetails = _.find(
+          userDetailsStore.currentUser.data.user.accounts,
+          { accountType: 'entity' },
+        );
+        mutation = updateAccount;
+        variables = {
+          userId: userStore.currentUser.sub,
+          accountId: accountDetails.accountId,
+          accountAttributes: this.accountAttributes,
+          status: formStatus,
+          accountType: 'entity',
+        };
+        actionPerformed = 'updated';
+      }
       return new Promise((resolve, reject) => {
         client
           .mutate({
-            mutation: createAccount,
-            variables: {
-              userId: userStore.currentUser.sub,
-              accountAttributes: this.accountAttributes,
-              status: formStatus,
-              accountType: 'entity',
-            },
+            mutation,
+            variables,
           })
           .then((result) => {
             switch (currentStep.name) {
               case 'Financial info':
                 this.setIsDirty('formFinInfo', false);
                 break;
+              case 'General':
+                this.setIsDirty('formGeneralInfo', false);
+                break;
               default:
                 break;
             }
-            Helper.toast(`${currentStep.name} updated successfully.`, 'success');
+            userDetailsStore.getUser(userStore.currentUser.sub);
+            if (formStatus === 'submit') {
+              Helper.toast('Entity account created successfully.', 'success');
+            } else {
+              Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+            }
             resolve(result);
           })
           .catch((err) => {

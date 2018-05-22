@@ -328,22 +328,22 @@ export const ENTITY_FIN_INFO = {
 
 export const ENTITY_GEN_INFO = {
   nameOfEntity: {
-    value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
+    key: 'nameOfEntity', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
   },
   taxId: {
-    value: '', label: 'Tax ID', error: undefined, rule: 'required', placeHolder: 'e.g. 12345',
+    key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required', placeHolder: 'e.g. 12345',
   },
   street: {
-    value: '', label: 'Street', error: undefined, rule: 'required|string',
+    key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
   },
   city: {
-    value: '', label: 'City', error: undefined, rule: 'required|string',
+    key: 'city', value: '', label: 'City', error: undefined, rule: 'required|string',
   },
   state: {
-    value: '', label: 'State', error: undefined, rule: 'required|string',
+    key: 'state', value: '', label: 'State', error: undefined, rule: 'required|string',
   },
   zipCode: {
-    value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric',
+    key: 'zipCode', value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric',
   },
 };
 

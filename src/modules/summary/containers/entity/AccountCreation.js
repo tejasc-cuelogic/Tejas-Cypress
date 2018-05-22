@@ -28,6 +28,7 @@ export default class AccountCreation extends React.Component {
         component: <General />,
         isValid: '',
         isDirty: this.props.entityAccountStore.formGeneralInfo.meta.isDirty,
+        validate: validationActions.validateEntityGeneralInformation,
       },
       {
         name: 'Financial info',
