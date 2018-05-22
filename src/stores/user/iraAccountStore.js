@@ -8,6 +8,7 @@ import { createAccount, updateAccount } from '../../stores/queries/account';
 import uiStore from '../uiStore';
 import userStore from '../userStore';
 import userDetailsStore from '../user/userDetailsStore';
+import Helper from '../../helper/utility';
 import {
   IRA_FIN_INFO,
   IRA_ACC_TYPES,
@@ -86,6 +87,11 @@ class IraAccountStore {
     this[form].fields[key].error = error;
   }
 
+  @action
+  setIsDirty = (form, status) => {
+    this[form].meta.isDirty = status;
+  }
+
   @computed
   get isValidIraFinancialInfo() {
     return _.isEmpty(this.formFinInfo.fields.networth.error) &&
@@ -123,9 +129,19 @@ class IraAccountStore {
       annualIncome:
       this.formFinInfo.fields.annualIncome.value ? this.formFinInfo.fields.annualIncome.value : 0,
       iraAccountType: accountType.label.toLowerCase(),
-      fundingType: fundingOption.label.toLowerCase(),
+      fundingType: this.getFundingType(fundingOption.label.toLowerCase()),
       identityDoc: this.formIdentity.fields.driversLicence.value,
     };
+  }
+
+  /* eslint-disable class-methods-use-this */
+  getFundingType(label) {
+    if (label === 'check') {
+      return 'check';
+    } else if (label === 'ira transfer') {
+      return 'iraTransfer';
+    }
+    return 'directRollOver';
   }
 
   @action
@@ -158,6 +174,7 @@ class IraAccountStore {
         status: 'draft',
         accountType: 'ira',
       };
+      let actionPerformed = 'submitted';
       if (typeof userDetailsStore.currentUser.data !== 'undefined') {
         const accountDetails = _.find(
           userDetailsStore.currentUser.data.user.accounts,
@@ -171,6 +188,7 @@ class IraAccountStore {
           status: 'draft',
           accountType: 'ira',
         };
+        actionPerformed = 'updated';
       }
       return new Promise((resolve, reject) => {
         client
@@ -181,25 +199,27 @@ class IraAccountStore {
           .then((result) => {
             switch (currentStep.name) {
               case 'Financial info':
-                this.formFinInfo.meta.isDirty = false;
+                this.setIsDirty('formFinInfo', false);
                 break;
               case 'Account type':
-                this.formAccTypes.meta.isDirty = false;
+                this.setIsDirty('formAccTypes', false);
                 break;
               case 'Funding':
-                this.formFunding.meta.isDirty = false;
+                this.setIsDirty('formFunding', false);
                 break;
               case 'Identity':
-                this.formIdentity.meta.isDirty = false;
+                this.setIsDirty('formIdentity', false);
                 break;
               default:
                 break;
             }
+            userDetailsStore.getUser(userStore.currentUser.sub);
+            Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
             resolve(result);
           })
           .catch((err) => {
-            uiStore.setErrors((err));
-            reject();
+            uiStore.setErrors(err);
+            reject(err);
           })
           .finally(() => {
             uiStore.setProgress(false);
