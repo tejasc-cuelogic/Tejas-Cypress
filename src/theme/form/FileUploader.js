@@ -2,12 +2,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Grid, Icon, Button } from 'semantic-ui-react';
+import FieldError from '../common/FieldError';
 
 const FileUploader = observer((props) => {
   const {
     label,
     sublabel,
     value,
+    error,
   } = props.fielddata;
   return (
     <Grid.Row>
@@ -33,6 +35,9 @@ const FileUploader = observer((props) => {
           <Button size="tiny" compact className="remove pull-right" onClick={() => props.removeUploadedDocument(props.name)}>Remove</Button>
           <span title={value}>{value}</span>
         </div>
+        }
+        {error &&
+          <FieldError error={error} />
         }
       </Grid.Column>
     </Grid.Row>

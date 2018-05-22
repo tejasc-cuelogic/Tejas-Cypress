@@ -3,12 +3,22 @@ import { Header, Table, Button, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Banklogo from '../../../../assets/images/boa-logo.jpg';
 import DateTimeFormat from '../../../../theme/common/DateTimeFormat';
+import Helper from '../../../../helper/utility';
 
-@inject('accountStore')
+@inject('entityAccountStore')
 @observer
 export default class Summary extends Component {
+  handleCreateAccount = () => {
+    this.props.entityAccountStore.createAccount('Summary', 'submit');
+  }
   render() {
-    const { entityAccount } = this.props.accountStore;
+    const {
+      formFinInfo,
+      formPersonalInfo,
+      formGeneralInfo,
+      formEntityInfo,
+    }
+      = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Verify the info and create Entity account</Header>
@@ -19,39 +29,43 @@ export default class Summary extends Component {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell><b>Entity net assest</b></Table.Cell>
-                  <Table.Cell>{entityAccount.entityNetAssets.value !== '' ? `$${entityAccount.entityNetAssets.value}` : ''}</Table.Cell>
+                  <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.entityNetAssets.value ?
+                      formFinInfo.fields.entityNetAssets.value : 0)}
+                  </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Other CF Investments</b></Table.Cell>
-                  <Table.Cell>{entityAccount.cfInvestments.value !== '' ? `$${entityAccount.cfInvestments.value}` : ''}</Table.Cell>
+                  <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.cfInvestments.value ?
+                      formFinInfo.fields.cfInvestments.value : 0)}
+                  </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Entitys name</b></Table.Cell>
-                  <Table.Cell>{entityAccount.nameOfEntity.value}</Table.Cell>
+                  <Table.Cell>{formPersonalInfo.fields.entityTitle.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Tax ID</b></Table.Cell>
-                  <Table.Cell>{entityAccount.taxId.value}</Table.Cell>
+                  <Table.Cell>{formGeneralInfo.fields.taxId.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row verticalAlign="top">
                   <Table.Cell><b>Entity Address</b></Table.Cell>
-                  <Table.Cell>{this.props.accountStore.fullAddress}
+                  <Table.Cell>{formGeneralInfo.fields.street.value}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Is Entity a trust?</b></Table.Cell>
-                  <Table.Cell>{entityAccount.isEntityTrust.value}
-                    {entityAccount.isEntityTrust.value === 'yes' &&
+                  <Table.Cell>{formEntityInfo.fields.isEntityTrust.value}
+                    {formEntityInfo.fields.isEntityTrust.value === 'yes' &&
                       ', since '
                     }
-                    {entityAccount.isEntityTrust.value === 'yes' &&
-                      <DateTimeFormat datetime={entityAccount.dateOfTrust.value} />
+                    {formEntityInfo.fields.isEntityTrust.value === 'yes' &&
+                      <DateTimeFormat datetime={formEntityInfo.fields.dateOfTrust.value} />
                     }
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Title with the entity</b></Table.Cell>
-                  <Table.Cell>{entityAccount.entityTitle.value}</Table.Cell>
+                  <Table.Cell>{formPersonalInfo.fields.entityTitle.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Bank account</b></Table.Cell>
@@ -71,7 +85,7 @@ export default class Summary extends Component {
           </div>
         </div>
         <div className="center-align">
-          <Button primary size="large">Create the account</Button>
+          <Button primary size="large" onClick={() => this.handleCreateAccount()}>Create the account</Button>
         </div>
       </div>
     );

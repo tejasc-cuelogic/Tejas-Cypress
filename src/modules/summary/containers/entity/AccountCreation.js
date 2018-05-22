@@ -7,7 +7,7 @@ import General from './General';
 import FinancilInfo from './FinancialInfo';
 import PersonalInformation from './PersonalInformation';
 import FormationDocuments from './FormationDocuments';
-import LinkBankAccount from './LinkBankAccount';
+import LinkBankAccount from '../individual/LinkBankPlaid';
 import Summary from './Summary';
 
 @inject('entityAccountStore', 'userDetailsStore', 'userStore')
@@ -52,6 +52,7 @@ export default class AccountCreation extends React.Component {
         component: <FormationDocuments />,
         isValid: '',
         isDirty: this.props.entityAccountStore.formFormationDocuments.meta.isDirty,
+        validate: validationActions.validateEntityFormationDoc,
       },
       { name: 'Link bank', component: <LinkBankAccount />, isValid: '' },
       { name: 'Summary', component: <Summary />, isValid: '' },

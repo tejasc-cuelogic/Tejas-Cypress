@@ -141,6 +141,13 @@ class EntityAccountStore {
   }
 
   @computed
+  get isValidFormationDoc() {
+    return _.isEmpty(this.formFormationDocuments.fields.entityFormationDocument.error) &&
+    _.isEmpty(this.formFormationDocuments.fields.entityOperatingDocument.error) &&
+    _.isEmpty(this.formFormationDocuments.fields.einVerification.error);
+  }
+
+  @computed
   get accountAttributes() {
     return {
       netAssets: this.formFinInfo.fields.entityNetAssets.value
@@ -194,6 +201,10 @@ class EntityAccountStore {
         currentStep.validate();
         isValidCurrentStep = this.isValidPersonalInfo;
         break;
+      case 'Formation doc':
+        currentStep.validate();
+        isValidCurrentStep = this.isValidFormationDoc;
+        break;
       default:
         break;
     }
@@ -240,6 +251,9 @@ class EntityAccountStore {
                 break;
               case 'Personal info':
                 this.setIsDirty('formPersonalInfo', false);
+                break;
+              case 'Formation doc':
+                this.setIsDirty('formFormationDocuments', false);
                 break;
               default:
                 break;

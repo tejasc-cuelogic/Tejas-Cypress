@@ -371,13 +371,13 @@ export const ENTITY_PERSONAL_INFO = {
 
 export const ENTITY_FORMATION_DOCS = {
   entityFormationDocument: {
-    value: '', error: undefined, rule: 'required', label: 'Entity Formation Document',
+    key: 'entityFormationDocument', value: '', error: undefined, rule: 'required', label: 'Entity Formation Document',
   },
   entityOperatingDocument: {
-    value: '', error: undefined, rule: 'required', label: 'Entity Operating Document',
+    key: 'entityOperatingDocument', value: '', error: undefined, rule: 'required', label: 'Entity Operating Document',
   },
   einVerification: {
-    value: '', error: undefined, rule: 'required', label: 'EIN Verification',
+    key: 'einVerification', value: '', error: undefined, rule: 'required', label: 'EIN Verification',
   },
 };
 

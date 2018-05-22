@@ -464,7 +464,7 @@ export class Validation {
  }
 
  /**
-  * @desc Validates Entity - Personal Infoon next/submit button
+  * @desc Validates Entity - Personal Info on next/submit button
   */
  validateEntityPersonalInfo = () => {
    _.map(entityAccountStore.formPersonalInfo.fields, (value) => {
@@ -472,6 +472,18 @@ export class Validation {
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
      entityAccountStore.setEntityError('formPersonalInfo', key, errors && errors[key][0]);
+   });
+ }
+
+ /**
+  * @desc Validates Entity - Formation Docs on next/submit button
+  */
+ validateEntityFormationDoc = () => {
+   _.map(entityAccountStore.formFormationDocuments.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     entityAccountStore.setEntityError('formFormationDocuments', key, errors && errors[key][0]);
    });
  }
 
