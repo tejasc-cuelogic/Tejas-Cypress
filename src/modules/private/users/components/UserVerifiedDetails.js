@@ -19,6 +19,14 @@ const userVerifiedDetails = (props) => {
     legalAddress,
     dateOfBirth,
   } = props.legalDetails;
+  if (!legalName) {
+    return (
+      <Card fluid className="form-card">
+        <h3>Identity not verified</h3>
+        <Link to="/app/summary" ><b>Verify Identity</b></Link>
+      </Card>
+    );
+  }
   return (
     <Card className="form-card">
       <h3>Identity verified</h3>
