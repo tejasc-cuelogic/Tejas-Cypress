@@ -309,6 +309,7 @@ export const IS_ENTITY_TRUST = {
 
 export const ENTITY_FIN_INFO = {
   entityNetAssets: {
+    key: 'entityNetAssets',
     value: '',
     label: 'Entity Net Assets',
     error: undefined,
@@ -316,6 +317,7 @@ export const ENTITY_FIN_INFO = {
     maxLength: 15,
   },
   cfInvestments: {
+    key: 'cfInvestments',
     value: '',
     label: 'Other religion CF investments made in prior 12 months',
     error: undefined,

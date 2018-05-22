@@ -7,6 +7,8 @@ import userStore from './../stores/userStore';
 import profileStore from './../stores/profileStore';
 import accountStore from './../stores/accountStore';
 import iraAccountStore from './../stores/user/iraAccountStore';
+import entityAccountStore from './../stores/user/entityAccountStore';
+
 import { REGISTRATION,
   PROFILE_DETAILS,
   CONDITIONAL_REQUIRE,
@@ -425,6 +427,29 @@ export class Validation {
    iraAccountStore.setIraError('formIdentity', 'driversLicence', errors && errors.driversLicence[0]);
  }
 
+ /**
+  * @desc Validates Entity - Financial Informationon next/submit button
+  */
+ validateEntityFinancialInfo = () => {
+   _.map(entityAccountStore.formFinInfo.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     entityAccountStore.setEntityError('formFinInfo', key, errors && errors[key][0]);
+   });
+ }
+
+ /**
+  * @desc Validates Entity - General Information next/submit button
+  */
+ validateEntityGeneralInformation = () => {
+   _.map(entityAccountStore.formGeneralInfo.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     entityAccountStore.setEntityError('formGeneralInfo', key, errors && errors[key][0]);
+   });
+ }
   // Private Methods ends here
 }
 
