@@ -273,6 +273,7 @@ export const IRA_FUNDING = {
 
 export const IRA_FIN_INFO = {
   networth: {
+    key: 'networth',
     value: '',
     error: undefined,
     rule: 'required|numeric',
@@ -281,6 +282,7 @@ export const IRA_FIN_INFO = {
     maxLength: 15,
   },
   annualIncome: {
+    key: 'annualIncome',
     value: '',
     error: undefined,
     rule: 'required|numeric',

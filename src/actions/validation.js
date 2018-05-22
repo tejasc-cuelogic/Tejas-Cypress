@@ -6,6 +6,7 @@ import businessStore from './../stores/businessStore';
 import userStore from './../stores/userStore';
 import profileStore from './../stores/profileStore';
 import accountStore from './../stores/accountStore';
+import iraAccountStore from './../stores/user/iraAccountStore';
 import { REGISTRATION,
   PROFILE_DETAILS,
   CONDITIONAL_REQUIRE,
@@ -399,6 +400,20 @@ export class Validation {
       }
     });
   }
+
+  /**
+  * @desc Validates IRA - financial info after clicking next/submit button
+  * @return null
+  */
+ validateIRAFinancialInfo = () => {
+   _.map(iraAccountStore.formFinInfo.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     iraAccountStore.setFinancialInfoError(key, errors && errors[key][0]);
+     // iraAccountStore.formFinInfo.fields[key].error = errors[key][0];
+   });
+ }
 
   // Private Methods ends here
 }

@@ -17,22 +17,22 @@ import {
 class IraAccountStore {
   @observable
   formFinInfo = {
-    fields: { ...IRA_FIN_INFO }, meta: { isValid: false, error: '' },
+    fields: { ...IRA_FIN_INFO }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formAccTypes = {
-    fields: { ...IRA_ACC_TYPES }, meta: { isValid: true, error: '' },
+    fields: { ...IRA_ACC_TYPES }, meta: { isValid: true, error: '', isDirty: false },
   };
 
   @observable
   formFunding = {
-    fields: { ...IRA_FUNDING }, meta: { isValid: true, error: '' },
+    fields: { ...IRA_FUNDING }, meta: { isValid: true, error: '', isDirty: false },
   };
 
   @observable
   formIdentity = {
-    fields: { ...IRA_IDENTITY }, meta: { isValid: true, error: '' },
+    fields: { ...IRA_IDENTITY }, meta: { isValid: true, error: '', isDirty: false },
   }
 
   @observable
@@ -76,8 +76,14 @@ class IraAccountStore {
       mapValues(this[form].fields, f => f.rule),
     );
     this[form].meta.isValid = validation.passes();
+    this[form].meta.isDirty = true;
     this[form].fields[field].error = validation.errors.first(field);
   };
+
+  @action
+  setFinancialInfoError = (key, error) => {
+    this.formFinInfo.fields[key].error = error;
+  }
 
   @computed
   get isValidIraFinancialInfo() {

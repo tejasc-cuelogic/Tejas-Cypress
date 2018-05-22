@@ -7,6 +7,7 @@ import AccountType from './AccountType';
 import Funding from './Funding';
 import Identity from './Identity';
 import Summary from './Summary';
+import validationActions from '../../../../actions/validation';
 
 @inject('iraAccountStore')
 @observer
@@ -18,31 +19,31 @@ export default class AccountCreation extends React.Component {
         name: 'Financial info',
         component: <FinancialInformation />,
         isValid: this.props.iraAccountStore.isValidIraFinancialInfo ? '' : 'error',
-        shouldSubmit: this.props.iraAccountStore.isValidIraFinancialInfo,
+        isDirty: this.props.iraAccountStore.formFinInfo.meta.isDirty,
+        validate: validationActions.validateIRAFinancialInfo,
       },
       {
         name: 'Account type',
         component: <AccountType />,
         isValid: '',
-        shouldSubmit: true,
+        isDirty: this.props.iraAccountStore.formAccTypes.meta.isDirty,
       },
       {
         name: 'Funding',
         component: <Funding />,
         isValid: '',
-        shouldSubmit: true,
+        isDirty: this.props.iraAccountStore.formFunding.meta.isDirty,
       },
       {
         name: 'Identity',
         component: <Identity />,
         isValid: '',
-        shouldSubmit: true,
+        isDirty: this.props.iraAccountStore.formIdentity.meta.isDirty,
       },
       {
         name: 'Summary',
         component: <Summary />,
         isValid: '',
-        shouldSubmit: true,
       },
     ];
 
