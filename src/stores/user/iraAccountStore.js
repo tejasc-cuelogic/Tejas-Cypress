@@ -111,38 +111,11 @@ class IraAccountStore {
       annualIncome: this.formFinInfo.fields.annualIncome.value,
       iraAccountType: accountType,
       fundingType: fundingOption,
-      identityDoc: 'xyz',
+      identityDoc: this.formIdentity.fields.driversLicence.value,
     };
   }
 
   createAccount = () => {
-    alert('here');
-    // uiStore.setProgress();
-    // return new Promise((resolve, reject) => {
-    //   client
-    //     .mutate({
-    //       mutation: createAccount,
-    //       variables: {
-    //         userId: userStore.currentUser.sub,
-    //         accountAttributes: {},
-    //         status: this.formStatus,
-    //         accountType: 'ira',
-    //       },
-    //     })
-    //     .then((result) => {
-    //       resolve(result);
-    //     })
-    //     .catch((err) => {
-    //       uiStore.setErrors(this.simpleErr(err));
-    //       reject();
-    //     })
-    //     .finally(() => {
-    //       uiStore.setProgress(false);
-    //     });
-    // });
-  }
-
-  createUserAccount = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -150,8 +123,8 @@ class IraAccountStore {
           mutation: createAccount,
           variables: {
             userId: userStore.currentUser.sub,
-            accountAttributes: {},
-            status: '',
+            accountAttributes: this.accountAttributes,
+            status: this.formStatus,
             accountType: 'ira',
           },
         })
