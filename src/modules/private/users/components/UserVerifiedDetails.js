@@ -28,7 +28,6 @@ const userVerifiedDetails = (props) => {
         <dt>Legal Last Name</dt>
         <dd>{legalName.lastLegalName}</dd>
         <dt>SSN</dt>
-        {/* <dd>XXX-XXX-2953</dd> */}
         <dd>{ssn}</dd>
         <dt>DOB</dt>
         <dd>{moment(dateOfBirth).format('MM-DD-YYYY')}</dd>

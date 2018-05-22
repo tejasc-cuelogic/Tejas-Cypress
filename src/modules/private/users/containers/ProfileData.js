@@ -60,9 +60,6 @@ export default class ProfileData extends Component {
                 />
                 <FormInput
                   action={{
-                    // color: 'green', className: 'link-button',
-                    // content: 'Change',
-                    // onClick: () => this.props.uiStore.setAuthWizardStep('ConfirmEmailAddress'),
                     color: 'green', className: 'link-button', content: 'Change', onClick: () => this.props.history.replace(`${this.props.match.url}/new-email-address`),
                   }}
                   name="email"
