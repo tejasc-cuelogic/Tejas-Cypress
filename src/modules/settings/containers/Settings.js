@@ -19,13 +19,7 @@ class Settings extends React.Component {
     return (
       <div>
         <div className="page-header-section">
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <Header as="h1">Your Settings</Header>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          <Header as="h1">Your Settings</Header>
         </div>
         <div className="login-form content-spacer">
           <Grid
