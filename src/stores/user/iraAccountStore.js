@@ -81,7 +81,7 @@ class IraAccountStore {
   };
 
   @action
-  setFinancialInfoError = (key, error) => {
+  setIraError = (key, error) => {
     this.formFinInfo.fields[key].error = error;
   }
 
@@ -89,6 +89,11 @@ class IraAccountStore {
   get isValidIraFinancialInfo() {
     return _.isEmpty(this.formFinInfo.fields.networth.error) &&
     _.isEmpty(this.formFinInfo.fields.annualIncome.error);
+  }
+
+  @computed
+  get isValidIraIdentity() {
+    return _.isEmpty(this.formIdentity.fields.driversLicence.error);
   }
 
   @computed
@@ -113,20 +118,37 @@ class IraAccountStore {
       { value: this.formFunding.fields.fundingOption.value },
     );
     return {
-      netWorth: this.formFinInfo.fields.networth.value,
-      annualIncome: this.formFinInfo.fields.annualIncome.value,
-      iraAccountType: accountType.label,
-      fundingType: fundingOption.label,
+      netWorth: this.formFinInfo.fields.networth.value ? this.formFinInfo.fields.networth.value : 0,
+      annualIncome:
+      this.formFinInfo.fields.annualIncome.value ? this.formFinInfo.fields.annualIncome.value : 0,
+      iraAccountType: accountType.label.toLowerCase(),
+      fundingType: fundingOption.label.toLowerCase(),
       identityDoc: this.formIdentity.fields.driversLicence.value,
     };
   }
 
   @action
   createAccount = (currentStep) => {
-    console.log(this.formStatus);
-    currentStep.validate();
-    console.log(currentStep.isValid);
-    if (currentStep.isValid !== 'error') {
+    let isValidCurrentStep = false;
+    switch (currentStep.name) {
+      case 'Financial info':
+        currentStep.validate();
+        isValidCurrentStep = this.isValidIraFinancialInfo;
+        break;
+      case 'Account type':
+        isValidCurrentStep = true;
+        break;
+      case 'Funding':
+        isValidCurrentStep = true;
+        break;
+      case 'Identity':
+        currentStep.validate();
+        isValidCurrentStep = this.isValidIraIdentity;
+        break;
+      default:
+        break;
+    }
+    if (isValidCurrentStep) {
       uiStore.setProgress();
       return new Promise((resolve, reject) => {
         client
@@ -143,6 +165,15 @@ class IraAccountStore {
             switch (currentStep.name) {
               case 'Financial info':
                 this.formFinInfo.meta.isDirty = false;
+                break;
+              case 'Account type':
+                this.formAccTypes.meta.isDirty = false;
+                break;
+              case 'Funding':
+                this.formFunding.meta.isDirty = false;
+                break;
+              case 'Identity':
+                this.formIdentity.meta.isDirty = false;
                 break;
               default:
                 break;

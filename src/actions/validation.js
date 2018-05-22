@@ -410,9 +410,19 @@ export class Validation {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     iraAccountStore.setFinancialInfoError(key, errors && errors[key][0]);
-     // iraAccountStore.formFinInfo.fields[key].error = errors[key][0];
+     iraAccountStore.setIraError('formFinInfo', key, errors && errors[key][0]);
    });
+ }
+
+  /**
+  * @desc Validates IRA - Identity after clicking next/submit button
+  * @return null
+  */
+ validateIRAIdentityInfo = () => {
+   const { errors } =
+  validationService.validate(iraAccountStore.formIdentity.fields.driversLicence);
+   // Store errors to store if any or else `undefined` will get set to it
+   iraAccountStore.setIraError('formIdentity', 'driversLicence', errors && errors.driversLicence[0]);
  }
 
   // Private Methods ends here

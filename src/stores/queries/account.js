@@ -64,3 +64,27 @@ export const createAccount = gql`
     }
     
   }`;
+
+export const updateAccount = gql`
+  mutation _updateAccount {
+    updateInvestorAccount(
+      userId:"49d20a2b-c409-4bb6-ad31-de4bc0c5bfcf"
+      accountId: "a58c1c20-5ce1-11e8-9032-97b00f84623b"
+      accountAttributes: {
+        netWorth: 100000,
+        annualIncome: 5000000
+        iraAccountType: traditional
+        fundingType: check
+        identityDoc: "xyz"
+      }
+      status: submit
+      accountType: ira
+    ) {
+      userId
+      accountId
+      accountType
+      status
+      startedDate
+      finishedDate
+      accountDetails
+  }`;
