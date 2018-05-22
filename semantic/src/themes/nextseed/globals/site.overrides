@@ -85,6 +85,9 @@ h6{
 .mb-half{
 	margin-bottom:@7px !important;
 }
+.mt-30{
+	margin-top:@30px !important;
+}
 .pull-left{
 	float:left !important;
 }

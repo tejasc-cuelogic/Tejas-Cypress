@@ -25,7 +25,21 @@ export class AuthStore {
   @observable signupFlow = {
     type: '',
   };
-
+  @observable oldPwd = {
+    value: '',
+    label: 'Old Password',
+    placeholder: 'Enter old password',
+  }
+  @observable newPwd = {
+    value: '',
+    label: 'New Password',
+    placeholder: 'Enter new password',
+  }
+  @observable confirmNewPwd = {
+    value: '',
+    label: 'Confirm New Password',
+    placeholder: 'Re-Enter new password',
+  }
   @observable
   values = {
     givenName: {
