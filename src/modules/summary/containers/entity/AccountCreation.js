@@ -10,9 +10,12 @@ import FormationDocuments from './FormationDocuments';
 import LinkBankAccount from './LinkBankAccount';
 import Summary from './Summary';
 
-@inject('entityAccountStore')
+@inject('entityAccountStore', 'userDetailsStore', 'userStore')
 @observer
 export default class AccountCreation extends React.Component {
+  componentWillMount() {
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+  }
   render() {
     const steps =
     [
@@ -31,16 +34,18 @@ export default class AccountCreation extends React.Component {
         validate: validationActions.validateEntityGeneralInformation,
       },
       {
-        name: 'Financial info',
+        name: 'Entity info',
         component: <FinancilInfo />,
         isValid: '',
         isDirty: this.props.entityAccountStore.formEntityInfo.meta.isDirty,
+        validate: validationActions.validateEntityInfo,
       },
       {
         name: 'Personal info',
         component: <PersonalInformation />,
         isValid: '',
         isDirty: this.props.entityAccountStore.formPersonalInfo.meta.isDirty,
+        validate: validationActions.validateEntityPersonalInfo,
       },
       {
         name: 'Formation doc',

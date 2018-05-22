@@ -428,7 +428,7 @@ export class Validation {
  }
 
  /**
-  * @desc Validates Entity - Financial Informationon next/submit button
+  * @desc Validates Entity - Financial Information on next/submit button
   */
  validateEntityFinancialInfo = () => {
    _.map(entityAccountStore.formFinInfo.fields, (value) => {
@@ -440,7 +440,7 @@ export class Validation {
  }
 
  /**
-  * @desc Validates Entity - General Information next/submit button
+  * @desc Validates Entity - General Information on next/submit button
   */
  validateEntityGeneralInformation = () => {
    _.map(entityAccountStore.formGeneralInfo.fields, (value) => {
@@ -450,6 +450,31 @@ export class Validation {
      entityAccountStore.setEntityError('formGeneralInfo', key, errors && errors[key][0]);
    });
  }
+
+ /**
+  * @desc Validates Entity - Info on next/submit button
+  */
+ validateEntityInfo = () => {
+   _.map(entityAccountStore.formEntityInfo.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     entityAccountStore.setEntityError('formEntityInfo', key, errors && errors[key][0]);
+   });
+ }
+
+ /**
+  * @desc Validates Entity - Personal Infoon next/submit button
+  */
+ validateEntityPersonalInfo = () => {
+   _.map(entityAccountStore.formPersonalInfo.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     entityAccountStore.setEntityError('formPersonalInfo', key, errors && errors[key][0]);
+   });
+ }
+
   // Private Methods ends here
 }
 

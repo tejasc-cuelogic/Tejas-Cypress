@@ -129,12 +129,26 @@ class EntityAccountStore {
   }
 
   @computed
+  get isValidEntityInfo() {
+    return _.isEmpty(this.formEntityInfo.fields.isEntityTrust.error) &&
+    _.isEmpty(this.formEntityInfo.fields.dateOfTrust.error);
+  }
+
+  @computed
+  get isValidPersonalInfo() {
+    return _.isEmpty(this.formPersonalInfo.fields.entityTitle.error) &&
+    _.isEmpty(this.formPersonalInfo.fields.photoId.error);
+  }
+
+  @computed
   get accountAttributes() {
     return {
-      netAssets: this.formFinInfo.fields.entityNetAssets.value,
+      netAssets: this.formFinInfo.fields.entityNetAssets.value
+        ? this.formFinInfo.fields.entityNetAssets.value : 0,
       cfInvestment: {
         dateOfInvestment: '02281975',
-        amount: this.formFinInfo.fields.cfInvestments.value,
+        amount: this.formFinInfo.fields.cfInvestments.value ?
+          this.formFinInfo.fields.cfInvestments.value : 0,
       },
       entity: {
         name: this.formGeneralInfo.fields.nameOfEntity.value,
@@ -171,6 +185,14 @@ class EntityAccountStore {
       case 'General':
         currentStep.validate();
         isValidCurrentStep = this.isValidEntityGeneralInfo;
+        break;
+      case 'Entity info':
+        currentStep.validate();
+        isValidCurrentStep = this.isValidEntityInfo;
+        break;
+      case 'Personal info':
+        currentStep.validate();
+        isValidCurrentStep = this.isValidPersonalInfo;
         break;
       default:
         break;
@@ -212,6 +234,12 @@ class EntityAccountStore {
                 break;
               case 'General':
                 this.setIsDirty('formGeneralInfo', false);
+                break;
+              case 'Entity info':
+                this.setIsDirty('formEntityInfo', false);
+                break;
+              case 'Personal info':
+                this.setIsDirty('formPersonalInfo', false);
                 break;
               default:
                 break;

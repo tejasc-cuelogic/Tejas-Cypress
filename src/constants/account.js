@@ -349,22 +349,23 @@ export const ENTITY_GEN_INFO = {
 
 export const ENTITY_TRUST_INFO = {
   isEntityTrust: {
+    key: 'isEntityTrust',
     value: 'yes',
     values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
     error: undefined,
     rule: 'required',
   },
   dateOfTrust: {
-    value: moment(), error: undefined, rule: 'required', label: 'Date of Trust',
+    key: 'dateOfTrust', value: moment(), error: undefined, rule: 'required', label: 'Date of Trust',
   },
 };
 
 export const ENTITY_PERSONAL_INFO = {
   entityTitle: {
-    value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
+    key: 'entityTitle', value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
   },
   photoId: {
-    value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID', sublabel: 'Drivers License or Passport',
+    key: 'photoId', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID', sublabel: 'Drivers License or Passport',
   },
 };
 
