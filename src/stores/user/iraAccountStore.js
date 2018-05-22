@@ -7,6 +7,7 @@ import { GqlClient as client } from '../../services/graphql';
 import { createAccount } from '../../stores/queries/account';
 import uiStore from '../uiStore';
 import userStore from '../userStore';
+import userDetailsStore from '../user/userDetailsStore';
 import {
   IRA_FIN_INFO,
   IRA_ACC_TYPES,
@@ -81,8 +82,8 @@ class IraAccountStore {
   };
 
   @action
-  setIraError = (key, error) => {
-    this.formFinInfo.fields[key].error = error;
+  setIraError = (form, key, error) => {
+    this[form].fields[key].error = error;
   }
 
   @computed
@@ -149,7 +150,8 @@ class IraAccountStore {
         break;
     }
     if (isValidCurrentStep) {
-      uiStore.setProgress();
+      uiStore.setProgress(userStore.currentUser.sub);
+      console.log(userDetailsStore.userDetails);
       return new Promise((resolve, reject) => {
         client
           .mutate({
