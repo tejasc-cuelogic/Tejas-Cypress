@@ -69,6 +69,13 @@ query getUserDetails($id: ID!) {
         zipCode
       }
     }
+    accounts {
+      userId
+      accountId
+      accountType
+      finishedDate
+      status
+    }
     accountStatus 
   }
 }

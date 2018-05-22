@@ -9,9 +9,12 @@ import Identity from './Identity';
 import Summary from './Summary';
 import validationActions from '../../../../actions/validation';
 
-@inject('iraAccountStore')
+@inject('iraAccountStore', 'userDetailsStore', 'userStore')
 @observer
 export default class AccountCreation extends React.Component {
+  componentWillMount() {
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+  }
   render() {
     const steps =
     [

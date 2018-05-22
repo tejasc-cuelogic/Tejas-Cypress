@@ -4,7 +4,7 @@ import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 
 import { GqlClient as client } from '../../services/graphql';
-import { createAccount } from '../../stores/queries/account';
+import { createAccount, updateAccount } from '../../stores/queries/account';
 import uiStore from '../uiStore';
 import userStore from '../userStore';
 import userDetailsStore from '../user/userDetailsStore';
@@ -151,17 +151,32 @@ class IraAccountStore {
     }
     if (isValidCurrentStep) {
       uiStore.setProgress(userStore.currentUser.sub);
-      console.log(userDetailsStore.userDetails);
+      let mutation = createAccount;
+      let variables = {
+        userId: userStore.currentUser.sub,
+        accountAttributes: this.accountAttributes,
+        status: 'draft',
+        accountType: 'ira',
+      };
+      if (typeof userDetailsStore.currentUser.data !== 'undefined') {
+        const accountDetails = _.find(
+          userDetailsStore.currentUser.data.user.accounts,
+          { accountType: 'ira' },
+        );
+        mutation = updateAccount;
+        variables = {
+          userId: userStore.currentUser.sub,
+          accountId: accountDetails.accountId,
+          accountAttributes: this.accountAttributes,
+          status: 'draft',
+          accountType: 'ira',
+        };
+      }
       return new Promise((resolve, reject) => {
         client
           .mutate({
-            mutation: createAccount,
-            variables: {
-              userId: userStore.currentUser.sub,
-              accountAttributes: this.accountAttributes,
-              status: 'draft',
-              accountType: 'ira',
-            },
+            mutation,
+            variables,
           })
           .then((result) => {
             switch (currentStep.name) {
