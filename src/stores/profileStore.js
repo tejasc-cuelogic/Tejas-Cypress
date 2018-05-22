@@ -11,6 +11,7 @@ import userStore from './userStore';
 import Helper from '../helper/utility';
 
 import {
+  UPDATE_PROFILE_INFO,
   VERIFY_IDENTITY_STEP_01,
   VERIFY_IDENTITY_STEP_04,
   CONFIRM_IDENTITY_DOCUMENTS,
@@ -26,6 +27,31 @@ export class ProfileStore {
   @observable verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
 
   @observable confirmIdentityDocuments = { ...CONFIRM_IDENTITY_DOCUMENTS };
+  @observable investmentLimits = {
+    annualIncome: {
+      value: '',
+      label: 'Annual Income',
+      error: undefined,
+      rule: 'required',
+      tooltip: 'Mention your Annual Income here',
+    },
+    netWorth: {
+      value: '',
+      label: 'Net Worth',
+      error: undefined,
+      rule: 'required',
+      tooltip: 'Mention your Net Worth here',
+    },
+    otherRegulation: {
+      value: '',
+      label: 'Other Regulation Crowdfunding investments made in prior 12 months',
+      error: undefined,
+      rule: 'required',
+      tooltip: 'Other Regulation Crowdfunding investments made in prior 12 months',
+    },
+  };
+
+  @observable updateProfileInfo = { fields: { ...UPDATE_PROFILE_INFO }, meta: { isValid: false, error: '' } };
 
   @action loadProfile(username) {
     uiStore.setProgress(true);
@@ -261,6 +287,23 @@ export class ProfileStore {
           uiStore.setProgress(false);
         });
     });
+  }
+
+  /**
+   * @desc Handle function for update profile info change.
+   */
+  @action
+  updateProfileInfoChange = (e, result) => {
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('updateProfileInfo', fieldName, fieldValue);
+  };
+
+  @action
+  setProfileInfo = (currentUser) => {
+    this.onFieldChange('updateProfileInfo', 'firstName', currentUser.givenName);
+    this.onFieldChange('updateProfileInfo', 'lastName', currentUser.familyName);
+    this.onFieldChange('updateProfileInfo', 'email', currentUser.email);
   }
 
   simpleErr = err => ({

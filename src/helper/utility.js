@@ -38,6 +38,58 @@ export class Utility {
     return `${s4()}${s4()}-${s4()}${s4()}`;
   }
 
+  // Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
+  getInvestmentLimit = (data) => {
+    let limit = 0;
+    const refAmount = 107000;
+    const referThis = data.annualIncome > data.netWorth ? data.netWorth : data.annualIncome;
+    if ((data.annualIncome >= refAmount) && (data.netWorth >= refAmount)) {
+      const referThis2 = (referThis * 10) / 100;
+      limit = (refAmount > referThis2) ? referThis2 : refAmount;
+    } else if ((data.annualIncome < refAmount) || (data.netWorth < refAmount)) {
+      const referThis2 = (referThis * 5) / 100;
+      limit = (referThis2 < 2200) ? 2200 : referThis2;
+    }
+    return limit;
+  }
+
+  gAddressClean = (place) => {
+    const componentsForAddress = ['route', 'sublocality_level_3', 'sublocality_level_2', 'sublocality_level_1'];
+    const componentsForCity = ['locality'];
+    const componentForState = ['administrative_area_level_1'];
+    const componentForZipCode = ['postal_code'];
+
+    const residentalStreet = [];
+    const city = [];
+    const state = [];
+    const zipCode = [];
+
+    for (let i = 0; i < place.address_components.length; i += 1) {
+      const component = place.address_components[i];
+      const addressType = component.types[0];
+
+      if (componentsForAddress.includes(addressType)) {
+        residentalStreet.push(component.long_name);
+      }
+      if (componentsForCity.includes(addressType)) {
+        city.push(component.long_name);
+      }
+      if (componentForState.includes(addressType)) {
+        state.push(component.long_name);
+      }
+      if (componentForZipCode.includes(addressType)) {
+        zipCode.push(component.long_name);
+      }
+    }
+
+    return {
+      residentalStreet: residentalStreet.join(', '),
+      city: city.join(''),
+      state: state.join(''),
+      zipCode: zipCode.join(''),
+    };
+  }
+
   CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
 }
 

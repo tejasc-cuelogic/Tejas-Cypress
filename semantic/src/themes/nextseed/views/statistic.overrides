@@ -29,8 +29,6 @@
         display:none;
     }
 }
-// div.*:not(.investment-summary){
-// }
 .tabular-wrap, .sticky-notification{
     .ui.statistic{
         position:relative;

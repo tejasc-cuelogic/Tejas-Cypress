@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Grid, Input, Button, List, Form, Icon } from 'semantic-ui-react';
+import { Grid, Input, Button, List, Form, Icon, Header } from 'semantic-ui-react';
 
 import businessActions from '../../../actions/business';
 import BusinessList from '../components/BusinessList';
@@ -32,7 +32,7 @@ class Business extends Component {
           <Grid stackable>
             <Grid.Row>
               <Grid.Column width={6}>
-                <h1>Manage Businesses</h1>
+                <Header as="h1">Manage Businesses</Header>
               </Grid.Column>
               <Grid.Column width={5}>
                 <Form inverted>

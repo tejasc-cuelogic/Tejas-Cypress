@@ -1,14 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
-import { DropdownFilter, DateRangeFilter, AppliedFilters } from './../../../theme/form/Filters';
-import { FILTER_META } from './../../../constants/user';
-// import { FormInput } from '../../../theme/form/FormElements';
-
-// const zipCode = {
-//   label: 'Zip Code',
-//   error: undefined,
-// };
+import { Header, Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
+import { DropdownFilter, DateRangeFilter, AppliedFilters } from '../../../../theme/form/Filters';
+import { FILTER_META } from '../../../../constants/user';
 
 const userListingSubheader = props => (
   <div>
@@ -16,7 +10,7 @@ const userListingSubheader = props => (
       <Grid stackable>
         <Grid.Row>
           <Grid.Column width={4}>
-            <h1>Manage Users</h1>
+            <Header as="h1">Manage Users</Header>
           </Grid.Column>
           <Grid.Column width={5}>
             <Form inverted>

@@ -14,17 +14,6 @@
                 color:@theme-primary;
             }
         }
-        // &.link{
-        //     > a.item{
-        //         font-size:@12px;
-        //         margin-left:@28px;
-        //         text-transform:uppercase;
-        //         color:@inverse-secondary-text;
-        //         &:hover, &:focus, &.active{
-        //             color:@theme-primary;
-        //         }
-        //     }
-        // }
     }
 }
 .secondary-menu{
@@ -47,7 +36,6 @@
     .ui.horizontal.list.link{
         margin-bottom:@28px;
         .item{
-            // font-family:@boldFont;
             color:@tertiary-text;
             border-bottom:2px solid transparent;
             &:hover, &:focus, &.active{
