@@ -26,6 +26,7 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.authStore.canSubmitEmailAddressVerification) {
       authActions.confirmCode()
         .then(() => {
+          this.props.authStore.reset();
           this.props.setAuthWizardStep('Login');
         })
         .catch(() => { });

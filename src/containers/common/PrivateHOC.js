@@ -35,24 +35,6 @@ class PrivateHOC extends Component {
               </div>
               {pageMeta.heading || pageMeta.title}
             </Header>
-            {/* <Grid>
-              <Grid.Row>
-                <Grid.Column width={6}>
-                  <h1>{pageMeta.heading || pageMeta.title}</h1>
-                </Grid.Column>
-                <Grid.Column width={4} floated="right" textAlign="right">
-                  <span className="item notification">
-                    <Icon className="ns-bell" />
-                    <span className="unread-count">3</span>
-                  </span>
-                  {roles.includes('investor') &&
-                    <Responsive minWidth={1025}>
-                      <Button primary floated="right">Invest Now</Button>
-                    </Responsive>
-                  }
-                </Grid.Column>
-              </Grid.Row>
-            </Grid> */}
           </div>
           {this.props.StickyNotification &&
             <div className="top-cta-section">

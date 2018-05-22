@@ -27,6 +27,29 @@ export class ProfileStore {
   @observable verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
 
   @observable confirmIdentityDocuments = { ...CONFIRM_IDENTITY_DOCUMENTS };
+  @observable investmentLimits = {
+    annualIncome: {
+      value: '',
+      label: 'Annual Income',
+      error: undefined,
+      rule: 'required',
+      tooltip: 'Mention your Annual Income here',
+    },
+    netWorth: {
+      value: '',
+      label: 'Net Worth',
+      error: undefined,
+      rule: 'required',
+      tooltip: 'Mention your Net Worth here',
+    },
+    otherRegulation: {
+      value: '',
+      label: 'Other Regulation Crowdfunding investments made in prior 12 months',
+      error: undefined,
+      rule: 'required',
+      tooltip: 'Other Regulation Crowdfunding investments made in prior 12 months',
+    },
+  };
 
   @observable updateProfileInfo = { fields: { ...UPDATE_PROFILE_INFO }, meta: { isValid: false, error: '' } };
 

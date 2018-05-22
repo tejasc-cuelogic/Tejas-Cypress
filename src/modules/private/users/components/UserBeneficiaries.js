@@ -8,9 +8,9 @@ const userBeneficiaries = () => {
       <Header as="h3">Beneficiaries</Header>
       <Grid columns={1} stackable>
         <Grid.Row>
-          <Grid.Column width={8}>
+          <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
             <Card fluid>
-              <Grid divided padded="horizontally">
+              <Grid stackable celled="internally" padded="horizontally">
                 <Grid.Row>
                   <Grid.Column width={8}>
                     <Card.Content>
@@ -34,21 +34,17 @@ const userBeneficiaries = () => {
                       </dl>
                     </Card.Content>
                     <Card.Content>
-                      <Grid columns="equal">
-                        <Grid.Column>
-                          <Button fluid inverted color="green">Approve</Button>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Button fluid inverted color="red">Decline</Button>
-                        </Grid.Column>
-                      </Grid>
+                      <Button.Group fluid>
+                        <Button inverted color="green">Approve</Button>
+                        <Button inverted color="red">Decline</Button>
+                      </Button.Group>
                     </Card.Content>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
             </Card>
             <Card fluid>
-              <Grid divided padded="horizontally">
+              <Grid stackable celled="internally" padded="horizontally">
                 <Grid.Row>
                   <Grid.Column width={8}>
                     <Card.Content>
@@ -80,7 +76,7 @@ const userBeneficiaries = () => {
               </Grid>
             </Card>
             <Card fluid>
-              <Grid divided padded="horizontally">
+              <Grid stackable celled="internally" padded="horizontally">
                 <Grid.Row>
                   <Grid.Column width={8}>
                     <Card.Content>

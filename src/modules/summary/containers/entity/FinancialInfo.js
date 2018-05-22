@@ -22,6 +22,7 @@ export default class AccountType extends Component {
             fielddata={formEntityInfo.fields.isEntityTrust}
             name="isEntityTrust"
             changed={entityInfoChange}
+            containerclassname="button-radio center-align"
           />
           <div className="field-wrap">
             <FormDatePicker

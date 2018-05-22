@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Link, withRouter } from 'react-router-dom';
 import { Header, Modal, Form, Button } from 'semantic-ui-react';
-import _ from 'lodash';
+// import _ from 'lodash';
 import { MaskedInput } from '../../../../theme/form/FormElements';
 import ConfirmPhoneNumber from '../../../summary/containers/ConfirmPhoneNumber';
 

@@ -11,7 +11,6 @@
             font-size:1rem;
         }
         .menu .item{
-            // font-weight:700;
             color:@primary-text;
             padding:@13px @30px;
             &.active{
@@ -30,7 +29,6 @@
                     padding:0 5px;
                     border-radius:10px;
                     font-size:@12px;
-                    // font-weight:500;
                     color:@inverse-text;
                     line-height:@18px;
                     display:block;
@@ -45,7 +43,6 @@
         .ui.dropdown{
             .menu{
                 >.item{
-                    // font-weight:700 !important;
                     padding:@11px @30px !important;
                 }
             }

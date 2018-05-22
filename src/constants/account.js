@@ -152,6 +152,7 @@ export const IND_LINK_BANK_MANUALLY = {
     rule: 'required|numeric|digits:10',
     label: 'Enter your bank routing number',
     tooltip: 'Put your 10 digit bank routing number',
+    maxLength: 10,
   },
   bankAccountNumber: {
     value: '',
@@ -159,6 +160,7 @@ export const IND_LINK_BANK_MANUALLY = {
     rule: 'required|numeric|digits:12',
     label: 'Enter your bank account number',
     tooltip: 'Put your 12 digit bank account number',
+    maxLength: 12,
   },
 };
 
@@ -169,6 +171,7 @@ export const IND_ADD_FUND = {
     error: undefined,
     rule: 'required|numeric',
     label: 'Value',
+    maxLength: 15,
   },
 };
 

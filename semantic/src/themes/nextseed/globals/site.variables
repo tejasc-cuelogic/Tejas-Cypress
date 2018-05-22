@@ -31,57 +31,6 @@
 @bold              : bold;
 @normal            : normal;
 
-// @fontName: 'SF Pro Display Regular';
-// @fontFileName: 'SFProDisplay';
-// @fallbackSRCRegular: url("@{fontPath}/@{fontFileName}-Regular.eot");
-// @srcRegular:
-//  url("@{fontPath}/@{fontFileName}-Regular.eot?#iefix") format('embedded-opentype'),
-//  url("@{fontPath}/@{fontFileName}-Regular.woff2") format('woff2'),
-//  url("@{fontPath}/@{fontFileName}-Regular.woff") format('woff'),
-//  url("@{fontPath}/@{fontFileName}-Regular.ttf") format('truetype'),
-//  url("@{fontPath}/@{fontFileName}-Regular.svg#SFProDisplay-Regular") format('svg')
-// ;
-
-// @fontName: 'SF Pro Display Medium';
-// @fontFileName: 'SFProDisplay';
-// @fallbackSRCMedium: url("@{fontPath}/@{fontFileName}-Medium.eot");
-// @srcMedium:
-//  url("@{fontPath}/@{fontFileName}-Medium.eot?#iefix") format('embedded-opentype'),
-//  url("@{fontPath}/@{fontFileName}-Medium.woff2") format('woff2'),
-//  url("@{fontPath}/@{fontFileName}-Medium.woff") format('woff'),
-//  url("@{fontPath}/@{fontFileName}-Medium.ttf") format('truetype'),
-//  url("@{fontPath}/@{fontFileName}-Medium.svg#SFProDisplay-Medium") format('svg')
-// ;
-
-// @fontName: 'SF Pro Display Bold';
-// @fontFileName: 'SFProDisplay';
-// @fallbackSRCBold: url("@{fontPath}/@{fontFileName}-Bold.eot");
-// @srcBold:
-//  url("@{fontPath}/@{fontFileName}-Bold.eot?#iefix") format('embedded-opentype'),
-//  url("@{fontPath}/@{fontFileName}-Bold.woff2") format('woff2'),
-//  url("@{fontPath}/@{fontFileName}-Bold.woff") format('woff'),
-//  url("@{fontPath}/@{fontFileName}-Bold.ttf") format('truetype'),
-//  url("@{fontPath}/@{fontFileName}-Bold.svg#SFProDisplay-Bold") format('svg')
-// ;
-
-// @fontName: 'SF Pro Display Heavy';
-// @fontFileName: 'SFProDisplay';
-// @fallbackSRCHeavy: url("@{fontPath}/@{fontFileName}-Heavy.eot");
-// @srcHeavy:
-//  url("@{fontPath}/@{fontFileName}-Heavy.eot?#iefix") format('embedded-opentype'),
-//  url("@{fontPath}/@{fontFileName}-Heavy.woff2") format('woff2'),
-//  url("@{fontPath}/@{fontFileName}-Heavy.woff") format('woff'),
-//  url("@{fontPath}/@{fontFileName}-Heavy.ttf") format('truetype'),
-//  url("@{fontPath}/@{fontFileName}-Heavy.svg#SFProDisplay-Heavy") format('svg')
-// ;
-
-// @headerFont 	:"SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-// @pageFont   	:"SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-
-// @regularFont	:"SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-// @boldFont		:"SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-// @heavyFont		:"SF Pro Display Heavy", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-
 /*-------------------
       Base Sizes
 --------------------*/
@@ -281,7 +230,7 @@
 
 /*---  Colors  ---*/
 @red              : @highlight-primary;
-@orange           : #F2711C;
+@orange           : @highlight-secondary;
 @yellow           : #FBBD08;
 @olive            : #B5CC18;
 @green            : @theme-primary;
@@ -1042,11 +991,9 @@
 @secondary-text:#383838;
 @tertiary-text:#4F4F4F;
 @quaternary-text:#989898;
-// @lighten-text:lighten(@primary-text, 21%);                  //  #666666           (when base = 303030)
 @inverse-text:#FFFFFF;
-// @inverse-text-darken:darken(@inverse-text, 26%);            //  #BDBDBD           (when base = FFFFFF)
-@inverse-secondary-text:darken(@inverse-text, 51%);					//  #7D7D7D           (when base = FFFFFF)
-@inverse-darken:darken(@inverse-text, 5%);                    //  #F2F2F2         (when base = FFFFFF)
+@inverse-secondary-text:darken(@inverse-text, 51%);				     //  #7D7D7D           (when base = FFFFFF)
+@inverse-darken:darken(@inverse-text, 5%);                     //  #F2F2F2         (when base = FFFFFF)
 
 @link-color:#772df9;
 @link-color-darken:darken(@link-color, 10%);

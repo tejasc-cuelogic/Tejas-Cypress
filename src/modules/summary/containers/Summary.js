@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Grid, Card, Header, Icon, Responsive, Divider } from 'semantic-ui-react';
+import { Grid, Card, Header, Icon, Responsive, Divider, List } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import PageHeaderSection from '../../../theme/common/PageHeaderSection';
@@ -11,15 +11,24 @@ import AccountSetupChecklist from '../components/AccountSetupChecklist';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 
-@inject('uiStore', 'accountStore')
+@inject('uiStore', 'accountStore', 'individualAccountStore')
 @observer
 class Summary extends Component {
   setDashboardWizardSetup = (step) => {
     this.props.uiStore.setDashboardWizardStep(step);
+    this.restoreStep();
   }
 
   handleAccoutTypeChange = (e, { activeIndex }) => {
     this.props.accountStore.setAccountType(activeIndex);
+    this.restoreStep();
+  }
+
+  restoreStep = () => {
+    if (this.props.accountStore.accountType.activeIndex === 0) {
+      this.props.individualAccountStore.setStepToBeRendered(0);
+      this.props.individualAccountStore.setBankLinkInterface('list');
+    }
   }
 
   render() {
@@ -28,7 +37,6 @@ class Summary extends Component {
       label: 'Complete all required information about yourself',
       linkText: 'Verify me',
       linkPath: 'InvestorPersonalDetails',
-      // linkPath: 'ConfirmPhoneNumber',
     };
     return (
       <Aux>
@@ -47,10 +55,16 @@ class Summary extends Component {
               <Grid.Column computer={8} largeScreen={8} widescreen={5}>
                 <Card fluid raised className="welcome-card">
                   <Card.Content>
-                    <Icon size="huge" className="ns-nextseed-icon pull-left" />
-                    <Card.Header>
-                      Would you like to start the process of new account creation?
-                    </Card.Header>
+                    <List divided relaxed="very">
+                      <List.Item>
+                        <List.Icon className="ns-nextseed-icon" size="huge" verticalAlign="middle" />
+                        <List.Content verticalAlign="middle">
+                          <List.Header>
+                            Would you like to start the process of new account creation?
+                          </List.Header>
+                        </List.Content>
+                      </List.Item>
+                    </List>
                     <Divider hidden />
                     <AccountSetupChecklist
                       setDashboardWizardSetup={this.setDashboardWizardSetup}

@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import _ from 'lodash';
+import Validator from 'validatorjs';
 
 import {
   FORM_VALUES,
@@ -10,6 +11,7 @@ import {
   SIGNATURE,
   NEW_OFFERING_INFORMATION,
   TEMPLATE_VARIABLES,
+  XML_SUBMISSION_TABS,
 } from './../constants/business';
 
 export class BusinessStore {
@@ -22,10 +24,10 @@ export class BusinessStore {
   filingId = '';
 
   @observable
-  folderId = '';
+  xmlSubmissionId = '';
 
   @observable
-  offeringUrl = '';
+  folderId = '';
 
   @observable
   templateVariables = { ...TEMPLATE_VARIABLES };
@@ -53,22 +55,35 @@ export class BusinessStore {
   };
 
   @observable
-  filerInformation = { ...FILER_INFORMATION }
+  formFilerInfo = {
+    fields: { ...FILER_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
+  };
 
   @observable
-  issuerInformation = { ...ISSUER_INFORMATION }
+  formIssuerInfo = {
+    fields: { ...ISSUER_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
+  };
 
   @observable
-  offeringInformation = { ...OFFERING_INFORMATION }
+  formOfferingInfo = {
+    fields: { ...OFFERING_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
+  };
 
   @observable
-  annualReportRequirements = { ...ANNUAL_REPORT_REQUIREMENTS }
+  formAnnualInfo = {
+    fields: { ...ANNUAL_REPORT_REQUIREMENTS }, meta: { isValid: false, error: '', isDirty: false },
+  };
 
   @observable
-  signature = { ...SIGNATURE }
+  formSignatureInfo = {
+    fields: { ...SIGNATURE }, meta: { isValid: false, error: '', isDirty: false },
+  };
 
   @observable
-  documentList = [];
+  formDocumentInfo = {
+    documentList: [],
+    meta: { isDirty: false },
+  }
 
   @observable
   offeringList = [];
@@ -82,6 +97,25 @@ export class BusinessStore {
   @observable
   xmlErrors = {};
 
+  @observable
+  xmlSubmissionTabs = [...XML_SUBMISSION_TABS];
+
+  @observable
+  xmlActiveTabName = 'filer';
+
+  @observable
+  xmlSubmissionStatus = '';
+
+  @observable
+  xmlSubStepsStatus = {
+    filer: false,
+    issuer: false,
+    offering: false,
+    annual: false,
+    signature: false,
+    doc: false,
+  };
+
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
   }
@@ -94,15 +128,110 @@ export class BusinessStore {
     return (this.business.name.value !== '' && this.business.desc.value !== '');
   }
 
-  @computed get canSubmitXmlForm() {
-    return _.isEmpty(_.filter(this.filerInformation, field => field.error)) &&
-      _.isEmpty(_.filter(this.issuerInformation, field => field.error)) &&
-      _.isEmpty(_.filter(this.offeringInformation, field => field.error)) &&
-      _.isEmpty(_.filter(this.annualReportRequirements, field => field.error));
+  @computed get canSubmitFilerInfoXmlForm() {
+    return _.isEmpty(_.filter(this.formFilerInfo.fields, field => field.error));
+  }
+
+  @computed get canSubmitIssuerInfoXmlForm() {
+    return _.isEmpty(_.filter(this.formIssuerInfo.fields, field => field.error));
+  }
+
+  @computed get canSubmitOfferingInfoXmlForm() {
+    return _.isEmpty(_.filter(this.formOfferingInfo.fields, field => field.error));
+  }
+
+  @computed get canSubmitAnnualReportXmlForm() {
+    return _.isEmpty(_.filter(this.formAnnualInfo.fields, field => field.error));
+  }
+
+  @computed get canSubmitSigntureForm() {
+    return _.isEmpty(_.filter(this.formSignatureInfo.fields, field => field.error));
+  }
+
+  @computed get canSubmitSignaturePersonsForm() {
+    return _.map(this.formSignatureInfo.fields.signaturePersons, signaturePerson =>
+      _.isEmpty(_.filter(signaturePerson, field => field.error)));
   }
 
   @computed get getSummary() {
     return this.businessList.length || 0;
+  }
+
+  @computed get checkStepsStatus() {
+    return _.every(this.xmlSubStepsStatus, key => key === true);
+  }
+
+  @action
+  updateStatusFlag = (stepDetails, key, value) => {
+    this[stepDetails][key].isValid = value;
+  };
+
+  @action
+  filerInfoChange = (e, { name, value }) => {
+    this.onFieldChange('formFilerInfo', name, value);
+  };
+
+  @action
+  issuerInfoChange = (e, { name, value }) => {
+    this.onFieldChange('formIssuerInfo', name, value);
+  };
+
+  @action
+  verifyDateIncorporation = (date) => {
+    this.onFieldChange('formIssuerInfo', 'dateIncorporation', date);
+  };
+
+  @action
+  offeringInfoChange = (e, { name, value }) => {
+    this.onFieldChange('formOfferingInfo', name, value);
+  };
+
+  @action
+  verifyDeadlineDate = (date) => {
+    this.onFieldChange('formOfferingInfo', 'deadlineDate', date);
+  };
+
+  @action
+  annualInfoChange = (e, { name, value }) => {
+    this.onFieldChange('formAnnualInfo', name, value);
+  };
+
+  @action
+  signatureInfoChange = (e, { name, value }) => {
+    this.onFieldSigChange(name, value);
+  };
+
+  @action
+  onFieldChange = (currentForm, field, value) => {
+    const form = currentForm || 'formFilerInfo';
+    this[form].fields[field].value = value;
+    const validation = new Validator(
+      _.mapValues(this[form].fields, f => f.value),
+      _.mapValues(this[form].fields, f => f.rule),
+      _.mapValues(this[form].fields, f => f.customErrors),
+    );
+    this[form].meta.isValid = validation.passes();
+    this[form].meta.isDirty = true;
+    this[form].fields[field].error = validation.errors.first(field);
+  };
+
+  @action
+  onFieldSigChange = (field, value) => {
+    this.formSignatureInfo.fields[field].value = value;
+    const newSigInfo = {
+      issuer: this.formSignatureInfo.fields.issuer,
+      issuerSignature: this.formSignatureInfo.fields.issuerSignature,
+      issuerTitle: this.formSignatureInfo.fields.issuerTitle,
+    };
+    const validation = new Validator(
+      _.mapValues(newSigInfo, f => f.value),
+      _.mapValues(newSigInfo, f => f.rule),
+      _.mapValues(newSigInfo, f => f.customErrors),
+    );
+
+    this.formSignatureInfo.meta.isValid = validation.passes();
+    this.formSignatureInfo.meta.isDirty = true;
+    this.formSignatureInfo.fields[field].error = validation.errors.first(field);
   }
 
   @action
@@ -122,13 +251,13 @@ export class BusinessStore {
 
   @action
   setDocumentList(list) {
-    this.documentList = list;
+    this.formDocumentInfo.documentList = list;
   }
 
   @action
   setDocument(name, value) {
     /*eslint-disable*/
-    _.forEach(this.documentList, (document) => {
+    _.forEach(this.formDocumentInfo.documentList, (document) => {
       if (document.name === name) {
         document.checked = value;
       }
@@ -136,9 +265,16 @@ export class BusinessStore {
   }
 
   @action
-  toggleRequiredFiles(key) {
-    _.filter(this.documentList, document => document.name === key)[0].checked =
-      !_.filter(this.documentList, document => document.name === key)[0].checked;
+  toggleRequiredFiles(key, isDirtyUpdate) {
+    _.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked =
+      !_.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked;
+    
+    if (_.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked) {
+      if (isDirtyUpdate) {
+        this.formDocumentInfo.meta.isDirty = true;
+      }
+      this.removeXmlError('documentListError');
+    }
   }
 
   @action
@@ -152,113 +288,133 @@ export class BusinessStore {
   }
 
   @action
+  setXmlSubmissionId(id) {
+    this.xmlSubmissionId = id;
+  }
+
+  @action
   setFolderId(id) {
     this.folderId = id;
   }
 
   @action
-  setOfferingUrl(url) {
-    this.offeringUrl = url;
-  }
-
-  @action
   setFiler(filerInformation) {
-    this.filerInformation = filerInformation;
+    this.formFilerInfo.fields = filerInformation;
   }
 
   @action
   setFilerInfo(field, value) {
-    this.filerInformation[field].value = value;
+    this.formFilerInfo.fields[field].value = value;
   }
 
   @action
   setFilerError(field, error) {
-    this.filerInformation[field].error = error;
+    this.formFilerInfo.fields[field].error = error;
   }
 
   @action
   clearFiler() {
-    this.filerInformation = { ...FILER_INFORMATION };
+    this.formFilerInfo = {
+      fields: { ...FILER_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
+    };
   }
 
   @action
   togglefilerCheckbox(name) {
-    this.filerInformation[name].value = !this.filerInformation[name].value;
+    this.formFilerInfo.fields[name].value = !this.formFilerInfo.fields[name].value;
   }
 
   @action
   setIssuer(issuerInformation) {
-    this.issuerInformation = issuerInformation;
+    this.formIssuerInfo.fields = issuerInformation;
   }
 
   @action
   setIssuerInfo(field, value) {
-    this.issuerInformation[field].value = value;
+    this.formIssuerInfo.fields[field].value = value;
   }
 
   @action
   setIssuerError(field, error) {
-    this.issuerInformation[field].error = error;
+    this.formIssuerInfo.fields[field].error = error;
   }
 
   @action
   clearIssuer() {
-    this.issuerInformation = { ...ISSUER_INFORMATION };
+    this.formIssuerInfo = {
+      fields: { ...ISSUER_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
+    };
   }
 
   @action
   setOffering(offeringInformation) {
-    this.offeringInformation = offeringInformation;
+    this.formOfferingInfo.fields = offeringInformation;
   }
 
   @action
   setOfferingInfo(field, value) {
-    this.offeringInformation[field].value = value;
+    this.formOfferingInfo.fields[field].value = value;
   }
 
   @action
   setOfferingError(field, error) {
-    this.offeringInformation[field].error = error;
+    this.formOfferingInfo.fields[field].error = error;
   }
 
   @action
   clearOffering() {
-    this.offeringInformation = { ...OFFERING_INFORMATION };
+    this.formOfferingInfo = {
+      fields: { ...OFFERING_INFORMATION }, meta: { isValid: false, error: '', isDirty: false },
+    };
   }
 
   @action
   setAnnualReport(newAnnualReport) {
-    this.annualReportRequirements = newAnnualReport;
+    this.formAnnualInfo.fields = newAnnualReport;
   }
 
   @action
   setAnnualReportInfo(field, value) {
-    this.annualReportRequirements[field].value = value;
+    this.formAnnualInfo.fields[field].value = value;
   }
 
   @action
   setAnnualReportError(field, error) {
-    this.annualReportRequirements[field].error = error;
+    this.formAnnualInfo.fields[field].error = error;
   }
 
   @action
   clearAnnualReport() {
-    this.annualReportRequirements = { ...ANNUAL_REPORT_REQUIREMENTS };
+    this.formAnnualInfo = {
+      fields: { ...ANNUAL_REPORT_REQUIREMENTS }, meta: { isValid: false, error: '', isDirty: false },
+    };
+  }
+
+  @action
+  setSignature(signature) {
+    this.formSignatureInfo.fields = signature;
   }
 
   @action
   setSignatureInfo(field, value) {
-    this.signature[field].value = value;
+    this.formSignatureInfo.fields[field].value = value;
   }
 
   @action
   setSignatureError(field, error) {
-    this.signature[field].error = error;
+    this.formSignatureInfo.fields[field].error = error;
   }
 
   @action
   clearSignature() {
-    this.signature = { ...SIGNATURE }
+    this.formSignatureInfo = {
+      fields: { ...SIGNATURE }, meta: { isValid: false, error: '', isDirty: false },
+    };
+  }
+
+  @action
+  setXmlSubmissionStatus(status) {
+    this.xmlSubmissionStatus = status;
   }
 
   /**
@@ -267,30 +423,50 @@ export class BusinessStore {
   *       finding out and entry with and given ID and then modifying value in it...
   */
   @action
-  changePersonalSignature(field, id, value) {
-    _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].value = value;
+  changePersonalSignature(field, id, value, isDirtyUpdate) {
+    _.filter(this.formSignatureInfo.fields.signaturePersons, person => person.id === id)[0][field].value = value;
+
+    let fieldValue = value;
+    let fieldRule = _.filter(this.formSignatureInfo.fields.signaturePersons, person => person.id === id)[0][field].rule;
+    let fieldCustomError = _.filter(this.formSignatureInfo.fields.signaturePersons, person => person.id === id)[0][field].customErrors;
+
+    const validation = new Validator(
+      fieldValue,
+      fieldRule,
+      fieldCustomError,
+    );
+    
+    validation.passes();
+    if (isDirtyUpdate) {
+      this.formSignatureInfo.meta.isDirty = true;
+    }
+    
+    if (!fieldValue) {
+      this.setPersonalSignatureError(field, id, validation.errors.first());
+    } else {
+      this.setPersonalSignatureError(field, id, '');
+    }
   }
 
   @action
   setPersonalSignatureError(field, id, error) {
-    _.filter(this.signature.signaturePersons, person => person.id === id)[0][field].error = error;
+    _.filter(this.formSignatureInfo.fields.signaturePersons, person => person.id === id)[0][field].error = error;
   }
 
   @action
-  setCountry(identifier, name, value) {
-    // this.annualReportRequirements.issueJurisdictionSecuritiesOffering.value = value;
-    this[identifier][name].value = value;
+  setCountry(identifier, fields, name, value) {    
+    this[identifier][fields][name].value = value;
   }
 
   @action
   setNewPersonalSignature(newSignatures) {
-    this.signature.signaturePersons = newSignatures;
+    this.formSignatureInfo.fields.signaturePersons = newSignatures;
   }
 
   @action
   deletePersonalSignature(id) {
-    const { signaturePersons } = this.signature;
-    this.signature.signaturePersons = _.filter(signaturePersons, person => person.id !== id);
+    const { signaturePersons } = this.formSignatureInfo.fields;
+    this.formSignatureInfo.fields.signaturePersons = _.filter(signaturePersons, person => person.id !== id);
   }
 
   @action
@@ -358,6 +534,34 @@ export class BusinessStore {
   removeXmlError(key) {
     this.xmlErrors = _.omit(this.xmlErrors, key);
   }
-}
 
+  @action
+  setXmlActiveTabName(name) {
+    this.xmlActiveTabName = name;
+  }
+  
+  @action
+  setXmlSubStepsStatus(stepname, isValue) {
+    this.xmlSubStepsStatus[stepname] = isValue;
+  }
+
+  @action
+  clearXmlSubStepsStatus() {    
+    _.forEach(this.xmlSubStepsStatus, (value, key) => {
+      this.xmlSubStepsStatus[key] = false;
+    });
+  }
+
+  @action
+  setXmlSubmissionTab(index, value) {
+    this.xmlSubmissionTabs[index].errorClass = value;
+  }
+
+  @action
+  clearXmlTabsValue() {    
+    _.forEach(this.xmlSubmissionTabs, (value, key) => {      
+      this.xmlSubmissionTabs[key].errorClass = '';
+    });
+  }
+}
 export default new BusinessStore();
