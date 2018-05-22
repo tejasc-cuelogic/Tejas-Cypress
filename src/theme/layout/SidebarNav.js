@@ -26,12 +26,12 @@ export class SidebarNav extends Component {
                   item
                   active={active === item.to}
                   name={item.to}
-                  text={<span><Icon className={item.icon} />{item.title}</span>}
+                  text={<Aux><Icon className={item.icon} />{item.title}</Aux>}
                   onClick={this.navClick}
                 >
                   <Dropdown.Menu>
                     {item.subNavigations.map(sn => (
-                      <Dropdown.Item as={NavLink} to={sn.to}>{sn.title}</Dropdown.Item>
+                      <Dropdown.Item as={NavLink} to={`/app/${item.to}/${sn.to}`}>{sn.title}</Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
                 </Dropdown>
