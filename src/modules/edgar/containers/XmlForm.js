@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Grid, Icon, Button } from 'semantic-ui-react';
+import { Form, Grid, Icon, Button, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 
@@ -398,7 +398,7 @@ export default class XmlForm extends React.Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <h1>
+                <Header as="h1">
                   <Link to={`/app/edgar/${this.props.match.params.businessId}`} className="back-link"><Icon name="ns-arrow-left" /></Link>
                   XML Form
                   {
@@ -435,7 +435,7 @@ export default class XmlForm extends React.Component {
                       Save
                     </Button>
                   }
-                </h1>
+                </Header>
               </Grid.Column>
             </Grid.Row>
           </Grid>
