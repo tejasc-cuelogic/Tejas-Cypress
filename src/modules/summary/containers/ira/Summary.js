@@ -7,6 +7,9 @@ import Helper from '../../../../helper/utility';
 @inject('iraAccountStore')
 @observer
 export default class Summary extends Component {
+  handleCreateAccount = () => {
+    this.props.iraAccountStore.createAccount('Summary', 'submit');
+  }
   render() {
     const {
       formFinInfo,
@@ -65,7 +68,7 @@ export default class Summary extends Component {
           </div>
         </div>
         <div className="center-align">
-          <Button primary size="large" className="relaxed" disabled={!this.props.iraAccountStore.isValidIraForm}>Create the account</Button>
+          <Button primary size="large" onClick={() => this.handleCreateAccount()} className="relaxed" disabled={!this.props.iraAccountStore.isValidIraForm}>Create the account</Button>
         </div>
       </div>
     );

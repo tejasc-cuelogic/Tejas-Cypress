@@ -34,7 +34,7 @@ class IraAccountStore {
 
   @observable
   formIdentity = {
-    fields: { ...IRA_IDENTITY }, meta: { isValid: true, error: '', isDirty: false },
+    fields: { ...IRA_IDENTITY }, meta: { isValid: false, error: '', isDirty: false },
   }
 
   @observable
@@ -109,10 +109,10 @@ class IraAccountStore {
     && this.formFunding.meta.isValid && this.formIdentity.meta.isValid;
   }
 
-  @computed
-  get formStatus() {
-    return this.isValidIraForm ? 'submit' : 'draft';
-  }
+  // @computed
+  // get formStatus() {
+  //   return this.isValidIraForm ? 'submit' : 'draft';
+  // }
 
   @computed
   get accountAttributes() {
@@ -144,9 +144,10 @@ class IraAccountStore {
     return 'directRollOver';
   }
 
+  /* eslint-disable consistent-return */
   @action
-  createAccount = (currentStep) => {
-    let isValidCurrentStep = false;
+  createAccount = (currentStep, formStatus = 'draft') => {
+    let isValidCurrentStep = true;
     switch (currentStep.name) {
       case 'Financial info':
         currentStep.validate();
@@ -171,7 +172,7 @@ class IraAccountStore {
       let variables = {
         userId: userStore.currentUser.sub,
         accountAttributes: this.accountAttributes,
-        status: 'draft',
+        status: formStatus,
         accountType: 'ira',
       };
       let actionPerformed = 'submitted';
@@ -185,7 +186,7 @@ class IraAccountStore {
           userId: userStore.currentUser.sub,
           accountId: accountDetails.accountId,
           accountAttributes: this.accountAttributes,
-          status: 'draft',
+          status: formStatus,
           accountType: 'ira',
         };
         actionPerformed = 'updated';
@@ -214,7 +215,11 @@ class IraAccountStore {
                 break;
             }
             userDetailsStore.getUser(userStore.currentUser.sub);
-            Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+            if (formStatus === 'submit') {
+              Helper.toast('IRA account created successfully.', 'success');
+            } else {
+              Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+            }
             resolve(result);
           })
           .catch((err) => {
@@ -226,7 +231,6 @@ class IraAccountStore {
           });
       });
     }
-    return true;
   }
 }
 
