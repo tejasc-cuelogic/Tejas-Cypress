@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Divider, Button, Grid, Icon, Popup, Message } from 'semantic-ui-react';
+import { Header, Form, Divider, Button, Grid, Icon, Popup, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import FilerInformation from './xmlFormContainers/FilerInformation';
@@ -88,10 +88,10 @@ export default class XmlForm extends React.Component {
           <Grid>
             <Grid.Row>
               <Grid.Column width={16}>
-                <h1>
+                <Header as="h1">
                   <Link to={`/app/business/${this.props.match.params.businessId}`} className="back-link"><Icon className="ns-arrow-left" /></Link>
                   XML Form
-                </h1>
+                </Header>
               </Grid.Column>
             </Grid.Row>
           </Grid>

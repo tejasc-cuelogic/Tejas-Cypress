@@ -28,11 +28,11 @@ export default class ProfileData extends Component {
     const { email, legalDetails } = this.props.userDetailsStore.userDetails;
     const { updateProfileInfo, updateProfileInfoChange } = this.props.profileStore;
     return (
-      <Grid columns={1} stackable>
+      <Grid>
         <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
         <Route path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
         <Grid.Row>
-          <Grid.Column width={8}>
+          <Grid.Column widescreen={8} largeScreen={10} tablet={16} mobile={16}>
             <Card fluid className="form-card">
               <Header as="h3">Personal Profile</Header>
               <Form>
@@ -77,9 +77,9 @@ export default class ProfileData extends Component {
               </Form>
             </Card>
           </Grid.Column>
-          <Grid.Column width={5}>
-            <Card.Group itemsPerRow={1}>
-              <Card className="form-card">
+          <Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
+            <Card.Group>
+              <Card fluid className="form-card">
                 <h3>Profile Photo</h3>
                 {/* <Randavatar name={this.props.UserInfo.fullname}
                 avatarKey={this.props.UserInfo.avatarKey} size="small" /> */}

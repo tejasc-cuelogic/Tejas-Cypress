@@ -22,6 +22,7 @@ export default class AccountType extends Component {
             fielddata={formAccTypes.fields.accountType}
             name="accountType"
             changed={AccTypesChange}
+            containerclassname="button-radio center-align"
           />
           <div className="option-details">
             {this.getOptionDetails()}

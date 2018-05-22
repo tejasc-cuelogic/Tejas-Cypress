@@ -4,6 +4,11 @@
 .ui.form{
     .field{
         position:relative;
+        &.dropdown-field{
+            margin-left:-@14px;
+            margin-right:-@14px;
+            padding:0 @14px;
+        }
     }
     .fields .field{
         margin-bottom:@14px;
@@ -47,7 +52,8 @@
     input[type=tel],
     input[type=text],
     input[type=time],
-    input[type=url]{
+    input[type=url],
+    textarea{
         border-bottom:@border-color 1px solid;
     }
 }
@@ -132,6 +138,7 @@
 .ui.form{
     .field>label{
         display:inline-block;
+        line-height:@18px;
     }
     &.inverted{
         input:not([type]),
@@ -211,9 +218,13 @@
         line-height:@14px;
         color:@highlight-primary;
     }
+    // .field.disabled{
+    //   input[type=text]{
+    //     opacity:0;
+    //   }
+    // }
 }
 
-// .ui.modal .ui.form.file-uploader-inline{
 .file-uploader{
     height:58px;
     padding:@14px;

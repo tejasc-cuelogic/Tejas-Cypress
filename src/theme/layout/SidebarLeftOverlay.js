@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Responsive, Sidebar, Menu, Button, Image } from 'semantic-ui-react';
+import { Responsive, Sidebar, Menu, Button, Image, Divider, Icon } from 'semantic-ui-react';
 import NotificationPanel from './NotificationPanel';
 import uiStore from '../../stores/uiStore';
 import { SidebarNav, GetNavItem } from './SidebarNav';
@@ -13,12 +13,14 @@ import LogoSmall from '../../assets/images/ns-logo-small.svg';
 @observer
 class SidebarLeftPush extends Component {
   toggleVisibility = () => uiStore.updateLayoutState('leftPanel');
+  toggleVisibilityMobile = () => uiStore.updateLayoutState('leftPanelMobile');
 
   render() {
     const UserInfo = { ...this.props.UserInfo };
     return (
       <div>
-        <Responsive minWidth={992}>
+        {/* Desktop Menu */}
+        <Responsive minWidth={1200}>
           <Sidebar.Pushable>
             <Sidebar
               as={Menu}
@@ -28,6 +30,7 @@ class SidebarLeftPush extends Component {
               icon
               vertical
               inverted={(UserInfo.roles[0] !== 'investor')}
+              className={UserInfo.roles[0]}
             >
               <Image
                 src={((uiStore.layoutState.leftPanel) ?
@@ -54,37 +57,35 @@ class SidebarLeftPush extends Component {
             <NotificationPanel status={uiStore.layoutState.notificationPanel} />
           </Sidebar.Pushable>
         </Responsive>
-        <Responsive maxWidth={991}>
-          <Button onClick={this.toggleVisibility} className="item collapseIcon pull-right">
-            <i className={`angle ${(uiStore.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
-            <span>Collapse</span>
-          </Button>
+        {/* Mobile Menu */}
+        <Responsive maxWidth={1199}>
           <Sidebar.Pushable>
             <Sidebar
               as={Menu}
-              animation="push"
+              animation="overlay"
               width="thin"
-              visible={uiStore.layoutState.leftPanel}
+              visible={uiStore.layoutState.leftPanelMobile}
               icon
               vertical
               inverted={(UserInfo.roles[0] !== 'investor')}
+              className={UserInfo.roles[0]}
             >
               <Image
-                src={((uiStore.layoutState.leftPanel) ?
-                  (UserInfo.roles[0] !== 'investor' ? LogoWhite : LogoColor) :
-                  LogoSmall)}
+                src={(UserInfo.roles[0] !== 'investor' ? LogoWhite : LogoColor)}
                 alt="NextSeed.com"
                 className="logo"
               />
+              <Icon onClick={this.toggleVisibilityMobile} className="ns-close-light" />
               <div className="user-picture">
                 <Randavatar name={UserInfo.fullname} accountType={UserInfo.accountType} avatarKey={UserInfo.avatarKey} size="small" />
                 <h2>{UserInfo.fullname}</h2>
-                <h3>{UserInfo.accountType}</h3>
                 {GetNavItem('profile-settings', UserInfo.roles)}
               </div>
+              <Divider />
               <SidebarNav handleLogOut={this.props.handleLogOut} roles={UserInfo.roles} />
             </Sidebar>
             <Sidebar.Pusher>
+              <Icon onClick={this.toggleVisibilityMobile} className="hamburger content" />
               {this.props.children}
             </Sidebar.Pusher>
             <NotificationPanel status={uiStore.layoutState.notificationPanel} />

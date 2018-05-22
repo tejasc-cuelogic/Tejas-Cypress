@@ -14,3 +14,15 @@
   font-family: 'Step';
   content: '\e800'; /* '' */
 }
+
+/*******************************
+		Custom for NS V.2
+*******************************/
+.ui.steps .step .title{
+	margin-bottom:0;
+}
+.ui.steps .step.tab-error{
+  .title{
+    color:@highlight-primary !important;
+  }
+}

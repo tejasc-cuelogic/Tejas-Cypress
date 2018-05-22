@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import Aux from 'react-aux';
-import { Divider, Icon, Button, Dropdown, Accordion } from 'semantic-ui-react'; // Dropdown, Accordion, Form, , Grid, Icon, Button
+import { Divider, Icon, Button, Dropdown, Accordion } from 'semantic-ui-react';
 
 const notificationPanel = (props) => {
   const { activeIndex } = 0;

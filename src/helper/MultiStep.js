@@ -23,7 +23,7 @@ export default class MultiStep extends React.Component {
       showPreviousBtn: false,
       showNextBtn: true,
       compState: this.props.stepToBeRendered || 0,
-      navState: getNavStates(0, this.props.steps.length),
+      navState: getNavStates((this.props.stepToBeRendered || 0), this.props.steps.length),
     };
     this.hidden = {
       display: 'none',

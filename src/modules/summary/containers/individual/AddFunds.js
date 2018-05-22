@@ -26,6 +26,7 @@ export default class AddFunds extends Component {
               name="value"
               fielddata={formAddFunds.fields.value}
               changed={addFundChange}
+              maxLength={formAddFunds.fields.value.maxLength}
               prefix="$"
             />
           </div>

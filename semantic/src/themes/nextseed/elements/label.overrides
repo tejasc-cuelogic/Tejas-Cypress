@@ -1,10 +1,6 @@
 /*******************************
          Theme Overrides
 *******************************/
-// .ui.label{
-//     font-family:@boldFont;
-// }
-
 .ui.labeled.input{
     &:not([class*="corner labeled"]) .label:first-child{
         padding-left:0;

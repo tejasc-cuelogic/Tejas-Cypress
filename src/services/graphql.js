@@ -10,6 +10,7 @@ import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json
 global.fetch = fetch;
 
 const uri = `${API_ROOT}${GRAPHQL}`;
+// const uri = 'https://api.graph.cool/simple/v1/cjei7bof31u8101243cyfqgjw';
 
 const authLink = setContext((_, { headers }) => {
   return {
