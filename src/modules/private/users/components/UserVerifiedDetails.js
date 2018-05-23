@@ -21,7 +21,7 @@ const userVerifiedDetails = (props) => {
   } = props.legalDetails;
   if (!legalName) {
     return (
-      <Card className="form-card">
+      <Card fluid className="form-card">
         <h3>Identity not verified</h3>
         <Link to="/app/summary" ><b>Verify Identity</b></Link>
       </Card>
