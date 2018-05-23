@@ -27,9 +27,10 @@ import BusinessDetails from './edgar/containers/BusinessDetails';
 import Summary from '../modules/summary/containers/Summary';
 import RewardsWallet from '../modules/rewardsWallet/containers/RewardsWallet';
 import Referrals from '../modules/referrals/containers/Referrals';
-import Education from '../modules/education/containers/Education';
+// import Education from '../modules/education/containers/Education';
 import AccountDetails from './private/accountDetails/containers/AccountDetails';
 import Business from '../modules/business/containers/Business';
+import Education from './private/education/containers/Education';
 import {
   AdminAuthorization,
   BusinessAuthorization,

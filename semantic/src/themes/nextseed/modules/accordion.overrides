@@ -38,7 +38,6 @@
 		position:relative;
 		padding-right:30px;
 		font-weight:700;
-		text-transform:capitalize;
 	}
 }
 
@@ -131,6 +130,24 @@
 		}
 		.content{
 			padding:0;
+		}
+	}
+}
+.ui.accordion.feed-view{
+	.title{
+		padding:@12px 0;
+		font-weight:400;
+		color:@quaternary-text;
+		border-top:@border-light 1px solid;
+		&:first-of-type{
+			border:none;
+		}
+		>span{
+			display:block;
+			color:@fullBlack;
+		}
+		&.active > span{
+			color:@link-color;
 		}
 	}
 }
