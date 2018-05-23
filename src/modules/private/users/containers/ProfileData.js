@@ -1,87 +1,98 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Grid, Form, Input, Card, Header, Button } from 'semantic-ui-react';
-import { FormSelect } from '../../../../theme/form/FormElements';
+import { inject, observer } from 'mobx-react';
+import { Link, Route } from 'react-router-dom';
+import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
+import { FormSelect, FormInput, MaskedInput } from '../../../../theme/form/FormElements';
 import { US_STATES } from '../../../../constants/account'; //  added Temperarily to update UI as per new layout
+
+import UserVerifiedDetails from '../components/UserVerifiedDetails';
+import NewPhoneNumber from './NewPhoneNumber';
+import NewEmailAddress from './NewEmailAddress';
 
 const states = {
   label: 'State',
   error: undefined,
 };
 
+@inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore')
+@observer
 export default class ProfileData extends Component {
+  componentWillMount() {
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+    this.props.profileStore.setProfileInfo(this.props.userStore.currentUser);
+  }
+  navigateToNewPhoneNumber = () => {
+    this.props.history.replace(`${this.props.match.url}/new-phone-number`);
+  }
   render() {
+    const { email, legalDetails } = this.props.userDetailsStore.userDetails;
+    const { updateProfileInfo, updateProfileInfoChange } = this.props.profileStore;
     return (
       <Grid>
-        <Grid.Column widescreen={8} largeScreen={10} tablet={16} mobile={16}>
-          <Card fluid className="form-card">
-            <Header as="h3">Personal Profile</Header>
-            <Form>
-              <Form.Group widths="equal">
-                <Form.Input fluid label="First name" placeholder="First name" value="NextSeed" />
-                <Form.Input fluid label="Last name" placeholder="Last name" value="Investor" />
-              </Form.Group>
-              <Form.Field>
-                {/* eslint-disable jsx-a11y/label-has-for */}
-                <label>Phone Number</label>
-                <Input
-                  action={{ color: 'green', className: 'link-button', content: 'Change' }}
-                  placeholder="Phone Number"
-                  defaultValue="123-456-7890"
-                />
-              </Form.Field>
-              <Form.Field>
-                <label>Email</label>
-                <Input
-                  action={{ color: 'green', className: 'link-button', content: 'Change' }}
-                  placeholder="Email"
-                  defaultValue="nsinvestor@gmail.com"
-                />
-              </Form.Field>
-              <Header as="h4">Mailing Address</Header>
-              <Form.Input fluid label="Residendial Street" placeholder="Residendial Street" value="123, East Street, Place" />
-              <Form.Group widths="equal">
-                <Form.Input fluid label="City" placeholder="City" value="Atlanta" />
-                <FormSelect label="State" name="state" fielddata={states} options={US_STATES} />
-                <Form.Input fluid label="ZIP code" placeholder="ZIP code" />
-              </Form.Group>
-              <Button inverted color="green" disabled>Update profile info</Button>
-            </Form>
-          </Card>
-        </Grid.Column>
-        <Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
-          <Card.Group>
+        <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
+        <Route path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
+        <Grid.Row>
+          <Grid.Column widescreen={8} largeScreen={10} tablet={16} mobile={16}>
             <Card fluid className="form-card">
-              <h3>Profile Photo</h3>
-              {/* <Randavatar name={this.props.UserInfo.fullname}
-              avatarKey={this.props.UserInfo.avatarKey} size="small" /> */}
-              <Link to=""><b>Change profile photo</b></Link>
+              <Header as="h3">Personal Profile</Header>
+              <Form>
+                <Form.Group widths="equal">
+                  {['firstName', 'lastName'].map(field => (
+                    <FormInput
+                      key={field}
+                      name={field}
+                      value={updateProfileInfo.fields[field].value}
+                      fielddata={updateProfileInfo.fields[field]}
+                      changed={updateProfileInfoChange}
+                    />
+                  ))}
+                </Form.Group>
+                <MaskedInput
+                  action
+                  actionlabel="Change"
+                  actionclass="link-button"
+                  actioncolor="green"
+                  name="phoneNumber"
+                  fielddata={updateProfileInfo.fields.phoneNumber}
+                  mask="999-999-9999"
+                  changed={updateProfileInfoChange}
+                  clickonaction={this.navigateToNewPhoneNumber}
+                />
+                <FormInput
+                  action={{
+                    color: 'green', className: 'link-button', content: 'Change', onClick: () => this.props.history.replace(`${this.props.match.url}/new-email-address`),
+                  }}
+                  name="email"
+                  fielddata={updateProfileInfo.fields.email}
+                  changed={updateProfileInfoChange}
+                />
+                <Header as="h4">Mailing Address</Header>
+                <Form.Input fluid label="Residendial Street" placeholder="Residendial Street" value="123, East Street, Place" />
+                <Form.Group widths="equal">
+                  <Form.Input fluid label="City" placeholder="City" value="Atlanta" />
+                  <FormSelect label="State" name="state" fielddata={states} options={US_STATES} />
+                  <Form.Input fluid label="ZIP code" placeholder="ZIP code" />
+                </Form.Group>
+                <Button inverted color="green" disabled={!updateProfileInfo.meta.isValid}>Update profile info</Button>
+              </Form>
             </Card>
-            <Card fluid className="form-card">
-              <h3>Identity verified</h3>
-              <dl className="dl-horizontal">
-                <dt>Legal First Name</dt>
-                <dd>Jonathan</dd>
-                <dt>Legal Last Name</dt>
-                <dd>Smith</dd>
-                <dt>SSN</dt>
-                <dd>XXX-XXX-2953</dd>
-                <dt>DOB</dt>
-                <dd>12-03-1986</dd>
-                <dt>Legal Address</dt>
-                <dd>Baker Street 221B<br />
-                  New York, NY, 1001
-                </dd>
-                <dt>Email Address</dt>
-                <dd>joesmith@gmail.com</dd>
-              </dl>
-              <p className="intro-text">
-                If any of this information needs to be updated, please contact support through the{' '}
-                <Link to="" className="link"><b>Message center</b></Link>.
-              </p>
-            </Card>
-          </Card.Group>
-        </Grid.Column>
+          </Grid.Column>
+          <Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
+            <Card.Group>
+              <Card fluid className="form-card">
+                <h3>Profile Photo</h3>
+                {/* <Randavatar name={this.props.UserInfo.fullname}
+                avatarKey={this.props.UserInfo.avatarKey} size="small" /> */}
+                <Link to={this.props.match.url}><b>Change profile photo</b></Link>
+              </Card>
+              <UserVerifiedDetails
+                {...this.props}
+                email={email}
+                legalDetails={legalDetails}
+              />
+            </Card.Group>
+          </Grid.Column>
+        </Grid.Row>
       </Grid>
     );
   }

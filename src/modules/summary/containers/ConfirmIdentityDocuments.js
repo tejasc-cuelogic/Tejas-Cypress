@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
 import FieldError from '../../../theme/common/FieldError';
 
 @inject('profileStore')
+@withRouter
 @observer
 export default class ConfirmIdentityDocuments extends Component {
   uploadDocument = (e) => {
@@ -40,7 +41,7 @@ export default class ConfirmIdentityDocuments extends Component {
           <Divider />
           <p>
             Please upload two valid identity documents or<br />
-            <Link to="/app/dashboard" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>update your SSN number</Link>
+            <Link to={this.props.match.url} onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>update your SSN number</Link>
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
