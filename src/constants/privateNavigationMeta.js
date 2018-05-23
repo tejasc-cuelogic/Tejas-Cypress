@@ -58,7 +58,7 @@ export const ALL_NAV_ITEMS = [
   {
     icon: 'question',
     title: 'Manage FAQ',
-    to: 'faq',
+    to: 'manage-faq',
     accessibleTo: ['admin', 'editor'],
     subNavigations: [],
   },
@@ -136,9 +136,9 @@ export const ALL_NAV_ITEMS = [
     accessibleTo: ['ira', 'individual', 'entity', 'investor', 'bowner'],
     subPanel: 1,
     subNavigations: [
-      { title: 'Welcome Packet', to: 'welcome-packet' },
-      { title: 'Knowledge Base', to: 'Knowledge-base' },
-      { title: 'FAQ', to: 'faq' },
+      { title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket' },
+      { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
+      { title: 'FAQ', to: 'faq', component: 'Faq' },
     ],
   },
   {

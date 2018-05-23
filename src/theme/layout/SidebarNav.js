@@ -15,7 +15,7 @@ export class SidebarNav extends Component {
       ALL_NAV_ITEMS,
       n => n.to !== 'profile-settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
     );
-    const actuals = ['account-details', 'summary', 'users', 'profile-settings', 'edgar'];
+    const actuals = ['account-details', 'summary', 'users', 'profile-settings', 'edgar', 'education'];
     return (
       <Aux>
         {
