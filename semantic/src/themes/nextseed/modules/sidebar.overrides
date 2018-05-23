@@ -48,7 +48,7 @@
 				display:none;
 				background:none;
 			}
-			>.icon:not(.dropdown){
+			.icon:not(.dropdown){
 				float:left;
 				height:auto;
 				font-size:@16px;
@@ -64,30 +64,8 @@
 			}
 			&:hover, &:focus, &.active{
 				background:@light-bg-color;
-				>.icon:not(.dropdown){
+				.icon:not(.dropdown){
 					color:@theme-primary;
-				}
-			}
-			&.dropdown{
-				.menu>.item:first-of-type{
-					margin-bottom:@3px;
-				}
-				.menu.transition{
-					position:relative;
-					left:0;
-					margin:@8px -@12px -@8px;
-					border:none;
-					box-shadow:none;
-					background:transparent;
-					.item{
-						padding:@8px @16px @8px @40px !important;
-						font-size:@12px !important;
-						color:@tertiary-text !important;
-						&.active, &.active:hover{
-							background-color:transparent;
-							color:@tertiary-text;
-						}
-					}
 				}
 			}
 		}
@@ -99,6 +77,32 @@
 					margin-left:@30px;
 					max-width:153px;
 				}
+				&.dropdown{
+					.menu>.item:first-of-type{
+						margin-bottom:@3px;
+					}
+					.icon.dropdown{
+						height:22px;
+						line-height:22px;
+						color:@theme-primary;
+					}
+					&:hover, &:focus, &.active, &.active:hover{
+						background-color:transparent;
+						color:@tertiary-text;
+					}
+					.menu.transition{
+						position:relative;
+						left:0;
+						margin:@8px -@12px -@8px;
+						border:none;
+						box-shadow:none;
+						background:transparent;
+						.item{
+							padding:@8px @16px @8px @42px !important;
+							color:@tertiary-text !important;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -106,6 +110,7 @@
 		width:64px;
 		transform:translate3D(0,0,0);
 		box-shadow:@boxShadow !important;
+		overflow-y:visible !important;
 		.user-picture{
 			margin:@24px 0 @7px;
 			> img{
@@ -126,6 +131,9 @@
 				position:absolute;
 				top:-5px;
 				right:-5px;
+			}
+			.icon.dropdown{
+				display:none;
 			}
 		}
 		~ .ui.button.collapseIcon{
@@ -251,10 +259,27 @@
 		&:hover, &:focus, &.active, &.active:hover{
 			background-color:@secondary-text;
 			color:@theme-primary !important;
+			.icon:not(.dropdown){
+				color:@quaternary-text;
+			}
 		}
-		>.icon:not(.dropdown){
+		.icon:not(.dropdown){
 			color:@quaternary-text;
 		}
+		&.dropdown{
+			.menu.transition{
+				.item{
+					color:@white !important;
+					&:hover, &:focus, &.active{
+						color:@theme-primary !important;
+						background-color:@secondary-text !important;
+					}
+				}
+			}
+		}
+	}
+	&:not(.visible) .dropdown .menu.transition{
+		background-color:@secondary-text;
 	}
 	~ .ui.button.collapseIcon{
 		background-color:transparent;
@@ -266,9 +291,18 @@
 			&:hover, &:focus, &.active, &.active:hover{
 				background-color:@secondary-text;
 				color:@white !important;
-				>.icon:not(.dropdown){
+				.icon:not(.dropdown){
 					color:@quaternary-text;
 				}
+			}
+		}
+		&.visible .item.dropdown{
+			&:hover, &:focus, &.active, &.active:hover{
+				background-color:transparent;
+			}
+			.item:hover, .item:focus, .item.active{
+				color:@white !important;
+				background-color:@secondary-text !important;
 			}
 		}
 	}
