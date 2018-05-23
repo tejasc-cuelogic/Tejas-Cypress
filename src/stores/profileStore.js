@@ -294,10 +294,10 @@ export class ProfileStore {
             });
           resolve();
         })
-        .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
+        .catch(action((err) => {
+          uiStore.setErrors(JSON.stringify(err.message));
           reject(err);
-        })
+        }))
         .finally(() => {
           uiStore.setProgress(false);
         });
