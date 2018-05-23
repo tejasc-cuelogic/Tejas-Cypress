@@ -39,6 +39,7 @@ export class SidebarNav extends Component {
               ) : (
                 <Menu.Item
                   key={item.to}
+                  onClick={this.navClick}
                   name={item.to}
                   as={NavLink}
                   to={(actuals.includes(item.to.split('/')[0])) ? `/app/${item.to}` : `/app/page/${item.to}`}
