@@ -26,7 +26,7 @@ export class SidebarNav extends Component {
                   item
                   active={active === item.to}
                   name={item.to}
-                  text={<Aux><Icon className={item.icon} />{item.title}</Aux>}
+                  text={<Aux><Icon className={item.icon} /><span>{item.title}</span></Aux>}
                   onClick={this.navClick}
                 >
                   <Dropdown.Menu>

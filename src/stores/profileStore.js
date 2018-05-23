@@ -11,6 +11,7 @@ import userStore from './userStore';
 import Helper from '../helper/utility';
 
 import {
+  UPDATE_PROFILE_INFO,
   VERIFY_IDENTITY_STEP_01,
   VERIFY_IDENTITY_STEP_04,
   CONFIRM_IDENTITY_DOCUMENTS,
@@ -49,6 +50,8 @@ export class ProfileStore {
       tooltip: 'Other Regulation Crowdfunding investments made in prior 12 months',
     },
   };
+
+  @observable updateProfileInfo = { fields: { ...UPDATE_PROFILE_INFO }, meta: { isValid: false, error: '' } };
 
   @action loadProfile(username) {
     uiStore.setProgress(true);
@@ -276,14 +279,31 @@ export class ProfileStore {
             });
           resolve();
         })
-        .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
+        .catch(action((err) => {
+          uiStore.setErrors(JSON.stringify(err.message));
           reject(err);
-        })
+        }))
         .finally(() => {
           uiStore.setProgress(false);
         });
     });
+  }
+
+  /**
+   * @desc Handle function for update profile info change.
+   */
+  @action
+  updateProfileInfoChange = (e, result) => {
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('updateProfileInfo', fieldName, fieldValue);
+  };
+
+  @action
+  setProfileInfo = (currentUser) => {
+    this.onFieldChange('updateProfileInfo', 'firstName', currentUser.givenName);
+    this.onFieldChange('updateProfileInfo', 'lastName', currentUser.familyName);
+    this.onFieldChange('updateProfileInfo', 'email', currentUser.email);
   }
 
   simpleErr = err => ({
