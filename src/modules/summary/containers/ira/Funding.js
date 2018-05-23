@@ -8,7 +8,7 @@ import { FormRadioGroup } from '../../../../theme/form/FormElements';
 @observer
 export default class Funding extends Component {
   getOptionDetails = () => {
-    const { value, values } = this.props.iraAccountStore.formFunding.fields.fundingOption;
+    const { value, values } = this.props.iraAccountStore.formFunding.fields.fundingType;
     return find(values, v => v.value === value).description;
   };
   render() {
@@ -19,8 +19,8 @@ export default class Funding extends Component {
         <Header as="h4" textAlign="center">Choose funding option</Header>
         <Form error className="account-type-tab">
           <FormRadioGroup
-            fielddata={formFunding.fields.fundingOption}
-            name="fundingOption"
+            fielddata={formFunding.fields.fundingType}
+            name="fundingType"
             changed={fundingChange}
             containerclassname="button-radio center-align"
           />

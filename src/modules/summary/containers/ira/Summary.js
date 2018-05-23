@@ -18,12 +18,12 @@ export default class Summary extends Component {
       formIdentity,
     } = this.props.iraAccountStore;
     const accountType = _.find(
-      formAccTypes.fields.accountType.values,
-      { value: formAccTypes.fields.accountType.value },
+      formAccTypes.fields.iraAccountType.values,
+      { value: formAccTypes.fields.iraAccountType.value },
     );
     const fundingOption = _.find(
-      formFunding.fields.fundingOption.values,
-      { value: formFunding.fields.fundingOption.value },
+      formFunding.fields.fundingType.values,
+      { value: formFunding.fields.fundingType.value },
     );
     return (
       <div>
@@ -44,8 +44,8 @@ export default class Summary extends Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your networth</b></Table.Cell>
-                    <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.networth.value ?
-                      formFinInfo.fields.networth.value : 0)}
+                    <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.netWorth.value ?
+                      formFinInfo.fields.netWorth.value : 0)}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
@@ -57,7 +57,7 @@ export default class Summary extends Component {
                   <Table.Row>
                     <Table.Cell><b>Drivers licence</b></Table.Cell>
                     <Table.Cell>
-                      {formIdentity.fields.driversLicence.value ?
+                      {formIdentity.fields.identityDoc.value ?
                         <span className="positive-text"><b>Uploaded</b></span> :
                         <span className="negative-text"><b>Not Uploaded</b></span>}
                     </Table.Cell>

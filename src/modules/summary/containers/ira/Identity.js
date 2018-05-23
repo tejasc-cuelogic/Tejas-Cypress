@@ -15,8 +15,8 @@ export default class Identity extends Component {
         <Divider section hidden />
         <Form className="file-uploader-large">
           <FileUploaderLarge
-            name="driversLicence"
-            fielddata={formIdentity.fields.driversLicence}
+            name="identityDoc"
+            fielddata={formIdentity.fields.identityDoc}
             uploadDocument={identityChange}
           />
         </Form>

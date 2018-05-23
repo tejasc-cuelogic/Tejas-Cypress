@@ -72,14 +72,20 @@ class IraAccountStore {
   @action
   onFieldChange = (currentForm, field, value) => {
     const form = currentForm || 'formFinInfo';
-    this[form].fields[field].value = value;
+    if (field) {
+      if (typeof value !== 'undefined') {
+        this[form].fields[field].value = value;
+      }
+    }
     const validation = new Validator(
       mapValues(this[form].fields, f => f.value),
       mapValues(this[form].fields, f => f.rule),
     );
     this[form].meta.isValid = validation.passes();
     this[form].meta.isDirty = true;
-    this[form].fields[field].error = validation.errors.first(field);
+    if (field && value) {
+      this[form].fields[field].error = validation.errors.first(field);
+    }
   };
 
   @action
@@ -94,13 +100,13 @@ class IraAccountStore {
 
   @computed
   get isValidIraFinancialInfo() {
-    return _.isEmpty(this.formFinInfo.fields.networth.error) &&
+    return _.isEmpty(this.formFinInfo.fields.netWorth.error) &&
     _.isEmpty(this.formFinInfo.fields.annualIncome.error);
   }
 
   @computed
   get isValidIraIdentity() {
-    return _.isEmpty(this.formIdentity.fields.driversLicence.error);
+    return _.isEmpty(this.formIdentity.fields.identityDoc.error);
   }
 
   @computed
@@ -117,20 +123,20 @@ class IraAccountStore {
   @computed
   get accountAttributes() {
     const accountType = _.find(
-      this.formAccTypes.fields.accountType.values,
-      { value: this.formAccTypes.fields.accountType.value },
+      this.formAccTypes.fields.iraAccountType.values,
+      { value: this.formAccTypes.fields.iraAccountType.value },
     );
     const fundingOption = _.find(
-      this.formFunding.fields.fundingOption.values,
-      { value: this.formFunding.fields.fundingOption.value },
+      this.formFunding.fields.fundingType.values,
+      { value: this.formFunding.fields.fundingType.value },
     );
     return {
-      netWorth: this.formFinInfo.fields.networth.value ? this.formFinInfo.fields.networth.value : 0,
+      netWorth: this.formFinInfo.fields.netWorth.value ? this.formFinInfo.fields.netWorth.value : 0,
       annualIncome:
       this.formFinInfo.fields.annualIncome.value ? this.formFinInfo.fields.annualIncome.value : 0,
       iraAccountType: accountType.label.toLowerCase(),
       fundingType: this.getFundingType(fundingOption.label.toLowerCase()),
-      identityDoc: this.formIdentity.fields.driversLicence.value,
+      identityDoc: this.formIdentity.fields.identityDoc.value,
     };
   }
 

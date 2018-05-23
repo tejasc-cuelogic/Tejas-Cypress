@@ -222,7 +222,7 @@ export const IND_BANK_LIST = [
 ];
 
 export const IRA_ACC_TYPES = {
-  accountType: {
+  iraAccountType: {
     value: 0,
     values: [
       {
@@ -244,7 +244,7 @@ export const IRA_ACC_TYPES = {
 };
 
 export const IRA_FUNDING = {
-  fundingOption: {
+  fundingType: {
     value: 0,
     values: [
       {
@@ -272,8 +272,8 @@ export const IRA_FUNDING = {
 };
 
 export const IRA_FIN_INFO = {
-  networth: {
-    key: 'networth',
+  netWorth: {
+    key: 'netWorth',
     value: '',
     error: undefined,
     rule: 'required|numeric',
@@ -293,9 +293,9 @@ export const IRA_FIN_INFO = {
 };
 
 export const IRA_IDENTITY = {
-  driversLicence: {
+  identityDoc: {
     value: '',
-    key: 'driversLicence',
+    key: 'identityDoc',
     error: undefined,
     rule: 'required',
     label: '',

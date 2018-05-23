@@ -15,7 +15,7 @@ export default class FinancialInformation extends React.Component {
         <Form error>
           <div className="field-wrap">
             {
-              ['networth', 'annualIncome'].map(field => (
+              ['netWorth', 'annualIncome'].map(field => (
                 <FormInput
                   key={field}
                   type="text"

@@ -422,9 +422,9 @@ export class Validation {
   */
  validateIRAIdentityInfo = () => {
    const { errors } =
-  validationService.validate(iraAccountStore.formIdentity.fields.driversLicence);
+  validationService.validate(iraAccountStore.formIdentity.fields.identityDoc);
    // Store errors to store if any or else `undefined` will get set to it
-   iraAccountStore.setIraError('formIdentity', 'driversLicence', errors && errors.driversLicence[0]);
+   iraAccountStore.setIraError('formIdentity', 'identityDoc', errors && errors.identityDoc[0]);
  }
 
  /**

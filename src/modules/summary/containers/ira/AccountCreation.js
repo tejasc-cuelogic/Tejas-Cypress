@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-
 import MuliStep from '../../../../helper/MultiStep';
 import FinancialInformation from './FinancialInformation';
 import AccountType from './AccountType';
