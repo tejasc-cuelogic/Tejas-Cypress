@@ -19,6 +19,7 @@ export default class FormationDocumemts extends Component {
             {
               ['entityFormationDocument', 'entityOperatingDocument', 'einVerification'].map(field => (
                 <FileUploader
+                  key={field}
                   name={field}
                   fielddata={formFormationDocuments.fields[field]}
                   uploadDocument={formationDocFileUpload}

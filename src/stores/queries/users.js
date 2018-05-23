@@ -73,6 +73,7 @@ query getUserDetails($id: ID!) {
       userId
       accountId
       accountType
+      accountDetails
       finishedDate
       status
     }

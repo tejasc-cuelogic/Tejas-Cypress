@@ -11,9 +11,13 @@ import AccountSetupChecklist from '../components/AccountSetupChecklist';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 
-@inject('uiStore', 'accountStore', 'individualAccountStore')
+@inject('uiStore', 'userStore', 'accountStore', 'userDetailsStore', 'individualAccountStore')
 @observer
 class Summary extends Component {
+  componentWillMount() {
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+  }
+
   setDashboardWizardSetup = (step) => {
     this.props.uiStore.setDashboardWizardStep(step);
     this.restoreStep();
