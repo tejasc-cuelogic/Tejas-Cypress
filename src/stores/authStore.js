@@ -2,8 +2,11 @@ import { observable, action, computed, createTransformer } from 'mobx';
 import * as AWSCognito from 'amazon-cognito-identity-js';
 import _ from 'lodash';
 // import * as AWS from 'aws-sdk';
+import Validator from 'validatorjs';
+import mapValues from 'lodash/mapValues';
 import userStore from './userStore';
 import commonStore from './commonStore';
+import { CHANGE_PASS } from '../modules/private/users/constants/metadata';
 import uiStore from './uiStore';
 
 const userPool = new AWSCognito.CognitoUserPool({
@@ -93,6 +96,8 @@ export class AuthStore {
     },
   };
 
+  @observable CHANGE_PASS_FRM = { fields: { ...CHANGE_PASS }, meta: { isValid: false, error: '' } };
+
   @computed get canRegister() {
     return _.isEmpty(_.filter(this.values, field => field.error));
   }
@@ -142,20 +147,11 @@ export class AuthStore {
 
   @action
   reset() {
-    this.values.givenName.value = '';
-    this.values.givenName.error = undefined;
-    this.values.familyName.value = '';
-    this.values.familyName.error = undefined;
-    this.values.email.value = '';
-    this.values.email.error = undefined;
-    this.values.password.value = '';
-    this.values.password.error = undefined;
-    this.values.verify.value = '';
-    this.values.verify.error = undefined;
-    this.values.code.value = '';
-    this.values.code.error = undefined;
-    this.values.role.value = '';
-    this.values.role.error = undefined;
+    Object.keys(this.values).map((field) => {
+      this.values[field].value = '';
+      this.values[field].error = undefined;
+      return true;
+    });
   }
 
   @computed
@@ -246,6 +242,27 @@ export class AuthStore {
     const newData = data;
     newData.roles = JSON.parse(data.roles);
     return newData;
+  };
+
+  @action
+  changePassChange = (e, result) => {
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('CHANGE_PASS_FRM', fieldName, fieldValue);
+  };
+
+  @action
+  onFieldChange = (currentForm, field, value) => {
+    const form = currentForm;
+    this[form].fields[field].value = value;
+    const validation = new Validator(
+      mapValues(this[form].fields, f => f.value),
+      mapValues(this[form].fields, f => f.rule),
+    );
+    this[form].meta.isValid = validation.passes();
+    if (field && value) {
+      this[form].fields[field].error = validation.errors.first(field);
+    }
   };
 }
 
