@@ -55,7 +55,7 @@ export default class ConfirmPhoneNumber extends Component {
     } = this.props.profileStore;
     const { errors, editMode } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
+      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your phone number</Header>
           <Divider />

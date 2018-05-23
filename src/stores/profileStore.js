@@ -266,7 +266,7 @@ export class ProfileStore {
           },
         })
         .then(() => Helper.toast('Verification code sent to user.', 'success'), resolve())
-        .catch(err => uiStore.setErrors(this.simpleErr(err)), reject());
+        .catch(err => uiStore.setErrors(JSON.stringify(err.message)), reject());
     });
   }
 
