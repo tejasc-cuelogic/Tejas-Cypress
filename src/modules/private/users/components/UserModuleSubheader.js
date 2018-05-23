@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Grid, List, Icon, Menu, Responsive } from 'semantic-ui-react';
-import { USER_DETAIL_SECTIONS } from '../../../constants/user';
+import { Grid, Header, List, Icon, Menu, Responsive } from 'semantic-ui-react';
+import { USER_DETAIL_SECTIONS } from '../../../../constants/user';
 
 const userModuleSubheader = props => (
   <div>
@@ -9,7 +9,7 @@ const userModuleSubheader = props => (
       <Grid>
         <Grid.Row>
           <Grid.Column width={16}>
-            <h1>
+            <Header as="h1">
               <Responsive {...Responsive.onlyComputer}>
                 <Link to="/app/users" className="back-link"><Icon className="ns-arrow-left" /></Link>
               </Responsive>
@@ -25,7 +25,7 @@ const userModuleSubheader = props => (
                   </List.Content>
                 </List.Item>
               </List>
-            </h1>
+            </Header>
           </Grid.Column>
         </Grid.Row>
       </Grid>

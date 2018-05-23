@@ -137,7 +137,7 @@ class IndividualAccountStore {
           variables: {
             userId: userStore.currentUser.sub,
             accountId: this.nsAccId,
-            funds: this.formAddFunds.fields.value.value,
+            funds: this.formAddFunds.fields.value.value ? this.formAddFunds.fields.value.value : 0,
           },
         })
         .then(() => resolve())

@@ -3,7 +3,7 @@ import { inject } from 'mobx-react';
 import { Header, Card, Grid, Form } from 'semantic-ui-react';
 import { FillTable } from '../../../../theme/table/NSTable';
 import { DateRangeFilter, DropdownFilter } from '../../../../theme/form/Filters';
-import { TRANSACTION_TYPES } from './../../../../constants/user';
+import { TRANSACTION_TYPES } from '../../../../constants/user';
 
 const result = {
   columns: [

@@ -106,3 +106,33 @@ export const CONFIRM_IDENTITY_DOCUMENTS = {
   },
 };
 
+export const UPDATE_PROFILE_INFO = {
+  firstName: {
+    value: '',
+    label: 'First name',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'First name',
+  },
+  lastName: {
+    value: '',
+    label: 'Last name',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Last name',
+  },
+  phoneNumber: {
+    value: '',
+    label: 'Phone Number',
+    error: undefined,
+    rule: 'required|maskedPhoneNumber',
+    placeHolder: 'Phone Number',
+  },
+  email: {
+    value: '',
+    label: 'Email',
+    error: undefined,
+    rule: 'required|email',
+    placeHolder: 'Email',
+  },
+};
