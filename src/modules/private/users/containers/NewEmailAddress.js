@@ -18,6 +18,9 @@ export default class NewEmailAddress extends Component {
   }
   render() {
     const { values } = this.props.authStore;
+    if (this.props.uiStore.authWizardStep === 'ConfirmEmailAddress') {
+      return null;
+    }
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
         <Modal.Header className="center-align signup-header">
