@@ -101,7 +101,7 @@ export class ProfileStore {
   get formattedPhoneDetails() {
     const phoneDetails = {
       phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-      countryCode: '1',
+      countryCode: '91',
     };
     return phoneDetails;
   }
@@ -213,6 +213,13 @@ export class ProfileStore {
     return _.isEmpty(_.filter(this.confirmIdentityDocuments, field => field.error));
   }
 
+  @computed
+  get canSubmitNewPhoneNumber() {
+    return ((typeof this.verifyIdentity01.fields.phoneNumber.error !== 'undefined' &&
+    !_.isEmpty(this.verifyIdentity01.fields.phoneNumber.value)) ||
+    _.isEmpty(this.verifyIdentity01.fields.phoneNumber.value));
+  }
+
   submitConfirmIdentityQuestions = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -242,6 +249,7 @@ export class ProfileStore {
 
   /* eslint-disable arrow-body-style */
   startPhoneVerification = () => {
+    uiStore.clearErrors();
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -268,6 +276,7 @@ export class ProfileStore {
           },
         })
         .then(() => {
+          this.onFieldChange('updateProfileInfo', 'phoneNumber', this.verifyIdentity01.fields.phoneNumber.value);
           client
             .mutate({
               mutation: updateUserCIPInfo,
