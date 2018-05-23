@@ -317,6 +317,7 @@ export class Auth {
     const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
     return new Promise((res, rej) => {
       this.cognitoUser = this.userPool.getCurrentUser();
+      this.cognitoUser.getSession((err, session) => console.log(err, session));
       this.cognitoUser.changePassword(
         passData.oldPasswd,
         passData.newPasswd,

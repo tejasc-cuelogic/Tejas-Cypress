@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Menu, Icon, Label, Dropdown } from 'semantic-ui-react';
 import _ from 'lodash';
 import { ALL_NAV_ITEMS } from '../../constants/privateNavigationMeta';
 
+@withRouter
 export class SidebarNav extends Component {
   state = { active: '' };
   navClick = (e, { name }) => this.setState({ active: name });
@@ -24,7 +25,7 @@ export class SidebarNav extends Component {
               {(item.subNavigations && item.subNavigations.length > 0) ? (
                 <Dropdown
                   item
-                  active={active === item.to}
+                  open={active === item.to || this.props.location.pathname.startsWith(`/app/${item.to}`)}
                   name={item.to}
                   text={<Aux><Icon className={item.icon} /><span>{item.title}</span></Aux>}
                   onClick={this.navClick}

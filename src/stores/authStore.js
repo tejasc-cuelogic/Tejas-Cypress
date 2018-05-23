@@ -264,6 +264,16 @@ export class AuthStore {
       this[form].fields[field].error = validation.errors.first(field);
     }
   };
+
+  @action
+  forceSetError = (form, field, error) => {
+    this[form].fields[field].error = error;
+  }
+
+  @action
+  resetForm() {
+    this.CHANGE_PASS_FRM = { fields: { ...CHANGE_PASS }, meta: { isValid: false, error: '' } };
+  }
 }
 
 export default new AuthStore();
