@@ -80,6 +80,12 @@ export class ProfileStore {
     this.verifyIdentity01.response = response;
   }
 
+  @action
+  reset() {
+    this.verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: false, error: '' }, response: {} };
+    this.verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
+  }
+
   @computed
   get formattedUserInfo() {
     const userInfo = {
@@ -101,7 +107,7 @@ export class ProfileStore {
   get formattedPhoneDetails() {
     const phoneDetails = {
       phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-      countryCode: '91',
+      countryCode: '1',
     };
     return phoneDetails;
   }

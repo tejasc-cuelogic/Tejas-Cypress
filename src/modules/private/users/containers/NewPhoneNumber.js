@@ -13,6 +13,7 @@ export default class NewPhoneNumber extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push('/app/profile-settings/profile-data');
+    this.props.profileStore.reset();
   }
   render() {
     const {
