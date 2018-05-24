@@ -11,7 +11,7 @@ const KnowledgeBase = () => (
             Chapter 1
             <span>Lorem ipsum dolor sit amet enim ullamcorper?</span>
           </Accordion.Title>
-          <Responsive as="div" className="content active" maxWidth={1199}>
+          <Responsive className="content active" maxWidth={1199}>
             <p>
               Lorem ipsum dolor sit amet pede. Cras dignissim. Donec pulvinar odio. Morbi pede.
               Cras ut massa. Proin orci. Suspendisse luctus quam ante et quam tristique sodales.
@@ -52,7 +52,7 @@ const KnowledgeBase = () => (
               elit lectus felis, malesuada ultricies?
             </span>
           </Accordion.Title>
-          <Responsive as="div" className="content" maxWidth={1199}>
+          <Responsive className="content" maxWidth={1199}>
             <p>
               Lorem ipsum dolor sit amet pede. Cras dignissim. Donec pulvinar odio. Morbi pede.
               Cras ut massa. Proin orci. Suspendisse luctus quam ante et quam tristique sodales.
@@ -90,7 +90,7 @@ const KnowledgeBase = () => (
             Chapter 3
             <span>Lorem ipsum dolor sit amet enim ullamcorper?</span>
           </Accordion.Title>
-          <Responsive as="div" className="content" maxWidth={1199}>
+          <Responsive className="content" maxWidth={1199}>
             <p>
               Lorem ipsum dolor sit amet pede. Cras dignissim. Donec pulvinar odio. Morbi pede.
               Cras ut massa. Proin orci. Suspendisse luctus quam ante et quam tristique sodales.
