@@ -8,10 +8,15 @@ import { ALL_NAV_ITEMS } from '../../constants/privateNavigationMeta';
 @withRouter
 export class SidebarNav extends Component {
   state = { active: '' };
-  navClick = (e, { name }) => this.setState({ active: name });
+  navClick = (e, { name }) => {
+    this.setState({ active: name });
+    if (e.target.getAttribute('role') === null) {
+      this.props.history.replace(`/app/${name}`);
+    }
+  };
+  isActive = (to, location) => this.state.active === to || location.pathname.startsWith(`/app/${to}`);
   render() {
-    const { roles } = this.props;
-    const { active } = this.state;
+    const { roles, location } = this.props;
     const navItems = _.filter(
       ALL_NAV_ITEMS,
       n => n.to !== 'profile-settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
@@ -25,12 +30,13 @@ export class SidebarNav extends Component {
               {(item.subNavigations && item.subNavigations.length > 0) ? (
                 <Dropdown
                   item
-                  open={active === item.to || this.props.location.pathname.startsWith(`/app/${item.to}`)}
+                  className={this.isActive(item.to, location) ? 'active' : ''}
                   name={item.to}
+                  to={`/app/${item.to}`}
                   text={<Aux><Icon className={item.icon} /><span>{item.title}</span></Aux>}
                   onClick={this.navClick}
                 >
-                  <Dropdown.Menu>
+                  <Dropdown.Menu className={this.isActive(item.to, location) ? 'visible' : ''}>
                     {item.subNavigations.map(sn => (
                       <Dropdown.Item as={NavLink} to={`/app/${item.to}/${sn.to}`}>{sn.title}</Dropdown.Item>
                     ))}
