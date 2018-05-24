@@ -1,17 +1,31 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable class-methods-use-this, prefer-destructuring */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../services/graphqlCool';
-import { allKbsQuery } from '../queries/knowledgeBase';
+import { allKbsQuery, getFirst, getOne } from '../queries/knowledgeBase';
 
 export class KnowledgeBase {
   @observable data = [];
+  @observable selected = { heading: '', description: '' };
 
   @action
   initRequest = () => {
     this.data = graphql({
       client,
       query: allKbsQuery,
+    });
+  }
+
+  @action
+  getOne = (id) => {
+    const variables = (id) ? { id } : { first: 1 };
+    graphql({
+      client,
+      query: (id) ? getOne : getFirst,
+      variables,
+      onFetch: (data) => {
+        this.selected = (id) ? data.KnowledgeBase : data.allKnowledgeBases[0];
+      },
     });
   }
 
