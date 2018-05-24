@@ -83,8 +83,10 @@ class IraAccountStore {
     );
     this[form].meta.isValid = validation.passes();
     this[form].meta.isDirty = true;
-    if (field && value) {
-      this[form].fields[field].error = validation.errors.first(field);
+    if (field) {
+      if (typeof value !== 'undefined') {
+        this[form].fields[field].error = validation.errors.first(field);
+      }
     }
   };
 
@@ -130,14 +132,20 @@ class IraAccountStore {
       this.formFunding.fields.fundingType.values,
       { value: this.formFunding.fields.fundingType.value },
     );
-    return {
-      netWorth: this.formFinInfo.fields.netWorth.value ? this.formFinInfo.fields.netWorth.value : 0,
-      annualIncome:
-      this.formFinInfo.fields.annualIncome.value ? this.formFinInfo.fields.annualIncome.value : 0,
+    const payload = {
       iraAccountType: accountType.label.toLowerCase(),
       fundingType: this.getFundingType(fundingOption.label.toLowerCase()),
-      identityDoc: this.formIdentity.fields.identityDoc.value,
     };
+    if (this.formFinInfo.fields.netWorth.value) {
+      payload.netWorth = this.formFinInfo.fields.netWorth.value;
+    }
+    if (this.formFinInfo.fields.annualIncome.value) {
+      payload.annualIncome = this.formFinInfo.fields.annualIncome.value;
+    }
+    if (this.formIdentity.fields.identityDoc.value) {
+      payload.identityDoc = this.formIdentity.fields.identityDoc.value;
+    }
+    return payload;
   }
 
   /* eslint-disable class-methods-use-this */
@@ -173,7 +181,8 @@ class IraAccountStore {
         break;
     }
     if (isValidCurrentStep) {
-      uiStore.setProgress(userStore.currentUser.sub);
+      uiStore.setProgress();
+      userDetailsStore.getUser(userStore.currentUser.sub);
       let mutation = createAccount;
       let variables = {
         userId: userStore.currentUser.sub,
@@ -182,20 +191,22 @@ class IraAccountStore {
         accountType: 'ira',
       };
       let actionPerformed = 'submitted';
-      if (typeof userDetailsStore.currentUser.data !== 'undefined') {
+      if (userDetailsStore.currentUser.data) {
         const accountDetails = _.find(
           userDetailsStore.currentUser.data.user.accounts,
           { accountType: 'ira' },
         );
-        mutation = updateAccount;
-        variables = {
-          userId: userStore.currentUser.sub,
-          accountId: accountDetails.accountId,
-          accountAttributes: this.accountAttributes,
-          status: formStatus,
-          accountType: 'ira',
-        };
-        actionPerformed = 'updated';
+        if (accountDetails) {
+          mutation = updateAccount;
+          variables = {
+            userId: userStore.currentUser.sub,
+            accountId: accountDetails.accountId,
+            accountAttributes: this.accountAttributes,
+            status: formStatus,
+            accountType: 'ira',
+          };
+          actionPerformed = 'updated';
+        }
       }
       return new Promise((resolve, reject) => {
         client
@@ -207,20 +218,23 @@ class IraAccountStore {
             switch (currentStep.name) {
               case 'Financial info':
                 this.setIsDirty('formFinInfo', false);
+                this.setStepToBeRendered(1);
                 break;
               case 'Account type':
                 this.setIsDirty('formAccTypes', false);
+                this.setStepToBeRendered(2);
                 break;
               case 'Funding':
                 this.setIsDirty('formFunding', false);
+                this.setStepToBeRendered(3);
                 break;
               case 'Identity':
                 this.setIsDirty('formIdentity', false);
+                this.setStepToBeRendered(4);
                 break;
               default:
                 break;
             }
-            userDetailsStore.getUser(userStore.currentUser.sub);
             if (formStatus === 'submit') {
               Helper.toast('IRA account created successfully.', 'success');
             } else {
@@ -229,7 +243,7 @@ class IraAccountStore {
             resolve(result);
           })
           .catch((err) => {
-            uiStore.setErrors(err);
+            uiStore.setErrors(this.simpleErr(err));
             reject(err);
           })
           .finally(() => {
@@ -238,6 +252,65 @@ class IraAccountStore {
       });
     }
   }
+
+  @action
+  populateData = (userData) => {
+    if (!_.isEmpty(userData)) {
+      const account = _.find(
+        userData.accounts,
+        { accountType: 'ira' },
+      );
+      if (account) {
+        Object.keys(this.formFinInfo.fields).map((f) => {
+          this.formFinInfo.fields[f].value = account.accountDetails[f];
+          return this.formFinInfo.fields[f];
+        });
+        this.onFieldChange('formFinInfo');
+        Object.keys(this.formFunding.fields).map((f) => {
+          if (account.accountDetails[f] === 'check') {
+            this.formFunding.fields[f].value = 0;
+          } else if (account.accountDetails[f] === 'iraTransfer') {
+            this.formFunding.fields[f].value = 1;
+          } else {
+            this.formFunding.fields[f].value = 2;
+          }
+          return this.formFunding.fields[f];
+        });
+        this.onFieldChange('formFunding');
+        Object.keys(this.formAccTypes.fields).map((f) => {
+          if (account.accountDetails[f] === 'traditional') {
+            this.formAccTypes.fields[f].value = 0;
+          } else {
+            this.formAccTypes.fields[f].value = 1;
+          }
+          return this.formAccTypes.fields[f];
+        });
+        this.onFieldChange('formAccTypes');
+        Object.keys(this.formIdentity.fields).map((f) => {
+          this.formIdentity.fields[f].value = account.accountDetails[f];
+          return this.formIdentity.fields[f];
+        });
+        this.onFieldChange('formIdentity');
+        if (!this.formFinInfo.meta.isValid) {
+          this.setStepToBeRendered(0);
+        } else if (!this.formAccTypes.meta.isValid) {
+          this.setStepToBeRendered(1);
+        } else if (!this.formFunding.meta.isValid) {
+          this.setStepToBeRendered(2);
+        } else if (!this.formIdentity.meta.isValid) {
+          this.setStepToBeRendered(3);
+        } else {
+          this.setStepToBeRendered(4);
+        }
+      }
+    }
+  }
+
+  simpleErr = err => ({
+    statusCode: err.statusCode,
+    code: err.code,
+    message: err.message,
+  });
 }
 
 export default new IraAccountStore();

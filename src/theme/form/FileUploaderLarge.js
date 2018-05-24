@@ -8,7 +8,7 @@ const FileUploaderLarge = observer((props) => {
   } = props.fielddata;
   return (
     <Form.Field>
-      {value === '' &&
+      {!value &&
         <div className="file-uploader">
           <div><Icon className="ns-upload" /> Choose a file <span>or drag it here</span></div>
           <input
@@ -18,7 +18,7 @@ const FileUploaderLarge = observer((props) => {
           />
         </div>
       }
-      {value !== '' &&
+      {value &&
         <div className="file-uploader attached">
           <span title={value}>{value}</span>
           <Button size="tiny" compact className="remove pull-right" onClick={() => props.uploadDocument(props.name, '')}>Remove</Button>

@@ -13,52 +13,11 @@ import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 import Spinner from '../../../theme/ui/Spinner';
 
-@inject('uiStore', 'userStore', 'accountStore', 'userDetailsStore', 'individualAccountStore')
+@inject('uiStore', 'userStore', 'accountStore', 'userDetailsStore', 'individualAccountStore', 'iraAccountStore')
 @observer
 class Summary extends Component {
   componentWillMount() {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-  }
-  componentDidMount() {
-    console.log(this.props.userDetailsStore.currentUser);
-    const account = _.find(
-      this.props.userDetailsStore.currentUser.data.user.accounts,
-      { accountType: 'ira' },
-    );
-    Object.keys(this.props.iraAccountStore.formFinInfo.fields).map((f) => {
-      this.props.iraAccountStore.formFinInfo.fields[f].value = account.accountDetails[f];
-      return this.props.iraAccountStore.formFinInfo.fields[f];
-    });
-    this.props.iraAccountStore.onFieldChange('formFinInfo');
-    Object.keys(this.props.iraAccountStore.formFunding.fields).map((f) => {
-      if (account.accountDetails[f] === 'check') {
-        this.props.iraAccountStore.formFunding.fields[f].value = 0;
-      } else if (account.accountDetails[f] === 'iraTransfer') {
-        this.props.iraAccountStore.formFunding.fields[f].value = 1;
-      } else {
-        this.props.iraAccountStore.formFunding.fields[f].value = 2;
-      }
-      return this.props.iraAccountStore.formFunding.fields[f];
-    });
-    this.props.iraAccountStore.onFieldChange('formFunding');
-    Object.keys(this.props.iraAccountStore.formAccTypes.fields).map((f) => {
-      if (account.accountDetails[f] === 'traditional') {
-        this.props.iraAccountStore.formAccTypes.fields[f].value = 0;
-      } else {
-        this.props.iraAccountStore.formAccTypes.fields[f].value = 1;
-      }
-      return this.props.iraAccountStore.formAccTypes.fields[f];
-    });
-    this.props.iraAccountStore.onFieldChange('formAccTypes');
-    Object.keys(this.props.iraAccountStore.formIdentity.fields).map((f) => {
-      this.props.iraAccountStore.formIdentity.fields[f].value = account.accountDetails[f];
-      return this.props.iraAccountStore.formIdentity.fields[f];
-    });
-    this.props.iraAccountStore.onFieldChange('formIdentity');
-    console.log(this.props.iraAccountStore.formFinInfo.meta.isValid);
-    console.log(this.props.iraAccountStore.formAccTypes.meta.isValid);
-    console.log(this.props.iraAccountStore.formIdentity.meta.isValid);
-    console.log(this.props.iraAccountStore.formFunding.meta.isValid);
   }
 
   setDashboardWizardSetup = (step) => {
@@ -85,13 +44,6 @@ class Summary extends Component {
       linkText: 'Verify me',
       linkPath: 'InvestorPersonalDetails',
     };
-    if (!this.props.userDetailsStore.currentUser.data.user) {
-      return (
-        <div>
-          <Spinner loaderMessage="Loading..." />
-        </div>
-      );
-    }
     return (
       <Aux>
         <PrivateLayout
