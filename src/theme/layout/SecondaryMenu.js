@@ -18,7 +18,7 @@ class SecondaryMenu extends Component {
   render() {
     return (
       <div>
-        <Responsive {...Responsive.onlyTablet}>
+        <Responsive minWidth={768}>
           <Menu
             className={this.props.className || ''}
             celled={!this.props.vertical}
@@ -41,7 +41,7 @@ class SecondaryMenu extends Component {
             }
           </Menu>
         </Responsive>
-        <Responsive className="secondary-menu" {...Responsive.onlyMobile}>
+        <Responsive className="secondary-menu" maxWidth={767}>
           <Dropdown
             fluid
             selection
