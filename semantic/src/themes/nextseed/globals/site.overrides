@@ -267,7 +267,41 @@ a.text-link{
 		padding:0 @20px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
-		padding:0 @10px;
+		padding:0 @20px @14px;
+		background-color:@secondary-text;
+		.ui.selection.dropdown{
+			padding:@11px;
+			padding-right:@30px;
+			background-color:@tertiary-text;
+			border:none;
+			border-radius:@6px;
+			color:@white;
+			z-index:9;
+			.dropdown.icon{
+				padding-right:@12px;
+			}
+			.menu{
+				border:none;
+				background-color:@tertiary-text;
+				.item{
+					padding:@11px !important;
+					border:none;
+					color:@quaternary-text;
+					&.selected{
+						color:@white;
+						font-weight:400;
+					}
+				}
+			}
+			&.active .menu{
+				margin:1px 0 0;
+				width:100%;
+				min-width:100%;
+			}
+			&.visible>.text:not(.default){
+				color:@white;
+			}
+		}
 	}
 }
 
