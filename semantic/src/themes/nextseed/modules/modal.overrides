@@ -21,11 +21,18 @@
     }
 }
 .ui.modal{
+    @media only screen and (min-width:@tabletBreakpoint){
+        width:665px;
+    }
     >.close{
         top:@7px;
         right:@7px;
         opacity:0.5;
         color:@quaternary-text;
+        @media only screen and (max-width:@largestMobileScreen){
+            top:0rem !important;
+            right:0rem !important;
+        }
     }
     >.header:not(.ui).signup-header{
         padding-top:@28px;
@@ -222,6 +229,9 @@
         border-radius:@15px;
         top:1rem;
         right:1rem;
+        @media only screen and (max-width:@largestTabletScreen){
+            color:@quaternary-text;
+        }
     }
     .ui.header{
         border:none;
