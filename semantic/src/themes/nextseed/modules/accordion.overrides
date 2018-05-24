@@ -42,8 +42,8 @@
 }
 
 /* Dropdown Icon */
-.ui.accordion,
-.ui.accordion .accordion{
+.ui.accordion:not(.styled),
+.ui.accordion .accordion:not(.styled){
 	.title{
 		.ns-chevron-down.icon {
 			margin:0;
@@ -52,11 +52,37 @@
 			line-height:@21px;
 			position:absolute;
 			right:0;
-			top:7px;
+			top:50%;
+			margin-top:-.75rem;
 		}
 		&.active{
 			.ns-chevron-down.icon{
 				transform:rotate(180deg);
+			}
+		}
+	}
+	&.splitted{
+		.title{
+			font-size:@18px;
+			color:@fullBlack;
+			padding:@14px @40px @14px @20px;
+			margin-bottom:@10px;
+			background-color:@white;
+			box-shadow:@cardBoxShadow;
+			border-radius:@6px;
+			>.icon{
+				font-size:@14px;
+				color:@link-color;
+				right:10px;
+			}
+			~ .content:not(.ui){
+				padding:@10px @20px @30px;
+			}
+		}
+		.list a.item{
+			color:@fullBlack;
+			&:hover, &:focus, &.active{
+				color:@link-color;
 			}
 		}
 	}
