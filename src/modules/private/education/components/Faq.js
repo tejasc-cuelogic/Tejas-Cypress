@@ -64,8 +64,8 @@ const Faq = () => (
               bank in order to receive any business payments, which requires a U.S. address and
               social security number. However, our partner bank is looking for a solution to
               accommodate people outside of the U.S. If you would like to be notified when we are
-              able to accept you as an investor, please send us a note at
-              <Link to="/" className="link">info@nextseed.com</Link>.
+              able to accept you as an investor, please send us a note
+              at <Link to="/" className="link">info@nextseed.com</Link>.
             </p>
           </Card.Content>
         </Card>
