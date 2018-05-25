@@ -49,8 +49,6 @@
 		.ns-chevron-down.icon {
 			margin:0;
 			height:@21px;
-			// height:19px;
-			// font-size:@14px;
 			color:@theme-primary;
 			line-height:@21px;
 			position:absolute;

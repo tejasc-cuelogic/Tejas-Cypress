@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { USER_LIST_META } from '../../../constants/user';
+import { USER_LIST_META } from '../../../../constants/user';
 import UserListingSubheader from './../components/UserListingSubheader';
 import UserListing from './../components/UserListing';
 

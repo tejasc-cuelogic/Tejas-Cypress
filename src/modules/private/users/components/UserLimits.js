@@ -9,9 +9,9 @@ const userLimits = () => (
     <Header as="h3">Regulation Crowdfunding Limits</Header>
     <Grid columns={1} stackable>
       <Grid.Row>
-        <Grid.Column width={8}>
+        <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
           <Card fluid>
-            <Grid divided padded="horizontally">
+            <Grid stackable celled="internally" padded="horizontally">
               <Grid.Row>
                 <Grid.Column width={6}>
                   <Card.Content>

@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import Header from './Header';
 import AuthWizard from '../../modules/auth/containers/AuthWizard';
 import authActions from '../../actions/auth';
-// import Spinner from '../ui/Spinner';
 
 @inject('userStore', 'uiStore')
 @withRouter
