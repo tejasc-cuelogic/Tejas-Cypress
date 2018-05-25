@@ -16,8 +16,10 @@ export default class ConfirmIdentityForm extends Component {
       /* eslint-disable no-underscore-dangle */
       if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
         Helper.toast('Identity questions verified.', 'success');
-        this.props.profileStore.startPhoneVerification();
-        this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+        this.props.profileStore.startPhoneVerification().then(() => {
+          this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+        })
+          .catch(() => {});
       } else {
         Helper.toast('Identity questions not verified.', 'error');
         this.props.setDashboardWizardStep('ConfirmIdentityDocuments');

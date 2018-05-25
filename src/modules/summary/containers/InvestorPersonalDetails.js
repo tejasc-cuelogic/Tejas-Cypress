@@ -7,6 +7,7 @@ import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
 import profileActions from '../../../actions/profile';
 import Helper from '../../../helper/utility';
 import CipErrors from '../../../theme/common/CipErrors';
+import ListErrors from '../../../theme/common/ListErrors';
 
 @inject('profileStore', 'uiStore', 'userStore')
 @withRouter
@@ -23,14 +24,17 @@ export default class investorPersonalDetails extends Component {
       const { key, questions } = this.props.profileStore.verifyIdentity01.response;
       if (key === 'id.error') {
         Helper.toast('User verification failed!', 'error');
+        this.props.setDashboardWizardStep('ConfirmIdentityDocuments');
       } else if (key === 'id.failure' && questions) {
         Helper.toast('User verification soft-failed!', 'error');
         this.props.profileStore.setIdentityQuestions();
         this.props.setDashboardWizardStep('ConfirmIdentityForm');
       } else if (key === 'id.success') {
         Helper.toast('User verification passed!', 'success');
-        this.props.profileStore.startPhoneVerification();
-        this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+        this.props.profileStore.startPhoneVerification().then(() => {
+          this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+        })
+          .catch(() => {});
       } else {
         Helper.toast('User verification hard-failed!', 'error');
         this.props.setDashboardWizardStep('ConfirmIdentityDocuments');
@@ -46,6 +50,7 @@ export default class investorPersonalDetails extends Component {
       verifyIdentityDateChange,
     } = this.props.profileStore;
     const welcomeMsg = `Hello ${this.props.userStore.currentUser.givenName}!`;
+    const { errors } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
@@ -57,6 +62,11 @@ export default class investorPersonalDetails extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={[errors]} />
+            </Message>
+          }
           {this.props.profileStore.verifyIdentity01.response.qualifiers &&
           <Message error>
             <CipErrors errorsList={this.props.profileStore.verifyIdentity01.response.qualifiers} />

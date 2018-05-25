@@ -69,7 +69,8 @@ query getUserDetails($id: ID!) {
         zipCode
       }
     }
-    accountStatus 
+    accountStatus
+    cipStatus
   }
 }
 `;

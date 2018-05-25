@@ -62,7 +62,7 @@ export class ProfileStore {
       dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
       ssn: Helper.unMaskInput(this.verifyIdentity01.fields.ssn.value),
       legalAddress: {
-        street1: this.verifyIdentity01.fields.residentalStreet.value,
+        street: this.verifyIdentity01.fields.residentalStreet.value,
         city: this.verifyIdentity01.fields.city.value,
         state: this.verifyIdentity01.fields.state.value,
         zipCode: this.verifyIdentity01.fields.zipCode.value,
@@ -74,8 +74,8 @@ export class ProfileStore {
   @computed
   get formattedPhoneDetails() {
     const phoneDetails = {
-      phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-      countryCode: '1',
+      number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+      countryCode: '91',
     };
     return phoneDetails;
   }
@@ -146,6 +146,18 @@ export class ProfileStore {
     this[form].fields[field].error = validation.errors.first(field);
   };
 
+  getCipStatus = (cipIdentityResponse) => {
+    const { key, questions } = cipIdentityResponse;
+    if (key === 'id.error') {
+      return 'FAIL';
+    } else if (key === 'id.failure' && questions) {
+      return 'SOFT_FAIL';
+    } else if (key === 'id.success') {
+      return 'PASS';
+    }
+    return 'HARD_FAIL';
+  }
+
   /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
     uiStore.setProgress();
@@ -160,11 +172,26 @@ export class ProfileStore {
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
+          const cipStatus = this.getCipStatus(data.data.verifyCIPIdentity);
+          client
+            .mutate({
+              mutation: updateUserCIPInfo,
+              variables: {
+                userId: userStore.currentUser.sub,
+                user: this.formattedUserInfo,
+                phoneDetails: this.formattedPhoneDetails,
+                cipStatus,
+              },
+            })
+            .then((result) => {
+              console.log(result);
+            })
+            .catch(() => {});
           resolve();
         })
         .catch((err) => {
           uiStore.setErrors(this.simpleErr(err));
-          reject();
+          reject(err);
         })
         .finally(() => {
           uiStore.setProgress(false);
@@ -202,6 +229,23 @@ export class ProfileStore {
           },
         })
         .then((result) => {
+          /* eslint-disable no-underscore-dangle */
+          if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
+            client
+              .mutate({
+                mutation: updateUserCIPInfo,
+                variables: {
+                  userId: userStore.currentUser.sub,
+                  user: this.formattedUserInfo,
+                  phoneDetails: this.formattedPhoneDetails,
+                  cipStatus: 'PASS',
+                },
+              })
+              .then((data) => {
+                resolve(data);
+              })
+              .catch(() => {});
+          }
           resolve(result);
         })
         .catch((err) => {
@@ -226,7 +270,7 @@ export class ProfileStore {
           },
         })
         .then(() => Helper.toast('Verification code sent to user.', 'success'), resolve())
-        .catch(err => uiStore.setErrors(this.simpleErr(err)), reject());
+        .catch(err => uiStore.setErrors(JSON.stringify(err)), reject());
     });
   }
 
@@ -249,6 +293,7 @@ export class ProfileStore {
                 userId: userStore.currentUser.sub,
                 user: this.formattedUserInfo,
                 phoneDetails: this.formattedPhoneDetails,
+                cipStatus: 'PASS',
               },
             });
           resolve();
@@ -257,6 +302,32 @@ export class ProfileStore {
           uiStore.setErrors(JSON.stringify(err.message));
           reject(err);
         }))
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  uploadAndUpdateCIPInfo = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateUserCIPInfo,
+          variables: {
+            userId: userStore.currentUser.sub,
+            user: this.formattedUserInfo,
+            phoneDetails: this.formattedPhoneDetails,
+            cipStatus: 'MANUAL_VERIFICATION_PENDING',
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
+        })
         .finally(() => {
           uiStore.setProgress(false);
         });

@@ -29,9 +29,13 @@ export default class ConfirmIdentityDocuments extends Component {
     e.preventDefault();
     validationActions.validateConfirmIdentityDocumentsForm();
     if (this.props.profileStore.canSubmitConfirmIdentityDocumentsForm) {
-      this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+      this.props.profileStore.uploadAndUpdateCIPInfo().then(() => {
+        this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+      })
+        .catch(() => { });
     }
   }
+
   render() {
     const { confirmIdentityDocuments } = this.props.profileStore;
     return (
