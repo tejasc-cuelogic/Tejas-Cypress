@@ -27,8 +27,8 @@ export default class General extends Component {
             <h5>Entity Address</h5>
             <FormInput
               type="text"
-              name="street1"
-              fielddata={formGeneralInfo.fields.street1}
+              name="street"
+              fielddata={formGeneralInfo.fields.street}
               changed={genInfoChange}
             />
             <Form.Group widths="equal">

@@ -49,7 +49,7 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row verticalAlign="top">
                   <Table.Cell><b>Entity Address</b></Table.Cell>
-                  <Table.Cell>{formGeneralInfo.fields.street1.value}
+                  <Table.Cell>{formGeneralInfo.fields.street.value}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>

@@ -333,8 +333,8 @@ export const ENTITY_GEN_INFO = {
   taxId: {
     key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required', placeHolder: 'e.g. 12345',
   },
-  street1: {
-    key: 'street1', value: '', label: 'Street', error: undefined, rule: 'required|string',
+  street: {
+    key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
   },
   city: {
     key: 'city', value: '', label: 'City', error: undefined, rule: 'required|string',

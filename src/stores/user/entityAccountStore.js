@@ -151,7 +151,7 @@ class EntityAccountStore {
   get isValidEntityGeneralInfo() {
     return _.isEmpty(this.formGeneralInfo.fields.name.error) &&
     _.isEmpty(this.formGeneralInfo.fields.taxId.error) &&
-    _.isEmpty(this.formGeneralInfo.fields.street1.error) &&
+    _.isEmpty(this.formGeneralInfo.fields.street.error) &&
     _.isEmpty(this.formGeneralInfo.fields.city.error) &&
     _.isEmpty(this.formGeneralInfo.fields.state.error) &&
     _.isEmpty(this.formGeneralInfo.fields.zipCode.error);
@@ -189,13 +189,11 @@ class EntityAccountStore {
       entity: {
         name: this.formGeneralInfo.fields.name.value ? this.formGeneralInfo.fields.name.value : '',
         taxId: this.formGeneralInfo.fields.taxId.value ? this.formGeneralInfo.fields.taxId.value : '',
-        address: '232 sda asd',
         isTrust: this.formEntityInfo.fields.isTrust.value,
         trustDate: this.formEntityInfo.fields.trustDate.value,
         /* eslint-disable no-dupe-keys */
         address: {
-          street1: this.formGeneralInfo.fields.street1.value ? this.formGeneralInfo.fields.street1.value : '',
-          street2: '',
+          street: this.formGeneralInfo.fields.street.value ? this.formGeneralInfo.fields.street.value : '',
           city: this.formGeneralInfo.fields.city.value ? this.formGeneralInfo.fields.city.value : '',
           state: this.formGeneralInfo.fields.state.value ? this.formGeneralInfo.fields.state.value : '',
           zipCode: this.formGeneralInfo.fields.zipCode.value ? this.formGeneralInfo.fields.zipCode.value : '',
@@ -360,7 +358,9 @@ class EntityAccountStore {
         });
         this.onFieldChange('formGeneralInfo');
         Object.keys(this.formEntityInfo.fields).map((f) => {
-          this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
+          if (f === 'isTrust') {
+            this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
+          }
           return this.formEntityInfo.fields[f];
         });
         this.onFieldChange('formEntityInfo');
@@ -374,6 +374,19 @@ class EntityAccountStore {
           return this.formFormationDocuments.fields[f];
         });
         this.onFieldChange('formFormationDocuments');
+        if (!this.formFinInfo.meta.isValid) {
+          this.setStepToBeRendered(0);
+        } else if (!this.formGeneralInfo.meta.isValid) {
+          this.setStepToBeRendered(1);
+        } else if (!this.formEntityInfo.meta.isValid) {
+          this.setStepToBeRendered(2);
+        } else if (!this.formPersonalInfo.meta.isValid) {
+          this.setStepToBeRendered(3);
+        } else if (!this.formFormationDocuments.meta.isValid) {
+          this.setStepToBeRendered(4);
+        } else {
+          this.setStepToBeRendered(5);
+        }
       }
     }
   }
