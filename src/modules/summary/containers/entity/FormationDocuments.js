@@ -17,7 +17,7 @@ export default class FormationDocumemts extends Component {
         <Form className="file-uploader-inline">
           <Grid divided="vertically">
             {
-              ['entityFormationDocument', 'entityOperatingDocument', 'einVerification'].map(field => (
+              ['formationDoc', 'operatingAgreementDoc', 'einVerificationDoc'].map(field => (
                 <FileUploader
                   key={field}
                   name={field}

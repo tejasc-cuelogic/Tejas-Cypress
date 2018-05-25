@@ -38,7 +38,15 @@ class IraAccountStore {
   }
 
   @observable
+  investorAccId = '';
+
+  @observable
   stepToBeRendered = 0;
+
+  @action
+  setInvestorAccId(id) {
+    this.investorAccId = id;
+  }
 
   @action
   setStepToBeRendered(step) {
@@ -116,11 +124,6 @@ class IraAccountStore {
     return this.formFinInfo.meta.isValid && this.formAccTypes.meta.isValid
     && this.formFunding.meta.isValid && this.formIdentity.meta.isValid;
   }
-
-  // @computed
-  // get formStatus() {
-  //   return this.isValidIraForm ? 'submit' : 'draft';
-  // }
 
   @computed
   get accountAttributes() {
@@ -208,6 +211,17 @@ class IraAccountStore {
           actionPerformed = 'updated';
         }
       }
+      if (this.investorAccId) {
+        mutation = updateAccount;
+        variables = {
+          userId: userStore.currentUser.sub,
+          accountId: this.investorAccId,
+          accountAttributes: this.accountAttributes,
+          status: formStatus,
+          accountType: 'ira',
+        };
+        actionPerformed = 'updated';
+      }
       return new Promise((resolve, reject) => {
         client
           .mutate({
@@ -215,6 +229,9 @@ class IraAccountStore {
             variables,
           })
           .then((result) => {
+            if (result.data.createInvestorAccount) {
+              this.setInvestorAccId(result.data.createInvestorAccount.accountId);
+            }
             switch (currentStep.name) {
               case 'Financial info':
                 this.setIsDirty('formFinInfo', false);

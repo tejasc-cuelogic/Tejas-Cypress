@@ -29,19 +29,19 @@ export default class Summary extends Component {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell><b>Entity net assest</b></Table.Cell>
-                  <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.entityNetAssets.value ?
-                      formFinInfo.fields.entityNetAssets.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.netAssets.value ?
+                      formFinInfo.fields.netAssets.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Other CF Investments</b></Table.Cell>
-                  <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.cfInvestments.value ?
-                      formFinInfo.fields.cfInvestments.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.cfInvestment.value ?
+                      formFinInfo.fields.cfInvestment.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Entitys name</b></Table.Cell>
-                  <Table.Cell>{formPersonalInfo.fields.entityTitle.value}</Table.Cell>
+                  <Table.Cell>{formPersonalInfo.fields.title.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Tax ID</b></Table.Cell>
@@ -49,23 +49,23 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row verticalAlign="top">
                   <Table.Cell><b>Entity Address</b></Table.Cell>
-                  <Table.Cell>{formGeneralInfo.fields.street.value}
+                  <Table.Cell>{formGeneralInfo.fields.street1.value}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Is Entity a trust?</b></Table.Cell>
-                  <Table.Cell>{formEntityInfo.fields.isEntityTrust.value}
-                    {formEntityInfo.fields.isEntityTrust.value === 'yes' &&
+                  <Table.Cell>{formEntityInfo.fields.isTrust.value}
+                    {formEntityInfo.fields.isTrust.value === 'yes' &&
                       ', since '
                     }
-                    {formEntityInfo.fields.isEntityTrust.value === 'yes' &&
-                      <DateTimeFormat datetime={formEntityInfo.fields.dateOfTrust.value} />
+                    {formEntityInfo.fields.isTrust.value === 'yes' &&
+                      <DateTimeFormat datetime={formEntityInfo.fields.trustDate.value} />
                     }
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Title with the entity</b></Table.Cell>
-                  <Table.Cell>{formPersonalInfo.fields.entityTitle.value}</Table.Cell>
+                  <Table.Cell>{formPersonalInfo.fields.title.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Bank account</b></Table.Cell>

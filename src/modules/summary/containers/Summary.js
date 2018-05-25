@@ -44,6 +44,14 @@ class Summary extends Component {
       linkText: 'Verify me',
       linkPath: 'InvestorPersonalDetails',
     };
+    if (!this.props.userDetailsStore.currentUser.data.user) {
+      return (
+        <div>
+          <Spinner loaderMessage="Loading..." />
+        </div>
+      );
+    }
+
     return (
       <Aux>
         <PrivateLayout

@@ -35,15 +35,15 @@ export default class PersonalInformation extends Component {
               readOnly
             />
             <FormInput
-              name="entityTitle"
-              fielddata={formPersonalInfo.fields.entityTitle}
+              name="title"
+              fielddata={formPersonalInfo.fields.title}
               changed={personalInfoChange}
             />
           </div>
           <Grid>
             <FileUploader
-              name="photoId"
-              fielddata={formPersonalInfo.fields.photoId}
+              name="legalDocUrl"
+              fielddata={formPersonalInfo.fields.legalDocUrl}
               uploadDocument={personalInfoFileUpload}
               removeUploadedDocument={personalInfoResetField}
             />

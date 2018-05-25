@@ -13,9 +13,6 @@ import Summary from './Summary';
 @inject('entityAccountStore', 'userDetailsStore', 'userStore')
 @observer
 export default class AccountCreation extends React.Component {
-  componentWillMount() {
-    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-  }
   render() {
     const steps =
     [
@@ -59,7 +56,7 @@ export default class AccountCreation extends React.Component {
     ];
     return (
       <div className="step-progress">
-        <MuliStep createAccount={this.props.entityAccountStore.createAccount} steps={steps} formTitle="Entity Account Creation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
+        <MuliStep stepToBeRendered={this.props.entityAccountStore.stepToBeRendered} createAccount={this.props.entityAccountStore.createAccount} steps={steps} formTitle="Entity Account Creation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
       </div>
     );
   }

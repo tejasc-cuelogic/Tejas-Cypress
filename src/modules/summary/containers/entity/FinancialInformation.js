@@ -15,7 +15,7 @@ export default class FinancialInformation extends Component {
         <Form error>
           <div className="field-wrap">
             {
-              ['entityNetAssets', 'cfInvestments'].map(field => (
+              ['netAssets', 'cfInvestment'].map(field => (
                 <FormInput
                   key={field}
                   name={field}

@@ -308,16 +308,16 @@ export const IS_ENTITY_TRUST = {
 };
 
 export const ENTITY_FIN_INFO = {
-  entityNetAssets: {
-    key: 'entityNetAssets',
+  netAssets: {
+    key: 'netAssets',
     value: '',
     label: 'Entity Net Assets',
     error: undefined,
     rule: 'required|numeric',
     maxLength: 15,
   },
-  cfInvestments: {
-    key: 'cfInvestments',
+  cfInvestment: {
+    key: 'cfInvestment',
     value: '',
     label: 'Other religion CF investments made in prior 12 months',
     error: undefined,
@@ -333,8 +333,8 @@ export const ENTITY_GEN_INFO = {
   taxId: {
     key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required', placeHolder: 'e.g. 12345',
   },
-  street: {
-    key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
+  street1: {
+    key: 'street1', value: '', label: 'Street', error: undefined, rule: 'required|string',
   },
   city: {
     key: 'city', value: '', label: 'City', error: undefined, rule: 'required|string',
@@ -348,36 +348,36 @@ export const ENTITY_GEN_INFO = {
 };
 
 export const ENTITY_TRUST_INFO = {
-  isEntityTrust: {
-    key: 'isEntityTrust',
+  isTrust: {
+    key: 'isTrust',
     value: 'yes',
     values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
     error: undefined,
     rule: 'required',
   },
-  dateOfTrust: {
-    key: 'dateOfTrust', value: moment(), error: undefined, rule: 'required', label: 'Date of Trust',
+  trustDate: {
+    key: 'trustDate', value: moment(), error: undefined, rule: 'required', label: 'Date of Trust',
   },
 };
 
 export const ENTITY_PERSONAL_INFO = {
-  entityTitle: {
-    key: 'entityTitle', value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
+  title: {
+    key: 'title', value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
   },
-  photoId: {
-    key: 'photoId', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID', sublabel: 'Drivers License or Passport',
+  legalDocUrl: {
+    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID', sublabel: 'Drivers License or Passport',
   },
 };
 
 export const ENTITY_FORMATION_DOCS = {
-  entityFormationDocument: {
-    key: 'entityFormationDocument', value: '', error: undefined, rule: 'required', label: 'Entity Formation Document',
+  formationDoc: {
+    key: 'formationDoc', value: '', error: undefined, rule: 'required', label: 'Entity Formation Document',
   },
-  entityOperatingDocument: {
-    key: 'entityOperatingDocument', value: '', error: undefined, rule: 'required', label: 'Entity Operating Document',
+  operatingAgreementDoc: {
+    key: 'operatingAgreementDoc', value: '', error: undefined, rule: 'required', label: 'Entity Operating Document',
   },
-  einVerification: {
-    key: 'einVerification', value: '', error: undefined, rule: 'required', label: 'EIN Verification',
+  einVerificationDoc: {
+    key: 'einVerificationDoc', value: '', error: undefined, rule: 'required', label: 'EIN Verification',
   },
 };
 

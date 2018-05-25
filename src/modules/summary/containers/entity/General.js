@@ -17,7 +17,7 @@ export default class General extends Component {
             {
               ['nameOfEntity', 'taxId'].map(field => (
                 <FormInput
-                  type="text"
+                  key={field}
                   fielddata={formGeneralInfo.fields[field]}
                   name={field}
                   changed={genInfoChange}
@@ -27,8 +27,8 @@ export default class General extends Component {
             <h5>Entity Address</h5>
             <FormInput
               type="text"
-              name="street"
-              fielddata={formGeneralInfo.fields.street}
+              name="street1"
+              fielddata={formGeneralInfo.fields.street1}
               changed={genInfoChange}
             />
             <Form.Group widths="equal">
