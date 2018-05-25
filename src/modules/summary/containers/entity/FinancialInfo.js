@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-import validationActions from '../../../../actions/validation';
 import { FormRadioGroup, FormDatePicker } from '../../../../theme/form/FormElements';
 
 @inject('accountStore', 'entityAccountStore')
 @observer
 export default class AccountType extends Component {
   handleDateChange = (date) => {
-    validationActions.validateEntityAccountField('trustDate', date);
+    this.props.entityAccountStore.entityInfoDateChange(date);
   }
   render() {
     const { formEntityInfo, entityInfoChange } = this.props.entityAccountStore;
@@ -26,11 +25,11 @@ export default class AccountType extends Component {
           />
           <div className="field-wrap">
             <FormDatePicker
+              name="trustDate"
               fielddata={formEntityInfo.fields.trustDate}
-              placeholderText={formEntityInfo.fields.trustDate.placeHolder}
               selected={formEntityInfo.fields.trustDate.value}
               changed={this.handleDateChange}
-              isdisabled={formEntityInfo.fields.isTrust.value === 'no'}
+              isdisabled={!formEntityInfo.fields.isTrust.value}
             />
           </div>
         </Form>

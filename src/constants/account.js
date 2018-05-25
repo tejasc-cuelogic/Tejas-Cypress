@@ -327,8 +327,8 @@ export const ENTITY_FIN_INFO = {
 };
 
 export const ENTITY_GEN_INFO = {
-  nameOfEntity: {
-    key: 'nameOfEntity', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
+  name: {
+    key: 'name', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
   },
   taxId: {
     key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required', placeHolder: 'e.g. 12345',
@@ -351,7 +351,7 @@ export const ENTITY_TRUST_INFO = {
   isTrust: {
     key: 'isTrust',
     value: 'yes',
-    values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
+    values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
     error: undefined,
     rule: 'required',
   },

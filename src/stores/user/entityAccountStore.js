@@ -106,6 +106,11 @@ class EntityAccountStore {
   };
 
   @action
+  entityInfoDateChange = (date) => {
+    this.onFieldChange('formEntityInfo', 'trustDate', date);
+  }
+
+  @action
   onFieldChange = (currentForm, field, value) => {
     const form = currentForm || 'formFinInfo';
     if (field) {
@@ -144,7 +149,7 @@ class EntityAccountStore {
 
   @computed
   get isValidEntityGeneralInfo() {
-    return _.isEmpty(this.formGeneralInfo.fields.nameOfEntity.error) &&
+    return _.isEmpty(this.formGeneralInfo.fields.name.error) &&
     _.isEmpty(this.formGeneralInfo.fields.taxId.error) &&
     _.isEmpty(this.formGeneralInfo.fields.street1.error) &&
     _.isEmpty(this.formGeneralInfo.fields.city.error) &&
@@ -182,7 +187,7 @@ class EntityAccountStore {
           this.formFinInfo.fields.cfInvestment.value : 0,
       },
       entity: {
-        name: this.formGeneralInfo.fields.nameOfEntity.value ? this.formGeneralInfo.fields.nameOfEntity.value : '',
+        name: this.formGeneralInfo.fields.name.value ? this.formGeneralInfo.fields.name.value : '',
         taxId: this.formGeneralInfo.fields.taxId.value ? this.formGeneralInfo.fields.taxId.value : '',
         address: '232 sda asd',
         isTrust: this.formEntityInfo.fields.isTrust.value,
@@ -346,8 +351,8 @@ class EntityAccountStore {
         });
         this.onFieldChange('formFinInfo');
         Object.keys(this.formGeneralInfo.fields).map((f) => {
-          if (f === 'taxId' || f === 'nameOfEntity') {
-            this.formGeneralInfo.fields[f].value = account.accountDetails[f];
+          if (f === 'taxId' || f === 'name') {
+            this.formGeneralInfo.fields[f].value = account.accountDetails.entity[f];
           } else {
             this.formGeneralInfo.fields[f].value = account.accountDetails.entity.address[f];
           }
@@ -355,8 +360,7 @@ class EntityAccountStore {
         });
         this.onFieldChange('formGeneralInfo');
         Object.keys(this.formEntityInfo.fields).map((f) => {
-          console.log(account.accountDetails.entity[f]);
-          // this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
+          this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
           return this.formEntityInfo.fields[f];
         });
         this.onFieldChange('formEntityInfo');

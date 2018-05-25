@@ -55,10 +55,10 @@ export default class Summary extends Component {
                 <Table.Row>
                   <Table.Cell><b>Is Entity a trust?</b></Table.Cell>
                   <Table.Cell>{formEntityInfo.fields.isTrust.value}
-                    {formEntityInfo.fields.isTrust.value === 'yes' &&
-                      ', since '
+                    {formEntityInfo.fields.isTrust.value &&
+                      'Yes, since '
                     }
-                    {formEntityInfo.fields.isTrust.value === 'yes' &&
+                    {!formEntityInfo.fields.isTrust.value &&
                       <DateTimeFormat datetime={formEntityInfo.fields.trustDate.value} />
                     }
                   </Table.Cell>

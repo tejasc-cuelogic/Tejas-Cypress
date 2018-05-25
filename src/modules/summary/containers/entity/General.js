@@ -15,7 +15,7 @@ export default class General extends Component {
         <Form error>
           <div className="field-wrap">
             {
-              ['nameOfEntity', 'taxId'].map(field => (
+              ['name', 'taxId'].map(field => (
                 <FormInput
                   key={field}
                   fielddata={formGeneralInfo.fields[field]}
