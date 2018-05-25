@@ -10,7 +10,6 @@ import ChangePassword from '../modules/auth/ChangePassword';
 import Confirm from '../modules/auth/Confirm';
 import EdgarForm from '../modules/edgar/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
-import Login from '../modules/auth/Login';
 import Register from '../modules/auth/Register';
 import ResetPassword from '../modules/auth/ResetPassword';
 import Settings from './../modules/settings/containers/Settings';
@@ -83,11 +82,6 @@ export const publicRoutes = [
   {
     path: '/confirm',
     component: Confirm,
-    exact: true,
-  },
-  {
-    path: '/login',
-    component: Login,
     exact: true,
   },
   {
