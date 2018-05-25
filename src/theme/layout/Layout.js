@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import Loadable from 'react-loadable';
+import { Route, withRouter } from 'react-router-dom';
 import Header from './Header';
-import AuthWizard from '../../modules/auth/containers/AuthWizard';
 import authActions from '../../actions/auth';
+
+const moduleMap = {
+  register: 'SignupInitial',
+  login: 'Login',
+  'register-investor': 'InvestorSignup',
+  'confirm-email': 'ConfirmEmailAddress',
+};
+const getModule = component => Loadable({
+  loader: () => import(`../../modules/auth/containers/${moduleMap[component]}`),
+  loading() {
+    return <div>Loading...</div>;
+  },
+});
 
 @inject('userStore', 'uiStore')
 @withRouter
@@ -22,6 +35,7 @@ class Layout extends Component {
 
   render() {
     const { location } = this.props;
+    const address = location.pathname.split('/');
     return (
       <div>
         {!this.props.userStore.currentUser &&
@@ -34,11 +48,8 @@ class Layout extends Component {
         }
         {this.props.children}
 
-        {this.props.uiStore.authWizardStep &&
-          <AuthWizard
-            authWizardStep={this.props.uiStore.authWizardStep}
-            setAuthWizardStep={this.handleChange}
-          />
+        {location.pathname.startsWith('/auth') &&
+          <Route path={location.pathname} component={getModule(address[2])} />
         }
       </div>
     );

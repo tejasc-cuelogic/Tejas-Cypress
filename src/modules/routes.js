@@ -8,10 +8,8 @@ import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
 import Edgar from './edgar/containers/Business';
 import ChangePassword from '../modules/auth/ChangePassword';
-import Confirm from '../modules/auth/Confirm';
 import EdgarForm from '../modules/edgar/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
-import Register from '../modules/auth/Register';
 import ResetPassword from '../modules/auth/ResetPassword';
 import Settings from './../modules/settings/containers/Settings';
 import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
@@ -78,16 +76,6 @@ export const publicRoutes = [
   {
     path: '/offerings',
     component: Offering,
-  },
-  {
-    path: '/confirm',
-    component: Confirm,
-    exact: true,
-  },
-  {
-    path: '/register',
-    component: Register,
-    exact: true,
   },
   {
     path: '/forgot-password',

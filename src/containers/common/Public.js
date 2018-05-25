@@ -19,7 +19,7 @@ export default class Public extends React.Component {
             />
           ))}
         </Switch>
-        {location.pathname !== '/business-application' &&
+        {(location.pathname !== '/business-application' && !location.pathname.startsWith('/auth')) &&
           <Footer />
         }
       </div>
