@@ -80,6 +80,12 @@ export class ProfileStore {
     this.verifyIdentity01.response = response;
   }
 
+  @action
+  reset() {
+    this.verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: false, error: '' }, response: {} };
+    this.verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
+  }
+
   @computed
   get formattedUserInfo() {
     const userInfo = {
@@ -100,7 +106,7 @@ export class ProfileStore {
   @computed
   get formattedPhoneDetails() {
     const phoneDetails = {
-      phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+      number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
       countryCode: '1',
     };
     return phoneDetails;
@@ -213,6 +219,13 @@ export class ProfileStore {
     return _.isEmpty(_.filter(this.confirmIdentityDocuments, field => field.error));
   }
 
+  @computed
+  get canSubmitNewPhoneNumber() {
+    return ((typeof this.verifyIdentity01.fields.phoneNumber.error !== 'undefined' &&
+    !_.isEmpty(this.verifyIdentity01.fields.phoneNumber.value)) ||
+    _.isEmpty(this.verifyIdentity01.fields.phoneNumber.value));
+  }
+
   submitConfirmIdentityQuestions = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -242,6 +255,7 @@ export class ProfileStore {
 
   /* eslint-disable arrow-body-style */
   startPhoneVerification = () => {
+    uiStore.clearErrors();
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -251,8 +265,14 @@ export class ProfileStore {
             method: 'sms',
           },
         })
-        .then(() => Helper.toast('Verification code sent to user.', 'success'), resolve())
-        .catch(err => uiStore.setErrors(this.simpleErr(err)), reject());
+        .then(() => {
+          Helper.toast('Verification code sent to user.', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(JSON.stringify(err.message));
+          reject(err);
+        });
     });
   }
 
@@ -268,6 +288,7 @@ export class ProfileStore {
           },
         })
         .then(() => {
+          this.onFieldChange('updateProfileInfo', 'phoneNumber', this.verifyIdentity01.fields.phoneNumber.value);
           client
             .mutate({
               mutation: updateUserCIPInfo,

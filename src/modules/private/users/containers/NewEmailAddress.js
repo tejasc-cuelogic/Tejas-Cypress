@@ -14,10 +14,14 @@ export default class NewEmailAddress extends Component {
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.authStore.reset();
     this.props.history.push('/app/profile-settings/profile-data');
   }
   render() {
     const { values } = this.props.authStore;
+    if (this.props.uiStore.authWizardStep === 'ConfirmEmailAddress') {
+      return null;
+    }
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
         <Modal.Header className="center-align signup-header">
