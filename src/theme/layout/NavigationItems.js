@@ -36,7 +36,7 @@ const UserNavigation = (props) => {
 };
 
 const navigationItems = props => (
-  <Menu borderless fixed="top" size="large">
+  <Menu borderless inverted={props.location.pathname === '/business-application'} fixed="top" size="large">
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
         <Image className="small" src={Logo} alt="NextSeed.com" style={{ marginRight: '1.5em' }} />

@@ -21,10 +21,12 @@ class Layout extends Component {
   }
 
   render() {
+    const { location } = this.props;
     return (
       <div>
         {!this.props.userStore.currentUser &&
           <Header
+            location={location}
             showSecondaryHeader={false}
             currentUser={this.props.userStore.currentUser}
             handleLogOut={this.handleLogOut}
