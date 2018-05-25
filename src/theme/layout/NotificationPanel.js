@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import Aux from 'react-aux';
-import { Divider, Icon, Button, Dropdown, Accordion } from 'semantic-ui-react'; // Dropdown, Accordion, Form, , Grid, Icon, Button
+import { Divider, Icon, Button, Dropdown, Accordion } from 'semantic-ui-react';
 
 const notificationPanel = (props) => {
   const { activeIndex } = 0;
@@ -25,7 +25,7 @@ const notificationPanel = (props) => {
   };
 
   const NotificationActions = (
-    <Dropdown icon="dropdown" pointing="right" className="icon pull-right">
+    <Dropdown icon={{ className: 'ns-ellipsis' }} pointing="right" className="icon pull-right">
       <Dropdown.Menu>
         <Dropdown.Item text="Remind me later" />
         <Dropdown.Item text="Dismiss" />
@@ -49,14 +49,14 @@ const notificationPanel = (props) => {
                   <Accordion.Title index={0} onClick={this.handleClick}>
                     <strong>{notification.who}</strong> {notification.operation}
                     <strong> {notification.module}</strong>
-                    <Icon name="angle down" />
+                    <Icon className="ns-chevron-down" />
                   </Accordion.Title>
                   <Accordion.Content active={activeIndex === 0}>
                     <p>Lorem ipsum doller sit amit, Pokeology has achieved minimum raise</p>
                   </Accordion.Content>
                 </Accordion>
                 {notification.money &&
-                  <Button inverted size="small" color="green" className="link-button"><Icon name="line graph" />See full portfolio stats</Button>
+                  <Button inverted size="small" primary className="link-button"><Icon className="ns-line-chart" />See full portfolio stats</Button>
                 }
               </div>
             ))}

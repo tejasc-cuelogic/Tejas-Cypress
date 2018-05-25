@@ -13,11 +13,11 @@
 @background: #FFFFFF;
 @fontFamily: @pageFont;
 @itemBackground: none;
-@fontWeight: normal;
+@fontWeight: 700;
 @borderWidth: 1px;
-@border: @borderWidth solid @borderColor;
+@border:none;
 @boxShadow: @subtleShadow;
-@borderRadius: @defaultBorderRadius;
+@borderRadius:0;
 @minHeight: (@itemVerticalPadding * 2) + 1em;
 
 /* Menu Item */
@@ -29,7 +29,7 @@
   box-shadow @defaultDuration @defaultEasing,
   color @defaultDuration @defaultEasing
 ;
-@itemFontWeight: normal;
+@itemFontWeight:700;
 @itemTextColor: @textColor;
 
 /* Divider */
@@ -113,7 +113,7 @@
 @verticalImageWidth: auto;
 
 /* Label */
-@labelOffset: -0.15em;
+@labelOffset:@2px;
 @labelBackground: #999999;
 @labelTextColor: @white;
 
@@ -169,7 +169,7 @@
 /* Active Item */
 @activeItemBackground: @transparentBlack;
 @activeItemTextColor: @selectedTextColor;
-@activeItemFontWeight: normal;
+@activeItemFontWeight:700;
 @activeIconOpacity: 1;
 @activeItemBoxShadow: none;
 
@@ -220,22 +220,22 @@
 @secondaryItemColor: @unselectedTextColor;
 
 @secondaryHoverItemBackground: @transparentBlack;
-@secondaryHoverItemColor: @selectedTextColor;
+@secondaryHoverItemColor:@link-color;
 
 @secondaryActiveItemBackground: @transparentBlack;
-@secondaryActiveItemColor: @selectedTextColor;
+@secondaryActiveItemColor:@link-color;
 @secondaryActiveHoverItemBackground: @transparentBlack;
-@secondaryActiveHoverItemColor: @selectedTextColor;
+@secondaryActiveHoverItemColor:@link-color;
 
 @secondaryActiveHoveredItemBackground: @transparentBlack;
-@secondaryActiveHoveredItemColor: @selectedTextColor;
+@secondaryActiveHoveredItemColor:@link-color;
 
 @secondaryHeaderBackground: none transparent;
 @secondaryHeaderBorder: none;
 
 @secondaryItemVerticalSpacing: @secondaryItemSpacing;
 @secondaryVerticalItemMargin: 0em 0em @secondaryItemVerticalSpacing;
-@secondaryVerticalItemBorderRadius: @defaultBorderRadius;
+@secondaryVerticalItemBorderRadius:0;
 
 @secondaryMenuSubMenuMargin: 0em -@secondaryItemHorizontalPadding;
 @secondaryMenuSubMenuItemMargin: 0em;
@@ -301,7 +301,7 @@
 
 /* Icon */
 @iconMenuTextAlign: center;
-@iconMenuItemColor: @black;
+@iconMenuItemColor: @tertiary-text;
 @iconMenuInvertedItemColor: @white;
 
 
@@ -376,44 +376,45 @@
 ---------------*/
 
 /* Inverted */
-@invertedBackground: @black;
-@invertedBoxShadow: none;
-@invertedBorder: 0px solid transparent;
+@dimmerColor: rgba(0, 0, 0, 0.4);
+@invertedBackground:@tertiary-text;
+@invertedBoxShadow:none;
+@invertedBorder:none;
 @invertedHeaderBackground: transparent;
 
 @invertedItemBackground: transparent;
-@invertedItemTextColor: @invertedTextColor;
+@invertedItemTextColor: @white;
 
 /* Inverted Sub Menu */
 @invertedSubMenuBackground: transparent;
 @invertedSubMenuColor: @invertedUnselectedTextColor;
 
 /* Inverted Hover */
-@invertedHoverBackground: @transparentWhite;
-@invertedHoverColor: @invertedSelectedTextColor;
+@invertedHoverBackground:@lighten-bg-color;
+@invertedHoverColor:@link-color;
 
 @invertedSubMenuHoverBackground: transparent;
 @invertedSubMenuHoverColor: @invertedSelectedTextColor;
 
 /* Pressed */
-@invertedMenuPressedBackground: @transparentWhite;
-@invertedMenuPressedColor: @invertedSelectedTextColor;
+@invertedMenuPressedBackground:@lighten-bg-color;
+@invertedMenuPressedColor:@link-color;
 
 /* Inverted Active */
-@invertedActiveBackground: @strongTransparentWhite;
-@invertedActiveColor: @invertedSelectedTextColor;
+@invertedActiveBackground: @lighten-bg-color;
+@invertedActiveColor:@link-color;
 @invertedArrowActiveColor: #3D3E3F;
 
 /* Inverted Active Hover  */
-@invertedActiveHoverBackground: @invertedActiveBackground;
-@invertedActiveHoverColor: @white;
+@invertedActiveHoverBackground:@lighten-bg-color;
+@invertedActiveHoverColor:@link-color;
 @invertedArrowActiveHoverColor: @invertedArrowActiveColor;
 
 @invertedSubMenuActiveBackground: transparent;
 @invertedSubMenuActiveColor: @white;
 
 /* Inverted Menu Divider */
-@invertedDividerBackground: rgba(255, 255, 255, 0.08);
+@invertedDividerBackground:@tertiary-text;
 @invertedVerticalDividerBackground: @invertedDividerBackground;
 
 /* Inverted Colored */

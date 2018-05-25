@@ -9,3 +9,12 @@
         }
     }
 }
+
+.ui.grid{
+    >.column{
+        &.update-list, &.update-details{
+            padding-top:@28px;
+            padding-bottom:@28px;
+        }
+    }
+}

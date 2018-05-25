@@ -5,7 +5,7 @@
 @background: @white;
 @border: none;
 @zIndex: 1001;
-@borderRadius: @defaultBorderRadius * 2.5;
+@borderRadius: @defaultBorderRadius * 1.5;
 @transformOrigin: 50% 25%;
 @boxShadow:
   1px 3px 3px 0px rgba(0, 0, 0, 0.2),
@@ -39,7 +39,7 @@
 
 /* Content */
 @contentFontSize: 1em;
-@contentPadding:2.5rem 3rem;
+@contentPadding:2.5rem 4rem;
 @contentLineHeight: 1.4;
 @contentBackground: #FFFFFF;
 
@@ -56,8 +56,8 @@
 /* Modal Actions */
 @actionBorder: 1px solid @borderColor;
 @actionBackground: @offWhite;
-@actionPadding: 1rem 1.5rem;
-@actionAlign: right;
+@actionPadding: 0 1.5rem 2rem;
+@actionAlign: center;
 
 @buttonDistance: 0.75em;
 
@@ -129,10 +129,10 @@
 --------------------*/
 
 /* Size Widths */
-@miniRatio: 0.4;
-@tinyRatio: 0.6;
-@smallRatio: 0.8;
-@largeRatio: 1.2;
+@miniRatio: 0.5;          //  475
+@tinyRatio: 0.6;          //  570
+@smallRatio: 0.7;         //  665
+@largeRatio: 1.2;         //  1140
 
 /* Derived Responsive Sizes */
 @miniHeaderSize: 1.3em;

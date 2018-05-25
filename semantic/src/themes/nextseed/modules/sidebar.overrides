@@ -9,54 +9,71 @@
 	}
 	~ .pusher{
 		transition:all .5s ease;
-		height:~"calc(100vh - 58px)";
+		height:100vh;
 		overflow-y:auto;
 		background-color:@lighten-bg-color;
 		.ui.vertical.segment.content{
 			padding:0;
 			min-height:~"calc(100vh - 58px)";
 		}
-		// @media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
-		// 	background-color:#f4a460;
-		// }
-		// @media only screen and (max-width : (@tabletBreakpoint - 1px)){
-		// 	background-color:#87ceeb;
-		// }
 	}
 }
-.sidebar{
-	.user-picture{
-		margin:@24px 0;
-		text-align:center;
-		color:@inverse-text;
-		> img, h2, h3{
-			transition:all .5s ease;
-			white-space:nowrap;
+.ui.sidebar.left.thin{
+	&.vertical{
+		padding:@18px @13px @43px;
+		visibility:visible;
+		transition:all .5s ease;
+		.item {
+			min-width: auto;
+			text-align: left;
 			overflow:hidden;
+			padding:@8px @9px;
+			border-radius:@4px !important;
+			margin-bottom:@3px;
+			font-weight:400;
+			&:first-of-type{
+				margin-bottom:@30px;
+			}
+			&:first-child:before, &:before{
+				display:none;
+				background:none;
+			}
+			>.icon:not(.dropdown){
+				float:left;
+				height:auto;
+				font-size:@16px;
+				line-height:@22px;
+			}
+			span{
+				opacity:0;
+				display:block;
+				line-height:@22px;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+			&:hover, &:focus, &.active{
+				background-color:@light-bg-color;
+				>.icon:not(.dropdown){
+					color:@theme-primary;
+				}
+			}
+		}
+		&.visible{
+			.item{
+				padding:@8px @12px;
+				span{
+					opacity:1;
+					margin-left:@30px;
+					max-width:153px;
+				}
+			}
 		}
 	}
-	&.visible{
-		.user-picture{
-			> img{
-				max-width:90px;
-				margin:0 auto 10px;
-			}
-			h2{
-				// @include fontMedium;
-				font-size:16px;
-				margin:0 0 5px;
-				font-weight:normal;
-			}
-			h3{
-				// @include fontMedium;
-				font-size:14px;
-				margin:0;
-				font-weight:normal;
-				color:@tertiary-text;
-			}
-		}
-	}
-	&:not(.visible){
+	&.push:not(.visible){
+		width:64px;
+		transform:translate3D(0,0,0);
+		box-shadow:@boxShadow !important;
 		.user-picture{
 			margin:@24px 0 @7px;
 			> img{
@@ -69,85 +86,165 @@
 				margin:0;
 			}
 		}
+		.item{
+			overflow:visible;
+			margin-bottom:@6px;
+			>.label{
+				margin:0;
+				position:absolute;
+				top:-5px;
+				right:-5px;
+			}
+		}
+		~ .ui.button.collapseIcon{
+			width:63px;
+			span{
+				display:none;
+			}
+		}
+	}
+	&.overlay{
+		width:260px;
+		padding-bottom:@18px;
+		.ui.image.logo{
+			margin-left:0;
+		}
+		.ns-close-light{
+			position:absolute;
+			top:12px;
+			right:10px;
+		}
+		.user-picture{
+			text-align:left;
+			padding:@10px;
+			>img{
+				float:left;
+				max-width:42px;
+				margin:0 @10px 0 0;
+			}
+		}
+		.ui.divider{
+			margin-left:-@13px;
+			margin-right:-@13px;
+		}
+		~.pusher .icon.hamburger{
+			font-size:20px;
+			color:@quaternary-text;
+			position:absolute;
+			top:20px;
+			left:18px;
+			z-index:1;
+			&:hover, &:active, &:focus{
+				color:@white;
+			}
+		}
+	}
+	.ui.image.logo{
+		height:30px;
+		max-height:30px;
+		margin:0 auto;
+	}
+	.user-picture{
+		margin:@14px 0;
+		padding:@10px 0;
+		text-align:center;
+		color:@secondary-text;
+		border-radius:@4px;
+		> img{
+			max-width:58px;
+			margin:0 auto 10px;
+			border:1px solid @trackBackground;
+		}
+		h2{
+			font-size:16px;
+			font-weight:900;
+			margin:0 0 @5px;
+		}
+		h3{
+			margin:@5px 0 0;
+			font-size:14px;
+			font-weight:700;
+			color:@border-color;
+		}
+		> img, h2, h3{
+			transition:all .5s ease;
+			white-space:nowrap;
+			overflow:hidden;
+			text-overflow:ellipsis;
+		}
+	}
+	&.visible .user-picture{
+		&:hover{
+			background-color:@light-bg-color;
+		}
+	}
+	~ .ui.button.collapseIcon{
+		width:219px;
+		margin:0;
+		border-radius:0;
+		background-color:@white;
+		color:@quaternary-text;
+		text-align:left;
+		position:absolute;
+		left:0;
+		bottom:0;
+		z-index:999;
+		transition:width .5s ease;
+		.icon{
+			float:left;
+			margin:0 !important;
+			font-size:@18px;
+		}
+		span{
+			margin-left:@30px;
+			display:block;
+			overflow:hidden;
+		}
+	}
+	@media only screen and (min-width : @largeMonitorBreakpoint){
+		&.visible{
+			~.fixed, ~.pusher{
+				padding-left:220px;
+				transform:translate3D(0,0,0);
+			}
+		}
 	}
 }
-.ui{
-	&.inverted{
-		&.menu{
-			background:#383838;
+
+.ui.sidebar.left.inverted.menu{
+	.ns-close-light{
+		color:@white;
+	}
+	.user-picture{
+		color:@inverse-text;
+	}
+	&.visible .user-picture{
+		&:hover{
+			background-color:@secondary-text;
 		}
 	}
-	&.sidebar{
-		&.left{
-			&.visible.thin{
-				~.fixed, ~.pusher{
-					padding-left:220px;
-					transform:translate3D(0,0,0);
-				}
-			}
-			&.push{
-				width:64px;
-				visibility:visible;
-				transform:translate3D(0,0,0);
-				transition:width .5s ease;
-				.item {
-					min-width: auto !important;
-					text-align: left;
-					overflow:hidden;
-					padding:@14px @20px;
-					color:@tertiary-text;
-					&:first-child:before, &:before{
-						display:none;
-						background:none;
-					}
-					>.icon:not(.dropdown){
-						float:left;
-						height:auto;
-						margin:0 !important;
-						font-size:@16px !important;
-						line-height:@22px;
-						position:relative;
-					}
-					span{
-						opacity:0;
-						display:block;
-						line-height:@22px;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-						overflow: hidden;
-					}
-					&.collapseIcon{
-						bottom:0;
-						margin:0;
-						&:before{
-							display:none;
-						}
-					}
-					&.active{
-						background:transparent;
-						color:@theme-primary !important;
-						> i.icon:after{
-							content:"";
-							width:6px;
-							height:6px;
-							border-radius:3px;
-							display:block;
-							background:@theme-primary;
-							position:absolute;
-							left:50%;
-							margin-left:-2px;
-							bottom:-9px;
-						}
-					}
-				}
-			}
+	.item{
+		&:hover, &:focus, &.active, &.active:hover{
+			background-color:@secondary-text;
+			color:@theme-primary !important;
 		}
-		&.visible.push{
-			width:220px;
-			.item span{
-				opacity:1;
-				margin-left:35px;
-				max-width:153px;
+		>.icon:not(.dropdown){
+			color:@quaternary-text;
+		}
+	}
+	~ .ui.button.collapseIcon{
+		background-color:transparent;
+		color:@quaternary-text;
+	}
+	&.bowner{
+		background-color:@primary-text;
+		.item{
+			&:hover, &:focus, &.active, &.active:hover{
+				background-color:@secondary-text;
+				color:@white !important;
+				>.icon:not(.dropdown){
+					color:@quaternary-text;
+				}
 			}
 		}
 	}
