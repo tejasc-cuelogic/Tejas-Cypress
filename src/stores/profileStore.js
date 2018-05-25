@@ -106,7 +106,7 @@ export class ProfileStore {
   @computed
   get formattedPhoneDetails() {
     const phoneDetails = {
-      phoneNumber: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+      number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
       countryCode: '1',
     };
     return phoneDetails;
@@ -265,8 +265,14 @@ export class ProfileStore {
             method: 'sms',
           },
         })
-        .then(() => Helper.toast('Verification code sent to user.', 'success'), resolve())
-        .catch(err => uiStore.setErrors(JSON.stringify(err.message)), reject());
+        .then(() => {
+          Helper.toast('Verification code sent to user.', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(JSON.stringify(err.message));
+          reject(err);
+        });
     });
   }
 
