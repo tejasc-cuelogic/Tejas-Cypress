@@ -67,8 +67,8 @@
 @innerCloseColor: @textColor;
 
 /* Mobile Positions */
-@mobileHeaderPadding: 0.75rem 1rem;
-@mobileContentPadding: 1rem;
+@mobileHeaderPadding: 1.75rem 2rem;
+@mobileContentPadding: 2rem;
 @mobileImagePadding: 0rem 0rem 1rem;
 @mobileDescriptionPadding: 1rem 0rem ;
 @mobileButtonDistance: 1rem;

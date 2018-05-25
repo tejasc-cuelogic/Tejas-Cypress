@@ -9,7 +9,13 @@
         margin:0 !important;
     }
 }
-
+.ui.modal{
+    &.mini{
+        @media only screen and (min-width:@tabletBreakpoint){
+            width:450px;
+        }
+    }
+}
 .ui.modal.deletion{
     .actions{
         .ui.primary.button{
@@ -30,8 +36,8 @@
         opacity:0.5;
         color:@quaternary-text;
         @media only screen and (max-width:@largestMobileScreen){
-            top:0rem !important;
-            right:0rem !important;
+            top:.25rem !important;
+            right:.25rem !important;
         }
     }
     >.header:not(.ui).signup-header{
@@ -68,7 +74,7 @@
             margin:0 auto;
         }
         &.signup-content{
-            padding-top:0;
+            // padding-top:0;
             padding-bottom:@28px;
         }
         .user-type{
@@ -283,6 +289,9 @@
     margin:@30px auto;
     padding:@25px @60px;
     background:@lighten-bg-color;
+    @media only screen and (max-width:@largestMobileScreen){
+        padding:@25px;
+    }
 }
 .bank-list{
     padding:@28px 0;

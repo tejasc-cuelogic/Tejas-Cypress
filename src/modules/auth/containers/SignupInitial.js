@@ -20,17 +20,21 @@ class signupInitial extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Grid stackable textAlign="center">
-            <Grid.Row columns={2}>
-              {userTypes.map(type => (
-                <Grid.Column onClick={() => this.chooseType(type.value)} key={type.key}>
-                  <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
-                    <Icon className={type.icon} size="huge" />
-                    <h3>{type.text}</h3>
-                    <p>{selectedType === type.value ? type.desc : ''}</p>
-                  </div>
-                </Grid.Column>
-              ))}
-            </Grid.Row>
+            {userTypes.map(type => (
+              <Grid.Column
+                onClick={() => this.chooseType(type.value)}
+                key={type.key}
+                computer={8}
+                tablet={16}
+                mobile={16}
+              >
+                <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
+                  <Icon className={type.icon} size="huge" />
+                  <h3>{type.text}</h3>
+                  <p>{selectedType === type.value ? type.desc : ''}</p>
+                </div>
+              </Grid.Column>
+            ))}
             <Grid.Row>
               <Grid.Column>
                 {selectedType ? <Button as={Link} to="/auth/register-investor" primary size="large" className="very relaxed" content="Start" /> : ''}

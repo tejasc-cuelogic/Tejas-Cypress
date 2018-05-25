@@ -552,13 +552,15 @@ dl.dl-horizontal{
 	}
 	dt{
 		float:left;
-		width:150px;
+		width:140px;
 		font-weight:700;
 	}
 	dd{
 		margin-left:150px;
 		margin-bottom:@10px;
 		color:@quaternary-text;
+		overflow:hidden;
+		text-overflow:ellipsis;
 		&:last-of-type{
 			margin-bottom:0;
 		}
@@ -620,17 +622,6 @@ ol.progtrckr{
 	}
 }
 
-@media (max-width:650px){
-    .progtrckr li span{
-		display:none;
-    }
-}
-@media (max-width:650px){
-    .progtrckr em{
-		display:inline;
-    }
-}
-  
 .update-details{
 	.ui.embed{
 		margin-bottom:@28px;
