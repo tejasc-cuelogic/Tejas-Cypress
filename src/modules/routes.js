@@ -11,11 +11,10 @@ import ChangePassword from '../modules/auth/ChangePassword';
 import EdgarForm from '../modules/edgar/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
 import ResetPassword from '../modules/auth/ResetPassword';
-import Settings from './../modules/settings/containers/Settings';
 import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
 import Banking from './banking/containers/Banking';
 import Base from './basemodule/Base';
-import Messages from './messages/containers/Messages';
+import Messages from './private/messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './private/users/containers/Users';
 import UserDetails from './private/users/containers/UserDetails';
@@ -23,8 +22,8 @@ import ProfileSettings from './private/users/containers/ProfileSettings';
 import XmlForm from './edgar/containers/XmlForm';
 import BusinessDetails from './edgar/containers/BusinessDetails';
 import Summary from '../modules/summary/containers/Summary';
-import RewardsWallet from '../modules/rewardsWallet/containers/RewardsWallet';
-import Referrals from '../modules/referrals/containers/Referrals';
+import RewardsWallet from './private/rewardsWallet/containers/RewardsWallet';
+import Referrals from './private/referrals/containers/Referrals';
 import AccountDetails from './private/accountDetails/containers/AccountDetails';
 import Business from '../modules/business/containers/Business';
 import Education from './private/education/containers/Education';
@@ -153,11 +152,6 @@ export const privateRoutes = [
     auth: AdminAuthorization,
   },
   {
-    path: '/app/settings',
-    component: Settings,
-    auth: UserAuthorization,
-  },
-  {
     path: '/app/messages',
     component: Messages,
     auth: UserAuthorization,
@@ -196,7 +190,7 @@ export const privateRoutes = [
     auth: InvestorAuthorization,
   },
   {
-    path: '/app/rewardswallet',
+    path: '/app/rewards-wallet',
     component: RewardsWallet,
     auth: InvestorAuthorization,
   },

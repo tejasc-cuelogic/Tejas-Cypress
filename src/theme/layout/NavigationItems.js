@@ -30,6 +30,7 @@ const PUBLIC_NAV_ITEMS = [
       { title: 'Register', to: 'register' },
     ],
   },
+  { title: 'Dashboard', to: 'app/dashboard' },
 ];
 
 export class NavItems extends Component {
@@ -44,7 +45,12 @@ export class NavItems extends Component {
   render() {
     const { location, isApp } = this.props;
     const app = (isApp) ? 'app' : '';
-    return this.props.navItems.map(item => (
+    const myNavItems = [...this.props.navItems];
+    if (this.props.refLoc === 'public') {
+      const kickMe = this.props.currentUser ? 4 : 5;
+      myNavItems.splice(kickMe, 1);
+    }
+    return myNavItems.map(item => (
       <Aux>
         {(item.subNavigations && item.subNavigations.length > 0) ? (
           <Dropdown
@@ -98,7 +104,7 @@ export const NavigationItems = props => (
       </Menu.Item>
       <Menu.Menu position="right">
         {props.location.pathname !== '/business-application' ?
-          <NavItems key="public" location={props.location} navItems={PUBLIC_NAV_ITEMS} /> : (
+          <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV_ITEMS} /> : (
             <Button.Group style={{ margin: '12px' }}>
               <Button inverted color="green">Save and Continue later</Button>
               <Button inverted color="green">Submit</Button>

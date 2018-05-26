@@ -38,7 +38,7 @@ class Layout extends Component {
     const address = location.pathname.split('/');
     return (
       <div>
-        {!this.props.userStore.currentUser &&
+        {(!this.props.userStore.currentUser || !location.pathname.startsWith('/app')) &&
           <Header
             location={location}
             showSecondaryHeader={false}
