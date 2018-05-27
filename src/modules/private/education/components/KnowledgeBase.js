@@ -5,17 +5,17 @@ import { inject, observer } from 'mobx-react';
 import { Grid, Header, Accordion, Responsive, Card } from 'semantic-ui-react';
 import Details from '../components/knowledgeBase/Details';
 
-@inject('knowledgeBase')
+@inject('educationStore')
 @observer
 export default class KnowledgeBase extends Component {
   componentWillMount() {
-    this.props.knowledgeBase.initRequest();
+    this.props.educationStore.initRequest('KnowledgeBase');
   }
   render() {
     const { match } = this.props;
     const {
       kbs, loading, error,
-    } = this.props.knowledgeBase;
+    } = this.props.educationStore;
     return (
       <div>
         <Grid>
@@ -34,7 +34,7 @@ export default class KnowledgeBase extends Component {
           </Grid.Column>
           <Grid.Column widescreen={8} largeScreen={8} only="large screen">
             <Route exact path={match.url} component={Details} />
-            <Route path={`${match.url}/:id`} component={Details} />
+            <Route path={`${match.url}/:id`} render={props => <Details refLink="KnowledgeBase" {...props} />} />
           </Grid.Column>
         </Grid>
       </div>
