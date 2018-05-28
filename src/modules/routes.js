@@ -6,6 +6,7 @@ import Invest from './public/invest/containers/Invest';
 import Offering from './public/offering/containers/Offering';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
+import Business from './public/business/containers/Business';
 import Edgar from './edgar/containers/Business';
 import ChangePassword from '../modules/auth/ChangePassword';
 import EdgarForm from '../modules/edgar/containers/EdgarForm';
@@ -25,7 +26,6 @@ import Summary from '../modules/summary/containers/Summary';
 import RewardsWallet from './private/rewardsWallet/containers/RewardsWallet';
 import Referrals from './private/referrals/containers/Referrals';
 import AccountDetails from './private/accountDetails/containers/AccountDetails';
-import Business from '../modules/business/containers/Business';
 import Education from './private/education/containers/Education';
 import {
   AdminAuthorization,
@@ -77,6 +77,10 @@ export const publicRoutes = [
     component: Offering,
   },
   {
+    path: '/business',
+    component: Business,
+  },
+  {
     path: '/forgot-password',
     component: ForgotPassword,
     exact: true,
@@ -99,12 +103,6 @@ export const publicRoutes = [
 ];
 
 export const privateRoutes = [
-  {
-    path: '/app/business',
-    component: Business,
-    auth: BusinessAuthorization,
-    exact: true,
-  },
   {
     path: '/app/edgar/:businessId/edgar/:filingId',
     component: EdgarForm,

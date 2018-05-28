@@ -25,7 +25,10 @@ export default class Faq extends Component {
   }
   render() {
     const { match } = this.props;
-    const { faqs } = this.props.educationStore;
+    const { faqs, loading } = this.props.educationStore;
+    if (loading) {
+      return 'loading...';
+    }
     return (
       <div>
         <Grid>
@@ -35,12 +38,12 @@ export default class Faq extends Component {
               {
                 faqs.map(record => (
                   <Aux key={record.id}>
-                    <Accordion.Title onClick={this.toggleAction} index={record.id}>
+                    <Accordion.Title active={this.isActive(record)} onClick={this.toggleAction} index={record.id}>
                       {record.name}
                       <Icon className="ns-chevron-down" />
                     </Accordion.Title>
-                    {record.faqs.length > 0 &&
-                      <Accordion.Content active={this.isActive(record)}>
+                    <Accordion.Content active={this.isActive(record)}>
+                      {record.faqs.length > 0 ? (
                         <List divided relaxed="very">
                           {
                             record.faqs.map(faq => (
@@ -48,8 +51,9 @@ export default class Faq extends Component {
                             ))
                           }
                         </List>
-                      </Accordion.Content>
-                    }
+                      ) : 'No FAQ to display.'
+                      }
+                    </Accordion.Content>
                   </Aux>
                 ))
 

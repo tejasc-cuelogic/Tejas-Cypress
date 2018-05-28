@@ -741,6 +741,16 @@ svg:not(:root).recharts-surface{
 	}
 }
 
+.knowledge-details{
+	position:relative;
+	.button.circular{
+		position:absolute;
+		right:0;
+		top:50%;
+		transform:translate(0%, 0%);
+	}
+}
+
 .welcome-packet{
 	.pdf-viewer{
 		height:~"calc(100vh - 184px)";
