@@ -749,3 +749,22 @@ svg:not(:root).recharts-surface{
 		margin:0 auto;
 	}
 }
+
+.issuer-signup{
+	.icon.huge{
+		font-size:80px;
+		width:auto;
+	}
+	h1.ui.header{
+		font-size:@32px;
+		.sub.header{
+			font-size:@14px;
+			> a{
+				font-weight:700;
+			}
+		}
+	}
+	.ui.header .sub.header{
+		margin-top:@10px;
+	}
+}
