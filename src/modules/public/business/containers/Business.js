@@ -16,6 +16,7 @@ class Business extends Component {
               }}
             >
               <span className="title">NextSeed for Business</span>
+              <span className="infotext">Let your community invest in your success..</span>
             </div>
           </div>
         </div>

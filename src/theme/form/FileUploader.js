@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Grid, Icon, Button } from 'semantic-ui-react';
+import { Grid, Icon, Button, Responsive } from 'semantic-ui-react';
 
 const FileUploader = observer((props) => {
   const {
@@ -30,7 +30,23 @@ const FileUploader = observer((props) => {
         }
         {value !== '' &&
         <div className="file-uploader attached">
-          <Button size="tiny" compact className="remove pull-right" onClick={() => props.removeUploadedDocument(props.name)}>Remove</Button>
+          <Responsive
+            as={Button}
+            minWidth={768}
+            size="tiny"
+            compact
+            className="remove pull-right"
+            onClick={() => props.removeUploadedDocument(props.name)}
+          >
+            Remove
+          </Responsive>
+          <Responsive
+            as={Icon}
+            maxWidth={767}
+            name="remove"
+            className="pull-right"
+            onClick={() => props.removeUploadedDocument(props.name)}
+          />
           <span title={value}>{value}</span>
         </div>
         }

@@ -13,33 +13,37 @@ class signupInitial extends Component {
     const userTypes = USER_TYPES_META.slice();
     const selectedType = this.props.authStore.signupFlow.type;
     return (
-      <Modal size="tiny" open onClose={() => this.props.setAuthWizardStep()}>
+      <Modal size="tiny" open onClose={this.props.history.goBack}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">How can NextSeed Help you?</Header>
           <p>Do you want to invest or apply for funding?</p>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Grid stackable textAlign="center">
-            <Grid.Row columns={2}>
-              {userTypes.map(type => (
-                <Grid.Column onClick={() => this.chooseType(type.value)} key={type.key}>
-                  <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
-                    <Icon className={type.icon} size="huge" />
-                    <h3>{type.text}</h3>
-                    <p>{selectedType === type.value ? type.desc : ''}</p>
-                  </div>
-                </Grid.Column>
-              ))}
-            </Grid.Row>
+            {userTypes.map(type => (
+              <Grid.Column
+                onClick={() => this.chooseType(type.value)}
+                key={type.key}
+                computer={8}
+                tablet={16}
+                mobile={16}
+              >
+                <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
+                  <Icon className={type.icon} size="huge" />
+                  <h3>{type.text}</h3>
+                  <p>{selectedType === type.value ? type.desc : ''}</p>
+                </div>
+              </Grid.Column>
+            ))}
             <Grid.Row>
               <Grid.Column>
-                {selectedType ? <Button primary size="large" className="very relaxed" onClick={() => this.props.setAuthWizardStep('InvestorSignup')} content="Start" /> : ''}
+                {selectedType ? <Button as={Link} to="/auth/register-investor" primary size="large" className="very relaxed" content="Start" /> : ''}
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>Already have an account? <Link to="" onClick={() => this.props.setAuthWizardStep('Login')}>Log in</Link></p>
+          <p>Already have an account? <Link to="/auth/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

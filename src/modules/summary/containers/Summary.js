@@ -88,9 +88,9 @@ class Summary extends Component {
           !this.isVerified(this.props.profileStore.verifyIdentity01.response.message) &&
             <div>
               <Header as="h3">Welcome to NextSeed!</Header>
-              <Grid stackable>
+              <Grid>
                 <Grid.Row>
-                  <Grid.Column computer={8} largeScreen={8} widescreen={5}>
+                  <Grid.Column widescreen={5} largeScreen={8} computer={8} tablet={16} mobile={16}>
                     <Card fluid raised className="welcome-card">
                       <Card.Content>
                         <List divided relaxed="very">
@@ -118,9 +118,9 @@ class Summary extends Component {
           !this.isVerified(currentUser.data.user.legalDetails.cipStatus) &&
             <div>
               <Header as="h3">Welcome to NextSeed!</Header>
-              <Grid stackable>
+              <Grid>
                 <Grid.Row>
-                  <Grid.Column computer={8} largeScreen={8} widescreen={5}>
+                  <Grid.Column widescreen={5} largeScreen={8} computer={8} tablet={16} mobile={16}>
                     <Card fluid raised className="welcome-card">
                       <Card.Content>
                         <List divided relaxed="very">

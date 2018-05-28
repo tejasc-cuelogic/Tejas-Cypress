@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Grid, Icon, Button, Header } from 'semantic-ui-react';
+import { Form, Grid, Icon, Button, Header, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 
@@ -395,50 +395,49 @@ export default class XmlForm extends React.Component {
     return (
       <div>
         <div className="page-header-section">
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <Header as="h1">
-                  <Link to={`/app/edgar/${this.props.match.params.businessId}`} className="back-link"><Icon name="ns-arrow-left" /></Link>
-                  XML Form
-                  {
-                    xmlSubmissionStatus === XML_STATUSES.completed &&
-                    <Button
-                      color="green"
-                      floated="right"
-                      onClick={this.handleXmlSubmissionCopy}
-                    >
-                      Copy XML Submission
-                    </Button>
-                  }
-                  {
-                    xmlSubmissionStatus === XML_STATUSES.draft &&
-                    <Button
-                      color="red"
-                      size="large"
-                      floated="right"
-                      disabled={!this.props.businessStore.checkStepsStatus}
-                      onClick={this.handleXmlSubmissionSubmit}
-                    >
-                      Submit
-                    </Button>
-                  }
-                  {
-                    xmlSubmissionStatus === XML_STATUSES.draft &&
-                    <Button
-                      color="green"
-                      size="large"
-                      floated="right"
-                      disabled={this.checkStepWiseStatus(xmlActiveTabName)}
-                      onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
-                    >
-                      Save
-                    </Button>
-                  }
-                </Header>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          <Header as="h1">
+            <Responsive
+              minWidth={Responsive.onlyLargeScreen.minWidth}
+              as={Link}
+              to={`/app/edgar/${this.props.match.params.businessId}`}
+              className="back-link"
+            >
+              <Icon name="ns-arrow-left" />
+            </Responsive>
+            XML Form
+            {
+              xmlSubmissionStatus === XML_STATUSES.completed &&
+              <Button
+                color="green"
+                floated="right"
+                onClick={this.handleXmlSubmissionCopy}
+              >
+                Copy XML Submission
+              </Button>
+            }
+            {
+              xmlSubmissionStatus === XML_STATUSES.draft &&
+              <Button
+                color="red"
+                floated="right"
+                disabled={!this.props.businessStore.checkStepsStatus}
+                onClick={this.handleXmlSubmissionSubmit}
+              >
+                Submit
+              </Button>
+            }
+            {
+              xmlSubmissionStatus === XML_STATUSES.draft &&
+              <Button
+                color="green"
+                floated="right"
+                disabled={this.checkStepWiseStatus(xmlActiveTabName)}
+                onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
+              >
+                Save
+              </Button>
+            }
+          </Header>
         </div>
         <div className="content-spacer">
           <Grid>

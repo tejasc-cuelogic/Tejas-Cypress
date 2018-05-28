@@ -311,6 +311,32 @@ export class Auth {
       });
   }
 
+  updatePassword() {
+    uiStore.reset();
+    uiStore.setProgress();
+    const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
+    return new Promise((res, rej) => {
+      this.cognitoUser = this.userPool.getCurrentUser();
+      this.cognitoUser.getSession((err, session) => console.log(err, session));
+      this.cognitoUser.changePassword(
+        passData.oldPasswd,
+        passData.newPasswd,
+        err => (err ? rej(err) : res()),
+      );
+    })
+      .then(() => {
+        Helper.toast('Password changed successfully', 'success');
+      })
+      .catch((err) => {
+        uiStore.setErrors(this.simpleErr(err));
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
   /**
    * @desc Changes user password. Method gets called in success flow of forgot password
    * @return null.
