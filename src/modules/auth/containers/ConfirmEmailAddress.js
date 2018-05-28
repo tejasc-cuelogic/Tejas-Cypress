@@ -42,7 +42,7 @@ export default class ConfirmEmailAddress extends Component {
     const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.props.setAuthWizardStep()}>
+      <Modal size="mini" open closeIcon onClose={this.props.history.goBack}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your email address</Header>
           <Divider />
