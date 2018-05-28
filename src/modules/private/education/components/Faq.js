@@ -3,6 +3,7 @@ import { Route, NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Grid, Header, Accordion, Icon, List } from 'semantic-ui-react';
+import mapValues from 'lodash/mapValues';
 import Details from '../components/knowledgeBase/Details';
 
 @inject('educationStore')
@@ -16,6 +17,11 @@ export default class Faq extends Component {
     const { index } = titleProps;
     const { activeIndex } = this.state;
     this.setState({ activeIndex: (activeIndex === index ? -1 : index) });
+  }
+  isActive = (record) => {
+    const id = this.props.location.pathname.split('/')[4];
+    const ids = mapValues(record.faqs, f => f.id);
+    return this.state.activeIndex === record.id || Object.values(ids).includes(id);
   }
   render() {
     const { match } = this.props;
@@ -34,7 +40,7 @@ export default class Faq extends Component {
                       <Icon className="ns-chevron-down" />
                     </Accordion.Title>
                     {record.faqs.length > 0 &&
-                      <Accordion.Content active={this.state.activeIndex === record.id}>
+                      <Accordion.Content active={this.isActive(record)}>
                         <List divided relaxed="very">
                           {
                             record.faqs.map(faq => (

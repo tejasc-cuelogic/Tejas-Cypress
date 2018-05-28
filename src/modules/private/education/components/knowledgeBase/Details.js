@@ -3,14 +3,14 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Header, Card } from 'semantic-ui-react';
 
-@inject('knowledgeBase')
+@inject('educationStore')
 @observer
 export default class Details extends Component {
   componentWillMount() {
-    this.props.knowledgeBase.getOne(this.props.refLink || 'KnowledgeBase', this.props.match.params.id);
+    this.props.educationStore.getOne(this.props.refLink || 'KnowledgeBase', this.props.match.params.id);
   }
   render() {
-    const { selected } = this.props.knowledgeBase;
+    const { selected } = this.props.educationStore;
     return (
       <Card fluid>
         <Card.Content className="padded">
