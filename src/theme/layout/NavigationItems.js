@@ -37,16 +37,16 @@ export class NavItems extends Component {
   state = { active: '' };
   navClick = (e, { name }) => {
     this.setState({ active: name });
-    if (e.target.getAttribute('role') === null) {
+    if (this.props.refLoc !== 'public' && e.target.getAttribute('role') === null) {
       this.props.history.replace(`/app/${name}`);
     }
   };
   isActive = (to, location, app) => (to !== '' && this.state.active === to) || location.pathname.startsWith(`/${app}/${to}`);
   render() {
-    const { location, isApp } = this.props;
+    const { location, isApp, refLoc } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = [...this.props.navItems];
-    if (this.props.refLoc === 'public') {
+    if (refLoc === 'public') {
       const kickMe = this.props.currentUser ? 4 : 5;
       myNavItems.splice(kickMe, 1);
     }
@@ -58,6 +58,7 @@ export class NavItems extends Component {
             key={item.to}
             className={this.isActive(item.to, location, app) ? 'active' : ''}
             name={item.to}
+            onClick={this.navClick}
             text={<Aux><Icon className={item.icon} /><span>{item.title}</span></Aux>}
           >
             <Dropdown.Menu className={this.isActive(item.to, location) ? 'visible' : ''}>
@@ -79,7 +80,9 @@ export class NavItems extends Component {
             as={NavLink}
             to={`${(isApp) ? '/app' : ''}/${item.to}`}
           >
-            <Icon className={item.icon} />
+            {item.icon &&
+              <Icon className={item.icon} />
+            }
             {item.to === 'messages' &&
               <Label circular color="red" size="mini" horizontal>3</Label>
             }
