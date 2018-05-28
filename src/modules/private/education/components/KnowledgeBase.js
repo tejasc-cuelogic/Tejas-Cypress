@@ -16,6 +16,10 @@ export default class KnowledgeBase extends Component {
     const {
       kbs, loading, error,
     } = this.props.educationStore;
+
+    if (loading) {
+      return 'loading...';
+    }
     return (
       <div>
         <Grid>

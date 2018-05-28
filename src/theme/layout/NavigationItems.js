@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Container, Icon, Image, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import LogoC from '../../assets/images/nextseed_logo_color.svg';
@@ -33,11 +33,13 @@ const PUBLIC_NAV_ITEMS = [
   { title: 'Dashboard', to: 'app/dashboard' },
 ];
 
+@withRouter
 export class NavItems extends Component {
   state = { active: '' };
   navClick = (e, { name }) => {
     this.setState({ active: name });
-    if (this.props.refLoc !== 'public' && e.target.getAttribute('role') === null) {
+    console.log(e.target, 'e.target');
+    if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
   };
