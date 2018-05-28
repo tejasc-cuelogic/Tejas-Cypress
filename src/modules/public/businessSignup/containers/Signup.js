@@ -5,7 +5,7 @@ import { Segment, Grid, Icon, Header, Divider } from 'semantic-ui-react';
 class Signup extends Component {
   render() {
     return (
-      <Segment vertical className="content">
+      <Segment vertical className="content issuer-signup">
         <Grid container>
           <Grid.Column>
             <Icon className="ns-paper-plane" size="huge" color="green" />

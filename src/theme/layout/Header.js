@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationItems } from './NavigationItems';
 
 const header = props => (
-  <div className="header-wrap">
+  <div className={(props.location.pathname === '/business-application') ? 'header-wrap large' : 'header-wrap'}>
     <NavigationItems {...props} />
     {props.showSecondaryHeader &&
       <div className="ui container fluid secondaryHeader">

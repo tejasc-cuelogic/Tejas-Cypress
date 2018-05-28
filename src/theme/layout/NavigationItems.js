@@ -41,7 +41,7 @@ export class NavItems extends Component {
       this.props.history.replace(`/app/${name}`);
     }
   };
-  isActive = (to, location, app) => this.state.active === to || location.pathname.startsWith(`/${app}/${to}`);
+  isActive = (to, location, app) => (to !== '' && this.state.active === to) || location.pathname.startsWith(`/${app}/${to}`);
   render() {
     const { location, isApp } = this.props;
     const app = (isApp) ? 'app' : '';
@@ -99,15 +99,14 @@ export const NavigationItems = props => (
           className="small"
           src={props.location.pathname === '/business-application' ? LogoW : LogoC}
           alt="NextSeed.com"
-          style={{ marginRight: '1.5em' }}
         />
       </Menu.Item>
       <Menu.Menu position="right">
         {props.location.pathname !== '/business-application' ?
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV_ITEMS} /> : (
-            <Button.Group style={{ margin: '12px' }}>
+            <Button.Group style={{ padding: '19px' }}>
               <Button inverted color="green">Save and Continue later</Button>
-              <Button inverted color="green">Submit</Button>
+              <Button color="grey" disabled>Submit</Button>
             </Button.Group>
           )
         }
