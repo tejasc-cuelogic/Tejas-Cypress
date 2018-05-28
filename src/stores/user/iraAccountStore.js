@@ -24,18 +24,18 @@ class IraAccountStore {
 
   @observable
   formAccTypes = {
-    fields: { ...IRA_ACC_TYPES }, meta: { isValid: true, error: '', isDirty: false },
+    fields: { ...IRA_ACC_TYPES }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formFunding = {
-    fields: { ...IRA_FUNDING }, meta: { isValid: true, error: '', isDirty: false },
+    fields: { ...IRA_FUNDING }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formIdentity = {
     fields: { ...IRA_IDENTITY }, meta: { isValid: false, error: '', isDirty: false },
-  }
+  };
 
   @observable
   investorAccId = '';
@@ -127,18 +127,7 @@ class IraAccountStore {
 
   @computed
   get accountAttributes() {
-    const accountType = _.find(
-      this.formAccTypes.fields.iraAccountType.values,
-      { value: this.formAccTypes.fields.iraAccountType.value },
-    );
-    const fundingOption = _.find(
-      this.formFunding.fields.fundingType.values,
-      { value: this.formFunding.fields.fundingType.value },
-    );
-    const payload = {
-      iraAccountType: accountType.label.toLowerCase(),
-      fundingType: this.getFundingType(fundingOption.label.toLowerCase()),
-    };
+    const payload = {};
     if (this.formFinInfo.fields.netWorth.value) {
       payload.netWorth = this.formFinInfo.fields.netWorth.value;
     }
@@ -164,7 +153,16 @@ class IraAccountStore {
   /* eslint-disable consistent-return */
   @action
   createAccount = (currentStep, formStatus = 'draft') => {
+    const accountType = _.find(
+      this.formAccTypes.fields.iraAccountType.values,
+      { value: this.formAccTypes.fields.iraAccountType.value },
+    );
+    const fundingOption = _.find(
+      this.formFunding.fields.fundingType.values,
+      { value: this.formFunding.fields.fundingType.value },
+    );
     let isValidCurrentStep = true;
+    const { accountAttributes } = this;
     switch (currentStep.name) {
       case 'Financial info':
         currentStep.validate();
@@ -172,9 +170,11 @@ class IraAccountStore {
         break;
       case 'Account type':
         isValidCurrentStep = true;
+        accountAttributes.iraAccountType = accountType.label.toLowerCase();
         break;
       case 'Funding':
         isValidCurrentStep = true;
+        accountAttributes.fundingType = this.getFundingType(fundingOption.label.toLowerCase());
         break;
       case 'Identity':
         currentStep.validate();
@@ -189,7 +189,7 @@ class IraAccountStore {
       let mutation = createAccount;
       let variables = {
         userId: userStore.currentUser.sub,
-        accountAttributes: this.accountAttributes,
+        accountAttributes,
         status: formStatus,
         accountType: 'ira',
       };
@@ -204,7 +204,7 @@ class IraAccountStore {
           variables = {
             userId: userStore.currentUser.sub,
             accountId: accountDetails.accountId,
-            accountAttributes: this.accountAttributes,
+            accountAttributes,
             status: formStatus,
             accountType: 'ira',
           };
@@ -216,7 +216,7 @@ class IraAccountStore {
         variables = {
           userId: userStore.currentUser.sub,
           accountId: this.investorAccId,
-          accountAttributes: this.accountAttributes,
+          accountAttributes,
           status: formStatus,
           accountType: 'ira',
         };
