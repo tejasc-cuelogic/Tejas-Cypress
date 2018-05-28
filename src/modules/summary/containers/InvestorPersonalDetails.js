@@ -34,7 +34,7 @@ export default class investorPersonalDetails extends Component {
         this.props.profileStore.startPhoneVerification().then(() => {
           this.props.setDashboardWizardStep('ConfirmPhoneNumber');
         })
-          .catch(() => {});
+          .catch((err) => { this.props.uiStore.setErrors(JSON.stringify(err.message)); });
       } else {
         Helper.toast('User verification hard-failed!', 'error');
         this.props.setDashboardWizardStep('ConfirmIdentityDocuments');

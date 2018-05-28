@@ -385,8 +385,9 @@ export class ProfileStore {
             cipStatus: 'MANUAL_VERIFICATION_PENDING',
           },
         })
-        .then((result) => {
-          console.log(result);
+        .then(() => {
+          const message = { message: 'MANUAL_VERIFICATION_PENDING' };
+          this.setVerifyIdentityResponse(message);
           resolve();
         })
         .catch((err) => {

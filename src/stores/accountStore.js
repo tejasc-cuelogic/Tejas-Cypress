@@ -25,6 +25,8 @@ export class AccountStore {
 
   @observable entityAccount = { ...ENTITY_ACCOUNT_CREATION }
 
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
+
   @computed
   get routeOnInvestmentTypeSelection() {
     return `${this.accountType.type}/AccountCreation`;

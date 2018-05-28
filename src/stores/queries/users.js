@@ -67,9 +67,9 @@ query getUserDetails($id: ID!) {
         state
         zipCode
       }
+      cipStatus
     }
     accountStatus
-    cipStatus
   }
 }
 `;
