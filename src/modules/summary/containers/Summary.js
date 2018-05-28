@@ -18,6 +18,7 @@ class Summary extends Component {
   componentWillMount() {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
+
   setDashboardWizardSetup = (step) => {
     this.props.uiStore.setDashboardWizardStep(step);
     this.restoreStep();

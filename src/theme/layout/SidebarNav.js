@@ -1,11 +1,12 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { Link, NavLink } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Menu, Icon, Label } from 'semantic-ui-react';
 import _ from 'lodash';
 import { ALL_NAV_ITEMS } from '../../constants/privateNavigationMeta';
 
-export const SidebarNav = (props) => {
+export const SidebarNav = observer((props) => {
   const { roles } = props;
   const navItems = _.filter(
     ALL_NAV_ITEMS,
@@ -17,6 +18,7 @@ export const SidebarNav = (props) => {
       {
         navItems.map(item => (
           <Menu.Item
+            disabled={props.roles[0] === 'investor' && item.to !== 'summary' && !props.isUserVerified}
             key={item.to}
             name={item.to}
             as={NavLink}
@@ -36,7 +38,7 @@ export const SidebarNav = (props) => {
       </Menu.Item>
     </Aux>
   );
-};
+});
 
 export const GetNavItem = (item, roles) => {
   const result = _.find(ALL_NAV_ITEMS, i => i.to === item);
