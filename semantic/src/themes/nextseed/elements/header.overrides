@@ -3,11 +3,14 @@
 *******************************/
 
 .header-wrap{
-	height:58px;
+    height:58px;
+    &.large{
+        height:80px;
+    }
     .ui.menu{
         box-shadow:0px 0px 5px fade(@fullBlack, 8%);
         &.large{
-            height:58px;
+            // height:58px;
             font-size:1rem;
         }
         .menu .item{

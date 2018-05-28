@@ -3,6 +3,7 @@
 *******************************/
 
 @boxShadow: none;
+@cardBoxShadow:0 0 10px @trackBackground;
 
 /* Title */
 @titleFont: @headerFont;
