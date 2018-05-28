@@ -1,65 +1,22 @@
 import React, { Component } from 'react';
-import { Link, NavLink, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Menu, Icon, Label, Dropdown } from 'semantic-ui-react';
+import { Menu, Icon } from 'semantic-ui-react';
 import _ from 'lodash';
 import { ALL_NAV_ITEMS } from '../../constants/privateNavigationMeta';
+import { NavItems } from './NavigationItems';
 
 @withRouter
 export class SidebarNav extends Component {
-  state = { active: '' };
-  navClick = (e, { name }) => {
-    this.setState({ active: name });
-    if (e.target.getAttribute('role') === null) {
-      this.props.history.replace(`/app/${name}`);
-    }
-  };
-  isActive = (to, location) => this.state.active === to || location.pathname.startsWith(`/app/${to}`);
   render() {
     const { roles, location } = this.props;
     const navItems = _.filter(
       ALL_NAV_ITEMS,
       n => n.to !== 'profile-settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
     );
-    const actuals = ['account-details', 'summary', 'users', 'profile-settings', 'edgar', 'education'];
     return (
       <Aux>
-        {
-          navItems.map(item => (
-            <Aux>
-              {(item.subNavigations && item.subNavigations.length > 0) ? (
-                <Dropdown
-                  item
-                  className={this.isActive(item.to, location) ? 'active' : ''}
-                  name={item.to}
-                  to={`/app/${item.to}`}
-                  text={<Aux><Icon className={item.icon} /><span>{item.title}</span></Aux>}
-                  onClick={this.navClick}
-                >
-                  <Dropdown.Menu className={this.isActive(item.to, location) ? 'visible' : ''}>
-                    {item.subNavigations.map(sn => (
-                      <Dropdown.Item as={NavLink} to={`/app/${item.to}/${sn.to}`}>{sn.title}</Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              ) : (
-                <Menu.Item
-                  key={item.to}
-                  onClick={this.navClick}
-                  name={item.to}
-                  as={NavLink}
-                  to={(actuals.includes(item.to.split('/')[0])) ? `/app/${item.to}` : `/app/page/${item.to}`}
-                >
-                  <Icon className={item.icon} />
-                  {item.to === 'messages' &&
-                    <Label circular color="red" size="mini" horizontal>3</Label>
-                  }
-                  <span>{item.title}</span>
-                </Menu.Item>
-              )}
-            </Aux>
-          ))
-        }
+        <NavItems location={location} navItems={navItems} isApp />
         <Menu.Item key="logout" name="logout" onClick={this.props.handleLogOut}>
           <Icon name="sign out" />
           <span>Logout</span>

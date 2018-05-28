@@ -9,7 +9,7 @@ import validationActions from '../../../../actions/validation';
 @observer
 export default class NewEmailAddress extends Component {
   handleChangeEmailAddress = () => {
-    this.props.uiStore.setAuthWizardStep('ConfirmEmailAddress');
+    this.props.history.push('auth/confirm-email');
   }
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleCloseModal = (e) => {

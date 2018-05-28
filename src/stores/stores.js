@@ -13,4 +13,4 @@ export { default as accountStore } from './accountStore';
 export { default as entityAccountStore } from './user/entityAccountStore';
 export { default as iraAccountStore } from './user/iraAccountStore';
 export { default as individualAccountStore } from './user/individualAccountStore';
-export { default as knowledgeBase } from './education/knowledgeBase';
+export { default as educationStore } from './education/educationStore';

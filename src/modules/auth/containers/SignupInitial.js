@@ -37,13 +37,13 @@ class signupInitial extends Component {
             ))}
             <Grid.Row>
               <Grid.Column>
-                {selectedType ? <Button primary size="large" className="very relaxed" onClick={() => this.props.setAuthWizardStep('InvestorSignup')} content="Start" /> : ''}
+                {selectedType ? <Button as={Link} to="/auth/register-investor" primary size="large" className="very relaxed" content="Start" /> : ''}
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>Already have an account? <Link to="" onClick={() => this.props.setAuthWizardStep('Login')}>Log in</Link></p>
+          <p>Already have an account? <Link to="/auth/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

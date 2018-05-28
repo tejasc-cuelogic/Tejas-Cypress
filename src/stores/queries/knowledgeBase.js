@@ -29,3 +29,36 @@ export const getOne = gql`
     }
   }
 `;
+
+export const allFaqCategories = gql`
+  query allCategories {
+    allCategories{
+      id
+      name
+      faqs{
+        id
+        text
+      }
+    }
+  }
+`;
+
+export const getFirstFaq = gql`
+  query GetFaq($first: Int!) {
+    allFaqs(first: $first, skip: 0) {
+      id
+      text
+      description
+    }
+  }
+`;
+
+export const getOneFaq = gql`
+  query GetOneFaq($id: ID!) {
+    Faq(id: $id) {
+      id
+      text
+      description
+    }
+  }
+`;
