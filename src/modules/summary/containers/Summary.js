@@ -64,12 +64,12 @@ class Summary extends Component {
         };
       }
     } else if (this.isVerified(currentUser.data.user.legalDetails.cipStatus)) {
-      // stepinfo = {
-      //   value: 'Welcome to NextSeed!',
-      //   label: 'Would you like to start the process of new account creation?',
-      //   linkText: 'Let`s start it!',
-      //   linkPath: 'InvestmentChooseType',
-      // };
+      stepinfo = {
+        value: 'Welcome to NextSeed!',
+        label: 'Would you like to start the process of new account creation?',
+        linkText: 'Let`s start it!',
+        linkPath: 'InvestmentChooseType',
+      };
     }
 
     return (

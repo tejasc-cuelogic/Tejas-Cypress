@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List, Message } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
+import ListErrors from '../../../theme/common/ListErrors';
 import FieldError from '../../../theme/common/FieldError';
 
-@inject('profileStore')
+@inject('profileStore', 'uiStore')
 @withRouter
 @observer
 export default class ConfirmIdentityDocuments extends Component {
@@ -30,7 +31,9 @@ export default class ConfirmIdentityDocuments extends Component {
     validationActions.validateConfirmIdentityDocumentsForm();
     if (this.props.profileStore.canSubmitConfirmIdentityDocumentsForm) {
       this.props.profileStore.uploadAndUpdateCIPInfo().then(() => {
-        this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+        this.props.profileStore.startPhoneVerification().then(() => {
+          this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+        });
       })
         .catch(() => { });
     }
@@ -38,6 +41,7 @@ export default class ConfirmIdentityDocuments extends Component {
 
   render() {
     const { confirmIdentityDocuments } = this.props.profileStore;
+    const { errors } = this.props.uiStore;
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
         <Modal.Header className="center-align signup-header">
@@ -49,6 +53,11 @@ export default class ConfirmIdentityDocuments extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={[errors]} />
+            </Message>
+          }
           <Form onSubmit={this.handleSubmitForm} className="file-uploader-inline">
             <Grid divided="vertically">
               <Grid.Row>
@@ -133,10 +142,10 @@ export default class ConfirmIdentityDocuments extends Component {
             </Grid>
             <Divider section hidden />
             <div className="center-align">
-              <Button primary size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitConfirmIdentityDocumentsForm}>Verify my identity</Button>
+              <Button loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!this.props.profileStore.canSubmitConfirmIdentityDocumentsForm}>Verify my identity</Button>
             </div>
             <div className="center-align">
-              <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I`ll finish this letter</Button>
+              <Button type="button" className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I`ll finish this letter</Button>
             </div>
           </Form>
         </Modal.Content>
