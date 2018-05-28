@@ -1,10 +1,17 @@
 import React from 'react';
+import { Grid } from 'semantic-ui-react';
 
 const WelcomePacket = () => (
   <div>
-    <div className="pdf-viewer ui grid centered">
-      <object width="1000" height="1000" data="http://www.africau.edu/images/default/sample.pdf">failed to load..</object>
-    </div>
+    <Grid>
+      <Grid.Row>
+        <Grid.Column className="welcome-packet">
+          <div className="pdf-viewer">
+            <object width="100%" height="100%" data="http://www.africau.edu/images/default/sample.pdf">failed to load..</object>
+          </div>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   </div>
 );
 
