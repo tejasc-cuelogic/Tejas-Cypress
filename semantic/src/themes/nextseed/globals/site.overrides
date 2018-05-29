@@ -774,7 +774,10 @@ svg:not(:root).recharts-surface{
 			}
 		}
 	}
-	.ui.header .sub.header{
-		margin-top:@10px;
+	.ui.header{
+		margin-bottom:@42px;
+		.sub.header{
+			margin-top:@10px;
+		}
 	}
 }

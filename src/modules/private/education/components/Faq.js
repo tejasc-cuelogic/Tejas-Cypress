@@ -38,7 +38,11 @@ export default class Faq extends Component {
               {
                 faqs.map(record => (
                   <Aux key={record.id}>
-                    <Accordion.Title active={this.isActive(record)} onClick={this.toggleAction} index={record.id}>
+                    <Accordion.Title
+                      active={this.isActive(record)}
+                      onClick={this.toggleAction}
+                      index={record.id}
+                    >
                       {record.name}
                       <Icon className="ns-chevron-down" />
                     </Accordion.Title>
