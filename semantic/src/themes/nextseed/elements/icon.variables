@@ -168,6 +168,7 @@
 @ns-store: "\e967";
 @ns-tags: "\e934";
 @ns-technology: "\e968";
+@ns-tick: "\e96a";
 @ns-times-box: "\e935";
 @ns-times-circle: "\e936";
 @ns-trash: "\e937";

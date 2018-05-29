@@ -1287,6 +1287,9 @@ i.icon[class*="ns-"]{
 .ns-technology:before{
     content:@ns-technology;
 }
+.ns-tick:before{
+    content:@ns-tick;
+}
 .ns-times-box:before{
     content:@ns-times-box;
 }

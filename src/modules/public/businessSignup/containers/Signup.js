@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Segment, Grid, Icon, Header, Divider, Form, Checkbox } from 'semantic-ui-react';
+import { Segment, Grid, Icon, Header, Divider, Form, Checkbox, List, Popup, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import { FormRadioGroup, FormInput, MaskedInput, AutoComplete } from '../../../../theme/form/FormElements';
@@ -201,6 +201,58 @@ class Signup extends Component {
                 <Checkbox label="Other" />
               </div>
               <Divider section className="doubled" />
+              <Header as="h2">
+                Legal Confirmation
+                <Header.Subheader>
+                  Please check all that apply.
+                  Note some of these items are not disqualifying conditions, but a NextSeed
+                  representative may follow up to verify any applicable details
+                </Header.Subheader>
+              </Header>
+              <List relaxed>
+                <List.Item>
+                  <Checkbox label="The company has not raised securities under Regulation Crowdfunding in the last 12 months." />
+                </List.Item>
+                <List.Item>
+                  <Checkbox label="The company is not concurrently conducting an offering on another platform." />
+                </List.Item>
+                <List.Item>
+                  <Checkbox label="The company is not a broker-dealer." />
+                </List.Item>
+                <List.Item>
+                  <Checkbox label="The company is organized in the United States" />
+                </List.Item>
+                <List.Item>
+                  <Checkbox label="The company is not an investment company." />
+                </List.Item>
+                <List.Item>
+                  <Checkbox label="The company has not sold securities registered under the Securities Exchange Act of 1934." />
+                </List.Item>
+                <List.Item>
+                  <Checkbox label={
+                    /*  eslint-disable jsx-a11y/label-has-for */
+                    <label>I have never filed for bankruptcy.
+                      <Popup
+                        trigger={<Icon name="help circle outline" />}
+                        content="If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy"
+                        position="top center"
+                      />
+                    </label>}
+                  />
+                </List.Item>
+                <List.Item>
+                  <Checkbox label="I am not currently charged with or have ever been convicted of fraud." />
+                </List.Item>
+                <List.Item>
+                  <Checkbox label="I am not currently charged with or have ever been convicted of a serious criminal offense." />
+                </List.Item>
+                <Divider section />
+                <List.Item>
+                  <Checkbox defaultChecked label="Please check here if you wish to subscribe to the latest news and offers from NextSeed.  You may unsubscribe at any time" />
+                </List.Item>
+              </List>
+              <Divider section hidden />
+              <Button size="large" color="green" className="very relaxed" disabled>Submit</Button>
             </Form>
           </Grid.Column>
         </Grid>
