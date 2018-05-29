@@ -54,7 +54,7 @@ export class NavItems extends Component {
     }
     return myNavItems.map(item => (
       <Aux>
-        {(item.subNavigations && item.subNavigations.length > 0) ? (
+        {(item.subPanel === 1 && item.subNavigations) ? (
           <Dropdown
             item
             key={item.to}

@@ -135,6 +135,12 @@ export const privateRoutes = [
     exact: true,
   },
   {
+    path: '/app/manage/:entity',
+    component: Base,
+    auth: BusinessAuthorization,
+    exact: true,
+  },
+  {
     path: '/app/users/:userId/:section',
     component: UserDetails,
     auth: AdminAuthorization,
@@ -200,7 +206,7 @@ export const privateRoutes = [
   {
     path: '/app/education',
     component: Education,
-    auth: InvestorAuthorization,
+    auth: UserAuthorization,
   },
   {
     path: '/app/page/:pageId',

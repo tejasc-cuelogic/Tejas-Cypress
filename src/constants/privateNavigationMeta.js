@@ -51,14 +51,14 @@ export const ALL_NAV_ITEMS = [
   {
     icon: 'feed',
     title: 'Manage blog',
-    to: 'blog',
+    to: 'manage/blog',
     accessibleTo: ['admin', 'editor'],
     subNavigations: [],
   },
   {
     icon: 'question',
     title: 'Manage FAQ',
-    to: 'manage-faq',
+    to: 'manage/faq',
     accessibleTo: ['admin', 'editor'],
     subNavigations: [],
   },
@@ -118,7 +118,7 @@ export const ALL_NAV_ITEMS = [
   {
     icon: 'gift',
     title: 'Offering',
-    to: 'offering',
+    to: 'manage/offering',
     accessibleTo: ['bowner'],
     subPanel: 1,
     subNavigations: [
@@ -144,7 +144,7 @@ export const ALL_NAV_ITEMS = [
   {
     icon: 'calendar',
     title: 'Events',
-    to: 'events',
+    to: 'manage/events',
     accessibleTo: ['bowner'],
   },
   {
