@@ -487,7 +487,7 @@ export class Auth {
       this.cognitoUser.resendConfirmationCode(err => (err ? rej(err) : res()));
     })
       .then(() => {
-        Helper.toast('Successfully re-sent confirmation code', 'success');
+        Helper.toast('Successfully sent confirmation code', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));

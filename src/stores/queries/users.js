@@ -62,8 +62,7 @@ query getUserDetails($id: ID!) {
       dateOfBirth
       ssn
       legalAddress {
-        street1
-        street2
+        street
         city
         state
         zipCode
