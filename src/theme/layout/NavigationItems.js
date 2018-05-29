@@ -61,7 +61,14 @@ export class NavItems extends Component {
             className={this.isActive(item.to, location, app) ? 'active' : ''}
             name={item.to}
             onClick={this.navClick}
-            text={<Aux><Icon className={item.icon} /><span>{item.title}</span></Aux>}
+            text={
+              <Aux>
+                {item.icon &&
+                  <Icon className={item.icon} />
+                }
+                <span>{item.title}</span>
+              </Aux>
+            }
           >
             <Dropdown.Menu className={this.isActive(item.to, location) ? 'visible' : ''}>
               {item.subNavigations.map(sn => (
