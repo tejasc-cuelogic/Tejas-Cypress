@@ -9,6 +9,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import App from './App';
 import * as stores from './stores/stores';
 
+/* eslint-disable no-undef */
+Raven.config('https://7e14162a1a8d40d4a1aa52907507b6c7@sentry.io/1215344').install();
+
 initApm({
 
   // Set required service name (allowed characters: a-z, A-Z, 0-9, -, _, and space)
