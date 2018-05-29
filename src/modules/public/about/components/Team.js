@@ -11,9 +11,9 @@ const team = () => (
     </span>
     <Divider inverted section />
     <p className="pageContent">
-      {/* eslint-disable max-len */}
-      By using the latest crowdfunding laws and technology, NextSeed is creating new opportunities for businesses and everyday investors to grow together.
-      Through NextSeed, small businesses have access to a source of debt financing that is all around them.
+      By using the latest crowdfunding laws and technology, NextSeed is creating new opportunities
+      for businesses and everyday investors to grow together. Through NextSeed, small businesses
+      have access to a source of debt financing that is all around them.
     </p>
   </div>
 );

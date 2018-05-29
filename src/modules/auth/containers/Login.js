@@ -27,7 +27,6 @@ class Login extends Component {
           this.props.authStore.reset();
           this.props.history.replace('/app/dashboard');
         }
-        this.props.setAuthWizardStep();
       });
   };
 
@@ -36,7 +35,7 @@ class Login extends Component {
     const { errors } = this.props.uiStore;
 
     return (
-      <Modal size="mini" open onClose={() => this.props.setAuthWizardStep()}>
+      <Modal size="mini" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Log in to NextSeed</Header>
         </Modal.Header>
@@ -80,7 +79,7 @@ class Login extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>Dont have an account? <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')}>Sign up</Link></p>
+          <p>Dont have an account? <Link to="/auth/register">Sign up</Link></p>
         </Modal.Actions>
       </Modal>
     );

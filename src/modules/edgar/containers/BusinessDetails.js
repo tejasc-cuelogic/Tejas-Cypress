@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Icon, Button, Grid, Confirm } from 'semantic-ui-react';
+import { Icon, Header, Button, Confirm, Responsive } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import FillingsList from '../components/FillingsList';
@@ -122,68 +122,69 @@ export default class BusinessDetails extends React.Component {
     return (
       <div>
         <div className="page-header-section">
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <h1>
-                  <Button
-                    primary
-                    floated="right"
-                    onClick={this.handleNewFiling}
-                  >
-                    + Add Filing
-                  </Button>
-                  <NewBusinessForm businessid={this.props.match.params.businessId} />
-                  <Link to="/app/edgar" className="back-link"><Icon name="ns-arrow-left" /></Link>
-                  {business.name.value}
-                  <div className="actions">
-                    <Button
-                      icon
-                      circular
-                      inverted
-                      color="green"
-                      size="mini"
-                      onClick={this.editBusinessModal}
-                    >
-                      <Icon name="ns-pencil" />
-                    </Button>{' '}
-                    <Button
-                      icon
-                      circular
-                      inverted
-                      color="red"
-                      size="mini"
-                      entity="business"
-                      refid={this.props.match.params.businessId}
-                      subrefid=""
-                      onClick={this.confirmDelete}
-                    >
-                      <Icon name="ns-trash" />
-                    </Button>
-                    <Button
-                      icon
-                      circular
-                      inverted
-                      size="mini"
-                      color="theme-primary"
-                      onClick={() => window.open(`${process.env.REACT_APP_BOX_URL}/folder/${business.folderId}`, '_blank')}
-                    >
-                      <Icon name="external" />
-                    </Button>
-                    <Confirm
-                      header="Confirm"
-                      content="Are you sure you want to delete business and its associated data?"
-                      open={this.props.uiStore.confirmBox.entity === 'business'}
-                      onCancel={this.handleDeleteCancel}
-                      onConfirm={this.handleDeleteBusiness}
-                      size="tiny"
-                      className="deletion"
-                    />
-                  </div>
-                </h1>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          <Header as="h1">
+            <Button
+              primary
+              floated="right"
+              onClick={this.handleNewFiling}
+            >
+              + Add Filing
+            </Button>
+            <NewBusinessForm businessid={this.props.match.params.businessId} />
+            <Responsive
+              minWidth={Responsive.onlyLargeScreen.minWidth}
+              as={Link}
+              to="/app/edgar"
+              className="back-link"
+            >
+              <Icon name="ns-arrow-left" />
+            </Responsive>
+            {business.name.value}
+            <div className="actions">
+              <Button
+                icon
+                circular
+                inverted
+                color="green"
+                size="mini"
+                onClick={this.editBusinessModal}
+              >
+                <Icon name="ns-pencil" />
+              </Button>{' '}
+              <Button
+                icon
+                circular
+                inverted
+                color="red"
+                size="mini"
+                entity="business"
+                refid={this.props.match.params.businessId}
+                subrefid=""
+                onClick={this.confirmDelete}
+              >
+                <Icon name="ns-trash" />
+              </Button>
+              <Button
+                icon
+                circular
+                inverted
+                size="mini"
+                color="theme-primary"
+                onClick={() => window.open(`${process.env.REACT_APP_BOX_URL}/folder/${business.folderId}`, '_blank')}
+              >
+                <Icon name="external" />
+              </Button>
+              <Confirm
+                header="Confirm"
+                content="Are you sure you want to delete business and its associated data?"
+                open={this.props.uiStore.confirmBox.entity === 'business'}
+                onCancel={this.handleDeleteCancel}
+                onConfirm={this.handleDeleteBusiness}
+                size="tiny"
+                className="deletion"
+              />
+            </div>
+          </Header>
         </div>
         <div className="search-filters">
           <p className="inverse-text">{business.desc.value}</p>

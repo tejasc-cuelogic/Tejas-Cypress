@@ -132,7 +132,6 @@ strong {
 b,
 strong {
   font-weight:bold;
-  // font-family:@boldFont;
 }
 
 /**

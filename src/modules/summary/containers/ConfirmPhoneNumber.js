@@ -11,26 +11,39 @@ import ListErrors from '../../../theme/common/ListErrors';
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
-  componentWillUnmount() {
-    this.props.uiStore.clearErrors();
-  }
+  // componentWillUnmount() {
+  //   this.props.uiStore.clearErrors();
+  // }
 
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
     this.props.profileStore.confirmPhoneNumber().then(() => {
       Helper.toast('Phone number is confirmed.', 'success');
+      if (this.props.refLink) {
+        this.props.history.replace('/app/profile-settings/profile-data');
+      }
       this.props.setDashboardWizardStep();
     })
       .catch(() => {});
   }
 
   handleChangePhoneNumber = () => {
-    this.props.uiStore.setEditMode(true);
+    if (!this.props.newPhoneNumber) {
+      this.props.uiStore.setEditMode(true);
+    }
   }
 
   startPhoneVerification = () => {
     this.props.profileStore.startPhoneVerification();
     this.props.uiStore.setEditMode(false);
+  }
+
+  handleCloseModal = () => {
+    this.props.uiStore.setDashboardWizardStep();
+    if (this.props.refLink) {
+      this.props.history.replace(this.props.refLink);
+    }
+    this.props.uiStore.clearErrors();
   }
 
   render() {
@@ -42,7 +55,7 @@ export default class ConfirmPhoneNumber extends Component {
     } = this.props.profileStore;
     const { errors, editMode } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your phone number</Header>
           <Divider />
@@ -51,7 +64,7 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Content className="signup-content center-align">
           {errors &&
             <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
+              <ListErrors errors={[errors]} />
             </Message>
           }
           <MaskedInput
@@ -72,7 +85,10 @@ export default class ConfirmPhoneNumber extends Component {
               </Link>
             </p> :
             <p>
-              <Link to={this.props.match.url} onClick={this.handleChangePhoneNumber}>
+              <Link
+                to={this.props.refLink ? this.props.refLink : this.props.match.url}
+                onClick={this.handleChangePhoneNumber}
+              >
                 Change phone number
               </Link>
             </p>
@@ -90,7 +106,7 @@ export default class ConfirmPhoneNumber extends Component {
               <Button loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!verifyIdentity04.meta.isValid}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Button className="cancel-link" onClick={() => this.props.profileStore.startPhoneVerification()}>Resend the code to my phone</Button>
+              <Button type="button" className="cancel-link" onClick={() => this.props.profileStore.startPhoneVerification()}>Resend the code to my phone</Button>
             </div>
           </Form>
         </Modal.Content>

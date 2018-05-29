@@ -1,9 +1,23 @@
 /*******************************
          Theme Overrides
 *******************************/
-.ui.action.input>.button,
-.ui.action.input>.buttons>.button{
-    + input{
-        padding-left:0.5em;
+.ui.action.input{
+    &:not([class*="left"])>input{
+        padding-right:@14px;
+    }
+    &.left >input{
+        padding-left:@14px;
+    }
+    .ui.button.link-button{
+        border-bottom:@border-color 1px solid;
+        border-radius:0 !important;
+    }
+    >input:focus ~ .ui.button.link-button{
+        border-color:@theme-primary;
+    }
+}
+.field.error{
+    .ui.action.input>input ~ .ui.button.link-button{
+        border-color:@highlight-primary;
     }
 }

@@ -9,7 +9,13 @@
         margin:0 !important;
     }
 }
-
+.ui.modal{
+    &.mini{
+        @media only screen and (min-width:@tabletBreakpoint){
+            width:450px;
+        }
+    }
+}
 .ui.modal.deletion{
     .actions{
         .ui.primary.button{
@@ -21,11 +27,18 @@
     }
 }
 .ui.modal{
+    @media only screen and (min-width:@tabletBreakpoint){
+        width:665px;
+    }
     >.close{
         top:@7px;
         right:@7px;
         opacity:0.5;
         color:@quaternary-text;
+        @media only screen and (max-width:@largestMobileScreen){
+            top:.25rem !important;
+            right:.25rem !important;
+        }
     }
     >.header:not(.ui).signup-header{
         padding-top:@28px;
@@ -58,48 +71,38 @@
     > .content{
         padding-top:@20px;
         &.login-modal{
-            // max-width:404px;
             margin:0 auto;
         }
         &.signup-content{
-            // max-width:548px;
-            // margin:0 auto;
-            padding-top:0;
+            // padding-top:0;
             padding-bottom:@28px;
-            .user-type{
-                height:100%;
-                padding:@14px;
-                border-radius:@defaultBorderRadius * 1.5;
-                border:darken(@light-bg-color, 9%) 1px solid;
-                cursor:pointer;
-                h3{
-                    margin:@7px 0;
-                }
-                p{
-                    // font-family:@regularFont;
-                    font-size:@13px;
-                    color:@fullBlack;
-                }
-                &:hover, &:focus, &.active{
-                    border-color:@theme-primary-darken;
-                    i.icon{
-                        color:@theme-primary-darken;
-                    }
+        }
+        .user-type{
+            height:100%;
+            padding:@14px;
+            border-radius:@defaultBorderRadius * 1.5;
+            border:darken(@light-bg-color, 9%) 1px solid;
+            cursor:pointer;
+            h3{
+                margin:@7px 0;
+            }
+            p{
+                font-size:@13px;
+                color:@fullBlack;
+            }
+            &:hover, &:focus, &.active{
+                border-color:@theme-primary-darken;
+                i.icon{
+                    color:@theme-primary-darken;
                 }
             }
         }
         .ui{
             &.button, &.buttons .button{
-                // letter-spacing:1px;
-                // &:not(.circular){
-                //     border-radius:0;
-                // }
                 &.large{
                     min-width:160px;
                     font-size:@14px;
                 }
-                // &.circular{
-                // }
             }
         }
         a.cancel-link, .button.cancel-link, a.theme-link, .button.theme-link{
@@ -107,9 +110,7 @@
             padding:0;
             display:inline-block;
             background:transparent;
-            // font-family:@regularFont;
             font-size:@16px;
-            // letter-spacing:1px;
             color:@quaternary-text;
             text-transform:none;
         }
@@ -124,14 +125,12 @@
         .display-only input[type=email],
         input[type=tel].display-only,
         input[type=email].display-only{
-            // font-family:@boldFont;
             padding:@14px @20px;
             margin-bottom:@10px;
             font-size:@20px;
             text-align:center;
             border:none;
             border-bottom:@border-light 1px solid;
-            // border-radius:@4px;
             background:@border-light;
         }
         .display-only input[type=tel]:not(:read-only),
@@ -142,35 +141,6 @@
             &:focus{
                 border-color:@theme-primary;
                 outline:none;
-            }
-        }
-        .ui.button.multistep__btn{
-            background:@white;
-            color:@theme-primary;
-            letter-spacing:0;
-            box-shadow:0 0 16px 2px fade(@fullBlack, 15%) !important;
-            margin:0;
-            position:absolute;
-            top:50%;
-            &.disabled{
-                background:@border-light;
-                color:@border-color;
-                opacity:1 !important;
-            }
-            >.icon{
-                width:auto;
-            }
-            &.prev{
-                left:0;
-                transform:translate(-50%, -50%);
-            }
-            &.next{
-                right:0;
-                transform:translate(50%, -50%);
-                &.active{
-                    background:@theme-primary;
-                    color:@white;
-                }
             }
         }
         &.reward-deatils{
@@ -236,6 +206,9 @@
         border-radius:@15px;
         top:1rem;
         right:1rem;
+        @media only screen and (max-width:@largestTabletScreen){
+            color:@quaternary-text;
+        }
     }
     .ui.header{
         border:none;
@@ -287,6 +260,9 @@
     margin:@30px auto;
     padding:@25px @60px;
     background:@lighten-bg-color;
+    @media only screen and (max-width:@largestMobileScreen){
+        padding:@25px;
+    }
 }
 .bank-list{
     padding:@28px 0;

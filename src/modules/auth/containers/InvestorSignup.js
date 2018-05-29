@@ -31,11 +31,10 @@ class InvestorSignup extends Component {
     if (this.props.authStore.canRegister) {
       authActions.register()
         .then(() => {
-          this.props.setAuthWizardStep();
           if (this.props.authStore.newPasswordRequired) {
             this.props.history.push('/change-password');
           } else {
-            this.props.setAuthWizardStep('ConfirmEmailAddress');
+            this.props.history.push('/auth/confirm-email');
           }
         })
         .catch(() => { });
@@ -50,9 +49,9 @@ class InvestorSignup extends Component {
     values.role.value = this.props.authStore.signupFlow.type;
 
     return (
-      <Modal size="mini" open onClose={() => this.props.setAuthWizardStep()}>
+      <Modal size="mini" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
-          <Link to="" onClick={() => this.props.setAuthWizardStep('SignupInitial')} className="back-link"><Icon className="ns-arrow-left" /></Link>
+          <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
           <Header as="h2">
             Sign Up as&nbsp;
             {(this.props.authStore.signupFlow.type === 'investor') ? 'Investor' : 'Business Owner'}
@@ -132,8 +131,7 @@ class InvestorSignup extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          {/* <p className="pull-left"><Link to="forgot-password">Forgot Password?</Link></p> */}
-          <p>Already have an account? <Link to="" onClick={() => this.props.setAuthWizardStep('Login')}>Log in</Link></p>
+          <p>Already have an account? <Link to="/auth/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

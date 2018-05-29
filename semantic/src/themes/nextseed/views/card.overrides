@@ -30,7 +30,7 @@
     }
 }
 .ui.stackable.cards>.card{
-    @media only screen and (max-width : (@tabletBreakpoint - 1px)){
+    @media only screen and (max-width : @largestMobileScreen){
         padding:@32px !important;
     }
 }
@@ -48,26 +48,29 @@
     }
 }
 .ui.card, .ui.cards>.card{
-    .header{
+    .ui.header{
         text-transform:capitalize;
     }
     &.welcome-card{
         >.content{
             padding:@25px;
-            i.icon.pull-left{
-                width:auto;
-                margin:0 1rem 0 0;
-                color:@theme-primary;
+            .item{
+                i.icon{
+                    width:auto;
+                    margin:0 1rem 0 0;
+                    color:@theme-primary;
+                }
+                .header:not(.ui){
+                    margin-top:0;
+                    font-size:@20px;
+                    line-height:@24px;
+                    font-weight:400;
+                    color:@fullBlack;
+                }
             }
             .ui.mini.image{
                 width:54px;
                 margin:0 @18px 0 0;
-            }
-            >.header:not(.ui){
-                // font-family:@boldFont;
-                font-size:@20px;
-                font-weight:400;
-                margin-top:0;
             }
             >.meta{
                 font-family:@pageFont;
@@ -82,14 +85,24 @@
     &.card-spacer{
         padding:@22px;
     }
-    .content .action-meta{
-        display:inline-block;
-        font-size:@12px;
-        vertical-align:top;
-        margin-left:@10px;
-        color:@quaternary-text;
-        >b{
-            color:@fullBlack;
+    .content{
+        .status{
+            margin:0;
+            padding:0.5rem 1rem;
+            display:inline-block;
+        }
+        .action-meta{
+            display:inline-block;
+            font-size:@12px;
+            vertical-align:top;
+            margin-left:@10px;
+            color:@quaternary-text;
+            >b{
+                color:@fullBlack;
+            }
+        }
+        &.padded{
+            padding:@42px;
         }
     }
 }
@@ -111,7 +124,11 @@
     }
     [class*="horizontally padded"].ui.grid{
         .content{
-            padding:@14px 0;
+            padding:@21px;
+            margin:-@14px;
+            + .content{
+                margin-top:@14px;
+            }
             &:not(:last-child){
                 border-bottom:@border-light 1px solid;
             }
@@ -156,9 +173,6 @@
             color:@quaternary-text;
             text-transform:uppercase;
         }
-        // .description p{
-        //     font-family:@boldFont;
-        // }
     }
 }
 .sticky-notification{

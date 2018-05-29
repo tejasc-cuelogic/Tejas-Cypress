@@ -1,39 +1,6 @@
 /*******************************
         Global Overrides
 *******************************/
-
-// @font-face {
-// 	font-family: 'SF Pro Display Regular';
-// 	src: @fallbackSRCRegular;
-// 	src: @srcRegular;
-// 	font-style: normal;
-// 	font-weight: 400;
-// }
-
-// @font-face {
-// 	font-family: 'SF Pro Display Medium';
-// 	src: @fallbackSRCMedium;
-// 	src: @srcMedium;
-// 	font-style: normal;
-// 	font-weight: 500;
-// }
-
-// @font-face {
-// 	font-family: 'SF Pro Display Bold';
-// 	src: @fallbackSRCBold;
-// 	src: @srcBold;
-// 	font-style: normal;
-// 	font-weight: 700;
-// }
-
-// @font-face {
-// 	font-family: 'SF Pro Display Heavy';
-// 	src: @fallbackSRCHeavy;
-// 	src: @srcHeavy;
-// 	font-style: normal;
-// 	font-weight: 900;
-// }
-
 .content-wrapper{
 	min-height:~"calc(100vh - 58px)";
 }
@@ -50,10 +17,10 @@
 .content-spacer{
 	position:relative;
 	padding:@30px @40px;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+	@media only screen and (max-width : @largestSmallMonitor){
 		padding:@20px;
 	}
-	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
 	}
 }
@@ -77,12 +44,11 @@
 	}
 }
 .webcontent-spacer{
-	// padding:@40px @70px @14px;
 	padding:@20px @40px;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+	@media only screen and (max-width : @largestSmallMonitor){
 		padding:@20px;
 	}
-	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
 	}
 }
@@ -119,6 +85,9 @@ h6{
 .mb-half{
 	margin-bottom:@7px !important;
 }
+.mt-30{
+	margin-top:@30px !important;
+}
 .pull-left{
 	float:left !important;
 }
@@ -148,6 +117,13 @@ h6{
 	color:@quaternary-text;
 	margin-bottom:@28px;
 }
+a.link{
+	color:@link-color;
+	&:hover{
+		color:darken(@link-color, 10%);
+	}
+}
+
 a.text-link{
 	color:@tertiary-text;
 	&:hover, &:active, &.active{
@@ -155,34 +131,42 @@ a.text-link{
 	}
 }
 
-//	Admin Page Content Styles	//
+//	Admin Page Content Styles
 
 //	Page Header Styles
 .page-header-section{
-	// min-height:132px;
 	background-color:@secondary-text;
 	position:relative;
 	padding:@20px @40px;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+	@media only screen and (max-width : @largestSmallMonitor){
 		min-height:auto;
 		padding:@20px;
+		padding-left:@60px;
 	}
-	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
+		padding-left:@60px;
 	}
-	h1{
-		// @include fontBold;
+	h1.ui.header{
 		font-size:@30px;
 		line-height:@42px;
 		color:@inverse-text;
-		// font-weight: bold;
+		position:relative;
+		@media only screen and (max-width : @largestSmallMonitor){
+			font-size:@16px;
+			line-height:@22px;
+			text-align:center;
+			padding-right:@30px;
+		}
 		a.back-link{
 			position:absolute;
-			left:-15px;
-			top:-4px;
+			left:-30px;
+			top:0;
 			color:@theme-primary;
 			> i.icon, i.icons{
 				font-size:@14px;
+				line-height:1;
+				vertical-align:middle;
 			}
 			&:hover, &:active, &:focus{
 				color:darken(@theme-primary, 8%);
@@ -190,7 +174,6 @@ a.text-link{
 		}
 	}
 	p{
-		// font-family:@regularFont;
 		color:@inverse-text;
 	}
 	span.filter-count{
@@ -221,15 +204,21 @@ a.text-link{
 		display:block;
 		float:right;
 		height:42px;
-		padding:10px 0;
 		margin-left:@30px;
 		cursor:pointer;
+		@media only screen and (max-width : @largestSmallMonitor){
+			height:22px;
+			margin-left:0;
+		}
 		.icon{
 			font-size:@22px;
 			color:@tertiary-text;
 			color:@white;
 			height:auto;
 			line-height:1;
+			@media only screen and (max-width : @largestSmallMonitor){
+				font-size:@16px;
+			}
 		}
 		span.unread-count{
 			height:18px;
@@ -237,7 +226,6 @@ a.text-link{
 			padding:0 5px;
 			border-radius:10px;
 			font-size:@12px;
-			// font-weight:500;
 			color:@inverse-text;
 			line-height:@18px;
 			display:block;
@@ -246,26 +234,27 @@ a.text-link{
 			position:absolute;
 			right:-6px;
 			bottom:6px;
+			@media only screen and (max-width : @largestSmallMonitor){
+				height:14px;
+				min-width:14px;
+				padding:0 3px;
+				font-size:@10px;
+				line-height:@14px;
+				bottom:0px;
+				right:-2px;
+			}
 		}
 	}
 }
 .search-filters{
 	background-color:@tertiary-text;
 	padding:@14px @40px;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
+	@media only screen and (max-width : @largestSmallMonitor){
 		padding:@7px @20px @14px;
 	}
-	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
+	@media only screen and (max-width : @largestMobileScreen){
 		padding:@7px @10px @14px;
 	}
-	// &.webcontent-spacer{
-	// }
-	// h5{
-	// 	// font-size:0.857142em;
-	// 	font-family:@pageFont;
-	// 	color:@quaternary-text;
-	// 	margin:0 0 @7px;
-	// }
 }
 .filter-meta{
 	background-color:@secondary-text;
@@ -274,18 +263,78 @@ a.text-link{
 .secondary-menu{
 	background-color:@tertiary-text;
 	padding:0 @40px;
+	@media only screen and (max-width : @largestLargeMonitor){
+		padding:0 @20px;
+	}
+	@media only screen and (max-width : @largestMobileScreen){
+		padding:0 @20px @14px;
+		background-color:@secondary-text;
+		.ui.selection.dropdown{
+			padding:@11px;
+			padding-right:@30px;
+			background-color:@tertiary-text;
+			border:none;
+			border-radius:@6px;
+			color:@white;
+			z-index:9;
+			.dropdown.icon{
+				padding-right:@12px;
+			}
+			.menu{
+				border:none;
+				background-color:@tertiary-text;
+				.item{
+					padding:@11px !important;
+					border:none;
+					color:@quaternary-text;
+					&.selected{
+						color:@white;
+						font-weight:400;
+					}
+				}
+			}
+			&.active .menu{
+				margin:1px 0 0;
+				width:100%;
+				min-width:100%;
+			}
+			&.visible>.text:not(.default){
+				color:@white;
+			}
+		}
+	}
 }
 
 .top-cta-section{
-	height:104px;
-	margin-bottom:@50px;
-	background:@tertiary-text;
+	// height:104px;
+	padding:@20px @40px;
+	position:relative;
+	// margin-bottom:@50px;
+	// background:@tertiary-text;
+	@media only screen and (max-width : @largestSmallMonitor){
+		padding:@20px;
+	}
+	@media only screen and (max-width : @largestMobileScreen){
+		padding:@20px @10px;
+	}
+	&:before{
+		content:"";
+		width:100%;
+		height:104px;
+		background-color:@tertiary-text;
+		position:absolute;
+		top:0;
+		left:0;
+	}
 	.sticky-notification{
 		position:relative;
-		width:50%;
-		left:@40px;
-		top:@30px;
 		z-index:9;
+		@media only screen and (min-width : @largeMonitorBreakpoint){
+			width:60%;
+		}
+		@media only screen and (max-width : @largestTabletScreen){
+			width:100%;
+		}
 	}
 }
 
@@ -430,7 +479,6 @@ a.text-link{
 	> div{
 		min-height:54px;
 		padding:0.7em 1em;
-		// font-family:@regularFont;
 		border-radius:@absoluteBorderRadius;
 		button{
 			font-size:@12px;
@@ -472,7 +520,6 @@ a.disabled, a.disabled:hover, a.disabled:focus{
 }
 //	Meta Data
 .meta-data{
-	// font-family:@regularFont;
 	font-size:@13px;
 	font-weight:400;
 	color:@quaternary-text;
@@ -500,15 +547,20 @@ a.disabled, a.disabled:hover, a.disabled:focus{
 // dl dt horizontal
 dl.dl-horizontal{
 	margin:0;
+	&:not(:last-child){
+		margin-bottom:@30px;
+	}
 	dt{
 		float:left;
-		width:170px;
+		width:140px;
 		font-weight:700;
 	}
 	dd{
-		margin-left:180px;
+		margin-left:150px;
 		margin-bottom:@10px;
 		color:@quaternary-text;
+		overflow:hidden;
+		text-overflow:ellipsis;
 		&:last-of-type{
 			margin-bottom:0;
 		}
@@ -525,7 +577,6 @@ ol.progtrckr{
 		margin:0 @10px @14px;
 		min-width:60px;
 		display:inline-block;
-		// font-family:@boldFont;
 		font-size:@13px;
 		line-height:2rem;
 		text-align:center;
@@ -571,17 +622,6 @@ ol.progtrckr{
 	}
 }
 
-@media (max-width:650px){
-    .progtrckr li span{
-		display:none;
-    }
-}
-@media (max-width:650px){
-    .progtrckr em{
-		display:inline;
-    }
-}
-  
 .update-details{
 	.ui.embed{
 		margin-bottom:@28px;
@@ -598,7 +638,6 @@ ol.progtrckr{
 		.investment-progress{
 			content:"";
 			height:3px;
-			// width:58%;
 			background:lighten(@link-color, 20%);
 			display:block;
 			position:absolute;
@@ -699,5 +738,24 @@ svg:not(:root).recharts-surface{
 			color:@fullBlack;
 			vertical-align:top;
 		}
+	}
+}
+
+.knowledge-details{
+	position:relative;
+	.button.circular{
+		position:absolute;
+		right:0;
+		top:50%;
+		transform:translate(0%, 0%);
+	}
+}
+
+.welcome-packet{
+	.pdf-viewer{
+		height:~"calc(100vh - 184px)";
+		width:100%;
+		max-width:1000px;
+		margin:0 auto;
 	}
 }

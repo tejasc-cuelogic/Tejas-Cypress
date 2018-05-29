@@ -5,31 +5,26 @@ import Home from './public/home/containers/Home';
 import Invest from './public/invest/containers/Invest';
 import Offering from './public/offering/containers/Offering';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
+import BusinessSignup from './public/businessSignup/containers/Signup';
+import Business from './public/business/containers/Business';
 import Edgar from './edgar/containers/Business';
 import ChangePassword from '../modules/auth/ChangePassword';
-import Confirm from '../modules/auth/Confirm';
 import EdgarForm from '../modules/edgar/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
-import Login from '../modules/auth/Login';
-import Register from '../modules/auth/Register';
 import ResetPassword from '../modules/auth/ResetPassword';
-import Settings from './../modules/settings/containers/Settings';
-import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
-import Banking from './banking/containers/Banking';
 import Base from './basemodule/Base';
-import Messages from './messages/containers/Messages';
+import Messages from './private/messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
-import Users from './users/containers/Users';
-import UserDetails from './users/containers/UserDetails';
+import Users from './private/users/containers/Users';
+import UserDetails from './private/users/containers/UserDetails';
+import ProfileSettings from './private/users/containers/ProfileSettings';
 import XmlForm from './edgar/containers/XmlForm';
 import BusinessDetails from './edgar/containers/BusinessDetails';
 import Summary from '../modules/summary/containers/Summary';
-import RewardsWallet from '../modules/rewardsWallet/containers/RewardsWallet';
-import Referrals from '../modules/referrals/containers/Referrals';
-import Education from '../modules/education/containers/Education';
+import RewardsWallet from './private/rewardsWallet/containers/RewardsWallet';
+import Referrals from './private/referrals/containers/Referrals';
 import AccountDetails from './private/accountDetails/containers/AccountDetails';
-import ProfileSettings from './private/profileSettings/containers/ProfileSettings';
-import Business from '../modules/business/containers/Business';
+import Education from './private/education/containers/Education';
 import {
   AdminAuthorization,
   BusinessAuthorization,
@@ -80,19 +75,8 @@ export const publicRoutes = [
     component: Offering,
   },
   {
-    path: '/confirm',
-    component: Confirm,
-    exact: true,
-  },
-  {
-    path: '/login',
-    component: Login,
-    exact: true,
-  },
-  {
-    path: '/register',
-    component: Register,
-    exact: true,
+    path: '/business',
+    component: Business,
   },
   {
     path: '/forgot-password',
@@ -109,15 +93,14 @@ export const publicRoutes = [
     component: ChangePassword,
     exact: true,
   },
+  {
+    path: '/business-application',
+    component: BusinessSignup,
+    exact: true,
+  },
 ];
 
 export const privateRoutes = [
-  {
-    path: '/app/business',
-    component: Business,
-    auth: BusinessAuthorization,
-    exact: true,
-  },
   {
     path: '/app/edgar/:businessId/edgar/:filingId',
     component: EdgarForm,
@@ -150,6 +133,12 @@ export const privateRoutes = [
     exact: true,
   },
   {
+    path: '/app/manage/:entity',
+    component: Base,
+    auth: BusinessAuthorization,
+    exact: true,
+  },
+  {
     path: '/app/users/:userId/:section',
     component: UserDetails,
     auth: AdminAuthorization,
@@ -165,23 +154,8 @@ export const privateRoutes = [
     auth: AdminAuthorization,
   },
   {
-    path: '/app/settings',
-    component: Settings,
-    auth: UserAuthorization,
-  },
-  {
     path: '/app/messages',
     component: Messages,
-    auth: UserAuthorization,
-  },
-  {
-    path: '/app/bonus-reward-fulfillment',
-    component: BonusRewardFulfillment,
-    auth: UserAuthorization,
-  },
-  {
-    path: '/app/banking',
-    component: Banking,
     auth: UserAuthorization,
   },
   {
@@ -205,10 +179,10 @@ export const privateRoutes = [
     path: '/app/profile-settings',
     exact: false,
     component: ProfileSettings,
-    auth: InvestorAuthorization,
+    auth: UserAuthorization,
   },
   {
-    path: '/app/rewardswallet',
+    path: '/app/rewards-wallet',
     component: RewardsWallet,
     auth: InvestorAuthorization,
   },
@@ -220,7 +194,7 @@ export const privateRoutes = [
   {
     path: '/app/education',
     component: Education,
-    auth: InvestorAuthorization,
+    auth: UserAuthorization,
   },
   {
     path: '/app/page/:pageId',

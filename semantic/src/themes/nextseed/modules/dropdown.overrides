@@ -106,28 +106,6 @@
 .ui.dropdown.inverted>.text{
 	color:@white;
 }
-// .ui.multiple.dropdown{
-// 	&.inverted>.ui.label{
-// 		color:@white;
-// 	}
-// 	>.ui.label{
-// 		padding:@5px 0;
-// 		box-shadow:none;
-// 		background:transparent;
-// 		font-weight:400;
-// 		color:@secondary-text;
-// 		>.delete.icon{
-// 			display:none;
-// 		}
-// 		&:after{
-// 			content:",";
-// 			padding-left:@1px;
-// 		}
-// 		&:last-of-type:after{
-// 			content:"";
-// 		}
-// 	}
-// }
 .notification-box{
 	.ui.dropdown .icon.dropdown{
 		margin:0 5px 0 0;
