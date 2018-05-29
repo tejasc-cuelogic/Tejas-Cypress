@@ -16,3 +16,8 @@
         border-color:@theme-primary;
     }
 }
+.field.error{
+    .ui.action.input>input ~ .ui.button.link-button{
+        border-color:@highlight-primary;
+    }
+}

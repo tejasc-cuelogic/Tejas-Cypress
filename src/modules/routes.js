@@ -12,8 +12,6 @@ import ChangePassword from '../modules/auth/ChangePassword';
 import EdgarForm from '../modules/edgar/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
 import ResetPassword from '../modules/auth/ResetPassword';
-import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
-import Banking from './banking/containers/Banking';
 import Base from './basemodule/Base';
 import Messages from './private/messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
@@ -161,16 +159,6 @@ export const privateRoutes = [
     auth: UserAuthorization,
   },
   {
-    path: '/app/bonus-reward-fulfillment',
-    component: BonusRewardFulfillment,
-    auth: UserAuthorization,
-  },
-  {
-    path: '/app/banking',
-    component: Banking,
-    auth: UserAuthorization,
-  },
-  {
     path: '/app/dashboard',
     component: Dashboard,
     exact: true,
@@ -191,7 +179,7 @@ export const privateRoutes = [
     path: '/app/profile-settings',
     exact: false,
     component: ProfileSettings,
-    auth: InvestorAuthorization,
+    auth: UserAuthorization,
   },
   {
     path: '/app/rewards-wallet',

@@ -49,7 +49,7 @@ class InvestorSignup extends Component {
     values.role.value = this.props.authStore.signupFlow.type;
 
     return (
-      <Modal size="mini" open onClose={this.props.history.goBack}>
+      <Modal size="mini" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
           <Header as="h2">
