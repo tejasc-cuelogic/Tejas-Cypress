@@ -179,7 +179,7 @@ export const privateRoutes = [
     path: '/app/profile-settings',
     exact: false,
     component: ProfileSettings,
-    auth: InvestorAuthorization,
+    auth: UserAuthorization,
   },
   {
     path: '/app/rewards-wallet',
