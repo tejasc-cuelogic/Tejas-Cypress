@@ -57,6 +57,7 @@ export default class ProfileData extends Component {
                   mask="999-999-9999"
                   changed={updateProfileInfoChange}
                   clickonaction={this.navigateToNewPhoneNumber}
+                  readOnly
                 />
                 <FormInput
                   action={{
@@ -65,6 +66,7 @@ export default class ProfileData extends Component {
                   name="email"
                   fielddata={updateProfileInfo.fields.email}
                   changed={updateProfileInfoChange}
+                  readOnly
                 />
                 <Header as="h4">Mailing Address</Header>
                 <Form.Input fluid label="Residendial Street" placeholder="Residendial Street" value="123, East Street, Place" />
