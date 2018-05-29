@@ -50,9 +50,9 @@ class Summary extends Component {
           }
         >
           <Header as="h3">Welcome to NextSeed!</Header>
-          <Grid stackable>
+          <Grid>
             <Grid.Row>
-              <Grid.Column computer={8} largeScreen={8} widescreen={5}>
+              <Grid.Column widescreen={5} largeScreen={8} computer={8} tablet={16} mobile={16}>
                 <Card fluid raised className="welcome-card">
                   <Card.Content>
                     <List divided relaxed="very">

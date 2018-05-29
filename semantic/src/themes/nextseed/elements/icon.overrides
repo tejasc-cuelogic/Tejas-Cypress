@@ -1027,10 +1027,13 @@ i.icon[class*="ns-"]{
     content:@ns-bag;
 }
 .ns-bar:before{
-    content:@ns-bar; 
+    content:@ns-bar;
 }
 .ns-bar-chart:before{
     content:@ns-bar-chart;
+}
+.ns-beauty-spa:before{
+    content:@ns-beauty-spa;
 }
 .ns-bell:before{
     content:@ns-bell;
@@ -1093,16 +1096,13 @@ i.icon[class*="ns-"]{
     content:@ns-circle-line;
 }
 .ns-close:before{
-    content:@ns-close; 
+    content:@ns-close;
 }
 .ns-close-circle:before{
     content:@ns-close-circle;
 }
 .ns-close-light:before{
-    content:@ns-close-light; 
-}
-.ns-close-light:before{
-    content:@ns-close-light; 
+    content:@ns-close-light;
 }
 .ns-coments-info:before{
     content:@ns-coments-info;
@@ -1112,6 +1112,9 @@ i.icon[class*="ns-"]{
 }
 .ns-compas:before{
     content:@ns-compas;
+}
+.ns-corporation:before{
+    content:@ns-corporation;
 }
 .ns-credit-card:before{
     content:@ns-credit-card;
@@ -1135,13 +1138,16 @@ i.icon[class*="ns-"]{
     content:@ns-entity;
 }
 .ns-entity-line:before{
-    content:@ns-entity-line; 
-}
-.ns-entity-line:before{
-    content:@ns-entity-line; 
+    content:@ns-entity-line;
 }
 .ns-envelope:before{
     content:@ns-envelope;
+}
+.ns-equipment-purchase:before{
+    content:@ns-equipment-purchase;
+}
+.ns-expand-business:before{
+    content:@ns-expand-business;
 }
 .ns-facebook:before{
     content:@ns-facebook;
@@ -1149,20 +1155,32 @@ i.icon[class*="ns-"]{
 .ns-file:before{
     content:@ns-file;
 }
+.ns-first-aid:before{
+    content:@ns-first-aid;
+}
+.ns-fitness2:before{
+    content:@ns-fitness2;
+}
 .ns-fitness:before{
-    content:@ns-fitness; 
+    content:@ns-fitness;
 }
 .ns-food:before{
     content:@ns-food;
 }
+.ns-food-light:before{
+    content:@ns-food-light;
+}
+.ns-franchise:before{
+    content:@ns-franchise;
+}
 .ns-help:before{
-    content:@ns-help; 
+    content:@ns-help;
 }
 .ns-help-circle:before{
     content:@ns-help-circle;
 }
 .ns-hospitality:before{
-    content:@ns-hospitality; 
+    content:@ns-hospitality;
 }
 .ns-image:before{
     content:@ns-image;
@@ -1171,13 +1189,13 @@ i.icon[class*="ns-"]{
     content:@ns-individual;
 }
 .ns-individual-line:before{
-    content:@ns-individual-line; 
-}
-.ns-individual-line:before{
-    content:@ns-individual-line; 
+    content:@ns-individual-line;
 }
 .ns-info-circle:before{
     content:@ns-info-circle;
+}
+.ns-inventory:before{
+    content:@ns-inventory;
 }
 .ns-investor:before{
     content:@ns-investor;
@@ -1186,10 +1204,7 @@ i.icon[class*="ns-"]{
     content:@ns-ira;
 }
 .ns-ira-line:before{
-    content:@ns-ira-line; 
-}
-.ns-ira-line:before{
-    content:@ns-ira-line; 
+    content:@ns-ira-line;
 }
 .ns-line-chart:before{
     content:@ns-line-chart;
@@ -1203,14 +1218,32 @@ i.icon[class*="ns-"]{
 .ns-long-arrow-left:before{
     content:@ns-long-arrow-left;
 }
+.ns-new-business:before{
+    content:@ns-new-business;
+}
+.ns-new-location:before{
+    content:@ns-new-location;
+}
+.ns-new-product:before{
+    content:@ns-new-product;
+}
 .ns-nextseed-icon:before{
     content:@ns-nextseed-icon;
 }
 .ns-nextseed-icon-line:before{
     content:@ns-nextseed-icon-line;
 }
+.ns-off-shoot-business:before{
+    content:@ns-off-shoot-business;
+}
 .ns-offering:before{
     content:@ns-offering;
+}
+.ns-paper-plane:before{
+    content:@ns-paper-plane;
+}
+.ns-partnership:before{
+    content:@ns-partnership;
 }
 .ns-pdf:before{
     content:@ns-pdf;
@@ -1218,11 +1251,23 @@ i.icon[class*="ns-"]{
 .ns-pencil:before{
     content:@ns-pencil;
 }
+.ns-proprietor:before{
+    content:@ns-proprietor;
+}
+.ns-real-estate:before{
+    content:@ns-real-estate;
+}
+.ns-renovations:before{
+    content:@ns-renovations;
+}
 .ns-replay:before{
     content:@ns-replay;
 }
+.ns-restructure-debt:before{
+    content:@ns-restructure-debt;
+}
 .ns-rss-feed:before{
-    content:@ns-rss-feed; 
+    content:@ns-rss-feed;
 }
 .ns-search:before{
     content:@ns-search;
@@ -1233,8 +1278,14 @@ i.icon[class*="ns-"]{
 .ns-statement:before{
     content:@ns-statement;
 }
+.ns-store:before{
+    content:@ns-store;
+}
 .ns-tags:before{
     content:@ns-tags;
+}
+.ns-technology:before{
+    content:@ns-technology;
 }
 .ns-times-box:before{
     content:@ns-times-box;
@@ -1249,13 +1300,13 @@ i.icon[class*="ns-"]{
     content:@ns-twitter;
 }
 .ns-unlock:before{
-    content:@ns-unlock; 
+    content:@ns-unlock;
 }
 .ns-upload:before{
     content:@ns-upload;
 }
 .ns-user:before{
-    content:@ns-user; 
+    content:@ns-user;
 }
 .ns-users:before{
     content:@ns-users;
@@ -1266,5 +1317,6 @@ i.icon[class*="ns-"]{
 .ns-wallet:before{
     content:@ns-wallet;
 }
-  
-  
+.ns-working-capital:before{
+    content:@ns-working-capital;
+}

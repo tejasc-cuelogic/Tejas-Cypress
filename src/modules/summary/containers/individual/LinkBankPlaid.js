@@ -49,10 +49,10 @@ export default class LinkBankPlaid extends Component {
             </Grid>
           }
           {
-            <Grid columns={3}>
+            <Grid centered>
               {
                 _.map(bankListing, bankData => (
-                  <Grid.Column key={bankData.institution_id}>
+                  <Grid.Column key={bankData.institution_id} computer={5} tablet={5} mobile={8}>
                     <Link
                       as="a"
                       className="bank-link"
@@ -70,7 +70,7 @@ export default class LinkBankPlaid extends Component {
               }
               {typeof bankListing === 'undefined' &&
                 _.map(IND_BANK_LIST, bankData => (
-                  <Grid.Column key={bankData.institutionID}>
+                  <Grid.Column key={bankData.institutionID} computer={5} tablet={5} mobile={8}>
                     <Link
                       as="a"
                       className="bank-link"
@@ -79,7 +79,7 @@ export default class LinkBankPlaid extends Component {
                     >
                       {/* eslint-disable import/no-dynamic-require */}
                       {/* eslint-disable global-require */}
-                      <Image centered size="large" src={require(`../../../../assets/images/banks/${bankData.institutionID}.png`)} />
+                      <Image centered src={require(`../../../../assets/images/banks/${bankData.institutionID}.png`)} />
                     </Link>
                   </Grid.Column>
                 ))
