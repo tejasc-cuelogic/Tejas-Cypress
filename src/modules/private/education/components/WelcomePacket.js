@@ -7,7 +7,7 @@ const WelcomePacket = () => (
       <Grid.Row>
         <Grid.Column className="welcome-packet">
           <div className="pdf-viewer">
-            <object width="100%" height="100%" data="http://www.africau.edu/images/default/sample.pdf" type="application/pdf">failed to load..</object>
+            <object width="100%" height="100%" data="https://cdn.uclouvain.be/public/Exports%20reddot/core/documents/coredp2015_15web.pdf" type="application/pdf">failed to load..</object>
           </div>
         </Grid.Column>
       </Grid.Row>
