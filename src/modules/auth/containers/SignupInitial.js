@@ -13,7 +13,7 @@ class signupInitial extends Component {
     const userTypes = USER_TYPES_META.slice();
     const selectedType = this.props.authStore.signupFlow.type;
     return (
-      <Modal size="tiny" open onClose={this.props.history.goBack}>
+      <Modal size="tiny" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">How can NextSeed Help you?</Header>
           <p>Do you want to invest or apply for funding?</p>

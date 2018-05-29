@@ -38,7 +38,6 @@ export class NavItems extends Component {
   state = { active: '' };
   navClick = (e, { name }) => {
     this.setState({ active: name });
-    console.log(e.target, 'e.target');
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
