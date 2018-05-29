@@ -9,6 +9,9 @@ import { FormRadioGroup } from '../../../../theme/form/FormElements';
 @observer
 class Signup extends Component {
   render() {
+    const {
+      BUSINESS_APP_FRM, businessAppEleChange,
+    } = this.props.newBusinessStore;
     return (
       <Segment vertical className="content">
         <Grid container>
@@ -30,8 +33,9 @@ class Signup extends Component {
                 </Header.Subheader>
               </Header>
               <FormRadioGroup
-                fielddata={this.props.newBusinessStore.businessType}
+                fielddata={BUSINESS_APP_FRM.fields.businessType}
                 name="businessType"
+                changed={businessAppEleChange}
                 containerclassname="button-radio"
               />
               <Divider section className="doubled" />
