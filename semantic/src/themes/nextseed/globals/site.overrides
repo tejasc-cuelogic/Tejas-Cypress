@@ -774,10 +774,16 @@ svg:not(:root).recharts-surface{
 			}
 		}
 	}
-	.ui.header{
+	>.ui.header{
 		margin-bottom:@42px;
 		.sub.header{
 			margin-top:@10px;
+		}
+	}
+	.field-wrap{
+		padding:@40px;
+		@media only screen and (max-width:@largestMobileScreen){
+			padding:@25px;
 		}
 	}
 }

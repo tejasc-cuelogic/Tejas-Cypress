@@ -12,13 +12,13 @@
 /* Checkmark */
 .ui.checkbox label:after,
 .ui.checkbox .box:after {
-	font-family: 'nextseed';
+	font-family: 'Checkbox';
 }
 
 /* Checked */
 .ui.checkbox input:checked ~ .box:after,
 .ui.checkbox input:checked ~ label:after {
-	content: '\e94b';
+	content: '\e800';
 }
 
 /* Indeterminate */
@@ -59,7 +59,7 @@
 }
 
 .iconic-checkbox{
-	margin:-@7px;
+	margin:@14px -@7px;
 	display:inline-block;
 	.ui.checkbox{
 		margin:@7px;
