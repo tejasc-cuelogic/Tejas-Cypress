@@ -126,4 +126,15 @@ export const BUSINESS_MODEL = {
     rule: 'required',
     placeHolder: 'e.g. 525,000',
   },
+  businessHelp: {
+    value: 'newbusiness',
+    values: [
+      { label: 'Launch New Business', icon: 'ns-new-business', value: 'newbusiness' },
+      { label: 'Open Franchise', icon: 'ns-franchise', value: 'openfranchise' },
+      { label: 'Expand/Upgrade Existing Business', icon: 'ns-expand-business', value: 'expandbusiness' },
+      { label: 'Create Off-shoot of Existing Business', icon: 'ns-off-shoot-business', value: 'createoffshoot' },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
 };

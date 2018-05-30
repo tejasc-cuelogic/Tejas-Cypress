@@ -9,3 +9,4 @@ export { default as FormDatePicker } from './FormDatePicker';
 export { default as MaskedInput } from './MaskedInput';
 export { default as AutoComplete } from './AutoComplete';
 export { default as FormTextarea } from './FormTextarea';
+export { default as FormCheckbox } from './FormCheckbox';
