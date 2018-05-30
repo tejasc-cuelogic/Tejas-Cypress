@@ -10,19 +10,8 @@ import App from './App';
 import * as stores from './stores/stores';
 
 /* eslint-disable no-undef */
-Raven.config('https://7e14162a1a8d40d4a1aa52907507b6c7@sentry.io/1215344').install();
+Raven.config(process.env.REACT_APP_SENTRY_URL).install();
 
-initApm({
-
-  // Set required service name (allowed characters: a-z, A-Z, 0-9, -, _, and space)
-  serviceName: 'ns-client',
-
-  // Set custom APM Server URL (default: http://localhost:8200)
-  serverUrl: 'http://35.174.107.218:8200',
-
-  // Set service version (required for sourcemap feature)
-  serviceVersion: '',
-});
 // For easier debugging
 window.APP_STATE = stores;
 

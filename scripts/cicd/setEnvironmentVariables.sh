@@ -39,6 +39,8 @@ function settingEnv(){
 	REACT_APP_PLAID_ENV=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/plaid\/env/ { print $3 }')
 	sed -i.bak "s/^\(REACT_APP_PLAID_ENV=\).*/\1${REACT_APP_PLAID_ENV}/" .env
 
+	REACT_APP_SENTRY_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/sentry\/url/ { print $3 }')
+	sed -i.bak "s/^\(REACT_APP_SENTRY_URL=\).*/\1${REACT_APP_SENTRY_URL}/" .env
 
 	cat .env
 }
