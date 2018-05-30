@@ -94,7 +94,7 @@ class IndividualAccountStore {
             this.setInvestorAccId(result.data.createInvestorAccount.accountId);
           }
           if (formStatus === 'submit') {
-            Helper.toast('Entity account created successfully.', 'success');
+            Helper.toast('Individual account created successfully.', 'success');
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           }

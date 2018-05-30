@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Header, Table, Button, Item, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
@@ -7,10 +8,14 @@ import Helper from '../../../../helper/utility';
 import ListErrors from '../../../../theme/common/ListErrors';
 
 @inject('entityAccountStore', 'accountStore', 'uiStore')
+@withRouter
 @observer
 export default class Summary extends Component {
   handleCreateAccount = () => {
     this.props.entityAccountStore.createAccount('Summary', 'submit');
+    if (!this.props.uiStore.errors) {
+      this.props.history.push('/app/dashboard');
+    }
   }
   render() {
     const {

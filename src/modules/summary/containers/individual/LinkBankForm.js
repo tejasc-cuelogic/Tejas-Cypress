@@ -21,6 +21,7 @@ export default class LinkBankForm extends Component {
   render() {
     const { errors } = this.props.uiStore;
     const { formLinkBankManually, linkBankManuallyChange } = this.props.accountStore;
+    console.log(formLinkBankManually);
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>

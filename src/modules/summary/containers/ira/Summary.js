@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -6,10 +7,14 @@ import Helper from '../../../../helper/utility';
 import ListErrors from '../../../../theme/common/ListErrors';
 
 @inject('iraAccountStore', 'uiStore')
+@withRouter
 @observer
 export default class Summary extends Component {
   handleCreateAccount = () => {
     this.props.iraAccountStore.createAccount('Summary', 'submit');
+    if (!this.props.uiStore.errors) {
+      this.props.history.push('/app/dashboard');
+    }
   }
   render() {
     const {

@@ -190,14 +190,8 @@ class EntityAccountStore {
 
   @computed
   get isValidEntityForm() {
-    if (accountStore.bankLinkInterface === 'form') {
-      return this.formFinInfo.meta.isValid && this.formGeneralInfo.meta.isValid
-      && this.formEntityInfo.meta.isValid && this.formPersonalInfo.meta.isValid &&
-      accountStore.isValidLinkBankAccountForm;
-    }
     return this.formFinInfo.meta.isValid && this.formGeneralInfo.meta.isValid
-      && this.formEntityInfo.meta.isValid && this.formPersonalInfo.meta.isValid &&
-      accountStore.isValidLinkBankPlaid;
+      && this.formEntityInfo.meta.isValid && this.formPersonalInfo.meta.isValid;
   }
 
   @computed
@@ -234,11 +228,15 @@ class EntityAccountStore {
         },
       },
     };
-    if (accountStore.bankLinkInterface === 'list') {
-      if (!_.isEmpty(accountStore.plaidBankDetails)) {
-        const plaidBankDetails = _.omit(accountStore.plaidBankDetails, '__typename');
-        payload.bankDetails = plaidBankDetails;
-      }
+    if (!_.isEmpty(accountStore.plaidBankDetails)) {
+      const plaidBankDetails = _.omit(accountStore.plaidBankDetails, '__typename');
+      payload.bankDetails = plaidBankDetails;
+    } else {
+      const plaidBankDetails = {
+        accountNumber: accountStore.formLinkBankManually.fields.accountNumber.value,
+        routingNumber: accountStore.formLinkBankManually.fields.routingNumber.value,
+      };
+      payload.bankDetails = plaidBankDetails;
     }
 
     return payload;
@@ -358,7 +356,7 @@ class EntityAccountStore {
             resolve(result);
           })
           .catch((err) => {
-            uiStore.setErrors(err);
+            uiStore.setErrors(this.simpleErr(err));
             reject(err);
           })
           .finally(() => {
@@ -411,6 +409,18 @@ class EntityAccountStore {
           return this.formFormationDocuments.fields[f];
         });
         this.onFieldChange('formFormationDocuments');
+        if (account.accountDetails.bankDetails.plaidItemId) {
+          const { accountNumber, routingNumber } = account.accountDetails.bankDetails;
+          accountStore.formLinkBankManually.fields.accountNumber.value = accountNumber;
+          accountStore.formLinkBankManually.fields.routingNumber.value = routingNumber;
+        } else {
+          Object.keys(accountStore.formLinkBankManually.fields).map((f) => {
+            const { accountDetails } = account;
+            accountStore.formLinkBankManually.fields[f].value = accountDetails.bankDetails[f];
+            return accountStore.formLinkBankManually.fields[f];
+          });
+          accountStore.onFieldChange('formLinkBankManually');
+        }
         if (!this.formFinInfo.meta.isValid) {
           this.setStepToBeRendered(0);
         } else if (!this.formGeneralInfo.meta.isValid) {
@@ -430,6 +440,12 @@ class EntityAccountStore {
       }
     }
   }
+
+  simpleErr = err => ({
+    statusCode: err.statusCode,
+    code: err.code,
+    message: err.message,
+  });
 }
 
 export default new EntityAccountStore();

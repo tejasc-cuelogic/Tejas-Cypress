@@ -173,6 +173,9 @@ class IraAccountStore {
   /* eslint-disable consistent-return */
   @action
   createAccount = (currentStep, formStatus = 'draft') => {
+    if (formStatus === 'submit') {
+      this.setFormStatus('submit');
+    }
     const accountType = _.find(
       this.formAccTypes.fields.iraAccountType.values,
       { value: this.formAccTypes.fields.iraAccountType.value },
@@ -211,10 +214,6 @@ class IraAccountStore {
         break;
     }
     if (isValidCurrentStep) {
-      if (formStatus === 'submit') {
-        accountAttributes.iraAccountType = accountType.label.toLowerCase();
-        accountAttributes.fundingType = this.getFundingType(fundingOption.label.toLowerCase());
-      }
       uiStore.setProgress();
       userDetailsStore.getUser(userStore.currentUser.sub);
       let mutation = createAccount;
