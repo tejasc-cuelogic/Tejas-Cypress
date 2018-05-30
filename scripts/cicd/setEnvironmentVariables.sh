@@ -10,9 +10,6 @@ if [ "$environment" = "" ]; then
 	exit 1
 fi 
 aws ssm get-parameters-by-path --recursive --path "/ns-client/" --region $region --output json| jq -r '.Parameters| .[] | .Name + " = " + .Value +""  ' > Env.txt
-
-cat Env.txt
-
 function settingEnv(){
 	
 	REACT_APP_AWS_REGION=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/aws\/region/ { print $3 }')
