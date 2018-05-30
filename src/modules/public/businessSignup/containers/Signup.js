@@ -252,6 +252,63 @@ class Signup extends Component {
             </Form>
           </Grid.Column>
         </Grid>
+        <Divider section />
+        <Grid container>
+          <Grid.Column className="issuer-signup">
+            <Icon className="ns-paper-plane" size="huge" color="green" />
+            <Header as="h1">Thank you for completing the pre-qualification form</Header>
+            <p>
+              <b>Unfortunately, NextSeed is currently unable to help your business at this time.</b>
+            </p>
+            <p>
+              We`ll update you if anything changes in the future. In the meantime, if you have
+              any questions, you can contact us at <Link to="/" className="link"><b>apply@nextseed.com</b></Link> or<br />
+              check out our <Link to="/" className="link"><b>Borrow page</b></Link> or <Link to="/" className="link"><b>FAQ</b></Link>
+              section for more information on our general business requirements.
+            </p>
+            <Divider section hidden />
+            <Button as={Link} to="/" size="large" color="green" className="very relaxed">Return to Home Page</Button>
+          </Grid.Column>
+        </Grid>
+        <Divider section />
+        <Grid container>
+          <Grid.Column className="issuer-signup">
+            <Icon className="ns-paper-plane" size="huge" color="green" />
+            <Header as="h1">Congratulations!</Header>
+            <p>
+              <b>You have been pre-qualified for a NextSeed campaign.</b>
+            </p>
+            <p>
+              Thanks for submitting Tstbsn`s application, Jane Doee! A NextSeed representative
+              will be reaching out to you shortly.<br />
+              In the meantime, please set up a user account to continue with your application.
+            </p>
+            <Divider section hidden />
+            <Form>
+              <Grid>
+                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+                  <div className="field-wrap">
+                    <FormInput
+                      name="emailAddress"
+                      value={fields.emailAddress.value}
+                      fielddata={fields.emailAddress}
+                      changed={businessAppEleChange}
+                    />
+                    <FormInput
+                      type="password"
+                      name="password"
+                      value={fields.password.value}
+                      fielddata={fields.password}
+                      changed={businessAppEleChange}
+                    />
+                  </div>
+                  <Divider hidden />
+                  <Button size="large" color="green" className="very relaxed">Continue</Button>
+                </Grid.Column>
+              </Grid>
+            </Form>
+          </Grid.Column>
+        </Grid>
       </Segment>
     );
   }
