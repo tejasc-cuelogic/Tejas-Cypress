@@ -10,6 +10,7 @@ import * as stores from './stores/stores';
 
 /* eslint-disable no-undef */
 if (process.env.REACT_APP_SENTRY_ENV) {
+  console.log('Enable sentry::env', process.env.REACT_APP_SENTRY_ENV);
   Raven.config(process.env.REACT_APP_SENTRY_URL, {
     environment: process.env.REACT_APP_SENTRY_ENV,
   }).install();
