@@ -12,7 +12,7 @@ import validationActions from '../../../actions/validation';
 @observer
 class InvestorSignup extends Component {
   componentWillMount() {
-    this.props.uiStore.clearErrors();
+    // this.props.uiStore.clearErrors();
     // this.props.authStore.reset();
   }
 
