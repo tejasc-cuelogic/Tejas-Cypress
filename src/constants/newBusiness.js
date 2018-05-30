@@ -40,16 +40,18 @@ export const BUSINESS_PRE_QUALIFICATION = {
     label: 'How many years of related industry experience does your team have?',
     error: undefined,
     rule: 'required|numeric',
+    maxLength: 2,
     placeHolder: 'e.g. 5',
   },
   estCreditScore: {
-    value: '', label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700',
+    value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700',
   },
   projectCost: {
-    value: '', label: 'What’s the total project cost?', error: undefined, rule: 'required', placeHolder: 'e.g. 100,000',
+    value: '', maxLength: 16, label: 'What’s the total project cost?', error: undefined, rule: 'required', placeHolder: 'e.g. 100,000',
   },
   raiseRequired: {
     value: '',
+    maxLength: 16,
     label: 'How much do you need to raise on NextSeed?',
     error: undefined,
     rule: 'required',
@@ -69,7 +71,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. 525,000',
   },
   industryType: {
-    value: 'fashionmerchandising',
+    value: [],
     values: [
       { label: 'Fashion & Merchandising', icon: 'ns-store', value: 'fashionmerchandising' },
       { label: 'Beauty & Spa', icon: 'ns-beauty-spa', value: 'beautyspa' },
@@ -95,7 +97,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: 'required',
   },
   fundUsage: {
-    value: 'renovations',
+    value: [],
     values: [
       { label: 'Renovations', icon: 'ns-renovations', value: 'renovations' },
       { label: 'Equipment Purchase', icon: 'ns-equipment-purchase', value: 'equipmentpurchase' },

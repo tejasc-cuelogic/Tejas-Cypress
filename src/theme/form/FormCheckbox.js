@@ -6,14 +6,14 @@ import { Icon, Popup } from 'semantic-ui-react';
 
 const FormCheckbox = observer((props) => {
   const {
-    label, values, tooltip,
+    label, values, tooltip, value,
   } = props.fielddata;
   return (
     <div className={props.containerclassname || false}>
       {
         values.map(c => (
           <div className="ui checkbox">
-            <input type="checkbox" className="hidden" value={c.value} onChange={props.changed} {...props} />
+            <input type="checkbox" checked={value.includes(c.value)} value={c.value} onChange={props.changed} {...props} />
             <label>
               {c.icon &&
                 <Icon className={c.icon} />
