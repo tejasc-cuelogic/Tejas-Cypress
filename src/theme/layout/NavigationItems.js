@@ -38,7 +38,6 @@ export class NavItems extends Component {
   state = { active: '' };
   navClick = (e, { name }) => {
     this.setState({ active: name });
-    console.log(e.target, 'e.target');
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
@@ -68,7 +67,14 @@ export class NavItems extends Component {
             className={this.isActive(item.to, location, app) ? 'active' : ''}
             name={item.to}
             onClick={this.navClick}
-            text={<Aux><Icon className={item.icon} /><span>{item.title}</span></Aux>}
+            text={
+              <Aux>
+                {item.icon &&
+                  <Icon className={item.icon} />
+                }
+                <span>{item.title}</span>
+              </Aux>
+            }
           >
             <Dropdown.Menu className={this.isActive(item.to, location) ? 'visible' : ''}>
               {item.subNavigations.map(sn => (

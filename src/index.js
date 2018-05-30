@@ -1,4 +1,3 @@
-import { init as initApm } from 'elastic-apm-js-base';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -9,17 +8,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import App from './App';
 import * as stores from './stores/stores';
 
-initApm({
+/* eslint-disable no-undef */
+Raven.config(process.env.REACT_APP_SENTRY_URL).install();
 
-  // Set required service name (allowed characters: a-z, A-Z, 0-9, -, _, and space)
-  serviceName: 'ns-client',
-
-  // Set custom APM Server URL (default: http://localhost:8200)
-  serverUrl: 'http://35.174.107.218:8200',
-
-  // Set service version (required for sourcemap feature)
-  serviceVersion: '',
-});
 // For easier debugging
 window.APP_STATE = stores;
 
