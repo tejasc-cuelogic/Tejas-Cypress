@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { Header, Table, Button } from 'semantic-ui-react';
+import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../helper/utility';
+import ListErrors from '../../../../theme/common/ListErrors';
 
-@inject('iraAccountStore')
+@inject('iraAccountStore', 'uiStore')
 @observer
 export default class Summary extends Component {
   handleCreateAccount = () => {
@@ -17,6 +18,7 @@ export default class Summary extends Component {
       formFunding,
       formIdentity,
     } = this.props.iraAccountStore;
+    const { errors } = this.props.uiStore;
     const accountType = _.find(
       formAccTypes.fields.iraAccountType.values,
       { value: formAccTypes.fields.iraAccountType.value },
@@ -29,6 +31,11 @@ export default class Summary extends Component {
       <div>
         <Header as="h1" textAlign="center">Verify the information and create IRA account</Header>
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
+        {errors &&
+          <Message error>
+            <ListErrors errors={[errors.message]} />
+          </Message>
+        }
         <div className="summary-wrap">
           <div className="field-wrap">
             <div className="table-wrapper">

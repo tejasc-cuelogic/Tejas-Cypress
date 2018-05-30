@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Header, Table, Button, Item } from 'semantic-ui-react';
+import { Header, Table, Button, Item, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import DateTimeFormat from '../../../../theme/common/DateTimeFormat';
 import Helper from '../../../../helper/utility';
+import ListErrors from '../../../../theme/common/ListErrors';
 
-@inject('entityAccountStore', 'accountStore')
+@inject('entityAccountStore', 'accountStore', 'uiStore')
 @observer
 export default class Summary extends Component {
   handleCreateAccount = () => {
@@ -19,6 +20,7 @@ export default class Summary extends Component {
       formEntityInfo,
     }
       = this.props.entityAccountStore;
+    const { errors } = this.props.uiStore;
     const { plaidBankDetails, formLinkBankManually } = this.props.accountStore;
     const bankAccountNumber = !_.isEmpty(plaidBankDetails) ?
       plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
@@ -26,6 +28,11 @@ export default class Summary extends Component {
       <div>
         <Header as="h1" textAlign="center">Verify the info and create Entity account</Header>
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
+        {errors &&
+          <Message error>
+            <ListErrors errors={[errors.message]} />
+          </Message>
+        }
         <div className="field-wrap">
           <div className="table-wrapper">
             <Table compact basic fixed>
@@ -63,6 +70,9 @@ export default class Summary extends Component {
                     }
                     {formEntityInfo.fields.isTrust.value &&
                       <DateTimeFormat datetime={formEntityInfo.fields.trustDate.value} />
+                    }
+                    {!formEntityInfo.fields.isTrust.value &&
+                      'No'
                     }
                   </Table.Cell>
                 </Table.Row>
