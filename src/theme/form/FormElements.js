@@ -10,3 +10,4 @@ export { default as MaskedInput } from './MaskedInput';
 export { default as MaskedInput2 } from './MaskedInput2';
 export { default as AutoComplete } from './AutoComplete';
 export { default as FormTextarea } from './FormTextarea';
+export { default as FormCheckbox } from './FormCheckbox';

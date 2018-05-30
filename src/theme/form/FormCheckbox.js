@@ -1,21 +1,24 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
+// import Aux from 'react-aux';
 import { Icon, Popup } from 'semantic-ui-react';
 
-const FormRadioGroup = observer((props) => {
-  const { values, value, tooltip } = props.fielddata;
+const FormCheckbox = observer((props) => {
+  const {
+    label, values, tooltip,
+  } = props.fielddata;
   return (
     <div className={props.containerclassname || false}>
       {
-        values.map(radio => (
-          <div className="ui radio checkbox">
-            <input type="radio" className="hidden" value={radio.value} checked={value === radio.value} onChange={props.changed} {...props} />
+        values.map(c => (
+          <div className="ui checkbox">
+            <input type="checkbox" className="hidden" value={c.value} onChange={props.changed} {...props} />
             <label>
-              {radio.icon &&
-                <Icon className={radio.icon} />
+              {props.icon &&
+                <Icon className={props.icon} />
               }
-              {radio.label}
+              {c.label}
               {tooltip &&
                 <Popup
                   trigger={<Icon name="help circle outline" />}
@@ -32,4 +35,4 @@ const FormRadioGroup = observer((props) => {
   );
 });
 
-export default FormRadioGroup;
+export default FormCheckbox;

@@ -8,7 +8,7 @@
 
 
 /* Label */
-@labelDistance: 1.85714em; /* 26px @ 14/em */
+@labelDistance: 2.142857em; /* 30px @ 14/em */
 
 /* Checkbox */
 @checkboxBackground: @white;
@@ -82,25 +82,25 @@
 /* Radio */
 /* Uses px to avoid rounding issues with circles */
 
-@radioSize: 15px;
-@radioTop: 1px;
+@radioSize: 16px;
+@radioTop: 2px;
 @radioLeft: 0px;
 @radioLabelDistance: @labelDistance;
 
-@bulletTop: 1px;
+@bulletTop: 2px;
 @bulletLeft: 0px;
 @bulletScale: (7 / 15); /* 7px as unitless value from radio size */
 @bulletColor: @textColor;
 @bulletRadius: @circularRadius;
 
-@radioFocusBackground: @checkboxFocusBackground;
-@radioFocusBulletColor: @checkboxFocusCheckColor;
+@radioFocusBackground: @white;
+@radioFocusBulletColor: @theme-primary;
 
-@radioActiveBackground: @checkboxActiveBackground;
-@radioActiveBulletColor: @checkboxActiveCheckColor;
+@radioActiveBackground: @white;
+@radioActiveBulletColor: @theme-primary;
 
-@radioActiveFocusBackground: @checkboxActiveFocusBackground;
-@radioActiveFocusBulletColor: @checkboxActiveFocusCheckColor;
+@radioActiveFocusBackground: @white;
+@radioActiveFocusBulletColor: @theme-primary;
 
 /* Slider & Toggle Handle */
 @handleBackground: @white @subtleGradient;
