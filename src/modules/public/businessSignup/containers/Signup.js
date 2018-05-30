@@ -98,7 +98,7 @@ class Signup extends Component {
                 <Header.Subheader>Please select all that apply.</Header.Subheader>
               </Header>
               <FormCheckbox
-                fielddata={BUSINESS_APP_FRM.fields.industryType}
+                fielddata={fields.industryType}
                 name="industryType"
                 changed={businessAppEleChange}
                 containerclassname="iconic-checkbox"
@@ -111,7 +111,7 @@ class Signup extends Component {
                 </Header.Subheader>
               </Header>
               <FormRadioGroup
-                fielddata={BUSINESS_APP_FRM.fields.businessHelp}
+                fielddata={fields.businessHelp}
                 name="businessHelp"
                 changed={businessAppEleChange}
                 containerclassname="iconic-radio"
@@ -126,8 +126,8 @@ class Signup extends Component {
                         <FormInput
                           key={field}
                           name={field}
-                          value={BUSINESS_APP_FRM.fields[field].value}
-                          fielddata={BUSINESS_APP_FRM.fields[field]}
+                          value={fields[field].value}
+                          fielddata={fields[field]}
                           changed={businessAppEleChange}
                         />
                       ))
@@ -138,8 +138,8 @@ class Signup extends Component {
                           key={field}
                           name={field}
                           isCurrency
-                          value={BUSINESS_APP_FRM.fields[field].value}
-                          fielddata={BUSINESS_APP_FRM.fields[field]}
+                          value={fields[field].value}
+                          fielddata={fields[field]}
                           changed={businessAppEleChange}
                         />
                       ))
@@ -153,7 +153,7 @@ class Signup extends Component {
                 <Header.Subheader>Please select all that apply.</Header.Subheader>
               </Header>
               <FormCheckbox
-                fielddata={BUSINESS_APP_FRM.fields.fundUsage}
+                fielddata={fields.fundUsage}
                 name="fundUsage"
                 changed={businessAppEleChange}
                 containerclassname="iconic-checkbox"
@@ -174,8 +174,8 @@ class Signup extends Component {
                           key={field}
                           name={field}
                           isCurrency
-                          value={BUSINESS_APP_FRM.fields[field].value}
-                          fielddata={BUSINESS_APP_FRM.fields[field]}
+                          value={fields[field].value}
+                          fielddata={fields[field]}
                           changed={businessAppEleChange}
                         />
                       ))
@@ -186,7 +186,7 @@ class Signup extends Component {
               <Divider section className="doubled" />
               <Header as="h2">What is your company’s entity structure?</Header>
               <FormRadioGroup
-                fielddata={BUSINESS_APP_FRM.fields.entityStructure}
+                fielddata={fields.entityStructure}
                 name="entityStructure"
                 changed={businessAppEleChange}
                 containerclassname="iconic-radio"

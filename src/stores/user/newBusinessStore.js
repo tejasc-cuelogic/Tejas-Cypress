@@ -13,16 +13,26 @@ export class NewBusinessStore {
 
   @action
   businessAppEleChange = (e, result) => {
+    const type = (e.target) ? e.target.type : '';
     const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
     const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
-    this.onFieldChange('BUSINESS_APP_FRM', fieldName, fieldValue);
+    this.onFieldChange('BUSINESS_APP_FRM', fieldName, fieldValue, type);
   };
 
   @action
-  onFieldChange = (currentForm, field, value) => {
+  onFieldChange = (currentForm, field, value, type) => {
     const form = currentForm || 'formFinInfo';
     if (field) {
-      this[form].fields[field].value = value;
+      if (type === 'checkbox') {
+        const index = this[form].fields[field].value.indexOf(value);
+        if (index === -1) {
+          this[form].fields[field].value.push(value);
+        } else {
+          this[form].fields[field].value.splice(index, 1);
+        }
+      } else {
+        this[form].fields[field].value = value;
+      }
     }
     const validation = new Validator(
       mapValues(this[form].fields, f => f.value),
