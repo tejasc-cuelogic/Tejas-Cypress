@@ -1,6 +1,8 @@
 #!/bin/bash
 region=$1
 environment=$2
+ci_commit_ref=$3
+
 if [ "$region" = "" ]; then
 	echo "First parameter should be region name."
 	exit 1
@@ -40,12 +42,14 @@ function settingEnv(){
 	REACT_APP_PLAID_ENV=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/plaid\/env/ { print $3 }')
 	sed -i.bak "s/^\(REACT_APP_PLAID_ENV=\).*/\1${REACT_APP_PLAID_ENV}/" .env
 
-	REACT_APP_SENTRY_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/sentry\/url/ { print $3 }')
-	sed -i.bak "s#^\(REACT_APP_SENTRY_URL=\).*#\1${REACT_APP_SENTRY_URL}#" .env
+	if [ "$ci_commit_ref" = "develop" ] || [ "$ci_commit_ref" = "qa" ] || [ "$ci_commit_ref" = "master" ]; then
+			REACT_APP_SENTRY_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/sentry\/url/ { print $3 }')
+			sed -i.bak "s#^\(REACT_APP_SENTRY_URL=\).*#\1${REACT_APP_SENTRY_URL}#" .env
     
-    REACT_APP_SENTRY_ENV=$environment
-    sed -i.bak "s/^\(REACT_APP_SENTRY_ENV=\).*/\1${REACT_APP_SENTRY_ENV}/" .env
-    
+			REACT_APP_SENTRY_ENV=$environment
+			sed -i.bak "s/^\(REACT_APP_SENTRY_ENV=\).*/\1${REACT_APP_SENTRY_ENV}/" .env
+	fi
+
 	cat .env
 }
 
