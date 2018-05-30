@@ -16,7 +16,7 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.authStore.values.email.value === '') {
       this.props.history.push('/');
     }
-    this.props.uiStore.clearErrors();
+    // this.props.uiStore.clearErrors();
     this.props.uiStore.reset();
   }
 

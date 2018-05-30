@@ -12,7 +12,7 @@ import FieldError from '../../../theme/common/FieldError';
 @observer
 class Login extends Component {
   componentWillUnmount() {
-    this.props.uiStore.clearErrors();
+    // this.props.uiStore.clearErrors();
     this.props.authStore.reset();
   }
 
