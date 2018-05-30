@@ -13,7 +13,7 @@ const FormCheckbox = observer((props) => {
       {
         values.map(c => (
           <div className="ui checkbox">
-            <input type="checkbox" className="hidden" value={c.value} onChange={props.changed} {...props} />
+            <input type="checkbox" readOnly value={c.value} onChange={props.changed} {...props} />
             <label>
               {c.icon &&
                 <Icon className={c.icon} />

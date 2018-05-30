@@ -10,7 +10,7 @@ const FormRadioGroup = observer((props) => {
       {
         values.map(radio => (
           <div className="ui radio checkbox">
-            <input type="radio" className="hidden" value={radio.value} checked={value === radio.value} onChange={props.changed} {...props} />
+            <input type="radio" readOnly value={radio.value} checked={value === radio.value} onChange={props.changed} {...props} />
             <label>
               {radio.icon &&
                 <Icon className={radio.icon} />

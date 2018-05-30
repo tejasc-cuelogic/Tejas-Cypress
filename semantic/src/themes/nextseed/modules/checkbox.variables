@@ -45,7 +45,7 @@
 @checkboxPressedBackground: @theme-primary;
 @checkboxPressedBorderColor: @selectedBorderColor;
 @checkboxPressedColor: @white;
-@labelPressedColor: @white;
+@labelPressedColor: @selectedTextColor;
 
 /* Focus */
 @checkboxFocusBackground: @white;
@@ -90,7 +90,7 @@
 @bulletTop: 2px;
 @bulletLeft: 0px;
 @bulletScale: (7 / 15); /* 7px as unitless value from radio size */
-@bulletColor: @textColor;
+@bulletColor: @theme-primary;
 @bulletRadius: @circularRadius;
 
 @radioFocusBackground: @white;

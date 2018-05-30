@@ -97,14 +97,12 @@ class Signup extends Component {
                 What industry are you in?
                 <Header.Subheader>Please select all that apply.</Header.Subheader>
               </Header>
-              <div className="iconic-checkbox">
-                <FormCheckbox
-                  fielddata={BUSINESS_APP_FRM.fields.industryType}
-                  name="industryType"
-                  changed={businessAppEleChange}
-                  containerclassname="iconic-checkbox"
-                />
-              </div>
+              <FormCheckbox
+                fielddata={BUSINESS_APP_FRM.fields.industryType}
+                name="industryType"
+                changed={businessAppEleChange}
+                containerclassname="iconic-checkbox"
+              />
               <Divider section className="doubled" />
               <Header as="h2">
                 What can NextSeed help you with?
@@ -209,7 +207,7 @@ class Signup extends Component {
                   changed={businessAppEleChange}
                 /> */}
                 <List.Item>
-                  <Checkbox label="The company has not raised securities under Regulation Crowdfunding in the last 12 months." />
+                  <Checkbox label={{ children: 'The company has not raised securities under Regulation Crowdfunding in the last 12 months.' }} />
                 </List.Item>
                 <List.Item>
                   <Checkbox label="The company is not concurrently conducting an offering on another platform." />
