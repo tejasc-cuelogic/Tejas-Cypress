@@ -1,4 +1,3 @@
-import { init as initApm } from 'elastic-apm-js-base';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
