@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Segment, Grid, Icon, Header, Divider, Form, Checkbox, Radio, List, Popup, Button } from 'semantic-ui-react';
+import { Segment, Grid, Icon, Header, Divider, Form, Checkbox, List, Popup, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import { FormRadioGroup, FormCheckbox, FormInput, MaskedInput, AutoComplete } from '../../../../theme/form/FormElements';
@@ -121,18 +121,12 @@ class Signup extends Component {
                   Select in which area NextSeed can help your business.
                 </Header.Subheader>
               </Header>
-              {/* <FormRadioGroup
+              <FormRadioGroup
                 fielddata={BUSINESS_APP_FRM.fields.businessHelp}
                 name="businessHelp"
                 changed={businessAppEleChange}
                 containerclassname="iconic-radio"
-              /> */}
-              <div className="iconic-radio">
-                <Radio icon="ns-new-business" label="Launch New Business" />
-                <Radio icon="ns-franchise" label="Open Franchise" />
-                <Radio icon="ns-expand-business" label="Expand/Upgrade Existing Business" />
-                <Radio icon="ns-off-shoot-business" label="Create Off-shoot of Existing Business" />
-              </div>
+              />
               <Divider section className="doubled" />
               <Header as="h2">Experience</Header>
               <Grid>
@@ -206,13 +200,12 @@ class Signup extends Component {
               </Grid>
               <Divider section className="doubled" />
               <Header as="h2">What is your company’s entity structure?</Header>
-              <div className="iconic-radio">
-                <Radio icon="ns-corporation" label="Corporation" />
-                <Radio icon="ns-business" label="LLC" />
-                <Radio icon="ns-partnership" label="Limited Partnership" />
-                <Radio icon="ns-proprietor" label="Sole Proprietor" />
-                <Radio label="Other" />
-              </div>
+              <FormRadioGroup
+                fielddata={BUSINESS_APP_FRM.fields.entityStructure}
+                name="entityStructure"
+                changed={businessAppEleChange}
+                containerclassname="iconic-radio"
+              />
               <Divider section className="doubled" />
               <Header as="h2">
                 Legal Confirmation

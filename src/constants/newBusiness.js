@@ -137,4 +137,16 @@ export const BUSINESS_MODEL = {
     error: undefined,
     rule: 'required',
   },
+  entityStructure: {
+    value: 'corporation',
+    values: [
+      { label: 'Corporation', icon: 'ns-corporation', value: 'corporation' },
+      { label: 'LLC', icon: 'ns-business', value: 'llc' },
+      { label: 'Limited Partnership', icon: 'ns-partnership', value: 'limitedpartnership' },
+      { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'soleproprietor' },
+      { label: 'Other', value: 'other' },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
 };
