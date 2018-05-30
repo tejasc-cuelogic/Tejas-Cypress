@@ -60,7 +60,7 @@ export default class AccountCreation extends React.Component {
         component: <LinkBankAccount />,
         isValid: '',
         isDirty: !_.isEmpty(this.props.accountStore.plaidBankDetails) ||
-        this.props.entityAccountStore.formFormationDocuments.meta.isDirty,
+        this.props.accountStore.formLinkBankManually.meta.isDirty,
         validate: validationActions.validateLinkBankForm,
       },
       {

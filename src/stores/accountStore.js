@@ -79,8 +79,8 @@ export class AccountStore {
 
   @computed
   get isValidLinkBankAccountForm() {
-    return _.isEmpty(this.formLinkBankManually.fields.bankRoutingNumber.error) &&
-    _.isEmpty(this.formLinkBankManually.fields.bankAccountNumber.error);
+    return _.isEmpty(this.formLinkBankManually.fields.routingNumber.error) &&
+    _.isEmpty(this.formLinkBankManually.fields.accountNumber.error);
   }
 
   @computed
@@ -104,14 +104,22 @@ export class AccountStore {
   @action
   onFieldChange = (currentForm, field, value) => {
     const form = currentForm || 'formAddFunds';
-    this[form].fields[field].value = value;
+    if (field) {
+      if (typeof value !== 'undefined') {
+        this[form].fields[field].value = value;
+      }
+    }
     const validation = new Validator(
       mapValues(this[form].fields, f => f.value),
       mapValues(this[form].fields, f => f.rule),
     );
     this[form].meta.isValid = validation.passes();
     this[form].meta.isDirty = true;
-    this[form].fields[field].error = validation.errors.first(field);
+    if (field) {
+      if (typeof value !== 'undefined') {
+        this[form].fields[field].error = validation.errors.first(field);
+      }
+    }
   };
 
   @action

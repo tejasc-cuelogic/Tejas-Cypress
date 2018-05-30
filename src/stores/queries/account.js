@@ -62,7 +62,6 @@ export const createAccount = gql`
       finishedDate
       accountDetails
     }
-    
   }`;
 
 export const updateAccount = gql`

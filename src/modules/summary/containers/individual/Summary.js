@@ -10,21 +10,19 @@ import Helper from '../../../../helper/utility';
 @withRouter
 @observer
 export default class Summary extends React.Component {
-  finalizeAccount = (e) => {
-    e.preventDefault();
-    this.props.individualAccountStore.finalizeAccount().then(() => {
-      Helper.toast('Individual account has been finalized.', 'success');
-    })
-      .catch(() => {});
+  handleCreateAccount = () => {
+    this.props.individualAccountStore.createAccount('Summary', 'submit');
   }
   render() {
     const { errors } = this.props.uiStore;
     const { currentUser } = this.props.userStore;
     const {
-      nsAccId,
       formAddFunds,
       plaidAccDetails,
+      isValidLinkBankPlaid,
       formLinkBankManually,
+      isValidLinkBankAccountForm,
+
     } = this.props.accountStore;
     return (
       <div>
@@ -46,12 +44,12 @@ export default class Summary extends React.Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Name</b></Table.Cell>
-                    <Table.Cell>{_.isEmpty(plaidAccDetails) ? '' : plaidAccDetails.institution.name}</Table.Cell>
+                    <Table.Cell>{_.isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
-                    <Table.Cell>{_.isEmpty(plaidAccDetails) ?
-                      formLinkBankManually.fields.bankAccountNumber.value :
+                    <Table.Cell>{_.isEmpty(plaidAccDetails) || !plaidAccDetails.account_id ?
+                      formLinkBankManually.fields.accountNumber.value :
                       plaidAccDetails.account_id}
                     </Table.Cell>
                   </Table.Row>
@@ -65,7 +63,7 @@ export default class Summary extends React.Component {
           </div>
         </div>
         <div className="center-align">
-          <Button primary size="large" disabled={nsAccId === '' && typeof plaidAccDetails.account_id === 'undefined' && !this.props.individualAccountStore.isValidAddFunds} onClick={this.finalizeAccount}>Create the account</Button>
+          <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!isValidLinkBankAccountForm && !isValidLinkBankPlaid}>Create the account</Button>
         </div>
       </div>
     );

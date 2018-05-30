@@ -72,16 +72,16 @@ export const US_STATES = [
 ];
 
 export const INDIVIDUAL_ACCOUNT_CREATION = {
-  bankRoutingNumber: {
+  routingNumber: {
     value: '',
-    key: 'bankRoutingNumber',
+    key: 'routingNumber',
     error: undefined,
     rule: 'required|numeric|digits:10',
     label: 'Enter your bank routing number',
   },
-  bankAccountNumber: {
+  accountNumber: {
     value: '',
-    key: 'bankAccountNumber',
+    key: 'accountNumber',
     error: undefined,
     rule: 'required|numeric|digits:12',
     label: 'Enter your bank account number',
@@ -115,8 +115,8 @@ export const IRA_ACCOUNT_CREATION = {
 };
 
 export const IND_LINK_BANK_MANUALLY = {
-  bankRoutingNumber: {
-    key: 'bankRoutingNumber',
+  routingNumber: {
+    key: 'routingNumber',
     value: '',
     error: undefined,
     rule: 'required|numeric|digits:10',
@@ -124,8 +124,8 @@ export const IND_LINK_BANK_MANUALLY = {
     tooltip: 'Put your 10 digit bank routing number',
     maxLength: 10,
   },
-  bankAccountNumber: {
-    key: 'bankAccountNumber',
+  accountNumber: {
+    key: 'accountNumber',
     value: '',
     error: undefined,
     rule: 'required|numeric|digits:12',

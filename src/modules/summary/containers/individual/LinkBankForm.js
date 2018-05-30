@@ -33,7 +33,7 @@ export default class LinkBankForm extends Component {
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
             {
-              ['bankRoutingNumber', 'bankAccountNumber'].map(field => (
+              ['routingNumber', 'accountNumber'].map(field => (
                 <FormInput
                   key={field}
                   name={field}

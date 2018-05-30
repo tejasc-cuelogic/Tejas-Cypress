@@ -6,7 +6,7 @@ import {
 } from '../constants/account';
 import ExternalApiService from '../services/externalApi';
 import accountStore from '../stores/accountStore';
-import indAccountStore from '../stores/user/individualAccountStore';
+// import indAccountStore from '../stores/user/individualAccountStore';
 import uiStore from '../stores/uiStore';
 import Helper from '../helper/utility';
 
@@ -100,7 +100,7 @@ export class Account {
         // The metadata object contains info about the institution the
         // user selected and the account ID, if selectAccount is enabled.
         Helper.toast(`Bank ${metadata.institution.name} with account id ${metadata.account_id} successfully linked.`, 'success');
-        indAccountStore.setStepToBeRendered(1);
+        // indAccountStore.setStepToBeRendered(1);
       },
       onExit: (err) => {
         // The user exited the Link flow.
