@@ -126,6 +126,21 @@ export const BUSINESS_MODEL = {
     rule: 'required',
     placeHolder: 'e.g. 525,000',
   },
+  industryType: {
+    value: 'fashionmerchandising',
+    values: [
+      { label: 'Fashion & Merchandising', icon: 'ns-store', value: 'fashionmerchandising' },
+      { label: 'Beauty & Spa', icon: 'ns-beauty-spa', value: 'beautyspa' },
+      { label: 'Food & Beverage', icon: 'ns-food-light', value: 'foodbeverage' },
+      { label: 'Real Estate', icon: 'ns-real-estate', value: 'realestate' },
+      { label: 'Fitness & Wellness', icon: 'ns-fitness', value: 'fitnesswellness' },
+      { label: 'Hospitality', icon: 'ns-first-aid', value: 'hospitality' },
+      { label: 'Technology', icon: 'ns-technology', value: 'technology' },
+      { label: 'Other Industry Type', value: 'otherindustrytype' },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
   businessHelp: {
     value: 'newbusiness',
     values: [
@@ -133,6 +148,21 @@ export const BUSINESS_MODEL = {
       { label: 'Open Franchise', icon: 'ns-franchise', value: 'openfranchise' },
       { label: 'Expand/Upgrade Existing Business', icon: 'ns-expand-business', value: 'expandbusiness' },
       { label: 'Create Off-shoot of Existing Business', icon: 'ns-off-shoot-business', value: 'createoffshoot' },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+  fundUsage: {
+    value: 'renovations',
+    values: [
+      { label: 'Renovations', icon: 'ns-renovations', value: 'renovations' },
+      { label: 'Equipment Purchase', icon: 'ns-equipment-purchase', value: 'equipmentpurchase' },
+      { label: 'Working Capital', icon: 'ns-working-capital', value: 'workingcapital' },
+      { label: 'Inventory', icon: 'ns-inventory', value: 'inventory' },
+      { label: 'New product line', icon: 'ns-new-product', value: 'newproductline' },
+      { label: 'New location', icon: 'ns-new-location', value: 'newlocation' },
+      { label: 'Restructure debt', icon: 'ns-restructure-debt', value: 'restructuredebt' },
+      { label: 'Other Industry Type', value: 'otherindustrytype' },
     ],
     error: undefined,
     rule: 'required',
@@ -145,6 +175,54 @@ export const BUSINESS_MODEL = {
       { label: 'Limited Partnership', icon: 'ns-partnership', value: 'limitedpartnership' },
       { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'soleproprietor' },
       { label: 'Other', value: 'other' },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+  legalConfirmation: {
+    value: 'legalConfirmation01',
+    values: [
+      {
+        label: 'The company has not raised securities under Regulation Crowdfunding in the last 12 months.',
+        value: 'legalConfirmation01',
+      },
+      {
+        label: 'The company is not concurrently conducting an offering on another platform.',
+        value: 'legalConfirmation02',
+      },
+      {
+        label: 'The company is not a broker-dealer.',
+        value: 'legalConfirmation03',
+      },
+      {
+        label: 'The company is organized in the United States',
+        value: 'legalConfirmation04',
+      },
+      {
+        label: 'The company is not an investment company.',
+        value: 'legalConfirmation05',
+      },
+      {
+        label: 'The company has not sold securities registered under the Securities Exchange Act of 1934.',
+        value: 'legalConfirmation06',
+      },
+      {
+        label: 'I have never filed for bankruptcy.',
+        value: 'legalConfirmation07',
+        tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy',
+      },
+      {
+        label: 'I am not currently charged with or have ever been convicted of fraud.',
+        value: 'legalConfirmation08',
+      },
+      {
+        label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
+        value: 'legalConfirmation09',
+      },
+      {
+        label: 'Please check here if you wish to subscribe to the latest news and offers from NextSeed. You may unsubscribe at any time',
+        value: 'legalConfirmation10',
+      },
     ],
     error: undefined,
     rule: 'required',

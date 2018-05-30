@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Segment, Grid, Icon, Header, Divider, Form, Checkbox, List, Popup, Button } from 'semantic-ui-react';
+import { Segment, Grid, Icon, Header, Divider, Form, Checkbox, Popup, List, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 import { FormRadioGroup, FormCheckbox, FormInput, MaskedInput, AutoComplete } from '../../../../theme/form/FormElements';
@@ -99,20 +99,11 @@ class Signup extends Component {
               </Header>
               <div className="iconic-checkbox">
                 <FormCheckbox
-                  fielddata={BUSINESS_APP_FRM.fields.businessType}
-                  name="businessType"
-                  icon="ns-store"
+                  fielddata={BUSINESS_APP_FRM.fields.industryType}
+                  name="industryType"
                   changed={businessAppEleChange}
-                  containerclassname="button-radio"
+                  containerclassname="iconic-checkbox"
                 />
-                <Checkbox icon="ns-store" label="Fashion & Merchandising" />
-                <Checkbox icon="ns-beauty-spa" label="Beauty & Spa" />
-                <Checkbox icon="ns-food-light" label="Food & Beverage" />
-                <Checkbox icon="ns-real-estate" label="Real Estate" />
-                <Checkbox icon="ns-fitness" label="Fitness & Wellness" />
-                <Checkbox icon="ns-first-aid" label="Hospitality" />
-                <Checkbox icon="ns-technology" label="Technology" />
-                <Checkbox label="Other Industry Type" />
               </div>
               <Divider section className="doubled" />
               <Header as="h2">
@@ -163,16 +154,12 @@ class Signup extends Component {
                 What will the funds be used for?
                 <Header.Subheader>Please select all that apply.</Header.Subheader>
               </Header>
-              <div className="iconic-checkbox">
-                <Checkbox icon="ns-renovations" label="Renovations" />
-                <Checkbox icon="ns-equipment-purchase" label="Equipment Purchase" />
-                <Checkbox icon="ns-working-capital" label="Working Capital" />
-                <Checkbox icon="ns-inventory" label="Inventory" />
-                <Checkbox icon="ns-new-product" label="New product line" />
-                <Checkbox icon="ns-new-location" label="New location" />
-                <Checkbox icon="ns-restructure-debt" label="Restructure debt" />
-                <Checkbox label="Other" />
-              </div>
+              <FormCheckbox
+                fielddata={BUSINESS_APP_FRM.fields.fundUsage}
+                name="fundUsage"
+                changed={businessAppEleChange}
+                containerclassname="iconic-checkbox"
+              />
               <Divider section className="doubled" />
               <Header as="h2">
                 Next year projections
@@ -216,6 +203,11 @@ class Signup extends Component {
                 </Header.Subheader>
               </Header>
               <List relaxed>
+                {/* <FormCheckbox
+                  fielddata={BUSINESS_APP_FRM.fields.legalConfirmation}
+                  name="legalConfirmation"
+                  changed={businessAppEleChange}
+                /> */}
                 <List.Item>
                   <Checkbox label="The company has not raised securities under Regulation Crowdfunding in the last 12 months." />
                 </List.Item>

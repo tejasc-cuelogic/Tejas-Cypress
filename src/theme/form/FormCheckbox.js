@@ -15,8 +15,8 @@ const FormCheckbox = observer((props) => {
           <div className="ui checkbox">
             <input type="checkbox" className="hidden" value={c.value} onChange={props.changed} {...props} />
             <label>
-              {props.icon &&
-                <Icon className={props.icon} />
+              {c.icon &&
+                <Icon className={c.icon} />
               }
               {c.label}
               {tooltip &&
