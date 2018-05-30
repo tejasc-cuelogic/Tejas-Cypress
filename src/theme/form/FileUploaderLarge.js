@@ -1,10 +1,12 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Icon, Button } from 'semantic-ui-react';
+import FieldError from '../common/FieldError';
 
 const FileUploaderLarge = observer((props) => {
   const {
     value,
+    error,
   } = props.fielddata;
   return (
     <Form.Field>
@@ -23,6 +25,9 @@ const FileUploaderLarge = observer((props) => {
           <span title={value}>{value}</span>
           <Button size="tiny" compact className="remove pull-right" onClick={() => props.uploadDocument(props.name, '')}>Remove</Button>
         </div>
+      }
+      {error &&
+        <FieldError className="center-align" error={error} />
       }
     </Form.Field>
   );
