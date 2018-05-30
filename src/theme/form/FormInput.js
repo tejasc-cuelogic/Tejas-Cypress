@@ -11,6 +11,7 @@ const FormInput = observer((props) => {
     tooltip,
     placeHolder,
     value,
+    maxLength,
   } = props.fielddata;
   return (
     <Form.Field className={props.containerclassname || ''} error={!!error}>
@@ -27,9 +28,9 @@ const FormInput = observer((props) => {
       </label>
       <Input
         fluid
-        // labeled
         {...props}
         value={value}
+        maxLength={maxLength || false}
         label={props.prefix || false}
         type={props.type || 'text'}
         placeholder={placeHolder}
