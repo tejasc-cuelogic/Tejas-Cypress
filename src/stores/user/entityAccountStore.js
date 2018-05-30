@@ -12,6 +12,7 @@ import {
 
 import { GqlClient as client } from '../../services/graphql';
 import { createAccount, updateAccount } from '../../stores/queries/account';
+import accountStore from '../accountStore';
 import uiStore from '../uiStore';
 import userStore from '../userStore';
 import userDetailsStore from '../user/userDetailsStore';
@@ -177,8 +178,31 @@ class EntityAccountStore {
   }
 
   @computed
+  get isValidLinkBank() {
+    if (accountStore.bankLinkInterface === 'list') {
+      return _.isEmpty(this.formPersonalInfo.fields.title.error) &&
+    _.isEmpty(this.formPersonalInfo.fields.legalDocUrl.error);
+    } else if (_.isEmpty(accountStore.plaidBankDetails)) {
+      return false;
+    }
+    return true;
+  }
+
+  @computed
+  get isValidEntityForm() {
+    if (accountStore.bankLinkInterface === 'form') {
+      return this.formFinInfo.meta.isValid && this.formGeneralInfo.meta.isValid
+      && this.formEntityInfo.meta.isValid && this.formPersonalInfo.meta.isValid &&
+      accountStore.isValidLinkBankAccountForm;
+    }
+    return this.formFinInfo.meta.isValid && this.formGeneralInfo.meta.isValid
+      && this.formEntityInfo.meta.isValid && this.formPersonalInfo.meta.isValid &&
+      accountStore.isValidLinkBankPlaid;
+  }
+
+  @computed
   get accountAttributes() {
-    return {
+    const payload = {
       netAssets: this.formFinInfo.fields.netAssets.value
         ? this.formFinInfo.fields.netAssets.value : 0,
       cfInvestment: {
@@ -191,7 +215,6 @@ class EntityAccountStore {
         taxId: this.formGeneralInfo.fields.taxId.value ? this.formGeneralInfo.fields.taxId.value : '',
         isTrust: this.formEntityInfo.fields.isTrust.value,
         trustDate: this.formEntityInfo.fields.trustDate.value,
-        /* eslint-disable no-dupe-keys */
         address: {
           street: this.formGeneralInfo.fields.street.value ? this.formGeneralInfo.fields.street.value : '',
           city: this.formGeneralInfo.fields.city.value ? this.formGeneralInfo.fields.city.value : '',
@@ -211,6 +234,14 @@ class EntityAccountStore {
         },
       },
     };
+    if (accountStore.bankLinkInterface === 'list') {
+      if (!_.isEmpty(accountStore.plaidBankDetails)) {
+        const plaidBankDetails = _.omit(accountStore.plaidBankDetails, '__typename');
+        payload.bankDetails = plaidBankDetails;
+      }
+    }
+
+    return payload;
   }
 
   /* eslint-disable consistent-return */
@@ -238,6 +269,12 @@ class EntityAccountStore {
       case 'Formation doc':
         currentStep.validate();
         isValidCurrentStep = this.isValidFormationDoc;
+        break;
+      case 'Link Bank':
+        if (accountStore.bankLinkInterface === 'list') {
+          currentStep.validate();
+        }
+        isValidCurrentStep = this.isValidLinkBank;
         break;
       default:
         break;
@@ -384,8 +421,11 @@ class EntityAccountStore {
           this.setStepToBeRendered(3);
         } else if (!this.formFormationDocuments.meta.isValid) {
           this.setStepToBeRendered(4);
-        } else {
+        } else if (!accountStore.formLinkBankManually.meta.isValid &&
+          _.isEmpty(accountStore.plaidBankDetails)) {
           this.setStepToBeRendered(5);
+        } else {
+          this.setStepToBeRendered(6);
         }
       }
     }

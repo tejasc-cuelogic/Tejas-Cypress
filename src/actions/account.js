@@ -5,6 +5,7 @@ import {
   PLAID_PUBLIC_KEY,
 } from '../constants/account';
 import ExternalApiService from '../services/externalApi';
+import accountStore from '../stores/accountStore';
 import indAccountStore from '../stores/user/individualAccountStore';
 import uiStore from '../stores/uiStore';
 import Helper from '../helper/utility';
@@ -53,7 +54,7 @@ export class Account {
   bankSearch = (e) => {
     if (e.charCode === 13) {
       uiStore.setProgress();
-      const { value } = indAccountStore.formBankSearch.fields.bankName;
+      const { value } = accountStore.formBankSearch.fields.bankName;
       if (value !== '') {
         const params = {
           url: PLAID_URL,
@@ -69,10 +70,10 @@ export class Account {
           contentType: 'application/json',
         };
         ExternalApiService.post(params)
-          .then(data => indAccountStore.setBankListing(data.body.institutions))
+          .then(data => accountStore.setBankListing(data.body.institutions))
           .finally(() => uiStore.setProgress(false));
       } else {
-        indAccountStore.setBankListing();
+        accountStore.setBankListing();
         uiStore.setProgress(false);
       }
     }
@@ -89,8 +90,12 @@ export class Account {
         // The Link module finished loading.
       },
       onSuccess: (publicToken, metadata) => {
-        indAccountStore.setPlaidAccDetails(metadata);
-        indAccountStore.createAccount();
+        accountStore.setPlaidAccDetails(metadata);
+        // accountStore.createAccount();
+        accountStore.getPlaidAccountData().then(() => {
+        })
+          .catch(() => { });
+        // Individual link bank account; move code from indaccstore to accountstore
         // Send the public_token to your app server here.
         // The metadata object contains info about the institution the
         // user selected and the account ID, if selectAccount is enabled.

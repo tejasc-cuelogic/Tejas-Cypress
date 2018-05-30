@@ -6,7 +6,7 @@ import _ from 'lodash';
 import ListErrors from '../../../../theme/common/ListErrors';
 import Helper from '../../../../helper/utility';
 
-@inject('individualAccountStore', 'uiStore', 'userStore')
+@inject('accountStore', 'individualAccountStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
@@ -25,7 +25,7 @@ export default class Summary extends React.Component {
       formAddFunds,
       plaidAccDetails,
       formLinkBankManually,
-    } = this.props.individualAccountStore;
+    } = this.props.accountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>

@@ -12,17 +12,6 @@ export const INVESTMENT_ACCOUNT_TYPES = {
   2: 'entity',
 };
 
-export const FUNDING_OPTIONS = {
-  0: 'Check',
-  1: 'IRA Transfer',
-  2: 'Direct Rollover',
-};
-
-export const IRA_ACCOUNT_TYPES = {
-  0: 'Traditional',
-  1: 'Roth',
-};
-
 export const US_STATES = [
   { key: 'AL', value: 'AL', text: 'ALABAMA' },
   { key: 'AK', value: 'AK', text: 'ALASKA' },
@@ -116,26 +105,6 @@ export const IRA_ACCOUNT_CREATION = {
     label: 'Your annual income',
     placeHolder: 'Your annual income',
   },
-  accountType: {
-    value: {
-      activeIndex: 0,
-      type: IRA_ACCOUNT_TYPES[0],
-    },
-    key: 'accountType',
-    error: undefined,
-    rule: 'required|string',
-    label: 'Choose an account type',
-  },
-  fundingOption: {
-    value: {
-      activeIndex: 0,
-      type: FUNDING_OPTIONS[0],
-    },
-    key: 'accountType',
-    error: undefined,
-    rule: 'required|string',
-    label: 'Choose funding option',
-  },
   driversLicence: {
     value: '',
     key: 'driversLicence',
@@ -147,6 +116,7 @@ export const IRA_ACCOUNT_CREATION = {
 
 export const IND_LINK_BANK_MANUALLY = {
   bankRoutingNumber: {
+    key: 'bankRoutingNumber',
     value: '',
     error: undefined,
     rule: 'required|numeric|digits:10',
@@ -155,6 +125,7 @@ export const IND_LINK_BANK_MANUALLY = {
     maxLength: 10,
   },
   bankAccountNumber: {
+    key: 'bankAccountNumber',
     value: '',
     error: undefined,
     rule: 'required|numeric|digits:12',
@@ -302,11 +273,6 @@ export const IRA_IDENTITY = {
   },
 };
 
-export const IS_ENTITY_TRUST = {
-  0: 'yes',
-  1: 'no',
-};
-
 export const ENTITY_FIN_INFO = {
   netAssets: {
     key: 'netAssets',
@@ -350,7 +316,7 @@ export const ENTITY_GEN_INFO = {
 export const ENTITY_TRUST_INFO = {
   isTrust: {
     key: 'isTrust',
-    value: 'yes',
+    value: true,
     values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
     error: undefined,
     rule: 'required',

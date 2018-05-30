@@ -33,7 +33,7 @@ class Summary extends Component {
   restoreStep = () => {
     if (this.props.accountStore.accountType.activeIndex === 0) {
       this.props.individualAccountStore.setStepToBeRendered(0);
-      this.props.individualAccountStore.setBankLinkInterface('list');
+      this.props.accountStore.setBankLinkInterface('list');
     }
   }
 

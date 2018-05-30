@@ -78,9 +78,19 @@ export default class MultiStep extends React.Component {
   }
 
   handleOnClick(evt) {
+    this.props.setStepTobeRendered(evt.currentTarget.value);
     if (evt.currentTarget.value === (this.props.steps.length - 1) &&
       this.state.compState === (this.props.steps.length - 1)) {
       this.setNavState(this.props.steps.length);
+    } else if (evt.currentTarget.value !== 0 &&
+    this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
+      this.props.createAccount(this.props.steps[(evt.currentTarget.value - 1)]);
+      if (!this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
+        this.setNavState(evt.currentTarget.value);
+      }
+      if (evt.currentTarget.value === (this.props.steps.length - 1)) {
+        this.setNavState(evt.currentTarget.value);
+      }
     } else {
       this.setNavState(evt.currentTarget.value);
     }
@@ -112,15 +122,18 @@ export default class MultiStep extends React.Component {
   /**
    * @todo Remove eslint-disbable comments and make appripriate changes
    */
+  /* eslint-disable arrow-body-style */
   renderSteps() {
-    return this.props.steps.map((s, i) => (
+    return this.props.steps.map((s, i) => {
       /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
-      <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid}`} onClick={this.handleOnClick} key={i} value={i}>
-        {this.props.steps[i].name}
-      </li>
-    ));
+      return (
+        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid}`} onClick={this.handleOnClick} key={i} value={i}>
+          {this.props.steps[i].name}
+        </li>
+      );
+    });
   }
 
   render() {

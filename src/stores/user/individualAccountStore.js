@@ -1,108 +1,17 @@
-import { action, observable, computed } from 'mobx';
-import Validator from 'validatorjs';
-import mapValues from 'lodash/mapValues';
+import { action, observable } from 'mobx';
 import _ from 'lodash';
 import userStore from '../userStore';
 import uiStore from '../uiStore';
-import {
-  IND_ADD_FUND,
-  IND_BANK_ACC_SEARCH,
-  IND_LINK_BANK_MANUALLY,
-} from '../../constants/account';
 import { GqlClient as client } from '../../services/graphql';
 import { createUserAccountIndividual, finalizeIndividualAccount } from '../queries/account';
 
 class IndividualAccountStore {
-  @observable bankLinkInterface = 'list';
-
-  @observable
-  formLinkBankManually = {
-    fields: { ...IND_LINK_BANK_MANUALLY }, meta: { isValid: false, error: '' },
-  }
-
-  @observable
-  formAddFunds = {
-    fields: { ...IND_ADD_FUND }, meta: { isValid: false, error: '' },
-  };
-
-  @observable
-  formBankSearch = {
-    fields: { ...IND_BANK_ACC_SEARCH }, meta: { isValid: false, error: '' },
-  };
-
-  @observable
-  bankListing = undefined;
-
-  @observable
-  plaidAccDetails = {};
-
-  @observable
-  nsAccId = '';
-
   @observable
   stepToBeRendered = '';
 
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
-  }
-
-  @action
-  setBankLinkInterface(mode) {
-    this.bankLinkInterface = mode;
-  }
-
-  @action
-  addFundChange = (e, { name, value }) => {
-    this.onFieldChange('formAddFunds', name, value);
-  };
-
-  @computed
-  get isValidAddFunds() {
-    return _.isEmpty(this.formAddFunds.fields.value.error);
-  }
-
-  @computed
-  get isValidLinkBankAccountForm() {
-    return _.isEmpty(this.formLinkBankManually.fields.bankRoutingNumber.error) &&
-    _.isEmpty(this.formLinkBankManually.fields.bankAccountNumber.error);
-  }
-
-  @action
-  bankSearchChange = (e, { name, value }) => {
-    this.onFieldChange('formBankSearch', name, value);
-  };
-
-  @action
-  linkBankManuallyChange = (e, { name, value }) => {
-    this.onFieldChange('formLinkBankManually', name, value);
-  };
-
-  @action
-  onFieldChange = (currentForm, field, value) => {
-    const form = currentForm || 'formAddFunds';
-    this[form].fields[field].value = value;
-    const validation = new Validator(
-      mapValues(this[form].fields, f => f.value),
-      mapValues(this[form].fields, f => f.rule),
-    );
-    this[form].meta.isValid = validation.passes();
-    this[form].fields[field].error = validation.errors.first(field);
-  };
-
-  @action
-  setBankListing = (bankData) => {
-    this.bankListing = bankData;
-  }
-
-  @action
-  setPlaidAccDetails = (plaidAccDetails) => {
-    this.plaidAccDetails = plaidAccDetails;
-  }
-
-  @action
-  setNsAccId = (nsAccId) => {
-    this.nsAccId = nsAccId;
   }
 
   /* eslint-disable arrow-body-style */

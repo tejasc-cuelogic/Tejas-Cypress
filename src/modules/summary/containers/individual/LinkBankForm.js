@@ -5,20 +5,22 @@ import { FormInput } from '../../../../theme/form/FormElements';
 import Helper from '../../../../helper/utility';
 import ListErrors from '../../../../theme/common/ListErrors';
 
-@inject('individualAccountStore', 'uiStore')
+@inject('individualAccountStore', 'accountStore', 'uiStore')
 @observer
 export default class LinkBankForm extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.individualAccountStore.createAccount().then(() => {
-      Helper.toast('Bank account has been linked.', 'success');
-      this.props.individualAccountStore.setStepToBeRendered(1);
-    });
+    if (this.props.accountStore.accountType.type === 'individual') {
+      this.props.individualAccountStore.createAccount().then(() => {
+        Helper.toast('Bank account has been linked.', 'success');
+        this.props.individualAccountStore.setStepToBeRendered(1);
+      });
+    }
   }
 
   render() {
     const { errors } = this.props.uiStore;
-    const { formLinkBankManually, linkBankManuallyChange } = this.props.individualAccountStore;
+    const { formLinkBankManually, linkBankManuallyChange } = this.props.accountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -46,7 +48,7 @@ export default class LinkBankForm extends Component {
             <Button primary size="large" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button className="theme-link" onClick={() => this.props.individualAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
+            <Button className="theme-link" onClick={() => this.props.accountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
           </div>
         </Form>
       </div>

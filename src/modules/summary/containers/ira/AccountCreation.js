@@ -11,6 +11,9 @@ import validationActions from '../../../../actions/validation';
 @inject('iraAccountStore', 'userDetailsStore', 'userStore')
 @observer
 export default class AccountCreation extends React.Component {
+  handleStepChange = (step) => {
+    this.props.iraAccountStore.setStepToBeRendered(step);
+  }
   render() {
     const steps =
     [
@@ -49,7 +52,7 @@ export default class AccountCreation extends React.Component {
 
     return (
       <div className="step-progress">
-        <MuliStep stepToBeRendered={this.props.iraAccountStore.stepToBeRendered} createAccount={this.props.iraAccountStore.createAccount} steps={steps} formTitle="IRA Account Creation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
+        <MuliStep setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.iraAccountStore.stepToBeRendered} createAccount={this.props.iraAccountStore.createAccount} steps={steps} formTitle="IRA Account Creation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
       </div>
     );
   }

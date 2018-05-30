@@ -83,3 +83,21 @@ export const updateAccount = gql`
       accountDetails
     }
   }`;
+
+export const getPlaidAccountdata = gql`
+  mutation _getPlaidAccountData($userId: String! $plaidPublicToken: String! $plaidAccountId: String! $bankName: String! $accountType: UserAccountTypeEnum!) {
+    plaidGetValidatedAccountData(
+    userId: $userId
+    plaidPublicToken: $plaidPublicToken
+    plaidAccountId: $plaidAccountId
+    bankName: $bankName
+    accountType: $accountType
+    ) {
+    bankName
+    accountNumber
+    routingNumber
+    plaidAccountId
+    plaidAccessToken
+    plaidItemId
+    }
+  }`;

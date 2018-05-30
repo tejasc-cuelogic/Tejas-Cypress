@@ -48,7 +48,6 @@ export class UserDetailsStore {
         id,
       },
       onFetch: (data) => {
-        console.log(data);
         iraAccountStore.populateData(data.user);
         entityAccountStore.populateData(data.user);
       },

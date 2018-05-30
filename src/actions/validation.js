@@ -15,7 +15,6 @@ import { REGISTRATION,
   CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE,
   CONFIRM_PHONE_NUMBER_VERIFICATION_CODE,
   CONFIRM_IDENTITY_QUESTIONS,
-  LINK_BANK_ACCCOUNT_FORM,
   CONFIRM_IDENTITY_DOCUMENTS_FORM } from './../constants/validation';
 
 /**
@@ -326,30 +325,6 @@ export class Validation {
   }
 
   /**
-   * @desc validates Individual Account's fields on change.
-   * @param string $field - field on form that need to be validated
-   * @param string $value - value that need to be set to field
-   * @return null
-   */
-  validateIndividualAccountField = (field, value) => {
-    accountStore.setIndividualAccountDetails(field, value);
-    const { errors } = validationService.validate(accountStore.individualAccount[field]);
-    accountStore.setIndividualAccountError(field, errors && errors[field][0]);
-  }
-
-  /**
-   * @desc validates IRA Account's fields on change.
-   * @param string $field - field on form that need to be validated
-   * @param string $value - value that need to be set to field
-   * @return null
-   */
-  validateIraAccountField = (field, value) => {
-    accountStore.setIraAccountDetails(field, value);
-    const { errors } = validationService.validate(accountStore.iraAccount[field]);
-    accountStore.setIraAccountError(field, errors && errors[field][0]);
-  }
-
-  /**
    * @desc validates Entity Account's fields on change.
    * @param string $field - field on form that need to be validated
    * @param string $value - value that need to be set to field
@@ -359,21 +334,6 @@ export class Validation {
     accountStore.setEntityAccountDetails(field, value);
     const { errors } = validationService.validate(accountStore.entityAccount[field]);
     accountStore.setEntityAccountError(field, errors && errors[field][0]);
-  }
-
-  /**
-   * @desc Validates Link Bank Account Form for Individual
-   */
-  validateLinkBankAccountForm = () => {
-    _.map(accountStore.individualAccount, (value) => {
-      const { key } = value;
-      // Select only required values and exclude others from being checked
-      if (LINK_BANK_ACCCOUNT_FORM.includes(key)) {
-        const { errors } = validationService.validate(value);
-        // Store errors to store if any or else `undefined` will get set to it
-        accountStore.setIndividualAccountError(key, errors && errors[key][0]);
-      }
-    });
   }
 
   /**
@@ -484,6 +444,18 @@ export class Validation {
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
      entityAccountStore.setEntityError('formFormationDocuments', key, errors && errors[key][0]);
+   });
+ }
+
+  /**
+  * @desc Validates Entity - Formation Docs on next/submit button
+  */
+ validateLinkBankForm = () => {
+   _.map(accountStore.formLinkBankManually.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     accountStore.setAccountError('formLinkBankManually', key, errors && errors[key][0]);
    });
  }
 

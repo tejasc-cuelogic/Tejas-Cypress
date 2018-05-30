@@ -43,6 +43,14 @@ class IraAccountStore {
   @observable
   stepToBeRendered = 0;
 
+  @observable
+  formStatus = 'draft';
+
+  @action
+  setFormStatus(formStatus) {
+    this.formStatus = formStatus;
+  }
+
   @action
   setInvestorAccId(id) {
     this.investorAccId = id;
@@ -128,14 +136,26 @@ class IraAccountStore {
   @computed
   get accountAttributes() {
     const payload = {};
-    if (this.formFinInfo.fields.netWorth.value) {
-      payload.netWorth = this.formFinInfo.fields.netWorth.value;
-    }
-    if (this.formFinInfo.fields.annualIncome.value) {
-      payload.annualIncome = this.formFinInfo.fields.annualIncome.value;
-    }
-    if (this.formIdentity.fields.identityDoc.value) {
-      payload.identityDoc = this.formIdentity.fields.identityDoc.value;
+    const accountType = _.find(
+      this.formAccTypes.fields.iraAccountType.values,
+      { value: this.formAccTypes.fields.iraAccountType.value },
+    );
+    const fundingOption = _.find(
+      this.formFunding.fields.fundingType.values,
+      { value: this.formFunding.fields.fundingType.value },
+    );
+    if (this.formStatus === 'submit') {
+      if (this.formFinInfo.fields.netWorth.value) {
+        payload.netWorth = this.formFinInfo.fields.netWorth.value;
+      }
+      if (this.formFinInfo.fields.annualIncome.value) {
+        payload.annualIncome = this.formFinInfo.fields.annualIncome.value;
+      }
+      if (this.formIdentity.fields.identityDoc.value) {
+        payload.identityDoc = this.formIdentity.fields.identityDoc.value;
+      }
+      payload.iraAccountType = accountType.label.toLowerCase();
+      payload.fundingType = this.getFundingType(fundingOption.label.toLowerCase());
     }
     return payload;
   }
@@ -167,6 +187,10 @@ class IraAccountStore {
       case 'Financial info':
         currentStep.validate();
         isValidCurrentStep = this.isValidIraFinancialInfo;
+        if (isValidCurrentStep) {
+          accountAttributes.netWorth = this.formFinInfo.fields.netWorth.value;
+          accountAttributes.annualIncome = this.formFinInfo.fields.annualIncome.value;
+        }
         break;
       case 'Account type':
         isValidCurrentStep = true;
@@ -179,11 +203,18 @@ class IraAccountStore {
       case 'Identity':
         currentStep.validate();
         isValidCurrentStep = this.isValidIraIdentity;
+        if (isValidCurrentStep) {
+          accountAttributes.identityDoc = this.formIdentity.fields.identityDoc.value;
+        }
         break;
       default:
         break;
     }
     if (isValidCurrentStep) {
+      if (formStatus === 'submit') {
+        accountAttributes.iraAccountType = accountType.label.toLowerCase();
+        accountAttributes.fundingType = this.getFundingType(fundingOption.label.toLowerCase());
+      }
       uiStore.setProgress();
       userDetailsStore.getUser(userStore.currentUser.sub);
       let mutation = createAccount;

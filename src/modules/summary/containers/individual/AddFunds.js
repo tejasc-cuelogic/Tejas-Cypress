@@ -4,7 +4,7 @@ import { Header, Form, Button } from 'semantic-ui-react';
 
 import { FormInput } from '../../../../theme/form/FormElements';
 
-@inject('individualAccountStore')
+@inject('accountStore', 'individualAccountStore')
 @observer
 export default class AddFunds extends Component {
   componentDidMount() {
@@ -15,7 +15,7 @@ export default class AddFunds extends Component {
     this.props.individualAccountStore.setStepToBeRendered(2);
   }
   render() {
-    const { formAddFunds, addFundChange } = this.props.individualAccountStore;
+    const { formAddFunds, addFundChange } = this.props.accountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Add funds</Header>

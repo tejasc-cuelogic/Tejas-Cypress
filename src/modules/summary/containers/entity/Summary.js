@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Header, Table, Button, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Banklogo from '../../../../assets/images/boa-logo.jpg';
+import _ from 'lodash';
 import DateTimeFormat from '../../../../theme/common/DateTimeFormat';
 import Helper from '../../../../helper/utility';
 
-@inject('entityAccountStore')
+@inject('entityAccountStore', 'accountStore')
 @observer
 export default class Summary extends Component {
   handleCreateAccount = () => {
@@ -19,6 +19,9 @@ export default class Summary extends Component {
       formEntityInfo,
     }
       = this.props.entityAccountStore;
+    const { plaidBankDetails, formLinkBankManually } = this.props.accountStore;
+    const bankAccountNumber = !_.isEmpty(plaidBankDetails) ?
+      plaidBankDetails.accountNumber : formLinkBankManually.fields.bankAccountNumber.value;
     return (
       <div>
         <Header as="h1" textAlign="center">Verify the info and create Entity account</Header>
@@ -58,7 +61,7 @@ export default class Summary extends Component {
                     {formEntityInfo.fields.isTrust.value &&
                       'Yes, since '
                     }
-                    {!formEntityInfo.fields.isTrust.value &&
+                    {formEntityInfo.fields.isTrust.value &&
                       <DateTimeFormat datetime={formEntityInfo.fields.trustDate.value} />
                     }
                   </Table.Cell>
@@ -72,9 +75,8 @@ export default class Summary extends Component {
                   <Table.Cell>
                     <Item.Group>
                       <Item>
-                        <Item.Image size="tiny" src={Banklogo} />
-                        <Item.Content verticalAlign="middle" className="right-align">
-                          <h5>...5648</h5>
+                        <Item.Content>
+                          <h5>{bankAccountNumber}</h5>
                         </Item.Content>
                       </Item>
                     </Item.Group>
@@ -85,7 +87,7 @@ export default class Summary extends Component {
           </div>
         </div>
         <div className="center-align">
-          <Button primary size="large" onClick={() => this.handleCreateAccount()}>Create the account</Button>
+          <Button primary size="large" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm}>Create the account</Button>
         </div>
       </div>
     );

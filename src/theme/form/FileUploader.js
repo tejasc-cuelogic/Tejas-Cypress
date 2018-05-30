@@ -20,7 +20,7 @@ const FileUploader = observer((props) => {
         </label>
       </Grid.Column>
       <Grid.Column width={9}>
-        {value === '' &&
+        {!value &&
           <div className="file-uploader">
             <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
             <input
@@ -30,7 +30,7 @@ const FileUploader = observer((props) => {
             />
           </div>
         }
-        {value !== '' &&
+        {value &&
         <div className="file-uploader attached">
           <Button size="tiny" compact className="remove pull-right" onClick={() => props.removeUploadedDocument(props.name)}>Remove</Button>
           <span title={value}>{value}</span>
