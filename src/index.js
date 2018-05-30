@@ -9,7 +9,9 @@ import App from './App';
 import * as stores from './stores/stores';
 
 /* eslint-disable no-undef */
-Raven.config(process.env.REACT_APP_SENTRY_URL).install();
+Raven.config(process.env.REACT_APP_SENTRY_URL, {
+  environment: process.env.REACT_APP_SENTRY_ENV
+}).install();
 
 // For easier debugging
 window.APP_STATE = stores;
