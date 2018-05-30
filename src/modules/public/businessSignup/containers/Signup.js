@@ -3,15 +3,16 @@ import { Link } from 'react-router-dom';
 import { Segment, Grid, Icon, Header, Divider, Form, Checkbox, List, Popup, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-import { FormRadioGroup, FormInput, MaskedInput, AutoComplete } from '../../../../theme/form/FormElements';
+import { FormRadioGroup, FormInput, MaskedInput2, AutoComplete } from '../../../../theme/form/FormElements';
 
 @inject('newBusinessStore')
 @observer
 class Signup extends Component {
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange,
+      BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
     } = this.props.newBusinessStore;
+    const { fields } = BUSINESS_APP_FRM;
     return (
       <Segment vertical className="content">
         <Grid container>
@@ -33,7 +34,7 @@ class Signup extends Component {
                 </Header.Subheader>
               </Header>
               <FormRadioGroup
-                fielddata={BUSINESS_APP_FRM.fields.businessType}
+                fielddata={fields.businessType}
                 name="businessType"
                 changed={businessAppEleChange}
                 containerclassname="button-radio"
@@ -48,22 +49,21 @@ class Signup extends Component {
                         <FormInput
                           key={field}
                           name={field}
-                          value={BUSINESS_APP_FRM.fields[field].value}
-                          fielddata={BUSINESS_APP_FRM.fields[field]}
+                          value={fields[field].value}
+                          fielddata={fields[field]}
                           changed={businessAppEleChange}
                         />
                       ))
                     }
-                    <MaskedInput
+                    <MaskedInput2
                       name="phoneNumber"
-                      fielddata={BUSINESS_APP_FRM.fields.phoneNumber}
-                      mask="(999)-999-999"
+                      fielddata={fields.phoneNumber}
                       changed={businessAppEleChange}
                     />
                     <FormInput
                       name="emailAddress"
-                      value={BUSINESS_APP_FRM.fields.emailAddress.value}
-                      fielddata={BUSINESS_APP_FRM.fields.emailAddress}
+                      value={fields.emailAddress.value}
+                      fielddata={fields.emailAddress}
                       changed={businessAppEleChange}
                     />
                   </div>
@@ -73,7 +73,8 @@ class Signup extends Component {
                     <Header as="h5">Business Address</Header>
                     <AutoComplete
                       name="businessStreet"
-                      fielddata={BUSINESS_APP_FRM.fields.businessStreet}
+                      fielddata={fields.businessStreet}
+                      onplaceselected={setAddressFields}
                       changed={businessAppEleChange}
                     />
                     <Form.Group widths="equal">
@@ -83,7 +84,7 @@ class Signup extends Component {
                             key={field}
                             type="text"
                             name={field}
-                            fielddata={BUSINESS_APP_FRM.fields[field]}
+                            fielddata={fields[field]}
                             changed={businessAppEleChange}
                           />
                         ))
@@ -138,10 +139,10 @@ class Signup extends Component {
                     }
                     {
                       ['projectCost', 'raiseRequired'].map(field => (
-                        <FormInput
+                        <MaskedInput2
                           key={field}
                           name={field}
-                          prefix="$"
+                          isCurrency
                           value={BUSINESS_APP_FRM.fields[field].value}
                           fielddata={BUSINESS_APP_FRM.fields[field]}
                           changed={businessAppEleChange}
@@ -178,10 +179,10 @@ class Signup extends Component {
                   <div className="field-wrap">
                     {
                       ['grossSales', 'goodsSold', 'operatingExpenses', 'netIncome'].map(field => (
-                        <FormInput
+                        <MaskedInput2
                           key={field}
                           name={field}
-                          prefix="$"
+                          isCurrency
                           value={BUSINESS_APP_FRM.fields[field].value}
                           fielddata={BUSINESS_APP_FRM.fields[field]}
                           changed={businessAppEleChange}
