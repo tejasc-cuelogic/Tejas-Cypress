@@ -13,7 +13,7 @@ import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 import Spinner from '../../../theme/ui/Spinner';
 
-@inject('uiStore', 'userStore', 'accountStore', 'userDetailsStore', 'individualAccountStore', 'iraAccountStore')
+@inject('uiStore', 'profileStore', 'iraAccountStore', 'accountStore', 'userStore', 'userDetailsStore', 'individualAccountStore')
 @observer
 class Summary extends Component {
   componentWillMount() {
@@ -37,19 +37,43 @@ class Summary extends Component {
     }
   }
 
+  isVerified(cipStatus) {
+    return this.props.accountStore.validAccStatus.includes(cipStatus);
+  }
+
   render() {
-    const stepinfo = {
+    let stepinfo = {
       value: 'Verify your identity',
       label: 'Complete all required information about yourself',
       linkText: 'Verify me',
       linkPath: 'InvestorPersonalDetails',
     };
-    if (!this.props.userDetailsStore.currentUser) {
+
+    const { currentUser } = this.props.userDetailsStore;
+    if (!currentUser.data.user) {
       return (
         <div>
           <Spinner loaderMessage="Loading..." />
         </div>
       );
+    }
+
+    if (this.props.profileStore.verifyIdentity01.response.message) {
+      if (this.isVerified(this.props.profileStore.verifyIdentity01.response.message)) {
+        stepinfo = {
+          value: 'Welcome to NextSeed!',
+          label: 'Would you like to start the process of new account creation?',
+          linkText: 'Let`s start it!',
+          linkPath: 'InvestmentChooseType',
+        };
+      }
+    } else if (this.isVerified(currentUser.data.user.legalDetails.cipStatus)) {
+      stepinfo = {
+        value: 'Welcome to NextSeed!',
+        label: 'Would you like to start the process of new account creation?',
+        linkText: 'Let`s start it!',
+        linkPath: 'InvestmentChooseType',
+      };
     }
 
     return (
@@ -63,31 +87,66 @@ class Summary extends Component {
             />
           }
         >
-          <Header as="h3">Welcome to NextSeed!</Header>
-          <Grid stackable>
-            <Grid.Row>
-              <Grid.Column computer={8} largeScreen={8} widescreen={5}>
-                <Card fluid raised className="welcome-card">
-                  <Card.Content>
-                    <List divided relaxed="very">
-                      <List.Item>
-                        <List.Icon className="ns-nextseed-icon" size="huge" verticalAlign="middle" />
-                        <List.Content verticalAlign="middle">
-                          <List.Header>
-                            Would you like to start the process of new account creation?
-                          </List.Header>
-                        </List.Content>
-                      </List.Item>
-                    </List>
-                    <Divider hidden />
-                    <AccountSetupChecklist
-                      setDashboardWizardSetup={this.setDashboardWizardSetup}
-                    />
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          {this.props.profileStore.verifyIdentity01.response.message &&
+          !this.isVerified(this.props.profileStore.verifyIdentity01.response.message) &&
+            <div>
+              <Header as="h3">Welcome to NextSeed!</Header>
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column widescreen={5} largeScreen={8} computer={8} tablet={16} mobile={16}>
+                    <Card fluid raised className="welcome-card">
+                      <Card.Content>
+                        <List divided relaxed="very">
+                          <List.Item>
+                            <List.Icon className="ns-nextseed-icon" size="huge" verticalAlign="middle" />
+                            <List.Content verticalAlign="middle">
+                              <List.Header>
+                                Would you like to start the process of new account creation?
+                              </List.Header>
+                            </List.Content>
+                          </List.Item>
+                        </List>
+                        <Divider hidden />
+                        <AccountSetupChecklist
+                          setDashboardWizardSetup={this.setDashboardWizardSetup}
+                        />
+                      </Card.Content>
+                    </Card>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </div>
+          }
+          {!this.props.profileStore.verifyIdentity01.response.message &&
+          !this.isVerified(currentUser.data.user.legalDetails.cipStatus) &&
+            <div>
+              <Header as="h3">Welcome to NextSeed!</Header>
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column widescreen={5} largeScreen={8} computer={8} tablet={16} mobile={16}>
+                    <Card fluid raised className="welcome-card">
+                      <Card.Content>
+                        <List divided relaxed="very">
+                          <List.Item>
+                            <List.Icon className="ns-nextseed-icon" size="huge" verticalAlign="middle" />
+                            <List.Content verticalAlign="middle">
+                              <List.Header>
+                                Would you like to start the process of new account creation?
+                              </List.Header>
+                            </List.Content>
+                          </List.Item>
+                        </List>
+                        <Divider hidden />
+                        <AccountSetupChecklist
+                          setDashboardWizardSetup={this.setDashboardWizardSetup}
+                        />
+                      </Card.Content>
+                    </Card>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </div>
+          }
         </PrivateLayout>
         {this.props.uiStore.dashboardStep &&
         <DashboardWizard

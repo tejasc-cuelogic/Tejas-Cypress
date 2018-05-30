@@ -28,7 +28,7 @@ const userVerifiedDetails = (props) => {
     );
   }
   return (
-    <Card className="form-card">
+    <Card fluid className="form-card">
       <h3>Identity verified</h3>
       <dl className="dl-horizontal">
         <dt>Legal First Name</dt>

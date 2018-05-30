@@ -32,6 +32,7 @@ export class AccountStore {
   /**
    * Link BANK Account
    */
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
 
   @observable
   bankListing = undefined;

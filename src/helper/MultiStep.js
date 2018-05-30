@@ -140,7 +140,7 @@ export default class MultiStep extends React.Component {
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
       <div onKeyDown={this.handleKeyDown}>
-        <Modal size="small" basic open closeIcon className="multistep-modal" closeOnRootNodeClick={false} onClose={() => this.props.setDashboardWizardStep()}>
+        <Modal basic open closeIcon className="multistep-modal" closeOnRootNodeClick={false} onClose={() => this.props.setDashboardWizardStep()}>
           <Header as="h1" textAlign="center">{this.props.formTitle}</Header>
           <ol className="progtrckr">
             {this.renderSteps()}

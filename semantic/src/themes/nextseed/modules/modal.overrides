@@ -9,7 +9,13 @@
         margin:0 !important;
     }
 }
-
+.ui.modal{
+    &.mini{
+        @media only screen and (min-width:@tabletBreakpoint){
+            width:450px;
+        }
+    }
+}
 .ui.modal.deletion{
     .actions{
         .ui.primary.button{
@@ -21,11 +27,18 @@
     }
 }
 .ui.modal{
+    @media only screen and (min-width:@tabletBreakpoint){
+        width:665px;
+    }
     >.close{
         top:@7px;
         right:@7px;
         opacity:0.5;
         color:@quaternary-text;
+        @media only screen and (max-width:@largestMobileScreen){
+            top:.25rem !important;
+            right:.25rem !important;
+        }
     }
     >.header:not(.ui).signup-header{
         padding-top:@28px;
@@ -61,7 +74,7 @@
             margin:0 auto;
         }
         &.signup-content{
-            padding-top:0;
+            // padding-top:0;
             padding-bottom:@28px;
         }
         .user-type{
@@ -130,35 +143,6 @@
                 outline:none;
             }
         }
-        .ui.button.multistep__btn{
-            background:@white;
-            color:@theme-primary;
-            letter-spacing:0;
-            box-shadow:0 0 16px 2px fade(@fullBlack, 15%) !important;
-            margin:0;
-            position:absolute;
-            top:50%;
-            &.disabled{
-                background:@border-light;
-                color:@border-color;
-                opacity:1 !important;
-            }
-            >.icon{
-                width:auto;
-            }
-            &.prev{
-                left:0;
-                transform:translate(-50%, -50%);
-            }
-            &.next{
-                right:0;
-                transform:translate(50%, -50%);
-                &.active{
-                    background:@theme-primary;
-                    color:@white;
-                }
-            }
-        }
         &.reward-deatils{
             padding:@14px;
         }
@@ -222,6 +206,9 @@
         border-radius:@15px;
         top:1rem;
         right:1rem;
+        @media only screen and (max-width:@largestTabletScreen){
+            color:@quaternary-text;
+        }
     }
     .ui.header{
         border:none;
@@ -273,6 +260,9 @@
     margin:@30px auto;
     padding:@25px @60px;
     background:@lighten-bg-color;
+    @media only screen and (max-width:@largestMobileScreen){
+        padding:@25px;
+    }
 }
 .bank-list{
     padding:@28px 0;

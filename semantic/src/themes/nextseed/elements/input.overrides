@@ -2,14 +2,17 @@
          Theme Overrides
 *******************************/
 .ui.action.input{
-    &:not([class*="left action"])>input{
+    &:not([class*="left"])>input{
         padding-right:@14px;
     }
-    .ui.button{
+    &.left >input{
+        padding-left:@14px;
+    }
+    .ui.button.link-button{
         border-bottom:@border-color 1px solid;
         border-radius:0 !important;
     }
-    >input:focus ~ .ui.button{
+    >input:focus ~ .ui.button.link-button{
         border-color:@theme-primary;
     }
 }

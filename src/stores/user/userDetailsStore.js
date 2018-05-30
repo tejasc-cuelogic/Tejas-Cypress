@@ -157,7 +157,7 @@ export class UserDetailsStore {
   @action
   onFieldChange = (currentForm, field, value) => {
     const form = currentForm || 'formFinInfo';
-    if (field && value) {
+    if (field) {
       this[form].fields[field].value = value;
     }
     const validation = new Validator(
@@ -165,7 +165,7 @@ export class UserDetailsStore {
       mapValues(this[form].fields, f => f.rule),
     );
     this[form].meta.isValid = validation.passes();
-    if (field && value) {
+    if (field) {
       this[form].fields[field].error = validation.errors.first(field);
     }
   };

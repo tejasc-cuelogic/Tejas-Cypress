@@ -13,6 +13,11 @@
             padding:@13px @16px;
         }
     }
+    a.header.item{
+        &:hover, &:active{
+            background-color:transparent;
+        }
+    }
 }
 .transaction-detials{
     .ui.inverted.menu .item{
