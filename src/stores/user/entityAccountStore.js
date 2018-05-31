@@ -105,9 +105,19 @@ class EntityAccountStore {
   };
 
   @action
-  genInfoChange = (e, { name, value }) => {
-    this.onFieldChange('formGeneralInfo', name, value);
+  genInfoChange = (e, result) => {
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('formGeneralInfo', fieldName, fieldValue);
   };
+
+  setAddressFields = (place) => {
+    const data = Helper.gAddressClean(place);
+    this.onFieldChange('formGeneralInfo', 'street', data.residentalStreet);
+    this.onFieldChange('formGeneralInfo', 'city', data.city);
+    this.onFieldChange('formGeneralInfo', 'state', data.state);
+    this.onFieldChange('formGeneralInfo', 'zipCode', data.zipCode);
+  }
 
   @action
   entityInfoChange = (e, { name, value }) => {
@@ -120,7 +130,7 @@ class EntityAccountStore {
   }
 
   @action
-  onFieldChange = (currentForm, field, value) => {
+  onFieldChange = (currentForm, field, value, isDirty = true) => {
     const form = currentForm || 'formFinInfo';
     if (field) {
       if (typeof value !== 'undefined') {
@@ -132,7 +142,7 @@ class EntityAccountStore {
       mapValues(this[form].fields, f => f.rule),
     );
     this[form].meta.isValid = validation.passes();
-    this[form].meta.isDirty = true;
+    this[form].meta.isDirty = isDirty;
     if (field) {
       if (typeof value !== 'undefined') {
         this[form].fields[field].error = validation.errors.first(field);
@@ -444,7 +454,7 @@ class EntityAccountStore {
           }
           return this.formFinInfo.fields[f];
         });
-        this.onFieldChange('formFinInfo');
+        this.onFieldChange('formFinInfo', undefined, undefined, false);
         Object.keys(this.formGeneralInfo.fields).map((f) => {
           if ((f === 'taxId' || f === 'name') && account.accountDetails.entity) {
             this.formGeneralInfo.fields[f].value = account.accountDetails.entity[f];
@@ -453,21 +463,21 @@ class EntityAccountStore {
           }
           return this.formGeneralInfo.fields[f];
         });
-        this.onFieldChange('formGeneralInfo');
+        this.onFieldChange('formGeneralInfo', undefined, undefined, false);
         Object.keys(this.formEntityInfo.fields).map((f) => {
           if (f === 'isTrust' && account.accountDetails.entity) {
             this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
           }
           return this.formEntityInfo.fields[f];
         });
-        this.onFieldChange('formEntityInfo');
+        this.onFieldChange('formEntityInfo', undefined, undefined, false);
         Object.keys(this.formPersonalInfo.fields).map((f) => {
           if (account.accountDetails.entity && account.accountDetails.entity.legalInfo) {
             this.formPersonalInfo.fields[f].value = account.accountDetails.entity.legalInfo[f];
           }
           return this.formPersonalInfo.fields[f];
         });
-        this.onFieldChange('formPersonalInfo');
+        this.onFieldChange('formPersonalInfo', undefined, undefined, false);
         Object.keys(this.formFormationDocuments.fields).map((f) => {
           if (account.accountDetails.entity && account.accountDetails.entity.legalDocs) {
             const { entity } = account.accountDetails;
@@ -475,7 +485,7 @@ class EntityAccountStore {
           }
           return this.formFormationDocuments.fields[f];
         });
-        this.onFieldChange('formFormationDocuments');
+        this.onFieldChange('formFormationDocuments', undefined, undefined, false);
         if (account.accountDetails.bankDetails && account.accountDetails.bankDetails.plaidItemId) {
           const { accountNumber, routingNumber } = account.accountDetails.bankDetails;
           accountStore.formLinkBankManually.fields.accountNumber.value = accountNumber;

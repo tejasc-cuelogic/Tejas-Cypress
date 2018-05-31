@@ -91,7 +91,7 @@ export default class Summary extends Component {
                     <Item.Group>
                       <Item>
                         <Item.Content>
-                          <h5>{bankAccountNumber}</h5>
+                          <h5>{Helper.encryptNumber(bankAccountNumber)}</h5>
                         </Item.Content>
                       </Item>
                     </Item.Group>
