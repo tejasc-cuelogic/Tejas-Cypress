@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Header, Card, Button, Icon } from 'semantic-ui-react';
+import { Header, Card } from 'semantic-ui-react';
 
 @inject('educationStore')
 @observer
@@ -21,14 +21,6 @@ export default class Details extends Component {
             </Aux>
             ) : <div>Nothing to display !</div>
           }
-          <div className="navigation-buttons">
-            <Button circular icon className="multistep__btn prev">
-              <Icon className="ns-arrow-left" />
-            </Button>
-            <Button circular icon primary className="multistep__btn next active">
-              <Icon className="ns-arrow-right" />
-            </Button>
-          </div>
         </Card.Content>
       </Card>
     );
