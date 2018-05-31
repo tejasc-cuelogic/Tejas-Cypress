@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form/FormElements';
-import Helper from '../../../../helper/utility';
 import ListErrors from '../../../../theme/common/ListErrors';
 
 @inject('individualAccountStore', 'accountStore', 'uiStore')
@@ -12,7 +11,6 @@ export default class LinkBankForm extends Component {
     e.preventDefault();
     if (this.props.accountStore.accountType.type === 'individual') {
       this.props.individualAccountStore.createAccount().then(() => {
-        Helper.toast('Bank account has been linked.', 'success');
         this.props.individualAccountStore.setStepToBeRendered(1);
       });
     }

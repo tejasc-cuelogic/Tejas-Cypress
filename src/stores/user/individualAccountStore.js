@@ -95,8 +95,10 @@ class IndividualAccountStore {
           }
           if (formStatus === 'submit') {
             Helper.toast('Individual account created successfully.', 'success');
-          } else {
+          } else if (currentStep) {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+          } else {
+            Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
           }
           resolve(result);
         })

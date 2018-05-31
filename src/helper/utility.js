@@ -93,7 +93,8 @@ export class Utility {
   CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
 
   encryptNumber = (number) => {
-    const encryptedNumber = number.replace(/.(?=.{4,}$)/g, '\u2715');
+    let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
+    encryptedNumber = encryptedNumber.slice(-7);
     return encryptedNumber;
   }
 }

@@ -14,6 +14,9 @@ import Summary from './Summary';
 @inject('accountStore', 'entityAccountStore', 'userDetailsStore', 'userStore')
 @observer
 export default class AccountCreation extends React.Component {
+  handleMultiStepModalclose = () => {
+    this.props.setDashboardWizardStep();
+  }
   handleStepChange = (step) => {
     this.props.entityAccountStore.setStepToBeRendered(step);
   }
@@ -71,7 +74,7 @@ export default class AccountCreation extends React.Component {
     ];
     return (
       <div className="step-progress">
-        <MuliStep setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.entityAccountStore.stepToBeRendered} createAccount={this.props.entityAccountStore.createAccount} steps={steps} formTitle="Entity Account Creation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
+        <MuliStep setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.entityAccountStore.stepToBeRendered} createAccount={this.props.entityAccountStore.createAccount} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

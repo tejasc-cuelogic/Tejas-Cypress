@@ -50,8 +50,8 @@ export class UserDetailsStore {
       },
       onFetch: (data) => {
         iraAccountStore.populateData(data.user);
-        entityAccountStore.populateData(data.user);
         individualAccountStore.populateData(data.user);
+        entityAccountStore.populateData(data.user);
       },
     });
   }

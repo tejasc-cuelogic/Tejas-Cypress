@@ -163,6 +163,17 @@ export class AccountStore {
     this.accountType.type = INVESTMENT_ACCOUNT_TYPES[type];
   }
 
+  @action
+  resetLinkBankForm() {
+    Object.keys(this.formLinkBankManually.fields).map((field) => {
+      this.formLinkBankManually.fields[field].value = '';
+      this.formLinkBankManually.fields[field].error = undefined;
+      return true;
+    });
+    this.formLinkBankManually.meta.isValid = false;
+    this.formLinkBankManually.meta.error = '';
+  }
+
   /* eslint-disable arrow-body-style */
   getPlaidAccountData = () => {
     return new Promise((resolve, reject) => {
