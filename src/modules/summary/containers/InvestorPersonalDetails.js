@@ -43,6 +43,11 @@ export default class investorPersonalDetails extends Component {
       .catch(() => { });
   }
 
+  handleCloseModal = () => {
+    this.props.setDashboardWizardStep();
+    this.props.profileStore.reset();
+  }
+
   render() {
     const {
       verifyIdentity01,
@@ -52,7 +57,7 @@ export default class investorPersonalDetails extends Component {
     const welcomeMsg = `Hello ${this.props.userStore.currentUser.givenName}!`;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">{welcomeMsg}</Header>
           <p>You’re almost at your personal dashboard</p>

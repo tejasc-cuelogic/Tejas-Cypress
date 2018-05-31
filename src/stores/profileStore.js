@@ -82,8 +82,14 @@ export class ProfileStore {
 
   @action
   reset() {
-    this.verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: false, error: '' }, response: {} };
-    this.verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
+    Object.keys(this.verifyIdentity01.fields).map((field) => {
+      this.verifyIdentity01.fields[field].value = '';
+      this.verifyIdentity01.fields[field].error = undefined;
+      return true;
+    });
+    this.verifyIdentity01.meta.isValid = false;
+    this.verifyIdentity01.meta.error = '';
+    this.verifyIdentity01.response = {};
   }
 
   @computed

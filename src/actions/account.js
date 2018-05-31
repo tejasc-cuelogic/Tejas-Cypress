@@ -99,7 +99,7 @@ export class Account {
         // Send the public_token to your app server here.
         // The metadata object contains info about the institution the
         // user selected and the account ID, if selectAccount is enabled.
-        Helper.toast(`Bank ${metadata.institution.name} with account id ${metadata.account_id} successfully linked.`, 'success');
+        Helper.toast(`Bank ${metadata.institution.name} with account id ${Helper.encryptNumber(metadata.account_id)} successfully linked.`, 'success');
         // indAccountStore.setStepToBeRendered(1);
       },
       onExit: (err) => {

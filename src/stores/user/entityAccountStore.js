@@ -50,6 +50,14 @@ class EntityAccountStore {
   @observable
   stepToBeRendered = 0;
 
+  @observable
+  formStatus = 'draft';
+
+  @action
+  setFormStatus(formStatus) {
+    this.formStatus = formStatus;
+  }
+
   @action
   setInvestorAccId(id) {
     this.investorAccId = id;
@@ -196,47 +204,51 @@ class EntityAccountStore {
 
   @computed
   get accountAttributes() {
-    const payload = {
-      netAssets: this.formFinInfo.fields.netAssets.value
-        ? this.formFinInfo.fields.netAssets.value : 0,
-      cfInvestment: {
-        dateOfInvestment: '02281975',
-        amount: this.formFinInfo.fields.cfInvestment.value ?
-          this.formFinInfo.fields.cfInvestment.value : 0,
-      },
-      entity: {
-        name: this.formGeneralInfo.fields.name.value ? this.formGeneralInfo.fields.name.value : '',
-        taxId: this.formGeneralInfo.fields.taxId.value ? this.formGeneralInfo.fields.taxId.value : '',
-        isTrust: this.formEntityInfo.fields.isTrust.value,
-        trustDate: this.formEntityInfo.fields.trustDate.value,
-        address: {
-          street: this.formGeneralInfo.fields.street.value ? this.formGeneralInfo.fields.street.value : '',
-          city: this.formGeneralInfo.fields.city.value ? this.formGeneralInfo.fields.city.value : '',
-          state: this.formGeneralInfo.fields.state.value ? this.formGeneralInfo.fields.state.value : '',
-          zipCode: this.formGeneralInfo.fields.zipCode.value ? this.formGeneralInfo.fields.zipCode.value : '',
+    let payload = {};
+    if (this.formStatus === 'submit') {
+      payload = {
+        netAssets: this.formFinInfo.fields.netAssets.value,
+        cfInvestment: {
+          dateOfInvestment: '02281975',
+          amount: this.formFinInfo.fields.cfInvestment.value,
         },
-        legalInfo: {
-          legalFirstName: userStore.currentUser.givenName,
-          legalLastName: userStore.currentUser.familyName,
-          title: this.formPersonalInfo.fields.title.value ? this.formPersonalInfo.fields.title.value : '',
-          legalDocUrl: this.formPersonalInfo.fields.legalDocUrl.value ? this.formPersonalInfo.fields.legalDocUrl.value : '',
+        entity: {
+          name: this.formGeneralInfo.fields.name.value,
+          taxId: this.formGeneralInfo.fields.taxId.value,
+          isTrust: this.formEntityInfo.fields.isTrust.value,
+          trustDate: this.formEntityInfo.fields.trustDate.value,
+          address: {
+            street: this.formGeneralInfo.fields.street.value,
+            city: this.formGeneralInfo.fields.city.value,
+            state: this.formGeneralInfo.fields.state.value,
+            zipCode: this.formGeneralInfo.fields.zipCode.value,
+          },
+          legalInfo: {
+            legalFirstName: userStore.currentUser.givenName,
+            legalLastName: userStore.currentUser.familyName,
+            title: this.formPersonalInfo.fields.title.value,
+            legalDocUrl: this.formPersonalInfo.fields.legalDocUrl.value,
+          },
+          legalDocs: {
+            formationDoc: this.formFormationDocuments.fields.formationDoc.value,
+            operatingAgreementDoc: this.formFormationDocuments.fields.operatingAgreementDoc.value,
+            einVerificationDoc: this.formFormationDocuments.fields.einVerificationDoc.value,
+          },
         },
-        legalDocs: {
-          formationDoc: this.formFormationDocuments.fields.formationDoc.value ? this.formFormationDocuments.fields.formationDoc.value : '',
-          operatingAgreementDoc: this.formFormationDocuments.fields.operatingAgreementDoc.value ? this.formFormationDocuments.fields.operatingAgreementDoc.value : '',
-          einVerificationDoc: this.formFormationDocuments.fields.einVerificationDoc.value ? this.formFormationDocuments.fields.einVerificationDoc.value : '',
-        },
-      },
-    };
-    if (!_.isEmpty(accountStore.plaidBankDetails)) {
-      const plaidBankDetails = _.omit(accountStore.plaidBankDetails, '__typename');
-      payload.bankDetails = plaidBankDetails;
-    } else {
-      const plaidBankDetails = {
-        accountNumber: accountStore.formLinkBankManually.fields.accountNumber.value,
-        routingNumber: accountStore.formLinkBankManually.fields.routingNumber.value,
       };
-      payload.bankDetails = plaidBankDetails;
+      if (!_.isEmpty(accountStore.plaidBankDetails)) {
+        const plaidBankDetails = _.omit(accountStore.plaidBankDetails, '__typename');
+        payload.bankDetails = plaidBankDetails;
+      } else {
+        const { accountNumber, routingNumber } = accountStore.formLinkBankManually.fields;
+        if (accountNumber && routingNumber) {
+          const plaidBankDetails = {
+            accountNumber: accountNumber.value,
+            routingNumber: routingNumber.value,
+          };
+          payload.bankDetails = plaidBankDetails;
+        }
+      }
     }
 
     return payload;
@@ -246,27 +258,77 @@ class EntityAccountStore {
   /* eslint-disable arrow-body-style */
   @action
   createAccount = (currentStep, formStatus = 'draft') => {
+    if (formStatus === 'submit') {
+      this.setFormStatus('submit');
+    }
     let isValidCurrentStep = true;
+    const { accountAttributes } = this;
     switch (currentStep.name) {
       case 'Financial info':
         currentStep.validate();
         isValidCurrentStep = this.isValidEntityFinancialInfo;
+        if (isValidCurrentStep) {
+          accountAttributes.netAssets = this.formFinInfo.fields.netAssets.value;
+          accountAttributes.cfInvestment = {
+            dateOfInvestment: '02281975',
+            amount: this.formFinInfo.fields.cfInvestment.value,
+          };
+        }
         break;
       case 'General':
         currentStep.validate();
         isValidCurrentStep = this.isValidEntityGeneralInfo;
+        if (isValidCurrentStep) {
+          accountAttributes.entity = {
+            name: this.formGeneralInfo.fields.name.value,
+            taxId: this.formGeneralInfo.fields.taxId.value,
+            address: {
+              street: this.formGeneralInfo.fields.street.value,
+              city: this.formGeneralInfo.fields.city.value,
+              state: this.formGeneralInfo.fields.state.value,
+              zipCode: this.formGeneralInfo.fields.zipCode.value,
+            },
+          };
+        }
         break;
       case 'Entity info':
         currentStep.validate();
         isValidCurrentStep = this.isValidEntityInfo;
+        if (isValidCurrentStep) {
+          if (accountAttributes.entity) {
+            accountAttributes.entity.isTrust = this.formEntityInfo.fields.isTrust.value;
+            accountAttributes.entity.trustDate = this.formEntityInfo.fields.trustDate.value;
+          } else {
+            accountAttributes.entity = {
+              isTrust: this.formEntityInfo.fields.isTrust.value,
+              trustDate: this.formEntityInfo.fields.trustDate.value,
+            };
+          }
+        }
         break;
       case 'Personal info':
         currentStep.validate();
         isValidCurrentStep = this.isValidPersonalInfo;
+        if (isValidCurrentStep) {
+          accountAttributes.entity = {};
+          accountAttributes.entity.legalInfo = {
+            legalFirstName: userStore.currentUser.givenName,
+            legalLastName: userStore.currentUser.familyName,
+            title: this.formPersonalInfo.fields.title.value,
+            legalDocUrl: this.formPersonalInfo.fields.legalDocUrl.value,
+          };
+        }
         break;
       case 'Formation doc':
         currentStep.validate();
         isValidCurrentStep = this.isValidFormationDoc;
+        if (isValidCurrentStep) {
+          accountAttributes.entity.legalDocs = {
+            formationDoc: this.formFormationDocuments.fields.formationDoc.value,
+            operatingAgreementDoc: this.formFormationDocuments.fields.operatingAgreementDoc.value,
+            einVerificationDoc: this.formFormationDocuments.fields.einVerificationDoc.value,
+          };
+        }
         break;
       case 'Link Bank':
         if (accountStore.bankLinkInterface === 'list') {
@@ -375,7 +437,7 @@ class EntityAccountStore {
       );
       if (account) {
         Object.keys(this.formFinInfo.fields).map((f) => {
-          if (f === 'cfInvestment') {
+          if (f === 'cfInvestment' && account.accountDetails[f].amount) {
             this.formFinInfo.fields[f].value = account.accountDetails[f].amount;
           } else {
             this.formFinInfo.fields[f].value = account.accountDetails[f];
@@ -384,39 +446,46 @@ class EntityAccountStore {
         });
         this.onFieldChange('formFinInfo');
         Object.keys(this.formGeneralInfo.fields).map((f) => {
-          if (f === 'taxId' || f === 'name') {
+          if ((f === 'taxId' || f === 'name') && account.accountDetails.entity) {
             this.formGeneralInfo.fields[f].value = account.accountDetails.entity[f];
-          } else {
+          } else if (account.accountDetails.entity && account.accountDetails.entity.address) {
             this.formGeneralInfo.fields[f].value = account.accountDetails.entity.address[f];
           }
           return this.formGeneralInfo.fields[f];
         });
         this.onFieldChange('formGeneralInfo');
         Object.keys(this.formEntityInfo.fields).map((f) => {
-          if (f === 'isTrust') {
+          if (f === 'isTrust' && account.accountDetails.entity) {
             this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
           }
           return this.formEntityInfo.fields[f];
         });
         this.onFieldChange('formEntityInfo');
         Object.keys(this.formPersonalInfo.fields).map((f) => {
-          this.formPersonalInfo.fields[f].value = account.accountDetails.entity.legalInfo[f];
+          if (account.accountDetails.entity && account.accountDetails.entity.legalInfo) {
+            this.formPersonalInfo.fields[f].value = account.accountDetails.entity.legalInfo[f];
+          }
           return this.formPersonalInfo.fields[f];
         });
         this.onFieldChange('formPersonalInfo');
         Object.keys(this.formFormationDocuments.fields).map((f) => {
-          this.formFormationDocuments.fields[f].value = account.accountDetails.entity.legalDocs[f];
+          if (account.accountDetails.entity && account.accountDetails.entity.legalDocs) {
+            const { entity } = account.accountDetails;
+            this.formFormationDocuments.fields[f].value = entity.legalDocs[f];
+          }
           return this.formFormationDocuments.fields[f];
         });
         this.onFieldChange('formFormationDocuments');
-        if (account.accountDetails.bankDetails.plaidItemId) {
+        if (account.accountDetails.bankDetails && account.accountDetails.bankDetails.plaidItemId) {
           const { accountNumber, routingNumber } = account.accountDetails.bankDetails;
           accountStore.formLinkBankManually.fields.accountNumber.value = accountNumber;
           accountStore.formLinkBankManually.fields.routingNumber.value = routingNumber;
         } else {
           Object.keys(accountStore.formLinkBankManually.fields).map((f) => {
             const { accountDetails } = account;
-            accountStore.formLinkBankManually.fields[f].value = accountDetails.bankDetails[f];
+            if (accountDetails.bankDetails) {
+              accountStore.formLinkBankManually.fields[f].value = accountDetails.bankDetails[f];
+            }
             return accountStore.formLinkBankManually.fields[f];
           });
           accountStore.onFieldChange('formLinkBankManually');

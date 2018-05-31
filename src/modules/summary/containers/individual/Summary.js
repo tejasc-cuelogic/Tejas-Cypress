@@ -52,8 +52,8 @@ export default class Summary extends React.Component {
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
                     <Table.Cell>{_.isEmpty(plaidAccDetails) || !plaidAccDetails.account_id ?
-                      formLinkBankManually.fields.accountNumber.value :
-                      plaidAccDetails.account_id}
+                      Helper.encryptNumber(formLinkBankManually.fields.accountNumber.value) :
+                      Helper.encryptNumber(plaidAccDetails.account_id)}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>

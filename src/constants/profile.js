@@ -1,4 +1,3 @@
-import moment from 'moment';
 import Validator from 'validatorjs';
 
 /* eslint-disable no-unused-vars */
@@ -63,7 +62,7 @@ export const VERIFY_IDENTITY_STEP_01 = {
     rule: 'required|maskedPhoneNumber',
   },
   dateOfBirth: {
-    value: moment(),
+    value: '',
     label: 'Date of Birth',
     error: undefined,
     rule: 'required',
