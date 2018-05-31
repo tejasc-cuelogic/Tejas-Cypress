@@ -86,7 +86,7 @@ class IraAccountStore {
   };
 
   @action
-  onFieldChange = (currentForm, field, value) => {
+  onFieldChange = (currentForm, field, value, isDirty = true) => {
     const form = currentForm || 'formFinInfo';
     if (field) {
       if (typeof value !== 'undefined') {
@@ -98,7 +98,7 @@ class IraAccountStore {
       mapValues(this[form].fields, f => f.rule),
     );
     this[form].meta.isValid = validation.passes();
-    this[form].meta.isDirty = true;
+    this[form].meta.isDirty = isDirty;
     if (field) {
       if (typeof value !== 'undefined') {
         this[form].fields[field].error = validation.errors.first(field);
@@ -311,7 +311,7 @@ class IraAccountStore {
           this.formFinInfo.fields[f].value = account.accountDetails[f];
           return this.formFinInfo.fields[f];
         });
-        this.onFieldChange('formFinInfo');
+        this.onFieldChange('formFinInfo', undefined, undefined, false);
         Object.keys(this.formFunding.fields).map((f) => {
           if (account.accountDetails[f] === 'check') {
             this.formFunding.fields[f].value = 0;
@@ -322,7 +322,7 @@ class IraAccountStore {
           }
           return this.formFunding.fields[f];
         });
-        this.onFieldChange('formFunding');
+        this.onFieldChange('formFunding', undefined, undefined, false);
         Object.keys(this.formAccTypes.fields).map((f) => {
           if (account.accountDetails[f] === 'traditional') {
             this.formAccTypes.fields[f].value = 0;
@@ -331,12 +331,12 @@ class IraAccountStore {
           }
           return this.formAccTypes.fields[f];
         });
-        this.onFieldChange('formAccTypes');
+        this.onFieldChange('formAccTypes', undefined, undefined, false);
         Object.keys(this.formIdentity.fields).map((f) => {
           this.formIdentity.fields[f].value = account.accountDetails[f];
           return this.formIdentity.fields[f];
         });
-        this.onFieldChange('formIdentity');
+        this.onFieldChange('formIdentity', undefined, undefined, false);
         if (!this.formFinInfo.meta.isValid) {
           this.setStepToBeRendered(0);
         } else if (!this.formAccTypes.meta.isValid) {
