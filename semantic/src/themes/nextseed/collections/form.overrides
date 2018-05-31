@@ -11,6 +11,8 @@
         }
     }
     .fields .field{
+        padding-left:@gutterWidth;
+        padding-right:@gutterWidth;
         margin-bottom:@14px;
     }
     .field.otp-field{

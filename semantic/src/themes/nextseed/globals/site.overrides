@@ -24,6 +24,9 @@
 		padding:@20px @10px;
 	}
 }
+.pusher.white-bg .content-spacer{
+	padding:@50px @40px;
+}
 .inner-content-spacer{
 	padding:@20px;
 }
@@ -784,6 +787,15 @@ svg:not(:root).recharts-surface{
 		padding:@40px;
 		@media only screen and (max-width:@largestMobileScreen){
 			padding:@25px;
+		}
+	}
+	.navigation-buttons{
+		min-height:50px;
+		position:relative;
+		.ui.button.multistep__btn{
+			&.prev, &.next{
+				transform:translate(0, -50%);
+			}
 		}
 	}
 }

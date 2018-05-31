@@ -45,7 +45,7 @@ class PrivateHOC extends Component {
             <SecondaryMenu match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} />
           }
         </div>
-        <div className="content-spacer white">
+        <div className="content-spacer">
           {this.props.children}
         </div>
       </Aux>

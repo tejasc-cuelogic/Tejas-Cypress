@@ -186,4 +186,22 @@ export const BUSINESS_PRE_QUALIFICATION = {
   termMonths: {
     value: '', label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5',
   },
+  fullLegalName: {
+    value: '', label: 'Full Legal Name', error: undefined, rule: 'required', placeHolder: 'John Doe',
+  },
+  yearsExperience: {
+    value: '', label: 'Years Experience', error: undefined, rule: 'required', placeHolder: '5',
+  },
+  ssnNumber: {
+    value: '', label: 'SSN', error: undefined, rule: 'required', placeHolder: '123-456-7890',
+  },
+  ownershipOfCompany: {
+    value: '', label: 'Ownership of Company', error: undefined, rule: 'required', placeHolder: '40.0%',
+  },
+  linkedInURL: {
+    value: '', label: 'LinkedIn URL', error: undefined, rule: 'required', placeHolder: 'http://linkedin.com/username',
+  },
+  title: {
+    value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO',
+  },
 };
