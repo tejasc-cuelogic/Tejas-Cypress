@@ -25,7 +25,7 @@ const MaskedInput2 = observer((props) => {
           />
         }
       </label>
-      {props.isCurrency ? (
+      {props.currency ? (
         <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
       ) : (
         <NumberFormat format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
