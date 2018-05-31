@@ -11,7 +11,7 @@ import FormElementWrap from '../components/FormElementWrap';
 class Signup extends Component {
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
+      BUSINESS_APP_FRM, businessAppEleChange, setAddressFields, BUSINESS_APP_STATUS,
     } = this.props.newBusinessStore;
     const { fields } = BUSINESS_APP_FRM;
     return (

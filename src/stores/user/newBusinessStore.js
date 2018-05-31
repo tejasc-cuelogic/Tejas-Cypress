@@ -10,6 +10,7 @@ import Helper from '../../helper/utility';
 
 export class NewBusinessStore {
   @observable BUSINESS_APP_FRM = { fields: { ...BUSINESS_PRE_QUALIFICATION }, meta: { isValid: false, error: '' } };
+  @observable BUSINESS_APP_STATUS = '';
 
   @action
   businessAppEleChange = (e, result) => {
@@ -43,6 +44,17 @@ export class NewBusinessStore {
       this[form].fields[field].error = validation.errors.first(field);
     }
   };
+
+  @action
+  businessPreQualification = () => {
+    const data = mapValues(this.BUSINESS_APP_FRM.fields, f => f.value);
+    console.log(data);
+    if (data.businessName === 'SUCCESS') {
+      BUSINESS_APP_STATUS = 'success';
+    } else {
+      BUSINESS_APP_STATUS = 'failed';
+    }
+  }
 
   @action
   setAddressFields = (place) => {
