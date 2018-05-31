@@ -124,7 +124,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: 'required',
   },
   legalConfirmation: {
-    value: 'legalConfirmation01',
+    value: [],
     values: [
       {
         label: 'The company has not raised securities under Regulation Crowdfunding in the last 12 months.',

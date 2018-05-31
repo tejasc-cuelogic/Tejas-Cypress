@@ -23,7 +23,7 @@ export class NewBusinessStore {
   onFieldChange = (currentForm, field, value, type) => {
     const form = currentForm || 'formFinInfo';
     if (field) {
-      if (type === 'checkbox') {
+      if (type === 'checkbox' || Array.isArray(this[form].fields[field].value)) {
         const index = this[form].fields[field].value.indexOf(value);
         if (index === -1) {
           this[form].fields[field].value.push(value);
