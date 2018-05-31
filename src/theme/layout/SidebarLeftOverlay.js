@@ -51,7 +51,7 @@ class SidebarLeftPush extends Component {
               <i className={`angle ${(uiStore.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
               <span>Collapse</span>
             </Button>
-            <Sidebar.Pusher>
+            <Sidebar.Pusher className="white-bg">
               {this.props.children}
             </Sidebar.Pusher>
             <NotificationPanel status={uiStore.layoutState.notificationPanel} />
@@ -84,7 +84,7 @@ class SidebarLeftPush extends Component {
               <Divider />
               <SidebarNav handleLogOut={this.props.handleLogOut} roles={UserInfo.roles} />
             </Sidebar>
-            <Sidebar.Pusher>
+            <Sidebar.Pusher className="white-bg">
               <Icon onClick={this.toggleVisibilityMobile} className="hamburger content" />
               {this.props.children}
             </Sidebar.Pusher>

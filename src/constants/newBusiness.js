@@ -171,10 +171,19 @@ export const BUSINESS_PRE_QUALIFICATION = {
     error: undefined,
     rule: 'required',
   },
-  email: {
-    value: '', label: 'E-mail address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
-  },
   password: {
     value: '', label: 'Password', error: undefined, rule: 'required', placeHolder: 'Password',
+  },
+  existingDebt1: {
+    value: '', label: 'Existing Debt 1', error: undefined, rule: 'required', placeHolder: '500,000',
+  },
+  remainingPrincipal: {
+    value: '', label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000',
+  },
+  interestExpenses: {
+    value: '', label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %',
+  },
+  termMonths: {
+    value: '', label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5',
   },
 };

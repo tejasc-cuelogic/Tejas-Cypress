@@ -218,6 +218,10 @@
         line-height:@14px;
         color:@highlight-primary;
     }
+    .additional-field{
+        padding:0 !important;
+        margin-bottom:@14px;
+    }
     // .field.disabled{
     //   input[type=text]{
     //     opacity:0;
