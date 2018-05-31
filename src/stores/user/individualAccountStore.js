@@ -46,7 +46,6 @@ class IndividualAccountStore {
   /* eslint-disable arrow-body-style */
   createAccount = (currentStep, formStatus = 'draft') => {
     uiStore.setProgress();
-    userDetailsStore.getUser(userStore.currentUser.sub);
     let mutation = createAccount;
     let variables = {
       userId: userStore.currentUser.sub,

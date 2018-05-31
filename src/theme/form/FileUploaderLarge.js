@@ -27,7 +27,9 @@ const FileUploaderLarge = observer((props) => {
         </div>
       }
       {error &&
-        <FieldError className="center-align" error={error} />
+        <div className="center-align">
+          <FieldError className="center-align" error={error} />
+        </div>
       }
     </Form.Field>
   );

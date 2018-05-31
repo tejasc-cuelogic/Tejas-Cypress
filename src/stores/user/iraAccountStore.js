@@ -215,7 +215,6 @@ class IraAccountStore {
     }
     if (isValidCurrentStep) {
       uiStore.setProgress();
-      userDetailsStore.getUser(userStore.currentUser.sub);
       let mutation = createAccount;
       let variables = {
         userId: userStore.currentUser.sub,
