@@ -24,12 +24,12 @@ class IraAccountStore {
 
   @observable
   formAccTypes = {
-    fields: { ...IRA_ACC_TYPES }, meta: { isValid: false, error: '', isDirty: false },
+    fields: { ...IRA_ACC_TYPES }, meta: { isValid: false, error: '', isDirty: true },
   };
 
   @observable
   formFunding = {
-    fields: { ...IRA_FUNDING }, meta: { isValid: false, error: '', isDirty: false },
+    fields: { ...IRA_FUNDING }, meta: { isValid: false, error: '', isDirty: true },
   };
 
   @observable
@@ -45,6 +45,22 @@ class IraAccountStore {
 
   @observable
   formStatus = 'draft';
+
+  @observable
+  accountNotSet = '';
+
+  @observable
+  fundingNotSet = '';
+
+  @action
+  setAccountNotSet(step) {
+    this.accountNotSet = step;
+  }
+
+  @action
+  setFundingNotSet(step) {
+    this.fundingNotSet = step;
+  }
 
   @action
   setFormStatus(formStatus) {
@@ -312,26 +328,36 @@ class IraAccountStore {
           return this.formFinInfo.fields[f];
         });
         this.onFieldChange('formFinInfo', undefined, undefined, false);
+        let isDirty = false;
         Object.keys(this.formFunding.fields).map((f) => {
           if (account.accountDetails[f] === 'check') {
             this.formFunding.fields[f].value = 0;
           } else if (account.accountDetails[f] === 'iraTransfer') {
             this.formFunding.fields[f].value = 1;
-          } else {
+          } else if (account.accountDetails[f] === 'directRollOver') {
             this.formFunding.fields[f].value = 2;
+          } else {
+            this.setFundingNotSet('funding');
+            this.formFunding.fields[f].value = 0;
+            isDirty = true;
           }
           return this.formFunding.fields[f];
         });
-        this.onFieldChange('formFunding', undefined, undefined, false);
+        this.onFieldChange('formFunding', undefined, undefined, isDirty);
+        isDirty = false;
         Object.keys(this.formAccTypes.fields).map((f) => {
           if (account.accountDetails[f] === 'traditional') {
             this.formAccTypes.fields[f].value = 0;
-          } else {
+          } else if (account.accountDetails[f] === 'roth') {
             this.formAccTypes.fields[f].value = 1;
+          } else {
+            this.setAccountNotSet('accType');
+            this.formAccTypes.fields[f].value = 0;
+            isDirty = true;
           }
           return this.formAccTypes.fields[f];
         });
-        this.onFieldChange('formAccTypes', undefined, undefined, false);
+        this.onFieldChange('formAccTypes', undefined, undefined, isDirty);
         Object.keys(this.formIdentity.fields).map((f) => {
           this.formIdentity.fields[f].value = account.accountDetails[f];
           return this.formIdentity.fields[f];
@@ -339,9 +365,9 @@ class IraAccountStore {
         this.onFieldChange('formIdentity', undefined, undefined, false);
         if (!this.formFinInfo.meta.isValid) {
           this.setStepToBeRendered(0);
-        } else if (!this.formAccTypes.meta.isValid) {
+        } else if (!this.formAccTypes.meta.isValid || this.accountNotSet === 'accType') {
           this.setStepToBeRendered(1);
-        } else if (!this.formFunding.meta.isValid) {
+        } else if (!this.formFunding.meta.isValid || this.fundingNotSet === 'funding') {
           this.setStepToBeRendered(2);
         } else if (!this.formIdentity.meta.isValid) {
           this.setStepToBeRendered(3);
