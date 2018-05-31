@@ -1,6 +1,8 @@
 #!/bin/bash
 region=$1
 environment=$2
+ci_commit_ref=$3
+
 if [ "$region" = "" ]; then
 	echo "First parameter should be region name."
 	exit 1
@@ -10,6 +12,7 @@ if [ "$environment" = "" ]; then
 	exit 1
 fi 
 aws ssm get-parameters-by-path --recursive --path "/ns-client/" --region $region --output json| jq -r '.Parameters| .[] | .Name + " = " + .Value +""  ' > Env.txt || { echo "aws ssm command not executed properly in setEnvironmentVariables.sh script. Try again." ; exit 1; }
+
 function settingEnv(){
 	
 	REACT_APP_AWS_REGION=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/aws\/region/ { print $3 }')
@@ -39,6 +42,13 @@ function settingEnv(){
 	REACT_APP_PLAID_ENV=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/plaid\/env/ { print $3 }')
 	sed -i.bak "s/^\(REACT_APP_PLAID_ENV=\).*/\1${REACT_APP_PLAID_ENV}/" .env
 
+	if [ "$ci_commit_ref" = "develop" ] || [ "$ci_commit_ref" = "qa" ] || [ "$ci_commit_ref" = "master" ]; then
+			REACT_APP_SENTRY_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/sentry\/url/ { print $3 }')
+			sed -i.bak "s#^\(REACT_APP_SENTRY_URL=\).*#\1${REACT_APP_SENTRY_URL}#" .env
+    
+			REACT_APP_SENTRY_ENV=$environment
+			sed -i.bak "s/^\(REACT_APP_SENTRY_ENV=\).*/\1${REACT_APP_SENTRY_ENV}/" .env
+	fi
 
 	cat .env
 }
