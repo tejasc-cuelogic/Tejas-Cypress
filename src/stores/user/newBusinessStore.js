@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { toJS, observable, action } from 'mobx';
 // import graphql from 'mobx-apollo';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
@@ -23,7 +23,7 @@ export class NewBusinessStore {
   onFieldChange = (currentForm, field, value, type) => {
     const form = currentForm || 'formFinInfo';
     if (field) {
-      if (type === 'checkbox' || Array.isArray(this[form].fields[field].value)) {
+      if (type === 'checkbox' || Array.isArray(toJS(this[form].fields[field].value))) {
         const index = this[form].fields[field].value.indexOf(value);
         if (index === -1) {
           this[form].fields[field].value.push(value);

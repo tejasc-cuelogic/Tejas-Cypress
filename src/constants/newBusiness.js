@@ -171,10 +171,15 @@ export const BUSINESS_PRE_QUALIFICATION = {
     error: undefined,
     rule: 'required',
   },
-  email: {
-    value: '', label: 'E-mail address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
-  },
-  password: {
-    value: '', label: 'Password', error: undefined, rule: 'required', placeHolder: 'Password',
+  subscribeTo: {
+    value: [],
+    values: [
+      {
+        label: 'Please check here if you wish to subscribe to the latest news and offers from NextSeed. You may unsubscribe at any time',
+        value: 'legalConfirmation10',
+      },
+    ],
+    error: undefined,
+    rule: '',
   },
 };

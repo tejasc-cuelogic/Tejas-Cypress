@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Segment, Grid, Icon, Header, Divider, Form, Button } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Segment, Grid, Icon, Header, Form, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormRadioGroup, FormCheckbox, FormInput, MaskedInput2, AutoComplete } from '../../../../theme/form/FormElements';
 import FormElementWrap from '../components/FormElementWrap';
 
-@inject('newBusinessStore')
+@inject('newBusinessStore', 'uiStore')
 @observer
 class Signup extends Component {
   render() {
@@ -19,14 +20,16 @@ class Signup extends Component {
           <Grid.Column>
             <Form className="issuer-signup">
               <Icon className="ns-paper-plane" size="huge" color="green" />
-              <Header as="h1">
-                Pre-Qualification Application Process
-                <Header.Subheader>
-                  Welcome to NextSeed! Run through this quick form to get pre-qualified.{' '}
-                  <Link to="/" className="link">Need help or have questions?</Link>
-                </Header.Subheader>
-              </Header>
-              <Divider section className="doubled" />
+              <FormElementWrap
+                as="h1"
+                header="Pre-Qualification Application Process"
+                subHeader={
+                  <Aux>
+                    Welcome to NextSeed! Run through this quick form to get pre-qualified.
+                    <Link to="/" className="link"> Need help or have questions?</Link>
+                  </Aux>
+                }
+              />
               <FormElementWrap
                 header="What is your Business Model?"
                 subHeader="Only Business to Consumer models are accepted at this time"
@@ -195,64 +198,22 @@ class Signup extends Component {
                   containerclassname="ui relaxed list"
                 />
               </FormElementWrap>
-              <Button size="large" color="green" className="very relaxed" disabled>Submit</Button>
-            </Form>
-          </Grid.Column>
-        </Grid>
-        <Divider section />
-        <Grid container>
-          <Grid.Column className="issuer-signup">
-            <Icon className="ns-paper-plane" size="huge" color="green" />
-            <Header as="h1">Thank you for completing the pre-qualification form</Header>
-            <p>
-              <b>Unfortunately, NextSeed is currently unable to help your business at this time.</b>
-            </p>
-            <p>
-              We`ll update you if anything changes in the future. In the meantime, if you have
-              any questions, you can contact us at <Link to="/" className="link"><b>apply@nextseed.com</b></Link> or<br />
-              check out our <Link to="/" className="link"><b>Borrow page</b></Link> or <Link to="/" className="link"><b>FAQ</b></Link>
-              section for more information on our general business requirements.
-            </p>
-            <Divider section hidden />
-            <Button as={Link} to="/" size="large" color="green" className="very relaxed">Return to Home Page</Button>
-          </Grid.Column>
-        </Grid>
-        <Divider section />
-        <Grid container>
-          <Grid.Column className="issuer-signup">
-            <Icon className="ns-paper-plane" size="huge" color="green" />
-            <Header as="h1">Congratulations!</Header>
-            <p>
-              <b>You have been pre-qualified for a NextSeed campaign.</b>
-            </p>
-            <p>
-              Thanks for submitting Tstbsn`s application, Jane Doee! A NextSeed representative
-              will be reaching out to you shortly.<br />
-              In the meantime, please set up a user account to continue with your application.
-            </p>
-            <Divider section hidden />
-            <Form>
-              <Grid>
-                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <div className="field-wrap">
-                    <FormInput
-                      name="emailAddress"
-                      value={fields.emailAddress.value}
-                      fielddata={fields.emailAddress}
-                      changed={businessAppEleChange}
-                    />
-                    <FormInput
-                      type="password"
-                      name="password"
-                      value={fields.password.value}
-                      fielddata={fields.password}
-                      changed={businessAppEleChange}
-                    />
-                  </div>
-                  <Divider hidden />
-                  <Button size="large" color="green" className="very relaxed">Continue</Button>
-                </Grid.Column>
-              </Grid>
+              <FormCheckbox
+                fielddata={fields.subscribeTo}
+                name="subscribeTo"
+                changed={businessAppEleChange}
+                defaults
+                containerclassname="ui relaxed list"
+              />
+              <Button
+                loading={this.props.uiStore.inProgress}
+                disabled={!BUSINESS_APP_FRM.meta.isValid}
+                size="large"
+                color="green"
+                className="very relaxed"
+              >
+                Submit
+              </Button>
             </Form>
           </Grid.Column>
         </Grid>
