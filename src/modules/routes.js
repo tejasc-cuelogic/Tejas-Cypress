@@ -24,6 +24,7 @@ import Summary from '../modules/summary/containers/Summary';
 import RewardsWallet from './private/rewardsWallet/containers/RewardsWallet';
 import Referrals from './private/referrals/containers/Referrals';
 import AccountDetails from './private/accountDetails/containers/AccountDetails';
+import BusinessApplication from './private/businessApplication/containers/BusinessApplication';
 import Education from './private/education/containers/Education';
 import {
   AdminAuthorization,
@@ -179,6 +180,12 @@ export const privateRoutes = [
     path: '/app/profile-settings',
     exact: false,
     component: ProfileSettings,
+    auth: UserAuthorization,
+  },
+  {
+    path: '/app/business-application',
+    exact: false,
+    component: BusinessApplication,
     auth: UserAuthorization,
   },
   {

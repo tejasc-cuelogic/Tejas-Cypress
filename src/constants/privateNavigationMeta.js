@@ -77,6 +77,19 @@ export const ALL_NAV_ITEMS = [
     subPanel: 0,
   },
   {
+    icon: 'ns-article',
+    title: 'Application',
+    to: 'business-application',
+    accessibleTo: ['bowner'],
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Pre-qualification', to: 'pre-qualification', component: 'PreQualification' },
+      { title: 'Business Details', to: 'business-details', component: 'BusinessDetails' },
+      { title: 'Performance', to: 'performance', component: 'Performance' },
+      { title: 'Documentation', to: 'documentation', component: 'Documentation' },
+    ],
+  },
+  {
     icon: 'ns-individual',
     title: 'Individual',
     heading: 'Individual Account',
