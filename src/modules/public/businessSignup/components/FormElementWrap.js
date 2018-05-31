@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 
 const FormElementWrap = props => (
   <Aux>
-    <Header as="h2">
+    <Header as={props.as || 'h2'}>
       {props.header}
       {props.subHeader &&
         <Header.Subheader>{props.subHeader}</Header.Subheader>

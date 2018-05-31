@@ -18,7 +18,13 @@ const FormCheckbox = observer((props) => {
                 checked={value.includes(c.value)}
                 value={c.value}
                 {...props}
-                label={c.label}
+                label={
+                  <label>{c.label}
+                    {c.tooltip &&
+                      <Popup trigger={<Icon name="help circle outline" />} content={c.tooltip} position="top center" />
+                    }
+                  </label>
+                }
                 onChange={props.changed}
               />
             ) : (

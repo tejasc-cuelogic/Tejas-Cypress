@@ -174,6 +174,17 @@ export const BUSINESS_PRE_QUALIFICATION = {
   password: {
     value: '', label: 'Password', error: undefined, rule: 'required', placeHolder: 'Password',
   },
+  subscribeTo: {
+    value: [],
+    values: [
+      {
+        label: 'Please check here if you wish to subscribe to the latest news and offers from NextSeed. You may unsubscribe at any time',
+        value: 'legalConfirmation10',
+      },
+    ],
+    error: undefined,
+    rule: '',
+  },
   existingDebt1: {
     value: '', label: 'Existing Debt 1', error: undefined, rule: 'required', placeHolder: '500,000',
   },
