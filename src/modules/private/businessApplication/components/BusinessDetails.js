@@ -17,13 +17,11 @@ export default class BusinessDetails extends Component {
       <Grid container>
         <Grid.Column>
           <Form className="issuer-signup">
-            <Header as="h1">
-              Business Details
-              <Header.Subheader>
-                Quickly, safely and accurately submit your business information.
-              </Header.Subheader>
-            </Header>
-            <Divider section className="doubled" />
+            <FormElementWrap
+              as="h1"
+              header="Business Details"
+              subHeader="Quickly, safely and accurately submit your business information."
+            />
             <FormElementWrap
               header={
                 <span>
@@ -31,7 +29,7 @@ export default class BusinessDetails extends Component {
                   <Link to="/" className="link"><small>Learn More</small></Link>
                 </span>
               }
-              subHeader="What are the outstanding debt obligations for the business?"
+              subHeader="Upload your business plan"
             >
               {/* Temp Code */}
               <Header as="h3" color="brown">[ Placeholder for File Uploader UI ]</Header>
@@ -133,12 +131,18 @@ export default class BusinessDetails extends Component {
               <Button inverted color="green">+ Add other owners</Button>
             </FormElementWrap>
             <div className="navigation-buttons">
-              <Button circular icon className="multistep__btn prev">
-                <Icon className="ns-arrow-left" />
-              </Button>
-              <Button circular icon primary className="multistep__btn next active">
-                <Icon className="ns-arrow-right" />
-              </Button>
+              <div className="pull-left">
+                <Button circular icon className="multistep__btn prev">
+                  <Icon className="ns-arrow-left" />
+                </Button>
+                Pre-qualification
+              </div>
+              <div className="pull-right">
+                Performance
+                <Button circular icon primary className="multistep__btn next active">
+                  <Icon className="ns-arrow-right" />
+                </Button>
+              </div>
             </div>
           </Form>
         </Grid.Column>

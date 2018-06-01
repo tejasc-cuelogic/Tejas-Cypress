@@ -215,4 +215,46 @@ export const BUSINESS_PRE_QUALIFICATION = {
   title: {
     value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO',
   },
+  pyGrossSales: {
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: '1,250,000',
+  },
+  pyOperatingExpenses: {
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: '100,000',
+  },
+  pyNetIncome: {
+    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: '550,000',
+  },
+  pyCogs: {
+    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: '550,000',
+  },
+  fyGrossSales: {
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: '1,250,000',
+  },
+  fyOperatingExpenses: {
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: '100,000',
+  },
+  fyNetIncome: {
+    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: '550,000',
+  },
+  fyCogs: {
+    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: '550,000',
+  },
+  blanketLien: {
+    value: '0',
+    values: [
+      { label: 'Yes', value: '0' },
+      { label: 'No', value: '1' },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+  personalGuarantee: {
+    value: '0',
+    values: [
+      { label: 'Yes', value: '0' },
+      { label: 'No', value: '1' },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
 };

@@ -790,12 +790,22 @@ svg:not(:root).recharts-surface{
 			padding:@25px;
 		}
 	}
+	* ~ .field-wrap{
+		height:auto;
+	}
 	.navigation-buttons{
 		min-height:50px;
-		position:relative;
-		.ui.button.multistep__btn{
+		font-weight:700;
+		> div .ui.button.multistep__btn{
+			position:relative;
 			&.prev, &.next{
-				transform:translate(0, -50%);
+				transform:translate(0, 0);
+			}
+			&.prev{
+				margin-right:@14px;
+			}
+			&.next{
+				margin-left:@14px;
 			}
 		}
 	}
