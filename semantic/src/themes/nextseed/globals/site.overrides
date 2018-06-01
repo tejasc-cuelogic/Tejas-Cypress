@@ -24,6 +24,9 @@
 		padding:@20px @10px;
 	}
 }
+.pusher.white-bg .content-spacer{
+	padding:@50px @40px;
+}
 .inner-content-spacer{
 	padding:@20px;
 }
@@ -782,8 +785,28 @@ svg:not(:root).recharts-surface{
 	}
 	.field-wrap{
 		padding:@40px;
+		height:100%;
 		@media only screen and (max-width:@largestMobileScreen){
 			padding:@25px;
+		}
+	}
+	* ~ .field-wrap{
+		height:auto;
+	}
+	.navigation-buttons{
+		min-height:50px;
+		font-weight:700;
+		> div .ui.button.multistep__btn{
+			position:relative;
+			&.prev, &.next{
+				transform:translate(0, 0);
+			}
+			&.prev{
+				margin-right:@14px;
+			}
+			&.next{
+				margin-left:@14px;
+			}
 		}
 	}
 }

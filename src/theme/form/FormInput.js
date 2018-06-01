@@ -16,7 +16,7 @@ const FormInput = observer((props) => {
     props.maxLength ? props.maxLength : false
   );
   return (
-    <Form.Field className={props.containerclassname || ''} error={!!error}>
+    <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''} error={!!error}>
       <label>
         {label}
         {tooltip &&

@@ -171,6 +171,9 @@ export const BUSINESS_PRE_QUALIFICATION = {
     error: undefined,
     rule: 'required',
   },
+  password: {
+    value: '', label: 'Password', error: undefined, rule: 'required', placeHolder: 'Password',
+  },
   subscribeTo: {
     value: [],
     values: [
@@ -181,6 +184,102 @@ export const BUSINESS_PRE_QUALIFICATION = {
     ],
     error: undefined,
     rule: '',
+  },
+  businessPlan: {
+    value: '', label: 'Upload your business plan', error: undefined, rule: 'required',
+  },
+  existingDebt1: {
+    value: '', label: 'Existing Debt 1', error: undefined, rule: 'required', placeHolder: '500,000',
+  },
+  remainingPrincipal: {
+    value: '', label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000',
+  },
+  interestExpenses: {
+    value: '', label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %',
+  },
+  termMonths: {
+    value: '', label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5',
+  },
+  fullLegalName: {
+    value: '', label: 'Full Legal Name', error: undefined, rule: 'required', placeHolder: 'John Doe',
+  },
+  yearsExperience: {
+    value: '', label: 'Years Experience', error: undefined, rule: 'required', placeHolder: '5',
+  },
+  ssnNumber: {
+    value: '', label: 'SSN', error: undefined, rule: 'required', placeHolder: '123-456-7890',
+  },
+  ownershipOfCompany: {
+    value: '', label: 'Ownership of Company', error: undefined, rule: 'required', placeHolder: '40.0%',
+  },
+  linkedInURL: {
+    value: '', label: 'LinkedIn URL', error: undefined, rule: 'required', placeHolder: 'http://linkedin.com/username',
+  },
+  title: {
+    value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO',
+  },
+  ownerResume: {
+    value: '', label: 'Upload Resume/CV', error: undefined, rule: 'required',
+  },
+  prior3YrStatement: {
+    value: '', label: 'Prior 3 Year Statement', error: undefined, rule: 'required',
+  },
+  ytdStatements: {
+    value: '', label: 'YTD Statements', error: undefined, rule: 'required',
+  },
+  fiveYrProjections: {
+    value: '', label: '5 Year Projections', error: undefined, rule: 'required',
+  },
+  pyGrossSales: {
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: '1,250,000',
+  },
+  pyOperatingExpenses: {
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: '100,000',
+  },
+  pyNetIncome: {
+    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: '550,000',
+  },
+  pyCogs: {
+    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: '550,000',
+  },
+  fyGrossSales: {
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: '1,250,000',
+  },
+  fyOperatingExpenses: {
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: '100,000',
+  },
+  fyNetIncome: {
+    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: '550,000',
+  },
+  fyCogs: {
+    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: '550,000',
+  },
+  bankStatements: {
+    value: '', label: 'Prior 6 months Bank Statements', error: undefined, rule: 'required',
+  },
+  leaseAgreement: {
+    value: '', label: 'Lease Agreement / Letter of Intent', error: undefined, rule: 'required',
+  },
+  blanketLien: {
+    value: '0',
+    values: [
+      { label: 'Yes', value: '0' },
+      { label: 'No', value: '1' },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+  personalGuarantee: {
+    value: '0',
+    values: [
+      { label: 'Yes', value: '0' },
+      { label: 'No', value: '1' },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+  personalGuaranteeForm: {
+    value: '', label: 'Personal Guarantee Form', error: undefined, rule: 'required',
   },
 };
 
