@@ -338,19 +338,19 @@ export const ENTITY_PERSONAL_INFO = {
     key: 'title', value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
   },
   legalDocUrl: {
-    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID', sublabel: 'Drivers License or Passport',
+    key: 'legalDocUrl', value: '', error: undefined, rule: 'required',
   },
 };
 
 export const ENTITY_FORMATION_DOCS = {
   formationDoc: {
-    key: 'formationDoc', value: '', error: undefined, rule: 'required', label: 'Entity Formation Document',
+    key: 'formationDoc', value: '', error: undefined, rule: 'required',
   },
   operatingAgreementDoc: {
-    key: 'operatingAgreementDoc', value: '', error: undefined, rule: 'required', label: 'Entity Operating Document',
+    key: 'operatingAgreementDoc', value: '', error: undefined, rule: 'required',
   },
   einVerificationDoc: {
-    key: 'einVerificationDoc', value: '', error: undefined, rule: 'required', label: 'EIN Verification',
+    key: 'einVerificationDoc', value: '', error: undefined, rule: 'required',
   },
 };
 

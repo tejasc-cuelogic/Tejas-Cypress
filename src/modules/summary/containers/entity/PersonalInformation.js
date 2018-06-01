@@ -40,13 +40,23 @@ export default class PersonalInformation extends Component {
               changed={personalInfoChange}
             />
           </div>
-          <Grid>
-            <FileUploader
-              name="legalDocUrl"
-              fielddata={formPersonalInfo.fields.legalDocUrl}
-              uploadDocument={personalInfoFileUpload}
-              removeUploadedDocument={personalInfoResetField}
-            />
+          <Grid verticalAlign="middle">
+            <Grid.Row>
+              <Grid.Column width={7}>
+                <Header as="h3">
+                  Upload a Photo ID
+                  <Header.Subheader>Drivers License or Passport</Header.Subheader>
+                </Header>
+              </Grid.Column>
+              <Grid.Column width={9}>
+                <FileUploader
+                  name="legalDocUrl"
+                  fielddata={formPersonalInfo.fields.legalDocUrl}
+                  uploadDocument={personalInfoFileUpload}
+                  removeUploadedDocument={personalInfoResetField}
+                />
+              </Grid.Column>
+            </Grid.Row>
           </Grid>
         </Form>
       </div>

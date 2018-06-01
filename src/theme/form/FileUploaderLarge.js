@@ -23,7 +23,7 @@ const FileUploaderLarge = observer((props) => {
       {value &&
         <div className="file-uploader attached">
           <span title={value}>{value}</span>
-          <Button size="tiny" compact className="remove pull-right" onClick={() => props.uploadDocument(props.name, '')}>Remove</Button>
+          <Button size="small" compact className="remove link-button pull-right" onClick={() => props.uploadDocument(props.name, '')}>Remove</Button>
         </div>
       }
       {error &&
