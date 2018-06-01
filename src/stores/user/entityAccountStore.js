@@ -212,7 +212,8 @@ class EntityAccountStore {
   @computed
   get isValidEntityForm() {
     return this.formFinInfo.meta.isValid && this.formGeneralInfo.meta.isValid
-      && this.formEntityInfo.meta.isValid && this.formPersonalInfo.meta.isValid;
+      && this.formEntityInfo.meta.isValid &&
+      this.formPersonalInfo.meta.isValid && this.formFormationDocuments.meta.isValid;
   }
 
   @computed
