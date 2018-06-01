@@ -1,20 +1,20 @@
-/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
-import { Route, NavLink } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Grid, Accordion, Responsive, Card, Form, Input } from 'semantic-ui-react';
+import { Grid, Form, Input } from 'semantic-ui-react';
+import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
 
 @inject('educationStore')
 @observer
 export default class KnowledgeBase extends Component {
   componentWillMount() {
-    this.props.educationStore.initRequest('KnowledgeBase');
+    this.props.educationStore.initRequest('Faq');
   }
   render() {
-    const { match } = this.props;
+    const { match, location } = this.props;
     const {
-      kbs, loading, error,
+      faqs, loading, error,
     } = this.props.educationStore;
 
     if (loading) {
@@ -32,16 +32,7 @@ export default class KnowledgeBase extends Component {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column widescreen={7} largeScreen={7} computer={16} tablet={16} mobile={16}>
-              <Accordion className="feed-view">
-                {
-                  kbs.map((record, index) => (
-                    <Accordion.Title as={NavLink} to={`${match.url}/${record.id}`} index={record.id}>
-                      {`Chapter ${(index + 1)}`}
-                      <span>{record.heading}</span>
-                    </Accordion.Title>
-                  ))
-                }
-              </Accordion>
+              <AccList location={location} match={match} error={error} data={faqs} />
             </Grid.Column>
             <Grid.Column widescreen={8} largeScreen={8} floated="right" only="large screen">
               <Route exact path={match.url} component={Details} />

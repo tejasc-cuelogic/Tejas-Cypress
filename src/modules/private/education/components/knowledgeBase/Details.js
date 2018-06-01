@@ -7,7 +7,8 @@ import { Header, Card } from 'semantic-ui-react';
 @observer
 export default class Details extends Component {
   componentWillMount() {
-    this.props.educationStore.getOne(this.props.refLink || 'KnowledgeBase', this.props.match.params.id);
+    // this.props.refLink || 'KnowledgeBase'
+    this.props.educationStore.getOne('Faq', this.props.match.params.id);
   }
   render() {
     const { selected } = this.props.educationStore;
