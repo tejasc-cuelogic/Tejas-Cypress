@@ -6,6 +6,7 @@ import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../services/graphql';
 import { GqlClient as client2 } from '../../services/graphqlCool';
 import uiStore from '../uiStore';
+import authStore from '../authStore';
 import iraAccountStore from '../user/iraAccountStore';
 import entityAccountStore from '../user/entityAccountStore';
 import individualAccountStore from '../user/individualAccountStore';
@@ -49,6 +50,7 @@ export class UserDetailsStore {
         id,
       },
       onFetch: (data) => {
+        authStore.checkIsInvestmentAccountCreated(data.user);
         iraAccountStore.populateData(data.user);
         individualAccountStore.populateData(data.user);
         entityAccountStore.populateData(data.user);

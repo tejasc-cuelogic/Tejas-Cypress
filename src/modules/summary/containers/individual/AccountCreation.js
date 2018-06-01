@@ -11,6 +11,7 @@ import AddFunds from './AddFunds';
 @observer
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
+    // this.props.accountStore.resetLinkBankForm();
     this.props.setDashboardWizardStep();
   }
   handleStepChange = (step) => {

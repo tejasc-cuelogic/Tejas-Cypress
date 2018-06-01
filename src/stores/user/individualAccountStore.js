@@ -91,6 +91,9 @@ class IndividualAccountStore {
         .then((result) => {
           if (result.data.createInvestorAccount) {
             this.setInvestorAccId(result.data.createInvestorAccount.accountId);
+            accountStore.setAccountTypeCreated(result.data.createInvestorAccount.accountType);
+          } else {
+            accountStore.setAccountTypeCreated(result.data.updateInvestorAccount.accountType);
           }
           if (formStatus === 'submit') {
             Helper.toast('Individual account created successfully.', 'success');

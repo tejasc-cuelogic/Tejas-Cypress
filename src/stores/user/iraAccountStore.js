@@ -15,6 +15,7 @@ import {
   IRA_FUNDING,
   IRA_IDENTITY,
 } from '../../constants/account';
+import accountStore from '../accountStore';
 
 class IraAccountStore {
   @observable
@@ -24,12 +25,12 @@ class IraAccountStore {
 
   @observable
   formAccTypes = {
-    fields: { ...IRA_ACC_TYPES }, meta: { isValid: false, error: '', isDirty: true },
+    fields: { ...IRA_ACC_TYPES }, meta: { isValid: true, error: '', isDirty: true },
   };
 
   @observable
   formFunding = {
-    fields: { ...IRA_FUNDING }, meta: { isValid: false, error: '', isDirty: true },
+    fields: { ...IRA_FUNDING }, meta: { isValid: true, error: '', isDirty: true },
   };
 
   @observable
@@ -276,6 +277,9 @@ class IraAccountStore {
           .then((result) => {
             if (result.data.createInvestorAccount) {
               this.setInvestorAccId(result.data.createInvestorAccount.accountId);
+              accountStore.setAccountTypeCreated(result.data.createInvestorAccount.accountType);
+            } else {
+              accountStore.setAccountTypeCreated(result.data.updateInvestorAccount.accountType);
             }
             switch (currentStep.name) {
               case 'Financial info':

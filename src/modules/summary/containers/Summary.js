@@ -58,13 +58,33 @@ class Summary extends Component {
       );
     }
 
+    let linkPath = 'InvestmentChooseType';
+    if (currentUser.data.user.accounts.length || this.props.accountStore.accountTypeCreated) {
+      let selectedAccType = '';
+      if (currentUser.data.user.accounts.length) {
+        selectedAccType = currentUser.data.user.accounts[0].accountType;
+      } else {
+        selectedAccType = this.props.accountStore.accountTypeCreated;
+      }
+      let type = 0;
+      if (selectedAccType === 'individual') {
+        type = 0;
+      } else if (selectedAccType === 'ira') {
+        type = 1;
+      } else if (selectedAccType === 'entity') {
+        type = 2;
+      }
+      linkPath = `${selectedAccType}/AccountCreation`;
+      this.props.accountStore.setAccountType(type);
+    }
+
     if (this.props.profileStore.verifyIdentity01.response.message) {
       if (this.isVerified(this.props.profileStore.verifyIdentity01.response.message)) {
         stepinfo = {
           value: 'Welcome to NextSeed!',
           label: 'Would you like to start the process of new account creation?',
           linkText: 'Let`s start it!',
-          linkPath: 'InvestmentChooseType',
+          linkPath,
         };
       }
     } else if (this.isVerified(currentUser.data.user.legalDetails.cipStatus)) {
@@ -72,7 +92,7 @@ class Summary extends Component {
         value: 'Welcome to NextSeed!',
         label: 'Would you like to start the process of new account creation?',
         linkText: 'Let`s start it!',
-        linkPath: 'InvestmentChooseType',
+        linkPath,
       };
     }
 

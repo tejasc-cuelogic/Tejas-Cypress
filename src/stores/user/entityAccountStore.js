@@ -21,27 +21,27 @@ import Helper from '../../helper/utility';
 class EntityAccountStore {
   @observable
   formFinInfo = {
-    fields: { ...ENTITY_FIN_INFO }, meta: { isValid: true, error: '', isDirty: false },
+    fields: { ...ENTITY_FIN_INFO }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formGeneralInfo = {
-    fields: { ...ENTITY_GEN_INFO }, meta: { isValid: true, error: '', isDirty: false },
+    fields: { ...ENTITY_GEN_INFO }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formEntityInfo = {
-    fields: { ...ENTITY_TRUST_INFO }, meta: { isValid: true, error: '', isDirty: false },
+    fields: { ...ENTITY_TRUST_INFO }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formPersonalInfo = {
-    fields: { ...ENTITY_PERSONAL_INFO }, meta: { isValid: true, error: '', isDirty: false },
+    fields: { ...ENTITY_PERSONAL_INFO }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
   formFormationDocuments = {
-    fields: { ...ENTITY_FORMATION_DOCS }, meta: { isValid: true, error: '', isDirty: false },
+    fields: { ...ENTITY_FORMATION_DOCS }, meta: { isValid: false, error: '', isDirty: false },
   };
 
   @observable
@@ -264,6 +264,50 @@ class EntityAccountStore {
     return payload;
   }
 
+  @action
+  setEntityAttributes = (step) => {
+    const entity = {};
+    switch (step) {
+      /* eslint-disable no-unused-expressions */
+      case 'General':
+        entity.name = this.formGeneralInfo.fields.name.value;
+        entity.taxId = this.formGeneralInfo.fields.taxId.value;
+        entity.address = {
+          street: this.formGeneralInfo.fields.street.value,
+          city: this.formGeneralInfo.fields.city.value,
+          state: this.formGeneralInfo.fields.state.value,
+          zipCode: this.formGeneralInfo.fields.zipCode.value,
+        };
+        break;
+
+      case 'Entity info':
+        entity.isTrust = this.formEntityInfo.fields.isTrust.value;
+        entity.trustDate = this.formEntityInfo.fields.trustDate.value;
+        break;
+
+      case 'Personal info':
+        entity.legalInfo = {
+          legalFirstName: userStore.currentUser.givenName,
+          legalLastName: userStore.currentUser.familyName,
+          title: this.formPersonalInfo.fields.title.value,
+          legalDocUrl: this.formPersonalInfo.fields.legalDocUrl.value,
+        };
+        break;
+
+      case 'Formation doc':
+        entity.legalDocs = {
+          formationDoc: this.formFormationDocuments.fields.formationDoc.value,
+          operatingAgreementDoc: this.formFormationDocuments.fields.operatingAgreementDoc.value,
+          einVerificationDoc: this.formFormationDocuments.fields.einVerificationDoc.value,
+        };
+        break;
+
+      default:
+        break;
+    }
+    return entity;
+  }
+
   /* eslint-disable consistent-return */
   /* eslint-disable arrow-body-style */
   @action
@@ -289,55 +333,28 @@ class EntityAccountStore {
         currentStep.validate();
         isValidCurrentStep = this.isValidEntityGeneralInfo;
         if (isValidCurrentStep) {
-          accountAttributes.entity = {
-            name: this.formGeneralInfo.fields.name.value,
-            taxId: this.formGeneralInfo.fields.taxId.value,
-            address: {
-              street: this.formGeneralInfo.fields.street.value,
-              city: this.formGeneralInfo.fields.city.value,
-              state: this.formGeneralInfo.fields.state.value,
-              zipCode: this.formGeneralInfo.fields.zipCode.value,
-            },
-          };
+          accountAttributes.entity = this.setEntityAttributes(currentStep.name);
         }
         break;
       case 'Entity info':
         currentStep.validate();
         isValidCurrentStep = this.isValidEntityInfo;
         if (isValidCurrentStep) {
-          if (accountAttributes.entity) {
-            accountAttributes.entity.isTrust = this.formEntityInfo.fields.isTrust.value;
-            accountAttributes.entity.trustDate = this.formEntityInfo.fields.trustDate.value;
-          } else {
-            accountAttributes.entity = {
-              isTrust: this.formEntityInfo.fields.isTrust.value,
-              trustDate: this.formEntityInfo.fields.trustDate.value,
-            };
-          }
+          accountAttributes.entity = this.setEntityAttributes(currentStep.name);
         }
         break;
       case 'Personal info':
         currentStep.validate();
         isValidCurrentStep = this.isValidPersonalInfo;
         if (isValidCurrentStep) {
-          accountAttributes.entity = {};
-          accountAttributes.entity.legalInfo = {
-            legalFirstName: userStore.currentUser.givenName,
-            legalLastName: userStore.currentUser.familyName,
-            title: this.formPersonalInfo.fields.title.value,
-            legalDocUrl: this.formPersonalInfo.fields.legalDocUrl.value,
-          };
+          accountAttributes.entity = this.setEntityAttributes(currentStep.name);
         }
         break;
       case 'Formation doc':
         currentStep.validate();
         isValidCurrentStep = this.isValidFormationDoc;
         if (isValidCurrentStep) {
-          accountAttributes.entity.legalDocs = {
-            formationDoc: this.formFormationDocuments.fields.formationDoc.value,
-            operatingAgreementDoc: this.formFormationDocuments.fields.operatingAgreementDoc.value,
-            einVerificationDoc: this.formFormationDocuments.fields.einVerificationDoc.value,
-          };
+          accountAttributes.entity = this.setEntityAttributes(currentStep.name);
         }
         break;
       case 'Link Bank':
@@ -395,6 +412,9 @@ class EntityAccountStore {
           .then((result) => {
             if (result.data.createInvestorAccount) {
               this.setInvestorAccId(result.data.createInvestorAccount.accountId);
+              accountStore.setAccountTypeCreated(result.data.createInvestorAccount.accountType);
+            } else {
+              accountStore.setAccountTypeCreated(result.data.updateInvestorAccount.accountType);
             }
             switch (currentStep.name) {
               case 'Financial info':
@@ -447,7 +467,7 @@ class EntityAccountStore {
       );
       if (account) {
         Object.keys(this.formFinInfo.fields).map((f) => {
-          if (f === 'cfInvestment' && account.accountDetails[f].amount) {
+          if (f === 'cfInvestment' && account.accountDetails[f]) {
             this.formFinInfo.fields[f].value = account.accountDetails[f].amount;
           } else {
             this.formFinInfo.fields[f].value = account.accountDetails[f];
@@ -495,10 +515,13 @@ class EntityAccountStore {
             const { accountDetails } = account;
             if (accountDetails.bankDetails) {
               accountStore.formLinkBankManually.fields[f].value = accountDetails.bankDetails[f];
+              return accountStore.formLinkBankManually.fields[f];
             }
-            return accountStore.formLinkBankManually.fields[f];
+            return null;
           });
-          accountStore.onFieldChange('formLinkBankManually');
+          if (account.accountDetails.bankDetails) {
+            accountStore.onFieldChange('formLinkBankManually');
+          }
         }
         if (!this.formFinInfo.meta.isValid) {
           this.setStepToBeRendered(0);

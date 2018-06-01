@@ -63,6 +63,14 @@ export class AccountStore {
     fields: { ...IND_BANK_ACC_SEARCH }, meta: { isValid: false, error: '' },
   };
 
+  @observable
+  accountTypeCreated = undefined;
+
+  @action
+  setAccountTypeCreated = (accountType) => {
+    this.accountTypeCreated = accountType;
+  }
+
   @action
   setBankLinkInterface(mode) {
     this.bankLinkInterface = mode;
