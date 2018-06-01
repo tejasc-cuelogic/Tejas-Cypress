@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
@@ -27,7 +28,7 @@ export default class AccountType extends Component {
             <FormDatePicker
               name="trustDate"
               fielddata={formEntityInfo.fields.trustDate}
-              selected={formEntityInfo.fields.trustDate.value}
+              selected={moment(formEntityInfo.fields.trustDate.value)}
               changed={this.handleDateChange}
               isdisabled={!formEntityInfo.fields.isTrust.value}
             />
