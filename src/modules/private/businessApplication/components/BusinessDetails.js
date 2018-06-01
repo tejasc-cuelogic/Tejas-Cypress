@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormInput } from '../../../../theme/form/FormElements';
+import { FormInput, FileUploader2 } from '../../../../theme/form/FormElements';
 import FormElementWrap from '../../../public/businessSignup/components/FormElementWrap';
 
 @inject('newBusinessStore')
@@ -10,7 +10,7 @@ import FormElementWrap from '../../../public/businessSignup/components/FormEleme
 export default class BusinessDetails extends Component {
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange,
+      BUSINESS_APP_FRM, businessAppEleChange, issuerFiles,
     } = this.props.newBusinessStore;
     const { fields } = BUSINESS_APP_FRM;
     return (
@@ -31,9 +31,11 @@ export default class BusinessDetails extends Component {
               }
               subHeader="Upload your business plan"
             >
-              {/* Temp Code */}
-              <Header as="h3" color="brown">[ Placeholder for File Uploader UI ]</Header>
-              {/* Temp Code */}
+              <FileUploader2
+                name="businessPlan"
+                fielddata={fields.businessPlan}
+                uploadDocument={issuerFiles}
+              />
             </FormElementWrap>
             <FormElementWrap
               header="Existing Debt"
@@ -121,9 +123,11 @@ export default class BusinessDetails extends Component {
                         ))
                       }
                     </Form.Group>
-                    {/* Temp Code */}
-                    <Header as="h3" color="brown">[ Placeholder for File Uploader UI ]</Header>
-                    {/* Temp Code */}
+                    <FileUploader2
+                      name="ownerResume"
+                      fielddata={fields.ownerResume}
+                      uploadDocument={issuerFiles}
+                    />
                   </div>
                 </Grid.Column>
               </Grid>

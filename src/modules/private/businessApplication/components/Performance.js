@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Grid, Header, Form, Button, Icon } from 'semantic-ui-react';
+import { Grid, Form, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { MaskedInput2 } from '../../../../theme/form/FormElements';
+import { MaskedInput2, FileUploader2 } from '../../../../theme/form/FormElements';
 import FormElementWrap from '../../../public/businessSignup/components/FormElementWrap';
 
 @inject('newBusinessStore')
@@ -9,7 +9,7 @@ import FormElementWrap from '../../../public/businessSignup/components/FormEleme
 export default class Performance extends Component {
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange,
+      BUSINESS_APP_FRM, businessAppEleChange, issuerFiles,
     } = this.props.newBusinessStore;
     const { fields } = BUSINESS_APP_FRM;
     return (
@@ -27,19 +27,25 @@ export default class Performance extends Component {
             >
               <Grid stackable columns="equal">
                 <Grid.Column>
-                  {/* Temp Code */}
-                  <Header as="h3" color="brown">[ Placeholder for File Uploader UI ]</Header>
-                  {/* Temp Code */}
+                  <FileUploader2
+                    name="prior3YrStatement"
+                    fielddata={fields.prior3YrStatement}
+                    uploadDocument={issuerFiles}
+                  />
                 </Grid.Column>
                 <Grid.Column>
-                  {/* Temp Code */}
-                  <Header as="h3" color="brown">[ Placeholder for File Uploader UI ]</Header>
-                  {/* Temp Code */}
+                  <FileUploader2
+                    name="ytdStatements"
+                    fielddata={fields.ytdStatements}
+                    uploadDocument={issuerFiles}
+                  />
                 </Grid.Column>
                 <Grid.Column>
-                  {/* Temp Code */}
-                  <Header as="h3" color="brown">[ Placeholder for File Uploader UI ]</Header>
-                  {/* Temp Code */}
+                  <FileUploader2
+                    name="fiveYrProjections"
+                    fielddata={fields.fiveYrProjections}
+                    uploadDocument={issuerFiles}
+                  />
                 </Grid.Column>
               </Grid>
             </FormElementWrap>

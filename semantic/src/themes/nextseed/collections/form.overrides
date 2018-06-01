@@ -231,6 +231,16 @@
     // }
 }
 
+.file-uploader-wrap{
+    max-width:360px;
+    label{
+        font-size:13px;
+        font-weight:700;
+        margin-bottom:@4px;
+        display:inline-block;
+    }
+}
+
 .file-uploader{
     min-height:58px;
     padding:@14px;

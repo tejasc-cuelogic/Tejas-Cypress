@@ -185,6 +185,9 @@ export const BUSINESS_PRE_QUALIFICATION = {
     error: undefined,
     rule: '',
   },
+  businessPlan: {
+    value: '', label: 'Upload your business plan', error: undefined, rule: 'required',
+  },
   existingDebt1: {
     value: '', label: 'Existing Debt 1', error: undefined, rule: 'required', placeHolder: '500,000',
   },
@@ -215,6 +218,18 @@ export const BUSINESS_PRE_QUALIFICATION = {
   title: {
     value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO',
   },
+  ownerResume: {
+    value: '', label: 'Upload Resume/CV', error: undefined, rule: 'required',
+  },
+  prior3YrStatement: {
+    value: '', label: 'Prior 3 Year Statement', error: undefined, rule: 'required',
+  },
+  ytdStatements: {
+    value: '', label: 'YTD Statements', error: undefined, rule: 'required',
+  },
+  fiveYrProjections: {
+    value: '', label: '5 Year Projections', error: undefined, rule: 'required',
+  },
   pyGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: '1,250,000',
   },
@@ -239,6 +254,12 @@ export const BUSINESS_PRE_QUALIFICATION = {
   fyCogs: {
     value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: '550,000',
   },
+  bankStatements: {
+    value: '', label: 'Prior 6 months Bank Statements', error: undefined, rule: 'required',
+  },
+  leaseAgreement: {
+    value: '', label: 'Lease Agreement / Letter of Intent', error: undefined, rule: 'required',
+  },
   blanketLien: {
     value: '0',
     values: [
@@ -256,5 +277,8 @@ export const BUSINESS_PRE_QUALIFICATION = {
     ],
     error: undefined,
     rule: 'required',
+  },
+  personalGuaranteeForm: {
+    value: '', label: 'Personal Guarantee Form', error: undefined, rule: 'required',
   },
 };

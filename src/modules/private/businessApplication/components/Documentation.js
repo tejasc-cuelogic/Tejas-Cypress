@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Form, Button, Icon } from 'semantic-ui-react';
+import { Grid, Form, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormRadioGroup } from '../../../../theme/form/FormElements';
+import { FormRadioGroup, FileUploader2 } from '../../../../theme/form/FormElements';
 import FormElementWrap from '../../../public/businessSignup/components/FormElementWrap';
 
 @inject('newBusinessStore')
@@ -10,7 +10,7 @@ import FormElementWrap from '../../../public/businessSignup/components/FormEleme
 export default class Documentation extends Component {
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange,
+      BUSINESS_APP_FRM, businessAppEleChange, issuerFiles,
     } = this.props.newBusinessStore;
     const { fields } = BUSINESS_APP_FRM;
     return (
@@ -35,14 +35,18 @@ export default class Documentation extends Component {
             >
               <Grid stackable columns="equal">
                 <Grid.Column>
-                  {/* Temp Code */}
-                  <Header as="h3" color="brown">[ Placeholder for File Uploader UI ]</Header>
-                  {/* Temp Code */}
+                  <FileUploader2
+                    name="bankStatements"
+                    fielddata={fields.bankStatements}
+                    uploadDocument={issuerFiles}
+                  />
                 </Grid.Column>
                 <Grid.Column>
-                  {/* Temp Code */}
-                  <Header as="h3" color="brown">[ Placeholder for File Uploader UI ]</Header>
-                  {/* Temp Code */}
+                  <FileUploader2
+                    name="leaseAgreement"
+                    fielddata={fields.leaseAgreement}
+                    uploadDocument={issuerFiles}
+                  />
                 </Grid.Column>
                 <Grid.Column>
                   NextSeed requires a lease or LOI prior to launching your campaign. Before
@@ -75,12 +79,14 @@ export default class Documentation extends Component {
                 containerclassname="button-radio"
               />
               <p>
-                Please <Link to="/" className="link">download</Link>, fill out and upload the
+                Please <Link to="/" className="link"><b>download</b></Link>, fill out and upload the
                 Personal Guarantee Form along with any supporting documentation
               </p>
-              {/* Temp Code */}
-              <Header as="h3" color="brown">[ Placeholder for File Uploader UI ]</Header>
-              {/* Temp Code */}
+              <FileUploader2
+                name="personalGuaranteeForm"
+                fielddata={fields.personalGuaranteeForm}
+                uploadDocument={issuerFiles}
+              />
             </FormElementWrap>
             <div className="navigation-buttons">
               <div className="pull-left">

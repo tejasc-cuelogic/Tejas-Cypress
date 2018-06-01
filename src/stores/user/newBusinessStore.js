@@ -51,6 +51,15 @@ export class NewBusinessStore {
     this.onFieldChange('BUSINESS_APP_FRM', 'city', data.city);
     this.onFieldChange('BUSINESS_APP_FRM', 'state', data.state);
     this.onFieldChange('BUSINESS_APP_FRM', 'zipCode', data.zipCode);
+  };
+
+  @action
+  issuerFiles = (name, files) => {
+    let uploadedFile = '';
+    if (typeof files !== 'undefined' && files.length) {
+      uploadedFile = files[0].name;
+      this.onFieldChange('BUSINESS_PRE_QUALIFICATION', name, uploadedFile);
+    }
   }
 }
 
