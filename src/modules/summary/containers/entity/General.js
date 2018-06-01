@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { US_STATES } from '../../../../constants/account';
-import { FormInput, FormSelect, AutoComplete } from '../../../../theme/form/FormElements';
+import { FormInput, FormSelect, AutoComplete, MaskedInput } from '../../../../theme/form/FormElements';
 
 @inject('entityAccountStore')
 @observer
@@ -14,16 +14,17 @@ export default class General extends Component {
         <Header as="h1" textAlign="center">General Information</Header>
         <Form error>
           <div className="field-wrap">
-            {
-              ['name', 'taxId'].map(field => (
-                <FormInput
-                  key={field}
-                  fielddata={formGeneralInfo.fields[field]}
-                  name={field}
-                  changed={genInfoChange}
-                />
-              ))
-            }
+            <FormInput
+              name="name"
+              fielddata={formGeneralInfo.fields.name}
+              changed={genInfoChange}
+            />
+            <MaskedInput
+              name="taxId"
+              fielddata={formGeneralInfo.fields.taxId}
+              mask="999-99-9999"
+              changed={genInfoChange}
+            />
             <h5>Entity Address</h5>
             <AutoComplete
               name="street"
