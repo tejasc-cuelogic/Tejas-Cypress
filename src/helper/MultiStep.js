@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { Modal, Header, Button } from 'semantic-ui-react';
 
 const getNavStates = (indx, length) => {
@@ -78,21 +79,23 @@ export default class MultiStep extends React.Component {
   }
 
   handleOnClick(evt) {
-    this.props.setStepTobeRendered(evt.currentTarget.value);
-    if (evt.currentTarget.value === (this.props.steps.length - 1) &&
-      this.state.compState === (this.props.steps.length - 1)) {
-      this.setNavState(this.props.steps.length);
-    } else if (evt.currentTarget.value !== 0 &&
-    this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
-      this.props.createAccount(this.props.steps[(evt.currentTarget.value - 1)]);
-      if (!this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
-        this.setNavState(evt.currentTarget.value);
-      }
-      if (evt.currentTarget.value === (this.props.steps.length - 1)) {
-        this.setNavState(evt.currentTarget.value);
-      }
+    const isAnyStepInvalid = _.find(this.props.steps, { isValid: 'error' });
+    if (isAnyStepInvalid) {
+      console.log(isAnyStepInvalid);
     } else {
-      this.setNavState(evt.currentTarget.value);
+      this.props.setStepTobeRendered(evt.currentTarget.value);
+      if (evt.currentTarget.value === (this.props.steps.length - 1) &&
+        this.state.compState === (this.props.steps.length - 1)) {
+        this.setNavState(this.props.steps.length);
+      } else if (evt.currentTarget.value !== 0 &&
+      this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
+        this.props.createAccount(this.props.steps[(evt.currentTarget.value - 1)]);
+        if (evt.currentTarget.value === (this.props.steps.length - 1)) {
+          this.setNavState(evt.currentTarget.value);
+        }
+      } else {
+        this.setNavState(evt.currentTarget.value);
+      }
     }
   }
 

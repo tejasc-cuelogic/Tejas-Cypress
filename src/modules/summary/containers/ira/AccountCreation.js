@@ -42,7 +42,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Identity',
         component: <Identity />,
-        isValid: '',
+        isValid: this.props.iraAccountStore.isValidIraIdentity ? '' : 'error',
         isDirty: this.props.iraAccountStore.formIdentity.meta.isDirty,
         validate: validationActions.validateIRAIdentityInfo,
       },
