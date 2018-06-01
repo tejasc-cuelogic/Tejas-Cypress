@@ -1,4 +1,11 @@
 import moment from 'moment';
+import Validator from 'validatorjs';
+
+/* eslint-disable no-unused-vars */
+/* eslint-disable arrow-body-style */
+Validator.register('taxId', (value, requirement, attribute) => {
+  return value.match(/^\d{3}-\d{2}-\d{4}$/);
+}, 'The :attribute is not in the format XXX-XX-XXXX.');
 
 export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
 
@@ -297,7 +304,7 @@ export const ENTITY_GEN_INFO = {
     key: 'name', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
   },
   taxId: {
-    key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required', placeHolder: 'e.g. 12345',
+    key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required|taxId', placeHolder: 'e.g. 12345',
   },
   street: {
     key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',

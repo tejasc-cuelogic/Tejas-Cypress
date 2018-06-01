@@ -53,6 +53,9 @@ class EntityAccountStore {
   @observable
   formStatus = 'draft';
 
+  @observable
+  entityData = {};
+
   @action
   setFormStatus(formStatus) {
     this.formStatus = formStatus;
@@ -266,13 +269,12 @@ class EntityAccountStore {
 
   @action
   setEntityAttributes = (step) => {
-    const entity = {};
     switch (step) {
       /* eslint-disable no-unused-expressions */
       case 'General':
-        entity.name = this.formGeneralInfo.fields.name.value;
-        entity.taxId = this.formGeneralInfo.fields.taxId.value;
-        entity.address = {
+        this.entityData.name = this.formGeneralInfo.fields.name.value;
+        this.entityData.taxId = this.formGeneralInfo.fields.taxId.value;
+        this.entityData.address = {
           street: this.formGeneralInfo.fields.street.value,
           city: this.formGeneralInfo.fields.city.value,
           state: this.formGeneralInfo.fields.state.value,
@@ -281,12 +283,12 @@ class EntityAccountStore {
         break;
 
       case 'Entity info':
-        entity.isTrust = this.formEntityInfo.fields.isTrust.value;
-        entity.trustDate = this.formEntityInfo.fields.trustDate.value;
+        this.entityData.isTrust = this.formEntityInfo.fields.isTrust.value;
+        this.entityData.trustDate = this.formEntityInfo.fields.trustDate.value;
         break;
 
       case 'Personal info':
-        entity.legalInfo = {
+        this.entityData.legalInfo = {
           legalFirstName: userStore.currentUser.givenName,
           legalLastName: userStore.currentUser.familyName,
           title: this.formPersonalInfo.fields.title.value,
@@ -295,7 +297,7 @@ class EntityAccountStore {
         break;
 
       case 'Formation doc':
-        entity.legalDocs = {
+        this.entityData.legalDocs = {
           formationDoc: this.formFormationDocuments.fields.formationDoc.value,
           operatingAgreementDoc: this.formFormationDocuments.fields.operatingAgreementDoc.value,
           einVerificationDoc: this.formFormationDocuments.fields.einVerificationDoc.value,
@@ -305,7 +307,7 @@ class EntityAccountStore {
       default:
         break;
     }
-    return entity;
+    return this.entityData;
   }
 
   /* eslint-disable consistent-return */
@@ -484,6 +486,9 @@ class EntityAccountStore {
           return this.formGeneralInfo.fields[f];
         });
         this.onFieldChange('formGeneralInfo', undefined, undefined, false);
+        if (account.accountDetails.entity && account.accountDetails.entity.address) {
+          this.setEntityAttributes('General');
+        }
         Object.keys(this.formEntityInfo.fields).map((f) => {
           if (f === 'isTrust' && account.accountDetails.entity) {
             this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
@@ -491,6 +496,9 @@ class EntityAccountStore {
           return this.formEntityInfo.fields[f];
         });
         this.onFieldChange('formEntityInfo', undefined, undefined, false);
+        if (account.accountDetails.entity && account.accountDetails.entity.isTrust) {
+          this.setEntityAttributes('Entity info');
+        }
         Object.keys(this.formPersonalInfo.fields).map((f) => {
           if (account.accountDetails.entity && account.accountDetails.entity.legalInfo) {
             this.formPersonalInfo.fields[f].value = account.accountDetails.entity.legalInfo[f];
@@ -498,6 +506,9 @@ class EntityAccountStore {
           return this.formPersonalInfo.fields[f];
         });
         this.onFieldChange('formPersonalInfo', undefined, undefined, false);
+        if (account.accountDetails.entity && account.accountDetails.entity.legalInfo) {
+          this.setEntityAttributes('Personal info');
+        }
         Object.keys(this.formFormationDocuments.fields).map((f) => {
           if (account.accountDetails.entity && account.accountDetails.entity.legalDocs) {
             const { entity } = account.accountDetails;
@@ -506,6 +517,9 @@ class EntityAccountStore {
           return this.formFormationDocuments.fields[f];
         });
         this.onFieldChange('formFormationDocuments', undefined, undefined, false);
+        if (account.accountDetails.entity && account.accountDetails.entity.legalDocs) {
+          this.setEntityAttributes('Formation doc');
+        }
         if (account.accountDetails.bankDetails && account.accountDetails.bankDetails.plaidItemId) {
           const { accountNumber, routingNumber } = account.accountDetails.bankDetails;
           accountStore.formLinkBankManually.fields.accountNumber.value = accountNumber;
