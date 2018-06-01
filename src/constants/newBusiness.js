@@ -183,3 +183,12 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: '',
   },
 };
+
+export const BUSINESS_SIGNUP = {
+  emailAddress: {
+    value: '', label: 'E-mail address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
+  },
+  password: {
+    value: '', label: 'Password', error: undefined, rule: 'required', placeHolder: 'Password',
+  },
+};

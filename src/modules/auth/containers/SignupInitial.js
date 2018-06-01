@@ -4,11 +4,18 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Button, Grid, Header, Icon } from 'semantic-ui-react';
 import { USER_TYPES_META } from './../../../constants/user';
 
+const GetBtn = ({ type }) => {
+  const BtnMeta = {
+    investor: { label: 'Start', to: '/auth/register-investor' },
+    bowner: { label: 'Start application process', to: '/business-application' },
+  };
+  return <Button as={Link} to={BtnMeta[type].to} primary size="large" className="very relaxed" content={BtnMeta[type].label} />;
+};
+
 @inject('authStore', 'uiStore')
 @observer
 class signupInitial extends Component {
   chooseType = type => this.props.authStore.updatesignupFlow('type', type);
-
   render() {
     const userTypes = USER_TYPES_META.slice();
     const selectedType = this.props.authStore.signupFlow.type;
@@ -37,7 +44,7 @@ class signupInitial extends Component {
             ))}
             <Grid.Row>
               <Grid.Column>
-                {selectedType ? <Button as={Link} to="/auth/register-investor" primary size="large" className="very relaxed" content="Start" /> : ''}
+                {selectedType ? <GetBtn type={selectedType} /> : ''}
               </Grid.Column>
             </Grid.Row>
           </Grid>

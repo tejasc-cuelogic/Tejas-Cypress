@@ -3,13 +3,12 @@ import { toJS, observable, action } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 // import { GqlClient as client } from '../../services/graphqlCool';
-import {
-  BUSINESS_PRE_QUALIFICATION,
-} from '../../constants/newBusiness';
+import { BUSINESS_PRE_QUALIFICATION, BUSINESS_SIGNUP } from '../../constants/newBusiness';
 import Helper from '../../helper/utility';
 
 export class NewBusinessStore {
   @observable BUSINESS_APP_FRM = { fields: { ...BUSINESS_PRE_QUALIFICATION }, meta: { isValid: false, error: '' } };
+  @observable BUSINESS_ACCOUNT = { fields: { ...BUSINESS_SIGNUP }, meta: { isValid: false, error: '' } };
   @observable BUSINESS_APP_STATUS = '';
 
   @action
@@ -18,6 +17,14 @@ export class NewBusinessStore {
     const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
     const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
     this.onFieldChange('BUSINESS_APP_FRM', fieldName, fieldValue, type);
+  };
+
+  @action
+  businessAccEleChange = (e, result) => {
+    const type = (e.target) ? e.target.type : '';
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('BUSINESS_ACCOUNT', fieldName, fieldValue, type);
   };
 
   @action
@@ -50,9 +57,9 @@ export class NewBusinessStore {
     const data = mapValues(this.BUSINESS_APP_FRM.fields, f => f.value);
     console.log(data);
     if (data.businessName === 'SUCCESS') {
-      BUSINESS_APP_STATUS = 'success';
+      this.BUSINESS_APP_STATUS = 'success';
     } else {
-      BUSINESS_APP_STATUS = 'failed';
+      this.BUSINESS_APP_STATUS = 'failed';
     }
   }
 

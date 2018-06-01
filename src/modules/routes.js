@@ -99,6 +99,11 @@ export const publicRoutes = [
     component: BusinessSignup,
     exact: true,
   },
+  {
+    path: '/business-application/:status',
+    component: BusinessSignup,
+    exact: true,
+  },
 ];
 
 export const privateRoutes = [

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Container, Icon, Image, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
+import { Container, Icon, Image, Menu, Dropdown, Label } from 'semantic-ui-react';
 import LogoC from '../../assets/images/nextseed_logo_color.svg';
 import LogoW from '../../assets/images/nextseed_logo_white_green.svg';
 
@@ -103,23 +103,18 @@ export class NavItems extends Component {
 }
 
 export const NavigationItems = props => (
-  <Menu borderless inverted={props.location.pathname === '/business-application'} fixed="top" size="large">
+  <Menu borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" size="large">
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
         <Image
           className="small"
-          src={props.location.pathname === '/business-application' ? LogoW : LogoC}
+          src={props.location.pathname.includes('/business-application') ? LogoW : LogoC}
           alt="NextSeed.com"
         />
       </Menu.Item>
       <Menu.Menu position="right">
-        {props.location.pathname !== '/business-application' ?
-          <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV_ITEMS} /> : (
-            <Button.Group style={{ padding: '19px' }}>
-              <Button inverted color="green">Save and Continue later</Button>
-              <Button color="grey" disabled>Submit</Button>
-            </Button.Group>
-          )
+        {!props.location.pathname.includes('/business-application') &&
+          <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV_ITEMS} />
         }
       </Menu.Menu>
     </Container>
