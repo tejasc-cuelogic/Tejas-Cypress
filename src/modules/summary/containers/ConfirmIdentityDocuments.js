@@ -63,10 +63,10 @@ export default class ConfirmIdentityDocuments extends Component {
               <Grid.Row>
                 <Grid.Column width={7}>
                   {/* eslint-disable jsx-a11y/label-has-for */}
-                  <label>
-                    <h3>Upload a Photo ID</h3>
-                    Driving Liscence or passport
-                  </label>
+                  <Header>
+                    Upload a Photo ID
+                    <Header.Subheader>Driving Liscence or passport</Header.Subheader>
+                  </Header>
                 </Grid.Column>
                 <Grid.Column width={9}>
                   {confirmIdentityDocuments.photoId.value === '' &&
