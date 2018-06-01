@@ -1,20 +1,20 @@
-/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
-import { Route, NavLink } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Grid, Header, Accordion, Responsive, Card } from 'semantic-ui-react';
+import { Grid, Form, Input } from 'semantic-ui-react';
+import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
 
 @inject('educationStore')
 @observer
 export default class KnowledgeBase extends Component {
   componentWillMount() {
-    this.props.educationStore.initRequest('KnowledgeBase');
+    this.props.educationStore.initRequest('Faq');
   }
   render() {
-    const { match } = this.props;
+    const { match, location } = this.props;
     const {
-      kbs, loading, error,
+      faqs, loading, error,
     } = this.props.educationStore;
 
     if (loading) {
@@ -23,23 +23,22 @@ export default class KnowledgeBase extends Component {
     return (
       <div>
         <Grid>
-          <Grid.Column widescreen={8} largeScreen={8} computer={16} tablet={16} mobile={16}>
-            <Header as="h3">Table of Content</Header>
-            <Accordion className="feed-view">
-              {
-                kbs.map((record, index) => (
-                  <Accordion.Title as={NavLink} to={`${match.url}/${record.id}`} index={record.id}>
-                    {`Chapter ${(index + 1)}`}
-                    <span>{record.heading}</span>
-                  </Accordion.Title>
-                ))
-              }
-            </Accordion>
-          </Grid.Column>
-          <Grid.Column widescreen={8} largeScreen={8} only="large screen">
-            <Route exact path={match.url} component={Details} />
-            <Route path={`${match.url}/:id`} render={props => <Details refLink="KnowledgeBase" {...props} />} />
-          </Grid.Column>
+          <Grid.Row>
+            <Grid.Column widescreen={7} largeScreen={7} computer={16} tablet={16} mobile={16}>
+              <Form>
+                <Input fluid inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Search by keyword or phrase" />
+              </Form>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column widescreen={7} largeScreen={7} computer={16} tablet={16} mobile={16}>
+              <AccList location={location} match={match} error={error} data={faqs} />
+            </Grid.Column>
+            <Grid.Column widescreen={8} largeScreen={8} floated="right" only="large screen">
+              <Route exact path={match.url} component={Details} />
+              <Route path={`${match.url}/:id`} render={props => <Details refLink="KnowledgeBase" {...props} />} />
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
       </div>
     );

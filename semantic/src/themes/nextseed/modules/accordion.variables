@@ -4,6 +4,15 @@
 
 @boxShadow: none;
 @cardBoxShadow:0 0 10px @trackBackground;
+@noTopShadow:
+  3px 3px 10px 0px @transparentBlack,
+  -3px 3px 10px 0px @transparentBlack
+;
+@allSideShadow:
+  3px 3px 10px 0px @transparentBlack,
+  -3px 3px 10px 0px @transparentBlack,
+  0px -3px 10px 0px @transparentBlack
+;
 
 /* Title */
 @titleFont: @headerFont;
