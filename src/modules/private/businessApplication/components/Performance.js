@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Form, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { MaskedInput2, FileUploader2 } from '../../../../theme/form/FormElements';
+import { MaskedInput2, FileUploader } from '../../../../theme/form/FormElements';
 import FormElementWrap from './FormElementWrap';
 
 @inject('newBusinessStore')
@@ -27,21 +27,21 @@ export default class Performance extends Component {
             >
               <Grid stackable columns="equal">
                 <Grid.Column>
-                  <FileUploader2
+                  <FileUploader
                     name="prior3YrStatement"
                     fielddata={fields.prior3YrStatement}
                     uploadDocument={issuerFiles}
                   />
                 </Grid.Column>
                 <Grid.Column>
-                  <FileUploader2
+                  <FileUploader
                     name="ytdStatements"
                     fielddata={fields.ytdStatements}
                     uploadDocument={issuerFiles}
                   />
                 </Grid.Column>
                 <Grid.Column>
-                  <FileUploader2
+                  <FileUploader
                     name="fiveYrProjections"
                     fielddata={fields.fiveYrProjections}
                     uploadDocument={issuerFiles}

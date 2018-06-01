@@ -247,7 +247,7 @@
     border-radius:@4px;
     border:@inverse-secondary-text 1px dashed;
     position:relative;
-    color:@theme-primary;
+    color:@link-color;
     line-height:@28px;
     font-weight:700;
     text-align:center;
@@ -269,22 +269,22 @@
         cursor:pointer;
     }
     &.attached{
-        color:@link-color;
+        color:@fullBlack;
         border:none;
         background:@border-light;
         overflow:hidden;
         text-overflow:ellipsis;
         white-space:nowrap;
-        > span{
-            color:@link-color;
-        }
         .remove{
-            margin:0 0 0 @7px;
-            color:@quaternary-text;
+            margin:@7px 0 @7px @7px;
+            color:@link-color;
             position:relative;
             z-index:9;
+            @media only screen and (max-width:@largestMobileScreen){
+                margin:0 0 0 @7px;
+            }
             &:hover{
-                color:@tertiary-text;
+                color:darken(@link-color, 10%);
             }
         }
     }
