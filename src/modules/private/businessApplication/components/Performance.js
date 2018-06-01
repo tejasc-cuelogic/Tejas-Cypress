@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Grid, Form, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput2, FileUploader2 } from '../../../../theme/form/FormElements';
-import FormElementWrap from '../../../public/businessSignup/components/FormElementWrap';
+import FormElementWrap from './FormElementWrap';
 
 @inject('newBusinessStore')
 @observer
