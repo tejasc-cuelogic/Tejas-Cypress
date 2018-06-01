@@ -494,6 +494,9 @@ class EntityAccountStore {
           if (f === 'isTrust' && account.accountDetails.entity) {
             this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
           }
+          // else if (f === 'trustDate' && account.accountDetails.entity[f]) {
+          //   this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
+          // }
           return this.formEntityInfo.fields[f];
         });
         this.onFieldChange('formEntityInfo', undefined, undefined, false);
