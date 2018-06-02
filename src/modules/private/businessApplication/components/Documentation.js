@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormRadioGroup, FileUploader2 } from '../../../../theme/form/FormElements';
+import { FormRadioGroup, FileUploader } from '../../../../theme/form/FormElements';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
@@ -41,14 +41,14 @@ export default class Documentation extends Component {
             >
               <Grid stackable columns="equal">
                 <Grid.Column>
-                  <FileUploader2
+                  <FileUploader
                     name="bankStatements"
                     fielddata={fields.bankStatements}
                     uploadDocument={issuerFiles}
                   />
                 </Grid.Column>
                 <Grid.Column>
-                  <FileUploader2
+                  <FileUploader
                     name="leaseAgreement"
                     fielddata={fields.leaseAgreement}
                     uploadDocument={issuerFiles}
@@ -88,7 +88,7 @@ export default class Documentation extends Component {
                 Please <Link to="/" className="link"><b>download</b></Link>, fill out and upload the
                 Personal Guarantee Form along with any supporting documentation
               </p>
-              <FileUploader2
+              <FileUploader
                 name="personalGuaranteeForm"
                 fielddata={fields.personalGuaranteeForm}
                 uploadDocument={issuerFiles}
