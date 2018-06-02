@@ -21,9 +21,6 @@ export const USER_LIST_META = [
   ['actions', '', false],
 ];
 
-export const USER_DETAIL_SECTIONS = ['Profile', 'Limits', 'Beneficiaries', 'Portfolio', 'Transactions', 'Statements', 'Bonus rewards', 'Messages'];
-
-// Filters
 export const FILTER_META = {
   accountType: [
     { text: 'Admin', value: 'admin' },
