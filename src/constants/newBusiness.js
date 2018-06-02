@@ -185,6 +185,18 @@ export const BUSINESS_PRE_QUALIFICATION = {
     error: undefined,
     rule: '',
   },
+};
+
+export const BUSINESS_SIGNUP = {
+  emailAddress: {
+    value: '', label: 'E-mail address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
+  },
+  password: {
+    value: '', label: 'Password', error: undefined, rule: 'required', placeHolder: 'Password',
+  },
+};
+
+export const BUSINESS_DETAILS = {
   businessPlan: {
     value: '', label: 'Upload your business plan', error: undefined, rule: 'required',
   },
@@ -221,6 +233,9 @@ export const BUSINESS_PRE_QUALIFICATION = {
   ownerResume: {
     value: '', label: 'Upload Resume/CV', error: undefined, rule: 'required',
   },
+};
+
+export const BUSINESS_PERF = {
   prior3YrStatement: {
     value: '', label: 'Prior 3 Year Statement', error: undefined, rule: 'required',
   },
@@ -254,6 +269,9 @@ export const BUSINESS_PRE_QUALIFICATION = {
   fyCogs: {
     value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: '550,000',
   },
+};
+
+export const BUSINESS_DOC = {
   bankStatements: {
     value: '', label: 'Prior 6 months Bank Statements', error: undefined, rule: 'required',
   },
@@ -280,14 +298,5 @@ export const BUSINESS_PRE_QUALIFICATION = {
   },
   personalGuaranteeForm: {
     value: '', label: 'Personal Guarantee Form', error: undefined, rule: 'required',
-  },
-};
-
-export const BUSINESS_SIGNUP = {
-  emailAddress: {
-    value: '', label: 'E-mail address', error: undefined, rule: 'required', placeHolder: 'e.g. john.doe@contact.com',
-  },
-  password: {
-    value: '', label: 'Password', error: undefined, rule: 'required', placeHolder: 'Password',
   },
 };

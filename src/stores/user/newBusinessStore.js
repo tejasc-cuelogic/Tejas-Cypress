@@ -3,12 +3,21 @@ import { toJS, observable, action } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 // import { GqlClient as client } from '../../services/graphqlCool';
-import { BUSINESS_PRE_QUALIFICATION, BUSINESS_SIGNUP } from '../../constants/newBusiness';
+import {
+  BUSINESS_PRE_QUALIFICATION,
+  BUSINESS_SIGNUP,
+  BUSINESS_DETAILS,
+  BUSINESS_PERF,
+  BUSINESS_DOC,
+} from '../../constants/newBusiness';
 import Helper from '../../helper/utility';
 
 export class NewBusinessStore {
   @observable BUSINESS_APP_FRM = { fields: { ...BUSINESS_PRE_QUALIFICATION }, meta: { isValid: false, error: '' } };
   @observable BUSINESS_ACCOUNT = { fields: { ...BUSINESS_SIGNUP }, meta: { isValid: false, error: '' } };
+  @observable BUSINESS_DETAILS_FRM = { fields: { ...BUSINESS_DETAILS }, meta: { isValid: false, error: '' } };
+  @observable BUSINESS_PERF_FRM = { fields: { ...BUSINESS_PERF }, meta: { isValid: false, error: '' } };
+  @observable BUSINESS_DOC_FRM = { fields: { ...BUSINESS_DOC }, meta: { isValid: false, error: '' } };
   @observable BUSINESS_APP_STATUS = '';
 
   @action
@@ -17,6 +26,30 @@ export class NewBusinessStore {
     const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
     const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
     this.onFieldChange('BUSINESS_APP_FRM', fieldName, fieldValue, type);
+  };
+
+  @action
+  businessDetailsChange = (e, result) => {
+    const type = (e.target) ? e.target.type : '';
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('BUSINESS_DETAILS_FRM', fieldName, fieldValue, type);
+  };
+
+  @action
+  businessPerfChange = (e, result) => {
+    const type = (e.target) ? e.target.type : '';
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('BUSINESS_PERF_FRM', fieldName, fieldValue, type);
+  };
+
+  @action
+  businessDocChange = (e, result) => {
+    const type = (e.target) ? e.target.type : '';
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('BUSINESS_DOC_FRM', fieldName, fieldValue, type);
   };
 
   @action

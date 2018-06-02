@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Divider, Form, Button, Icon } from 'semantic-ui-react';
+import { Grid, Header, Divider, Form, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormInput, FileUploader2 } from '../../../../theme/form/FormElements';
 import FormElementWrap from './FormElementWrap';
+import AppNavigation from './AppNavigation';
+// import Helper from '../../../../helper/utility';
 
 @inject('newBusinessStore')
 @observer
 export default class BusinessDetails extends Component {
+  submit = () => {
+    // e.preventDefault();
+    console.log(111);
+  }
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange, issuerFiles,
+      BUSINESS_DETAILS_FRM, businessDetailsChange, issuerFiles,
     } = this.props.newBusinessStore;
-    const { fields } = BUSINESS_APP_FRM;
+    const { fields } = BUSINESS_DETAILS_FRM;
     return (
       <Grid container>
         <Grid.Column>
@@ -48,14 +54,14 @@ export default class BusinessDetails extends Component {
                       name="existingDebt1"
                       value={fields.existingDebt1.value}
                       fielddata={fields.existingDebt1}
-                      changed={businessAppEleChange}
+                      changed={businessDetailsChange}
                     />
                     <Button size="tiny" color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
                     <FormInput
                       name="remainingPrincipal"
                       value={fields.remainingPrincipal.value}
                       fielddata={fields.remainingPrincipal}
-                      changed={businessAppEleChange}
+                      changed={businessDetailsChange}
                     />
                   </div>
                 </Grid.Column>
@@ -68,7 +74,7 @@ export default class BusinessDetails extends Component {
                           type="text"
                           name={field}
                           fielddata={fields[field]}
-                          changed={businessAppEleChange}
+                          changed={businessDetailsChange}
                         />
                       ))
                     }
@@ -92,7 +98,7 @@ export default class BusinessDetails extends Component {
                             type="text"
                             name={field}
                             fielddata={fields[field]}
-                            changed={businessAppEleChange}
+                            changed={businessDetailsChange}
                           />
                         ))
                       }
@@ -105,7 +111,7 @@ export default class BusinessDetails extends Component {
                             type="text"
                             name={field}
                             fielddata={fields[field]}
-                            changed={businessAppEleChange}
+                            changed={businessDetailsChange}
                           />
                         ))
                       }
@@ -118,7 +124,7 @@ export default class BusinessDetails extends Component {
                             type="text"
                             name={field}
                             fielddata={fields[field]}
-                            changed={businessAppEleChange}
+                            changed={businessDetailsChange}
                           />
                         ))
                       }
@@ -134,20 +140,7 @@ export default class BusinessDetails extends Component {
               <Divider hidden />
               <Button inverted color="green">+ Add other owners</Button>
             </FormElementWrap>
-            <div className="navigation-buttons">
-              <div className="pull-left">
-                <Button circular icon className="multistep__btn prev">
-                  <Icon className="ns-arrow-left" />
-                </Button>
-                Pre-qualification
-              </div>
-              <div className="pull-right">
-                Performance
-                <Button circular icon primary className="multistep__btn next active">
-                  <Icon className="ns-arrow-right" />
-                </Button>
-              </div>
-            </div>
+            <AppNavigation action={this.submit} />
           </Form>
         </Grid.Column>
       </Grid>

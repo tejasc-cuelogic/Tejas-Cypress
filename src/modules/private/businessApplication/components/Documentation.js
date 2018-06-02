@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Form, Button, Icon } from 'semantic-ui-react';
+import { Grid, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormRadioGroup, FileUploader2 } from '../../../../theme/form/FormElements';
 import FormElementWrap from './FormElementWrap';
+import AppNavigation from './AppNavigation';
 
 @inject('newBusinessStore')
 @observer
 export default class Documentation extends Component {
+  submit = () => {
+    // e.preventDefault();
+    console.log(111);
+    // this.props.history.push(`/app/business-application/${APP_STATUS}`);
+  }
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange, issuerFiles,
+      BUSINESS_DOC_FRM, businessDocChange, issuerFiles,
     } = this.props.newBusinessStore;
-    const { fields } = BUSINESS_APP_FRM;
+    const { fields } = BUSINESS_DOC_FRM;
     return (
       <Grid container>
         <Grid.Column>
@@ -63,7 +69,7 @@ export default class Documentation extends Component {
                 fielddata={fields.blanketLien}
                 name="blanketLien"
                 iconic
-                changed={businessAppEleChange}
+                changed={businessDocChange}
                 containerclassname="button-radio"
               />
             </FormElementWrap>
@@ -75,7 +81,7 @@ export default class Documentation extends Component {
                 fielddata={fields.personalGuarantee}
                 name="personalGuarantee"
                 iconic
-                changed={businessAppEleChange}
+                changed={businessDocChange}
                 containerclassname="button-radio"
               />
               <p>
@@ -88,17 +94,7 @@ export default class Documentation extends Component {
                 uploadDocument={issuerFiles}
               />
             </FormElementWrap>
-            <div className="navigation-buttons">
-              <div className="pull-left">
-                <Button circular icon className="multistep__btn prev">
-                  <Icon className="ns-arrow-left" />
-                </Button>
-                Performance
-              </div>
-              <div className="pull-right">
-                <Button primary className="very relaxed" content="Submit" />
-              </div>
-            </div>
+            <AppNavigation action={this.submit} />
           </Form>
         </Grid.Column>
       </Grid>
