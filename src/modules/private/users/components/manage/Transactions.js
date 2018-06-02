@@ -1,10 +1,11 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { Header, Grid, Card, Table, Icon } from 'semantic-ui-react';
 
 /* eslint-disable arrow-body-style */
-const userTransactions = () => {
+const Transactions = () => {
   return (
-    <div className="content-spacer">
+    <Aux>
       <Header as="h3">Transactions</Header>
       <Grid stackable>
         <Grid.Row>
@@ -61,8 +62,8 @@ const userTransactions = () => {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    </div>
+    </Aux>
   );
 };
 
-export default userTransactions;
+export default Transactions;

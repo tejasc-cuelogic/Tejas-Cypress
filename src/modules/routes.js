@@ -145,7 +145,7 @@ export const privateRoutes = [
     exact: true,
   },
   {
-    path: '/app/users/:userId/:section',
+    path: '/app/users/:userId',
     component: UserDetails,
     auth: AdminAuthorization,
   },

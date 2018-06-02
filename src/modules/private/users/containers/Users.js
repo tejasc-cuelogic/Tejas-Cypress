@@ -1,9 +1,12 @@
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { USER_LIST_META } from '../../../../constants/user';
-import UserListingSubheader from './../components/UserListingSubheader';
-import UserListing from './../components/UserListing';
+import PrivateLayout from '../../../../containers/common/PrivateHOC';
+
+import { P1, P2, P3, P4 } from './../components/UserListingSubheader';
+import UserListing from '../components/manage/UserListing';
 
 @inject('userListingStore')
 @observer
@@ -44,21 +47,23 @@ class Users extends Component {
 
   render() {
     const {
-      users, loading, error, usersSummary,
+      users, loading, error, usersSummary, requestState,
     } = this.props.userListingStore;
     return (
-      <Aux>
-        <UserListingSubheader
-          summary={usersSummary}
-          filters={this.props.userListingStore.filters}
-          requestState={this.props.userListingStore.requestState}
-          toggleSearch={this.toggleSearch}
-          executeSearch={this.executeSearch}
+      <PrivateLayout
+        {...this.props}
+        P1={<P1 executeSearch={this.executeSearch} />}
+        P2={<P2 requestState={requestState} toggleSearch={this.toggleSearch} />}
+        P3={<P3 />}
+        P4={<P4
+          requestState={requestState}
           setSearchParam={this.setSearchParam}
           dateFilterStart={this.dateFilterStart}
           dateFilterEnd={this.dateFilterEnd}
+          summary={usersSummary}
           removeFilter={this.removeFilter}
-        />
+        />}
+      >
         <UserListing
           loading={loading}
           error={error}
@@ -68,7 +73,7 @@ class Users extends Component {
           loadMore={this.loadMore}
           sortState={this.props.userListingStore.sortInfo}
         />
-      </Aux>
+      </PrivateLayout>
     );
   }
 }

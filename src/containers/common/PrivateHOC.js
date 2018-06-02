@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Header, Button, Icon, Responsive } from 'semantic-ui-react';
+import { Grid, Header, Button, Icon, Responsive } from 'semantic-ui-react';
 import { GetNavMeta } from '../../theme/layout/SidebarNav';
 import SecondaryMenu from '../../theme/layout/SecondaryMenu';
 
@@ -17,31 +18,25 @@ class PrivateHOC extends Component {
       <Aux>
         <div>
           <div className="page-header-section">
-            <Header as="h1">
-              <div className="pull-right">
-                <span className="item notification">
-                  <Icon className="ns-bell" />
-                  <span className="unread-count">3</span>
-                </span>
-                {roles.includes('investor') &&
-                  <Responsive
-                    minWidth={Responsive.onlyLargeScreen.minWidth}
-                    as={Button}
-                    content="Invest Now"
-                    primary
-                    floated="right"
-                  />
-                }
-              </div>
-              {pageMeta.heading || pageMeta.title}
-            </Header>
+            <Grid stackable>
+              <Grid.Row>
+                <Grid.Column width={4}>
+                  <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
+                </Grid.Column>
+                <Grid.Column width={5}>{this.props.P1}</Grid.Column>
+                <Grid.Column width={3} textAlign="center">{this.props.P2}</Grid.Column>
+                <Grid.Column width={3} textAlign="right">{this.props.P3}</Grid.Column>
+                <Grid.Column floated="right" textAlign="right">
+                  <span className="item notification">
+                    <Icon className="ns-bell" />
+                    <span className="unread-count">3</span>
+                  </span>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </div>
-          {this.props.StickyNotification &&
-            <div className="top-cta-section">
-              {this.props.StickyNotification}
-            </div>
-          }
-          {pageMeta.subPanel === 1 &&
+          {this.props.P4}
+          {(pageMeta.subPanel === 1 || this.props.subNav) &&
             <SecondaryMenu match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} />
           }
         </div>

@@ -1,28 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { toJS } from 'mobx';
+import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Form, Label, Card, Header, Button, Checkbox, Feed } from 'semantic-ui-react';
-import Spinner from '../../../../theme/ui/Spinner';
-import { US_STATES } from '../../../../constants/account'; //  added Temperarily to update UI as per new layout
-import { FormSelect } from '../../../../theme/form/FormElements';
+import { US_STATES } from '../../../../../constants/account'; //  added Temperarily to update UI as per new layout
+import { FormSelect } from '../../../../../theme/form/FormElements';
 
 const states = {
   label: 'State',
   error: undefined,
 };
 
-const userDetails = (props) => {
-  if (!props.details || !props.details.id) {
-    return (
-      <div>
-        <Spinner loaderMessage="Loading..." />
-      </div>
-    );
-  }
+@inject('userDetailsStore')
+@observer
+export default class Detail extends Component {
+  render() {
+    const { currentUser } = this.props.userDetailsStore;
+    const details = toJS({ ...currentUser.data.user });
+    const { legalAddress } = details.legalDetails;
+    const { phone } = details.contactDetails;
 
-  const { legalAddress } = props.details.legalDetails;
-  const { phone } = props.details.contactDetails;
-  return (
-    <div className="content-spacer">
+    return (
       <Grid columns={1} stackable>
         <Grid.Row>
           <Grid.Column width={8}>
@@ -31,8 +29,8 @@ const userDetails = (props) => {
                 <Header as="h3">Personal Profile</Header>
                 <Form>
                   <Form.Group widths="equal">
-                    <Form.Input fluid label="First name" placeholder="First name" value={props.details.firstName || ''} />
-                    <Form.Input fluid label="Last name" placeholder="Last name" value={props.details.lastName || ''} />
+                    <Form.Input fluid label="First name" placeholder="First name" value={details.firstName || ''} />
+                    <Form.Input fluid label="Last name" placeholder="Last name" value={details.lastName || ''} />
                   </Form.Group>
                   <Form.Input fluid label="Phone number" placeholder="Phone number" defaultValue={(phone) ? phone.number : ''} />
                   <Header as="h4">Mailing Address</Header>
@@ -51,13 +49,13 @@ const userDetails = (props) => {
                 <Header as="h3">Verified identity</Header>
                 <Form>
                   <Form.Group widths="equal">
-                    <Form.Input fluid label="Legal First name" placeholder="Legal First name" readOnly value={props.details.firstLegalName || ''} />
-                    <Form.Input fluid label="Legal Last name" placeholder="Legal Last name" readOnly value={props.details.lastLegalName || ''} />
+                    <Form.Input fluid label="Legal First name" placeholder="Legal First name" readOnly value={details.firstLegalName || ''} />
+                    <Form.Input fluid label="Legal Last name" placeholder="Legal Last name" readOnly value={details.lastLegalName || ''} />
                   </Form.Group>
-                  <Form.Input fluid label="SSN" placeholder="SSN" readOnly defaultValue={props.details.legalDetails.ssn} />
-                  <Form.Input fluid label="Date of Birth" placeholder="Date of Birth" readOnly defaultValue={props.details.legalDetails.dateOfBirth} />
+                  <Form.Input fluid label="SSN" placeholder="SSN" readOnly defaultValue={details.legalDetails.ssn} />
+                  <Form.Input fluid label="Date of Birth" placeholder="Date of Birth" readOnly defaultValue={details.legalDetails.dateOfBirth} />
                   <Form.Input fluid label="Legal Address" placeholder="Legal Address" readOnly defaultValue={legalAddress ? legalAddress.street1 : ''} />
-                  <Form.Input fluid label="Email" placeholder="Email" readOnly defaultValue={props.details.email} />
+                  <Form.Input fluid label="Email" placeholder="Email" readOnly defaultValue={details.email} />
                   <Button inverted color="green" disabled>Update identity</Button>
                 </Form>
               </Card.Content>
@@ -151,8 +149,6 @@ const userDetails = (props) => {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    </div>
-  );
-};
-
-export default userDetails;
+    );
+  }
+}
