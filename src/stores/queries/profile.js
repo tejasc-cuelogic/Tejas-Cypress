@@ -114,3 +114,26 @@ export const updateUserCIPInfo = gql`
       accreditation
     }
   }`;
+
+export const updateUserProfileData = gql`
+  mutation _updateUserProfileData($userId: String! $profileDetails: profileDetailsInput!) {
+    updateUserProfileData(
+    userId: $userId
+    profileDetails: $profileDetails
+    ) {
+      id
+      firstName
+      lastName
+      address {
+        mailing {
+          street
+          city
+          state
+          zipCode
+        }
+        residence {
+          street
+        }
+      }
+    }
+  }`;

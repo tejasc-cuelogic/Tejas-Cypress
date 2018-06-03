@@ -3,7 +3,7 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import { GqlClient as client } from '../services/graphql';
-import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
+import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo, updateUserProfileData } from '../stores/queries/profile';
 
 import api from '../ns-api';
 import uiStore from './uiStore';
@@ -372,10 +372,12 @@ export class ProfileStore {
   };
 
   @action
-  setProfileInfo = (currentUser) => {
-    this.onFieldChange('updateProfileInfo', 'firstName', currentUser.givenName);
-    this.onFieldChange('updateProfileInfo', 'lastName', currentUser.familyName);
-    this.onFieldChange('updateProfileInfo', 'email', currentUser.email);
+  setProfileInfo = (userDetails) => {
+    const { email, legalDetails, contactDetails } = userDetails;
+    this.onFieldChange('updateProfileInfo', 'firstName', legalDetails.legalName.firstLegalName);
+    this.onFieldChange('updateProfileInfo', 'lastName', legalDetails.legalName.lastLegalName);
+    this.onFieldChange('updateProfileInfo', 'email', email);
+    this.onFieldChange('updateProfileInfo', 'phoneNumber', contactDetails.phone.number);
   }
 
   uploadAndUpdateCIPInfo = () => {
@@ -397,6 +399,56 @@ export class ProfileStore {
           resolve();
         })
         .catch((err) => {
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @computed
+  get profileDetails() {
+    const profileDetails = {
+      firstName: this.updateProfileInfo.fields.firstName.value,
+      lastName: this.updateProfileInfo.fields.lastName.value,
+      address: {
+        mailing: {
+          street: this.updateProfileInfo.fields.street.value,
+          city: this.updateProfileInfo.fields.city.value,
+          state: this.updateProfileInfo.fields.state.value,
+          zipCode: this.updateProfileInfo.fields.zipCode.value,
+        },
+      },
+    };
+    return profileDetails;
+  }
+
+  setAddressFields = (place) => {
+    const data = Helper.gAddressClean(place);
+    this.onFieldChange('updateProfileInfo', 'street', data.residentalStreet);
+    this.onFieldChange('updateProfileInfo', 'city', data.city);
+    this.onFieldChange('updateProfileInfo', 'state', data.state);
+    this.onFieldChange('updateProfileInfo', 'zipCode', data.zipCode);
+  }
+
+  updateUserProfileData = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateUserProfileData,
+          variables: {
+            userId: userStore.currentUser.sub,
+            profileDetails: this.profileDetails,
+          },
+        })
+        .then(() => {
+          Helper.toast('Investor profile has been updated.', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
           reject(err);
         })
         .finally(() => {

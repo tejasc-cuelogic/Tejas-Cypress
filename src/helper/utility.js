@@ -97,6 +97,14 @@ export class Utility {
     encryptedNumber = encryptedNumber.slice(-7);
     return encryptedNumber;
   }
+
+  cryptedSSNNumber = (ssnNumber) => {
+    const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
+    console.log(cyrptedSSNNumber.substr(0, 2));
+    console.log(cyrptedSSNNumber.substr(2, 2));
+    const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
+    return formattedSSNNumber;
+  }
 }
 
 export default new Utility();

@@ -82,6 +82,15 @@ query getUserDetails($id: ID!) {
 }
 `;
 
+// address {
+//   mailing {
+//     street
+//     city
+//     state
+//     zipCode
+//   }
+// }
+
 export const createUserMutation = gql`
   mutation createUser($name: String!, $email: String!, $city: String!, $state: String!, $ssn: String!, $dateOfBirth: DateTime!, ) {
     createUser(name: $name, email: $email, city: $city, state: $state, ssn: $ssn, dateOfBirth: $dateOfBirth) {
