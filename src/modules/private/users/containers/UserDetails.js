@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { Link, Route, Switch } from 'react-router-dom';
-import { List } from 'semantic-ui-react';
+import { Route, Switch } from 'react-router-dom';
+import { List, Button } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
+import Helper from '../../../../helper/utility';
 import Spinner from '../../../../theme/ui/Spinner';
 import PrivateLayout from '../../../../containers/common/PrivateHOC';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -20,6 +21,10 @@ const getModule = component => Loadable({
 export default class AccountDetails extends Component {
   componentWillMount() {
     this.props.userDetailsStore.getUser(this.props.match.params.userId);
+  }
+  toggleState = (id) => {
+    this.props.userDetailsStore.toggleState(id);
+    Helper.toast('User Account status updated successfully.', 'success');
   }
   render() {
     const { match } = this.props;
@@ -40,11 +45,22 @@ export default class AccountDetails extends Component {
         P1={
           <List horizontal>
             <List.Item>
-              <List.Icon circular color="red" className="ns-lock" />
+              <List.Icon
+                circular
+                color={details.accountStatus === 'unlocked' ? 'green' : 'red'}
+                className={`ns-${details.accountStatus === 'unlocked' ? 'unlock' : 'lock'}`}
+              />
               <List.Content verticalAlign="middle">
                 <List.Description>
-                  Account locked <br />
-                  <Link to="">Unlock</Link>
+                  Account {details.accountStatus} <br />
+                  <Button
+                    onClick={() => this.toggleState(details.id)}
+                    size="tiny"
+                    color={details.accountStatus === 'unlocked' ? 'red' : 'green'}
+                    className="ghost-button"
+                  >
+                    {details.accountStatus === 'unlocked' ? 'Lock' : 'Unlock'}
+                  </Button>
                 </List.Description>
               </List.Content>
             </List.Item>

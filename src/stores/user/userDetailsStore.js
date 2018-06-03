@@ -49,6 +49,12 @@ export class UserDetailsStore {
   }
 
   @action
+  toggleState = () => {
+    this.currentUser.data.user.accountStatus = this.currentUser.data.user.accountStatus === 'locked' ?
+      'unlocked' : 'locked';
+  }
+
+  @action
   getBeneficiaries = () => {
     this.beneficiariesData = graphql({
       client: client2,
