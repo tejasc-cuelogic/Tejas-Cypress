@@ -17,6 +17,7 @@ import Messages from './private/messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './private/users/containers/Users';
 import UserDetails from './private/users/containers/UserDetails';
+import UsersNew from './private/users/containers/UsersNew';
 import ProfileSettings from './private/users/containers/ProfileSettings';
 import XmlForm from './edgar/containers/XmlForm';
 import BusinessDetails from './edgar/containers/BusinessDetails';
@@ -145,13 +146,13 @@ export const privateRoutes = [
     exact: true,
   },
   {
-    path: '/app/users/:userId',
-    component: UserDetails,
+    path: '/app/users/new',
+    component: UsersNew,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/users/new',
-    component: Users,
+    path: '/app/users/:userId',
+    component: UserDetails,
     auth: AdminAuthorization,
   },
   {
