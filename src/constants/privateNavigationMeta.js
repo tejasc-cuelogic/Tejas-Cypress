@@ -131,8 +131,8 @@ export const ALL_NAV_ITEMS = [
   },
   {
     icon: 'ns-article',
-    title: 'Education',
-    to: 'education',
+    title: 'Resources',
+    to: 'resources',
     accessibleTo: ['ira', 'individual', 'entity', 'investor', 'bowner'],
     subPanel: 1,
     subNavigations: [

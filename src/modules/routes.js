@@ -192,7 +192,7 @@ export const privateRoutes = [
     auth: InvestorAuthorization,
   },
   {
-    path: '/app/education',
+    path: '/app/resources',
     component: Education,
     auth: UserAuthorization,
   },
