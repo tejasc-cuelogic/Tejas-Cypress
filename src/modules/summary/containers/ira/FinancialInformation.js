@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form/FormElements';
@@ -10,8 +11,8 @@ export default class FinancialInformation extends React.Component {
     const { formFinInfo, finInfoChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">Complete your financial information</Header>
-        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
+        <Header as="h1" textAlign="center">Your financial information</Header>
+        <Header as="h4" textAlign="center">Your net worth and annual income are used to determine your 12-month<br />investment limit. <Link className="link" to="/app/summary">How is this calculated?</Link></Header>
         <Form error>
           <div className="field-wrap">
             {

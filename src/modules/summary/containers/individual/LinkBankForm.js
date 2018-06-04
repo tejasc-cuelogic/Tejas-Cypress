@@ -3,8 +3,9 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form/FormElements';
 import ListErrors from '../../../../theme/common/ListErrors';
+import validationActions from '../../../../actions/validation';
 
-@inject('individualAccountStore', 'accountStore', 'uiStore')
+@inject('individualAccountStore', 'accountStore', 'uiStore', 'entityAccountStore')
 @observer
 export default class LinkBankForm extends Component {
   handleSubmitForm = (e) => {
@@ -13,6 +14,12 @@ export default class LinkBankForm extends Component {
       this.props.individualAccountStore.createAccount().then(() => {
         this.props.individualAccountStore.setStepToBeRendered(1);
       });
+    } else {
+      const currentStep = {
+        name: 'Link bank',
+        validate: validationActions.validateLinkBankForm,
+      };
+      this.props.entityAccountStore.createAccount(currentStep);
     }
   }
 

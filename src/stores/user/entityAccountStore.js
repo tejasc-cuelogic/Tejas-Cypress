@@ -31,7 +31,7 @@ class EntityAccountStore {
 
   @observable
   formEntityInfo = {
-    fields: { ...ENTITY_TRUST_INFO }, meta: { isValid: false, error: '', isDirty: false },
+    fields: { ...ENTITY_TRUST_INFO }, meta: { isValid: false, error: '', isDirty: true },
   };
 
   @observable
@@ -198,15 +198,11 @@ class EntityAccountStore {
     _.isEmpty(this.formFormationDocuments.fields.einVerificationDoc.error);
   }
 
-  @computed
-  get isValidLinkBank() {
-    if (accountStore.bankLinkInterface === 'list') {
-      return _.isEmpty(this.formPersonalInfo.fields.title.error) &&
-    _.isEmpty(this.formPersonalInfo.fields.legalDocUrl.error);
-    } else if (_.isEmpty(accountStore.plaidBankDetails)) {
-      return false;
-    }
-    return true;
+  /* eslint-disable class-methods-use-this */
+  isValidLinkBank() {
+    return ((_.isEmpty(accountStore.formLinkBankManually.fields.routingNumber.error) &&
+   _.isEmpty(accountStore.formLinkBankManually.fields.accountNumber.error)) ||
+   !_.isEmpty(accountStore.plaidBankDetails));
   }
 
   @computed
@@ -361,11 +357,26 @@ class EntityAccountStore {
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
         }
         break;
-      case 'Link Bank':
+      case 'Link bank':
         if (accountStore.bankLinkInterface === 'list') {
           currentStep.validate();
         }
-        isValidCurrentStep = this.isValidLinkBank;
+        isValidCurrentStep = this.isValidLinkBank();
+        if (isValidCurrentStep) {
+          if (!_.isEmpty(accountStore.plaidBankDetails)) {
+            const plaidBankDetails = _.omit(accountStore.plaidBankDetails, '__typename');
+            accountAttributes.bankDetails = plaidBankDetails;
+          } else {
+            const { accountNumber, routingNumber } = accountStore.formLinkBankManually.fields;
+            if (accountNumber && routingNumber) {
+              const plaidBankDetails = {
+                accountNumber: accountNumber.value,
+                routingNumber: routingNumber.value,
+              };
+              accountAttributes.bankDetails = plaidBankDetails;
+            }
+          }
+        }
         break;
       default:
         break;
@@ -403,7 +414,7 @@ class EntityAccountStore {
           accountId: this.investorAccId,
           accountAttributes: this.accountAttributes,
           status: formStatus,
-          accountType: 'ira',
+          accountType: 'entity',
         };
         actionPerformed = 'updated';
       }
@@ -491,15 +502,21 @@ class EntityAccountStore {
         if (account.accountDetails.entity && account.accountDetails.entity.address) {
           this.setEntityAttributes('General');
         }
+        let isDirty = false;
         Object.keys(this.formEntityInfo.fields).map((f) => {
-          if (f === 'isTrust' && account.accountDetails.entity) {
-            this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
+          if (f === 'isTrust') {
+            if (account.accountDetails.entity && account.accountDetails.entity[f]) {
+              this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
+            } else {
+              this.formEntityInfo.fields[f].value = true;
+              isDirty = true;
+            }
           } else if (f === 'trustDate' && account.accountDetails.entity && account.accountDetails.entity[f]) {
             this.formEntityInfo.fields[f].value = account.accountDetails.entity[f];
           }
           return this.formEntityInfo.fields[f];
         });
-        this.onFieldChange('formEntityInfo', undefined, undefined, false);
+        this.onFieldChange('formEntityInfo', undefined, undefined, isDirty);
         if (account.accountDetails.entity && account.accountDetails.entity.isTrust) {
           this.setEntityAttributes('Entity info');
         }
@@ -531,13 +548,14 @@ class EntityAccountStore {
         } else {
           Object.keys(accountStore.formLinkBankManually.fields).map((f) => {
             const { accountDetails } = account;
-            if (accountDetails.bankDetails) {
+            if (accountDetails.bankDetails && accountDetails.bankDetails[f] !== '') {
               accountStore.formLinkBankManually.fields[f].value = accountDetails.bankDetails[f];
               return accountStore.formLinkBankManually.fields[f];
             }
             return null;
           });
-          if (account.accountDetails.bankDetails) {
+          if (account.accountDetails.bankDetails && account.accountDetails.bankDetails.routingNumber !== '' &&
+          account.accountDetails.bankDetails.accountNumber !== '') {
             accountStore.onFieldChange('formLinkBankManually');
           }
         }
