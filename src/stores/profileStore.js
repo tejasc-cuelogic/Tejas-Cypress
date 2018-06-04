@@ -26,7 +26,7 @@ export class ProfileStore {
 
   @observable verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
 
-  @observable confirmIdentityDocuments = { ...CONFIRM_IDENTITY_DOCUMENTS };
+  @observable confirmIdentityDocuments = { fields: { ...CONFIRM_IDENTITY_DOCUMENTS }, meta: { isValid: false, error: '' } };
   @observable investmentLimits = {
     annualIncome: {
       value: '',
@@ -89,7 +89,9 @@ export class ProfileStore {
     });
     this.verifyIdentity01.meta.isValid = false;
     this.verifyIdentity01.meta.error = '';
-    // this.verifyIdentity01.response = {};
+    if (this.verifyIdentity01.response.key !== 'id.success') {
+      this.verifyIdentity01.response = {};
+    }
   }
 
   @computed
@@ -239,7 +241,7 @@ export class ProfileStore {
 
   @action
   setConfirmIdentityDocuments(field, value) {
-    this.confirmIdentityDocuments[field].value = value;
+    this.onFieldChange('confirmIdentityDocuments', field, value);
   }
 
   @action
