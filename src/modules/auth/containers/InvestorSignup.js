@@ -32,7 +32,7 @@ class InvestorSignup extends Component {
       authActions.register()
         .then(() => {
           if (this.props.authStore.newPasswordRequired) {
-            this.props.history.push('/change-password');
+            this.props.history.push('/auth/change-password');
           } else {
             this.props.history.push('/auth/confirm-email');
           }

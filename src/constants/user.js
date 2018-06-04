@@ -150,3 +150,27 @@ export const FIN_INFO = {
     rule: 'numeric',
   },
 };
+
+export const ROLES = [
+  { key: 'admin', value: 'admin', text: 'Admin' },
+  { key: 'bowner', value: 'bowner', text: 'Business Owner' },
+  { key: 'investor', value: 'investor', text: 'Investor' },
+];
+
+export const NEW_USER = {
+  givenName: {
+    value: '', label: 'First Name', error: undefined, rule: 'required',
+  },
+  familyName: {
+    value: '', label: 'Last Name', error: undefined, rule: 'required',
+  },
+  email: {
+    value: '', label: 'Email address', error: undefined, rule: 'required|email',
+  },
+  TemporaryPassword: {
+    value: '', label: 'Temporary Password', error: undefined, rule: 'required',
+  },
+  role: {
+    value: ['admin'], label: 'Role', error: undefined, rule: 'required',
+  },
+};

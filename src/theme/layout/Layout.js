@@ -10,6 +10,7 @@ const moduleMap = {
   login: 'Login',
   'register-investor': 'InvestorSignup',
   'confirm-email': 'ConfirmEmailAddress',
+  'change-password': 'ChangePassword',
 };
 const getModule = component => Loadable({
   loader: () => import(`../../modules/auth/containers/${moduleMap[component]}`),

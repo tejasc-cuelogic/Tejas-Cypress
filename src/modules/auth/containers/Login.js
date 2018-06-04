@@ -22,7 +22,7 @@ class Login extends Component {
     authActions.login()
       .then(() => {
         if (this.props.authStore.newPasswordRequired) {
-          this.props.history.push('/change-password');
+          this.props.history.push('/auth/change-password');
         } else {
           this.props.authStore.reset();
           this.props.history.replace('/app/dashboard');
