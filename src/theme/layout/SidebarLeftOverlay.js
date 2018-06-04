@@ -56,7 +56,7 @@ class SidebarLeftPush extends Component {
                 </Button>
               </Aux>
             }
-            <Sidebar.Pusher className="white-bg">
+            <Sidebar.Pusher className={(this.props.match.url.includes('/business-application') ? 'business-application' : '')}>
               {this.props.children}
             </Sidebar.Pusher>
             <NotificationPanel status={uiStore.layoutState.notificationPanel} />
@@ -91,7 +91,7 @@ class SidebarLeftPush extends Component {
                 <SidebarNav handleLogOut={this.props.handleLogOut} roles={UserInfo.roles} />
               </Sidebar>
             }
-            <Sidebar.Pusher className="white-bg">
+            <Sidebar.Pusher>
               <Icon onClick={this.toggleVisibilityMobile} className="hamburger content" />
               {this.props.children}
             </Sidebar.Pusher>

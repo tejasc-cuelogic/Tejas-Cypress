@@ -24,8 +24,8 @@
 		padding:@20px @10px;
 	}
 }
-.pusher.white-bg .content-spacer{
-	padding:@50px @40px;
+.business-application .content-spacer{
+	padding:@50px 0px;
 }
 .inner-content-spacer{
 	padding:@20px;

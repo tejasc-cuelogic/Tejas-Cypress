@@ -18,9 +18,9 @@
 		}
 	}
 }
-.pusher.white-bg{
-	background-color:@white !important;
-}
+// .pusher.white-bg{
+// 	background-color:@white !important;
+// }
 .ui.sidebar.left.thin.menu{
 	@media only screen and (min-width : @largeMonitorBreakpoint){
 		&.visible{

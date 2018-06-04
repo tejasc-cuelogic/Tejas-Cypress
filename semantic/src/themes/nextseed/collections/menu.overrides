@@ -44,3 +44,10 @@
     }
 }
 
+.business-application{
+    .ui.inverted.menu .item{
+        &:hover, &:active, &:focus, &.active{
+            background-color:@white;
+        }
+    }
+}
