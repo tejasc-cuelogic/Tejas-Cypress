@@ -16,7 +16,6 @@ export default class AccountType extends Component {
     return (
       <div>
         <Header as="h1" textAlign="center">Is entity a trust?</Header>
-        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Header>
         <Form error className="account-type-tab">
           <FormRadioGroup
             fielddata={formEntityInfo.fields.isTrust}

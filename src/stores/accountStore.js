@@ -89,7 +89,9 @@ export class AccountStore {
   @computed
   get isValidLinkBankAccountForm() {
     return _.isEmpty(this.formLinkBankManually.fields.routingNumber.error) &&
-    _.isEmpty(this.formLinkBankManually.fields.accountNumber.error);
+    _.isEmpty(this.formLinkBankManually.fields.accountNumber.error) &&
+    !_.isEmpty(this.formLinkBankManually.fields.routingNumber.value) &&
+    !_.isEmpty(this.formLinkBankManually.fields.accountNumber.value);
   }
 
   @computed

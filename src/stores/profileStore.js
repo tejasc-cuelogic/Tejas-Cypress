@@ -89,7 +89,7 @@ export class ProfileStore {
     });
     this.verifyIdentity01.meta.isValid = false;
     this.verifyIdentity01.meta.error = '';
-    this.verifyIdentity01.response = {};
+    // this.verifyIdentity01.response = {};
   }
 
   @computed

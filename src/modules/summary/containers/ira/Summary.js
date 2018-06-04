@@ -35,7 +35,6 @@ export default class Summary extends Component {
     return (
       <div>
         <Header as="h1" textAlign="center">Verify the information and create IRA account</Header>
-        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />

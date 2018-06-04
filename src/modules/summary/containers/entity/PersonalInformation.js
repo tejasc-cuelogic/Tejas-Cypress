@@ -19,7 +19,7 @@ export default class PersonalInformation extends Component {
     return (
       <div>
         <Header as="h1" textAlign="center">Complete personal info about entity</Header>
-        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Header>
+        <Header as="h4" textAlign="center">Enter the Authorized Signatory Information</Header>
         <Form error>
           <div className="field-wrap">
             <Form.Input
