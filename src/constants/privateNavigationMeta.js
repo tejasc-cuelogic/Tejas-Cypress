@@ -83,10 +83,30 @@ export const ALL_NAV_ITEMS = [
     accessibleTo: ['bowner'],
     subPanel: 1,
     subNavigations: [
-      { title: 'Pre-qualification', to: 'pre-qualification', component: 'PreQualification' },
-      { title: 'Business Details', to: 'business-details', component: 'BusinessDetails' },
-      { title: 'Performance', to: 'performance', component: 'Performance' },
-      { title: 'Documentation', to: 'documentation', component: 'Documentation' },
+      {
+        icon: 'ns-check-circle',
+        title: 'Pre-qualification',
+        to: 'pre-qualification',
+        component: 'PreQualification',
+      },
+      {
+        icon: 'ns-check-circle',
+        title: 'Business Details',
+        to: 'business-details',
+        component: 'BusinessDetails',
+      },
+      {
+        icon: 'ns-check-circle',
+        title: 'Performance',
+        to: 'performance',
+        component: 'Performance',
+      },
+      {
+        icon: 'ns-check-circle',
+        title: 'Documentation',
+        to: 'documentation',
+        component: 'Documentation',
+      },
     ],
   },
   {
