@@ -58,7 +58,12 @@ export default class Summary extends React.Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your initial deposit</b></Table.Cell>
-                    <Table.Cell>{formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` : Helper.CurrencyFormat(0)}</Table.Cell>
+                    <Table.Cell>
+                      {!this.props.individualAccountStore.depositMoneyNow ?
+                      Helper.CurrencyFormat(0) :
+                      formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
+                      Helper.CurrencyFormat(0)}
+                    </Table.Cell>
                   </Table.Row>
                 </Table.Body>
               </Table>

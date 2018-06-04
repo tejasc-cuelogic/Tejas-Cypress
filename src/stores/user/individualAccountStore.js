@@ -20,6 +20,14 @@ class IndividualAccountStore {
   @observable
   investorAccId = '';
 
+  @observable
+  depositMoneyNow = true;
+
+  @action
+  setDepositMoneyNow(status) {
+    this.depositMoneyNow = status;
+  }
+
   @action
   setInvestorAccId(id) {
     this.investorAccId = id;
