@@ -15,7 +15,7 @@ stages:
   artifacts:
     paths:
     - build/
-    expire_in: 10 minutes
+    expire_in: 1 day
 
 .deploy_template: &deploy_defination
   tags:
