@@ -138,7 +138,7 @@ class Summary extends Component {
             </div>
           }
           {!this.props.profileStore.verifyIdentity01.response.message &&
-          !this.isVerified(currentUser.data.user.legalDetails.cipStatus) &&
+          !this.isVerified(currentUser.data.user.legalDetails.cipStatus.status) &&
             <div>
               <Header as="h3">Welcome to NextSeed!</Header>
               <Grid>
