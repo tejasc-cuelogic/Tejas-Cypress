@@ -40,7 +40,7 @@ const userVerifiedDetails = (props) => {
         <dt>DOB</dt>
         <dd>{moment(dateOfBirth).format('MM-DD-YYYY')}</dd>
         <dt>Legal Address</dt>
-        <dd>{`${legalAddress.street1}, ${legalAddress.city}, ${legalAddress.state}, ${legalAddress.zipCode}`}
+        <dd>{`${legalAddress.street}, ${legalAddress.city}, ${legalAddress.state}, ${legalAddress.zipCode}`}
         </dd>
         <dt>Email Address</dt>
         <dd>{props.email}</dd>
