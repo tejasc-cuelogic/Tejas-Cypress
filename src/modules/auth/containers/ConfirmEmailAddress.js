@@ -13,13 +13,6 @@ import Helper from '../../../helper/utility';
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
-  componentWillMount() {
-    if (this.props.authStore.values.email.value === '') {
-      this.props.history.push('/');
-    }
-    this.props.uiStore.reset();
-  }
-
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
 
