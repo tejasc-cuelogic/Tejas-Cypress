@@ -69,11 +69,6 @@ query getUserDetails($id: ID!) {
       }
       cipStatus {
         status
-        verificationDocs {
-          idProof {
-            fileId
-          }
-        }
       }
     }
     accounts {

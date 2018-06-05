@@ -87,7 +87,7 @@ class Summary extends Component {
           linkPath,
         };
       }
-    } else if (this.isVerified(currentUser.data.user.legalDetails.cipStatus)) {
+    } else if (this.isVerified(currentUser.data.user.legalDetails.cipStatus.status)) {
       stepinfo = {
         value: 'Welcome to NextSeed!',
         label: 'Would you like to start the process of new account creation?',
