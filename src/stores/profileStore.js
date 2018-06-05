@@ -458,7 +458,6 @@ export class ProfileStore {
          },
        })
        .then(() => {
-         Helper.toast('Email Change request has been accepted', 'success');
          resolve();
        })
        .catch((err) => {
@@ -483,7 +482,6 @@ export class ProfileStore {
          },
        })
        .then(() => {
-         Helper.toast('Email has been verified and updated', 'success');
          resolve();
        })
        .catch((err) => {

@@ -7,8 +7,9 @@ import validationActions from '../../../actions/validation';
 import authActions from '../../../actions/auth';
 import { FormInput } from '../../../theme/form/FormElements';
 import ListErrors from '../../../theme/common/ListErrors';
+import Helper from '../../../helper/utility';
 
-@inject('authStore', 'uiStore', 'userStore')
+@inject('authStore', 'uiStore', 'userStore', 'profileStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
@@ -16,7 +17,6 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.authStore.values.email.value === '') {
       this.props.history.push('/');
     }
-    // this.props.uiStore.clearErrors();
     this.props.uiStore.reset();
   }
 
@@ -27,12 +27,19 @@ export default class ConfirmEmailAddress extends Component {
     e.preventDefault();
     validationActions.validateConfirmEmailAddressForm();
     if (this.props.authStore.canSubmitEmailAddressVerification) {
-      authActions.confirmCode()
-        .then(() => {
-          this.props.authStore.reset();
-          this.props.history.push('/auth/login');
+      if (this.props.userStore.currentUser) {
+        this.props.profileStore.verifyAndUpdateEmail().then(() => {
+          Helper.toast('Email has been verified and updated', 'success');
         })
-        .catch(() => { });
+          .catch(() => { });
+      } else {
+        authActions.confirmCode()
+          .then(() => {
+            this.props.authStore.reset();
+            this.props.history.push('/auth/login');
+          })
+          .catch(() => { });
+      }
     }
   }
 
