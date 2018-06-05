@@ -515,7 +515,11 @@ export class ProfileStore {
                  countryCode: '1',
                },
              },
-           });
+           })
+           .then(() => {
+             this.onFieldChange('updateProfileInfo', 'phoneNumber', this.verifyIdentity01.fields.phoneNumber.value);
+           })
+           .catch(() => { });
          resolve();
        })
        .catch(action((err) => {

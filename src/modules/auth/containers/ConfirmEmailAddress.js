@@ -44,13 +44,22 @@ export default class ConfirmEmailAddress extends Component {
     }
   }
 
+  handleCloseModal = () => {
+    if (this.props.refLink) {
+      this.props.history.push(this.props.refLink);
+    } else {
+      this.props.history.push('/');
+    }
+    this.props.uiStore.clearErrors();
+  }
+
   render() {
-    const changeEmailAddressLink = typeof this.props.userStore.currentUser === 'undefined' ?
-      '/auth/register-investor' : this.props.location.pathname;
+    const changeEmailAddressLink = this.props.refLink ?
+      this.props.refLink : this.props.location.pathname;
     const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.props.history.push('/')}>
+      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your email address</Header>
           <Divider />

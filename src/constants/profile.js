@@ -124,7 +124,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'Phone Number',
     error: undefined,
-    rule: 'numeric',
+    rule: 'string',
     placeHolder: 'Phone Number',
   },
   email: {

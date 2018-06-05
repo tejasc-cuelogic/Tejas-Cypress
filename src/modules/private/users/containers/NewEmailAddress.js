@@ -36,7 +36,7 @@ export default class NewEmailAddress extends Component {
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
         <Route
           path={`${this.props.match.url}/confirm`}
-          render={props => <ConfirmEmailAddress {...props} />}
+          render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
         />
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Enter new email address</Header>
