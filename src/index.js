@@ -1,5 +1,5 @@
 import bugsnag from 'bugsnag-js';
-import createPlugin from 'bugsnag-react'
+import createPlugin from 'bugsnag-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
