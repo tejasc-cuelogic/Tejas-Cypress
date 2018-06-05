@@ -30,6 +30,7 @@ export default class ConfirmEmailAddress extends Component {
       if (this.props.userStore.currentUser) {
         this.props.profileStore.verifyAndUpdateEmail().then(() => {
           Helper.toast('Email has been verified and updated', 'success');
+          this.props.history.push('/app/profile-settings/profile-data');
         })
           .catch(() => { });
       } else {
