@@ -134,4 +134,31 @@ export const UPDATE_PROFILE_INFO = {
     rule: 'required|email',
     placeHolder: 'Email',
   },
+  street: {
+    value: '',
+    label: 'Residential Street',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'Residential Street',
+  },
+  city: {
+    value: '',
+    label: 'City',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'City',
+  },
+  state: {
+    value: '',
+    label: 'State',
+    error: undefined,
+    rule: 'required|string',
+  },
+  zipCode: {
+    value: '',
+    label: 'ZIP Code',
+    error: undefined,
+    rule: 'required|numeric',
+    placeHolder: 'ZIP Code',
+  },
 };
