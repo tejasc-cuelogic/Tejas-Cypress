@@ -3,7 +3,7 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import { GqlClient as client } from '../services/graphql';
-import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
+import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
 
 import api from '../ns-api';
 import authStore from './authStore';
@@ -341,7 +341,6 @@ export class ProfileStore {
           },
         })
         .then(() => {
-          this.onFieldChange('updateProfileInfo', 'phoneNumber', this.verifyIdentity01.fields.phoneNumber.value);
           client
             .mutate({
               mutation: updateUserCIPInfo,
@@ -494,6 +493,40 @@ export class ProfileStore {
    });
  }
 
+ verifyAndUpdatePhoneNumber = () => {
+   uiStore.setProgress();
+   return new Promise((resolve, reject) => {
+     client
+       .mutate({
+         mutation: checkUserPhoneVerificationCode,
+         variables: {
+           phoneDetails: this.formattedPhoneDetails,
+           verificationCode: this.verifyIdentity04.fields.code.value,
+         },
+       })
+       .then(() => {
+         client
+           .mutate({
+             mutation: updateUserPhoneDetail,
+             variables: {
+               userId: userStore.currentUser.sub,
+               phoneDetails: {
+                 number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+                 countryCode: '1',
+               },
+             },
+           });
+         resolve();
+       })
+       .catch(action((err) => {
+         uiStore.setErrors(JSON.stringify(err.message));
+         reject(err);
+       }))
+       .finally(() => {
+         uiStore.setProgress(false);
+       });
+   });
+ }
 
   uploadAndUpdateCIPInfo = () => {
     uiStore.setProgress();

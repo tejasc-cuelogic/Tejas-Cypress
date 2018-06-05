@@ -156,3 +156,21 @@ export const verifyAndUpdateEmail = gql`
       email
     }
   }`;
+
+export const updateUserPhoneDetail = gql`
+  mutation _updateUserPhoneDetail($phoneDetails: phoneInput! $userId: String!){
+    updateUserPhoneDetails(
+      phoneDetails: $phoneDetails,
+      userId: $userId
+      ) {
+      id
+      email
+      contactDetails{
+        phone {
+          number
+          countryCode
+          verificationDate
+        }
+      }
+    }
+  }`;

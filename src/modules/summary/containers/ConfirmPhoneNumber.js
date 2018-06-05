@@ -11,20 +11,21 @@ import ListErrors from '../../../theme/common/ListErrors';
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
-  // componentWillUnmount() {
-  //   this.props.uiStore.clearErrors();
-  // }
-
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
-    this.props.profileStore.confirmPhoneNumber().then(() => {
-      Helper.toast('Phone number is confirmed.', 'success');
-      if (this.props.refLink) {
+    if (this.props.refLink) {
+      this.props.profileStore.verifyAndUpdatePhoneNumber().then(() => {
+        Helper.toast('Phone number is confirmed.', 'success');
         this.props.history.replace('/app/profile-settings/profile-data');
-      }
-      this.props.setDashboardWizardStep();
-    })
-      .catch(() => {});
+      })
+        .catch(() => { });
+    } else {
+      this.props.profileStore.confirmPhoneNumber().then(() => {
+        Helper.toast('Phone number is confirmed.', 'success');
+        this.props.setDashboardWizardStep();
+      })
+        .catch(() => {});
+    }
   }
 
   handleChangePhoneNumber = () => {

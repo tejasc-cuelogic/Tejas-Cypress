@@ -84,6 +84,14 @@ query getUserDetails($id: ID!) {
       finishedDate
       status
     }
+    address {
+      mailing {
+        street
+        city
+        state
+        zipCode
+      }
+    }
     accountStatus 
   }
 }

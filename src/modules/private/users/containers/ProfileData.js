@@ -9,11 +9,6 @@ import UserVerifiedDetails from '../components/UserVerifiedDetails';
 import NewPhoneNumber from './NewPhoneNumber';
 import NewEmailAddress from './NewEmailAddress';
 
-const states = {
-  label: 'State',
-  error: undefined,
-};
-
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore')
 @observer
 export default class ProfileData extends Component {
@@ -87,7 +82,7 @@ export default class ProfileData extends Component {
                   />
                   <FormSelect
                     name="state"
-                    fielddata={states}
+                    fielddata={updateProfileInfo.fields.state}
                     options={US_STATES}
                     changed={updateProfileInfoChange}
                   />
