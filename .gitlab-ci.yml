@@ -94,10 +94,6 @@ delete:review:
 #Building code
 build:dev:
   <<: *build_definition
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-    - node_modules/
   only:
     refs:
       - develop
