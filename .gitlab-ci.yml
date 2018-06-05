@@ -103,8 +103,10 @@ build:dev:
       - develop
   <<: *before_script_defination
   script:
-    - sh setEnvironmentVariables.sh $REGION dev 
-  <<: *after_script_defination
+    - sh setEnvironmentVariables.sh $REGION dev ${CI_COMMIT_REF_NAME}
+ # <<: *after_script_defination
+    - npm install
+    - npm run build
 #Deploying code to s3 bucket
 deploy:dev:
   <<: *deploy_defination
