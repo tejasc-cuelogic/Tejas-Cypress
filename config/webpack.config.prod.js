@@ -9,7 +9,7 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const SentryPlugin = require('@sentry/webpack-plugin');
+const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const getCustomConfig = require('./custom-react-scripts/config');
@@ -263,11 +263,11 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    // Enable sentry release tracking and source maps sync
-    new SentryPlugin({
-      release: process.env.CI_PIPELINE_ID,
-      include: './build',
-      ignore: ['node_modules', 'webpack.config.js'],
+    // It's a good idea to only run this plugin when you're building a bundle
+    // that will be released, rather than for every development build
+    new BugsnagSourceMapUploaderPlugin({
+      apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
+      appVersion: process.env.CI_PIPELINE_ID,
     }),
   ],
   // Some libraries import Node modules but don't use them in the browser.
