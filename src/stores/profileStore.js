@@ -3,9 +3,10 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import { GqlClient as client } from '../services/graphql';
-import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
+import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
 
 import api from '../ns-api';
+import authStore from './authStore';
 import uiStore from './uiStore';
 import userStore from './userStore';
 import Helper from '../helper/utility';
@@ -326,6 +327,107 @@ export class ProfileStore {
     this.onFieldChange('updateProfileInfo', 'lastName', currentUser.familyName);
     this.onFieldChange('updateProfileInfo', 'email', currentUser.email);
   }
+
+  @computed
+  get profileDetails() {
+    const profileDetails = {
+      firstName: this.updateProfileInfo.fields.firstName.value,
+      lastName: this.updateProfileInfo.fields.lastName.value,
+      address: {
+        mailing: {
+          street: this.updateProfileInfo.fields.street.value,
+          city: this.updateProfileInfo.fields.city.value,
+          state: this.updateProfileInfo.fields.state.value,
+          zipCode: this.updateProfileInfo.fields.zipCode.value,
+        },
+      },
+    };
+    return profileDetails;
+  }
+
+ setAddressFields = (place) => {
+   const data = Helper.gAddressClean(place);
+   this.onFieldChange('updateProfileInfo', 'street', data.residentalStreet);
+   this.onFieldChange('updateProfileInfo', 'city', data.city);
+   this.onFieldChange('updateProfileInfo', 'state', data.state);
+   this.onFieldChange('updateProfileInfo', 'zipCode', data.zipCode);
+ }
+
+ updateUserProfileData = () => {
+   uiStore.setProgress();
+   return new Promise((resolve, reject) => {
+     client
+       .mutate({
+         mutation: updateUserProfileData,
+         variables: {
+           userId: userStore.currentUser.sub,
+           profileDetails: this.profileDetails,
+         },
+       })
+       .then(() => {
+         Helper.toast('Investor profile has been updated.', 'success');
+         resolve();
+       })
+       .catch((err) => {
+         uiStore.setErrors(this.simpleErr(err));
+         reject(err);
+       })
+       .finally(() => {
+         uiStore.setProgress(false);
+       });
+   });
+ }
+
+ requestEmailChange = () => {
+   uiStore.setProgress();
+   return new Promise((resolve, reject) => {
+     client
+       .mutate({
+         mutation: requestEmailChnage,
+         variables: {
+           userId: userStore.currentUser.sub,
+           newEmail: authStore.values.email.value,
+         },
+       })
+       .then(() => {
+         Helper.toast('Email Change request has been accepted', 'success');
+         resolve();
+       })
+       .catch((err) => {
+         uiStore.setErrors(this.simpleErr(err));
+         reject(err);
+       })
+       .finally(() => {
+         uiStore.setProgress(false);
+       });
+   });
+ }
+
+ verifyAndUpdateEmail = () => {
+   uiStore.setProgress();
+   return new Promise((resolve, reject) => {
+     client
+       .mutate({
+         mutation: verifyAndUpdateEmail,
+         variables: {
+           userId: userStore.currentUser.sub,
+           confirmationCode: authStore.values.code.value,
+         },
+       })
+       .then(() => {
+         Helper.toast('Email has been verified and updated', 'success');
+         resolve();
+       })
+       .catch((err) => {
+         uiStore.setErrors(this.simpleErr(err));
+         reject(err);
+       })
+       .finally(() => {
+         uiStore.setProgress(false);
+       });
+   });
+ }
+
 
   simpleErr = err => ({
     statusCode: err.statusCode,

@@ -114,3 +114,42 @@ export const updateUserCIPInfo = gql`
       accreditation
     }
   }`;
+
+export const updateUserProfileData = gql`
+  mutation _updateUserProfileData($userId: String! $profileDetails: profileDetailsInput!) {
+  updateUserProfileData(
+  userId: $userId
+  profileDetails: $profileDetails
+  ) {
+      id
+      firstName
+      lastName
+      address {
+        mailing {
+          street
+          city
+          state
+          zipCode
+        }
+        residence {
+          street
+          }
+        }
+      }
+  }`;
+
+export const requestEmailChnage = gql`
+  mutation _requestEmailChange($userId: String! $newEmail: String!) {
+    requestEmailChange(
+      userId: $userId
+      newEmail: $newEmail
+    )
+  }`;
+
+export const verifyAndUpdateEmail = gql`
+  mutation _verifyAndUpdateEmail($userId: String! $confirmationCode: String!) {
+    verifyAndUpdateEmail(
+      userId: $userId
+      confirmationCode: $confirmationCode
+    )
+  }`;

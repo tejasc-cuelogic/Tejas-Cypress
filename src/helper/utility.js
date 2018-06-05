@@ -91,6 +91,12 @@ export class Utility {
   }
 
   CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
+
+  cryptedSSNNumber = (ssnNumber) => {
+    const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
+    const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
+    return formattedSSNNumber;
+  }
 }
 
 export default new Utility();
