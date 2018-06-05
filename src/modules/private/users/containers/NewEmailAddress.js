@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
-import { Header, Modal, Button, Form } from 'semantic-ui-react';
+import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
 import FieldError from '../../../../theme/common/FieldError';
 import validationActions from '../../../../actions/validation';
+import ListErrors from '../../../../theme/common/ListErrors';
 
-@inject('authStore', 'uiStore')
+@inject('authStore', 'uiStore', 'profileStore')
+@withRouter
 @observer
 export default class NewEmailAddress extends Component {
   handleChangeEmailAddress = () => {
-    this.props.history.push('auth/confirm-email');
+    this.props.profileStore.requestEmailChange().then(() => {
+      this.props.history.push('/auth/confirm-email');
+    })
+      .catch(() => { });
   }
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleCloseModal = (e) => {
@@ -19,6 +25,7 @@ export default class NewEmailAddress extends Component {
   }
   render() {
     const { values } = this.props.authStore;
+    const { errors } = this.props.uiStore;
     if (this.props.uiStore.authWizardStep === 'ConfirmEmailAddress') {
       return null;
     }
@@ -29,6 +36,11 @@ export default class NewEmailAddress extends Component {
           <p>We will send you a verification code to the email address you provide.</p>
         </Modal.Header>
         <Modal.Content>
+          {errors &&
+            <Message error>
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
           <Form error onSubmit={this.handleChangeEmailAddress}>
             <Form.Input
               fluid

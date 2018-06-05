@@ -137,3 +137,19 @@ export const updateUserProfileData = gql`
       }
     }
   }`;
+
+export const requestEmailChnage = gql`
+  mutation _requestEmailChange($userId: String! $newEmail: String!) {
+    requestEmailChange(
+      userId: $userId
+      newEmail: $newEmail
+    )
+  }`;
+
+export const verifyAndUpdateEmail = gql`
+  mutation _verifyAndUpdateEmail($userId: String! $confirmationCode: String!) {
+    verifyAndUpdateEmail(
+      userId: $userId
+      confirmationCode: $confirmationCode
+    )
+  }`;

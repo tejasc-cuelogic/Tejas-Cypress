@@ -3,11 +3,12 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import { GqlClient as client } from '../services/graphql';
-import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo, updateUserProfileData } from '../stores/queries/profile';
+import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo, updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail } from '../stores/queries/profile';
 
 import api from '../ns-api';
 import uiStore from './uiStore';
 import userStore from './userStore';
+import authStore from './authStore';
 import Helper from '../helper/utility';
 
 import {
@@ -113,7 +114,7 @@ export class ProfileStore {
   get formattedPhoneDetails() {
     const phoneDetails = {
       number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-      countryCode: '1',
+      countryCode: '91',
     };
     return phoneDetails;
   }
@@ -458,6 +459,56 @@ export class ProfileStore {
         })
         .then(() => {
           Helper.toast('Investor profile has been updated.', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  requestEmailChange = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: requestEmailChnage,
+          variables: {
+            userId: userStore.currentUser.sub,
+            newEmail: authStore.values.email.value,
+          },
+        })
+        .then(() => {
+          Helper.toast('Email Change request has been accepted', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  verifyAndUpdateEmail = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: verifyAndUpdateEmail,
+          variables: {
+            userId: userStore.currentUser.sub,
+            confirmationCode: authStore.values.code.value,
+          },
+        })
+        .then(() => {
+          Helper.toast('Email has been verified and updated', 'success');
           resolve();
         })
         .catch((err) => {
