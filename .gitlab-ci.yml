@@ -57,7 +57,7 @@ build:review:
     - "curl --request GET --header 'PRIVATE-TOKEN: '$PRIVATE_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
     - "curl --request GET --header 'PRIVATE-TOKEN: '$PRIVATE_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3PublicReadAccessPolicy%2Ejson/raw?ref=$BRANCH > s3PublicReadAccessPolicy.json"
     - sh s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} $REGION
-    - sh setEnvironmentVariables.sh $REGION dev
+    - sh setEnvironmentVariables.sh $REGION dev ${CI_COMMIT_REF_NAME}
   <<: *after_script_defination
 
 #Deploying code to s3 bucket
@@ -99,7 +99,7 @@ build:dev:
       - develop
   <<: *before_script_defination
   script:
-    - sh setEnvironmentVariables.sh $REGION dev
+    - sh setEnvironmentVariables.sh $REGION dev ${CI_COMMIT_REF_NAME}
   <<: *after_script_defination
 #Deploying code to s3 bucket
 deploy:dev:
@@ -125,7 +125,7 @@ build:qa:
       - qa
   <<: *before_script_defination
   script:
-    - sh setEnvironmentVariables.sh $REGION qa
+    - sh setEnvironmentVariables.sh $REGION qa ${CI_COMMIT_REF_NAME}
   <<: *after_script_defination
 
 #Deploying code to s3 bucket
@@ -152,7 +152,7 @@ build:prod:
       - master
   <<: *before_script_defination
   script: 
-    - sh setEnvironmentVariables.sh $REGION prod
+    - sh setEnvironmentVariables.sh $REGION prod ${CI_COMMIT_REF_NAME}
   <<: *after_script_defination  
 #Deploying code to s3 bucket
 deploy:prod:
