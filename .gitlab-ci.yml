@@ -12,10 +12,10 @@ stages:
   tags:
     - ns-client
   stage: build
-  artifacts:
-    paths:
-    - build/
-    expire_in: 1 day
+#  artifacts:
+#    paths:
+#    - build/
+#    expire_in: 1 day
 
 .deploy_template: &deploy_defination
   tags:
@@ -101,6 +101,10 @@ build:dev:
   script:
     - sh setEnvironmentVariables.sh $REGION dev ${CI_COMMIT_REF_NAME}
   <<: *after_script_defination
+  artifacts:
+    paths:
+    - build/
+    expire_in: 1 day
 #Deploying code to s3 bucket
 deploy:dev:
   <<: *deploy_defination
