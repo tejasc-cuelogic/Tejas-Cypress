@@ -183,7 +183,11 @@ export class ProfileStore {
       mapValues(this[form].fields, f => f.value),
       mapValues(this[form].fields, f => f.rule),
     );
-    this[form].meta.isValid = validation.passes();
+    if (currentForm !== 'updateProfileInfo') {
+      this[form].meta.isValid = validation.passes();
+    } else if (field !== 'phoneNumber' && field !== 'email') {
+      this[form].meta.isValid = validation.passes();
+    }
     this[form].fields[field].error = validation.errors.first(field);
   };
 
@@ -221,7 +225,9 @@ export class ProfileStore {
                 userId: userStore.currentUser.sub,
                 user: this.formattedUserInfo,
                 phoneDetails: this.formattedPhoneDetails,
-                cipStatus,
+                cipStatus: {
+                  status: cipStatus,
+                },
               },
             })
             .then((result) => {
@@ -381,10 +387,14 @@ export class ProfileStore {
       legalDetails,
       contactDetails,
     } = userDetails;
-    this.onFieldChange('updateProfileInfo', 'firstName', legalDetails.legalName.firstLegalName);
-    this.onFieldChange('updateProfileInfo', 'lastName', legalDetails.legalName.lastLegalName);
+    if (legalDetails.legalName !== null) {
+      this.onFieldChange('updateProfileInfo', 'firstName', legalDetails.legalName.firstLegalName);
+      this.onFieldChange('updateProfileInfo', 'lastName', legalDetails.legalName.lastLegalName);
+    }
     this.onFieldChange('updateProfileInfo', 'email', email);
-    this.onFieldChange('updateProfileInfo', 'phoneNumber', contactDetails.phone.number);
+    if (contactDetails.phone !== null) {
+      this.onFieldChange('updateProfileInfo', 'phoneNumber', contactDetails.phone.number);
+    }
     if (address === null) {
       if (legalDetails.legalAddress) {
         this.onFieldChange('updateProfileInfo', 'street', legalDetails.legalAddress.street);

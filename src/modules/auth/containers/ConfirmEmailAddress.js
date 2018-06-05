@@ -55,7 +55,7 @@ export default class ConfirmEmailAddress extends Component {
 
   render() {
     const changeEmailAddressLink = this.props.refLink ?
-      this.props.refLink : this.props.location.pathname;
+      this.props.refLink : '/auth/register-investor';
     const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (

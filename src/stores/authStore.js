@@ -280,11 +280,14 @@ export class AuthStore {
 
   @action
   checkIsInvestmentAccountCreated = (userData) => {
-    const investmentAccountCreated = _.find(
-      userData.accounts,
-      { status: 'FULL' },
-    );
-    this.isInvestmentAccountCreated = investmentAccountCreated;
+    if (userData.accounts.length > 0) {
+      const investmentAccountCreated = _.find(
+        userData.accounts,
+        { status: 'FULL' },
+      );
+      this.isInvestmentAccountCreated = investmentAccountCreated;
+    }
+    return this.isInvestmentAccountCreated;
   }
 }
 
