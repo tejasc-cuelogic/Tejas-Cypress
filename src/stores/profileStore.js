@@ -292,7 +292,9 @@ export class ProfileStore {
                   userId: userStore.currentUser.sub,
                   user: this.formattedUserInfo,
                   phoneDetails: this.formattedPhoneDetails,
-                  cipStatus: 'PASS',
+                  cipStatus: {
+                    status: 'PASS',
+                  },
                 },
               })
               .then((data) => {
@@ -354,7 +356,9 @@ export class ProfileStore {
                 userId: userStore.currentUser.sub,
                 user: this.formattedUserInfo,
                 phoneDetails: this.formattedPhoneDetails,
-                cipStatus: 'PASS',
+                cipStatus: {
+                  status: 'PASS',
+                },
               },
             });
           resolve();
