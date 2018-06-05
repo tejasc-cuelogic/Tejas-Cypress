@@ -12,10 +12,10 @@ stages:
   tags:
     - ns-client
   stage: build
-#  artifacts:
-#    paths:
-#    - build/
-#    expire_in: 1 day
+  artifacts:
+    paths:
+    - build/
+    expire_in: 1 day
 
 .deploy_template: &deploy_defination
   tags:
@@ -93,31 +93,42 @@ delete:review:
 
 #Building code
 build:dev:
-  <<: *build_definition
+  cache:
+    paths:
+    - node_modules/
   only:
     refs:
       - develop
-  <<: *before_script_defination
+  tags:
+    - ns-client
+  stage: build
   script:
-    - sh setEnvironmentVariables.sh $REGION dev ${CI_COMMIT_REF_NAME}
-  <<: *after_script_defination
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$PRIVATE_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FsetEnvironmentVariables%2Esh/raw?ref=$BRANCH > setEnvironmentVariables.sh"
+    - sh setEnvironmentVariables.sh us-east-1 dev ${CI_COMMIT_REF_NAME}
+    - npm install
+    - npm run build
   artifacts:
     paths:
     - build/
     expire_in: 1 day
+
 #Deploying code to s3 bucket
 deploy:dev:
-  <<: *deploy_defination
   only:
     refs:
       - develop
   environment:
     name: dev
-    url: http://$DEV_URL
+    url:  http://dev.nextseed.qa.s3-website-us-east-1.amazonaws.com
+  tags:
+    - ns-client
+  stage: deploy
   script: 
-    - aws s3 cp build/ s3://$DEV_URL/ --recursive
+    - echo "deploy to s3 bucket"
+    - aws s3 cp build/ s3://dev.nextseed.qa/ --recursive
   dependencies:
     - build:dev
+
 
 #---------------------------------Qa--------------------------------------------
 
