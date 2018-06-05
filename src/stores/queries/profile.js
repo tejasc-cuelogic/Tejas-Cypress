@@ -151,5 +151,8 @@ export const verifyAndUpdateEmail = gql`
     verifyAndUpdateEmail(
       userId: $userId
       confirmationCode: $confirmationCode
-    )
+    ){
+      id
+      email
+    }
   }`;
