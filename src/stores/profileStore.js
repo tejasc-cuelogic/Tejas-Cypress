@@ -392,6 +392,11 @@ export class ProfileStore {
         this.onFieldChange('updateProfileInfo', 'state', legalDetails.legalAddress.state);
         this.onFieldChange('updateProfileInfo', 'zipCode', legalDetails.legalAddress.zipCode);
       }
+    } else if (address.mailing) {
+      this.onFieldChange('updateProfileInfo', 'street', address.mailing.street);
+      this.onFieldChange('updateProfileInfo', 'city', address.mailing.city);
+      this.onFieldChange('updateProfileInfo', 'state', address.mailing.state);
+      this.onFieldChange('updateProfileInfo', 'zipCode', address.mailing.zipCode);
     }
   }
 
@@ -432,7 +437,6 @@ export class ProfileStore {
          },
        })
        .then(() => {
-         Helper.toast('Investor profile has been updated.', 'success');
          resolve();
        })
        .catch((err) => {

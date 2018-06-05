@@ -8,6 +8,7 @@ import { US_STATES } from '../../../../constants/account'; //  added Temperarily
 import UserVerifiedDetails from '../components/UserVerifiedDetails';
 import NewPhoneNumber from './NewPhoneNumber';
 import NewEmailAddress from './NewEmailAddress';
+import Helper from '../../../../helper/utility';
 
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore')
 @observer
@@ -18,6 +19,13 @@ export default class ProfileData extends Component {
   }
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
+  }
+  handleUpdateProfileInfo = (e) => {
+    e.preventDefault();
+    this.props.profileStore.updateUserProfileData().then(() => {
+      Helper.toast('Investor profile has been updated.', 'success');
+    })
+      .catch(() => {});
   }
   render() {
     const { email, legalDetails } = this.props.userDetailsStore.userDetails;
@@ -34,7 +42,7 @@ export default class ProfileData extends Component {
           <Grid.Column widescreen={8} largeScreen={10} tablet={16} mobile={16}>
             <Card fluid className="form-card">
               <Header as="h3">Personal Profile</Header>
-              <Form>
+              <Form onSubmit={this.handleUpdateProfileInfo}>
                 <Form.Group widths="equal">
                   {['firstName', 'lastName'].map(field => (
                     <FormInput
