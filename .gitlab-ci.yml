@@ -100,8 +100,7 @@ build:dev:
   <<: *before_script_defination
   script:
     - sh setEnvironmentVariables.sh $REGION dev 
-    - npm install
-    - npm run build
+<<: *after_script_defination
 #Deploying code to s3 bucket
 deploy:dev:
   <<: *deploy_defination
