@@ -67,6 +67,22 @@ query getUserDetails($id: ID!) {
         state
         zipCode
       }
+      cipStatus {
+        status
+        verificationDocs {
+          idProof {
+            fileId
+          }
+        }
+      }
+    }
+    accounts {
+      userId
+      accountId
+      accountType
+      accountDetails
+      finishedDate
+      status
     }
     accountStatus 
   }

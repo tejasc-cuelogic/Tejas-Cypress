@@ -8,7 +8,7 @@ import LinkBankForm from './LinkBankForm';
 import defaultBankLogo from '../../../../assets/images/banks/default.png';
 import { IND_BANK_LIST } from '../../../../constants/account';
 
-@inject('individualAccountStore', 'uiStore')
+@inject('accountStore', 'uiStore')
 @withRouter
 @observer
 export default class LinkBankPlaid extends Component {
@@ -18,7 +18,7 @@ export default class LinkBankPlaid extends Component {
       formBankSearch,
       bankSearchChange,
       bankListing,
-    } = this.props.individualAccountStore;
+    } = this.props.accountStore;
     const { inProgress } = this.props.uiStore;
     if (bankLinkInterface === 'form') {
       return <LinkBankForm />;
@@ -49,10 +49,10 @@ export default class LinkBankPlaid extends Component {
             </Grid>
           }
           {
-            <Grid columns={3}>
+            <Grid centered>
               {
                 _.map(bankListing, bankData => (
-                  <Grid.Column key={bankData.institution_id}>
+                  <Grid.Column key={bankData.institution_id} computer={5} tablet={5} mobile={8}>
                     <Link
                       as="a"
                       className="bank-link"
@@ -70,7 +70,7 @@ export default class LinkBankPlaid extends Component {
               }
               {typeof bankListing === 'undefined' &&
                 _.map(IND_BANK_LIST, bankData => (
-                  <Grid.Column key={bankData.institutionID}>
+                  <Grid.Column key={bankData.institutionID} computer={5} tablet={5} mobile={8}>
                     <Link
                       as="a"
                       className="bank-link"
@@ -79,7 +79,7 @@ export default class LinkBankPlaid extends Component {
                     >
                       {/* eslint-disable import/no-dynamic-require */}
                       {/* eslint-disable global-require */}
-                      <Image centered size="large" src={require(`../../../../assets/images/banks/${bankData.institutionID}.png`)} />
+                      <Image centered src={require(`../../../../assets/images/banks/${bankData.institutionID}.png`)} />
                     </Link>
                   </Grid.Column>
                 ))
@@ -88,7 +88,7 @@ export default class LinkBankPlaid extends Component {
           }
         </div>
         <div className="center-align">
-          <Button className="theme-link" primary onClick={() => this.props.individualAccountStore.setBankLinkInterface('form')}>or enter it manually</Button>
+          <Button className="theme-link" primary onClick={() => this.props.accountStore.setBankLinkInterface('form')}>or enter it manually</Button>
         </div>
       </div>
     );

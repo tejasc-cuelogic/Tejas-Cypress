@@ -25,7 +25,7 @@ class PrivateHOC extends Component {
                 </span>
                 {roles.includes('investor') &&
                   <Responsive
-                    {...Responsive.onlyLargeScreen}
+                    minWidth={Responsive.onlyLargeScreen.minWidth}
                     as={Button}
                     content="Invest Now"
                     primary
@@ -38,9 +38,7 @@ class PrivateHOC extends Component {
           </div>
           {this.props.StickyNotification &&
             <div className="top-cta-section">
-              <Responsive {...Responsive.onlyComputer}>
-                {this.props.StickyNotification}
-              </Responsive>
+              {this.props.StickyNotification}
             </div>
           }
           {pageMeta.subPanel === 1 &&

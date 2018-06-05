@@ -8,15 +8,36 @@ import Randavatar from './../../theme/common/Randavatar';
 import LogoWhite from '../../assets/images/nextseed_logo_white_green.svg';
 import LogoColor from '../../assets/images/nextseed_logo_color.svg';
 import LogoSmall from '../../assets/images/ns-logo-small.svg';
+import Spinner from '../ui/Spinner';
 
-@inject('uiStore')
+@inject('uiStore', 'userStore', 'profileStore', 'accountStore', 'userDetailsStore')
 @observer
 class SidebarLeftPush extends Component {
+  componentWillMount() {
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+  }
   toggleVisibility = () => uiStore.updateLayoutState('leftPanel');
   toggleVisibilityMobile = () => uiStore.updateLayoutState('leftPanelMobile');
-
+  isVerified(cipStatus) {
+    return this.props.accountStore.validAccStatus.includes(cipStatus);
+  }
+  createdAccount = (accounts) => {
+    if (accounts.length) {
+      return accounts[0].accountType;
+    }
+    return null;
+  }
   render() {
     const UserInfo = { ...this.props.UserInfo };
+    const { currentUser } = this.props.userDetailsStore;
+    const { verifyIdentity01 } = this.props.profileStore;
+    if (!currentUser.data.user) {
+      return (
+        <div>
+          <Spinner loaderMessage="Loading..." />
+        </div>
+      );
+    }
     return (
       <div>
         {/* Desktop Menu */}
@@ -45,7 +66,21 @@ class SidebarLeftPush extends Component {
                 <h3>{UserInfo.accountType}</h3>
                 {GetNavItem('profile-settings', UserInfo.roles)}
               </div>
-              <SidebarNav handleLogOut={this.props.handleLogOut} roles={UserInfo.roles} />
+              {verifyIdentity01.response.message &&
+                <SidebarNav
+                  isUserVerified={this.isVerified(verifyIdentity01.response.message)}
+                  handleLogOut={this.props.handleLogOut}
+                  roles={UserInfo.roles}
+                />
+              }
+              {!verifyIdentity01.response.message && currentUser.data.user &&
+                <SidebarNav
+                  isUserVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus)}
+                  createdAccount={this.createdAccount(currentUser.data.user.accounts)}
+                  handleLogOut={this.props.handleLogOut}
+                  roles={UserInfo.roles}
+                />
+              }
             </Sidebar>
             <Button onClick={this.toggleVisibility} className="item collapseIcon">
               <i className={`angle ${(uiStore.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
@@ -82,7 +117,20 @@ class SidebarLeftPush extends Component {
                 {GetNavItem('profile-settings', UserInfo.roles)}
               </div>
               <Divider />
-              <SidebarNav handleLogOut={this.props.handleLogOut} roles={UserInfo.roles} />
+              {verifyIdentity01.response.message &&
+                <SidebarNav
+                  isUserVerified={this.isVerified(verifyIdentity01.response.message)}
+                  handleLogOut={this.props.handleLogOut}
+                  roles={UserInfo.roles}
+                />
+              }
+              {!verifyIdentity01.response.message && currentUser.data.user &&
+                <SidebarNav
+                  isUserVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus)}
+                  handleLogOut={this.props.handleLogOut}
+                  roles={UserInfo.roles}
+                />
+              }
             </Sidebar>
             <Sidebar.Pusher>
               <Icon onClick={this.toggleVisibilityMobile} className="hamburger content" />

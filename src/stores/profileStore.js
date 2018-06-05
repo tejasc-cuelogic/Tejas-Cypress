@@ -27,7 +27,7 @@ export class ProfileStore {
 
   @observable verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
 
-  @observable confirmIdentityDocuments = { ...CONFIRM_IDENTITY_DOCUMENTS };
+  @observable confirmIdentityDocuments = { fields: { ...CONFIRM_IDENTITY_DOCUMENTS }, meta: { isValid: false, error: '' } };
   @observable investmentLimits = {
     annualIncome: {
       value: '',
@@ -83,8 +83,16 @@ export class ProfileStore {
 
   @action
   reset() {
-    this.verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: false, error: '' }, response: {} };
-    this.verifyIdentity04 = { fields: { ...VERIFY_IDENTITY_STEP_04 }, meta: { isValid: false, error: '' } };
+    Object.keys(this.verifyIdentity01.fields).map((field) => {
+      this.verifyIdentity01.fields[field].value = '';
+      this.verifyIdentity01.fields[field].error = undefined;
+      return true;
+    });
+    this.verifyIdentity01.meta.isValid = false;
+    this.verifyIdentity01.meta.error = '';
+    if (this.verifyIdentity01.response.key !== 'id.success') {
+      this.verifyIdentity01.response = {};
+    }
   }
 
   @computed
@@ -95,7 +103,7 @@ export class ProfileStore {
       dateOfBirth: this.verifyIdentity01.fields.dateOfBirth.value,
       ssn: Helper.unMaskInput(this.verifyIdentity01.fields.ssn.value),
       legalAddress: {
-        street1: this.verifyIdentity01.fields.residentalStreet.value,
+        street: this.verifyIdentity01.fields.residentalStreet.value,
         city: this.verifyIdentity01.fields.city.value,
         state: this.verifyIdentity01.fields.state.value,
         zipCode: this.verifyIdentity01.fields.zipCode.value,
@@ -179,6 +187,18 @@ export class ProfileStore {
     this[form].fields[field].error = validation.errors.first(field);
   };
 
+  getCipStatus = (cipIdentityResponse) => {
+    const { key, questions } = cipIdentityResponse;
+    if (key === 'id.error') {
+      return 'FAIL';
+    } else if (key === 'id.failure' && questions) {
+      return 'SOFT_FAIL';
+    } else if (key === 'id.success') {
+      return 'PASS';
+    }
+    return 'HARD_FAIL';
+  }
+
   /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
     uiStore.setProgress();
@@ -193,11 +213,26 @@ export class ProfileStore {
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
+          const cipStatus = this.getCipStatus(data.data.verifyCIPIdentity);
+          client
+            .mutate({
+              mutation: updateUserCIPInfo,
+              variables: {
+                userId: userStore.currentUser.sub,
+                user: this.formattedUserInfo,
+                phoneDetails: this.formattedPhoneDetails,
+                cipStatus,
+              },
+            })
+            .then((result) => {
+              console.log(result);
+            })
+            .catch(() => {});
           resolve();
         })
         .catch((err) => {
           uiStore.setErrors(this.simpleErr(err));
-          reject();
+          reject(err);
         })
         .finally(() => {
           uiStore.setProgress(false);
@@ -207,7 +242,7 @@ export class ProfileStore {
 
   @action
   setConfirmIdentityDocuments(field, value) {
-    this.confirmIdentityDocuments[field].value = value;
+    this.onFieldChange('confirmIdentityDocuments', field, value);
   }
 
   @action
@@ -242,6 +277,23 @@ export class ProfileStore {
           },
         })
         .then((result) => {
+          /* eslint-disable no-underscore-dangle */
+          if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
+            client
+              .mutate({
+                mutation: updateUserCIPInfo,
+                variables: {
+                  userId: userStore.currentUser.sub,
+                  user: this.formattedUserInfo,
+                  phoneDetails: this.formattedPhoneDetails,
+                  cipStatus: 'PASS',
+                },
+              })
+              .then((data) => {
+                resolve(data);
+              })
+              .catch(() => {});
+          }
           resolve(result);
         })
         .catch((err) => {
@@ -297,6 +349,7 @@ export class ProfileStore {
                 userId: userStore.currentUser.sub,
                 user: this.formattedUserInfo,
                 phoneDetails: this.formattedPhoneDetails,
+                cipStatus: 'PASS',
               },
             });
           resolve();
@@ -443,6 +496,33 @@ export class ProfileStore {
    });
  }
 
+
+  uploadAndUpdateCIPInfo = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateUserCIPInfo,
+          variables: {
+            userId: userStore.currentUser.sub,
+            user: this.formattedUserInfo,
+            phoneDetails: this.formattedPhoneDetails,
+            cipStatus: 'MANUAL_VERIFICATION_PENDING',
+          },
+        })
+        .then(() => {
+          const message = { message: 'MANUAL_VERIFICATION_PENDING' };
+          this.setVerifyIdentityResponse(message);
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
 
   simpleErr = err => ({
     statusCode: err.statusCode,

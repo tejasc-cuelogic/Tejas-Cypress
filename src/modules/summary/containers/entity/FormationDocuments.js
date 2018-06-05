@@ -15,17 +15,49 @@ export default class FormationDocumemts extends Component {
         <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Header>
         <Divider hidden />
         <Form className="file-uploader-inline">
-          <Grid divided="vertically">
-            {
-              ['entityFormationDocument', 'entityOperatingDocument', 'einVerification'].map(field => (
+          <Grid verticalAlign="middle" divided="vertically">
+            <Grid.Row>
+              <Grid.Column width={7}>
+                <Header as="h3">Entity Formation Document</Header>
+              </Grid.Column>
+              <Grid.Column width={9}>
                 <FileUploader
-                  name={field}
-                  fielddata={formFormationDocuments.fields[field]}
+                  key="formationDoc"
+                  name="formationDoc"
+                  fielddata={formFormationDocuments.fields.formationDoc}
                   uploadDocument={formationDocFileUpload}
                   removeUploadedDocument={formationDocResetField}
                 />
-              ))
-            }
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column width={7}>
+                <Header as="h3">Entity Operating Document</Header>
+              </Grid.Column>
+              <Grid.Column width={9}>
+                <FileUploader
+                  key="operatingAgreementDoc"
+                  name="operatingAgreementDoc"
+                  fielddata={formFormationDocuments.fields.operatingAgreementDoc}
+                  uploadDocument={formationDocFileUpload}
+                  removeUploadedDocument={formationDocResetField}
+                />
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column width={7}>
+                <Header as="h3">EIN Verification</Header>
+              </Grid.Column>
+              <Grid.Column width={9}>
+                <FileUploader
+                  key="einVerificationDoc"
+                  name="einVerificationDoc"
+                  fielddata={formFormationDocuments.fields.einVerificationDoc}
+                  uploadDocument={formationDocFileUpload}
+                  removeUploadedDocument={formationDocResetField}
+                />
+              </Grid.Column>
+            </Grid.Row>
           </Grid>
         </Form>
       </div>

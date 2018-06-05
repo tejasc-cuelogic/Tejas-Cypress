@@ -10,19 +10,17 @@ export default class Identity extends Component {
     const { formIdentity, identityChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">Confirm your identity and upload your drivers license</Header>
-        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</Header>
+        <Header as="h1" textAlign="center">Confirm your identity and upload your <br /> Driver’s License, state-issued ID, or U.S. <br /> passport</Header>
         <Divider section hidden />
         <Form className="file-uploader-large">
           <FileUploaderLarge
-            name="driversLicence"
-            fielddata={formIdentity.fields.driversLicence}
+            name="identityDoc"
+            fielddata={formIdentity.fields.identityDoc}
             uploadDocument={identityChange}
           />
         </Form>
         <Divider section hidden />
-        <p className="center-align">As a regulated financial service company operating in the US we are periodically
-          required to identify users on the  platform. That’s why lorem ipsum dolor sit amet
+        <p className="center-align">As a regulated financial service company operating in the U.S., we are we are periodically required to identify users on the  platform. That’s why lorem ipsum dolor sit amet
         </p>
       </div>
     );

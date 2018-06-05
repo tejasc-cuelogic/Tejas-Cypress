@@ -101,6 +101,9 @@
                 color:@fullBlack;
             }
         }
+        &.padded{
+            padding:@42px;
+        }
     }
 }
 

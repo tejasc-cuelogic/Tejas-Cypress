@@ -6,6 +6,10 @@ import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../services/graphql';
 import { GqlClient as client2 } from '../../services/graphqlCool';
 import uiStore from '../uiStore';
+import authStore from '../authStore';
+import iraAccountStore from '../user/iraAccountStore';
+import entityAccountStore from '../user/entityAccountStore';
+import individualAccountStore from '../user/individualAccountStore';
 import { BENEFICIARY_FRM, FIN_INFO } from '../../constants/user';
 import { userDetailsQuery } from '../queries/users';
 import { allBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../queries/beneficiaries';
@@ -44,6 +48,12 @@ export class UserDetailsStore {
       query: userDetailsQuery,
       variables: {
         id,
+      },
+      onFetch: (data) => {
+        authStore.checkIsInvestmentAccountCreated(data.user);
+        iraAccountStore.populateData(data.user);
+        individualAccountStore.populateData(data.user);
+        entityAccountStore.populateData(data.user);
       },
     });
   }
@@ -149,7 +159,7 @@ export class UserDetailsStore {
   @action
   onFieldChange = (currentForm, field, value) => {
     const form = currentForm || 'formFinInfo';
-    if (field && value) {
+    if (field) {
       this[form].fields[field].value = value;
     }
     const validation = new Validator(
@@ -157,7 +167,7 @@ export class UserDetailsStore {
       mapValues(this[form].fields, f => f.rule),
     );
     this[form].meta.isValid = validation.passes();
-    if (field && value) {
+    if (field) {
       this[form].fields[field].error = validation.errors.first(field);
     }
   };

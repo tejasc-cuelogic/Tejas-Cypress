@@ -97,6 +97,12 @@ export class Utility {
     const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
     return formattedSSNNumber;
   }
+
+  encryptNumber = (number) => {
+    let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
+    encryptedNumber = encryptedNumber.slice(-7);
+    return encryptedNumber;
+  }
 }
 
 export default new Utility();

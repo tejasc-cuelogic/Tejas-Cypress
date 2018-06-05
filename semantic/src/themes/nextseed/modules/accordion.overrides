@@ -38,13 +38,12 @@
 		position:relative;
 		padding-right:30px;
 		font-weight:700;
-		text-transform:capitalize;
 	}
 }
 
 /* Dropdown Icon */
-.ui.accordion,
-.ui.accordion .accordion{
+.ui.accordion:not(.styled),
+.ui.accordion .accordion:not(.styled){
 	.title{
 		.ns-chevron-down.icon {
 			margin:0;
@@ -53,7 +52,8 @@
 			line-height:@21px;
 			position:absolute;
 			right:0;
-			top:7px;
+			top:50%;
+			margin-top:-.75rem;
 		}
 		&.active{
 			.ns-chevron-down.icon{
@@ -61,8 +61,61 @@
 			}
 		}
 	}
+	//	FAQ UI
+	&.splitted{
+		.title{
+			font-size:@18px;
+			color:@fullBlack;
+			padding:@14px @40px @14px @20px;
+			background-color:@white;
+			box-shadow:@noTopShadow;
+			border-bottom:@border-light 1px solid;
+			position:relative;
+			overflow:hidden;
+			&:first-of-type{
+				box-shadow:@allSideShadow;
+				border-radius:@6px @6px 0 0;
+			}
+			&:nth-last-child(2){
+				border-radius:0 0 @6px @6px;
+			}
+			>.icon{
+				font-size:@14px;
+				color:@link-color;
+				right:10px;
+			}
+			~ .content:not(.ui){
+				padding:@20px @20px @30px;
+				&.active + .title{
+					border-top-left-radius:@6px;
+					border-top-right-radius:@6px;
+					box-shadow:@allSideShadow;
+				}
+			}
+			&.active{
+				border-bottom-right-radius:@6px;
+				border-bottom-left-radius:@6px;
+				&:before{
+					content:"";
+					width:6px;
+					position:absolute;
+					left:0;
+					top:0;
+					bottom:0;
+					background-color:@theme-primary;
+				}
+			}
+		}
+		.list a.item{
+			color:@fullBlack;
+			&:hover, &:focus, &.active{
+				color:@link-color;
+			}
+		}
+	}
 }
 .ui.styled.accordion, .ui.styled.accordion .accordion{
+	//	Edgar Filing List UI
 	&.filing-list{
 		background:none;
 		box-shadow:none;
@@ -131,6 +184,26 @@
 		}
 		.content{
 			padding:0;
+		}
+	}
+}
+
+//	Knowledge Base UI
+.ui.accordion.feed-view{
+	.title{
+		padding:@12px 0;
+		font-weight:400;
+		color:@quaternary-text;
+		border-top:@border-light 1px solid;
+		&:first-of-type{
+			border:none;
+		}
+		>span{
+			display:block;
+			color:@fullBlack;
+		}
+		&.active > span{
+			color:@link-color;
 		}
 	}
 }

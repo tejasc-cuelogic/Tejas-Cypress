@@ -14,6 +14,7 @@ import authStore from './../stores/authStore';
 import commonStore from './../stores/commonStore';
 import adminStore from '../stores/adminStore';
 import uiStore from '../stores/uiStore';
+import userDetailsStore from '../stores/user/userDetailsStore';
 import Helper from '../helper/utility';
 
 /**
@@ -169,6 +170,7 @@ export class Auth {
           // Extract JWT from token
           commonStore.setToken(data.idToken.jwtToken);
           userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+          userDetailsStore.getUser(userStore.currentUser.sub);
           AWS.config.region = AWS_REGION;
           // Check if currentUser has admin role, if user has admin role set admin access to user
           if (userStore.isCurrentUserWithRole('admin')) {
@@ -297,6 +299,32 @@ export class Auth {
         onSuccess: data => res(data),
         onFailure: err => rej(err),
       });
+    })
+      .then(() => {
+        Helper.toast('Password changed successfully', 'success');
+      })
+      .catch((err) => {
+        uiStore.setErrors(this.simpleErr(err));
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
+  updatePassword() {
+    uiStore.reset();
+    uiStore.setProgress();
+    const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
+    return new Promise((res, rej) => {
+      this.cognitoUser = this.userPool.getCurrentUser();
+      this.cognitoUser.getSession((err, session) => console.log(err, session));
+      this.cognitoUser.changePassword(
+        passData.oldPasswd,
+        passData.newPasswd,
+        err => (err ? rej(err) : res()),
+      );
     })
       .then(() => {
         Helper.toast('Password changed successfully', 'success');
