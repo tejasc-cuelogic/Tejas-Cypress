@@ -29,9 +29,6 @@ export class AccountStore {
 
   @observable entityAccount = { ...ENTITY_ACCOUNT_CREATION }
 
-  /**
-   * Link BANK Account
-   */
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
 
   @observable
