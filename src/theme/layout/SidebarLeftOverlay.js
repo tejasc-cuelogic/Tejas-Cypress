@@ -68,14 +68,14 @@ class SidebarLeftPush extends Component {
               </div>
               {verifyIdentity01.response.message &&
                 <SidebarNav
-                  isUserVerified={this.isVerified(verifyIdentity01.response.message)}
+                  isVerified={this.isVerified(verifyIdentity01.response.message)}
                   handleLogOut={this.props.handleLogOut}
                   roles={UserInfo.roles}
                 />
               }
               {!verifyIdentity01.response.message && currentUser.data.user &&
                 <SidebarNav
-                  isUserVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus.status)}
+                  isVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus.status)}
                   createdAccount={this.createdAccount(currentUser.data.user.accounts)}
                   handleLogOut={this.props.handleLogOut}
                   roles={UserInfo.roles}
@@ -119,14 +119,14 @@ class SidebarLeftPush extends Component {
               <Divider />
               {verifyIdentity01.response.message &&
                 <SidebarNav
-                  isUserVerified={this.isVerified(verifyIdentity01.response.message)}
+                  isVerified={this.isVerified(verifyIdentity01.response.message)}
                   handleLogOut={this.props.handleLogOut}
                   roles={UserInfo.roles}
                 />
               }
               {!verifyIdentity01.response.message && currentUser.data.user &&
                 <SidebarNav
-                  isUserVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus.status)}
+                  isVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus.status)}
                   handleLogOut={this.props.handleLogOut}
                   roles={UserInfo.roles}
                 />

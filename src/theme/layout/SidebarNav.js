@@ -12,7 +12,7 @@ export class SidebarNav extends Component {
     const {
       roles,
       location,
-      isUserVerified,
+      isVerified,
       createdAccount,
     } = this.props;
     const navItems = _.filter(
@@ -25,7 +25,7 @@ export class SidebarNav extends Component {
           location={location}
           navItems={navItems}
           roles={roles}
-          isUserVerified={isUserVerified}
+          isUserVerified={isVerified}
           createdAccount={createdAccount}
           isApp
         />
