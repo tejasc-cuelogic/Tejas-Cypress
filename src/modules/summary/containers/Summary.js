@@ -87,7 +87,7 @@ class Summary extends Component {
           linkPath,
         };
       }
-    } else if (this.isVerified(currentUser.data.user.legalDetails.cipStatus.status)) {
+    } else if (this.isVerified(currentUser.data.user.legalDetails.cipStatus)) {
       stepinfo = {
         value: 'Welcome to NextSeed!',
         label: 'Would you like to start the process of new account creation?',
@@ -138,7 +138,7 @@ class Summary extends Component {
             </div>
           }
           {!this.props.profileStore.verifyIdentity01.response.message &&
-          !this.isVerified(currentUser.data.user.legalDetails.cipStatus.status) &&
+          !this.isVerified(currentUser.data.user.legalDetails.cipStatus) &&
             <div>
               <Header as="h3">Welcome to NextSeed!</Header>
               <Grid>

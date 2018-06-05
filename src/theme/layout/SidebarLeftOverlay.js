@@ -19,7 +19,10 @@ class SidebarLeftPush extends Component {
   toggleVisibility = () => uiStore.updateLayoutState('leftPanel');
   toggleVisibilityMobile = () => uiStore.updateLayoutState('leftPanelMobile');
   isVerified(cipStatus) {
-    return this.props.accountStore.validAccStatus.includes(cipStatus);
+    if (cipStatus !== null) {
+      return this.props.accountStore.validAccStatus.includes(cipStatus);
+    }
+    return false;
   }
   createdAccount = (accounts) => {
     if (accounts.length) {
@@ -75,7 +78,7 @@ class SidebarLeftPush extends Component {
               }
               {!verifyIdentity01.response.message && currentUser.data.user &&
                 <SidebarNav
-                  isVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus.status)}
+                  isVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus)}
                   createdAccount={this.createdAccount(currentUser.data.user.accounts)}
                   handleLogOut={this.props.handleLogOut}
                   roles={UserInfo.roles}
@@ -126,7 +129,7 @@ class SidebarLeftPush extends Component {
               }
               {!verifyIdentity01.response.message && currentUser.data.user &&
                 <SidebarNav
-                  isVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus.status)}
+                  isVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus)}
                   handleLogOut={this.props.handleLogOut}
                   roles={UserInfo.roles}
                 />
