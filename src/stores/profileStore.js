@@ -322,10 +322,25 @@ export class ProfileStore {
   };
 
   @action
-  setProfileInfo = (currentUser) => {
-    this.onFieldChange('updateProfileInfo', 'firstName', currentUser.givenName);
-    this.onFieldChange('updateProfileInfo', 'lastName', currentUser.familyName);
-    this.onFieldChange('updateProfileInfo', 'email', currentUser.email);
+  setProfileInfo = (userDetails) => {
+    const {
+      email,
+      address,
+      legalDetails,
+      contactDetails,
+    } = userDetails;
+    this.onFieldChange('updateProfileInfo', 'firstName', legalDetails.legalName.firstLegalName);
+    this.onFieldChange('updateProfileInfo', 'lastName', legalDetails.legalName.lastLegalName);
+    this.onFieldChange('updateProfileInfo', 'email', email);
+    this.onFieldChange('updateProfileInfo', 'phoneNumber', contactDetails.phone.number);
+    if (address === null) {
+      if (legalDetails.legalAddress) {
+        this.onFieldChange('updateProfileInfo', 'street', legalDetails.legalAddress.street);
+        this.onFieldChange('updateProfileInfo', 'city', legalDetails.legalAddress.city);
+        this.onFieldChange('updateProfileInfo', 'state', legalDetails.legalAddress.state);
+        this.onFieldChange('updateProfileInfo', 'zipCode', legalDetails.legalAddress.zipCode);
+      }
+    }
   }
 
   @computed
