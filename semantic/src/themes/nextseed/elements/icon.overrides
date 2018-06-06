@@ -1095,6 +1095,9 @@ i.icon[class*="ns-"]{
 .ns-circle-line:before{
     content:@ns-circle-line;
 }
+.ns-clipboard-check:before{
+    content:@ns-clipboard-check;
+}
 .ns-close:before{
     content:@ns-close;
 }
@@ -1275,6 +1278,9 @@ i.icon[class*="ns-"]{
 .ns-setting:before{
     content:@ns-setting;
 }
+.ns-shield-check:before{
+    content:@ns-shield-check;
+}
 .ns-statement:before{
     content:@ns-statement;
 }
@@ -1289,6 +1295,9 @@ i.icon[class*="ns-"]{
 }
 .ns-tick:before{
     content:@ns-tick;
+}
+.ns-timer:before{
+    content:@ns-timer;
 }
 .ns-times-box:before{
     content:@ns-times-box;

@@ -4,6 +4,7 @@ import Aux from 'react-aux';
 import { Container, Icon, Image, Menu, Dropdown, Label } from 'semantic-ui-react';
 import LogoC from '../../assets/images/nextseed_logo_color.svg';
 import LogoW from '../../assets/images/nextseed_logo_white_green.svg';
+import LogoNsAndLendio from '../../assets/images/nextseed_and_lendio.svg';
 
 const PUBLIC_NAV_ITEMS = [
   { title: 'Browse Deals', to: 'offerings' },
@@ -106,11 +107,20 @@ export const NavigationItems = props => (
   <Menu borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" size="large">
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
-        <Image
-          className="small"
-          src={props.location.pathname.includes('/business-application') ? LogoW : LogoC}
-          alt="NextSeed.com"
-        />
+        {!props.location.pathname.includes('/business-application/failed') &&
+          <Image
+            size="small"
+            src={props.location.pathname.includes('/business-application') ? LogoW : LogoC}
+            alt="NextSeed.com"
+          />
+        }
+        {props.location.pathname.includes('/business-application/failed') &&
+          <Image
+            src={LogoNsAndLendio}
+            alt="NextSeed.com"
+            style={{ height: '28px', width: 'auto' }}
+          />
+        }
       </Menu.Item>
       <Menu.Menu position="right">
         {!props.location.pathname.includes('/business-application') &&
