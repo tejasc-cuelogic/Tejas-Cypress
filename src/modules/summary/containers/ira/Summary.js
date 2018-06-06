@@ -12,9 +12,6 @@ import ListErrors from '../../../../theme/common/ListErrors';
 export default class Summary extends Component {
   handleCreateAccount = () => {
     this.props.iraAccountStore.createAccount('Summary', 'submit');
-    if (!this.props.uiStore.errors) {
-      this.props.history.push('/app/dashboard');
-    }
   }
   render() {
     const {

@@ -23,6 +23,9 @@ class IndividualAccountStore {
   @observable
   depositMoneyNow = true;
 
+  @observable
+  formStatus = 'draft';
+
   @action
   setDepositMoneyNow(status) {
     this.depositMoneyNow = status;
@@ -31,6 +34,11 @@ class IndividualAccountStore {
   @action
   setInvestorAccId(id) {
     this.investorAccId = id;
+  }
+
+  @action
+  setFormStatus(formStatus) {
+    this.formStatus = formStatus;
   }
 
   /* eslint-disable class-methods-use-this */
@@ -53,6 +61,9 @@ class IndividualAccountStore {
 
   /* eslint-disable arrow-body-style */
   createAccount = (currentStep, formStatus = 'draft') => {
+    if (formStatus === 'submit') {
+      this.setFormStatus('submit');
+    }
     uiStore.setProgress();
     let mutation = createAccount;
     let variables = {

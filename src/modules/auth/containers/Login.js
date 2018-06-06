@@ -25,11 +25,7 @@ class Login extends Component {
           this.props.history.push('/change-password');
         } else {
           this.props.authStore.reset();
-          if (this.props.authStore.isInvestmentAccountCreated) {
-            this.props.history.replace('/app/dashboard');
-          } else {
-            this.props.history.replace('/app/summary');
-          }
+          this.props.history.replace('/app/summary');
         }
       });
   };

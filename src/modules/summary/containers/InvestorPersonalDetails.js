@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete } from '../../../theme/form/FormElements';
 import { PROFILE_DETAILS_TITLE } from '../../../constants/profile';
@@ -60,10 +60,11 @@ export default class investorPersonalDetails extends Component {
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">{welcomeMsg}</Header>
-          <p>You’re almost at your personal dashboard</p>
+          <p>Let`s get you set up with a NextSeed investment <br /> account.</p>
           <Divider />
-          <p><Link to={this.props.match.url}>Federal regulations </Link>
-           require us to collect some more info to enable you to fully use your account
+          <p>
+            Federal regulations require us to verify your legal<br />
+            identity. We use state-of-the-art security measures<br /> to protect your information.
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">

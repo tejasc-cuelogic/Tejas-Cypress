@@ -613,7 +613,9 @@ export class ProfileStore {
             userId: userStore.currentUser.sub,
             user: this.formattedUserInfo,
             phoneDetails: this.formattedPhoneDetails,
-            cipStatus: 'MANUAL_VERIFICATION_PENDING',
+            cipStatus: {
+              status: 'MANUAL_VERIFICATION_PENDING',
+            },
           },
         })
         .then(() => {

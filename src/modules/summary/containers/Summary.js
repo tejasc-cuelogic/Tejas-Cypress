@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import _ from 'lodash';
-import { Grid, Card, Header, Icon, Responsive, Divider, List } from 'semantic-ui-react';
+import { Grid, Card, Header, Icon, Responsive, Divider, List, Button } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import PageHeaderSection from '../../../theme/common/PageHeaderSection';
@@ -13,7 +13,7 @@ import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 import Spinner from '../../../theme/ui/Spinner';
 
-@inject('uiStore', 'profileStore', 'iraAccountStore', 'accountStore', 'userStore', 'userDetailsStore', 'individualAccountStore')
+@inject('uiStore', 'profileStore', 'entityAccountStore', 'iraAccountStore', 'accountStore', 'userStore', 'userDetailsStore', 'individualAccountStore')
 @observer
 class Summary extends Component {
   componentWillMount() {
@@ -57,6 +57,38 @@ class Summary extends Component {
       linkText: 'Verify me',
       linkPath: 'InvestorPersonalDetails',
     };
+
+    let accTypes = ['ira', 'individual', 'entity'];
+    if (!this.props.uiStore.errors && this.props.accountStore.accountTypeCreated &&
+    (this.props.iraAccountStore.formStatus === 'submit' || this.props.individualAccountStore.formStatus === 'submit'
+    || this.props.entityAccountStore.formStatus === 'submit')) {
+      accTypes = _.filter(
+        accTypes,
+        n => n !== this.props.accountStore.accountTypeCreated,
+      );
+      return (
+        <Aux>
+          <PrivateLayout
+            {...this.props}
+          >
+            <div className="conent-spacer">
+              <Header as="h3">Create New Account!</Header>
+              <Grid>
+                <Grid.Row>
+                  {
+                    accTypes.map(item => (
+                      <Button primary size="large">
+                        {_.startCase(item)}
+                      </Button>
+                    ))
+                  }
+                </Grid.Row>
+              </Grid>
+            </div>
+          </PrivateLayout>
+        </Aux>
+      );
+    }
 
     const { currentUser } = this.props.userDetailsStore;
     if (!currentUser.data.user) {

@@ -31,8 +31,10 @@ class SidebarLeftPush extends Component {
     return false;
   }
   createdAccount = (accounts) => {
-    if (accounts.length) {
+    if (accounts && accounts.length) {
       return accounts[0].accountType;
+    } else if (accounts !== null) {
+      return accounts;
     }
     return null;
   }
@@ -78,6 +80,7 @@ class SidebarLeftPush extends Component {
               {verifyIdentity01.response.message &&
                 <SidebarNav
                   isVerified={this.isVerified(verifyIdentity01.response.message)}
+                  createdAccount={this.createdAccount(this.props.accountStore.accountTypeCreated)}
                   handleLogOut={this.props.handleLogOut}
                   roles={UserInfo.roles}
                 />
@@ -129,6 +132,7 @@ class SidebarLeftPush extends Component {
               {verifyIdentity01.response.message &&
                 <SidebarNav
                   isVerified={this.isVerified(verifyIdentity01.response.message)}
+                  createdAccount={this.createdAccount(this.props.accountStore.accountTypeCreated)}
                   handleLogOut={this.props.handleLogOut}
                   roles={UserInfo.roles}
                 />
@@ -136,6 +140,7 @@ class SidebarLeftPush extends Component {
               {!verifyIdentity01.response.message && currentUser.data.user &&
                 <SidebarNav
                   isVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus)}
+                  createdAccount={this.createdAccount(currentUser.data.user.accounts)}
                   handleLogOut={this.props.handleLogOut}
                   roles={UserInfo.roles}
                 />

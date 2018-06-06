@@ -48,9 +48,6 @@ export class NavItems extends Component {
       location,
       isApp,
       refLoc,
-      roles,
-      isUserVerified,
-      createdAccount,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = [...this.props.navItems];
@@ -58,13 +55,11 @@ export class NavItems extends Component {
       const kickMe = this.props.currentUser ? 4 : 5;
       myNavItems.splice(kickMe, 1);
     }
-    const accountTypes = ['account-details/ira', 'account-details/individual', 'account-details/entity'];
     return myNavItems.map(item => (
       <Aux>
         {(item.subPanel === 1 && item.subNavigations) ? (
           <Dropdown
             item
-            disabled={(roles && roles[0] === 'investor' && !isUserVerified) && item.to !== 'summary' && (accountTypes.includes(item.to) && item.to !== `account-details/${createdAccount}`)}
             key={item.to}
             className={this.isActive(item.to, location, app) ? 'active' : ''}
             name={item.to}
