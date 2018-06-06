@@ -16,8 +16,6 @@ export default class KnowledgeBase extends Component {
     const {
       faqs, loading, error, dataOne,
     } = this.props.educationStore;
-
-    console.log(dataOne);
     if (loading || dataOne.loading) {
       return 'loading...';
     }
