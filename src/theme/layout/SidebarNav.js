@@ -19,9 +19,9 @@ export class SidebarNav extends Component {
     const navItems = _.filter(
       ALL_NAV_ITEMS,
       n => n.to !== 'profile-settings' && n.to !== 'business-application' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0) &&
-      ((roles && roles[0] === 'investor' && n.to === 'summary') ||
+      (((roles && roles[0] === 'investor' && n.to === 'summary') ||
       (roles && roles[0] === 'investor' && isVerified && !accountTypes.includes(n.to)) ||
-      (roles && roles[0] === 'investor' && (accountTypes.includes(n.to) && n.to === `account-details/${createdAccount}`))),
+      (roles && roles[0] === 'investor' && (accountTypes.includes(n.to) && n.to === `account-details/${createdAccount}`))) || (roles && roles[0] !== 'investor')),
     );
     return (
       <Aux>
