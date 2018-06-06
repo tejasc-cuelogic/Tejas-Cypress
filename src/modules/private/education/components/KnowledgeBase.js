@@ -14,10 +14,11 @@ export default class KnowledgeBase extends Component {
   render() {
     const { match, location } = this.props;
     const {
-      faqs, loading, error,
+      faqs, loading, error, dataOne,
     } = this.props.educationStore;
 
-    if (loading) {
+    console.log(dataOne);
+    if (loading || dataOne.loading) {
       return 'loading...';
     }
     return (
