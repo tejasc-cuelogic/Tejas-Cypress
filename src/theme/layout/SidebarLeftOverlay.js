@@ -19,8 +19,14 @@ class SidebarLeftPush extends Component {
   toggleVisibility = () => uiStore.updateLayoutState('leftPanel');
   toggleVisibilityMobile = () => uiStore.updateLayoutState('leftPanelMobile');
   isVerified(cipStatus) {
+    let checkStatus = '';
     if (cipStatus !== null) {
-      return this.props.accountStore.validAccStatus.includes(cipStatus);
+      if (typeof cipStatus === 'object') {
+        checkStatus = cipStatus.status;
+      } else {
+        checkStatus = cipStatus;
+      }
+      return this.props.accountStore.validAccStatus.includes(checkStatus);
     }
     return false;
   }

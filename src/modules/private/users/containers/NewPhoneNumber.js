@@ -54,7 +54,7 @@ export default class NewPhoneNumber extends Component {
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">
-              <Button disabled={!!verifyIdentity01.fields.phoneNumber.error || _.isEmpty(verifyIdentity01.fields.phoneNumber.value)} loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed" >Change Phone Number</Button>
+              <Button loading={this.props.uiStore.inProgress} disabled={!!verifyIdentity01.fields.phoneNumber.error || _.isEmpty(verifyIdentity01.fields.phoneNumber.value)} primary size="large" className="very relaxed" >Change Phone Number</Button>
             </div>
           </Form>
         </Modal.Content>

@@ -38,7 +38,16 @@ class Summary extends Component {
   }
 
   isVerified(cipStatus) {
-    return this.props.accountStore.validAccStatus.includes(cipStatus);
+    let checkStatus = '';
+    if (cipStatus !== null) {
+      if (typeof cipStatus === 'object') {
+        checkStatus = cipStatus.status;
+      } else {
+        checkStatus = cipStatus;
+      }
+      return this.props.accountStore.validAccStatus.includes(checkStatus);
+    }
+    return false;
   }
 
   render() {

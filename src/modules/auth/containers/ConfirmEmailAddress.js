@@ -18,6 +18,7 @@ export default class ConfirmEmailAddress extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.profileStore.setReSendVerificationCode(false);
     validationActions.validateConfirmEmailAddressForm();
     if (this.props.authStore.canSubmitEmailAddressVerification) {
       if (this.props.userStore.currentUser) {
@@ -47,6 +48,7 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   handleResendCode = () => {
+    this.props.profileStore.setReSendVerificationCode(true);
     if (this.props.refLink) {
       this.props.profileStore.requestEmailChange().then(() => {
         Helper.toast('Re-sent the verification code', 'success');
@@ -95,10 +97,10 @@ export default class ConfirmEmailAddress extends Component {
               changed={this.handleInputChange}
             />
             <div className="center-align">
-              <Button primary size="large" className="very relaxed" loading={this.props.uiStore.inProgress} disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
+              <Button primary size="large" className="very relaxed" loading={!this.props.profileStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Button type="button" className="cancel-link" onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
+              <Button type="button" className="cancel-link" loading={this.props.profileStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
             </div>
           </Form>
         </Modal.Content>

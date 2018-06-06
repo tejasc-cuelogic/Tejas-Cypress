@@ -54,6 +54,14 @@ export class ProfileStore {
 
   @observable updateProfileInfo = { fields: { ...UPDATE_PROFILE_INFO }, meta: { isValid: false, error: '' } };
 
+  @observable
+  reSendVerificationCode = false;
+
+  @action
+  setReSendVerificationCode(status) {
+    this.reSendVerificationCode = status;
+  }
+
   @action loadProfile(username) {
     uiStore.setProgress(true);
     api.User.get(username)
@@ -93,6 +101,30 @@ export class ProfileStore {
     if (this.verifyIdentity01.response.key !== 'id.success') {
       this.verifyIdentity01.response = {};
     }
+  }
+
+  @action
+  resetVerificationCode() {
+    Object.keys(this.verifyIdentity04.fields).map((field) => {
+      this.verifyIdentity04.fields[field].value = '';
+      this.verifyIdentity04.fields[field].error = undefined;
+      return true;
+    });
+    this.verifyIdentity04.meta.isValid = false;
+    this.verifyIdentity04.meta.error = '';
+    this.verifyIdentity04.response = {};
+  }
+
+  @action
+  resetUpdateProfileDetails() {
+    Object.keys(this.updateProfileInfo.fields).map((field) => {
+      this.updateProfileInfo.fields[field].value = '';
+      this.updateProfileInfo.fields[field].error = undefined;
+      return true;
+    });
+    this.updateProfileInfo.meta.isValid = false;
+    this.updateProfileInfo.meta.error = '';
+    this.updateProfileInfo.response = {};
   }
 
   @computed
@@ -317,6 +349,7 @@ export class ProfileStore {
   /* eslint-disable arrow-body-style */
   startPhoneVerification = () => {
     uiStore.clearErrors();
+    uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -333,6 +366,9 @@ export class ProfileStore {
         .catch((err) => {
           uiStore.setErrors(JSON.stringify(err.message));
           reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
         });
     });
   }
@@ -385,6 +421,7 @@ export class ProfileStore {
 
   @action
   setProfileInfo = (userDetails) => {
+    this.resetUpdateProfileDetails();
     const {
       email,
       address,
@@ -405,7 +442,7 @@ export class ProfileStore {
       this.onFieldChange('updateProfileInfo', 'phoneNumber', contactDetails.phone.number);
     }
     if (address === null) {
-      if (legalDetails.legalAddress) {
+      if (legalDetails.legalAddress !== null) {
         this.onFieldChange('updateProfileInfo', 'street', legalDetails.legalAddress.street);
         this.onFieldChange('updateProfileInfo', 'city', legalDetails.legalAddress.city);
         this.onFieldChange('updateProfileInfo', 'state', legalDetails.legalAddress.state);
@@ -464,6 +501,8 @@ export class ProfileStore {
          },
        })
        .then(() => {
+         userStore.setGivenName(this.updateProfileInfo.fields.firstName.value);
+         userStore.setFamilyName(this.updateProfileInfo.fields.lastName.value);
          resolve();
        })
        .catch((err) => {
@@ -477,6 +516,7 @@ export class ProfileStore {
  }
 
  requestEmailChange = () => {
+   uiStore.reset();
    uiStore.setProgress();
    return new Promise((resolve, reject) => {
      client

@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
 import { FormSelect, FormInput, MaskedInput, AutoComplete } from '../../../../theme/form/FormElements';
-import { US_STATES } from '../../../../constants/account'; //  added Temperarily to update UI as per new layout
+import { US_STATES } from '../../../../constants/account';
 
 import UserVerifiedDetails from '../components/UserVerifiedDetails';
 import NewPhoneNumber from './NewPhoneNumber';
