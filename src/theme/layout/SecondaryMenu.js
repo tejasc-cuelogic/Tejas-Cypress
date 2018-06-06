@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Responsive, Menu, Dropdown } from 'semantic-ui-react';
+import { Responsive, Menu, Icon, Dropdown } from 'semantic-ui-react';
 
 const options = [
   {
@@ -35,6 +35,9 @@ class SecondaryMenu extends Component {
                   as={NavLink}
                   to={`${this.props.match.url}/${item.to}`}
                 >
+                  {item.icon &&
+                    <Icon className={`${item.icon}`} />
+                  }
                   {item.title}
                 </Menu.Item>
               ))

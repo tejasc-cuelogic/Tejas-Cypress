@@ -1,22 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Loadable from 'react-loadable';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Switch } from 'react-router-dom';
 import Header from './Header';
 import authActions from '../../actions/auth';
-
-const moduleMap = {
-  register: 'SignupInitial',
-  login: 'Login',
-  'register-investor': 'InvestorSignup',
-  'confirm-email': 'ConfirmEmailAddress',
-};
-const getModule = component => Loadable({
-  loader: () => import(`../../modules/auth/containers/${moduleMap[component]}`),
-  loading() {
-    return <div>Loading...</div>;
-  },
-});
+import Login from '../../modules/auth/containers/Login';
+import SignupInitial from '../../modules/auth/containers/SignupInitial';
+import InvestorSignup from '../../modules/auth/containers/InvestorSignup';
+import ConfirmEmailAddress from '../../modules/auth/containers/ConfirmEmailAddress';
+import ChangePassword from '../../modules/auth/containers/ChangePassword';
 
 @inject('userStore', 'uiStore')
 @withRouter
@@ -35,7 +26,6 @@ class Layout extends Component {
 
   render() {
     const { location } = this.props;
-    const address = location.pathname.split('/');
     return (
       <div>
         {(!this.props.userStore.currentUser || !location.pathname.startsWith('/app')) &&
@@ -49,7 +39,13 @@ class Layout extends Component {
         {this.props.children}
 
         {location.pathname.startsWith('/auth') &&
-          <Route path={location.pathname} component={getModule(address[2])} />
+          <Switch>
+            <Route path="/auth/login" component={Login} />
+            <Route path="/auth/register" component={SignupInitial} />
+            <Route path="/auth/register-investor" component={InvestorSignup} />
+            <Route path="/auth/confirm-email" component={ConfirmEmailAddress} />
+            <Route path="/auth/change-password" component={ChangePassword} />
+          </Switch>
         }
       </div>
     );

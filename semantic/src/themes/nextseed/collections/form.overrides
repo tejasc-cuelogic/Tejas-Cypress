@@ -11,6 +11,8 @@
         }
     }
     .fields .field{
+        padding-left:@gutterWidth;
+        padding-right:@gutterWidth;
         margin-bottom:@14px;
     }
     .field.otp-field{
@@ -218,6 +220,10 @@
         line-height:@14px;
         color:@highlight-primary;
     }
+    .additional-field{
+        padding:0 !important;
+        margin-bottom:@14px;
+    }
     // .field.disabled{
     //   input[type=text]{
     //     opacity:0;
@@ -234,6 +240,7 @@
         display:inline-block;
     }
 }
+
 .file-uploader{
     min-height:58px;
     padding:@14px;

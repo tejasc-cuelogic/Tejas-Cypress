@@ -12,8 +12,11 @@ const FormInput = observer((props) => {
     placeHolder,
     value,
   } = props.fielddata;
+  const maxlength = props.fielddata.maxLength ? props.fielddata.maxLength : (
+    props.maxLength ? props.maxLength : false
+  );
   return (
-    <Form.Field className={props.containerclassname || ''} error={!!error}>
+    <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''} error={!!error}>
       <label>
         {label}
         {tooltip &&
@@ -25,11 +28,15 @@ const FormInput = observer((props) => {
           />
         }
       </label>
+      {props.type === 'password' &&
+        <input style={{ opacity: 0, position: 'absolute' }} value="something" />
+      }
       <Input
         fluid
-        // labeled
         {...props}
         value={value}
+        autoComplete="nope"
+        maxLength={maxlength || false}
         label={props.prefix || false}
         type={props.type || 'text'}
         placeholder={placeHolder}

@@ -1,28 +1,19 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { Header, Card, Grid, Statistic, Popup, Icon, Form, List, Radio, Divider, Table, Accordion, Progress, Button } from 'semantic-ui-react';
-import { FormDropDown } from '../../../../theme/form/FormElements';
+// import { FormDropDown } from '../../../../../theme/form/FormElements';
 
 /* eslint-disable arrow-body-style */
-const options = [
-  { key: 'i', text: 'Individual', value: 'individual' },
-  { key: 'r', text: 'IRA', value: 'ira' },
-  { key: 'e', text: 'Entity', value: 'entity' },
-];
+// const options = [
+//   { key: 'i', text: 'Individual', value: 'individual' },
+//   { key: 'r', text: 'IRA', value: 'ira' },
+//   { key: 'e', text: 'Entity', value: 'entity' },
+// ];
 
-// state = { activeIndex: 0 };
-
-// handleClick = (e, titleProps) => {
-//   const { index } = titleProps;
-//   const { activeIndex } = this.state;
-//   const newIndex = activeIndex === index ? -1 : index;
-
-//   this.setState({ activeIndex: newIndex });
-// };
-
-const userPortfolio = () => {
+const Portfolio = () => {
   // const { activeIndex } = this.state;
   return (
-    <div>
+    <Aux>
       <div className="content-spacer secondary-section">
         <Header as="h3">All accounts overview</Header>
         <Card fluid>
@@ -121,7 +112,7 @@ const userPortfolio = () => {
             <Grid.Column mobile={1} tablet={8} computer={3}>
               <Card>
                 <Form className="select-option">
-                  <FormDropDown placeholder="Select Account" fluid selection options={options} />
+                  dropdown ...
                 </Form>
               </Card>
             </Grid.Column>
@@ -469,8 +460,9 @@ const userPortfolio = () => {
           </Accordion.Content>
         </Accordion>
       </div>
-    </div>
+    </Aux>
   );
 };
 
-export default userPortfolio;
+// <FormDropDown placeholder="Select Account" fluid selection options={options} />
+export default Portfolio;

@@ -1,66 +1,80 @@
 import React, { Component } from 'react';
+import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
-import UserModuleSubheader from './../components/UserModuleSubheader';
-import UserDetail from './../components/UserDetail';
-import UserLimits from './../components/UserLimits';
-import UserBeneficiaries from './../components/UserBeneficiaries';
-import UserPortfolio from './../components/UserPortfolio';
-import UserTransactions from './../components/UserTransactions';
-import UserStatements from './../components/UserStatements';
-import UserMessages from './../components/UserMessages';
-import UserBonusRewards from './../components/UserBonusRewards';
+import { Route, Switch } from 'react-router-dom';
+import { List, Button } from 'semantic-ui-react';
+import Loadable from 'react-loadable';
+import Helper from '../../../../helper/utility';
+import Spinner from '../../../../theme/ui/Spinner';
+import PrivateLayout from '../../../../containers/common/PrivateHOC';
+import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+
+const getModule = component => Loadable({
+  loader: () => import(`../components/manage/${component}`),
+  loading() {
+    return <div>Loading...</div>;
+  },
+});
 
 @inject('userDetailsStore')
 @observer
-class UserDetails extends Component {
+export default class AccountDetails extends Component {
   componentWillMount() {
     this.props.userDetailsStore.getUser(this.props.match.params.userId);
   }
-
+  toggleState = (id) => {
+    this.props.userDetailsStore.toggleState(id);
+    Helper.toast('User Account status updated successfully.', 'success');
+  }
   render() {
-    const {
-      userDetails, editCard, setEditCard, save,
-    } = this.props.userDetailsStore;
+    const { match } = this.props;
+    const navItems = GetNavMeta(match.url).subNavigations;
+    const { currentUser } = this.props.userDetailsStore;
+    if (currentUser.loading) {
+      return (
+        <div><Spinner loaderMessage="Loading..." /></div>
+      );
+    }
+    const details = toJS({ ...currentUser.data.user });
+    const forceTitle = `${details.firstName} ${details.lastName}`;
     return (
-      <Aux>
-        <UserModuleSubheader
-          fullname={`${userDetails.firstName} ${userDetails.lastName}`}
-          section={this.props.match.params.section}
-          id={userDetails.id}
-        />
-        {(this.props.match.params.section === 'Profile' || this.props.match.params.section === 'profile') &&
-        <UserDetail
-          editCard={editCard}
-          setEditCard={setEditCard}
-          details={userDetails}
-          save={save}
-        />
+      <PrivateLayout
+        subNav
+        forceTitle={forceTitle}
+        {...this.props}
+        P1={
+          <List horizontal>
+            <List.Item>
+              <List.Icon
+                circular
+                color={details.accountStatus === 'unlocked' ? 'green' : 'red'}
+                className={`ns-${details.accountStatus === 'unlocked' ? 'unlock' : 'lock'}`}
+              />
+              <List.Content verticalAlign="middle">
+                <List.Description>
+                  Account {details.accountStatus} <br />
+                  <Button
+                    onClick={() => this.toggleState(details.id)}
+                    size="tiny"
+                    color={details.accountStatus === 'unlocked' ? 'red' : 'green'}
+                    className="ghost-button"
+                  >
+                    {details.accountStatus === 'unlocked' ? 'Lock' : 'Unlock'}
+                  </Button>
+                </List.Description>
+              </List.Content>
+            </List.Item>
+          </List>
         }
-        {this.props.match.params.section === 'Limits' &&
-        <UserLimits />
-        }
-        {this.props.match.params.section === 'Beneficiaries' &&
-        <UserBeneficiaries />
-        }
-        {this.props.match.params.section === 'Portfolio' &&
-        <UserPortfolio />
-        }
-        {this.props.match.params.section === 'Transactions' &&
-        <UserTransactions />
-        }
-        {this.props.match.params.section === 'Statements' &&
-        <UserStatements />
-        }
-        {this.props.match.params.section === 'Messages' &&
-        <UserMessages />
-        }
-        {this.props.match.params.section === 'Bonus rewards' &&
-        <UserBonusRewards />
-        }
-      </Aux>
+      >
+        <Switch>
+          {
+            navItems.map(item => (
+              <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+            ))
+          }
+        </Switch>
+      </PrivateLayout>
     );
   }
 }
-
-export default UserDetails;

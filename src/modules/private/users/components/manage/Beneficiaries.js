@@ -1,10 +1,11 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { Card, Grid, Header, Button } from 'semantic-ui-react';
 
 /* eslint-disable arrow-body-style */
-const userBeneficiaries = () => {
+const Beneficiaries = () => {
   return (
-    <div className="content-spacer">
+    <Aux>
       <Header as="h3">Beneficiaries</Header>
       <Grid columns={1} stackable>
         <Grid.Row>
@@ -111,9 +112,9 @@ const userBeneficiaries = () => {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    </div>
+    </Aux>
   );
 };
 
-export default userBeneficiaries;
+export default Beneficiaries;
 

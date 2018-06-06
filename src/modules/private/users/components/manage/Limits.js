@@ -1,11 +1,9 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
+import Aux from 'react-aux';
 import { Card, Statistic, Popup, Icon, Grid, Header, Form, Input, Button } from 'semantic-ui-react';
 
-const userLimits = () => (
-  // <Tab className="tabular-wrap compact" menu={{ fluid: true, vertical: true, tabular: 'left' }}
-  // panes={panes} renderActiveOnly={false} />
-  <div className="content-spacer">
+const Limits = () => (
+  <Aux>
     <Header as="h3">Regulation Crowdfunding Limits</Header>
     <Grid columns={1} stackable>
       <Grid.Row>
@@ -75,7 +73,7 @@ const userLimits = () => (
         </Grid.Column>
       </Grid.Row>
     </Grid>
-  </div>
+  </Aux>
 );
 
-export default userLimits;
+export default Limits;

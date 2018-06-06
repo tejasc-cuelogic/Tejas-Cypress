@@ -2,17 +2,17 @@
             Checkbox
 *******************************/
 
-@checkboxSize: 16px;
+@checkboxSize: 20px;
 @checkboxColor: @textColor;
 @checkboxLineHeight: @checkboxSize;
 
 
 /* Label */
-@labelDistance: 1.85714em; /* 26px @ 14/em */
+@labelDistance: 2.142857em; /* 30px @ 14/em */
 
 /* Checkbox */
-@checkboxBackground: @border-light;
-@checkboxBorder:none;
+@checkboxBackground: @white;
+@checkboxBorder:@border-light 1px solid;
 @checkboxBorderRadius: @4px;
 @checkboxTransition:
   border @defaultDuration @defaultEasing,
@@ -22,7 +22,7 @@
 ;
 
 /* Checkmark */
-@checkboxCheckFontSize: 10px;
+@checkboxCheckFontSize: 16px;
 @checkboxCheckTop: 0px;
 @checkboxCheckLeft: 0px;
 @checkboxCheckSize: @checkboxSize;
@@ -45,18 +45,18 @@
 @checkboxPressedBackground: @theme-primary;
 @checkboxPressedBorderColor: @selectedBorderColor;
 @checkboxPressedColor: @white;
-@labelPressedColor: @white;
+@labelPressedColor: @selectedTextColor;
 
 /* Focus */
-@checkboxFocusBackground: @border-light;
-@checkboxFocusBorderColor: @focusedFormMutedBorderColor;
+@checkboxFocusBackground: @white;
+@checkboxFocusBorderColor: @border-light;
 @checkboxFocusCheckColor: @selectedTextColor;
 @labelFocusColor: @selectedTextColor;
 
 /* Active */
 @labelActiveColor: @textColor;
 @checkboxActiveBackground: @theme-primary;
-@checkboxActiveBorderColor: @selectedBorderColor;
+@checkboxActiveBorderColor: @theme-primary;
 @checkboxActiveCheckColor: @white;
 @checkboxActiveCheckOpacity: 1;
 
@@ -82,25 +82,25 @@
 /* Radio */
 /* Uses px to avoid rounding issues with circles */
 
-@radioSize: 15px;
-@radioTop: 1px;
+@radioSize: 16px;
+@radioTop: 2px;
 @radioLeft: 0px;
 @radioLabelDistance: @labelDistance;
 
-@bulletTop: 1px;
+@bulletTop: 2px;
 @bulletLeft: 0px;
 @bulletScale: (7 / 15); /* 7px as unitless value from radio size */
-@bulletColor: @textColor;
+@bulletColor: @theme-primary;
 @bulletRadius: @circularRadius;
 
-@radioFocusBackground: @checkboxFocusBackground;
-@radioFocusBulletColor: @checkboxFocusCheckColor;
+@radioFocusBackground: @white;
+@radioFocusBulletColor: @theme-primary;
 
-@radioActiveBackground: @checkboxActiveBackground;
-@radioActiveBulletColor: @checkboxActiveCheckColor;
+@radioActiveBackground: @white;
+@radioActiveBulletColor: @theme-primary;
 
-@radioActiveFocusBackground: @checkboxActiveFocusBackground;
-@radioActiveFocusBulletColor: @checkboxActiveFocusCheckColor;
+@radioActiveFocusBackground: @white;
+@radioActiveFocusBulletColor: @theme-primary;
 
 /* Slider & Toggle Handle */
 @handleBackground: @white @subtleGradient;
