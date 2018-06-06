@@ -297,3 +297,40 @@ export const BUSINESS_DOC = {
     value: '', label: 'Personal Guarantee Form', error: undefined, rule: 'required',
   },
 };
+
+export const LENDIO_PRE_QUAL = {
+  businessName: {
+    value: '',
+    label: 'Business Name (or anticipated name)',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'e.g.  NextBrewery',
+  },
+  businessOwnerName: {
+    value: '', label: 'Business Owner\'s Full Name', error: undefined, rule: 'required', placeHolder: 'e.g. John Doe',
+  },
+  emailAddress: {
+    value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g.next.brewery@contact.com',
+  },
+  phoneNumber: {
+    value: '', label: 'Best Contact Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789',
+  },
+  comments: {
+    value: '', label: 'Comments (Optional)', error: undefined, rule: 'alpha_num', placeHolder: 'Add your comments here',
+  },
+  yrsInBusiness: {
+    value: '', error: undefined, rule: 'required', label: 'How long you have been in business?',
+  },
+  avgSales: {
+    value: '', error: undefined, rule: 'required', label: 'What are your average monthly sales before expenses?',
+  },
+  personalCreditRating: {
+    value: '', error: undefined, rule: 'required', label: 'How would you rate your personal credit?',
+  },
+  industryType: {
+    value: '', error: undefined, rule: 'required', label: 'What type of industry is your business in?',
+  },
+  money: {
+    value: '', error: undefined, rule: 'required', label: 'How much money you are looking for today? (Optional)',
+  },
+};

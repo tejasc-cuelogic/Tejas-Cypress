@@ -103,24 +103,22 @@ export class NavItems extends Component {
   }
 }
 
+const getLogo = path => (path.includes('/lendio') ? LogoNsAndLendio : (
+  (path.includes('business-application') ? LogoW : LogoC)
+));
+
+const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
+
 export const NavigationItems = props => (
   <Menu borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" size="large">
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
-        {!props.location.pathname.includes('/business-application/failed') &&
-          <Image
-            size="small"
-            src={props.location.pathname.includes('/business-application') ? LogoW : LogoC}
-            alt="NextSeed.com"
-          />
-        }
-        {props.location.pathname.includes('/business-application/failed') &&
-          <Image
-            src={LogoNsAndLendio}
-            alt="NextSeed.com"
-            style={{ height: '28px', width: 'auto' }}
-          />
-        }
+        <Image
+          size="small"
+          src={getLogo(props.location.pathname)}
+          style={getLogoStyle(props.location.pathname)}
+          alt="NextSeed.com"
+        />
       </Menu.Item>
       <Menu.Menu position="right">
         {!props.location.pathname.includes('/business-application') &&

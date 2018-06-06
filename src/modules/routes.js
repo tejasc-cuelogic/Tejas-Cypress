@@ -95,7 +95,7 @@ export const publicRoutes = [
     exact: true,
   },
   {
-    path: '/business-application/:status',
+    path: '/business-application/:status?/:reason?',
     component: BusinessSignup,
     exact: true,
   },
