@@ -143,12 +143,7 @@ a.text-link{
 	padding:@20px @40px;
 	@media only screen and (max-width : @largestSmallMonitor){
 		min-height:auto;
-		padding:@20px;
-		padding-left:@60px;
-	}
-	@media only screen and (max-width : @largestMobileScreen){
-		padding:@20px @10px;
-		padding-left:@60px;
+		padding:@20px @60px;
 	}
 	h1.ui.header{
 		font-size:@30px;
@@ -212,15 +207,23 @@ a.text-link{
 		@media only screen and (max-width : @largestSmallMonitor){
 			height:22px;
 			margin-left:0;
+			position:absolute;
+			top:50%;
+			right:-30px;
+			transform:translate(0, -50%);
+		}
+		@media only screen and (max-width : @largestMobileScreen){
+			right:-40px;
 		}
 		.icon{
 			font-size:@22px;
 			color:@tertiary-text;
 			color:@white;
 			height:auto;
-			line-height:1;
+			line-height:@42px;
 			@media only screen and (max-width : @largestSmallMonitor){
 				font-size:@16px;
+				line-height:@22px;
 			}
 		}
 		span.unread-count{
@@ -764,8 +767,12 @@ svg:not(:root).recharts-surface{
 }
 
 .issuer-signup{
-	.icon.huge{
+	.icon.massive{
 		font-size:80px;
+		width:auto;
+	}
+	.icon.huge{
+		font-size:60px;
 		width:auto;
 	}
 	h1.ui.header{

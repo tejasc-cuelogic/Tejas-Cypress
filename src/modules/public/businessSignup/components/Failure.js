@@ -7,7 +7,7 @@ import LogoLendio from '../../../../assets/images/lendio_logo.svg';
 
 const Failure = () => (
   <Grid.Column className="issuer-signup">
-    <Icon className="ns-paper-plane" size="huge" color="green" />
+    <Icon className="ns-paper-plane" size="massive" color="green" />
     <Header as="h1">Thank you for completing the pre-qualification form</Header>
     <p>
       <b>Unfortunately, NextSeed is currently unable to help your business at this time.</b>

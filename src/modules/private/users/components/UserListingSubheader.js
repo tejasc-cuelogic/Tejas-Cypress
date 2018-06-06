@@ -15,16 +15,18 @@ export const P1 = props => (
 );
 
 export const P2 = props => (
-  <Aux>
+  <Grid.Column width={3} textAlign="center">
     <span className="filter-count">{Object.keys(props.requestState.search).length}</span>
     <Button icon color="green" onClick={props.toggleSearch} className="link-button">
       Filters <Icon className="ns-caret-down" />
     </Button>
-  </Aux>
+  </Grid.Column>
 );
 
 export const P3 = props => (
-  <Button color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
+  <Grid.Column width={3} textAlign="right">
+    <Button color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
+  </Grid.Column>
 );
 
 export const P5 = props => (

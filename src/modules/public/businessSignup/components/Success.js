@@ -13,7 +13,7 @@ class Success extends Component {
     const { fields } = BUSINESS_ACCOUNT;
     return (
       <Grid.Column className="issuer-signup">
-        <Icon className="ns-paper-plane" size="huge" color="green" />
+        <Icon className="ns-paper-plane" size="massive" color="green" />
         <Header as="h1">Congratulations!</Header>
         <p>
           <b>You have been pre-qualified for a NextSeed campaign.</b>
