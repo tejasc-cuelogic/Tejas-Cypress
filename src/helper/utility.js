@@ -53,6 +53,11 @@ export class Utility {
     return limit;
   }
 
+  getTotal = (from, key) => {
+    const total = 0;
+    return from.map(r => total + parseInt(r[key], 0)).reduce((sum, n) => sum + n);
+  }
+
   gAddressClean = (place) => {
     const componentsForAddress = ['route', 'sublocality_level_3', 'sublocality_level_2', 'sublocality_level_1'];
     const componentsForCity = ['locality'];

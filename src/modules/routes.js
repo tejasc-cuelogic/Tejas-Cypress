@@ -8,7 +8,6 @@ import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
 import Edgar from './edgar/containers/Business';
-import ChangePassword from '../modules/auth/ChangePassword';
 import EdgarForm from '../modules/edgar/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
 import ResetPassword from '../modules/auth/ResetPassword';
@@ -88,11 +87,6 @@ export const publicRoutes = [
   {
     path: '/reset-password',
     component: ResetPassword,
-    exact: true,
-  },
-  {
-    path: '/change-password',
-    component: ChangePassword,
     exact: true,
   },
   {

@@ -47,7 +47,7 @@ const userVerifiedDetails = (props) => {
       </dl>
       <p className="intro-text">
         If any of this information needs to be updated, please contact support through the{' '}
-        <Link to={props.match.url} className="link"><b>Message center</b></Link>.
+        <Link to="/app/messages" className="link"><b>Message center</b></Link>.
       </p>
     </Card>
   );

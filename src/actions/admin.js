@@ -72,7 +72,7 @@ export class Admin {
     const user = mapValues(userStore.USR_FRM.fields, f => f.value);
     const attributes = [];
     Object.keys(user).map((item) => {
-      if (item !== 'TemporaryPassword') {
+      if (item !== 'TemporaryPassword' && item !== 'verifyPassword') {
         attributes.push({
           Name: (item === 'role' ? 'custom:roles' : snakeCase(item)),
           Value: (item === 'role' ? JSON.stringify(toJS(user[item])) : toJS(user[item])),

@@ -10,6 +10,9 @@ import { ROLES } from '../../../../../constants/user';
 @withRouter
 @observer
 export default class CreateNew extends Component {
+  componentWillMount() {
+    this.props.userStore.userReset();
+  }
   submit = (e) => {
     e.preventDefault();
     adminActions.createNewUser()
@@ -27,7 +30,7 @@ export default class CreateNew extends Component {
     return (
       <Grid columns={1} stackable>
         <Grid.Row>
-          <Grid.Column width={8}>
+          <Grid.Column width={6}>
             <Card fluid>
               <Card.Content>
                 <Header as="h3">Personal Profile</Header>
@@ -46,10 +49,10 @@ export default class CreateNew extends Component {
                     }
                   </Form.Group>
                   {
-                    ['email', 'TemporaryPassword'].map(field => (
+                    ['email', 'TemporaryPassword', 'verifyPassword'].map(field => (
                       <FormInput
                         key={field}
-                        type="text"
+                        type={field !== 'email' ? 'password' : 'text'}
                         name={field}
                         fielddata={USR_FRM.fields[field]}
                         changed={userEleChange}
@@ -57,8 +60,7 @@ export default class CreateNew extends Component {
                     ))
                   }
                   <FormSelect
-                    containerwidth={6}
-                    name="Role"
+                    name="role"
                     fielddata={USR_FRM.fields.role}
                     options={ROLES}
                     multiple

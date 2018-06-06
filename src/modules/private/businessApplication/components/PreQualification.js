@@ -35,7 +35,7 @@ export default class PreQualification extends Component {
               subHeader={
                 <Aux>
                   Welcome to NextSeed! Run through this quick form to get pre-qualified.
-                  <Link to="/" className="link"> Need help or have questions?</Link>
+                  <Link target="_blank" to="/about/faq" className="link"> Need help or have questions?</Link>
                 </Aux>
               }
             />

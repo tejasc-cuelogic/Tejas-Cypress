@@ -25,7 +25,7 @@ export const FillTable = props => (
               {
                 props.result.columns.map(col => (
                   <Table.Cell key={col.field} textAlign={col.textAlign}>
-                    {row[col.field]}
+                    {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field]) : row[col.field]}
                   </Table.Cell>
                 ))
               }

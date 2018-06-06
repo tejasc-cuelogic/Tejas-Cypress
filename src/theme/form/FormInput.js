@@ -28,10 +28,14 @@ const FormInput = observer((props) => {
           />
         }
       </label>
+      {props.type === 'password' &&
+        <input style={{ opacity: 0, position: 'absolute' }} value="something" />
+      }
       <Input
         fluid
         {...props}
         value={value}
+        autoComplete="nope"
         maxLength={maxlength || false}
         label={props.prefix || false}
         type={props.type || 'text'}

@@ -8,8 +8,8 @@ import authActions from './../../../actions/auth';
 @observer
 export default class ChangePassword extends React.Component {
   componentWillUnmount() {
-    // this.props.authStore.reset();
     this.props.uiStore.clearErrors();
+    this.props.authStore.reset();
   }
 
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
@@ -18,7 +18,7 @@ export default class ChangePassword extends React.Component {
     e.preventDefault();
     authActions.changePassword()
       .then(() => {
-        this.props.history.push('/');
+        this.props.history.push('/auth/login');
       });
   }
   render() {

@@ -86,7 +86,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: 'required',
   },
   businessHelp: {
-    value: 'newbusiness',
+    value: '',
     values: [
       { label: 'Launch New Business', icon: 'ns-new-business', value: 'newbusiness' },
       { label: 'Open Franchise', icon: 'ns-franchise', value: 'openfranchise' },
@@ -112,7 +112,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: 'required',
   },
   entityStructure: {
-    value: 'corporation',
+    value: '',
     values: [
       { label: 'Corporation', icon: 'ns-corporation', value: 'corporation' },
       { label: 'LLC', icon: 'ns-business', value: 'llc' },
@@ -169,10 +169,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       },
     ],
     error: undefined,
-    rule: 'required',
-  },
-  password: {
-    value: '', label: 'Password', error: undefined, rule: 'required', placeHolder: 'Password',
+    rule: 'array',
   },
   subscribeTo: {
     value: [],
@@ -183,7 +180,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       },
     ],
     error: undefined,
-    rule: '',
+    rule: 'alpha',
   },
 };
 

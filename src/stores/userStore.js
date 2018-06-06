@@ -31,7 +31,7 @@ export class UserStore {
 
   @action
   userEleChange = (e, result) => {
-    const type = (e.target) ? e.target.type : '';
+    const type = (e.target && e.target.type) ? e.target.type : (result.icon === 'dropdown' ? 'dropdown' : '');
     const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
     const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
     this.onFieldChange('USR_FRM', fieldName, fieldValue, type);
@@ -40,7 +40,7 @@ export class UserStore {
   onFieldChange = (currentForm, field, value, type) => {
     const form = currentForm || 'formFinInfo';
     if (field) {
-      if (type === 'checkbox' || Array.isArray(toJS(this[form].fields[field].value))) {
+      if (type === 'checkbox' || (Array.isArray(toJS(this[form].fields[field].value)) && type !== 'dropdown')) {
         const index = this[form].fields[field].value.indexOf(value);
         if (index === -1) {
           this[form].fields[field].value.push(value);
@@ -65,6 +65,11 @@ export class UserStore {
   applyFormError = (form, error) => {
     this[form].meta.isValid = false;
     this[form].meta.error = error.message;
+  }
+
+  @action
+  userReset = () => {
+    this.USR_FRM = { fields: { ...NEW_USER }, meta: { isValid: false, error: '' } };
   }
   // ends
 

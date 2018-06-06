@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Grid, Header, Image, Button, Icon, Responsive } from 'semantic-ui-react';
@@ -25,15 +26,15 @@ class PrivateHOC extends Component {
                   {!this.props.match.url.includes('/business-application') &&
                     <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header>
                   }
-                  {this.props.match.url.includes('/business-application') &&
+                  {this.props.match.url.includes('/app/business-application') &&
                     <Image
                       src={LogoWhite}
                       alt="NextSeed.com"
                       className="logo"
                       verticalAlign="middle"
-                      as="a"
+                      as={Link}
+                      to="/app/business-application"
                       size="small"
-                      href="/"
                     />
                   }
                 </Grid.Column>

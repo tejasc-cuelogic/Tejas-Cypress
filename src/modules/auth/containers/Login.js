@@ -11,11 +11,10 @@ import FieldError from '../../../theme/common/FieldError';
 @withRouter
 @observer
 class Login extends Component {
-  componentWillUnmount() {
+  componentWillMount() {
     this.props.uiStore.clearErrors();
     this.props.authStore.reset();
   }
-
   handleInputChange = (e, { name, value }) => validationActions.validateLoginField(name, value);
   handleSubmitForm = (e) => {
     e.preventDefault();

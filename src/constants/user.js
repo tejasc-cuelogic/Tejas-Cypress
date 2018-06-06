@@ -168,9 +168,12 @@ export const NEW_USER = {
     value: '', label: 'Email address', error: undefined, rule: 'required|email',
   },
   TemporaryPassword: {
-    value: '', label: 'Temporary Password', error: undefined, rule: 'required',
+    value: '', label: 'Temporary Password', error: undefined, rule: 'required|min:8|max:15',
+  },
+  verifyPassword: {
+    value: '', label: 'Verify Password', error: undefined, rule: 'required|same:TemporaryPassword',
   },
   role: {
-    value: ['admin'], label: 'Role', error: undefined, rule: 'required',
+    value: [], label: 'Role', error: undefined, rule: 'required',
   },
 };
