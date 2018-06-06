@@ -16,7 +16,7 @@ export default class BusinessDetails extends Component {
   }
   render() {
     const {
-      BUSINESS_DETAILS_FRM, businessDetailsChange, issuerFiles,
+      BUSINESS_DETAILS_FRM, businessDetailsChange, businessDetailsFiles, businessDetailsReset,
     } = this.props.newBusinessStore;
     const { fields } = BUSINESS_DETAILS_FRM;
     return (
@@ -40,7 +40,8 @@ export default class BusinessDetails extends Component {
               <FileUploader
                 name="businessPlan"
                 fielddata={fields.businessPlan}
-                uploadDocument={issuerFiles}
+                uploadDocument={businessDetailsFiles}
+                removeUploadedDocument={businessDetailsReset}
               />
             </FormElementWrap>
             <FormElementWrap
@@ -132,7 +133,8 @@ export default class BusinessDetails extends Component {
                     <FileUploader
                       name="ownerResume"
                       fielddata={fields.ownerResume}
-                      uploadDocument={issuerFiles}
+                      uploadDocument={businessDetailsFiles}
+                      removeUploadedDocument={businessDetailsReset}
                     />
                   </div>
                 </Grid.Column>

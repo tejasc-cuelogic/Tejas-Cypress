@@ -1,4 +1,4 @@
-import { toJS, observable, action } from 'mobx';
+import { toJS, observable, action, computed } from 'mobx';
 // import graphql from 'mobx-apollo';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
@@ -60,6 +60,13 @@ export class NewBusinessStore {
     this.onFieldChange('BUSINESS_ACCOUNT', fieldName, fieldValue, type);
   };
 
+  @computed get canSubmitApp() {
+    const notOkForms = ['BUSINESS_APP_FRM', 'BUSINESS_DETAILS_FRM', 'BUSINESS_PERF_FRM', 'BUSINESS_DOC_FRM']
+      .filter(form => !this[form].meta.isValid);
+    console.log(notOkForms);
+    return notOkForms.length === 0;
+  }
+
   @action
   onFieldChange = (currentForm, field, value, type) => {
     const form = currentForm || 'formFinInfo';
@@ -106,13 +113,46 @@ export class NewBusinessStore {
   };
 
   @action
-  issuerFiles = (name, files) => {
+  businessDetailsFiles = (name, files) => {
     let uploadedFile = '';
     if (typeof files !== 'undefined' && files.length) {
       uploadedFile = files[0].name;
-      this.onFieldChange('BUSINESS_PRE_QUALIFICATION', name, uploadedFile);
+      this.onFieldChange('BUSINESS_DETAILS_FRM', name, uploadedFile);
     }
   }
+
+  @action
+  businessDetailsReset = (field) => {
+    this.onFieldChange('BUSINESS_DETAILS_FRM', field, '');
+  };
+
+  @action
+  performanceFiles = (name, files) => {
+    let uploadedFile = '';
+    if (typeof files !== 'undefined' && files.length) {
+      uploadedFile = files[0].name;
+      this.onFieldChange('BUSINESS_PERF_FRM', name, uploadedFile);
+    }
+  }
+
+  @action
+  performanceReset = (field) => {
+    this.onFieldChange('BUSINESS_PERF_FRM', field, '');
+  };
+
+  @action
+  docuFiles = (name, files) => {
+    let uploadedFile = '';
+    if (typeof files !== 'undefined' && files.length) {
+      uploadedFile = files[0].name;
+      this.onFieldChange('BUSINESS_DOC_FRM', name, uploadedFile);
+    }
+  }
+
+  @action
+  docuReset = (field) => {
+    this.onFieldChange('BUSINESS_DOC_FRM', field, '');
+  };
 }
 
 export default new NewBusinessStore();

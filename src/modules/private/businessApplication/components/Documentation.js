@@ -16,7 +16,7 @@ export default class Documentation extends Component {
   }
   render() {
     const {
-      BUSINESS_DOC_FRM, businessDocChange, issuerFiles,
+      BUSINESS_DOC_FRM, businessDocChange, docuFiles, docuReset,
     } = this.props.newBusinessStore;
     const { fields } = BUSINESS_DOC_FRM;
     return (
@@ -44,14 +44,16 @@ export default class Documentation extends Component {
                   <FileUploader
                     name="bankStatements"
                     fielddata={fields.bankStatements}
-                    uploadDocument={issuerFiles}
+                    uploadDocument={docuFiles}
+                    removeUploadedDocument={docuReset}
                   />
                 </Grid.Column>
                 <Grid.Column>
                   <FileUploader
                     name="leaseAgreement"
                     fielddata={fields.leaseAgreement}
-                    uploadDocument={issuerFiles}
+                    uploadDocument={docuFiles}
+                    removeUploadedDocument={docuReset}
                   />
                 </Grid.Column>
                 <Grid.Column>
@@ -91,7 +93,8 @@ export default class Documentation extends Component {
               <FileUploader
                 name="personalGuaranteeForm"
                 fielddata={fields.personalGuaranteeForm}
-                uploadDocument={issuerFiles}
+                uploadDocument={docuFiles}
+                removeUploadedDocument={docuReset}
               />
             </FormElementWrap>
             <AppNavigation action={this.submit} />

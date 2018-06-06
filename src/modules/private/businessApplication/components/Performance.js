@@ -15,7 +15,7 @@ export default class Performance extends Component {
   }
   render() {
     const {
-      BUSINESS_PERF_FRM, businessPerfChange, issuerFiles,
+      BUSINESS_PERF_FRM, businessPerfChange, performanceFiles, performanceReset,
     } = this.props.newBusinessStore;
     const { fields } = BUSINESS_PERF_FRM;
     return (
@@ -32,27 +32,19 @@ export default class Performance extends Component {
               subHeader="How has the business been performing, and what are your projections? Upload your financial statements in each section."
             >
               <Grid stackable columns="equal">
-                <Grid.Column>
-                  <FileUploader
-                    name="prior3YrStatement"
-                    fielddata={fields.prior3YrStatement}
-                    uploadDocument={issuerFiles}
-                  />
-                </Grid.Column>
-                <Grid.Column>
-                  <FileUploader
-                    name="ytdStatements"
-                    fielddata={fields.ytdStatements}
-                    uploadDocument={issuerFiles}
-                  />
-                </Grid.Column>
-                <Grid.Column>
-                  <FileUploader
-                    name="fiveYrProjections"
-                    fielddata={fields.fiveYrProjections}
-                    uploadDocument={issuerFiles}
-                  />
-                </Grid.Column>
+                {
+                  ['prior3YrStatement', 'ytdStatements', 'fiveYrProjections'].map(field => (
+                    <Grid.Column>
+                      <FileUploader
+                        key={field}
+                        name={field}
+                        fielddata={fields[field]}
+                        uploadDocument={performanceFiles}
+                        removeUploadedDocument={performanceReset}
+                      />
+                    </Grid.Column>
+                  ))
+                }
               </Grid>
             </FormElementWrap>
             <FormElementWrap
