@@ -73,7 +73,6 @@ export class NewBusinessStore {
   @computed get canSubmitApp() {
     const notOkForms = ['BUSINESS_APP_FRM', 'BUSINESS_DETAILS_FRM', 'BUSINESS_PERF_FRM', 'BUSINESS_DOC_FRM']
       .filter(form => !this[form].meta.isValid);
-    console.log(notOkForms);
     return notOkForms.length === 0;
   }
 

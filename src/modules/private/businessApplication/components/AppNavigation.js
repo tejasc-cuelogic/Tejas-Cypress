@@ -19,7 +19,6 @@ export default class AppNavigation extends Component {
     this.props.history.push(`/app/business-application/${this.state.navItems[this.state.step + where].to}`);
   }
   render() {
-    console.log(this.state.step);
     return (
       <div className="navigation-buttons">
         {this.state.step > 0 &&
@@ -38,7 +37,7 @@ export default class AppNavigation extends Component {
                 <Icon className="ns-arrow-right" />
               </Button>
             </Aux>
-          ) : <Button primary className="very relaxed" content="Submit" />
+          ) : <Button disabled={!this.props.canSubmitApp} primary className="very relaxed" content="Submit" />
           }
         </div>
       </div>
