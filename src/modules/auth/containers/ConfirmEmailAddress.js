@@ -46,6 +46,17 @@ export default class ConfirmEmailAddress extends Component {
     this.props.uiStore.clearErrors();
   }
 
+  handleResendCode = () => {
+    if (this.props.refLink) {
+      this.props.profileStore.requestEmailChange().then(() => {
+        Helper.toast('Re-sent the verification code', 'success');
+      })
+        .catch(() => {});
+    } else {
+      authActions.resendConfirmationCode();
+    }
+  }
+
   render() {
     const changeEmailAddressLink = this.props.refLink ?
       this.props.refLink : '/auth/register-investor';
@@ -87,7 +98,7 @@ export default class ConfirmEmailAddress extends Component {
               <Button primary size="large" className="very relaxed" loading={this.props.uiStore.inProgress} disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Button type="button" className="cancel-link" onClick={() => authActions.resendConfirmationCode()}>Resend the code to my email</Button>
+              <Button type="button" className="cancel-link" onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
             </div>
           </Form>
         </Modal.Content>

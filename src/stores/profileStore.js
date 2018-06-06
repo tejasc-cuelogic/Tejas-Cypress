@@ -391,7 +391,12 @@ export class ProfileStore {
       legalDetails,
       contactDetails,
     } = userDetails;
-    if (legalDetails.legalName !== null) {
+    if (userDetails.firstName) {
+      this.onFieldChange('updateProfileInfo', 'firstName', userDetails.firstName);
+    }
+    if (userDetails.lastName) {
+      this.onFieldChange('updateProfileInfo', 'lastName', userDetails.lastName);
+    } else if (legalDetails.legalName !== null) {
       this.onFieldChange('updateProfileInfo', 'firstName', legalDetails.legalName.firstLegalName);
       this.onFieldChange('updateProfileInfo', 'lastName', legalDetails.legalName.lastLegalName);
     }
@@ -407,10 +412,18 @@ export class ProfileStore {
         this.onFieldChange('updateProfileInfo', 'zipCode', legalDetails.legalAddress.zipCode);
       }
     } else if (address.mailing) {
-      this.onFieldChange('updateProfileInfo', 'street', address.mailing.street);
-      this.onFieldChange('updateProfileInfo', 'city', address.mailing.city);
-      this.onFieldChange('updateProfileInfo', 'state', address.mailing.state);
-      this.onFieldChange('updateProfileInfo', 'zipCode', address.mailing.zipCode);
+      if (address.mailing.street !== null) {
+        this.onFieldChange('updateProfileInfo', 'street', address.mailing.street);
+      }
+      if (address.mailing.city !== null) {
+        this.onFieldChange('updateProfileInfo', 'city', address.mailing.city);
+      }
+      if (address.mailing.state !== null) {
+        this.onFieldChange('updateProfileInfo', 'state', address.mailing.state);
+      }
+      if (address.mailing.zipCode !== null) {
+        this.onFieldChange('updateProfileInfo', 'zipCode', address.mailing.zipCode);
+      }
     }
   }
 
