@@ -1,4 +1,3 @@
-import moment from 'moment';
 import Validator from 'validatorjs';
 
 /* eslint-disable no-unused-vars */
@@ -63,7 +62,7 @@ export const VERIFY_IDENTITY_STEP_01 = {
     rule: 'required|maskedPhoneNumber',
   },
   dateOfBirth: {
-    value: moment(),
+    value: '',
     label: 'Date of Birth',
     error: undefined,
     rule: 'required',
@@ -125,7 +124,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'Phone Number',
     error: undefined,
-    rule: 'required|maskedPhoneNumber',
+    rule: 'string',
     placeHolder: 'Phone Number',
   },
   email: {
@@ -134,5 +133,32 @@ export const UPDATE_PROFILE_INFO = {
     error: undefined,
     rule: 'required|email',
     placeHolder: 'Email',
+  },
+  street: {
+    value: '',
+    label: 'Residential Street',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'Residential Street',
+  },
+  city: {
+    value: '',
+    label: 'City',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'City',
+  },
+  state: {
+    value: '',
+    label: 'State',
+    error: undefined,
+    rule: 'required|string',
+  },
+  zipCode: {
+    value: '',
+    label: 'ZIP Code',
+    error: undefined,
+    rule: 'required|numeric',
+    placeHolder: 'ZIP Code',
   },
 };

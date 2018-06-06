@@ -19,7 +19,7 @@ export default class PersonalInformation extends Component {
     return (
       <div>
         <Header as="h1" textAlign="center">Complete personal info about entity</Header>
-        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Header>
+        <Header as="h4" textAlign="center">Enter the Authorized Signatory Information</Header>
         <Form error>
           <div className="field-wrap">
             <Form.Input
@@ -35,18 +35,28 @@ export default class PersonalInformation extends Component {
               readOnly
             />
             <FormInput
-              name="entityTitle"
-              fielddata={formPersonalInfo.fields.entityTitle}
+              name="title"
+              fielddata={formPersonalInfo.fields.title}
               changed={personalInfoChange}
             />
           </div>
-          <Grid>
-            <FileUploader
-              name="photoId"
-              fielddata={formPersonalInfo.fields.photoId}
-              uploadDocument={personalInfoFileUpload}
-              removeUploadedDocument={personalInfoResetField}
-            />
+          <Grid verticalAlign="middle">
+            <Grid.Row>
+              <Grid.Column width={7}>
+                <Header as="h3">
+                  Upload a Photo ID
+                  <Header.Subheader>Drivers License or Passport</Header.Subheader>
+                </Header>
+              </Grid.Column>
+              <Grid.Column width={9}>
+                <FileUploader
+                  name="legalDocUrl"
+                  fielddata={formPersonalInfo.fields.legalDocUrl}
+                  uploadDocument={personalInfoFileUpload}
+                  removeUploadedDocument={personalInfoResetField}
+                />
+              </Grid.Column>
+            </Grid.Row>
           </Grid>
         </Form>
       </div>

@@ -1,24 +1,46 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import _ from 'lodash';
 
 import MuliStep from '../../../../helper/MultiStep';
 import LinkBankPlaid from './LinkBankPlaid';
 import Summary from './Summary';
 import AddFunds from './AddFunds';
 
-@inject('individualAccountStore', 'uiStore')
+@inject('accountStore', 'individualAccountStore', 'uiStore')
 @observer
 export default class AccountCreation extends React.Component {
+  handleMultiStepModalclose = () => {
+    // this.props.accountStore.resetLinkBankForm();
+    this.props.setDashboardWizardStep();
+  }
+  handleStepChange = (step) => {
+    this.props.individualAccountStore.setStepToBeRendered(step);
+  }
   render() {
     const steps =
     [
-      { name: 'Link Bank', component: <LinkBankPlaid />, isValid: this.props.individualAccountStore.isValidLinkBankAccountForm && typeof this.props.uiStore.errors === 'undefined' ? '' : 'error' },
-      { name: 'Add funds', component: <AddFunds />, isValid: this.props.individualAccountStore.isValidAddFunds ? '' : 'error' },
-      { name: 'Summary', component: <Summary />, isValid: '' },
+      {
+        name: 'Link Bank',
+        component: <LinkBankPlaid />,
+        isValid: '',
+        isDirty: !_.isEmpty(this.props.accountStore.plaidBankDetails) ||
+        this.props.accountStore.formLinkBankManually.meta.isDirty,
+      },
+      {
+        name: 'Add funds',
+        component: <AddFunds />,
+        isValid: this.props.accountStore.isValidAddFunds ? '' : 'error',
+      },
+      {
+        name: 'Summary',
+        component: <Summary />,
+        isValid: '',
+      },
     ];
     return (
       <div className="step-progress">
-        <MuliStep stepToBeRendered={this.props.individualAccountStore.stepToBeRendered} formTitle="Individual Account Creation" steps={steps} setDashboardWizardStep={this.props.setDashboardWizardStep} />
+        <MuliStep setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.individualAccountStore.stepToBeRendered} formTitle="Individual Account Creation" steps={steps} createAccount={this.props.individualAccountStore.createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

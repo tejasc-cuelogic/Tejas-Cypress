@@ -1,4 +1,11 @@
 import moment from 'moment';
+import Validator from 'validatorjs';
+
+/* eslint-disable no-unused-vars */
+/* eslint-disable arrow-body-style */
+Validator.register('taxId', (value, requirement, attribute) => {
+  return value.match(/^\d{3}-\d{2}-\d{4}$/);
+}, 'The :attribute is not in the format XXX-XX-XXXX.');
 
 export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
 
@@ -10,17 +17,6 @@ export const INVESTMENT_ACCOUNT_TYPES = {
   0: 'individual',
   1: 'ira',
   2: 'entity',
-};
-
-export const FUNDING_OPTIONS = {
-  0: 'Check',
-  1: 'IRA Transfer',
-  2: 'Direct Rollover',
-};
-
-export const IRA_ACCOUNT_TYPES = {
-  0: 'Traditional',
-  1: 'Roth',
 };
 
 export const US_STATES = [
@@ -83,16 +79,16 @@ export const US_STATES = [
 ];
 
 export const INDIVIDUAL_ACCOUNT_CREATION = {
-  bankRoutingNumber: {
+  routingNumber: {
     value: '',
-    key: 'bankRoutingNumber',
+    key: 'routingNumber',
     error: undefined,
     rule: 'required|numeric|digits:10',
     label: 'Enter your bank routing number',
   },
-  bankAccountNumber: {
+  accountNumber: {
     value: '',
-    key: 'bankAccountNumber',
+    key: 'accountNumber',
     error: undefined,
     rule: 'required|numeric|digits:12',
     label: 'Enter your bank account number',
@@ -116,26 +112,6 @@ export const IRA_ACCOUNT_CREATION = {
     label: 'Your annual income',
     placeHolder: 'Your annual income',
   },
-  accountType: {
-    value: {
-      activeIndex: 0,
-      type: IRA_ACCOUNT_TYPES[0],
-    },
-    key: 'accountType',
-    error: undefined,
-    rule: 'required|string',
-    label: 'Choose an account type',
-  },
-  fundingOption: {
-    value: {
-      activeIndex: 0,
-      type: FUNDING_OPTIONS[0],
-    },
-    key: 'accountType',
-    error: undefined,
-    rule: 'required|string',
-    label: 'Choose funding option',
-  },
   driversLicence: {
     value: '',
     key: 'driversLicence',
@@ -146,7 +122,8 @@ export const IRA_ACCOUNT_CREATION = {
 };
 
 export const IND_LINK_BANK_MANUALLY = {
-  bankRoutingNumber: {
+  routingNumber: {
+    key: 'routingNumber',
     value: '',
     error: undefined,
     rule: 'required|numeric|digits:10',
@@ -154,7 +131,8 @@ export const IND_LINK_BANK_MANUALLY = {
     tooltip: 'Put your 10 digit bank routing number',
     maxLength: 10,
   },
-  bankAccountNumber: {
+  accountNumber: {
+    key: 'accountNumber',
     value: '',
     error: undefined,
     rule: 'required|numeric|digits:12',
@@ -222,20 +200,18 @@ export const IND_BANK_LIST = [
 ];
 
 export const IRA_ACC_TYPES = {
-  accountType: {
+  iraAccountType: {
     value: 0,
     values: [
       {
         label: 'Traditional',
         value: 0,
-        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Traditional!,
-        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+        description: 'Earnings grow tax-deferred',
       },
       {
         label: 'Roth',
         value: 1,
-        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Roth!,
-        sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+        description: 'Earnings grow tax-deferred',
       },
     ],
     error: undefined,
@@ -244,7 +220,7 @@ export const IRA_ACC_TYPES = {
 };
 
 export const IRA_FUNDING = {
-  fundingOption: {
+  fundingType: {
     value: 0,
     values: [
       {
@@ -272,103 +248,107 @@ export const IRA_FUNDING = {
 };
 
 export const IRA_FIN_INFO = {
-  networth: {
+  netWorth: {
+    key: 'netWorth',
     value: '',
     error: undefined,
     rule: 'required|numeric',
-    label: 'Your networth',
+    label: 'Net worth',
     placeHolder: 'Your networth',
+    maxLength: 15,
   },
   annualIncome: {
+    key: 'annualIncome',
     value: '',
     error: undefined,
     rule: 'required|numeric',
-    label: 'Your annual income',
+    label: 'Annual income',
     placeHolder: 'Your annual income',
+    maxLength: 15,
   },
 };
 
 export const IRA_IDENTITY = {
-  driversLicence: {
+  identityDoc: {
     value: '',
-    key: 'driversLicence',
+    key: 'identityDoc',
     error: undefined,
     rule: 'required',
     label: '',
   },
 };
 
-export const IS_ENTITY_TRUST = {
-  0: 'yes',
-  1: 'no',
-};
-
 export const ENTITY_FIN_INFO = {
-  entityNetAssets: {
+  netAssets: {
+    key: 'netAssets',
     value: '',
     label: 'Entity Net Assets',
     error: undefined,
     rule: 'required|numeric',
+    maxLength: 15,
   },
-  cfInvestments: {
+  cfInvestment: {
+    key: 'cfInvestment',
     value: '',
-    label: 'Other religion CF investments made in prior 12 months',
+    label: 'Entity Annual Income',
     error: undefined,
     rule: 'required|numeric',
+    maxLength: 15,
   },
 };
 
 export const ENTITY_GEN_INFO = {
-  nameOfEntity: {
-    value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
+  name: {
+    key: 'name', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
   },
   taxId: {
-    value: '', label: 'Tax ID', error: undefined, rule: 'required', placeHolder: 'e.g. 12345',
+    key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required|taxId', placeHolder: 'e.g. 12345',
   },
   street: {
-    value: '', label: 'Street', error: undefined, rule: 'required|string',
+    key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
   },
   city: {
-    value: '', label: 'City', error: undefined, rule: 'required|string',
+    key: 'city', value: '', label: 'City', error: undefined, rule: 'required|string',
   },
   state: {
-    value: '', label: 'State', error: undefined, rule: 'required|string',
+    key: 'state', value: '', label: 'State', error: undefined, rule: 'required|string',
   },
   zipCode: {
-    value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric',
+    key: 'zipCode', value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric',
   },
 };
 
 export const ENTITY_TRUST_INFO = {
-  isEntityTrust: {
-    value: 'yes',
-    values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
+  isTrust: {
+    key: 'isTrust',
+    value: true,
+    values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
     error: undefined,
     rule: 'required',
   },
-  dateOfTrust: {
-    value: moment(), error: undefined, rule: 'required', label: 'Date of Trust',
+  trustDate: {
+    key: 'trustDate', value: moment(), error: undefined, rule: 'required', label: 'Date of Trust',
   },
 };
 
 export const ENTITY_PERSONAL_INFO = {
-  entityTitle: {
-    value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
+  title: {
+    key: 'title', value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
   },
-  photoId: {
-    value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID', sublabel: 'Drivers License or Passport',
+  legalDocUrl: {
+    key: 'legalDocUrl', value: '', error: undefined, rule: 'required',
   },
 };
 
 export const ENTITY_FORMATION_DOCS = {
-  entityFormationDocument: {
-    value: '', error: undefined, rule: 'required', label: 'Entity Formation Document',
+  formationDoc: {
+    key: 'formationDoc', value: '', error: undefined, rule: 'required',
   },
-  entityOperatingDocument: {
-    value: '', error: undefined, rule: 'required', label: 'Entity Operating Document',
+  operatingAgreementDoc: {
+    key: 'operatingAgreementDoc', value: '', error: undefined, rule: 'required',
   },
-  einVerification: {
-    value: '', error: undefined, rule: 'required', label: 'EIN Verification',
+  einVerificationDoc: {
+    key: 'einVerificationDoc', value: '', error: undefined, rule: 'required',
   },
 };
 

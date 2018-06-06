@@ -1,19 +1,23 @@
 import { observable, action, computed } from 'mobx';
 import _ from 'lodash';
+import Validator from 'validatorjs';
+import mapValues from 'lodash/mapValues';
 
 import {
   INVESTMENT_ACCOUNT_TYPES,
-  IRA_ACCOUNT_TYPES,
-  FUNDING_OPTIONS,
   INDIVIDUAL_ACCOUNT_CREATION,
   IRA_ACCOUNT_CREATION,
-  IS_ENTITY_TRUST,
   ENTITY_ACCOUNT_CREATION,
+  IND_ADD_FUND,
+  IND_BANK_ACC_SEARCH,
+  IND_LINK_BANK_MANUALLY,
 } from '../constants/account';
+import { GqlClient as client } from '../services/graphql';
+import { getPlaidAccountdata } from '../stores/queries/account';
+import userStore from './userStore';
+import uiStore from './uiStore';
 
 export class AccountStore {
-  @observable bankLinkInterface = 'list';
-
   @observable accountType = {
     activeIndex: 0,
     type: INVESTMENT_ACCOUNT_TYPES[0],
@@ -24,6 +28,136 @@ export class AccountStore {
   @observable iraAccount = { ...IRA_ACCOUNT_CREATION }
 
   @observable entityAccount = { ...ENTITY_ACCOUNT_CREATION }
+
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
+
+  @observable
+  bankListing = undefined;
+
+  @observable
+  plaidAccDetails = {};
+
+  @observable
+  plaidBankDetails = {};
+
+  @observable
+  nsAccId = '';
+
+  @observable bankLinkInterface = 'list';
+
+  @observable
+  formLinkBankManually = {
+    fields: { ...IND_LINK_BANK_MANUALLY }, meta: { isValid: false, error: '' },
+  }
+
+  @observable
+  formAddFunds = {
+    fields: { ...IND_ADD_FUND }, meta: { isValid: false, error: '' },
+  };
+
+  @observable
+  formBankSearch = {
+    fields: { ...IND_BANK_ACC_SEARCH }, meta: { isValid: false, error: '' },
+  };
+
+  @observable
+  accountTypeCreated = undefined;
+
+  @action
+  setAccountTypeCreated = (accountType) => {
+    this.accountTypeCreated = accountType;
+  }
+
+  @action
+  setBankLinkInterface(mode) {
+    this.bankLinkInterface = mode;
+  }
+
+  @action
+  addFundChange = (e, { name, value }) => {
+    this.onFieldChange('formAddFunds', name, value);
+  };
+
+  @computed
+  get isValidAddFunds() {
+    return _.isEmpty(this.formAddFunds.fields.value.error);
+  }
+
+  @computed
+  get isValidLinkBankAccountForm() {
+    return _.isEmpty(this.formLinkBankManually.fields.routingNumber.error) &&
+    _.isEmpty(this.formLinkBankManually.fields.accountNumber.error) &&
+    !_.isEmpty(this.formLinkBankManually.fields.routingNumber.value) &&
+    !_.isEmpty(this.formLinkBankManually.fields.accountNumber.value);
+  }
+
+  @computed
+  get isValidLinkBankPlaid() {
+    if (_.isEmpty(this.plaidBankDetails)) {
+      return false;
+    }
+    return true;
+  }
+
+  @action
+  bankSearchChange = (e, { name, value }) => {
+    this.onFieldChange('formBankSearch', name, value);
+  };
+
+  @action
+  linkBankManuallyChange = (e, { name, value }) => {
+    this.onFieldChange('formLinkBankManually', name, value);
+  };
+
+  @action
+  onFieldChange = (currentForm, field, value) => {
+    const form = currentForm || 'formAddFunds';
+    if (field) {
+      if (typeof value !== 'undefined') {
+        this[form].fields[field].value = value;
+      }
+    }
+    const validation = new Validator(
+      mapValues(this[form].fields, f => f.value),
+      mapValues(this[form].fields, f => f.rule),
+    );
+    this[form].meta.isValid = validation.passes();
+    this[form].meta.isDirty = true;
+    if (field) {
+      if (typeof value !== 'undefined') {
+        this[form].fields[field].error = validation.errors.first(field);
+      }
+    }
+  };
+
+  @action
+  setAccountError = (form, key, error) => {
+    this[form].fields[key].error = error;
+  }
+
+  @action
+  setBankListing = (bankData) => {
+    this.bankListing = bankData;
+  }
+
+  @action
+  setPlaidAccDetails = (plaidAccDetails) => {
+    this.plaidAccDetails = plaidAccDetails;
+  }
+
+  @action
+  setPlaidBankDetails = (plaidBankDetails) => {
+    this.plaidBankDetails = plaidBankDetails;
+  }
+
+  @action
+  setNsAccId = (nsAccId) => {
+    this.nsAccId = nsAccId;
+  }
+
+  /**
+   * Link BANK Account
+   */
 
   @computed
   get routeOnInvestmentTypeSelection() {
@@ -37,95 +171,48 @@ export class AccountStore {
   }
 
   @action
-  setBankLinkInterface(mode) {
-    this.bankLinkInterface = mode;
+  resetLinkBankForm() {
+    Object.keys(this.formLinkBankManually.fields).map((field) => {
+      this.formLinkBankManually.fields[field].value = '';
+      this.formLinkBankManually.fields[field].error = undefined;
+      return true;
+    });
+    this.formLinkBankManually.meta.isValid = false;
+    this.formLinkBankManually.meta.error = '';
   }
 
-  @action
-  setIndividualAccountDetails(field, value) {
-    this.individualAccount[field].value = value;
+  /* eslint-disable arrow-body-style */
+  getPlaidAccountData = () => {
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: getPlaidAccountdata,
+          variables: {
+            userId: userStore.currentUser.sub,
+            plaidPublicToken:
+             _.isEmpty(this.plaidAccDetails) ? '' : this.plaidAccDetails.public_token,
+            plaidAccountId:
+             _.isEmpty(this.plaidAccDetails) ? '' : this.plaidAccDetails.account_id,
+            bankName:
+             _.isEmpty(this.plaidAccDetails) ? '' : this.plaidAccDetails.institution.name,
+            accountType: this.accountType.type,
+          },
+        })
+        .then((result) => {
+          this.setPlaidBankDetails(result.data.plaidGetValidatedAccountData);
+          resolve();
+        })
+        .catch(action((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject();
+        }));
+    });
   }
 
-  @action
-  setIndividualAccountError(field, error) {
-    this.individualAccount[field].error = error;
-  }
-
-  @action
-  setIraAccountDetails(field, value) {
-    this.iraAccount[field].value = value;
-  }
-
-  @action
-  setIraAccountError(field, error) {
-    this.iraAccount[field].error = error;
-  }
-
-  @action
-  setIraAccountType(type) {
-    const field = 'accountType';
-    const value = {
-      activeIndex: type,
-      type: IRA_ACCOUNT_TYPES[type],
-    };
-    this.setIraAccountDetails(field, value);
-  }
-
-  @action
-  setIraFundingOption(option) {
-    const field = 'fundingOption';
-    const value = {
-      activeIndex: option,
-      type: FUNDING_OPTIONS[option],
-    };
-    this.setIraAccountDetails(field, value);
-  }
-
-  @computed
-  get isValidIraFinancialInformation() {
-    return _.isEmpty(this.iraAccount.networth.error) &&
-    _.isEmpty(this.iraAccount.annualIncome.error);
-  }
-
-  @action
-  setEntityAccountDetails(field, value) {
-    this.entityAccount[field].value = value;
-  }
-
-  @action
-  setEntityAccountError(field, error) {
-    this.entityAccount[field].error = error;
-  }
-
-  @action
-  setIsEntityTrust(option) {
-    const field = 'isEntityTrust';
-    const value = {
-      activeIndex: option,
-      type: IS_ENTITY_TRUST[option],
-    };
-    this.setEntityAccountDetails(field, value);
-  }
-
-  @computed
-  get fullAddress() {
-    /**
-     * @todo Push all values in array and use join for display.
-     */
-    let address = '';
-    if (this.entityAccount.street.value !== '') {
-      address = this.entityAccount.street.value;
-    }
-    if (this.entityAccount.city.value !== '') {
-      address += this.entityAccount.street.value !== '' ? `, ${this.entityAccount.city.value}` : this.entityAccount.city.value;
-    }
-    if (this.entityAccount.state.value !== '') {
-      address += this.entityAccount.city.value !== '' ? `, ${this.entityAccount.state.value}` : this.entityAccount.state.value;
-    }
-    if (this.entityAccount.zipCode.value !== '') {
-      address += this.entityAccount.state.value !== '' ? `, ${this.entityAccount.zipCode.value}` : this.entityAccount.zipCode.value;
-    }
-    return address;
-  }
+  simpleErr = err => ({
+    statusCode: err.statusCode,
+    code: err.code,
+    message: err.message,
+  });
 }
 export default new AccountStore();

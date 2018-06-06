@@ -1,44 +1,14 @@
-import { action, observable, computed } from 'mobx';
-import Validator from 'validatorjs';
-import mapValues from 'lodash/mapValues';
+import { action, observable } from 'mobx';
 import _ from 'lodash';
+import userDetailsStore from './userDetailsStore';
+import accountStore from '../accountStore';
 import userStore from '../userStore';
 import uiStore from '../uiStore';
-import {
-  IND_ADD_FUND,
-  IND_BANK_ACC_SEARCH,
-  IND_LINK_BANK_MANUALLY,
-} from '../../constants/account';
 import { GqlClient as client } from '../../services/graphql';
-import { createUserAccountIndividual, finalizeIndividualAccount } from '../queries/account';
+import { createAccount, updateAccount } from '../queries/account';
+import Helper from '../../helper/utility';
 
 class IndividualAccountStore {
-  @observable bankLinkInterface = 'list';
-
-  @observable
-  formLinkBankManually = {
-    fields: { ...IND_LINK_BANK_MANUALLY }, meta: { isValid: false, error: '' },
-  }
-
-  @observable
-  formAddFunds = {
-    fields: { ...IND_ADD_FUND }, meta: { isValid: false, error: '' },
-  };
-
-  @observable
-  formBankSearch = {
-    fields: { ...IND_BANK_ACC_SEARCH }, meta: { isValid: false, error: '' },
-  };
-
-  @observable
-  bankListing = undefined;
-
-  @observable
-  plaidAccDetails = {};
-
-  @observable
-  nsAccId = '';
-
   @observable
   stepToBeRendered = '';
 
@@ -47,105 +17,132 @@ class IndividualAccountStore {
     this.stepToBeRendered = step;
   }
 
+  @observable
+  investorAccId = '';
+
+  @observable
+  depositMoneyNow = true;
+
   @action
-  setBankLinkInterface(mode) {
-    this.bankLinkInterface = mode;
+  setDepositMoneyNow(status) {
+    this.depositMoneyNow = status;
   }
 
   @action
-  addFundChange = (e, { name, value }) => {
-    this.onFieldChange('formAddFunds', name, value);
-  };
-
-  @computed
-  get isValidAddFunds() {
-    return _.isEmpty(this.formAddFunds.fields.value.error);
+  setInvestorAccId(id) {
+    this.investorAccId = id;
   }
 
-  @computed
-  get isValidLinkBankAccountForm() {
-    return _.isEmpty(this.formLinkBankManually.fields.bankRoutingNumber.error) &&
-    _.isEmpty(this.formLinkBankManually.fields.bankAccountNumber.error);
-  }
-
-  @action
-  bankSearchChange = (e, { name, value }) => {
-    this.onFieldChange('formBankSearch', name, value);
-  };
-
-  @action
-  linkBankManuallyChange = (e, { name, value }) => {
-    this.onFieldChange('formLinkBankManually', name, value);
-  };
-
-  @action
-  onFieldChange = (currentForm, field, value) => {
-    const form = currentForm || 'formAddFunds';
-    this[form].fields[field].value = value;
-    const validation = new Validator(
-      mapValues(this[form].fields, f => f.value),
-      mapValues(this[form].fields, f => f.rule),
-    );
-    this[form].meta.isValid = validation.passes();
-    this[form].fields[field].error = validation.errors.first(field);
-  };
-
-  @action
-  setBankListing = (bankData) => {
-    this.bankListing = bankData;
-  }
-
-  @action
-  setPlaidAccDetails = (plaidAccDetails) => {
-    this.plaidAccDetails = plaidAccDetails;
-  }
-
-  @action
-  setNsAccId = (nsAccId) => {
-    this.nsAccId = nsAccId;
+  /* eslint-disable class-methods-use-this */
+  accountAttributes() {
+    const accountAttributes = {};
+    if (accountStore.bankLinkInterface === 'list' && !_.isEmpty(accountStore.plaidBankDetails)) {
+      accountAttributes.plaidAccessToken = accountStore.plaidBankDetails.plaidAccessToken;
+      accountAttributes.plaidAccountId = accountStore.plaidBankDetails.plaidAccountId;
+      accountAttributes.bankName = accountStore.plaidBankDetails.bankName;
+      accountAttributes.accountNumber = accountStore.plaidBankDetails.accountNumber;
+      accountAttributes.routingNumber = accountStore.plaidBankDetails.routingNumber;
+      accountAttributes.plaidItemId = accountStore.plaidBankDetails.plaidItemId;
+    } else {
+      const { accountNumber, routingNumber } = accountStore.formLinkBankManually.fields;
+      accountAttributes.accountNumber = accountNumber.value;
+      accountAttributes.routingNumber = routingNumber.value;
+    }
+    return accountAttributes;
   }
 
   /* eslint-disable arrow-body-style */
-  createAccount = () => {
+  createAccount = (currentStep, formStatus = 'draft') => {
+    uiStore.setProgress();
+    let mutation = createAccount;
+    let variables = {
+      userId: userStore.currentUser.sub,
+      accountAttributes: this.accountAttributes(),
+      status: formStatus,
+      accountType: 'individual',
+    };
+    let actionPerformed = 'submitted';
+    if (userDetailsStore.currentUser.data) {
+      const accountDetails = _.find(
+        userDetailsStore.currentUser.data.user.accounts,
+        { accountType: 'individual' },
+      );
+      if (accountDetails) {
+        mutation = updateAccount;
+        variables = {
+          userId: userStore.currentUser.sub,
+          accountId: accountDetails.accountId,
+          accountAttributes: this.accountAttributes(),
+          status: formStatus,
+          accountType: 'individual',
+        };
+        actionPerformed = 'updated';
+      }
+    }
+    if (this.investorAccId) {
+      mutation = updateAccount;
+      variables = {
+        userId: userStore.currentUser.sub,
+        accountId: this.investorAccId,
+        accountAttributes: this.accountAttributes(),
+        status: formStatus,
+        accountType: 'individual',
+      };
+      actionPerformed = 'updated';
+    }
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: createUserAccountIndividual,
-          variables: {
-            userId: userStore.currentUser.sub,
-            plaidPublicToken: _.isEmpty(this.plaidAccDetails) ? '' : this.plaidAccDetails.public_token,
-            plaidAccountId: _.isEmpty(this.plaidAccDetails) ? '' : this.plaidAccDetails.account_id,
-            bankName: _.isEmpty(this.plaidAccDetails) ? '' : this.plaidAccDetails.institution.name,
-            accountNumber: this.formLinkBankManually.fields.bankAccountNumber.value,
-            routingNumber: this.formLinkBankManually.fields.bankRoutingNumber.value,
-            accountType: 'individual',
-          },
+          mutation,
+          variables,
         })
-        .then(result => this.setNsAccId(result.data.createIndividualAccount.accountId), resolve())
+        .then((result) => {
+          if (result.data.createInvestorAccount) {
+            this.setInvestorAccId(result.data.createInvestorAccount.accountId);
+            accountStore.setAccountTypeCreated(result.data.createInvestorAccount.accountType);
+          } else {
+            accountStore.setAccountTypeCreated(result.data.updateInvestorAccount.accountType);
+          }
+          if (formStatus === 'submit') {
+            Helper.toast('Individual account created successfully.', 'success');
+          } else if (currentStep) {
+            Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+          } else {
+            Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
+          }
+          resolve(result);
+        })
         .catch(action((err) => {
           uiStore.setErrors(this.simpleErr(err));
           reject();
-        }));
+        }))
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
     });
   }
 
-  finalizeAccount = () => {
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: finalizeIndividualAccount,
-          variables: {
-            userId: userStore.currentUser.sub,
-            accountId: this.nsAccId,
-            funds: this.formAddFunds.fields.value.value ? this.formAddFunds.fields.value.value : 0,
-          },
-        })
-        .then(() => resolve())
-        .catch(action((err) => {
-          uiStore.setErrors(this.simpleErr(err));
-          reject();
-        }));
-    });
+  @action
+  populateData = (userData) => {
+    if (!_.isEmpty(userData)) {
+      const account = _.find(
+        userData.accounts,
+        { accountType: 'individual' },
+      );
+      if (account) {
+        if (account.accountDetails.plaidItemId) {
+          const plaidAccDetails = {};
+          plaidAccDetails.account_id = account.accountDetails.accountNumber;
+          accountStore.setPlaidAccDetails(plaidAccDetails);
+        } else {
+          Object.keys(accountStore.formLinkBankManually.fields).map((f) => {
+            accountStore.formLinkBankManually.fields[f].value = account.accountDetails[f];
+            return accountStore.formLinkBankManually.fields[f];
+          });
+          accountStore.onFieldChange('formLinkBankManually');
+        }
+      }
+    }
   }
 
   simpleErr = err => ({

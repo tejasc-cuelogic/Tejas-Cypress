@@ -2,31 +2,38 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
-import { FormSelect, FormInput, MaskedInput } from '../../../../theme/form/FormElements';
-import { US_STATES } from '../../../../constants/account'; //  added Temperarily to update UI as per new layout
+import { FormSelect, FormInput, MaskedInput, AutoComplete } from '../../../../theme/form/FormElements';
+import { US_STATES } from '../../../../constants/account';
 
 import UserVerifiedDetails from '../components/UserVerifiedDetails';
 import NewPhoneNumber from './NewPhoneNumber';
 import NewEmailAddress from './NewEmailAddress';
-
-const states = {
-  label: 'State',
-  error: undefined,
-};
+import Helper from '../../../../helper/utility';
 
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore')
 @observer
 export default class ProfileData extends Component {
   componentWillMount() {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-    this.props.profileStore.setProfileInfo(this.props.userStore.currentUser);
+    this.props.profileStore.setProfileInfo(this.props.userDetailsStore.userDetails);
   }
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
   }
+  handleUpdateProfileInfo = (e) => {
+    e.preventDefault();
+    this.props.profileStore.updateUserProfileData().then(() => {
+      Helper.toast('Investor profile has been updated.', 'success');
+    })
+      .catch(() => {});
+  }
   render() {
     const { email, legalDetails } = this.props.userDetailsStore.userDetails;
-    const { updateProfileInfo, updateProfileInfoChange } = this.props.profileStore;
+    const {
+      updateProfileInfo,
+      updateProfileInfoChange,
+      setAddressFields,
+    } = this.props.profileStore;
     return (
       <Grid>
         <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
@@ -35,7 +42,7 @@ export default class ProfileData extends Component {
           <Grid.Column widescreen={8} largeScreen={10} tablet={16} mobile={16}>
             <Card fluid className="form-card">
               <Header as="h3">Personal Profile</Header>
-              <Form>
+              <Form onSubmit={this.handleUpdateProfileInfo}>
                 <Form.Group widths="equal">
                   {['firstName', 'lastName'].map(field => (
                     <FormInput
@@ -69,11 +76,29 @@ export default class ProfileData extends Component {
                   readOnly
                 />
                 <Header as="h4">Mailing Address</Header>
-                <Form.Input fluid label="Residendial Street" placeholder="Residendial Street" value="123, East Street, Place" />
+                <AutoComplete
+                  name="street"
+                  fielddata={updateProfileInfo.fields.street}
+                  onplaceselected={setAddressFields}
+                  changed={updateProfileInfoChange}
+                />
                 <Form.Group widths="equal">
-                  <Form.Input fluid label="City" placeholder="City" value="Atlanta" />
-                  <FormSelect label="State" name="state" fielddata={states} options={US_STATES} />
-                  <Form.Input fluid label="ZIP code" placeholder="ZIP code" />
+                  <FormInput
+                    name="city"
+                    fielddata={updateProfileInfo.fields.city}
+                    changed={updateProfileInfoChange}
+                  />
+                  <FormSelect
+                    name="state"
+                    fielddata={updateProfileInfo.fields.state}
+                    options={US_STATES}
+                    changed={updateProfileInfoChange}
+                  />
+                  <FormInput
+                    name="zipCode"
+                    fielddata={updateProfileInfo.fields.zipCode}
+                    changed={updateProfileInfoChange}
+                  />
                 </Form.Group>
                 <Button inverted color="green" disabled={!updateProfileInfo.meta.isValid}>Update profile info</Button>
               </Form>

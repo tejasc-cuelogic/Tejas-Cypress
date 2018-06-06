@@ -98,6 +98,9 @@ export class AuthStore {
 
   @observable CHANGE_PASS_FRM = { fields: { ...CHANGE_PASS }, meta: { isValid: false, error: '' } };
 
+  @observable
+  isInvestmentAccountCreated = false;
+
   @computed get canRegister() {
     return _.isEmpty(_.filter(this.values, field => field.error));
   }
@@ -273,6 +276,20 @@ export class AuthStore {
   @action
   resetForm() {
     this.CHANGE_PASS_FRM = { fields: { ...CHANGE_PASS }, meta: { isValid: false, error: '' } };
+  }
+
+  @action
+  checkIsInvestmentAccountCreated = (userData) => {
+    if (userData !== null) {
+      if (userData.accounts && userData.accounts.length > 0) {
+        const investmentAccountCreated = _.find(
+          userData.accounts,
+          { status: 'FULL' },
+        );
+        this.isInvestmentAccountCreated = investmentAccountCreated;
+      }
+    }
+    return this.isInvestmentAccountCreated;
   }
 }
 

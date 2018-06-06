@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form/FormElements';
@@ -10,16 +11,20 @@ export default class FinancialInformation extends Component {
     const { formFinInfo, finInfoChange } = this.props.entityAccountStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">Complete financial info about entity</Header>
-        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
+        <Header as="h1" textAlign="center">Calculating your Entity`s <br /> investment limit</Header>
+        <Header as="h4" textAlign="center">
+        Your entity`s net assets and annual income are used to determine its <br />
+        12-month investment limit. <Link to="/app/summary" className="link">How is this calculated?</Link>
+        </Header>
         <Form error>
           <div className="field-wrap">
             {
-              ['entityNetAssets', 'cfInvestments'].map(field => (
+              ['netAssets', 'cfInvestment'].map(field => (
                 <FormInput
-                  type="text"
-                  fielddata={formFinInfo.fields[field]}
+                  key={field}
                   name={field}
+                  fielddata={formFinInfo.fields[field]}
+                  maxLength={formFinInfo.fields[field].maxLength}
                   changed={finInfoChange}
                   prefix="$"
                 />

@@ -8,7 +8,7 @@ import LinkBankForm from './LinkBankForm';
 import defaultBankLogo from '../../../../assets/images/banks/default.png';
 import { IND_BANK_LIST } from '../../../../constants/account';
 
-@inject('individualAccountStore', 'uiStore')
+@inject('accountStore', 'uiStore')
 @withRouter
 @observer
 export default class LinkBankPlaid extends Component {
@@ -18,7 +18,7 @@ export default class LinkBankPlaid extends Component {
       formBankSearch,
       bankSearchChange,
       bankListing,
-    } = this.props.individualAccountStore;
+    } = this.props.accountStore;
     const { inProgress } = this.props.uiStore;
     if (bankLinkInterface === 'form') {
       return <LinkBankForm />;
@@ -88,7 +88,7 @@ export default class LinkBankPlaid extends Component {
           }
         </div>
         <div className="center-align">
-          <Button className="theme-link" primary onClick={() => this.props.individualAccountStore.setBankLinkInterface('form')}>or enter it manually</Button>
+          <Button className="theme-link" primary onClick={() => this.props.accountStore.setBankLinkInterface('form')}>or enter it manually</Button>
         </div>
       </div>
     );

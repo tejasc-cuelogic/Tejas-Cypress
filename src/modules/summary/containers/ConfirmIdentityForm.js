@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
-import { Modal, Grid, Button, Header, Form, Divider, Icon } from 'semantic-ui-react';
+import { Modal, Grid, Button, Header, Form, Divider } from 'semantic-ui-react';
 import { FormSelect } from '../../../theme/form/FormElements';
 import Helper from '../../../helper/utility';
 
@@ -10,14 +10,21 @@ import Helper from '../../../helper/utility';
 @withRouter
 @observer
 export default class ConfirmIdentityForm extends Component {
+  handleCloseModal = () => {
+    this.props.setDashboardWizardStep();
+    this.props.profileStore.reset();
+    this.props.uiStore.clearErrors();
+  }
   handleIdentityQuestionsSubmit = (e) => {
     e.preventDefault();
     this.props.profileStore.submitConfirmIdentityQuestions().then((result) => {
       /* eslint-disable no-underscore-dangle */
       if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
         Helper.toast('Identity questions verified.', 'success');
-        this.props.profileStore.startPhoneVerification();
-        this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+        this.props.profileStore.startPhoneVerification().then(() => {
+          this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+        })
+          .catch(() => {});
       } else {
         Helper.toast('Identity questions not verified.', 'error');
         this.props.setDashboardWizardStep('ConfirmIdentityDocuments');
@@ -28,14 +35,12 @@ export default class ConfirmIdentityForm extends Component {
   render() {
     const { verifyIdentity02, identityQuestionAnswerChange } = this.props.profileStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.props.setDashboardWizardStep()}>
+      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">We need to confirm your identity</Header>
-          <Link to={this.props.match.url} className="back-link" onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}><Icon className="ns-arrow-left" /></Link>
           <Divider />
           <p>
-            Please answer the questions below or<br />
-            <Link to={this.props.match.url} onClick={() => this.props.setDashboardWizardStep('InvestorPersonalDetails')}>update your address</Link>
+            Please answer the questions below
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
@@ -59,7 +64,7 @@ export default class ConfirmIdentityForm extends Component {
               <Button loading={this.props.uiStore.inProgress} color="green" size="large" className="relaxed" disabled={!verifyIdentity02.meta.isValid}>Verify my identity</Button>
             </div>
             <div className="center-align">
-              <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>
+              <Button className="cancel-link" onClick={() => this.handleCloseModal()}>I’ll finish this later</Button>
             </div>
           </Form>
         </Modal.Content>

@@ -9,14 +9,26 @@ import { NavItems } from './NavigationItems';
 @withRouter
 export class SidebarNav extends Component {
   render() {
-    const { roles, location } = this.props;
+    const {
+      roles,
+      location,
+      isVerified,
+      createdAccount,
+    } = this.props;
     const navItems = _.filter(
       ALL_NAV_ITEMS,
       n => n.to !== 'profile-settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
     );
     return (
       <Aux>
-        <NavItems location={location} navItems={navItems} isApp />
+        <NavItems
+          location={location}
+          navItems={navItems}
+          roles={roles}
+          isUserVerified={isVerified}
+          createdAccount={createdAccount}
+          isApp
+        />
         <Menu.Item key="logout" name="logout" onClick={this.props.handleLogOut}>
           <Icon name="sign out" />
           <span>Logout</span>

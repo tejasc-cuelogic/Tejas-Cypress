@@ -7,12 +7,12 @@ import ListErrors from '../../../theme/common/ListErrors';
 import validationActions from '../../../actions/validation';
 import FieldError from '../../../theme/common/FieldError';
 
-@inject('authStore', 'uiStore', 'userStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 class Login extends Component {
   componentWillUnmount() {
-    this.props.uiStore.clearErrors();
+    // this.props.uiStore.clearErrors();
     this.props.authStore.reset();
   }
 
@@ -25,7 +25,11 @@ class Login extends Component {
           this.props.history.push('/change-password');
         } else {
           this.props.authStore.reset();
-          this.props.history.replace('/app/dashboard');
+          if (this.props.authStore.isInvestmentAccountCreated) {
+            this.props.history.replace('/app/dashboard');
+          } else {
+            this.props.history.replace('/app/summary');
+          }
         }
       });
   };

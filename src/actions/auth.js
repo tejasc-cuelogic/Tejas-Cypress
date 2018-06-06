@@ -14,6 +14,7 @@ import authStore from './../stores/authStore';
 import commonStore from './../stores/commonStore';
 import adminStore from '../stores/adminStore';
 import uiStore from '../stores/uiStore';
+import userDetailsStore from '../stores/user/userDetailsStore';
 import Helper from '../helper/utility';
 
 /**
@@ -169,6 +170,7 @@ export class Auth {
           // Extract JWT from token
           commonStore.setToken(data.idToken.jwtToken);
           userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+          userDetailsStore.getUser(userStore.currentUser.sub);
           AWS.config.region = AWS_REGION;
           // Check if currentUser has admin role, if user has admin role set admin access to user
           if (userStore.isCurrentUserWithRole('admin')) {

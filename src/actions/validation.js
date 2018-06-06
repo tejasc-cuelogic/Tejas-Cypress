@@ -6,13 +6,15 @@ import businessStore from './../stores/businessStore';
 import userStore from './../stores/userStore';
 import profileStore from './../stores/profileStore';
 import accountStore from './../stores/accountStore';
+import iraAccountStore from './../stores/user/iraAccountStore';
+import entityAccountStore from './../stores/user/entityAccountStore';
+
 import { REGISTRATION,
   PROFILE_DETAILS,
   CONDITIONAL_REQUIRE,
   CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE,
   CONFIRM_PHONE_NUMBER_VERIFICATION_CODE,
   CONFIRM_IDENTITY_QUESTIONS,
-  LINK_BANK_ACCCOUNT_FORM,
   CONFIRM_IDENTITY_DOCUMENTS_FORM } from './../constants/validation';
 
 /**
@@ -323,30 +325,6 @@ export class Validation {
   }
 
   /**
-   * @desc validates Individual Account's fields on change.
-   * @param string $field - field on form that need to be validated
-   * @param string $value - value that need to be set to field
-   * @return null
-   */
-  validateIndividualAccountField = (field, value) => {
-    accountStore.setIndividualAccountDetails(field, value);
-    const { errors } = validationService.validate(accountStore.individualAccount[field]);
-    accountStore.setIndividualAccountError(field, errors && errors[field][0]);
-  }
-
-  /**
-   * @desc validates IRA Account's fields on change.
-   * @param string $field - field on form that need to be validated
-   * @param string $value - value that need to be set to field
-   * @return null
-   */
-  validateIraAccountField = (field, value) => {
-    accountStore.setIraAccountDetails(field, value);
-    const { errors } = validationService.validate(accountStore.iraAccount[field]);
-    accountStore.setIraAccountError(field, errors && errors[field][0]);
-  }
-
-  /**
    * @desc validates Entity Account's fields on change.
    * @param string $field - field on form that need to be validated
    * @param string $value - value that need to be set to field
@@ -356,21 +334,6 @@ export class Validation {
     accountStore.setEntityAccountDetails(field, value);
     const { errors } = validationService.validate(accountStore.entityAccount[field]);
     accountStore.setEntityAccountError(field, errors && errors[field][0]);
-  }
-
-  /**
-   * @desc Validates Link Bank Account Form for Individual
-   */
-  validateLinkBankAccountForm = () => {
-    _.map(accountStore.individualAccount, (value) => {
-      const { key } = value;
-      // Select only required values and exclude others from being checked
-      if (LINK_BANK_ACCCOUNT_FORM.includes(key)) {
-        const { errors } = validationService.validate(value);
-        // Store errors to store if any or else `undefined` will get set to it
-        accountStore.setIndividualAccountError(key, errors && errors[key][0]);
-      }
-    });
   }
 
   /**
@@ -399,6 +362,102 @@ export class Validation {
       }
     });
   }
+
+  /**
+  * @desc Validates IRA - financial info after clicking next/submit button
+  * @return null
+  */
+ validateIRAFinancialInfo = () => {
+   _.map(iraAccountStore.formFinInfo.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     iraAccountStore.setIraError('formFinInfo', key, errors && errors[key][0]);
+   });
+ }
+
+  /**
+  * @desc Validates IRA - Identity after clicking next/submit button
+  * @return null
+  */
+ validateIRAIdentityInfo = () => {
+   const { errors } =
+  validationService.validate(iraAccountStore.formIdentity.fields.identityDoc);
+   // Store errors to store if any or else `undefined` will get set to it
+   iraAccountStore.setIraError('formIdentity', 'identityDoc', errors && errors.identityDoc[0]);
+ }
+
+ /**
+  * @desc Validates Entity - Financial Information on next/submit button
+  */
+ validateEntityFinancialInfo = () => {
+   _.map(entityAccountStore.formFinInfo.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     entityAccountStore.setEntityError('formFinInfo', key, errors && errors[key][0]);
+   });
+ }
+
+ /**
+  * @desc Validates Entity - General Information on next/submit button
+  */
+ validateEntityGeneralInformation = () => {
+   _.map(entityAccountStore.formGeneralInfo.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     entityAccountStore.setEntityError('formGeneralInfo', key, errors && errors[key][0]);
+   });
+ }
+
+ /**
+  * @desc Validates Entity - Info on next/submit button
+  */
+ validateEntityInfo = () => {
+   _.map(entityAccountStore.formEntityInfo.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     entityAccountStore.setEntityError('formEntityInfo', key, errors && errors[key][0]);
+   });
+ }
+
+ /**
+  * @desc Validates Entity - Personal Info on next/submit button
+  */
+ validateEntityPersonalInfo = () => {
+   _.map(entityAccountStore.formPersonalInfo.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     entityAccountStore.setEntityError('formPersonalInfo', key, errors && errors[key][0]);
+   });
+ }
+
+ /**
+  * @desc Validates Entity - Formation Docs on next/submit button
+  */
+ validateEntityFormationDoc = () => {
+   _.map(entityAccountStore.formFormationDocuments.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     entityAccountStore.setEntityError('formFormationDocuments', key, errors && errors[key][0]);
+   });
+ }
+
+  /**
+  * @desc Validates Entity - Formation Docs on next/submit button
+  */
+ validateLinkBankForm = () => {
+   _.map(accountStore.formLinkBankManually.fields, (value) => {
+     const { key } = value;
+     const { errors } = validationService.validate(value);
+     // Store errors to store if any or else `undefined` will get set to it
+     accountStore.setAccountError('formLinkBankManually', key, errors && errors[key][0]);
+   });
+ }
 
   // Private Methods ends here
 }
