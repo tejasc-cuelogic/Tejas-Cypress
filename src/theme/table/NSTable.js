@@ -1,6 +1,9 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Table, Icon } from 'semantic-ui-react';
+import Aux from 'react-aux';
 import Helper from '../../helper/utility';
+
 
 export const THeader = ({ columns }) => (
   <Table.Header>
@@ -14,6 +17,12 @@ export const THeader = ({ columns }) => (
   </Table.Header>
 );
 
+const Actions = props => (
+  <Aux>
+    <Link className="link" to="/app/account-details/individual/statements/monthly-statements"><Icon className={`ns-file ${props[0]}`} /> PDF</Link>
+  </Aux>
+);
+
 export const FillTable = props => (
   <div className="table-wrapper">
     <Table singleLine className="investment-details">
@@ -25,7 +34,10 @@ export const FillTable = props => (
               {
                 props.result.columns.map(col => (
                   <Table.Cell key={col.field} textAlign={col.textAlign}>
-                    {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field]) : row[col.field]}
+                    {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field]) : (
+                        (col.field === 'actions') ? <Actions actions={row[col.field]} /> : row[col.field]
+                      )
+                    }
                   </Table.Cell>
                 ))
               }

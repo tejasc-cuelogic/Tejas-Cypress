@@ -64,8 +64,7 @@ export const TRANSACTION_TYPES = [
   { text: 'Deposit', value: 'Deposit' },
   { text: 'Withdrawal', value: 'Withdrawal' },
   { text: 'Repayment', value: 'Repayment' },
-  { text: 'Interest', value: 'Interest' },
-  { text: 'Accured', value: 'Accured' },
+  { text: 'Interest Accured', value: 'InterestAccured' },
   { text: 'Referral Credits', value: 'ReferralCredits' },
 ];
 

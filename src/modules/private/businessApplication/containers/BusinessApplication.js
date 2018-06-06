@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import { Image, Button } from 'semantic-ui-react';
 import PrivateLayout from '../../../../containers/common/PrivateHOC';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import LogoWhite from '../../../../assets/images/nextseed_logo_white_green.svg';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -21,7 +23,26 @@ export default class BusinessApplication extends Component {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url).subNavigations;
     return (
-      <PrivateLayout {...this.props}>
+      <PrivateLayout
+        {...this.props}
+        P0={
+          <Image
+            src={LogoWhite}
+            alt="NextSeed.com"
+            className="logo"
+            verticalAlign="middle"
+            as={Link}
+            to="/app/business-application"
+            size="small"
+          />
+        }
+        P4={
+          <Button.Group>
+            <Button inverted color="green">Save and Continue later</Button>
+            <Button color="grey" disabled>Submit</Button>
+          </Button.Group>
+        }
+      >
         <Switch>
           <Route exact path={match.url} component={getModule(navItems[0].component)} />
           {

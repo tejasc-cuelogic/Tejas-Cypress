@@ -7,9 +7,11 @@ import { DropdownFilter, DateRangeFilter, AppliedFilters } from '../../../../the
 import { FILTER_META } from '../../../../constants/user';
 
 export const P1 = props => (
-  <Form inverted>
-    <Input fluid onKeyPress={props.executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Type user’s name, e-mail address, city, state, zip code or phone number" />
-  </Form>
+  <Grid.Column width={5}>
+    <Form inverted>
+      <Input fluid onKeyPress={props.executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Type user’s name, e-mail address, city, state, zip code or phone number" />
+    </Form>
+  </Grid.Column>
 );
 
 export const P2 = props => (
@@ -25,7 +27,7 @@ export const P3 = props => (
   <Button color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
 );
 
-export const P4 = props => (
+export const P5 = props => (
   <Aux>
     <div className="search-filters">
       <Form inverted>
