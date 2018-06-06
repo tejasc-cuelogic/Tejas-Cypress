@@ -19,7 +19,7 @@ export const THeader = ({ columns }) => (
 
 const Actions = props => (
   <Aux>
-    <Link className="link" to="/app/account-details/individual/statements/monthly-statements"><Icon className={`ns-file ${props[0]}`} /> PDF</Link>
+    <Link className="action" to="/app/account-details/individual/statements/monthly-statements"><Icon className={`ns-file ${props[0]}`} /> PDF</Link>
   </Aux>
 );
 

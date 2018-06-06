@@ -89,7 +89,7 @@ const InvestmentTimeline = (props) => {
           {
             data.milestones.map((milestone, index) => (
               <Grid.Column
-                className={`crossed ${(data.milestones[index].amount <= data.invested && data.milestones[index + 1].amount >= data.invested) ? 'active' : ''}`}
+                className={`${(data.milestones[index].amount <= data.invested && data.milestones[index + 1].amount >= data.invested) ? 'crossed' : ''}`}
                 key={`m_${milestone.amount}`}
               >
                 <Popup
