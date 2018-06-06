@@ -141,7 +141,7 @@ class Summary extends Component {
       <Aux>
         <PrivateLayout
           {...this.props}
-          StickyNotification={
+          P5={
             <StickyNotification
               stepinfo={stepinfo}
               setDashboardWizardSetup={this.setDashboardWizardSetup}
