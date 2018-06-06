@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import { Header, Grid, Icon, Form, Button } from 'semantic-ui-react';
+import { Header, Grid, Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../helper/utility';
 import { FormRadioGroup, FormCheckbox, FormInput, MaskedInput2, AutoComplete } from '../../../../theme/form/FormElements';
@@ -214,6 +214,7 @@ export default class PreQualification extends Component {
               defaults
               containerclassname="ui relaxed list"
             />
+            <Divider hidden />
             <Button
               loading={this.props.uiStore.inProgress}
               disabled={!BUSINESS_APP_FRM.meta.isValid}
