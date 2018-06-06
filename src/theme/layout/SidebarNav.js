@@ -12,7 +12,8 @@ export class SidebarNav extends Component {
     const { roles, location } = this.props;
     const navItems = _.filter(
       ALL_NAV_ITEMS,
-      n => n.to !== 'profile-settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
+      n => n.to !== 'profile-settings' && n.to !== 'business-application' &&
+      (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
     );
     return (
       <Aux>
