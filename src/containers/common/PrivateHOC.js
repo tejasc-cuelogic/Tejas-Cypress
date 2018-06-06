@@ -18,24 +18,22 @@ class PrivateHOC extends Component {
       <Aux>
         <div>
           <div className="page-header-section">
-            <Grid stackable>
+            <Grid columns="equal" stackable>
               <Grid.Row>
-                <Grid.Column width={4}>
+                <Grid.Column>
                   {!this.props.P0 ?
                     <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header> :
                     this.props.P0
                   }
                 </Grid.Column>
                 {this.props.P1}
-                <Grid.Column width={3} textAlign="center">{this.props.P2}</Grid.Column>
-                <Grid.Column width={3} textAlign="right">{this.props.P3}</Grid.Column>
+                {this.props.P2}
+                {this.props.P3}
                 {!this.props.P4 ? (
-                  <Grid.Column floated="right" textAlign="right">
-                    <span className="item notification">
-                      <Icon className="ns-bell" />
-                      <span className="unread-count">3</span>
-                    </span>
-                  </Grid.Column>
+                  <span className="item notification">
+                    <Icon className="ns-bell" />
+                    <span className="unread-count">3</span>
+                  </span>
                   ) : (
                     <Grid.Column width={3} floated="right" textAlign="right">{this.props.P4}</Grid.Column>
                   )

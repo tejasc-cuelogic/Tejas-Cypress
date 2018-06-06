@@ -28,7 +28,7 @@ export default class PreQualification extends Component {
       <Grid container>
         <Grid.Column>
           <Form onSubmit={this.submit} className="issuer-signup">
-            <Icon className="ns-paper-plane" size="huge" color="green" />
+            <Icon className="ns-paper-plane" size="massive" color="green" />
             <FormElementWrap
               as="h1"
               header="Pre-Qualification Application Process"

@@ -9,7 +9,7 @@ export default class Failure extends Component {
     const reason = match.params.reason ? match.params.reason : '';
     return (
       <Grid.Column className="issuer-signup">
-        <Icon className="ns-paper-plane" size="huge" color="green" />
+        <Icon className="ns-paper-plane" size="massive" color="green" />
         <Header as="h1">Thank you for completing the pre-qualification form</Header>
         <p>
           <b>Unfortunately, NextSeed is currently unable to help your business at this time.</b>
