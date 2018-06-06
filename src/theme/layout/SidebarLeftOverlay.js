@@ -21,7 +21,12 @@ class SidebarLeftPush extends Component {
   isVerified(cipStatus) {
     return this.props.accountStore.validAccStatus.includes(cipStatus);
   }
-
+  createdAccount = (accounts) => {
+    if (accounts.length) {
+      return accounts[0].accountType;
+    }
+    return null;
+  }
   render() {
     const UserInfo = { ...this.props.UserInfo };
     const { currentUser } = this.props.userDetailsStore;
@@ -71,6 +76,7 @@ class SidebarLeftPush extends Component {
               {!verifyIdentity01.response.message && currentUser.data.user &&
                 <SidebarNav
                   isUserVerified={this.isVerified(currentUser.data.user.legalDetails.cipStatus)}
+                  createdAccount={this.createdAccount(currentUser.data.user.accounts)}
                   handleLogOut={this.props.handleLogOut}
                   roles={UserInfo.roles}
                 />

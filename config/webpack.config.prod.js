@@ -1,4 +1,4 @@
-'use strict';
+
 
 const path = require('path');
 const webpack = require('webpack');
@@ -9,7 +9,7 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const SentryPlugin = require('@sentry/webpack-plugin');
+const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const getCustomConfig = require('./custom-react-scripts/config');
@@ -25,7 +25,7 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const publicUrl = publicPath.slice(0, -1);
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
-//Get custom configuration for injecting plugins, presets and loaders
+// Get custom configuration for injecting plugins, presets and loaders
 const customConfig = getCustomConfig(false);
 
 // Assert this just to be safe.
@@ -57,7 +57,7 @@ module.exports = {
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
-    publicPath: publicPath,
+    publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path
@@ -71,8 +71,7 @@ module.exports = {
     // https://github.com/facebookincubator/create-react-app/issues/253
     modules: ['node_modules', paths.appNodeModules].concat(
       // It is guaranteed to exist because we tweak it in `env.js`
-      process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
-    ),
+      process.env.NODE_PATH.split(path.delimiter).filter(Boolean)),
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
@@ -81,7 +80,7 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -112,7 +111,7 @@ module.exports = {
             options: {
               formatter: eslintFormatter,
               eslintPath: require.resolve('eslint'),
-              
+
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -141,9 +140,7 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             options: {
               babelrc: false,
-              presets: [require.resolve('babel-preset-react-app')].concat(
-                customConfig.babelPresets
-              ),
+              presets: [require.resolve('babel-preset-react-app')].concat(customConfig.babelPresets),
               plugins: customConfig.babelPlugins,
               compact: true,
             },
@@ -250,7 +247,7 @@ module.exports = {
       },
       minify: true,
       // For unknown URLs, fallback to the index page
-      navigateFallback: publicUrl + '/index.html',
+      navigateFallback: `${publicUrl}/index.html`,
       // Ignores URLs starting from /__ (useful for Firebase):
       // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
       navigateFallbackWhitelist: [/^(?!\/__).*/],
@@ -263,12 +260,7 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    // Enable sentry release tracking and source maps sync
-    new SentryPlugin({
-      release: process.env.CI_PIPELINE_ID,
-      include: './build',
-      ignore: ['node_modules', 'webpack.config.js'],
-    }),
+
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
@@ -279,3 +271,12 @@ module.exports = {
     tls: 'empty',
   },
 };
+
+if (process.env.REACT_APP_BUG_SNAG_KEY) {
+  // It's a good idea to only run this plugin when you're building a bundle
+  // that will be released, rather than for every development build
+  module.exports.plugins.push(new BugsnagSourceMapUploaderPlugin({
+    apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
+    appVersion: process.env.CI_PIPELINE_ID,
+  }));
+}

@@ -10,8 +10,13 @@ export default class AddFunds extends Component {
   componentDidMount() {
     this.props.individualAccountStore.setStepToBeRendered(1);
   }
+  doNotDepositMoneyNow = () => {
+    this.props.individualAccountStore.setDepositMoneyNow(false);
+    this.props.individualAccountStore.setStepToBeRendered(2);
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.individualAccountStore.setDepositMoneyNow(true);
     this.props.individualAccountStore.setStepToBeRendered(2);
   }
   render() {
@@ -34,7 +39,7 @@ export default class AddFunds extends Component {
             <Button primary size="large" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button className="theme-link" onClick={() => this.props.individualAccountStore.setStepToBeRendered(2)}>I don`t want to deposit any money now</Button>
+            <Button className="theme-link" onClick={() => this.doNotDepositMoneyNow()}>I don`t want to deposit any money now</Button>
           </div>
         </Form>
       </div>

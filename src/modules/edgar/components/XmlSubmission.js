@@ -33,7 +33,7 @@ const XmlSubmission = observer((props) => {
                     {
                       xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed &&
                       xmlSubmission.xmlSubmissionDownloadUrl &&
-                        <a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" download className="ui button icon link-button">
+                        <a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" rel="noopener noreferrer" download className="ui button icon link-button">
                           <Icon name="download" />
                         </a>
                     }
