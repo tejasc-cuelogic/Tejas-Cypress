@@ -1,8 +1,10 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable class-methods-use-this, arrow-body-style */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
+import map from 'lodash/map';
+import filter from 'lodash/filter';
 import { GqlClient as client } from '../../services/graphql';
 import { GqlClient as client2 } from '../../services/graphqlCool';
 import uiStore from '../uiStore';
@@ -101,11 +103,13 @@ export class UserDetailsStore {
       details.idVerification = (this.userDetails.legalDetails &&
         this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
       ) ? this.userDetails.legalDetails.cipStatus.status : 'FAIL';
-      details.accounts = ['ira'];
-      console.log(this.userDetails);
+      details.accounts = mapValues(this.userDetails.accounts, (a) => {
+        const data = { accountType: a.accountType, status: a.status };
+        return data;
+      });
+      details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
       return details;
     }
-
     return details;
   }
 

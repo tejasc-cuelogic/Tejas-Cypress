@@ -64,6 +64,11 @@
 //    Custom for NS V.2
 .ui.selection.dropdown{
 	border-bottom:@border-color 1px solid;
+	.menu{
+		border:none;
+		padding:0 @menuGutterWidth;
+		margin:@2px -@menuGutterWidth 0;
+	}
 	>.dropdown.icon{
 		color:@theme-primary;
 	}
@@ -73,7 +78,7 @@
 		left:0;
 		right:0;
 		z-index:1;
-		border-radius:@4px;
+		border-radius:@borderRadius @borderRadius 0 0;
 		color:@fullBlack;
 		padding:0;
 		height:0;
@@ -81,16 +86,12 @@
 		font-weight:700;
 	}
 	&.active{
-		.menu{
+		.menu > .item{
 			border:none;
-			margin-top:2px;
-			>.item{
-				border:none;
-				background:transparent;
-			}
+			background:transparent;
 		}
 		~ .dropdown-effect{
-			height:380px;
+			height:90px;
 			padding:@6px @14px;
 			font-size:13px;
 			background-color:@white;
@@ -98,11 +99,6 @@
 		}
 	}
 }
-// .ui.form .fields .field{
-// 	.ui.selection.dropdown ~ .dropdown-effect{
-// 		padding:@6px @7px;
-// 	}
-// }
 .ui.dropdown.inverted>.text{
 	color:@white;
 }

@@ -216,7 +216,7 @@ const Portfolio = () => {
           </Accordion.Title>
           <Accordion.Content active>
             <div className="table-wrapper">
-              <Table singleLine className="investment-details">
+              <Table unstackable singleLine className="investment-details">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell />
@@ -302,7 +302,7 @@ const Portfolio = () => {
           </Accordion.Title>
           <Accordion.Content active>
             <div className="table-wrapper">
-              <Table singleLine className="investment-details">
+              <Table unstackable singleLine className="investment-details">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell />
@@ -384,7 +384,7 @@ const Portfolio = () => {
           </Accordion.Title>
           <Accordion.Content active>
             <div className="table-wrapper">
-              <Table singleLine className="investment-details">
+              <Table unstackable singleLine className="investment-details">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell />

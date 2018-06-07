@@ -18,7 +18,7 @@ export class NavStore {
   }
 
   @computed get myNavItems() {
-    const permitted = [...this.params.roles, ...userDetailsStore.signupStatus.accounts];
+    const permitted = [...this.params.roles, ...userDetailsStore.signupStatus.activeAccounts];
     let navItems = _.filter(
       this.NAV_ITEMS,
       n => n.to !== 'profile-settings' && n.to !== 'business-application' &&
