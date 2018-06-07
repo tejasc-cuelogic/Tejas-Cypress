@@ -18,7 +18,7 @@ const XmlSubmission = observer((props) => {
         <p>
           <Link to={xmlUrl}>Click here to create a new submission.</Link>
         </p>
-        <Table basic celled collapsing>
+        <Table unstackable basic celled collapsing>
           <Table.Body>
             {
               props.xmlSubmissions.map(xmlSubmission => (

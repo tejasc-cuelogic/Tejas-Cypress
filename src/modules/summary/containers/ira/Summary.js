@@ -40,7 +40,7 @@ export default class Summary extends Component {
         <div className="summary-wrap">
           <div className="field-wrap">
             <div className="table-wrapper">
-              <Table compact basic>
+              <Table unstackable compact basic>
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell><b>Account type</b></Table.Cell>

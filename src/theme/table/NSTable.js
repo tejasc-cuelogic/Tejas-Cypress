@@ -25,7 +25,7 @@ const Actions = props => (
 
 export const FillTable = props => (
   <div className="table-wrapper">
-    <Table singleLine className="investment-details">
+    <Table unstackable singleLine className="investment-details">
       <THeader columns={props.result.columns} />
       <Table.Body>
         {

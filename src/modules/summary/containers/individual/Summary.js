@@ -36,7 +36,7 @@ export default class Summary extends React.Component {
         <div className="summary-wrap">
           <div className="field-wrap">
             <div className="table-wrapper">
-              <Table compact basic fixed singleLine>
+              <Table unstackable compact basic fixed singleLine>
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell><b>Investor Name</b></Table.Cell>

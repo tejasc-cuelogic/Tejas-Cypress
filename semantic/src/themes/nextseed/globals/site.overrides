@@ -288,6 +288,7 @@ a.text-link{
 			}
 			.menu{
 				border:none;
+				padding:0;
 				background-color:@tertiary-text;
 				.item{
 					padding:@11px !important;
