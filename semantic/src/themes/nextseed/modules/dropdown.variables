@@ -13,6 +13,7 @@
 @borderRadius: @defaultBorderRadius;
 
 @raisedShadow: 0px 2px 3px 0px @borderColor;
+@customShadow:0 12px 20px @veryStrongTransparentBlack;
 
 /*-------------------
        Content
@@ -26,9 +27,10 @@
 @textTransition: none;
 
 /* Menu */
-@menuBackground:transparent;
-@menuMargin:@2px 0 0;
-@menuPadding: 0em 0em;
+@menuBackground:@white;
+@menuGutterWidth: @14px;
+@menuMargin:@2px -@menuGutterWidth 0;
+@menuPadding: 0em @menuGutterWidth;
 @menuTop: ~"calc(100% + "(@menuBorderWidth * 2)~")";
 @menuTextAlign: left;
 
@@ -38,7 +40,7 @@
 @menuBoxShadow: @raisedShadow;
 @menuBorderRadius: @borderRadius;
 @menuTransition: opacity @defaultDuration @defaultEasing;
-@menuMinWidth: ~"calc(100% + "(@menuBorderWidth * 2)~")";
+@menuMinWidth: ~"calc(100% + "(@menuGutterWidth * 2)~")";
 @menuZIndex: 11;
 
 /* Text */
@@ -195,7 +197,7 @@
 /* Focus */
 @selectionFocusBorderColor: @theme-primary;
 @selectionFocusBoxShadow: none;
-@selectionFocusMenuBoxShadow:none;
+@selectionFocusMenuBoxShadow:@customShadow;
 
 /* Visible */
 @selectionVisibleTextFontWeight: normal;
@@ -203,7 +205,7 @@
 
 @selectionVisibleBorderColor: @theme-primary;
 @selectionVisibleBoxShadow:none;
-@selectionVisibleMenuBoxShadow:none;
+@selectionVisibleMenuBoxShadow:@customShadow;
 
 /* Visible Hover */
 @selectionActiveHoverBorderColor: @theme-primary;
