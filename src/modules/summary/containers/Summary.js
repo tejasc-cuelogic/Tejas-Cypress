@@ -58,7 +58,7 @@ class Summary extends Component {
       linkPath: 'InvestorPersonalDetails',
     };
 
-    let accTypes = ['IRA', 'individual', 'entity'];
+    let accTypes = ['individual', 'IRA', 'entity'];
     if (!this.props.uiStore.errors) {
       const accDetails = this.props.userDetailsStore.signupStatus;
       if (accDetails.activeAccounts.length > 0) {
@@ -72,7 +72,7 @@ class Summary extends Component {
               {...this.props}
             >
               <div className="conent-spacer">
-                <Card.Group itemsPerRow={4}>
+                <Card.Group itemsPerRow={3}>
                   {
                     accTypes.map(item => (
                       <Card fluid>
@@ -80,7 +80,7 @@ class Summary extends Component {
                           <Header as="h3">New {_.startCase(item)} Account</Header>
                           <p>Start new application process to proceed</p>
                           <Divider hidden />
-                          <Button primary className="relaxed">
+                          <Button onClick={() => this.setDashboardWizardSetup(`${_.lowerCase(item)}/AccountCreation`)} primary>
                             Create {_.startCase(item)} Account
                           </Button>
                         </Card.Content>
