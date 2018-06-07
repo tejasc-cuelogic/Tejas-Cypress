@@ -17,7 +17,7 @@ class Dashboard extends Component {
       <div>
         <PrivateLayout
           {...this.props}
-          StickyNotification={
+          P5={
             <StickyNotification
               stepinfo={stepinfo}
               setDashboardWizardSetup={this.setDashboardWizardSetup}
