@@ -10,7 +10,7 @@ import LogoWhite from '../../assets/images/nextseed_logo_white_green.svg';
 import LogoColor from '../../assets/images/nextseed_logo_color.svg';
 import LogoSmall from '../../assets/images/ns-logo-small.svg';
 
-@inject('uiStore', 'userStore', 'accountStore', 'userDetailsStore')
+@inject('uiStore')
 @observer
 class SidebarLeftPush extends Component {
   toggle = () => uiStore.updateLayoutState('leftPanel');
@@ -18,14 +18,14 @@ class SidebarLeftPush extends Component {
   render() {
     const { layoutState } = uiStore;
     return (
-      <div>
+      <Aux>
         <Responsive minWidth={1200}>
           <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />
         </Responsive>
         <Responsive maxWidth={1199}>
           <MySidebar layoutState={layoutState} toggle={this.toggleMobile} mobile {...this.props} />
         </Responsive>
-      </div>
+      </Aux>
     );
   }
 }

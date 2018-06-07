@@ -62,7 +62,7 @@ class Summary extends Component {
       linkPath: 'InvestorPersonalDetails',
     };
 
-    let accTypes = ['ira', 'individual', 'entity'];
+    let accTypes = ['IRA', 'individual', 'entity'];
     if (!this.props.uiStore.errors) {
       const accDetails = this.props.userDetailsStore.signupStatus;
       if (accDetails.activeAccounts.length > 0) {
@@ -76,18 +76,22 @@ class Summary extends Component {
               {...this.props}
             >
               <div className="conent-spacer">
-                <Header as="h3">Create New Account!</Header>
-                <Grid>
-                  <Grid.Row>
-                    {
-                      accTypes.map(item => (
-                        <Button onClick={() => this.navToCreateAcc(`${_.lowerCase(item)}/AccountCreation`)} primary size="large">
-                          {_.startCase(item)}
-                        </Button>
-                      ))
-                    }
-                  </Grid.Row>
-                </Grid>
+                <Card.Group itemsPerRow={4}>
+                  {
+                    accTypes.map(item => (
+                      <Card fluid>
+                        <Card.Content>
+                          <Header as="h3">New {_.startCase(item)} Account</Header>
+                          <p>Start new application process to proceed</p>
+                          <Divider hidden />
+                          <Button onClick={() => this.navToCreateAcc(`${_.lowerCase(item)}/AccountCreation`)} primary className="relaxed">
+                            Create {_.startCase(item)} Account
+                          </Button>
+                        </Card.Content>
+                      </Card>
+                    ))
+                  }
+                </Card.Group>
               </div>
             </PrivateLayout>
           </Aux>
