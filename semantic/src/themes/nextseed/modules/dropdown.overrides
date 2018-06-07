@@ -98,11 +98,11 @@
 		}
 	}
 }
-.ui.form .fields .field{
-	.ui.selection.dropdown ~ .dropdown-effect{
-		padding:@6px @7px;
-	}
-}
+// .ui.form .fields .field{
+// 	.ui.selection.dropdown ~ .dropdown-effect{
+// 		padding:@6px @7px;
+// 	}
+// }
 .ui.dropdown.inverted>.text{
 	color:@white;
 }
