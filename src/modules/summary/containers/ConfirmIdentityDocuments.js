@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List, Message } from 'semantic-ui-react';
+// import Dropzone from 'react-dropzone';
 
 import validationActions from '../../../actions/validation';
 import ListErrors from '../../../theme/common/ListErrors';
@@ -74,6 +75,7 @@ export default class ConfirmIdentityDocuments extends Component {
                 </Grid.Column>
                 <Grid.Column width={9}>
                   {confirmIdentityDocuments.fields.photoId.value === '' &&
+                  // <div>
                     <div className="file-uploader">
                       <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
                       <input
@@ -84,6 +86,24 @@ export default class ConfirmIdentityDocuments extends Component {
                         error={!!confirmIdentityDocuments.fields.photoId.error}
                       />
                     </div>
+                  //   <div>
+                  //     <Dropzone>
+                  //       {({
+                  //         isDragActive, isDragReject, acceptedFiles, rejectedFiles,
+                  //       }) => {
+                  //         if (isDragActive) {
+                  //           return 'This file is authorized';
+                  //         }
+                  //         if (isDragReject) {
+                  //           return 'This file is not authorized';
+                  //         }
+                  //         return acceptedFiles.length || rejectedFiles.length
+                  //           ? console.log(acceptedFiles)
+                  //           : 'Try dropping some files.';
+                  //       }}
+                  //     </Dropzone>
+                  //   </div>
+                  // </div>
                   }
                   <FieldError error={confirmIdentityDocuments.fields.photoId.error} />
                   {confirmIdentityDocuments.fields.photoId.value !== '' &&

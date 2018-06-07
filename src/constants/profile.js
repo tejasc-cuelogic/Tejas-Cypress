@@ -96,12 +96,14 @@ export const CONFIRM_IDENTITY_DOCUMENTS = {
     value: '',
     error: undefined,
     rule: 'required',
+    // fileData: '',
   },
   proofOfResidence: {
     key: 'proofOfResidence',
     value: '',
     error: undefined,
     rule: 'required',
+    // fileData: '',
   },
 };
 
