@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Menu, Icon } from 'semantic-ui-react';
 import _ from 'lodash';
 import { ALL_NAV_ITEMS } from '../../constants/privateNavigationMeta';
 import { NavItems } from './NavigationItems';
 
+@inject('navStore')
 @withRouter
+@observer
 export class SidebarNav extends Component {
+  componentWillMount() {
+    this.props.navStore.setAccessParams('roles', this.props.roles);
+  }
   render() {
     const {
       roles,
       location,
       isVerified,
       createdAccount,
+      navStore,
     } = this.props;
-    const accountTypes = ['account-details/ira', 'account-details/individual', 'account-details/entity'];
-    const navItems = _.filter(
-      ALL_NAV_ITEMS,
-      n => n.to !== 'profile-settings' && n.to !== 'business-application' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0) &&
-      (((roles && roles[0] === 'investor' && n.to === 'summary') ||
-      (roles && roles[0] === 'investor' && isVerified && !accountTypes.includes(n.to)) ||
-      (roles && roles[0] === 'investor' && (accountTypes.includes(n.to) && n.to === `account-details/${createdAccount}`))) || (roles && roles[0] !== 'investor')),
-    );
+    const navItems = navStore.myNavItems;
     return (
       <Aux>
         <NavItems
