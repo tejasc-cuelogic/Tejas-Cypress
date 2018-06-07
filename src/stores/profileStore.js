@@ -9,6 +9,7 @@ import api from '../ns-api';
 import authStore from './authStore';
 import uiStore from './uiStore';
 import userStore from './userStore';
+import userDetailsStore from './user/userDetailsStore';
 import Helper from '../helper/utility';
 
 import {
@@ -263,6 +264,7 @@ export class ProfileStore {
               },
             })
             .then((result) => {
+              userDetailsStore.getUser(userStore.currentUser.sub);
               console.log(result);
             })
             .catch(() => {});
