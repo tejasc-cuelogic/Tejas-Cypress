@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { withRouter, Switch, Route } from 'react-router-dom'; // Redirect
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
@@ -41,13 +42,13 @@ class App extends Component {
   render() {
     if (this.props.authStore.hasSession && this.props.uiStore.appLoader) {
       return (
-        <div>
+        <Aux>
           <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
-        </div>
+        </Aux>
       );
     }
     return (
-      <div>
+      <Aux>
         <Layout>
           <Switch>
             <Route exact path="/app/*" component={Private} />
@@ -56,7 +57,7 @@ class App extends Component {
         </Layout>
         <ToastContainer className="toast-message" />
         <ListErrors errors={this.props.uiStore.errors} />
-      </div>
+      </Aux>
     );
   }
 }
