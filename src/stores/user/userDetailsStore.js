@@ -9,6 +9,7 @@ import { GqlClient as client } from '../../services/graphql';
 import { GqlClient as client2 } from '../../services/graphqlCool';
 import uiStore from '../uiStore';
 import authStore from '../authStore';
+import profileStore from '../profileStore';
 import iraAccountStore from '../user/iraAccountStore';
 import entityAccountStore from '../user/entityAccountStore';
 import individualAccountStore from '../user/individualAccountStore';
@@ -56,6 +57,7 @@ export class UserDetailsStore {
         iraAccountStore.populateData(data.user);
         individualAccountStore.populateData(data.user);
         entityAccountStore.populateData(data.user);
+        profileStore.setProfileInfo(this.userDetails);
       },
     });
   }
