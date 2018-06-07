@@ -115,6 +115,7 @@ class IndividualAccountStore {
             accountStore.setAccountTypeCreated(result.data.updateInvestorAccount.accountType);
           }
           if (formStatus === 'submit') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
             Helper.toast('Individual account created successfully.', 'success');
           } else if (currentStep) {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');

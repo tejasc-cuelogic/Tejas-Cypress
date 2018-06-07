@@ -30,7 +30,7 @@
 @menuBackground:@white;
 @menuGutterWidth: @14px;
 @menuMargin:@2px -@menuGutterWidth 0;
-@menuPadding: 0em @menuGutterWidth;
+@menuPadding: 0em 0em;
 @menuTop: ~"calc(100% + "(@menuBorderWidth * 2)~")";
 @menuTextAlign: left;
 

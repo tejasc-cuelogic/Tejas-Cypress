@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
 import { Route, withRouter, Switch } from 'react-router-dom';
 import Header from './Header';
 import authActions from '../../actions/auth';
@@ -27,7 +28,7 @@ class Layout extends Component {
   render() {
     const { location } = this.props;
     return (
-      <div>
+      <Aux>
         {(!this.props.userStore.currentUser || !location.pathname.startsWith('/app')) &&
           <Header
             location={location}
@@ -47,7 +48,7 @@ class Layout extends Component {
             <Route path="/auth/change-password" component={ChangePassword} />
           </Switch>
         }
-      </div>
+      </Aux>
     );
   }
 }

@@ -37,7 +37,7 @@ export default class Summary extends Component {
         }
         <div className="field-wrap">
           <div className="table-wrapper">
-            <Table compact basic fixed>
+            <Table unstackable compact basic fixed>
               <Table.Body>
                 <Table.Row>
                   <Table.Cell><b>Entity net assest</b></Table.Cell>

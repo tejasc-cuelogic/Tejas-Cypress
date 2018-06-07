@@ -66,6 +66,7 @@
 	border-bottom:@border-color 1px solid;
 	.menu{
 		border:none;
+		padding:0 @menuGutterWidth;
 		margin:@2px -@menuGutterWidth 0;
 	}
 	>.dropdown.icon{
