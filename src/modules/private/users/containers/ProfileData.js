@@ -15,7 +15,6 @@ import Helper from '../../../../helper/utility';
 export default class ProfileData extends Component {
   componentWillMount() {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-    this.props.profileStore.setProfileInfo(this.props.userDetailsStore.userDetails);
   }
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
