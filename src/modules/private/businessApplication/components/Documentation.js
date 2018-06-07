@@ -16,7 +16,7 @@ export default class Documentation extends Component {
   }
   render() {
     const {
-      BUSINESS_DOC_FRM, businessDocChange, docuFiles, docuReset,
+      BUSINESS_DOC_FRM, businessDocChange, docuFiles, docuReset, canSubmitApp,
     } = this.props.newBusinessStore;
     const { fields } = BUSINESS_DOC_FRM;
     return (
@@ -97,7 +97,7 @@ export default class Documentation extends Component {
                 removeUploadedDocument={docuReset}
               />
             </FormElementWrap>
-            <AppNavigation action={this.submit} />
+            <AppNavigation canSubmitApp={canSubmitApp} action={this.submit} />
           </Form>
         </Grid.Column>
       </Grid>

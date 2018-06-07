@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Card, Statistic } from 'semantic-ui-react';
 
 const StickyNotification = () => (
@@ -13,7 +12,7 @@ const StickyNotification = () => (
             <Statistic.Label>
               We are hard at work finalizing your application and will be in touch within
               three business days.<br />
-              If you have any questions in the meantime, please contact us at <Link to="/"><b>apply@nextseed.com</b></Link>
+              If you have any questions in the meantime, please contact us at <a href="mailto:apply@nextseed.com" className="link"><b>apply@nextseed.com</b></a>
             </Statistic.Label>
           </Statistic>
         </Card.Content>
