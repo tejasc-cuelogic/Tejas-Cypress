@@ -50,6 +50,19 @@ class Summary extends Component {
     return false;
   }
 
+  navToAccTypes(step) {
+    let type = 0;
+    if (step === 'individual') {
+      type = 0;
+    } else if (step === 'ira') {
+      type = 1;
+    } else if (step === 'entity') {
+      type = 2;
+    }
+    this.props.accountStore.setAccountType(type);
+    this.setDashboardWizardSetup(`${step}/AccountCreation`);
+  }
+
   render() {
     let stepinfo = {
       value: 'Verify your identity',
@@ -64,7 +77,7 @@ class Summary extends Component {
       if (accDetails.activeAccounts.length > 0) {
         accTypes = _.filter(
           accTypes,
-          n => n !== accDetails.activeAccounts[0],
+          n => _.lowerCase(n) !== (accDetails.activeAccounts[0]),
         );
         return (
           <Aux>
@@ -80,7 +93,7 @@ class Summary extends Component {
                           <Header as="h3">New {_.startCase(item)} Account</Header>
                           <p>Start new application process to proceed</p>
                           <Divider hidden />
-                          <Button onClick={() => this.setDashboardWizardSetup(`${_.lowerCase(item)}/AccountCreation`)} primary>
+                          <Button onClick={() => this.navToAccTypes(_.lowerCase(item))} primary>
                             Create {_.startCase(item)} Account
                           </Button>
                         </Card.Content>
@@ -90,6 +103,9 @@ class Summary extends Component {
                 </Card.Group>
               </div>
             </PrivateLayout>
+            {this.props.uiStore.dashboardStep &&
+            <DashboardWizard />
+            }
           </Aux>
         );
       }

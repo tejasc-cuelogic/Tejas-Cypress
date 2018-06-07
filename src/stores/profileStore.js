@@ -430,7 +430,6 @@ export class ProfileStore {
       legalDetails,
       contactDetails,
     } = userDetails;
-    console.log(userDetailsStore.userDetails);
     if (userDetails.firstName) {
       this.onFieldChange('updateProfileInfo', 'firstName', userDetails.firstName);
     }
