@@ -81,7 +81,7 @@ export default class investorPersonalDetails extends Component {
           <Form error onSubmit={this.handleSubmitInvestorDetails}>
             <Form.Group widths="equal">
               <FormSelect
-                containerwidth={6}
+                containerwidth={8}
                 name="title"
                 fielddata={verifyIdentity01.fields.title}
                 options={PROFILE_DETAILS_TITLE}
