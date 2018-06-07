@@ -95,13 +95,14 @@ export class UserDetailsStore {
     return this.financialLimit.loading;
   }
 
-  @computed get userSignupStatus() {
+  @computed get signupStatus() {
     const details = { idVerification: 'FAIL', accounts: [] };
     if (this.userDetails) {
       details.idVerification = (this.userDetails.legalDetails &&
         this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
       ) ? this.userDetails.legalDetails.cipStatus.status : 'FAIL';
-      details.accounts = [];
+      details.accounts = ['ira'];
+      console.log(this.userDetails);
       return details;
     }
 
