@@ -59,35 +59,36 @@ class Summary extends Component {
     };
 
     let accTypes = ['ira', 'individual', 'entity'];
-    if (!this.props.uiStore.errors && this.props.accountStore.accountTypeCreated &&
-    (this.props.iraAccountStore.formStatus === 'submit' || this.props.individualAccountStore.formStatus === 'submit'
-    || this.props.entityAccountStore.formStatus === 'submit')) {
-      accTypes = _.filter(
-        accTypes,
-        n => n !== this.props.accountStore.accountTypeCreated,
-      );
-      return (
-        <Aux>
-          <PrivateLayout
-            {...this.props}
-          >
-            <div className="conent-spacer">
-              <Header as="h3">Create New Account!</Header>
-              <Grid>
-                <Grid.Row>
-                  {
-                    accTypes.map(item => (
-                      <Button primary size="large">
-                        {_.startCase(item)}
-                      </Button>
-                    ))
-                  }
-                </Grid.Row>
-              </Grid>
-            </div>
-          </PrivateLayout>
-        </Aux>
-      );
+    if (!this.props.uiStore.errors) {
+      const { accounts } = this.props.userDetailsStore.signupStatus;
+      if (accounts.length > 0 && accounts[0].status === 'FULL') {
+        accTypes = _.filter(
+          accTypes,
+          n => n !== this.props.accountStore.accountTypeCreated,
+        );
+        return (
+          <Aux>
+            <PrivateLayout
+              {...this.props}
+            >
+              <div className="conent-spacer">
+                <Header as="h3">Create New Account!</Header>
+                <Grid>
+                  <Grid.Row>
+                    {
+                      accTypes.map(item => (
+                        <Button primary size="large">
+                          {_.startCase(item)}
+                        </Button>
+                      ))
+                    }
+                  </Grid.Row>
+                </Grid>
+              </div>
+            </PrivateLayout>
+          </Aux>
+        );
+      }
     }
 
     const { currentUser } = this.props.userDetailsStore;
