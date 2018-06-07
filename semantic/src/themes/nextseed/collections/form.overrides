@@ -278,6 +278,7 @@
         white-space:nowrap;
         .remove{
             margin:@7px 0 @7px @7px;
+            line-height:1;
             color:@link-color;
             position:relative;
             z-index:9;
