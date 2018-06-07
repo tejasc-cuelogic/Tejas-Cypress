@@ -2,37 +2,10 @@ import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Container, Icon, Image, Menu, Dropdown, Label } from 'semantic-ui-react';
+import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import LogoC from '../../assets/images/nextseed_logo_color.svg';
 import LogoW from '../../assets/images/nextseed_logo_white_green.svg';
 import LogoNsAndLendio from '../../assets/images/nextseed_and_lendio.svg';
-
-const PUBLIC_NAV_ITEMS = [
-  { title: 'Browse Deals', to: 'offerings' },
-  { title: 'For Investers', to: 'invest' },
-  { title: 'For Businesses', to: 'business' },
-  {
-    title: 'Learn',
-    subPanel: 1,
-    to: '',
-    subNavigations: [
-      { title: 'Team', to: 'about/team' },
-      { title: 'Ambassadors', to: 'about/ambassadors' },
-      { title: 'Blog', to: 'blog' },
-      { title: 'Case Studies', to: 'case-studies' },
-      { title: 'FAQ', to: 'about/faq' },
-    ],
-  },
-  {
-    title: 'Log In or Sign Up',
-    subPanel: 1,
-    to: 'auth',
-    subNavigations: [
-      { title: 'Log In', to: 'login' },
-      { title: 'Register', to: 'register' },
-    ],
-  },
-  { title: 'Dashboard', to: 'app/dashboard' },
-];
 
 @withRouter
 export class NavItems extends Component {
@@ -126,7 +99,7 @@ export const NavigationItems = props => (
       </Menu.Item>
       <Menu.Menu position="right">
         {!props.location.pathname.includes('/business-application') &&
-          <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV_ITEMS} />
+          <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
       </Menu.Menu>
     </Container>

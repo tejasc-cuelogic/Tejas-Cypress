@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars, navItems, prefer-const */
 import { toJS, observable, action, computed } from 'mobx';
 import _ from 'lodash';
-import { ALL_NAV_ITEMS } from '../../constants/privateNavigationMeta';
+import { PRIVATE_NAV } from '../../constants/NavigationMeta';
 import userStore from '../userStore';
 import userDetailsStore from '../user/userDetailsStore';
 
 export class NavStore {
-  @observable NAV_ITEMS = { ...ALL_NAV_ITEMS };
+  @observable NAV_ITEMS = { ...PRIVATE_NAV };
   @observable params = {
     roles: [],
   };
@@ -18,11 +18,11 @@ export class NavStore {
   }
 
   @computed get myNavItems() {
-    console.log('currentUser', userDetailsStore.currentUser);
+    const permitted = [...this.params.roles, ...userDetailsStore.signupStatus.accounts];
     let navItems = _.filter(
       this.NAV_ITEMS,
       n => n.to !== 'profile-settings' && n.to !== 'business-application' &&
-      (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, this.params.roles).length > 0),
+      (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0),
     );
     return navItems;
   }
@@ -30,7 +30,6 @@ export class NavStore {
   @action
   setAccessParams(key, value) {
     this.params[key] = value;
-    console.log('im here', this.params);
   }
 }
 
