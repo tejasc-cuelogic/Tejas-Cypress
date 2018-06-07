@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { NavLink } from 'react-router-dom';
 import { Responsive, Menu, Icon, Dropdown } from 'semantic-ui-react';
 
@@ -17,7 +18,7 @@ const options = [
 class SecondaryMenu extends Component {
   render() {
     return (
-      <div>
+      <Aux>
         <Responsive minWidth={768}>
           <Menu
             className={this.props.className || ''}
@@ -51,7 +52,7 @@ class SecondaryMenu extends Component {
             options={options}
           />
         </Responsive>
-      </div>
+      </Aux>
     );
   }
 }

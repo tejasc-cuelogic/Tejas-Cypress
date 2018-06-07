@@ -18,14 +18,14 @@ class SidebarLeftPush extends Component {
   render() {
     const { layoutState } = uiStore;
     return (
-      <div>
+      <Aux>
         <Responsive minWidth={1200}>
           <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />
         </Responsive>
         <Responsive maxWidth={1199}>
           <MySidebar layoutState={layoutState} toggle={this.toggleMobile} mobile {...this.props} />
         </Responsive>
-      </div>
+      </Aux>
     );
   }
 }

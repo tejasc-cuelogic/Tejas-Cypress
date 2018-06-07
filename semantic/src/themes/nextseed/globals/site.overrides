@@ -145,6 +145,11 @@ a.text-link{
 		min-height:auto;
 		padding:@20px @60px;
 	}
+	@media only screen and (max-width : @largestMobileScreen){
+		~ .secondary-menu{
+			padding:0 @20px @14px;
+		}
+	}
 	h1.ui.header{
 		font-size:@30px;
 		line-height:@42px;
@@ -273,7 +278,7 @@ a.text-link{
 		padding:0 @20px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
-		padding:0 @20px @14px;
+		padding:@14px @20px;
 		background-color:@secondary-text;
 		.ui.selection.dropdown{
 			padding:@11px;
