@@ -50,6 +50,10 @@ class Summary extends Component {
     return false;
   }
 
+  navToCreateAcc = (step) => {
+    this.props.uiStore.setDashboardWizardStep(step);
+  }
+
   render() {
     let stepinfo = {
       value: 'Verify your identity',
@@ -77,7 +81,7 @@ class Summary extends Component {
                   <Grid.Row>
                     {
                       accTypes.map(item => (
-                        <Button primary size="large">
+                        <Button onClick={() => this.navToCreateAcc(`${_.lowerCase(item)}/AccountCreation`)} primary size="large">
                           {_.startCase(item)}
                         </Button>
                       ))
