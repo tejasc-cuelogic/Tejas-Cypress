@@ -20,11 +20,20 @@ class Login extends Component {
     e.preventDefault();
     authActions.login()
       .then(() => {
+        const { roles } = this.props.userStore.currentUser;
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/auth/change-password');
         } else {
           this.props.authStore.reset();
-          this.props.history.replace('/app/summary');
+          if (roles) {
+            if (roles[0] === 'investor') {
+              this.props.history.replace('/app/summary');
+            } else {
+              this.props.history.replace('/app/dashboard');
+            }
+          } else {
+            this.props.history.replace('/app/dashboard');
+          }
         }
       });
   };
