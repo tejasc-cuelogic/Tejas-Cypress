@@ -95,6 +95,20 @@ export class UserDetailsStore {
     return this.financialLimit.loading;
   }
 
+  @computed get signupStatus() {
+    const details = { idVerification: 'FAIL', accounts: [] };
+    if (this.userDetails) {
+      details.idVerification = (this.userDetails.legalDetails &&
+        this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
+      ) ? this.userDetails.legalDetails.cipStatus.status : 'FAIL';
+      details.accounts = ['ira'];
+      console.log(this.userDetails);
+      return details;
+    }
+
+    return details;
+  }
+
   @action
   createBeneficiary = () => {
     const beneficiary = mapValues(this.BENEFICIARY_META.fields, f => f.value);

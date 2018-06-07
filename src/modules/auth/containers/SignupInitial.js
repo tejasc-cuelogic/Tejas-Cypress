@@ -9,7 +9,7 @@ const GetBtn = ({ type }) => {
     investor: { label: 'Start', to: '/auth/register-investor' },
     bowner: { label: 'Start application process', to: '/business-application' },
   };
-  return <Button as={Link} to={BtnMeta[type].to} primary size="large" className="very relaxed" content={BtnMeta[type].label} />;
+  return <Button as={Link} to={BtnMeta.investor.to} primary size="large" className="very relaxed" content={BtnMeta[type].label} />;
 };
 
 @inject('authStore', 'uiStore')
