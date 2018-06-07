@@ -60,11 +60,11 @@ class Summary extends Component {
 
     let accTypes = ['ira', 'individual', 'entity'];
     if (!this.props.uiStore.errors) {
-      const { accounts } = this.props.userDetailsStore.signupStatus;
-      if (accounts.length > 0 && accounts[0].status === 'FULL') {
+      const accDetails = this.props.userDetailsStore.signupStatus;
+      if (accDetails.activeAccounts.length > 0) {
         accTypes = _.filter(
           accTypes,
-          n => n !== this.props.accountStore.accountTypeCreated,
+          n => n !== accDetails.activeAccounts[0],
         );
         return (
           <Aux>
