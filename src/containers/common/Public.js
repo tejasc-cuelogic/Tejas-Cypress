@@ -1,4 +1,5 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { Route, Switch } from 'react-router-dom';
 import { publicRoutes } from './../../modules/routes';
 import Footer from './../../theme/layout/Footer';
@@ -7,7 +8,7 @@ export default class Public extends React.Component {
   render() {
     const { location } = this.props;
     return (
-      <div>
+      <Aux>
         <Switch>
           {publicRoutes.map(route => (
             <Route
@@ -22,7 +23,7 @@ export default class Public extends React.Component {
         {(location.pathname !== '/business-application' && !location.pathname.startsWith('/auth')) &&
           <Footer />
         }
-      </div>
+      </Aux>
     );
   }
 }

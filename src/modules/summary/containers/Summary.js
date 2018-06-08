@@ -50,6 +50,19 @@ class Summary extends Component {
     return false;
   }
 
+  navToAccTypes(step) {
+    let type = 0;
+    if (step === 'individual') {
+      type = 0;
+    } else if (step === 'ira') {
+      type = 1;
+    } else if (step === 'entity') {
+      type = 2;
+    }
+    this.props.accountStore.setAccountType(type);
+    this.setDashboardWizardSetup(`${step}/AccountCreation`);
+  }
+
   render() {
     let stepinfo = {
       value: 'Verify your identity',
@@ -58,36 +71,44 @@ class Summary extends Component {
       linkPath: 'InvestorPersonalDetails',
     };
 
-    let accTypes = ['ira', 'individual', 'entity'];
-    if (!this.props.uiStore.errors && this.props.accountStore.accountTypeCreated &&
-    (this.props.iraAccountStore.formStatus === 'submit' || this.props.individualAccountStore.formStatus === 'submit'
-    || this.props.entityAccountStore.formStatus === 'submit')) {
-      accTypes = _.filter(
-        accTypes,
-        n => n !== this.props.accountStore.accountTypeCreated,
-      );
-      return (
-        <Aux>
-          <PrivateLayout
-            {...this.props}
-          >
-            <div className="conent-spacer">
-              <Header as="h3">Create New Account!</Header>
-              <Grid>
-                <Grid.Row>
+    let accTypes = ['individual', 'IRA', 'entity'];
+    if (!this.props.uiStore.errors) {
+      const accDetails = this.props.userDetailsStore.signupStatus;
+      if (accDetails.activeAccounts.length > 0) {
+        accTypes = _.filter(
+          accTypes,
+          n => _.lowerCase(n) !== (accDetails.activeAccounts[0]),
+        );
+        return (
+          <Aux>
+            <PrivateLayout
+              {...this.props}
+            >
+              <div className="conent-spacer">
+                <Card.Group itemsPerRow={3}>
                   {
                     accTypes.map(item => (
-                      <Button primary size="large">
-                        {_.startCase(item)}
-                      </Button>
+                      <Card fluid>
+                        <Card.Content>
+                          <Header as="h3">New {_.startCase(item)} Account</Header>
+                          <p>Start new application process to proceed</p>
+                          <Divider hidden />
+                          <Button onClick={() => this.navToAccTypes(_.lowerCase(item))} primary>
+                            Create {_.startCase(item)} Account
+                          </Button>
+                        </Card.Content>
+                      </Card>
                     ))
                   }
-                </Grid.Row>
-              </Grid>
-            </div>
-          </PrivateLayout>
-        </Aux>
-      );
+                </Card.Group>
+              </div>
+            </PrivateLayout>
+            {this.props.uiStore.dashboardStep &&
+            <DashboardWizard />
+            }
+          </Aux>
+        );
+      }
     }
 
     const { currentUser } = this.props.userDetailsStore;

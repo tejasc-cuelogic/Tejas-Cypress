@@ -459,6 +459,7 @@ class EntityAccountStore {
                 break;
             }
             if (formStatus === 'submit') {
+              userDetailsStore.getUser(userStore.currentUser.sub);
               Helper.toast('Entity account created successfully.', 'success');
             } else {
               Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');

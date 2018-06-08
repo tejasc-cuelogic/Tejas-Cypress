@@ -10,7 +10,7 @@
             padding:0 @14px;
         }
     }
-    .fields .field{
+    .fields .field, .fields .wide.field{
         padding-left:@gutterWidth;
         padding-right:@gutterWidth;
         margin-bottom:@14px;
@@ -38,7 +38,7 @@
     }
     label{
         i.icon{
-            margin-left:@7px;
+            margin:0 0 0 @5px;
             font-size:@14px;
             color:@quaternary-text;
         }
@@ -278,6 +278,7 @@
         white-space:nowrap;
         .remove{
             margin:@7px 0 @7px @7px;
+            line-height:1;
             color:@link-color;
             position:relative;
             z-index:9;

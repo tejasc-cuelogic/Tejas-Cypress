@@ -31,7 +31,7 @@ const result = {
 
 const Transactions = () => (
   <div className="table-wrapper">
-    <Table singleLine className="investment-details" textAlign="right">
+    <Table unstackable singleLine className="investment-details" textAlign="right">
       <THeader columns={result.columns} />
       <Table.Body>
         {

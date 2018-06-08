@@ -12,7 +12,7 @@ const Transactions = () => {
           <Grid.Column mobile={1} tablet={8} computer={11}>
             <Card fluid>
               <div className="table-wrapper">
-                <Table className="investment-details">
+                <Table unstackable className="investment-details">
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>Date</Table.HeaderCell>

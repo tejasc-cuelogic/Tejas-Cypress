@@ -27,7 +27,7 @@ class UserListing extends Component {
     return (
       <Card fluid>
         <div className="table-wrapper">
-          <Table striped sortable singleLine className="user-list">
+          <Table unstackable striped sortable singleLine className="user-list">
             <Table.Header>
               <Table.Row>
                 {this.props.header.map(item => (
