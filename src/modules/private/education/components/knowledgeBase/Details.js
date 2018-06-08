@@ -7,8 +7,7 @@ import { Header, Card } from 'semantic-ui-react';
 @observer
 export default class Details extends Component {
   componentWillMount() {
-    // this.props.refLink || 'KnowledgeBase'
-    this.props.educationStore.getOne('Faq', this.props.match.params.id);
+    this.props.educationStore.getOne(this.props.module, this.props.match.params.id);
   }
   render() {
     const { selected } = this.props.educationStore;
@@ -17,8 +16,8 @@ export default class Details extends Component {
         <Card.Content className="padded knowledge-details">
           {selected ? (
             <Aux>
-              <Header as="h3">{selected.heading || selected.text}</Header>
-              <p>{selected.description}</p>
+              <Header as="h3">{selected.title}</Header>
+              <p>{selected.body}</p>
             </Aux>
             ) : <div>Nothing to display !</div>
           }

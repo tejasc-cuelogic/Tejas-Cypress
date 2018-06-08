@@ -26,19 +26,19 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
 });
 
-const defaultOptions = {
-  watchQuery: {
-    fetchPolicy: 'network-only',
-    errorPolicy: 'ignore',
-  },
-  query: {
-    fetchPolicy: 'network-only',
-    errorPolicy: 'all',
-  },
-};
+// const defaultOptions = {
+//   watchQuery: {
+//     fetchPolicy: 'network-only',
+//     errorPolicy: 'ignore',
+//   },
+//   query: {
+//     fetchPolicy: 'network-only',
+//     errorPolicy: 'all',
+//   },
+// };
 
 export const GqlClient = new ApolloClient({
   link: authLink.concat(new HttpLink({ uri })),
   cache: new InMemoryCache({ fragmentMatcher }),
-  defaultOptions,
+  // defaultOptions,
 });

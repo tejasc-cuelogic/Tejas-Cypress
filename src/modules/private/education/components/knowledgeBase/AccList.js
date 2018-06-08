@@ -9,24 +9,28 @@ import mapValues from 'lodash/mapValues';
 @observer
 export default class Faq extends Component {
   state = { activeIndex: 0 };
-  componentWillMount() {
-    this.props.educationStore.initRequest('Faq');
-  }
   toggleAction = (e, titleProps) => {
-    const { index } = titleProps;
+    const { index, refItem } = titleProps;
     const { activeIndex } = this.state;
     this.setState({ activeIndex: (activeIndex === index ? -1 : index) });
+    if (refItem !== '') {
+      this.props.educationStore.getOne(this.props.module, refItem);
+    }
   }
-  isActive = (record) => {
+  isActive = (record, key) => {
     let currId = this.props.location.pathname.split('/')[4];
     if (this.props.educationStore.selected) {
       currId = this.props.educationStore.selected.id;
     }
-    const ids = mapValues(record.faqs, f => f.id);
+    const ids = mapValues(record[key], f => f.id);
     return this.state.activeIndex === record.id || Object.values(ids).includes(currId);
   }
   render() {
-    const { match, data } = this.props;
+    const { match, data, module } = this.props;
+    const params = {
+      subItems: `${module}Items`,
+      item: module === 'faq' ? 'question' : 'title',
+    };
     const { selected } = this.props.educationStore;
     return (
       <Accordion className="splitted">
@@ -34,25 +38,26 @@ export default class Faq extends Component {
           data.map(record => (
             <Aux key={record.id}>
               <Accordion.Title
-                active={this.isActive(record)}
+                active={this.isActive(record, params.subItems)}
                 onClick={this.toggleAction}
                 index={record.id}
+                refItem={record[params.subItems].length > 0 ? record[params.subItems][0].id : ''}
               >
-                {record.name}
+                {record[params.item]}
                 <Icon className="ns-chevron-down" />
               </Accordion.Title>
-              <Accordion.Content active={this.isActive(record)}>
-                {record.faqs.length > 0 ? (
+              <Accordion.Content active={this.isActive(record, params.subItems)}>
+                {record[params.subItems].length > 0 ? (
                   <List divided relaxed="very">
                     {
-                      record.faqs.map(faq => (
+                      record[params.subItems].map(item => (
                         <List.Item
-                          className={selected && selected.id === faq.id ? 'active' : ''}
-                          to={`${match.url}/${faq.id}`}
-                          key={faq.id}
+                          className={selected && selected.id === item.id ? 'active' : ''}
+                          to={`${match.url}/${item.id}`}
+                          key={item.id}
                           as={NavLink}
                         >
-                          {faq.text}
+                          {item[params.item]}
                         </List.Item>
                       ))
                     }

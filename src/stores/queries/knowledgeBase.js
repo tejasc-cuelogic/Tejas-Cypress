@@ -1,64 +1,29 @@
 import gql from 'graphql-tag';
 
 export const allKbsQuery = gql`
-  query allKnowledgeBases {
-    allKnowledgeBases{
+  query getknowledgeBase {
+    knowledgeBase(scopeType: INVESTOR) {
       id
-      heading
-      description
-    }
-  }
-`;
-
-export const getFirst = gql`
-  query GetKnowledgeBase($first: Int!) {
-    allKnowledgeBases(first: $first, skip: 0) {
-      id
-      heading
-      description
-    }
-  }
-`;
-
-export const getOne = gql`
-  query GetOneKnowledgeBase($id: ID!) {
-    KnowledgeBase(id: $id) {
-      id
-      heading
-      description
-    }
-  }
-`;
-
-export const allFaqCategories = gql`
-  query allCategories {
-    allCategories{
-      id
-      name
-      faqs(orderBy: createdAt_DESC){
+      title
+      knowledgeBaseItems {
         id
-        text
+        title
+        body
       }
     }
   }
 `;
 
-export const getFirstFaq = gql`
-  query GetFaq($first: Int!) {
-    allFaqs(first: $first, skip: 0, orderBy: createdAt_DESC) {
+export const allFaqQuery = gql`
+  query getFaqs {
+    faqs(scopeType: INVESTOR) {
       id
-      text
-      description
-    }
-  }
-`;
-
-export const getOneFaq = gql`
-  query GetOneFaq($id: ID!) {
-    Faq(id: $id) {
-      id
-      text
-      description
+      question
+      faqItems {
+        id
+        question
+        answer
+      }
     }
   }
 `;
