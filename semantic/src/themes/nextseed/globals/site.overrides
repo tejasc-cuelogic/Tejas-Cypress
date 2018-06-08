@@ -116,6 +116,9 @@ h6{
 .negative-text{
 	color:@highlight-primary !important;
 }
+.tertiary-text{
+	color:@tertiary-text !important;
+}
 .intro-text{
 	color:@quaternary-text;
 	margin-bottom:@28px;
