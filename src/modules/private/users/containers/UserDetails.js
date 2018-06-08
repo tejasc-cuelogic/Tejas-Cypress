@@ -47,19 +47,19 @@ export default class AccountDetails extends Component {
             <List.Item>
               <List.Icon
                 circular
-                color={details.accountStatus === 'unlocked' ? 'green' : 'red'}
-                className={`ns-${details.accountStatus === 'unlocked' ? 'unlock' : 'lock'}`}
+                color={details.accountStatus === 'LOCK' ? 'red' : 'green'}
+                className={`ns-${details.accountStatus === 'LOCK' ? 'lock' : 'unlock'}`}
               />
               <List.Content verticalAlign="middle">
                 <List.Description>
-                  Account {details.accountStatus} <br />
+                  Account {details.accountStatus === 'LOCK' ? 'Locked' : 'Unlocked'} <br />
                   <Button
                     onClick={() => this.toggleState(details.id)}
                     size="tiny"
-                    color={details.accountStatus === 'unlocked' ? 'red' : 'green'}
+                    color={details.accountStatus === 'LOCK' ? 'green' : 'red'}
                     className="ghost-button"
                   >
-                    {details.accountStatus === 'unlocked' ? 'Lock' : 'Unlock'}
+                    {details.accountStatus === 'LOCK' ? 'Unlock' : 'Lock'}
                   </Button>
                 </List.Description>
               </List.Content>
