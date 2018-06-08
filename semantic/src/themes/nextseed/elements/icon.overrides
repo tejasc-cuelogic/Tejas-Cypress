@@ -1032,6 +1032,9 @@ i.icon[class*="ns-"]{
 .ns-bar-chart:before{
     content:@ns-bar-chart;
 }
+.ns-bar-line-chart:before{
+    content:@ns-bar-line-chart;
+}
 .ns-beauty-spa:before{
     content:@ns-beauty-spa;
 }
@@ -1064,6 +1067,9 @@ i.icon[class*="ns-"]{
 }
 .ns-category-line:before{
     content:@ns-category-line;
+}
+.ns-chart-setting:before{
+    content:@ns-chart-setting;
 }
 .ns-check-circle:before{
     content:@ns-check-circle;
@@ -1116,6 +1122,9 @@ i.icon[class*="ns-"]{
 .ns-compas:before{
     content:@ns-compas;
 }
+.ns-contact-card:before{
+    content:@ns-contact-card;
+}
 .ns-corporation:before{
     content:@ns-corporation;
 }
@@ -1134,6 +1143,9 @@ i.icon[class*="ns-"]{
 .ns-download:before{
     content:@ns-download;
 }
+.ns-dumbbells:before{
+    content:@ns-dumbbells;
+}
 .ns-ellipsis:before{
     content:@ns-ellipsis;
 }
@@ -1145,6 +1157,9 @@ i.icon[class*="ns-"]{
 }
 .ns-envelope:before{
     content:@ns-envelope;
+}
+.ns-envelope-line:before{
+    content:@ns-envelope-line;
 }
 .ns-equipment-purchase:before{
     content:@ns-equipment-purchase;
@@ -1160,9 +1175,6 @@ i.icon[class*="ns-"]{
 }
 .ns-first-aid:before{
     content:@ns-first-aid;
-}
-.ns-fitness2:before{
-    content:@ns-fitness2;
 }
 .ns-fitness:before{
     content:@ns-fitness;
@@ -1253,6 +1265,12 @@ i.icon[class*="ns-"]{
 }
 .ns-pencil:before{
     content:@ns-pencil;
+}
+.ns-pencil-circle-line:before{
+    content:@ns-pencil-circle-line;
+}
+.ns-phone-line:before{
+    content:@ns-phone-line;
 }
 .ns-proprietor:before{
     content:@ns-proprietor;

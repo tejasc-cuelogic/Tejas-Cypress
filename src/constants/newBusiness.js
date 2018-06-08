@@ -77,7 +77,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Beauty & Spa', icon: 'ns-beauty-spa', value: 'beautyspa' },
       { label: 'Food & Beverage', icon: 'ns-food-light', value: 'foodbeverage' },
       { label: 'Real Estate', icon: 'ns-real-estate', value: 'realestate' },
-      { label: 'Fitness & Wellness', icon: 'ns-fitness', value: 'fitnesswellness' },
+      { label: 'Fitness & Wellness', icon: 'ns-dumbbells', value: 'fitnesswellness' },
       { label: 'Hospitality', icon: 'ns-first-aid', value: 'hospitality' },
       { label: 'Technology', icon: 'ns-technology', value: 'technology' },
       { label: 'Other Industry Type', value: 'otherindustrytype' },

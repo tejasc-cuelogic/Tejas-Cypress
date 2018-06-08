@@ -19,7 +19,7 @@ export default class Bowner extends Component {
           </Card>
           <Card fluid>
             <Card.Content>
-              <Header as="h3"><Icon name="ns-pencil" /> California 88</Header>
+              <Header as="h3"><Icon name="ns-pencil-circle-line" /> California 88</Header>
             </Card.Content>
             <Card.Content>
               <dl className="dl-horizontal">
