@@ -188,4 +188,5 @@
 @ns-users: "\e939";
 @ns-view: "\e93a";
 @ns-wallet: "\e93b";
+@ns-warning-circle: "\e974";
 @ns-working-capital: "\e969";

@@ -1347,6 +1347,9 @@ i.icon[class*="ns-"]{
 .ns-wallet:before{
     content:@ns-wallet;
 }
+.ns-warning-circle:before{
+    content:@ns-warning-circle;
+}
 .ns-working-capital:before{
     content:@ns-working-capital;
 }
