@@ -58,7 +58,6 @@ const MySidebar = observer(props => (
         <div className="user-picture">
           <Randavatar name={props.UserInfo.fullname} accountType={props.UserInfo.accountType} avatarKey={props.UserInfo.avatarKey} size="small" />
           <h2>{props.UserInfo.fullname}</h2>
-          {props.desktop && <h3>{props.UserInfo.accountType}</h3>}
           {GetNavItem('profile-settings', props.UserInfo.roles)}
         </div>
         <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />

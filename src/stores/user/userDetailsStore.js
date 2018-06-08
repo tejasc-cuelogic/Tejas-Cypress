@@ -1,4 +1,4 @@
-/* eslint-disable class-methods-use-this, arrow-body-style */
+/* eslint-disable class-methods-use-this, arrow-body-style, no-return-assign */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import Validator from 'validatorjs';
@@ -14,7 +14,7 @@ import iraAccountStore from '../user/iraAccountStore';
 import entityAccountStore from '../user/entityAccountStore';
 import individualAccountStore from '../user/individualAccountStore';
 import { BENEFICIARY_FRM, FIN_INFO } from '../../constants/user';
-import { userDetailsQuery } from '../queries/users';
+import { userDetailsQuery, toggleUserAccount } from '../queries/users';
 import { allBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../queries/beneficiaries';
 import { finLimit, updateFinLimit } from '../queries/financialLimits';
 import Helper from '../../helper/utility';
@@ -63,9 +63,21 @@ export class UserDetailsStore {
   }
 
   @action
+  updateUserStatus = (status) => {
+    this.currentUser.data.user.accountStatus = status;
+  }
+
+  @action
   toggleState = () => {
-    this.currentUser.data.user.accountStatus = this.currentUser.data.user.accountStatus === 'locked' ?
-      'unlocked' : 'locked';
+    const { accountStatus, id } = this.currentUser.data.user;
+    const params = { status: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCK', id };
+    client
+      .mutate({
+        mutation: toggleUserAccount,
+        variables: params,
+      })
+      .then(() => this.updateUserStatus(params.status))
+      .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
 
   @action

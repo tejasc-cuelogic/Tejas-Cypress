@@ -277,13 +277,13 @@
         text-overflow:ellipsis;
         white-space:nowrap;
         .remove{
-            margin:@7px 0 @7px @7px;
+            margin:0 0 0 @7px;
             line-height:1;
             color:@link-color;
             position:relative;
             z-index:9;
             @media only screen and (max-width:@largestMobileScreen){
-                margin:0 0 0 @7px;
+                margin:@7px 0 @7px @7px;
             }
             &:hover{
                 color:darken(@link-color, 10%);
