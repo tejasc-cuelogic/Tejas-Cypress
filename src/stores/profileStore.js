@@ -3,7 +3,7 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import { GqlClient as client } from '../services/graphql';
-import { createUploadEntry, updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
+import { createUploadEntry, removeUploadedFile, updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
 
 import api from '../ns-api';
 import authStore from './authStore';
@@ -309,6 +309,34 @@ export class ProfileStore {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           this.confirmIdentityDocuments.fields[field].fileId = fileId;
           this.confirmIdentityDocuments.fields[field].preSignedUrl = preSignedUrl;
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  removeUploadedData(field) {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: removeUploadedFile,
+          variables: {
+            fileId: this.confirmIdentityDocuments.fields[field].fileId,
+          },
+        })
+        .then((result) => {
+          this.onFieldChange('confirmIdentityDocuments', field, '');
+          this.confirmIdentityDocuments.fields[field].fileId = '';
+          this.confirmIdentityDocuments.fields[field].preSignedUrl = '';
+          console.log(result);
           resolve();
         })
         .catch((err) => {

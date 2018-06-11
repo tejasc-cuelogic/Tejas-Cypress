@@ -15,6 +15,11 @@ export default class ConfirmIdentityDocuments extends Component {
     this.props.profileStore.setFileUploadData('photoId', files);
   }
 
+  onPhotoIdRemove = (e) => {
+    e.stopPropagation();
+    this.props.profileStore.removeUploadedData('photoId');
+  }
+
   onProofOfResidenceDrop = (files) => {
     this.props.profileStore.setFileUploadData('proofOfResidence', files);
   }
@@ -70,6 +75,7 @@ export default class ConfirmIdentityDocuments extends Component {
                   <DropZone
                     fielddata={confirmIdentityDocuments.fields.photoId}
                     ondrop={this.onPhotoIdDrop}
+                    onremove={this.onPhotoIdRemove}
                   />
                 </Grid.Column>
               </Grid.Row>

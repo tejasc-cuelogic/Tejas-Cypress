@@ -182,3 +182,11 @@ export const createUploadEntry = gql`
       fileId
     }
   }`;
+
+export const removeUploadedFile = gql`
+  mutation removeFile($fileId:String!) {
+    removeFile(fileId: $fileId) {
+      preSignedUrl
+      fileId
+    }
+  }`;
