@@ -137,6 +137,9 @@ a.text-link{
 	}
 }
 
+.invisible{
+	opacity:0 !important;
+}
 //	Admin Page Content Styles
 
 //	Page Header Styles

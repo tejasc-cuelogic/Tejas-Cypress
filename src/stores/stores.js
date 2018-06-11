@@ -16,4 +16,4 @@ export { default as individualAccountStore } from './user/individualAccountStore
 export { default as educationStore } from './education/educationStore';
 export { default as newBusinessStore } from './user/newBusinessStore';
 export { default as navStore } from './common/navStore';
-
+export { default as messageStore } from './messageStore';
