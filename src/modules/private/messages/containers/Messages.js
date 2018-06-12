@@ -32,7 +32,7 @@ export default class Messages extends Component {
           </Grid>
         </Form>
         <Card fluid className="messages">
-          <List divided relaxed="very" verticalAlign="middle">
+          <List divided selection relaxed="very" verticalAlign="middle">
             <List.Item className="active">
               <Item.Extra>
                 <Label size="mini" color="red" horizontal>New</Label>
@@ -144,7 +144,59 @@ export default class Messages extends Component {
               <Header as="h3">Business model</Header>
             </div>
             <div className="message-body">
-              <h1>Message body</h1>
+              <Item.Group className="messages">
+                <Item className="date-stamp">April 7, 2018</Item>
+                <Item>
+                  <Item.Image size="mini" avatar src={ProfilePicTemp} />
+                  <Item.Content>
+                    <Item.Description>
+                      <p>Hello,<br />
+                        Lorem ipsum dolor sit amet leo. Donec non ligula eleifend pede bibendum
+                        tempus. Nullam wisi semper risus. Ut rhoncus laoreet purus lacinia lacus.
+                        Nulla ut tortor. Maecenas elit odio, in dui. Vivamus nec elementum diam
+                        aliquet eget, dui. Mauris?
+                      </p>
+                      <p>Curae, Duis lobortis, mi ligula, elementum at, nibh. Duis non ligula
+                        accumsan urna, id eros. In tristique senectus et ultrices posuere
+                        cubilia Curae, Duis hendrerit sollicitudin.
+                      </p>
+                      <p>
+                        Thanks,<br />
+                        <b>Sarah Gainsborough</b>
+                      </p>
+                    </Item.Description>
+                  </Item.Content>
+                  <Item.Extra>
+                    <Label size="mini" color="red">New</Label>
+                    <span className="time-stamp">3:43 PM</span>
+                  </Item.Extra>
+                </Item>
+                <Item className="sent">
+                  <Item.Extra>
+                    <span className="time-stamp">4:58 PM</span>
+                  </Item.Extra>
+                  <Item.Content>
+                    <Item.Description>
+                      <p>Hello Sarah,<br />
+                        Lorem ipsum dolor sit amet leo. Donec non ligula eleifend pede bibendum
+                        tempus. Nullam wisi semper risus. Ut rhoncus laoreet purus lacinia lacus.
+                        Nulla ut tortor. Maecenas elit odio, in dui. Vivamus nec elementum diam
+                        aliquet eget, dui. Mauris?
+                      </p>
+                      <p>Curae, Duis lobortis, mi ligula, elementum at, nibh. Duis non ligula
+                        accumsan urna, id eros. In tristique senectus et ultrices posuere
+                        cubilia Curae, Duis hendrerit sollicitudin.
+                      </p>
+                      <p>
+                        Thanks,<br />
+                        <b>Isabel Ives</b>
+                      </p>
+                    </Item.Description>
+                  </Item.Content>
+                  <Item.Image size="mini" avatar src={ProfilePicTemp} />
+                </Item>
+              </Item.Group>
+
             </div>
             <div className="message-footer">
               <Form>
