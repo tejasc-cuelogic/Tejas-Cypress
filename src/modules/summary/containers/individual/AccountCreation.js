@@ -7,7 +7,7 @@ import LinkBankPlaid from './LinkBankPlaid';
 import Summary from './Summary';
 import AddFunds from './AddFunds';
 
-@inject('accountStore', 'individualAccountStore', 'uiStore')
+@inject('uiStore', 'accountStore', 'individualAccountStore', 'uiStore')
 @observer
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
@@ -18,6 +18,7 @@ export default class AccountCreation extends React.Component {
     this.props.individualAccountStore.setStepToBeRendered(step);
   }
   render() {
+    const { inProgress } = this.props.uiStore;
     const steps =
     [
       {
@@ -40,7 +41,7 @@ export default class AccountCreation extends React.Component {
     ];
     return (
       <div className="step-progress">
-        <MuliStep setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.individualAccountStore.stepToBeRendered} formTitle="Individual Account Creation" steps={steps} createAccount={this.props.individualAccountStore.createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MuliStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.individualAccountStore.stepToBeRendered} formTitle="Individual Account Creation" steps={steps} createAccount={this.props.individualAccountStore.createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

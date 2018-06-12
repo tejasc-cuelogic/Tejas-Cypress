@@ -123,9 +123,11 @@ export class Utility {
   }
 
   /* eslint-disable arrow-body-style */
-  uploadOnS3 = (item) => {
+  uploadOnS3 = (item, fileData) => {
+    const data = new FormData();
+    data.append('file', fileData);
     return new Promise((resolve, reject) => {
-      uploadApi.put(item)
+      uploadApi.put(item, data)
         .then(() => {
           resolve(item);
         })
@@ -139,7 +141,7 @@ export class Utility {
     return new Promise((resolve, reject) => {
       const funcArray = [];
       _.forEach(urlArray, (item) => {
-        funcArray.push(this.uploadOnS3(item));
+        funcArray.push(this.uploadOnS3(item.preSignedUrl, item.fileData[0]));
       });
       Promise.all(funcArray).then(() => {
         resolve();

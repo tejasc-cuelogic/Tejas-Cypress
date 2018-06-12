@@ -275,6 +275,9 @@ export const IRA_IDENTITY = {
     error: undefined,
     rule: 'required',
     label: '',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
   },
 };
 
@@ -336,19 +339,19 @@ export const ENTITY_PERSONAL_INFO = {
     key: 'title', value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
   },
   legalDocUrl: {
-    key: 'legalDocUrl', value: '', error: undefined, rule: 'required',
+    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
 };
 
 export const ENTITY_FORMATION_DOCS = {
   formationDoc: {
-    key: 'formationDoc', value: '', error: undefined, rule: 'required',
+    key: 'formationDoc', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   operatingAgreementDoc: {
-    key: 'operatingAgreementDoc', value: '', error: undefined, rule: 'required',
+    key: 'operatingAgreementDoc', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   einVerificationDoc: {
-    key: 'einVerificationDoc', value: '', error: undefined, rule: 'required',
+    key: 'einVerificationDoc', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
 };
 

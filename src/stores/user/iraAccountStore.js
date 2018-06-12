@@ -5,8 +5,10 @@ import _ from 'lodash';
 
 import { GqlClient as client } from '../../services/graphql';
 import { createAccount, updateAccount } from '../../stores/queries/account';
+import { createUploadEntry, removeUploadedFile } from '../../stores/queries/common';
 import uiStore from '../uiStore';
 import userStore from '../userStore';
+import accountStore from '../accountStore';
 import userDetailsStore from '../user/userDetailsStore';
 import Helper from '../../helper/utility';
 import {
@@ -15,7 +17,6 @@ import {
   IRA_FUNDING,
   IRA_IDENTITY,
 } from '../../constants/account';
-import accountStore from '../accountStore';
 
 class IraAccountStore {
   @observable
@@ -169,7 +170,9 @@ class IraAccountStore {
         payload.annualIncome = this.formFinInfo.fields.annualIncome.value;
       }
       if (this.formIdentity.fields.identityDoc.value) {
-        payload.identityDoc = this.formIdentity.fields.identityDoc.value;
+        payload.identityDoc = {};
+        payload.identityDoc.fileId = this.formIdentity.fields.identityDoc.fileId;
+        payload.identityDoc.fileName = this.formIdentity.fields.identityDoc.value;
       }
       payload.iraAccountType = accountType.label.toLowerCase();
       payload.fundingType = this.getFundingType(fundingOption.label.toLowerCase());
@@ -192,6 +195,7 @@ class IraAccountStore {
   createAccount = (currentStep, formStatus = 'draft') => {
     if (formStatus === 'submit') {
       this.setFormStatus('submit');
+      this.submitForm(currentStep, formStatus, this.accountAttributes);
     }
     const accountType = _.find(
       this.formAccTypes.fields.iraAccountType.values,
@@ -210,114 +214,131 @@ class IraAccountStore {
         if (isValidCurrentStep) {
           accountAttributes.netWorth = this.formFinInfo.fields.netWorth.value;
           accountAttributes.annualIncome = this.formFinInfo.fields.annualIncome.value;
+          this.submitForm(currentStep, formStatus, accountAttributes);
         }
         break;
       case 'Account type':
         isValidCurrentStep = true;
         accountAttributes.iraAccountType = accountType.label.toLowerCase();
+        this.submitForm(currentStep, formStatus, accountAttributes);
         break;
       case 'Funding':
         isValidCurrentStep = true;
         accountAttributes.fundingType = this.getFundingType(fundingOption.label.toLowerCase());
+        this.submitForm(currentStep, formStatus, accountAttributes);
         break;
       case 'Identity':
         currentStep.validate();
         isValidCurrentStep = this.isValidIraIdentity;
         if (isValidCurrentStep) {
-          accountAttributes.identityDoc = this.formIdentity.fields.identityDoc.value;
+          accountAttributes.identityDoc = {};
+          accountAttributes.identityDoc.fileId = this.formIdentity.fields.identityDoc.fileId;
+          accountAttributes.identityDoc.fileName = this.formIdentity.fields.identityDoc.value;
+          return new Promise((resolve, reject) => {
+            Helper.putUploadedFile([this.formIdentity.fields.identityDoc])
+              .then(() => {
+                this.submitForm(currentStep, formStatus, accountAttributes);
+              })
+              .catch((err) => {
+                uiStore.setErrors(this.simpleErr(err));
+                reject(err);
+              });
+          });
         }
         break;
       default:
         break;
     }
-    if (isValidCurrentStep) {
-      uiStore.setProgress();
-      let mutation = createAccount;
-      let variables = {
-        userId: userStore.currentUser.sub,
-        accountAttributes,
-        status: formStatus,
-        accountType: 'ira',
-      };
-      let actionPerformed = 'submitted';
-      if (userDetailsStore.currentUser.data) {
-        const accountDetails = _.find(
-          userDetailsStore.currentUser.data.user.accounts,
-          { accountType: 'ira' },
-        );
-        if (accountDetails) {
-          mutation = updateAccount;
-          variables = {
-            userId: userStore.currentUser.sub,
-            accountId: accountDetails.accountId,
-            accountAttributes,
-            status: formStatus,
-            accountType: 'ira',
-          };
-          actionPerformed = 'updated';
-        }
-      }
-      if (this.investorAccId) {
+  }
+
+  @action
+  submitForm = (currentStep, formStatus, accountAttributes) => {
+    uiStore.setProgress();
+    let mutation = createAccount;
+    let variables = {
+      userId: userStore.currentUser.sub,
+      accountAttributes,
+      status: formStatus,
+      accountType: 'ira',
+    };
+    let actionPerformed = 'submitted';
+    if (userDetailsStore.currentUser.data) {
+      const accountDetails = _.find(
+        userDetailsStore.currentUser.data.user.accounts,
+        { accountType: 'ira' },
+      );
+      if (accountDetails) {
         mutation = updateAccount;
         variables = {
           userId: userStore.currentUser.sub,
-          accountId: this.investorAccId,
+          accountId: accountDetails.accountId,
           accountAttributes,
           status: formStatus,
           accountType: 'ira',
         };
         actionPerformed = 'updated';
       }
-      return new Promise((resolve, reject) => {
-        client
-          .mutate({
-            mutation,
-            variables,
-          })
-          .then((result) => {
-            if (result.data.createInvestorAccount) {
-              this.setInvestorAccId(result.data.createInvestorAccount.accountId);
-              accountStore.setAccountTypeCreated(result.data.createInvestorAccount.accountType);
-            } else {
-              accountStore.setAccountTypeCreated(result.data.updateInvestorAccount.accountType);
-            }
-            switch (currentStep.name) {
-              case 'Financial info':
-                this.setIsDirty('formFinInfo', false);
-                this.setStepToBeRendered(1);
-                break;
-              case 'Account type':
-                this.setIsDirty('formAccTypes', false);
-                this.setStepToBeRendered(2);
-                break;
-              case 'Funding':
-                this.setIsDirty('formFunding', false);
-                this.setStepToBeRendered(3);
-                break;
-              case 'Identity':
-                this.setIsDirty('formIdentity', false);
-                this.setStepToBeRendered(4);
-                break;
-              default:
-                break;
-            }
-            if (formStatus === 'submit') {
-              Helper.toast('IRA account created successfully.', 'success');
-              userDetailsStore.getUser(userStore.currentUser.sub);
-            } else {
-              Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
-            }
-            resolve(result);
-          })
-          .catch((err) => {
-            uiStore.setErrors(this.simpleErr(err));
-            reject(err);
-          })
-          .finally(() => {
-            uiStore.setProgress(false);
-          });
-      });
     }
+    if (this.investorAccId) {
+      mutation = updateAccount;
+      variables = {
+        userId: userStore.currentUser.sub,
+        accountId: this.investorAccId,
+        accountAttributes,
+        status: formStatus,
+        accountType: 'ira',
+      };
+      actionPerformed = 'updated';
+    }
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation,
+          variables,
+        })
+        .then((result) => {
+          if (result.data.createInvestorAccount) {
+            this.setInvestorAccId(result.data.createInvestorAccount.accountId);
+            accountStore.setAccountTypeCreated(result.data.createInvestorAccount.accountType);
+          } else {
+            accountStore.setAccountTypeCreated(result.data.updateInvestorAccount.accountType);
+          }
+          switch (currentStep.name) {
+            case 'Financial info':
+              this.setIsDirty('formFinInfo', false);
+              this.setStepToBeRendered(1);
+              break;
+            case 'Account type':
+              this.setIsDirty('formAccTypes', false);
+              this.setStepToBeRendered(2);
+              break;
+            case 'Funding':
+              this.setIsDirty('formFunding', false);
+              this.setStepToBeRendered(3);
+              break;
+            case 'Identity':
+              this.setIsDirty('formIdentity', false);
+              this.setStepToBeRendered(4);
+              break;
+            default:
+              break;
+          }
+          if (formStatus === 'submit') {
+            Helper.toast('IRA account created successfully.', 'success');
+            userDetailsStore.getUser(userStore.currentUser.sub);
+          } else {
+            Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+          }
+          resolve(result);
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 
   @action
@@ -364,7 +385,10 @@ class IraAccountStore {
         });
         this.onFieldChange('formAccTypes', undefined, undefined, isDirty);
         Object.keys(this.formIdentity.fields).map((f) => {
-          this.formIdentity.fields[f].value = account.accountDetails[f];
+          if (account.accountDetails[f]) {
+            this.formIdentity.fields[f].value = account.accountDetails[f].fileName;
+            this.formIdentity.fields[f].fileId = account.accountDetails[f].fileId;
+          }
           return this.formIdentity.fields[f];
         });
         this.onFieldChange('formIdentity', undefined, undefined, false);
@@ -381,6 +405,67 @@ class IraAccountStore {
         }
       }
     }
+  }
+
+  @action
+  setFileUploadData(field, files) {
+    console.log(files);
+    this.formIdentity.fields[field].fileData = files;
+    const fileData = Helper.getFormattedFileData(files);
+    this.onFieldChange('formIdentity', field, fileData.fileName);
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createUploadEntry,
+          variables: {
+            userId: userStore.currentUser.sub,
+            stepName: 'IRAAccountDocuments',
+            fileData,
+          },
+        })
+        .then(action((result) => {
+          const { fileId, preSignedUrl } = result.data.createUploadEntry;
+          this.formIdentity.fields[field].fileId = fileId;
+          this.formIdentity.fields[field].preSignedUrl = preSignedUrl;
+          resolve();
+        }))
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          this.onFieldChange('formIdentity', field, '');
+          reject(err);
+        })
+        .finally(() => {
+          // uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  removeUploadedData(field) {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: removeUploadedFile,
+          variables: {
+            fileId: this.formIdentity.fields[field].fileId,
+          },
+        })
+        .then(() => {
+          this.onFieldChange('formIdentity', field, '');
+          this.formIdentity.fields[field].fileId = '';
+          this.formIdentity.fields[field].preSignedUrl = '';
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 
   simpleErr = err => ({

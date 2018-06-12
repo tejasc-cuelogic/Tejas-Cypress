@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List, Message, Confirm } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
 import ListErrors from '../../../theme/common/ListErrors';
@@ -15,13 +15,17 @@ export default class ConfirmIdentityDocuments extends Component {
     this.props.profileStore.setFileUploadData('photoId', files);
   }
 
-  onPhotoIdRemove = (e) => {
-    e.stopPropagation();
-    this.props.profileStore.removeUploadedData('photoId');
-  }
-
   onProofOfResidenceDrop = (files) => {
     this.props.profileStore.setFileUploadData('proofOfResidence', files);
+  }
+
+  handleDelDoc = (field) => {
+    this.props.profileStore.removeUploadedData(field);
+  }
+
+  confirmRemoveDoc = (name) => {
+    console.log(name);
+    this.props.uiStore.setConfirmBox(name);
   }
 
   handleCloseModal = () => {
@@ -43,9 +47,13 @@ export default class ConfirmIdentityDocuments extends Component {
     }
   }
 
+  handleDelCancel = () => {
+    this.props.uiStore.setConfirmBox('');
+  }
+
   render() {
     const { confirmIdentityDocuments } = this.props.profileStore;
-    const { errors } = this.props.uiStore;
+    const { errors, confirmBox } = this.props.uiStore;
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
@@ -73,9 +81,10 @@ export default class ConfirmIdentityDocuments extends Component {
                 </Grid.Column>
                 <Grid.Column width={9}>
                   <DropZone
+                    name="photoId"
                     fielddata={confirmIdentityDocuments.fields.photoId}
                     ondrop={this.onPhotoIdDrop}
-                    onremove={this.onPhotoIdRemove}
+                    onremove={this.confirmRemoveDoc}
                   />
                 </Grid.Column>
               </Grid.Row>
@@ -104,8 +113,10 @@ export default class ConfirmIdentityDocuments extends Component {
                 </Grid.Column>
                 <Grid.Column width={9}>
                   <DropZone
+                    name="proofOfResidence"
                     fielddata={confirmIdentityDocuments.fields.proofOfResidence}
                     ondrop={this.onProofOfResidenceDrop}
+                    onremove={this.confirmRemoveDoc}
                   />
                 </Grid.Column>
               </Grid.Row>
@@ -118,6 +129,15 @@ export default class ConfirmIdentityDocuments extends Component {
               <Button type="button" className="cancel-link" onClick={() => this.handleCloseModal()}>I`ll finish this letter</Button>
             </div>
           </Form>
+          <Confirm
+            header="Confirm"
+            content="Are you sure you want to remove this file?"
+            open={confirmBox.entity === 'proofOfResidence' || confirmBox.entity === 'photoId'}
+            onCancel={this.handleDelCancel}
+            onConfirm={() => this.handleDelDoc(confirmBox.entity)}
+            size="tiny"
+            className="deletion"
+          />
         </Modal.Content>
       </Modal>
     );

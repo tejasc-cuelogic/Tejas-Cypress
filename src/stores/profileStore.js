@@ -3,7 +3,8 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import { GqlClient as client } from '../services/graphql';
-import { createUploadEntry, removeUploadedFile, updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
+import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
+import { createUploadEntry, removeUploadedFile } from '../stores/queries/common';
 
 import api from '../ns-api';
 import authStore from './authStore';
@@ -668,7 +669,7 @@ export class ProfileStore {
     uiStore.setProgress();
     const { photoId, proofOfResidence } = this.confirmIdentityDocuments.fields;
     return new Promise((resolve, reject) => {
-      Helper.putUploadedFile([photoId.preSignedUrl, proofOfResidence.preSignedUrl])
+      Helper.putUploadedFile([photoId, proofOfResidence])
         .then(() => {
           client
             .mutate({

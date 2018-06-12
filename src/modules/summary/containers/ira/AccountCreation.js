@@ -8,7 +8,7 @@ import Identity from './Identity';
 import Summary from './Summary';
 import validationActions from '../../../../actions/validation';
 
-@inject('iraAccountStore', 'userDetailsStore', 'userStore')
+@inject('uiStore', 'iraAccountStore', 'userDetailsStore', 'userStore')
 @observer
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
@@ -18,6 +18,7 @@ export default class AccountCreation extends React.Component {
     this.props.iraAccountStore.setStepToBeRendered(step);
   }
   render() {
+    const { inProgress } = this.props.uiStore;
     const steps =
     [
       {
@@ -55,7 +56,7 @@ export default class AccountCreation extends React.Component {
 
     return (
       <div className="step-progress">
-        <MuliStep setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.iraAccountStore.stepToBeRendered} createAccount={this.props.iraAccountStore.createAccount} steps={steps} formTitle="IRA Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MuliStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.iraAccountStore.stepToBeRendered} createAccount={this.props.iraAccountStore.createAccount} steps={steps} formTitle="IRA Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }
