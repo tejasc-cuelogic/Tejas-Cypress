@@ -93,10 +93,12 @@
 @ns-caret-left: "\e90e";
 @ns-caret-right: "\e90f";
 @ns-caret-up: "\e910";
+@ns-cash-dollar: "\e975";
 @ns-category: "\e911";
 @ns-category-line: "\e912";
 @ns-chart-setting: "\e970";
 @ns-check-circle: "\e913";
+@ns-check-circle-line: "\e976";
 @ns-chevron-down: "\e914";
 @ns-chevron-down-compact: "\e915";
 @ns-chevron-left: "\e916";
@@ -118,6 +120,7 @@
 @ns-credit-card: "\e91f";
 @ns-dashboard: "\e920";
 @ns-dashboard-circle: "\e921";
+@ns-document: "\e977";
 @ns-doller-circle: "\e922";
 @ns-download: "\e923";
 @ns-dumbbells: "\e959";
@@ -165,6 +168,8 @@
 @ns-phone-line: "\e973";
 @ns-proprietor: "\e963";
 @ns-real-estate: "\e964";
+@ns-reload-circle: "\e978";
+@ns-reload-circle-line: "\e979";
 @ns-renovations: "\e965";
 @ns-replay: "\e946";
 @ns-restructure-debt: "\e966";
@@ -188,4 +193,5 @@
 @ns-users: "\e939";
 @ns-view: "\e93a";
 @ns-wallet: "\e93b";
+@ns-warning-circle: "\e974";
 @ns-working-capital: "\e969";
