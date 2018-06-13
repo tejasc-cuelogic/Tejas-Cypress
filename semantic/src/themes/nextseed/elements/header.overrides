@@ -56,3 +56,12 @@
 .ui.header + .ui.header{
     margin-top:@7px;
 }
+
+.ui.header{
+    a.link{
+        margin-left:@10px;
+        >small{
+            font-size:@13px;
+        }
+    }
+}

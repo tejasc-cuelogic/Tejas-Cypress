@@ -31,7 +31,7 @@ class EntityAccountStore {
 
   @observable
   formEntityInfo = {
-    fields: { ...ENTITY_TRUST_INFO }, meta: { isValid: false, error: '', isDirty: true },
+    fields: { ...ENTITY_TRUST_INFO }, meta: { isValid: true, error: '', isDirty: true },
   };
 
   @observable
@@ -452,10 +452,14 @@ class EntityAccountStore {
                 this.setIsDirty('formFormationDocuments', false);
                 this.setStepToBeRendered(5);
                 break;
+              case 'Link bank':
+                this.setStepToBeRendered(6);
+                break;
               default:
                 break;
             }
             if (formStatus === 'submit') {
+              userDetailsStore.getUser(userStore.currentUser.sub);
               Helper.toast('Entity account created successfully.', 'success');
             } else {
               Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');

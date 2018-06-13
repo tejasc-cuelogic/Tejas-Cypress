@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import _ from 'lodash';
-import { Grid, Card, Header, Icon, Responsive, Divider, List } from 'semantic-ui-react';
+import { Grid, Card, Header, Icon, Responsive, Divider, List, Button } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import PageHeaderSection from '../../../theme/common/PageHeaderSection';
@@ -13,7 +13,7 @@ import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 import Spinner from '../../../theme/ui/Spinner';
 
-@inject('uiStore', 'profileStore', 'iraAccountStore', 'accountStore', 'userStore', 'userDetailsStore', 'individualAccountStore')
+@inject('uiStore', 'profileStore', 'entityAccountStore', 'iraAccountStore', 'accountStore', 'userStore', 'userDetailsStore', 'individualAccountStore')
 @observer
 class Summary extends Component {
   componentWillMount() {
@@ -50,6 +50,19 @@ class Summary extends Component {
     return false;
   }
 
+  navToAccTypes(step) {
+    let type = 0;
+    if (step === 'individual') {
+      type = 0;
+    } else if (step === 'ira') {
+      type = 1;
+    } else if (step === 'entity') {
+      type = 2;
+    }
+    this.props.accountStore.setAccountType(type);
+    this.setDashboardWizardSetup(`${step}/AccountCreation`);
+  }
+
   render() {
     let stepinfo = {
       value: 'Verify your identity',
@@ -57,6 +70,95 @@ class Summary extends Component {
       linkText: 'Verify me',
       linkPath: 'InvestorPersonalDetails',
     };
+
+    let accTypes = ['individual', 'IRA', 'entity'];
+    if (!this.props.uiStore.errors) {
+      const accDetails = this.props.userDetailsStore.signupStatus;
+      if (accDetails.activeAccounts.length > 0) {
+        accTypes = _.filter(
+          accTypes,
+          n => _.lowerCase(n) !== (accDetails.activeAccounts[0]),
+        );
+        return (
+          <Aux>
+            <PrivateLayout
+              {...this.props}
+            >
+              <div className="conent-spacer">
+                <Card.Group stackable itemsPerRow={3}>
+                  {
+                    accTypes.map(item => (
+                      <Card fluid>
+                        <Card.Content>
+                          <Header as="h3">New {_.startCase(item)} Account</Header>
+                          <p>Start new application process to proceed</p>
+                          <Divider hidden />
+                          <Button onClick={() => this.navToAccTypes(_.lowerCase(item))} primary>
+                            Create {_.startCase(item)} Account
+                          </Button>
+                        </Card.Content>
+                      </Card>
+                    ))
+                  }
+                </Card.Group>
+                <Header as="h3">Progress of verifying your identity</Header>
+                <Card.Group stackable itemsPerRow={3}>
+                  <Card fluid className="verification done">
+                    <Card.Content>
+                      <Icon.Group size="huge">
+                        <Icon className="ns-envelope-line" />
+                        <Icon corner color="green" className="ns-check-circle" />
+                      </Icon.Group>
+                      <p>Your <b>Email-addres</b> has been verified</p>
+                    </Card.Content>
+                  </Card>
+                  <Card fluid className="verification">
+                    <Card.Content>
+                      <Icon.Group size="huge">
+                        <Icon className="ns-contact-card" />
+                        <Icon corner color="red" className="ns-warning-circle" />
+                      </Icon.Group>
+                      <p><b>Please verify your Identity</b></p>
+                      <Button color="green" className="relaxed" content="Verify" />
+                    </Card.Content>
+                  </Card>
+                  <Card fluid className="verification disabled">
+                    <Card.Content>
+                      <Icon.Group size="huge">
+                        <Icon className="ns-phone-line" />
+                      </Icon.Group>
+                      <p><b>Please verify your phone number</b></p>
+                      <Button color="green" className="relaxed" disabled content="Verify" />
+                    </Card.Content>
+                  </Card>
+                  <Card fluid className="verification">
+                    <Card.Content>
+                      <Icon.Group size="huge">
+                        <Icon className="ns-bar-line-chart" />
+                      </Icon.Group>
+                      <p><b>You have no account yet</b></p>
+                      <Button color="green" content="Create your first investment account" />
+                    </Card.Content>
+                  </Card>
+                  <Card fluid className="verification disabled">
+                    <Card.Content>
+                      <Icon.Group size="huge">
+                        <Icon className="ns-chart-setting" />
+                      </Icon.Group>
+                      <p><b>Start creation process of another type of account</b></p>
+                      <Button inverted color="green" content="Create another account" />
+                    </Card.Content>
+                  </Card>
+                </Card.Group>
+              </div>
+            </PrivateLayout>
+            {this.props.uiStore.dashboardStep &&
+            <DashboardWizard />
+            }
+          </Aux>
+        );
+      }
+    }
 
     const { currentUser } = this.props.userDetailsStore;
     if (!currentUser.data.user) {
@@ -109,7 +211,7 @@ class Summary extends Component {
       <Aux>
         <PrivateLayout
           {...this.props}
-          StickyNotification={
+          P5={
             <StickyNotification
               stepinfo={stepinfo}
               setDashboardWizardSetup={this.setDashboardWizardSetup}

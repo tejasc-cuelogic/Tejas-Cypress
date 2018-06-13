@@ -9,6 +9,7 @@ import api from '../ns-api';
 import authStore from './authStore';
 import uiStore from './uiStore';
 import userStore from './userStore';
+import userDetailsStore from './user/userDetailsStore';
 import Helper from '../helper/utility';
 
 import {
@@ -263,6 +264,7 @@ export class ProfileStore {
               },
             })
             .then((result) => {
+              userDetailsStore.getUser(userStore.currentUser.sub);
               console.log(result);
             })
             .catch(() => {});
@@ -433,22 +435,22 @@ export class ProfileStore {
     }
     if (userDetails.lastName) {
       this.onFieldChange('updateProfileInfo', 'lastName', userDetails.lastName);
-    } else if (legalDetails.legalName !== null) {
+    } else if (legalDetails && legalDetails.legalName !== null) {
       this.onFieldChange('updateProfileInfo', 'firstName', legalDetails.legalName.firstLegalName);
       this.onFieldChange('updateProfileInfo', 'lastName', legalDetails.legalName.lastLegalName);
     }
     this.onFieldChange('updateProfileInfo', 'email', email);
-    if (contactDetails.phone !== null) {
+    if (contactDetails && contactDetails.phone !== null) {
       this.onFieldChange('updateProfileInfo', 'phoneNumber', contactDetails.phone.number);
     }
     if (address === null) {
-      if (legalDetails.legalAddress !== null) {
+      if (legalDetails && legalDetails.legalAddress !== null) {
         this.onFieldChange('updateProfileInfo', 'street', legalDetails.legalAddress.street);
         this.onFieldChange('updateProfileInfo', 'city', legalDetails.legalAddress.city);
         this.onFieldChange('updateProfileInfo', 'state', legalDetails.legalAddress.state);
         this.onFieldChange('updateProfileInfo', 'zipCode', legalDetails.legalAddress.zipCode);
       }
-    } else if (address.mailing) {
+    } else if (address && address.mailing) {
       if (address.mailing.street !== null) {
         this.onFieldChange('updateProfileInfo', 'street', address.mailing.street);
       }
@@ -613,7 +615,9 @@ export class ProfileStore {
             userId: userStore.currentUser.sub,
             user: this.formattedUserInfo,
             phoneDetails: this.formattedPhoneDetails,
-            cipStatus: 'MANUAL_VERIFICATION_PENDING',
+            cipStatus: {
+              status: 'MANUAL_VERIFICATION_PENDING',
+            },
           },
         })
         .then(() => {

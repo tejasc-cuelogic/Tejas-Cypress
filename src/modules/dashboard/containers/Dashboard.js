@@ -1,24 +1,23 @@
 import React, { Component } from 'react';
+import { toJS } from 'mobx';
+import { inject, observer } from 'mobx-react';
 import PrivateLayout from '../../../containers/common/PrivateHOC';
+import StickyNotification from '../components/StickyNotification';
+import CommonDashboard from './dashboards/CommonDashboard';
+import Bowner from './dashboards/Bowner';
 
+@inject('userStore')
+@observer
 class Dashboard extends Component {
   render() {
-    const pathInfo = this.props.location.pathname.split('/app/');
+    const { roles } = toJS(this.props.userStore.currentUser);
+    const role = roles[0];
     return (
-      <PrivateLayout {...this.props}>
-        <div
-          style={{
-            fontSize: '24px',
-            color: '#666',
-            marginTop: '28px',
-            textAlign: 'center',
-          }}
-        >
-          {`
-            This is just a landing page to demonstrate real navigation of route
-            "${pathInfo[1].replace(/\//g, ' > ')}"
-          `}
-        </div>
+      <PrivateLayout
+        {...this.props}
+        P5={role === 'bowner' ? <StickyNotification /> : null}
+      >
+        {role === 'bowner' ? <Bowner /> : <CommonDashboard />}
       </PrivateLayout>
     );
   }

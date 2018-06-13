@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Menu, Icon } from 'semantic-ui-react';
 import _ from 'lodash';
-import { ALL_NAV_ITEMS } from '../../constants/privateNavigationMeta';
+import { PRIVATE_NAV } from '../../constants/NavigationMeta';
 import { NavItems } from './NavigationItems';
 
+@inject('navStore')
 @withRouter
+@observer
 export class SidebarNav extends Component {
+  componentWillMount() {
+    this.props.navStore.setAccessParams('roles', this.props.roles);
+  }
   render() {
     const {
       roles,
       location,
       isVerified,
       createdAccount,
+      navStore,
     } = this.props;
-    const navItems = _.filter(
-      ALL_NAV_ITEMS,
-      n => n.to !== 'profile-settings' && (n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0),
-    );
+    const navItems = navStore.myNavItems;
     return (
       <Aux>
         <NavItems
@@ -39,7 +43,7 @@ export class SidebarNav extends Component {
 }
 
 export const GetNavItem = (item, roles) => {
-  const result = _.find(ALL_NAV_ITEMS, i => i.to === item);
+  const result = _.find(PRIVATE_NAV, i => i.to === item);
   const link = <h3><Link to={`/app/${result.to}`}>{result.title}</Link></h3>;
   return (
     result && (
@@ -48,6 +52,6 @@ export const GetNavItem = (item, roles) => {
 };
 
 export const GetNavMeta = (item) => {
-  const navMeta = _.find(ALL_NAV_ITEMS, i => item.includes(i.to));
+  const navMeta = _.find(PRIVATE_NAV, i => item.includes(i.to));
   return navMeta;
 };

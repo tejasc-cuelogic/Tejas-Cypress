@@ -92,7 +92,7 @@ export default class FilerInformation extends React.Component {
             />
           </Form.Group>
         </Card>
-        <Card.Group itemsPerRow={2}>
+        <Card.Group stackable itemsPerRow={2}>
           <Card fluid className="form-card">
             <FormInput
               type="text"
