@@ -251,6 +251,7 @@
     line-height:@28px;
     font-weight:700;
     text-align:center;
+    cursor:pointer;
     .icon{
         height:auto;
         margin-right:@6px;
