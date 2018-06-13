@@ -8,7 +8,7 @@ export default class Bowner extends Component {
     return (
       <Aux>
         <Header as="h3">Applications</Header>
-        <Card.Group itemsPerRow={4}>
+        <Card.Group stackable itemsPerRow={4}>
           <Card fluid>
             <Card.Content>
               <Header as="h3"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>

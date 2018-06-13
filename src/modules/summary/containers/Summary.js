@@ -85,7 +85,7 @@ class Summary extends Component {
               {...this.props}
             >
               <div className="conent-spacer">
-                <Card.Group itemsPerRow={3}>
+                <Card.Group stackable itemsPerRow={3}>
                   {
                     accTypes.map(item => (
                       <Card fluid>
