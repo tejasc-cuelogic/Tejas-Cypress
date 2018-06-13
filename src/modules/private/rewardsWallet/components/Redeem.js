@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Modal, Button, Header, Grid, Card, Statistic, Form, List } from 'semantic-ui-react';
+import { Modal, Button, Header, Grid, Card, Statistic } from 'semantic-ui-react';
 
 const Redeem = props => (
   <Modal
@@ -35,31 +34,18 @@ const Redeem = props => (
       </Grid>
     </Modal.Content>
     <Modal.Content className="center-align">
-      <p>We sent a verification PIN to your email:</p>
-      <Form.Input
-        fluid
-        size="huge"
-        type="email"
-        value="isabel.ives@gmail.com"
-        readOnly
-        className="display-only"
-      />
-      <List horizontal divided relaxed="very" className="link-list">
-        <List.Item>
-          <Link to={props.location}>Change email address</Link>
-        </List.Item>
-        <List.Item>
-          <Link to={props.location}>Resend message</Link>
-        </List.Item>
-      </List>
-      <Form error onSubmit={this.handleSubmitForm}>
-        <Form.Input
-          label="Enter PIN here:"
-          size="huge"
-          containerclassname="otp-field"
-        />
-        <Button primary size="large" onClose={props.history.goBack} className="very relaxed">Redeem Reward</Button>
-      </Form>
+      <div>
+        <Header as="h5">Description Header</Header>
+        <p>
+          The prime wagyu briskets from Akaushi Beef will go into the pit between midnight and 2am
+          in preparation for lunch and dinner service that day.
+        </p>
+      </div>
+      <p>
+        Please present this digital voucher (on your phone or printed up) to California 88 to
+        finish the redemption process
+      </p>
+      <Button primary size="large" onClose={props.history.goBack} className="very relaxed">Redeem Reward</Button>
     </Modal.Content>
   </Modal>
 );
