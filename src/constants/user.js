@@ -118,6 +118,12 @@ export const BENEFICIARY_FRM = {
     error: undefined,
     rule: 'required|numeric',
   },
+  share: {
+    value: '',
+    label: 'Share',
+    error: undefined,
+    rule: 'required|numeric',
+  },
 };
 
 export const FIN_INFO = {

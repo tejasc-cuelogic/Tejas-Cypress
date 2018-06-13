@@ -570,7 +570,7 @@ dl.dl-horizontal{
 	dd{
 		margin-left:150px;
 		margin-bottom:@10px;
-		color:@quaternary-text;
+		color:@secondary-text;
 		overflow:hidden;
 		text-overflow:ellipsis;
 		&:last-of-type{
