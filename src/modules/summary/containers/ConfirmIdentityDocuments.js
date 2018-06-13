@@ -21,10 +21,11 @@ export default class ConfirmIdentityDocuments extends Component {
 
   handleDelDoc = (field) => {
     this.props.profileStore.removeUploadedData(field);
+    this.props.uiStore.setConfirmBox('');
   }
 
-  confirmRemoveDoc = (name) => {
-    console.log(name);
+  confirmRemoveDoc = (e, name) => {
+    e.preventDefault();
     this.props.uiStore.setConfirmBox(name);
   }
 
@@ -41,7 +42,10 @@ export default class ConfirmIdentityDocuments extends Component {
       this.props.profileStore.uploadAndUpdateCIPInfo().then(() => {
         this.props.profileStore.startPhoneVerification().then(() => {
           this.props.setDashboardWizardStep('ConfirmPhoneNumber');
-        });
+        })
+          .catch((err) => {
+            this.props.uiStore.setErrors(JSON.stringify(err.message));
+          });
       })
         .catch(() => { });
     }
@@ -64,7 +68,12 @@ export default class ConfirmIdentityDocuments extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
+          {errors && errors.message &&
+            <Message error textAlign="left">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
+          {errors && !errors.message &&
             <Message error textAlign="left">
               <ListErrors errors={[errors]} />
             </Message>

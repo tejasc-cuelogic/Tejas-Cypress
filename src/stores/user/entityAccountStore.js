@@ -571,7 +571,7 @@ class EntityAccountStore {
           if (account.accountDetails.entity && account.accountDetails.entity.legalInfo && f === 'legalDocUrl') {
             this.formPersonalInfo.fields[f].value =
               account.accountDetails.entity.legalInfo[f].fileName;
-            this.formPersonalInfo.fields[f].value =
+            this.formPersonalInfo.fields[f].fileId =
               account.accountDetails.entity.legalInfo[f].fileId;
           } else if (account.accountDetails.entity && account.accountDetails.entity.legalInfo) {
             this.formPersonalInfo.fields[f].value = account.accountDetails.entity.legalInfo[f];
@@ -585,7 +585,10 @@ class EntityAccountStore {
         Object.keys(this.formFormationDocuments.fields).map((f) => {
           if (account.accountDetails.entity && account.accountDetails.entity.legalDocs) {
             const { entity } = account.accountDetails;
-            this.formFormationDocuments.fields[f].value = entity.legalDocs[f];
+            if (entity.legalDocs[f]) {
+              this.formFormationDocuments.fields[f].value = entity.legalDocs[f].fileName;
+              this.formFormationDocuments.fields[f].fileId = entity.legalDocs[f].fileId;
+            }
           }
           return this.formFormationDocuments.fields[f];
         });
@@ -611,21 +614,23 @@ class EntityAccountStore {
             accountStore.onFieldChange('formLinkBankManually');
           }
         }
-        if (!this.formFinInfo.meta.isValid) {
-          this.setStepToBeRendered(0);
-        } else if (!this.formGeneralInfo.meta.isValid) {
-          this.setStepToBeRendered(1);
-        } else if (!this.formEntityInfo.meta.isValid) {
-          this.setStepToBeRendered(2);
-        } else if (!this.formPersonalInfo.meta.isValid) {
-          this.setStepToBeRendered(3);
-        } else if (!this.formFormationDocuments.meta.isValid) {
-          this.setStepToBeRendered(4);
-        } else if (!accountStore.formLinkBankManually.meta.isValid &&
-          _.isEmpty(accountStore.plaidBankDetails)) {
-          this.setStepToBeRendered(5);
-        } else {
-          this.setStepToBeRendered(6);
+        if (!uiStore.errors) {
+          if (!this.formFinInfo.meta.isValid) {
+            this.setStepToBeRendered(0);
+          } else if (!this.formGeneralInfo.meta.isValid) {
+            this.setStepToBeRendered(1);
+          } else if (!this.formEntityInfo.meta.isValid) {
+            this.setStepToBeRendered(2);
+          } else if (!this.formPersonalInfo.meta.isValid) {
+            this.setStepToBeRendered(3);
+          } else if (!this.formFormationDocuments.meta.isValid) {
+            this.setStepToBeRendered(4);
+          } else if (!accountStore.formLinkBankManually.meta.isValid &&
+            _.isEmpty(accountStore.plaidBankDetails)) {
+            this.setStepToBeRendered(5);
+          } else {
+            this.setStepToBeRendered(6);
+          }
         }
       }
     }

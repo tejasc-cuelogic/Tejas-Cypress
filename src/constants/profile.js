@@ -96,6 +96,7 @@ export const CONFIRM_IDENTITY_DOCUMENTS = {
     rule: 'required',
     preSignedUrl: '',
     fileId: '',
+    fileData: '',
   },
   proofOfResidence: {
     key: 'proofOfResidence',
@@ -104,6 +105,7 @@ export const CONFIRM_IDENTITY_DOCUMENTS = {
     rule: 'required',
     preSignedUrl: '',
     fileId: '',
+    fileData: '',
   },
 };
 

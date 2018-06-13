@@ -114,7 +114,7 @@ export class Utility {
     const fileData = {};
     if (files && files.length > 0) {
       const fileInfo = files[0];
-      fileData.fileName = fileInfo.name;
+      fileData.fileName = fileInfo.name.replace(/ /g, '_');
       fileData.fileType = fileInfo.type;
       fileData.fileExtension = fileInfo.name.substr((fileInfo.name.lastIndexOf('.') + 1));
       fileData.fileSize = fileInfo.size;
@@ -124,12 +124,10 @@ export class Utility {
 
   /* eslint-disable arrow-body-style */
   uploadOnS3 = (item, fileData) => {
-    const data = new FormData();
-    data.append('file', fileData);
     return new Promise((resolve, reject) => {
-      uploadApi.put(item, data)
+      uploadApi.put(item, fileData)
         .then(() => {
-          resolve(item);
+          resolve();
         })
         .catch((err) => {
           reject(err);
