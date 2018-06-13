@@ -392,16 +392,18 @@ class IraAccountStore {
           return this.formIdentity.fields[f];
         });
         this.onFieldChange('formIdentity', undefined, undefined, false);
-        if (!this.formFinInfo.meta.isValid) {
-          this.setStepToBeRendered(0);
-        } else if (!this.formAccTypes.meta.isValid || this.accountNotSet === 'accType') {
-          this.setStepToBeRendered(1);
-        } else if (!this.formFunding.meta.isValid || this.fundingNotSet === 'funding') {
-          this.setStepToBeRendered(2);
-        } else if (!this.formIdentity.meta.isValid) {
-          this.setStepToBeRendered(3);
-        } else {
-          this.setStepToBeRendered(4);
+        if (!uiStore.errors) {
+          if (!this.formFinInfo.meta.isValid) {
+            this.setStepToBeRendered(0);
+          } else if (!this.formAccTypes.meta.isValid || this.accountNotSet === 'accType') {
+            this.setStepToBeRendered(1);
+          } else if (!this.formFunding.meta.isValid || this.fundingNotSet === 'funding') {
+            this.setStepToBeRendered(2);
+          } else if (!this.formIdentity.meta.isValid) {
+            this.setStepToBeRendered(3);
+          } else {
+            this.setStepToBeRendered(4);
+          }
         }
       }
     }
@@ -409,7 +411,6 @@ class IraAccountStore {
 
   @action
   setFileUploadData(field, files) {
-    console.log(files);
     this.formIdentity.fields[field].fileData = files;
     const fileData = Helper.getFormattedFileData(files);
     this.onFieldChange('formIdentity', field, fileData.fileName);
@@ -436,7 +437,7 @@ class IraAccountStore {
           reject(err);
         })
         .finally(() => {
-          // uiStore.setProgress(false);
+          uiStore.setProgress(false);
         });
     });
   }

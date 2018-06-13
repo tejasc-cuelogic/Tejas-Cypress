@@ -12,6 +12,7 @@ export default class Identity extends Component {
   }
   onIdentityDocRemove = () => {
     this.props.iraAccountStore.removeUploadedData('identityDoc');
+    this.props.uiStore.setConfirmBox('');
   }
   confirmRemoveDoc = (name) => {
     this.props.uiStore.setConfirmBox(name);

@@ -16,26 +16,15 @@ export default class FormationDocumemts extends Component {
   onEinVerificationDocDrop = (files) => {
     this.props.entityAccountStore.setFileUploadData('formFormationDocuments', 'einVerificationDoc', files);
   }
-  // onFormationDocRemove = () => {
-  //   this.props.entityAccountStore.removeUploadedData('formFormationDocuments', 'formationDoc');
-  // }
-  // onOperatingAgreementDocRemove = () => {
-  //   this.props.entityAccountStore.removeUploadedData(
-  // 'formFormationDocuments', 'operatingAgreementDoc');
-  // }
-  // onEinVerificationDocRemove = () => {
-  //   this.props.entityAccountStore.removeUploadedData(
-  // 'formFormationDocuments', 'einVerificationDoc');
-  // }
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
-  confirmRemoveDoc = (name) => {
-    console.log(name);
+  confirmRemoveDoc = (e, name) => {
     this.props.uiStore.setConfirmBox(name);
   }
   handleDelDoc = (field) => {
     this.props.entityAccountStore.removeUploadedData('formFormationDocuments', field);
+    this.props.uiStore.setConfirmBox('');
   }
   render() {
     const { formFormationDocuments } = this.props.entityAccountStore;

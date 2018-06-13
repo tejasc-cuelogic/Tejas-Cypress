@@ -8,6 +8,7 @@ export class UploadApi {
     new Promise((resolve, reject) => {
       request
         .put(`${url}`)
+        .set('Content-Type', 'text/plain')
         .send(file)
         .end((err, data) => {
           if (err) {

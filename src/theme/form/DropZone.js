@@ -32,7 +32,7 @@ const DropZone = observer((props) => {
           size="tiny"
           compact
           className="remove pull-right"
-          onClick={() => props.onremove(props.name)}
+          onClick={e => props.onremove(e, props.name)}
         >
           Remove
         </Responsive>
@@ -41,7 +41,7 @@ const DropZone = observer((props) => {
           maxWidth={767}
           name="remove"
           className="pull-right"
-          onClick={() => props.onremove(props.name)}
+          onClick={e => props.onremove(e, props.name)}
         />
         <span title={value}>{value}</span>
       </div>

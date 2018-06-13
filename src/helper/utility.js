@@ -124,12 +124,10 @@ export class Utility {
 
   /* eslint-disable arrow-body-style */
   uploadOnS3 = (item, fileData) => {
-    const data = new FormData();
-    data.append('file', fileData);
     return new Promise((resolve, reject) => {
-      uploadApi.put(item, data)
+      uploadApi.put(item, fileData)
         .then(() => {
-          resolve(item);
+          resolve();
         })
         .catch((err) => {
           reject(err);
