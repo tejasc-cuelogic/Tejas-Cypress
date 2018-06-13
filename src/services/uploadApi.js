@@ -8,7 +8,7 @@ export class UploadApi {
     new Promise((resolve, reject) => {
       request
         .put(`${url}`)
-        .set('Content-Type', 'text/plain')
+        .set('Content-Type', 'text/plain') // Added for File upload functionality (Binary Mode)
         .send(file)
         .end((err, data) => {
           if (err) {
