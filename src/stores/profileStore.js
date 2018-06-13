@@ -293,6 +293,7 @@ export class ProfileStore {
 
   @action
   setFileUploadData(field, files) {
+    this.confirmIdentityDocuments.fields[field].fileData = files;
     const fileData = Helper.getFormattedFileData(files);
     this.onFieldChange('confirmIdentityDocuments', field, fileData.fileName);
     uiStore.setProgress();
