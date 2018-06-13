@@ -101,6 +101,55 @@ class Summary extends Component {
                     ))
                   }
                 </Card.Group>
+                <Header as="h3">Progress of verifying your identity</Header>
+                <Card.Group stackable itemsPerRow={3}>
+                  <Card fluid className="verification done">
+                    <Card.Content>
+                      <Icon.Group size="huge">
+                        <Icon className="ns-envelope-line" />
+                        <Icon corner color="green" className="ns-check-circle" />
+                      </Icon.Group>
+                      <p>Your <b>Email-addres</b> has been verified</p>
+                    </Card.Content>
+                  </Card>
+                  <Card fluid className="verification">
+                    <Card.Content>
+                      <Icon.Group size="huge">
+                        <Icon className="ns-contact-card" />
+                        <Icon corner color="red" className="ns-warning-circle" />
+                      </Icon.Group>
+                      <p><b>Please verify your Identity</b></p>
+                      <Button color="green" className="relaxed" content="Verify" />
+                    </Card.Content>
+                  </Card>
+                  <Card fluid className="verification disabled">
+                    <Card.Content>
+                      <Icon.Group size="huge">
+                        <Icon className="ns-phone-line" />
+                      </Icon.Group>
+                      <p><b>Please verify your phone number</b></p>
+                      <Button color="green" className="relaxed" disabled content="Verify" />
+                    </Card.Content>
+                  </Card>
+                  <Card fluid className="verification">
+                    <Card.Content>
+                      <Icon.Group size="huge">
+                        <Icon className="ns-bar-line-chart" />
+                      </Icon.Group>
+                      <p><b>You have no account yet</b></p>
+                      <Button color="green" content="Create your first investment account" />
+                    </Card.Content>
+                  </Card>
+                  <Card fluid className="verification disabled">
+                    <Card.Content>
+                      <Icon.Group size="huge">
+                        <Icon className="ns-chart-setting" />
+                      </Icon.Group>
+                      <p><b>Start creation process of another type of account</b></p>
+                      <Button inverted color="green" content="Create another account" />
+                    </Card.Content>
+                  </Card>
+                </Card.Group>
               </div>
             </PrivateLayout>
             {this.props.uiStore.dashboardStep &&
