@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const allKbsQuery = gql`
-  query getknowledgeBase {
-    knowledgeBase(scopeType: INVESTOR) {
+  query getknowledgeBase($scopeType: KnowledgeBaseTypeEnum!) {
+    knowledgeBase(scopeType: $scopeType) {
       id
       title
       knowledgeBaseItems {
@@ -15,8 +15,8 @@ export const allKbsQuery = gql`
 `;
 
 export const allFaqQuery = gql`
-  query getFaqs {
-    faqs(scopeType: INVESTOR) {
+  query getFaqs($scopeType: FaqTypeEnum!) {
+    faqs(scopeType: $scopeType) {
       id
       question
       faqItems {

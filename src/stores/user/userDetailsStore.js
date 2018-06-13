@@ -49,6 +49,7 @@ export class UserDetailsStore {
     this.currentUser = graphql({
       client,
       query: userDetailsQuery,
+      fetchPolicy: 'network-only',
       variables: {
         id,
       },

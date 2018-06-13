@@ -4,19 +4,26 @@ import graphql from 'mobx-apollo';
 import flatMap from 'lodash/flatMap';
 import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../services/graphql';
+import userStore from '../userStore';
+import ClientSearch from '../../helper/clientSearch';
 import { allKbsQuery, allFaqQuery } from '../queries/knowledgeBase';
 
 export class EducationStore {
   @observable data = [];
+  @observable searchParam = '';
   @observable selected = { id: '', title: '', body: '' };
 
   @action
   initRequest = (module) => {
     const query = (module === 'KnowledgeBase') ? allKbsQuery : allFaqQuery;
-    this.data = graphql({
-      client,
-      query,
-    });
+    if (userStore.currentUser) {
+      const scopeType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
+      this.data = graphql({
+        client,
+        query,
+        variables: { scopeType },
+      });
+    }
   }
 
   @action
@@ -30,13 +37,18 @@ export class EducationStore {
     }
   }
 
+  @action
+  setSrchParam = (value) => {
+    this.searchParam = value || '';
+  }
+
   @computed get allData() {
     return this.data;
   }
 
   @computed get kbs() {
     return (this.allData.data && this.allData.data.knowledgeBase
-      && toJS(this.allData.data.knowledgeBase)) || [];
+      && ClientSearch.search(toJS(this.allData.data.knowledgeBase), this.searchParam)) || [];
   }
 
   @computed get faqs() {
