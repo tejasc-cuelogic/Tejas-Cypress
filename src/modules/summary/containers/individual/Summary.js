@@ -12,9 +12,6 @@ import Helper from '../../../../helper/utility';
 export default class Summary extends React.Component {
   handleCreateAccount = () => {
     this.props.individualAccountStore.createAccount('Summary', 'submit');
-    if (!this.props.uiStore.errors) {
-      this.props.history.push('/app/dashboard');
-    }
   }
   render() {
     const { errors } = this.props.uiStore;
@@ -39,7 +36,7 @@ export default class Summary extends React.Component {
         <div className="summary-wrap">
           <div className="field-wrap">
             <div className="table-wrapper">
-              <Table compact basic fixed singleLine>
+              <Table unstackable compact basic fixed singleLine>
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell><b>Investor Name</b></Table.Cell>

@@ -3,6 +3,7 @@
  */
 import { toast } from 'react-toastify';
 import _ from 'lodash';
+import uploadApi from '../services/uploadApi';
 
 export class Utility {
   // Default options for the toast
@@ -53,6 +54,11 @@ export class Utility {
     return limit;
   }
 
+  getTotal = (from, key) => {
+    const total = 0;
+    return from.map(r => total + parseInt(r[key], 0)).reduce((sum, n) => sum + n);
+  }
+
   gAddressClean = (place) => {
     const componentsForAddress = ['route', 'sublocality_level_3', 'sublocality_level_2', 'sublocality_level_1'];
     const componentsForCity = ['locality'];
@@ -92,18 +98,56 @@ export class Utility {
 
   CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
 
+  cryptedSSNNumber = (ssnNumber) => {
+    const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
+    const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
+    return formattedSSNNumber;
+  }
+
   encryptNumber = (number) => {
     let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
     encryptedNumber = encryptedNumber.slice(-7);
     return encryptedNumber;
   }
 
-  cryptedSSNNumber = (ssnNumber) => {
-    const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
-    console.log(cyrptedSSNNumber.substr(0, 2));
-    console.log(cyrptedSSNNumber.substr(2, 2));
-    const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
-    return formattedSSNNumber;
+  getFormattedFileData = (files) => {
+    const fileData = {};
+    if (files && files.length > 0) {
+      const fileInfo = files[0];
+      fileData.fileName = fileInfo.name.replace(/ /g, '_');
+      fileData.fileType = fileInfo.type;
+      fileData.fileExtension = fileInfo.name.substr((fileInfo.name.lastIndexOf('.') + 1));
+      fileData.fileSize = fileInfo.size;
+    }
+    return fileData;
+  }
+
+  /* eslint-disable arrow-body-style */
+  uploadOnS3 = (item, fileData) => {
+    return new Promise((resolve, reject) => {
+      uploadApi.put(item, fileData)
+        .then(() => {
+          resolve();
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  putUploadedFile = (urlArray) => {
+    return new Promise((resolve, reject) => {
+      const funcArray = [];
+      _.forEach(urlArray, (item) => {
+        funcArray.push(this.uploadOnS3(item.preSignedUrl, item.fileData[0]));
+      });
+      Promise.all(funcArray).then(() => {
+        resolve();
+      })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
 }
 

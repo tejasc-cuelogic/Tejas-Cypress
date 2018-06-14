@@ -87,8 +87,11 @@ const InvestmentTimeline = (props) => {
         </div>
         <Grid.Row>
           {
-            data.milestones.map(milestone => (
-              <Grid.Column className="crossed" key={`m_${milestone.amount}`} >
+            data.milestones.map((milestone, index) => (
+              <Grid.Column
+                className={`${(data.milestones[index].amount <= data.invested && data.milestones[index + 1].amount >= data.invested) ? 'crossed' : ''}`}
+                key={`m_${milestone.amount}`}
+              >
                 <Popup
                   trigger={<span>{Helper.CurrencyFormat(milestone.amount)}</span>}
                   position="bottom center"

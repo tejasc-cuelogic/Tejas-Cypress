@@ -7,30 +7,26 @@ import validationActions from '../../../actions/validation';
 import authActions from '../../../actions/auth';
 import { FormInput } from '../../../theme/form/FormElements';
 import ListErrors from '../../../theme/common/ListErrors';
+import Helper from '../../../helper/utility';
 
 @inject('authStore', 'uiStore', 'userStore', 'profileStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
-  componentWillMount() {
-    if (this.props.authStore.values.email.value === '') {
-      this.props.history.push('/');
-    }
-    this.props.uiStore.reset();
-  }
-
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
 
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.profileStore.setReSendVerificationCode(false);
     validationActions.validateConfirmEmailAddressForm();
     if (this.props.authStore.canSubmitEmailAddressVerification) {
       if (this.props.userStore.currentUser) {
         this.props.profileStore.verifyAndUpdateEmail().then(() => {
+          Helper.toast('Email has been verified and updated', 'success');
           this.props.history.push('/app/profile-settings/profile-data');
         })
-          .catch(() => {});
+          .catch(() => { });
       } else {
         authActions.confirmCode()
           .then(() => {
@@ -42,13 +38,34 @@ export default class ConfirmEmailAddress extends Component {
     }
   }
 
+  handleCloseModal = () => {
+    if (this.props.refLink) {
+      this.props.history.push(this.props.refLink);
+    } else {
+      this.props.history.push('/');
+    }
+    this.props.uiStore.clearErrors();
+  }
+
+  handleResendCode = () => {
+    this.props.profileStore.setReSendVerificationCode(true);
+    if (this.props.refLink) {
+      this.props.profileStore.requestEmailChange().then(() => {
+        Helper.toast('Re-sent the verification code', 'success');
+      })
+        .catch(() => {});
+    } else {
+      authActions.resendConfirmationCode();
+    }
+  }
+
   render() {
-    const changeEmailAddressLink = typeof this.props.userStore.currentUser === 'undefined' ?
-      '/auth/register-investor' : this.props.location.pathname;
+    const changeEmailAddressLink = this.props.refLink ?
+      this.props.refLink : '/auth/register-investor';
     const { values } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.props.history.push('/')}>
+      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Confirm your email address</Header>
           <Divider />
@@ -80,10 +97,10 @@ export default class ConfirmEmailAddress extends Component {
               changed={this.handleInputChange}
             />
             <div className="center-align">
-              <Button primary size="large" className="very relaxed" loading={this.props.uiStore.inProgress} disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
+              <Button primary size="large" className="very relaxed" loading={!this.props.profileStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Button type="button" className="cancel-link" onClick={() => authActions.resendConfirmationCode()}>Resend the code to my email</Button>
+              <Button type="button" className="cancel-link" loading={this.props.profileStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
             </div>
           </Form>
         </Modal.Content>

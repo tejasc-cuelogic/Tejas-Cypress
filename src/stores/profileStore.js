@@ -3,12 +3,14 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import { GqlClient as client } from '../services/graphql';
-import { verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo, updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail } from '../stores/queries/profile';
+import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
+import { createUploadEntry, removeUploadedFile } from '../stores/queries/common';
 
 import api from '../ns-api';
+import authStore from './authStore';
 import uiStore from './uiStore';
 import userStore from './userStore';
-import authStore from './authStore';
+import userDetailsStore from './user/userDetailsStore';
 import Helper from '../helper/utility';
 
 import {
@@ -54,6 +56,14 @@ export class ProfileStore {
 
   @observable updateProfileInfo = { fields: { ...UPDATE_PROFILE_INFO }, meta: { isValid: false, error: '' } };
 
+  @observable
+  reSendVerificationCode = false;
+
+  @action
+  setReSendVerificationCode(status) {
+    this.reSendVerificationCode = status;
+  }
+
   @action loadProfile(username) {
     uiStore.setProgress(true);
     api.User.get(username)
@@ -93,6 +103,30 @@ export class ProfileStore {
     if (this.verifyIdentity01.response.key !== 'id.success') {
       this.verifyIdentity01.response = {};
     }
+  }
+
+  @action
+  resetVerificationCode() {
+    Object.keys(this.verifyIdentity04.fields).map((field) => {
+      this.verifyIdentity04.fields[field].value = '';
+      this.verifyIdentity04.fields[field].error = undefined;
+      return true;
+    });
+    this.verifyIdentity04.meta.isValid = false;
+    this.verifyIdentity04.meta.error = '';
+    this.verifyIdentity04.response = {};
+  }
+
+  @action
+  resetUpdateProfileDetails() {
+    Object.keys(this.updateProfileInfo.fields).map((field) => {
+      this.updateProfileInfo.fields[field].value = '';
+      this.updateProfileInfo.fields[field].error = undefined;
+      return true;
+    });
+    this.updateProfileInfo.meta.isValid = false;
+    this.updateProfileInfo.meta.error = '';
+    this.updateProfileInfo.response = {};
   }
 
   @computed
@@ -183,7 +217,11 @@ export class ProfileStore {
       mapValues(this[form].fields, f => f.value),
       mapValues(this[form].fields, f => f.rule),
     );
-    this[form].meta.isValid = validation.passes();
+    if (currentForm !== 'updateProfileInfo') {
+      this[form].meta.isValid = validation.passes();
+    } else if (field !== 'phoneNumber' && field !== 'email') {
+      this[form].meta.isValid = validation.passes();
+    }
     this[form].fields[field].error = validation.errors.first(field);
   };
 
@@ -221,11 +259,13 @@ export class ProfileStore {
                 userId: userStore.currentUser.sub,
                 user: this.formattedUserInfo,
                 phoneDetails: this.formattedPhoneDetails,
-                cipStatus,
+                cipStatus: {
+                  status: cipStatus,
+                },
               },
             })
-            .then((result) => {
-              console.log(result);
+            .then(() => {
+              userDetailsStore.getUser(userStore.currentUser.sub);
             })
             .catch(() => {});
           resolve();
@@ -248,6 +288,66 @@ export class ProfileStore {
   @action
   setConfirmIdentityDocumentsError(field, error) {
     this.confirmIdentityDocuments[field].error = error;
+  }
+
+  @action
+  setFileUploadData(field, files) {
+    this.confirmIdentityDocuments.fields[field].fileData = files;
+    const fileData = Helper.getFormattedFileData(files);
+    this.onFieldChange('confirmIdentityDocuments', field, fileData.fileName);
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createUploadEntry,
+          variables: {
+            userId: userStore.currentUser.sub,
+            stepName: 'CIPDocuments',
+            fileData,
+          },
+        })
+        .then((result) => {
+          const { fileId, preSignedUrl } = result.data.createUploadEntry;
+          this.confirmIdentityDocuments.fields[field].fileId = fileId;
+          this.confirmIdentityDocuments.fields[field].preSignedUrl = preSignedUrl;
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  removeUploadedData(field) {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: removeUploadedFile,
+          variables: {
+            fileId: this.confirmIdentityDocuments.fields[field].fileId,
+          },
+        })
+        .then((result) => {
+          this.onFieldChange('confirmIdentityDocuments', field, '');
+          this.confirmIdentityDocuments.fields[field].fileId = '';
+          this.confirmIdentityDocuments.fields[field].preSignedUrl = '';
+          console.log(result);
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 
   @computed
@@ -286,7 +386,9 @@ export class ProfileStore {
                   userId: userStore.currentUser.sub,
                   user: this.formattedUserInfo,
                   phoneDetails: this.formattedPhoneDetails,
-                  cipStatus: 'PASS',
+                  cipStatus: {
+                    status: 'PASS',
+                  },
                 },
               })
               .then((data) => {
@@ -309,6 +411,7 @@ export class ProfileStore {
   /* eslint-disable arrow-body-style */
   startPhoneVerification = () => {
     uiStore.clearErrors();
+    uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -325,6 +428,9 @@ export class ProfileStore {
         .catch((err) => {
           uiStore.setErrors(JSON.stringify(err.message));
           reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
         });
     });
   }
@@ -341,7 +447,6 @@ export class ProfileStore {
           },
         })
         .then(() => {
-          this.onFieldChange('updateProfileInfo', 'phoneNumber', this.verifyIdentity01.fields.phoneNumber.value);
           client
             .mutate({
               mutation: updateUserCIPInfo,
@@ -349,7 +454,9 @@ export class ProfileStore {
                 userId: userStore.currentUser.sub,
                 user: this.formattedUserInfo,
                 phoneDetails: this.formattedPhoneDetails,
-                cipStatus: 'PASS',
+                cipStatus: {
+                  status: 'PASS',
+                },
               },
             });
           resolve();
@@ -376,51 +483,47 @@ export class ProfileStore {
 
   @action
   setProfileInfo = (userDetails) => {
+    this.resetUpdateProfileDetails();
     const {
       email,
       address,
       legalDetails,
       contactDetails,
     } = userDetails;
-    this.onFieldChange('updateProfileInfo', 'firstName', legalDetails.legalName.firstLegalName);
-    this.onFieldChange('updateProfileInfo', 'lastName', legalDetails.legalName.lastLegalName);
+    if (userDetails.firstName) {
+      this.onFieldChange('updateProfileInfo', 'firstName', userDetails.firstName);
+    }
+    if (userDetails.lastName) {
+      this.onFieldChange('updateProfileInfo', 'lastName', userDetails.lastName);
+    } else if (legalDetails && legalDetails.legalName !== null) {
+      this.onFieldChange('updateProfileInfo', 'firstName', legalDetails.legalName.firstLegalName);
+      this.onFieldChange('updateProfileInfo', 'lastName', legalDetails.legalName.lastLegalName);
+    }
     this.onFieldChange('updateProfileInfo', 'email', email);
-    this.onFieldChange('updateProfileInfo', 'phoneNumber', contactDetails.phone.number);
+    if (contactDetails && contactDetails.phone !== null) {
+      this.onFieldChange('updateProfileInfo', 'phoneNumber', contactDetails.phone.number);
+    }
     if (address === null) {
-      if (legalDetails.legalAddress) {
+      if (legalDetails && legalDetails.legalAddress !== null) {
         this.onFieldChange('updateProfileInfo', 'street', legalDetails.legalAddress.street);
         this.onFieldChange('updateProfileInfo', 'city', legalDetails.legalAddress.city);
         this.onFieldChange('updateProfileInfo', 'state', legalDetails.legalAddress.state);
         this.onFieldChange('updateProfileInfo', 'zipCode', legalDetails.legalAddress.zipCode);
       }
+    } else if (address && address.mailing) {
+      if (address.mailing.street !== null) {
+        this.onFieldChange('updateProfileInfo', 'street', address.mailing.street);
+      }
+      if (address.mailing.city !== null) {
+        this.onFieldChange('updateProfileInfo', 'city', address.mailing.city);
+      }
+      if (address.mailing.state !== null) {
+        this.onFieldChange('updateProfileInfo', 'state', address.mailing.state);
+      }
+      if (address.mailing.zipCode !== null) {
+        this.onFieldChange('updateProfileInfo', 'zipCode', address.mailing.zipCode);
+      }
     }
-  }
-
-  uploadAndUpdateCIPInfo = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: updateUserCIPInfo,
-          variables: {
-            userId: userStore.currentUser.sub,
-            user: this.formattedUserInfo,
-            phoneDetails: this.formattedPhoneDetails,
-            cipStatus: 'MANUAL_VERIFICATION_PENDING',
-          },
-        })
-        .then(() => {
-          const message = { message: 'MANUAL_VERIFICATION_PENDING' };
-          this.setVerifyIdentityResponse(message);
-          resolve();
-        })
-        .catch((err) => {
-          reject(err);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
   }
 
   @computed
@@ -438,6 +541,176 @@ export class ProfileStore {
       },
     };
     return profileDetails;
+  }
+
+ setAddressFields = (place) => {
+   const data = Helper.gAddressClean(place);
+   this.onFieldChange('updateProfileInfo', 'street', data.residentalStreet);
+   this.onFieldChange('updateProfileInfo', 'city', data.city);
+   this.onFieldChange('updateProfileInfo', 'state', data.state);
+   this.onFieldChange('updateProfileInfo', 'zipCode', data.zipCode);
+ }
+
+ updateUserProfileData = () => {
+   uiStore.setProgress();
+   return new Promise((resolve, reject) => {
+     client
+       .mutate({
+         mutation: updateUserProfileData,
+         variables: {
+           userId: userStore.currentUser.sub,
+           profileDetails: this.profileDetails,
+         },
+       })
+       .then(() => {
+         userStore.setGivenName(this.updateProfileInfo.fields.firstName.value);
+         userStore.setFamilyName(this.updateProfileInfo.fields.lastName.value);
+         resolve();
+       })
+       .catch((err) => {
+         uiStore.setErrors(this.simpleErr(err));
+         reject(err);
+       })
+       .finally(() => {
+         uiStore.setProgress(false);
+       });
+   });
+ }
+
+ requestEmailChange = () => {
+   uiStore.reset();
+   uiStore.setProgress();
+   return new Promise((resolve, reject) => {
+     client
+       .mutate({
+         mutation: requestEmailChnage,
+         variables: {
+           userId: userStore.currentUser.sub,
+           newEmail: authStore.values.email.value,
+         },
+       })
+       .then(() => {
+         resolve();
+       })
+       .catch((err) => {
+         uiStore.setErrors(this.simpleErr(err));
+         reject(err);
+       })
+       .finally(() => {
+         uiStore.setProgress(false);
+       });
+   });
+ }
+
+ verifyAndUpdateEmail = () => {
+   uiStore.setProgress();
+   return new Promise((resolve, reject) => {
+     client
+       .mutate({
+         mutation: verifyAndUpdateEmail,
+         variables: {
+           userId: userStore.currentUser.sub,
+           confirmationCode: authStore.values.code.value,
+         },
+       })
+       .then(() => {
+         resolve();
+       })
+       .catch((err) => {
+         uiStore.setErrors(this.simpleErr(err));
+         reject(err);
+       })
+       .finally(() => {
+         uiStore.setProgress(false);
+       });
+   });
+ }
+
+ verifyAndUpdatePhoneNumber = () => {
+   uiStore.setProgress();
+   return new Promise((resolve, reject) => {
+     client
+       .mutate({
+         mutation: checkUserPhoneVerificationCode,
+         variables: {
+           phoneDetails: this.formattedPhoneDetails,
+           verificationCode: this.verifyIdentity04.fields.code.value,
+         },
+       })
+       .then(() => {
+         client
+           .mutate({
+             mutation: updateUserPhoneDetail,
+             variables: {
+               userId: userStore.currentUser.sub,
+               phoneDetails: {
+                 number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+                 countryCode: '1',
+               },
+             },
+           })
+           .then(() => {
+             this.onFieldChange('updateProfileInfo', 'phoneNumber', this.verifyIdentity01.fields.phoneNumber.value);
+           })
+           .catch(() => { });
+         resolve();
+       })
+       .catch(action((err) => {
+         uiStore.setErrors(JSON.stringify(err.message));
+         reject(err);
+       }))
+       .finally(() => {
+         uiStore.setProgress(false);
+       });
+   });
+ }
+
+  uploadAndUpdateCIPInfo = () => {
+    uiStore.setProgress();
+    const { photoId, proofOfResidence } = this.confirmIdentityDocuments.fields;
+    return new Promise((resolve, reject) => {
+      Helper.putUploadedFile([photoId, proofOfResidence])
+        .then(() => {
+          client
+            .mutate({
+              mutation: updateUserCIPInfo,
+              variables: {
+                userId: userStore.currentUser.sub,
+                user: this.formattedUserInfo,
+                phoneDetails: this.formattedPhoneDetails,
+                cipStatus: {
+                  status: 'MANUAL_VERIFICATION_PENDING',
+                  verificationDocs:
+                  {
+                    idProof: {
+                      fileId: photoId.fileId,
+                      fileName: photoId.value,
+                    },
+                    addressProof: {
+                      fileId: proofOfResidence.fileId,
+                      fileName: proofOfResidence.value,
+                    },
+                  },
+                },
+              },
+            })
+            .then(() => {
+              userDetailsStore.getUser(userStore.currentUser.sub);
+              resolve();
+            })
+            .catch((err) => {
+              reject(err);
+              uiStore.setErrors(this.simpleErr(err));
+            })
+            .finally(() => {
+              uiStore.setProgress(false);
+            });
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject();
+        });
+    });
   }
 
   setAddressFields = (place) => {

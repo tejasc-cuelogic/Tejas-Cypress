@@ -12,7 +12,7 @@ const INVESTER_ACC_SUB_NAV_ITEMS = {
 subPanel => 0: none, 1: subnavigation, 2: has search panel
 */
 
-export const ALL_NAV_ITEMS = [
+export const PRIVATE_NAV = [
   {
     title: 'Settings',
     to: 'profile-settings',
@@ -34,18 +34,18 @@ export const ALL_NAV_ITEMS = [
   },
   {
     icon: 'ns-users',
-    title: 'Manage users',
+    title: 'Manage Users',
     to: 'users',
     accessibleTo: ['admin'],
     subNavigations: [
-      { title: 'Profile', to: 'profile' },
-      { title: 'Limits', to: 'Limits' },
-      { title: 'Beneficiaries', to: 'beneficiaries' },
-      { title: 'Portfolio', to: 'portfolio' },
-      { title: 'Transactions', to: 'transactions' },
-      { title: 'Statements', to: 'statements' },
-      { title: 'Bonus rewards', to: 'bonus-rewards' },
-      { title: 'Messages', to: 'messages' },
+      { title: 'Profile', to: 'profile', component: 'Detail' },
+      { title: 'Limits', to: 'limits', component: 'Limits' },
+      { title: 'Beneficiaries', to: 'beneficiaries', component: 'Beneficiaries' },
+      { title: 'Portfolio', to: 'portfolio', component: 'Portfolio' },
+      { title: 'Transactions', to: 'transactions', component: 'Transactions' },
+      { title: 'Statements', to: 'statements', component: 'Statements' },
+      { title: 'Bonus rewards', to: 'bonus-rewards', component: 'BonusRewards' },
+      { title: 'Messages', to: 'talk', component: 'Messages' },
     ],
   },
   {
@@ -73,15 +73,48 @@ export const ALL_NAV_ITEMS = [
     icon: 'ns-dashboard',
     title: 'Summary',
     to: 'summary',
-    accessibleTo: ['ira', 'individual', 'entity', 'investor'],
+    accessibleTo: ['investor'],
     subPanel: 0,
+  },
+  {
+    icon: 'ns-article',
+    title: 'Application',
+    to: 'business-application',
+    accessibleTo: ['bowner'],
+    subPanel: 1,
+    subNavigations: [
+      {
+        icon: 'ns-check-circle',
+        title: 'Pre-qualification',
+        to: 'pre-qualification',
+        component: 'PreQualification',
+      },
+      {
+        icon: 'ns-check-circle',
+        title: 'Business Details',
+        to: 'business-details',
+        component: 'BusinessDetails',
+      },
+      {
+        icon: 'ns-check-circle',
+        title: 'Performance',
+        to: 'performance',
+        component: 'Performance',
+      },
+      {
+        icon: 'ns-check-circle',
+        title: 'Documentation',
+        to: 'documentation',
+        component: 'Documentation',
+      },
+    ],
   },
   {
     icon: 'ns-individual',
     title: 'Individual',
     heading: 'Individual Account',
     to: 'account-details/individual',
-    accessibleTo: ['individual', 'investor'],
+    accessibleTo: ['individual'],
     subPanel: 1,
     ...INVESTER_ACC_SUB_NAV_ITEMS,
   },
@@ -90,7 +123,7 @@ export const ALL_NAV_ITEMS = [
     title: 'IRA',
     heading: 'IRA Account',
     to: 'account-details/ira',
-    accessibleTo: ['ira', 'investor'],
+    accessibleTo: ['ira'],
     subPanel: 1,
     ...INVESTER_ACC_SUB_NAV_ITEMS,
   },
@@ -99,7 +132,7 @@ export const ALL_NAV_ITEMS = [
     title: 'Entity',
     heading: 'Entity Account',
     to: 'account-details/entity',
-    accessibleTo: ['entity', 'investor'],
+    accessibleTo: ['entity'],
     subPanel: 1,
     ...INVESTER_ACC_SUB_NAV_ITEMS,
   },
@@ -107,13 +140,13 @@ export const ALL_NAV_ITEMS = [
     icon: 'ns-wallet',
     title: 'Rewards wallet',
     to: 'rewards-wallet',
-    accessibleTo: ['ira', 'individual', 'entity', 'investor'],
+    accessibleTo: ['ira', 'individual', 'entity'],
   },
   {
     icon: 'ns-comments-edit',
     title: 'Referrals',
     to: 'referrals',
-    accessibleTo: ['ira', 'individual', 'entity', 'investor'],
+    accessibleTo: ['ira', 'individual', 'entity'],
   },
   {
     icon: 'gift',
@@ -133,7 +166,7 @@ export const ALL_NAV_ITEMS = [
     icon: 'ns-article',
     title: 'Resources',
     to: 'resources',
-    accessibleTo: ['ira', 'individual', 'entity', 'investor', 'bowner'],
+    accessibleTo: ['investor', 'bowner'],
     subPanel: 1,
     subNavigations: [
       { title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket' },
@@ -153,4 +186,32 @@ export const ALL_NAV_ITEMS = [
     to: 'edgar',
     accessibleTo: ['admin'],
   },
+];
+
+export const PUBLIC_NAV = [
+  { title: 'Browse Deals', to: 'offerings' },
+  { title: 'For Investers', to: 'invest' },
+  { title: 'For Businesses', to: 'business' },
+  {
+    title: 'Learn',
+    subPanel: 1,
+    to: '',
+    subNavigations: [
+      { title: 'Team', to: 'about/team' },
+      { title: 'Ambassadors', to: 'about/ambassadors' },
+      { title: 'Blog', to: 'blog' },
+      { title: 'Case Studies', to: 'case-studies' },
+      { title: 'FAQ', to: 'about/faq' },
+    ],
+  },
+  {
+    title: 'Log In or Sign Up',
+    subPanel: 1,
+    to: 'auth',
+    subNavigations: [
+      { title: 'Log In', to: 'login' },
+      { title: 'Register', to: 'register' },
+    ],
+  },
+  { title: 'Dashboard', to: 'app/dashboard' },
 ];

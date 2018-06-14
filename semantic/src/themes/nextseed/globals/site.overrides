@@ -24,6 +24,9 @@
 		padding:@20px @10px;
 	}
 }
+.business-application .content-spacer{
+	padding:@50px 0px;
+}
 .inner-content-spacer{
 	padding:@20px;
 }
@@ -140,12 +143,12 @@ a.text-link{
 	padding:@20px @40px;
 	@media only screen and (max-width : @largestSmallMonitor){
 		min-height:auto;
-		padding:@20px;
-		padding-left:@60px;
+		padding:@20px @60px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
-		padding:@20px @10px;
-		padding-left:@60px;
+		~ .secondary-menu{
+			padding:0 @20px @14px;
+		}
 	}
 	h1.ui.header{
 		font-size:@30px;
@@ -209,15 +212,23 @@ a.text-link{
 		@media only screen and (max-width : @largestSmallMonitor){
 			height:22px;
 			margin-left:0;
+			position:absolute;
+			top:50%;
+			right:-30px;
+			transform:translate(0, -50%);
+		}
+		@media only screen and (max-width : @largestMobileScreen){
+			right:-40px;
 		}
 		.icon{
 			font-size:@22px;
 			color:@tertiary-text;
 			color:@white;
 			height:auto;
-			line-height:1;
+			line-height:@42px;
 			@media only screen and (max-width : @largestSmallMonitor){
 				font-size:@16px;
+				line-height:@22px;
 			}
 		}
 		span.unread-count{
@@ -267,7 +278,7 @@ a.text-link{
 		padding:0 @20px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
-		padding:0 @20px @14px;
+		padding:@14px @20px;
 		background-color:@secondary-text;
 		.ui.selection.dropdown{
 			padding:@11px;
@@ -282,6 +293,7 @@ a.text-link{
 			}
 			.menu{
 				border:none;
+				padding:0;
 				background-color:@tertiary-text;
 				.item{
 					padding:@11px !important;
@@ -757,5 +769,57 @@ svg:not(:root).recharts-surface{
 		width:100%;
 		max-width:1000px;
 		margin:0 auto;
+	}
+}
+
+.issuer-signup{
+	.icon.massive{
+		font-size:80px;
+		width:auto;
+	}
+	.icon.huge{
+		font-size:60px;
+		width:auto;
+	}
+	h1.ui.header{
+		font-size:@32px;
+		.sub.header{
+			font-size:@14px;
+			> a{
+				font-weight:700;
+			}
+		}
+	}
+	>.ui.header{
+		margin-bottom:@42px;
+		.sub.header{
+			margin-top:@10px;
+		}
+	}
+	.field-wrap{
+		padding:@40px;
+		height:100%;
+		@media only screen and (max-width:@largestMobileScreen){
+			padding:@25px;
+		}
+	}
+	* ~ .field-wrap{
+		height:auto;
+	}
+	.navigation-buttons{
+		min-height:50px;
+		font-weight:700;
+		> div .ui.button.multistep__btn{
+			position:relative;
+			&.prev, &.next{
+				transform:translate(0, 0);
+			}
+			&.prev{
+				margin-right:@14px;
+			}
+			&.next{
+				margin-left:@14px;
+			}
+		}
 	}
 }

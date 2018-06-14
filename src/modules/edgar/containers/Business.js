@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Grid, Input, Button, List, Form, Icon, Header } from 'semantic-ui-react';
@@ -27,7 +28,7 @@ class Business extends Component {
       );
     }
     return (
-      <div>
+      <Aux>
         <div className="page-header-section">
           <Grid stackable>
             <Grid.Row>
@@ -110,7 +111,7 @@ class Business extends Component {
         <BusinessList
           businessList={this.props.businessStore.businessList}
         />
-      </div>
+      </Aux>
     );
   }
 }

@@ -19,21 +19,19 @@ export const VERIFY_IDENTITY_STEP_01 = {
   },
   firstLegalName: {
     value: '',
-    label: 'First Legal Name',
+    label: 'First Name (Legal)',
     error: undefined,
     rule: 'required',
-    tooltip: 'Put your first name as listed on your driver license',
   },
   lastLegalName: {
     value: '',
-    label: 'Last Legal Name',
+    label: 'Last Name (Legal)',
     error: undefined,
     rule: 'required',
-    tooltip: 'Put your last name as listed on your driver license',
   },
   residentalStreet: {
     value: '',
-    label: 'Residental Street',
+    label: 'Residential Address',
     error: undefined,
     rule: 'required',
   },
@@ -69,7 +67,7 @@ export const VERIFY_IDENTITY_STEP_01 = {
   },
   ssn: {
     value: '',
-    label: 'SSN',
+    label: 'Social Security Number',
     error: undefined,
     rule: 'required|maskedSSN',
   },
@@ -96,12 +94,18 @@ export const CONFIRM_IDENTITY_DOCUMENTS = {
     value: '',
     error: undefined,
     rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
   },
   proofOfResidence: {
     key: 'proofOfResidence',
     value: '',
     error: undefined,
     rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
   },
 };
 
@@ -124,7 +128,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'Phone Number',
     error: undefined,
-    rule: 'required',
+    rule: 'string',
     placeHolder: 'Phone Number',
   },
   email: {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { NavLink } from 'react-router-dom';
-import { Responsive, Menu, Dropdown } from 'semantic-ui-react';
+import { Responsive, Menu, Icon, Dropdown } from 'semantic-ui-react';
 
 const options = [
   {
@@ -17,7 +18,7 @@ const options = [
 class SecondaryMenu extends Component {
   render() {
     return (
-      <div>
+      <Aux>
         <Responsive minWidth={768}>
           <Menu
             className={this.props.className || ''}
@@ -35,6 +36,9 @@ class SecondaryMenu extends Component {
                   as={NavLink}
                   to={`${this.props.match.url}/${item.to}`}
                 >
+                  {item.icon &&
+                    <Icon className={`${item.icon}`} />
+                  }
                   {item.title}
                 </Menu.Item>
               ))
@@ -48,7 +52,7 @@ class SecondaryMenu extends Component {
             options={options}
           />
         </Responsive>
-      </div>
+      </Aux>
     );
   }
 }

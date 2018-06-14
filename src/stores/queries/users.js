@@ -69,11 +69,6 @@ query getUserDetails($id: ID!) {
       }
       cipStatus {
         status
-        verificationDocs {
-          idProof {
-            fileId
-          }
-        }
       }
     }
     accounts {
@@ -119,6 +114,13 @@ export const deleteUserMutation = gql`
   }
 `;
 
+export const toggleUserAccount = gql`
+  mutation updateUserStatus($id: String!, $status: UserProfileStatusEnum!) {
+    updateUserStatus(userId: $id, accountStatus:$status) {
+      id
+    }
+  }
+`;
 
 export const userSubscription = gql`
   subscription {

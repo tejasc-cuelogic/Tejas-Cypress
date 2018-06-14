@@ -1,4 +1,5 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Icon, Header, Button, Confirm, Responsive } from 'semantic-ui-react';
@@ -120,7 +121,7 @@ export default class BusinessDetails extends React.Component {
       );
     }
     return (
-      <div>
+      <Aux>
         <div className="page-header-section">
           <Header as="h1">
             <Button
@@ -204,7 +205,7 @@ export default class BusinessDetails extends React.Component {
             handleXMLSubmissionLockUnlock={this.handleXMLSubmissionLockUnlock}
           />
         </div>
-      </div>
+      </Aux>
     );
   }
 }

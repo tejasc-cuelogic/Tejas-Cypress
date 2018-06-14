@@ -8,7 +8,7 @@ const BusinessList = observer(props => (
   <div className="content-spacer">
     <Card fluid>
       <div className="table-wrapper">
-        <Table striped padded>
+        <Table unstackable striped padded>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell width={1} />

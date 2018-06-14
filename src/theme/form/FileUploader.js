@@ -30,9 +30,9 @@ const FileUploader = observer((props) => {
         <Responsive
           as={Button}
           minWidth={768}
-          size="small"
+          size="tiny"
           compact
-          className="remove link-button pull-right"
+          className="remove pull-right"
           onClick={() => props.removeUploadedDocument(props.name)}
         >
           Remove

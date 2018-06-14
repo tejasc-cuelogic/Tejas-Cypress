@@ -1,10 +1,11 @@
 import * as AWS from 'aws-sdk';
-
+import { toJS } from 'mobx';
+import mapValues from 'lodash/mapValues';
+import snakeCase from 'lodash/snakeCase';
 import { API_VERSION, USER_POOL_ID, LIST_LIMIT, STATUSES } from './../constants/aws';
 import adminStore from './../stores/adminStore';
 import userStore from './../stores/userStore';
 import uiStore from '../stores/uiStore';
-
 import Helper from '../helper/utility';
 
 /**
@@ -68,11 +69,23 @@ export class Admin {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Creating new user');
 
+    const user = mapValues(userStore.USR_FRM.fields, f => f.value);
+    const attributes = [];
+    Object.keys(user).map((item) => {
+      if (item !== 'TemporaryPassword' && item !== 'verifyPassword') {
+        attributes.push({
+          Name: (item === 'role' ? 'custom:roles' : snakeCase(item)),
+          Value: (item === 'role' ? JSON.stringify(toJS(user[item])) : toJS(user[item])),
+        });
+      }
+      return true;
+    });
+    attributes.push({ Name: 'email_verified', Value: 'true' });
     const params = {
       UserPoolId: USER_POOL_ID,
-      TemporaryPassword: userStore.userAttributes.password,
-      Username: userStore.userAttributes.email,
-      UserAttributes: this.mappedUserAttributes(),
+      TemporaryPassword: user.TemporaryPassword,
+      Username: user.email,
+      UserAttributes: attributes,
     };
     this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
     return (
@@ -86,7 +99,9 @@ export class Admin {
       })
         .then(() => Helper.toast('User created successfully', 'success'))
         .catch((err) => {
-          uiStore.setErrors(err);
+          if (err && err.message) {
+            userStore.applyFormError('USR_FRM', err);
+          }
           throw err;
         })
         .finally(() => {

@@ -11,20 +11,24 @@ import ListErrors from '../../../theme/common/ListErrors';
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
-  // componentWillUnmount() {
-  //   this.props.uiStore.clearErrors();
-  // }
-
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
-    this.props.profileStore.confirmPhoneNumber().then(() => {
-      Helper.toast('Phone number is confirmed.', 'success');
-      if (this.props.refLink) {
+    this.props.profileStore.setReSendVerificationCode(false);
+    if (this.props.refLink) {
+      this.props.profileStore.verifyAndUpdatePhoneNumber().then(() => {
+        Helper.toast('Phone number is confirmed.', 'success');
         this.props.history.replace('/app/profile-settings/profile-data');
-      }
-      this.props.setDashboardWizardStep();
-    })
-      .catch(() => {});
+        this.props.uiStore.clearErrors();
+        this.props.profileStore.resetVerificationCode();
+      })
+        .catch(() => { });
+    } else {
+      this.props.profileStore.confirmPhoneNumber().then(() => {
+        Helper.toast('Phone number is confirmed.', 'success');
+        this.props.setDashboardWizardStep();
+      })
+        .catch(() => {});
+    }
   }
 
   handleChangePhoneNumber = () => {
@@ -34,8 +38,11 @@ export default class ConfirmPhoneNumber extends Component {
   }
 
   startPhoneVerification = () => {
+    this.props.profileStore.setReSendVerificationCode(true);
     this.props.profileStore.startPhoneVerification();
-    this.props.uiStore.setEditMode(false);
+    if (!this.props.refLink) {
+      this.props.uiStore.setEditMode(false);
+    }
   }
 
   handleCloseModal = () => {
@@ -44,6 +51,7 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.history.replace(this.props.refLink);
     }
     this.props.uiStore.clearErrors();
+    this.props.profileStore.resetVerificationCode();
   }
 
   render() {
@@ -103,10 +111,10 @@ export default class ConfirmPhoneNumber extends Component {
               changed={verifyVerificationCodeChange}
             />
             <div className="center-align">
-              <Button loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!verifyIdentity04.meta.isValid}>Confirm</Button>
+              <Button loading={!this.props.profileStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!verifyIdentity04.meta.isValid}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Button type="button" className="cancel-link" onClick={() => this.props.profileStore.startPhoneVerification()}>Resend the code to my phone</Button>
+              <Button loading={this.props.profileStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="cancel-link" onClick={() => this.startPhoneVerification()}>Resend the code to my phone</Button>
             </div>
           </Form>
         </Modal.Content>

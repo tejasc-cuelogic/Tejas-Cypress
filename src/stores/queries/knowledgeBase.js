@@ -35,7 +35,7 @@ export const allFaqCategories = gql`
     allCategories{
       id
       name
-      faqs{
+      faqs(orderBy: createdAt_DESC){
         id
         text
       }
@@ -45,7 +45,7 @@ export const allFaqCategories = gql`
 
 export const getFirstFaq = gql`
   query GetFaq($first: Int!) {
-    allFaqs(first: $first, skip: 0) {
+    allFaqs(first: $first, skip: 0, orderBy: createdAt_DESC) {
       id
       text
       description

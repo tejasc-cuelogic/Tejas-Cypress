@@ -219,6 +219,7 @@
         position:relative;
         padding:@50px @70px;
         .field-wrap{
+            margin:@30px auto;
             h5{
                 margin-bottom:@10px;
             }
@@ -254,10 +255,33 @@
                 padding:@30px;
             }
         }
+        .ui.dimmer.active{
+            border-radius:@9px;
+            ~ .multistep__btn{
+                &:before{
+                    content:"";
+                    height:100%;
+                    width:50%;
+                    background-color:@darkTextColor;
+                    display:block;
+                    position:absolute;
+                    top:0;
+                    z-index:1;
+                    transform:scale(1.03);
+                }
+                &.prev:before{
+                    left:0;
+                    border-radius:@40px 0 0 @40px;
+                }
+                &.next:before{
+                    right:0;
+                    border-radius:0 @40px @40px 0;
+                }
+            }
+        }
     }
 }
 .field-wrap{
-    margin:@30px auto;
     padding:@25px @60px;
     background:@lighten-bg-color;
     @media only screen and (max-width:@largestMobileScreen){

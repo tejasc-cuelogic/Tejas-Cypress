@@ -1,34 +1,38 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List, Message, Confirm } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
 import ListErrors from '../../../theme/common/ListErrors';
-import FieldError from '../../../theme/common/FieldError';
+import { DropZone } from '../../../theme/form/FormElements';
 
 @inject('profileStore', 'uiStore')
 @withRouter
 @observer
 export default class ConfirmIdentityDocuments extends Component {
+  onPhotoIdDrop = (files) => {
+    this.props.profileStore.setFileUploadData('photoId', files);
+  }
+
+  onProofOfResidenceDrop = (files) => {
+    this.props.profileStore.setFileUploadData('proofOfResidence', files);
+  }
+
+  handleDelDoc = (field) => {
+    this.props.profileStore.removeUploadedData(field);
+    this.props.uiStore.setConfirmBox('');
+  }
+
+  confirmRemoveDoc = (e, name) => {
+    e.preventDefault();
+    this.props.uiStore.setConfirmBox(name);
+  }
+
   handleCloseModal = () => {
     this.props.setDashboardWizardStep();
     this.props.profileStore.reset();
     this.props.uiStore.clearErrors();
-  }
-  uploadDocument = (e) => {
-    if (e.target.files.length) {
-      const uploadFile = e.target.files[0];
-      this.props.profileStore.setConfirmIdentityDocuments(e.target.name, uploadFile.name);
-    }
-  }
-
-  removeUploadedPhotoId = () => {
-    this.props.profileStore.setConfirmIdentityDocuments('photoId', '');
-  }
-
-  removeUploadedProofOfResidence = () => {
-    this.props.profileStore.setConfirmIdentityDocuments('proofOfResidence', '');
   }
 
   handleSubmitForm = (e) => {
@@ -38,15 +42,22 @@ export default class ConfirmIdentityDocuments extends Component {
       this.props.profileStore.uploadAndUpdateCIPInfo().then(() => {
         this.props.profileStore.startPhoneVerification().then(() => {
           this.props.setDashboardWizardStep('ConfirmPhoneNumber');
-        });
+        })
+          .catch((err) => {
+            this.props.uiStore.setErrors(JSON.stringify(err.message));
+          });
       })
         .catch(() => { });
     }
   }
 
+  handleDelCancel = () => {
+    this.props.uiStore.setConfirmBox('');
+  }
+
   render() {
     const { confirmIdentityDocuments } = this.props.profileStore;
-    const { errors } = this.props.uiStore;
+    const { errors, confirmBox } = this.props.uiStore;
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
@@ -57,7 +68,12 @@ export default class ConfirmIdentityDocuments extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
+          {errors && errors.message &&
+            <Message error textAlign="left">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
+          {errors && !errors.message &&
             <Message error textAlign="left">
               <ListErrors errors={[errors]} />
             </Message>
@@ -73,27 +89,12 @@ export default class ConfirmIdentityDocuments extends Component {
                   </Header>
                 </Grid.Column>
                 <Grid.Column width={9}>
-                  {confirmIdentityDocuments.fields.photoId.value === '' &&
-                    <div className="file-uploader">
-                      <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
-                      <input
-                        name={confirmIdentityDocuments.fields.photoId.key}
-                        type="file"
-                        onChange={this.uploadDocument}
-                        accept=".jpg,.jpeg,.pdf"
-                        error={!!confirmIdentityDocuments.fields.photoId.error}
-                      />
-                    </div>
-                  }
-                  <FieldError error={confirmIdentityDocuments.fields.photoId.error} />
-                  {confirmIdentityDocuments.fields.photoId.value !== '' &&
-                  <div className="file-uploader attached">
-                    <span title={confirmIdentityDocuments.fields.photoId.value}>
-                      {confirmIdentityDocuments.fields.photoId.value}
-                    </span>
-                    <Icon className="ns-close" size="small" onClick={this.removeUploadedPhotoId} />
-                  </div>
-                  }
+                  <DropZone
+                    name="photoId"
+                    fielddata={confirmIdentityDocuments.fields.photoId}
+                    ondrop={this.onPhotoIdDrop}
+                    onremove={this.confirmRemoveDoc}
+                  />
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
@@ -120,27 +121,12 @@ export default class ConfirmIdentityDocuments extends Component {
                   </label>
                 </Grid.Column>
                 <Grid.Column width={9}>
-                  {confirmIdentityDocuments.fields.proofOfResidence.value === '' &&
-                    <div className="file-uploader">
-                      <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
-                      <input
-                        name={confirmIdentityDocuments.fields.proofOfResidence.key}
-                        type="file"
-                        onChange={this.uploadDocument}
-                        accept=".jpg,.jpeg,.pdf"
-                        error={!!confirmIdentityDocuments.fields.proofOfResidence.error}
-                      />
-                    </div>
-                  }
-                  <FieldError error={confirmIdentityDocuments.fields.proofOfResidence.error} />
-                  {confirmIdentityDocuments.fields.proofOfResidence.value !== '' &&
-                    <div className="file-uploader attached">
-                      <span title={confirmIdentityDocuments.fields.proofOfResidence.value}>
-                        {confirmIdentityDocuments.fields.proofOfResidence.value}
-                      </span>
-                      <Icon className="ns-close" size="small" onClick={this.removeUploadedProofOfResidence} />
-                    </div>
-                  }
+                  <DropZone
+                    name="proofOfResidence"
+                    fielddata={confirmIdentityDocuments.fields.proofOfResidence}
+                    ondrop={this.onProofOfResidenceDrop}
+                    onremove={this.confirmRemoveDoc}
+                  />
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -152,6 +138,15 @@ export default class ConfirmIdentityDocuments extends Component {
               <Button type="button" className="cancel-link" onClick={() => this.handleCloseModal()}>I`ll finish this letter</Button>
             </div>
           </Form>
+          <Confirm
+            header="Confirm"
+            content="Are you sure you want to remove this file?"
+            open={confirmBox.entity === 'proofOfResidence' || confirmBox.entity === 'photoId'}
+            onCancel={this.handleDelCancel}
+            onConfirm={() => this.handleDelDoc(confirmBox.entity)}
+            size="tiny"
+            className="deletion"
+          />
         </Modal.Content>
       </Modal>
     );

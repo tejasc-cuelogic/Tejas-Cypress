@@ -1,37 +1,11 @@
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Container, Icon, Image, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
+import { Container, Icon, Image, Menu, Dropdown, Label } from 'semantic-ui-react';
+import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import LogoC from '../../assets/images/nextseed_logo_color.svg';
 import LogoW from '../../assets/images/nextseed_logo_white_green.svg';
-
-const PUBLIC_NAV_ITEMS = [
-  { title: 'Browse Deals', to: 'offerings' },
-  { title: 'For Investers', to: 'invest' },
-  { title: 'For Businesses', to: 'business' },
-  {
-    title: 'Learn',
-    subPanel: 1,
-    to: '',
-    subNavigations: [
-      { title: 'Team', to: 'about/team' },
-      { title: 'Ambassadors', to: 'about/ambassadors' },
-      { title: 'Blog', to: 'blog' },
-      { title: 'Case Studies', to: 'case-studies' },
-      { title: 'FAQ', to: 'about/faq' },
-    ],
-  },
-  {
-    title: 'Log In or Sign Up',
-    subPanel: 1,
-    to: 'auth',
-    subNavigations: [
-      { title: 'Log In', to: 'login' },
-      { title: 'Register', to: 'register' },
-    ],
-  },
-  { title: 'Dashboard', to: 'app/dashboard' },
-];
+import LogoNsAndLendio from '../../assets/images/nextseed_and_lendio.svg';
 
 @withRouter
 export class NavItems extends Component {
@@ -48,9 +22,6 @@ export class NavItems extends Component {
       location,
       isApp,
       refLoc,
-      roles,
-      isUserVerified,
-      createdAccount,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = [...this.props.navItems];
@@ -58,13 +29,11 @@ export class NavItems extends Component {
       const kickMe = this.props.currentUser ? 4 : 5;
       myNavItems.splice(kickMe, 1);
     }
-    const accountTypes = ['account-details/ira', 'account-details/individual', 'account-details/entity'];
     return myNavItems.map(item => (
       <Aux>
         {(item.subPanel === 1 && item.subNavigations) ? (
           <Dropdown
             item
-            disabled={(roles && roles[0] === 'investor' && !isUserVerified) && item.to !== 'summary' && (accountTypes.includes(item.to) && item.to !== `account-details/${createdAccount}`)}
             key={item.to}
             className={this.isActive(item.to, location, app) ? 'active' : ''}
             name={item.to}
@@ -111,24 +80,26 @@ export class NavItems extends Component {
   }
 }
 
+const getLogo = path => (path.includes('/lendio') ? LogoNsAndLendio : (
+  (path.includes('business-application') ? LogoW : LogoC)
+));
+
+const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
+
 export const NavigationItems = props => (
-  <Menu borderless inverted={props.location.pathname === '/business-application'} fixed="top" size="large">
+  <Menu borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" size="large">
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
         <Image
-          className="small"
-          src={props.location.pathname === '/business-application' ? LogoW : LogoC}
+          size="small"
+          src={getLogo(props.location.pathname)}
+          style={getLogoStyle(props.location.pathname)}
           alt="NextSeed.com"
         />
       </Menu.Item>
       <Menu.Menu position="right">
-        {props.location.pathname !== '/business-application' ?
-          <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV_ITEMS} /> : (
-            <Button.Group style={{ padding: '19px' }}>
-              <Button inverted color="green">Save and Continue later</Button>
-              <Button color="grey" disabled>Submit</Button>
-            </Button.Group>
-          )
+        {!props.location.pathname.includes('/business-application') &&
+          <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
       </Menu.Menu>
     </Container>

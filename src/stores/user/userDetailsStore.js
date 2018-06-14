@@ -1,17 +1,20 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable class-methods-use-this, arrow-body-style, no-return-assign */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
+import map from 'lodash/map';
+import filter from 'lodash/filter';
 import { GqlClient as client } from '../../services/graphql';
 import { GqlClient as client2 } from '../../services/graphqlCool';
 import uiStore from '../uiStore';
 import authStore from '../authStore';
+import profileStore from '../profileStore';
 import iraAccountStore from '../user/iraAccountStore';
 import entityAccountStore from '../user/entityAccountStore';
 import individualAccountStore from '../user/individualAccountStore';
 import { BENEFICIARY_FRM, FIN_INFO } from '../../constants/user';
-import { userDetailsQuery } from '../queries/users';
+import { userDetailsQuery, toggleUserAccount } from '../queries/users';
 import { allBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../queries/beneficiaries';
 import { finLimit, updateFinLimit } from '../queries/financialLimits';
 import Helper from '../../helper/utility';
@@ -24,6 +27,7 @@ export class UserDetailsStore {
   @observable BENEFICIARY_META = { fields: { ...BENEFICIARY_FRM }, meta: { isValid: false, error: '' } };
   @observable deleting = 0;
   @observable FIN_INFO = { fields: { ...FIN_INFO }, meta: { isValid: false, error: '' } };
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
@@ -54,8 +58,27 @@ export class UserDetailsStore {
         iraAccountStore.populateData(data.user);
         individualAccountStore.populateData(data.user);
         entityAccountStore.populateData(data.user);
+        profileStore.setProfileInfo(this.userDetails);
       },
     });
+  }
+
+  @action
+  updateUserStatus = (status) => {
+    this.currentUser.data.user.accountStatus = status;
+  }
+
+  @action
+  toggleState = () => {
+    const { accountStatus, id } = this.currentUser.data.user;
+    const params = { status: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCK', id };
+    client
+      .mutate({
+        mutation: toggleUserAccount,
+        variables: params,
+      })
+      .then(() => this.updateUserStatus(params.status))
+      .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
 
   @action
@@ -87,6 +110,27 @@ export class UserDetailsStore {
 
   @computed get fLoading() {
     return this.financialLimit.loading;
+  }
+
+  @computed get signupStatus() {
+    const details = { idVerification: 'FAIL', accounts: [] };
+    if (this.userDetails) {
+      details.idVerification = (this.userDetails.legalDetails &&
+        this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
+      ) ? this.userDetails.legalDetails.cipStatus.status : 'FAIL';
+      details.accounts = mapValues(this.userDetails.accounts, (a) => {
+        const data = { accountType: a.accountType, status: a.status };
+        return data;
+      });
+      details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
+      return details;
+    }
+    return details;
+  }
+
+  @computed get isUserVerified() {
+    const accDetails = this.signupStatus;
+    return this.validAccStatus.includes(accDetails.idVerification);
   }
 
   @action

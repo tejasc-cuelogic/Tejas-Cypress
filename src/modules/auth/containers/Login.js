@@ -11,24 +11,28 @@ import FieldError from '../../../theme/common/FieldError';
 @withRouter
 @observer
 class Login extends Component {
-  componentWillUnmount() {
-    // this.props.uiStore.clearErrors();
+  componentWillMount() {
+    this.props.uiStore.clearErrors();
     this.props.authStore.reset();
   }
-
   handleInputChange = (e, { name, value }) => validationActions.validateLoginField(name, value);
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.login()
       .then(() => {
+        const { roles } = this.props.userStore.currentUser;
         if (this.props.authStore.newPasswordRequired) {
-          this.props.history.push('/change-password');
+          this.props.history.push('/auth/change-password');
         } else {
           this.props.authStore.reset();
-          if (this.props.authStore.isInvestmentAccountCreated) {
-            this.props.history.replace('/app/dashboard');
+          if (roles) {
+            if (roles[0] === 'investor') {
+              this.props.history.replace('/app/summary');
+            } else {
+              this.props.history.replace('/app/dashboard');
+            }
           } else {
-            this.props.history.replace('/app/summary');
+            this.props.history.replace('/app/dashboard');
           }
         }
       });

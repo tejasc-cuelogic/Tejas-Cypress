@@ -35,6 +35,19 @@
 .ui.menu.secondary-menu{
     a.item{
         padding:@16px @20px;
+        >.icon{
+            color:@border-light;
+        }
+        &.done >.icon{
+            color:@theme-primary;
+        }
     }
 }
 
+.business-application{
+    .ui.inverted.menu .item{
+        &:hover, &:active, &:focus, &.active{
+            background-color:@white;
+        }
+    }
+}

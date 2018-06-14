@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
+import { Route, withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
 import FieldError from '../../../../theme/common/FieldError';
 import validationActions from '../../../../actions/validation';
 import ListErrors from '../../../../theme/common/ListErrors';
+import Helper from '../../../../helper/utility';
+import ConfirmEmailAddress from '../../../auth/containers/ConfirmEmailAddress';
 
 @inject('authStore', 'uiStore', 'profileStore')
 @withRouter
@@ -13,9 +15,10 @@ import ListErrors from '../../../../theme/common/ListErrors';
 export default class NewEmailAddress extends Component {
   handleChangeEmailAddress = () => {
     this.props.profileStore.requestEmailChange().then(() => {
-      this.props.history.push('/auth/confirm-email');
+      Helper.toast('Email Change request has been accepted', 'success');
+      this.props.history.push(`${this.props.match.url}/confirm`);
     })
-      .catch(() => { });
+      .catch(() => {});
   }
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleCloseModal = (e) => {
@@ -31,6 +34,10 @@ export default class NewEmailAddress extends Component {
     }
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
+        <Route
+          path={`${this.props.match.url}/confirm`}
+          render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
+        />
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Enter new email address</Header>
           <p>We will send you a verification code to the email address you provide.</p>
