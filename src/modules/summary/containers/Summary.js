@@ -12,6 +12,7 @@ import AccountSetupChecklist from '../components/AccountSetupChecklist';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 import Spinner from '../../../theme/ui/Spinner';
+import OtherAccountTypes from '../components/OtherAccountTypes';
 
 @inject('uiStore', 'profileStore', 'entityAccountStore', 'iraAccountStore', 'accountStore', 'userStore', 'userDetailsStore', 'individualAccountStore')
 @observer
@@ -37,7 +38,7 @@ class Summary extends Component {
     }
   }
 
-  navToAccTypes(step) {
+  navToAccTypes = (step) => {
     const type = this.props.accountStore.getAccountTypeIndex(step);
     this.props.accountStore.setAccountType(type);
     this.setDashboardWizardSetup(`${step}/AccountCreation`);
@@ -60,33 +61,12 @@ class Summary extends Component {
           n => _.lowerCase(n) !== (accDetails.activeAccounts[0]),
         );
         return (
-          <Aux>
-            <PrivateLayout
-              {...this.props}
-            >
-              <div className="conent-spacer">
-                <Card.Group itemsPerRow={3}>
-                  {
-                    accTypes.map(item => (
-                      <Card fluid>
-                        <Card.Content>
-                          <Header as="h3">New {_.startCase(item)} Account</Header>
-                          <p>Start new application process to proceed</p>
-                          <Divider hidden />
-                          <Button onClick={() => this.navToAccTypes(_.lowerCase(item))} primary>
-                            Create {_.startCase(item)} Account
-                          </Button>
-                        </Card.Content>
-                      </Card>
-                    ))
-                  }
-                </Card.Group>
-              </div>
-            </PrivateLayout>
-            {this.props.uiStore.dashboardStep &&
-            <DashboardWizard />
-            }
-          </Aux>
+          <OtherAccountTypes
+            {...this.props}
+            accTypes={accTypes}
+            navToAccTypes={this.navToAccTypes}
+            dashboardStep={this.props.uiStore.dashboardStep}
+          />
         );
       }
     }
