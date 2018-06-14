@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header } from 'semantic-ui-react';
+import { Header, Form, Input, Button } from 'semantic-ui-react';
 import Compose from './Compose';
 
 @inject('messageStore', 'uiStore')
@@ -13,7 +13,20 @@ export default class NewMessage extends Component {
           <Header as="h3">New Message</Header>
         </div>
         <div className="message-body">
-          inner content ...
+          <Form>
+            <Form.Field>
+              {/* eslint-disable jsx-a11y/label-has-for  */}
+              <label>Send a message to</label>
+              <Input fluid icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Type a name or multiple names" />
+            </Form.Field>
+          </Form>
+          <div className="new-msg-intro">
+            <Header as="h3">
+              Need to contact with our support?
+              <Header.Subheader>Let us know how we can help.</Header.Subheader>
+            </Header>
+            <Button primary content="Contact with support" />
+          </div>
         </div>
         <Compose />
       </div>
