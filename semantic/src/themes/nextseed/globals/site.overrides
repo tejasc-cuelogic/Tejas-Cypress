@@ -119,7 +119,7 @@ h6{
 .tertiary-text{
 	color:@tertiary-text !important;
 }
-.intro-text{
+.intro-text, .note{
 	color:@quaternary-text;
 	margin-bottom:@28px;
 }
