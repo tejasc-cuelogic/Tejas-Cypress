@@ -12,10 +12,12 @@ const MessagesList = props => (
           as={Link}
           to={`${props.match.url}/${msg.id}`}
           key={msg.id}
-          className={props.message.id === msg.id ? 'active' : ''}
+          className={props.current.id === msg.id ? 'active' : ''}
         >
           <Item.Extra>
-            <Label size="mini" color="red" horizontal>New</Label>
+            {msg.messageDetails.read === '1' &&
+              <Label size="mini" color="red" horizontal>New</Label>
+            }
             <DateTimeFormat fromNow datetime={msg.updatedAt} />
           </Item.Extra>
           <Image avatar src={ProfilePicTemp} />

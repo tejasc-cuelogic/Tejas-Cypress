@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Card } from 'semantic-ui-react';
-import { Route } from 'react-router-dom';
+import { Card, Button, Grid } from 'semantic-ui-react';
+import { Link, Route, Switch } from 'react-router-dom';
 import PrivateLayout from '../../../../containers/common/PrivateHOC';
 import MessagesHeader from '../components/Header';
 import MessagesList from '../components/MessagesList';
 import MessagesWrap from '../components/MessagesWrap';
+import NewMessage from '../components/NewMessage';
 
 @inject('messageStore')
 @observer
@@ -16,20 +17,32 @@ export default class Messages extends Component {
   render() {
     const { match, messageStore } = this.props;
     const {
-      messages, message, loading, error,
+      messages, current, loading, error,
     } = messageStore;
     return (
-      <PrivateLayout {...this.props}>
+      <PrivateLayout
+        {...this.props}
+        P3={
+          <Grid.Column width={3} textAlign="right">
+            <Button as={Link} to={`${match.url}/new`} color="green" floated="right">
+              Create new message
+            </Button>
+          </Grid.Column>
+        }
+      >
         <MessagesHeader />
         <Card fluid className="messages">
           <MessagesList
             match={match}
             messages={messages}
-            message={message}
+            current={current}
             loading={loading}
             error={error}
           />
-          <Route exact path={`${match.url}/:id`} component={MessagesWrap} />
+          <Switch>
+            <Route exact path={`${match.url}/new`} component={NewMessage} />
+            <Route exact path={`${match.url}/:id`} component={MessagesWrap} />
+          </Switch>
         </Card>
       </PrivateLayout>
     );
