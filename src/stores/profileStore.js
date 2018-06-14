@@ -264,9 +264,8 @@ export class ProfileStore {
                 },
               },
             })
-            .then((result) => {
+            .then(() => {
               userDetailsStore.getUser(userStore.currentUser.sub);
-              console.log(result);
             })
             .catch(() => {});
           resolve();
@@ -696,8 +695,7 @@ export class ProfileStore {
               },
             })
             .then(() => {
-              const message = { message: 'MANUAL_VERIFICATION_PENDING' };
-              this.setVerifyIdentityResponse(message);
+              userDetailsStore.getUser(userStore.currentUser.sub);
               resolve();
             })
             .catch((err) => {

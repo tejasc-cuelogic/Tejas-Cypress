@@ -37,19 +37,6 @@ class Summary extends Component {
     }
   }
 
-  isVerified(cipStatus) {
-    let checkStatus = '';
-    if (cipStatus !== null) {
-      if (typeof cipStatus === 'object') {
-        checkStatus = cipStatus.status;
-      } else {
-        checkStatus = cipStatus;
-      }
-      return this.props.accountStore.validAccStatus.includes(checkStatus);
-    }
-    return false;
-  }
-
   navToAccTypes(step) {
     let type = 0;
     if (step === 'individual') {
@@ -111,7 +98,7 @@ class Summary extends Component {
       }
     }
 
-    const { currentUser } = this.props.userDetailsStore;
+    const { currentUser, isUserVerified } = this.props.userDetailsStore;
     if (!currentUser.data.user) {
       return (
         <div>
@@ -140,16 +127,7 @@ class Summary extends Component {
       this.props.accountStore.setAccountType(type);
     }
 
-    if (this.props.profileStore.verifyIdentity01.response.message) {
-      if (this.isVerified(this.props.profileStore.verifyIdentity01.response.message)) {
-        stepinfo = {
-          value: 'Welcome to NextSeed!',
-          label: 'Would you like to start the process of new account creation?',
-          linkText: 'Let`s start it!',
-          linkPath,
-        };
-      }
-    } else if (this.isVerified(currentUser.data.user.legalDetails.cipStatus)) {
+    if (isUserVerified) {
       stepinfo = {
         value: 'Welcome to NextSeed!',
         label: 'Would you like to start the process of new account creation?',
@@ -169,38 +147,7 @@ class Summary extends Component {
             />
           }
         >
-          {this.props.profileStore.verifyIdentity01.response.message &&
-          !this.isVerified(this.props.profileStore.verifyIdentity01.response.message) &&
-            <div>
-              <Header as="h3">Welcome to NextSeed!</Header>
-              <Grid>
-                <Grid.Row>
-                  <Grid.Column widescreen={5} largeScreen={8} computer={8} tablet={16} mobile={16}>
-                    <Card fluid raised className="welcome-card">
-                      <Card.Content>
-                        <List divided relaxed="very">
-                          <List.Item>
-                            <List.Icon className="ns-nextseed-icon" size="huge" verticalAlign="middle" />
-                            <List.Content verticalAlign="middle">
-                              <List.Header>
-                                Would you like to start the process of new account creation?
-                              </List.Header>
-                            </List.Content>
-                          </List.Item>
-                        </List>
-                        <Divider hidden />
-                        <AccountSetupChecklist
-                          setDashboardWizardSetup={this.setDashboardWizardSetup}
-                        />
-                      </Card.Content>
-                    </Card>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </div>
-          }
-          {!this.props.profileStore.verifyIdentity01.response.message &&
-          !this.isVerified(currentUser.data.user.legalDetails.cipStatus) &&
+          {!isUserVerified &&
             <div>
               <Header as="h3">Welcome to NextSeed!</Header>
               <Grid>

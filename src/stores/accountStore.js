@@ -29,8 +29,6 @@ export class AccountStore {
 
   @observable entityAccount = { ...ENTITY_ACCOUNT_CREATION }
 
-  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
-
   @observable
   bankListing = undefined;
 
