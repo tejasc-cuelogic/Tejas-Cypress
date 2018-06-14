@@ -207,6 +207,19 @@ export class AccountStore {
     });
   }
 
+  /* eslint-disable class-methods-use-this */
+  getAccountTypeIndex(accType) {
+    let type = 0;
+    if (accType === 'individual') {
+      type = 0;
+    } else if (accType === 'ira') {
+      type = 1;
+    } else if (accType === 'entity') {
+      type = 2;
+    }
+    return type;
+  }
+
   simpleErr = err => ({
     statusCode: err.statusCode,
     code: err.code,

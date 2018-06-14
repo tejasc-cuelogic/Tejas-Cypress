@@ -38,14 +38,7 @@ class Summary extends Component {
   }
 
   navToAccTypes(step) {
-    let type = 0;
-    if (step === 'individual') {
-      type = 0;
-    } else if (step === 'ira') {
-      type = 1;
-    } else if (step === 'entity') {
-      type = 2;
-    }
+    const type = this.props.accountStore.getAccountTypeIndex(step);
     this.props.accountStore.setAccountType(type);
     this.setDashboardWizardSetup(`${step}/AccountCreation`);
   }
@@ -115,14 +108,7 @@ class Summary extends Component {
       } else {
         selectedAccType = this.props.accountStore.accountTypeCreated;
       }
-      let type = 0;
-      if (selectedAccType === 'individual') {
-        type = 0;
-      } else if (selectedAccType === 'ira') {
-        type = 1;
-      } else if (selectedAccType === 'entity') {
-        type = 2;
-      }
+      const type = this.props.accountStore.getAccountTypeIndex(selectedAccType);
       linkPath = `${selectedAccType}/AccountCreation`;
       this.props.accountStore.setAccountType(type);
     }
