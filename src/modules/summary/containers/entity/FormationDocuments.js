@@ -23,7 +23,7 @@ export default class FormationDocumemts extends Component {
     this.props.uiStore.setConfirmBox(name);
   }
   handleDelDoc = (field) => {
-    this.props.entityAccountStore.removeUploadedData('formFormationDocuments', field);
+    this.props.entityAccountStore.removeUploadedData('formFormationDocuments', field, 'Formation doc');
     this.props.uiStore.setConfirmBox('');
   }
   render() {

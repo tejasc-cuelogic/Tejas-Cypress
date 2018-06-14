@@ -14,7 +14,7 @@ export default class PersonalInformation extends Component {
     this.props.uiStore.setConfirmBox(name);
   }
   handleDelLegalDocUrl = () => {
-    this.props.entityAccountStore.removeUploadedData('formPersonalInfo', 'legalDocUrl');
+    this.props.entityAccountStore.removeUploadedData('formPersonalInfo', 'legalDocUrl', 'Personal info');
     this.props.uiStore.setConfirmBox('');
   }
   handleDelCancel = () => {

@@ -18,6 +18,7 @@ import uiStore from '../uiStore';
 import userStore from '../userStore';
 import userDetailsStore from '../user/userDetailsStore';
 import Helper from '../../helper/utility';
+import validationActions from '../../actions/validation';
 
 class EntityAccountStore {
   @observable
@@ -267,7 +268,7 @@ class EntityAccountStore {
   }
 
   @action
-  setEntityAttributes = (step) => {
+  setEntityAttributes = (step, removeUploadedData, field) => {
     switch (step) {
       /* eslint-disable no-unused-expressions */
       case 'General':
@@ -287,32 +288,50 @@ class EntityAccountStore {
         break;
 
       case 'Personal info':
-        this.entityData.legalInfo = {
-          legalFirstName: userStore.currentUser.givenName,
-          legalLastName: userStore.currentUser.familyName,
-          title: this.formPersonalInfo.fields.title.value,
-          legalDocUrl: {
-            fileId: this.formPersonalInfo.fields.legalDocUrl.fileId,
-            fileName: this.formPersonalInfo.fields.legalDocUrl.value,
-          },
-        };
+        if (removeUploadedData) {
+          if (this.entityData.legalInfo) {
+            this.entityData.legalInfo[field] = {
+              fileName: '',
+              fileId: '',
+            };
+          }
+        } else {
+          this.entityData.legalInfo = {
+            legalFirstName: userStore.currentUser.givenName,
+            legalLastName: userStore.currentUser.familyName,
+            title: this.formPersonalInfo.fields.title.value,
+            legalDocUrl: {
+              fileId: this.formPersonalInfo.fields.legalDocUrl.fileId,
+              fileName: this.formPersonalInfo.fields.legalDocUrl.value,
+            },
+          };
+        }
         break;
 
       case 'Formation doc':
-        this.entityData.legalDocs = {
-          formationDoc: {
-            fileName: this.formFormationDocuments.fields.formationDoc.value,
-            fileId: this.formFormationDocuments.fields.formationDoc.fileId,
-          },
-          operatingAgreementDoc: {
-            fileName: this.formFormationDocuments.fields.operatingAgreementDoc.value,
-            fileId: this.formFormationDocuments.fields.operatingAgreementDoc.fileId,
-          },
-          einVerificationDoc: {
-            fileName: this.formFormationDocuments.fields.einVerificationDoc.value,
-            fileId: this.formFormationDocuments.fields.einVerificationDoc.fileId,
-          },
-        };
+        if (removeUploadedData) {
+          if (this.entityData.legalDocs) {
+            this.entityData.legalDocs[field] = {
+              fileName: '',
+              fileId: '',
+            };
+          }
+        } else {
+          this.entityData.legalDocs = {
+            formationDoc: {
+              fileName: this.formFormationDocuments.fields.formationDoc.value,
+              fileId: this.formFormationDocuments.fields.formationDoc.fileId,
+            },
+            operatingAgreementDoc: {
+              fileName: this.formFormationDocuments.fields.operatingAgreementDoc.value,
+              fileId: this.formFormationDocuments.fields.operatingAgreementDoc.fileId,
+            },
+            einVerificationDoc: {
+              fileName: this.formFormationDocuments.fields.einVerificationDoc.value,
+              fileId: this.formFormationDocuments.fields.einVerificationDoc.fileId,
+            },
+          };
+        }
         break;
 
       default:
@@ -324,7 +343,7 @@ class EntityAccountStore {
   /* eslint-disable consistent-return */
   /* eslint-disable arrow-body-style */
   @action
-  createAccount = (currentStep, formStatus = 'draft') => {
+  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false, field = null) => {
     if (formStatus === 'submit') {
       this.setFormStatus('submit');
     }
@@ -360,41 +379,56 @@ class EntityAccountStore {
         }
         break;
       case 'Personal info':
-        currentStep.validate();
-        isValidCurrentStep = this.isValidPersonalInfo;
-        if (isValidCurrentStep) {
-          accountAttributes.entity = this.setEntityAttributes(currentStep.name);
-          return new Promise((resolve, reject) => {
-            Helper.putUploadedFile([this.formPersonalInfo.fields.legalDocUrl])
-              .then(() => {
-                this.submitForm(currentStep, formStatus, accountAttributes);
-              })
-              .catch((err) => {
-                uiStore.setErrors(this.simpleErr(err));
-                reject(err);
-              });
-          });
+        if (removeUploadedData) {
+          accountAttributes.entity =
+            this.setEntityAttributes(currentStep.name, removeUploadedData, field);
+          this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData);
+        } else {
+          currentStep.validate();
+          isValidCurrentStep = this.isValidPersonalInfo;
+          if (isValidCurrentStep) {
+            accountAttributes.entity = this.setEntityAttributes(currentStep.name);
+            return new Promise((resolve, reject) => {
+              Helper.putUploadedFile([this.formPersonalInfo.fields.legalDocUrl])
+                .then(() => {
+                  this.submitForm(currentStep, formStatus, accountAttributes);
+                })
+                .catch((err) => {
+                  uiStore.setErrors(this.simpleErr(err));
+                  reject(err);
+                });
+            });
+          }
         }
         break;
       case 'Formation doc':
-        currentStep.validate();
-        isValidCurrentStep = this.isValidFormationDoc;
-        if (isValidCurrentStep) {
-          accountAttributes.entity = this.setEntityAttributes(currentStep.name);
-          return new Promise((resolve, reject) => {
-            Helper.putUploadedFile([
-              this.formFormationDocuments.fields.formationDoc,
-              this.formFormationDocuments.fields.operatingAgreementDoc,
-              this.formFormationDocuments.fields.einVerificationDoc,
-            ])
-              .then(() => {
-                this.submitForm(currentStep, formStatus, accountAttributes);
-              })
-              .catch((err) => {
-                uiStore.setErrors(this.simpleErr(err));
-                reject(err);
+        if (removeUploadedData) {
+          accountAttributes.entity =
+            this.setEntityAttributes(currentStep.name, removeUploadedData, field);
+          this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData);
+        } else {
+          currentStep.validate();
+          isValidCurrentStep = this.isValidFormationDoc;
+          if (isValidCurrentStep) {
+            accountAttributes.entity =
+            this.setEntityAttributes(currentStep.name, removeUploadedData);
+            if (!removeUploadedData) {
+              return new Promise((resolve, reject) => {
+                Helper.putUploadedFile([
+                  this.formFormationDocuments.fields.formationDoc,
+                  this.formFormationDocuments.fields.operatingAgreementDoc,
+                  this.formFormationDocuments.fields.einVerificationDoc,
+                ])
+                  .then(() => {
+                    this.submitForm(currentStep, formStatus, accountAttributes);
+                  })
+                  .catch((err) => {
+                    uiStore.setErrors(this.simpleErr(err));
+                    reject(err);
+                  });
               });
-          });
+            }
+          }
         }
         break;
       case 'Link bank':
@@ -425,7 +459,8 @@ class EntityAccountStore {
   }
 
   @action
-  submitForm = (currentStep, formStatus, accountAttributes) => {
+  submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
+    uiStore.setProgress();
     let mutation = createAccount;
     let variables = {
       userId: userStore.currentUser.sub,
@@ -489,12 +524,20 @@ class EntityAccountStore {
               this.setStepToBeRendered(3);
               break;
             case 'Personal info':
-              this.setIsDirty('formPersonalInfo', false);
-              this.setStepToBeRendered(4);
+              if (removeUploadedData) {
+                validationActions.validateEntityPersonalInfo();
+              } else {
+                this.setIsDirty('formPersonalInfo', false);
+                this.setStepToBeRendered(4);
+              }
               break;
             case 'Formation doc':
-              this.setIsDirty('formFormationDocuments', false);
-              this.setStepToBeRendered(5);
+              if (removeUploadedData) {
+                validationActions.validateEntityFormationDoc();
+              } else {
+                this.setIsDirty('formFormationDocuments', false);
+                this.setStepToBeRendered(5);
+              }
               break;
             case 'Link bank':
               this.setStepToBeRendered(6);
@@ -569,10 +612,10 @@ class EntityAccountStore {
         }
         Object.keys(this.formPersonalInfo.fields).map((f) => {
           if (account.accountDetails.entity && account.accountDetails.entity.legalInfo && f === 'legalDocUrl') {
-            this.formPersonalInfo.fields[f].value =
-              account.accountDetails.entity.legalInfo[f].fileName;
-            this.formPersonalInfo.fields[f].fileId =
-              account.accountDetails.entity.legalInfo[f].fileId;
+            const fileName = account.accountDetails.entity.legalInfo[f].fileName === null ? '' : account.accountDetails.entity.legalInfo[f].fileName;
+            const fileId = account.accountDetails.entity.legalInfo[f].fileId === null ? '' : account.accountDetails.entity.legalInfo[f].fileId;
+            this.formPersonalInfo.fields[f].value = fileName;
+            this.formPersonalInfo.fields[f].fileId = fileId;
           } else if (account.accountDetails.entity && account.accountDetails.entity.legalInfo) {
             this.formPersonalInfo.fields[f].value = account.accountDetails.entity.legalInfo[f];
           }
@@ -586,8 +629,10 @@ class EntityAccountStore {
           if (account.accountDetails.entity && account.accountDetails.entity.legalDocs) {
             const { entity } = account.accountDetails;
             if (entity.legalDocs[f]) {
-              this.formFormationDocuments.fields[f].value = entity.legalDocs[f].fileName;
-              this.formFormationDocuments.fields[f].fileId = entity.legalDocs[f].fileId;
+              const fileName = entity.legalDocs[f].fileName === null ? '' : entity.legalDocs[f].fileName;
+              const fileId = entity.legalDocs[f].fileId === null ? '' : entity.legalDocs[f].fileId;
+              this.formFormationDocuments.fields[f].value = fileName;
+              this.formFormationDocuments.fields[f].fileId = fileId;
             }
           }
           return this.formFormationDocuments.fields[f];
@@ -668,7 +713,8 @@ class EntityAccountStore {
     });
   }
 
-  removeUploadedData = (form, field) => {
+  removeUploadedData = (form, field, step) => {
+    const currentStep = { name: step };
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -682,6 +728,7 @@ class EntityAccountStore {
           this.onFieldChange(form, field, '');
           this[form].fields[field].fileId = '';
           this[form].fields[field].preSignedUrl = '';
+          this.createAccount(currentStep, 'draft', true, field);
           resolve();
         })
         .catch((err) => {

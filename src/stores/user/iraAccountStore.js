@@ -11,6 +11,7 @@ import userStore from '../userStore';
 import accountStore from '../accountStore';
 import userDetailsStore from '../user/userDetailsStore';
 import Helper from '../../helper/utility';
+import validationActions from '../../actions/validation';
 import {
   IRA_FIN_INFO,
   IRA_ACC_TYPES,
@@ -192,7 +193,7 @@ class IraAccountStore {
 
   /* eslint-disable consistent-return */
   @action
-  createAccount = (currentStep, formStatus = 'draft') => {
+  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false) => {
     if (formStatus === 'submit') {
       this.setFormStatus('submit');
       this.submitForm(currentStep, formStatus, this.accountAttributes);
@@ -228,22 +229,30 @@ class IraAccountStore {
         this.submitForm(currentStep, formStatus, accountAttributes);
         break;
       case 'Identity':
-        currentStep.validate();
-        isValidCurrentStep = this.isValidIraIdentity;
-        if (isValidCurrentStep) {
-          accountAttributes.identityDoc = {};
-          accountAttributes.identityDoc.fileId = this.formIdentity.fields.identityDoc.fileId;
-          accountAttributes.identityDoc.fileName = this.formIdentity.fields.identityDoc.value;
-          return new Promise((resolve, reject) => {
-            Helper.putUploadedFile([this.formIdentity.fields.identityDoc])
-              .then(() => {
-                this.submitForm(currentStep, formStatus, accountAttributes);
-              })
-              .catch((err) => {
-                uiStore.setErrors(this.simpleErr(err));
-                reject(err);
-              });
-          });
+        if (removeUploadedData) {
+          accountAttributes.identityDoc = {
+            fileId: '',
+            fileName: '',
+          };
+          this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData);
+        } else {
+          currentStep.validate();
+          isValidCurrentStep = this.isValidIraIdentity;
+          if (isValidCurrentStep) {
+            accountAttributes.identityDoc = {};
+            accountAttributes.identityDoc.fileId = this.formIdentity.fields.identityDoc.fileId;
+            accountAttributes.identityDoc.fileName = this.formIdentity.fields.identityDoc.value;
+            return new Promise((resolve, reject) => {
+              Helper.putUploadedFile([this.formIdentity.fields.identityDoc])
+                .then(() => {
+                  this.submitForm(currentStep, formStatus, accountAttributes);
+                })
+                .catch((err) => {
+                  uiStore.setErrors(this.simpleErr(err));
+                  reject(err);
+                });
+            });
+          }
         }
         break;
       default:
@@ -252,7 +261,7 @@ class IraAccountStore {
   }
 
   @action
-  submitForm = (currentStep, formStatus, accountAttributes) => {
+  submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
     uiStore.setProgress();
     let mutation = createAccount;
     let variables = {
@@ -317,8 +326,12 @@ class IraAccountStore {
               this.setStepToBeRendered(3);
               break;
             case 'Identity':
-              this.setIsDirty('formIdentity', false);
-              this.setStepToBeRendered(4);
+              if (removeUploadedData) {
+                validationActions.validateIRAIdentityInfo();
+              } else {
+                this.setIsDirty('formIdentity', false);
+                this.setStepToBeRendered(4);
+              }
               break;
             default:
               break;
@@ -444,6 +457,7 @@ class IraAccountStore {
 
   @action
   removeUploadedData(field) {
+    const currentStep = { name: 'Identity' };
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -457,6 +471,7 @@ class IraAccountStore {
           this.onFieldChange('formIdentity', field, '');
           this.formIdentity.fields[field].fileId = '';
           this.formIdentity.fields[field].preSignedUrl = '';
+          this.createAccount(currentStep, 'draft', true);
           resolve();
         })
         .catch((err) => {
