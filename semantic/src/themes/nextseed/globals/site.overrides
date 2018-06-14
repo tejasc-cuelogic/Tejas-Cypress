@@ -854,6 +854,9 @@ svg:not(:root).recharts-surface{
 	.message-body{
 		flex:1 0;
 		overflow:auto;
+		.new-msg-intro{
+			margin:10% 0;
+		}
 	}
 	.message-footer{
 		border-top:@borderColor 1px solid;
