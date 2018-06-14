@@ -29,7 +29,11 @@ export class NewMessage {
     this.current = { id };
     this.message = graphql({
       client,
+      fetchPolicy: 'network-only',
       query: messageThread,
+      onFetch: () => {
+        this.MESSAGE_FRM = { fields: { ...MESSAGES }, meta: { isValid: false, error: '' } };
+      },
     });
   }
 

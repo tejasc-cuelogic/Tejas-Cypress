@@ -30,12 +30,13 @@ export const deleteMessage = gql`
 
 export const messageThread = gql`
   query messageThread {
-    allMessages(orderBy: createdAt_ASC){
+    allMessages(orderBy: createdAt_ASC, filter: {deleted: false}){
       id
       subject
       body
       updatedAt
       messageDetails{
+        id
         from
         to
         read
