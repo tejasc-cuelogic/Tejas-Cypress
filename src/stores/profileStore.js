@@ -56,6 +56,17 @@ export class ProfileStore {
 
   @observable updateProfileInfo = { fields: { ...UPDATE_PROFILE_INFO }, meta: { isValid: false, error: '' } };
 
+  @observable profilePhoto = {
+    value: '',
+    key: 'profilePhoto',
+    error: undefined,
+    rule: 'required',
+    label: '',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+  };
+
   @observable
   reSendVerificationCode = false;
 

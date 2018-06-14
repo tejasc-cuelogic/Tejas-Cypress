@@ -8,6 +8,7 @@ import { US_STATES } from '../../../../constants/account';
 import UserVerifiedDetails from '../components/UserVerifiedDetails';
 import NewPhoneNumber from './NewPhoneNumber';
 import NewEmailAddress from './NewEmailAddress';
+import UpdateProfilePhoto from './UpdateProfilePhoto';
 import Helper from '../../../../helper/utility';
 
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore')
@@ -37,6 +38,10 @@ export default class ProfileData extends Component {
       <Grid>
         <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
         <Route path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
+        <Route
+          path={`${this.props.match.url}/update-profile-photo`}
+          render={props => <UpdateProfilePhoto refLink={this.props.match.url} {...props} />}
+        />
         <Grid.Column widescreen={8} largeScreen={10} tablet={16} mobile={16}>
           <Card fluid className="form-card">
             <Header as="h3">Personal Profile</Header>
@@ -108,7 +113,7 @@ export default class ProfileData extends Component {
               <h3>Profile Photo</h3>
               {/* <Randavatar name={this.props.UserInfo.fullname}
               avatarKey={this.props.UserInfo.avatarKey} size="small" /> */}
-              <Link to={this.props.match.url}><b>Change profile photo</b></Link>
+              <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
             </Card>
             <UserVerifiedDetails
               {...this.props}
