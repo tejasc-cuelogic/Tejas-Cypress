@@ -81,7 +81,7 @@ export default class PersonalInformation extends Component {
           open={confirmBox.entity === 'legalDocUrl'}
           onCancel={this.handleDelCancel}
           onConfirm={this.handleDelLegalDocUrl}
-          size="tiny"
+          size="mini"
           className="deletion"
         />
       </div>

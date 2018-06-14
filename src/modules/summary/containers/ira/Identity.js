@@ -49,7 +49,7 @@ export default class Identity extends Component {
           open={confirmBox.entity === 'identityDoc'}
           onCancel={this.handleDelCancel}
           onConfirm={this.onIdentityDocRemove}
-          size="tiny"
+          size="mini"
           className="deletion"
         />
       </div>
