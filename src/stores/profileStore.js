@@ -62,13 +62,17 @@ export class ProfileStore {
     error: undefined,
     rule: 'required',
     label: '',
-    preSignedUrl: '',
-    fileId: '',
-    fileData: '',
+    src: '',
+    croppedResult: '',
   };
 
   @observable
   reSendVerificationCode = false;
+
+  @action
+  setProfilePhoto(attr, value) {
+    this.profilePhoto[attr] = value;
+  }
 
   @action
   setReSendVerificationCode(status) {

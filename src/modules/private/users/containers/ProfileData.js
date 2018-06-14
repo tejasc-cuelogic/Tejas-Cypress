@@ -33,6 +33,7 @@ export default class ProfileData extends Component {
       updateProfileInfo,
       updateProfileInfoChange,
       setAddressFields,
+      profilePhoto,
     } = this.props.profileStore;
     return (
       <Grid>
@@ -113,6 +114,7 @@ export default class ProfileData extends Component {
               <h3>Profile Photo</h3>
               {/* <Randavatar name={this.props.UserInfo.fullname}
               avatarKey={this.props.UserInfo.avatarKey} size="small" /> */}
+              <img src={profilePhoto.croppedResult} alt="" />
               <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
             </Card>
             <UserVerifiedDetails
