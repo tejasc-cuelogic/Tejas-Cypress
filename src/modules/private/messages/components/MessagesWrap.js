@@ -24,6 +24,7 @@ export default class MessagesWrap extends Component {
   render() {
     const { uiStore, messageStore } = this.props;
     const { thread, tError, tLoading } = messageStore;
+    console.log(messageStore.message);
     return (
       <div className="message-wrap">
         <div className="message-head">
@@ -38,7 +39,7 @@ export default class MessagesWrap extends Component {
           <Header as="h3">Business model</Header>
         </div>
         <Body current="2" thread={thread} error={tError} loading={tLoading} />
-        <Compose form={this.props.messageStore.MESSAGE_FRM} />
+        <Compose />
         <Confirm
           header="Confirm"
           content="Are you sure you want to delete this message?"

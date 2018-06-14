@@ -44,4 +44,25 @@ export const messageThread = gql`
   }
 `;
 
+export const createMessage = gql`
+  mutation createMessageAndMeta($subject: String!, $body: String!) {
+    createMessage(
+      subject: $subject
+      body: $body
+      messageDetails: {
+        from: "2"
+        to: "1"
+        read: "1"
+        deletedSender: false
+        deletedReceiver: false
+      }
+    ) {
+      id
+      messageDetails {
+        id
+      }
+    }
+  }
+`;
+
 // (filter:{deletedReceiver_not: true}) , filter: {id: $id} ($id: ID!)

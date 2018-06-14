@@ -15,7 +15,7 @@ export default class NewMessage extends Component {
         <div className="message-body">
           inner content ...
         </div>
-        <Compose form={this.props.messageStore.MESSAGE_FRM} />
+        <Compose />
       </div>
     );
   }

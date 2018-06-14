@@ -1,9 +1,8 @@
 export const MESSAGES = {
-  messages: {
+  body: {
     value: '',
     placeHolder: 'Write a new message',
     label: '',
-    key: 'messages',
     error: undefined,
     rule: 'required|max:256',
     customErrors: {

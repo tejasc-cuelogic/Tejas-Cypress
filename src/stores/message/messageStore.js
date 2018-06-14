@@ -1,7 +1,11 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
+import Validator from 'validatorjs';
+import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../services/graphqlCool';
-import { allMessages, deleteMessage, messageThread } from '../queries/message';
+import {
+  allMessages, deleteMessage, messageThread, createMessage,
+} from '../queries/message';
 import Helper from '../../helper/utility';
 import { MESSAGES } from '../../constants/messages';
 
@@ -27,6 +31,19 @@ export class NewMessage {
       client,
       query: messageThread,
     });
+  }
+
+  @action
+  send = () => {
+    const data = mapValues(this.MESSAGE_FRM.fields, f => f.value);
+    client
+      .mutate({
+        mutation: createMessage,
+        variables: { subject: 'Hi..', body: data.body },
+        refetchQueries: [{ query: allMessages }],
+      })
+      .then(() => Helper.toast('Message sent.', 'success'))
+      .catch(() => Helper.toast('Error while sending message', 'error'));
   }
 
   @action
@@ -69,6 +86,42 @@ export class NewMessage {
   @computed get tLoading() {
     return this.message.loading;
   }
+
+  /*
+    Send Message
+  */
+  @action
+  msgEleChange = (e, result) => {
+    const type = (e.target) ? e.target.type : '';
+    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
+    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
+    this.onFieldChange('MESSAGE_FRM', fieldName, fieldValue, type);
+  };
+
+  @action
+  onFieldChange = (currentForm, field, value, type) => {
+    const form = currentForm || 'formFinInfo';
+    if (field) {
+      if (type === 'checkbox' || Array.isArray(toJS(this[form].fields[field].value))) {
+        const index = this[form].fields[field].value.indexOf(value);
+        if (index === -1) {
+          this[form].fields[field].value.push(value);
+        } else {
+          this[form].fields[field].value.splice(index, 1);
+        }
+      } else {
+        this[form].fields[field].value = value;
+      }
+    }
+    const validation = new Validator(
+      mapValues(this[form].fields, f => f.value),
+      mapValues(this[form].fields, f => f.rule),
+    );
+    this[form].meta.isValid = validation.passes();
+    if (field) {
+      this[form].fields[field].error = validation.errors.first(field);
+    }
+  };
 }
 
 export default new NewMessage();
