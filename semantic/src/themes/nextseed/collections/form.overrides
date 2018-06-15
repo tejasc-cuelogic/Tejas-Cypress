@@ -113,15 +113,11 @@
     }
     &.cropper-wrap{
         position:relative;
-        // min-height:250px;
         max-height:70vh;
         text-align:center;
         .file-uploader{
             border:none;
             background:@inverse-darken;
-
-            // display:inline-block;
-            // margin:95px auto;
             .file-uploader-inner{
                 padding:@14px;
                 margin:5rem 0;
