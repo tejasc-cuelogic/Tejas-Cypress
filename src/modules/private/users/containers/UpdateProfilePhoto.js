@@ -68,32 +68,37 @@ export default class UpdateProfilePhoto extends Component {
    * @param {File} image - Image File Object
    * @param {Object} pixelCrop - pixelCrop Object provided by react-image-crop
    */
-  getCroppedImg(image, pixelCrop) {
+  getCroppedImg(image, pixelCrop, name) {
+    console.log(name);
     console.log(this);
     const canvas = document.createElement('canvas');
     canvas.width = pixelCrop.width;
     canvas.height = pixelCrop.height;
     const ctx = canvas.getContext('2d');
 
-    const myImageUrl = URL.createObjectURL(image);
     const myImage = new Image();
-    myImage.src = myImageUrl;
 
-    ctx.drawImage(
-      myImage,
-      pixelCrop.x,
-      pixelCrop.y,
-      pixelCrop.width,
-      pixelCrop.height,
-      0,
-      0,
-      pixelCrop.width,
-      pixelCrop.height,
-    );
+    myImage.onload = function () {
+      ctx.drawImage(
+        myImage,
+        pixelCrop.x,
+        pixelCrop.y,
+        pixelCrop.width,
+        pixelCrop.height,
+        0,
+        0,
+        pixelCrop.width,
+        pixelCrop.height,
+      );
+    };
 
     // As Base64 string
-    const base64Image = canvas.toDataURL('image/jpeg');
-    return base64Image;
+    // const base64Image = canvas.toDataURL('image/jpeg');
+    // console.log(base64Image);
+    const myImageUrl = URL.createObjectURL(image);
+    myImage.src = myImageUrl;
+
+    return myImageUrl;
   }
 
   async test() {
@@ -105,7 +110,7 @@ export default class UpdateProfilePhoto extends Component {
 
   cropImage = () => {
     this.props.profileStore.setProfilePhoto('croppedResult', this.state.cropResult);
-    this.props.history.push(this.props.refLink);
+    // this.props.history.push(this.props.refLink);
   }
   handleCloseModal = () => {
     if (this.props.refLink) {
@@ -133,7 +138,6 @@ export default class UpdateProfilePhoto extends Component {
               <div>
                 <div className="box" style={{ width: '50%', float: 'right' }}>
                   <h1>
-                    <span>Crop</span>
                     <button onClick={this.cropImage} style={{ float: 'right' }}>
                       Crop Image
                     </button>
