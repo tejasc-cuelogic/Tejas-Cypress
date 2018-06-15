@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 import React from 'react';
 import { Grid, Card } from 'semantic-ui-react';
 import { FaqWidget } from '../../../../../theme/common/ImportCommon';
+=======
+import React, { Component } from 'react';
+import { Card } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
+>>>>>>> develop
 import { FillTable } from '../../../../../theme/table/NSTable';
 
 const result = {
   columns: [
+<<<<<<< HEAD
     {
       title: 'Statement Date', field: 'date',
     },
@@ -55,3 +62,27 @@ const TaxForms = () => (
 );
 
 export default TaxForms;
+=======
+    { title: 'Statement Date', field: 'taxFormDate' },
+    { title: 'Form Type', field: 'types' },
+    { title: 'Download as', field: 'file', textAlign: 'right' },
+  ],
+};
+
+@inject('statementStore')
+@observer
+export default class TaxForms extends Component {
+  componentWillMount() {
+    this.props.statementStore.initRequest('TaxForms');
+  }
+  render() {
+    const { taxForms, loading, error } = this.props.statementStore;
+    result.rows = taxForms;
+    return (
+      <Card fluid>
+        <FillTable loading={loading} error={error} result={result} />
+      </Card>
+    );
+  }
+}
+>>>>>>> develop

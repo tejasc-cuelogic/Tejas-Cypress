@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 import React from 'react';
 import { Grid, Card } from 'semantic-ui-react';
 import { FaqWidget } from '../../../../../theme/common/ImportCommon';
+=======
+import React, { Component } from 'react';
+import { Card } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
+>>>>>>> develop
 import { FillTable } from '../../../../../theme/table/NSTable';
 
 const result = {
   columns: [
+<<<<<<< HEAD
     {
       title: 'Statement Date', field: 'date',
     },
@@ -55,3 +62,27 @@ const MonthlyStatements = () => (
 );
 
 export default MonthlyStatements;
+=======
+    { title: 'Statement Date', field: 'statementDate' },
+    { title: 'Description', field: 'description' },
+    { title: 'Download as', field: 'file', textAlign: 'right' },
+  ],
+};
+
+@inject('statementStore')
+@observer
+export default class MonthlyStatements extends Component {
+  componentWillMount() {
+    this.props.statementStore.initRequest('MonthlyStatements');
+  }
+  render() {
+    const { monthlyStatements, loading, error } = this.props.statementStore;
+    result.rows = monthlyStatements;
+    return (
+      <Card fluid>
+        <FillTable loading={loading} error={error} result={result} />
+      </Card>
+    );
+  }
+}
+>>>>>>> develop

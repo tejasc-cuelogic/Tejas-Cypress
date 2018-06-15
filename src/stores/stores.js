@@ -13,6 +13,8 @@ export { default as accountStore } from './accountStore';
 export { default as entityAccountStore } from './user/entityAccountStore';
 export { default as iraAccountStore } from './user/iraAccountStore';
 export { default as individualAccountStore } from './user/individualAccountStore';
+export { default as statementStore } from './account/statementStore';
+
 export { default as educationStore } from './education/educationStore';
 export { default as rewardStore } from './rewardWallet/rewardStore';
 export { default as newBusinessStore } from './user/newBusinessStore';
