@@ -14,23 +14,35 @@ export const THeader = ({ columns }) => (
   </Table.Header>
 );
 
-export const FillTable = props => (
+const NoR = ({ cols, msg }) => (
+  <Table.Row><Table.Cell textAlign="center" colSpan={cols}>{msg}</Table.Cell></Table.Row>
+);
+
+export const FillTable = ({ result, loading, error }) => (
   <div className="table-wrapper">
     <Table singleLine className="investment-details">
-      <THeader columns={props.result.columns} />
+      <THeader columns={result.columns} />
       <Table.Body>
         {
-          props.result.rows.map(row => (
-            <Table.Row key={Helper.guid()}>
-              {
-                props.result.columns.map(col => (
-                  <Table.Cell key={col.field} textAlign={col.textAlign}>
-                    {row[col.field]}
-                  </Table.Cell>
+          error ? <NoR cols={result.columns.length} msg="Error while loading data" /> : (
+            loading ? <NoR cols={result.columns.length} msg="Loading.." /> : (
+              result.rows.length === 0 ? (
+                <NoR cols={result.columns.length} msg="No record to display" />
+              ) : (
+                result.rows.map(row => (
+                  <Table.Row key={Helper.guid()}>
+                    {
+                      result.columns.map(col => (
+                        <Table.Cell key={col.field} textAlign={col.textAlign}>
+                          {row[col.field]}
+                        </Table.Cell>
+                      ))
+                    }
+                  </Table.Row>
                 ))
-              }
-            </Table.Row>
-          ))
+              )
+            )
+          )
         }
       </Table.Body>
     </Table>

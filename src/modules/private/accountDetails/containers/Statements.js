@@ -23,7 +23,7 @@ const faqs = [
 ];
 
 const getModule = component => Loadable({
-  loader: () => import(`../components/rewards/${component}`),
+  loader: () => import(`../components/statements/${component}`),
   loading() {
     return <div>Loading...</div>;
   },
