@@ -31,7 +31,7 @@ const NoR = ({ cols, msg }) => (
 
 export const FillTable = ({ result, loading, error }) => (
   <div className="table-wrapper">
-    <Table singleLine className="investment-details">
+    <Table unstackable singleLine className="investment-details">
       <THeader columns={result.columns} />
       <Table.Body>
         {
