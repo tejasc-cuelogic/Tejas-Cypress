@@ -5,7 +5,6 @@ export const allMonthlyStatements = gql`
     investorAccountStatements(accountId: $accountId){
       accountId
       statementDate
-      userId
       description
       file {
         fileId
@@ -20,7 +19,6 @@ export const allTaxForms = gql`
     investorAccountTaxForms(accountId: $accountId){
       accountId
       taxFormDate
-      userId
       types
       file {
         fileId

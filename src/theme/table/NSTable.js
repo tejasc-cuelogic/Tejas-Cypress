@@ -48,8 +48,9 @@ export const FillTable = ({ result, loading, error }) => (
                           {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field]) : (
                               ['taxFormDate', 'statementDate'].includes(col.field) ?
                                 <DateTimeFormat datetime={row[col.field]} /> : (
-                                  (col.field === 'file') ? <Actions actions={row[col.field]} /> :
-                                  row[col.field]
+                                  (col.field === 'file') ? <Actions actions={row[col.field]} /> : (
+                                    Array.isArray(row[col.field]) ? row[col.field].join(' and ') : row[col.field]
+                                  )
                                 )
                             )
                           }
