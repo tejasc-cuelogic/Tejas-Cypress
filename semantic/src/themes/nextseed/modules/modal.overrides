@@ -149,6 +149,12 @@
         &.relaxed{
             padding:@50px @70px;
         }
+        &.image{
+            .description{
+                width:100%;
+                overflow:hidden;
+            }
+        }
     }
     .actions{
         font-size:@14px;

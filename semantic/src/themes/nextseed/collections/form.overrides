@@ -224,11 +224,9 @@
         padding:0 !important;
         margin-bottom:@14px;
     }
-    // .field.disabled{
-    //   input[type=text]{
-    //     opacity:0;
-    //   }
-    // }
+    .ReactCrop{
+        width:100%;
+    }
 }
 
 .file-uploader-wrap{

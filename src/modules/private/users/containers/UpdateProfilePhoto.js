@@ -115,7 +115,7 @@ export default class UpdateProfilePhoto extends Component {
   render() {
     const { profilePhoto } = this.props.profileStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
+      <Modal open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header>Select a Photo</Modal.Header>
         <Modal.Content image>
           <Modal.Description>
