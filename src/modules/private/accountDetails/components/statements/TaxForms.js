@@ -7,7 +7,7 @@ const result = {
   columns: [
     { title: 'Statement Date', field: 'taxFormDate' },
     { title: 'Form Type', field: 'types' },
-    { title: 'Download as', field: 'actions', textAlign: 'right' },
+    { title: 'Download as', field: 'file', textAlign: 'right' },
   ],
 };
 
@@ -20,7 +20,6 @@ export default class TaxForms extends Component {
   render() {
     const { taxForms, loading, error } = this.props.statementStore;
     result.rows = taxForms;
-    console.log(loading, error, taxForms);
     return (
       <Card fluid>
         <FillTable loading={loading} error={error} result={result} />

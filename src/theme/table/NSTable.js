@@ -1,6 +1,9 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Table, Icon } from 'semantic-ui-react';
+import Aux from 'react-aux';
 import Helper from '../../helper/utility';
+import DateTimeFormat from '../common/DateTimeFormat';
 
 export const THeader = ({ columns }) => (
   <Table.Header>
@@ -12,6 +15,14 @@ export const THeader = ({ columns }) => (
       }
     </Table.Row>
   </Table.Header>
+);
+
+const Actions = props => (
+  <Aux>
+    <Link className={`action ${props.actions.fileName}`} to="/">
+      <Icon className={`ns-file ${props[0]}`} /> PDF
+    </Link>
+  </Aux>
 );
 
 const NoR = ({ cols, msg }) => (
@@ -34,7 +45,14 @@ export const FillTable = ({ result, loading, error }) => (
                     {
                       result.columns.map(col => (
                         <Table.Cell key={col.field} textAlign={col.textAlign}>
-                          {row[col.field]}
+                          {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field]) : (
+                              ['taxFormDate', 'statementDate'].includes(col.field) ?
+                                <DateTimeFormat datetime={row[col.field]} /> : (
+                                  (col.field === 'file') ? <Actions actions={row[col.field]} /> :
+                                  row[col.field]
+                                )
+                            )
+                          }
                         </Table.Cell>
                       ))
                     }

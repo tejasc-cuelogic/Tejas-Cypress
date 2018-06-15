@@ -7,7 +7,7 @@ const result = {
   columns: [
     { title: 'Statement Date', field: 'statementDate' },
     { title: 'Description', field: 'description' },
-    { title: 'Download as', field: 'actions', textAlign: 'right' },
+    { title: 'Download as', field: 'file', textAlign: 'right' },
   ],
 };
 
