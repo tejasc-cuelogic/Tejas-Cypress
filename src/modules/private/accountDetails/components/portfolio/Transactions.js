@@ -5,24 +5,12 @@ import Helper from '../../../../../helper/utility';
 
 const result = {
   columns: [
-    {
-      title: 'Payment Date', field: 'payDate', textAlign: 'left',
-    },
-    {
-      title: 'Payment Received', field: 'received', className: 'positive-text',
-    },
-    {
-      title: 'Interest Paid', field: 'interest',
-    },
-    {
-      title: 'Principal', field: 'principal',
-    },
-    {
-      title: 'Service Fees', field: 'fees',
-    },
-    {
-      title: 'Net Payment Received', field: 'netReceived',
-    },
+    { title: 'Payment Date', field: 'payDate', textAlign: 'left' },
+    { title: 'Payment Received', field: 'received', className: 'positive-text' },
+    { title: 'Interest Paid', field: 'interest' },
+    { title: 'Principal', field: 'principal' },
+    { title: 'Service Fees', field: 'fees' },
+    { title: 'Net Payment Received', field: 'netReceived' },
   ],
   rows: Array(12).fill({
     payDate: '01-24-2018', received: 5000, interest: 3020, principal: 3020, fees: 3020, netReceived: 20000,
