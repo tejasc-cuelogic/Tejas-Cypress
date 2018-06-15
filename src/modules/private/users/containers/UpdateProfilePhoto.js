@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import ReactCrop, { makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import { Header, Modal, Form } from 'semantic-ui-react';
+import { Modal, Form, Icon, Button } from 'semantic-ui-react';
 
 @inject('profileStore')
 @withRouter
@@ -17,7 +17,9 @@ export default class UpdateProfilePhoto extends Component {
         y: 0,
         // aspect: 16 / 9,
       },
-      maxHeight: 80,
+      minWidth: 20,
+      // minHeight: 20,
+      keepSelection: true,
       fileObject: '',
       pixelCrop: '',
       cropResult: '',
@@ -45,11 +47,11 @@ export default class UpdateProfilePhoto extends Component {
   onImageLoaded = (image) => {
     this.setState({
       crop: makeAspectCrop({
-        x: 0,
-        y: 0,
+        x: 20,
+        y: 20,
         aspect: 1 / 1,
-        width: 50,
-      }, image.naturalWidth / image.naturalHeight),
+        width: 20,
+      }, image.width / image.height),
       image,
     });
   }
@@ -122,31 +124,28 @@ export default class UpdateProfilePhoto extends Component {
     return (
       <Modal open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header>Select a Photo</Modal.Header>
-        <Modal.Content image>
-          <Modal.Description>
-            <Header>Default Profile Image</Header>
-            <Form className="file-uploader-large">
-              <input type="file" onChange={this.onChange} />
-              <ReactCrop
-                {...this.state}
-                src={profilePhoto.src}
-                onImageLoaded={this.onImageLoaded}
-                onComplete={this.onCropComplete}
-                onChange={this.onCropChange}
-                crop={this.state.crop}
-              />
-              <div>
-                <div className="box" style={{ width: '50%', float: 'right' }}>
-                  <h1>
-                    <button onClick={this.cropImage} style={{ float: 'right' }}>
-                      Crop Image
-                    </button>
-                  </h1>
-                </div>
+        <Modal.Content>
+          <Form className="cropper-wrap">
+            <ReactCrop
+              {...this.state}
+              src={profilePhoto.src}
+              onImageLoaded={this.onImageLoaded}
+              onComplete={this.onCropComplete}
+              onChange={this.onCropChange}
+              crop={this.state.crop}
+            />
+            <div className="file-uploader">
+              <div className="file-uploader-inner">
+                <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
               </div>
-            </Form>
-          </Modal.Description>
+              <input type="file" onChange={this.onChange} />
+            </div>
+          </Form>
         </Modal.Content>
+        <Modal.Actions>
+          <Button primary content="Set Profile Photo" onClick={this.cropImage} />
+          <Button content="Clear" />
+        </Modal.Actions>
       </Modal>
     );
   }

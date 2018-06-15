@@ -75,7 +75,7 @@
         }
         &.signup-content{
             // padding-top:0;
-            padding-bottom:@28px;
+            padding-bottom:@20px;
         }
         .user-type{
             height:100%;
@@ -149,18 +149,13 @@
         &.relaxed{
             padding:@50px @70px;
         }
-        &.image{
-            .description{
-                width:100%;
-                overflow:hidden;
-            }
-        }
     }
     .actions{
         font-size:@14px;
         &.signup-actions{
             background-color:@inverse-text;
             border:none;
+            padding-top:0;
         }
     }
     .ui.divider{

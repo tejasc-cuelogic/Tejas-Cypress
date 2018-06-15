@@ -39,7 +39,7 @@
 
 /* Content */
 @contentFontSize: 1em;
-@contentPadding:2.5rem 4rem;
+@contentPadding:2.5rem 3rem;
 @contentLineHeight: 1.4;
 @contentBackground: #FFFFFF;
 
@@ -56,7 +56,7 @@
 /* Modal Actions */
 @actionBorder: 1px solid @borderColor;
 @actionBackground: @offWhite;
-@actionPadding: 0 1.5rem 2rem;
+@actionPadding:1.5rem;
 @actionAlign: center;
 
 @buttonDistance: 0.75em;

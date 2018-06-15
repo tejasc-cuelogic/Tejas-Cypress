@@ -47,7 +47,7 @@ class Login extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Log in to NextSeed</Header>
         </Modal.Header>
-        <Modal.Content className="signup-modal">
+        <Modal.Content className="signup-content">
           {errors &&
             <Message error textAlign="left">
               <ListErrors errors={[errors.message]} />
