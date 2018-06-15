@@ -9,14 +9,14 @@ const BeneficiaryList = props => (
     <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
       <Card fluid>
         <Card.Content className="padded beneficiaries">
-          <div className="status">
-            <span className="time-stamp">Updated: 4-05-2018</span>
-            <Icon color="orange" className="ns-reload-circle" /> Pending
-          </div>
           <Header as="h3">
             <Icon color="green" className="ns-individual-line" />
             Individual Account Beneficiaries
           </Header>
+          <div className="status">
+            <span className="time-stamp">Updated: 4-05-2018</span>
+            <Icon color="orange" className="ns-reload-circle" /> Pending
+          </div>
           <p>
             Pellentesque facilisis. Nulla imperdiet sit amet magna.
             Vestibulum dapibus, mauris nec malesuada fames ac turpis
