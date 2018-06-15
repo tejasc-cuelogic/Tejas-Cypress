@@ -87,6 +87,10 @@ query getUserDetails($id: ID!) {
         zipCode
       }
     }
+    avatar {
+      name
+      url
+    }
     accountStatus 
   }
 }

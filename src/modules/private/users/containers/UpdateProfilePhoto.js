@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import ReactCrop, { makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import { Header, Modal, Form } from 'semantic-ui-react';
+import { Header, Modal, Form, Button } from 'semantic-ui-react';
 
 @inject('profileStore')
 @withRouter
@@ -21,6 +21,7 @@ export default class UpdateProfilePhoto extends Component {
       fileObject: '',
       pixelCrop: '',
       cropResult: '',
+      image: '',
     };
   }
   /* eslint-disable prefer-destructuring */
@@ -35,6 +36,7 @@ export default class UpdateProfilePhoto extends Component {
     this.setState({
       fileObject: files[0],
     });
+    this.props.profileStore.setProfilePhoto('value', files[0].name);
     const reader = new FileReader();
     reader.onload = () => {
       this.props.profileStore.setProfilePhoto('src', reader.result);
@@ -68,54 +70,43 @@ export default class UpdateProfilePhoto extends Component {
    * @param {File} image - Image File Object
    * @param {Object} pixelCrop - pixelCrop Object provided by react-image-crop
    */
-  getCroppedImg(image, pixelCrop, name) {
-    console.log(name);
-    console.log(this);
+  /* eslint-disable class-methods-use-this */
+  getCroppedImg(image, pixelCrop) {
     const canvas = document.createElement('canvas');
     canvas.width = pixelCrop.width;
     canvas.height = pixelCrop.height;
     const ctx = canvas.getContext('2d');
 
-    const myImage = new Image();
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height,
+    );
 
-    myImage.onload = function () {
-      ctx.drawImage(
-        myImage,
-        pixelCrop.x,
-        pixelCrop.y,
-        pixelCrop.width,
-        pixelCrop.height,
-        0,
-        0,
-        pixelCrop.width,
-        pixelCrop.height,
-      );
-    };
-
-    // As Base64 string
-    // const base64Image = canvas.toDataURL('image/jpeg');
-    // console.log(base64Image);
-    const myImageUrl = URL.createObjectURL(image);
-    myImage.src = myImageUrl;
-
-    return myImageUrl;
+    const base64Image = canvas.toDataURL('image/jpg');
+    return base64Image;
   }
 
   async test() {
-    const image = this.state.fileObject;
+    const image = this.state.image;
     const pixelCrop = this.state.pixelCrop;
-    const croppedImg = await this.getCroppedImg(image, pixelCrop, image.name);
+    const croppedImg = await this.getCroppedImg(image, pixelCrop);
     this.setState({ cropResult: croppedImg });
-  }
-
-  cropImage = () => {
-    this.props.profileStore.setProfilePhoto('croppedResult', this.state.cropResult);
-    // this.props.history.push(this.props.refLink);
   }
   handleCloseModal = () => {
     if (this.props.refLink) {
       this.props.history.push(this.props.refLink);
     }
+  }
+  uploadProfilePhoto = () => {
+    this.props.profileStore.setProfilePhoto('base64String', this.state.cropResult);
+    this.props.profileStore.uploadProfilePhoto();
   }
   render() {
     const { profilePhoto } = this.props.profileStore;
@@ -125,7 +116,7 @@ export default class UpdateProfilePhoto extends Component {
         <Modal.Content image>
           <Modal.Description>
             <Header>Default Profile Image</Header>
-            <Form className="file-uploader-large">
+            <Form className="file-uploader-large" onSubmit={this.uploadProfilePhoto}>
               <input type="file" onChange={this.onChange} />
               <ReactCrop
                 {...this.state}
@@ -138,9 +129,7 @@ export default class UpdateProfilePhoto extends Component {
               <div>
                 <div className="box" style={{ width: '50%', float: 'right' }}>
                   <h1>
-                    <button onClick={this.cropImage} style={{ float: 'right' }}>
-                      Crop Image
-                    </button>
+                    <Button inverted color="green">Submit</Button>
                   </h1>
                 </div>
               </div>

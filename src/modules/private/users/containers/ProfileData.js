@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
+import _ from 'lodash';
 import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
 import { FormSelect, FormInput, MaskedInput, AutoComplete } from '../../../../theme/form/FormElements';
 import { US_STATES } from '../../../../constants/account';
@@ -10,6 +11,7 @@ import NewPhoneNumber from './NewPhoneNumber';
 import NewEmailAddress from './NewEmailAddress';
 import UpdateProfilePhoto from './UpdateProfilePhoto';
 import Helper from '../../../../helper/utility';
+import Spinner from '../../../../theme/ui/Spinner';
 
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore')
 @observer
@@ -28,13 +30,19 @@ export default class ProfileData extends Component {
       .catch(() => {});
   }
   render() {
-    const { email, legalDetails } = this.props.userDetailsStore.userDetails;
+    const { email, legalDetails, avatar } = this.props.userDetailsStore.userDetails;
     const {
       updateProfileInfo,
       updateProfileInfoChange,
       setAddressFields,
-      profilePhoto,
     } = this.props.profileStore;
+    if (_.isEmpty(this.props.userDetailsStore.userDetails)) {
+      return (
+        <div>
+          <Spinner loaderMessage="Loading..." />
+        </div>
+      );
+    }
     return (
       <Grid>
         <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
@@ -114,7 +122,7 @@ export default class ProfileData extends Component {
               <h3>Profile Photo</h3>
               {/* <Randavatar name={this.props.UserInfo.fullname}
               avatarKey={this.props.UserInfo.avatarKey} size="small" /> */}
-              <img src={profilePhoto.croppedResult} alt="" />
+              <img src={avatar.url} alt={avatar.name} />
               <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
             </Card>
             <UserVerifiedDetails

@@ -6,12 +6,13 @@ import { GqlClient as client } from '../services/graphql';
 import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
 import { createUploadEntry, removeUploadedFile } from '../stores/queries/common';
 
-import api from '../ns-api';
+// import api from '../ns-api';
 import authStore from './authStore';
 import uiStore from './uiStore';
 import userStore from './userStore';
 import userDetailsStore from './user/userDetailsStore';
 import Helper from '../helper/utility';
+import api from '../services/api';
 
 import {
   UPDATE_PROFILE_INFO,
@@ -64,6 +65,8 @@ export class ProfileStore {
     label: '',
     src: '',
     croppedResult: '',
+    base64String: '',
+    responseUrl: '',
   };
 
   @observable
@@ -554,6 +557,10 @@ export class ProfileStore {
           zipCode: this.updateProfileInfo.fields.zipCode.value,
         },
       },
+      avatar: {
+        name: this.profilePhoto.value,
+        url: this.profilePhoto.responseUrl,
+      },
     };
     return profileDetails;
   }
@@ -736,30 +743,30 @@ export class ProfileStore {
     this.onFieldChange('updateProfileInfo', 'zipCode', data.zipCode);
   }
 
-  updateUserProfileData = () => {
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: updateUserProfileData,
-          variables: {
-            userId: userStore.currentUser.sub,
-            profileDetails: this.profileDetails,
-          },
-        })
-        .then(() => {
-          Helper.toast('Investor profile has been updated.', 'success');
-          resolve();
-        })
-        .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
-          reject(err);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
+  // updateUserProfileData = () => {
+  //   uiStore.setProgress();
+  //   return new Promise((resolve, reject) => {
+  //     client
+  //       .mutate({
+  //         mutation: updateUserProfileData,
+  //         variables: {
+  //           userId: userStore.currentUser.sub,
+  //           profileDetails: this.profileDetails,
+  //         },
+  //       })
+  //       .then(() => {
+  //         Helper.toast('Investor profile has been updated.', 'success');
+  //         resolve();
+  //       })
+  //       .catch((err) => {
+  //         uiStore.setErrors(this.simpleErr(err));
+  //         reject(err);
+  //       })
+  //       .finally(() => {
+  //         uiStore.setProgress(false);
+  //       });
+  //   });
+  // }
 
   requestEmailChange = () => {
     uiStore.setProgress();
@@ -809,6 +816,22 @@ export class ProfileStore {
           uiStore.setProgress(false);
         });
     });
+  }
+
+  uploadProfilePhoto = () => {
+    uiStore.setProgress();
+    const profileData = this.profilePhoto.base64String;
+    const b64Text = profileData.split(',')[1];
+    const payload = {
+      userId: userStore.currentUser.sub,
+      base64String: b64Text,
+    };
+    api.post('/upload/file', payload)
+      .then(action((response) => {
+        this.setProfilePhoto('responseUrl', response.body.fileFullPath);
+        this.updateUserProfileData();
+      }))
+      .finally(action(() => { uiStore.setProgress(false); }));
   }
 
   simpleErr = err => ({
