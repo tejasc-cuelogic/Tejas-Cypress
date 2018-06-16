@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import ReactCrop, { makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import { Header, Modal, Form, Button, Icon } from 'semantic-ui-react';
+import { Modal, Form, Button, Icon } from 'semantic-ui-react';
 
 @inject('profileStore')
 @withRouter
