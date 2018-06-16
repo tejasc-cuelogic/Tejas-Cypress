@@ -19,6 +19,7 @@
                 line-height:@24px;
                 border-radius:@6px;
                 background-color:@light-bg-color;
+                white-space: pre-line;
             }
             p{
                 margin:0 0 @21px;

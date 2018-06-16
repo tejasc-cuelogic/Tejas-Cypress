@@ -24,7 +24,6 @@ export default class MessagesWrap extends Component {
   render() {
     const { uiStore, messageStore } = this.props;
     const { thread, tError, tLoading } = messageStore;
-    console.log(messageStore.message);
     return (
       <div className="message-wrap">
         <div className="message-head">

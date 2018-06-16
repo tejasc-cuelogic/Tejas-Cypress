@@ -26,7 +26,7 @@ const MessagesList = props => (
           </List.Content>
           <List.Content>
             <List.Header>{msg.subject}</List.Header>
-            <List.Description>{msg.body}</List.Description>
+            <List.Description>{msg.body.substr(0, 40)}</List.Description>
           </List.Content>
         </List.Item>
       ))
