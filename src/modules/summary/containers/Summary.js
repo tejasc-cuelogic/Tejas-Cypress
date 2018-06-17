@@ -74,6 +74,7 @@ class Summary extends Component {
     let accTypes = ['individual', 'IRA', 'entity'];
     if (!this.props.uiStore.errors) {
       const accDetails = this.props.userDetailsStore.signupStatus;
+      console.log(accDetails, 'accDetails');
       if (accDetails.activeAccounts.length > 0) {
         accTypes = _.filter(
           accTypes,

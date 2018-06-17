@@ -118,7 +118,7 @@ export class UserDetailsStore {
         this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
       ) ? this.userDetails.legalDetails.cipStatus.status : 'FAIL';
       details.accounts = mapValues(this.userDetails.accounts, (a) => {
-        const data = { accountType: a.accountType, status: a.status };
+        const data = { accountId: a.accountId, accountType: a.accountType, status: a.status };
         return data;
       });
       details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
