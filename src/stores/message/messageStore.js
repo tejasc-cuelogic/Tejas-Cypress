@@ -2,6 +2,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
+import isArray from 'lodash/isArray';
 import { GqlClient as client } from '../../services/graphqlCool';
 import {
   allMessages, deleteMessage, messageThread, createMessage,
@@ -11,6 +12,7 @@ import { MESSAGES } from '../../constants/messages';
 
 export class NewMessage {
   @observable MESSAGE_FRM = { fields: { ...MESSAGES }, meta: { isValid: false, error: '' } };
+  @observable requestState = { search: {} };
   @observable data = [];
   @observable current = {};
   @observable message = {};
@@ -60,6 +62,31 @@ export class NewMessage {
       })
       .then(() => Helper.toast('Message deleted successfully.', 'success'))
       .catch(() => Helper.toast('Error while deleting message', 'error'));
+
+  @action
+  setInitiateSrch = (name, value) => {
+    if (name === 'startDate' || name === 'endDate') {
+      this.requestState.search[name] = value;
+      if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
+        const srchParams = { ...this.requestState.search };
+        this.initiateSearch(srchParams);
+      }
+    } else {
+      const srchParams = { ...this.requestState.search };
+      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+        srchParams[name] = value;
+      } else {
+        delete srchParams[name];
+      }
+      this.initiateSearch(srchParams);
+    }
+  }
+
+  @action
+  initiateSearch = (srchParams) => {
+    this.requestState.search = srchParams;
+    this.initRequest();
+  }
 
   @computed get allData() {
     return this.data;

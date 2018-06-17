@@ -1,23 +1,18 @@
 import React from 'react';
-import { Form, Grid, Input } from 'semantic-ui-react';
-import { DropdownFilter, DateRangeFilter } from '../../../../theme/form/Filters';
+import { Form, Grid } from 'semantic-ui-react';
+import { ByKeyword, DropdownFilter, DateRangeFilter } from '../../../../theme/form/Filters';
+import { ROLES } from '../../../../constants/user';
 
-const Header = () => (
+const Header = props => (
   <Form>
     <Grid>
       <Grid.Row>
-        <Grid.Column widescreen={8} largeScreen={8} computer={16} tablet={16} mobile={16}>
-          <Form.Field>
-            {/* eslint-disable jsx-a11y/label-has-for  */}
-            <label className="invisible">Search by keyword or user’s name</label>
-            <Input fluid inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Search by keyword or user’s name" />
-          </Form.Field>
+        <ByKeyword {...props} w={[8, 16]} fLabel placeholder="Search by keyword or user’s name" />
+        <Grid.Column widescreen={4} largeScreen={4} computer={16} tablet={16} mobile={16}>
+          <DropdownFilter options={ROLES} change={props.setSearchParam} value={props.requestState.search.userType} name="User Type" isMultiple />
         </Grid.Column>
         <Grid.Column widescreen={4} largeScreen={4} computer={16} tablet={16} mobile={16}>
-          <DropdownFilter value="user type" name="User Type" isMultiple />
-        </Grid.Column>
-        <Grid.Column widescreen={4} largeScreen={4} computer={16} tablet={16} mobile={16}>
-          <DateRangeFilter filters="" label="Creation date" name="createdAt" />
+          <DateRangeFilter filters={props.requestState.search} changeStart={props.dateFilterStart} changeEnd={props.dateFilterEnd} label="Creation date" name="createdAt" />
         </Grid.Column>
       </Grid.Row>
     </Grid>

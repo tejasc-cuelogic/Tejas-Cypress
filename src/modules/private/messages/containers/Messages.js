@@ -14,10 +14,27 @@ export default class Messages extends Component {
   componentWillMount() {
     this.props.messageStore.initRequest();
   }
+  setSearchParam = (e, { name, value }) => this.props.messageStore.setInitiateSrch(name, value);
+  dateFilterStart = (date) => {
+    if (date) {
+      this.props.messageStore.setInitiateSrch('startDate', date);
+    }
+  }
+
+  dateFilterEnd = (date) => {
+    if (date) {
+      this.props.messageStore.setInitiateSrch('endDate', date);
+    }
+  }
+  executeSearch = (e) => {
+    if (e.charCode === 13) {
+      this.props.messageStore.setInitiateSrch('keyword', e.target.value);
+    }
+  }
   render() {
     const { match, messageStore } = this.props;
     const {
-      messages, current, loading, error,
+      messages, current, loading, error, requestState,
     } = messageStore;
     return (
       <PrivateLayout
@@ -30,7 +47,12 @@ export default class Messages extends Component {
           </Grid.Column>
         }
       >
-        <MessagesHeader />
+        <MessagesHeader
+          setSearchParam={this.setSearchParam}
+          requestState={requestState}
+          dateFilterStart={this.dateFilterStart}
+          dateFilterEnd={this.dateFilterEnd}
+        />
         <Card fluid className="messages">
           <MessagesList
             match={match}

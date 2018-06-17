@@ -1,17 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
-import { DropdownFilter, DateRangeFilter, AppliedFilters } from '../../../../theme/form/Filters';
+import { Grid, Button, Form, Icon, List } from 'semantic-ui-react';
+import { ByKeyword, DropdownFilter, DateRangeFilter, AppliedFilters } from '../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../constants/user';
 
-export const P1 = props => (
-  <Grid.Column width={5}>
-    <Form inverted>
-      <Input fluid onKeyPress={props.executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Type user’s name, e-mail address, city, state, zip code or phone number" />
-    </Form>
-  </Grid.Column>
-);
+export const P1 = props => <ByKeyword {...props} w={[5]} placeholder="Type user’s name, e-mail address, city, state, zip code or phone number" />;
 
 export const P2 = props => (
   <Grid.Column width={3} textAlign="center">
