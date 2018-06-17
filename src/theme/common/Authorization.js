@@ -10,14 +10,7 @@ const Authorization = (allowedRoles, UnauthorizedComponent) => (
   WrappedComponent,
   context,
 ) => class WithAuthorization extends React.Component {
-//   constructor(props) {
-//     super(props);
-//   }
-
   render() {
-    // console.log(context);
-
-    // Check if current user exists i.e. used is logged in
     if (context.userStore.currentUser) {
       const allowed = context.userStore.currentUser.roles.some(role =>
         allowedRoles.includes(role));

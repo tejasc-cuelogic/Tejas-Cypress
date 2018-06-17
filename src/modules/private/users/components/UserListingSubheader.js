@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
+import { Grid, Button, Form, Input, Icon, List } from 'semantic-ui-react';
 import { DropdownFilter, DateRangeFilter, AppliedFilters } from '../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../constants/user';
 
@@ -23,7 +22,7 @@ export const P2 = props => (
   </Grid.Column>
 );
 
-export const P3 = props => (
+export const P3 = () => (
   <Grid.Column width={3} textAlign="right">
     <Button color="green" as={Link} floated="right" to="/app/users/new">+ Add new user</Button>
   </Grid.Column>

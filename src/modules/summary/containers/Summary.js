@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import _ from 'lodash';
-import { Grid, Card, Header, Icon, Responsive, Divider, List, Button } from 'semantic-ui-react';
+import { Grid, Card, Header, Divider, List, Button } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
-import PageHeaderSection from '../../../theme/common/PageHeaderSection';
 import StickyNotification from '../components/StickyNotification';
 import AccountSetupChecklist from '../components/AccountSetupChecklist';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
