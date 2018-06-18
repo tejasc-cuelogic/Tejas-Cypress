@@ -5,7 +5,7 @@ import ReactCrop, { makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Modal, Form, Button, Icon } from 'semantic-ui-react';
 
-@inject('profileStore')
+@inject('profileStore', 'uiStore')
 @withRouter
 @observer
 export default class UpdateProfilePhoto extends Component {
@@ -17,10 +17,6 @@ export default class UpdateProfilePhoto extends Component {
         y: 0,
         // aspect: 16 / 9,
       },
-      minWidth: 20,
-      // minHeight: 20,
-      keepSelection: true,
-      fileObject: '',
       pixelCrop: '',
       cropResult: '',
       image: '',
@@ -35,9 +31,6 @@ export default class UpdateProfilePhoto extends Component {
     } else if (e.target) {
       files = e.target.files;
     }
-    this.setState({
-      fileObject: files[0],
-    });
     this.props.profileStore.setProfilePhoto('value', files[0].name);
     const reader = new FileReader();
     reader.onload = () => {
@@ -68,6 +61,7 @@ export default class UpdateProfilePhoto extends Component {
   onCropChange = (crop) => {
     this.setState({ crop });
   }
+
   /**
    * @param {File} image - Image File Object
    * @param {Object} pixelCrop - pixelCrop Object provided by react-image-crop
@@ -101,17 +95,21 @@ export default class UpdateProfilePhoto extends Component {
     const croppedImg = await this.getCroppedImg(image, pixelCrop);
     this.setState({ cropResult: croppedImg });
   }
+
   handleCloseModal = () => {
     if (this.props.refLink) {
       this.props.history.push(this.props.refLink);
     }
   }
+
   uploadProfilePhoto = () => {
     this.props.profileStore.setProfilePhoto('base64String', this.state.cropResult);
     this.props.profileStore.uploadProfilePhoto();
   }
+
   render() {
-    const { profilePhoto } = this.props.profileStore;
+    const { updateProfileInfo, canUpdateProfilePhoto, resetProfilePhoto } = this.props.profileStore;
+    const { inProgress } = this.props.uiStore;
     return (
       <Modal open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header>Select a Photo</Modal.Header>
@@ -119,7 +117,7 @@ export default class UpdateProfilePhoto extends Component {
           <Form className="cropper-wrap">
             <ReactCrop
               {...this.state}
-              src={profilePhoto.src}
+              src={updateProfileInfo.fields.profilePhoto.src}
               onImageLoaded={this.onImageLoaded}
               onComplete={this.onCropComplete}
               onChange={this.onCropChange}
@@ -134,8 +132,8 @@ export default class UpdateProfilePhoto extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
-          <Button primary content="Set Profile Photo" onClick={this.cropImage} />
-          <Button content="Clear" />
+          <Button loading={inProgress} disabled={!canUpdateProfilePhoto} primary content="Set Profile Photo" onClick={this.uploadProfilePhoto} />
+          <Button disabled={!canUpdateProfilePhoto} content="Clear" onClick={() => resetProfilePhoto()} />
         </Modal.Actions>
       </Modal>
     );

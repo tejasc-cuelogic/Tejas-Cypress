@@ -57,24 +57,12 @@ export class ProfileStore {
 
   @observable updateProfileInfo = { fields: { ...UPDATE_PROFILE_INFO }, meta: { isValid: false, error: '' } };
 
-  @observable profilePhoto = {
-    value: '',
-    key: 'profilePhoto',
-    error: undefined,
-    rule: 'required',
-    label: '',
-    src: '',
-    croppedResult: '',
-    base64String: '',
-    responseUrl: '',
-  };
-
   @observable
   reSendVerificationCode = false;
 
   @action
   setProfilePhoto(attr, value) {
-    this.profilePhoto[attr] = value;
+    this.updateProfileInfo.fields.profilePhoto[attr] = value;
   }
 
   @action
@@ -743,31 +731,6 @@ export class ProfileStore {
     this.onFieldChange('updateProfileInfo', 'zipCode', data.zipCode);
   }
 
-  // updateUserProfileData = () => {
-  //   uiStore.setProgress();
-  //   return new Promise((resolve, reject) => {
-  //     client
-  //       .mutate({
-  //         mutation: updateUserProfileData,
-  //         variables: {
-  //           userId: userStore.currentUser.sub,
-  //           profileDetails: this.profileDetails,
-  //         },
-  //       })
-  //       .then(() => {
-  //         Helper.toast('Investor profile has been updated.', 'success');
-  //         resolve();
-  //       })
-  //       .catch((err) => {
-  //         uiStore.setErrors(this.simpleErr(err));
-  //         reject(err);
-  //       })
-  //       .finally(() => {
-  //         uiStore.setProgress(false);
-  //       });
-  //   });
-  // }
-
   requestEmailChange = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -832,6 +795,17 @@ export class ProfileStore {
         this.updateUserProfileData();
       }))
       .finally(action(() => { uiStore.setProgress(false); }));
+  }
+
+  @computed
+  get canUpdateProfilePhoto() {
+    return this.updateProfileInfo.fields.profilePhoto.value !== '';
+  }
+
+  @action
+  resetProfilePhoto = () => {
+    this.uploadProfilePhoto.fields.profilePhoto.src = '';
+    this.uploadProfilePhoto.fields.profilePhoto.value = '';
   }
 
   simpleErr = err => ({

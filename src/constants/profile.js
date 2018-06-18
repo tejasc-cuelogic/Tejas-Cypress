@@ -165,4 +165,15 @@ export const UPDATE_PROFILE_INFO = {
     rule: 'required|numeric',
     placeHolder: 'ZIP Code',
   },
+  profilePhoto: {
+    value: '',
+    key: 'profilePhoto',
+    error: undefined,
+    rule: 'required',
+    label: '',
+    src: '',
+    croppedResult: '',
+    base64String: '',
+    responseUrl: '',
+  },
 };
