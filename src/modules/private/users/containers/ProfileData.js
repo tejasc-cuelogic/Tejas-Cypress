@@ -10,7 +10,7 @@ import NewPhoneNumber from './NewPhoneNumber';
 import NewEmailAddress from './NewEmailAddress';
 import Helper from '../../../../helper/utility';
 
-@inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore')
+@inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore', 'accountStore')
 @observer
 export default class ProfileData extends Component {
   componentWillMount() {
@@ -18,6 +18,17 @@ export default class ProfileData extends Component {
   }
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
+  }
+  handleNavToVerifyIdentity = (step) => {
+    this.props.uiStore.setDashboardWizardStep(step);
+  }
+  isVerified = (cipStatus) => {
+    let checkStatus = '';
+    if (cipStatus !== null) {
+      checkStatus = cipStatus.status;
+      return this.props.accountStore.validAccStatus.includes(checkStatus);
+    }
+    return false;
   }
   handleUpdateProfileInfo = (e) => {
     e.preventDefault();
@@ -114,6 +125,8 @@ export default class ProfileData extends Component {
               {...this.props}
               email={email}
               legalDetails={legalDetails}
+              isUserVerified={this.isVerified}
+              handleNavToVerifyIdentity={this.handleNavToVerifyIdentity}
             />
           </Card.Group>
         </Grid.Column>
