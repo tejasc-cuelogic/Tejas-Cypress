@@ -20,10 +20,7 @@ export default class KnowledgeBase extends Component {
   render() {
     const { match, location } = this.props;
     const {
-      kbs,
-      loading,
-      error,
-      searchParam,
+      kbs, loading, error, searchParam,
     } = this.props.educationStore;
     const modul = 'knowledgeBase';
     if (loading) {
