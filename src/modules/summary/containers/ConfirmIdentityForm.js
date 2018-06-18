@@ -40,7 +40,11 @@ export default class ConfirmIdentityForm extends Component {
           <Header as="h2">We need to confirm your identity</Header>
           <Divider />
           <p>
-            Please answer the questions below
+            We were unable to match your information with the<br />
+            address you provided. (
+            <i>Note: This may happen if you<br />
+            recently relocated or you entered your address incorrectly
+            </i>)
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">

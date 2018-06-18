@@ -5,6 +5,7 @@ import Aux from 'react-aux';
 import Helper from '../../helper/utility';
 import DateTimeFormat from '../common/DateTimeFormat';
 
+
 export const THeader = ({ columns }) => (
   <Table.Header>
     <Table.Row>

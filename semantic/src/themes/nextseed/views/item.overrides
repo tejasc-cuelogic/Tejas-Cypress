@@ -1,3 +1,59 @@
 /*******************************
          Theme Overrides
 *******************************/
+.ui.items.messages{
+    .item{
+        margin:@35px 0;
+        &.date-stamp{
+            margin:@14px 0;
+            justify-content:center;
+            + .item{
+                margin-top:@21px;
+            }
+        }
+        > .content{
+            > .description{
+                margin:0;
+                padding:@12px @20px;
+                font-size:@16px;
+                line-height:@24px;
+                border-radius:@6px;
+                background-color:@light-bg-color;
+                white-space: pre-line;
+            }
+            p{
+                margin:0 0 @21px;
+                &:last-child{
+                    margin:0;
+                }
+            }
+        }
+        > .extra{
+            min-width:100px;
+            margin:0 0 0 @14px;
+            flex:0 1;
+            > *{
+                margin:0;
+            }
+            .time-stamp{
+                display:block;
+                color:@border-color;
+            }
+        }
+        &.sent{
+            .extra{
+                text-align:right;
+                margin:0 @14px 0 0;
+            }
+            .content{
+                padding:0 @21px 0 0;
+                > .description{
+                    background-color:transparent;
+                    border:@borderColor 1px solid;
+                }
+            }
+        }
+    }
+}
+
+

@@ -6,6 +6,7 @@ import { allKbsQuery, getFirst, getOne, allFaqCategories, getOneFaq, getFirstFaq
 
 export class EducationStore {
   @observable data = [];
+  @observable dataOne = {};
   @observable module = '';
   @observable selected = { heading: '', description: '' };
 
@@ -27,7 +28,7 @@ export class EducationStore {
     } else if (module === 'Faq') {
       query = (id) ? getOneFaq : getFirstFaq;
     }
-    graphql({
+    this.dataOne = graphql({
       client,
       query,
       variables,

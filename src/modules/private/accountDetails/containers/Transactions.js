@@ -12,7 +12,7 @@ const result = {
     { title: 'Amount', field: 'amount', textAlign: 'right' },
   ],
   rows: Array(5).fill({
-    date: '3/24/18', description: 'Automatic Deposit', amount: 3020,
+    date: '3/24/18', description: 'Automatic Deposit', amount: 150.8,
   }),
 };
 

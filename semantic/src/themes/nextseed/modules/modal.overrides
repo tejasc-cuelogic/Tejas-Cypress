@@ -189,6 +189,19 @@
                 padding-bottom:@7px;
             }
         }
+        .reward-description{
+            padding:@18px @25px;
+            margin-bottom:@18px;
+            text-align:left;
+            background-color:@lighten-bg-color;
+            .ui.header{
+                margin-bottom:@12px;
+            }
+        }
+        .note{
+            font-size:@12px;
+            margin-top:@14px;
+        }
     }
 }
 
@@ -219,6 +232,7 @@
         position:relative;
         padding:@50px @70px;
         .field-wrap{
+            margin:@30px auto;
             h5{
                 margin-bottom:@10px;
             }
@@ -257,7 +271,6 @@
     }
 }
 .field-wrap{
-    margin:@30px auto;
     padding:@25px @60px;
     background:@lighten-bg-color;
     @media only screen and (max-width:@largestMobileScreen){

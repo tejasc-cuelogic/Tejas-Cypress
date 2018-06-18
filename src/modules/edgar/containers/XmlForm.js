@@ -1,4 +1,5 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Form, Grid, Icon, Button, Header, Responsive } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -393,7 +394,7 @@ export default class XmlForm extends React.Component {
       );
     }
     return (
-      <div>
+      <Aux>
         <div className="page-header-section">
           <Header as="h1">
             <Responsive
@@ -460,7 +461,7 @@ export default class XmlForm extends React.Component {
             <FormErrors xmlErrors={xmlErrors} className="field-error-message" />
           </Grid>
         </div>
-      </div>
+      </Aux>
     );
   }
 }

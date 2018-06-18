@@ -30,6 +30,9 @@
         &.ghost-button{
             background-color:transparent;
             box-shadow:none;
+            &.tiny{
+                font-size:@13px;
+            }
             &.mini{
                 font-size:@14px;
             }
@@ -48,6 +51,13 @@
                 &:hover, &:focus, &:active{
                     color:@white;
                     background-color:@highlight-primary;
+                }
+            }
+            &.violet{
+                color:@violet;
+                &:hover, &:focus, &:active{
+                    color:darken(@violet, 10%);
+                    background-color:transparent;
                 }
             }
         }

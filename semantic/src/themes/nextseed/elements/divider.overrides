@@ -24,7 +24,14 @@
 		margin:@7px 0;
 	}
 }
-.ui.divider.only-border{
-	margin:0;
-	border-top:@borderColor 1px solid;
+.ui.divider{
+	&.only-border{
+		margin:0;
+		border-top:@borderColor 1px solid;
+	}
+	@media only screen and (min-width:@largeMonitorBreakpoint){
+		&.doubled{
+			margin:@50px 0;
+		}
+	}
 }

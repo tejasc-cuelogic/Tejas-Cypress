@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { NavLink } from 'react-router-dom';
+import { Responsive, Menu, Dropdown } from 'semantic-ui-react';
 import map from 'lodash/map';
 import mapKeys from 'lodash/mapKeys';
-import { Responsive, Menu, Dropdown } from 'semantic-ui-react';
 
 const iMap = { to: 'key', title: 'text' };
 const NavItems = ({ navItems, match }) => navItems.map(item => (
@@ -16,7 +17,7 @@ class SecondaryMenu extends Component {
     const { navItems, match } = this.props;
     const mobnavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
-      <div>
+      <Aux>
         <Responsive minWidth={768}>
           <Menu
             className={this.props.className || ''}
@@ -33,7 +34,7 @@ class SecondaryMenu extends Component {
         <Responsive className="secondary-menu" maxWidth={767}>
           <Dropdown fluid selection options={mobnavItems} />
         </Responsive>
-      </div>
+      </Aux>
     );
   }
 }

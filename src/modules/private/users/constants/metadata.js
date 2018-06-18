@@ -1,18 +1,15 @@
 export const securitySections = [
   {
     title: 'Password',
-    description: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.',
+    description: `Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.
+    Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.`,
     action: ['change-password', 'Change Password'],
   },
   {
     title: 'Multi-Factor Autentitaction',
-    description: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.',
+    description: `Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.
+    Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.`,
     action: ['mfa', 'Manage multi-factor autentication'],
-  },
-  {
-    title: 'Challenge Questions',
-    description: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.',
-    action: ['challenge-question', 'Manage challenge questions'],
   },
   {
     title: 'Social Connect',

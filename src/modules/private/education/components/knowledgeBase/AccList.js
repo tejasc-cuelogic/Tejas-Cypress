@@ -18,12 +18,16 @@ export default class Faq extends Component {
     this.setState({ activeIndex: (activeIndex === index ? -1 : index) });
   }
   isActive = (record) => {
-    const id = this.props.location.pathname.split('/')[4];
+    let currId = this.props.location.pathname.split('/')[4];
+    if (this.props.educationStore.selected) {
+      currId = this.props.educationStore.selected.id;
+    }
     const ids = mapValues(record.faqs, f => f.id);
-    return this.state.activeIndex === record.id || Object.values(ids).includes(id);
+    return this.state.activeIndex === record.id || Object.values(ids).includes(currId);
   }
   render() {
     const { match, data } = this.props;
+    const { selected } = this.props.educationStore;
     return (
       <Accordion className="splitted">
         {
@@ -42,7 +46,14 @@ export default class Faq extends Component {
                   <List divided relaxed="very">
                     {
                       record.faqs.map(faq => (
-                        <List.Item to={`${match.url}/${faq.id}`} key={faq.id} as={NavLink}>{faq.text}</List.Item>
+                        <List.Item
+                          className={selected && selected.id === faq.id ? 'active' : ''}
+                          to={`${match.url}/${faq.id}`}
+                          key={faq.id}
+                          as={NavLink}
+                        >
+                          {faq.text}
+                        </List.Item>
                       ))
                     }
                   </List>

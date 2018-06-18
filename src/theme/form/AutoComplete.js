@@ -6,16 +6,10 @@ import Autocomplete from 'react-google-autocomplete';
 import FieldError from '../common/FieldError';
 
 const AutoComplete = observer((props) => {
-  const {
-    label,
-    error,
-    value,
-  } = props.fielddata;
+  const { label, error, value } = props.fielddata;
   return (
-    <Form.Field error={!!error}>
-      <label>
-        {label}
-      </label>
+    <Form.Field error={error}>
+      <label>{label}</label>
       <Autocomplete
         {...props}
         onPlaceSelected={(place) => {

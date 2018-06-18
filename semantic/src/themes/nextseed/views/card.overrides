@@ -86,6 +86,9 @@
         padding:@22px;
     }
     .content{
+        .ui.header .icon{
+            color:@quaternary-text;
+        }
         .status{
             margin:0;
             padding:0.5rem 1rem;

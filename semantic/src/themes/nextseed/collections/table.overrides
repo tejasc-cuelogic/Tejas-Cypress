@@ -69,7 +69,7 @@
             }
         }
     }
-    a{
+    a:not(.button){
         font-family:@pageFont;
         color:@primary-text;
         text-decoration:none;

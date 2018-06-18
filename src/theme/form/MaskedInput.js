@@ -5,7 +5,6 @@ import { Form, Popup, Icon, Button } from 'semantic-ui-react';
 import InputMask from 'react-input-mask';
 import FieldError from '../common/FieldError';
 
-/* eslint-disable arrow-body-style */
 const MaskedInput = observer((props) => {
   const { label, error, value } = props.fielddata;
   return (

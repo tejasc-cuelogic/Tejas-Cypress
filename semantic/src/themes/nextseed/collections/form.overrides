@@ -10,7 +10,9 @@
             padding:0 @14px;
         }
     }
-    .fields .field{
+    .fields .field, .fields .wide.field{
+        padding-left:@gutterWidth;
+        padding-right:@gutterWidth;
         margin-bottom:@14px;
     }
     .field.otp-field{
@@ -36,7 +38,7 @@
     }
     label{
         i.icon{
-            margin-left:@7px;
+            margin:0 0 0 @5px;
             font-size:@14px;
             color:@quaternary-text;
         }
@@ -218,6 +220,10 @@
         line-height:@14px;
         color:@highlight-primary;
     }
+    .additional-field{
+        padding:0 !important;
+        margin-bottom:@14px;
+    }
     // .field.disabled{
     //   input[type=text]{
     //     opacity:0;
@@ -234,6 +240,7 @@
         display:inline-block;
     }
 }
+
 .file-uploader{
     min-height:58px;
     padding:@14px;
@@ -271,6 +278,7 @@
         white-space:nowrap;
         .remove{
             margin:@7px 0 @7px @7px;
+            line-height:1;
             color:@link-color;
             position:relative;
             z-index:9;
