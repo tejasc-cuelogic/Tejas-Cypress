@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import _ from 'lodash';
-import { Grid, Card, Header, Divider, List, Button } from 'semantic-ui-react';
+import { Grid, Card, Header, Divider, List } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
@@ -53,11 +53,10 @@ class Summary extends Component {
     let accTypes = ['individual', 'IRA', 'entity'];
     if (!this.props.uiStore.errors) {
       const accDetails = this.props.userDetailsStore.signupStatus;
-      console.log(accDetails, 'accDetails');
       if (accDetails.activeAccounts.length > 0) {
         accTypes = _.filter(
           accTypes,
-          n => _.lowerCase(n) !== (accDetails.activeAccounts[0]),
+          n => !accDetails.activeAccounts.includes(_.lowerCase(n)),
         );
         return (
           <OtherAccountTypes
