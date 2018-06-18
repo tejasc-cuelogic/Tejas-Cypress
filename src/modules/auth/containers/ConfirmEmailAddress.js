@@ -31,7 +31,16 @@ export default class ConfirmEmailAddress extends Component {
         authActions.confirmCode()
           .then(() => {
             this.props.authStore.reset();
-            this.props.history.push('/auth/login');
+            const { roles } = this.props.userStore.currentUser;
+            if (roles) {
+              if (roles[0] === 'investor') {
+                this.props.history.replace('/app/summary');
+              } else {
+                this.props.history.replace('/app/dashboard');
+              }
+            } else {
+              this.props.history.replace('/app/login');
+            }
           })
           .catch(() => { });
       }
