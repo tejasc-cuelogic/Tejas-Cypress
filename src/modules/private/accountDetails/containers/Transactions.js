@@ -7,15 +7,9 @@ import { TRANSACTION_TYPES } from '../../../../constants/user';
 
 const result = {
   columns: [
-    {
-      title: 'Date', field: 'date',
-    },
-    {
-      title: 'Description', field: 'description', className: 'positive-text',
-    },
-    {
-      title: 'Amount', field: 'amount', textAlign: 'right',
-    },
+    { title: 'Date', field: 'date' },
+    { title: 'Description', field: 'description', className: 'positive-text' },
+    { title: 'Amount', field: 'amount', textAlign: 'right' },
   ],
   rows: Array(5).fill({
     date: '3/24/18', description: 'Automatic Deposit', amount: 150.8,

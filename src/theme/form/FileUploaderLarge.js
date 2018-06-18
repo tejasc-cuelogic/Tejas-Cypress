@@ -4,10 +4,7 @@ import { Form, Icon, Button } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
 const FileUploaderLarge = observer((props) => {
-  const {
-    value,
-    error,
-  } = props.fielddata;
+  const { error, value } = props.fielddata;
   return (
     <Form.Field>
       {!value &&

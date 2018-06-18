@@ -3,7 +3,7 @@ import { Header } from 'semantic-ui-react';
 import { Route } from 'react-router-dom';
 import InvestmentTimeline from './Rewards/InvestmentTimeline';
 import RewardList from './Rewards/RewardList';
-import Redeem from './Rewards/Redeem';
+import Redeem from '../../../rewardsWallet/components/Redeem';
 
 const list = [
   {

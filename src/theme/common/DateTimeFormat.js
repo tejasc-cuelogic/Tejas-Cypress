@@ -8,8 +8,10 @@ const dateTimeFormat = props => (
     {props.fromNow ? (
       <Moment fromNow>{props.datetime}</Moment>
     ) : (
-      props.dateonly ? <Moment format={DATE_ONLY}>{props.datetime}</Moment> :
-      <Moment format={DATE_FORMAT}>{props.datetime}</Moment>
+      props.dateonly ? <Moment format={DATE_ONLY}>{props.datetime}</Moment> : (
+        props.format ? <Moment format={props.format}>{props.datetime}</Moment> :
+        <Moment format={DATE_FORMAT}>{props.datetime}</Moment>
+      )
     )
     }
   </Aux>
