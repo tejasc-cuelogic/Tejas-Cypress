@@ -5,18 +5,10 @@ import UpdatesTimeline from './UpdatesComponents/UpdatesTimeline';
 import UpdateDetails from './UpdatesComponents/UpdateDetails';
 
 const summary = [
-  {
-    id: 4, date: 'Jan 23rd 2018',
-  },
-  {
-    id: 3, date: 'Dec 17th 2017',
-  },
-  {
-    id: 2, date: 'Aug 28th 2017',
-  },
-  {
-    id: 1, date: 'Mar 01st 2017',
-  },
+  { id: 4, date: 'Jan 23rd 2018' },
+  { id: 3, date: 'Dec 17th 2017' },
+  { id: 2, date: 'Aug 28th 2017' },
+  { id: 1, date: 'Mar 01st 2017' },
 ];
 
 const Updates = props => (

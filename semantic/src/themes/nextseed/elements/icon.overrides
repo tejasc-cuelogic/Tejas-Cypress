@@ -1062,6 +1062,9 @@ i.icon[class*="ns-"]{
 .ns-caret-up:before{
     content:@ns-caret-up;
 }
+.ns-cash-dollar:before{
+    content:@ns-cash-dollar;
+}
 .ns-category:before{
     content:@ns-category;
 }
@@ -1073,6 +1076,9 @@ i.icon[class*="ns-"]{
 }
 .ns-check-circle:before{
     content:@ns-check-circle;
+}
+.ns-check-circle-line:before{
+    content:@ns-check-circle-line;
 }
 .ns-chevron-down:before{
     content:@ns-chevron-down;
@@ -1136,6 +1142,9 @@ i.icon[class*="ns-"]{
 }
 .ns-dashboard-circle:before{
     content:@ns-dashboard-circle;
+}
+.ns-document:before{
+    content:@ns-document;
 }
 .ns-doller-circle:before{
     content:@ns-doller-circle;
@@ -1277,6 +1286,12 @@ i.icon[class*="ns-"]{
 }
 .ns-real-estate:before{
     content:@ns-real-estate;
+}
+.ns-reload-circle:before{
+    content:@ns-reload-circle;
+}
+.ns-reload-circle-line:before{
+    content:@ns-reload-circle-line;
 }
 .ns-renovations:before{
     content:@ns-renovations;

@@ -116,7 +116,10 @@ h6{
 .negative-text{
 	color:@highlight-primary !important;
 }
-.intro-text{
+.tertiary-text{
+	color:@tertiary-text !important;
+}
+.intro-text, .note{
 	color:@quaternary-text;
 	margin-bottom:@28px;
 }
@@ -134,6 +137,9 @@ a.text-link{
 	}
 }
 
+.invisible{
+	opacity:0 !important;
+}
 //	Admin Page Content Styles
 
 //	Page Header Styles
@@ -819,6 +825,50 @@ svg:not(:root).recharts-surface{
 			}
 			&.next{
 				margin-left:@14px;
+			}
+		}
+	}
+}
+
+//	Message details UI
+.message-wrap{
+	width:70%;
+	display:flex;
+	flex-direction:column;
+	.message-head, .message-body, .message-footer{
+		padding:@14px @21px;
+	}
+	.message-head{
+		border-bottom:@borderColor 1px solid;
+		.ui.header{
+			margin:0;
+			text-overflow:ellipsis;
+			overflow:hidden;
+			white-space:nowrap;
+		}
+		.ui.button>.icon{
+			height:22px;
+			line-height:22px;
+		}
+	}
+	.message-body{
+		flex:1 0;
+		overflow:auto;
+		.new-msg-intro{
+			margin:10% 0;
+		}
+	}
+	.message-footer{
+		border-top:@borderColor 1px solid;
+		.ui.form{
+			display:flex;
+			.field{
+				flex:1;
+				margin:0 @20px 0 0;
+			}
+			textarea{
+				min-height:42px;
+				max-height:150px;
 			}
 		}
 	}

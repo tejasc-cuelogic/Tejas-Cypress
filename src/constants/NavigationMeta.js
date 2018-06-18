@@ -183,6 +183,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'browser',
     title: 'Edgar',
+    heading: 'Manage Businesses',
     to: 'edgar',
     accessibleTo: ['admin'],
   },
