@@ -143,8 +143,7 @@ class IndividualAccountStore {
       );
       if (account) {
         if (account.accountDetails.plaidItemId) {
-          const plaidAccDetails = {};
-          plaidAccDetails.account_id = account.accountDetails.accountNumber;
+          const plaidAccDetails = account.accountDetails;
           accountStore.setPlaidAccDetails(plaidAccDetails);
         } else {
           Object.keys(accountStore.formLinkBankManually.fields).map((f) => {
@@ -152,6 +151,10 @@ class IndividualAccountStore {
             return accountStore.formLinkBankManually.fields[f];
           });
           accountStore.onFieldChange('formLinkBankManually');
+        }
+        if (accountStore.formLinkBankManually.meta.isValid ||
+          !_.isEmpty(accountStore.plaidAccDetails)) {
+          this.setStepToBeRendered(2);
         }
       }
     }
