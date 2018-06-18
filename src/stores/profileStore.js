@@ -59,6 +59,14 @@ export class ProfileStore {
   @observable
   reSendVerificationCode = false;
 
+  @observable
+  submitVerificationsDocs = false;
+
+  @action
+  setSubmitVerificationDocs(status) {
+    this.submitVerificationsDocs = status;
+  }
+
   @action
   setReSendVerificationCode(status) {
     this.reSendVerificationCode = status;
