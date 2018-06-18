@@ -25,7 +25,7 @@ export default class ConfirmPhoneNumber extends Component {
     } else {
       this.props.profileStore.confirmPhoneNumber().then(() => {
         Helper.toast('Phone number is confirmed.', 'success');
-        this.props.setDashboardWizardStep();
+        this.props.setDashboardWizardStep('InvestmentChooseType');
       })
         .catch(() => {});
     }
