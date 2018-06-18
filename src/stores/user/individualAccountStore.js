@@ -117,6 +117,7 @@ class IndividualAccountStore {
           if (formStatus === 'submit') {
             userDetailsStore.getUser(userStore.currentUser.sub);
             Helper.toast('Individual account created successfully.', 'success');
+            uiStore.setDashboardWizardStep();
           } else if (currentStep) {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           } else {

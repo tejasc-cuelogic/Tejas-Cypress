@@ -77,7 +77,7 @@ class Summary extends Component {
       if (accDetails.activeAccounts.length > 0) {
         accTypes = _.filter(
           accTypes,
-          n => _.lowerCase(n) !== (accDetails.activeAccounts[0]),
+          n => !accDetails.activeAccounts.includes(_.lowerCase(n)),
         );
         return (
           <Aux>

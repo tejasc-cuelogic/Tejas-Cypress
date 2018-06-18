@@ -304,6 +304,7 @@ class IraAccountStore {
             if (formStatus === 'submit') {
               Helper.toast('IRA account created successfully.', 'success');
               userDetailsStore.getUser(userStore.currentUser.sub);
+              uiStore.setDashboardWizardStep();
             } else {
               Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
             }
