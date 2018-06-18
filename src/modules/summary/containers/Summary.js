@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import _ from 'lodash';
-import { Grid, Card, Header, Divider, List, Button } from 'semantic-ui-react';
+import { Grid, Card, Header, Divider, List, Button, Icon } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
