@@ -19,13 +19,13 @@ const randavatar = (props) => {
     ...optionsDefault,
     ...{ foreground: UserTypeColor[props.accountType[0].toUpperCase()] },
   };
-  const imgContent = (props.avatarKey && props.avatarKey.length > 15) ?
-    new Identicon(props.avatarKey, options).toString() : '';
+  const imgContent = (!props.avatarUrl && props.avatarKey.length > 15) ?
+    `data:image/png;base64, ${new Identicon(props.avatarKey, options).toString()}` : props.avatarUrl;
   const alt = (props.name) ? props.name[0] : 'N';
   const size = props.size || 'mini';
   return (
     <Image
-      src={`data:image/png;base64, ${imgContent}`}
+      src={`${imgContent}`}
       alt={alt}
       size={size}
       avatar

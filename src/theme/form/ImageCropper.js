@@ -98,23 +98,26 @@ export default class ImageCropper extends Component {
     const { profilePhoto } = this.props.fieldData.fields;
     return (
       <div>
-        <ReactCrop
-          {...this.state}
-          src={profilePhoto.src}
-          onImageLoaded={this.onImageLoaded}
-          onComplete={this.onCropComplete}
-          onChange={this.onCropChange}
-          crop={this.state.crop}
-        />
-        <div className="file-uploader">
-          <div className="file-uploader-inner">
-            <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
+        { profilePhoto.src ?
+          <ReactCrop
+            {...this.state}
+            src={profilePhoto.src}
+            onImageLoaded={this.onImageLoaded}
+            onComplete={this.onCropComplete}
+            onChange={this.onCropChange}
+            crop={this.state.crop}
+          />
+        :
+          <div className="file-uploader">
+            <div className="file-uploader-inner">
+              <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
+            </div>
+            <input type="file" onChange={this.onChange} />
+            {profilePhoto.error &&
+              <FieldError error={profilePhoto.error} />
+            }
           </div>
-          <input type="file" onChange={this.onChange} />
-          {profilePhoto.error &&
-            <FieldError error={profilePhoto.error} />
-          }
-        </div>
+        }
       </div>
     );
   }

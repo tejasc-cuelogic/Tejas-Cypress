@@ -12,6 +12,7 @@ import NewEmailAddress from './NewEmailAddress';
 import UpdateProfilePhoto from './UpdateProfilePhoto';
 import Helper from '../../../../helper/utility';
 import Spinner from '../../../../theme/ui/Spinner';
+import Randavatar from '../../../../theme/common/Randavatar';
 
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore')
 @observer
@@ -30,7 +31,9 @@ export default class ProfileData extends Component {
       .catch(() => {});
   }
   render() {
-    const { email, legalDetails, avatar } = this.props.userDetailsStore.userDetails;
+    const {
+      email, legalDetails, avatar, firstName,
+    } = this.props.userDetailsStore.userDetails;
     const {
       updateProfileInfo,
       updateProfileInfoChange,
@@ -123,7 +126,8 @@ export default class ProfileData extends Component {
               {/* <Randavatar name={this.props.UserInfo.fullname}
               avatarKey={this.props.UserInfo.avatarKey} size="small" /> */}
               {avatar &&
-                <img src={avatar.url} alt={avatar.name} circular />
+                <Randavatar name={firstName} accountType={this.props.userStore.currentUser.roles} avatarUrl={avatar.url} size="small" />
+                // <img src={avatar.url} alt={avatar.name} circular />
               }
               <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
             </Card>
