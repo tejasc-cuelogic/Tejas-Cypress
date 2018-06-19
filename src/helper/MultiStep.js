@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { Modal, Header, Button } from 'semantic-ui-react';
+import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
 
 const getNavStates = (indx, length) => {
   const styles = [];
@@ -149,6 +149,9 @@ export default class MultiStep extends React.Component {
             {this.renderSteps()}
           </ol>
           <Modal.Content className="multistep">
+            <Dimmer active={this.props.inProgress}>
+              <Loader active={this.props.inProgress} />
+            </Dimmer>
             {this.props.steps[this.state.compState].component}
             <Button
               circular

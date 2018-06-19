@@ -11,3 +11,5 @@ export { default as MaskedInput2 } from './MaskedInput2';
 export { default as AutoComplete } from './AutoComplete';
 export { default as FormTextarea } from './FormTextarea';
 export { default as FormCheckbox } from './FormCheckbox';
+export { default as DropZone } from './DropZone';
+export { default as DropZoneLarge } from './DropZoneLarge';

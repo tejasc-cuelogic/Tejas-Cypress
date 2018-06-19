@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import _ from 'lodash';
-import { Grid, Card, Header, Divider, List, Button, Icon } from 'semantic-ui-react';
+import { Grid, Card, Header, Divider, List } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
@@ -10,6 +10,7 @@ import AccountSetupChecklist from '../components/AccountSetupChecklist';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 import Spinner from '../../../theme/ui/Spinner';
+import OtherAccountTypes from '../components/OtherAccountTypes';
 
 @inject('uiStore', 'profileStore', 'entityAccountStore', 'iraAccountStore', 'accountStore', 'userStore', 'userDetailsStore', 'individualAccountStore')
 @observer
@@ -30,33 +31,13 @@ class Summary extends Component {
 
   restoreStep = () => {
     if (this.props.accountStore.accountType.activeIndex === 0) {
-      this.props.individualAccountStore.setStepToBeRendered(0);
+      // this.props.individualAccountStore.setStepToBeRendered(0);
       this.props.accountStore.setBankLinkInterface('list');
     }
   }
 
-  isVerified(cipStatus) {
-    let checkStatus = '';
-    if (cipStatus !== null) {
-      if (typeof cipStatus === 'object') {
-        checkStatus = cipStatus.status;
-      } else {
-        checkStatus = cipStatus;
-      }
-      return this.props.accountStore.validAccStatus.includes(checkStatus);
-    }
-    return false;
-  }
-
-  navToAccTypes(step) {
-    let type = 0;
-    if (step === 'individual') {
-      type = 0;
-    } else if (step === 'ira') {
-      type = 1;
-    } else if (step === 'entity') {
-      type = 2;
-    }
+  navToAccTypes = (step) => {
+    const type = this.props.accountStore.getAccountTypeIndex(step);
     this.props.accountStore.setAccountType(type);
     this.setDashboardWizardSetup(`${step}/AccountCreation`);
   }
@@ -78,87 +59,17 @@ class Summary extends Component {
           n => !accDetails.activeAccounts.includes(_.lowerCase(n)),
         );
         return (
-          <Aux>
-            <PrivateLayout
-              {...this.props}
-            >
-              <div className="conent-spacer">
-                <Card.Group stackable itemsPerRow={3}>
-                  {
-                    accTypes.map(item => (
-                      <Card fluid>
-                        <Card.Content>
-                          <Header as="h3">New {_.startCase(item)} Account</Header>
-                          <p>Start new application process to proceed</p>
-                          <Divider hidden />
-                          <Button onClick={() => this.navToAccTypes(_.lowerCase(item))} primary>
-                            Create {_.startCase(item)} Account
-                          </Button>
-                        </Card.Content>
-                      </Card>
-                    ))
-                  }
-                </Card.Group>
-                <Header as="h3">Progress of verifying your identity</Header>
-                <Card.Group stackable itemsPerRow={3}>
-                  <Card fluid className="verification done">
-                    <Card.Content>
-                      <Icon.Group size="huge">
-                        <Icon className="ns-envelope-line" />
-                        <Icon corner color="green" className="ns-check-circle" />
-                      </Icon.Group>
-                      <p>Your <b>Email-addres</b> has been verified</p>
-                    </Card.Content>
-                  </Card>
-                  <Card fluid className="verification">
-                    <Card.Content>
-                      <Icon.Group size="huge">
-                        <Icon className="ns-contact-card" />
-                        <Icon corner color="red" className="ns-warning-circle" />
-                      </Icon.Group>
-                      <p><b>Please verify your Identity</b></p>
-                      <Button color="green" className="relaxed" content="Verify" />
-                    </Card.Content>
-                  </Card>
-                  <Card fluid className="verification disabled">
-                    <Card.Content>
-                      <Icon.Group size="huge">
-                        <Icon className="ns-phone-line" />
-                      </Icon.Group>
-                      <p><b>Please verify your phone number</b></p>
-                      <Button color="green" className="relaxed" disabled content="Verify" />
-                    </Card.Content>
-                  </Card>
-                  <Card fluid className="verification">
-                    <Card.Content>
-                      <Icon.Group size="huge">
-                        <Icon className="ns-bar-line-chart" />
-                      </Icon.Group>
-                      <p><b>You have no account yet</b></p>
-                      <Button color="green" content="Create your first investment account" />
-                    </Card.Content>
-                  </Card>
-                  <Card fluid className="verification disabled">
-                    <Card.Content>
-                      <Icon.Group size="huge">
-                        <Icon className="ns-chart-setting" />
-                      </Icon.Group>
-                      <p><b>Start creation process of another type of account</b></p>
-                      <Button inverted color="green" content="Create another account" />
-                    </Card.Content>
-                  </Card>
-                </Card.Group>
-              </div>
-            </PrivateLayout>
-            {this.props.uiStore.dashboardStep &&
-            <DashboardWizard />
-            }
-          </Aux>
+          <OtherAccountTypes
+            {...this.props}
+            accTypes={accTypes}
+            navToAccTypes={this.navToAccTypes}
+            dashboardStep={this.props.uiStore.dashboardStep}
+          />
         );
       }
     }
 
-    const { currentUser } = this.props.userDetailsStore;
+    const { currentUser, isUserVerified } = this.props.userDetailsStore;
     if (!currentUser.data.user) {
       return (
         <div>
@@ -175,28 +86,12 @@ class Summary extends Component {
       } else {
         selectedAccType = this.props.accountStore.accountTypeCreated;
       }
-      let type = 0;
-      if (selectedAccType === 'individual') {
-        type = 0;
-      } else if (selectedAccType === 'ira') {
-        type = 1;
-      } else if (selectedAccType === 'entity') {
-        type = 2;
-      }
+      const type = this.props.accountStore.getAccountTypeIndex(selectedAccType);
       linkPath = `${selectedAccType}/AccountCreation`;
       this.props.accountStore.setAccountType(type);
     }
 
-    if (this.props.profileStore.verifyIdentity01.response.message) {
-      if (this.isVerified(this.props.profileStore.verifyIdentity01.response.message)) {
-        stepinfo = {
-          value: 'Welcome to NextSeed!',
-          label: 'Would you like to start the process of new account creation?',
-          linkText: 'Let`s start it!',
-          linkPath,
-        };
-      }
-    } else if (this.isVerified(currentUser.data.user.legalDetails.cipStatus)) {
+    if (isUserVerified) {
       stepinfo = {
         value: 'Welcome to NextSeed!',
         label: 'Would you like to start the process of new account creation?',
@@ -216,38 +111,7 @@ class Summary extends Component {
             />
           }
         >
-          {this.props.profileStore.verifyIdentity01.response.message &&
-          !this.isVerified(this.props.profileStore.verifyIdentity01.response.message) &&
-            <div>
-              <Header as="h3">Welcome to NextSeed!</Header>
-              <Grid>
-                <Grid.Row>
-                  <Grid.Column widescreen={5} largeScreen={8} computer={8} tablet={16} mobile={16}>
-                    <Card fluid raised className="welcome-card">
-                      <Card.Content>
-                        <List divided relaxed="very">
-                          <List.Item>
-                            <List.Icon className="ns-nextseed-icon" size="huge" verticalAlign="middle" />
-                            <List.Content verticalAlign="middle">
-                              <List.Header>
-                                Would you like to start the process of new account creation?
-                              </List.Header>
-                            </List.Content>
-                          </List.Item>
-                        </List>
-                        <Divider hidden />
-                        <AccountSetupChecklist
-                          setDashboardWizardSetup={this.setDashboardWizardSetup}
-                        />
-                      </Card.Content>
-                    </Card>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </div>
-          }
-          {!this.props.profileStore.verifyIdentity01.response.message &&
-          !this.isVerified(currentUser.data.user.legalDetails.cipStatus) &&
+          {!isUserVerified &&
             <div>
               <Header as="h3">Welcome to NextSeed!</Header>
               <Grid>

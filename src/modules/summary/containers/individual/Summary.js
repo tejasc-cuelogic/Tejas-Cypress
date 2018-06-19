@@ -22,7 +22,6 @@ export default class Summary extends React.Component {
       isValidLinkBankPlaid,
       formLinkBankManually,
       isValidLinkBankAccountForm,
-
     } = this.props.accountStore;
     return (
       <div>
@@ -44,13 +43,14 @@ export default class Summary extends React.Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Name</b></Table.Cell>
-                    <Table.Cell>{_.isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? '' : plaidAccDetails.institution.name}</Table.Cell>
+                    <Table.Cell>{_.isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
                     <Table.Cell>{_.isEmpty(plaidAccDetails) || !plaidAccDetails.account_id ?
-                      Helper.encryptNumber(formLinkBankManually.fields.accountNumber.value) :
+                      plaidAccDetails.plaidAccountId ? Helper.encryptNumber(plaidAccDetails.plaidAccountId) : '' :
                       Helper.encryptNumber(plaidAccDetails.account_id)}
+                      {formLinkBankManually.fields.accountNumber.value ? Helper.encryptNumber(formLinkBankManually.fields.accountNumber.value) : ''}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>

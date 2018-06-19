@@ -76,6 +76,7 @@
     "react-datepicker": "^1.4.1",
     "react-dev-utils": "^3.1.0",
     "react-dom": "^16.1.0",
+    "react-dropzone": "^4.2.11",
     "react-error-overlay": "^1.0.10",
     "react-google-autocomplete": "^1.0.15",
     "react-input-mask": "^1.2.2",

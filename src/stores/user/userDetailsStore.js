@@ -27,6 +27,7 @@ export class UserDetailsStore {
   @observable BENEFICIARY_META = { fields: { ...BENEFICIARY_FRM }, meta: { isValid: false, error: '' } };
   @observable deleting = 0;
   @observable FIN_INFO = { fields: { ...FIN_INFO }, meta: { isValid: false, error: '' } };
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
@@ -130,6 +131,11 @@ export class UserDetailsStore {
       return details;
     }
     return details;
+  }
+
+  @computed get isUserVerified() {
+    const accDetails = this.signupStatus;
+    return this.validAccStatus.includes(accDetails.idVerification);
   }
 
   @action
