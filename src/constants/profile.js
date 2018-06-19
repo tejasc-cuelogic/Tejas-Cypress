@@ -172,7 +172,6 @@ export const UPDATE_PROFILE_INFO = {
     rule: 'required',
     label: '',
     src: '',
-    croppedResult: '',
     base64String: '',
     responseUrl: '',
   },
