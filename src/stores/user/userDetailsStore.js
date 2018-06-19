@@ -45,6 +45,14 @@ export class UserDetailsStore {
   }
 
   @action
+  setUserAccDetails = () => {
+    authStore.checkIsInvestmentAccountCreated(this.userDetails);
+    iraAccountStore.populateData(this.userDetails);
+    individualAccountStore.populateData(this.userDetails);
+    entityAccountStore.populateData(this.userDetails);
+  }
+
+  @action
   getUser = (id) => {
     this.currentUser = graphql({
       client,
@@ -53,11 +61,7 @@ export class UserDetailsStore {
       variables: {
         id,
       },
-      onFetch: (data) => {
-        authStore.checkIsInvestmentAccountCreated(data.user);
-        iraAccountStore.populateData(data.user);
-        individualAccountStore.populateData(data.user);
-        entityAccountStore.populateData(data.user);
+      onFetch: () => {
         profileStore.setProfileInfo(this.userDetails);
       },
     });

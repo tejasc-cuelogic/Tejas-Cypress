@@ -13,9 +13,6 @@ import Helper from '../../../../helper/utility';
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore', 'accountStore')
 @observer
 export default class ProfileData extends Component {
-  componentWillMount() {
-    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-  }
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
   }

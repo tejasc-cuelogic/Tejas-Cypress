@@ -15,7 +15,7 @@ import Spinner from '../../../theme/ui/Spinner';
 @observer
 class Summary extends Component {
   componentWillMount() {
-    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+    this.props.userDetailsStore.setUserAccDetails();
   }
 
   setDashboardWizardSetup = (step) => {
