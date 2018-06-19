@@ -6,13 +6,13 @@ import { GqlClient as client } from '../services/graphql';
 import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
 import { createUploadEntry, removeUploadedFile } from '../stores/queries/common';
 
-// import api from '../ns-api';
+import api from '../ns-api';
 import authStore from './authStore';
 import uiStore from './uiStore';
 import userStore from './userStore';
 import userDetailsStore from './user/userDetailsStore';
 import Helper from '../helper/utility';
-import api from '../services/api';
+import apiService from '../services/api';
 
 import {
   UPDATE_PROFILE_INFO,
@@ -789,7 +789,7 @@ export class ProfileStore {
       userId: userStore.currentUser.sub,
       base64String: b64Text,
     };
-    api.post('/upload/file', payload)
+    apiService.post('/upload/file', payload)
       .then(action((response) => {
         this.setProfilePhoto('responseUrl', response.body.fileFullPath);
         this.updateUserProfileData().then(() => {
