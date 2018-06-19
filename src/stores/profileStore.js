@@ -158,7 +158,7 @@ export class ProfileStore {
   get formattedPhoneDetails() {
     const phoneDetails = {
       number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-      countryCode: '1',
+      countryCode: '91',
     };
     return phoneDetails;
   }
@@ -457,16 +457,16 @@ export class ProfileStore {
         .then(() => {
           client
             .mutate({
-              mutation: updateUserCIPInfo,
+              mutation: updateUserPhoneDetail,
               variables: {
                 userId: userStore.currentUser.sub,
-                user: this.formattedUserInfo,
-                phoneDetails: this.formattedPhoneDetails,
-                cipStatus: {
-                  status: 'PASS',
+                phoneDetails: {
+                  number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+                  countryCode: '91',
                 },
               },
-            });
+            })
+            .catch(() => { });
           resolve();
         })
         .catch(action((err) => {
@@ -653,7 +653,7 @@ export class ProfileStore {
                userId: userStore.currentUser.sub,
                phoneDetails: {
                  number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-                 countryCode: '1',
+                 countryCode: '91',
                },
              },
            })

@@ -52,6 +52,7 @@ query getUserDetails($id: ID!) {
     contactDetails {
       phone {
         number
+        verificationDate
       }
     }
     legalDetails {

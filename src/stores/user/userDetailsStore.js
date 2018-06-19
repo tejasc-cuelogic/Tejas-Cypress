@@ -118,7 +118,7 @@ export class UserDetailsStore {
   }
 
   @computed get signupStatus() {
-    const details = { idVerification: 'FAIL', accounts: [] };
+    const details = { idVerification: 'FAIL', accounts: [], phoneVerification: 'FAIL' };
     if (this.userDetails) {
       details.idVerification = (this.userDetails.legalDetails &&
         this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
@@ -128,9 +128,36 @@ export class UserDetailsStore {
         return data;
       });
       details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
+      details.phoneVerification = (this.userDetails.contactDetails &&
+        this.userDetails.contactDetails.phone.verificationDate) ? 'DONE' : 'FAIL';
       return details;
     }
     return details;
+  }
+
+  getStepStatus = (step) => {
+    const statusDetails = this.signupStatus;
+    let status = '';
+    if (statusDetails[step]) {
+      if (step === 'idVerification') {
+        if (this.validAccStatus.includes(statusDetails[step])) {
+          status = 'done';
+        } else {
+          status = 'enable';
+        }
+      } else if (step === 'phoneVerification') {
+        if (this.validAccStatus.includes(statusDetails[step])) {
+          if (statusDetails.phoneVerification === 'done') {
+            status = 'done';
+          } else {
+            status = 'enable';
+          }
+        } else {
+          status = 'disable';
+        }
+      }
+    }
+    return status;
   }
 
   @computed get isUserVerified() {
