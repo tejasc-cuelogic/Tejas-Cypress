@@ -20,10 +20,19 @@ export default class UpdateProfilePhoto extends Component {
     }
   }
 
+  handleVerifyFileSize = (fileSize) => {
+    if (fileSize > 5242880) {
+      const field = 'error';
+      const errorMsg = 'File size Greater then 5MB';
+      this.props.profileStore.setProfilePhoto(field, errorMsg);
+    }
+  }
+
   handleCloseModal = () => {
     if (this.props.refLink) {
       this.props.history.push(this.props.refLink);
     }
+    this.props.profileStore.resetProfilePhoto();
   }
 
   render() {
@@ -37,6 +46,7 @@ export default class UpdateProfilePhoto extends Component {
             <ImageCropper
               fieldData={updateProfileInfo}
               setData={this.setData}
+              verifySize={this.handleVerifyFileSize}
             />
           </Form>
         </Modal.Content>

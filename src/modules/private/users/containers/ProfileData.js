@@ -123,7 +123,7 @@ export default class ProfileData extends Component {
               {/* <Randavatar name={this.props.UserInfo.fullname}
               avatarKey={this.props.UserInfo.avatarKey} size="small" /> */}
               {avatar &&
-                <img src={avatar.url} alt={avatar.name} />
+                <img src={avatar.url} alt={avatar.name} circular />
               }
               <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
             </Card>

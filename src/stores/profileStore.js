@@ -795,6 +795,7 @@ export class ProfileStore {
         this.updateUserProfileData().then(() => {
           Helper.toast('Profile photo updated successfully', 'success');
           userDetailsStore.getUser(userStore.currentUser.sub);
+          this.resetProfilePhoto();
         })
           .catch((err) => {
             uiStore.setErrors(this.simpleErr(err));
@@ -810,8 +811,9 @@ export class ProfileStore {
 
   @action
   resetProfilePhoto = () => {
-    this.uploadProfilePhoto.fields.profilePhoto.src = '';
-    this.uploadProfilePhoto.fields.profilePhoto.value = '';
+    this.updateProfileInfo.fields.profilePhoto.src = '';
+    this.updateProfileInfo.fields.profilePhoto.value = '';
+    this.updateProfileInfo.fields.profilePhoto.base64String = '';
   }
 
   simpleErr = err => ({

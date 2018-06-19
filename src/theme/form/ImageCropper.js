@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import ReactCrop, { makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Icon } from 'semantic-ui-react';
+import FieldError from '../common/FieldError';
 
 @observer
 export default class ImageCropper extends Component {
@@ -28,6 +29,7 @@ export default class ImageCropper extends Component {
       files = e.target.files;
     }
     this.props.setData('value', files[0].name);
+    this.props.verifySize(files[0].size);
     const reader = new FileReader();
     reader.onload = () => {
       this.props.setData('src', reader.result);
@@ -93,11 +95,12 @@ export default class ImageCropper extends Component {
   }
 
   render() {
+    const { profilePhoto } = this.props.fieldData.fields;
     return (
       <div>
         <ReactCrop
           {...this.state}
-          src={this.props.fieldData.fields.profilePhoto.src}
+          src={profilePhoto.src}
           onImageLoaded={this.onImageLoaded}
           onComplete={this.onCropComplete}
           onChange={this.onCropChange}
@@ -108,6 +111,9 @@ export default class ImageCropper extends Component {
             <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
           </div>
           <input type="file" onChange={this.onChange} />
+          {profilePhoto.error &&
+            <FieldError error={profilePhoto.error} />
+          }
         </div>
       </div>
     );
