@@ -546,8 +546,8 @@ export class ProfileStore {
         },
       },
       avatar: {
-        name: this.profilePhoto.value,
-        url: this.profilePhoto.responseUrl,
+        name: this.updateProfileInfo.fields.profilePhoto.value,
+        url: this.updateProfileInfo.fields.profilePhoto.responseUrl,
       },
     };
     return profileDetails;
@@ -783,7 +783,7 @@ export class ProfileStore {
 
   uploadProfilePhoto = () => {
     uiStore.setProgress();
-    const profileData = this.profilePhoto.base64String;
+    const profileData = this.updateProfileInfo.fields.profilePhoto.base64String;
     const b64Text = profileData.split(',')[1];
     const payload = {
       userId: userStore.currentUser.sub,
@@ -792,7 +792,13 @@ export class ProfileStore {
     api.post('/upload/file', payload)
       .then(action((response) => {
         this.setProfilePhoto('responseUrl', response.body.fileFullPath);
-        this.updateUserProfileData();
+        this.updateUserProfileData().then(() => {
+          Helper.toast('Profile photo updated successfully', 'success');
+          userDetailsStore.getUser(userStore.currentUser.sub);
+        })
+          .catch((err) => {
+            uiStore.setErrors(this.simpleErr(err));
+          });
       }))
       .finally(action(() => { uiStore.setProgress(false); }));
   }
