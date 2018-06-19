@@ -146,7 +146,7 @@ export class UserDetailsStore {
           status = 'enable';
         }
       } else if (step === 'phoneVerification') {
-        if (this.validAccStatus.includes(statusDetails[step])) {
+        if (this.validAccStatus.includes(statusDetails.idVerification)) {
           if (statusDetails.phoneVerification === 'done') {
             status = 'done';
           } else {

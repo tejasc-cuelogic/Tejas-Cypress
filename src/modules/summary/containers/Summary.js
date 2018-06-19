@@ -111,8 +111,13 @@ class Summary extends Component {
                 <Icon.Group size="huge">
                   <Icon className="ns-phone-line" />
                 </Icon.Group>
-                <p><b>Please verify your phone number</b></p>
-                <Button color="green" className="relaxed" disabled content="Verify" />
+                {getStepStatus('phoneVerification') === 'done' ?
+                  <p><b>Your phone number has been verified</b></p> :
+                  <div>
+                    <p><b>Please verify your phone number</b></p>
+                    <Button color="green" className="relaxed" disabled={getStepStatus('phoneVerification') === 'disable'} content="Verify" />
+                  </div>
+                }
               </Card.Content>
             </Card>
             <Card fluid className="verification">
