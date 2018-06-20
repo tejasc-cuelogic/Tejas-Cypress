@@ -1,16 +1,65 @@
 /*******************************
         Global Overrides
 *******************************/
+/* PUBLIC PAGES TEMP UI STYLES ==> START */
+.nsContent {
+	font-size: 30px;
+}
+.nsContent .ui.header{
+	color: #666;
+}
+.nsContent .sub.header {
+	color: #e6e0e0;
+}
+p.pageContent {
+	font-size: 0.55em;
+	color: #4c4a4a;
+	line-height: 31px;
+}
+.footerLinks a {
+	display: block;
+}
+a.header {
+	font-size: 1.07142857rem !important;
+	text-decoration: none;
+} 
+.nsContent .offeringList{
+	border: 1px solid #c5b9b9;
+	border-radius: 6px;
+	padding: 8px;
+	min-height: 200px;
+}
+.nsContent .offeringList h4{
+	text-align: left;
+}
+.nsContent .offeringList p{
+	text-align: left;
+	font-size: 12px;
+}
+.offerDetails {
+	text-align: left;
+}
+.offerDetails ul {
+	font-size: 0.55em;
+	line-height: 30px;
+	color: #4c4a4a;
+	margin-top: 30px;
+}
+/* END <== PUBLIC PAGES TEMP UI STYLES */
+
 .content-wrapper{
 	min-height:~"calc(100vh - 58px)";
 }
 .ui.segment.vertical{
     &.content{
         padding:50px 0;
-		min-height:~"calc(100vh - 344px)";
+		min-height:~"calc(100vh - 330px)";
 		&.banner-img{
 			background:url('@{imagePath}/banner_raise.jpg') center center no-repeat;
 			background-size:cover;
+		}
+		&.foot-banner{
+			min-height:~"calc(100vh - 364px)";
 		}
 	}
 }

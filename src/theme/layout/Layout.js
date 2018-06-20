@@ -32,13 +32,11 @@ class Layout extends Component {
         {(!this.props.userStore.currentUser || !location.pathname.startsWith('/app')) &&
           <Header
             location={location}
-            showSecondaryHeader={false}
             currentUser={this.props.userStore.currentUser}
             handleLogOut={this.handleLogOut}
           />
         }
         {this.props.children}
-
         {location.pathname.startsWith('/auth') &&
           <Switch>
             <Route path="/auth/login" component={Login} />
