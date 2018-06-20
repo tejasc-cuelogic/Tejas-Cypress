@@ -27,7 +27,10 @@ export class AuthStore {
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
   @observable isUserLoggedIn = false;
-  @observable devAuth = { required: REACT_APP_DEPLOY_ENV !== 'production', authStatus: cookie.load('DEV_AUTH_TOKEN') };
+  @observable devAuth = {
+    required: !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV),
+    authStatus: cookie.load('DEV_AUTH_TOKEN'),
+  };
   @observable signupFlow = {
     type: '',
   };

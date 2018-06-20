@@ -35,7 +35,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    activityActions.log({ action: 'APP_LOAD', status: 'SUCCESS' });
+    if (this.props.uiStore.devBanner) {
+      activityActions.log({ action: 'APP_LOAD', status: 'SUCCESS' });
+    }
   }
 
   componentDidUpdate(prevProps) {

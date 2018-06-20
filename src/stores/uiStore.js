@@ -17,7 +17,7 @@ export class UiStore {
   @observable success = undefined;
   @observable redirectURL = undefined;
   @observable asyncCheckLoader = false;
-  @observable devBanner = REACT_APP_DEPLOY_ENV !== 'production' || false;
+  @observable devBanner = !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV);
   @observable confirmBox = {
     entity: '',
     refId: '',
