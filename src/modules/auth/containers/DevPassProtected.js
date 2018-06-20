@@ -17,12 +17,15 @@ class DevPassProtected extends Component {
   }
   submit = () => {
     activityActions.devAppLogin({ password: this.state.password })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        activityActions.log({ action: 'LOGIN', status: 'SUCCESS' });
         this.props.authStore.setDevAppAuthStatus(true);
         this.props.history.push('/');
       })
-      .catch(() => this.setState({ error: 'Entered password is invalid, please try again.' }));
+      .catch(() => {
+        activityActions.log({ action: 'LOGIN', status: 'FAIL' });
+        this.setState({ error: 'Entered password is invalid, please try again.' });
+      });
   }
   render() {
     return (
