@@ -791,7 +791,7 @@ export class ProfileStore {
     });
   }
 
-  uploadProfilePhoto = () => {
+  uploadProfilePhoto = (history, refLink) => {
     uiStore.setProgress();
     const profileData = this.updateProfileInfo.fields.profilePhoto.base64String;
     const b64Text = profileData.split(',')[1];
@@ -801,15 +801,21 @@ export class ProfileStore {
     };
     apiService.post('/upload/file', payload)
       .then(action((response) => {
-        this.setProfilePhoto('responseUrl', response.body.fileFullPath);
-        this.updateUserProfileData().then(() => {
-          Helper.toast('Profile photo updated successfully', 'success');
-          userDetailsStore.getUser(userStore.currentUser.sub);
-          this.resetProfilePhoto();
-        })
-          .catch((err) => {
-            uiStore.setErrors(this.simpleErr(err));
-          });
+        if (!response.body.errorMessage) {
+          this.setProfilePhoto('responseUrl', response.body.fileFullPath);
+          this.updateUserProfileData().then(() => {
+            userDetailsStore.setProfilePhoto(response.body.fileFullPath);
+            Helper.toast('Profile photo updated successfully', 'success');
+            this.resetProfilePhoto();
+            history.push(refLink);
+          })
+            .catch((err) => {
+              uiStore.setErrors(this.simpleErr(err));
+            });
+        } else {
+          this.setProfilePhoto('error', 'Something went wrong.');
+          this.setProfilePhoto('value', '');
+        }
       }))
       .finally(action(() => { uiStore.setProgress(false); }));
   }

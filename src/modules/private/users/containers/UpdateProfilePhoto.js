@@ -15,10 +15,7 @@ export default class UpdateProfilePhoto extends Component {
   }
 
   uploadProfilePhoto = () => {
-    this.props.profileStore.uploadProfilePhoto();
-    if (this.props.refLink) {
-      this.props.history.push(this.props.refLink);
-    }
+    this.props.profileStore.uploadProfilePhoto(this.props.history, this.props.refLink);
   }
 
   handleVerifyFileSize = (fileSize) => {
@@ -26,6 +23,7 @@ export default class UpdateProfilePhoto extends Component {
       const field = 'error';
       const errorMsg = 'File size Greater than 5MB';
       this.props.profileStore.setProfilePhoto(field, errorMsg);
+      this.props.profileStore.setProfilePhoto('value', '');
     }
   }
 
@@ -34,6 +32,16 @@ export default class UpdateProfilePhoto extends Component {
       const field = 'error';
       const errorMsg = `Only ${PROFILE_PHOTO_EXTENSIONS.join(', ')}  extensions are allowed.`;
       this.props.profileStore.setProfilePhoto(field, errorMsg);
+      this.props.profileStore.setProfilePhoto('value', '');
+    }
+  }
+
+  handelImageDeimension = (width, height) => {
+    if (width < 200 || height < 200) {
+      const field = 'error';
+      const errorMsg = 'Image size should not be less than 200 x 200.';
+      this.props.profileStore.setProfilePhoto(field, errorMsg);
+      this.props.profileStore.setProfilePhoto('value', '');
     }
   }
 
@@ -62,6 +70,7 @@ export default class UpdateProfilePhoto extends Component {
               verifySize={this.handleVerifyFileSize}
               verifyExtension={this.handleVerifyFileExtension}
               handelReset={this.handleresetProfilePhoto}
+              verifyImageDimension={this.handelImageDeimension}
             />
           </Form>
         </Modal.Content>
