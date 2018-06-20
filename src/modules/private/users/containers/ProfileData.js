@@ -131,8 +131,10 @@ export default class ProfileData extends Component {
           <Card.Group>
             <Card fluid className="form-card">
               <h3>Profile Photo</h3>
-              <Randavatar name={firstName} accountType={this.props.userStore.currentUser.roles} avatarKey={this.props.userStore.currentUser.sub} avatarUrl={avatar ? avatar.url : ''} />
-              <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
+              <div>
+                <Randavatar name={firstName} accountType={this.props.userStore.currentUser.roles} avatarKey={this.props.userStore.currentUser.sub} avatarUrl={avatar ? avatar.url : ''} />
+                <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
+              </div>
             </Card>
             <UserVerifiedDetails
               {...this.props}
