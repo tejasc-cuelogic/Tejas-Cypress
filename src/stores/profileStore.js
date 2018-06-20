@@ -236,7 +236,7 @@ export class ProfileStore {
     );
     if (currentForm !== 'updateProfileInfo') {
       this[form].meta.isValid = validation.passes();
-    } else if (field !== 'phoneNumber' && field !== 'email') {
+    } else if (field !== 'phoneNumber' && field !== 'email' && field !== 'profilePhoto') {
       this[form].meta.isValid = validation.passes();
     }
     this[form].fields[field].error = validation.errors.first(field);
