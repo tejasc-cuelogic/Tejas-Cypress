@@ -367,6 +367,7 @@ class EntityAccountStore {
         currentStep.validate();
         isValidCurrentStep = this.isValidEntityFinancialInfo;
         if (isValidCurrentStep) {
+          uiStore.setProgress();
           accountAttributes.netAssets = this.formFinInfo.fields.netAssets.value;
           accountAttributes.cfInvestment = {
             dateOfInvestment: '02281975',
@@ -379,6 +380,7 @@ class EntityAccountStore {
         currentStep.validate();
         isValidCurrentStep = this.isValidEntityGeneralInfo;
         if (isValidCurrentStep) {
+          uiStore.setProgress();
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
           this.submitForm(currentStep, formStatus, accountAttributes);
         }
@@ -387,6 +389,7 @@ class EntityAccountStore {
         currentStep.validate();
         isValidCurrentStep = this.isValidEntityInfo;
         if (isValidCurrentStep) {
+          uiStore.setProgress();
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
           this.submitForm(currentStep, formStatus, accountAttributes);
         }
@@ -400,6 +403,7 @@ class EntityAccountStore {
           currentStep.validate();
           isValidCurrentStep = this.isValidPersonalInfo;
           if (isValidCurrentStep) {
+            uiStore.setProgress();
             accountAttributes.entity = this.setEntityAttributes(currentStep.name);
             return new Promise((resolve, reject) => {
               Helper.putUploadedFile([this.formPersonalInfo.fields.legalDocUrl])
@@ -407,6 +411,7 @@ class EntityAccountStore {
                   this.submitForm(currentStep, formStatus, accountAttributes);
                 })
                 .catch((err) => {
+                  uiStore.setProgress(false);
                   uiStore.setErrors(this.simpleErr(err));
                   reject(err);
                 });
@@ -423,6 +428,7 @@ class EntityAccountStore {
           currentStep.validate();
           isValidCurrentStep = this.isValidFormationDoc;
           if (isValidCurrentStep) {
+            uiStore.setProgress();
             accountAttributes.entity =
             this.setEntityAttributes(currentStep.name, removeUploadedData);
             if (!removeUploadedData) {
@@ -436,6 +442,7 @@ class EntityAccountStore {
                     this.submitForm(currentStep, formStatus, accountAttributes);
                   })
                   .catch((err) => {
+                    uiStore.setProgress(false);
                     uiStore.setErrors(this.simpleErr(err));
                     reject(err);
                   });
@@ -450,6 +457,7 @@ class EntityAccountStore {
         }
         isValidCurrentStep = this.isValidLinkBank();
         if (isValidCurrentStep) {
+          uiStore.setProgress();
           if (!_.isEmpty(accountStore.plaidBankDetails)) {
             const plaidBankDetails = _.omit(accountStore.plaidBankDetails, '__typename');
             accountAttributes.bankDetails = plaidBankDetails;

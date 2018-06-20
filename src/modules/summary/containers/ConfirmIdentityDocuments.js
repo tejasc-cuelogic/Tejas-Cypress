@@ -145,7 +145,7 @@ export default class ConfirmIdentityDocuments extends Component {
             open={confirmBox.entity === 'proofOfResidence' || confirmBox.entity === 'photoId'}
             onCancel={this.handleDelCancel}
             onConfirm={() => this.handleDelDoc(confirmBox.entity)}
-            size="tiny"
+            size="mini"
             className="deletion"
           />
         </Modal.Content>

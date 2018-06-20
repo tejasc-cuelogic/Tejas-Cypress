@@ -88,7 +88,7 @@ export default class FormationDocumemts extends Component {
           open={confirmBox.entity === 'einVerificationDoc' || confirmBox.entity === 'operatingAgreementDoc' || confirmBox.entity === 'formationDoc'}
           onCancel={this.handleDelCancel}
           onConfirm={() => this.handleDelDoc(confirmBox.entity)}
-          size="tiny"
+          size="mini"
           className="deletion"
         />
       </div>
