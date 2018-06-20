@@ -27,6 +27,13 @@ class Summary extends Component {
     this.restoreStep();
   }
 
+  verifyPhoneNumber = () => {
+    this.props.profileStore.startPhoneVerification().then(() => {
+      this.setDashboardWizardSetup('ConfirmPhoneNumber');
+    })
+      .catch(() => { });
+  }
+
   restoreStep = () => {
     if (this.props.accountStore.accountType.activeIndex === 0) {
       // this.props.individualAccountStore.setStepToBeRendered(0);
@@ -49,6 +56,7 @@ class Summary extends Component {
     };
 
     const { getStepStatus } = this.props.userDetailsStore;
+    const { signupStatus } = this.props.userDetailsStore;
 
     let accTypes = ['individual', 'IRA', 'entity'];
     if (!this.props.uiStore.errors) {
@@ -80,8 +88,12 @@ class Summary extends Component {
             />
           }
         >
-          <Header as="h3">Progress of verifying your identity</Header>
+          {getStepStatus('accounts') !== 'done' ?
+            <Header as="h3">Progress of verifying your identity</Header> :
+            <Header as="h3">Progress of your profile creation</Header>
+          }
           <Card.Group stackable itemsPerRow={3}>
+            {getStepStatus('accounts') !== 'done' &&
             <Card fluid className="verification done">
               <Card.Content>
                 <Icon.Group size="huge">
@@ -91,6 +103,8 @@ class Summary extends Component {
                 <p>Your <b>Email-addres</b> has been verified</p>
               </Card.Content>
             </Card>
+            }
+            {getStepStatus('accounts') !== 'done' &&
             <Card fluid className="verification">
               <Card.Content>
                 <Icon.Group size="huge">
@@ -106,38 +120,58 @@ class Summary extends Component {
                 }
               </Card.Content>
             </Card>
+            }
+            {getStepStatus('accounts') !== 'done' &&
             <Card fluid className={getStepStatus('phoneVerification') === 'disable' ? 'verification disabled' : 'verification'}>
               <Card.Content>
                 <Icon.Group size="huge">
                   <Icon className="ns-phone-line" />
+                  <Icon corner color={getStepStatus('phoneVerification') === 'done' ? 'green' : 'red'} className={getStepStatus('phoneVerification') === 'done' ? 'ns-check-circle' : 'ns-warning-circle'} />
                 </Icon.Group>
                 {getStepStatus('phoneVerification') === 'done' ?
                   <p><b>Your phone number has been verified</b></p> :
                   <div>
                     <p><b>Please verify your phone number</b></p>
-                    <Button color="green" className="relaxed" disabled={getStepStatus('phoneVerification') === 'disable'} content="Verify" />
+                    <Button onClick={() => this.verifyPhoneNumber()} color="green" className="relaxed" disabled={getStepStatus('phoneVerification') === 'disable'} content="Verify" />
                   </div>
                 }
               </Card.Content>
             </Card>
-            <Card fluid className="verification">
+            }
+            {_.isEmpty(signupStatus.accounts) &&
+            <Card fluid className={getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
               <Card.Content>
                 <Icon.Group size="huge">
                   <Icon className="ns-bar-line-chart" />
                 </Icon.Group>
                 <p><b>You have no account yet</b></p>
-                <Button color="green" content="Create your first investment account" />
+                <Button
+                  color={getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
+                  content="Create your first investment account"
+                  disabled={getStepStatus('accounts') === 'disable'}
+                  onClick={() => this.setDashboardWizardSetup('InvestmentChooseType')}
+                />
               </Card.Content>
             </Card>
-            <Card fluid className="verification disabled">
-              <Card.Content>
-                <Icon.Group size="huge">
-                  <Icon className="ns-chart-setting" />
-                </Icon.Group>
-                <p><b>Start creation process of another type of account</b></p>
-                <Button inverted color="green" content="Create another account" />
-              </Card.Content>
-            </Card>
+            }
+            {signupStatus.partialAccounts.length > 0 &&
+              signupStatus.partialAccounts.map(accountType => (
+                <Card fluid className={getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
+                  <Card.Content>
+                    <Icon.Group size="huge">
+                      <Icon className="ns-bar-line-chart" />
+                    </Icon.Group>
+                    <p><b>{`You have not finished ${_.upperCase(accountType)} account creation`}</b></p>
+                    <Button
+                      color={getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
+                      content="Continue"
+                      disabled={getStepStatus('accounts') === 'disable'}
+                      onClick={() => this.setDashboardWizardSetup('InvestmentChooseType')}
+                    />
+                  </Card.Content>
+                </Card>
+              ))
+            }
           </Card.Group>
         </PrivateLayout>
         {this.props.uiStore.dashboardStep &&

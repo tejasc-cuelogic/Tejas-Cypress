@@ -7,7 +7,7 @@ import { FormInput, MaskedInput } from '../../../theme/form/FormElements';
 import Helper from '../../../helper/utility';
 import ListErrors from '../../../theme/common/ListErrors';
 
-@inject('profileStore', 'uiStore')
+@inject('profileStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
@@ -62,6 +62,10 @@ export default class ConfirmPhoneNumber extends Component {
       verifyVerificationCodeChange,
     } = this.props.profileStore;
     const { errors, editMode } = this.props.uiStore;
+    const { userDetails } = this.props.userDetailsStore;
+    const phoneNumber = verifyIdentity01.fields.phoneNumber.value !== '' ?
+      verifyIdentity01.fields.phoneNumber.value : userDetails.contactDetails.phone.number;
+
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -76,7 +80,7 @@ export default class ConfirmPhoneNumber extends Component {
             </Message>
           }
           <MaskedInput
-            value={verifyIdentity01.fields.phoneNumber.value}
+            value={phoneNumber}
             type="tel"
             name="phoneNumber"
             fielddata={verifyIdentity01.fields.phoneNumber}

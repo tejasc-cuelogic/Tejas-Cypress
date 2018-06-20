@@ -5,6 +5,7 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
+import _ from 'lodash';
 import { GqlClient as client } from '../../services/graphql';
 import { GqlClient as client2 } from '../../services/graphqlCool';
 import uiStore from '../uiStore';
@@ -127,8 +128,10 @@ export class UserDetailsStore {
         const data = { accountId: a.accountId, accountType: a.accountType, status: a.status };
         return data;
       });
+      details.partialAccounts = map(filter(details.accounts, a => a.status === 'PARTIAL'), 'accountType');
       details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
       details.phoneVerification = (this.userDetails.contactDetails &&
+        this.userDetails.contactDetails.phone &&
         this.userDetails.contactDetails.phone.verificationDate) ? 'DONE' : 'FAIL';
       return details;
     }
@@ -147,10 +150,24 @@ export class UserDetailsStore {
         }
       } else if (step === 'phoneVerification') {
         if (this.validAccStatus.includes(statusDetails.idVerification)) {
-          if (statusDetails.phoneVerification === 'done') {
+          if (statusDetails.phoneVerification === 'DONE') {
             status = 'done';
           } else {
             status = 'enable';
+          }
+        } else {
+          status = 'disable';
+        }
+      } else if (step === 'accounts') {
+        if (this.validAccStatus.includes(statusDetails.idVerification)) {
+          if (statusDetails.phoneVerification === 'DONE') {
+            if (!_.isEmpty(statusDetails.accounts)) {
+              status = 'done';
+            } else {
+              status = 'enable';
+            }
+          } else {
+            status = 'disable';
           }
         } else {
           status = 'disable';

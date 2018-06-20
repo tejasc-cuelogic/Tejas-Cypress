@@ -61,6 +61,8 @@ export class AccountStore {
   @observable
   accountTypeCreated = undefined;
 
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
+
   @action
   setAccountTypeCreated = (accountType) => {
     this.accountTypeCreated = accountType;
