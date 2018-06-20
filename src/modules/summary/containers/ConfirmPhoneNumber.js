@@ -11,6 +11,15 @@ import ListErrors from '../../../theme/common/ListErrors';
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
+  componentWillMount() {
+    if (this.props.profileStore.verifyIdentity01.fields.phoneNumber.value === '') {
+      if (this.props.userDetailsStore.userDetails.contactDetails.phone) {
+        const fieldValue =
+        Helper.maskPhoneNumber(this.props.userDetailsStore.userDetails.contactDetails.phone.number);
+        this.props.profileStore.onFieldChange('verifyIdentity01', 'phoneNumber', fieldValue);
+      }
+    }
+  }
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
     this.props.profileStore.setReSendVerificationCode(false);
@@ -62,10 +71,6 @@ export default class ConfirmPhoneNumber extends Component {
       verifyVerificationCodeChange,
     } = this.props.profileStore;
     const { errors, editMode } = this.props.uiStore;
-    const { userDetails } = this.props.userDetailsStore;
-    const phoneNumber = verifyIdentity01.fields.phoneNumber.value !== '' ?
-      verifyIdentity01.fields.phoneNumber.value : userDetails.contactDetails.phone.number;
-
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -80,7 +85,7 @@ export default class ConfirmPhoneNumber extends Component {
             </Message>
           }
           <MaskedInput
-            value={phoneNumber}
+            value={verifyIdentity01.fields.phoneNumber.value}
             type="tel"
             name="phoneNumber"
             fielddata={verifyIdentity01.fields.phoneNumber}

@@ -1,5 +1,6 @@
 import React from 'react';
 import Aux from 'react-aux';
+import _ from 'lodash';
 import { Card, Icon, Button } from 'semantic-ui-react';
 
 const checkStatus = (signupStatus, key) => {
@@ -33,9 +34,16 @@ const checkStatus = (signupStatus, key) => {
   return status;
 };
 
-const ProgressCard = ({ metaData, signupStatus, action }) => (
+const ProgressCard = ({
+  metaData,
+  signupStatus,
+  action,
+  getStepStatus,
+  navToAccTypes,
+}) => (
   <Card.Group stackable itemsPerRow={3}>
     {
+      _.isEmpty(signupStatus.accounts) &&
       Object.keys(metaData).map((key) => {
         const status = checkStatus(signupStatus, key);
         return (
@@ -64,6 +72,56 @@ const ProgressCard = ({ metaData, signupStatus, action }) => (
           </Card>
         );
       })
+    }
+    {_.isEmpty(signupStatus.accounts) &&
+    <Card fluid className={getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
+      <Card.Content>
+        <Icon.Group size="huge">
+          <Icon className="ns-bar-line-chart" />
+        </Icon.Group>
+        <p><b>You have no account yet</b></p>
+        <Button
+          color={getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
+          content="Create your first investment account"
+          disabled={getStepStatus('accounts') === 'disable'}
+          onClick={() => action('InvestmentChooseType')}
+        />
+      </Card.Content>
+    </Card>
+    }
+    {signupStatus.partialAccounts.length > 0 &&
+      signupStatus.partialAccounts.map(accountType => (
+        <Card fluid className={getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
+          <Card.Content>
+            <Icon.Group size="huge">
+              <Icon className="ns-bar-line-chart" />
+            </Icon.Group>
+            <p><b>{`You have not finished ${_.upperCase(accountType)} account creation`}</b></p>
+            <Button
+              color={getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
+              content="Continue"
+              disabled={getStepStatus('accounts') === 'disable'}
+              onClick={() => navToAccTypes(accountType)}
+            />
+          </Card.Content>
+        </Card>
+      ))
+    }
+    {!_.isEmpty(signupStatus.accounts) && signupStatus.inActiveAccounts.length > 0 &&
+      <Card fluid className={getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
+        <Card.Content>
+          <Icon.Group size="huge">
+            <Icon className="ns-chart-setting" />
+          </Icon.Group>
+          <p><b>Start creation process of another type of account</b></p>
+          <Button
+            color={getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
+            content="Create another account"
+            disabled={getStepStatus('accounts') === 'disable'}
+            onClick={() => action('InvestmentChooseType')}
+          />
+        </Card.Content>
+      </Card>
     }
   </Card.Group>
 );

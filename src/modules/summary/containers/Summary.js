@@ -1,17 +1,14 @@
-/* eslint-disable no-unused-vars, prefer-const */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import _ from 'lodash';
-import { Card, Header, Icon, Button } from 'semantic-ui-react';
+import { Message } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
-import OtherAccountTypes from '../components/OtherAccountTypes';
 import ProgressCard from '../components/ProgressCard';
-import Spinner from '../../../theme/ui/Spinner';
+import ListErrors from '../../../theme/common/ListErrors';
 
 @inject('uiStore', 'profileStore', 'accountStore', 'userDetailsStore')
 @observer
@@ -35,7 +32,9 @@ class Summary extends Component {
       if (step === 'ConfirmPhoneNumber') {
         this.props.profileStore.startPhoneVerification().then(() => {
           this.setDashboardWizardSetup(step);
-        }).catch(() => { });
+        }).catch((err) => {
+          this.props.uiStore.setErrors(JSON.stringify(err.message));
+        });
       } else {
         this.setDashboardWizardSetup(step);
       }
@@ -55,30 +54,15 @@ class Summary extends Component {
   }
 
   render() {
-    const { getStepStatus, currentUser } = this.props.userDetailsStore;
+    const { getStepStatus } = this.props.userDetailsStore;
     const { signupStatus } = this.props.userDetailsStore;
-
-    if (!currentUser.data) {
-      return (
-        <div>
-          <Spinner loaderMessage="Loading..." />
-        </div>
-      );
-    }
+    const { errors } = this.props.uiStore;
 
     const progressMeta = {
       'envelope-line': { label: 'Email-address', action: false },
       'contact-card': { label: 'Identity', action: 'InvestorPersonalDetails' },
       'phone-line': { label: 'phone number', action: 'ConfirmPhoneNumber' },
-      'bar-line-chart': { label: 'You have no account yet', action: 'InvestmentChooseType', labelGiven: true },
-      'chart-setting': {
-        label: 'Start creation process of another type of account',
-        action: false,
-        labelGiven: true,
-      },
     };
-
-    console.log(signupStatus);
 
     return (
       <Aux>
@@ -90,10 +74,17 @@ class Summary extends Component {
             /> : null
           }
         >
+          {errors &&
+            <Message error>
+              <ListErrors errors={[errors]} />
+            </Message>
+          }
           <ProgressCard
             action={this.verifyStep}
             metaData={progressMeta}
             signupStatus={signupStatus}
+            getStepStatus={getStepStatus}
+            navToAccTypes={this.navToAccTypes}
           />
         </PrivateLayout>
         {this.props.uiStore.dashboardStep &&
