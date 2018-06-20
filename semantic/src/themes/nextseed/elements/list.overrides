@@ -146,3 +146,41 @@
         }
     }
 }
+
+//  Used for message section
+.ui.card.messages{
+    flex-direction:row;
+    max-height:~"calc(100vh - 232px)";
+    .ui.list{
+        width:30%;
+        margin:0;
+        overflow:auto;
+        border-radius:@6px 0 0 @6px !important;
+        border-right:@borderColor 1px solid;
+        >.item{
+            padding:@12px;
+            position:relative;
+            .header{
+                font-weight:700;
+                color:@fullBlack;
+            }
+            h4.header{
+                font-size:@16px;
+            }
+            .extra{
+                font-size:@13px;
+                color:@quaternary-text;
+                position:absolute;
+                right:12px;
+            }
+        }
+        .content{
+            + .content{
+                padding-top:@7px;
+            }
+            .description{
+                margin-top:@5px;
+            }
+        }
+    }
+}

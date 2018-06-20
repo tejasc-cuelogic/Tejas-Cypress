@@ -31,7 +31,7 @@ export default class CreateNew extends Component {
     return (
       <Aux>
         <Header as="h3">User Details</Header>
-        <Card.Group itemsPerRow={3}>
+        <Card.Group stackable itemsPerRow={3}>
           <Card fluid>
             <Card.Content>
               <Header as="h3">Personal Profile</Header>

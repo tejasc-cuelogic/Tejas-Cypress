@@ -60,6 +60,14 @@ export class ProfileStore {
   @observable
   reSendVerificationCode = false;
 
+  @observable
+  submitVerificationsDocs = false;
+
+  @action
+  setSubmitVerificationDocs(status) {
+    this.submitVerificationsDocs = status;
+  }
+
   @action
   setProfilePhoto(attr, value) {
     this.updateProfileInfo.fields.profilePhoto[attr] = value;
@@ -455,16 +463,16 @@ export class ProfileStore {
         .then(() => {
           client
             .mutate({
-              mutation: updateUserCIPInfo,
+              mutation: updateUserPhoneDetail,
               variables: {
                 userId: userStore.currentUser.sub,
-                user: this.formattedUserInfo,
-                phoneDetails: this.formattedPhoneDetails,
-                cipStatus: {
-                  status: 'PASS',
+                phoneDetails: {
+                  number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+                  countryCode: '1',
                 },
               },
-            });
+            })
+            .catch(() => { });
           resolve();
         })
         .catch(action((err) => {

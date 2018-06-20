@@ -191,6 +191,19 @@
                 padding-bottom:@7px;
             }
         }
+        .reward-description{
+            padding:@18px @25px;
+            margin-bottom:@18px;
+            text-align:left;
+            background-color:@lighten-bg-color;
+            .ui.header{
+                margin-bottom:@12px;
+            }
+        }
+        .note{
+            font-size:@12px;
+            margin-top:@14px;
+        }
     }
     &.deletion{
         > .header{

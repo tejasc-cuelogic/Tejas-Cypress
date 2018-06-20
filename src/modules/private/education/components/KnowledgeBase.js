@@ -9,14 +9,21 @@ import Details from '../components/knowledgeBase/Details';
 @observer
 export default class KnowledgeBase extends Component {
   componentWillMount() {
-    this.props.educationStore.initRequest('Faq');
+    this.props.educationStore.initRequest('KnowledgeBase');
+  }
+  search = (e) => {
+    this.props.educationStore.setSrchParam(e.target.value);
+    if (this.props.location.pathname !== '/app/resources/knowledge-base') {
+      this.props.history.replace('/app/resources/knowledge-base');
+    }
   }
   render() {
     const { match, location } = this.props;
     const {
-      faqs, loading, error, dataOne,
+      kbs, loading, error, searchParam,
     } = this.props.educationStore;
-    if (loading || dataOne.loading) {
+    const modul = 'knowledgeBase';
+    if (loading) {
       return 'loading...';
     }
     return (
@@ -25,17 +32,32 @@ export default class KnowledgeBase extends Component {
           <Grid.Row>
             <Grid.Column widescreen={7} largeScreen={7} computer={16} tablet={16} mobile={16}>
               <Form>
-                <Input fluid inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Search by keyword or phrase" />
+                <Input
+                  fluid
+                  onChange={this.search}
+                  value={searchParam}
+                  inverted
+                  icon={{ className: 'ns-search' }}
+                  iconPosition="left"
+                  placeholder="Search by keyword or phrase"
+                />
               </Form>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column widescreen={7} largeScreen={7} computer={16} tablet={16} mobile={16}>
-              <AccList location={location} match={match} error={error} data={faqs} />
+              <AccList module={modul} location={location} match={match} error={error} data={kbs} />
             </Grid.Column>
             <Grid.Column widescreen={8} largeScreen={8} floated="right" only="large screen">
-              <Route exact path={match.url} component={Details} />
-              <Route path={`${match.url}/:id`} render={props => <Details refLink="KnowledgeBase" {...props} />} />
+              <Route
+                exact
+                path={match.url}
+                render={props => <Details module={modul} {...props} />}
+              />
+              <Route
+                path={`${match.url}/:id`}
+                render={props => <Details module={modul} {...props} />}
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>

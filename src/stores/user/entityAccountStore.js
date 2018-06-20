@@ -240,12 +240,24 @@ class EntityAccountStore {
             legalFirstName: userStore.currentUser.givenName,
             legalLastName: userStore.currentUser.familyName,
             title: this.formPersonalInfo.fields.title.value,
-            legalDocUrl: this.formPersonalInfo.fields.legalDocUrl.value,
+            legalDocUrl: {
+              fileId: this.formPersonalInfo.fields.legalDocUrl.fileId,
+              fileName: this.formPersonalInfo.fields.legalDocUrl.value,
+            },
           },
           legalDocs: {
-            formationDoc: this.formFormationDocuments.fields.formationDoc.value,
-            operatingAgreementDoc: this.formFormationDocuments.fields.operatingAgreementDoc.value,
-            einVerificationDoc: this.formFormationDocuments.fields.einVerificationDoc.value,
+            formationDoc: {
+              fileName: this.formFormationDocuments.fields.formationDoc.value,
+              fileId: this.formFormationDocuments.fields.formationDoc.fileId,
+            },
+            operatingAgreementDoc: {
+              fileName: this.formFormationDocuments.fields.operatingAgreementDoc.value,
+              fileId: this.formFormationDocuments.fields.operatingAgreementDoc.fileId,
+            },
+            einVerificationDoc: {
+              fileName: this.formFormationDocuments.fields.einVerificationDoc.value,
+              fileId: this.formFormationDocuments.fields.einVerificationDoc.fileId,
+            },
           },
         },
       };
@@ -346,6 +358,7 @@ class EntityAccountStore {
   createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false, field = null) => {
     if (formStatus === 'submit') {
       this.setFormStatus('submit');
+      this.submitForm(currentStep, formStatus, this.accountAttributes);
     }
     let isValidCurrentStep = true;
     const { accountAttributes } = this;
@@ -548,6 +561,7 @@ class EntityAccountStore {
           if (formStatus === 'submit') {
             userDetailsStore.getUser(userStore.currentUser.sub);
             Helper.toast('Entity account created successfully.', 'success');
+            uiStore.setDashboardWizardStep();
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           }

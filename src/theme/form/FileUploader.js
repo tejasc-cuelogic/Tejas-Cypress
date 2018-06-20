@@ -5,11 +5,7 @@ import { Icon, Button, Responsive } from 'semantic-ui-react';
 import FieldError from '../common/FieldError';
 
 const FileUploader = observer((props) => {
-  const {
-    label,
-    value,
-    error,
-  } = props.fielddata;
+  const { label, error, value } = props.fielddata;
   return (
     <div className="file-uploader-wrap">
       {label &&

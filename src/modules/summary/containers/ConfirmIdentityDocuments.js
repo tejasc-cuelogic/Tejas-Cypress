@@ -37,6 +37,7 @@ export default class ConfirmIdentityDocuments extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.profileStore.setSubmitVerificationDocs(true);
     validationActions.validateConfirmIdentityDocumentsForm();
     if (this.props.profileStore.canSubmitConfirmIdentityDocumentsForm) {
       this.props.profileStore.uploadAndUpdateCIPInfo().then(() => {
@@ -56,7 +57,7 @@ export default class ConfirmIdentityDocuments extends Component {
   }
 
   render() {
-    const { confirmIdentityDocuments } = this.props.profileStore;
+    const { confirmIdentityDocuments, submitVerificationsDocs } = this.props.profileStore;
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <Modal size="tiny" open closeIcon onClose={() => this.handleCloseModal()}>
@@ -132,7 +133,7 @@ export default class ConfirmIdentityDocuments extends Component {
             </Grid>
             <Divider section hidden />
             <div className="center-align">
-              <Button loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!confirmIdentityDocuments.meta.isValid}>Verify my identity</Button>
+              <Button loading={submitVerificationsDocs && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!confirmIdentityDocuments.meta.isValid}>Verify my identity</Button>
             </div>
             <div className="center-align">
               <Button type="button" className="cancel-link" onClick={() => this.handleCloseModal()}>I`ll finish this letter</Button>

@@ -211,3 +211,28 @@
         }
     }
 }
+
+.ui.card.verification{
+    text-align:center;
+    justify-content:center;
+    .content{
+        flex-grow:0;
+        p{
+            margin:@21px 0;
+        }
+    }
+    .icon{
+        color:@border-color;
+        &.corner{
+            font-size:.35em;
+            right:-.4em;
+        }
+    }
+    &.disabled{
+        color:@border-color;
+    }
+    &.done{
+        background-color:@inverse-darken;
+        box-shadow:none;
+    }
+}

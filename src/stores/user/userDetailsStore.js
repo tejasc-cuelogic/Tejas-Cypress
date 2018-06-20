@@ -46,18 +46,23 @@ export class UserDetailsStore {
   }
 
   @action
+  setUserAccDetails = () => {
+    authStore.checkIsInvestmentAccountCreated(this.userDetails);
+    iraAccountStore.populateData(this.userDetails);
+    individualAccountStore.populateData(this.userDetails);
+    entityAccountStore.populateData(this.userDetails);
+  }
+
+  @action
   getUser = (id) => {
     this.currentUser = graphql({
       client,
       query: userDetailsQuery,
+      fetchPolicy: 'network-only',
       variables: {
         id,
       },
-      onFetch: (data) => {
-        authStore.checkIsInvestmentAccountCreated(data.user);
-        iraAccountStore.populateData(data.user);
-        individualAccountStore.populateData(data.user);
-        entityAccountStore.populateData(data.user);
+      onFetch: () => {
         profileStore.setProfileInfo(this.userDetails);
       },
     });
@@ -113,19 +118,46 @@ export class UserDetailsStore {
   }
 
   @computed get signupStatus() {
-    const details = { idVerification: 'FAIL', accounts: [] };
+    const details = { idVerification: 'FAIL', accounts: [], phoneVerification: 'FAIL' };
     if (this.userDetails) {
       details.idVerification = (this.userDetails.legalDetails &&
         this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
       ) ? this.userDetails.legalDetails.cipStatus.status : 'FAIL';
       details.accounts = mapValues(this.userDetails.accounts, (a) => {
-        const data = { accountType: a.accountType, status: a.status };
+        const data = { accountId: a.accountId, accountType: a.accountType, status: a.status };
         return data;
       });
       details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
+      details.phoneVerification = (this.userDetails.contactDetails &&
+        this.userDetails.contactDetails.phone.verificationDate) ? 'DONE' : 'FAIL';
       return details;
     }
     return details;
+  }
+
+  getStepStatus = (step) => {
+    const statusDetails = this.signupStatus;
+    let status = '';
+    if (statusDetails[step]) {
+      if (step === 'idVerification') {
+        if (this.validAccStatus.includes(statusDetails[step])) {
+          status = 'done';
+        } else {
+          status = 'enable';
+        }
+      } else if (step === 'phoneVerification') {
+        if (this.validAccStatus.includes(statusDetails.idVerification)) {
+          if (statusDetails.phoneVerification === 'done') {
+            status = 'done';
+          } else {
+            status = 'enable';
+          }
+        } else {
+          status = 'disable';
+        }
+      }
+    }
+    return status;
   }
 
   @computed get isUserVerified() {

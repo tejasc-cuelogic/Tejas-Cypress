@@ -39,24 +39,17 @@ export default class Signature extends React.Component {
         <Card fluid className="form-card">
           <Header as="h3" textAlign="left">Issuer Signature</Header>
           <Form.Group widths="3">
-            <FormInput
-              type="text"
-              fielddata={formSignatureInfo.fields.issuer}
-              name="issuer"
-              changed={signatureInfoChange}
-            />
-            <FormInput
-              type="text"
-              fielddata={formSignatureInfo.fields.issuerSignature}
-              name="issuerSignature"
-              changed={signatureInfoChange}
-            />
-            <FormInput
-              type="text"
-              fielddata={formSignatureInfo.fields.issuerTitle}
-              name="issuerTitle"
-              changed={signatureInfoChange}
-            />
+            {
+              ['issuer', 'issuerSignature', 'issuerTitle'].map(field => (
+                <FormInput
+                  type="text"
+                  key={field}
+                  name={field}
+                  fielddata={formSignatureInfo.fields[field]}
+                  changed={signatureInfoChange}
+                />
+              ))
+            }
           </Form.Group>
         </Card>
         <Card fluid className="form-card">
