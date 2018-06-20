@@ -36,6 +36,13 @@ export class UserDetailsStore {
   }
 
   @action
+  setProfilePhoto(url) {
+    if (this.currentUser) {
+      this.currentUser.data.user.avatar.url = url;
+    }
+  }
+
+  @action
   setEditCard = (cardIndex) => {
     this.editCard = cardIndex || 0;
   }

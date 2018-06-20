@@ -21,6 +21,7 @@ export default class ImageCropper extends Component {
       pixelCrop: '',
       cropResult: '',
       image: '',
+      imageType: '',
     };
   }
   /* eslint-disable prefer-destructuring */
@@ -33,6 +34,8 @@ export default class ImageCropper extends Component {
     } else if (e.target) {
       files = e.target.files;
     }
+
+    this.setState({ imageType: files[0].type });
     this.props.setData('value', files[0].name);
     this.props.verifySize(files[0].size);
     this.props.verifyExtension(files[0].type.split('/')[1]);
@@ -44,10 +47,11 @@ export default class ImageCropper extends Component {
   }
 
   onImageLoaded = (image) => {
+    this.props.verifyImageDimension(image.width, image.height);
     this.setState({
       crop: makeAspectCrop({
-        x: 20,
-        y: 20,
+        x: 0,
+        y: 0,
         aspect: 1 / 1,
         width: 20,
       }, image.width / image.height),
@@ -89,7 +93,8 @@ export default class ImageCropper extends Component {
       pixelCrop.height,
     );
 
-    const base64Image = canvas.toDataURL('image/jpg');
+    const imageType = this.state.imageType;
+    const base64Image = canvas.toDataURL(imageType);
     return base64Image;
   }
 
