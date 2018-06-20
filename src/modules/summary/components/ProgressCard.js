@@ -1,12 +1,13 @@
 import React from 'react';
-import { Card, Icon } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Card, Icon, Button } from 'semantic-ui-react';
 
 const checkStatus = (signupStatus, key) => {
   console.log(signupStatus, key);
   return true;
 };
 
-const ProgressCard = ({ metaData, signupStatus }) => (
+const ProgressCard = ({ metaData, signupStatus, action }) => (
   <Card.Group stackable itemsPerRow={3}>
     {
       Object.keys(metaData).map((key) => {
@@ -19,9 +20,17 @@ const ProgressCard = ({ metaData, signupStatus }) => (
                 <Icon corner color="green" className={`ns-${status ? 'check' : 'warning'}-circle`} />
               </Icon.Group>
               <p>
-                {status ?
-                  `Please verify your <b>${metaData[key]}</b>` :
-                  `Your <b>${metaData[key]}</b> has been verified`
+                {!status ? 'Your <b>{metaData[key].label}</b> has been verified' : (
+                  <Aux>
+                    <p><b>Please verify your {metaData[key].label}</b></p>
+                    <Button
+                      onClick={() => action(metaData[key].action)}
+                      color="green"
+                      className="relaxed"
+                      content="Verify"
+                    />
+                  </Aux>
+                )
                 }
               </p>
             </Card.Content>

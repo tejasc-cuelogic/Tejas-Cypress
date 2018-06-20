@@ -12,7 +12,7 @@ import DashboardWizard from './DashboardWizard';
 import OtherAccountTypes from '../components/OtherAccountTypes';
 import ProgressCard from '../components/ProgressCard';
 
-@inject('uiStore', 'profileStore', 'entityAccountStore', 'iraAccountStore', 'accountStore', 'userStore', 'userDetailsStore', 'individualAccountStore')
+@inject('uiStore', 'profileStore', 'accountStore', 'userDetailsStore')
 @observer
 class Summary extends Component {
   componentWillMount() {
@@ -29,6 +29,12 @@ class Summary extends Component {
     this.restoreStep();
   }
 
+  verifyStep = (step) => {
+    if (step) {
+      this.setDashboardWizardSetup(step);
+    }
+  }
+
   verifyPhoneNumber = () => {
     this.props.profileStore.startPhoneVerification().then(() => {
       this.setDashboardWizardSetup('ConfirmPhoneNumber');
@@ -38,7 +44,6 @@ class Summary extends Component {
 
   restoreStep = () => {
     if (this.props.accountStore.accountType.activeIndex === 0) {
-      // this.props.individualAccountStore.setStepToBeRendered(0);
       this.props.accountStore.setBankLinkInterface('list');
     }
   }
@@ -63,11 +68,14 @@ class Summary extends Component {
     let accTypes = ['individual', 'IRA', 'entity'];
 
     const progressMeta = {
-      'envelope-line': 'Email-address',
-      'contact-card': 'Identity',
-      'phone-line': 'phone number',
-      'bar-line-chart': 'You have no account yet',
-      'chart-setting': 'Start creation process of another type of account',
+      'envelope-line': { label: 'Email-address', action: false },
+      'contact-card': { label: 'Identity', action: 'InvestorPersonalDetails' },
+      'phone-line': { label: 'phone number', action: 'ConfirmPhoneNumber' },
+      'bar-line-chart': { label: 'You have no account yet', action: false },
+      'chart-setting': {
+        label: 'Start creation process of another type of account',
+        action: false,
+      },
     };
 
     console.log(signupStatus);
@@ -83,7 +91,11 @@ class Summary extends Component {
             /> : null
           }
         >
-          <ProgressCard metaData={progressMeta} signupStatus={signupStatus} />
+          <ProgressCard
+            action={this.verifyStep}
+            metaData={progressMeta}
+            signupStatus={signupStatus}
+          />
         </PrivateLayout>
         {this.props.uiStore.dashboardStep &&
         <DashboardWizard
