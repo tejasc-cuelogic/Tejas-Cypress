@@ -385,7 +385,7 @@ export class Auth {
   confirmCode() {
     uiStore.reset();
     uiStore.setProgress();
-    const { code, email } = authStore.values;
+    const { code, email, password } = authStore.values;
     this.cognitoUser = new AWSCognito.CognitoUser({
       Username: email.value,
       Pool: this.userPool,
@@ -400,6 +400,48 @@ export class Auth {
     })
       .then(() => {
         Helper.toast('Successfully done confirmation', 'success');
+
+        const authenticationDetails = new AWSCognito.AuthenticationDetails({
+          Username: email.value,
+          Password: password.value,
+        });
+
+        this.cognitoUser = new AWSCognito.CognitoUser({
+          Username: email.value,
+          Pool: this.userPool,
+        });
+
+        return new Promise((res, rej) => {
+          this.cognitoUser.authenticateUser(authenticationDetails, {
+            onSuccess: result => res({ data: result }),
+            newPasswordRequired: (result) => {
+              res({ data: result, action: 'newPassword' });
+            },
+            onFailure: err => rej(err),
+          });
+        })
+          .then((result) => {
+            authStore.setUserLoggedIn(true);
+            if (result.action && result.action === 'newPassword') {
+              authStore.setEmail(result.data.email);
+              authStore.setCognitoUserSession(this.cognitoUser.Session);
+              authStore.setNewPasswordRequired(true);
+            } else {
+              const { data } = result;
+              // Extract JWT from token
+              commonStore.setToken(data.idToken.jwtToken);
+              userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+              userDetailsStore.getUser(userStore.currentUser.sub);
+              AWS.config.region = AWS_REGION;
+              if (userStore.isCurrentUserWithRole('admin')) {
+                this.setAWSAdminAccess(data.idToken.jwtToken);
+              }
+            }
+          })
+          .catch((err) => {
+            uiStore.setErrors(this.simpleErr(err));
+            throw err;
+          });
       })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));

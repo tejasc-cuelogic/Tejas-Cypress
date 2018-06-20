@@ -16,7 +16,7 @@ import ListErrors from './theme/common/ListErrors';
 /**
  * Main App
  */
-@inject('userStore', 'commonStore', 'authStore', 'uiStore')
+@inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 class App extends Component {
@@ -29,6 +29,9 @@ class App extends Component {
       .then(() => {
         if (this.props.uiStore.redirectURL) {
           history.push(this.props.uiStore.redirectURL);
+        }
+        if (this.props.userStore.currentUser) {
+          this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
         }
       })
       .then(() => this.props.uiStore.clearRedirectURL());

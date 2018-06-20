@@ -60,7 +60,6 @@ export class UiStore {
 
   @action
   setErrors(errors) {
-    console.log(errors, 'errors');
     this.errors = errors;
   }
 

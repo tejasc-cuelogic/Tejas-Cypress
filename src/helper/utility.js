@@ -3,6 +3,8 @@
  */
 import { toast } from 'react-toastify';
 import _ from 'lodash';
+// import uploadApi from '../services/uploadApi';
+import api from '../services/api';
 
 export class Utility {
   // Default options for the toast
@@ -107,6 +109,46 @@ export class Utility {
     let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
     encryptedNumber = encryptedNumber.slice(-7);
     return encryptedNumber;
+  }
+
+  getFormattedFileData = (files) => {
+    const fileData = {};
+    if (files && files.length > 0) {
+      const fileInfo = files[0];
+      fileData.fileName = fileInfo.name.replace(/ /g, '_');
+      fileData.fileType = fileInfo.type;
+      fileData.fileExtension = fileInfo.name.substr((fileInfo.name.lastIndexOf('.') + 1));
+      fileData.fileSize = fileInfo.size;
+    }
+    return fileData;
+  }
+
+  // uploadOnS3 = (item, fileData) => new Promise((resolve, reject) => {
+  //   uploadApi.put(item, fileData)
+  //     .then(() => {
+  //       resolve();
+  //     })
+  //     .catch((err) => {
+  //       reject(err);
+  //     });
+  // });
+
+  putUploadedFile = urlArray => new Promise((resolve, reject) => {
+    const funcArray = [];
+    _.forEach(urlArray, (item) => {
+      funcArray.push(api.uploadOnS3(item.preSignedUrl, item.fileData[0]));
+    });
+    Promise.all(funcArray).then(() => {
+      resolve();
+    })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
+  maskPhoneNumber = (phoneNumber) => {
+    const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
+    return maskPhoneNumber;
   }
 }
 

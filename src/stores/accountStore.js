@@ -29,8 +29,6 @@ export class AccountStore {
 
   @observable entityAccount = { ...ENTITY_ACCOUNT_CREATION }
 
-  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
-
   @observable
   bankListing = undefined;
 
@@ -62,6 +60,8 @@ export class AccountStore {
 
   @observable
   accountTypeCreated = undefined;
+
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
 
   @action
   setAccountTypeCreated = (accountType) => {
@@ -207,6 +207,19 @@ export class AccountStore {
           reject();
         }));
     });
+  }
+
+  /* eslint-disable class-methods-use-this */
+  getAccountTypeIndex(accType) {
+    let type = 0;
+    if (accType === 'individual') {
+      type = 0;
+    } else if (accType === 'ira') {
+      type = 1;
+    } else if (accType === 'entity') {
+      type = 2;
+    }
+    return type;
   }
 
   simpleErr = err => ({

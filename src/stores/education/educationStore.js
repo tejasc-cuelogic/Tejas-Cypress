@@ -1,45 +1,45 @@
 /* eslint-disable class-methods-use-this, prefer-destructuring */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../services/graphqlCool';
-import { allKbsQuery, getFirst, getOne, allFaqCategories, getOneFaq, getFirstFaq } from '../queries/knowledgeBase';
+import flatMap from 'lodash/flatMap';
+import mapValues from 'lodash/mapValues';
+import { GqlClient as client } from '../../services/graphql';
+import userStore from '../userStore';
+import ClientSearch from '../../helper/clientSearch';
+import { allKbsQuery, allFaqQuery } from '../queries/knowledgeBase';
 
 export class EducationStore {
   @observable data = [];
-  @observable dataOne = {};
-  @observable module = '';
-  @observable selected = { heading: '', description: '' };
+  @observable searchParam = '';
+  @observable selected = { id: '', title: '', body: '' };
 
   @action
   initRequest = (module) => {
-    const query = (module === 'KnowledgeBase') ? allKbsQuery : allFaqCategories;
-    this.data = graphql({
-      client,
-      query,
-    });
+    const query = (module === 'KnowledgeBase') ? allKbsQuery : allFaqQuery;
+    if (userStore.currentUser) {
+      const scopeType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
+      this.data = graphql({
+        client,
+        query,
+        variables: { scopeType },
+      });
+    }
   }
 
   @action
-  getOne = (module, id) => {
-    const variables = (id) ? { id } : { first: 1 };
-    let query = '';
-    if (module === 'KnowledgeBase') {
-      query = (id) ? getOne : getFirst;
-    } else if (module === 'Faq') {
-      query = (id) ? getOneFaq : getFirstFaq;
+  getOne = (ref, id) => {
+    const meta = { knowledgeBase: ['kbs', 'title', 'body'], faq: ['faqs', 'question', 'answer'] };
+    if (this[meta[ref][0]].length > 1) {
+      const item = (!id) ? this[meta[ref][0]][0][`${ref}Items`][0] :
+        flatMap(mapValues(this[meta[ref][0]], f => f[`${ref}Items`])).find(i => i.id === id);
+      this.selected = item ? { id: item.id, title: item[meta[ref][1]], body: item[meta[ref][2]] } :
+        {};
     }
-    this.dataOne = graphql({
-      client,
-      query,
-      variables,
-      onFetch: (data) => {
-        if (module === 'KnowledgeBase') {
-          this.selected = (id) ? data.KnowledgeBase : data.allKnowledgeBases[0];
-        } else if (module === 'Faq') {
-          this.selected = (id) ? data.Faq : data.allFaqs[0];
-        }
-      },
-    });
+  }
+
+  @action
+  setSrchParam = (value) => {
+    this.searchParam = value || '';
   }
 
   @computed get allData() {
@@ -47,13 +47,17 @@ export class EducationStore {
   }
 
   @computed get kbs() {
-    return (this.allData.data && this.allData.data.allKnowledgeBases &&
-      toJS(this.allData.data.allKnowledgeBases)) || [];
+    return (this.allData.data && this.allData.data.knowledgeBase
+      && ClientSearch.search(
+        toJS(this.allData.data.knowledgeBase),
+        this.searchParam,
+        'knowledgeBase',
+      )) || [];
   }
 
   @computed get faqs() {
-    return (this.allData.data && this.allData.data.allCategories &&
-      toJS(this.allData.data.allCategories)) || [];
+    return (this.allData.data && this.allData.data.faqs
+      && ClientSearch.search(toJS(this.allData.data.faqs), this.searchParam, 'faq')) || [];
   }
 
   @computed get error() {
@@ -62,10 +66,6 @@ export class EducationStore {
 
   @computed get loading() {
     return this.allData.loading;
-  }
-
-  @computed get count() {
-    return this.kbs.length || 0;
   }
 }
 

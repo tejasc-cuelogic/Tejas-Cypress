@@ -4,6 +4,7 @@ import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
 import { GqlClient as client } from '../services/graphql';
 import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
+import { createUploadEntry, removeUploadedFile } from '../stores/queries/common';
 
 import api from '../ns-api';
 import authStore from './authStore';
@@ -11,6 +12,7 @@ import uiStore from './uiStore';
 import userStore from './userStore';
 import userDetailsStore from './user/userDetailsStore';
 import Helper from '../helper/utility';
+import apiService from '../services/api';
 
 import {
   UPDATE_PROFILE_INFO,
@@ -57,6 +59,19 @@ export class ProfileStore {
 
   @observable
   reSendVerificationCode = false;
+
+  @observable
+  submitVerificationsDocs = false;
+
+  @action
+  setSubmitVerificationDocs(status) {
+    this.submitVerificationsDocs = status;
+  }
+
+  @action
+  setProfilePhoto(attr, value) {
+    this.updateProfileInfo.fields.profilePhoto[attr] = value;
+  }
 
   @action
   setReSendVerificationCode(status) {
@@ -147,9 +162,12 @@ export class ProfileStore {
 
   @computed
   get formattedPhoneDetails() {
+    const number = this.verifyIdentity01.fields.phoneNumber.value ?
+      this.verifyIdentity01.fields.phoneNumber.value :
+      userDetailsStore.userDetails.contactDetails.phone.number;
     const phoneDetails = {
-      number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-      countryCode: '1',
+      number: Helper.unMaskInput(number),
+      countryCode: '91',
     };
     return phoneDetails;
   }
@@ -218,7 +236,7 @@ export class ProfileStore {
     );
     if (currentForm !== 'updateProfileInfo') {
       this[form].meta.isValid = validation.passes();
-    } else if (field !== 'phoneNumber' && field !== 'email') {
+    } else if (field !== 'phoneNumber' && field !== 'email' && field !== 'profilePhoto') {
       this[form].meta.isValid = validation.passes();
     }
     this[form].fields[field].error = validation.errors.first(field);
@@ -263,9 +281,8 @@ export class ProfileStore {
                 },
               },
             })
-            .then((result) => {
+            .then(() => {
               userDetailsStore.getUser(userStore.currentUser.sub);
-              console.log(result);
             })
             .catch(() => {});
           resolve();
@@ -288,6 +305,66 @@ export class ProfileStore {
   @action
   setConfirmIdentityDocumentsError(field, error) {
     this.confirmIdentityDocuments[field].error = error;
+  }
+
+  @action
+  setFileUploadData(field, files) {
+    this.confirmIdentityDocuments.fields[field].fileData = files;
+    const fileData = Helper.getFormattedFileData(files);
+    this.onFieldChange('confirmIdentityDocuments', field, fileData.fileName);
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createUploadEntry,
+          variables: {
+            userId: userStore.currentUser.sub,
+            stepName: 'CIPDocuments',
+            fileData,
+          },
+        })
+        .then((result) => {
+          const { fileId, preSignedUrl } = result.data.createUploadEntry;
+          this.confirmIdentityDocuments.fields[field].fileId = fileId;
+          this.confirmIdentityDocuments.fields[field].preSignedUrl = preSignedUrl;
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  removeUploadedData(field) {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: removeUploadedFile,
+          variables: {
+            fileId: this.confirmIdentityDocuments.fields[field].fileId,
+          },
+        })
+        .then((result) => {
+          this.onFieldChange('confirmIdentityDocuments', field, '');
+          this.confirmIdentityDocuments.fields[field].fileId = '';
+          this.confirmIdentityDocuments.fields[field].preSignedUrl = '';
+          console.log(result);
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 
   @computed
@@ -348,7 +425,6 @@ export class ProfileStore {
     });
   }
 
-  /* eslint-disable arrow-body-style */
   startPhoneVerification = () => {
     uiStore.clearErrors();
     uiStore.setProgress();
@@ -389,16 +465,16 @@ export class ProfileStore {
         .then(() => {
           client
             .mutate({
-              mutation: updateUserCIPInfo,
+              mutation: updateUserPhoneDetail,
               variables: {
                 userId: userStore.currentUser.sub,
-                user: this.formattedUserInfo,
-                phoneDetails: this.formattedPhoneDetails,
-                cipStatus: {
-                  status: 'PASS',
+                phoneDetails: {
+                  number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+                  countryCode: '91',
                 },
               },
-            });
+            })
+            .catch(() => { });
           resolve();
         })
         .catch(action((err) => {
@@ -478,6 +554,10 @@ export class ProfileStore {
           state: this.updateProfileInfo.fields.state.value,
           zipCode: this.updateProfileInfo.fields.zipCode.value,
         },
+      },
+      avatar: {
+        name: this.updateProfileInfo.fields.profilePhoto.value,
+        url: this.updateProfileInfo.fields.profilePhoto.responseUrl,
       },
     };
     return profileDetails;
@@ -585,7 +665,7 @@ export class ProfileStore {
                userId: userStore.currentUser.sub,
                phoneDetails: {
                  number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-                 countryCode: '1',
+                 countryCode: '91',
                },
              },
            })
@@ -607,31 +687,150 @@ export class ProfileStore {
 
   uploadAndUpdateCIPInfo = () => {
     uiStore.setProgress();
+    const { photoId, proofOfResidence } = this.confirmIdentityDocuments.fields;
+    return new Promise((resolve, reject) => {
+      Helper.putUploadedFile([photoId, proofOfResidence])
+        .then(() => {
+          client
+            .mutate({
+              mutation: updateUserCIPInfo,
+              variables: {
+                userId: userStore.currentUser.sub,
+                user: this.formattedUserInfo,
+                phoneDetails: this.formattedPhoneDetails,
+                cipStatus: {
+                  status: 'MANUAL_VERIFICATION_PENDING',
+                  verificationDocs:
+                  {
+                    idProof: {
+                      fileId: photoId.fileId,
+                      fileName: photoId.value,
+                    },
+                    addressProof: {
+                      fileId: proofOfResidence.fileId,
+                      fileName: proofOfResidence.value,
+                    },
+                  },
+                },
+              },
+            })
+            .then(() => {
+              userDetailsStore.getUser(userStore.currentUser.sub);
+              resolve();
+            })
+            .catch((err) => {
+              reject(err);
+              uiStore.setErrors(this.simpleErr(err));
+            })
+            .finally(() => {
+              uiStore.setProgress(false);
+            });
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject();
+        });
+    });
+  }
+
+  setAddressFields = (place) => {
+    const data = Helper.gAddressClean(place);
+    this.onFieldChange('updateProfileInfo', 'street', data.residentalStreet);
+    this.onFieldChange('updateProfileInfo', 'city', data.city);
+    this.onFieldChange('updateProfileInfo', 'state', data.state);
+    this.onFieldChange('updateProfileInfo', 'zipCode', data.zipCode);
+  }
+
+  requestEmailChange = () => {
+    uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: updateUserCIPInfo,
+          mutation: requestEmailChnage,
           variables: {
             userId: userStore.currentUser.sub,
-            user: this.formattedUserInfo,
-            phoneDetails: this.formattedPhoneDetails,
-            cipStatus: {
-              status: 'MANUAL_VERIFICATION_PENDING',
-            },
+            newEmail: authStore.values.email.value,
           },
         })
         .then(() => {
-          const message = { message: 'MANUAL_VERIFICATION_PENDING' };
-          this.setVerifyIdentityResponse(message);
+          Helper.toast('Email Change request has been accepted', 'success');
           resolve();
         })
         .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
           reject(err);
         })
         .finally(() => {
           uiStore.setProgress(false);
         });
     });
+  }
+
+  verifyAndUpdateEmail = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: verifyAndUpdateEmail,
+          variables: {
+            userId: userStore.currentUser.sub,
+            confirmationCode: authStore.values.code.value,
+          },
+        })
+        .then(() => {
+          Helper.toast('Email has been verified and updated', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  uploadProfilePhoto = (history, refLink) => {
+    uiStore.setProgress();
+    const profileData = this.updateProfileInfo.fields.profilePhoto.base64String;
+    const b64Text = profileData.split(',')[1];
+    const payload = {
+      userId: userStore.currentUser.sub,
+      base64String: b64Text,
+    };
+    apiService.post('/upload/file', payload)
+      .then(action((response) => {
+        if (!response.body.errorMessage) {
+          this.setProfilePhoto('responseUrl', response.body.fileFullPath);
+          this.updateUserProfileData().then(() => {
+            userDetailsStore.setProfilePhoto(response.body.fileFullPath);
+            Helper.toast('Profile photo updated successfully', 'success');
+            this.resetProfilePhoto();
+            history.push(refLink);
+          })
+            .catch((err) => {
+              uiStore.setErrors(this.simpleErr(err));
+            });
+        } else {
+          this.setProfilePhoto('error', 'Something went wrong.');
+          this.setProfilePhoto('value', '');
+        }
+      }))
+      .finally(action(() => { uiStore.setProgress(false); }));
+  }
+
+  @computed
+  get canUpdateProfilePhoto() {
+    return this.updateProfileInfo.fields.profilePhoto.value !== '';
+  }
+
+  @action
+  resetProfilePhoto = () => {
+    this.updateProfileInfo.fields.profilePhoto.src = '';
+    this.updateProfileInfo.fields.profilePhoto.error = '';
+    this.updateProfileInfo.fields.profilePhoto.value = '';
+    this.updateProfileInfo.fields.profilePhoto.base64String = '';
   }
 
   simpleErr = err => ({

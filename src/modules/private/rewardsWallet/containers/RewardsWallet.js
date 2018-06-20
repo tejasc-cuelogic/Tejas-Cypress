@@ -4,7 +4,7 @@ import { Checkbox } from 'semantic-ui-react';
 import PrivateLayout from '../../../../containers/common/PrivateHOC';
 import RewardList from '../components/RewardList';
 
-@inject('rewardStore')
+@inject('rewardStore', 'userDetailsStore')
 @observer
 export default class RewardsWallet extends Component {
   componentWillMount() {

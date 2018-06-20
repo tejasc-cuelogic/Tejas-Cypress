@@ -75,7 +75,7 @@
         }
         &.signup-content{
             // padding-top:0;
-            padding-bottom:@28px;
+            padding-bottom:@20px;
         }
         .user-type{
             height:100%;
@@ -153,8 +153,10 @@
     .actions{
         font-size:@14px;
         &.signup-actions{
-            background-color:@inverse-text;
+            padding-top:0;
+            text-align:center;
             border:none;
+            background-color:@inverse-text;
         }
     }
     .ui.divider{
@@ -201,6 +203,18 @@
         .note{
             font-size:@12px;
             margin-top:@14px;
+        }
+    }
+    &.deletion{
+        > .header{
+            padding:1.25rem 1.5rem;
+        }
+        > .content{
+            padding:1.5rem;
+        }
+        > .actions{
+            padding:1rem;
+            text-align:right;
         }
     }
 }
@@ -266,6 +280,30 @@
             .field-wrap{
                 display:inline-block;
                 padding:@30px;
+            }
+        }
+        .ui.dimmer.active{
+            border-radius:@9px;
+            ~ .multistep__btn{
+                &:before{
+                    content:"";
+                    height:100%;
+                    width:50%;
+                    background-color:@darkTextColor;
+                    display:block;
+                    position:absolute;
+                    top:0;
+                    z-index:1;
+                    transform:scale(1.03);
+                }
+                &.prev:before{
+                    left:0;
+                    border-radius:@40px 0 0 @40px;
+                }
+                &.next:before{
+                    right:0;
+                    border-radius:0 @40px @40px 0;
+                }
             }
         }
     }
