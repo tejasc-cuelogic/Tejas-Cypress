@@ -31,15 +31,14 @@ class Summary extends Component {
 
   verifyStep = (step) => {
     if (step) {
-      this.setDashboardWizardSetup(step);
+      if (step === 'ConfirmPhoneNumber') {
+        this.props.profileStore.startPhoneVerification().then(() => {
+          this.setDashboardWizardSetup(step);
+        }).catch(() => { });
+      } else {
+        this.setDashboardWizardSetup(step);
+      }
     }
-  }
-
-  verifyPhoneNumber = () => {
-    this.props.profileStore.startPhoneVerification().then(() => {
-      this.setDashboardWizardSetup('ConfirmPhoneNumber');
-    })
-      .catch(() => { });
   }
 
   restoreStep = () => {
