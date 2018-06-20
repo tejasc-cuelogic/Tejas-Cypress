@@ -11,6 +11,7 @@ import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 import OtherAccountTypes from '../components/OtherAccountTypes';
 import ProgressCard from '../components/ProgressCard';
+import Spinner from '../../../theme/ui/Spinner';
 
 @inject('uiStore', 'profileStore', 'accountStore', 'userDetailsStore')
 @observer
@@ -54,19 +55,26 @@ class Summary extends Component {
   }
 
   render() {
-    const { getStepStatus } = this.props.userDetailsStore;
+    const { getStepStatus, currentUser } = this.props.userDetailsStore;
     const { signupStatus } = this.props.userDetailsStore;
 
-    let accTypes = ['individual', 'IRA', 'entity'];
+    if (!currentUser.data) {
+      return (
+        <div>
+          <Spinner loaderMessage="Loading..." />
+        </div>
+      );
+    }
 
     const progressMeta = {
       'envelope-line': { label: 'Email-address', action: false },
       'contact-card': { label: 'Identity', action: 'InvestorPersonalDetails' },
       'phone-line': { label: 'phone number', action: 'ConfirmPhoneNumber' },
-      'bar-line-chart': { label: 'You have no account yet', action: false },
+      'bar-line-chart': { label: 'You have no account yet', action: 'InvestmentChooseType', labelGiven: true },
       'chart-setting': {
         label: 'Start creation process of another type of account',
         action: false,
+        labelGiven: true,
       },
     };
 

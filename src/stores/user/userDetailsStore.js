@@ -48,10 +48,12 @@ export class UserDetailsStore {
 
   @action
   setUserAccDetails = () => {
-    authStore.checkIsInvestmentAccountCreated(this.userDetails);
-    iraAccountStore.populateData(this.userDetails);
-    individualAccountStore.populateData(this.userDetails);
-    entityAccountStore.populateData(this.userDetails);
+    if (!_.isEmpty(this.userDetails)) {
+      authStore.checkIsInvestmentAccountCreated(this.userDetails);
+      iraAccountStore.populateData(this.userDetails);
+      individualAccountStore.populateData(this.userDetails);
+      entityAccountStore.populateData(this.userDetails);
+    }
   }
 
   @action

@@ -48,7 +48,7 @@ const ProgressCard = ({ metaData, signupStatus, action }) => (
               <p>
                 {status === 2 ? `Your <b>${metaData[key].label}</b> has been verified` : (
                   <Aux>
-                    <p><b>Please verify your {metaData[key].label}</b></p>
+                    <p><b>{metaData[key].labelGiven ? metaData[key].label : `Please verify your ${metaData[key].label}`}</b></p>
                     <Button
                       onClick={() => action(metaData[key].action)}
                       color={status === 0 ? '' : 'green'}
