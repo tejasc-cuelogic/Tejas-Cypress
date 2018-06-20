@@ -31,10 +31,11 @@ export default class investorPersonalDetails extends Component {
         this.props.setDashboardWizardStep('ConfirmIdentityForm');
       } else if (key === 'id.success') {
         Helper.toast('User verification passed!', 'success');
-        this.props.profileStore.startPhoneVerification().then(() => {
-          this.props.setDashboardWizardStep('ConfirmPhoneNumber');
-        })
-          .catch((err) => { this.props.uiStore.setErrors(JSON.stringify(err.message)); });
+        // this.props.profileStore.startPhoneVerification().then(() => {
+        //   this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+        // })
+        //   .catch((err) => { this.props.uiStore.setErrors(JSON.stringify(err.message)); });
+        this.props.setDashboardWizardStep();
       } else {
         Helper.toast('User verification hard-failed!', 'error');
         this.props.setDashboardWizardStep('ConfirmIdentityDocuments');
