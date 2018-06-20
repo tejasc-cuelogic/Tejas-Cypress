@@ -15,7 +15,11 @@ export default class ImageCropper extends Component {
         y: 0,
         // aspect: 16 / 9,
       },
+      minWidth: 20,
+      keepSelection: true,
+      fileObject: '',
       pixelCrop: '',
+      cropResult: '',
       image: '',
     };
   }

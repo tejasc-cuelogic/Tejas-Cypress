@@ -22,7 +22,7 @@ const randavatar = (props) => {
   const imgContent = (!props.avatarUrl && props.avatarKey.length > 15) ?
     `data:image/png;base64, ${new Identicon(props.avatarKey, options).toString()}` : props.avatarUrl;
   const alt = (props.name) ? props.name[0] : 'N';
-  const size = props.size || 'mini';
+  const size = props.size || 'huge';
   return (
     <Image
       src={`${imgContent}`}
