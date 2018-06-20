@@ -143,6 +143,11 @@ export class UserDetailsStore {
       details.phoneVerification = (this.userDetails.contactDetails &&
         this.userDetails.contactDetails.phone &&
         this.userDetails.contactDetails.phone.verificationDate) ? 'DONE' : 'FAIL';
+
+      details.finalStatus = (details.activeAccounts.count > 0 &&
+        this.validAccStatus.includes(details.idVerification) &&
+        details.phoneVerification === 'DONE');
+
       return details;
     }
     return details;
