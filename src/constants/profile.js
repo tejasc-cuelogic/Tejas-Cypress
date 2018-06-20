@@ -169,7 +169,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     key: 'profilePhoto',
     error: undefined,
-    rule: 'required',
+    rule: '',
     label: '',
     src: '',
     base64String: '',

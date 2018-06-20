@@ -143,7 +143,7 @@ export default class investorPersonalDetails extends Component {
               <Button loading={this.props.uiStore.inProgress} size="large" color="green" className="very relaxed" disabled={!verifyIdentity01.meta.isValid}>Verify my identity</Button>
             </div>
             <div className="center-align">
-              <Button className="cancel-link" onClick={() => this.props.setDashboardWizardStep()}>I’ll finish this later</Button>
+              <Button className="cancel-link" onClick={this.handleCloseModal}>I’ll finish this later</Button>
             </div>
           </Form>
         </Modal.Content>
