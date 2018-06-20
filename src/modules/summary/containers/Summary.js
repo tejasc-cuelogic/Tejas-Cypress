@@ -54,13 +54,6 @@ class Summary extends Component {
   }
 
   render() {
-    const stepinfo = {
-      value: 'Verify your identity',
-      label: 'Complete all required information about yourself',
-      linkText: 'Verify me',
-      linkPath: 'InvestorPersonalDetails',
-    };
-
     const { getStepStatus } = this.props.userDetailsStore;
     const { signupStatus } = this.props.userDetailsStore;
 
@@ -85,8 +78,7 @@ class Summary extends Component {
           {...this.props}
           P5={!signupStatus.finalStatus ?
             <StickyNotification
-              stepinfo={stepinfo}
-              setDashboardWizardSetup={this.setDashboardWizardSetup}
+              signupStatus={signupStatus}
             /> : null
           }
         >

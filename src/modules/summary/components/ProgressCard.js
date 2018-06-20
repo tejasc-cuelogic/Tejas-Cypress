@@ -5,14 +5,21 @@ import { Card, Icon, Button } from 'semantic-ui-react';
 const checkStatus = (signupStatus, key) => {
   let status = false;
   if (key === 'envelope-line') {
-    status = true;
+    status = 2;
   } else if (key === 'contact-card') {
-    if (signupStatus.idVerification === 'PASS') {
-      status = true;
+    if (signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') {
+      status = 2;
+    } else {
+      status = 1;
     }
   } else if (key === 'phone-line') {
+    if (signupStatus.idVerification !== 'PASS' && !signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING') {
+      status = 0;
+    } else {
+      status = 1;
+    }
     if (signupStatus.phoneVerification === 'DONE') {
-      status = true;
+      status = 2;
     }
   } else if (key === 'bar-line-chart') {
     if (signupStatus.partialAccounts.length > 0) {
@@ -32,21 +39,22 @@ const ProgressCard = ({ metaData, signupStatus, action }) => (
       Object.keys(metaData).map((key) => {
         const status = checkStatus(signupStatus, key);
         return (
-          <Card fluid className={`verification ${status ? 'done' : ''}`}>
+          <Card fluid className={`verification ${status === 2 ? 'done' : status === 0 ? 'disabled' : ''}`}>
             <Card.Content>
               <Icon.Group size="huge">
                 <Icon className={`ns-${key}`} />
-                <Icon corner color={status ? 'green' : 'red'} className={`ns-${status ? 'check' : 'warning'}-circle`} />
+                <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `ns-${status === 2 ? 'check' : 'warning'}-circle`} />
               </Icon.Group>
               <p>
-                {!status ? 'Your <b>{metaData[key].label}</b> has been verified' : (
+                {status === 2 ? `Your <b>${metaData[key].label}</b> has been verified` : (
                   <Aux>
                     <p><b>Please verify your {metaData[key].label}</b></p>
                     <Button
                       onClick={() => action(metaData[key].action)}
-                      color="green"
+                      color={status === 0 ? '' : 'green'}
                       className="relaxed"
                       content="Verify"
+                      disabled={status === 0}
                     />
                   </Aux>
                 )
