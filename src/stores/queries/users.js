@@ -30,6 +30,10 @@ export const allUsersQuery = gql`
             zipCode
           }
         }
+        avatar {
+          name
+          url
+        }
         accountStatus
       }
       
@@ -87,6 +91,10 @@ query getUserDetails($id: ID!) {
         state
         zipCode
       }
+    }
+    avatar {
+      name
+      url
     }
     accountStatus 
   }

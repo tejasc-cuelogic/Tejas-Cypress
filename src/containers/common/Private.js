@@ -6,7 +6,7 @@ import authActions from '../../actions/auth';
 import { privateRoutes } from '../../modules/routes';
 import SidebarLeftOverlay from './../../theme/layout/SidebarLeftOverlay';
 
-@inject('authStore', 'uiStore', 'userStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class Private extends React.Component {
@@ -26,10 +26,12 @@ export default class Private extends React.Component {
 
   render() {
     const User = { ...this.props.userStore.currentUser };
+    const { avatar } = this.props.userDetailsStore.userDetails;
     const { match } = this.props;
     const UserInfo = {
       fullname: `${User.givenName} ${User.familyName}`,
       avatarKey: User.sub,
+      avatarUrl: avatar ? avatar.url : '',
       accountType: User.roles ? User.roles[0] : '',
       roles: toJS(User.roles),
     };

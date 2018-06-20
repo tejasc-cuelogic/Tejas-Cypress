@@ -1,14 +1,12 @@
 import React from 'react';
-import {
-  Divider,
-} from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Header, Divider } from 'semantic-ui-react';
 
 const team = () => (
-  <div>
-    <span className="title">NextSeed Privacy Policy</span>
-    <span className="infotext">
-      Last updated January 2018
-    </span>
+  <Aux>
+    <Header as="h1">NextSeed Privacy Policy
+      <Header.Subheader>Last updated January 2018</Header.Subheader>
+    </Header>
     <Divider inverted section />
     <p className="pageContent">
       NextSeed US LLC (together with its affiliates, “NextSeed”) offers its website and services
@@ -27,7 +25,7 @@ const team = () => (
       “NextSeed Content” and “User Content” have specific definitions that you must read
       and understand to have a full understanding these Terms.
     </p>
-  </div>
+  </Aux>
 );
 
 export default team;

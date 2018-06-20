@@ -54,7 +54,7 @@ const ProgressCard = ({
                 <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `ns-${status === 2 ? 'check' : 'warning'}-circle`} />
               </Icon.Group>
               <p>
-                {status === 2 ? `Your <b>${metaData[key].label}</b> has been verified` : (
+                {status === 2 ? <p>Your <b>{metaData[key].label}</b> has been verified</p> : (
                   <Aux>
                     <p><b>{metaData[key].labelGiven ? metaData[key].label : `Please verify your ${metaData[key].label}`}</b></p>
                     <Button

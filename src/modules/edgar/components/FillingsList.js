@@ -66,7 +66,7 @@ const FillingsList = observer((props) => {
           open={props.confirmBoxValues.entity === 'filing' && props.confirmBoxValues.metaData.isAnyFilingXmlLocked === false}
           onCancel={props.handleDeleteCancel}
           onConfirm={props.handleDeleteFiling}
-          size="tiny"
+          size="mini"
           className="deletion"
         />
       </Accordion>

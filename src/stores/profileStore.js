@@ -12,6 +12,7 @@ import uiStore from './uiStore';
 import userStore from './userStore';
 import userDetailsStore from './user/userDetailsStore';
 import Helper from '../helper/utility';
+import apiService from '../services/api';
 
 import {
   UPDATE_PROFILE_INFO,
@@ -65,6 +66,11 @@ export class ProfileStore {
   @action
   setSubmitVerificationDocs(status) {
     this.submitVerificationsDocs = status;
+  }
+
+  @action
+  setProfilePhoto(attr, value) {
+    this.updateProfileInfo.fields.profilePhoto[attr] = value;
   }
 
   @action
@@ -161,7 +167,7 @@ export class ProfileStore {
       userDetailsStore.userDetails.contactDetails.phone.number;
     const phoneDetails = {
       number: Helper.unMaskInput(number),
-      countryCode: '1',
+      countryCode: '91',
     };
     return phoneDetails;
   }
@@ -230,7 +236,7 @@ export class ProfileStore {
     );
     if (currentForm !== 'updateProfileInfo') {
       this[form].meta.isValid = validation.passes();
-    } else if (field !== 'phoneNumber' && field !== 'email') {
+    } else if (field !== 'phoneNumber' && field !== 'email' && field !== 'profilePhoto') {
       this[form].meta.isValid = validation.passes();
     }
     this[form].fields[field].error = validation.errors.first(field);
@@ -464,7 +470,7 @@ export class ProfileStore {
                 userId: userStore.currentUser.sub,
                 phoneDetails: {
                   number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-                  countryCode: '1',
+                  countryCode: '91',
                 },
               },
             })
@@ -548,6 +554,10 @@ export class ProfileStore {
           state: this.updateProfileInfo.fields.state.value,
           zipCode: this.updateProfileInfo.fields.zipCode.value,
         },
+      },
+      avatar: {
+        name: this.updateProfileInfo.fields.profilePhoto.value,
+        url: this.updateProfileInfo.fields.profilePhoto.responseUrl,
       },
     };
     return profileDetails;
@@ -655,7 +665,7 @@ export class ProfileStore {
                userId: userStore.currentUser.sub,
                phoneDetails: {
                  number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-                 countryCode: '1',
+                 countryCode: '91',
                },
              },
            })
@@ -721,6 +731,100 @@ export class ProfileStore {
           reject();
         });
     });
+  }
+
+  setAddressFields = (place) => {
+    const data = Helper.gAddressClean(place);
+    this.onFieldChange('updateProfileInfo', 'street', data.residentalStreet);
+    this.onFieldChange('updateProfileInfo', 'city', data.city);
+    this.onFieldChange('updateProfileInfo', 'state', data.state);
+    this.onFieldChange('updateProfileInfo', 'zipCode', data.zipCode);
+  }
+
+  requestEmailChange = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: requestEmailChnage,
+          variables: {
+            userId: userStore.currentUser.sub,
+            newEmail: authStore.values.email.value,
+          },
+        })
+        .then(() => {
+          Helper.toast('Email Change request has been accepted', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  verifyAndUpdateEmail = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: verifyAndUpdateEmail,
+          variables: {
+            userId: userStore.currentUser.sub,
+            confirmationCode: authStore.values.code.value,
+          },
+        })
+        .then(() => {
+          Helper.toast('Email has been verified and updated', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(this.simpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  uploadProfilePhoto = () => {
+    uiStore.setProgress();
+    const profileData = this.updateProfileInfo.fields.profilePhoto.base64String;
+    const b64Text = profileData.split(',')[1];
+    const payload = {
+      userId: userStore.currentUser.sub,
+      base64String: b64Text,
+    };
+    apiService.post('/upload/file', payload)
+      .then(action((response) => {
+        this.setProfilePhoto('responseUrl', response.body.fileFullPath);
+        this.updateUserProfileData().then(() => {
+          Helper.toast('Profile photo updated successfully', 'success');
+          userDetailsStore.getUser(userStore.currentUser.sub);
+          this.resetProfilePhoto();
+        })
+          .catch((err) => {
+            uiStore.setErrors(this.simpleErr(err));
+          });
+      }))
+      .finally(action(() => { uiStore.setProgress(false); }));
+  }
+
+  @computed
+  get canUpdateProfilePhoto() {
+    return this.updateProfileInfo.fields.profilePhoto.value !== '';
+  }
+
+  @action
+  resetProfilePhoto = () => {
+    this.updateProfileInfo.fields.profilePhoto.src = '';
+    this.updateProfileInfo.fields.profilePhoto.error = '';
+    this.updateProfileInfo.fields.profilePhoto.value = '';
+    this.updateProfileInfo.fields.profilePhoto.base64String = '';
   }
 
   simpleErr = err => ({

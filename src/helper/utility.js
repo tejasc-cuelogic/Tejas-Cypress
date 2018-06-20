@@ -3,7 +3,8 @@
  */
 import { toast } from 'react-toastify';
 import _ from 'lodash';
-import uploadApi from '../services/uploadApi';
+// import uploadApi from '../services/uploadApi';
+import api from '../services/api';
 
 export class Utility {
   // Default options for the toast
@@ -122,33 +123,28 @@ export class Utility {
     return fileData;
   }
 
-  /* eslint-disable arrow-body-style */
-  uploadOnS3 = (item, fileData) => {
-    return new Promise((resolve, reject) => {
-      uploadApi.put(item, fileData)
-        .then(() => {
-          resolve();
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  }
+  // uploadOnS3 = (item, fileData) => new Promise((resolve, reject) => {
+  //   uploadApi.put(item, fileData)
+  //     .then(() => {
+  //       resolve();
+  //     })
+  //     .catch((err) => {
+  //       reject(err);
+  //     });
+  // });
 
-  putUploadedFile = (urlArray) => {
-    return new Promise((resolve, reject) => {
-      const funcArray = [];
-      _.forEach(urlArray, (item) => {
-        funcArray.push(this.uploadOnS3(item.preSignedUrl, item.fileData[0]));
-      });
-      Promise.all(funcArray).then(() => {
-        resolve();
-      })
-        .catch((err) => {
-          reject(err);
-        });
+  putUploadedFile = urlArray => new Promise((resolve, reject) => {
+    const funcArray = [];
+    _.forEach(urlArray, (item) => {
+      funcArray.push(api.uploadOnS3(item.preSignedUrl, item.fileData[0]));
     });
-  }
+    Promise.all(funcArray).then(() => {
+      resolve();
+    })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 
   maskPhoneNumber = (phoneNumber) => {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');

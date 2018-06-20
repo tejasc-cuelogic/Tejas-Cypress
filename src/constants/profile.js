@@ -165,4 +165,18 @@ export const UPDATE_PROFILE_INFO = {
     rule: 'required|numeric',
     placeHolder: 'ZIP Code',
   },
+  profilePhoto: {
+    value: '',
+    key: 'profilePhoto',
+    error: undefined,
+    rule: '',
+    label: '',
+    src: '',
+    base64String: '',
+    responseUrl: '',
+  },
 };
+
+export const PROFILE_PHOTO_EXTENSIONS = ['jpeg', 'jpg', 'png'];
+
+export const PROFILE_PHOTO_BYTES = 5242880;

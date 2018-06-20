@@ -213,6 +213,7 @@ class IraAccountStore {
         currentStep.validate();
         isValidCurrentStep = this.isValidIraFinancialInfo;
         if (isValidCurrentStep) {
+          uiStore.setProgress();
           accountAttributes.netWorth = this.formFinInfo.fields.netWorth.value;
           accountAttributes.annualIncome = this.formFinInfo.fields.annualIncome.value;
           this.submitForm(currentStep, formStatus, accountAttributes);
@@ -221,11 +222,13 @@ class IraAccountStore {
       case 'Account type':
         isValidCurrentStep = true;
         accountAttributes.iraAccountType = accountType.label.toLowerCase();
+        uiStore.setProgress();
         this.submitForm(currentStep, formStatus, accountAttributes);
         break;
       case 'Funding':
         isValidCurrentStep = true;
         accountAttributes.fundingType = this.getFundingType(fundingOption.label.toLowerCase());
+        uiStore.setProgress();
         this.submitForm(currentStep, formStatus, accountAttributes);
         break;
       case 'Identity':
@@ -234,11 +237,13 @@ class IraAccountStore {
             fileId: '',
             fileName: '',
           };
+          uiStore.setProgress();
           this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData);
         } else {
           currentStep.validate();
           isValidCurrentStep = this.isValidIraIdentity;
           if (isValidCurrentStep) {
+            uiStore.setProgress();
             accountAttributes.identityDoc = {};
             accountAttributes.identityDoc.fileId = this.formIdentity.fields.identityDoc.fileId;
             accountAttributes.identityDoc.fileName = this.formIdentity.fields.identityDoc.value;
@@ -248,6 +253,7 @@ class IraAccountStore {
                   this.submitForm(currentStep, formStatus, accountAttributes);
                 })
                 .catch((err) => {
+                  uiStore.setProgress(false);
                   uiStore.setErrors(this.simpleErr(err));
                   reject(err);
                 });

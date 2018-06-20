@@ -25,7 +25,7 @@ export class Api {
   post = (url, payload) => (
     new Promise((resolve, reject) => {
       request
-        .post(`${API_ROOT}${url}`)
+        .post(url.includes('https://') ? url : `${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
         .set('Authorization', commonStore.token)
         .send(payload)
@@ -61,6 +61,21 @@ export class Api {
         .set('Content-Type', 'application/json')
         .set('Authorization', commonStore.token)
         .send(payload)
+        .end((err, data) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(data);
+        });
+    })
+  )
+
+  uploadOnS3 = (url, file) => (
+    new Promise((resolve, reject) => {
+      request
+        .put(`${url}`)
+        .set('Content-Type', 'text/plain') // Added for File upload functionality (Binary Mode)
+        .send(file)
         .end((err, data) => {
           if (err) {
             reject(err);

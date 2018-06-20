@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
+import _ from 'lodash';
 import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
 import { FormSelect, FormInput, MaskedInput, AutoComplete } from '../../../../theme/form/FormElements';
 import { US_STATES } from '../../../../constants/account';
@@ -8,7 +9,10 @@ import { US_STATES } from '../../../../constants/account';
 import UserVerifiedDetails from '../components/UserVerifiedDetails';
 import NewPhoneNumber from './NewPhoneNumber';
 import NewEmailAddress from './NewEmailAddress';
+import UpdateProfilePhoto from './UpdateProfilePhoto';
 import Helper from '../../../../helper/utility';
+import Spinner from '../../../../theme/ui/Spinner';
+import Randavatar from '../../../../theme/common/Randavatar';
 
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore', 'accountStore')
 @observer
@@ -35,16 +39,29 @@ export default class ProfileData extends Component {
       .catch(() => {});
   }
   render() {
-    const { email, legalDetails } = this.props.userDetailsStore.userDetails;
+    const {
+      email, legalDetails, avatar, firstName,
+    } = this.props.userDetailsStore.userDetails;
     const {
       updateProfileInfo,
       updateProfileInfoChange,
       setAddressFields,
     } = this.props.profileStore;
+    if (_.isEmpty(this.props.userDetailsStore.userDetails)) {
+      return (
+        <div>
+          <Spinner loaderMessage="Loading..." />
+        </div>
+      );
+    }
     return (
       <Grid>
         <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
         <Route path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
+        <Route
+          path={`${this.props.match.url}/update-profile-photo`}
+          render={props => <UpdateProfilePhoto refLink={this.props.match.url} {...props} />}
+        />
         <Grid.Column widescreen={8} largeScreen={10} tablet={16} mobile={16}>
           <Card fluid className="form-card">
             <Header as="h3">Personal Profile</Header>
@@ -114,9 +131,10 @@ export default class ProfileData extends Component {
           <Card.Group>
             <Card fluid className="form-card">
               <h3>Profile Photo</h3>
-              {/* <Randavatar name={this.props.UserInfo.fullname}
-              avatarKey={this.props.UserInfo.avatarKey} size="small" /> */}
-              <Link to={this.props.match.url}><b>Change profile photo</b></Link>
+              <div>
+                <Randavatar name={firstName} accountType={this.props.userStore.currentUser.roles} avatarKey={this.props.userStore.currentUser.sub} avatarUrl={avatar ? avatar.url : ''} />
+                <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
+              </div>
             </Card>
             <UserVerifiedDetails
               {...this.props}
