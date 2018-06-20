@@ -30,6 +30,10 @@ export const allUsersQuery = gql`
             zipCode
           }
         }
+        avatar {
+          name
+          url
+        }
         accountStatus
       }
       
