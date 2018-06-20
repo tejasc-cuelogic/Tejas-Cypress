@@ -22,6 +22,7 @@ export default class ImageCropper extends Component {
   /* eslint-disable prefer-destructuring */
   onChange = (e) => {
     e.preventDefault();
+    this.props.handelReset();
     let files;
     if (e.dataTransfer) {
       files = e.dataTransfer.files;
@@ -30,6 +31,7 @@ export default class ImageCropper extends Component {
     }
     this.props.setData('value', files[0].name);
     this.props.verifySize(files[0].size);
+    this.props.verifyExtension(files[0].type.split('/')[1]);
     const reader = new FileReader();
     reader.onload = () => {
       this.props.setData('src', reader.result);
@@ -98,7 +100,7 @@ export default class ImageCropper extends Component {
     const { profilePhoto } = this.props.fieldData.fields;
     return (
       <div>
-        { profilePhoto.src ?
+        { profilePhoto.src && !profilePhoto.error ?
           <ReactCrop
             {...this.state}
             src={profilePhoto.src}
@@ -112,7 +114,7 @@ export default class ImageCropper extends Component {
             <div className="file-uploader-inner">
               <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
             </div>
-            <input type="file" onChange={this.onChange} />
+            <input type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
             {profilePhoto.error &&
               <FieldError error={profilePhoto.error} />
             }

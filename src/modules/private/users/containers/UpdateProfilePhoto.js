@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Modal, Form, Button } from 'semantic-ui-react';
 import ImageCropper from '../../../../theme/form/ImageCropper';
+import { PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS } from '../../../../constants/profile';
 
 @inject('profileStore', 'uiStore')
 @withRouter
@@ -21,11 +22,23 @@ export default class UpdateProfilePhoto extends Component {
   }
 
   handleVerifyFileSize = (fileSize) => {
-    if (fileSize > 5242880) {
+    if (fileSize > PROFILE_PHOTO_BYTES) {
       const field = 'error';
-      const errorMsg = 'File size Greater then 5MB';
+      const errorMsg = 'File size Greater than 5MB';
       this.props.profileStore.setProfilePhoto(field, errorMsg);
     }
+  }
+
+  handleVerifyFileExtension = (fileExt) => {
+    if (PROFILE_PHOTO_EXTENSIONS.indexOf(fileExt) === -1) {
+      const field = 'error';
+      const errorMsg = `Only ${PROFILE_PHOTO_EXTENSIONS.join(', ')}  extensions are allowed.`;
+      this.props.profileStore.setProfilePhoto(field, errorMsg);
+    }
+  }
+
+  handleresetProfilePhoto = () => {
+    this.props.profileStore.resetProfilePhoto();
   }
 
   handleCloseModal = () => {
@@ -47,6 +60,8 @@ export default class UpdateProfilePhoto extends Component {
               fieldData={updateProfileInfo}
               setData={this.setData}
               verifySize={this.handleVerifyFileSize}
+              verifyExtension={this.handleVerifyFileExtension}
+              handelReset={this.handleresetProfilePhoto}
             />
           </Form>
         </Modal.Content>

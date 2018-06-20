@@ -822,6 +822,7 @@ export class ProfileStore {
   @action
   resetProfilePhoto = () => {
     this.updateProfileInfo.fields.profilePhoto.src = '';
+    this.updateProfileInfo.fields.profilePhoto.error = '';
     this.updateProfileInfo.fields.profilePhoto.value = '';
     this.updateProfileInfo.fields.profilePhoto.base64String = '';
   }

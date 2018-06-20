@@ -176,3 +176,7 @@ export const UPDATE_PROFILE_INFO = {
     responseUrl: '',
   },
 };
+
+export const PROFILE_PHOTO_EXTENSIONS = ['jpeg', 'jpg', 'png'];
+
+export const PROFILE_PHOTO_BYTES = 5242880;
