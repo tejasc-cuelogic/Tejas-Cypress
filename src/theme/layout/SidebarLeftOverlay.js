@@ -70,7 +70,10 @@ const MySidebar = observer(props => (
       }
     </Aux>
     }
-    <Sidebar.Pusher className={(props.match.url.includes('/business-application') ? 'business-application' : '')}>
+    <Sidebar.Pusher
+      className={`${props.match.url.includes('/business-application') ?
+        'business-application' : ''} ${uiStore.devBanner ? 'banner' : ''}`}
+    >
       {props.mobile && <Icon onClick={props.toggle} className="hamburger content" />}
       {props.children}
     </Sidebar.Pusher>

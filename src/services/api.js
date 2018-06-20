@@ -25,7 +25,7 @@ export class Api {
   post = (url, payload) => (
     new Promise((resolve, reject) => {
       request
-        .post(`${API_ROOT}${url}`)
+        .post(url.includes('https://') ? url : `${API_ROOT}${url}`)
         .set('Content-Type', 'application/json')
         .set('Authorization', commonStore.token)
         .send(payload)

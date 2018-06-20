@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
+import { Header, Divider } from 'semantic-ui-react';
 import GridListing from '../../../../theme/ui/GridListing';
 import OfferDetails from '../components/OfferDetails';
 
@@ -31,25 +33,13 @@ class Offering extends Component {
     }
 
     return (
-      <div className="ui vertical segment content">
-        <div className="ui container">
-          <div className="ui one column grid">
-            <div
-              className="column nsContent"
-              style={{
-                fontSize: '30px',
-                color: '#666',
-                textAlign: 'center',
-                // top: '25px',
-              }}
-            >
-              <span className="title">NextSeed Offerings</span>
-              <span className="infotext">Invest in growing local businesses</span>
-              {pageContent}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Aux>
+        <Header as="h1">NextSeed Offerings
+          <Header.Subheader>Invest in growing local businesses</Header.Subheader>
+        </Header>
+        <Divider inverted section />
+        {pageContent}
+      </Aux>
     );
   }
 }

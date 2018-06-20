@@ -1,11 +1,10 @@
 import React from 'react';
-import {
-  Divider,
-} from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Header, Divider } from 'semantic-ui-react';
 
 const ambassadors = () => (
-  <div>
-    <span className="title">Terms of Use</span>
+  <Aux>
+    <Header as="h1">Terms of Use</Header>
     <Divider inverted section />
     <p className="pageContent">
       NextSeed US LLC (together with its affiliates, “NextSeed”) offers its website and services
@@ -14,7 +13,7 @@ const ambassadors = () => (
       website and services. Please read the Terms and the Privacy Policy carefully and let us
       know if you have any questions at all.
     </p>
-  </div>
+  </Aux>
 );
 
 export default ambassadors;
