@@ -41,13 +41,12 @@ export default class ConfirmIdentityDocuments extends Component {
     validationActions.validateConfirmIdentityDocumentsForm();
     if (this.props.profileStore.canSubmitConfirmIdentityDocumentsForm) {
       this.props.profileStore.uploadAndUpdateCIPInfo().then(() => {
-        // this.props.profileStore.startPhoneVerification().then(() => {
-        //   this.props.setDashboardWizardStep('ConfirmPhoneNumber');
-        // })
-        //   .catch((err) => {
-        //     this.props.uiStore.setErrors(JSON.stringify(err.message));
-        //   });
-        this.props.setDashboardWizardStep();
+        this.props.profileStore.startPhoneVerification().then(() => {
+          this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+        })
+          .catch((err) => {
+            this.props.uiStore.setErrors(JSON.stringify(err.message));
+          });
       })
         .catch(() => { });
     }
