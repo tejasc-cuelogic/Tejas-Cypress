@@ -167,7 +167,7 @@ export class ProfileStore {
       userDetailsStore.userDetails.contactDetails.phone.number;
     const phoneDetails = {
       number: Helper.unMaskInput(number),
-      countryCode: '91',
+      countryCode: '1',
     };
     return phoneDetails;
   }
@@ -470,7 +470,7 @@ export class ProfileStore {
                 userId: userStore.currentUser.sub,
                 phoneDetails: {
                   number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-                  countryCode: '91',
+                  countryCode: '1',
                 },
               },
             })
@@ -665,7 +665,7 @@ export class ProfileStore {
                userId: userStore.currentUser.sub,
                phoneDetails: {
                  number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-                 countryCode: '91',
+                 countryCode: '1',
                },
              },
            })
