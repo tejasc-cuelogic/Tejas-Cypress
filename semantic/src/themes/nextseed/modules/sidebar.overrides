@@ -16,6 +16,9 @@
 			padding:0;
 			min-height:~"calc(100vh - 58px)";
 		}
+		&.banner{
+			height:~"calc(100vh - 34px)";
+		}
 	}
 }
 // .pusher.white-bg{

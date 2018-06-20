@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
+import { Header, Divider } from 'semantic-ui-react';
 import GridListing from '../../../../theme/ui/GridListing';
 import BlogPost from '../components/BlogPost';
 
@@ -31,17 +33,13 @@ class Blog extends Component {
     }
 
     return (
-      <div className="ui vertical segment content">
-        <div className="ui container">
-          <div className="ui one column grid">
-            <div className="column nsContent">
-              <span className="title">NextSeed Blog</span>
-              <span className="infotext">Let your community invest in your success</span>
-              {pageContent}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Aux>
+        <Header as="h1">NextSeed Blog
+          <Header.Subheader>Let your community invest in your success</Header.Subheader>
+        </Header>
+        <Divider inverted section />
+        {pageContent}
+      </Aux>
     );
   }
 }

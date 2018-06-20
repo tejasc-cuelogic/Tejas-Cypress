@@ -2,11 +2,13 @@ import { observable, action, computed, createTransformer } from 'mobx';
 import * as AWSCognito from 'amazon-cognito-identity-js';
 import _ from 'lodash';
 // import * as AWS from 'aws-sdk';
+import cookie from 'react-cookies';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import userStore from './userStore';
 import commonStore from './commonStore';
 import { CHANGE_PASS } from '../modules/private/users/constants/metadata';
+import { REACT_APP_DEPLOY_ENV } from '../constants/common';
 import uiStore from './uiStore';
 
 const userPool = new AWSCognito.CognitoUserPool({
@@ -25,6 +27,7 @@ export class AuthStore {
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
   @observable isUserLoggedIn = false;
+  @observable devAuth = { required: REACT_APP_DEPLOY_ENV !== 'production', authStatus: cookie.load('DEV_AUTH_TOKEN') };
   @observable signupFlow = {
     type: '',
   };
@@ -116,6 +119,16 @@ export class AuthStore {
 
   @computed get canSendMail() {
     return _.isEmpty(this.values.email.value) || !!this.values.email.error;
+  }
+
+  @computed get devPasswdProtection() {
+    return this.devAuth.required && !this.devAuth.authStatus;
+  }
+
+  @action
+  setDevAppAuthStatus(status) {
+    cookie.save('DEV_AUTH_TOKEN', status, { maxAge: 86400 });
+    this.devAuth.authStatus = status;
   }
 
   isValid = createTransformer(field => (!_.isEmpty(field.value) || field.error));
