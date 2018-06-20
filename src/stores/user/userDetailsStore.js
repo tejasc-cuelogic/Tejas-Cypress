@@ -120,6 +120,7 @@ export class UserDetailsStore {
 
   @computed get signupStatus() {
     const details = { idVerification: 'FAIL', accounts: [], phoneVerification: 'FAIL' };
+    const accTypes = ['ira', 'entity', 'individual'];
     if (this.userDetails) {
       details.idVerification = (this.userDetails.legalDetails &&
         this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
@@ -128,6 +129,15 @@ export class UserDetailsStore {
         const data = { accountId: a.accountId, accountType: a.accountType, status: a.status };
         return data;
       });
+      details.inActiveAccounts = [];
+      Object.keys(details.accounts).map((key) => {
+        const isAccountActive = accTypes.includes(details.accounts[key].accountType);
+        if (isAccountActive) {
+          accTypes.splice(key, 1);
+        }
+        return true;
+      });
+      details.inActiveAccounts = accTypes;
       details.partialAccounts = map(filter(details.accounts, a => a.status === 'PARTIAL'), 'accountType');
       details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
       details.phoneVerification = (this.userDetails.contactDetails &&

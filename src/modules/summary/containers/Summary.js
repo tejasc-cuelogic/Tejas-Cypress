@@ -166,11 +166,27 @@ class Summary extends Component {
                       color={getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
                       content="Continue"
                       disabled={getStepStatus('accounts') === 'disable'}
-                      onClick={() => this.setDashboardWizardSetup('InvestmentChooseType')}
+                      onClick={() => this.navToAccTypes(accountType)}
                     />
                   </Card.Content>
                 </Card>
               ))
+            }
+            {signupStatus.inActiveAccounts.length > 0 &&
+              <Card fluid className={getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
+                <Card.Content>
+                  <Icon.Group size="huge">
+                    <Icon className="ns-chart-setting" />
+                  </Icon.Group>
+                  <p><b>Start creation process of another type of account</b></p>
+                  <Button
+                    color={getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
+                    content="Create another account"
+                    disabled={getStepStatus('accounts') === 'disable'}
+                    onClick={() => this.setDashboardWizardSetup('InvestmentChooseType')}
+                  />
+                </Card.Content>
+              </Card>
             }
           </Card.Group>
         </PrivateLayout>
