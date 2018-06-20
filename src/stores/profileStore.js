@@ -156,8 +156,11 @@ export class ProfileStore {
 
   @computed
   get formattedPhoneDetails() {
+    const number = this.verifyIdentity01.fields.phoneNumber.value ?
+      this.verifyIdentity01.fields.phoneNumber.value :
+      userDetailsStore.userDetails.contactDetails.phone.number;
     const phoneDetails = {
-      number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
+      number: Helper.unMaskInput(number),
       countryCode: '1',
     };
     return phoneDetails;
@@ -416,7 +419,6 @@ export class ProfileStore {
     });
   }
 
-  /* eslint-disable arrow-body-style */
   startPhoneVerification = () => {
     uiStore.clearErrors();
     uiStore.setProgress();
