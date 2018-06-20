@@ -54,8 +54,7 @@ class Summary extends Component {
   }
 
   render() {
-    const { getStepStatus } = this.props.userDetailsStore;
-    const { signupStatus } = this.props.userDetailsStore;
+    const { getStepStatus, currentUser, signupStatus } = this.props.userDetailsStore;
     const { errors } = this.props.uiStore;
 
     const progressMeta = {
@@ -79,13 +78,16 @@ class Summary extends Component {
               <ListErrors errors={[errors]} />
             </Message>
           }
-          <ProgressCard
-            action={this.verifyStep}
-            metaData={progressMeta}
-            signupStatus={signupStatus}
-            getStepStatus={getStepStatus}
-            navToAccTypes={this.navToAccTypes}
-          />
+          {!(currentUser.data && currentUser.data.user) ? 'Loading..' : (
+            <ProgressCard
+              action={this.verifyStep}
+              metaData={progressMeta}
+              signupStatus={signupStatus}
+              getStepStatus={getStepStatus}
+              navToAccTypes={this.navToAccTypes}
+            />
+          )
+          }
         </PrivateLayout>
         {this.props.uiStore.dashboardStep &&
         <DashboardWizard
