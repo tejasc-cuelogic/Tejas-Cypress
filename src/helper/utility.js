@@ -123,16 +123,6 @@ export class Utility {
     return fileData;
   }
 
-  // uploadOnS3 = (item, fileData) => new Promise((resolve, reject) => {
-  //   uploadApi.put(item, fileData)
-  //     .then(() => {
-  //       resolve();
-  //     })
-  //     .catch((err) => {
-  //       reject(err);
-  //     });
-  // });
-
   putUploadedFile = urlArray => new Promise((resolve, reject) => {
     const funcArray = [];
     _.forEach(urlArray, (item) => {
@@ -149,6 +139,21 @@ export class Utility {
   maskPhoneNumber = (phoneNumber) => {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
     return maskPhoneNumber;
+  }
+
+  eleToUpperCaseInArray = (givenArray) => {
+    const upperCaseEleArray = givenArray.map((item) => {
+      if (item === 'ira') {
+        return item.toUpperCase();
+      }
+      return _.upperFirst(item);
+    });
+    return upperCaseEleArray;
+  }
+
+  getCommaSeparatedArrStr = (array) => {
+    const formattedData = [array.slice(0, -1).join(', '), array.slice(-1)[0]].join(array.length < 2 ? '' : ' or ');
+    return formattedData;
   }
 }
 

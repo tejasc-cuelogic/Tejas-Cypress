@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 import { Modal, Grid, Button, Header, Tab, Menu } from 'semantic-ui-react';
 
 const panes = [
   {
+    accType: 'individual',
     menuItem: <Menu.Item key="individual"><div className="account-tab"><div className="account-type small">I</div> Individual</div></Menu.Item>,
     render: () => [
       <Tab.Pane key="individual">
@@ -21,6 +23,7 @@ const panes = [
     ],
   },
   {
+    accType: 'ira',
     menuItem: <Menu.Item key="ira"><div className="account-tab"><div className="account-type small">R</div> IRA</div></Menu.Item>,
     render: () => [
       <Tab.Pane key="ira">
@@ -35,6 +38,7 @@ const panes = [
     ],
   },
   {
+    accType: 'entity',
     menuItem: <Menu.Item key="entity"><div className="account-tab"><div className="account-type small">E</div> Entity</div></Menu.Item>,
     render: () => [
       <Tab.Pane key="entity">
@@ -52,36 +56,53 @@ const panes = [
   },
 ];
 
-const InvestmentChooseType = props => (
-  <Modal open closeIcon onClose={() => props.setDashboardWizardStep()}>
-    <Modal.Header className="center-align signup-header">
-      <Header as="h1">What type of Investment Account would you like to start?</Header>
-    </Modal.Header>
-    <Modal.Content className="signup-content">
-      <Header as="h4" textAlign="center">Choose an account type</Header>
-      <Grid textAlign="center">
-        <Tab
-          className="account-type-tab"
-          menu={{
-            secondary: true,
-            pointing: true,
-            className: 'item three',
-            fluid: true,
-            stackable: true,
-          }}
-          panes={panes}
-          activeIndex={props.selectedInvestmentType.activeIndex}
-          onTabChange={props.handleAccoutTypeChange}
+const getInActiveAccounts = (signupStatus) => {
+  const { inActiveAccounts } = signupStatus;
+  const validPanes = [];
+  inActiveAccounts.map((key) => {
+    const acc = _.find(panes, { accType: key });
+    if (acc) {
+      validPanes.push(acc);
+    }
+    return validPanes;
+  });
+  return validPanes;
+};
+
+const InvestmentChooseType = (props) => {
+  const validPanes = getInActiveAccounts(props.signupStatus);
+  console.log(validPanes);
+  return (
+    <Modal open closeIcon onClose={() => props.setDashboardWizardStep()}>
+      <Modal.Header className="center-align signup-header">
+        <Header as="h1">What type of Investment Account would you like to start?</Header>
+      </Modal.Header>
+      <Modal.Content className="signup-content">
+        <Header as="h4" textAlign="center">Choose an account type</Header>
+        <Grid textAlign="center">
+          <Tab
+            className="account-type-tab"
+            menu={{
+              secondary: true,
+              pointing: true,
+              className: 'item three',
+              fluid: true,
+              stackable: true,
+            }}
+            panes={panes}
+            activeIndex={props.selectedInvestmentType.activeIndex}
+            onTabChange={props.handleAccoutTypeChange}
+          />
+        </Grid>
+        <Button
+          circular
+          icon={{ className: 'ns-arrow-right' }}
+          className="multistep__btn next active"
+          onClick={() => props.setDashboardWizardStep(props.routeOnInvestmentTypeSelection)}
         />
-      </Grid>
-      <Button
-        circular
-        icon={{ className: 'ns-arrow-right' }}
-        className="multistep__btn next active"
-        onClick={() => props.setDashboardWizardStep(props.routeOnInvestmentTypeSelection)}
-      />
-    </Modal.Content>
-  </Modal>
-);
+      </Modal.Content>
+    </Modal>
+  );
+};
 
 export default InvestmentChooseType;
