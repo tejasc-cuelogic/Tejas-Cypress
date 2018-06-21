@@ -21,9 +21,6 @@ export const USER_LIST_META = [
   ['actions', '', false],
 ];
 
-export const USER_DETAIL_SECTIONS = ['Profile', 'Limits', 'Beneficiaries', 'Portfolio', 'Transactions', 'Statements', 'Bonus rewards', 'Messages'];
-
-// Filters
 export const FILTER_META = {
   accountType: [
     { text: 'Admin', value: 'admin' },
@@ -67,8 +64,7 @@ export const TRANSACTION_TYPES = [
   { text: 'Deposit', value: 'Deposit' },
   { text: 'Withdrawal', value: 'Withdrawal' },
   { text: 'Repayment', value: 'Repayment' },
-  { text: 'Interest', value: 'Interest' },
-  { text: 'Accured', value: 'Accured' },
+  { text: 'Interest Accured', value: 'InterestAccured' },
   { text: 'Referral Credits', value: 'ReferralCredits' },
 ];
 
@@ -151,5 +147,32 @@ export const FIN_INFO = {
     label: 'Your current investment limit',
     error: undefined,
     rule: 'numeric',
+  },
+};
+
+export const ROLES = [
+  { key: 'admin', value: 'admin', text: 'Admin' },
+  { key: 'bowner', value: 'bowner', text: 'Business Owner' },
+  { key: 'investor', value: 'investor', text: 'Investor' },
+];
+
+export const NEW_USER = {
+  givenName: {
+    value: '', label: 'First Name', error: undefined, rule: 'required',
+  },
+  familyName: {
+    value: '', label: 'Last Name', error: undefined, rule: 'required',
+  },
+  email: {
+    value: '', label: 'Email address', error: undefined, rule: 'required|email',
+  },
+  TemporaryPassword: {
+    value: '', label: 'Temporary Password', error: undefined, rule: 'required|min:8|max:15',
+  },
+  verifyPassword: {
+    value: '', label: 'Verify Password', error: undefined, rule: 'required|same:TemporaryPassword',
+  },
+  role: {
+    value: [], label: 'Role', error: undefined, rule: 'required',
   },
 };

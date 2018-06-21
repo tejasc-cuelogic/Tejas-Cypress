@@ -30,6 +30,10 @@ export const allUsersQuery = gql`
             zipCode
           }
         }
+        avatar {
+          name
+          url
+        }
         accountStatus
       }
       
@@ -52,6 +56,7 @@ query getUserDetails($id: ID!) {
     contactDetails {
       phone {
         number
+        verificationDate
       }
     }
     legalDetails {
@@ -67,6 +72,29 @@ query getUserDetails($id: ID!) {
         state
         zipCode
       }
+      cipStatus {
+        status
+      }
+    }
+    accounts {
+      userId
+      accountId
+      accountType
+      accountDetails
+      finishedDate
+      status
+    }
+    address {
+      mailing {
+        street
+        city
+        state
+        zipCode
+      }
+    }
+    avatar {
+      name
+      url
     }
     accountStatus 
   }
@@ -95,6 +123,13 @@ export const deleteUserMutation = gql`
   }
 `;
 
+export const toggleUserAccount = gql`
+  mutation updateUserStatus($id: String!, $status: UserProfileStatusEnum!) {
+    updateUserStatus(userId: $id, accountStatus:$status) {
+      id
+    }
+  }
+`;
 
 export const userSubscription = gql`
   subscription {

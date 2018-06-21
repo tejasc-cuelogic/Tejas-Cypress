@@ -6,26 +6,23 @@ import _ from 'lodash';
 import ListErrors from '../../../../theme/common/ListErrors';
 import Helper from '../../../../helper/utility';
 
-@inject('individualAccountStore', 'uiStore', 'userStore')
+@inject('accountStore', 'individualAccountStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
-  finalizeAccount = (e) => {
-    e.preventDefault();
-    this.props.individualAccountStore.finalizeAccount().then(() => {
-      Helper.toast('Individual account has been finalized.', 'success');
-    })
-      .catch(() => {});
+  handleCreateAccount = () => {
+    this.props.individualAccountStore.createAccount('Summary', 'submit');
   }
   render() {
     const { errors } = this.props.uiStore;
     const { currentUser } = this.props.userStore;
     const {
-      nsAccId,
       formAddFunds,
       plaidAccDetails,
+      isValidLinkBankPlaid,
       formLinkBankManually,
-    } = this.props.individualAccountStore;
+      isValidLinkBankAccountForm,
+    } = this.props.accountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -38,7 +35,7 @@ export default class Summary extends React.Component {
         <div className="summary-wrap">
           <div className="field-wrap">
             <div className="table-wrapper">
-              <Table compact basic fixed singleLine>
+              <Table unstackable compact basic fixed singleLine>
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell><b>Investor Name</b></Table.Cell>
@@ -46,18 +43,24 @@ export default class Summary extends React.Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Name</b></Table.Cell>
-                    <Table.Cell>{_.isEmpty(plaidAccDetails) ? '' : plaidAccDetails.institution.name}</Table.Cell>
+                    <Table.Cell>{_.isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
-                    <Table.Cell>{_.isEmpty(plaidAccDetails) ?
-                      formLinkBankManually.fields.bankAccountNumber.value :
-                      plaidAccDetails.account_id}
+                    <Table.Cell>{_.isEmpty(plaidAccDetails) || !plaidAccDetails.account_id ?
+                      plaidAccDetails.plaidAccountId ? Helper.encryptNumber(plaidAccDetails.plaidAccountId) : '' :
+                      Helper.encryptNumber(plaidAccDetails.account_id)}
+                      {formLinkBankManually.fields.accountNumber.value ? Helper.encryptNumber(formLinkBankManually.fields.accountNumber.value) : ''}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your initial deposit</b></Table.Cell>
-                    <Table.Cell>{formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` : Helper.CurrencyFormat(0)}</Table.Cell>
+                    <Table.Cell>
+                      {!this.props.individualAccountStore.depositMoneyNow ?
+                      Helper.CurrencyFormat(0) :
+                      formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
+                      Helper.CurrencyFormat(0)}
+                    </Table.Cell>
                   </Table.Row>
                 </Table.Body>
               </Table>
@@ -65,7 +68,7 @@ export default class Summary extends React.Component {
           </div>
         </div>
         <div className="center-align">
-          <Button primary size="large" disabled={nsAccId === '' && typeof plaidAccDetails.account_id === 'undefined' && !this.props.individualAccountStore.isValidAddFunds} onClick={this.finalizeAccount}>Create the account</Button>
+          <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!isValidLinkBankAccountForm && !isValidLinkBankPlaid}>Create the account</Button>
         </div>
       </div>
     );

@@ -1,19 +1,22 @@
-/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Grid, Card, Header, Icon, Responsive, Divider, List } from 'semantic-ui-react';
+import { Message } from 'semantic-ui-react';
 
 import PrivateLayout from '../../../containers/common/PrivateHOC';
-import PageHeaderSection from '../../../theme/common/PageHeaderSection';
 import StickyNotification from '../components/StickyNotification';
-import AccountSetupChecklist from '../components/AccountSetupChecklist';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
+import ProgressCard from '../components/ProgressCard';
+import ListErrors from '../../../theme/common/ListErrors';
 
-@inject('uiStore', 'accountStore', 'individualAccountStore')
+@inject('uiStore', 'profileStore', 'accountStore', 'userDetailsStore')
 @observer
 class Summary extends Component {
+  componentWillMount() {
+    this.props.userDetailsStore.setUserAccDetails();
+  }
+
   setDashboardWizardSetup = (step) => {
     this.props.uiStore.setDashboardWizardStep(step);
     this.restoreStep();
@@ -24,56 +27,67 @@ class Summary extends Component {
     this.restoreStep();
   }
 
-  restoreStep = () => {
-    if (this.props.accountStore.accountType.activeIndex === 0) {
-      this.props.individualAccountStore.setStepToBeRendered(0);
-      this.props.individualAccountStore.setBankLinkInterface('list');
+  verifyStep = (step) => {
+    if (step) {
+      if (step === 'ConfirmPhoneNumber') {
+        this.props.profileStore.startPhoneVerification().then(() => {
+          this.setDashboardWizardSetup(step);
+        }).catch((err) => {
+          this.props.uiStore.setErrors(JSON.stringify(err.message));
+        });
+      } else {
+        this.setDashboardWizardSetup(step);
+      }
     }
   }
 
+  restoreStep = () => {
+    if (this.props.accountStore.accountType.activeIndex === 0) {
+      this.props.accountStore.setBankLinkInterface('list');
+    }
+  }
+
+  navToAccTypes = (step) => {
+    const type = this.props.accountStore.getAccountTypeIndex(step);
+    this.props.accountStore.setAccountType(type);
+    this.setDashboardWizardSetup(`${step}/AccountCreation`);
+  }
+
   render() {
-    const stepinfo = {
-      value: 'Verify your identity',
-      label: 'Complete all required information about yourself',
-      linkText: 'Verify me',
-      linkPath: 'InvestorPersonalDetails',
+    const { getStepStatus, currentUser, signupStatus } = this.props.userDetailsStore;
+    const { errors } = this.props.uiStore;
+
+    const progressMeta = {
+      'envelope-line': { label: 'Email-address', action: false },
+      'contact-card': { label: 'Identity', action: 'InvestorPersonalDetails' },
+      'phone-line': { label: 'phone number', action: 'ConfirmPhoneNumber' },
     };
+
     return (
       <Aux>
         <PrivateLayout
           {...this.props}
-          StickyNotification={
+          P5={!signupStatus.finalStatus ?
             <StickyNotification
-              stepinfo={stepinfo}
-              setDashboardWizardSetup={this.setDashboardWizardSetup}
-            />
+              signupStatus={signupStatus}
+            /> : null
           }
         >
-          <Header as="h3">Welcome to NextSeed!</Header>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column widescreen={5} largeScreen={8} computer={8} tablet={16} mobile={16}>
-                <Card fluid raised className="welcome-card">
-                  <Card.Content>
-                    <List divided relaxed="very">
-                      <List.Item>
-                        <List.Icon className="ns-nextseed-icon" size="huge" verticalAlign="middle" />
-                        <List.Content verticalAlign="middle">
-                          <List.Header>
-                            Would you like to start the process of new account creation?
-                          </List.Header>
-                        </List.Content>
-                      </List.Item>
-                    </List>
-                    <Divider hidden />
-                    <AccountSetupChecklist
-                      setDashboardWizardSetup={this.setDashboardWizardSetup}
-                    />
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          {errors &&
+            <Message error>
+              <ListErrors errors={[errors]} />
+            </Message>
+          }
+          {!(currentUser.data && currentUser.data.user) ? 'Loading..' : (
+            <ProgressCard
+              action={this.verifyStep}
+              metaData={progressMeta}
+              signupStatus={signupStatus}
+              getStepStatus={getStepStatus}
+              navToAccTypes={this.navToAccTypes}
+            />
+          )
+          }
         </PrivateLayout>
         {this.props.uiStore.dashboardStep &&
         <DashboardWizard

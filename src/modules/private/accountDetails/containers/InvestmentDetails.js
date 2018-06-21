@@ -11,7 +11,7 @@ const summaryDetails = {
   businessName: 'The Brewers Table',
   summary: [
     {
-      title: 'Total invested amount', content: 3810, type: 1, info: 'Your Total invested amount as of today',
+      title: 'Total invested amount', content: 7500, type: 1, info: 'Your Total invested amount as of today',
     },
     {
       title: 'Status', content: 'Funded', info: 'Your Status as of today',
@@ -20,10 +20,10 @@ const summaryDetails = {
       title: 'Date', content: 'May 5th, 2018', info: 'Date of investment started',
     },
     {
-      title: 'Net Payments Received', content: 6500, type: 1, info: 'Your Net Payments Received till date',
+      title: 'Net Payments Received', content: 1762.5, type: 1, info: 'Your Net Payments Received till date',
     },
     {
-      title: 'Net Annualied Returns', content: '18.23%', info: 'Your Net Annualied Returns till date',
+      title: 'Net Annualied Returns', content: '23.5%', info: 'Your Net Annualied Returns till date',
     },
   ],
 };

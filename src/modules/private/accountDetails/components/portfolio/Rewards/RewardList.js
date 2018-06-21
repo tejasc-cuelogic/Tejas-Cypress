@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, Button } from 'semantic-ui-react';
 
 const RewardList = ({ match, list }) => (
-  <Card.Group itemsPerRow={list.length}>
+  <Card.Group stackable itemsPerRow={list.length}>
     {
       list.map(card => (
         <Card key={card.id}>

@@ -8,7 +8,7 @@ import { FormRadioGroup } from '../../../../theme/form/FormElements';
 @observer
 export default class NetWorth extends Component {
   getOptionDetails = () => {
-    const { value, values } = this.props.iraAccountStore.formAccTypes.fields.accountType;
+    const { value, values } = this.props.iraAccountStore.formAccTypes.fields.iraAccountType;
     return find(values, v => v.value === value).description;
   };
   render() {
@@ -23,8 +23,8 @@ export default class NetWorth extends Component {
           </Header>
           <Form error className="account-type-tab">
             <FormRadioGroup
-              fielddata={formAccTypes.fields.accountType}
-              name="accountType"
+              fielddata={formAccTypes.fields.iraAccountType}
+              name="iraAccountType"
               changed={AccTypesChange}
             />
             <div className="option-details">

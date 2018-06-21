@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Table, Accordion, Progress, Button } from 'semantic-ui-react';
+import Helper from '../../../../../helper/utility';
 
 const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
 const investments = [
@@ -28,7 +29,7 @@ const InvestmentList = (props) => {
       </Accordion.Title>
       <Accordion.Content active>
         <div className="table-wrapper">
-          <Table singleLine className="investment-details">
+          <Table unstackable singleLine className="investment-details">
             <Table.Header>
               <Table.Row>
                 {
@@ -68,7 +69,7 @@ const InvestmentList = (props) => {
               <Table.Row>
                 <Table.HeaderCell colSpan="2" />
                 <Table.HeaderCell>Total:</Table.HeaderCell>
-                <Table.HeaderCell textAlign="right">$33,900</Table.HeaderCell>
+                <Table.HeaderCell textAlign="right">{Helper.getTotal(investments, 'amount')}</Table.HeaderCell>
                 <Table.HeaderCell colSpan="3" />
               </Table.Row>
             </Table.Footer>

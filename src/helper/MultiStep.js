@@ -1,5 +1,6 @@
 import React from 'react';
-import { Modal, Header, Button } from 'semantic-ui-react';
+import _ from 'lodash';
+import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
 
 const getNavStates = (indx, length) => {
   const styles = [];
@@ -35,7 +36,9 @@ export default class MultiStep extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setNavState(nextProps.stepToBeRendered);
+    if (typeof nextProps.stepToBeRendered !== 'undefined') {
+      this.setNavState(nextProps.stepToBeRendered);
+    }
   }
 
   getClassName(className, i) {
@@ -76,16 +79,41 @@ export default class MultiStep extends React.Component {
   }
 
   handleOnClick(evt) {
-    if (evt.currentTarget.value === (this.props.steps.length - 1) &&
-      this.state.compState === (this.props.steps.length - 1)) {
-      this.setNavState(this.props.steps.length);
+    const isAnyStepInvalid = _.find(this.props.steps, { isValid: 'error' });
+    if (isAnyStepInvalid) {
+      console.log(isAnyStepInvalid);
     } else {
-      this.setNavState(evt.currentTarget.value);
+      this.props.setStepTobeRendered(evt.currentTarget.value);
+      if (evt.currentTarget.value === (this.props.steps.length - 1) &&
+        this.state.compState === (this.props.steps.length - 1)) {
+        this.setNavState(this.props.steps.length);
+      } else if (evt.currentTarget.value !== 0 &&
+      this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
+        this.props.createAccount(this.props.steps[(evt.currentTarget.value - 1)]);
+        if (evt.currentTarget.value === (this.props.steps.length - 1)) {
+          this.setNavState(evt.currentTarget.value);
+        }
+      } else {
+        this.setNavState(evt.currentTarget.value);
+      }
     }
   }
 
   next() {
-    this.setNavState(this.state.compState + 1);
+    if (!this.props.steps[this.state.compState].isDirty) {
+      this.setNavState(this.state.compState + 1);
+    } else {
+      // this.props.createAccount(this.props.steps[this.state.compState]).then(() => {
+      //   if (!this.props.steps[this.state.compState].isDirty) {
+      //     this.setNavState(this.state.compState + 1);
+      //   }
+      // })
+      //   .catch(() => { });
+      this.props.createAccount(this.props.steps[this.state.compState]);
+      if (!this.props.steps[this.state.compState].isDirty) {
+        this.setNavState(this.state.compState + 1);
+      }
+    }
   }
 
   previous() {
@@ -97,27 +125,33 @@ export default class MultiStep extends React.Component {
   /**
    * @todo Remove eslint-disbable comments and make appripriate changes
    */
+  /* eslint-disable arrow-body-style */
   renderSteps() {
-    return this.props.steps.map((s, i) => (
+    return this.props.steps.map((s, i) => {
       /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
-      <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid}`} onClick={this.handleOnClick} key={i} value={i}>
-        {this.props.steps[i].name}
-      </li>
-    ));
+      return (
+        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid}`} onClick={this.handleOnClick} key={i} value={i}>
+          {this.props.steps[i].name}
+        </li>
+      );
+    });
   }
 
   render() {
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
       <div onKeyDown={this.handleKeyDown}>
-        <Modal basic open closeIcon className="multistep-modal" closeOnRootNodeClick={false} onClose={() => this.props.setDashboardWizardStep()}>
+        <Modal basic open closeIcon className="multistep-modal" closeOnRootNodeClick={false} onClose={() => this.props.handleMultiStepModalclose()}>
           <Header as="h1" textAlign="center">{this.props.formTitle}</Header>
           <ol className="progtrckr">
             {this.renderSteps()}
           </ol>
           <Modal.Content className="multistep">
+            <Dimmer active={this.props.inProgress}>
+              <Loader active={this.props.inProgress} />
+            </Dimmer>
             {this.props.steps[this.state.compState].component}
             <Button
               circular

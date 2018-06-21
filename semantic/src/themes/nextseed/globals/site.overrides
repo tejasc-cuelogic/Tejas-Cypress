@@ -1,16 +1,65 @@
 /*******************************
         Global Overrides
 *******************************/
+/* PUBLIC PAGES TEMP UI STYLES ==> START */
+.nsContent {
+	font-size: 30px;
+}
+.nsContent .ui.header{
+	color: #666;
+}
+.nsContent .sub.header {
+	color: #e6e0e0;
+}
+p.pageContent {
+	font-size: 0.55em;
+	color: #4c4a4a;
+	line-height: 31px;
+}
+.footerLinks a {
+	display: block;
+}
+a.header {
+	font-size: 1.07142857rem !important;
+	text-decoration: none;
+} 
+.nsContent .offeringList{
+	border: 1px solid #c5b9b9;
+	border-radius: 6px;
+	padding: 8px;
+	min-height: 200px;
+}
+.nsContent .offeringList h4{
+	text-align: left;
+}
+.nsContent .offeringList p{
+	text-align: left;
+	font-size: 12px;
+}
+.offerDetails {
+	text-align: left;
+}
+.offerDetails ul {
+	font-size: 0.55em;
+	line-height: 30px;
+	color: #4c4a4a;
+	margin-top: 30px;
+}
+/* END <== PUBLIC PAGES TEMP UI STYLES */
+
 .content-wrapper{
 	min-height:~"calc(100vh - 58px)";
 }
 .ui.segment.vertical{
     &.content{
         padding:50px 0;
-		min-height:~"calc(100vh - 344px)";
+		min-height:~"calc(100vh - 330px)";
 		&.banner-img{
 			background:url('@{imagePath}/banner_raise.jpg') center center no-repeat;
 			background-size:cover;
+		}
+		&.foot-banner{
+			min-height:~"calc(100vh - 364px)";
 		}
 	}
 }
@@ -23,6 +72,9 @@
 	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
 	}
+}
+.business-application .content-spacer{
+	padding:@50px 0px;
 }
 .inner-content-spacer{
 	padding:@20px;
@@ -113,7 +165,10 @@ h6{
 .negative-text{
 	color:@highlight-primary !important;
 }
-.intro-text{
+.tertiary-text{
+	color:@tertiary-text !important;
+}
+.intro-text, .note{
 	color:@quaternary-text;
 	margin-bottom:@28px;
 }
@@ -131,6 +186,9 @@ a.text-link{
 	}
 }
 
+.invisible{
+	opacity:0 !important;
+}
 //	Admin Page Content Styles
 
 //	Page Header Styles
@@ -140,12 +198,12 @@ a.text-link{
 	padding:@20px @40px;
 	@media only screen and (max-width : @largestSmallMonitor){
 		min-height:auto;
-		padding:@20px;
-		padding-left:@60px;
+		padding:@20px @60px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
-		padding:@20px @10px;
-		padding-left:@60px;
+		~ .secondary-menu{
+			padding:0 @20px @14px;
+		}
 	}
 	h1.ui.header{
 		font-size:@30px;
@@ -209,15 +267,23 @@ a.text-link{
 		@media only screen and (max-width : @largestSmallMonitor){
 			height:22px;
 			margin-left:0;
+			position:absolute;
+			top:50%;
+			right:-30px;
+			transform:translate(0, -50%);
+		}
+		@media only screen and (max-width : @largestMobileScreen){
+			right:-40px;
 		}
 		.icon{
 			font-size:@22px;
 			color:@tertiary-text;
 			color:@white;
 			height:auto;
-			line-height:1;
+			line-height:@42px;
 			@media only screen and (max-width : @largestSmallMonitor){
 				font-size:@16px;
+				line-height:@22px;
 			}
 		}
 		span.unread-count{
@@ -267,7 +333,7 @@ a.text-link{
 		padding:0 @20px;
 	}
 	@media only screen and (max-width : @largestMobileScreen){
-		padding:0 @20px @14px;
+		padding:@14px @20px;
 		background-color:@secondary-text;
 		.ui.selection.dropdown{
 			padding:@11px;
@@ -282,6 +348,7 @@ a.text-link{
 			}
 			.menu{
 				border:none;
+				padding:0;
 				background-color:@tertiary-text;
 				.item{
 					padding:@11px !important;
@@ -757,5 +824,101 @@ svg:not(:root).recharts-surface{
 		width:100%;
 		max-width:1000px;
 		margin:0 auto;
+	}
+}
+
+.issuer-signup{
+	.icon.massive{
+		font-size:80px;
+		width:auto;
+	}
+	.icon.huge{
+		font-size:60px;
+		width:auto;
+	}
+	h1.ui.header{
+		font-size:@32px;
+		.sub.header{
+			font-size:@14px;
+			> a{
+				font-weight:700;
+			}
+		}
+	}
+	>.ui.header{
+		margin-bottom:@42px;
+		.sub.header{
+			margin-top:@10px;
+		}
+	}
+	.field-wrap{
+		padding:@40px;
+		height:100%;
+		@media only screen and (max-width:@largestMobileScreen){
+			padding:@25px;
+		}
+	}
+	* ~ .field-wrap{
+		height:auto;
+	}
+	.navigation-buttons{
+		min-height:50px;
+		font-weight:700;
+		> div .ui.button.multistep__btn{
+			position:relative;
+			&.prev, &.next{
+				transform:translate(0, 0);
+			}
+			&.prev{
+				margin-right:@14px;
+			}
+			&.next{
+				margin-left:@14px;
+			}
+		}
+	}
+}
+
+//	Message details UI
+.message-wrap{
+	width:70%;
+	display:flex;
+	flex-direction:column;
+	.message-head, .message-body, .message-footer{
+		padding:@14px @21px;
+	}
+	.message-head{
+		border-bottom:@borderColor 1px solid;
+		.ui.header{
+			margin:0;
+			text-overflow:ellipsis;
+			overflow:hidden;
+			white-space:nowrap;
+		}
+		.ui.button>.icon{
+			height:22px;
+			line-height:22px;
+		}
+	}
+	.message-body{
+		flex:1 0;
+		overflow:auto;
+		.new-msg-intro{
+			margin:10% 0;
+		}
+	}
+	.message-footer{
+		border-top:@borderColor 1px solid;
+		.ui.form{
+			display:flex;
+			.field{
+				flex:1;
+				margin:0 @20px 0 0;
+			}
+			textarea{
+				min-height:42px;
+				max-height:150px;
+			}
+		}
 	}
 }

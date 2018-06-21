@@ -8,7 +8,7 @@ import { FormRadioGroup } from '../../../../theme/form/FormElements';
 @observer
 export default class AccountType extends Component {
   getOptionDetails = () => {
-    const { value, values } = this.props.iraAccountStore.formAccTypes.fields.accountType;
+    const { value, values } = this.props.iraAccountStore.formAccTypes.fields.iraAccountType;
     return find(values, v => v.value === value).description;
   };
   render() {
@@ -19,8 +19,8 @@ export default class AccountType extends Component {
         <Header as="h4" textAlign="center">Choose an account type</Header>
         <Form error className="account-type-tab">
           <FormRadioGroup
-            fielddata={formAccTypes.fields.accountType}
-            name="accountType"
+            fielddata={formAccTypes.fields.iraAccountType}
+            name="iraAccountType"
             changed={AccTypesChange}
             containerclassname="button-radio center-align"
           />

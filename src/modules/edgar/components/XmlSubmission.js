@@ -18,7 +18,7 @@ const XmlSubmission = observer((props) => {
         <p>
           <Link to={xmlUrl}>Click here to create a new submission.</Link>
         </p>
-        <Table basic celled collapsing>
+        <Table unstackable basic celled collapsing>
           <Table.Body>
             {
               props.xmlSubmissions.map(xmlSubmission => (
@@ -33,7 +33,7 @@ const XmlSubmission = observer((props) => {
                     {
                       xmlSubmission.xmlSubmissionStatus === XML_STATUSES.completed &&
                       xmlSubmission.xmlSubmissionDownloadUrl &&
-                        <a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" download className="ui button icon link-button">
+                        <a href={xmlSubmission.xmlSubmissionDownloadUrl} target="_blank" rel="noopener noreferrer" download className="ui button icon link-button">
                           <Icon name="download" />
                         </a>
                     }
@@ -89,7 +89,7 @@ const XmlSubmission = observer((props) => {
               open={props.confirmBoxValues.entity === 'xml' && filingId === props.confirmBoxValues.refId}
               onCancel={props.handleDeleteCancel}
               onConfirm={props.handleDeleteXMlSubmission}
-              size="tiny"
+              size="mini"
               className="deletion"
             />
             <Confirm
@@ -98,7 +98,7 @@ const XmlSubmission = observer((props) => {
               open={props.confirmBoxValues.entity === 'lockunlock' && filingId === props.confirmBoxValues.refId}
               onCancel={props.handleDeleteCancel}
               onConfirm={props.handleXMLSubmissionLockUnlock}
-              size="tiny"
+              size="mini"
               className="deletion"
             />
           </Table.Body>

@@ -2,23 +2,30 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form/FormElements';
-import Helper from '../../../../helper/utility';
 import ListErrors from '../../../../theme/common/ListErrors';
+import validationActions from '../../../../actions/validation';
 
-@inject('individualAccountStore', 'uiStore')
+@inject('individualAccountStore', 'accountStore', 'uiStore', 'entityAccountStore')
 @observer
 export default class LinkBankForm extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.individualAccountStore.createAccount().then(() => {
-      Helper.toast('Bank account has been linked.', 'success');
-      this.props.individualAccountStore.setStepToBeRendered(1);
-    });
+    if (this.props.accountStore.accountType.type === 'individual') {
+      this.props.individualAccountStore.createAccount().then(() => {
+        this.props.individualAccountStore.setStepToBeRendered(1);
+      });
+    } else {
+      const currentStep = {
+        name: 'Link bank',
+        validate: validationActions.validateLinkBankForm,
+      };
+      this.props.entityAccountStore.createAccount(currentStep);
+    }
   }
 
   render() {
     const { errors } = this.props.uiStore;
-    const { formLinkBankManually, linkBankManuallyChange } = this.props.individualAccountStore;
+    const { formLinkBankManually, linkBankManuallyChange } = this.props.accountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -31,7 +38,7 @@ export default class LinkBankForm extends Component {
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
             {
-              ['bankRoutingNumber', 'bankAccountNumber'].map(field => (
+              ['routingNumber', 'accountNumber'].map(field => (
                 <FormInput
                   key={field}
                   name={field}
@@ -46,7 +53,7 @@ export default class LinkBankForm extends Component {
             <Button primary size="large" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button className="theme-link" onClick={() => this.props.individualAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
+            <Button className="theme-link" onClick={() => this.props.accountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
           </div>
         </Form>
       </div>

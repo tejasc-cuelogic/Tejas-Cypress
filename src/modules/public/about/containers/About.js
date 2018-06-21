@@ -13,15 +13,7 @@ class About extends Component {
     });
 
     return (
-      <div className="ui vertical segment content">
-        <div className="ui container">
-          <div className="ui one column grid">
-            <div className="column nsContent">
-              <LoadableAbout />
-            </div>
-          </div>
-        </div>
-      </div>
+      <LoadableAbout />
     );
   }
 }

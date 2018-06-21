@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { toJS } from 'mobx';
-import { Dropdown, Form, Label, Icon, List } from 'semantic-ui-react';
+import { Grid, Input, Dropdown, Form, Label, Icon, List } from 'semantic-ui-react';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import camelCase from 'lodash/camelCase';
@@ -23,6 +23,17 @@ export const DropdownFilter = props => (
     />
     <div className="dropdown-effect">{props.name}</div>
   </Form.Field>
+);
+
+export const ByKeyword = ({
+  w, executeSearch, placeholder, fLabel,
+}) => (
+  <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
+    <Form.Field inverted>
+      {fLabel && <label className="invisible">{placeholder}</label>}
+      <Input fluid onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />
+    </Form.Field>
+  </Grid.Column>
 );
 
 export const DateRangeFilter = props => (

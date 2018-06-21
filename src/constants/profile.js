@@ -1,4 +1,3 @@
-import moment from 'moment';
 import Validator from 'validatorjs';
 
 /* eslint-disable no-unused-vars */
@@ -20,21 +19,19 @@ export const VERIFY_IDENTITY_STEP_01 = {
   },
   firstLegalName: {
     value: '',
-    label: 'First Legal Name',
+    label: 'First Name (Legal)',
     error: undefined,
     rule: 'required',
-    tooltip: 'Put your first name as listed on your driver license',
   },
   lastLegalName: {
     value: '',
-    label: 'Last Legal Name',
+    label: 'Last Name (Legal)',
     error: undefined,
     rule: 'required',
-    tooltip: 'Put your last name as listed on your driver license',
   },
   residentalStreet: {
     value: '',
-    label: 'Residental Street',
+    label: 'Residential Address',
     error: undefined,
     rule: 'required',
   },
@@ -63,14 +60,14 @@ export const VERIFY_IDENTITY_STEP_01 = {
     rule: 'required|maskedPhoneNumber',
   },
   dateOfBirth: {
-    value: moment(),
+    value: '',
     label: 'Date of Birth',
     error: undefined,
     rule: 'required',
   },
   ssn: {
     value: '',
-    label: 'SSN',
+    label: 'Social Security Number',
     error: undefined,
     rule: 'required|maskedSSN',
   },
@@ -97,12 +94,18 @@ export const CONFIRM_IDENTITY_DOCUMENTS = {
     value: '',
     error: undefined,
     rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
   },
   proofOfResidence: {
     key: 'proofOfResidence',
     value: '',
     error: undefined,
     rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
   },
 };
 
@@ -125,7 +128,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'Phone Number',
     error: undefined,
-    rule: 'required|maskedPhoneNumber',
+    rule: 'string',
     placeHolder: 'Phone Number',
   },
   email: {
@@ -135,4 +138,45 @@ export const UPDATE_PROFILE_INFO = {
     rule: 'required|email',
     placeHolder: 'Email',
   },
+  street: {
+    value: '',
+    label: 'Residential Street',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'Residential Street',
+  },
+  city: {
+    value: '',
+    label: 'City',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'City',
+  },
+  state: {
+    value: '',
+    label: 'State',
+    error: undefined,
+    rule: 'required|string',
+  },
+  zipCode: {
+    value: '',
+    label: 'ZIP Code',
+    error: undefined,
+    rule: 'required|numeric',
+    placeHolder: 'ZIP Code',
+  },
+  profilePhoto: {
+    value: '',
+    key: 'profilePhoto',
+    error: undefined,
+    rule: '',
+    label: '',
+    src: '',
+    base64String: '',
+    responseUrl: '',
+  },
 };
+
+export const PROFILE_PHOTO_EXTENSIONS = ['jpeg', 'jpg', 'png'];
+
+export const PROFILE_PHOTO_BYTES = 5242880;

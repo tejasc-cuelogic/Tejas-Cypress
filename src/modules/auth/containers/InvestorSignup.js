@@ -12,7 +12,7 @@ import validationActions from '../../../actions/validation';
 @observer
 class InvestorSignup extends Component {
   componentWillMount() {
-    this.props.uiStore.clearErrors();
+    // this.props.uiStore.clearErrors();
     // this.props.authStore.reset();
   }
 
@@ -32,7 +32,7 @@ class InvestorSignup extends Component {
       authActions.register()
         .then(() => {
           if (this.props.authStore.newPasswordRequired) {
-            this.props.history.push('/change-password');
+            this.props.history.push('/auth/change-password');
           } else {
             this.props.history.push('/auth/confirm-email');
           }

@@ -63,14 +63,6 @@ export const CONFIRM_IDENTITY_QUESTIONS = [
 ];
 
 /**
- * @desc Validate only following fields after submitting Link Bank Account Form
- */
-export const LINK_BANK_ACCCOUNT_FORM = [
-  'bankRoutingNumber',
-  'bankAccountNumber',
-];
-
-/**
  * @desc Validate only following fields after validating Confirm Identity Documents
  */
 export const CONFIRM_IDENTITY_DOCUMENTS_FORM = [

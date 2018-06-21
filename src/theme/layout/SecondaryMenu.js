@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { NavLink } from 'react-router-dom';
 import { Responsive, Menu, Dropdown } from 'semantic-ui-react';
+import map from 'lodash/map';
+import mapKeys from 'lodash/mapKeys';
 
-const options = [
-  {
-    key: 'edit', text: 'Menu Option One', value: 'edit',
-  },
-  {
-    key: 'delete', text: 'Menu Option Two', value: 'delete',
-  },
-  {
-    key: 'hide', text: 'Menu Option Three', value: 'hide',
-  },
-];
+const iMap = { to: 'key', title: 'text' };
+const NavItems = ({ navItems, match }) => navItems.map(item => (
+  <Menu.Item key={item.to} as={NavLink} to={`${match.url}/${item.to}`}>
+    {item.title}
+  </Menu.Item>
+));
 
 class SecondaryMenu extends Component {
   render() {
+    const { navItems, match } = this.props;
+    const mobnavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
-      <div>
+      <Aux>
         <Responsive minWidth={768}>
           <Menu
             className={this.props.className || ''}
@@ -28,27 +28,13 @@ class SecondaryMenu extends Component {
             vertical={this.props.vertical}
             attached={this.props.attached}
           >
-            {
-              this.props.navItems.map(item => (
-                <Menu.Item
-                  key={item.to}
-                  as={NavLink}
-                  to={`${this.props.match.url}/${item.to}`}
-                >
-                  {item.title}
-                </Menu.Item>
-              ))
-            }
+            <NavItems navItems={navItems} match={match} />
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767}>
-          <Dropdown
-            fluid
-            selection
-            options={options}
-          />
+          <Dropdown fluid selection options={mobnavItems} />
         </Responsive>
-      </div>
+      </Aux>
     );
   }
 }

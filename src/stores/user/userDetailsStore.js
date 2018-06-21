@@ -1,13 +1,21 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable class-methods-use-this, arrow-body-style, no-return-assign */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
+import map from 'lodash/map';
+import filter from 'lodash/filter';
+import _ from 'lodash';
 import { GqlClient as client } from '../../services/graphql';
 import { GqlClient as client2 } from '../../services/graphqlCool';
 import uiStore from '../uiStore';
+import authStore from '../authStore';
+import profileStore from '../profileStore';
+import iraAccountStore from '../user/iraAccountStore';
+import entityAccountStore from '../user/entityAccountStore';
+import individualAccountStore from '../user/individualAccountStore';
 import { BENEFICIARY_FRM, FIN_INFO } from '../../constants/user';
-import { userDetailsQuery } from '../queries/users';
+import { userDetailsQuery, toggleUserAccount } from '../queries/users';
 import { allBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../queries/beneficiaries';
 import { finLimit, updateFinLimit } from '../queries/financialLimits';
 import Helper from '../../helper/utility';
@@ -20,10 +28,18 @@ export class UserDetailsStore {
   @observable BENEFICIARY_META = { fields: { ...BENEFICIARY_FRM }, meta: { isValid: false, error: '' } };
   @observable deleting = 0;
   @observable FIN_INFO = { fields: { ...FIN_INFO }, meta: { isValid: false, error: '' } };
+  validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
     return details;
+  }
+
+  @action
+  setProfilePhoto(url) {
+    if (this.currentUser) {
+      this.currentUser.data.user.avatar.url = url;
+    }
   }
 
   @action
@@ -38,14 +54,46 @@ export class UserDetailsStore {
   }
 
   @action
+  setUserAccDetails = () => {
+    if (!_.isEmpty(this.userDetails)) {
+      authStore.checkIsInvestmentAccountCreated(this.userDetails);
+      iraAccountStore.populateData(this.userDetails);
+      individualAccountStore.populateData(this.userDetails);
+      entityAccountStore.populateData(this.userDetails);
+    }
+  }
+
+  @action
   getUser = (id) => {
     this.currentUser = graphql({
       client,
       query: userDetailsQuery,
+      fetchPolicy: 'network-only',
       variables: {
         id,
       },
+      onFetch: () => {
+        profileStore.setProfileInfo(this.userDetails);
+      },
     });
+  }
+
+  @action
+  updateUserStatus = (status) => {
+    this.currentUser.data.user.accountStatus = status;
+  }
+
+  @action
+  toggleState = () => {
+    const { accountStatus, id } = this.currentUser.data.user;
+    const params = { status: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCK', id };
+    client
+      .mutate({
+        mutation: toggleUserAccount,
+        variables: params,
+      })
+      .then(() => this.updateUserStatus(params.status))
+      .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
 
   @action
@@ -77,6 +125,85 @@ export class UserDetailsStore {
 
   @computed get fLoading() {
     return this.financialLimit.loading;
+  }
+
+  @computed get signupStatus() {
+    const details = { idVerification: 'FAIL', accounts: [], phoneVerification: 'FAIL' };
+    const accTypes = ['ira', 'entity', 'individual'];
+    if (this.userDetails) {
+      details.idVerification = (this.userDetails.legalDetails &&
+        this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
+      ) ? this.userDetails.legalDetails.cipStatus.status : 'FAIL';
+      details.accounts = mapValues(this.userDetails.accounts, (a) => {
+        const data = { accountId: a.accountId, accountType: a.accountType, status: a.status };
+        return data;
+      });
+      details.inActiveAccounts = [];
+      Object.keys(details.accounts).map((key) => {
+        const isAccountActive = accTypes.includes(details.accounts[key].accountType);
+        if (isAccountActive) {
+          accTypes.splice(key, 1);
+        }
+        return true;
+      });
+      details.inActiveAccounts = accTypes;
+      details.partialAccounts = map(filter(details.accounts, a => a.status === 'PARTIAL'), 'accountType');
+      details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
+      details.phoneVerification = (this.userDetails.contactDetails &&
+        this.userDetails.contactDetails.phone &&
+        this.userDetails.contactDetails.phone.verificationDate) ? 'DONE' : 'FAIL';
+
+      details.finalStatus = (details.activeAccounts.count > 0 &&
+        this.validAccStatus.includes(details.idVerification) &&
+        details.phoneVerification === 'DONE');
+
+      return details;
+    }
+    return details;
+  }
+
+  getStepStatus = (step) => {
+    const statusDetails = this.signupStatus;
+    let status = '';
+    if (statusDetails[step]) {
+      if (step === 'idVerification') {
+        if (this.validAccStatus.includes(statusDetails[step])) {
+          status = 'done';
+        } else {
+          status = 'enable';
+        }
+      } else if (step === 'phoneVerification') {
+        if (this.validAccStatus.includes(statusDetails.idVerification)) {
+          if (statusDetails.phoneVerification === 'DONE') {
+            status = 'done';
+          } else {
+            status = 'enable';
+          }
+        } else {
+          status = 'disable';
+        }
+      } else if (step === 'accounts') {
+        if (this.validAccStatus.includes(statusDetails.idVerification)) {
+          if (statusDetails.phoneVerification === 'DONE') {
+            if (!_.isEmpty(statusDetails.accounts)) {
+              status = 'done';
+            } else {
+              status = 'enable';
+            }
+          } else {
+            status = 'disable';
+          }
+        } else {
+          status = 'disable';
+        }
+      }
+    }
+    return status;
+  }
+
+  @computed get isUserVerified() {
+    const accDetails = this.signupStatus;
+    return this.validAccStatus.includes(accDetails.idVerification);
   }
 
   @action

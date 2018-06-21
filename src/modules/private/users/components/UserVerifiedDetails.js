@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Card } from 'semantic-ui-react';
 import Spinner from '../../../../theme/ui/Spinner';
+import Helper from '../../../../helper/utility';
 
 /* eslint-disable arrow-body-style */
 const userVerifiedDetails = (props) => {
@@ -19,11 +20,11 @@ const userVerifiedDetails = (props) => {
     legalAddress,
     dateOfBirth,
   } = props.legalDetails;
-  if (!legalName) {
+  if (!props.isUserVerified(props.legalDetails.cipStatus)) {
     return (
       <Card fluid className="form-card">
         <h3>Identity not verified</h3>
-        <Link to="/app/summary" ><b>Verify Identity</b></Link>
+        <Link to="/app/summary" onClick={() => props.handleNavToVerifyIdentity('InvestorPersonalDetails')} ><b>Verify Identity</b></Link>
       </Card>
     );
   }
@@ -36,18 +37,18 @@ const userVerifiedDetails = (props) => {
         <dt>Legal Last Name</dt>
         <dd>{legalName.lastLegalName}</dd>
         <dt>SSN</dt>
-        <dd>{ssn}</dd>
+        <dd>{Helper.cryptedSSNNumber(ssn)}</dd>
         <dt>DOB</dt>
         <dd>{moment(dateOfBirth).format('MM-DD-YYYY')}</dd>
         <dt>Legal Address</dt>
-        <dd>{`${legalAddress.street1}, ${legalAddress.city}, ${legalAddress.state}, ${legalAddress.zipCode}`}
+        <dd>{`${legalAddress.street}, ${legalAddress.city}, ${legalAddress.state}, ${legalAddress.zipCode}`}
         </dd>
         <dt>Email Address</dt>
         <dd>{props.email}</dd>
       </dl>
       <p className="intro-text">
         If any of this information needs to be updated, please contact support through the{' '}
-        <Link to={props.match.url} className="link"><b>Message center</b></Link>.
+        <Link to="/app/messages" className="link"><b>Message center</b></Link>.
       </p>
     </Card>
   );

@@ -28,7 +28,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             />
           </Form.Field>
         </Card>
-        <Card.Group itemsPerRow={2}>
+        <Card.Group stackable itemsPerRow={2}>
           <Card fluid className="form-card">
             <Header as="h3">Total Assets</Header>
             <FormInput

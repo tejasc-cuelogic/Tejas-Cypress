@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import { inject, observer } from 'mobx-react';
 
-@inject('authStore', 'uiStore', 'accountStore')
+@inject('authStore', 'uiStore', 'accountStore', 'userDetailsStore')
 @observer
 class DashboardWizard extends Component {
   handleChange = (step) => {
@@ -10,6 +10,7 @@ class DashboardWizard extends Component {
   }
 
   render() {
+    const { signupStatus } = this.props.userDetailsStore;
     const module = this.props.uiStore.dashboardStep;
     const DashboardModule = Loadable({
       loader: () => (module === `${this.props.accountStore.accountType.type}/AccountCreation` || module === 'InvestorPersonalDetails' || module === 'ConfirmIdentityForm' || module === 'ConfirmIdentityDocuments' || module === 'ConfirmPhoneNumber' ? import(`../containers/${module}`) : import(`../components/${module}`)),
@@ -20,7 +21,11 @@ class DashboardWizard extends Component {
 
     return (
       <div>
-        <DashboardModule {...this.props} setDashboardWizardStep={this.handleChange} />
+        <DashboardModule
+          {...this.props}
+          setDashboardWizardStep={this.handleChange}
+          signupStatus={signupStatus}
+        />
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import { action, observable } from 'mobx';
+import { REACT_APP_DEPLOY_ENV } from '../constants/common';
 
 export class UiStore {
   @observable
@@ -16,6 +17,7 @@ export class UiStore {
   @observable success = undefined;
   @observable redirectURL = undefined;
   @observable asyncCheckLoader = false;
+  @observable devBanner = !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV);
   @observable confirmBox = {
     entity: '',
     refId: '',
@@ -34,6 +36,11 @@ export class UiStore {
   @action
   setModalStatus(status) {
     this.modalStatus = status;
+  }
+
+  @action
+  toggleDevBanner() {
+    this.devBanner = !this.devBanner;
   }
 
   @action

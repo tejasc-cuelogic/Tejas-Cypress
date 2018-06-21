@@ -104,8 +104,8 @@ export const checkUserPhoneVerificationCode = gql`
  }`;
 
 export const updateUserCIPInfo = gql`
-  mutation updateUserCIPInfo($userId: String! $user: userCIPInput! $phoneDetails: phoneInput!) {
-    updateUserCIPInfo(userId: $userId user: $user phoneDetails: $phoneDetails) {
+  mutation updateUserCIPInfo($userId: String! $user: userCIPInput! $phoneDetails: phoneInput! $cipStatus: CipStatusInput!) {
+    updateUserCIPInfo(userId: $userId user: $user phoneDetails: $phoneDetails cipStatus: $cipStatus) {
       id
       email
       firstName
@@ -114,3 +114,64 @@ export const updateUserCIPInfo = gql`
       accreditation
     }
   }`;
+
+export const updateUserProfileData = gql`
+  mutation _updateUserProfileData($userId: String! $profileDetails: UserProfileInput!) {
+  updateUserProfileData(
+  userId: $userId
+  profileDetails: $profileDetails
+  ) {
+      id
+      firstName
+      lastName
+      address {
+        mailing {
+          street
+          city
+          state
+          zipCode
+        }
+        residence {
+          street
+          }
+        }
+      }
+  }`;
+
+export const requestEmailChnage = gql`
+  mutation _requestEmailChange($userId: String! $newEmail: String!) {
+    requestEmailChange(
+      userId: $userId
+      newEmail: $newEmail
+    )
+  }`;
+
+export const verifyAndUpdateEmail = gql`
+  mutation _verifyAndUpdateEmail($userId: String! $confirmationCode: String!) {
+    verifyAndUpdateEmail(
+      userId: $userId
+      confirmationCode: $confirmationCode
+    ){
+      id
+      email
+    }
+  }`;
+
+export const updateUserPhoneDetail = gql`
+  mutation _updateUserPhoneDetail($phoneDetails: phoneInput! $userId: String!){
+    updateUserPhoneDetails(
+      phoneDetails: $phoneDetails,
+      userId: $userId
+      ) {
+      id
+      email
+      contactDetails{
+        phone {
+          number
+          countryCode
+          verificationDate
+        }
+      }
+    }
+  }`;
+

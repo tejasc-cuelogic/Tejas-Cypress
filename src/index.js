@@ -1,4 +1,5 @@
-import { init as initApm } from 'elastic-apm-js-base';
+import bugsnag from 'bugsnag-js';
+import createPlugin from 'bugsnag-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -8,21 +9,18 @@ import { Provider } from 'mobx-react';
 import 'react-datepicker/dist/react-datepicker.css';
 import App from './App';
 import * as stores from './stores/stores';
+import CustomErrorBoundry from './helper/ErrorBoundry';
 
-/* eslint-disable no-undef */
-Raven.config('https://7e14162a1a8d40d4a1aa52907507b6c7@sentry.io/1215344').install();
+// Set the default error boundry to the customErrorBoundry
+// and reassign it if one from Bugsnag is present
+let ErrorBoundary = CustomErrorBoundry;
 
-initApm({
+if (process.env.REACT_APP_BUG_SNAG_KEY) {
+  const bugsnagClient = bugsnag(process.env.REACT_APP_BUG_SNAG_KEY);
+  // wrap your entire app tree in the ErrorBoundary provided
+  ErrorBoundary = bugsnagClient.use(createPlugin(React));
+}
 
-  // Set required service name (allowed characters: a-z, A-Z, 0-9, -, _, and space)
-  serviceName: 'ns-client',
-
-  // Set custom APM Server URL (default: http://localhost:8200)
-  serverUrl: 'http://35.174.107.218:8200',
-
-  // Set service version (required for sourcemap feature)
-  serviceVersion: '',
-});
 // For easier debugging
 window.APP_STATE = stores;
 
@@ -30,10 +28,12 @@ promiseFinally.shim();
 useStrict(true);
 
 ReactDOM.render(
-  <Provider {...stores}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
+  <ErrorBoundary >
+    <Provider {...stores}>
+      <BrowserRouter >
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </ErrorBoundary>,
   document.getElementById('root'),
 );

@@ -8,7 +8,6 @@ import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
 import Edgar from './edgar/containers/Business';
-import ChangePassword from '../modules/auth/ChangePassword';
 import EdgarForm from '../modules/edgar/containers/EdgarForm';
 import ForgotPassword from '../modules/auth/ForgotPassword';
 import ResetPassword from '../modules/auth/ResetPassword';
@@ -17,6 +16,7 @@ import Messages from './private/messages/containers/Messages';
 import Dashboard from './dashboard/containers/Dashboard';
 import Users from './private/users/containers/Users';
 import UserDetails from './private/users/containers/UserDetails';
+import UsersNew from './private/users/containers/UsersNew';
 import ProfileSettings from './private/users/containers/ProfileSettings';
 import XmlForm from './edgar/containers/XmlForm';
 import BusinessDetails from './edgar/containers/BusinessDetails';
@@ -24,6 +24,7 @@ import Summary from '../modules/summary/containers/Summary';
 import RewardsWallet from './private/rewardsWallet/containers/RewardsWallet';
 import Referrals from './private/referrals/containers/Referrals';
 import AccountDetails from './private/accountDetails/containers/AccountDetails';
+import BusinessApplication from './private/businessApplication/containers/BusinessApplication';
 import Education from './private/education/containers/Education';
 import {
   AdminAuthorization,
@@ -89,12 +90,12 @@ export const publicRoutes = [
     exact: true,
   },
   {
-    path: '/change-password',
-    component: ChangePassword,
+    path: '/business-application',
+    component: BusinessSignup,
     exact: true,
   },
   {
-    path: '/business-application',
+    path: '/business-application/:status?/:reason?',
     component: BusinessSignup,
     exact: true,
   },
@@ -139,13 +140,13 @@ export const privateRoutes = [
     exact: true,
   },
   {
-    path: '/app/users/:userId/:section',
-    component: UserDetails,
+    path: '/app/users/new',
+    component: UsersNew,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/users/new',
-    component: Users,
+    path: '/app/users/:userId',
+    component: UserDetails,
     auth: AdminAuthorization,
   },
   {
@@ -182,6 +183,12 @@ export const privateRoutes = [
     auth: UserAuthorization,
   },
   {
+    path: '/app/business-application',
+    exact: false,
+    component: BusinessApplication,
+    auth: UserAuthorization,
+  },
+  {
     path: '/app/rewards-wallet',
     component: RewardsWallet,
     auth: InvestorAuthorization,
@@ -192,7 +199,7 @@ export const privateRoutes = [
     auth: InvestorAuthorization,
   },
   {
-    path: '/app/education',
+    path: '/app/resources',
     component: Education,
     auth: UserAuthorization,
   },
