@@ -14,7 +14,7 @@ const checkStatus = (signupStatus, key) => {
       status = 1;
     }
   } else if (key === 'phone-line') {
-    if (signupStatus.idVerification !== 'PASS' && !signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING') {
+    if (signupStatus.idVerification !== 'PASS' && signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING') {
       status = 0;
     } else {
       status = 1;
@@ -45,6 +45,7 @@ const ProgressCard = ({
     {
       _.isEmpty(signupStatus.accounts) &&
       Object.keys(metaData).map((key) => {
+        console.log(signupStatus);
         const status = checkStatus(signupStatus, key);
         return (
           <Card fluid className={`verification ${status === 2 ? 'done' : status === 0 ? 'disabled' : ''}`}>
@@ -99,6 +100,7 @@ const ProgressCard = ({
             <p><b>{`You have not finished ${_.upperCase(accountType)} account creation`}</b></p>
             <Button
               color={getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
+              className="relaxed"
               content="Continue"
               disabled={getStepStatus('accounts') === 'disable'}
               onClick={() => navToAccTypes(accountType)}
@@ -115,6 +117,7 @@ const ProgressCard = ({
           </Icon.Group>
           <p><b>Start creation process of another type of account</b></p>
           <Button
+            inverted
             color={getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
             content="Create another account"
             disabled={getStepStatus('accounts') === 'disable'}
