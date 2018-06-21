@@ -19,6 +19,7 @@ import {
   VERIFY_IDENTITY_STEP_01,
   VERIFY_IDENTITY_STEP_04,
   CONFIRM_IDENTITY_DOCUMENTS,
+  COUNTRY_CODES,
 } from '../constants/profile';
 
 export class ProfileStore {
@@ -167,7 +168,7 @@ export class ProfileStore {
       userDetailsStore.userDetails.contactDetails.phone.number;
     const phoneDetails = {
       number: Helper.unMaskInput(number),
-      countryCode: '91',
+      countryCode: COUNTRY_CODES.US,
     };
     return phoneDetails;
   }
@@ -470,7 +471,7 @@ export class ProfileStore {
                 userId: userStore.currentUser.sub,
                 phoneDetails: {
                   number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-                  countryCode: '91',
+                  countryCode: COUNTRY_CODES.US,
                 },
               },
             })
@@ -665,7 +666,7 @@ export class ProfileStore {
                userId: userStore.currentUser.sub,
                phoneDetails: {
                  number: Helper.unMaskInput(this.verifyIdentity01.fields.phoneNumber.value),
-                 countryCode: '91',
+                 countryCode: COUNTRY_CODES.US,
                },
              },
            })
