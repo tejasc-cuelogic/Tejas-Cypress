@@ -11,6 +11,7 @@ const stepinfo = {
 
 const checkStatus = (signupStatus) => {
   let accCreation = signupStatus.partialAccounts.concat(signupStatus.inActiveAccounts);
+  console.log(accCreation);
   accCreation = Helper.eleToUpperCaseInArray(accCreation);
   if (signupStatus.idVerification !== 'PASS' && signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING') {
     stepinfo.title = 'Please verify your identity in order to proceed';
@@ -19,7 +20,9 @@ const checkStatus = (signupStatus) => {
   } else if (!_.isEmpty(signupStatus.accounts)) {
     stepinfo.title = 'You can open your other NextSeed account!';
     stepinfo.group = 'Congratulations!';
-    stepinfo.label = `Choose between an ${Helper.getCommaSeparatedArrStr(accCreation)} account to get started.`;
+    // stepinfo.label =
+    // `Choose between an ${Helper.getCommaSeparatedArrStr(accCreation)} account to get started.`;
+    stepinfo.label = 'Choose between an Individual, IRA or Entity account to get started.';
   } else {
     stepinfo.title = 'Now you can open your first NextSeed account!';
     stepinfo.group = 'Congratulations!';
