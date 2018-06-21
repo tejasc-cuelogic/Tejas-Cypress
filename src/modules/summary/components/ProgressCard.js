@@ -45,7 +45,6 @@ const ProgressCard = ({
     {
       _.isEmpty(signupStatus.accounts) &&
       Object.keys(metaData).map((key) => {
-        console.log(signupStatus);
         const status = checkStatus(signupStatus, key);
         return (
           <Card fluid className={`verification ${status === 2 ? 'done' : status === 0 ? 'disabled' : ''}`}>

@@ -7,15 +7,19 @@ import LinkBankPlaid from './LinkBankPlaid';
 import Summary from './Summary';
 import AddFunds from './AddFunds';
 
-@inject('uiStore', 'accountStore', 'individualAccountStore', 'uiStore')
+@inject('uiStore', 'accountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
 @observer
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
     // this.props.accountStore.resetLinkBankForm();
+    this.updateUser();
     this.props.setDashboardWizardStep();
   }
   handleStepChange = (step) => {
     this.props.individualAccountStore.setStepToBeRendered(step);
+  }
+  updateUser = () => {
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
   render() {
     const { inProgress } = this.props.uiStore;

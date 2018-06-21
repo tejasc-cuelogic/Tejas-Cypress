@@ -15,10 +15,14 @@ import Summary from './Summary';
 @observer
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
+    this.updateUser();
     this.props.setDashboardWizardStep();
   }
   handleStepChange = (step) => {
     this.props.entityAccountStore.setStepToBeRendered(step);
+  }
+  updateUser = () => {
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
   render() {
     const { inProgress } = this.props.uiStore;
