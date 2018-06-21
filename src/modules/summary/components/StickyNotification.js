@@ -6,7 +6,7 @@ import Helper from '../../../helper/utility';
 const stepinfo = {
   group: 'Investor Account Creation',
   title: '',
-  label: 'You`re a few steps away from being able to invest! ',
+  label: 'You’re a few steps away from being able to invest!',
 };
 
 const checkStatus = (signupStatus) => {
