@@ -36,7 +36,7 @@ export default class MultiStep extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (typeof nextProps.stepToBeRendered !== 'undefined') {
+    if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
       this.setNavState(nextProps.stepToBeRendered);
     }
   }
@@ -103,12 +103,6 @@ export default class MultiStep extends React.Component {
     if (!this.props.steps[this.state.compState].isDirty) {
       this.setNavState(this.state.compState + 1);
     } else {
-      // this.props.createAccount(this.props.steps[this.state.compState]).then(() => {
-      //   if (!this.props.steps[this.state.compState].isDirty) {
-      //     this.setNavState(this.state.compState + 1);
-      //   }
-      // })
-      //   .catch(() => { });
       this.props.createAccount(this.props.steps[this.state.compState]);
       if (!this.props.steps[this.state.compState].isDirty) {
         this.setNavState(this.state.compState + 1);
