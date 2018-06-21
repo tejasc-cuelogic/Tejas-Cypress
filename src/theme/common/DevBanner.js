@@ -24,7 +24,7 @@ const DevBanner = props => (
     <b>Deploy Branch:</b> {REACT_APP_DEPLOY_BRANCH}
     <span style={{ float: 'right' }}>
       <b>Last updated:</b>
-      {moment(REACT_APP_DEPLOY_TIME).local().format('D/MM/YY h:m a')}
+      {moment(REACT_APP_DEPLOY_TIME).local().format('MM/DD/YY h:m a')}
     </span>
     <Button
       icon

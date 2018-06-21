@@ -12,7 +12,7 @@ export class Activity {
   }
 
   devAppLogin = (payload) => {
-    const params = { url: window.location.hostname, ...payload };
+    const params = { ...commonParams, ...payload };
     return new Promise((res, rej) => {
       ApiService.post(`${REACT_APP_PROTECTION_API}/password-protected`, params)
         .then(data => res(data))
