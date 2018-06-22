@@ -1,19 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import find from 'lodash/find';
 import { Modal, Grid, Button, Header, Form } from 'semantic-ui-react';
 import { FormRadioGroup } from '../../../theme/form/FormElements';
-
-const getOptionDetails = (accType) => {
-  if (accType) {
-    const { value, values } = accType;
-    const isAccExist = find(values, { value: accType.value });
-    if (isAccExist) {
-      return find(values, v => v.value === value).description;
-    }
-  }
-  return true;
-};
+import InvestmentDescription from './InvestmentDescription';
 
 const InvestmentChooseType = observer(props => (
   <Modal open closeIcon onClose={() => props.setDashboardWizardStep()}>
@@ -30,9 +19,9 @@ const InvestmentChooseType = observer(props => (
             changed={props.handleAccoutTypeChange}
             containerclassname="button-radio center-align"
           />
-          <div className="option-details">
-            {getOptionDetails(props.investmentAccTypes.fields.accType)}
-          </div>
+          <InvestmentDescription
+            accTypes={props.investmentAccTypes.fields.accType}
+          />
         </Form>
       </Grid>
       <Button

@@ -129,7 +129,7 @@ export class UserDetailsStore {
 
   @computed get signupStatus() {
     const details = { idVerification: 'FAIL', accounts: [], phoneVerification: 'FAIL' };
-    const validAccTypes = ['ira', 'entity', 'individual'];
+    const validAccTypes = ['individual', 'ira', 'entity'];
     details.inActiveAccounts = [];
     const accTypes = [];
     if (this.userDetails) {

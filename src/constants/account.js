@@ -474,12 +474,10 @@ export const ACC_TYPE = {
         label: 'Individual',
         value: 0,
         description: `Open a NextSeed investment account to begin investing in local businesses.
-
         An initial deposit can be quickly and securely completed by linking your checking account. 
         You can easily connect your account by logging in through our secure system or by 
         manually entering your account information. The uninvested cash in your account is 
         [FDIC-insured][note: hover over with footnote] up to $250,000 and is interest-bearing. 
-        
         We safeguard your information with bank-level security measures.`,
         accType: 'individual',
       },
@@ -495,12 +493,9 @@ export const ACC_TYPE = {
       {
         label: 'Entity',
         value: 2,
-        description: `Create a NextSeed Investment Account by linking your checking account. You can easily 
-        connect your account by logging in through our secure system or by manually entering your 
-        account information. 
-        The uninvested cash in your account1 is FDIC-insured up to $250,000 and is interest-bearing.
-        
-        We safeguard your information with bank-level security measures.`,
+        description: `Invest in local businesses through an Entity investment account. (Note: Investment limits for Entity accounts are treated separately from Individual investment accounts) 
+        An initial deposit can be quickly and securely completed by linking your entity checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information. 
+        The uninvested cash in your account is [FDIC-insured][note: hover over with footnote] up to $250,000 and is interest-bearing.   We safeguard your information with bank-level security measures.  `,
         accType: 'entity',
       },
     ],
