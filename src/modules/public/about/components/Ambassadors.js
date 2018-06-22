@@ -1,20 +1,19 @@
 import React from 'react';
-import {
-  Divider,
-} from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Header, Divider } from 'semantic-ui-react';
 
 const ambassadors = () => (
-  <div>
-    <span className="title">NextSeed Ambassadors</span>
-    <span className="infotext">
-      Champions of local growth
-    </span>
+  <Aux>
+    <Header as="h1">NextSeed Ambassadors
+      <Header.Subheader>Champions of local growth</Header.Subheader>
+    </Header>
     <Divider inverted section />
     <p className="pageContent">
-      {/* eslint-disable max-len */}
-      We’re working with some of the best and brightest thought leaders and influencers in local communities around the country. Together, we’re collaborating to drive and promote growth from Main Street on up.
+      We’re working with some of the best and brightest thought leaders and
+      influencers in local communities around the country. Together, we’re
+      collaborating to drive and promote growth from Main Street on up.
     </p>
-  </div>
+  </Aux>
 );
 
 export default ambassadors;

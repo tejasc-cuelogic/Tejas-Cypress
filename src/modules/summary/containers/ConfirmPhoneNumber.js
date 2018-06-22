@@ -7,10 +7,19 @@ import { FormInput, MaskedInput } from '../../../theme/form/FormElements';
 import Helper from '../../../helper/utility';
 import ListErrors from '../../../theme/common/ListErrors';
 
-@inject('profileStore', 'uiStore')
+@inject('profileStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
+  componentWillMount() {
+    if (this.props.profileStore.verifyIdentity01.fields.phoneNumber.value === '') {
+      if (this.props.userDetailsStore.userDetails.contactDetails.phone) {
+        const fieldValue =
+        Helper.maskPhoneNumber(this.props.userDetailsStore.userDetails.contactDetails.phone.number);
+        this.props.profileStore.onFieldChange('verifyIdentity01', 'phoneNumber', fieldValue);
+      }
+    }
+  }
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
     this.props.profileStore.setReSendVerificationCode(false);
@@ -25,7 +34,7 @@ export default class ConfirmPhoneNumber extends Component {
     } else {
       this.props.profileStore.confirmPhoneNumber().then(() => {
         Helper.toast('Phone number is confirmed.', 'success');
-        this.props.setDashboardWizardStep();
+        this.props.setDashboardWizardStep('InvestmentChooseType');
       })
         .catch(() => {});
     }

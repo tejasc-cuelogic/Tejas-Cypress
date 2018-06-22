@@ -5,7 +5,6 @@ import { Form, Popup, Icon } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 import FieldError from '../common/FieldError';
 
-/* eslint-disable arrow-body-style */
 const FormDatePicker = observer((props) => {
   const { label, error } = props.fielddata;
   return (

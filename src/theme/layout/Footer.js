@@ -1,17 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  // Button,
   Container,
   Divider,
   Grid,
   Header,
-  // Icon,
-  // Image,
-  // List,
-  // Menu,
   Segment,
-  // Visibility,
 } from 'semantic-ui-react';
 
 const footer = () => (

@@ -6,10 +6,7 @@ import FieldError from '../common/FieldError';
 
 
 const FormDropDown = observer((props) => {
-  const {
-    label,
-    error,
-  } = props.fielddata;
+  const { label, error } = props.fielddata;
   return (
     <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''}>
       <label>
@@ -23,9 +20,7 @@ const FormDropDown = observer((props) => {
           />
         }
       </label>
-      <Dropdown
-        {...props}
-      />
+      <Dropdown {...props} />
       <div className="dropdown-effect">{label}</div>
       {error &&
         <FieldError error={error} />

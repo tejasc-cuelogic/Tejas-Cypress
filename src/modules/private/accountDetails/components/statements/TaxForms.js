@@ -1,23 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Grid, Card } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
 import { FaqWidget } from '../../../../../theme/common/ImportCommon';
 import { FillTable } from '../../../../../theme/table/NSTable';
 
 const result = {
   columns: [
-    {
-      title: 'Statement Date', field: 'date',
-    },
-    {
-      title: 'Form Type', field: 'formType',
-    },
-    {
-      title: 'Download as', field: 'actions', textAlign: 'right',
-    },
+    { title: 'Statement Date', field: 'taxFormDate' },
+    { title: 'Form Type', field: 'types' },
+    { title: 'Download as', field: 'file', textAlign: 'right' },
   ],
-  rows: Array(8).fill({
-    date: '3/24/18', formType: '1099-B and 1099-DIV', actions: ['download'],
-  }),
 };
 
 const faqs = [
@@ -37,21 +29,30 @@ const faqs = [
   },
 ];
 
-const TaxForms = () => (
-  <Grid>
-    <Grid.Row>
-      <Grid.Column width={16}>
-        <Card fluid>
-          <FillTable result={result} />
-        </Card>
-      </Grid.Column>
-    </Grid.Row>
-    <Grid.Row>
-      <Grid.Column widescreen={12} largeScreen={12} computer={12} tablet={16} mobile={16}>
-        <FaqWidget heading="Tax Forms" faqs={faqs} />
-      </Grid.Column>
-    </Grid.Row>
-  </Grid>
-);
-
-export default TaxForms;
+@inject('statementStore')
+@observer
+export default class TaxForms extends Component {
+  componentWillMount() {
+    this.props.statementStore.initRequest('TaxForms');
+  }
+  render() {
+    const { taxForms, loading, error } = this.props.statementStore;
+    result.rows = taxForms;
+    return (
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={16}>
+            <Card fluid>
+              <FillTable loading={loading} error={error} result={result} />
+            </Card>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column widescreen={12} largeScreen={12} computer={12} tablet={16} mobile={16}>
+            <FaqWidget heading="Tax Forms" faqs={faqs} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    );
+  }
+}

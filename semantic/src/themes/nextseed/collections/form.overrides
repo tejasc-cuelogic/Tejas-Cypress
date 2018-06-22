@@ -9,32 +9,39 @@
             margin-right:-@14px;
             padding:0 @14px;
         }
+        >label{
+            display:inline-block;
+            line-height:@18px;
+        }
+        &.otp-field{
+            margin:3rem 0;
+            label{
+                font-size:@14px;
+            }
+            .ui.input > input{
+                max-width:290px;
+                margin:0 auto;
+                padding-left:13px;
+                letter-spacing:38px;
+                border:none;
+                background-image:linear-gradient(to left, @border-color 75%, rgba(0, 0, 0, 0) 0%);
+                background-position:bottom;
+                background-size:51px 1px;
+                background-repeat:repeat-x;
+                background-position-x:35px;
+                &:focus{
+                    background-image:linear-gradient(to left, @theme-primary 75%, rgba(0, 0, 0, 0) 0%);
+                }
+            }
+        }
     }
     .fields .field, .fields .wide.field{
         padding-left:@gutterWidth;
         padding-right:@gutterWidth;
         margin-bottom:@14px;
     }
-    .field.otp-field{
-        margin:3rem 0;
-        label{
-            font-size:@14px;
-        }
-        .ui.input > input{
-            max-width:290px;
-            margin:0 auto;
-            padding-left:13px;
-            letter-spacing:38px;
-            border:none;
-            background-image: linear-gradient(to left, @border-color 75%, rgba(0, 0, 0, 0) 0%);
-            background-position: bottom;
-            background-size: 51px 1px;
-            background-repeat: repeat-x;
-            background-position-x: 35px;
-            &:focus{
-                background-image: linear-gradient(to left, @theme-primary 75%, rgba(0, 0, 0, 0) 0%);
-            }
-        }
+    .error:not(.field){
+        color:@negativeTextColor;
     }
     label{
         i.icon{
@@ -57,6 +64,71 @@
     input[type=url],
     textarea{
         border-bottom:@border-color 1px solid;
+    }
+    /*  Inverted Form  */
+    &.inverted{
+        input:not([type]),
+        input[type=date],
+        input[type=datetime-local],
+        input[type=email],
+        input[type=file],
+        input[type=number],
+        input[type=password],
+        input[type=search],
+        input[type=tel],
+        input[type=text],
+        input[type=time],
+        input[type=url]{
+            &:focus{
+                border-color:@theme-primary;
+            }
+            &::placeholder{
+                color:@quaternary-text;
+            }
+        }
+    }
+    .select-option{
+        .field{
+            padding:0 @14px;
+            >label{
+                display:none;
+            }
+            .ui.selection.dropdown{
+                border:none;
+            }
+            .dropdown-effect{
+                top:0;
+                border-radius:@6px;
+            }
+        }
+    }
+    p.field-error{
+        font-size:@12px;
+        line-height:@14px;
+        color:@highlight-primary;
+    }
+    .additional-field{
+        padding:0 !important;
+        margin-bottom:@14px;
+    }
+    &.cropper-wrap{
+        position:relative;
+        max-height:70vh;
+        text-align:center;
+        .file-uploader{
+            border:none;
+            background:@inverse-darken;
+            .file-uploader-inner{
+                padding:@14px;
+                margin:5rem 0;
+                display:inline-block;
+                border-radius:@4px;
+                border:#7d7d7d 1px dashed;
+            }
+        }
+        .ReactCrop.ReactCrop--fixed-aspect ~ .file-uploader{
+            display:none;
+        }
     }
 }
 .card{
@@ -136,37 +208,6 @@
     }
 }
 
-/*  Inverted Form  */
-.ui.form{
-    .field>label{
-        display:inline-block;
-        line-height:@18px;
-    }
-    &.inverted{
-        input:not([type]),
-        input[type=date],
-        input[type=datetime-local],
-        input[type=email],
-        input[type=file],
-        input[type=number],
-        input[type=password],
-        input[type=search],
-        input[type=tel],
-        input[type=text],
-        input[type=time],
-        input[type=url]{
-            &:focus{
-                border-color:@theme-primary;
-            }
-            &::placeholder{
-                color:@quaternary-text;
-            }
-        }
-    }
-    .error:not(.field){
-        color:@negativeTextColor;
-    }
-}
 .page-header-section{
     .ui.input.inverted{
         .icon{
@@ -214,23 +255,6 @@
     }
 }
 
-.ui.form{
-    p.field-error{
-        font-size:@12px;
-        line-height:@14px;
-        color:@highlight-primary;
-    }
-    .additional-field{
-        padding:0 !important;
-        margin-bottom:@14px;
-    }
-    // .field.disabled{
-    //   input[type=text]{
-    //     opacity:0;
-    //   }
-    // }
-}
-
 .file-uploader-wrap{
     max-width:360px;
     label{
@@ -251,6 +275,7 @@
     line-height:@28px;
     font-weight:700;
     text-align:center;
+    cursor:pointer;
     .icon{
         height:auto;
         margin-right:@6px;
@@ -317,21 +342,5 @@
 .field.error{
     .ui.labeled .ui.label{
         border-color:@negativeTextColor;
-    }
-}
-
-.ui.form.select-option{
-    .field{
-        padding:0 @14px;
-        >label{
-            display:none;
-        }
-        .ui.selection.dropdown{
-            border:none;
-        }
-        .dropdown-effect{
-            top:0;
-            border-radius:@6px;
-        }
     }
 }

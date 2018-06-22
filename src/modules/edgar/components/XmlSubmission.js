@@ -89,7 +89,7 @@ const XmlSubmission = observer((props) => {
               open={props.confirmBoxValues.entity === 'xml' && filingId === props.confirmBoxValues.refId}
               onCancel={props.handleDeleteCancel}
               onConfirm={props.handleDeleteXMlSubmission}
-              size="tiny"
+              size="mini"
               className="deletion"
             />
             <Confirm
@@ -98,7 +98,7 @@ const XmlSubmission = observer((props) => {
               open={props.confirmBoxValues.entity === 'lockunlock' && filingId === props.confirmBoxValues.refId}
               onCancel={props.handleDeleteCancel}
               onConfirm={props.handleXMLSubmissionLockUnlock}
-              size="tiny"
+              size="mini"
               className="deletion"
             />
           </Table.Body>

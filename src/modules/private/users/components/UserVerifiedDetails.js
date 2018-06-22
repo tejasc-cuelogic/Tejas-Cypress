@@ -20,11 +20,11 @@ const userVerifiedDetails = (props) => {
     legalAddress,
     dateOfBirth,
   } = props.legalDetails;
-  if (!legalName) {
+  if (!props.isUserVerified(props.legalDetails.cipStatus)) {
     return (
       <Card fluid className="form-card">
         <h3>Identity not verified</h3>
-        <Link to="/app/summary" ><b>Verify Identity</b></Link>
+        <Link to="/app/summary" onClick={() => props.handleNavToVerifyIdentity('InvestorPersonalDetails')} ><b>Verify Identity</b></Link>
       </Card>
     );
   }

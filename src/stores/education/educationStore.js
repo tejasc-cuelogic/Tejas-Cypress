@@ -48,12 +48,16 @@ export class EducationStore {
 
   @computed get kbs() {
     return (this.allData.data && this.allData.data.knowledgeBase
-      && ClientSearch.search(toJS(this.allData.data.knowledgeBase), this.searchParam)) || [];
+      && ClientSearch.search(
+        toJS(this.allData.data.knowledgeBase),
+        this.searchParam,
+        'knowledgeBase',
+      )) || [];
   }
 
   @computed get faqs() {
-    return (this.allData.data && this.allData.data.faqs &&
-      toJS(this.allData.data.faqs)) || [];
+    return (this.allData.data && this.allData.data.faqs
+      && ClientSearch.search(toJS(this.allData.data.faqs), this.searchParam, 'faq')) || [];
   }
 
   @computed get error() {

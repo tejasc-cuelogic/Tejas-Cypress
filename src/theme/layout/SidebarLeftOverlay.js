@@ -56,7 +56,7 @@ const MySidebar = observer(props => (
         />
         {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
         <div className="user-picture">
-          <Randavatar name={props.UserInfo.fullname} accountType={props.UserInfo.accountType} avatarKey={props.UserInfo.avatarKey} size="small" />
+          <Randavatar name={props.UserInfo.fullname} accountType={props.UserInfo.accountType} avatarUrl={props.UserInfo.avatarUrl} avatarKey={props.UserInfo.avatarKey} size="small" />
           <h2>{props.UserInfo.fullname}</h2>
           {GetNavItem('profile-settings', props.UserInfo.roles)}
         </div>
@@ -70,7 +70,10 @@ const MySidebar = observer(props => (
       }
     </Aux>
     }
-    <Sidebar.Pusher className={(props.match.url.includes('/business-application') ? 'business-application' : '')}>
+    <Sidebar.Pusher
+      className={`${props.match.url.includes('/business-application') ?
+        'business-application' : ''} ${uiStore.devBanner ? 'banner' : ''}`}
+    >
       {props.mobile && <Icon onClick={props.toggle} className="hamburger content" />}
       {props.children}
     </Sidebar.Pusher>

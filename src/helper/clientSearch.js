@@ -1,23 +1,22 @@
-// import Fuse from 'fuse.js';
-
 class ClientSearch {
-  options = {
-    shouldSort: true,
-    threshold: 0.6,
-    location: 0,
-    distance: 100,
-    maxPatternLength: 32,
-    minMatchCharLength: 2,
-    keys: [
-      'title', 'knowledgeBaseItems.title',
-    ],
-  };
-
-  search = (list, params) => {
-    // const fuse = new Fuse(list, this.options);
-    // (params && params !== '') ? fuse.search(params || '') :
-    console.log(params);
-    return list;
+  search = (list, srch, what) => {
+    const params = {
+      subItems: `${what}Items`,
+      item: what === 'faq' ? 'question' : 'title',
+      body: what === 'faq' ? 'answer' : 'body',
+    };
+    let result = list.filter(f => f[params.item].toLowerCase().includes(srch) ||
+      f[params.subItems].find(item => item[params.item].toLowerCase().includes(srch) ||
+      item[params.body].toLowerCase().includes(srch)));
+    result = result.map((i) => {
+      const updated = i;
+      updated[params.subItems] = i[params.item].toLowerCase().includes(srch) ?
+        updated[params.subItems] : updated[params.subItems].filter(ui =>
+          ui[params.item].toLowerCase().includes(srch) ||
+          ui[params.body].toLowerCase().includes(srch));
+      return updated;
+    });
+    return result;
   }
 }
 
