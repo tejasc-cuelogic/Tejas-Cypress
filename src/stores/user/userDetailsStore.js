@@ -151,7 +151,7 @@ export class UserDetailsStore {
         this.userDetails.contactDetails.phone &&
         this.userDetails.contactDetails.phone.verificationDate) ? 'DONE' : 'FAIL';
 
-      details.finalStatus = (details.activeAccounts.count > 0 &&
+      details.finalStatus = (details.activeAccounts.length > 2 &&
         this.validAccStatus.includes(details.idVerification) &&
         details.phoneVerification === 'DONE');
 
