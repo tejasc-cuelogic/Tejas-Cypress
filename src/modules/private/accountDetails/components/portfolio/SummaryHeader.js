@@ -27,7 +27,7 @@ const SummaryTitle = props => ((props.details.businessName) ? (
 ) : (
   <Aux>
     <Card.Content>
-      <Card.Header><AccTypeTitle /></Card.Header>
+      <Card.Header className="with-icon"><AccTypeTitle /></Card.Header>
     </Card.Content>
     <Divider horizontal className="only-border" />
   </Aux>

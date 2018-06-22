@@ -149,7 +149,7 @@
     }
     [class*="horizontally padded"].ui.grid{
         .content{
-            padding:@14px;
+            padding:@21px;
             margin:-@14px;
             + .content{
                 margin-top:@14px;
@@ -159,11 +159,12 @@
             }
         }
     }
-    &.investment-summary{
-        .header i.icon{
-            font-size:24px;
-            color:@highlight-tertiary;
-            vertical-align:top;
+    .header.with-icon i.icon{
+        font-size:24px;
+        color:@highlight-tertiary;
+        vertical-align:top;
+        &:not(:first-of-type){
+            margin-left:@20px;
         }
     }
     &.linked-bank{

@@ -170,7 +170,7 @@ h6{
 }
 .intro-text, .note{
 	color:@quaternary-text;
-	margin-bottom:@28px;
+	// margin-bottom:@28px;
 }
 a.link{
 	color:@link-color;
