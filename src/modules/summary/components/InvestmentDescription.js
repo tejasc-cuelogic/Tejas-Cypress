@@ -1,13 +1,15 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
+import find from 'lodash/find';
 
 const InvestmentDescription = observer((props) => {
-  const { value } = props.accTypes;
+  const { value, values } = props.accTypes;
+  const isAccExist = find(values, v => v.value === value);
   return (
     <div className="option-details center-align">
       { /* Individual */ }
-      {value === 0 &&
+      {isAccExist && value === 0 &&
         <p>Open a NextSeed investment account to begin investing in local businesses.
           <br />
         An initial deposit can be quickly and securely completed by linking your checking account.
@@ -19,7 +21,7 @@ const InvestmentDescription = observer((props) => {
         </p>
       }
       { /* IRA */ }
-      {value === 1 &&
+      {isAccExist && value === 1 &&
       <p>
         Open a self-directed NextSeed IRA to begin investing in local businesses.
         (Traditional and Roth IRA options available.) Minimum opening deposit: $5,000.
@@ -32,7 +34,7 @@ const InvestmentDescription = observer((props) => {
         Questions? Please see our <Link to="/app/summary" className="link">FAQs on IRAs</Link>
       </p>}
       { /* Entity */ }
-      {value === 2 &&
+      {isAccExist && value === 2 &&
       <p>
         Invest in local businesses through an Entity investment account.
         (Note: Investment limits for Entity
