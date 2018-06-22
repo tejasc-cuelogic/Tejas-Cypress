@@ -466,3 +466,45 @@ export const ENTITY_ACCOUNT_CREATION = {
   },
 };
 
+export const ACC_TYPE = {
+  accType: {
+    value: 0,
+    values: [
+      {
+        label: 'Individual',
+        value: 0,
+        description: `Open a NextSeed investment account to begin investing in local businesses.
+
+        An initial deposit can be quickly and securely completed by linking your checking account. 
+        You can easily connect your account by logging in through our secure system or by 
+        manually entering your account information. The uninvested cash in your account is 
+        [FDIC-insured][note: hover over with footnote] up to $250,000 and is interest-bearing. 
+        
+        We safeguard your information with bank-level security measures.`,
+        accType: 'individual',
+      },
+      {
+        label: 'IRA',
+        value: 1,
+        description: `Open a self-directed NextSeed IRA to begin investing in local businesses. (Traditional and Roth IRA options available.) 
+        Minimum opening deposit: $5,000. Investment limits apply. 
+        For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and annual account
+        fees for four years. See the Terms and Conditions for full details`,
+        accType: 'ira',
+      },
+      {
+        label: 'Entity',
+        value: 2,
+        description: `Create a NextSeed Investment Account by linking your checking account. You can easily 
+        connect your account by logging in through our secure system or by manually entering your 
+        account information. 
+        The uninvested cash in your account1 is FDIC-insured up to $250,000 and is interest-bearing.
+        
+        We safeguard your information with bank-level security measures.`,
+        accType: 'entity',
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+};
