@@ -51,8 +51,8 @@
     Brand Colors
 --------------------*/
 
-@primaryColor        : @blue;
-@secondaryColor      : @black;
+@primaryColor        : @primary-one;
+@secondaryColor      : @primary-two;
 
 @lightPrimaryColor   : @lightBlue;
 @lightSecondaryColor : @lightBlack;
@@ -62,12 +62,12 @@
 ---------------*/
 
 @headerFontWeight : @bold;
-@headerLineHeight : unit((18 / 14), em);
+@headerLineHeight : unit((14 / 14), em);
 
-@h1 : unit((28 / 14), rem);
-@h2 : unit((24 / 14), rem);
-@h3 : unit((18 / 14), rem);
-@h4 : unit((15 / 14), rem);
+@h1 : unit((60 / 14), rem);
+@h2 : unit((40 / 14), rem);
+@h3 : unit((28 / 14), rem);
+@h4 : unit((16 / 14), rem);
 @h5 : unit((14 / 14), rem);
 
 /*--------------
@@ -963,3 +963,27 @@
 @whiteActive           : darken(@white, 5);
 @offWhiteActive        : darken(@offWhite, 5);
 @darkWhiteActive       : darken(@darkWhite, 5);
+
+
+/*-----------------------------
+        Custom variables
+-------------------------------*/
+
+//  THEME BASE COLORS
+@primary-one:#20C86D;
+@primary-one-darken:darken(spin(@primary-one, 0.1190), 11.3725);                                        //  #189652
+@primary-one-lighten:lighten(desaturate(spin(@primary-one, 0.1190), 11.8369), 13.7255);                 //  #58D692
+
+@primary-two:#1781FB;
+@primary-two-darken:darken(desaturate(spin(@primary-two, -2.1053), 3.3898), 8.6275);                      //  #0073E6
+@primary-two-lighten:lighten(desaturate(spin(@primary-two, 0.0634), 1.2079), 12.1569);                    //  #55A2FB
+
+@secondary-color:#263E64;
+@secondary-color-darken:darken(desaturate(spin(@secondary-color, 0.2471), 0.7035), 6.8627);                 //  #1C2E4B
+@secondary-color-lighten:lighten(desaturate(spin(@secondary-color, 0.2471), 24.5812), 18.2353);             //  #5C6E8B
+
+@neutral:#31333D;
+@neutral-light:lighten(desaturate(spin(@neutral, -5.0000), 5.4045), 21.1765);                               //  #676A73
+@neutral-lighter:lighten(desaturate(spin(@neutral, 10.0000), 6.7424), 69.0196);                             //  #E6E6E8
+@neutral-lightest:lighten(desaturate(spin(@neutral, -2.0000), 5.2199), 72.3529);                            //  #EDEEF2
+@neutral-leghten:lighten(desaturate(spin(@neutral, -2.0000), 34.5455), 76.2745);                            //  #F7F8FC

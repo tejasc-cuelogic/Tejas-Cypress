@@ -7,15 +7,15 @@
 --------------------*/
 
 @background: @white;
-@borderWidth: 1px;
+@borderWidth: 0px;
 @border: @borderWidth solid @borderColor;
 
 @boxShadow: @subtleShadow;
-@verticalPadding: 1em;
-@horizontalPadding: 1em;
+@verticalPadding: 0em;
+@horizontalPadding: 0em;
 @padding: @verticalPadding @horizontalPadding;
 
-@verticalMargin: 1rem;
+@verticalMargin: 0rem;
 @horizontalMargin: 0em;
 @margin: @verticalMargin @horizontalMargin;
 @borderRadius: @defaultBorderRadius;

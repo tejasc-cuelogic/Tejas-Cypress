@@ -1,3 +1,22 @@
 /*******************************
          Theme Overrides
 *******************************/
+.ui.container{
+    &.home-banner{
+        min-height:80vh;
+        padding-top:74px;
+        background:url(../../assets/images/home-banner.jpg) top center no-repeat / cover;
+        >.ui.container{
+            display:table;
+            height:~"calc(80vh - 74px)";
+            .banner-caption{
+                display:table-cell;
+                vertical-align:middle;
+                // margin:0;
+                // position:absolute;
+                // top:50%;
+                // transform:translate(0%, -50%);
+            }
+        }
+    }
+}

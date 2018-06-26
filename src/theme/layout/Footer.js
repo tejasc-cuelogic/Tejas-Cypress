@@ -1,17 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Container,
-  Divider,
-  Grid,
-  Header,
-  Segment,
-} from 'semantic-ui-react';
+import { Container, Divider, Grid, Header, Segment } from 'semantic-ui-react';
 
 const footer = () => (
   <Segment inverted vertical className="footer">
     <Container fluid>
-      <Grid divided inverted stackable>
+      <Grid divided inverted stackable padded="vertically">
         <Grid.Column className="footerLinks" width={3}>
           <Header inverted as={Link} to="/about/team" content="Team" />
           <Header inverted as={Link} to="/blog" content="Blog" />

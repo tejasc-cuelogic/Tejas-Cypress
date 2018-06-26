@@ -1,3 +1,10 @@
 /*******************************
-        Global Overrides
+	Global Overrides
 *******************************/
+section{
+	padding:@60px 0;
+}
+//	Healper Classes
+.highlight-text{
+	color:@primary-one;
+}

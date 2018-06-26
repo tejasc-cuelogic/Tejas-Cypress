@@ -15,14 +15,14 @@
 @lineHeight: 1em;
 
 /* Button defaults to using same height as input globally */
-@verticalPadding: @inputVerticalPadding;
+@verticalPadding: @16px;
 @horizontalPadding: 1.5em;
 
 /* Text */
 @textTransform: none;
 @tapColor: transparent;
 @fontFamily: @pageFont;
-@fontWeight: @bold;
+@fontWeight: 400;
 @textColor: rgba(0, 0, 0, 0.6);
 @textShadow: none;
 @invertedTextShadow: @textShadow;
