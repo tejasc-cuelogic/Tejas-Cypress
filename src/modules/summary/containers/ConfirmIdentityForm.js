@@ -6,7 +6,7 @@ import { Modal, Grid, Button, Header, Form, Divider } from 'semantic-ui-react';
 import { FormSelect } from '../../../theme/form/FormElements';
 import Helper from '../../../helper/utility';
 
-@inject('profileStore', 'uiStore')
+@inject('profileStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class ConfirmIdentityForm extends Component {
@@ -21,10 +21,17 @@ export default class ConfirmIdentityForm extends Component {
       /* eslint-disable no-underscore-dangle */
       if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
         Helper.toast('Identity questions verified.', 'success');
-        this.props.profileStore.startPhoneVerification().then(() => {
-          this.props.setDashboardWizardStep('ConfirmPhoneNumber');
-        })
-          .catch(() => {});
+        if (this.props.userDetailsStore.userDetails.contactDetails.phone &&
+          this.props.userDetailsStore.userDetails.contactDetails.phone.verificationDate) {
+          this.props.setDashboardWizardStep();
+        } else {
+          this.props.profileStore.startPhoneVerification().then(() => {
+            this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+          })
+            .catch((err) => {
+              this.props.uiStore.setErrors(JSON.stringify(err.message));
+            });
+        }
       } else {
         Helper.toast('Identity questions not verified.', 'error');
         this.props.setDashboardWizardStep('ConfirmIdentityDocuments');

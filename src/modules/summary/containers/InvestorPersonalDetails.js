@@ -9,10 +9,20 @@ import Helper from '../../../helper/utility';
 import CipErrors from '../../../theme/common/CipErrors';
 import ListErrors from '../../../theme/common/ListErrors';
 
-@inject('profileStore', 'uiStore', 'userStore')
+@inject('profileStore', 'uiStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class investorPersonalDetails extends Component {
+  componentWillMount() {
+    if (this.props.profileStore.verifyIdentity01.fields.phoneNumber.value === '') {
+      if (this.props.userDetailsStore.userDetails.contactDetails.phone) {
+        const fieldValue =
+        Helper.maskPhoneNumber(this.props.userDetailsStore.userDetails.contactDetails.phone.number);
+        this.props.profileStore.onFieldChange('verifyIdentity01', 'phoneNumber', fieldValue);
+      }
+    }
+  }
+
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
@@ -31,10 +41,15 @@ export default class investorPersonalDetails extends Component {
         this.props.setDashboardWizardStep('ConfirmIdentityForm');
       } else if (key === 'id.success') {
         Helper.toast('User verification passed!', 'success');
-        this.props.profileStore.startPhoneVerification().then(() => {
-          this.props.setDashboardWizardStep('ConfirmPhoneNumber');
-        })
-          .catch((err) => { this.props.uiStore.setErrors(JSON.stringify(err.message)); });
+        if (this.props.userDetailsStore.userDetails.contactDetails.phone &&
+          this.props.userDetailsStore.userDetails.contactDetails.phone.verificationDate) {
+          this.props.setDashboardWizardStep();
+        } else {
+          this.props.profileStore.startPhoneVerification().then(() => {
+            this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+          })
+            .catch((err) => { this.props.uiStore.setErrors(JSON.stringify(err.message)); });
+        }
       } else {
         Helper.toast('User verification hard-failed!', 'error');
         this.props.setDashboardWizardStep('ConfirmIdentityDocuments');
@@ -60,7 +75,7 @@ export default class investorPersonalDetails extends Component {
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">{welcomeMsg}</Header>
-          <p>Let`s get you set up with a NextSeed investment <br /> account.</p>
+          <p>Let’s get you set up with a NextSeed investment <br /> account.</p>
           <Divider />
           <p>
             Federal regulations require us to verify your legal<br />

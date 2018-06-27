@@ -7,7 +7,7 @@ import validationActions from '../../../actions/validation';
 import ListErrors from '../../../theme/common/ListErrors';
 import { DropZone } from '../../../theme/form/FormElements';
 
-@inject('profileStore', 'uiStore')
+@inject('profileStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class ConfirmIdentityDocuments extends Component {
@@ -41,12 +41,17 @@ export default class ConfirmIdentityDocuments extends Component {
     validationActions.validateConfirmIdentityDocumentsForm();
     if (this.props.profileStore.canSubmitConfirmIdentityDocumentsForm) {
       this.props.profileStore.uploadAndUpdateCIPInfo().then(() => {
-        this.props.profileStore.startPhoneVerification().then(() => {
-          this.props.setDashboardWizardStep('ConfirmPhoneNumber');
-        })
-          .catch((err) => {
-            this.props.uiStore.setErrors(JSON.stringify(err.message));
-          });
+        if (this.props.userDetailsStore.userDetails.contactDetails.phone &&
+          this.props.userDetailsStore.userDetails.contactDetails.phone.verificationDate) {
+          this.props.setDashboardWizardStep();
+        } else {
+          this.props.profileStore.startPhoneVerification().then(() => {
+            this.props.setDashboardWizardStep('ConfirmPhoneNumber');
+          })
+            .catch((err) => {
+              this.props.uiStore.setErrors(JSON.stringify(err.message));
+            });
+        }
       })
         .catch(() => { });
     }

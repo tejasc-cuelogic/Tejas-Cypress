@@ -21,7 +21,7 @@ export default class UpdateProfilePhoto extends Component {
   handleVerifyFileSize = (fileSize) => {
     if (fileSize > PROFILE_PHOTO_BYTES) {
       const field = 'error';
-      const errorMsg = 'File size Greater than 5MB';
+      const errorMsg = 'File size cannot be more than 5 MB.';
       this.props.profileStore.setProfilePhoto(field, errorMsg);
       this.props.profileStore.setProfilePhoto('value', '');
     }
@@ -60,7 +60,7 @@ export default class UpdateProfilePhoto extends Component {
     const { updateProfileInfo, canUpdateProfilePhoto, resetProfilePhoto } = this.props.profileStore;
     const { inProgress } = this.props.uiStore;
     return (
-      <Modal open closeIcon onClose={() => this.handleCloseModal()}>
+      <Modal open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Header>Select a Photo</Modal.Header>
         <Modal.Content>
           <Form className="cropper-wrap">

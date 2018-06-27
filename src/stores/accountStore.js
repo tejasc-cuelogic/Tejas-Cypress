@@ -11,6 +11,7 @@ import {
   IND_ADD_FUND,
   IND_BANK_ACC_SEARCH,
   IND_LINK_BANK_MANUALLY,
+  ACC_TYPE,
 } from '../constants/account';
 import { GqlClient as client } from '../services/graphql';
 import { getPlaidAccountdata } from '../stores/queries/account';
@@ -57,6 +58,27 @@ export class AccountStore {
   formBankSearch = {
     fields: { ...IND_BANK_ACC_SEARCH }, meta: { isValid: false, error: '' },
   };
+
+  @observable
+  investmentAccTypes = {
+    fields: { ...ACC_TYPE },
+  };
+
+  @action
+  setInvestmentAccType = (accType) => {
+    this.investmentAccTypes.fields.accType.value = accType;
+  }
+
+  @action
+  setInvestmentAccTypeValues = (values) => {
+    this.investmentAccTypes.fields.accType.values = values;
+  }
+
+  @computed
+  get investmentAccType() {
+    const type = this.investmentAccTypes.fields.accType.value;
+    return INVESTMENT_ACCOUNT_TYPES[type];
+  }
 
   @observable
   accountTypeCreated = undefined;
@@ -161,7 +183,7 @@ export class AccountStore {
 
   @computed
   get routeOnInvestmentTypeSelection() {
-    return `${this.accountType.type}/AccountCreation`;
+    return `${this.investmentAccType}/AccountCreation`;
   }
 
   @action

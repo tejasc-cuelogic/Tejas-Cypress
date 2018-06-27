@@ -236,6 +236,7 @@
 }
 
 .ui.card.verification{
+    min-height:210px;
     text-align:center;
     justify-content:center;
     .content{

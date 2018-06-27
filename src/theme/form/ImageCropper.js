@@ -48,14 +48,17 @@ export default class ImageCropper extends Component {
 
   onImageLoaded = (image) => {
     this.props.verifyImageDimension(image.width, image.height);
+    const minimumWidth = 200;
+    const cropWidthPer = (minimumWidth / image.width) * 100;
     this.setState({
       crop: makeAspectCrop({
         x: 0,
         y: 0,
         aspect: 1 / 1,
-        width: 20,
+        width: cropWidthPer,
       }, image.width / image.height),
       image,
+      minWidth: cropWidthPer,
     });
   }
 
