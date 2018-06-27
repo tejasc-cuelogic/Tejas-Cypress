@@ -16,7 +16,7 @@ import entityAccountStore from '../user/entityAccountStore';
 import individualAccountStore from '../user/individualAccountStore';
 import { BENEFICIARY_FRM, FIN_INFO } from '../../constants/user';
 import { userDetailsQuery, toggleUserAccount } from '../queries/users';
-import { allBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../queries/beneficiaries';
+import { allBeneficiaries, getBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../queries/beneficiaries';
 import { finLimit, updateFinLimit } from '../queries/financialLimits';
 import Helper from '../../helper/utility';
 
@@ -99,8 +99,8 @@ export class UserDetailsStore {
   @action
   getBeneficiaries = () => {
     this.beneficiariesData = graphql({
-      client: client2,
-      query: allBeneficiaries,
+      client,
+      query: getBeneficiaries,
     });
   }
 
@@ -110,8 +110,8 @@ export class UserDetailsStore {
 
   @computed get beneficiaries() {
     return (this.beneficiariesData.data
-      && this.beneficiariesData.data.allBeneficiaries
-      && toJS(this.beneficiariesData.data.allBeneficiaries)
+      && this.beneficiariesData.data.beneficiaries
+      && toJS(this.beneficiariesData.data.beneficiaries)
     ) || [];
   }
 

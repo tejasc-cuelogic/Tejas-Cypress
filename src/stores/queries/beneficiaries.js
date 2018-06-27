@@ -17,6 +17,31 @@ export const allBeneficiaries = gql`
   }
 `;
 
+export const getBeneficiaries = gql`
+  query getBeneficiaries {   
+    beneficiaries {   
+        accountId   
+        accountType   
+        beneficiary {     
+            requestStatus    
+            recipients {     
+                firstName    
+                lastName    
+                dob     
+                relationship     
+                shares     
+                address {     
+                    street    
+                    city     
+                    state     
+                    zipCode    
+                }     
+            }    
+        }    
+    }     
+  }
+`;
+
 export const createBeneficiaryMutation = gql`
   mutation createBeneficiary($firstName: String!, $lastName: String!, $relationship: String!, $residentalStreet: String!, $city: String!, $state: String!, $zipCode: Int!, $dob: String!, ) {
     createBeneficiary(firstName: $firstName, lastName: $lastName, relationship: $relationship, residentalStreet: $residentalStreet, city: $city, state: $state, zipCode: $zipCode, dob: $dob) {

@@ -15,25 +15,34 @@ export default class Beneficiaries extends Component {
 
   render() {
     const {
-      beneficiaries, bLoading, bErr, deleteBeneficiary, deleting, signupStatus,
+      beneficiaries, bLoading, bErr, deleteBeneficiary, deleting,
     } = this.props.userDetailsStore;
-    console.log(signupStatus);
+    console.log(beneficiaries, bErr);
+    const beneficiaryList = beneficiaries.map(beneficary => (
+      beneficary ?
+        <NoBeneficiary
+          match={this.props.match}
+          title={beneficary.accountType}
+          key={beneficary.accountId}
+          curLocation={this.props.location}
+        /> :
+        <BeneficiaryList
+          key={beneficary.accountId}
+          title={beneficary.accountType}
+          match={this.props.match}
+          delete={deleteBeneficiary}
+          beneficiaries={beneficiaries}
+          deleting={deleting}
+          loading={bLoading}
+        />
+    ));
     return (
       <div>
         <Header as="h3">Beneficiaries</Header>
         <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis</p>
         {bLoading ? <div>loading...</div> : (
           <Grid columns={1} stackable>
-            {(bErr || beneficiaries.length === 0) ?
-              <NoBeneficiary match={this.props.match} /> :
-              <BeneficiaryList
-                match={this.props.match}
-                delete={deleteBeneficiary}
-                beneficiaries={beneficiaries}
-                deleting={deleting}
-                loading={bLoading}
-              />
-            }
+            { beneficiaryList }
             <Route exact path={`${this.props.match.url}/add-beneficiary`} render={props => <AddBeneficiary refLink={this.props.match.url} {...props} />} />
           </Grid>
           )
