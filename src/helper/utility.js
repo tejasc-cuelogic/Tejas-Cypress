@@ -3,7 +3,6 @@
  */
 import { toast } from 'react-toastify';
 import _ from 'lodash';
-// import uploadApi from '../services/uploadApi';
 import api from '../services/api';
 
 export class Utility {
