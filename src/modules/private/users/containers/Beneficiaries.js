@@ -15,8 +15,9 @@ export default class Beneficiaries extends Component {
 
   render() {
     const {
-      beneficiaries, bLoading, bErr, deleteBeneficiary, deleting,
+      beneficiaries, bLoading, bErr, deleteBeneficiary, deleting, signupStatus,
     } = this.props.userDetailsStore;
+    console.log(signupStatus);
     return (
       <div>
         <Header as="h3">Beneficiaries</Header>
