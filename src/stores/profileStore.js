@@ -222,7 +222,6 @@ export class ProfileStore {
     return 'HARD_FAIL';
   }
 
-  /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -318,11 +317,10 @@ export class ProfileStore {
             fileId: this.confirmIdentityDocuments.fields[field].fileId,
           },
         })
-        .then((result) => {
+        .then(() => {
           this.onFieldChange('confirmIdentityDocuments', field, '');
           this.confirmIdentityDocuments.fields[field].fileId = '';
           this.confirmIdentityDocuments.fields[field].preSignedUrl = '';
-          console.log(result);
           resolve();
         })
         .catch((err) => {
