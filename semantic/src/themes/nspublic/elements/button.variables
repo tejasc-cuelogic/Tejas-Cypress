@@ -38,10 +38,8 @@
 @borderBoxShadowColor: transparent;
 @borderBoxShadowWidth: 1px;
 @borderBoxShadow: 0px 0px 0px @borderBoxShadowWidth @borderBoxShadowColor inset;
-@boxShadow:
-  @borderBoxShadow,
-  @shadowBoxShadow
-;
+@boxShadow:0px 1px 1px 0px @thumbBackground;
+@buttonHoverShadow:0px 3px 4px 0px @thumbBackground;
 
 /* Icon */
 @iconHeight: @relativeTiny;
@@ -256,7 +254,7 @@
 
 /* Colors */
 @coloredBackgroundImage: none;
-@coloredBoxShadow: @shadowBoxShadow;
+@coloredBoxShadow: @boxShadow;
 
 /* Colored */
 @brownTextColor: @invertedTextColor;

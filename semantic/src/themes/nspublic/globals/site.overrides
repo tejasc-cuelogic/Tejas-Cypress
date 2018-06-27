@@ -1,8 +1,14 @@
 /*******************************
 	Global Overrides
 *******************************/
+body{
+	color:@neutral-light;
+}
 section{
 	padding:@60px 0;
+	.caption{
+		margin-bottom:@50px;
+	}
 }
 //	Healper Classes
 .highlight-text{

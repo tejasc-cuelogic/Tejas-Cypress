@@ -125,7 +125,7 @@
 @pageOverflowX       : hidden;
 
 @lineHeight          : 1.4285em;
-@textColor           : rgba(0, 0, 0, 0.87);
+@textColor           :@neutral;
 
 /*-------------------
       Paragraph
@@ -735,8 +735,8 @@
 ;
 
 /*---  Colors  ---*/
-@primaryColorHover    : saturate(darken(@primaryColor, 5), 10, relative);
-@secondaryColorHover  : saturate(lighten(@secondaryColor, 5), 10, relative);
+@primaryColorHover    : @primary-one-darken;
+@secondaryColorHover  : @primary-two-darken;
 
 @redHover             : saturate(darken(@red, 5), 10, relative);
 @orangeHover          : saturate(darken(@orange, 5), 10, relative);

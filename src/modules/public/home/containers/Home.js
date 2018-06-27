@@ -24,7 +24,7 @@ class Home extends Component {
             <Header as="h2">
               A community-driven platform for fundraising and investing.
             </Header>
-            <p>
+            <p className="caption">
               Welcome to capital investing reinvented. NextSeed connects entrepreneurs with
               everyday people to help businesses, investors and communities grow together.
             </p>
