@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Form, Button, Grid, Divider, Icon, Card, Responsive } from 'semantic-ui-react';
 import shortid from 'shortid';
-import '../../../assets/custom.css';
 
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';

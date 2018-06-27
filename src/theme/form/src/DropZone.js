@@ -1,10 +1,9 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Icon, Responsive, Button } from 'semantic-ui-react';
+import { Icon, Responsive, Button } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
-
-import FieldError from '../common/FieldError';
+import { FieldError } from '../../common';
 
 const DropZone = observer((props) => {
   const {
@@ -13,14 +12,14 @@ const DropZone = observer((props) => {
     error,
   } = props.fielddata;
   return (
-    <Form.Field>
+    <div className="file-uploader-wrap">
       {label &&
         <label>{label}</label>
       }
       {!value &&
       <div className="file-uploader">
         <Dropzone onDrop={props.ondrop} className="test" style={{}}>
-          <div><Icon className="ns-upload" /> Choose a file <span>or drag it here</span></div>
+          <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
         </Dropzone>
       </div>
       }
@@ -32,7 +31,7 @@ const DropZone = observer((props) => {
           size="tiny"
           compact
           className="remove pull-right"
-          onClick={() => props.onremove(props.name)}
+          onClick={e => props.onremove(e, props.name)}
         >
           Remove
         </Responsive>
@@ -41,17 +40,15 @@ const DropZone = observer((props) => {
           maxWidth={767}
           name="remove"
           className="pull-right"
-          onClick={() => props.onremove(props.name)}
+          onClick={e => props.onremove(e, props.name)}
         />
         <span title={value}>{value}</span>
       </div>
       }
       {error &&
-        <div className="center-align">
-          <FieldError error={error} />
-        </div>
+        <FieldError error={error} />
       }
-    </Form.Field>
+    </div>
   );
 });
 

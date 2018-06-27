@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Grid } from 'semantic-ui-react';
-import { FaqWidget } from '../../../../theme/common/ImportCommon';
+import { FaqWidget } from '../../../../theme/common';
 import AvailableCashTransfer from '../components/transferFunds/AvailableCashTransfer';
 
 const data = {

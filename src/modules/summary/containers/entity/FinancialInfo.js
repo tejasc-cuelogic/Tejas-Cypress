@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-import { FormRadioGroup, FormDatePicker } from '../../../../theme/form/FormElements';
+import { FormRadioGroup, FormDatePicker } from '../../../../theme/form';
 
 @inject('accountStore', 'entityAccountStore')
 @observer

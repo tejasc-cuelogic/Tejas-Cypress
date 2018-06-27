@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { MaskedInput2, FileUploader } from '../../../../theme/form/FormElements';
+import { MaskedInput2, FileUploader } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 

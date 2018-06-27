@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Header, Card, Form, Button } from 'semantic-ui-react';
 import adminActions from '../../../../../actions/admin';
-import { FormInput, FormSelect } from '../../../../../theme/form/FormElements';
+import { FormInput, FormSelect } from '../../../../../theme/form';
 import { ROLES } from '../../../../../constants/user';
 
 @inject('userStore', 'uiStore')

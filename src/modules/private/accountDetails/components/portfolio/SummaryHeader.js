@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import snakeCase from 'lodash/snakeCase';
 import Aux from 'react-aux';
 import { Card, Grid, Popup, Divider, Statistic, Icon, Header } from 'semantic-ui-react';
-import { AccTypeTitle } from '../../../../../theme/common/ImportCommon';
+import { AccTypeTitle } from '../../../../../theme/common';
 import Helper from '../../../../../helper/utility';
 /*
   type =>

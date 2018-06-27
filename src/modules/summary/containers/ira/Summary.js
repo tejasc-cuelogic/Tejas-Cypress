@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../helper/utility';
-import ListErrors from '../../../../theme/common/ListErrors';
+import { ListErrors } from '../../../../theme/common';
 
 @inject('iraAccountStore', 'uiStore')
 @withRouter

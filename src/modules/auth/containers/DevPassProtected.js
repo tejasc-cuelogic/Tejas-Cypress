@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Modal, Button, Form, Image, Divider } from 'semantic-ui-react';
 import activityActions from '../../../actions/activity';
-import FieldError from '../../../theme/common/FieldError';
+import { FieldError } from '../../../theme/common';
 import Logo from '../../../assets/images/nextseed_logo_white_green.svg';
 
 @inject('authStore', 'uiStore')

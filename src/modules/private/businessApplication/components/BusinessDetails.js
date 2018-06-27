@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormInput, FileUploader } from '../../../../theme/form/FormElements';
+import { FormInput, FileUploader } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 // import Helper from '../../../../helper/utility';

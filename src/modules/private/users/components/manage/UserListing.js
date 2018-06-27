@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table, Visibility, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import DateTimeFormat from './../../../../../theme/common/DateTimeFormat';
+import { DateTimeFormat } from './../../../../../theme/common';
 import Randavatar from './../../../../../theme/common/Randavatar';
 import UserTypeIcon from './UserTypeIcon';
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon, Input } from 'semantic-ui-react';
-import FieldError from '../common/FieldError';
+import { FieldError } from '../../common';
 
 const FormInput = observer((props) => {
   const {

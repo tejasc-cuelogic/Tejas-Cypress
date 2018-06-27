@@ -1,38 +1,34 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon, Input } from 'semantic-ui-react';
-import FieldError from '../common/FieldError';
+import { Form, Popup, Icon } from 'semantic-ui-react';
+import DatePicker from 'react-datepicker';
+import { FieldError } from '../../common';
 
-const FormLabelInput = observer((props) => {
-  const {
-    label,
-    error,
-    tooltip,
-    placeHolder,
-  } = props.fielddata;
+const FormDatePicker = observer((props) => {
+  const { label, error } = props.fielddata;
   return (
     <Form.Field>
       <label>
         {label}
-        {tooltip &&
+        {props.tooltip &&
           <Popup
             trigger={<Icon name="help circle outline" />}
-            content={tooltip}
+            content={props.tooltip}
             position="top center"
             className="center-align"
           />
         }
       </label>
-      <Input
-        fluid
-        labeled
+      <DatePicker
+        showMonthDropdown
+        showYearDropdown
         {...props}
         label={false}
-        type={props.type || 'text'}
-        error={!!error}
-        placeholder={placeHolder}
+        dateFormat="MM-DD-YYYY"
+        onClick={props.changed}
         onChange={props.changed}
+        disabled={props.isdisabled}
       />
       {error &&
         <FieldError error={error} />
@@ -41,4 +37,4 @@ const FormLabelInput = observer((props) => {
   );
 });
 
-export default FormLabelInput;
+export default FormDatePicker;

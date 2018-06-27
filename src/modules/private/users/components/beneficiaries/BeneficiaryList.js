@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Grid, Button, Header } from 'semantic-ui-react';
-import DateTimeFormat from '../../../../../theme/common/DateTimeFormat';
+import { DateTimeFormat } from '../../../../../theme/common';
 
 const statuses = ['Rejected', 'Pending Approval', 'Approved'];
 const BeneficiaryList = props => (

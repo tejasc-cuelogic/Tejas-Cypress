@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { US_STATES } from '../../../../constants/account';
-import { FormInput, FormSelect, AutoComplete, MaskedInput } from '../../../../theme/form/FormElements';
+import { FormInput, FormSelect, AutoComplete, MaskedInput } from '../../../../theme/form';
 
 @inject('entityAccountStore')
 @observer

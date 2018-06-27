@@ -3,7 +3,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Form } from 'semantic-ui-react';
 import Autocomplete from 'react-google-autocomplete';
-import FieldError from '../common/FieldError';
+import { FieldError } from '../../common';
 
 const AutoComplete = observer((props) => {
   const { label, error, value } = props.fielddata;

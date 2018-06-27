@@ -2,7 +2,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Icon, Button, Responsive } from 'semantic-ui-react';
-import FieldError from '../common/FieldError';
+import { FieldError } from '../../common';
 
 const FileUploader = observer((props) => {
   const { label, error, value } = props.fielddata;

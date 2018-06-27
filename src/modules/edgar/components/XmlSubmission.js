@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Accordion, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import _ from 'lodash';
-import DateTimeFormat from './../../../theme/common/DateTimeFormat';
+import { DateTimeFormat } from './../../../theme/common';
 
 import {
   XML_STATUSES,

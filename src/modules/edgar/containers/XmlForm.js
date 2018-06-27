@@ -15,7 +15,7 @@ import FileSelector from './xmlFormContainers/FileSelector';
 import businessActions from '../../../actions/business';
 import Spinner from '../../../theme/ui/Spinner';
 import Helper from '../../../helper/utility';
-import FormErrors from '../../../theme/common/FormErrors';
+import { FormErrors } from '../../../theme/common';
 import {
   XML_STATUSES,
   XML_SUBMISSION_TABS,

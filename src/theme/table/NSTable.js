@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Table, Icon } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import Helper from '../../helper/utility';
-import DateTimeFormat from '../common/DateTimeFormat';
+import { DateTimeFormat } from '../common';
 
 
 export const THeader = ({ columns }) => (

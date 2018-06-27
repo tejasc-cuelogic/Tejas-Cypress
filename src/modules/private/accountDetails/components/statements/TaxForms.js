@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FaqWidget } from '../../../../../theme/common/ImportCommon';
+import { FaqWidget } from '../../../../../theme/common';
 import { FillTable } from '../../../../../theme/table/NSTable';
 
 const result = {

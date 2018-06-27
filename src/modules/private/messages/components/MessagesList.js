@@ -2,7 +2,7 @@ import React from 'react';
 import { List, Image, Item, Label } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import ProfilePicTemp from '../../../../assets/images/james-wright.png';
-import DateTimeFormat from '../../../../theme/common/DateTimeFormat';
+import { DateTimeFormat } from '../../../../theme/common';
 
 const MessagesList = props => (
   <List divided selection relaxed="very" verticalAlign="middle">

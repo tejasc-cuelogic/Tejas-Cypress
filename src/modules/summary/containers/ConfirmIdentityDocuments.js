@@ -4,8 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List, Message, Confirm } from 'semantic-ui-react';
 
 import validationActions from '../../../actions/validation';
-import ListErrors from '../../../theme/common/ListErrors';
-import { DropZone } from '../../../theme/form/FormElements';
+import { ListErrors } from '../../../theme/common';
+import { DropZone } from '../../../theme/form';
 
 @inject('profileStore', 'uiStore', 'userDetailsStore')
 @withRouter

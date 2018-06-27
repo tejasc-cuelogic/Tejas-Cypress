@@ -3,9 +3,8 @@ import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import { Route, withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
-import FieldError from '../../../../theme/common/FieldError';
+import { FieldError, ListErrors } from '../../../../theme/common';
 import validationActions from '../../../../actions/validation';
-import ListErrors from '../../../../theme/common/ListErrors';
 import Helper from '../../../../helper/utility';
 import ConfirmEmailAddress from '../../../auth/containers/ConfirmEmailAddress';
 

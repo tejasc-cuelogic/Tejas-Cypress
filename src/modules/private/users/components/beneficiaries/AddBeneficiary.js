@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Form, Button } from 'semantic-ui-react';
-import { FormInput, AutoComplete, FormDatePicker } from '../../../../../theme/form/FormElements';
+import { FormInput, AutoComplete, FormDatePicker } from '../../../../../theme/form';
 import Helper from '../../../../../helper/utility';
 
 @inject('userDetailsStore', 'uiStore')

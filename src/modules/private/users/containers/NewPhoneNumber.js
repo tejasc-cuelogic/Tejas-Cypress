@@ -3,9 +3,9 @@ import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import { Route, withRouter } from 'react-router-dom';
 import { Header, Modal, Form, Button, Message } from 'semantic-ui-react';
-import { MaskedInput } from '../../../../theme/form/FormElements';
+import { MaskedInput } from '../../../../theme/form';
 import ConfirmPhoneNumber from '../../../summary/containers/ConfirmPhoneNumber';
-import ListErrors from '../../../../theme/common/ListErrors';
+import { ListErrors } from '../../../../theme/common';
 
 @inject('profileStore', 'uiStore')
 @withRouter

@@ -9,7 +9,7 @@ import StickyNotification from '../components/StickyNotification';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';
 import ProgressCard from '../components/ProgressCard';
-import ListErrors from '../../../theme/common/ListErrors';
+import { ListErrors } from '../../../theme/common';
 
 @inject('uiStore', 'profileStore', 'accountStore', 'userDetailsStore')
 @observer

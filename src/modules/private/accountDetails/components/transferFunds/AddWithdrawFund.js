@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Input, Divider } from 'semantic-ui-react';
-import { AccTypeTitle } from '../../../../../theme/common/ImportCommon';
+import { AccTypeTitle } from '../../../../../theme/common';
 
 const AddWithdrawFund = ({ match, history, location }) => (
   <Modal

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Header, Form, Divider, Message, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { DropZoneLarge } from '../../../../theme/form/FormElements';
-import ListErrors from '../../../../theme/common/ListErrors';
+import { DropZoneLarge } from '../../../../theme/form';
+import { ListErrors } from '../../../../theme/common';
 
 @inject('uiStore', 'iraAccountStore')
 @observer

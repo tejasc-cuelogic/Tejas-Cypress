@@ -14,7 +14,7 @@ import {
   FormSelect,
   FormRadioGroup,
   FormDatePicker,
-} from './../../../../theme/form/FormElements';
+} from './../../../../theme/form';
 
 @inject('businessStore')
 @withRouter

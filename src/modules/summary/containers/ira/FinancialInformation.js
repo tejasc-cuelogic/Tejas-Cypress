@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
-import { FormInput } from '../../../../theme/form/FormElements';
+import { FormInput } from '../../../../theme/form';
 
 @inject('iraAccountStore')
 @observer

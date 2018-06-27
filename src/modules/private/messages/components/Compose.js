@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Button } from 'semantic-ui-react';
-import { FormTextarea } from '../../../../theme/form/FormElements';
+import { FormTextarea } from '../../../../theme/form';
 
 @inject('messageStore', 'uiStore')
 @observer

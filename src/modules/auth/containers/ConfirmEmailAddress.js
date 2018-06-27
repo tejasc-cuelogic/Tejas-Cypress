@@ -5,8 +5,8 @@ import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react
 
 import validationActions from '../../../actions/validation';
 import authActions from '../../../actions/auth';
-import { FormInput } from '../../../theme/form/FormElements';
-import ListErrors from '../../../theme/common/ListErrors';
+import { FormInput } from '../../../theme/form';
+import { ListErrors } from '../../../theme/common';
 import Helper from '../../../helper/utility';
 
 @inject('authStore', 'uiStore', 'userStore', 'profileStore')

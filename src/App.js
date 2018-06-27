@@ -5,14 +5,13 @@ import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
-import DevBanner from './theme/common/DevBanner';
+import { DevBanner, ListErrors } from './theme/common';
 import Layout from './theme/layout/Layout';
 import Private from './containers/common/Private';
 import Public from './containers/common/Public';
 import authActions from './actions/auth';
 import activityActions from './actions/activity';
 import Spinner from './theme/ui/Spinner';
-import ListErrors from './theme/common/ListErrors';
 /**
  * Main App
  */
