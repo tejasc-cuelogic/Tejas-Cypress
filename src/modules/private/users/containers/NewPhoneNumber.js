@@ -18,6 +18,7 @@ export default class NewPhoneNumber extends Component {
     this.props.profileStore.resetFormData('verifyIdentity01');
   }
   handleChangePhoneNumber = () => {
+    this.props.profileStore.resetFormData('verifyIdentity04');
     this.props.profileStore.startPhoneVerification().then(() => {
       this.props.history.push(`${this.props.match.url}/confirm`);
     })

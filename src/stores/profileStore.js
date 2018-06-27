@@ -97,30 +97,6 @@ export class ProfileStore {
   }
 
   @action
-  resetVerificationCode() {
-    Object.keys(this.verifyIdentity04.fields).map((field) => {
-      this.verifyIdentity04.fields[field].value = '';
-      this.verifyIdentity04.fields[field].error = undefined;
-      return true;
-    });
-    this.verifyIdentity04.meta.isValid = false;
-    this.verifyIdentity04.meta.error = '';
-    this.verifyIdentity04.response = {};
-  }
-
-  @action
-  resetUpdateProfileDetails() {
-    Object.keys(this.updateProfileInfo.fields).map((field) => {
-      this.updateProfileInfo.fields[field].value = '';
-      this.updateProfileInfo.fields[field].error = undefined;
-      return true;
-    });
-    this.updateProfileInfo.meta.isValid = false;
-    this.updateProfileInfo.meta.error = '';
-    this.updateProfileInfo.response = {};
-  }
-
-  @action
   resetFormData(form) {
     Object.keys(this[form].fields).map((field) => {
       this[form].fields[field].value = '';
@@ -491,7 +467,7 @@ export class ProfileStore {
 
   @action
   setProfileInfo = (userDetails) => {
-    this.resetUpdateProfileDetails();
+    this.resetFormData('updateProfileInfo');
     const {
       email,
       address,

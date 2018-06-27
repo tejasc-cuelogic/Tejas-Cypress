@@ -28,7 +28,7 @@ export default class ConfirmPhoneNumber extends Component {
         Helper.toast('Phone number is confirmed.', 'success');
         this.props.history.replace('/app/profile-settings/profile-data');
         this.props.uiStore.clearErrors();
-        this.props.profileStore.resetVerificationCode();
+        this.props.profileStore.resetFormData('verifyIdentity04');
       })
         .catch(() => { });
     } else {
@@ -43,6 +43,8 @@ export default class ConfirmPhoneNumber extends Component {
   handleChangePhoneNumber = () => {
     if (!this.props.newPhoneNumber) {
       this.props.uiStore.setEditMode(true);
+    } else {
+      this.props.uiStore.clearErrors();
     }
   }
 
@@ -60,7 +62,7 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.history.replace(this.props.refLink);
     }
     this.props.uiStore.clearErrors();
-    this.props.profileStore.resetVerificationCode();
+    this.props.profileStore.resetFormData('verifyIdentity04');
   }
 
   render() {
