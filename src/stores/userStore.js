@@ -2,9 +2,7 @@ import { toJS, observable, action, computed } from 'mobx';
 import shortid from 'shortid';
 import Validator from 'validatorjs';
 import _ from 'lodash';
-import api from '../ns-api';
 import { NEW_USER } from '../constants/user';
-import uiStore from './uiStore';
 
 export class UserStore {
   @observable currentUser;
@@ -147,20 +145,6 @@ export class UserStore {
   @action
   setUserFilter(filter) {
     this.userFilter = filter;
-  }
-
-  @action pullUser() {
-    uiStore.setProgress(true);
-    return api.Auth.current()
-      .then(action((user) => { this.currentUser = user; }))
-      .finally(action(() => { uiStore.setProgress(false); }));
-  }
-
-  @action updateUser(userAttributes) {
-    uiStore.setProgress(true);
-    return api.User.update(userAttributes)
-      .then(action(({ user }) => { this.currentUser = user; }))
-      .finally(action(() => { uiStore.setProgress(false); }));
   }
 
   @action forgetUser() {
