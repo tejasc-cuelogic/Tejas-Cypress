@@ -6,7 +6,6 @@ import { GqlClient as client } from '../services/graphql';
 import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
 import { createUploadEntry, removeUploadedFile } from '../stores/queries/common';
 
-import api from '../ns-api';
 import authStore from './authStore';
 import uiStore from './uiStore';
 import userStore from './userStore';
@@ -23,8 +22,6 @@ import {
 } from '../constants/profile';
 
 export class ProfileStore {
-  @observable profile = undefined;
-
   @observable verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: false, error: '' }, response: {} };
 
   @observable verifyIdentity02 = { fields: [], meta: { isValid: false, error: '' } };
@@ -79,13 +76,6 @@ export class ProfileStore {
     this.reSendVerificationCode = status;
   }
 
-  @action loadProfile(username) {
-    uiStore.setProgress(true);
-    api.User.get(username)
-      .then(action((profile) => { this.profile = profile; }))
-      .finally(action(() => { uiStore.setProgress(false); }));
-  }
-
   /**
    * @desc Handle functions for Verify Identity Form 1 fields.
    */
@@ -107,41 +97,18 @@ export class ProfileStore {
   }
 
   @action
-  reset() {
-    Object.keys(this.verifyIdentity01.fields).map((field) => {
-      this.verifyIdentity01.fields[field].value = '';
-      this.verifyIdentity01.fields[field].error = undefined;
+  resetFormData(form) {
+    Object.keys(this[form].fields).map((field) => {
+      this[form].fields[field].value = '';
+      this[form].fields[field].error = undefined;
       return true;
     });
-    this.verifyIdentity01.meta.isValid = false;
-    this.verifyIdentity01.meta.error = '';
-    if (this.verifyIdentity01.response.key !== 'id.success') {
+    this[form].meta.isValid = false;
+    this[form].meta.error = '';
+    this[form].response = {};
+    if (form !== 'verifyIdentity01' || (form === 'verifyIdentity01' && this.verifyIdentity01.response.key !== 'id.success')) {
       this.verifyIdentity01.response = {};
     }
-  }
-
-  @action
-  resetVerificationCode() {
-    Object.keys(this.verifyIdentity04.fields).map((field) => {
-      this.verifyIdentity04.fields[field].value = '';
-      this.verifyIdentity04.fields[field].error = undefined;
-      return true;
-    });
-    this.verifyIdentity04.meta.isValid = false;
-    this.verifyIdentity04.meta.error = '';
-    this.verifyIdentity04.response = {};
-  }
-
-  @action
-  resetUpdateProfileDetails() {
-    Object.keys(this.updateProfileInfo.fields).map((field) => {
-      this.updateProfileInfo.fields[field].value = '';
-      this.updateProfileInfo.fields[field].error = undefined;
-      return true;
-    });
-    this.updateProfileInfo.meta.isValid = false;
-    this.updateProfileInfo.meta.error = '';
-    this.updateProfileInfo.response = {};
   }
 
   @computed
@@ -255,7 +222,6 @@ export class ProfileStore {
     return 'HARD_FAIL';
   }
 
-  /* eslint-disable arrow-body-style */
   submitInvestorPersonalDetails = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -351,11 +317,10 @@ export class ProfileStore {
             fileId: this.confirmIdentityDocuments.fields[field].fileId,
           },
         })
-        .then((result) => {
+        .then(() => {
           this.onFieldChange('confirmIdentityDocuments', field, '');
           this.confirmIdentityDocuments.fields[field].fileId = '';
           this.confirmIdentityDocuments.fields[field].preSignedUrl = '';
-          console.log(result);
           resolve();
         })
         .catch((err) => {
@@ -500,7 +465,7 @@ export class ProfileStore {
 
   @action
   setProfileInfo = (userDetails) => {
-    this.resetUpdateProfileDetails();
+    this.resetFormData('updateProfileInfo');
     const {
       email,
       address,
