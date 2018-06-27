@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import _ from 'lodash';
 import Aux from 'react-aux';
 import { Message } from 'semantic-ui-react';
 
@@ -15,6 +16,19 @@ import ListErrors from '../../../theme/common/ListErrors';
 class Summary extends Component {
   componentWillMount() {
     this.props.userDetailsStore.setUserAccDetails();
+    const validPanes = [];
+    const { inActiveAccounts } = this.props.userDetailsStore.signupStatus;
+    const accTypesValues = this.props.accountStore.investmentAccTypes.fields.accType.values;
+    inActiveAccounts.map((key) => {
+      const acc = _.find(accTypesValues, { accType: key });
+      if (acc) {
+        validPanes.push(acc);
+      }
+      return validPanes;
+    });
+    if (inActiveAccounts.length !== 3) {
+      this.props.accountStore.setInvestmentAccTypeValues(validPanes);
+    }
   }
 
   setDashboardWizardSetup = (step) => {
@@ -22,8 +36,8 @@ class Summary extends Component {
     this.restoreStep();
   }
 
-  handleAccoutTypeChange = (e, { activeIndex }) => {
-    this.props.accountStore.setAccountType(activeIndex);
+  handleAccoutTypeChange = (e, { value }) => {
+    this.props.accountStore.setInvestmentAccType(value);
     this.restoreStep();
   }
 
@@ -49,13 +63,14 @@ class Summary extends Component {
 
   navToAccTypes = (step) => {
     const type = this.props.accountStore.getAccountTypeIndex(step);
-    this.props.accountStore.setAccountType(type);
+    this.props.accountStore.setInvestmentAccType(type);
     this.setDashboardWizardSetup(`${step}/AccountCreation`);
   }
 
   render() {
     const { getStepStatus, currentUser, signupStatus } = this.props.userDetailsStore;
     const { errors } = this.props.uiStore;
+    const { investmentAccTypes } = this.props.accountStore;
 
     const progressMeta = {
       'envelope-line': { label: 'Email-address', action: false },
@@ -94,6 +109,7 @@ class Summary extends Component {
           handleAccoutTypeChange={this.handleAccoutTypeChange}
           routeOnInvestmentTypeSelection={this.props.accountStore.routeOnInvestmentTypeSelection}
           selectedInvestmentType={this.props.accountStore.accountType}
+          investmentAccTypes={investmentAccTypes}
         />
         }
         {this.props.uiStore.modalStatus &&
