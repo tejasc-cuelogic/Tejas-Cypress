@@ -6,7 +6,6 @@ import { GqlClient as client } from '../services/graphql';
 import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../stores/queries/profile';
 import { createUploadEntry, removeUploadedFile } from '../stores/queries/common';
 
-import api from '../ns-api';
 import authStore from './authStore';
 import uiStore from './uiStore';
 import userStore from './userStore';
@@ -23,8 +22,6 @@ import {
 } from '../constants/profile';
 
 export class ProfileStore {
-  @observable profile = undefined;
-
   @observable verifyIdentity01 = { fields: { ...VERIFY_IDENTITY_STEP_01 }, meta: { isValid: false, error: '' }, response: {} };
 
   @observable verifyIdentity02 = { fields: [], meta: { isValid: false, error: '' } };
@@ -77,13 +74,6 @@ export class ProfileStore {
   @action
   setReSendVerificationCode(status) {
     this.reSendVerificationCode = status;
-  }
-
-  @action loadProfile(username) {
-    uiStore.setProgress(true);
-    api.User.get(username)
-      .then(action((profile) => { this.profile = profile; }))
-      .finally(action(() => { uiStore.setProgress(false); }));
   }
 
   /**
