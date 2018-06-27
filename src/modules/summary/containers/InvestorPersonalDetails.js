@@ -60,7 +60,7 @@ export default class investorPersonalDetails extends Component {
 
   handleCloseModal = () => {
     this.props.setDashboardWizardStep();
-    this.props.profileStore.reset();
+    this.props.profileStore.resetFormData('verifyIdentity01');
   }
 
   render() {

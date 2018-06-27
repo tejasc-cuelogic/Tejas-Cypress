@@ -12,7 +12,7 @@ import Helper from '../../../helper/utility';
 export default class ConfirmIdentityForm extends Component {
   handleCloseModal = () => {
     this.props.setDashboardWizardStep();
-    this.props.profileStore.reset();
+    this.props.profileStore.resetFormData('verifyIdentity01');
     this.props.uiStore.clearErrors();
   }
   handleIdentityQuestionsSubmit = (e) => {

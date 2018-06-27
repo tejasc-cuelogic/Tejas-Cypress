@@ -97,20 +97,6 @@ export class ProfileStore {
   }
 
   @action
-  reset() {
-    Object.keys(this.verifyIdentity01.fields).map((field) => {
-      this.verifyIdentity01.fields[field].value = '';
-      this.verifyIdentity01.fields[field].error = undefined;
-      return true;
-    });
-    this.verifyIdentity01.meta.isValid = false;
-    this.verifyIdentity01.meta.error = '';
-    if (this.verifyIdentity01.response.key !== 'id.success') {
-      this.verifyIdentity01.response = {};
-    }
-  }
-
-  @action
   resetVerificationCode() {
     Object.keys(this.verifyIdentity04.fields).map((field) => {
       this.verifyIdentity04.fields[field].value = '';
@@ -132,6 +118,21 @@ export class ProfileStore {
     this.updateProfileInfo.meta.isValid = false;
     this.updateProfileInfo.meta.error = '';
     this.updateProfileInfo.response = {};
+  }
+
+  @action
+  resetFormData(form) {
+    Object.keys(this[form].fields).map((field) => {
+      this[form].fields[field].value = '';
+      this[form].fields[field].error = undefined;
+      return true;
+    });
+    this[form].meta.isValid = false;
+    this[form].meta.error = '';
+    this[form].response = {};
+    if (form !== 'verifyIdentity01' || (form === 'verifyIdentity01' && this.verifyIdentity01.response.key !== 'id.success')) {
+      this.verifyIdentity01.response = {};
+    }
   }
 
   @computed
