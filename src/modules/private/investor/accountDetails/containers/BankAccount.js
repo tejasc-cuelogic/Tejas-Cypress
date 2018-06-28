@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import { Header, Grid, Card, Divider, Button } from 'semantic-ui-react';
 import _ from 'lodash';
 import AccountDetailsView from '../components/bankaccount/AccountDetailsView';
-import { FaqWidget } from '../../../../theme/shared';
+import { FaqWidget } from '../../../../../theme/shared';
 import LinkBankAccount from './LinkBankAccount';
 
 const data = {

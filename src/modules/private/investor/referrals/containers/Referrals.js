@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PrivateLayout from '../../../../containers/common/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateHOC';
 
 export default class Referrals extends Component {
   render() {
