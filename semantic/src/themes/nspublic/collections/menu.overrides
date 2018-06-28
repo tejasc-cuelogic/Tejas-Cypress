@@ -30,3 +30,23 @@
         }
     }
 }
+
+.ui.secondary.menu.menu-secondary {
+    .item {
+        font-family: @fontName;
+        font-size: 12px;
+        line-height: 14px;
+        text-align: center;
+        text-transform: uppercase;
+        border-bottom: 2px solid transparent;
+        border-radius: 0;
+        padding: 0px 0 10px;
+        margin: 0 1.357143em;
+        
+        &:hover, &:active, &:focus, &:visited, &.active {
+            border-bottom: 2px solid @primary-one;
+            background-color: transparent;
+        }
+    }
+
+}

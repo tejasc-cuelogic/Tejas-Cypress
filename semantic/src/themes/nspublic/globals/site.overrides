@@ -8,3 +8,67 @@ section{
 .highlight-text{
 	color:@primary-one;
 }
+
+.center-align{
+	text-align:center !important;
+	justify-content:center;
+}
+.primary-text {
+	color: @primaryColor;
+}
+.secondary-text {
+	color: @secondary-color;
+}
+
+.mission-statistic-section {
+	background-color: @neutral-leghten;
+	.mission-block {
+		padding: 10px;
+		text-align: center;
+		color: #fff;
+		// border: 1px solid #fff;
+		&.green-block {
+			background-color: @primaryColor;
+		}
+		&.blue-block {
+			background-color: @secondary-color;
+		}
+	
+		h2 {
+			color: #fff;
+		}
+
+	}
+	.ui.grid.mission-base-block {
+		background-color: #fff;
+		padding: 10px;
+		margin-top: 10px;
+
+		h3 {
+			font-family: @fontName; 
+			font-size: 28px;
+			line-height: 33px;
+
+			&.primary-text {
+				color: @primaryColor;
+			}
+			&.secondary-text {
+				color: @secondary-color;
+			}
+		}
+
+		p {
+			color: #676A73;
+			font-size: 14px;
+			line-height: 16px;
+			font-family: @fontName; 
+		}
+	}
+	p.disclaimer-text {
+		font-size: 10px;
+		line-height: 14px;
+		color: #676A73;
+		font-family: @fontName; 
+	}
+}
+
