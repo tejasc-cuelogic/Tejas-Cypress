@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Item, Grid, Card } from 'semantic-ui-react';
-import Banklogo from '../../../../../assets/images/boa-logo.jpg';
+import Banklogo from '../../../../../../assets/images/boa-logo.jpg';
 
 const AccountDetailsView = props => (
   <Grid.Row>

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import PrivateLayout from '../../../../containers/common/PrivateHOC';
-import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import PrivateLayout from '../../../shared/PrivateHOC';
+import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 
 const getModule = component => Loadable({
   loader: () => import(`./${component}`),

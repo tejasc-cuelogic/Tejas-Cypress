@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { Link, Route } from 'react-router-dom';
 import moment from 'moment';
 import { Header, Table, Card, Button } from 'semantic-ui-react';
-import { DateTimeFormat } from './../../../../theme/shared';
+import { DateTimeFormat } from '../../../../../theme/shared';
 import Redeem from './Redeem';
 
 const RewardList = props => props.rewards.map(offering => (

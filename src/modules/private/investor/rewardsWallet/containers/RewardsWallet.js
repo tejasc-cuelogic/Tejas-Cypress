@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Checkbox } from 'semantic-ui-react';
-import PrivateLayout from '../../../../containers/common/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateHOC';
 import RewardList from '../components/RewardList';
 
 @inject('rewardStore', 'userDetailsStore')
