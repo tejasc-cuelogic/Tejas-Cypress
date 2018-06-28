@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { USER_LIST_META } from '../../../../constants/user';
-import PrivateLayout from '../../../../containers/common/PrivateHOC';
+import { USER_LIST_META } from '../../../../../constants/user';
+import PrivateLayout from '../../../../../containers/common/PrivateHOC';
 
 import { P1, P2, P3, P5 } from './../components/UserListingSubheader';
 import UserListing from '../components/manage/UserListing';
