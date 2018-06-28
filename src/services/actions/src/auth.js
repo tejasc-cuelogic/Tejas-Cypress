@@ -4,12 +4,11 @@ import camel from 'to-camel-case';
 import _ from 'lodash';
 
 import {
-  USER_POOL_ID,
-  COGNITO_CLIENT_ID,
-  AWS_REGION,
-  COGNITO_IDENTITY_POOL_ID,
+  USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
 } from '../../../constants/aws';
-import { userStore, authStore, commonStore, adminStore, uiStore, userDetailsStore } from '../../stores';
+import {
+  userStore, userDetailsStore, authStore, commonStore, adminStore, uiStore,
+} from '../../stores';
 import Helper from '../../../helper/utility';
 
 /**

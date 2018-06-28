@@ -1,21 +1,21 @@
 import _ from 'lodash';
-
-import validationService from './../services/validation';
-import authStore from './../stores/authStore';
-import businessStore from './../stores/businessStore';
-import userStore from './../stores/userStore';
-import profileStore from './../stores/profileStore';
-import accountStore from './../stores/accountStore';
-import iraAccountStore from './../stores/user/iraAccountStore';
-import entityAccountStore from './../stores/user/entityAccountStore';
-
+import validationService from '../../../api/validation';
+import {
+  authStore,
+  businessStore,
+  userStore,
+  profileStore,
+  accountStore,
+  iraAccountStore,
+  entityAccountStore,
+} from '../../stores';
 import { REGISTRATION,
   PROFILE_DETAILS,
   CONDITIONAL_REQUIRE,
   CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE,
   CONFIRM_PHONE_NUMBER_VERIFICATION_CODE,
   CONFIRM_IDENTITY_QUESTIONS,
-  CONFIRM_IDENTITY_DOCUMENTS_FORM } from './../constants/validation';
+  CONFIRM_IDENTITY_DOCUMENTS_FORM } from '../../../constants/validation';
 
 /**
  * @desc Validation class for form inputs

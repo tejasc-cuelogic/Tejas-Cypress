@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Icon, Button } from 'semantic-ui-react';
-import { FieldError } from '../../common';
+import { FieldError } from '../../shared';
 
 const FileUploaderLarge = observer((props) => {
   const { error, value } = props.fielddata;

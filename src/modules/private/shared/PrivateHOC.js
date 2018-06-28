@@ -4,8 +4,8 @@ import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Grid, Header, Icon, Responsive } from 'semantic-ui-react';
-import { GetNavMeta } from '../../theme/layout/SidebarNav';
-import SecondaryMenu from '../../theme/layout/SecondaryMenu';
+import { GetNavMeta } from '../../../theme/layout/SidebarNav';
+import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 
 @inject('userStore', 'uiStore')
 @observer

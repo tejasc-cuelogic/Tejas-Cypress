@@ -2,8 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import shortid from 'shortid';
 import graphql from 'graphql';
-
-import { GqlClient as client } from '../services/graphql';
+import { GqlClient as client } from '../../../api/graphql';
 import {
   listOfferings,
   getXmlDetails,
@@ -14,19 +13,18 @@ import {
   signatureMutation,
   documentListMutation,
   xmlSubmissionMutation,
-  cloneXmlSubmissionMutation } from '../stores/queries/business';
-import businessStore from './../stores/businessStore';
-import uiStore from './../stores/uiStore';
+  cloneXmlSubmissionMutation } from '../../stores/queries/business';
+import { businessStore, uiStore } from '../../stores';
 import {
   EDGAR_URL,
   GRAPHQL,
   PERSONAL_SIGNATURE,
   FILES,
   XML_STATUSES,
-} from './../constants/business';
-import ApiService from '../services/api';
-import Helper from '../helper/utility';
-import validationActions from './validation';
+} from '../../../constants/business';
+import ApiService from '../../../api/api';
+import { validationActions } from '../../../services/actions';
+import Helper from '../../../helper/utility';
 
 export class Business {
   /**

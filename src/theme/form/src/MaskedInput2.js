@@ -3,7 +3,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon } from 'semantic-ui-react';
 import NumberFormat from 'react-number-format';
-import { FieldError } from '../../common';
+import { FieldError } from '../../shared';
 
 const MaskedInput2 = observer((props) => {
   const {

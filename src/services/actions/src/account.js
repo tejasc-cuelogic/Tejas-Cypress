@@ -1,14 +1,10 @@
-import validationActions from '../actions/validation';
+import validationActions from './validation';
 import {
-  PLAID_ENV,
-  PLAID_URL,
-  PLAID_PUBLIC_KEY,
-} from '../constants/account';
-import ExternalApiService from '../services/externalApi';
-import accountStore from '../stores/accountStore';
-import indAccountStore from '../stores/user/individualAccountStore';
-import uiStore from '../stores/uiStore';
-import Helper from '../helper/utility';
+  PLAID_ENV, PLAID_URL, PLAID_PUBLIC_KEY,
+} from '../../../constants/account';
+import ExternalApiService from '../../../api/externalApi';
+import { accountStore, indAccountStore, uiStore } from '../../stores';
+import Helper from '../../../helper/utility';
 
 export class Account {
   /**

@@ -3,9 +3,8 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Responsive, Sidebar, Menu, Button, Image, Icon } from 'semantic-ui-react';
 import NotificationPanel from './NotificationPanel';
-import uiStore from '../../stores/uiStore';
 import { SidebarNav, GetNavItem } from './SidebarNav';
-import Randavatar from './../../theme/common/Randavatar';
+import Randavatar from '../shared/Randavatar';
 import LogoWhite from '../../assets/images/nextseed_logo_white_green.svg';
 import LogoColor from '../../assets/images/nextseed_logo_color.svg';
 import LogoSmall from '../../assets/images/ns-logo-small.svg';
@@ -13,10 +12,10 @@ import LogoSmall from '../../assets/images/ns-logo-small.svg';
 @inject('uiStore')
 @observer
 class SidebarLeftPush extends Component {
-  toggle = () => uiStore.updateLayoutState('leftPanel');
-  toggleMobile = () => uiStore.updateLayoutState('leftPanelMobile');
+  toggle = () => this.props.uiStore.updateLayoutState('leftPanel');
+  toggleMobile = () => this.props.uiStore.updateLayoutState('leftPanelMobile');
   render() {
-    const { layoutState } = uiStore;
+    const { layoutState } = this.props.uiStore;
     return (
       <Aux>
         <Responsive minWidth={1200}>
@@ -72,7 +71,7 @@ const MySidebar = observer(props => (
     }
     <Sidebar.Pusher
       className={`${props.match.url.includes('/business-application') ?
-        'business-application' : ''} ${uiStore.devBanner ? 'banner' : ''}`}
+        'business-application' : ''} ${this.props.uiStore.devBanner ? 'banner' : ''}`}
     >
       {props.mobile && <Icon onClick={props.toggle} className="hamburger content" />}
       {props.children}

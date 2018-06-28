@@ -3,11 +3,11 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Grid, Input, Form } from 'semantic-ui-react';
 
-import PrivateLayout from '../../../containers/common/PrivateHOC';
-import businessActions from '../../../actions/business';
+import PrivateLayout from '../../../../../containers/common/PrivateHOC';
+import { businessActions } from '../../../../../services/actions';
 import BusinessList from '../components/BusinessList';
 import NewBusinessForm from './NewBusinessForm';
-import { Spinner } from '../../../theme/shared';
+import { Spinner } from '../../../../../theme/shared';
 
 @withRouter
 @inject('businessStore', 'uiStore')

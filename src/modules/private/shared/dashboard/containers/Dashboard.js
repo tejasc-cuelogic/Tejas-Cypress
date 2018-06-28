@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import PrivateLayout from '../../../containers/common/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
 import CommonDashboard from './dashboards/CommonDashboard';
 import Bowner from './dashboards/Bowner';

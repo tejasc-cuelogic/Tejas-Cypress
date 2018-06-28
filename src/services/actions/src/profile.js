@@ -1,5 +1,5 @@
-import profileStore from '../stores/profileStore';
-import Helper from '../helper/utility';
+import { profileStore } from '../../stores';
+import Helper from '../../../helper/utility';
 
 export class Profile {
   setAddressFieldsOnGoogleAutocomplete = (place) => {

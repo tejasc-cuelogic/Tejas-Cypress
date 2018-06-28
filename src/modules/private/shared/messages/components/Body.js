@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import Aux from 'react-aux';
 import { Label, Item } from 'semantic-ui-react';
-import ProfilePicTemp from '../../../../assets/images/james-wright.png';
+import ProfilePicTemp from '../../../../../assets/images/james-wright.png';
 
 const D_FORMAT = 'MMMM D, YYYY';
 const Avatar = () => <Item.Image size="mini" avatar src={ProfilePicTemp} />;

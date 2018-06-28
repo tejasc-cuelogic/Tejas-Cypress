@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Card, Button, Grid } from 'semantic-ui-react';
 import { Link, Route, Switch } from 'react-router-dom';
-import PrivateLayout from '../../../../containers/common/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateHOC';
 import MessagesHeader from '../components/Header';
 import MessagesList from '../components/MessagesList';
 import MessagesWrap from '../components/MessagesWrap';

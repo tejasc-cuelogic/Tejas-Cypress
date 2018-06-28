@@ -2,9 +2,8 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Button, Form, Grid, Header, Message, Divider } from 'semantic-ui-react';
-import authActions from '../../actions/auth';
+import { authActions, validationActions } from '../../services/actions';
 import { FieldError, ListErrors } from '../../theme/shared';
-import validationActions from '../../actions/validation';
 
 @inject('authStore', 'uiStore')
 @observer
