@@ -34,7 +34,7 @@ section{
 .mission-statistic-section {
 	background-color: @neutral-leghten;
 	.mission-block {
-		padding: 10px;
+		padding: @10px;
 		text-align: center;
 		color: #fff;
 		// border: 1px solid #fff;
@@ -45,39 +45,45 @@ section{
 			background-color: @secondary-color;
 		}
 	
-		h2 {
-			color: #fff;
+		.statistic {
+			.value, .label {
+				color: #fff;
+				text-transform: none;
+			}
 		}
 
 	}
 	.ui.grid.mission-base-block {
 		background-color: #fff;
-		padding: 10px;
-		margin-top: 10px;
+		padding: @10px;
+		margin-top: @10px;
 
-		h3 {
-			font-family: @fontName; 
-			font-size: 28px;
-			line-height: 33px;
-
-			&.primary-text {
-				color: @primaryColor;
+		.statistic {
+			.value {
+				font-family: @fontName; 
+				font-size: @28px;
+				line-height: @33px;
+	
+				&.primary-text {
+					color: @primaryColor !important;
+				}
+				&.secondary-text {
+					color: @secondary-color !important;
+				}
 			}
-			&.secondary-text {
-				color: @secondary-color;
+			.label {
+				color: #676A73 !important;
+				font-size: @14px;
+				line-height: @16px;
+				font-family: @fontName; 
+				text-transform: inherit;
+				font-weight: normal;
 			}
-		}
-
-		p {
-			color: #676A73;
-			font-size: 14px;
-			line-height: 16px;
-			font-family: @fontName; 
 		}
 	}
 	p.disclaimer-text {
-		font-size: 10px;
-		line-height: 14px;
+		font-size: @10px;
+		line-height: @14px;
 		color: #676A73;
 		font-family: @fontName; 
 	}
