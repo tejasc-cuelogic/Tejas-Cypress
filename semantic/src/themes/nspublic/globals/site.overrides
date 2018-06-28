@@ -26,3 +26,25 @@ section{
 	float:right;
 }
 
+
+// Footer Styles
+footer{
+	background-color:@neutral-lighten;
+	.footer-head{
+		padding:0 @60px;
+		background-color:@neutral;
+	}
+	section{
+		padding:@30px @60px;
+		.secure{
+			float:right;
+			margin-left:@50px;
+		}
+		.copyright-info{
+			float:right;
+			max-width:650px;
+			font-size:12px;
+			line-height:22px;
+		}
+	}
+}

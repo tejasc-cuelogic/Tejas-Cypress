@@ -30,3 +30,34 @@
         }
     }
 }
+.footer-head{
+    .ui.menu{
+        &.inverted{
+            background-color:transparent;
+            .item{
+                padding:@13px @7px;
+            }
+        }
+        .item > .icon{
+            margin:0;
+        }
+        >.item{
+            min-width:120px;
+            padding:@13px 0;
+        }
+    }
+}
+footer{
+    section{
+        .ui.vertical.text.menu{
+            width:120px;
+            margin:0;
+            padding:0 @15px 0 0;
+            flex-direction:row;
+            display:inline-block;
+            .item{
+                margin:0;
+            }
+        }
+    }
+}
