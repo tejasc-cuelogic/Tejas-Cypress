@@ -3,7 +3,7 @@
  */
 import { toast } from 'react-toastify';
 import _ from 'lodash';
-import api from '../services/api';
+import api from '../api/api';
 
 export class Utility {
   // Default options for the toast
