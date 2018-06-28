@@ -1,4 +1,4 @@
-import uiStore from '../stores/uiStore';
+import { uiStore } from '../../stores';
 
 export class UserInterface {
   setOpenAccordion = (id) => {

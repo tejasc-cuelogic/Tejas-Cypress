@@ -3,7 +3,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon, Button } from 'semantic-ui-react';
 import InputMask from 'react-input-mask';
-import { FieldError } from '../../common';
+import { FieldError } from '../../shared';
 
 const MaskedInput = observer((props) => {
   const { label, error, value } = props.fielddata;

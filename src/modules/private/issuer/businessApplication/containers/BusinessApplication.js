@@ -3,10 +3,10 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { Image, Button } from 'semantic-ui-react';
-import PrivateLayout from '../../../../containers/common/PrivateHOC';
-import Helper from '../../../../helper/utility';
-import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import LogoWhite from '../../../../assets/images/nextseed_logo_white_green.svg';
+import PrivateLayout from '../../../shared/PrivateHOC';
+import Helper from '../../../../../helper/utility';
+import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
+import LogoWhite from '../../../../../assets/images/nextseed_logo_white_green.svg';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),

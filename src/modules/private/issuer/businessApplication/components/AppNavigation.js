@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 
 @withRouter
 export default class AppNavigation extends Component {

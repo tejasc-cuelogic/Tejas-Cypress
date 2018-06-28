@@ -7,31 +7,31 @@ import Offering from './public/offering/containers/Offering';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
-import Edgar from './edgar/containers/Business';
-import EdgarForm from '../modules/edgar/containers/EdgarForm';
-import ForgotPassword from '../modules/auth/ForgotPassword';
-import ResetPassword from '../modules/auth/ResetPassword';
-import Base from './basemodule/Base';
-import Messages from './private/messages/containers/Messages';
-import Dashboard from './dashboard/containers/Dashboard';
-import Users from './private/users/containers/Users';
-import UserDetails from './private/users/containers/UserDetails';
-import UsersNew from './private/users/containers/UsersNew';
-import ProfileSettings from './private/users/containers/ProfileSettings';
-import XmlForm from './edgar/containers/XmlForm';
-import BusinessDetails from './edgar/containers/BusinessDetails';
-import Summary from '../modules/summary/containers/Summary';
-import RewardsWallet from './private/rewardsWallet/containers/RewardsWallet';
-import Referrals from './private/referrals/containers/Referrals';
-import AccountDetails from './private/accountDetails/containers/AccountDetails';
-import BusinessApplication from './private/businessApplication/containers/BusinessApplication';
-import Education from './private/education/containers/Education';
+import Edgar from './private/admin/edgar/containers/Business';
+import EdgarForm from './private/admin/edgar/containers/EdgarForm';
+import ForgotPassword from './auth/ForgotPassword';
+import ResetPassword from './auth/ResetPassword';
+import Base from './private/shared/basemodule/Base';
+import Messages from './private/shared/messages/containers/Messages';
+import Dashboard from './private/shared/dashboard/containers/Dashboard';
+import Users from './private/admin/users/containers/Users';
+import UserDetails from './private/admin/users/containers/UserDetails';
+import UsersNew from './private/admin/users/containers/UsersNew';
+import ProfileSettings from './private/admin/users/containers/ProfileSettings';
+import XmlForm from './private/admin/edgar/containers/XmlForm';
+import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
+import Summary from './private/investor/summary/containers/Summary';
+import RewardsWallet from './private/investor/rewardsWallet/containers/RewardsWallet';
+import Referrals from './private/investor/referrals/containers/Referrals';
+import AccountDetails from './private/investor/accountDetails/containers/AccountDetails';
+import BusinessApplication from './private/issuer/businessApplication/containers/BusinessApplication';
+import Education from './private/shared/education/containers/Education';
 import {
   AdminAuthorization,
   BusinessAuthorization,
   UserAuthorization,
   InvestorAuthorization,
-} from '../theme/common/Authorization';
+} from '../theme/shared/Authorization';
 
 export const publicRoutes = [
   {

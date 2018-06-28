@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Grid } from 'semantic-ui-react';
-import { ByKeyword, DropdownFilter, DateRangeFilter } from '../../../../theme/form/Filters';
-import { ROLES } from '../../../../constants/user';
+import { ByKeyword, DropdownFilter, DateRangeFilter } from '../../../../../theme/form/Filters';
+import { ROLES } from '../../../../../constants/user';
 
 const Header = props => (
   <Form>

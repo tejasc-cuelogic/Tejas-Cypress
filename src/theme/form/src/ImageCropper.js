@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import ReactCrop, { makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Icon } from 'semantic-ui-react';
-import { FieldError } from '../../common';
+import { FieldError } from '../../shared';
 
 @observer
 export default class ImageCropper extends Component {

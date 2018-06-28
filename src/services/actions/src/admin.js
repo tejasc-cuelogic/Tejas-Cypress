@@ -2,11 +2,9 @@ import * as AWS from 'aws-sdk';
 import { toJS } from 'mobx';
 import mapValues from 'lodash/mapValues';
 import snakeCase from 'lodash/snakeCase';
-import { API_VERSION, USER_POOL_ID, LIST_LIMIT, STATUSES } from './../constants/aws';
-import adminStore from './../stores/adminStore';
-import userStore from './../stores/userStore';
-import uiStore from '../stores/uiStore';
-import Helper from '../helper/utility';
+import { API_VERSION, USER_POOL_ID, LIST_LIMIT, STATUSES } from '../../../constants/aws';
+import { adminStore, userStore, uiStore } from '../../stores';
+import Helper from '../../../helper/utility';
 
 /**
  * @desc All actions that admin has to perform

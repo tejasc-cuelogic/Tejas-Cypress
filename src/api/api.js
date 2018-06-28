@@ -1,6 +1,6 @@
 import request from 'superagent';
-import { API_ROOT } from 'constants/common';
-import { commonStore } from 'services/stores';
+import { API_ROOT } from '../constants/common';
+import { commonStore } from '../services/stores';
 
 /**
  * @desc Service to make asynchronous API calls from system

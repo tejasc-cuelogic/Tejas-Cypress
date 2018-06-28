@@ -2,7 +2,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon, TextArea } from 'semantic-ui-react';
-import { FieldError } from '../../common';
+import { FieldError } from '../../shared';
 
 const FormTextarea = observer((props) => {
   const {

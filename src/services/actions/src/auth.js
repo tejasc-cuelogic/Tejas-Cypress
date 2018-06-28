@@ -4,18 +4,12 @@ import camel from 'to-camel-case';
 import _ from 'lodash';
 
 import {
-  USER_POOL_ID,
-  COGNITO_CLIENT_ID,
-  AWS_REGION,
-  COGNITO_IDENTITY_POOL_ID,
-} from './../constants/aws';
-import userStore from './../stores/userStore';
-import authStore from './../stores/authStore';
-import commonStore from './../stores/commonStore';
-import adminStore from '../stores/adminStore';
-import uiStore from '../stores/uiStore';
-import userDetailsStore from '../stores/user/userDetailsStore';
-import Helper from '../helper/utility';
+  USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
+} from '../../../constants/aws';
+import {
+  userStore, userDetailsStore, authStore, commonStore, adminStore, uiStore,
+} from '../../stores';
+import Helper from '../../../helper/utility';
 
 /**
  * @desc Class for all authorization actions

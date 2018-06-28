@@ -3,7 +3,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
-import { FieldError } from '../../common';
+import { FieldError } from '../../shared';
 
 const FormDatePicker = observer((props) => {
   const { label, error } = props.fielddata;

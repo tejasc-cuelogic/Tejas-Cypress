@@ -3,7 +3,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Icon, Responsive, Button } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
-import { FieldError } from '../../common';
+import { FieldError } from '../../shared';
 
 const DropZone = observer((props) => {
   const {
