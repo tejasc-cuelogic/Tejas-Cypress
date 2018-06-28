@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Modal, Button, Form, Image, Divider } from 'semantic-ui-react';
-import activityActions from '../../../actions/activity';
-import { FieldError } from '../../../theme/common';
+import { activityActions } from '../../../services/actions';
+import { FieldError } from '../../../theme/shared';
 import Logo from '../../../assets/images/nextseed_logo_white_green.svg';
 
 @inject('authStore', 'uiStore')

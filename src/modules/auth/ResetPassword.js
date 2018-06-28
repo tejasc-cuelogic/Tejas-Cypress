@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Button, Message, Form, Grid, Header, Divider } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
-import { FieldError, ListErrors } from '../../theme/common';
+import { FieldError, ListErrors } from '../../theme/shared';
 import authActions from '../../actions/auth';
 import validationActions from '../../actions/validation';
 

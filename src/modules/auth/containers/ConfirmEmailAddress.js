@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-
-import validationActions from '../../../actions/validation';
-import authActions from '../../../actions/auth';
+import { authActions, validationActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
-import { ListErrors } from '../../../theme/common';
+import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 
 @inject('authStore', 'uiStore', 'userStore', 'profileStore')

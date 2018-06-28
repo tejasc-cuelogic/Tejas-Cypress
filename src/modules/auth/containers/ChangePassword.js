@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Modal, Header, Button } from 'semantic-ui-react';
 
-import authActions from './../../../actions/auth';
+import { authActions } from './../../../services/actions';
 
 @inject('authStore', 'uiStore')
 @observer

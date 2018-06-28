@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Route, withRouter, Switch } from 'react-router-dom';
 import Header from './Header';
-import authActions from '../../actions/auth';
+import { authActions } from '../../services/actions';
 import Login from '../../modules/auth/containers/Login';
 import SignupInitial from '../../modules/auth/containers/SignupInitial';
 import InvestorSignup from '../../modules/auth/containers/InvestorSignup';
@@ -19,10 +19,6 @@ class Layout extends Component {
       .then(() => {
         this.props.history.push('/');
       });
-  }
-
-  handleChange = (step) => {
-    this.props.uiStore.setAuthWizardStep(step);
   }
 
   render() {
