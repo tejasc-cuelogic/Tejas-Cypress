@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route } from 'react-router-dom';
 import { Grid, Header } from 'semantic-ui-react';
 import NoBeneficiary from '../components/beneficiaries/NoBeneficiary';
 import BeneficiaryList from '../components/beneficiaries/BeneficiaryList';
-import AddBeneficiary from '../components/beneficiaries/AddBeneficiary';
 
 @inject('userDetailsStore')
 @observer
@@ -15,27 +13,27 @@ export default class Beneficiaries extends Component {
 
   render() {
     const {
-      beneficiaries, bLoading, bErr, deleteBeneficiary, deleting,
+      beneficiaries, bLoading, deleteBeneficiary, deleting,
     } = this.props.userDetailsStore;
-    console.log(beneficiaries, bErr);
-    const beneficiaryList = beneficiaries.map(beneficary => (
-      beneficary ?
-        <NoBeneficiary
-          match={this.props.match}
-          title={beneficary.accountType}
-          key={beneficary.accountId}
-          curLocation={this.props.location}
-        /> :
+    const beneficiaryList = beneficiaries ? beneficiaries.map(beneficiary => (
+      beneficiary.beneficiary ?
         <BeneficiaryList
-          key={beneficary.accountId}
-          title={beneficary.accountType}
+          key={beneficiary.accountId}
+          title={beneficiary.accountType}
           match={this.props.match}
           delete={deleteBeneficiary}
-          beneficiaries={beneficiaries}
+          beneficiaries={beneficiary.beneficiary}
           deleting={deleting}
           loading={bLoading}
+        /> :
+        <NoBeneficiary
+          match={this.props.match}
+          title={beneficiary.accountType}
+          key={beneficiary.accountId}
+          curLocation={this.props.location}
         />
-    ));
+    )) :
+        <div>loading</div>;
     return (
       <div>
         <Header as="h3">Beneficiaries</Header>
@@ -43,7 +41,6 @@ export default class Beneficiaries extends Component {
         {bLoading ? <div>loading...</div> : (
           <Grid columns={1} stackable>
             { beneficiaryList }
-            <Route exact path={`${this.props.match.url}/add-beneficiary`} render={props => <AddBeneficiary refLink={this.props.match.url} {...props} />} />
           </Grid>
           )
         }

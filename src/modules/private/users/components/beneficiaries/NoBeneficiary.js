@@ -5,11 +5,8 @@ import startCase from 'lodash/startCase';
 import AddBeneficiary from './AddBeneficiary';
 
 const NoBeneficiary = (props) => {
-  console.log(props.curLocation.pathname);
-  // const routeLocation = props.curLocation.pathname.split('/');
   const title = props.title === 'ira' ? props.title.toUpperCase() : startCase(props.title);
   const showButton = props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary`;
-  console.log(showButton);
   return (
     <Grid.Row>
       <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>

@@ -182,3 +182,8 @@ export const NEW_USER = {
     value: [], label: 'Role', error: undefined, rule: 'required',
   },
 };
+
+export const BENEFICIARY_STATUS = {
+  PENDING : 'PENDING',
+  APPROVED : 'APPROVED',
+};

@@ -21,7 +21,9 @@ export const getBeneficiaries = gql`
   query getBeneficiaries {   
     beneficiaries {   
         accountId   
-        accountType   
+        accountType
+        updatedDate
+        createdDate   
         beneficiary {     
             requestStatus    
             recipients {     
