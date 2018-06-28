@@ -4,10 +4,10 @@ import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import { List, Button } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
-import Helper from '../../../../helper/utility';
-import { Spinner } from '../../../../theme/shared';
-import PrivateLayout from '../../../../containers/common/PrivateHOC';
-import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import Helper from '../../../../../helper/utility';
+import { Spinner } from '../../../../../theme/shared';
+import PrivateLayout from '../../../../../containers/common/PrivateHOC';
+import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/manage/${component}`),
