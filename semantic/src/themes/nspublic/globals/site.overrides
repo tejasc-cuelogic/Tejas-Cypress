@@ -10,6 +10,11 @@ section{
 		margin-bottom:@50px;
 	}
 }
+.info-card{
+	p{
+		margin-bottom:@40px;
+	}
+}
 //	Healper Classes
 .highlight-text{
 	color:@primary-one;
