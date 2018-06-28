@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 import { Header, Form, Button, Grid, Divider, Icon, Card, Responsive } from 'semantic-ui-react';
 import shortid from 'shortid';
 
-import businessActions from '../../../actions/business';
-import { Spinner } from '../../../theme/shared';
-import Helper from '../../../helper/utility';
+import { businessActions } from '../../../../../services/actions';
+import { Spinner } from '../../../../../theme/shared';
+import Helper from '../../../../../helper/utility';
 
 const key = shortid.generate();
 
