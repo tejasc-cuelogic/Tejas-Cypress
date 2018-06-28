@@ -22,7 +22,7 @@
 @borderWidth: 1px;
 @borderShadow: 0px 0px 0px @borderWidth @solidBorderColor;
 @boxShadow:none;
-@cardHoverShadow:0px 3px 4px 0px @thumbBackground;
+@cardHoverShadow:0px 4px 10px 0px @thumbInactiveBackground;
 @border: @borderWidth solid @neutral-lighter;
 @zIndex: '';
 @transition:
@@ -70,8 +70,8 @@
 /* Header */
 @headerMargin: '';
 @headerFontWeight: @bold;
-@headerFontSize: @relativeBig;
-@headerLineHeightOffset: -(@lineHeight - 1em) / 2;
+@headerFontSize: @20px;
+@headerLineHeightOffset:@7px;
 @headerColor: @darkTextColor;
 
 /* Metadata */

@@ -1,3 +1,55 @@
 /*******************************
          Theme Overrides
 *******************************/
+.ui.card{
+    &:hover{
+        box-shadow:@cardHoverShadow;
+    }
+}
+
+.ui.card{
+    &.campaign{
+        .ui.label{
+            border:none;
+            text-transform:uppercase;
+            box-shadow:@commonShadow;
+            position:absolute;
+            top:12px;
+            left:12px;
+        }
+        .icon.heart{
+            font-size:@18px;
+            color:@primary-one;
+            text-shadow:@commonShadow;
+            position:absolute;
+            top:12px;
+            right:12px;
+            &.outline{
+                color:@white;
+            }
+        }
+        >.content{
+            line-height:@24px;
+            padding:@21px @28px;
+            .tags{
+                font-size:@12px;
+                font-weight:700;
+                color:@neutral-light;
+                text-transform:uppercase;
+                >span{
+                    text-transform:none;
+                }
+            }
+            > .meta{
+                color:@neutral-light;
+            }
+            .description{
+                height:80px;
+                margin:@14px 0;
+                overflow:hidden;
+                font-size:@12px;
+                line-height:@20px;
+            }
+        }
+    }
+}

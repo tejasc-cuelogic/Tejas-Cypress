@@ -19,3 +19,10 @@ section{
 .highlight-text{
 	color:@primary-one;
 }
+.pull-left{
+	float:left;
+}
+.pull-right{
+	float:right;
+}
+

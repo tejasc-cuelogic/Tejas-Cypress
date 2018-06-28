@@ -987,3 +987,5 @@
 @neutral-lighter:lighten(desaturate(spin(@neutral, 10.0000), 6.7424), 69.0196);                             //  #E6E6E8
 @neutral-lightest:lighten(desaturate(spin(@neutral, -2.0000), 5.2199), 72.3529);                            //  #EDEEF2
 @neutral-leghten:lighten(desaturate(spin(@neutral, -2.0000), 34.5455), 76.2745);                            //  #F7F8FC
+
+@commonShadow:0px 1px 1px @thumbInactiveBackground;
