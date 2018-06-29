@@ -12,6 +12,7 @@
     "no-nested-ternary": "off",
     "no-bitwise": "off",
     "react/prop-types": "off",
+    "linebreak-style": ["error", "windows"],
     "react/prefer-stateless-function": "off",
     "jsx-a11y/anchor-is-valid": [
       "off",

@@ -31,7 +31,7 @@ section{
 }
 
 .mission-statistic-section {
-	background-color: @neutral-leghten;
+	background-color: @neutral-lighten;
 	.mission-block {
 		padding: @10px;
 		text-align: center;
@@ -96,7 +96,7 @@ section{
 
 
 // Footer Styles
-c{
+footer{
 	background-color:@neutral-lighten;
 	.footer-head{
 		padding:0 @60px;
