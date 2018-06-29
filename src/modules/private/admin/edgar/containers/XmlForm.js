@@ -12,13 +12,13 @@ import AnnualReportDisclosureRequirements from './xmlFormContainers/AnnualReport
 import XmlTabs from '../components/XmlTabs';
 import Signature from './xmlFormContainers/Signature';
 import FileSelector from './xmlFormContainers/FileSelector';
-import businessActions from '../../../actions/business';
-import Helper from '../../../helper/utility';
-import { FormErrors, Spinner } from '../../../theme/shared';
+import { businessActions } from '../../../../../services/actions';
+import Helper from '../../../../../helper/utility';
+import { FormErrors, Spinner } from '../../../../../theme/shared';
 import {
   XML_STATUSES,
   XML_SUBMISSION_TABS,
-} from '../../../constants/business';
+} from '../../../../../constants/business';
 
 @inject('businessStore', 'uiStore')
 @observer

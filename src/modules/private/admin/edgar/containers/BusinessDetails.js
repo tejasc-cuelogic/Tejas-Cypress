@@ -6,11 +6,10 @@ import { Icon, Header, Button, Confirm, Responsive } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import FillingsList from '../components/FillingsList';
-import uiActions from '../../../actions/ui';
-import businessActions from '../../../actions/business';
+import { uiActions, businessActions } from '../../../../../services/actions';
 import NewBusinessForm from '../containers/NewBusinessForm';
-import { Spinner } from '../../../theme/shared';
-import Helper from '../../../helper/utility';
+import { Spinner } from '../../../../../theme/shared';
+import Helper from '../../../../../helper/utility';
 
 @inject('businessStore', 'uiStore')
 @observer
