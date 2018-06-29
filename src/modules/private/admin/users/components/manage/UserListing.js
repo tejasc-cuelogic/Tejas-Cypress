@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Table, Visibility, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import { DateTimeFormat } from './../../../../../theme/shared';
-import Randavatar from './../../../../../theme/common/Randavatar';
+import { DateTimeFormat } from './../../../../../../theme/shared';
+import Randavatar from './../../../../../../theme/shared/Randavatar';
 import UserTypeIcon from './UserTypeIcon';
 
 class UserListing extends Component {

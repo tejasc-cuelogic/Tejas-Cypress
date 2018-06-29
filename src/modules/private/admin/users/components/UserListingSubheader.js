@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Grid, Button, Form, Icon, List } from 'semantic-ui-react';
-import { ByKeyword, DropdownFilter, DateRangeFilter, AppliedFilters } from '../../../../theme/form/Filters';
-import { FILTER_META } from '../../../../constants/user';
+import { ByKeyword, DropdownFilter, DateRangeFilter, AppliedFilters } from '../../../../../theme/form/Filters';
+import { FILTER_META } from '../../../../../constants/user';
 
 export const P1 = props => <ByKeyword {...props} w={[5]} placeholder="Type user’s name, e-mail address, city, state, zip code or phone number" />;
 

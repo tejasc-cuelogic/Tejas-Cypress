@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button, Checkbox } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 import { FormInput, FormDropDown } from '../../../../../theme/form';
-import FormElementWrap from '../../../../private/businessApplication/components/FormElementWrap';
+import FormElementWrap from '../../../../private/issuer/businessApplication/components/FormElementWrap';
 
 @inject('newBusinessStore')
 @observer

@@ -3,9 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Header, Card, Form, Button } from 'semantic-ui-react';
-import adminActions from '../../../../../actions/admin';
-import { FormInput, FormSelect } from '../../../../../theme/form';
-import { ROLES } from '../../../../../constants/user';
+import { adminActions } from '../../../../../../services/actions';
+import { FormInput, FormSelect } from '../../../../../../theme/form';
+import { ROLES } from '../../../../../../constants/user';
 
 @inject('userStore', 'uiStore')
 @withRouter

@@ -3,8 +3,8 @@ import { Form, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 import Chips from 'react-chips/lib/Chips';
-import { FieldError } from './../../../../theme/shared';
-import { FormInput, FormRadioGroup } from './../../../../theme/form';
+import { FieldError } from './../../../../../../theme/shared';
+import { FormInput, FormRadioGroup } from './../../../../../../theme/form';
 
 @inject('businessStore')
 @withRouter
