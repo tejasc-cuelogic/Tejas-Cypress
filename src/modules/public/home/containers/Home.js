@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Container, Grid, Image, Button, Divider, Embed, Card, Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Header, Container, Grid, Image, Button, Divider, Embed, Card, Label, Icon, List } from 'semantic-ui-react';
 import UserOne from '../../../../assets/images/owner-1.jpg';
 import UserTwo from '../../../../assets/images/owner-2.jpg';
 import videoPoster from '../../../../assets/images/636206632.webp';
-import assetsUrl from '../../../../assets/images/campaign-1.jpg';
+import campaign1 from '../../../../assets/images/campaign-1.jpg';
+import campaign2 from '../../../../assets/images/campaign-2.jpg';
+import campaign3 from '../../../../assets/images/campaign-3.jpg';
 
 const nsvideos = {
   embed: '218642510',
@@ -85,101 +88,73 @@ class Home extends Component {
           <Container>
             <Header as="h2" textAlign="center">Latest Campaigns</Header>
             <p className="caption text-center">Browse the newest investment opportunities on NextSeed. The next big thing may be inviting you to participate.</p>
-            <Card.Group itemsPerRow={3}>
-              <Card>
-                <Image src={assetsUrl} />
+            <Card.Group itemsPerRow={3} stackable>
+              <Card className="campaign">
+                <Image src={campaign1} />
+                <Label basic color="green">300% Funded</Label>
+                <Icon name="heart" />
                 <Card.Content>
-                  <Card.Header>Matthew</Card.Header>
-                  <Card.Meta>
-                    <span className="date">Joined in 2015</span>
-                  </Card.Meta>
-                  <Card.Description>Matthew is a musician living in Nashville.</Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                  <a>
-                    <Icon name="user" />
-                    22 Friends
-                  </a>
+                  <div className="tags">
+                    brewpub
+                    <span className="pull-right">1.45x/48mos</span>
+                  </div>
+                  <Card.Header>Buffbrew Taproom</Card.Header>
+                  <Card.Meta>Houston, TX</Card.Meta>
+                  <Card.Description>
+                    Houston Brewery is expanding its facilities and launching
+                    the new Buffbrew Taproom, complete with a full-service
+                    kitchen, event space and over 40 beers on tap.
+                  </Card.Description>
+                  <List divided horizontal>
+                    <List.Item as={Link} to="/">Brewery & Pub</List.Item>
+                    <List.Item as={Link} to="/">Shedule A</List.Item>
+                    <List.Item as={Link} to="/">Revenue Sharing </List.Item>
+                  </List>
                 </Card.Content>
               </Card>
-              <Card>
-                <Image src={assetsUrl} />
+              <Card className="campaign">
+                <Image src={campaign2} />
+                <Label basic color="green">New</Label>
+                <Icon name="heart outline" />
                 <Card.Content>
-                  <Card.Header>Matthew</Card.Header>
-                  <Card.Meta>
-                    <span className="date">Joined in 2015</span>
-                  </Card.Meta>
-                  <Card.Description>Matthew is a musician living in Nashville.</Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                  <a>
-                    <Icon name="user" />
-                    22 Friends
-                  </a>
+                  <div className="tags">
+                    Fitness
+                    <span className="pull-right">1.45x/48mos</span>
+                  </div>
+                  <Card.Header>Mob Cycle</Card.Header>
+                  <Card.Meta>Salt Lake City, UT</Card.Meta>
+                  <Card.Description>
+                    Experienced team opening one of the first indoor cycling studios
+                    in downtown Salt Lake City. Skilled instructors and top of the
+                    line equipment. Looking to expand throughout the state and region.
+                  </Card.Description>
+                  <List divided horizontal>
+                    <List.Item as={Link} to="/">Fitness</List.Item>
+                    <List.Item as={Link} to="/">Shedule A</List.Item>
+                    <List.Item as={Link} to="/">Revenue Sharing </List.Item>
+                  </List>
                 </Card.Content>
               </Card>
-              <Card>
-                <Image src={assetsUrl} />
+              <Card className="campaign">
+                <Image src={campaign3} />
+                <Label basic color="green">10 days left</Label>
+                <Icon name="heart outline" />
                 <Card.Content>
-                  <Card.Header>Matthew</Card.Header>
-                  <Card.Meta>
-                    <span className="date">Joined in 2015</span>
-                  </Card.Meta>
-                  <Card.Description>Matthew is a musician living in Nashville.</Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                  <a>
-                    <Icon name="user" />
-                    22 Friends
-                  </a>
-                </Card.Content>
-              </Card>
-              <Card>
-                <Image src={assetsUrl} />
-                <Card.Content>
-                  <Card.Header>Matthew</Card.Header>
-                  <Card.Meta>
-                    <span className="date">Joined in 2015</span>
-                  </Card.Meta>
-                  <Card.Description>Matthew is a musician living in Nashville.</Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                  <a>
-                    <Icon name="user" />
-                    22 Friends
-                  </a>
-                </Card.Content>
-              </Card>
-              <Card>
-                <Image src={assetsUrl} />
-                <Card.Content>
-                  <Card.Header>Matthew</Card.Header>
-                  <Card.Meta>
-                    <span className="date">Joined in 2015</span>
-                  </Card.Meta>
-                  <Card.Description>Matthew is a musician living in Nashville.</Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                  <a>
-                    <Icon name="user" />
-                    22 Friends
-                  </a>
-                </Card.Content>
-              </Card>
-              <Card>
-                <Image src={assetsUrl} />
-                <Card.Content>
-                  <Card.Header>Matthew</Card.Header>
-                  <Card.Meta>
-                    <span className="date">Joined in 2015</span>
-                  </Card.Meta>
-                  <Card.Description>Matthew is a musician living in Nashville.</Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                  <a>
-                    <Icon name="user" />
-                    22 Friends
-                  </a>
+                  <div className="tags">
+                    Education
+                    <span className="pull-right">11%/18mos</span>
+                  </div>
+                  <Card.Header>Avant Media Institute</Card.Header>
+                  <Card.Meta>Houston, TX</Card.Meta>
+                  <Card.Description>
+                    Audio engineering program providing relevant, hands-on
+                    training with experienced faculty. Seeking national accreditation.
+                  </Card.Description>
+                  <List divided horizontal>
+                    <List.Item as={Link} to="/">Education</List.Item>
+                    <List.Item as={Link} to="/">Shedule A</List.Item>
+                    <List.Item as={Link} to="/">Revenue Sharing </List.Item>
+                  </List>
                 </Card.Content>
               </Card>
             </Card.Group>
