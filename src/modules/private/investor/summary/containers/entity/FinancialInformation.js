@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
-import { FormInput } from '../../../../theme/form';
+import { FormInput } from '../../../../../../theme/form';
 
 @inject('entityAccountStore')
 @observer

@@ -4,11 +4,11 @@ import { Card, Header, Form, Button, Divider } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 
 import PersonalSignature from '../../components/PersonalSignature';
-import businessActions from '../../../../actions/business';
-import { FormInput } from './../../../../theme/form';
+import { businessActions } from '../../../../../../services/actions';
+import { FormInput } from './../../../../../../theme/form';
 import {
   XML_STATUSES,
-} from '../../../../constants/business';
+} from '../../../../../../constants/business';
 
 @inject('businessStore')
 @withRouter

@@ -1,12 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import MuliStep from '../../../../helper/MultiStep';
+import { MultiStep } from '../../../../../../helper';
 import FinancialInformation from './FinancialInformation';
 import AccountType from './AccountType';
 import Funding from './Funding';
 import Identity from './Identity';
 import Summary from './Summary';
-import validationActions from '../../../../actions/validation';
+import { validationActions } from '../../../../../../services/actions';
 
 @inject('uiStore', 'iraAccountStore', 'userDetailsStore', 'userStore')
 @observer
@@ -60,7 +60,7 @@ export default class AccountCreation extends React.Component {
 
     return (
       <div className="step-progress">
-        <MuliStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.iraAccountStore.stepToBeRendered} createAccount={this.props.iraAccountStore.createAccount} steps={steps} formTitle="IRA Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.iraAccountStore.stepToBeRendered} createAccount={this.props.iraAccountStore.createAccount} steps={steps} formTitle="IRA Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

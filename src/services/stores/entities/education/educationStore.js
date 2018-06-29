@@ -5,7 +5,7 @@ import flatMap from 'lodash/flatMap';
 import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../../../api/graphql';
 import { userStore } from '../../index';
-import { ClientSearch } from '../../../../helper';
+import { clientSearch } from '../../../../helper';
 import { allKbsQuery, allFaqQuery } from '../../queries/knowledgeBase';
 
 export class EducationStore {
@@ -48,7 +48,7 @@ export class EducationStore {
 
   @computed get kbs() {
     return (this.allData.data && this.allData.data.knowledgeBase
-      && ClientSearch.search(
+      && clientSearch.search(
         toJS(this.allData.data.knowledgeBase),
         this.searchParam,
         'knowledgeBase',
@@ -57,7 +57,7 @@ export class EducationStore {
 
   @computed get faqs() {
     return (this.allData.data && this.allData.data.faqs
-      && ClientSearch.search(toJS(this.allData.data.faqs), this.searchParam, 'faq')) || [];
+      && clientSearch.search(toJS(this.allData.data.faqs), this.searchParam, 'faq')) || [];
   }
 
   @computed get error() {

@@ -4,8 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 import moment from 'moment';
 
-import { US_STATES, LEGAL_FORM_TYPES } from '../../../../constants/business';
-import { FormInput, FormSelect, FormDatePicker } from './../../../../theme/form';
+import { US_STATES, LEGAL_FORM_TYPES } from '../../../../../../constants/business';
+import { FormInput, FormSelect, FormDatePicker } from './../../../../../../theme/form';
 
 @inject('businessStore')
 @withRouter

@@ -3,10 +3,10 @@ import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import _ from 'lodash';
 import { Header, Button, Image, Grid, Form, Loader, Input, Dimmer } from 'semantic-ui-react';
-import accountActions from '../../../../actions/account';
+import { accountActions } from '../../../../../../services/actions';
 import LinkBankForm from './LinkBankForm';
-import defaultBankLogo from '../../../../assets/images/banks/default.png';
-import { IND_BANK_LIST } from '../../../../constants/account';
+import defaultBankLogo from '../../../../../../assets/images/banks/default.png';
+import { IND_BANK_LIST } from '../../../../../../constants/account';
 
 @inject('accountStore', 'uiStore')
 @withRouter
@@ -79,7 +79,7 @@ export default class LinkBankPlaid extends Component {
                     >
                       {/* eslint-disable import/no-dynamic-require */}
                       {/* eslint-disable global-require */}
-                      <Image centered src={require(`../../../../assets/images/banks/${bankData.institutionID}.png`)} />
+                      <Image centered src={require(`../../../../../../assets/images/banks/${bankData.institutionID}.png`)} />
                     </Link>
                   </Grid.Column>
                 ))

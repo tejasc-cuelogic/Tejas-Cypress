@@ -3,9 +3,9 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List, Message, Confirm } from 'semantic-ui-react';
 
-import validationActions from '../../../actions/validation';
-import { ListErrors } from '../../../theme/shared';
-import { DropZone } from '../../../theme/form';
+import { validationActions } from '../../../../../services/actions';
+import { ListErrors } from '../../../../../theme/shared';
+import { DropZone } from '../../../../../theme/form';
 
 @inject('profileStore', 'uiStore', 'userDetailsStore')
 @withRouter

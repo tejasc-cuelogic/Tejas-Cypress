@@ -71,7 +71,7 @@ const MySidebar = observer(props => (
     }
     <Sidebar.Pusher
       className={`${props.match.url.includes('/business-application') ?
-        'business-application' : ''} ${this.props.uiStore.devBanner ? 'banner' : ''}`}
+        'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''}`}
     >
       {props.mobile && <Icon onClick={props.toggle} className="hamburger content" />}
       {props.children}

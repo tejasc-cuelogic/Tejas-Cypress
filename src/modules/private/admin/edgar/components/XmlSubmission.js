@@ -3,11 +3,11 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Accordion, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import _ from 'lodash';
-import { DateTimeFormat } from './../../../theme/shared';
+import { DateTimeFormat } from './../../../../../theme/shared';
 
 import {
   XML_STATUSES,
-} from '../../../constants/business';
+} from '../../../../../constants/business';
 
 const XmlSubmission = observer((props) => {
   const { businessId, filingId } = props;

@@ -3,8 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { Modal, Grid, Button, Header, Form, Divider } from 'semantic-ui-react';
-import { FormSelect } from '../../../theme/form';
-import Helper from '../../../helper/utility';
+import { FormSelect } from '../../../../../theme/form';
+import Helper from '../../../../../helper/utility';
 
 @inject('profileStore', 'uiStore', 'userDetailsStore')
 @withRouter

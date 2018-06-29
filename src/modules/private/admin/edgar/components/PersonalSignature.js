@@ -2,9 +2,9 @@ import React from 'react';
 import { Form, Button, Input } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import moment from 'moment';
-import { FieldError } from '../../../theme/shared';
+import { FieldError } from '../../../../../theme/shared';
 
-import { FormInput, FormDatePicker } from './../../../theme/form';
+import { FormInput, FormDatePicker } from './../../../../../theme/form';
 
 const PersonalSignature = observer(props => (
   <div>

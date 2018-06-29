@@ -1,9 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
-import MuliStep from '../../../../helper/MultiStep';
+import { MultiStep } from '../../../../../../helper';
 import FinancialInformation from './FinancialInformation';
-import validationActions from '../../../../actions/validation';
+import { validationActions } from '../../../../../../services/actions';
 import General from './General';
 import FinancilInfo from './FinancialInfo';
 import PersonalInformation from './PersonalInformation';
@@ -79,7 +79,7 @@ export default class AccountCreation extends React.Component {
     ];
     return (
       <div className="step-progress">
-        <MuliStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.entityAccountStore.stepToBeRendered} createAccount={this.props.entityAccountStore.createAccount} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.entityAccountStore.stepToBeRendered} createAccount={this.props.entityAccountStore.createAccount} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

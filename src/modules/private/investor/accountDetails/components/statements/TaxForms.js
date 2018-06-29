@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FaqWidget } from '../../../../../theme/shared';
-import { FillTable } from '../../../../../theme/table/NSTable';
+import { FaqWidget } from '../../../../../../theme/shared';
+import { FillTable } from '../../../../../../theme/table/NSTable';
 
 const result = {
   columns: [

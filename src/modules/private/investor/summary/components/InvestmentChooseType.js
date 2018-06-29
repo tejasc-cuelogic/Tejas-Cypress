@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Modal, Grid, Button, Header, Form } from 'semantic-ui-react';
-import { FormRadioGroup } from '../../../theme/form';
+import { FormRadioGroup } from '../../../../../theme/form';
 import InvestmentDescription from './InvestmentDescription';
 
 const InvestmentChooseType = observer(props => (

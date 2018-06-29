@@ -3,8 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Modal, Form, Button } from 'semantic-ui-react';
-import { ImageCropper } from '../../../../theme/form';
-import { PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS } from '../../../../constants/profile';
+import { ImageCropper } from '../../../../../theme/form';
+import { PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS } from '../../../../../constants/profile';
 
 @inject('profileStore', 'uiStore')
 @withRouter

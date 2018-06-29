@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Grid, Divider, Message, Confirm } from 'semantic-ui-react';
-import { DropZone } from '../../../../theme/form';
-import { ListErrors } from '../../../../theme/shared';
+import { DropZone } from '../../../../../../theme/form';
+import { ListErrors } from '../../../../../../theme/shared';
 
 @inject('uiStore', 'entityAccountStore')
 @observer

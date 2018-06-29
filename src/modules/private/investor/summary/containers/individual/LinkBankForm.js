@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
-import { FormInput } from '../../../../theme/form';
-import { ListErrors } from '../../../../theme/shared';
-import validationActions from '../../../../actions/validation';
+import { FormInput } from '../../../../../../theme/form';
+import { ListErrors } from '../../../../../../theme/shared';
+import { validationActions } from '../../../../../../services/actions';
 
 @inject('individualAccountStore', 'accountStore', 'uiStore', 'entityAccountStore')
 @observer

@@ -3,16 +3,16 @@ import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import _ from 'lodash';
 import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
-import { FormSelect, FormInput, MaskedInput, AutoComplete } from '../../../../theme/form';
-import { US_STATES } from '../../../../constants/account';
+import { FormSelect, FormInput, MaskedInput, AutoComplete } from '../../../../../theme/form';
+import { US_STATES } from '../../../../../constants/account';
 
 import UserVerifiedDetails from '../components/UserVerifiedDetails';
 import NewPhoneNumber from './NewPhoneNumber';
 import NewEmailAddress from './NewEmailAddress';
 import UpdateProfilePhoto from './UpdateProfilePhoto';
-import Helper from '../../../../helper/utility';
-import { Spinner } from '../../../../theme/shared';
-import Randavatar from '../../../../theme/shared/Randavatar';
+import Helper from '../../../../../helper/utility';
+import { Spinner } from '../../../../../theme/shared';
+import Randavatar from '../../../../../theme/shared/Randavatar';
 
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore', 'accountStore')
 @observer

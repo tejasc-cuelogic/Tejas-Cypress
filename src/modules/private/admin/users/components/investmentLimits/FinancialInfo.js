@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Grid, Card, Statistic, Popup, Icon, Form, Button } from 'semantic-ui-react';
-import { FormInput } from '../../../../../theme/form';
-import Helper from '../../../../../helper/utility';
+import { FormInput } from '../../../../../../theme/form';
+import Helper from '../../../../../../helper/utility';
 
 @inject('userDetailsStore', 'uiStore')
 @observer

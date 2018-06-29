@@ -3,7 +3,7 @@ import {
   PLAID_ENV, PLAID_URL, PLAID_PUBLIC_KEY,
 } from '../../../constants/account';
 import ExternalApiService from '../../../api/externalApi';
-import { accountStore, indAccountStore, uiStore } from '../../stores';
+import { accountStore, individualAccountStore, uiStore } from '../../stores';
 import Helper from '../../../helper/utility';
 
 export class Account {
@@ -96,7 +96,7 @@ export class Account {
         // The metadata object contains info about the institution the
         // user selected and the account ID, if selectAccount is enabled.
         Helper.toast(`Bank ${metadata.institution.name} with account id ${Helper.encryptNumber(metadata.account_id)} successfully linked.`, 'success');
-        indAccountStore.setStepToBeRendered(1);
+        individualAccountStore.setStepToBeRendered(1);
       },
       onExit: (err) => {
         // The user exited the Link flow.

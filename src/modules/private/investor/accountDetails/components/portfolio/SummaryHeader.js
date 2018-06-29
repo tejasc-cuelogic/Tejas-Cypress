@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import snakeCase from 'lodash/snakeCase';
 import Aux from 'react-aux';
 import { Card, Grid, Popup, Divider, Statistic, Icon, Header } from 'semantic-ui-react';
-import { AccTypeTitle } from '../../../../../theme/shared';
-import Helper from '../../../../../helper/utility';
+import { AccTypeTitle } from '../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
 /*
   type =>
   0 / undefined: display as it is

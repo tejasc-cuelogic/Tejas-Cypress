@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Statistic } from 'semantic-ui-react';
 import _ from 'lodash';
-import Helper from '../../../helper/utility';
+import Helper from '../../../../../helper/utility';
 
 const stepinfo = {
   group: 'Investor Account Creation',

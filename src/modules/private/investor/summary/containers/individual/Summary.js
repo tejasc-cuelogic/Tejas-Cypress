@@ -3,8 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
 import _ from 'lodash';
-import { ListErrors } from '../../../../theme/shared';
-import Helper from '../../../../helper/utility';
+import { ListErrors } from '../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
 
 @inject('accountStore', 'individualAccountStore', 'uiStore', 'userStore')
 @withRouter

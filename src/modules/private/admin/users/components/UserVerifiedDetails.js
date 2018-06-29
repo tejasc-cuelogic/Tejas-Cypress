@@ -2,8 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Card } from 'semantic-ui-react';
-import { Spinner } from '../../../../theme/shared';
-import Helper from '../../../../helper/utility';
+import { Spinner } from '../../../../../theme/shared';
+import Helper from '../../../../../helper/utility';
 
 /* eslint-disable arrow-body-style */
 const userVerifiedDetails = (props) => {

@@ -6,7 +6,7 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import userStore from './userStore';
 import commonStore from './commonStore';
-import { CHANGE_PASS } from '../../../constants/user';
+import { CHANGE_PASS } from '../../../services/constants/user';
 import { REACT_APP_DEPLOY_ENV } from '../../../constants/common';
 import uiStore from './uiStore';
 

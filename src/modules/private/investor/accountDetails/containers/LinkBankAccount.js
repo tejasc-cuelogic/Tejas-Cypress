@@ -9,7 +9,7 @@ export default class LinkBankAccount extends Component {
   }
   render() {
     const LoadableLinkBank = Loadable({
-      loader: () => import('../../../summary/containers/individual/LinkBankPlaid'),
+      loader: () => import('../../summary/containers/individual/LinkBankPlaid'),
       loading() {
         return <div>Loading...</div>;
       },

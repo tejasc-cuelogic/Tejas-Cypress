@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 import { Card, Grid, Header, Button, Divider } from 'semantic-ui-react';
 import ChangePassword from '../components/profileSettings/ChangePassword';
-import { securitySections } from '../constants/metadata';
+import { securitySections } from './../../../../../services/constants/user';
 
 export default class Security extends Component {
   render() {

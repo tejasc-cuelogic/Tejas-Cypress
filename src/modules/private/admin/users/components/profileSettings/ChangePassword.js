@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
-import { FormInput } from '../../../../../theme/form';
-import authActions from '../../../../../actions/auth';
+import { FormInput } from '../../../../../../theme/form';
+import { authActions } from '../../../../../../services/actions';
 
 @inject('authStore', 'uiStore')
 @observer

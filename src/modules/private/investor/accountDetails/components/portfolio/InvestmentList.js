@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Table, Accordion, Progress, Button } from 'semantic-ui-react';
-import Helper from '../../../../../helper/utility';
+import Helper from '../../../../../../helper/utility';
 
 const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
 const investments = [

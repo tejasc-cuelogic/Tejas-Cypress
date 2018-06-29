@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 
-import MuliStep from '../../../../helper/MultiStep';
+import { MultiStep } from '../../../../../helper';
 import NetWorth from './NetWorth';
 import IncomeEvidence from './IncomeEvidence';
 import Verification from './Verification';
@@ -19,7 +19,7 @@ export default class Accreditation extends React.Component {
 
     return (
       <div className="step-progress">
-        <MuliStep steps={steps} formTitle="Verify your accreditation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
+        <MultiStep steps={steps} formTitle="Verify your accreditation" setDashboardWizardStep={this.props.setDashboardWizardStep} />
       </div>
     );
   }

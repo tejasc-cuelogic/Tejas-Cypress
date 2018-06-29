@@ -3,8 +3,8 @@ import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Form, Label, Card, Header, Button, Checkbox, Feed } from 'semantic-ui-react';
-import { US_STATES } from '../../../../../constants/account'; //  added Temperarily to update UI as per new layout
-import { FormSelect } from '../../../../../theme/form';
+import { US_STATES } from '../../../../../../constants/account'; //  added Temperarily to update UI as per new layout
+import { FormSelect } from '../../../../../../theme/form';
 
 const states = {
   label: 'State',
