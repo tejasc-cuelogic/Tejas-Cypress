@@ -96,7 +96,7 @@ section{
 
 
 // Footer Styles
-footer{
+c{
 	background-color:@neutral-lighten;
 	.footer-head{
 		padding:0 @60px;
@@ -113,6 +113,57 @@ footer{
 			max-width:650px;
 			font-size:12px;
 			line-height:22px;
+		}
+	}
+}
+
+
+// Campaign list page
+.text-right {
+	text-align: right;
+}
+.campaign-list-wrapper {
+	.ui.cards
+	{ 
+		>.card {
+			.card-labels {
+				position: absolute;
+				left: 0;
+				top: 0;
+				padding: 10px;
+				width: 100%;
+
+				span {
+					text-transform: uppercase;
+					font-size: @12px;
+					line-height: 24px;
+					color: @neutral-light;
+					letter-spacing: 1px;
+				}
+			}
+			>.content {
+				>.header {
+					font-size: @20px;
+					line-height: 24px;
+					color: @neutral;
+				}
+				>.description {
+					font-size: @12px;
+					line-height: 20px;
+					color: @neutral-light;
+				}
+			}
+			.meta {
+				font-size: @14px;
+				line-height: 24px;
+				color: @neutral;
+			}
+		} 
+	} 
+	.card-details {
+		span {
+			display: inline-block;
+			width: 50%;
 		}
 	}
 }

@@ -80,3 +80,11 @@ footer{
         }
     }
 }
+
+.filter-menu {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    .ui.text.menu {
+        margin: 0;
+    }
+}

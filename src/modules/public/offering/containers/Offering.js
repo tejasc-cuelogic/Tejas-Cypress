@@ -1,39 +1,10 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Container, Menu } from 'semantic-ui-react';
-// import GridListing from '../../../../theme/ui/GridListing';
-// import OfferDetails from '../components/OfferDetails';
+import { Header, Container, Menu, Image, Card, Label, Icon } from 'semantic-ui-react';
+import CardImage from '../../../../assets/images/img.png';
 
 class Offering extends Component {
-  // offerings = [
-  //   {
-  //     title: 'Restaurant',
-  //     description: 'A bar-style, fast casual restaurant
-  //  bringing a unique and pot dining experience.',
-  //   },
-  //   {
-  //     title: 'Chef Hall',
-  //     description: 'Next evolution of the food hall. Bravery Chef Hall will feature 5 concepts.',
-  //   },
-  //   {
-  //     title: 'BREW Pub',
-  //     description: 'Houstan Bravery is launching new Buffbrew and over 40 beers on tap.',
-  //   },
-  //   {
-  //     title: 'GastroLounge',
-  //     description: 'GastroLounge and high end event space in up-and-coming East
-  //  Downtown Houstan.',
-  //   },
-  // ];
-
   render() {
-    // let pageContent = null;
-    // if (this.props.match.params.offerId) {
-    //   pageContent = <OfferDetails offerId={this.props.match.params.offerId} />;
-    // } else {
-    //   pageContent = <GridListing listItems={this.offerings} details="offerings/details" />;
-    // }
-
     return (
       <Aux>
         <Container fluid className="mission-banner">
@@ -45,15 +16,101 @@ class Offering extends Component {
             </div>
           </Container>
         </Container>
-        <Menu className="filter-menu">
-          <Menu.Item
-            name="filter"
-          />
-          <Menu.Item
-            name="50 Results Found"
-            position="right"
-          />
-        </Menu>
+        <div className="filter-menu">
+          <Container>
+            <Menu text>
+              <Menu.Item name="filter">
+                <Image src="../../../../assets/images/icon_filter.png" />
+                 Filter
+              </Menu.Item>
+              <Menu.Item
+                name="50 Results Found"
+                position="right"
+              />
+            </Menu>
+          </Container>
+        </div>
+        <section className="campaign-list-wrapper">
+          <Container>
+            <Header as="h4" textAlign="center" caption>Active Campaigns</Header>
+            <Card.Group itemsPerRow={3}>
+              <Card>
+                <Image src={CardImage} />
+                <div className="card-labels">
+                  <Label>
+                    300% funded
+                  </Label>
+                  <Icon name="heart outline" floated="right" />
+                </div>
+                <Card.Content>
+                  <div className="card-details">
+                    <span>brewpub</span>
+                    <span className="text-right">.45x/48mos</span>
+                  </div>
+                  <Card.Header>Buffbrew Taproom</Card.Header>
+                  <Card.Meta>
+                    <span>Houston, TX</span>
+                  </Card.Meta>
+                  <Card.Description>
+                    Houston Brewery is expanding its facilities and launching the
+                    new Buffbrew Taproom, complete with a full-service kitchen, event
+                    space and over 40 beers on tap.
+                  </Card.Description>
+                </Card.Content>
+                <Card.Content divided>
+                  <a>
+                    22 Friends
+                  </a>
+                  <span> | </span>
+                  <a>
+                    22 Friends
+                  </a>
+                  <span> | </span>
+                  <a>
+                    22 Friends
+                  </a>
+                </Card.Content>
+              </Card>
+              <Card>
+                <Image src={CardImage} />
+                <div className="card-labels">
+                  <Label>
+                    300% funded
+                  </Label>
+                  <Icon name="heart" />
+                </div>
+                <Card.Content>
+                  <div>
+                    <span floated="left">brewpub</span>
+                    <span floated="right">1.45x/48mos</span>
+                  </div>
+                  <Card.Header>Buffbrew Taproom</Card.Header>
+                  <Card.Meta>
+                    <span>Houston, TX</span>
+                  </Card.Meta>
+                  <Card.Description>
+                    Houston Brewery is expanding its facilities and launching the
+                    new Buffbrew Taproom, complete with a full-service kitchen, event
+                    space and over 40 beers on tap.
+                  </Card.Description>
+                </Card.Content>
+                <Card.Content divided>
+                  <a>
+                    22 Friends
+                  </a>
+                  <span> | </span>
+                  <a>
+                    22 Friends
+                  </a>
+                  <span> | </span>
+                  <a>
+                    22 Friends
+                  </a>
+                </Card.Content>
+              </Card>
+            </Card.Group>
+          </Container>
+        </section>
       </Aux>
     );
   }
