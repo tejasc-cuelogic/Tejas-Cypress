@@ -86,5 +86,11 @@ footer{
     border-bottom: 1px solid #ccc;
     .ui.text.menu {
         margin: 0;
+
+        .item {
+            .ui.image.filterIcon {
+                margin-right: 10px;
+            }
+        }
     }
 }
