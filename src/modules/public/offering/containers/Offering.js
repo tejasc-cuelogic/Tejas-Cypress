@@ -6,6 +6,7 @@ import campaign1 from '../../../../assets/images/campaign-1.jpg';
 import campaign2 from '../../../../assets/images/campaign-2.jpg';
 import campaign3 from '../../../../assets/images/campaign-3.jpg';
 import filterIcon from '../../../../assets/images/icon_filter.png';
+import lockIcon from '../../../../assets/images/icon_lock.png';
 
 class Offering extends Component {
   render() {
@@ -23,7 +24,7 @@ class Offering extends Component {
         <div className="filter-menu">
           <Container>
             <Menu text>
-              <Menu.Item name="filter">
+              <Menu.Item name="filter" className="text-uppercase">
                 <Image src={filterIcon} className="filterIcon" />
                  Filter
               </Menu.Item>
@@ -104,6 +105,20 @@ class Offering extends Component {
                     <List.Item as={Link} to="/">Shedule A</List.Item>
                     <List.Item as={Link} to="/">Revenue Sharing </List.Item>
                   </List>
+                </Card.Content>
+                <Card.Content>
+                  <div className="card-hidden">
+                    <div className="hidden-card-lock-image">
+                      <Image src={lockIcon} />
+                    </div>
+                    <div className="hidden-card-details">
+                      <div className="tags">
+                        hidden
+                      </div>
+                      <Card.Header>For NextSeed members only.</Card.Header>
+                      <Card.Meta>Login or complete your profile to view this offering.</Card.Meta>
+                    </div>
+                  </div>
                 </Card.Content>
               </Card>
             </Card.Group>

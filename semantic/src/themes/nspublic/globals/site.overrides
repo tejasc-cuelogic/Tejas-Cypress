@@ -29,6 +29,10 @@ section{
 .secondary-text {
 	color: @secondary-color;
 }
+.text-uppercase {
+	text-transform: uppercase !important;
+	font-weight: bold;
+}
 
 .mission-statistic-section {
 	background-color: @neutral-lighten;
@@ -45,9 +49,14 @@ section{
 		}
 	
 		.statistic {
+			margin-bottom: 0;
 			.value, .label {
 				color: #fff;
 				text-transform: none;
+			}
+			.value~.label {
+				margin-top: 10px;
+				font-weight: 100;
 			}
 		}
 
@@ -117,8 +126,3 @@ footer{
 	}
 }
 
-
-// Campaign list page
-.text-right {
-	text-align: right;
-}
