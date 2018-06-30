@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Loadable from 'react-loadable';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
+import ProfileData from '../components/ProfileData';
+import InvestmentLimits from '../../../investor/settings/containers/InvestmentLimits';
+import Security from '../components/Security';
+import Beneficiaries from '../../../investor/settings/containers/Beneficiaries';
 
-const getModule = component => Loadable({
-  loader: () => import(`./${component}`),
-  loading() {
-    return <div>Loading...</div>;
-  },
-});
+const getModule = (component) => {
+  let c = null;
+  switch (component) {
+    case 'InvestmentLimits': c = InvestmentLimits; break;
+    case 'Security': c = Security; break;
+    case 'Beneficiaries': c = Beneficiaries; break;
+    default: c = ProfileData; break;
+  }
+  return c;
+};
 
 export default class ProfileSettings extends Component {
   componentWillMount() {

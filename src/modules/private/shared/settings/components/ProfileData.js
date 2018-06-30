@@ -6,10 +6,10 @@ import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
 import { FormSelect, FormInput, MaskedInput, AutoComplete } from '../../../../../theme/form';
 import { US_STATES } from '../../../../../constants/account';
 
-import UserVerifiedDetails from '../components/UserVerifiedDetails';
-import NewPhoneNumber from './NewPhoneNumber';
-import NewEmailAddress from './NewEmailAddress';
-import UpdateProfilePhoto from './UpdateProfilePhoto';
+import UserVerifiedDetails from '../../../investor/settings/components/UserVerifiedDetails';
+import NewPhoneNumber from './profileSettings/NewPhoneNumber';
+import NewEmailAddress from './profileSettings/NewEmailAddress';
+import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
 import { Spinner } from '../../../../../theme/shared';
 import Randavatar from '../../../../../theme/shared/Randavatar';

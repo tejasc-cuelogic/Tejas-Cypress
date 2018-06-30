@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Button } from 'semantic-ui-react';
-import Accreditation from './Accreditation';
+import Accreditation from '../components/Accreditation';
 
 @inject('uiStore')
 @observer

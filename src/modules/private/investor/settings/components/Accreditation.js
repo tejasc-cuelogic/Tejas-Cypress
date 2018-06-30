@@ -2,9 +2,9 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 
 import { MultiStep } from '../../../../../helper';
-import NetWorth from './NetWorth';
-import IncomeEvidence from './IncomeEvidence';
-import Verification from './Verification';
+import NetWorth from './accreditation/NetWorth';
+import IncomeEvidence from './accreditation/IncomeEvidence';
+import Verification from './accreditation/Verification';
 
 @inject('accountStore')
 @observer

@@ -1,14 +1,8 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Header, Card, Grid, Statistic, Popup, Icon, Form, List, Radio, Divider, Table, Accordion, Progress, Button } from 'semantic-ui-react';
-// import { FormDropDown } from '../../../../../theme/form';
 
 /* eslint-disable arrow-body-style */
-// const options = [
-//   { key: 'i', text: 'Individual', value: 'individual' },
-//   { key: 'r', text: 'IRA', value: 'ira' },
-//   { key: 'e', text: 'Entity', value: 'entity' },
-// ];
 
 const Portfolio = () => {
   // const { activeIndex } = this.state;

@@ -3,10 +3,10 @@ import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import { Route, withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
-import { FieldError, ListErrors } from '../../../../../theme/shared';
-import { validationActions } from '../../../../../services/actions';
-import Helper from '../../../../../helper/utility';
-import ConfirmEmailAddress from '../../../../auth/containers/ConfirmEmailAddress';
+import { FieldError, ListErrors } from '../../../../../../theme/shared';
+import { validationActions } from '../../../../../../services/actions';
+import Helper from '../../../../../../helper/utility';
+import ConfirmEmailAddress from '../../../../../auth/containers/ConfirmEmailAddress';
 
 @inject('authStore', 'uiStore', 'profileStore')
 @withRouter
