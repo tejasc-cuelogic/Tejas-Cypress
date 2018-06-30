@@ -4,7 +4,7 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import map from 'lodash/map';
 import isArray from 'lodash/isArray';
-import { GqlClient as client } from '../../../../api/graphql';
+import { GqlClient as client } from '../../../../api/gqlApi';
 import { allUsersQuery } from '../../queries/users';
 
 export class UserListingStore {

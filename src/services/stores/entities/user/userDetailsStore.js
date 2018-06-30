@@ -6,8 +6,8 @@ import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
 import _ from 'lodash';
-import { GqlClient as client } from '../../../../api/graphql';
-import { GqlClient as client2 } from '../../../../api/graphqlCool';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as client2 } from '../../../../api/gcoolApi';
 import {
   uiStore, authStore, profileStore, iraAccountStore, entityAccountStore, individualAccountStore,
 } from '../../index';

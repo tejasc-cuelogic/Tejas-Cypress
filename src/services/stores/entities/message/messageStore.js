@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import isArray from 'lodash/isArray';
-import { GqlClient as client } from '../../../../api/graphqlCool';
+import { GqlClient as client } from '../../../../api/gcoolApi';
 import {
   allMessages, deleteMessage, messageThread, createMessage,
 } from '../../queries/message';

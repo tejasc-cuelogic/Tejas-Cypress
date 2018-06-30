@@ -3,7 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import flatMap from 'lodash/flatMap';
 import mapValues from 'lodash/mapValues';
-import { GqlClient as client } from '../../../../api/graphql';
+import { GqlClient as client } from '../../../../api/gqlApi';
 import { userStore } from '../../index';
 import { clientSearch } from '../../../../helper';
 import { allKbsQuery, allFaqQuery } from '../../queries/knowledgeBase';

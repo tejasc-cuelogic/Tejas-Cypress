@@ -18,7 +18,7 @@ export default class ResetPassword extends React.Component {
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleSubmitForm = (event) => {
     event.preventDefault();
-    authActions.setNewPassword().then(() => this.props.history.push('/login'));
+    authActions.setNewPassword().then(() => this.props.history.push('/auth/login'));
   }
 
   render() {

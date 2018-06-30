@@ -1,4 +1,4 @@
-import ApiService from '../../../api/api';
+import ApiService from '../../../api/restApi';
 import { REACT_APP_DEPLOY_ENV, REACT_APP_PROTECTION_API } from '../../../constants/common';
 
 const commonParams = { env: REACT_APP_DEPLOY_ENV, url: window.location.hostname };

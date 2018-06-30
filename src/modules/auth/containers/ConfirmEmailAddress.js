@@ -37,7 +37,7 @@ export default class ConfirmEmailAddress extends Component {
                 this.props.history.replace('/app/dashboard');
               }
             } else {
-              this.props.history.replace('/app/login');
+              this.props.history.replace('/auth/login');
             }
           })
           .catch(() => { });

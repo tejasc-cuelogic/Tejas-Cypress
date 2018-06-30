@@ -2,7 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import shortid from 'shortid';
 import graphql from 'graphql';
-import { GqlClient as client } from '../../../api/graphql';
+import { GqlClient as client } from '../../../api/gqlApi';
 import {
   listOfferings,
   getXmlDetails,
@@ -22,7 +22,7 @@ import {
   FILES,
   XML_STATUSES,
 } from '../../../constants/business';
-import ApiService from '../../../api/api';
+import ApiService from '../../../api/restApi';
 import { validationActions } from '../../../services/actions';
 import Helper from '../../../helper/utility';
 
@@ -177,17 +177,6 @@ export class Business {
   *       Fetches list of offerings from DynamoDB
   */
   listOfferings = () => {
-    // const payload = {
-    //   query: 'query getOfferingFilings{offeringFilings{id created payload{' +
-    //     'templateVariables{ name_of_business } } } }',
-    // };
-    // uiStore.toggleDropdownLoader();
-    // ApiService.post(GRAPHQL, payload)
-    //   .then(data => this.setOfferings(data.body.data.offeringFilings))
-    //   .catch(err => uiStore.setErrors(err))
-    //   .finally(() => {
-    //     uiStore.toggleDropdownLoader();
-    //   });
     graphql({ client, query: listOfferings })
       .then(data => this.setOfferings(data.body.data.offeringFilings))
       .catch(err => uiStore.setErrors(err))
@@ -592,36 +581,12 @@ export class Business {
   // Private Methods starts here
   /**
   * @desc Converts store data in the format that should be sent in an API
-  * @param $info - {
-  *   filerCik: {
-  *     value: '12345',
-  *     key: 'filerCik',
-  *     rule: 'required',
-  *     error: undefined,
-  *   },
-  *   filerCcc: {
-  *     value: 'abcde',
-  *     key: 'filerCcc',
-  *     rule: 'required',
-  *     error: undefined,
-  *   },
-  * }
-  * @return {
-  *   filerCik: '12345',
-  *   filerCcc: 'abcde',
-  * }
   */
   getFormattedInformation = (info) => {
     const formattedData = {};
     const dateKeys = ['dateIncorporation', 'deadlineDate'];
     _.forEach(info, (data, key) => {
-      if (dateKeys.includes(key)) {
-        // If value is date then it has Moment object and not string value, in order to send proper
-        // value to server we have to parse value as follows
-        formattedData[key] = data.value.format('MM-DD-YYYY');
-      } else {
-        formattedData[key] = data.value;
-      }
+      formattedData[key] = dateKeys.includes(key) ? data.value.format('MM-DD-YYYY') : data.value;
     });
     return formattedData;
   }

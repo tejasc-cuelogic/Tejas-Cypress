@@ -38,6 +38,21 @@ export class Api {
     })
   )
 
+  postNoAuth = (url, payload) => (
+    new Promise((resolve, reject) => {
+      request
+        .post(url.includes('https://') ? url : `${API_ROOT}${url}`)
+        .set('Content-Type', 'application/json')
+        .send(payload)
+        .end((err, data) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(data);
+        });
+    })
+  )
+
   delete = (url, payload) => (
     new Promise((resolve, reject) => {
       request
@@ -74,7 +89,7 @@ export class Api {
     new Promise((resolve, reject) => {
       request
         .put(`${url}`)
-        .set('Content-Type', 'text/plain') // Added for File upload functionality (Binary Mode)
+        .set('Content-Type', 'text/plain') // File upload (Binary Mode)
         .send(file)
         .end((err, data) => {
           if (err) {

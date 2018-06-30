@@ -199,32 +199,6 @@ export class Admin {
 
   /**
    * @desc Arrange user data that has been recieved from cognito.
-   * @param $userList @type Array - List of users that is recied from cognito API. UserList will be
-   *        in format below
-   *        input for method consist for array with hashes in following format
-   *        [
-   *          {
-   *            Attributes: [
-   *              { Name: 'given_name', Value: 'test' },
-   *              .
-   *              .
-   *            ],
-   *            Enabled: true,
-   *            UserStatus: 'CONFIRMED',
-   *          },
-   *          {...},
-   *          {...}
-   *        ]
-   * @return Processed userList @type Object
-   *         {
-   *            #username: {
-   *              given_name: 'test',
-   *              enabled: true,
-   *              confirmed: true/false
-   *            },
-   *            #username: {...},
-   *            #username: {...}
-   *         }
    */
   getFormatedUserData = (userList) => {
     const formatedUserData = {};

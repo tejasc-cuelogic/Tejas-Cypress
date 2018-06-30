@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../api/graphql';
+import { GqlClient as client } from '../../../../api/gqlApi';
 import { allMonthlyStatements, allTaxForms } from '../../queries/statement';
 
 export class StatementStore {

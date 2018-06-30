@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import { Form, Popup, Icon, Dropdown } from 'semantic-ui-react';
 import { FieldError } from '../../shared';
 
-
 const FormDropDown = observer((props) => {
   const { label, error } = props.fielddata;
   return (

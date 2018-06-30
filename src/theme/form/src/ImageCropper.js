@@ -24,16 +24,10 @@ export default class ImageCropper extends Component {
       imageType: '',
     };
   }
-  /* eslint-disable prefer-destructuring */
   onChange = (e) => {
     e.preventDefault();
     this.props.handelReset();
-    let files;
-    if (e.dataTransfer) {
-      files = e.dataTransfer.files;
-    } else if (e.target) {
-      files = e.target.files;
-    }
+    const { files } = (e.dataTransfer) ? e.dataTransfer : e.target;
 
     this.setState({ imageType: files[0].type });
     this.props.setData('value', files[0].name);
@@ -77,7 +71,6 @@ export default class ImageCropper extends Component {
    * @param {File} image - Image File Object
    * @param {Object} pixelCrop - pixelCrop Object provided by react-image-crop
    */
-  /* eslint-disable class-methods-use-this */
   getCroppedImg(image, pixelCrop) {
     const canvas = document.createElement('canvas');
     canvas.width = pixelCrop.width;
@@ -95,15 +88,11 @@ export default class ImageCropper extends Component {
       pixelCrop.width,
       pixelCrop.height,
     );
-
-    const imageType = this.state.imageType;
-    const base64Image = canvas.toDataURL(imageType);
-    return base64Image;
+    return canvas.toDataURL(this.state.imageType); // base 64
   }
 
   async test() {
-    const image = this.state.image;
-    const pixelCrop = this.state.pixelCrop;
+    const { image, pixelCrop } = this.state;
     const croppedImg = await this.getCroppedImg(image, pixelCrop);
     this.props.setData('base64String', croppedImg);
   }

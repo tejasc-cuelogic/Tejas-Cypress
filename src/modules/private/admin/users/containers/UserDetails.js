@@ -5,8 +5,8 @@ import { Route, Switch } from 'react-router-dom';
 import { List, Button } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import Helper from '../../../../../helper/utility';
+import PrivateLayout from '../../../shared/PrivateHOC';
 import { Spinner } from '../../../../../theme/shared';
-import PrivateLayout from '../../../../../containers/common/PrivateHOC';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 
 const getModule = component => Loadable({

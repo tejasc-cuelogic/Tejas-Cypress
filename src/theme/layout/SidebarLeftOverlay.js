@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Responsive, Sidebar, Menu, Button, Image, Icon } from 'semantic-ui-react';
+import { Responsive, Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav, GetNavItem } from './SidebarNav';
 import Randavatar from '../shared/Randavatar';
-import LogoWhite from '../../assets/images/nextseed_logo_white_green.svg';
-import LogoColor from '../../assets/images/nextseed_logo_color.svg';
-import LogoSmall from '../../assets/images/ns-logo-small.svg';
+import { Logo } from '../shared';
 
 @inject('uiStore')
 @observer
@@ -46,12 +44,11 @@ const MySidebar = observer(props => (
         inverted={(props.UserInfo.roles[0] !== 'investor')}
         className={props.UserInfo.roles[0]}
       >
-        <Image
-          src={((props.layoutState.leftPanel) ?
-            (props.UserInfo.roles[0] !== 'investor' ? LogoWhite : LogoColor) :
-            LogoSmall)}
-          alt="NextSeed.com"
+        <Logo
           className="logo"
+          dataSrc={((props.layoutState.leftPanel) ?
+            (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhite' : 'LogoColor') :
+            'LogoSmall')}
         />
         {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
         <div className="user-picture">

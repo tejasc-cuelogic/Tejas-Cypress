@@ -2,7 +2,7 @@ import { action, observable, computed } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
-import { GqlClient as client } from '../../../../api/graphql';
+import { GqlClient as client } from '../../../../api/gqlApi';
 import { createAccount, updateAccount } from '../../queries/account';
 import { createUploadEntry, removeUploadedFile } from '../../queries/common';
 import { accountStore, uiStore, userStore, userDetailsStore } from '../../index';

@@ -2,12 +2,12 @@ import { observable, action, computed } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import _ from 'lodash';
-import { GqlClient as client } from '../../../api/graphql';
+import { GqlClient as client } from '../../../api/gqlApi';
 import { updateUserProfileData, requestEmailChnage, verifyAndUpdateEmail, updateUserPhoneDetail, verifyCIPUser, verifyCIPAnswers, checkUserPhoneVerificationCode, startUserPhoneVerification, updateUserCIPInfo } from '../queries/profile';
 import { createUploadEntry, removeUploadedFile } from '../queries/common';
 import { authStore, uiStore, userStore, userDetailsStore } from '../index';
 import Helper from '../../../helper/utility';
-import apiService from '../../../api/api';
+import apiService from '../../../api/restApi';
 
 import {
   UPDATE_PROFILE_INFO,

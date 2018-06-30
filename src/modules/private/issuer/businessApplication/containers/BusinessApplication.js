@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
-import { Image, Button } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
-import LogoWhite from '../../../../../assets/images/nextseed_logo_white_green.svg';
+import { Logo } from '../../../../../theme/shared';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -39,11 +39,10 @@ export default class BusinessApplication extends Component {
       <PrivateLayout
         {...this.props}
         P0={
-          <Image
-            src={LogoWhite}
-            alt="NextSeed.com"
+          <Logo
             className="logo"
             verticalAlign="middle"
+            dataSrc="LogoWhite"
             as={Link}
             to="/app/business-application"
             size="small"

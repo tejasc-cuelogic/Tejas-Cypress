@@ -1,7 +1,7 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { GqlClient as client } from '../../../../api/graphqlCool';
+import { GqlClient as client } from '../../../../api/gcoolApi';
 import { allRewards } from '../../queries/rewards';
 
 export class RewardStore {

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Grid, Input, Form } from 'semantic-ui-react';
-
-import PrivateLayout from '../../../../../containers/common/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateHOC';
 import { businessActions } from '../../../../../services/actions';
 import BusinessList from '../components/BusinessList';
 import NewBusinessForm from './NewBusinessForm';

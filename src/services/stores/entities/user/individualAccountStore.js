@@ -1,7 +1,7 @@
 import { action, observable } from 'mobx';
 import _ from 'lodash';
 import { accountStore, uiStore, userStore, userDetailsStore } from '../../index';
-import { GqlClient as client } from '../../../../api/graphql';
+import { GqlClient as client } from '../../../../api/gqlApi';
 import { createAccount, updateAccount } from '../../queries/account';
 import Helper from '../../../../helper/utility';
 

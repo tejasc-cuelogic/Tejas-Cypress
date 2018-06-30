@@ -12,7 +12,7 @@ import {
   IND_LINK_BANK_MANUALLY,
   ACC_TYPE,
 } from '../../../constants/account';
-import { GqlClient as client } from '../../../api/graphql';
+import { GqlClient as client } from '../../../api/gqlApi';
 import { getPlaidAccountdata } from '../queries/account';
 import { uiStore, userStore } from '../index';
 

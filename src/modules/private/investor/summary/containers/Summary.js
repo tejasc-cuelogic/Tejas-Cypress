@@ -3,8 +3,7 @@ import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import Aux from 'react-aux';
 import { Message } from 'semantic-ui-react';
-
-import PrivateLayout from '../../../../../containers/common/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
 import InvestorPersonalDetails from '../containers/InvestorPersonalDetails';
 import DashboardWizard from './DashboardWizard';

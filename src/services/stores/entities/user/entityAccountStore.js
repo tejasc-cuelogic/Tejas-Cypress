@@ -9,7 +9,7 @@ import {
   ENTITY_PERSONAL_INFO,
   ENTITY_FORMATION_DOCS,
 } from '../../../../constants/account';
-import { GqlClient as client } from '../../../../api/graphql';
+import { GqlClient as client } from '../../../../api/gqlApi';
 import { createAccount, updateAccount } from '../../queries/account';
 import { createUploadEntry, removeUploadedFile } from '../../queries/common';
 import { accountStore, uiStore, userStore, userDetailsStore } from '../../index';
