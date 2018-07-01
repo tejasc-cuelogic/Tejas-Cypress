@@ -2,63 +2,15 @@ import * as AWS from 'aws-sdk';
 import { toJS } from 'mobx';
 import mapValues from 'lodash/mapValues';
 import snakeCase from 'lodash/snakeCase';
-import { API_VERSION, USER_POOL_ID, LIST_LIMIT, STATUSES } from '../../../constants/aws';
+import { API_VERSION, USER_POOL_ID, STATUSES } from '../../../constants/aws';
 import { adminStore, userStore, uiStore } from '../../stores';
 import Helper from '../../../helper/utility';
 
 /**
  * @desc All actions that admin has to perform
- *       IMP: All these actions need admin creds that are being set from
- *       Auth::setAdminAccess from auth actions
- * @function $listUsers
- * @function $createNewUser
- * @function $deleteUser
- * @function $updateUserAttributes
- * @function $searchUser
  */
 export class Admin {
   awsCognitoISP = null;
-
-  /**
-   * @desc List users in cognito from whatever options we have passed.
-   * @param $options options by which users have to be filtered out
-   * @todo Pass pagination token and other params as require.
-   * @see https://github.com/CassetteRocks/react-infinite-scroller
-   */
-  listUsers = (options) => {
-    uiStore.reset();
-    // uiStore.setProgress();
-    uiStore.setLoaderMessage('Fetching user data');
-
-    const params = {
-      UserPoolId: USER_POOL_ID,
-      Limit: LIST_LIMIT,
-      Filter: options.filter,
-    };
-    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
-    return (
-      new Promise((res, rej) => {
-        this.awsCognitoISP.listUsers(params, (err, data) => {
-          if (err) {
-            rej(err);
-          }
-          res(data);
-        });
-      })
-        .then((data) => {
-          adminStore.setUsersList(this.getFormatedUserData(data.Users));
-        })
-        .catch((err) => {
-          uiStore.setErrors(err);
-          throw err;
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-          uiStore.clearLoaderMessage();
-        })
-    );
-  }
-
   /**
    * @desc Creates New user from parameters that have been stored in store
    */
@@ -109,12 +61,6 @@ export class Admin {
     );
   }
 
-  /**
-   * @desc Delete user from username that has been passed, username here is email id that user has
-   *       given while signing up
-   * @param $username @type String - Username(email) of user which has to be deleted from cognito
-   *        userpool.
-   */
   deleteUser = (username) => {
     uiStore.reset();
     uiStore.setProgress();
@@ -179,51 +125,9 @@ export class Admin {
         uiStore.clearLoaderMessage();
       });
   }
-
-  /**
-   * @desc Search user from provided querystring, internally this method calls @function $listUsers
-   *       with search parameters
-   * @param $queryString @type String - Query from which we have to search user in cognito userpool
-   * @return List of user matching search query.
-   */
-  searchUser = (queryString) => {
-    let filterString = '';
-    if (queryString.length !== 0) {
-      filterString = `${userStore.userFilter} ^= "${queryString}"`;
-    }
-    this.listUsers({ filter: filterString });
-  }
-
-
-  // Private method starts here
-
-  /**
-   * @desc Arrange user data that has been recieved from cognito.
-   */
-  getFormatedUserData = (userList) => {
-    const formatedUserData = {};
-
-    userList.map((user) => {
-      const userHash = {};
-      user.Attributes.map((attr) => {
-        userHash[attr.Name] = attr.Value;
-        return null;
-      });
-      userHash.username = user.Username;
-      userHash.enabled = user.Enabled;
-      userHash.UserCreateDate = user.UserCreateDate.toString();
-      userHash.status = user.UserStatus;
-      formatedUserData[user.Username] = userHash;
-      return null;
-    });
-    return formatedUserData;
-  }
-
   /**
    * @desc Maps user attributes in format required by cognito API, method is being executed for new
    *       User, two extra parameters i.e. email and email verified are passed explicitly.
-   * @param $newUser @type boolean - value to decide if method is being executed for new user
-   * @return Formatted user data
   */
   mappedUserAttributes = (newUser = true) => {
     const userData = [
@@ -237,7 +141,6 @@ export class Admin {
     }
     return userData;
   }
-  // Private method ends here
 }
 
 export default new Admin();

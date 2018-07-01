@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import { REACT_APP_DEPLOY_ENV } from '../../../constants/common';
+import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 
 export class UiStore {
   @observable
@@ -106,10 +106,6 @@ export class UiStore {
   updateLayoutState(prop) {
     this.layoutState[prop] = !this.layoutState[prop];
   }
-
-  // setSubmitButtonDisability(status) {
-  //   this.submitButtonDisabled = status;
-  // }
 
   @action
   toggleSubmitButton() {

@@ -1,4 +1,4 @@
-export const MESSAGES = {
+export const DRAFT_NEW = {
   body: {
     value: '',
     placeHolder: 'Write a new message',

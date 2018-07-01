@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this, prefer-destructuring */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import flatMap from 'lodash/flatMap';
