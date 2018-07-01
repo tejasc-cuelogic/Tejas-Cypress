@@ -1,53 +1,50 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
-import { FormInput } from '../../../../../../theme/form';
-import { authActions } from '../../../../../../services/actions';
+import { FormInput } from '../../../theme/form';
+import { authActions } from '../../../services/actions';
 
 @inject('authStore', 'uiStore')
 @observer
-export default class ChangePassword extends Component {
+export default class ResetPassword extends Component {
+  componentWillMount() {
+    const { FORGOT_PASS_FRM, RESET_PASS_FRM } = this.props.authStore;
+    RESET_PASS_FRM.fields.email.value = FORGOT_PASS_FRM.fields.email.value;
+  }
   onSubmit = (e) => {
     e.preventDefault();
-    authActions.updatePassword()
-      .then(() => {
-        this.props.history.goBack();
-      })
-      .catch(() => {
-        this.props.authStore.forceSetError(
-          'CHANGE_PASS_FRM',
-          'oldPasswd',
-          'Entered password is incorrect, please try again.',
-        );
-      });
+    authActions.setNewPassword().then(() => this.props.history.push('/auth/login'));
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.goBack();
   }
   render() {
-    const { CHANGE_PASS_FRM, changePassChange } = this.props.authStore;
+    const { RESET_PASS_FRM, resetPassChange } = this.props.authStore;
     return (
       <div>
         <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
-            <Header as="h2">Change your Password</Header>
+            <Header as="h2">Reset Password</Header>
+            <p>The verification code has been sent to your registered email address</p>
           </Modal.Header>
           <Modal.Content className="signup-content">
             <Form onSubmit={this.onSubmit}>
               {
-                Object.keys(CHANGE_PASS_FRM.fields).map(field => (
+                ['password', 'verify', 'code'].map(field => (
                   <FormInput
                     key={field}
                     type="password"
                     name={field}
-                    fielddata={CHANGE_PASS_FRM.fields[field]}
-                    changed={changePassChange}
+                    fielddata={RESET_PASS_FRM.fields[field]}
+                    changed={resetPassChange}
                   />
                 ))
               }
               <div className="mt-30 center-align">
-                <Button loading={this.props.uiStore.inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} primary size="large">Set new password</Button>
+                <Button loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} primary size="large">
+                  Reset Password
+                </Button>
               </div>
             </Form>
           </Modal.Content>

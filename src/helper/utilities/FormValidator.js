@@ -25,6 +25,8 @@ class FormValidator {
     }
     return currentForm;
   }
+
+  ExtractValues = fields => mapValues(fields, f => f.value);
 }
 
 export default new FormValidator();

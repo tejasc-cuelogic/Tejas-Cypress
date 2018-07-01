@@ -2,6 +2,7 @@ import * as AWSCognito from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk';
 import camel from 'to-camel-case';
 import _ from 'lodash';
+import { FormValidator as Validator } from '../../../helper';
 
 import {
   USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
@@ -131,16 +132,15 @@ export class Auth {
   login() {
     uiStore.reset();
     uiStore.setProgress();
-
-    const { email, password } = authStore.values;
+    const { email, password } = Validator.ExtractValues(authStore.LOGIN_FRM.fields);
 
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: email.value,
-      Password: password.value,
+      Username: email,
+      Password: password,
     });
 
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email.value,
+      Username: email,
       Pool: this.userPool,
     });
 
@@ -203,9 +203,10 @@ export class Auth {
       const attributeLastName = new AWSCognito.CognitoUserAttribute({
         Name: 'family_name', Value: fields.familyName.value,
       });
-
-      const attributeList = [...attributeRoles, ...attributeFirstName, ...attributeLastName];
-
+      const attributeList = [];
+      attributeList.push(attributeRoles);
+      attributeList.push(attributeFirstName);
+      attributeList.push(attributeLastName);
       this.userPool.signUp(
         fields.email.value,
         fields.password.value,
@@ -243,17 +244,12 @@ export class Auth {
     uiStore.reset();
     uiStore.setProgress();
     uiStore.setLoaderMessage('Password changed successfully');
-    const { email } = authStore.values;
-    const userData = {
-      Username: email.value,
-      Pool: this.userPool,
-    };
+    const { email } = Validator.ExtractValues(authStore.FORGOT_PASS_FRM.fields);
 
     return new Promise((res, rej) => {
-      this.cognitoUser = new AWSCognito.CognitoUser(userData);
+      this.cognitoUser = new AWSCognito.CognitoUser({ Username: email, Pool: this.userPool });
       this.cognitoUser.forgotPassword({
-        onSuccess: data => res(data),
-        onFailure: err => rej(err),
+        onSuccess: data => res(data), onFailure: err => rej(err),
       });
     })
       .then(() => {
@@ -276,15 +272,11 @@ export class Auth {
   setNewPassword() {
     uiStore.reset();
     uiStore.setProgress();
-
-    const { code, email, password } = authStore.values;
+    const { code, email, password } = Validator.ExtractValues(authStore.RESET_PASS_FRM.fields);
 
     return new Promise((res, rej) => {
-      this.cognitoUser = new AWSCognito.CognitoUser({
-        Username: email.value,
-        Pool: this.userPool,
-      });
-      this.cognitoUser.confirmPassword(code.value, password.value, {
+      this.cognitoUser = new AWSCognito.CognitoUser({ Username: email, Pool: this.userPool });
+      this.cognitoUser.confirmPassword(code, password, {
         onSuccess: data => res(data),
         onFailure: err => rej(err),
       });
@@ -374,15 +366,14 @@ export class Auth {
   confirmCode() {
     uiStore.reset();
     uiStore.setProgress();
-    const { code, email, password } = authStore.values;
+    const { code, email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: email.value,
-      Pool: this.userPool,
+      Username: email, Pool: this.userPool,
     });
 
     return new Promise((res, rej) => {
       this.cognitoUser.confirmRegistration(
-        code.value,
+        code,
         true,
         err => (err ? rej(err) : res()),
       );
@@ -391,13 +382,11 @@ export class Auth {
         Helper.toast('Successfully done confirmation', 'success');
 
         const authenticationDetails = new AWSCognito.AuthenticationDetails({
-          Username: email.value,
-          Password: password.value,
+          Username: email, Password: password,
         });
 
         this.cognitoUser = new AWSCognito.CognitoUser({
-          Username: email.value,
-          Pool: this.userPool,
+          Username: email, Pool: this.userPool,
         });
 
         return new Promise((res, rej) => {

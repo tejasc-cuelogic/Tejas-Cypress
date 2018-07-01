@@ -12,7 +12,7 @@ const GetBtn = ({ type }) => {
   return <Button as={Link} to={BtnMeta[type].to} primary size="large" className="very relaxed" content={BtnMeta[type].label} />;
 };
 
-@inject('authStore', 'uiStore')
+@inject('authStore')
 @observer
 class signupInitial extends Component {
   render() {

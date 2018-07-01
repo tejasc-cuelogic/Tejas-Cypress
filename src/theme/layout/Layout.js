@@ -9,6 +9,8 @@ import SignupInitial from '../../modules/auth/containers/SignupInitial';
 import InvestorSignup from '../../modules/auth/containers/InvestorSignup';
 import ConfirmEmailAddress from '../../modules/auth/containers/ConfirmEmailAddress';
 import ChangePassword from '../../modules/auth/containers/ChangePassword';
+import ForgotPassword from '../../modules/auth/containers/ForgotPassword';
+import ResetPassword from '../../modules/auth/containers/ResetPassword';
 
 @inject('userStore', 'uiStore')
 @withRouter
@@ -40,6 +42,8 @@ class Layout extends Component {
             <Route path="/auth/register-investor" component={InvestorSignup} />
             <Route path="/auth/confirm-email" component={ConfirmEmailAddress} />
             <Route path="/auth/change-password" component={ChangePassword} />
+            <Route path="/auth/reset-password" component={ResetPassword} />
+            <Route path="/auth/forgot-password" component={ForgotPassword} />
           </Switch>
         }
       </Aux>

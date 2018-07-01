@@ -6,7 +6,7 @@ import { Modal, Button, Form, Divider } from 'semantic-ui-react';
 import { activityActions } from '../../../services/actions';
 import { Logo, FieldError } from '../../../theme/shared';
 
-@inject('authStore', 'uiStore')
+@inject('authStore')
 @withRouter
 @observer
 class DevPassProtected extends Component {

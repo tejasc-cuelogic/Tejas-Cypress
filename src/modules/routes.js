@@ -9,8 +9,6 @@ import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
-import ForgotPassword from './auth/ForgotPassword';
-import ResetPassword from './auth/ResetPassword';
 import Base from './private/shared/basemodule/Base';
 import Messages from './private/shared/messages/containers/Messages';
 import Dashboard from './private/shared/dashboard/containers/Dashboard';
@@ -78,16 +76,6 @@ export const publicRoutes = [
   {
     path: '/business',
     component: Business,
-  },
-  {
-    path: '/forgot-password',
-    component: ForgotPassword,
-    exact: true,
-  },
-  {
-    path: '/reset-password',
-    component: ResetPassword,
-    exact: true,
   },
   {
     path: '/business-application',

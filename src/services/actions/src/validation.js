@@ -8,10 +8,9 @@ import {
   iraAccountStore,
   entityAccountStore,
 } from '../../stores';
-import { REGISTRATION,
-  CONDITIONAL_REQUIRE,
-  CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE,
-  CONFIRM_IDENTITY_DOCUMENTS_FORM } from '../../../constants/validation';
+import {
+  REGISTRATION, CONDITIONAL_REQUIRE, CONFIRM_IDENTITY_DOCUMENTS_FORM,
+} from '../../../constants/validation';
 
 /**
  * @desc Validation class for form inputs
@@ -126,20 +125,6 @@ export class Validation {
       if (field !== 'notificationEmailElement') {
         businessStore.removeXmlError(field);
       }
-    }
-  }
-
-  /**
-   * @desc Validates Confirm Email Address Form after Form Submission
-   */
-  validateConfirmEmailAddressForm = () => {
-    const { key } = authStore.values.code;
-    // Select only required values and exclude others from being checked
-    if (CONFIRM_EMAIL_ADDRESS_VERIFICATION_CODE.includes(key)) {
-      const { errors } =
-      validationService.validate(authStore.values.code);
-      // Store errors to store if any or else `undefined` will get set to it
-      authStore.setError('code', errors && errors[key][0]);
     }
   }
 

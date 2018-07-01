@@ -6,7 +6,7 @@ import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
-@inject('authStore', 'authStore', 'uiStore')
+@inject('authStore', 'uiStore')
 @withRouter
 @observer
 class InvestorSignup extends Component {
@@ -68,7 +68,7 @@ class InvestorSignup extends Component {
               ['email', 'password', 'verify'].map(field => (
                 <FormInput
                   key={field}
-                  type="text"
+                  type={field === 'password' ? 'password' : 'text'}
                   name={field}
                   fielddata={SIGNUP_FRM.fields[field]}
                   changed={signupChange}

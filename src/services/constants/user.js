@@ -19,22 +19,3 @@ export const securitySections = [
   },
 ];
 
-export const CHANGE_PASS = {
-  oldPasswd: {
-    value: '',
-    error: undefined,
-    label: 'Old Password',
-    rule: 'required|min:8',
-  },
-  newPasswd: {
-    value: '',
-    label: 'New Password',
-    rule: 'required|min:8',
-  },
-  retypePasswd: {
-    value: '',
-    label: 'Confirm New Password',
-    error: undefined,
-    rule: 'required|same:newPasswd',
-  },
-};
