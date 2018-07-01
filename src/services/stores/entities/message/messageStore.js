@@ -6,7 +6,7 @@ import {
 } from '../../queries/message';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
-import { DRAFT_NEW } from '../../constants/messages';
+import { DRAFT_NEW } from '../../../constants/messages';
 
 export class NewMessage {
   @observable MESSAGE_FRM = Validator.prepareFormObject(DRAFT_NEW);

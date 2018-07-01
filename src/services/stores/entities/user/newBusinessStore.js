@@ -1,4 +1,4 @@
-import { toJS, observable, action, computed } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { FormValidator as Validator } from '../../../../helper';
 // import { GqlClient as client } from '../../services/graphqlCool';
 import {
@@ -8,7 +8,7 @@ import {
   BUSINESS_PERF,
   BUSINESS_DOC,
   LENDIO_PRE_QUAL,
-} from '../../constants/newBusiness';
+} from '../../../constants/newBusiness';
 import Helper from '../../../../helper/utility';
 
 export class NewBusinessStore {
@@ -26,28 +26,34 @@ export class NewBusinessStore {
   };
 
   @action
-  businessDocChange = (e, result) => {
-    this.BUSINESS_ACCOUNT = Validator.onChange(this.BUSINESS_ACCOUNT, Validator.pullValues(e, result));
+  businessDocChange = (e, res) => {
+    this.BUSINESS_ACCOUNT = Validator.onChange(this.BUSINESS_ACCOUNT, Validator.pullValues(e, res));
   };
 
   @action
-  businessPerfChange = (e, result) => {
-    this.BUSINESS_PERF_FRM = Validator.onChange(this.BUSINESS_PERF_FRM, Validator.pullValues(e, result));
+  businessPerfChange = (e, res) => {
+    this.BUSINESS_PERF_FRM = Validator.onChange(
+      this.BUSINESS_PERF_FRM,
+      Validator.pullValues(e, res),
+    );
   };
 
   @action
-  businessDetailsChange = (e, result) => {
-    this.BUSINESS_DETAILS_FRM = Validator.onChange(this.BUSINESS_DETAILS_FRM, Validator.pullValues(e, result));
+  businessDetailsChange = (e, res) => {
+    this.BUSINESS_DETAILS_FRM = Validator.onChange(
+      this.BUSINESS_DETAILS_FRM,
+      Validator.pullValues(e, res),
+    );
   };
 
   @action
-  businessAppEleChange = (e, result) => {
-    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, Validator.pullValues(e, result));
+  businessAppEleChange = (e, res) => {
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, Validator.pullValues(e, res));
   };
 
   @action
-  lendioEleChange = (e, result) => {
-    this.LENDIO_QUAL_FRM = Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, result));
+  lendioEleChange = (e, res) => {
+    this.LENDIO_QUAL_FRM = Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res));
   };
 
   @computed get canSubmitApp() {
@@ -59,6 +65,7 @@ export class NewBusinessStore {
   @action
   businessLendioPreQual = () => {
     const data = Validator.ExtractValues(this.LENDIO_QUAL_FRM.fields);
+    console.log(data);
   }
 
   @action
