@@ -1,6 +1,5 @@
-// TODO: Clean up the code to export without using default as
 export { default as adminStore } from './entities/adminStore';
-export { default as authStore } from './entities/authStore';
+export { default as authStore } from './entities/shared/authStore';
 export { default as businessStore } from './entities/businessStore';
 export { default as commonStore } from './entities/commonStore';
 export { default as profileStore } from './entities/profileStore';

@@ -15,10 +15,10 @@ const GetBtn = ({ type }) => {
 @inject('authStore', 'uiStore')
 @observer
 class signupInitial extends Component {
-  chooseType = type => this.props.authStore.updatesignupFlow('type', type);
   render() {
     const userTypes = USER_TYPES_META.slice();
-    const selectedType = this.props.authStore.signupFlow.type;
+    const { SIGNUP_FRM, signupChange } = this.props.authStore;
+    const selectedType = SIGNUP_FRM.fields.role;
     return (
       <Modal size="tiny" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
@@ -29,22 +29,22 @@ class signupInitial extends Component {
           <Grid stackable textAlign="center">
             {userTypes.map(type => (
               <Grid.Column
-                onClick={() => this.chooseType(type.value)}
+                onClick={e => signupChange(e, { name: 'role', value: type.value })}
                 key={type.key}
                 computer={8}
                 tablet={16}
                 mobile={16}
               >
-                <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
+                <div className={`user-type ${(selectedType.value === type.value ? 'active' : '')}`}>
                   <Icon className={type.icon} size="huge" />
                   <h3>{type.text}</h3>
-                  <p>{selectedType === type.value ? type.desc : ''}</p>
+                  <p>{selectedType.value === type.value ? type.desc : ''}</p>
                 </div>
               </Grid.Column>
             ))}
             <Grid.Row>
               <Grid.Column>
-                {selectedType ? <GetBtn type={selectedType} /> : ''}
+                {selectedType.value ? <GetBtn type={selectedType.value} /> : ''}
               </Grid.Column>
             </Grid.Row>
           </Grid>

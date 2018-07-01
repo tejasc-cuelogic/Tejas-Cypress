@@ -191,29 +191,24 @@ export class Auth {
     uiStore.setLoaderMessage('Signing you up');
 
     return new Promise((res, rej) => {
+      const { fields } = authStore.SIGNUP_FRM;
       const attributeRoles = new AWSCognito.CognitoUserAttribute({
-        Name: 'custom:roles',
-        Value: JSON.stringify([authStore.values.role.value]),
+        Name: 'custom:roles', Value: JSON.stringify([fields.role.value]),
       });
 
       const attributeFirstName = new AWSCognito.CognitoUserAttribute({
-        Name: 'given_name',
-        Value: authStore.values.givenName.value,
+        Name: 'given_name', Value: fields.givenName.value,
       });
 
       const attributeLastName = new AWSCognito.CognitoUserAttribute({
-        Name: 'family_name',
-        Value: authStore.values.familyName.value,
+        Name: 'family_name', Value: fields.familyName.value,
       });
 
-      const attributeList = [];
-      attributeList.push(attributeRoles);
-      attributeList.push(attributeFirstName);
-      attributeList.push(attributeLastName);
+      const attributeList = [...attributeRoles, ...attributeFirstName, ...attributeLastName];
 
       this.userPool.signUp(
-        authStore.values.email.value,
-        authStore.values.password.value,
+        fields.email.value,
+        fields.password.value,
         attributeList,
         null,
         (err, result) => {
