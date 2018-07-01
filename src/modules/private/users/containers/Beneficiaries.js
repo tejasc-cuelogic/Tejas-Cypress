@@ -18,6 +18,7 @@ export default class Beneficiaries extends Component {
     const beneficiaryList = beneficiaries ? beneficiaries.map(beneficiary => (
       beneficiary.beneficiary ?
         <BeneficiaryList
+          accountId={beneficiary.accountId}
           key={beneficiary.accountId}
           title={beneficiary.accountType}
           match={this.props.match}
@@ -25,8 +26,10 @@ export default class Beneficiaries extends Component {
           beneficiaries={beneficiary.beneficiary}
           deleting={deleting}
           loading={bLoading}
+          curLocation={this.props.location}
         /> :
         <NoBeneficiary
+          accountId={beneficiary.accountId}
           match={this.props.match}
           title={beneficiary.accountType}
           key={beneficiary.accountId}

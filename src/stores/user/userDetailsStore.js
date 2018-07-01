@@ -136,7 +136,7 @@ export class UserDetailsStore {
   }
 
   @action beneficiaryReset = () => {
-    this.BENEFICIARY_META = { fields: { ...BENEFICIARY_FRM }, meta: { isValid: false, error: '' } };
+    this.BENEFICIARY_META = { fields: [{ ...BENEFICIARY_FRM }], meta: { isValid: false, error: '' } };
   }
 
   @computed get beneficiaries() {
@@ -249,6 +249,32 @@ export class UserDetailsStore {
         zipCode: beneficiaries.zipCode.value,
       },
     }));
+  }
+
+  @action
+  setBeneficiariesInfo = (accountId) => {
+    const beneficiaryList = this.beneficiaries.filter(acc => acc.accountId === accountId)[0];
+    console.log(accountId);
+    console.log(beneficiaryList.beneficiary);
+    if (beneficiaryList.beneficiary) {
+      let index = 0;
+      _.forEach(beneficiaryList.beneficiary.recipients, (beneficiary) => {
+        this.onFieldArrayChange('BENEFICIARY_META', 'firstName', beneficiary.firstName, index);
+        this.onFieldArrayChange('BENEFICIARY_META', 'lastName', beneficiary.lastName, index);
+        this.onFieldArrayChange('BENEFICIARY_META', 'city', beneficiary.address.city, index);
+        this.onFieldArrayChange('BENEFICIARY_META', 'state', beneficiary.address.state, index);
+        this.onFieldArrayChange('BENEFICIARY_META', 'residentalStreet', beneficiary.address.street, index);
+        this.onFieldArrayChange('BENEFICIARY_META', 'zipCode', beneficiary.address.zipCode, index);
+        // this.onFieldArrayChange('BENEFICIARY_META', 'dob', beneficiary.dob, index);
+        this.onFieldArrayChange('BENEFICIARY_META', 'relationship', beneficiary.relationship, index);
+        this.onFieldArrayChange('BENEFICIARY_META', 'share', beneficiary.shares, index);
+        index += 1;
+        if (index !== beneficiaryList.beneficiary.recipients.length) {
+          this.addMoreBeneficiary();
+        }
+        console.log(beneficiary);
+      });
+    }
   }
 
   @action

@@ -8,6 +8,13 @@ import Helper from '../../../../../helper/utility';
 @inject('userDetailsStore', 'uiStore')
 @observer
 export default class AddBeneficiary extends Component {
+  componentWillMount() {
+    this.props.userDetailsStore.beneficiaryReset();
+    if (this.props.isDataAvailable) {
+      this.props.userDetailsStore.setBeneficiariesInfo(this.props.accountId);
+    }
+  }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.goBack();
