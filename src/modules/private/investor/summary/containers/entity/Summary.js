@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { DateTimeFormat, ListErrors } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 
-@inject('entityAccountStore', 'accountStore', 'uiStore')
+@inject('entityAccountStore', 'uiStore', 'bankAccountStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -22,7 +22,7 @@ export default class Summary extends Component {
     }
       = this.props.entityAccountStore;
     const { errors } = this.props.uiStore;
-    const { plaidBankDetails, formLinkBankManually } = this.props.accountStore;
+    const { plaidBankDetails, formLinkBankManually } = this.props.bankAccountStore;
     const bankAccountNumber = !_.isEmpty(plaidBankDetails) ?
       plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
     return (

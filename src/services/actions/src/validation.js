@@ -4,7 +4,7 @@ import {
   authStore,
   businessStore,
   profileStore,
-  accountStore,
+  bankAccountStore,
   iraAccountStore,
   entityAccountStore,
 } from '../../stores';
@@ -129,15 +129,6 @@ export class Validation {
   }
 
   /**
-   * @desc validates Entity Account's fields on change.
-   */
-  validateEntityAccountField = (field, value) => {
-    accountStore.setEntityAccountDetails(field, value);
-    const { errors } = validationService.validate(accountStore.entityAccount[field]);
-    accountStore.setEntityAccountError(field, errors && errors[field][0]);
-  }
-
-  /**
    * @desc Validates Confirm Identity Documents Form
    */
   validateConfirmIdentityDocumentsForm = () => {
@@ -240,11 +231,11 @@ export class Validation {
   * @desc Validates Entity - Formation Docs on next/submit button
   */
  validateLinkBankForm = () => {
-   _.map(accountStore.formLinkBankManually.fields, (value) => {
+   _.map(bankAccountStore.formLinkBankManually.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     accountStore.setAccountError('formLinkBankManually', key, errors && errors[key][0]);
+     bankAccountStore.setAccountError('formLinkBankManually', key, errors && errors[key][0]);
    });
  }
 

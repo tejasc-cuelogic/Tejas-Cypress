@@ -4,6 +4,6 @@ export { default as validationActions } from './src/validation';
 export { default as businessActions } from './src/business';
 export { default as adminActions } from './src/admin';
 export { default as profileActions } from './src/profile';
-export { default as accountActions } from './src/account';
 export { default as uiActions } from './src/ui';
 export { default as userActions } from './src/user';
+export { default as bankAccountActions } from './src/bankAccount';

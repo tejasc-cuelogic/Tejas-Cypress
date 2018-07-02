@@ -2,25 +2,25 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button } from 'semantic-ui-react';
 
-import { FormInput } from '../../../../../../theme/form';
+import { FormInput } from '../../../../../theme/form';
 
-@inject('accountStore', 'individualAccountStore')
+@inject('bankAccountStore', 'individualAccountStore')
 @observer
 export default class AddFunds extends Component {
   componentDidMount() {
     this.props.individualAccountStore.setStepToBeRendered(1);
   }
   doNotDepositMoneyNow = () => {
-    this.props.individualAccountStore.setDepositMoneyNow(false);
+    this.props.bankAccountStore.setDepositMoneyNow(false);
     this.props.individualAccountStore.setStepToBeRendered(2);
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.individualAccountStore.setDepositMoneyNow(true);
+    this.props.bankAccountStore.setDepositMoneyNow(true);
     this.props.individualAccountStore.setStepToBeRendered(2);
   }
   render() {
-    const { formAddFunds, addFundChange } = this.props.accountStore;
+    const { formAddFunds, addFundChange } = this.props.bankAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Add funds</Header>

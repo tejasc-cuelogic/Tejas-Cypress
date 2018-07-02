@@ -10,7 +10,7 @@ import DashboardWizard from './DashboardWizard';
 import ProgressCard from '../components/ProgressCard';
 import { ListErrors } from '../../../../../theme/shared';
 
-@inject('uiStore', 'profileStore', 'accountStore', 'userDetailsStore')
+@inject('uiStore', 'profileStore', 'accountStore', 'userDetailsStore', 'bankAccountStore')
 @observer
 class Summary extends Component {
   componentWillMount() {
@@ -56,7 +56,7 @@ class Summary extends Component {
 
   restoreStep = () => {
     if (this.props.accountStore.accountType.activeIndex === 0) {
-      this.props.accountStore.setBankLinkInterface('list');
+      this.props.bankAccountStore.setBankLinkInterface('list');
     }
   }
 

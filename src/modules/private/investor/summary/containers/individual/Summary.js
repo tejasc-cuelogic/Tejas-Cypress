@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { ListErrors } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 
-@inject('accountStore', 'individualAccountStore', 'uiStore', 'userStore')
+@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
@@ -22,7 +22,8 @@ export default class Summary extends React.Component {
       isValidLinkBankPlaid,
       formLinkBankManually,
       isValidLinkBankAccountForm,
-    } = this.props.accountStore;
+      depositMoneyNow,
+    } = this.props.bankAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -56,7 +57,7 @@ export default class Summary extends React.Component {
                   <Table.Row>
                     <Table.Cell><b>Your initial deposit</b></Table.Cell>
                     <Table.Cell>
-                      {!this.props.individualAccountStore.depositMoneyNow ?
+                      {!depositMoneyNow ?
                       Helper.CurrencyFormat(0) :
                       formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
                       Helper.CurrencyFormat(0)}
