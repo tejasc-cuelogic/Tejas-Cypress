@@ -13,6 +13,8 @@
         }
         .item{
             padding:@3px @18px;
+            font-weight:@medium;
+            text-transform:uppercase;
             > span{
                 padding:0.5em 0;
             }
@@ -41,9 +43,12 @@
         .item > .icon{
             margin:0;
         }
-        >.item{
+        >.item, a.item{
             min-width:120px;
             padding:@13px 0;
+            &:hover{
+                background-color:transparent;
+            }
         }
     }
 }
