@@ -8,14 +8,16 @@ import LegalDetails from '../../components/identityVerification/LegalDetails';
 @observer
 export default class IdentityVerification extends Component {
   handleCloseModal = () => {
-    if (this.props.refLink) {
-      this.props.history.push(this.props.refLink);
-    }
+    this.props.history.push('/app/summary/');
   }
   render() {
     const { ID_VERIFICATION_FRM, personalInfoChange } = this.props.identityStore;
     return (
-      <LegalDetails form={ID_VERIFICATION_FRM} change={personalInfoChange} />
+      <LegalDetails
+        form={ID_VERIFICATION_FRM}
+        close={this.handleCloseModal}
+        change={personalInfoChange}
+      />
     );
   }
 }

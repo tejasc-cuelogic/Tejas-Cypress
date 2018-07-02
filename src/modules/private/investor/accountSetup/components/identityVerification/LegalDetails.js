@@ -8,7 +8,7 @@ import {
 const LegalDetails = ({
   form, change, close, name, autoComplete, inProgress,
 }) => (
-  <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
+  <Modal size="mini" open closeIcon onClose={close}>
     <Modal.Header className="center-align signup-header">
       <Header as="h2">Welcome {name}</Header>
       <p>Let’s get you set up with a NextSeed investment <br /> account.</p>
