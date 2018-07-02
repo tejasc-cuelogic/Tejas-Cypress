@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Header, Container, Menu, Image, Card, Label, Icon, List } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 import campaign1 from '../../../../assets/images/campaign-1.jpg';
 import campaign2 from '../../../../assets/images/campaign-2.jpg';
 import campaign3 from '../../../../assets/images/campaign-3.jpg';
 import filterIcon from '../../../../assets/images/icon_filter.png';
 import lockIcon from '../../../../assets/images/icon_lock.png';
+// import closeIcon from '../../../../assets/images/icon_close.png';
+// import OfferFilter from '../components/OfferFilter';
 
 class Offering extends Component {
   render() {
     return (
       <Aux>
-        <Container fluid className="home-banner">
+        <Container fluid className="campaign-list-banner">
           <Container>
             <div className="banner-caption">
               <Header as="h1">
@@ -32,6 +34,10 @@ class Offering extends Component {
                 name="50 Results Found"
                 position="right"
               />
+              {/* <Menu.Item name="clear all" position="right">
+                CLEAR ALL
+                <Image src={closeIcon} className="closeIcon" />
+              </Menu.Item> */}
             </Menu>
           </Container>
         </div>
@@ -40,7 +46,7 @@ class Offering extends Component {
             <Header as="h4" textAlign="center" caption>Active Campaigns</Header>
             <Card.Group itemsPerRow={3} stackable>
               <Card className="campaign">
-                <Image src={campaign1} />
+                <Image as={Link} to="/offerings/details" src={campaign1} />
                 <Label basic color="green">300% Funded</Label>
                 <Icon name="heart" />
                 <Card.Content>
@@ -121,6 +127,7 @@ class Offering extends Component {
               </Card>
             </Card.Group>
           </Container>
+          {/* <OfferFilter /> */}
         </section>
       </Aux>
     );

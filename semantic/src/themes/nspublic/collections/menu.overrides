@@ -13,7 +13,7 @@
         }
         .item{
             padding:@3px @18px;
-            font-weight:@medium;
+            font-weight:@fontMedium;
             text-transform:uppercase;
             > span{
                 padding:0.5em 0;
@@ -91,10 +91,16 @@ footer{
     border-bottom: 1px solid #ccc;
     .ui.text.menu {
         margin: 0;
-
         .item {
+            font-weight: @fontMedium;
+            font-size: @14px;
+            line-height: @20px;
+            letter-spacing: @1px;
             .ui.image.filterIcon {
                 margin-right: 10px;
+            }
+            .ui.image.closeIcon {
+                margin-left: 117px;
             }
         }
     }

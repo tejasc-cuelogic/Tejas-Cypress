@@ -22,7 +22,7 @@
 
 
 @bold              : 700;
-@medium            : 500;
+@fontMedium        : 500;
 @normal            : 400;
 
 /*-------------------
@@ -62,7 +62,7 @@
   Page Heading
 ---------------*/
 
-@headerFontWeight : @medium;
+@headerFontWeight : @fontMedium;
 @headerLineHeight : unit((14 / 14), em);
 
 @h1 : unit((60 / 14), rem);

@@ -36,7 +36,36 @@ h5, h5.ui.header{
 	text-transform: uppercase !important;
 	font-weight: bold;
 }
+.pull-left{
+	float:left;
+}
+.pull-right{
+	float:right;
+}
 
+// Footer Styles
+footer{
+	background-color:@neutral-lighten;
+	.footer-head{
+		padding:0 @60px;
+		background-color:@neutral;
+	}
+	section{
+		padding:@30px @60px;
+		.secure{
+			float:right;
+			margin-left:@50px;
+		}
+		.copyright-info{
+			float:right;
+			max-width:650px;
+			font-size:12px;
+			line-height:22px;
+		}
+	}
+}
+
+/** About Us **/
 .mission-statistic-section {
 	background-color: @neutral-lighten;
 	.mission-block {
@@ -99,33 +128,159 @@ h5, h5.ui.header{
 		font-family: @fontName; 
 	}
 }
-.pull-left{
-	float:left;
-}
-.pull-right{
-	float:right;
-}
 
 
-// Footer Styles
-footer{
-	background-color:@neutral-lighten;
-	.footer-head{
-		padding:0 @60px;
-		background-color:@neutral;
-	}
-	section{
-		padding:@30px @60px;
-		.secure{
-			float:right;
-			margin-left:@50px;
+/** campaign filter **/
+.campaign-list-wrapper {
+	position: relative;
+}
+.offerfilter {
+	position: absolute;
+    background: rgba(0,0,0,0.5);
+    height: 100%;
+    width: 100%;
+    left: 0;
+	top: 0;
+	
+	.offerFilterContainer {
+		background-color: #fff;
+		width: 100%;
+		height: auto;
+		padding: @17px 0 @59px; 
+
+		h6.ui.header {
+			font-size: @13px;
+			font-weight: @bold;
+			line-height: @16px;
+			color: @neutral-light;
+			padding-bottom: @6px;
 		}
-		.copyright-info{
-			float:right;
-			max-width:650px;
-			font-size:12px;
-			line-height:22px;
+
+		.ui.checkbox {
+			label {
+				font-size: @15px;
+				line-height: @19px;
+				color: #616972;
+			}
+		} 
+
+		i {
+			font-size: @16px;
+			line-height: @16px;
+			color: #616972;
+			&.help {
+				color: @green;
+			}
+		}
+		.checkboxGroup {
+			.ui.label {
+				background-color: transparent;
+				font-size: @15px;
+				line-height: @19px;
+				color: #616972;
+				padding: 0;
+				padding-left: @3px;
+				font-weight: normal; 
+			}
 		}
 	}
 }
 
+/** Campaign Details **/
+.offerDetails {
+	margin-top: 74px;
+
+	.offeringSideMenu {
+		background-color: @neutral ;
+		padding: 0;
+		height: 100%;
+
+		.offeringIntro {
+			padding: @32px @20px;
+			h4.ui.header {
+				position: relative;
+				> a {
+					position: absolute;
+					left: 0;
+					font-size: 12px;
+					color: @neutral-light;
+				}
+			}
+		}
+		.progressBar {
+			height: 209px;
+			width: 210px;
+			background-color: @white;
+			margin: auto auto @16px;
+		}
+
+		p {
+			font-size: @13px;
+			color: @white;
+			text-align: center;
+		}
+
+		.ui.statistics {
+			.statistic {
+				>.value, >.label {
+					font-size: 13px !important;
+					line-height: 15px;
+					color: #fff;
+					font-weight: normal;
+					text-transform: none;
+				}
+
+				>.label {
+					font-weight: @bold;
+				}
+			}
+		}
+
+		.ui.secondary.button {
+			margin: 24px auto 50px;
+		}
+
+		.ui.vertical.menu {
+			width: 100%;
+			margin: 0;
+			text-align: left;
+			background-color: transparent;
+			/* color: #fff; */
+
+			.item {
+				font-size: @14px;
+				color: #fff;
+				box-shadow: none;
+				border-left: @4px solid transparent;
+				border-radius: 0;
+				padding-left: @31px;
+				font-weight: @bold;
+
+				&:hover, &.active {
+					background-color: #3A4048;
+					border-left: @4px solid @primary-one;
+					border-radius: 0;
+					color: @primary-one;
+				}
+
+				>i.icon {
+					float: left;
+					margin-left: 0;
+					margin-right: 14px;
+				}
+
+				>.label.circular {
+					margin-top: -5px;
+				}
+
+				&.watchDealMenu {
+					color: #616972;
+				}
+			}
+			.ui.divider {
+				margin: 64px 29px 0;
+			}
+		}
+
+	}
+}
