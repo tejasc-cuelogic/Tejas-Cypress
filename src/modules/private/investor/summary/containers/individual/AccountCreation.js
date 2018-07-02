@@ -3,15 +3,13 @@ import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 
 import { MultiStep } from '../../../../../../helper';
-import LinkBankPlaid from './LinkBankPlaid';
+import { Plaid, AddFunds } from '../../../../shared/bankAccount';
 import Summary from './Summary';
-import AddFunds from './AddFunds';
 
-@inject('uiStore', 'accountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
+@inject('uiStore', 'bankAccountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
 @observer
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
-    // this.props.accountStore.resetLinkBankForm();
     this.updateUser();
     this.props.setDashboardWizardStep();
   }
@@ -27,15 +25,15 @@ export default class AccountCreation extends React.Component {
     [
       {
         name: 'Link Bank',
-        component: <LinkBankPlaid />,
+        component: <Plaid />,
         isValid: '',
-        isDirty: !_.isEmpty(this.props.accountStore.plaidBankDetails) ||
-        this.props.accountStore.formLinkBankManually.meta.isDirty,
+        isDirty: !_.isEmpty(this.props.bankAccountStore.plaidBankDetails) ||
+        this.props.bankAccountStore.formLinkBankManually.meta.isDirty,
       },
       {
         name: 'Add funds',
         component: <AddFunds />,
-        isValid: this.props.accountStore.isValidAddFunds ? '' : 'error',
+        isValid: this.props.bankAccountStore.isValidAddFunds ? '' : 'error',
       },
       {
         name: 'Summary',

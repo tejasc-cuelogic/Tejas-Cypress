@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
-import { FormInput } from '../../../../../../theme/form';
-import { ListErrors } from '../../../../../../theme/shared';
-import { validationActions } from '../../../../../../services/actions';
+import { FormInput } from '../../../../../theme/form';
+import { ListErrors } from '../../../../../theme/shared';
+import { validationActions } from '../../../../../services/actions';
 
-@inject('individualAccountStore', 'accountStore', 'uiStore', 'entityAccountStore')
+@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore')
 @observer
-export default class LinkBankForm extends Component {
+export default class ManualForm extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.accountStore.accountType.type === 'individual') {
@@ -25,7 +25,11 @@ export default class LinkBankForm extends Component {
 
   render() {
     const { errors } = this.props.uiStore;
-    const { formLinkBankManually, linkBankManuallyChange } = this.props.accountStore;
+    const {
+      formLinkBankManually,
+      linkBankManuallyChange,
+    }
+      = this.props.bankAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>
@@ -53,7 +57,7 @@ export default class LinkBankForm extends Component {
             <Button primary size="large" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button className="theme-link" onClick={() => this.props.accountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
+            <Button type="button" className="theme-link" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
           </div>
         </Form>
       </div>

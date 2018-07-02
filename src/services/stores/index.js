@@ -18,6 +18,5 @@ export { default as rewardStore } from './entities/rewardWallet/rewardStore';
 export { default as newBusinessStore } from './entities/user/newBusinessStore';
 export { default as navStore } from './entities/shared/navStore';
 export { default as messageStore } from './entities/message/messageStore';
-
-
+export { default as bankAccountStore } from './entities/shared/bankAccountStore';
 export { default as identityStore } from './entities/user/identityStore';
