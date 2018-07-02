@@ -22,9 +22,10 @@ export default class AddBeneficiary extends Component {
 
   submit = (e) => {
     e.preventDefault();
-    this.props.userDetailsStore.createBeneficiary().then(() => {
+    // this.props.userDetailsStore.createBeneficiary(this.props.accountId).then(() => {
+    this.props.userDetailsStore.requestOtpForManageBeneficiary().then(() => {
       Helper.toast('Beneficiary added!', 'success');
-      this.props.history.push(this.props.refLink);
+      // this.props.history.push(this.props.refLink);
     });
   }
 

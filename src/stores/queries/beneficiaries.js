@@ -67,3 +67,11 @@ export const deleteBeneficiary = gql`
     }
   }
 `;
+
+export const requestOptForBeneficiaries = gql`
+  mutation _requestOtp($scopeType: mfaEnum!, $method: PhoneVerificationMethodsEnum!) {
+    requestOtp(scopeType: $scopeType, method: $method) {
+      requestId
+    }
+  }
+`;

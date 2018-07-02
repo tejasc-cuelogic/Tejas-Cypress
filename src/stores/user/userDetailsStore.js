@@ -17,7 +17,7 @@ import entityAccountStore from '../user/entityAccountStore';
 import individualAccountStore from '../user/individualAccountStore';
 import { BENEFICIARY_FRM, FIN_INFO } from '../../constants/user';
 import { userDetailsQuery, toggleUserAccount } from '../queries/users';
-import { allBeneficiaries, getBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../queries/beneficiaries';
+import { allBeneficiaries, getBeneficiaries, requestOptForBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../queries/beneficiaries';
 import { finLimit, updateFinLimit } from '../queries/financialLimits';
 import Helper from '../../helper/utility';
 
@@ -29,6 +29,7 @@ export class UserDetailsStore {
   @observable BENEFICIARY_META = { fields: [{ ...BENEFICIARY_FRM }], meta: { isValid: false, error: '' } };
   @observable removeBeneficiaryIndex = null;
   @observable beneficiaryModal = false;
+  @observable beneficiaryOtpRequestId = null;
   @observable deleting = 0;
   @observable FIN_INFO = { fields: { ...FIN_INFO }, meta: { isValid: false, error: '' } };
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
@@ -278,26 +279,44 @@ export class UserDetailsStore {
   }
 
   @action
-  createBeneficiary = () => {
+  requestOtpForManageBeneficiary = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: requestOptForBeneficiaries,
+          variables: {
+            scopeType: 'BENEFICIARY',
+            method: 'sms',
+          },
+        })
+        .then((result) => {
+          this.beneficiaryOtpRequestId = result.data.requestOtp.requestId;
+          resolve();
+        })
+        .catch(() => reject())
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  createBeneficiary = (accountId) => {
     const beneficiaries = this.getBeneficiariesData;
-    console.log(createBeneficiaryMutation);
-    console.log(beneficiaries);
+    console.log(beneficiaries, createBeneficiaryMutation, accountId);
     // uiStore.setProgress();
     // return new Promise((resolve, reject) => {
-    //   client2
+    //   client
     //     .mutate({
     //       mutation: createBeneficiaryMutation,
     //       variables: {
-    //         firstName: beneficiary.firstName,
-    //         lastName: beneficiary.lastName,
-    //         relationship: beneficiary.relationship,
-    //         residentalStreet: beneficiary.residentalStreet,
-    //         city: beneficiary.city,
-    //         state: beneficiary.state,
-    //         zipCode: parseInt(beneficiary.zipCode, 10),
-    //         dob: beneficiary.dob,
+    //         requestId: this.beneficiaryOtpRequestId,
+    //         accountId: accountId,
+    //         verificationCode: accountId,
+    //         beneficiaries: beneficiaries,
     //       },
-    //       refetchQueries: [{ query: allBeneficiaries }],
+    //       refetchQueries: [{ query: getBeneficiaries }],
     //     })
     //     .then(() => resolve())
     //     .catch(() => reject())

@@ -7,7 +7,6 @@ import DateTimeFormat from '../../../../../theme/common/DateTimeFormat';
 import { BENEFICIARY_STATUS } from '../../../../../constants/user';
 import AddBeneficiary from './AddBeneficiary';
 
-// const statuses = ['Rejected', 'Pending Approval', 'Approved'];
 const BeneficiaryList = (props) => {
   const title = props.title === 'ira' ? props.title.toUpperCase() : startCase(props.title);
   const status = startCase(props.beneficiaries.requestStatus);
