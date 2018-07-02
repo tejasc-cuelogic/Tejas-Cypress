@@ -106,18 +106,16 @@ class Offering extends Component {
                     <List.Item as={Link} to="/">Revenue Sharing </List.Item>
                   </List>
                 </Card.Content>
-                <Card.Content>
-                  <div className="card-hidden">
-                    <div className="hidden-card-lock-image">
-                      <Image src={lockIcon} />
+                <Card.Content className="card-hidden">
+                  <div className="hidden-card-lock-image">
+                    <Image src={lockIcon} />
+                  </div>
+                  <div className="hidden-card-details">
+                    <div className="tags">
+                      hidden
                     </div>
-                    <div className="hidden-card-details">
-                      <div className="tags">
-                        hidden
-                      </div>
-                      <Card.Header>For NextSeed members only.</Card.Header>
-                      <Card.Meta>Login or complete your profile to view this offering.</Card.Meta>
-                    </div>
+                    <Card.Header>For NextSeed members only.</Card.Header>
+                    <Card.Meta>Login or complete your profile to view this offering.</Card.Meta>
                   </div>
                 </Card.Content>
               </Card>
