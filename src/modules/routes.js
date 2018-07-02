@@ -29,7 +29,7 @@ import {
   BusinessAuthorization,
   UserAuthorization,
   InvestorAuthorization,
-} from '../theme/shared/Authorization';
+} from '../modules/shared/Authorization';
 
 export const publicRoutes = [
   {
