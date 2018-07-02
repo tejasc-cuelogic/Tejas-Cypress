@@ -19,3 +19,71 @@ export const securitySections = [
   },
 ];
 
+export const USER_IDENTITY = {
+  title: {
+    value: '',
+    label: 'Title',
+    error: undefined,
+    rule: 'string',
+  },
+  firstLegalName: {
+    value: '',
+    label: 'First Name (Legal)',
+    error: undefined,
+    rule: 'required',
+  },
+  lastLegalName: {
+    value: '',
+    label: 'Last Name (Legal)',
+    error: undefined,
+    rule: 'required',
+  },
+  residentalStreet: {
+    value: '',
+    label: 'Residential Address',
+    error: undefined,
+    rule: 'required',
+  },
+  city: {
+    value: '',
+    label: 'City',
+    error: undefined,
+    rule: 'required',
+  },
+  state: {
+    value: '',
+    label: 'State',
+    error: undefined,
+    rule: 'required',
+  },
+  zipCode: {
+    value: '',
+    label: 'Zip Code',
+    error: undefined,
+    rule: 'required',
+  },
+  phoneNumber: {
+    value: '',
+    label: 'Phone Number',
+    error: undefined,
+    rule: 'required|maskedPhoneNumber',
+  },
+  dateOfBirth: {
+    value: '',
+    label: 'Date of Birth',
+    error: undefined,
+    rule: 'required',
+  },
+  ssn: {
+    value: '',
+    label: 'Social Security Number',
+    error: undefined,
+    rule: 'required|maskedSSN',
+  },
+};
+
+export const USER_TITLE = [
+  { key: 'Mr', value: 'Mr', text: 'Mr' },
+  { key: 'Ms', value: 'Ms', text: 'Ms' },
+  { key: 'Mrs', value: 'Mrs', text: 'Mrs' },
+];
