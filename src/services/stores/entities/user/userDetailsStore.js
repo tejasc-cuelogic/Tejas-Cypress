@@ -19,6 +19,7 @@ import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
+  @observable detailsOfUser = {};
   @observable beneficiariesData = [];
   @observable financialLimit = {};
   @observable editCard = 0;
@@ -65,9 +66,7 @@ export class UserDetailsStore {
       client,
       query: userDetailsQuery,
       fetchPolicy: 'network-only',
-      variables: {
-        id,
-      },
+      variables: { id },
       onFetch: () => {
         profileStore.setProfileInfo(this.userDetails);
       },
@@ -75,8 +74,17 @@ export class UserDetailsStore {
   }
 
   @action
+  getUserProfileDetails = (id) => {
+    this.detailsOfUser = graphql({
+      client,
+      query: userDetailsQuery,
+      variables: { id },
+    });
+  }
+
+  @action
   updateUserStatus = (status) => {
-    this.currentUser.data.user.accountStatus = status;
+    this.detailsOfUser.data.user.accountStatus = status;
   }
 
   @action

@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 // queries, mutations and subscriptions
 export const allUsersQuery = gql`
   query getUsers($search: String, $orderBy: userOrderBy, $filters: [UserFilter]) {
-    users(search: $search, orderBy: $orderBy, filters: $filters) {
+    users(search: $search, limit: "10", orderBy: $orderBy, filters: $filters) {
       resultCount
       totalCount
       lek {

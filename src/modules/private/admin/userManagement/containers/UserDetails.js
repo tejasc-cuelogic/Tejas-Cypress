@@ -20,7 +20,7 @@ const getModule = component => Loadable({
 @observer
 export default class AccountDetails extends Component {
   componentWillMount() {
-    this.props.userDetailsStore.getUser(this.props.match.params.userId);
+    this.props.userDetailsStore.getUserProfileDetails(this.props.match.params.userId);
   }
   toggleState = (id) => {
     this.props.userDetailsStore.toggleState(id);
@@ -29,13 +29,13 @@ export default class AccountDetails extends Component {
   render() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url).subNavigations;
-    const { currentUser } = this.props.userDetailsStore;
-    if (currentUser.loading) {
+    const { detailsOfUser } = this.props.userDetailsStore;
+    if (detailsOfUser.loading) {
       return (
         <div><Spinner loaderMessage="Loading..." /></div>
       );
     }
-    const details = toJS({ ...currentUser.data.user });
+    const details = toJS({ ...detailsOfUser.data.user });
     const forceTitle = `${details.firstName} ${details.lastName}`;
     return (
       <PrivateLayout
