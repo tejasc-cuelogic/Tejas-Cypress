@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Route } from 'react-router-dom';
 import Aux from 'react-aux';
 import startCase from 'lodash/startCase';
+import moment from 'moment';
 import { Card, Grid, Button, Header, Icon, Item } from 'semantic-ui-react';
 import { DateTimeFormat } from '../../../../../../theme/shared';
 import { BENEFICIARY_STATUS } from '../../../../../../constants/user';
@@ -11,7 +12,7 @@ const BeneficiaryList = (props) => {
   const title = props.title === 'ira' ? props.title.toUpperCase() : startCase(props.title);
   const status = startCase(props.beneficiaries.requestStatus);
   const statusImg = (BENEFICIARY_STATUS.PENDING === props.beneficiaries.requestStatus ? 'orange reload' : 'green check').split(' ');
-  const showButton = props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary`;
+  const showButton = (props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary` && props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary/confirm`);
   return (
     <Grid.Row>
       <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
@@ -44,7 +45,12 @@ const BeneficiaryList = (props) => {
                                   <dt>Names</dt>
                                   <dd>{`${beneficiary.firstName} ${beneficiary.lastName}`}</dd>
                                   <dt>DOB</dt>
-                                  <dd><DateTimeFormat datetime={beneficiary.dob} /></dd>
+                                  <dd>
+                                    <DateTimeFormat
+                                      datetime={moment(beneficiary.dob, 'MM-DD-YYYY')}
+                                      dateonly
+                                    />
+                                  </dd>
                                   <dt>Relationship</dt>
                                   <dd>{beneficiary.relationship}</dd>
                                 </dl>
@@ -76,7 +82,7 @@ const BeneficiaryList = (props) => {
                 <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} color="green">Manage beneficiaries</Button>
               </Aux>
               : null }
-            <Route exact path={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} render={props1 => <AddBeneficiary refLink={props.match.url} isDataAvailable accountId={props.accountId} {...props1} />} />
+            <Route path={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} render={props1 => <AddBeneficiary refLink={props.match.url} isDataAvailable accountId={props.accountId} {...props1} />} />
           </Card.Content>
         </Card>
       </Grid.Column>

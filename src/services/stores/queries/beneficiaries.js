@@ -45,19 +45,29 @@ export const getBeneficiaries = gql`
 `;
 
 export const createBeneficiaryMutation = gql`
-  mutation createBeneficiary($firstName: String!, $lastName: String!, $relationship: String!, $residentalStreet: String!, $city: String!, $state: String!, $zipCode: Int!, $dob: String!, ) {
-    createBeneficiary(firstName: $firstName, lastName: $lastName, relationship: $relationship, residentalStreet: $residentalStreet, city: $city, state: $state, zipCode: $zipCode, dob: $dob) {
-      id
-      firstName
-      lastName
-      relationship
-      residentalStreet
-      city
-      state
-      zipCode
-      dob
+mutation _createBeneficiaries($requestId: String!, $verificationCode: String!, $accountId: String!, $beneficiaries: [BeneficiaryRecipientInput]!) {
+  createBeneficiaries(requestId: $requestId, accountId: $accountId, verificationCode: $verificationCode, beneficiaries: $beneficiaries) {
+    userId
+    accountId
+    beneficiary {
+      requestedDate
+      requestStatus
+      recipients {
+        firstName
+        lastName
+        dob
+        relationship
+        shares
+        address {
+          street
+          city
+          state
+          zipCode
+        }
+      }
     }
   }
+}
 `;
 
 export const deleteBeneficiary = gql`

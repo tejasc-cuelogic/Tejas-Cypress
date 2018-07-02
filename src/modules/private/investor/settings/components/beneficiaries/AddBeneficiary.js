@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { Route, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Form, Header, Button, Confirm } from 'semantic-ui-react';
+import moment from 'moment';
+import { Form, Header, Button, Confirm, Icon } from 'semantic-ui-react';
 import { FormInput, AutoComplete, FormDatePicker } from '../../../../../../theme/form';
-import Helper from '../../../../../../helper/utility';
+// import Helper from '../../../../../../helper/utility';
+import ConfirmVerificationCode from './ConfirmVerificationCode';
 
-@inject('userDetailsStore', 'uiStore')
+@inject('beneficiaryStore', 'uiStore')
+@withRouter
 @observer
 export default class AddBeneficiary extends Component {
   componentWillMount() {
-    this.props.userDetailsStore.beneficiaryReset();
-    if (this.props.isDataAvailable) {
-      this.props.userDetailsStore.setBeneficiariesInfo(this.props.accountId);
+    this.props.beneficiaryStore.setCurrentSelectedAccountId(this.props.accountId);
+    const location = `${this.props.match.url}/confirm`;
+    console.log(this.props.location.pathname);
+    console.log(location);
+    if (this.props.isDataAvailable && this.props.location.pathname !== location) {
+      this.props.beneficiaryStore.beneficiaryReset();
+      this.props.beneficiaryStore.setBeneficiariesInfo();
     }
   }
 
@@ -22,30 +30,29 @@ export default class AddBeneficiary extends Component {
 
   submit = (e) => {
     e.preventDefault();
-    // this.props.userDetailsStore.createBeneficiary(this.props.accountId).then(() => {
-    this.props.userDetailsStore.requestOtpForManageBeneficiary().then(() => {
-      Helper.toast('Beneficiary added!', 'success');
-      // this.props.history.push(this.props.refLink);
+    this.props.beneficiaryStore.requestOtpForManageBeneficiary().then(() => {
+      const location = `${this.props.match.url}/confirm`;
+      this.props.history.push(location);
     });
   }
 
   addMoreBeneficiary = (e) => {
     e.preventDefault();
-    this.props.userDetailsStore.addMoreBeneficiary();
+    this.props.beneficiaryStore.addMoreBeneficiary();
   }
 
   toggleConfirm = (e, index) => {
     e.preventDefault();
-    this.props.userDetailsStore.toggleBeneficiaryConfirmModal(index);
+    this.props.beneficiaryStore.toggleBeneficiaryConfirmModal(index);
   }
 
   removeBeneficiary = () => {
-    if (this.props.userDetailsStore.BENEFICIARY_META.fields.length === 1) {
+    if (this.props.beneficiaryStore.BENEFICIARY_META.fields.length === 1) {
       this.props.history.push(this.props.refLink);
-      this.props.userDetailsStore.toggleBeneficiaryConfirmModal(null);
+      this.props.beneficiaryStore.toggleBeneficiaryConfirmModal(null);
     } else {
-      const index = this.props.userDetailsStore.removeBeneficiaryIndex;
-      this.props.userDetailsStore.removeBeneficiary(index);
+      const index = this.props.beneficiaryStore.removeBeneficiaryIndex;
+      this.props.beneficiaryStore.removeBeneficiary(index);
     }
   }
 
@@ -56,15 +63,24 @@ export default class AddBeneficiary extends Component {
       beneficiaryDateChange,
       setAddressFields,
       beneficiaryModal,
-    } = this.props.userDetailsStore;
+    } = this.props.beneficiaryStore;
     return (
       <Aux>
         <Form onSubmit={this.submit}>
           {
+            !BENEFICIARY_META.meta.isShareValid ?
+              <p>The sum of percentages must be 100</p> :
+              null
+          }
+          {
             BENEFICIARY_META.fields.map((beneficiary, index) => (
               <Aux>
-                <Header as="h4">{`Beneficiary ${index + 1}`}</Header>
-                <Button color="red" className="ghost-button pull-right" onClick={e => this.toggleConfirm(e, index)}>- Remove beneficiary</Button>
+                <Header as="h4">
+                  {`Beneficiary ${index + 1}`}
+                  <Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
+                    <Icon color="red" className="ns-trash" />
+                  </Button>
+                </Header>
                 <div className="field-wrap">
                   <Form.Group widths="equal">
                     {
@@ -84,7 +100,7 @@ export default class AddBeneficiary extends Component {
                       type="text"
                       name="dob"
                       fielddata={beneficiary.dob}
-                      selected={beneficiary.dob.value}
+                      selected={moment(beneficiary.dob.value)}
                       changed={date => beneficiaryDateChange(date, index)}
                     />
                     <FormInput
@@ -139,6 +155,8 @@ export default class AddBeneficiary extends Component {
           size="mini"
           className="deletion"
         />
+        <Route path={`${this.props.match.url}/confirm`} render={() => <ConfirmVerificationCode refLink={this.props.refLink} />} />
+        {/* <ConfirmVerificationCode /> */}
       </Aux>
     );
   }

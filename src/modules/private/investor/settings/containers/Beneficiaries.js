@@ -4,17 +4,17 @@ import { Grid, Header } from 'semantic-ui-react';
 import NoBeneficiary from '../components/beneficiaries/NoBeneficiary';
 import BeneficiaryList from '../components/beneficiaries/BeneficiaryList';
 
-@inject('userDetailsStore')
+@inject('beneficiaryStore')
 @observer
 export default class Beneficiaries extends Component {
   componentWillMount() {
-    this.props.userDetailsStore.getBeneficiaries();
+    this.props.beneficiaryStore.getBeneficiaries();
   }
 
   render() {
     const {
       beneficiaries, bLoading, deleteBeneficiary, deleting,
-    } = this.props.userDetailsStore;
+    } = this.props.beneficiaryStore;
     const beneficiaryList = beneficiaries ? beneficiaries.map(beneficiary => (
       beneficiary.beneficiary ?
         <BeneficiaryList
