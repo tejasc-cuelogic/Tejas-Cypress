@@ -18,7 +18,7 @@ import UsersNew from './private/admin/userManagement/containers/UsersNew';
 import ProfileSettings from './private/shared/settings/containers/ProfileSettings';
 import XmlForm from './private/admin/edgar/containers/XmlForm';
 import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
-import Summary from './private/investor/summary/containers/Summary';
+import AccountSetup from './private/investor/accountSetup/containers/AccountSetup';
 import RewardsWallet from './private/investor/rewardsWallet/containers/RewardsWallet';
 import Referrals from './private/investor/referrals/containers/Referrals';
 import AccountDetails from './private/investor/accountDetails/containers/AccountDetails';
@@ -155,7 +155,7 @@ export const privateRoutes = [
   },
   {
     path: '/app/summary',
-    component: Summary,
+    component: AccountSetup,
     auth: InvestorAuthorization,
   },
   {
