@@ -6,7 +6,7 @@
        Fonts
 --------------------*/
 
-@fontName          : 'Lato';
+@fontName          : 'Roboto';
 @fontSmoothing     : antialiased;
 
 @headerFont        : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -14,15 +14,16 @@
 
 @googleFontName    : @fontName;
 @importGoogleFonts : true;
-@googleFontSizes   : '400,700,400italic,700italic';
+@googleFontSizes   : '400,500,700,400italic,500italic,700italic';
 @googleSubset      : 'latin';
 
 @googleProtocol    : 'https://';
 @googleFontRequest : '@{googleFontName}:@{googleFontSizes}&subset=@{googleSubset}';
 
 
-@bold              : bold;
-@normal            : normal;
+@bold              : 700;
+@medium            : 500;
+@normal            : 400;
 
 /*-------------------
       Base Sizes
@@ -32,7 +33,7 @@
 @emSize   : 14px;
 
 /* The size of page text  */
-@fontSize : 14px;
+@fontSize : 15px;
 
 
 /*-------------------
@@ -61,14 +62,14 @@
   Page Heading
 ---------------*/
 
-@headerFontWeight : @bold;
+@headerFontWeight : @medium;
 @headerLineHeight : unit((14 / 14), em);
 
 @h1 : unit((60 / 14), rem);
 @h2 : unit((40 / 14), rem);
 @h3 : unit((28 / 14), rem);
-@h4 : unit((16 / 14), rem);
-@h5 : unit((14 / 14), rem);
+@h4 : unit((20 / 14), rem);
+@h5 : unit((16 / 14), rem);
 
 /*--------------
    Form Input

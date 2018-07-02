@@ -16,6 +16,9 @@ section{
 	}
 }
 //	Healper Classes
+h5, h5.ui.header{
+	font-weight:@bold;
+}
 .highlight-text{
 	color:@primary-one;
 }
