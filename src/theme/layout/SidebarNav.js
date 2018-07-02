@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import _ from 'lodash';
 import Aux from 'react-aux';
 import { Menu, Icon } from 'semantic-ui-react';
-import _ from 'lodash';
 import { PRIVATE_NAV } from '../../constants/NavigationMeta';
 import { NavItems } from './NavigationItems';
 
