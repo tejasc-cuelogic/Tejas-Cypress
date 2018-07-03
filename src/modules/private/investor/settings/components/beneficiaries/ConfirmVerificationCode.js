@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import InputMask from 'react-input-mask';
 import { FormInput } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../theme/shared';
@@ -20,7 +19,7 @@ export default class ConfirmVerificationCode extends Component {
   getMaskedPhoneNumber = () => {
     // const number = this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber;
     const number = '9860196397';
-    return number ? `XXXXXX${number.substr(number.length - 4)}` : '';
+    return number ? `XXX - XXX - ${number.substr(number.length - 4)}` : '';
   }
 
   submit = (e) => {
@@ -70,15 +69,7 @@ export default class ConfirmVerificationCode extends Component {
               <ListErrors errors={[errors]} />
             </Message>
           }
-          <p> {this.getMaskedPhoneNumber()} </p>
-          <InputMask
-            value={this.getMaskedPhoneNumber()}
-            type="tel"
-            mask="999-999-9999"
-            readOnly
-            hidelabel
-            className="display-only"
-          />
+          <p className="display-only">{this.getMaskedPhoneNumber()}</p>
           <p>
             <Link
               to="/app/profile-settings/security"
