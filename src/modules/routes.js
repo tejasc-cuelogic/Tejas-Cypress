@@ -5,6 +5,7 @@ import Home from './public/home/containers/Home';
 import Invest from './public/invest/containers/Invest';
 import Offering from './public/offering/containers/Offering';
 import OfferDetails from './public/offering/components/OfferDetails';
+import AboutOffer from './public/offering/components/AboutOffer';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
@@ -71,6 +72,10 @@ export const publicRoutes = [
   {
     path: '/offerings/details',
     component: OfferDetails,
+  },
+  {
+    path: '/offerings/about',
+    component: AboutOffer,
   },
   {
     path: '/offerings',

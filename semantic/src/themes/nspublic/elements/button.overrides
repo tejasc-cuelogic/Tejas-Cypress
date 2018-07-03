@@ -6,3 +6,12 @@
         box-shadow:@buttonHoverShadow;
     }
 }
+
+.offer-details {
+	.offering-side-menu {
+        .ui.secondary.button {
+            margin: 24px auto 35px;
+            display: block;
+		}
+    }
+}

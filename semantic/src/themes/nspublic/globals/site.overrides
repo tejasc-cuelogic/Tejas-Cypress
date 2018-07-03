@@ -134,7 +134,7 @@ footer{
 .campaign-list-wrapper {
 	position: relative;
 }
-.offerfilter {
+.offer-filter {
 	position: absolute;
     background: rgba(0,0,0,0.5);
     height: 100%;
@@ -142,7 +142,7 @@ footer{
     left: 0;
 	top: 0;
 	
-	.offerFilterContainer {
+	.offer-filter-container {
 		background-color: #fff;
 		width: 100%;
 		height: auto;
@@ -172,7 +172,7 @@ footer{
 				color: @green;
 			}
 		}
-		.checkboxGroup {
+		.checkbox-group {
 			.ui.label {
 				background-color: transparent;
 				font-size: @15px;
@@ -187,15 +187,21 @@ footer{
 }
 
 /** Campaign Details **/
-.offerDetails {
+.offer-details {
 	margin-top: 74px;
+	display: flex;
+	flex-direction: row;
 
-	.offeringSideMenu {
+	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
-		height: 100%;
+		width: 280px;
 
-		.offeringIntro {
+		.ui.menu, .ui.vertical.menu {
+			border: none;
+			box-shadow: none;
+		}
+		.offering-intro {
 			padding: @32px @20px;
 			h4.ui.header {
 				position: relative;
@@ -207,80 +213,161 @@ footer{
 				}
 			}
 		}
-		.progressBar {
-			height: 209px;
+		.progress-bar {
+			height: 210px;
 			width: 210px;
 			background-color: @white;
 			margin: auto auto @16px;
 		}
-
 		p {
 			font-size: @13px;
 			color: @white;
 			text-align: center;
 		}
+	}
+	.offering-wrapper {
+		background-color: #F3F4F8;
+		flex-grow: 1;
+		height: 100%;
+		
+		.offering-no-early-bird-wrapper {
+			padding: @17px @50px @50px;
+		}
+		.quick-bar {
+			padding: @10px 0;
+		}
 
-		.ui.statistics {
-			.statistic {
-				>.value, >.label {
-					font-size: 13px !important;
-					line-height: 15px;
-					color: #fff;
-					font-weight: normal;
-					text-transform: none;
-				}
+		p {
+			color: @neutral;
+			font-size: @15px;
+			letter-spacing: 1px;
+			line-height: @14px;
 
-				>.label {
+			span {
+				font-weight: @bold;
+			}
+			&.detail-section {
+				line-height: @20px;
+			}
+
+			&.note {
+				color: @neutral-light;
+				font-size: @12px;
+				line-height: @44px;
+			}
+			&.early-bird-title {
+				font-weight: bold;
+				line-height: @28px;
+				font-size: @15px;
+				text-align: center;
+			}
+			&.early-bird-desc {
+				line-height: @27px;
+				font-size: @15px;
+				text-align: center;
+			}
+		}
+		.ui.divider {
+			margin: @40px 0;
+		}
+
+		ul {
+			line-height: @26px;
+			font-size: @15px;
+			color: @neutral-light;
+			padding-left: @20px;
+
+			li {
+				span {
 					font-weight: @bold;
 				}
 			}
 		}
 
-		.ui.secondary.button {
-			margin: 24px auto 50px;
-		}
+		.ui.grid.investment-grid {
+			>.row {
+				>.column:last-child {
+					background-color: @primary-one;
+					position: relative;
+					&:before {
+						content: "";
+						position: absolute;
+						top: 50%;
+						left: -1px;
+						border-style: solid;
+						border-width: 10px 0px 10px 12px;
+						border-color: transparent #fff;
+						display: block;
+						width: 0;
+						z-index: 0;
+						-webkit-transform: translate(0,-50%);
+						-ms-transform: translate(0,-50%);
+						transform: translate(0,-50%);
+					}
 
-		.ui.vertical.menu {
-			width: 100%;
-			margin: 0;
-			text-align: left;
-			background-color: transparent;
-			/* color: #fff; */
-
-			.item {
-				font-size: @14px;
-				color: #fff;
-				box-shadow: none;
-				border-left: @4px solid transparent;
-				border-radius: 0;
-				padding-left: @31px;
-				font-weight: @bold;
-
-				&:hover, &.active {
-					background-color: #3A4048;
-					border-left: @4px solid @primary-one;
-					border-radius: 0;
-					color: @primary-one;
+					.ui.statistic {
+			
+						>.label{
+							color: @white;
+						}
+						>.value {
+							color: @white;
+						}
+					}
 				}
-
-				>i.icon {
-					float: left;
-					margin-left: 0;
-					margin-right: 14px;
-				}
-
-				>.label.circular {
-					margin-top: -5px;
-				}
-
-				&.watchDealMenu {
-					color: #616972;
-				}
-			}
-			.ui.divider {
-				margin: 64px 29px 0;
 			}
 		}
 
+		.no-early-bird {
+			margin: @20px auto;
+		}
+
+		.campaign-about-wrapper {
+			padding: @30px;
+			background-color: @white;
+			height: 100%;
+
+			.carousel {
+				height: 460px;
+				width: 100%;
+				
+				img {
+					width: 100%;
+					height: 100%;
+				}
+			}
+			
+			p {
+				line-height: @20px;
+				color: @neutral-light;
+				&.note {
+					font-style: italic;
+					margin-bottom: 35px;
+				}
+			}
+
+			img {
+				width: 100%;
+				margin-top: @35px;
+			}
+			.history-section {
+				margin-top: 140px;
+
+				i.icon {
+					color: @green;
+				}
+
+				.ui.list {
+					>.item {
+						margin-bottom: 30px;
+    					padding-bottom: 0;
+					}
+				}
+			}
+		}
+		.campaign-right-sidebar {
+			padding: @30px;
+			height: 100%;
+		}
 	}
 }
