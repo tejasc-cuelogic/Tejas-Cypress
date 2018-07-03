@@ -24,7 +24,7 @@ const NoBeneficiary = (props) => {
               </Card.Description> :
               null
             }
-            <Route exact path={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} render={props1 => <AddBeneficiary refLink={props.match.url} isDataAvailable={false} accountId={props.accountId} {...props1} />} />
+            <Route path={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} render={props1 => <AddBeneficiary refLink={props.match.url} isDataAvailable={false} accountId={props.accountId} {...props1} />} />
           </Card.Content>
         </Card>
       </Grid.Column>

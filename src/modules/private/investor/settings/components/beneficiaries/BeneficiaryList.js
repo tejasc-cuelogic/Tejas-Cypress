@@ -48,7 +48,6 @@ const BeneficiaryList = (props) => {
                                   <dd>
                                     <DateTimeFormat
                                       datetime={moment(beneficiary.dob, 'MM-DD-YYYY')}
-                                      dateonly
                                     />
                                   </dd>
                                   <dt>Relationship</dt>

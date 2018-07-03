@@ -18,7 +18,7 @@ export const allBeneficiaries = gql`
 `;
 
 export const getBeneficiaries = gql`
-  query getBeneficiaries {   
+  query getBeneficiaries {
     beneficiaries {   
         accountId   
         accountType
@@ -82,6 +82,7 @@ export const requestOptForBeneficiaries = gql`
   mutation _requestOtp($scopeType: mfaEnum!, $method: PhoneVerificationMethodsEnum!) {
     requestOtp(scopeType: $scopeType, method: $method) {
       requestId
+      phoneNumber
     }
   }
 `;
