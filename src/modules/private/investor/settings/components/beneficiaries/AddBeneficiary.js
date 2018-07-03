@@ -49,7 +49,7 @@ export default class AddBeneficiary extends Component {
 
   removeBeneficiary = () => {
     if (this.props.beneficiaryStore.BENEFICIARY_META.fields.length === 1) {
-      this.props.history.push(this.props.refLink);
+      // this.props.history.push(this.props.refLink);
       this.props.beneficiaryStore.toggleBeneficiaryConfirmModal(null);
     } else {
       const index = this.props.beneficiaryStore.removeBeneficiaryIndex;
@@ -58,12 +58,14 @@ export default class AddBeneficiary extends Component {
   }
 
   render() {
+    const { inProgress } = this.props.uiStore;
     const {
       BENEFICIARY_META,
       beneficiaryEleChange,
       beneficiaryDateChange,
       setAddressFields,
       beneficiaryModal,
+      removeBeneficiaryMessage,
     } = this.props.beneficiaryStore;
     return (
       <Aux>
@@ -102,8 +104,8 @@ export default class AddBeneficiary extends Component {
                         type="text"
                         name="dob"
                         fielddata={beneficiary.dob}
-                        selected={moment(beneficiary.dob.value ?
-                          beneficiary.dob.value : new Date())}
+                        selected={beneficiary.dob.value ?
+                          moment(beneficiary.dob.value) : null}
                         changed={date => beneficiaryDateChange(date, index)}
                       />
                       <FormInput
@@ -148,11 +150,11 @@ export default class AddBeneficiary extends Component {
             <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
           : null
           }
-          <Button loading={this.props.uiStore.inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Submit to approval</Button>
+          <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Submit to approval</Button>
         </Form>
         <Confirm
           header="Confirm"
-          content="Are you sure you want to remove this beneficiary?"
+          content={removeBeneficiaryMessage}
           open={beneficiaryModal}
           onCancel={this.toggleConfirm}
           onConfirm={this.removeBeneficiary}

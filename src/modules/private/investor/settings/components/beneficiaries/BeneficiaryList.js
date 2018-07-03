@@ -3,7 +3,7 @@ import { Link, Route } from 'react-router-dom';
 import Aux from 'react-aux';
 import startCase from 'lodash/startCase';
 import moment from 'moment';
-import { Card, Grid, Button, Header, Icon, Item } from 'semantic-ui-react';
+import { Card, Grid, Button, Header, Icon, Item, Divider } from 'semantic-ui-react';
 import { DateTimeFormat } from '../../../../../../theme/shared';
 import { BENEFICIARY_STATUS } from '../../../../../../constants/user';
 import AddBeneficiary from './AddBeneficiary';
@@ -13,6 +13,8 @@ const BeneficiaryList = (props) => {
   const status = startCase(props.beneficiaries.requestStatus);
   const statusImg = (BENEFICIARY_STATUS.PENDING === props.beneficiaries.requestStatus ? 'orange reload' : 'green check').split(' ');
   const showButton = (props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary` && props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary/confirm`);
+  const headerMsg = `Pellentesque facilisis. Nulla imperdiet sit amet magna.
+                      Vestibulum dapibus, mauris nec malesuada fames ac turpis`;
   return (
     <Grid.Row>
       <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
@@ -28,10 +30,8 @@ const BeneficiaryList = (props) => {
                   <span className="time-stamp">Updated: 4-05-2018</span>
                   <Icon color={statusImg[0]} className={`ns-${statusImg[1]}-circle`} /> {`${status}`}
                 </div>
-                <p>
-                  Pellentesque facilisis. Nulla imperdiet sit amet magna.
-                  Vestibulum dapibus, mauris nec malesuada fames ac turpis
-                </p>
+                <p>{headerMsg}</p>
+                <Divider hidden />
                 <Item.Group>
                   {
                     props.beneficiaries.recipients ?
@@ -79,8 +79,10 @@ const BeneficiaryList = (props) => {
                   }
                 </Item.Group>
                 <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} color="green">Manage beneficiaries</Button>
-              </Aux>
-              : null }
+              </Aux> :
+              <p>{headerMsg}</p>
+              }
+            <Divider hidden />
             <Route path={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} render={props1 => <AddBeneficiary refLink={props.match.url} isDataAvailable accountId={props.accountId} {...props1} />} />
           </Card.Content>
         </Card>
