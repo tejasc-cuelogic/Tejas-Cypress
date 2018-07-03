@@ -19,11 +19,15 @@ export class BeneficiaryStore {
   @observable currentSelectedAccountId = null;
   @observable beneficiaryDisplayPhoneNumber = null;
   @observable reSendVerificationCode = null;
+  @observable removeBeneficiaryMessage = 'Are you sure you want to remove this beneficiary?';
 
   @action
   toggleBeneficiaryConfirmModal(index) {
     this.beneficiaryModal = !this.beneficiaryModal;
     this.removeBeneficiaryIndex = this.beneficiaryModal ? index : null;
+    this.removeBeneficiaryMessage = this.BENEFICIARY_META.fields.length === 1 ?
+      'You need to add at leat one beneficiary.' :
+      'Are you sure you want to remove this beneficiary?';
   }
 
   @action
