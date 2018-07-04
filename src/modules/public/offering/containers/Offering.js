@@ -43,7 +43,7 @@ class Offering extends Component {
         </div>
         <section className="campaign-list-wrapper">
           <Container>
-            <Header as="h4" textAlign="center" caption>Active Campaigns</Header>
+            <Header as="h5" textAlign="center" caption>Active Campaigns</Header>
             <Card.Group itemsPerRow={3} stackable>
               <Card className="campaign">
                 <Image as={Link} to="/offerings/details" src={campaign1} />

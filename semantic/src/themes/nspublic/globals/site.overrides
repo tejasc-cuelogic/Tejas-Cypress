@@ -132,6 +132,11 @@ footer{
 /** campaign filter **/
 .campaign-list-wrapper {
 	position: relative;
+
+	h5.ui.header {
+		color: @neutral-light;
+		margin-bottom: @35px;
+	}
 }
 .offerfilter {
 	position: absolute;
@@ -159,14 +164,14 @@ footer{
 			label {
 				font-size: @15px;
 				line-height: @19px;
-				color: #616972;
+				color: @neutral-light;
 			}
 		} 
 
 		i {
 			font-size: @16px;
 			line-height: @16px;
-			color: #616972;
+			color: @neutral-light;
 			&.help {
 				color: @green;
 			}
@@ -257,8 +262,7 @@ footer{
 
 				&:hover, &.active {
 					background-color: #3A4048;
-					border-left: @4px solid @primary-one;
-					border-radius: 0;
+					border-color: @primary-one;
 					color: @primary-one;
 				}
 
