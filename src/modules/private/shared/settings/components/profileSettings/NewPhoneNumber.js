@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { Route, withRouter } from 'react-router-dom';
 import { Header, Modal, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
@@ -55,7 +55,7 @@ export default class NewPhoneNumber extends Component {
               changed={verifyIdentityEleChange}
             />
             <div className="center-align">
-              <Button loading={this.props.uiStore.inProgress} disabled={!!verifyIdentity01.fields.phoneNumber.error || _.isEmpty(verifyIdentity01.fields.phoneNumber.value)} primary size="large" className="very relaxed" >Change Phone Number</Button>
+              <Button loading={this.props.uiStore.inProgress} disabled={!!verifyIdentity01.fields.phoneNumber.error || isEmpty(verifyIdentity01.fields.phoneNumber.value)} primary size="large" className="very relaxed" >Change Phone Number</Button>
             </div>
           </Form>
         </Modal.Content>

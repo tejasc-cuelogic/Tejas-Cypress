@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { Route, withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
 import { FieldError, ListErrors } from '../../../../../../theme/shared';
@@ -59,7 +59,7 @@ export default class NewEmailAddress extends Component {
             />
             <FieldError error={values.email.error} />
             <div className="center-align">
-              <Button disabled={typeof values.email.error !== 'undefined' || _.isEmpty(values.email.value)} loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed">Change Email Address</Button>
+              <Button disabled={typeof values.email.error !== 'undefined' || isEmpty(values.email.value)} loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed">Change Email Address</Button>
             </div>
           </Form>
         </Modal.Content>

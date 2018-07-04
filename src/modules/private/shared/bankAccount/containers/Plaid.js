@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import _ from 'lodash';
 import { Header, Button, Image, Grid, Form, Loader, Input, Dimmer } from 'semantic-ui-react';
 import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
@@ -51,7 +50,7 @@ export default class Plaid extends Component {
           {
             <Grid centered>
               {
-                _.map(bankListing, bankData => (
+                bankListing.map(bankData => (
                   <Grid.Column key={bankData.institution_id} computer={5} tablet={5} mobile={8}>
                     <Link
                       as="a"
@@ -69,7 +68,7 @@ export default class Plaid extends Component {
                 ))
               }
               {typeof bankListing === 'undefined' &&
-                _.map(IND_BANK_LIST, bankData => (
+                IND_BANK_LIST.map(bankData => (
                   <Grid.Column key={bankData.institutionID} computer={5} tablet={5} mobile={8}>
                     <Link
                       as="a"

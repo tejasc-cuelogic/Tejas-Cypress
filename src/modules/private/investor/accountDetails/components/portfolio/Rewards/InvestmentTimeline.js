@@ -1,7 +1,6 @@
 import React from 'react';
-// import { Route } from 'react-router-dom';
 import Aux from 'react-aux';
-import _ from 'lodash';
+import findLastIndex from 'lodash/findLastIndex';
 import { Grid, Popup, Header, List } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 
@@ -68,7 +67,7 @@ const data = {
 };
 
 const calcSmartProgress = (milestones, amount) => {
-  const pIndex = _.findLastIndex(milestones, m => m.amount <= amount);
+  const pIndex = findLastIndex(milestones, m => m.amount <= amount);
   return ((pIndex / (milestones.length - 1)) * 100) +
     (((amount - milestones[pIndex].amount) /
       (milestones[pIndex + 1].amount - milestones[pIndex].amount)) *
