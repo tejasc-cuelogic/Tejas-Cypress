@@ -3,7 +3,7 @@ import { Route, Link } from 'react-router-dom';
 import { Card, Grid, Header, Button, Divider } from 'semantic-ui-react';
 import ChangePassword from '../../../../auth/containers/ChangePassword';
 import { securitySections } from './../../../../../services/constants/user';
-import MfaModal from '../components/profileSettings/MfaModal';
+import ManageMultiFactorAuth from '../components/profileSettings/ManageMultiFactorAuth';
 
 export default class Security extends Component {
   render() {
@@ -11,7 +11,7 @@ export default class Security extends Component {
     return (
       <div>
         <Route exact path={`${this.props.match.url}/change-password`} component={ChangePassword} />
-        <Route exact path={`${this.props.match.url}/mfa`} component={MfaModal} />
+        <Route exact path={`${this.props.match.url}/mfa`} component={ManageMultiFactorAuth} />
         <Header as="h3">Security</Header>
         <p className="intro-text">
           Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris<br />

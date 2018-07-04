@@ -19,3 +19,4 @@ export { default as newBusinessStore } from './entities/user/newBusinessStore';
 export { default as navStore } from './entities/shared/navStore';
 export { default as messageStore } from './entities/message/messageStore';
 export { default as beneficiaryStore } from './entities/user/settings/beneficiaryStore';
+export { default as multiFactorAuthStore } from './entities/user/settings/multiFactorAuthStore';
