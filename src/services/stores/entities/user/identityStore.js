@@ -55,7 +55,7 @@ export class IdentityStore {
 
   @action
   setAddressFieldsOnGoogleAutocomplete = (place) => {
-    Helper.setAddressFields(place, this.ID_VERIFICATION_FRM);
+    FormValidator.setAddressFields(place, this.ID_VERIFICATION_FRM);
   }
 
   @action

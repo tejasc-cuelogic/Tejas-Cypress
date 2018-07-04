@@ -1,6 +1,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
+import Helper from '../utility';
 
 class FormValidator {
   prepareFormObject = fields => ({ fields: { ...fields }, meta: { isValid: false, error: '' }, response: {} });
@@ -47,6 +48,16 @@ class FormValidator {
     currentForm.meta.isValid = false;
     currentForm.meta.error = '';
     return currentForm;
+  }
+
+  setAddressFields = (place, form) => {
+    const { state, city, zipCode } = form.fields;
+    const currentForm = form;
+    const data = Helper.gAddressClean(place);
+    currentForm.fields.residentalStreet.value = data.residentalStreet;
+    state.value = data.state;
+    city.value = data.city;
+    zipCode.value = data.zipCode;
   }
 }
 
