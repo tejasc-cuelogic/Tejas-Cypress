@@ -4,7 +4,7 @@ import Helper from '../helper';
 
 const progressMeta = Helper.Progress();
 
-const ProgressCard = () => (
+const ProgressCard = props => (
   <Card.Group stackable itemsPerRow={3}>
     {
       Object.keys(progressMeta).map((key) => {
@@ -19,6 +19,7 @@ const ProgressCard = () => (
               <Button
                 color="green"
                 content="Verify Identity"
+                onClick={() => props.renderStep(currentCard.step)}
               />
             </Card.Content>
           </Card>

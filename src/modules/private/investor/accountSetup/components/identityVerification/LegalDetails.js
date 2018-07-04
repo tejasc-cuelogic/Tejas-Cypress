@@ -1,12 +1,14 @@
 import React from 'react';
-import { Button, Modal, Divider, Header, Form } from 'semantic-ui-react';
+import { observer } from 'mobx-react';
+import { Button, Modal, Divider, Header, Form, Message } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
 import {
   FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete,
 } from '../../../../../../theme/form';
+import { CipErrors, ListErrors } from '../../../../../../theme/shared';
 
-const LegalDetails = ({
-  form, change, close, name, autoComplete, inProgress,
+const LegalDetails = observer(({
+  form, change, dobChange, close, autoComplete, name, inProgress, errors, onSubmit,
 }) => (
   <Modal size="mini" open closeIcon onClose={close}>
     <Modal.Header className="center-align signup-header">
@@ -19,8 +21,17 @@ const LegalDetails = ({
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
-      <p>errors goes here..</p>
-      <Form onSubmit={this.handleSubmitInvestorDetails}>
+      {errors &&
+        <Message error textAlign="left">
+          <ListErrors errors={[errors]} />
+        </Message>
+      }
+      {form.response.qualifiers &&
+        <Message error>
+          <CipErrors errorsList={form.response.qualifiers} />
+        </Message>
+      }
+      <Form onSubmit={onSubmit}>
         <Form.Group widths="equal">
           <FormSelect
             containerwidth={8}
@@ -68,11 +79,10 @@ const LegalDetails = ({
             changed={change}
           />
           <FormDatePicker
-            type="text"
             name="dateOfBirth"
             fielddata={form.fields.dateOfBirth}
             selected={form.fields.dateOfBirth.value}
-            changed={change}
+            changed={dobChange}
           />
         </Form.Group>
         <MaskedInput
@@ -90,6 +100,6 @@ const LegalDetails = ({
       </Form>
     </Modal.Content>
   </Modal>
-);
+));
 
 export default LegalDetails;

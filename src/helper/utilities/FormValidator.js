@@ -3,7 +3,7 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 
 class FormValidator {
-  prepareFormObject = fields => ({ fields: { ...fields }, meta: { isValid: false, error: '' } });
+  prepareFormObject = fields => ({ fields: { ...fields }, meta: { isValid: false, error: '' }, response: {} });
 
   pullValues = (e, data) => ({
     name: typeof data === 'undefined' ? e.target.name : data.name,
@@ -36,6 +36,18 @@ class FormValidator {
   }
 
   ExtractValues = fields => mapValues(fields, f => f.value);
+
+  resetFormData = (form) => {
+    const currentForm = form;
+    Object.keys(currentForm.fields).map((field) => {
+      currentForm.fields[field].value = '';
+      currentForm.fields[field].error = undefined;
+      return true;
+    });
+    currentForm.meta.isValid = false;
+    currentForm.meta.error = '';
+    return currentForm;
+  }
 }
 
 export default new FormValidator();

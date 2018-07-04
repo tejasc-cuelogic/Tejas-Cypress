@@ -87,3 +87,33 @@ export const USER_TITLE = [
   { key: 'Ms', value: 'Ms', text: 'Ms' },
   { key: 'Mrs', value: 'Mrs', text: 'Mrs' },
 ];
+
+export const IDENTITY_DOCUMENTS = {
+  photoId: {
+    key: 'photoId',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+  },
+  proofOfResidence: {
+    key: 'proofOfResidence',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+  },
+};
+
+export const PHONE_VERIFICATION = {
+  code: {
+    value: '',
+    label: 'Enter your verification code here:',
+    error: undefined,
+    rule: 'required|numeric',
+  },
+};

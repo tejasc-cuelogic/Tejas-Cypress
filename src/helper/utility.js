@@ -136,6 +136,15 @@ export class Utility {
     const formattedData = [array.slice(0, -1).join(', '), array.slice(-1)[0]].join(array.length < 2 ? '' : ' or ');
     return formattedData;
   }
+
+  setAddressFields = (place, form) => {
+    const currentForm = form;
+    const data = this.gAddressClean(place);
+    currentForm.fields.residentalStreet.value = data.residentalStreet;
+    currentForm.fields.state.value = data.state;
+    currentForm.fields.city.value = data.city;
+    currentForm.fields.zipCode.value = data.zipCode;
+  }
 }
 
 export default new Utility();
