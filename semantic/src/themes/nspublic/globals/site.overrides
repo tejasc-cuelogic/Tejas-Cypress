@@ -328,12 +328,11 @@ footer{
 			height: 100%;
 
 			.carousel {
-				height: 460px;
 				width: 100%;
-				
 				img {
 					width: 100%;
 					height: 100%;
+					margin-top: 0;
 				}
 			}
 			
@@ -342,7 +341,7 @@ footer{
 				color: @neutral-light;
 				&.note {
 					font-style: italic;
-					margin-bottom: 35px;
+					margin-bottom: @35px;
 				}
 			}
 
@@ -352,22 +351,62 @@ footer{
 			}
 			.history-section {
 				margin-top: 140px;
-
-				i.icon {
-					color: @green;
-				}
-
 				.ui.list {
 					>.item {
-						margin-bottom: 30px;
+						margin-bottom: @30px;
     					padding-bottom: 0;
 					}
 				}
 			}
 		}
 		.campaign-right-sidebar {
-			padding: @30px;
+			padding: @30px @30px @30px 0;
 			height: 100%;
+			.ui.padded.segment {
+				padding: @15px @30px @25px;
+				margin-bottom: @20px;
+				.ui.breadcrumb {
+					margin-bottom: @20px;
+				}
+				iframe {
+					width: 100%;
+					height: 100%;
+					border: none;
+				}
+			}
+		}
+	}
+}
+
+/** Share icons **/
+.share-icons {
+	margin-bottom: 30px;
+	i.icon {
+		color: @white;
+		background: @neutral-lighter;
+		box-shadow: none !important;
+		font-size: @40px !important;
+		margin-bottom: @10px;
+		&.default {
+			color: inherit;
+		}
+		&.fb-color {
+			background: @facebookColor;
+			&:hover {
+				background: @facebookHoverColor;
+			}
+		}
+		&.tw-color {
+			background: @twitterColor;
+			&:hover {
+				background: @twitterHoverColor;
+			}
+		}
+		&.in-color {
+			background:@linkedInColor;
+			&:hover {
+				background: @linkedInHoverColor;
+			}
 		}
 	}
 }

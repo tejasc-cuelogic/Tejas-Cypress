@@ -87,3 +87,11 @@
 		}
 	}
 }
+
+.ui.modal{ 
+	.ui.statistic>.label {
+		color: @neutral-light;
+		text-transform: capitalize;
+		font-weight: @fontMedium;
+	}
+}

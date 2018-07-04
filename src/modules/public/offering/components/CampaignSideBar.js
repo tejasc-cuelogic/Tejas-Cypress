@@ -12,9 +12,7 @@ const CampaignSideBar = () => (
         Account Settings
         <Header.Subheader>Manage your preferences</Header.Subheader>
       </Header>
-      <div className="progress-bar">
-        dfshgf
-      </div>
+      <div className="progress-bar" />
       <p>
         <Icon name="flag" /> Min reached on 10 days ago
       </p>
