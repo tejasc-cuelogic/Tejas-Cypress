@@ -1,6 +1,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
+import { sumBy, forEach, replace } from 'lodash';
 // import { map } from 'lodash';
 
 class FormValidator {
@@ -52,25 +53,43 @@ class FormValidator {
         currentForm.fields[formIndex][element.name].value = element.value;
       }
     }
-    const validation = new Validator(
-      mapValues(currentForm.fields[formIndex], f => f.value),
-      mapValues(currentForm.fields[formIndex], f => f.rule),
-    );
+
+    Validator.register('sum', (value, requirement) => {
+      const total = sumBy(currentForm.fields, currentValue =>
+        parseInt(currentValue[requirement].value, 10));
+      const status = total === 100 ? undefined : true;
+      forEach(currentForm.fields, (ele, key) => {
+        currentForm.fields[key][requirement].error = status;
+      });
+      return total === 100;
+    }, 'The sum of :attribute percentages must be 100.');
+
+    const rules = {
+      'beneficiary.*.city': 'required',
+      'beneficiary.*.dob': 'required',
+      'beneficiary.*.firstName': 'required',
+      'beneficiary.*.lastName': 'required',
+      'beneficiary.*.relationship': 'required',
+      'beneficiary.*.residentalStreet': 'required',
+      'beneficiary.*.share': 'required|numeric|sum:share',
+      'beneficiary.*.state': 'required',
+      'beneficiary.*.zipCode': 'required',
+    };
+    const formData = currentForm.fields.map(fieldsSet => mapValues(fieldsSet, f => f.value));
+    const data = {
+      beneficiary: formData,
+    };
+
+    const validation = new Validator(data, rules);
     currentForm.meta.isValid = validation.passes();
     if (element.name) {
-      currentForm.fields[formIndex][element.name].error = validation.errors.first(element.name);
+      currentForm.fields[formIndex][element.name].error = validation.errors.first(`beneficiary.${formIndex}.${element.name}`) ?
+        replace(
+          validation.errors.first(`beneficiary.${formIndex}.${element.name}`),
+          `beneficiary.${formIndex}.${element.name}`,
+          element.name,
+        ) : undefined;
     }
-
-    const errorList = currentForm.fields.map((fieldsSet) => {
-      const allvalidation = new Validator(
-        mapValues(fieldsSet, f => f.value),
-        mapValues(fieldsSet, f => f.rule),
-      );
-      return allvalidation.passes();
-    });
-
-    currentForm.meta.isValid = !errorList.filter(val => !val).length;
-
     return currentForm;
   }
 

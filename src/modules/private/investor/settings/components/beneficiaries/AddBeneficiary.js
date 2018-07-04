@@ -3,6 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { Route, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import moment from 'moment';
+import Validator from 'validatorjs';
+import { sumBy } from 'lodash';
 import { Form, Header, Button, Confirm, Icon } from 'semantic-ui-react';
 import { FormInput, AutoComplete, FormDatePicker } from '../../../../../../theme/form';
 // import Helper from '../../../../../../helper/utility';
@@ -21,6 +23,32 @@ export default class AddBeneficiary extends Component {
     if (this.props.isDataAvailable && this.props.location.pathname !== location) {
       this.props.beneficiaryStore.setBeneficiariesInfo();
     }
+    console.log(this.props.beneficiaryStore.getBeneficiariesData);
+    const data1 = this.props.beneficiaryStore.getBeneficiariesData;
+    data1[0].shares = 50;
+    const data = {
+      users: data1,
+    };
+
+    Validator.register('sum', () => {
+      const total = sumBy(data1, currentValue => currentValue.shares);
+      return total === 100;
+    }, 'The :attribute phone number is not in the format XXX-XXX-XXXX.');
+
+    const rules = {
+      'users.*.address.city': 'required',
+      'users.*.dob': 'required',
+      'users.*.firstName': 'required|min:3',
+      'users.*.lastName': 'required',
+      'users.*.relationship': 'required',
+      'users.*.address.street': 'required',
+      'users.*.shares': 'required|sum',
+      'users.*.address.state': 'required',
+      'users.*.address.zipCode': 'required',
+    };
+
+    const validation = new Validator(data, rules);
+    console.log('Validation:', validation.passes());
   }
 
   handleCloseModal = (e) => {

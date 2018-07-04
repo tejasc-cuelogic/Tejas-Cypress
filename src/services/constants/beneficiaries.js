@@ -51,7 +51,7 @@ export const BENEFICIARY_FRM = {
     value: '',
     label: 'Share',
     error: undefined,
-    rule: 'required|numeric',
+    rule: 'required|numeric|sum',
   },
 };
 

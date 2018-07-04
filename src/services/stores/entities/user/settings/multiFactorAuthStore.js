@@ -7,7 +7,6 @@ import { FormValidator as Validator } from '../../../../../helper';
 
 export class MultiFactorAuthStore {
   @observable MFA_MODE_TYPE_META = Validator.prepareFormObject(MFA_MODE_TYPES);
-  @observable MFA_DATA = null;
 
   @action
   handleMfaModeTypeChanged = (e, { value }) => {
@@ -20,10 +19,9 @@ export class MultiFactorAuthStore {
     // return new Promise((resolve, reject) => {
     //   client
     //     .mutate({
-    //       mutation: requestOptForBeneficiaries,
+    //       mutation: updateMfaModeType,
     //       variables: {
-    //         scopeType: 'BENEFICIARY',
-    //         method: 'sms',
+    //         mfaMethodType: this.MFA_MODE_TYPE_META.fields.mfaModeTypes.value,
     //       },
     //     })
     //     .then((result) => {

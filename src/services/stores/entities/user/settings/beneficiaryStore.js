@@ -112,28 +112,26 @@ export class BeneficiaryStore {
     const beneficiaryList = this.beneficiaries.filter(acc =>
       acc.accountId === this.currentSelectedAccountId)[0];
     if (beneficiaryList.beneficiary) {
-      let index = 0;
-      forEach(beneficiaryList.beneficiary.recipients, (beneficiary) => {
+      forEach(beneficiaryList.beneficiary.recipients, (beneficiary, key) => {
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: beneficiary.firstName }, index);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: beneficiary.firstName }, key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'lastName', value: beneficiary.lastName }, index);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'lastName', value: beneficiary.lastName }, key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: beneficiary.address.city }, index);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: beneficiary.address.city }, key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: beneficiary.address.state }, index);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: beneficiary.address.state }, key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: beneficiary.address.street }, index);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: beneficiary.address.street }, key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: beneficiary.address.zipCode }, index);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: beneficiary.address.zipCode }, key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: moment(beneficiary.dob) }, index);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: moment(beneficiary.dob) }, key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'relationship', value: beneficiary.relationship }, index);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'relationship', value: beneficiary.relationship }, key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: beneficiary.shares }, index);
-        index += 1;
-        if (index !== beneficiaryList.beneficiary.recipients.length) {
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: beneficiary.shares }, key);
+        if (key < beneficiaryList.beneficiary.recipients.length - 1) {
           this.addMoreBeneficiary();
         }
       });
@@ -146,8 +144,9 @@ export class BeneficiaryStore {
   };
 
   @action
-  verifyVerificationCodeChange = (e, { name, value }) => {
-    this.OTP_VERIFY_META = Validator.onChange(this.OTP_VERIFY_META, { name, value });
+  verifyVerificationCodeChange = (e, result) => {
+    this.OTP_VERIFY_META = Validator
+      .onChange(this.OTP_VERIFY_META, Validator.pullValues(e, result));
   };
 
   @action

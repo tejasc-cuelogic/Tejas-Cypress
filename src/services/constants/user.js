@@ -6,8 +6,9 @@ export const securitySections = [
     action: ['change-password', 'Change Password'],
   },
   {
-    title: 'Multi-Factor Autentitaction',
-    description: `Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.
+    title: 'Multi-factor autentitaction',
+    description: 'You can choose your Active MFA Factor.',
+    descriptionNotAvailable: `Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.
     Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.`,
     action: ['mfa', 'Manage multi-factor autentication'],
   },
