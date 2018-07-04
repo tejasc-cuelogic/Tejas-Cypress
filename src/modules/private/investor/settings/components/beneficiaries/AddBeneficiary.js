@@ -82,7 +82,7 @@ export default class AddBeneficiary extends Component {
                   <Header as="h4">
                     {`Beneficiary ${index + 1}`}
                     <Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
-                      <Icon color="red" className="ns-trash" />
+                      <Icon color="red" size="small" className="ns-trash" />
                     </Button>
                   </Header>
                   <div className="field-wrap">
