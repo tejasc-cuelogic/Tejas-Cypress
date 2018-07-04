@@ -5,7 +5,7 @@ import { Header, Container, Menu, Grid, Statistic } from 'semantic-ui-react';
 
 const ambassadors = () => (
   <Aux>
-    <Container fluid className="mission-banner">
+    <Container fluid className="mission-banner banner">
       <Container>
         <div className="banner-caption">
           <Header as="h1">

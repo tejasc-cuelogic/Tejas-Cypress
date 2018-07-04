@@ -95,7 +95,6 @@ footer{
             font-weight: @fontMedium;
             font-size: @14px;
             line-height: @20px;
-            letter-spacing: @1px;
             .ui.image.filterIcon {
                 margin-right: 10px;
             }

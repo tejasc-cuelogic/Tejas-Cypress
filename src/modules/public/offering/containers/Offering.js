@@ -14,7 +14,7 @@ class Offering extends Component {
   render() {
     return (
       <Aux>
-        <Container fluid className="campaign-list-banner">
+        <Container fluid className="campaign-list-banner banner">
           <Container>
             <div className="banner-caption">
               <Header as="h1">
