@@ -375,7 +375,7 @@ export class IdentityStore {
           mutation: updateUserCIPInfo,
           variables: {
             userId: userStore.currentUser.sub,
-            user: this.formattedUserInfo,
+            user: this.formattedUserInfo.userInfo,
             phoneDetails: this.formattedUserInfo.phoneDetails,
             cipStatus,
           },
