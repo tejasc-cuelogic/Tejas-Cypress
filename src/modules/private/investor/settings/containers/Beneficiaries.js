@@ -13,30 +13,30 @@ export default class Beneficiaries extends Component {
 
   render() {
     const {
-      beneficiaries, bLoading, deleteBeneficiary, deleting,
+      beneficiaries, bLoading,
     } = this.props.beneficiaryStore;
     const beneficiaryList = beneficiaries ? beneficiaries.map(beneficiary => (
       beneficiary.beneficiary ?
         <BeneficiaryList
           accountId={beneficiary.accountId}
+          updatedDate={beneficiary.updatedDate ? beneficiary.updatedDate : beneficiary.createdDate}
           key={beneficiary.accountId}
           title={beneficiary.accountType}
           match={this.props.match}
-          delete={deleteBeneficiary}
           beneficiaries={beneficiary.beneficiary}
-          deleting={deleting}
           loading={bLoading}
           curLocation={this.props.location}
         /> :
-        <NoBeneficiary
-          accountId={beneficiary.accountId}
-          match={this.props.match}
-          title={beneficiary.accountType}
-          key={beneficiary.accountId}
-          curLocation={this.props.location}
-        />
+        (beneficiary.status === 'FULL' ?
+          <NoBeneficiary
+            accountId={beneficiary.accountId}
+            match={this.props.match}
+            title={beneficiary.accountType}
+            key={beneficiary.accountId}
+            curLocation={this.props.location}
+          /> : null)
     )) :
-        <div>loading</div>;
+          <div>loading</div>;
     return (
       <div>
         <Header as="h3">Beneficiaries</Header>

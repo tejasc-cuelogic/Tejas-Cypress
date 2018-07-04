@@ -10,7 +10,7 @@ import AddBeneficiary from './AddBeneficiary';
 
 const BeneficiaryList = (props) => {
   const title = props.title === 'ira' ? props.title.toUpperCase() : startCase(props.title);
-  const status = startCase(props.beneficiaries.requestStatus);
+  const status = startCase(props.beneficiaries.requestStatus.toLowerCase());
   const statusImg = (BENEFICIARY_STATUS.PENDING === props.beneficiaries.requestStatus ? 'orange reload' : 'green check').split(' ');
   const showButton = (props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary` && props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary/confirm`);
   const headerMsg = `Pellentesque facilisis. Nulla imperdiet sit amet magna.
@@ -27,7 +27,7 @@ const BeneficiaryList = (props) => {
             { showButton ?
               <Aux>
                 <div className="status">
-                  <span className="time-stamp">Updated: 4-05-2018</span>
+                  <span className="time-stamp">{`Updated: ${moment(props.updatedDate).format('MM-DD-YYYY')}`}</span>
                   <Icon color={statusImg[0]} className={`ns-${statusImg[1]}-circle`} /> {`${status}`}
                 </div>
                 <p>{headerMsg}</p>

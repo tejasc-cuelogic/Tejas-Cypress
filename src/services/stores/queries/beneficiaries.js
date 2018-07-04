@@ -22,6 +22,7 @@ export const getBeneficiaries = gql`
     beneficiaries {   
         accountId   
         accountType
+        status
         updatedDate
         createdDate   
         beneficiary {     
