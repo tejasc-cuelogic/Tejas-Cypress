@@ -10,15 +10,14 @@ import { ListErrors } from '../../../../../../theme/shared';
 @withRouter
 @observer
 export default class ConfirmVerificationCode extends Component {
-  // componentWillMount() {
-  //   if (!this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber) {
-  //     this.props.history.push(this.props.refLink);
-  //   }
-  // }
+  componentWillMount() {
+    if (!this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber) {
+      this.props.history.push(this.props.refLink);
+    }
+  }
 
   getMaskedPhoneNumber = () => {
-    // const number = this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber;
-    const number = '9860196397';
+    const number = this.props.beneficiaryStore.beneficiaryDisplayPhoneNumber;
     return number ? `XXX - XXX - ${number.substr(number.length - 4)}` : '';
   }
 
@@ -30,9 +29,9 @@ export default class ConfirmVerificationCode extends Component {
     });
   }
 
-  // gotoMfaSettings = () => {
-  //   this.props.history.push(this.props.refLink);
-  // }
+  gotoMfaSettings = () => {
+    this.props.history.push(this.props.refLink);
+  }
 
   resendVerification = (e) => {
     e.preventDefault();

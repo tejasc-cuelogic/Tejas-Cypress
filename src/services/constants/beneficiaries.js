@@ -1,58 +1,60 @@
 export const BENEFICIARY_FRM = {
-  firstName: {
-    value: '',
-    label: 'First name',
-    error: undefined,
-    rule: 'required',
-  },
-  lastName: {
-    value: '',
-    label: 'Last Name',
-    error: undefined,
-    rule: 'required',
-  },
-  dob: {
-    value: null,
-    label: 'Date of Birth',
-    error: undefined,
-    rule: 'required',
-  },
-  relationship: {
-    value: '',
-    label: 'Relationship to Account Holder',
-    error: undefined,
-    rule: 'required',
-  },
-  residentalStreet: {
-    value: '',
-    label: 'Residental Street',
-    error: undefined,
-    rule: 'required',
-  },
-  city: {
-    value: '',
-    label: 'City',
-    error: undefined,
-    rule: 'required',
-  },
-  state: {
-    value: '',
-    label: 'State',
-    error: undefined,
-    rule: 'required',
-  },
-  zipCode: {
-    value: '',
-    label: 'Zip Code',
-    error: undefined,
-    rule: 'required|numeric',
-  },
-  share: {
-    value: '',
-    label: 'Share',
-    error: undefined,
-    rule: 'required|numeric|sum',
-  },
+  beneficiary: [{
+    firstName: {
+      value: '',
+      label: 'First name',
+      error: undefined,
+      rule: 'required',
+    },
+    lastName: {
+      value: '',
+      label: 'Last Name',
+      error: undefined,
+      rule: 'required',
+    },
+    dob: {
+      value: null,
+      label: 'Date of birth',
+      error: undefined,
+      rule: 'required',
+    },
+    relationship: {
+      value: '',
+      label: 'Relationship to Account Holder',
+      error: undefined,
+      rule: 'required',
+    },
+    residentalStreet: {
+      value: '',
+      label: 'Residental Street',
+      error: undefined,
+      rule: 'required',
+    },
+    city: {
+      value: '',
+      label: 'City',
+      error: undefined,
+      rule: 'required',
+    },
+    state: {
+      value: '',
+      label: 'State',
+      error: undefined,
+      rule: 'required',
+    },
+    zipCode: {
+      value: '',
+      label: 'ZIP code',
+      error: undefined,
+      rule: 'required|numeric',
+    },
+    share: {
+      value: '',
+      label: 'Shares percentage',
+      error: undefined,
+      rule: 'required|numeric|sharePercentage:share',
+    },
+  }],
 };
 
 export const VERIFY_OTP = {

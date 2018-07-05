@@ -25,7 +25,7 @@ export class BeneficiaryStore {
   toggleBeneficiaryConfirmModal(index) {
     this.beneficiaryModal = !this.beneficiaryModal;
     this.removeBeneficiaryIndex = this.beneficiaryModal ? index : null;
-    this.removeBeneficiaryMessage = this.BENEFICIARY_META.fields.length === 1 ?
+    this.removeBeneficiaryMessage = this.BENEFICIARY_META.fields.beneficiary.length === 1 ?
       'You need to add at leat one beneficiary.' :
       'Are you sure you want to remove this beneficiary?';
   }
@@ -52,10 +52,13 @@ export class BeneficiaryStore {
   addMoreBeneficiary() {
     this.BENEFICIARY_META = {
       ...this.BENEFICIARY_META,
-      fields: [
+      fields: {
         ...this.BENEFICIARY_META.fields,
-        BENEFICIARY_FRM,
-      ],
+        beneficiary: [
+          ...this.BENEFICIARY_META.fields.beneficiary,
+          BENEFICIARY_FRM.beneficiary[0],
+        ],
+      },
       meta: {
         ...this.BENEFICIARY_META.meta,
         isValid: false,
@@ -66,7 +69,7 @@ export class BeneficiaryStore {
 
   @action
   removeBeneficiary(index) {
-    this.BENEFICIARY_META.fields.splice(index, 1);
+    this.BENEFICIARY_META.fields.beneficiary.splice(index, 1);
     this.beneficiaryModal = !this.beneficiaryModal;
     this.removeBeneficiaryIndex = null;
   }
@@ -80,7 +83,7 @@ export class BeneficiaryStore {
   }
 
   @action beneficiaryReset = () => {
-    this.BENEFICIARY_META = { fields: [{ ...BENEFICIARY_FRM }], meta: { isValid: false, error: '' } };
+    this.BENEFICIARY_META = { fields: { beneficiary: BENEFICIARY_FRM.beneficiary }, meta: { isValid: false, error: '' } };
   }
 
   @computed get beneficiaries() {
@@ -91,8 +94,8 @@ export class BeneficiaryStore {
   }
 
   @computed get getBeneficiariesData() {
-    return this.BENEFICIARY_META.fields.length ?
-      toJS(this.BENEFICIARY_META.fields).map(beneficiaries => ({
+    return this.BENEFICIARY_META.fields.beneficiary.length ?
+      toJS(this.BENEFICIARY_META.fields.beneficiary).map(beneficiaries => ({
         firstName: beneficiaries.firstName.value,
         lastName: beneficiaries.lastName.value,
         dob: moment(beneficiaries.dob.value).format('MM-DD-YYYY'),

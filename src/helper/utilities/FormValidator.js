@@ -1,13 +1,10 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
-import mapValues from 'lodash/mapValues';
-import { sumBy, forEach, replace } from 'lodash';
-// import { map } from 'lodash';
+import { mapValues, replace, sumBy, forEach, mapKeys, isArray, toArray, reduce } from 'lodash';
+import CustomeValidations from './CustomeValidations';
 
 class FormValidator {
   prepareFormObject = fields => ({ fields: { ...fields }, meta: { isValid: false, error: '' } });
-
-  prepareMultiFormObject = fields => ({ fields: [{ ...fields }], meta: { isValid: false, error: '' } });
 
   pullValues = (e, data) => ({
     name: typeof data === 'undefined' ? e.target.name : data.name,
@@ -40,50 +37,40 @@ class FormValidator {
   }
 
   onArrayFieldChange = (form, element, formIndex, type) => {
+    CustomeValidations.executet();
     const currentForm = form;
     if (element.name) {
-      if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[formIndex][element.name].value)) && type !== 'dropdown')) {
-        const index = currentForm.fields[formIndex][element.name].value.indexOf(element.value);
+      if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields.beneficiary[formIndex][element.name].value)) && type !== 'dropdown')) {
+        const index = currentForm.fields.beneficiary[formIndex][element.name]
+          .value.indexOf(element.value);
         if (index === -1) {
-          currentForm.fields[formIndex][element.name].value.push(element.value);
+          currentForm.fields.beneficiary[formIndex][element.name].value.push(element.value);
         } else {
-          currentForm.fields[formIndex][element.name].value.splice(index, 1);
+          currentForm.fields.beneficiary[formIndex][element.name].value.splice(index, 1);
         }
       } else {
-        currentForm.fields[formIndex][element.name].value = element.value;
+        currentForm.fields.beneficiary[formIndex][element.name].value = element.value;
       }
     }
 
-    Validator.register('sum', (value, requirement) => {
-      const total = sumBy(currentForm.fields, currentValue =>
+    /* Beneficiary share percentage validation register */
+    Validator.register('sharePercentage', (value, requirement) => {
+      const total = sumBy(currentForm.fields.beneficiary, currentValue =>
         parseInt(currentValue[requirement].value, 10));
       const status = total === 100 ? undefined : true;
-      forEach(currentForm.fields, (ele, key) => {
-        currentForm.fields[key][requirement].error = status;
+      forEach(currentForm.fields.beneficiary, (ele, key) => {
+        currentForm.fields.beneficiary[key][requirement].error = status;
       });
       return total === 100;
     }, 'The sum of :attribute percentages must be 100.');
 
-    const rules = {
-      'beneficiary.*.city': 'required',
-      'beneficiary.*.dob': 'required',
-      'beneficiary.*.firstName': 'required',
-      'beneficiary.*.lastName': 'required',
-      'beneficiary.*.relationship': 'required',
-      'beneficiary.*.residentalStreet': 'required',
-      'beneficiary.*.share': 'required|numeric|sum:share',
-      'beneficiary.*.state': 'required',
-      'beneficiary.*.zipCode': 'required',
-    };
-    const formData = currentForm.fields.map(fieldsSet => mapValues(fieldsSet, f => f.value));
-    const data = {
-      beneficiary: formData,
-    };
+    const formData = this.ExtractValues(toJS(currentForm.fields));
+    const formRules = this.ExtractRules(toJS(currentForm.fields));
 
-    const validation = new Validator(data, rules);
+    const validation = new Validator(formData, formRules);
     currentForm.meta.isValid = validation.passes();
     if (element.name) {
-      currentForm.fields[formIndex][element.name].error = validation.errors.first(`beneficiary.${formIndex}.${element.name}`) ?
+      currentForm.fields.beneficiary[formIndex][element.name].error = validation.errors.first(`beneficiary.${formIndex}.${element.name}`) ?
         replace(
           validation.errors.first(`beneficiary.${formIndex}.${element.name}`),
           `beneficiary.${formIndex}.${element.name}`,
@@ -106,7 +93,13 @@ class FormValidator {
     return currentForm;
   }
 
-  ExtractValues = fields => mapValues(fields, f => f.value);
+  ExtractValues = fields => mapValues(fields, f =>
+    (isArray(f) ? toArray(mapValues(f, d => mapValues(d, s => s.value))) :
+      mapValues(f, p => p.value)));
+
+  ExtractRules = fields => reduce(mapValues(fields, (f, key) =>
+    (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`) :
+      mapKeys(mapValues(f, k => k.rule), (s, v) => `${key}.${v}`))), (a, b) => Object.assign(a, b));
 }
 
 export default new FormValidator();

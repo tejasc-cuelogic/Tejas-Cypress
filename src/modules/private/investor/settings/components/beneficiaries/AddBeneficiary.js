@@ -3,11 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { Route, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import moment from 'moment';
-import Validator from 'validatorjs';
-import { sumBy } from 'lodash';
-import { Form, Header, Button, Confirm, Icon } from 'semantic-ui-react';
+import { Form, Header, Button, Confirm, Icon, Message } from 'semantic-ui-react';
 import { FormInput, AutoComplete, FormDatePicker } from '../../../../../../theme/form';
-// import Helper from '../../../../../../helper/utility';
 import ConfirmVerificationCode from './ConfirmVerificationCode';
 
 @inject('beneficiaryStore', 'uiStore')
@@ -23,32 +20,6 @@ export default class AddBeneficiary extends Component {
     if (this.props.isDataAvailable && this.props.location.pathname !== location) {
       this.props.beneficiaryStore.setBeneficiariesInfo();
     }
-    console.log(this.props.beneficiaryStore.getBeneficiariesData);
-    const data1 = this.props.beneficiaryStore.getBeneficiariesData;
-    data1[0].shares = 50;
-    const data = {
-      users: data1,
-    };
-
-    Validator.register('sum', () => {
-      const total = sumBy(data1, currentValue => currentValue.shares);
-      return total === 100;
-    }, 'The :attribute phone number is not in the format XXX-XXX-XXXX.');
-
-    const rules = {
-      'users.*.address.city': 'required',
-      'users.*.dob': 'required',
-      'users.*.firstName': 'required|min:3',
-      'users.*.lastName': 'required',
-      'users.*.relationship': 'required',
-      'users.*.address.street': 'required',
-      'users.*.shares': 'required|sum',
-      'users.*.address.state': 'required',
-      'users.*.address.zipCode': 'required',
-    };
-
-    const validation = new Validator(data, rules);
-    console.log('Validation:', validation.passes());
   }
 
   handleCloseModal = (e) => {
@@ -76,7 +47,7 @@ export default class AddBeneficiary extends Component {
   }
 
   removeBeneficiary = () => {
-    if (this.props.beneficiaryStore.BENEFICIARY_META.fields.length === 1) {
+    if (this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary.length === 1) {
       // this.props.history.push(this.props.refLink);
       this.props.beneficiaryStore.toggleBeneficiaryConfirmModal(null);
     } else {
@@ -95,17 +66,20 @@ export default class AddBeneficiary extends Component {
       beneficiaryModal,
       removeBeneficiaryMessage,
     } = this.props.beneficiaryStore;
+    const showError = BENEFICIARY_META.fields.beneficiary.length ?
+      BENEFICIARY_META.fields.beneficiary[0].share.error : false;
     return (
       <Aux>
+        {showError &&
+          <Message error>
+            <Icon name="warning circle" />
+            The sum of percentages must be 100
+          </Message>
+        }
         <Form onSubmit={this.submit}>
-          {/* {
-            !BENEFICIARY_META.meta.isShareValid ?
-              <p>The sum of percentages must be 100</p> :
-              null
-          } */}
           {
-            BENEFICIARY_META.fields.length ?
-              BENEFICIARY_META.fields.map((beneficiary, index) => (
+            BENEFICIARY_META.fields.beneficiary.length ?
+              BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
                 <Aux>
                   <Header as="h4">
                     {`Beneficiary ${index + 1}`}
@@ -163,6 +137,7 @@ export default class AddBeneficiary extends Component {
                         ))
                       }
                     </Form.Group>
+                    <Header as="h4">Shares</Header>
                     <FormInput
                       type="text"
                       name="share"
@@ -174,7 +149,7 @@ export default class AddBeneficiary extends Component {
               )) :
               <p>loading...</p>
           }
-          {BENEFICIARY_META.fields.length !== 5 ?
+          {BENEFICIARY_META.fields.beneficiary.length !== 5 ?
             <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
           : null
           }
