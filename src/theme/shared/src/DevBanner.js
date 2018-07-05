@@ -12,7 +12,7 @@ const DevBanner = props => (
       textAlign: 'center',
       background: '#FFE626',
       padding: '5px 30px',
-      positiaon: 'fixed',
+      position: 'fixed',
       left: '0',
       right: '0',
       bottom: '0',
