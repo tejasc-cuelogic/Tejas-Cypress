@@ -113,10 +113,10 @@ class Offering extends Component {
                   </List>
                 </Card.Content>
                 <Card.Content className="card-hidden">
-                  <div className="hidden-card-lock-image">
+                  <div className="lock-image">
                     <Image src={lockIcon} />
                   </div>
-                  <div className="hidden-card-details">
+                  <div className="details">
                     <div className="tags">
                       hidden
                     </div>
