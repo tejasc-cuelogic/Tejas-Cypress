@@ -19,9 +19,8 @@ export default class Summary extends React.Component {
     const {
       formAddFunds,
       plaidAccDetails,
-      isValidLinkBankPlaid,
+      isValidLinkBank,
       formLinkBankManually,
-      isValidLinkBankAccountForm,
       depositMoneyNow,
     } = this.props.bankAccountStore;
     return (
@@ -69,7 +68,7 @@ export default class Summary extends React.Component {
           </div>
         </div>
         <div className="center-align">
-          <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!isValidLinkBankAccountForm && !isValidLinkBankPlaid}>Create the account</Button>
+          <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank}>Create the account</Button>
         </div>
       </div>
     );

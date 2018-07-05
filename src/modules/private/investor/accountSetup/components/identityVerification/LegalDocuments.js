@@ -33,14 +33,9 @@ const LegalDocuments = observer(({
           <Loader active={inProgress} />
         </Dimmer>
       }
-      {errors && errors.message &&
+      {errors &&
         <Message error textAlign="left">
-          <ListErrors errors={[errors.message]} />
-        </Message>
-      }
-      {errors && !errors.message &&
-        <Message error textAlign="left">
-          <ListErrors errors={[errors]} />
+          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
         </Message>
       }
       <Form onSubmit={onSubmit} className="file-uploader-inline">

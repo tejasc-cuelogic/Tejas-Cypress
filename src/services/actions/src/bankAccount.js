@@ -43,8 +43,7 @@ export class BankAccount {
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
         bankAccountStore.getPlaidAccountData().then(() => {
-        })
-          .catch(() => { });
+        }).catch(() => { });
         Helper.toast(`Bank ${metadata.institution.name} with account id ${Helper.encryptNumber(metadata.account_id)} successfully linked.`, 'success');
         individualAccountStore.setStepToBeRendered(1);
       },

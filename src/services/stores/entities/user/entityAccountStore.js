@@ -208,7 +208,7 @@ class EntityAccountStore {
     return this.formFinInfo.meta.isValid && this.formGeneralInfo.meta.isValid
       && this.formEntityInfo.meta.isValid &&
       this.formPersonalInfo.meta.isValid && this.formFormationDocuments.meta.isValid &&
-      (bankAccountStore.isValidLinkBankAccountForm || bankAccountStore.isValidLinkBankPlaid);
+      (bankAccountStore.formLinkBankManually.meta.isValid || bankAccountStore.isValidLinkBank);
   }
 
   @computed
