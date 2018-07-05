@@ -8,7 +8,7 @@ import { FormInput } from '../../../../../../../theme/form';
 @observer
 export default class FinancialInformation extends React.Component {
   render() {
-    const { formFinInfo, finInfoChange } = this.props.iraAccountStore;
+    const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Your financial information</Header>
@@ -20,11 +20,11 @@ export default class FinancialInformation extends React.Component {
                 <FormInput
                   key={field}
                   type="text"
-                  fielddata={formFinInfo.fields[field]}
+                  fielddata={FIN_INFO_FRM.fields[field]}
                   name={field}
                   changed={finInfoChange}
                   prefix="$"
-                  maxLength={formFinInfo.fields[field].maxLength}
+                  maxLength={FIN_INFO_FRM.fields[field].maxLength}
                 />
               ))
             }

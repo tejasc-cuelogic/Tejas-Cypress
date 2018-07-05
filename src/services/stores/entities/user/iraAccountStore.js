@@ -1,74 +1,32 @@
-import { action, observable, computed } from 'mobx';
-import Validator from 'validatorjs';
-import mapValues from 'lodash/mapValues';
-import _ from 'lodash';
-import { GqlClient as client } from '../../../../api/gqlApi';
-import { createAccount, updateAccount } from '../../queries/account';
-import { createUploadEntry, removeUploadedFile } from '../../queries/common';
-import { accountStore, uiStore, userStore, userDetailsStore } from '../../index';
-import Helper from '../../../../helper/utility';
-import { validationActions } from '../../../actions';
+import { observable, action, computed } from 'mobx';
+import { isEmpty, find } from 'lodash';
 import {
-  IRA_FIN_INFO,
   IRA_ACC_TYPES,
-  IRA_FUNDING,
+  IRA_FIN_INFO,
   IRA_IDENTITY,
+  IRA_FUNDING,
 } from '../../../../constants/account';
+import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
+import { uiStore, userStore, userDetailsStore } from '../../index';
+import { createAccount, updateAccount } from '../../queries/account';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import { FormValidator, DataFormatter } from '../../../../helper';
+import { validationActions } from '../../../actions';
+import { createUploadEntry, removeUploadedFile } from '../../queries/common';
+import Helper from '../../../../helper/utility';
 
 class IraAccountStore {
-  @observable
-  formFinInfo = {
-    fields: { ...IRA_FIN_INFO }, meta: { isValid: false, error: '', isDirty: false },
-  };
+  @observable FIN_INFO_FRM = FormValidator.prepareFormObject(IRA_FIN_INFO);
+  @observable IDENTITY_FRM = FormValidator.prepareFormObject(IRA_IDENTITY);
+  @observable ACC_TYPES_FRM = FormValidator.prepareFormObject(IRA_ACC_TYPES, true, true);
+  @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING, true, true);
 
-  @observable
-  formAccTypes = {
-    fields: { ...IRA_ACC_TYPES }, meta: { isValid: true, error: '', isDirty: true },
-  };
-
-  @observable
-  formFunding = {
-    fields: { ...IRA_FUNDING }, meta: { isValid: true, error: '', isDirty: true },
-  };
-
-  @observable
-  formIdentity = {
-    fields: { ...IRA_IDENTITY }, meta: { isValid: false, error: '', isDirty: false },
-  };
-
-  @observable
-  investorAccId = '';
-
-  @observable
-  stepToBeRendered = 0;
-
-  @observable
-  formStatus = 'draft';
-
-  @observable
-  accountNotSet = '';
-
-  @observable
-  fundingNotSet = '';
-
-  @action
-  setAccountNotSet(step) {
-    this.accountNotSet = step;
-  }
-
-  @action
-  setFundingNotSet(step) {
-    this.fundingNotSet = step;
-  }
+  @observable formStatus = 'draft';
+  @observable stepToBeRendered = 0;
 
   @action
   setFormStatus(formStatus) {
     this.formStatus = formStatus;
-  }
-
-  @action
-  setInvestorAccId(id) {
-    this.investorAccId = id;
   }
 
   @action
@@ -77,49 +35,9 @@ class IraAccountStore {
   }
 
   @action
-  fundingChange = (e, { name, value }) => {
-    this.onFieldChange('formFunding', name, value);
-  };
-
-  @action
-  finInfoChange = (e, { name, value }) => {
-    this.onFieldChange('formFinInfo', name, value);
-  };
-
-  @action
-  AccTypesChange = (e, { name, value }) => {
-    this.onFieldChange('formAccTypes', name, value);
-  };
-
-  @action
-  identityChange = (name, files) => {
-    let uploadedFile = '';
-    if (typeof files !== 'undefined' && files.length) {
-      uploadedFile = files[0].name;
-    }
-    this.onFieldChange('formIdentity', name, uploadedFile);
-  };
-
-  @action
-  onFieldChange = (currentForm, field, value, isDirty = true) => {
-    const form = currentForm || 'formFinInfo';
-    if (field) {
-      if (typeof value !== 'undefined') {
-        this[form].fields[field].value = value;
-      }
-    }
-    const validation = new Validator(
-      mapValues(this[form].fields, f => f.value),
-      mapValues(this[form].fields, f => f.rule),
-    );
-    this[form].meta.isValid = validation.passes();
-    this[form].meta.isDirty = isDirty;
-    if (field) {
-      if (typeof value !== 'undefined') {
-        this[form].fields[field].error = validation.errors.first(field);
-      }
-    }
-  };
+  setIsDirty = (form, status) => {
+    this[form].meta.isDirty = status;
+  }
 
   @action
   setIraError = (form, key, error) => {
@@ -127,103 +45,123 @@ class IraAccountStore {
   }
 
   @action
-  setIsDirty = (form, status) => {
-    this[form].meta.isDirty = status;
+  finInfoChange = (e, result) => {
+    this.FIN_INFO_FRM = FormValidator.onChange(
+      this.FIN_INFO_FRM,
+      FormValidator.pullValues(e, result),
+    );
+  }
+
+  /**
+   * @todo Do file upload related changes
+   */
+  @action
+  identityInfoChange = (e, result) => {
+    this.IDENTITY_FRM = FormValidator.onChange(
+      this.IDENTITY_FRM,
+      FormValidator.pullValues(e, result),
+    );
+  }
+
+  @action
+  accTypesChange = (e, result) => {
+    this.ACC_TYPES_FRM = FormValidator.onChange(
+      this.ACC_TYPES_FRM,
+      FormValidator.pullValues(e, result),
+    );
+  }
+
+  @action
+  fundingChange = (e, result) => {
+    this.FUNDING_FRM = FormValidator.onChange(
+      this.FUNDING_FRM,
+      FormValidator.pullValues(e, result),
+    );
   }
 
   @computed
-  get isValidIraFinancialInfo() {
-    return _.isEmpty(this.formFinInfo.fields.netWorth.error) &&
-    _.isEmpty(this.formFinInfo.fields.annualIncome.error);
+  get isValidFinancialInfo() {
+    const { netWorth, annualIncome } = this.FIN_INFO_FRM.fields;
+    return isEmpty(netWorth.error) && isEmpty(annualIncome.error);
   }
 
   @computed
-  get isValidIraIdentity() {
-    return _.isEmpty(this.formIdentity.fields.identityDoc.error);
+  get isValidIdentity() {
+    const { error } = this.IDENTITY_FRM.fields.identityDoc;
+    return isEmpty(error);
   }
 
   @computed
   get isValidIraForm() {
-    return this.formFinInfo.meta.isValid && this.formAccTypes.meta.isValid
-    && this.formFunding.meta.isValid && this.formIdentity.meta.isValid;
+    return this.FIN_INFO_FRM.meta.isValid && this.ACC_TYPES_FRM.meta.isValid
+    && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid;
+  }
+
+  @computed
+  get accountType() {
+    const { values, value } = this.ACC_TYPES_FRM.fields.iraAccountType;
+    const accountType = find(values, { value });
+    return accountType;
+  }
+
+  @computed
+  get fundingOption() {
+    const { values, value } = this.FUNDING_FRM.fields.fundingType;
+    const fundingOption = find(values, { value });
+    return fundingOption;
   }
 
   @computed
   get accountAttributes() {
     const payload = {};
-    const accountType = _.find(
-      this.formAccTypes.fields.iraAccountType.values,
-      { value: this.formAccTypes.fields.iraAccountType.value },
-    );
-    const fundingOption = _.find(
-      this.formFunding.fields.fundingType.values,
-      { value: this.formFunding.fields.fundingType.value },
-    );
     if (this.formStatus === 'submit') {
-      if (this.formFinInfo.fields.netWorth.value) {
-        payload.netWorth = this.formFinInfo.fields.netWorth.value;
-      }
-      if (this.formFinInfo.fields.annualIncome.value) {
-        payload.annualIncome = this.formFinInfo.fields.annualIncome.value;
-      }
-      if (this.formIdentity.fields.identityDoc.value) {
-        payload.identityDoc = {};
-        payload.identityDoc.fileId = this.formIdentity.fields.identityDoc.fileId;
-        payload.identityDoc.fileName = this.formIdentity.fields.identityDoc.value;
-      }
-      payload.iraAccountType = accountType.label.toLowerCase();
-      payload.fundingType = this.getFundingType(fundingOption.label.toLowerCase());
+      payload.netWorth = this.FIN_INFO_FRM.fields.netWorth.value;
+      payload.annualIncome = this.FIN_INFO_FRM.fields.annualIncome.value;
+      payload.identityDoc = {};
+      payload.identityDoc.fileId = this.IDENTITY_FRM.fields.identityDoc.fileId;
+      payload.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
+      payload.iraAccountType = this.accountType.label.toLowerCase();
+      payload.fundingType =
+        AccCreationHelper.getFundingType(this.fundingOption.label.toLowerCase());
     }
     return payload;
   }
 
-  /* eslint-disable class-methods-use-this */
-  getFundingType(label) {
-    if (label === 'check') {
-      return 'check';
-    } else if (label === 'ira transfer') {
-      return 'iraTransfer';
-    }
-    return 'directRollOver';
-  }
-
-  /* eslint-disable consistent-return */
   @action
   createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false) => {
     if (formStatus === 'submit') {
       this.setFormStatus('submit');
       this.submitForm(currentStep, formStatus, this.accountAttributes);
+    } else {
+      this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData);
     }
-    const accountType = _.find(
-      this.formAccTypes.fields.iraAccountType.values,
-      { value: this.formAccTypes.fields.iraAccountType.value },
-    );
-    const fundingOption = _.find(
-      this.formFunding.fields.fundingType.values,
-      { value: this.formFunding.fields.fundingType.value },
-    );
+  }
+
+  @action
+  validateAndSubmitStep = (currentStep, formStatus, removeUploadedData) => {
     let isValidCurrentStep = true;
     const { accountAttributes } = this;
     switch (currentStep.name) {
       case 'Financial info':
         currentStep.validate();
-        isValidCurrentStep = this.isValidIraFinancialInfo;
+        isValidCurrentStep = this.isValidFinancialInfo;
         if (isValidCurrentStep) {
           uiStore.setProgress();
-          accountAttributes.netWorth = this.formFinInfo.fields.netWorth.value;
-          accountAttributes.annualIncome = this.formFinInfo.fields.annualIncome.value;
+          accountAttributes.netWorth = this.FIN_INFO_FRM.fields.netWorth.value;
+          accountAttributes.annualIncome = this.FIN_INFO_FRM.fields.annualIncome.value;
           this.submitForm(currentStep, formStatus, accountAttributes);
         }
         break;
       case 'Account type':
         isValidCurrentStep = true;
-        accountAttributes.iraAccountType = accountType.label.toLowerCase();
+        accountAttributes.iraAccountType = this.accountType.label.toLowerCase();
         uiStore.setProgress();
         this.submitForm(currentStep, formStatus, accountAttributes);
         break;
       case 'Funding':
         isValidCurrentStep = true;
-        accountAttributes.fundingType = this.getFundingType(fundingOption.label.toLowerCase());
+        accountAttributes.fundingType =
+          AccCreationHelper.getFundingType(this.fundingOption.label.toLowerCase());
         uiStore.setProgress();
         this.submitForm(currentStep, formStatus, accountAttributes);
         break;
@@ -241,16 +179,16 @@ class IraAccountStore {
           if (isValidCurrentStep) {
             uiStore.setProgress();
             accountAttributes.identityDoc = {};
-            accountAttributes.identityDoc.fileId = this.formIdentity.fields.identityDoc.fileId;
-            accountAttributes.identityDoc.fileName = this.formIdentity.fields.identityDoc.value;
+            accountAttributes.identityDoc.fileId = this.IDENTITY_FRM.fields.identityDoc.fileId;
+            accountAttributes.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
             return new Promise((resolve, reject) => {
-              Helper.putUploadedFile([this.formIdentity.fields.identityDoc])
+              Helper.putUploadedFile([this.IDENTITY_FRM.fields.identityDoc])
                 .then(() => {
                   this.submitForm(currentStep, formStatus, accountAttributes);
                 })
                 .catch((err) => {
                   uiStore.setProgress(false);
-                  uiStore.setErrors(this.simpleErr(err));
+                  uiStore.setErrors(DataFormatter.getSimpleErr(err));
                   reject(err);
                 });
             });
@@ -260,46 +198,27 @@ class IraAccountStore {
       default:
         break;
     }
+    return true;
   }
 
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
     uiStore.setProgress();
     let mutation = createAccount;
-    let variables = {
+    const variables = {
       userId: userStore.currentUser.sub,
-      accountAttributes,
+      accountAttributes: this.accountAttributes,
       status: formStatus,
       accountType: 'ira',
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = _.find(
-        userDetailsStore.currentUser.data.user.accounts,
-        { accountType: 'ira' },
-      );
+      const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'ira' });
       if (accountDetails) {
         mutation = updateAccount;
-        variables = {
-          userId: userStore.currentUser.sub,
-          accountId: accountDetails.accountId,
-          accountAttributes,
-          status: formStatus,
-          accountType: 'ira',
-        };
+        variables.accountId = accountDetails.accountId;
         actionPerformed = 'updated';
       }
-    }
-    if (this.investorAccId) {
-      mutation = updateAccount;
-      variables = {
-        userId: userStore.currentUser.sub,
-        accountId: this.investorAccId,
-        accountAttributes,
-        status: formStatus,
-        accountType: 'ira',
-      };
-      actionPerformed = 'updated';
     }
     return new Promise((resolve, reject) => {
       client
@@ -308,30 +227,24 @@ class IraAccountStore {
           variables,
         })
         .then((result) => {
-          if (result.data.createInvestorAccount) {
-            this.setInvestorAccId(result.data.createInvestorAccount.accountId);
-            accountStore.setAccountTypeCreated(result.data.createInvestorAccount.accountType);
-          } else {
-            accountStore.setAccountTypeCreated(result.data.updateInvestorAccount.accountType);
-          }
           switch (currentStep.name) {
             case 'Financial info':
-              this.setIsDirty('formFinInfo', false);
+              this.setIsDirty('FIN_INFO_FRM', false);
               this.setStepToBeRendered(1);
               break;
             case 'Account type':
-              this.setIsDirty('formAccTypes', false);
+              this.setIsDirty('ACC_TYPES_FRM', false);
               this.setStepToBeRendered(2);
               break;
             case 'Funding':
-              this.setIsDirty('formFunding', false);
+              this.setIsDirty('FUNDING_FRM', false);
               this.setStepToBeRendered(3);
               break;
             case 'Identity':
               if (removeUploadedData) {
                 validationActions.validateIRAIdentityInfo();
               } else {
-                this.setIsDirty('formIdentity', false);
+                this.setIsDirty('IDENTITY_FRM', false);
                 this.setStepToBeRendered(4);
               }
               break;
@@ -341,14 +254,13 @@ class IraAccountStore {
           if (formStatus === 'submit') {
             Helper.toast('IRA account created successfully.', 'success');
             userDetailsStore.getUser(userStore.currentUser.sub);
-            uiStore.setDashboardWizardStep();
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           }
           resolve(result);
         })
         .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         })
         .finally(() => {
@@ -359,63 +271,64 @@ class IraAccountStore {
 
   @action
   populateData = (userData) => {
-    if (!_.isEmpty(userData)) {
-      const account = _.find(
-        userData.accounts,
-        { accountType: 'ira' },
-      );
+    if (!isEmpty(userData)) {
+      const account = find(userData.accounts, { accountType: 'ira' });
       if (account) {
-        Object.keys(this.formFinInfo.fields).map((f) => {
-          this.formFinInfo.fields[f].value = account.accountDetails[f];
-          return this.formFinInfo.fields[f];
+        Object.keys(this.FIN_INFO_FRM.fields).map((f) => {
+          this.FIN_INFO_FRM.fields[f].value = account.accountDetails[f];
+          return this.FIN_INFO_FRM.fields[f];
         });
-        this.onFieldChange('formFinInfo', undefined, undefined, false);
+        this.onFieldChange('FIN_INFO_FRM', undefined, undefined, false);
+
+        // Funding Type
         let isDirty = false;
-        Object.keys(this.formFunding.fields).map((f) => {
-          if (account.accountDetails[f] === 'check') {
-            this.formFunding.fields[f].value = 0;
-          } else if (account.accountDetails[f] === 'iraTransfer') {
-            this.formFunding.fields[f].value = 1;
-          } else if (account.accountDetails[f] === 'directRollOver') {
-            this.formFunding.fields[f].value = 2;
+        Object.keys(this.FUNDING_FRM.fields).map((f) => {
+          const value = AccCreationHelper.getFundingTypeIndex(account.accountDetails[f]);
+          if (value !== '') {
+            this.FUNDING_FRM.fields[f].value = value;
           } else {
             this.setFundingNotSet('funding');
-            this.formFunding.fields[f].value = 0;
+            this.FUNDING_FRM.fields[f].value = 0;
             isDirty = true;
           }
-          return this.formFunding.fields[f];
+          return this.FUNDING_FRM.fields[f];
         });
-        this.onFieldChange('formFunding', undefined, undefined, isDirty);
+        this.onFieldChange('FUNDING_FRM', undefined, undefined, isDirty);
+
+        // Account Types
         isDirty = false;
-        Object.keys(this.formAccTypes.fields).map((f) => {
-          if (account.accountDetails[f] === 'traditional') {
-            this.formAccTypes.fields[f].value = 0;
-          } else if (account.accountDetails[f] === 'roth') {
-            this.formAccTypes.fields[f].value = 1;
+        Object.keys(this.ACC_TYPES_FRM.fields).map((f) => {
+          const value = AccCreationHelper.getAccountTypeIndex();
+          if (value !== '') {
+            this.ACC_TYPES_FRM.fields[f].value = value;
           } else {
             this.setAccountNotSet('accType');
-            this.formAccTypes.fields[f].value = 0;
+            this.ACC_TYPES_FRM.fields[f].value = 0;
             isDirty = true;
           }
-          return this.formAccTypes.fields[f];
+          return this.ACC_TYPES_FRM.fields[f];
         });
-        this.onFieldChange('formAccTypes', undefined, undefined, isDirty);
-        Object.keys(this.formIdentity.fields).map((f) => {
+        this.onFieldChange('ACC_TYPES_FRM', undefined, undefined, isDirty);
+
+        // Identity Form
+        Object.keys(this.IDENTITY_FRM.fields).map((f) => {
           if (account.accountDetails[f]) {
-            this.formIdentity.fields[f].value = account.accountDetails[f].fileName;
-            this.formIdentity.fields[f].fileId = account.accountDetails[f].fileId;
+            this.IDENTITY_FRM.fields[f].value = account.accountDetails[f].fileName;
+            this.IDENTITY_FRM.fields[f].fileId = account.accountDetails[f].fileId;
           }
-          return this.formIdentity.fields[f];
+          return this.IDENTITY_FRM.fields[f];
         });
-        this.onFieldChange('formIdentity', undefined, undefined, false);
+        this.onFieldChange('IDENTITY_FRM', undefined, undefined, false);
+
+        // Resume the step on opening the modal
         if (!uiStore.errors) {
-          if (!this.formFinInfo.meta.isValid) {
+          if (!this.FIN_INFO_FRM.meta.isValid) {
             this.setStepToBeRendered(0);
-          } else if (!this.formAccTypes.meta.isValid || this.accountNotSet === 'accType') {
+          } else if (!this.ACC_TYPES_FRM.meta.isValid || this.accountNotSet === 'accType') {
             this.setStepToBeRendered(1);
-          } else if (!this.formFunding.meta.isValid || this.fundingNotSet === 'funding') {
+          } else if (!this.FUNDING_FRM.meta.isValid || this.fundingNotSet === 'funding') {
             this.setStepToBeRendered(2);
-          } else if (!this.formIdentity.meta.isValid) {
+          } else if (!this.IDENTITY_FRM.meta.isValid) {
             this.setStepToBeRendered(3);
           } else {
             this.setStepToBeRendered(4);
@@ -427,9 +340,9 @@ class IraAccountStore {
 
   @action
   setFileUploadData(field, files) {
-    this.formIdentity.fields[field].fileData = files;
+    this.IDENTITY_FRM.fields[field].fileData = files;
     const fileData = Helper.getFormattedFileData(files);
-    this.onFieldChange('formIdentity', field, fileData.fileName);
+    this.onFieldChange('IDENTITY_FRM', field, fileData.fileName);
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -443,13 +356,13 @@ class IraAccountStore {
         })
         .then(action((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
-          this.formIdentity.fields[field].fileId = fileId;
-          this.formIdentity.fields[field].preSignedUrl = preSignedUrl;
+          this.IDENTITY_FRM.fields[field].fileId = fileId;
+          this.IDENTITY_FRM.fields[field].preSignedUrl = preSignedUrl;
           resolve();
         }))
         .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
-          this.onFieldChange('formIdentity', field, '');
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          this.onFieldChange('IDENTITY_FRM', field, '');
           reject(err);
         })
         .finally(() => {
@@ -467,18 +380,18 @@ class IraAccountStore {
         .mutate({
           mutation: removeUploadedFile,
           variables: {
-            fileId: this.formIdentity.fields[field].fileId,
+            fileId: this.IDENTITY_FRM.fields[field].fileId,
           },
         })
         .then(() => {
-          this.onFieldChange('formIdentity', field, '');
-          this.formIdentity.fields[field].fileId = '';
-          this.formIdentity.fields[field].preSignedUrl = '';
+          this.onFieldChange('IDENTITY_FRM', field, '');
+          this.IDENTITY_FRM.fields[field].fileId = '';
+          this.IDENTITY_FRM.fields[field].preSignedUrl = '';
           this.createAccount(currentStep, 'draft', true);
           resolve();
         })
         .catch((err) => {
-          uiStore.setErrors(this.simpleErr(err));
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         })
         .finally(() => {
@@ -486,12 +399,6 @@ class IraAccountStore {
         });
     });
   }
-
-  simpleErr = err => ({
-    statusCode: err.statusCode,
-    code: err.code,
-    message: err.message,
-  });
 }
 
 export default new IraAccountStore();

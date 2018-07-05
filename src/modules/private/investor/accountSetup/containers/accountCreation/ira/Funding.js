@@ -8,18 +8,18 @@ import { FormRadioGroup } from '../../../../../../../theme/form';
 @observer
 export default class Funding extends Component {
   getOptionDetails = () => {
-    const { value, values } = this.props.iraAccountStore.formFunding.fields.fundingType;
+    const { value, values } = this.props.iraAccountStore.FUNDING_FRM.fields.fundingType;
     return find(values, v => v.value === value).description;
   };
   render() {
-    const { formFunding, fundingChange } = this.props.iraAccountStore;
+    const { FUNDING_FRM, fundingChange } = this.props.iraAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">How would you like to fund your IRA?</Header>
         <Header as="h4" textAlign="center">Choose funding option</Header>
         <Form error className="account-type-tab">
           <FormRadioGroup
-            fielddata={formFunding.fields.fundingType}
+            fielddata={FUNDING_FRM.fields.fundingType}
             name="fundingType"
             changed={fundingChange}
             containerclassname="button-radio center-align"

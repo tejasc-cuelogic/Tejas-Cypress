@@ -4,14 +4,14 @@ import mapValues from 'lodash/mapValues';
 import Helper from '../utility';
 
 class FormValidator {
-  prepareFormObject = fields => ({ fields: { ...fields }, meta: { isValid: false, error: '' }, response: {} });
+  prepareFormObject = (fields, isDirty = false, isValid = false) => ({ fields: { ...fields }, meta: { isValid, error: '', isDirty }, response: {} });
 
   pullValues = (e, data) => ({
     name: typeof data === 'undefined' ? e.target.name : data.name,
     value: typeof data === 'undefined' ? e.target.value : data.value,
   });
 
-  onChange = (form, element, type) => {
+  onChange = (form, element, type, isDirty = true) => {
     const currentForm = form;
     if (element.name) {
       if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[element.name].value)) && type !== 'dropdown')) {
@@ -33,6 +33,7 @@ class FormValidator {
     if (element.name) {
       currentForm.fields[element.name].error = validation.errors.first(element.name);
     }
+    currentForm.meta.isDirty = isDirty;
     return currentForm;
   }
 

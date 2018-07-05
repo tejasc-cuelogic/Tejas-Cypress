@@ -33,10 +33,10 @@ const data = {
   ],
 };
 
-@inject('individualAccountStore')
+@inject('bankAccountStore')
 export default class BankAccount extends Component {
   handleLinkBankInterface = () => {
-    this.props.individualAccountStore.setBankLinkInterface('list');
+    this.props.bankAccountStore.setBankLinkInterface('list');
   }
 
   render() {
@@ -50,7 +50,7 @@ export default class BankAccount extends Component {
           nec malesuada fames ac turpis
         </p>
         <Grid>
-          {isEmpty(this.props.individualAccountStore.plaidAccDetails) &&
+          {isEmpty(this.props.bankAccountStore.plaidAccDetails) &&
           <Grid.Row>
             <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
               <Card fluid>
@@ -66,7 +66,7 @@ export default class BankAccount extends Component {
             </Grid.Column>
           </Grid.Row>
           }
-          {!isEmpty(this.props.individualAccountStore.plaidAccDetails) &&
+          {!isEmpty(this.props.bankAccountStore.plaidAccDetails) &&
             <AccountDetailsView accountDetails={data.accountDetails} />
           }
           <Grid.Row>

@@ -18,23 +18,29 @@ export default class AccountCreation extends Component {
   }
   renderAccType = () => {
     const { investmentAccType } = this.props.accountStore;
-    this.props.history.push(`/app/summary/account-creation/${investmentAccType}`);
+    this.props.history.push(`${this.props.match.url}/${investmentAccType}`);
   }
   render() {
     const { investmentAccTypes } = this.props.accountStore;
     return (
       <div>
         <Switch>
-          <Route exact path="/app/summary/account-creation/individual" component={IndividualAccCreation} />
-          <Route exact path="/app/summary/account-creation/ira" component={IraAccCreation} />
-          <Route exact path="/app/summary/account-creation/entity" component={EntityAccCreation} />
+          <Route
+            exact
+            path={this.props.match.url}
+            render={props =>
+              (<AccountTypes
+                form={investmentAccTypes}
+                close={this.handleCloseModal}
+                renderAccType={this.renderAccType}
+                handleAccTypeChange={this.handleAccTypeChange}
+                {...props}
+              />)}
+          />
+          <Route exact path={`${this.props.match.url}/individual`} component={IndividualAccCreation} />
+          <Route exact path={`${this.props.match.url}/ira`} component={IraAccCreation} />
+          <Route exact path={`${this.props.match.url}/entity`} component={EntityAccCreation} />
         </Switch>
-        <AccountTypes
-          form={investmentAccTypes}
-          close={this.handleCloseModal}
-          renderAccType={this.renderAccType}
-          handleAccTypeChange={this.handleAccTypeChange}
-        />
       </div>
     );
   }

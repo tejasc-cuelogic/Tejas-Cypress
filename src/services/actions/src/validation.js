@@ -148,11 +148,11 @@ export class Validation {
   * @return null
   */
  validateIRAFinancialInfo = () => {
-   _.map(iraAccountStore.formFinInfo.fields, (value) => {
+   _.map(iraAccountStore.FIN_INFO_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     iraAccountStore.setIraError('formFinInfo', key, errors && errors[key][0]);
+     iraAccountStore.setIraError('FIN_INFO_FRM', key, errors && errors[key][0]);
    });
  }
 
@@ -162,9 +162,9 @@ export class Validation {
   */
  validateIRAIdentityInfo = () => {
    const { errors } =
-  validationService.validate(iraAccountStore.formIdentity.fields.identityDoc);
+  validationService.validate(iraAccountStore.IDENTITY_FRM.fields.identityDoc);
    // Store errors to store if any or else `undefined` will get set to it
-   iraAccountStore.setIraError('formIdentity', 'identityDoc', errors && errors.identityDoc[0]);
+   iraAccountStore.setIraError('IDENTITY_FRM', 'IDENTITY_FRM', errors && errors.identityDoc[0]);
  }
 
  /**

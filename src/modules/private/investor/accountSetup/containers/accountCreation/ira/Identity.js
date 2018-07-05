@@ -21,7 +21,7 @@ export default class Identity extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   render() {
-    const { formIdentity } = this.props.iraAccountStore;
+    const { IDENTITY_FRM } = this.props.iraAccountStore;
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <div>
@@ -35,7 +35,7 @@ export default class Identity extends Component {
         <Form className="file-uploader-large">
           <DropZoneLarge
             name="identityDoc"
-            fielddata={formIdentity.fields.identityDoc}
+            fielddata={IDENTITY_FRM.fields.identityDoc}
             ondrop={this.onIdentityDocDrop}
             onremove={this.confirmRemoveDoc}
           />
