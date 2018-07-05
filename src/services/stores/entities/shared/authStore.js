@@ -1,15 +1,20 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
+import cookie from 'react-cookies';
 import { FormValidator as Validator } from '../../../../helper';
 import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS,
 } from '../../../constants/auth';
+import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 
 export class AuthStore {
   @observable hasSession = false;
   @observable isUserLoggedIn = false;
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
-
+  @observable devAuth = {
+    required: !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV),
+    authStatus: cookie.load('DEV_AUTH_TOKEN'),
+  };
   @observable LOGIN_FRM = Validator.prepareFormObject(LOGIN);
   @observable SIGNUP_FRM = Validator.prepareFormObject(SIGNUP);
   @observable CONFIRM_FRM = Validator.prepareFormObject(CONFIRM);
@@ -71,6 +76,16 @@ export class AuthStore {
   @action
   setProgress(entity) {
     this.confirmProgress = entity;
+  }
+
+  @computed get devPasswdProtection() {
+    return this.devAuth.required && !this.devAuth.authStatus;
+  }
+
+  @action
+  setDevAppAuthStatus(status) {
+    cookie.save('DEV_AUTH_TOKEN', status, { maxAge: 86400 });
+    this.devAuth.authStatus = status;
   }
 
   @action
