@@ -1,4 +1,4 @@
-const COMMON = {
+export const COMMON = {
   email: {
     value: '',
     error: undefined,

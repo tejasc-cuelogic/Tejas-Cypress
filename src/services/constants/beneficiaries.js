@@ -1,3 +1,5 @@
+import { COMMON } from './auth';
+
 export const BENEFICIARY_FRM = {
   beneficiary: [{
     firstName: {
@@ -52,18 +54,14 @@ export const BENEFICIARY_FRM = {
       value: '',
       label: 'Shares percentage',
       error: undefined,
-      rule: 'required|numeric|sharePercentage:share',
+      rule: 'required|sharePercentage:share',
+      tooltip: 'Tooltip content',
     },
   }],
 };
 
 export const VERIFY_OTP = {
-  code: {
-    value: '',
-    label: 'Enter your verification code here:',
-    error: undefined,
-    rule: 'required|numeric',
-  },
+  code: { ...COMMON.code },
 };
 
 export const DISPLAY_NUMBER = {

@@ -3,8 +3,9 @@ import { inject, observer } from 'mobx-react';
 import { Route, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import moment from 'moment';
-import { Form, Header, Button, Confirm, Icon, Message } from 'semantic-ui-react';
-import { FormInput, AutoComplete, FormDatePicker } from '../../../../../../theme/form';
+import { Form, Header, Button, Confirm, Icon } from 'semantic-ui-react';
+import { FormInput, AutoComplete, FormDatePicker, MaskedInput2 } from '../../../../../../theme/form';
+import { FieldError } from '../../../../../../theme/shared';
 import ConfirmVerificationCode from './ConfirmVerificationCode';
 
 @inject('beneficiaryStore', 'uiStore')
@@ -61,6 +62,7 @@ export default class AddBeneficiary extends Component {
     const {
       BENEFICIARY_META,
       beneficiaryEleChange,
+      beneficiaryShareChange,
       beneficiaryDateChange,
       setAddressFields,
       beneficiaryModal,
@@ -70,13 +72,10 @@ export default class AddBeneficiary extends Component {
       BENEFICIARY_META.fields.beneficiary[0].share.error : false;
     return (
       <Aux>
-        {showError &&
-          <Message error>
-            <Icon name="warning circle" />
-            The sum of percentages must be 100
-          </Message>
-        }
         <Form onSubmit={this.submit}>
+          {showError &&
+            <FieldError error="The sum of percentages must be 100" icon="warning circle" />
+          }
           {
             BENEFICIARY_META.fields.beneficiary.length ?
               BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
@@ -138,11 +137,20 @@ export default class AddBeneficiary extends Component {
                       }
                     </Form.Group>
                     <Header as="h4">Shares</Header>
-                    <FormInput
+                    {/* <FormInput
                       type="text"
                       name="share"
                       fielddata={beneficiary.share}
                       changed={(e, result) => beneficiaryEleChange(e, result, index)}
+                    /> */}
+                    <MaskedInput2
+                      percentage
+                      showErrorOnField
+                      tooltip={beneficiary.share.tooltip}
+                      type="text"
+                      name="share"
+                      fielddata={beneficiary.share}
+                      changed={e => beneficiaryShareChange(e, index)}
                     />
                   </div>
                 </Aux>

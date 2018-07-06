@@ -213,6 +213,13 @@ export class BeneficiaryStore {
   };
 
   @action
+  beneficiaryShareChange = (e, index) => {
+    const share = parseInt(e.target.value.slice(0, -1), 10);
+    this.BENEFICIARY_META = Validator
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: share }, index);
+  };
+
+  @action
   beneficiaryDateChange = (date, index) => {
     this.BENEFICIARY_META = Validator
       .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: date }, index);

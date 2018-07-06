@@ -52,14 +52,13 @@ class FormValidator {
         currentForm.fields.beneficiary[formIndex][element.name].value = element.value;
       }
     }
-
     /* Beneficiary share percentage validation register */
     Validator.register('sharePercentage', (value, requirement) => {
       const total = sumBy(currentForm.fields.beneficiary, currentValue =>
         parseInt(currentValue[requirement].value, 10));
-      const status = total === 100 ? undefined : true;
       forEach(currentForm.fields.beneficiary, (ele, key) => {
-        currentForm.fields.beneficiary[key][requirement].error = status;
+        currentForm.fields.beneficiary[key][requirement].error = total === 100 ?
+          undefined : true;
       });
       return total === 100;
     }, 'The sum of :attribute percentages must be 100.');
