@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Form, Button } from 'semantic-ui-react';
 import { FormRadioGroup } from '../../../../../../theme/form';
 
-@inject('multiFactorAuthStore', 'uiStore', 'userDetailsStore')
+@inject('multiFactorAuthStore', 'uiStore')
 @observer
 export default class ManageMultiFactorAuth extends Component {
   submit = (e) => {

@@ -70,6 +70,9 @@ export class BeneficiaryStore {
   @action
   removeBeneficiary(index) {
     this.BENEFICIARY_META.fields.beneficiary.splice(index, 1);
+    const shareVal = this.BENEFICIARY_META.fields.beneficiary[0].share.value;
+    this.BENEFICIARY_META = Validator
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: shareVal }, 0);
     this.beneficiaryModal = !this.beneficiaryModal;
     this.removeBeneficiaryIndex = null;
   }
@@ -83,7 +86,7 @@ export class BeneficiaryStore {
   }
 
   @action beneficiaryReset = () => {
-    this.BENEFICIARY_META = { fields: { beneficiary: BENEFICIARY_FRM.beneficiary }, meta: { isValid: false, error: '' } };
+    this.BENEFICIARY_META = Validator.prepareFormObject(BENEFICIARY_FRM);
   }
 
   @computed get beneficiaries() {

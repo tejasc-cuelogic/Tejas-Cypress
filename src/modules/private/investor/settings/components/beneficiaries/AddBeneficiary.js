@@ -137,12 +137,6 @@ export default class AddBeneficiary extends Component {
                       }
                     </Form.Group>
                     <Header as="h4">Shares</Header>
-                    {/* <FormInput
-                      type="text"
-                      name="share"
-                      fielddata={beneficiary.share}
-                      changed={(e, result) => beneficiaryEleChange(e, result, index)}
-                    /> */}
                     <MaskedInput2
                       percentage
                       showErrorOnField

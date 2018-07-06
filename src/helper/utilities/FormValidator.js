@@ -63,8 +63,8 @@ class FormValidator {
       return total === 100;
     }, 'The sum of :attribute percentages must be 100.');
 
-    const formData = this.ExtractValues(toJS(currentForm.fields));
-    const formRules = this.ExtractRules(toJS(currentForm.fields));
+    const formData = this.ExtractFormValues(toJS(currentForm.fields));
+    const formRules = this.ExtractFormRules(toJS(currentForm.fields));
 
     const validation = new Validator(formData, formRules);
     currentForm.meta.isValid = validation.passes();
@@ -92,11 +92,13 @@ class FormValidator {
     return currentForm;
   }
 
-  ExtractValues = fields => mapValues(fields, f =>
+  ExtractValues = fields => mapValues(fields, f => f.value);
+
+  ExtractFormValues = fields => mapValues(fields, f =>
     (isArray(f) ? toArray(mapValues(f, d => mapValues(d, s => s.value))) :
       mapValues(f, p => p.value)));
 
-  ExtractRules = fields => reduce(mapValues(fields, (f, key) =>
+  ExtractFormRules = fields => reduce(mapValues(fields, (f, key) =>
     (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`) :
       mapKeys(mapValues(f, k => k.rule), (s, v) => `${key}.${v}`))), (a, b) => Object.assign(a, b));
 }
