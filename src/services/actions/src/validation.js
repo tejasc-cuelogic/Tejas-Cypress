@@ -171,11 +171,11 @@ export class Validation {
   * @desc Validates Entity - Financial Information on next/submit button
   */
  validateEntityFinancialInfo = () => {
-   _.map(entityAccountStore.formFinInfo.fields, (value) => {
+   _.map(entityAccountStore.FIN_INFO_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     entityAccountStore.setEntityError('formFinInfo', key, errors && errors[key][0]);
+     entityAccountStore.setEntityError('FIN_INFO_FRM', key, errors && errors[key][0]);
    });
  }
 
@@ -183,11 +183,11 @@ export class Validation {
   * @desc Validates Entity - General Information on next/submit button
   */
  validateEntityGeneralInformation = () => {
-   _.map(entityAccountStore.formGeneralInfo.fields, (value) => {
+   _.map(entityAccountStore.GEN_INFO_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     entityAccountStore.setEntityError('formGeneralInfo', key, errors && errors[key][0]);
+     entityAccountStore.setEntityError('GEN_INFO_FRM', key, errors && errors[key][0]);
    });
  }
 
@@ -195,11 +195,11 @@ export class Validation {
   * @desc Validates Entity - Info on next/submit button
   */
  validateEntityInfo = () => {
-   _.map(entityAccountStore.formEntityInfo.fields, (value) => {
+   _.map(entityAccountStore.TRUST_INFO_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     entityAccountStore.setEntityError('formEntityInfo', key, errors && errors[key][0]);
+     entityAccountStore.setEntityError('TRUST_INFO_FRM', key, errors && errors[key][0]);
    });
  }
 
@@ -207,11 +207,11 @@ export class Validation {
   * @desc Validates Entity - Personal Info on next/submit button
   */
  validateEntityPersonalInfo = () => {
-   _.map(entityAccountStore.formPersonalInfo.fields, (value) => {
+   _.map(entityAccountStore.PERSONAL_INFO_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     entityAccountStore.setEntityError('formPersonalInfo', key, errors && errors[key][0]);
+     entityAccountStore.setEntityError('PERSONAL_INFO_FRM', key, errors && errors[key][0]);
    });
  }
 
@@ -219,11 +219,11 @@ export class Validation {
   * @desc Validates Entity - Formation Docs on next/submit button
   */
  validateEntityFormationDoc = () => {
-   _.map(entityAccountStore.formFormationDocuments.fields, (value) => {
+   _.map(entityAccountStore.FORM_DOCS_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     entityAccountStore.setEntityError('formFormationDocuments', key, errors && errors[key][0]);
+     entityAccountStore.setEntityError('FORM_DOCS_FRM', key, errors && errors[key][0]);
    });
  }
 

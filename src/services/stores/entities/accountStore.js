@@ -1,6 +1,4 @@
 import { observable, action, computed } from 'mobx';
-import Validator from 'validatorjs';
-import mapValues from 'lodash/mapValues';
 import {
   INVESTMENT_ACCOUNT_TYPES,
   ACC_TYPE,
@@ -47,27 +45,6 @@ export class AccountStore {
   }
 
   @action
-  onFieldChange = (currentForm, field, value) => {
-    const form = currentForm || 'formAddFunds';
-    if (field) {
-      if (typeof value !== 'undefined') {
-        this[form].fields[field].value = value;
-      }
-    }
-    const validation = new Validator(
-      mapValues(this[form].fields, f => f.value),
-      mapValues(this[form].fields, f => f.rule),
-    );
-    this[form].meta.isValid = validation.passes();
-    this[form].meta.isDirty = true;
-    if (field) {
-      if (typeof value !== 'undefined') {
-        this[form].fields[field].error = validation.errors.first(field);
-      }
-    }
-  };
-
-  @action
   setAccountError = (form, key, error) => {
     this[form].fields[key].error = error;
   }
@@ -100,11 +77,5 @@ export class AccountStore {
     }
     return type;
   }
-
-  simpleErr = err => ({
-    statusCode: err.statusCode,
-    code: err.code,
-    message: err.message,
-  });
 }
 export default new AccountStore();

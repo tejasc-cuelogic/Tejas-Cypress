@@ -55,7 +55,11 @@ class FormValidator {
     const { state, city, zipCode } = form.fields;
     const currentForm = form;
     const data = Helper.gAddressClean(place);
-    currentForm.fields.residentalStreet.value = data.residentalStreet;
+    if (currentForm.fields.street) {
+      currentForm.fields.street.value = data.residentalStreet;
+    } else {
+      currentForm.fields.residentalStreet.value = data.residentalStreet;
+    }
     state.value = data.state;
     city.value = data.city;
     zipCode.value = data.zipCode;

@@ -12,7 +12,7 @@ import AccountCreation from './accountCreation';
 @observer
 export default class AccountSetup extends Component {
   componentWillMount() {
-    // this.props.userDetailsStore.setUserAccDetails();
+    this.props.userDetailsStore.setUserAccDetails();
   }
 
   renderStep = (step) => {

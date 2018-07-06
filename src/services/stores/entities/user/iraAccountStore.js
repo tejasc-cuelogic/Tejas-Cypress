@@ -23,6 +23,8 @@ class IraAccountStore {
 
   @observable formStatus = 'draft';
   @observable stepToBeRendered = 0;
+  @observable fundingNotSet = '';
+  @observable accountNotSet = '';
 
   @action
   setFormStatus(formStatus) {
@@ -42,6 +44,16 @@ class IraAccountStore {
   @action
   setIraError = (form, key, error) => {
     this[form].fields[key].error = error;
+  }
+
+  @action
+  setAccountNotSet(step) {
+    this.accountNotSet = step;
+  }
+
+  @action
+  setFundingNotSet(step) {
+    this.fundingNotSet = step;
   }
 
   @action
@@ -274,11 +286,12 @@ class IraAccountStore {
     if (!isEmpty(userData)) {
       const account = find(userData.accounts, { accountType: 'ira' });
       if (account) {
+        // Financial Information
         Object.keys(this.FIN_INFO_FRM.fields).map((f) => {
           this.FIN_INFO_FRM.fields[f].value = account.accountDetails[f];
           return this.FIN_INFO_FRM.fields[f];
         });
-        this.onFieldChange('FIN_INFO_FRM', undefined, undefined, false);
+        FormValidator.onChange(this.FIN_INFO_FRM, '', '', false);
 
         // Funding Type
         let isDirty = false;
@@ -293,7 +306,7 @@ class IraAccountStore {
           }
           return this.FUNDING_FRM.fields[f];
         });
-        this.onFieldChange('FUNDING_FRM', undefined, undefined, isDirty);
+        FormValidator.onChange(this.FUNDING_FRM, '', '', isDirty);
 
         // Account Types
         isDirty = false;
@@ -308,7 +321,7 @@ class IraAccountStore {
           }
           return this.ACC_TYPES_FRM.fields[f];
         });
-        this.onFieldChange('ACC_TYPES_FRM', undefined, undefined, isDirty);
+        FormValidator.onChange(this.ACC_TYPES_FRM, '', '', isDirty);
 
         // Identity Form
         Object.keys(this.IDENTITY_FRM.fields).map((f) => {
@@ -318,7 +331,7 @@ class IraAccountStore {
           }
           return this.IDENTITY_FRM.fields[f];
         });
-        this.onFieldChange('IDENTITY_FRM', undefined, undefined, false);
+        FormValidator.onChange(this.IDENTITY_FRM, '', '', false);
 
         // Resume the step on opening the modal
         if (!uiStore.errors) {

@@ -1,10 +1,10 @@
 import { observable, action } from 'mobx';
 import { FormValidator as Validator } from '../../../helper';
-import { NEW_USER } from '../../../constants/user';
+// import { NEW_USER } from '../../../constants/user';
 
 export class UserStore {
   @observable currentUser;
-  @observable USR_FRM = Validator.prepareFormObject(NEW_USER);
+  // @observable USR_FRM = Validator.prepareFormObject(NEW_USER);
 
   @action
   userEleChange = (e, result) => {
@@ -17,10 +17,10 @@ export class UserStore {
     this[form].meta.error = error.message;
   }
 
-  @action
-  userReset = () => {
-    this.USR_FRM = Validator.prepareFormObject(NEW_USER);
-  }
+  // @action
+  // userReset = () => {
+  //   this.USR_FRM = Validator.prepareFormObject(NEW_USER);
+  // }
 
   @action forgetUser() {
     this.currentUser = undefined;
