@@ -8,7 +8,7 @@ import campaign3 from '../../../../assets/images/campaign-3.jpg';
 import filterIcon from '../../../../assets/images/icon_filter.png';
 import lockIcon from '../../../../assets/images/icon_lock.png';
 // import closeIcon from '../../../../assets/images/icon_close.png';
-// import OfferFilter from '../components/OfferFilter';
+import OfferFilter from '../components/OfferFilter';
 
 class Offering extends Component {
   render() {
@@ -127,7 +127,7 @@ class Offering extends Component {
               </Card>
             </Card.Group>
           </Container>
-          {/* <OfferFilter /> */}
+          <OfferFilter />
         </section>
       </Aux>
     );

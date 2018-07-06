@@ -27,19 +27,19 @@ const offerFilter = () => (
                     <Checkbox
                       label="Revenue Sharing"
                     />
-                    <Popup trigger={<Icon name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                    <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                   </Form.Field>
                   <Form.Field>
                     <Checkbox
                       label="Term Note"
                     />
-                    <Popup trigger={<Icon name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                    <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                   </Form.Field>
                   <Form.Field>
                     <Checkbox
                       label="Equity"
                     />
-                    <Popup trigger={<Icon name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                    <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                   </Form.Field>
                 </Form>
               </div>
@@ -52,25 +52,25 @@ const offerFilter = () => (
                     <Checkbox
                       label="Reg A"
                     />
-                    <Popup trigger={<Icon name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                    <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                   </Form.Field>
                   <Form.Field>
                     <Checkbox
                       label="Reg D"
                     />
-                    <Popup trigger={<Icon name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                    <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                   </Form.Field>
                   <Form.Field>
                     <Checkbox
                       label="Reg CF"
                     />
-                    <Popup trigger={<Icon name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                    <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                   </Form.Field>
                   <Form.Field>
                     <Checkbox
                       label="Reg F"
                     />
-                    <Popup trigger={<Icon name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                    <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                   </Form.Field>
                 </Form>
               </div>

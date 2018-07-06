@@ -89,8 +89,11 @@ footer{
 .filter-menu {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
+    height: @60px;
+
     .ui.text.menu {
         margin: 0;
+        height: @60px;
         .item {
             font-weight: @fontMedium;
             font-size: @14px;

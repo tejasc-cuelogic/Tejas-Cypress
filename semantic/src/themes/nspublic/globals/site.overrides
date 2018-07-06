@@ -172,9 +172,6 @@ footer{
 			font-size: @16px;
 			line-height: @16px;
 			color: @neutral-light;
-			&.help {
-				color: @green;
-			}
 		}
 		.checkboxGroup {
 			.ui.label {
