@@ -348,3 +348,44 @@ export const ACC_TYPE = {
     rule: 'required',
   },
 };
+
+export const EMPLOYMENT = {
+  employmentStatus: {
+    key: 'employmentStatus',
+    value: true,
+    values:
+      [
+        { label: 'Employed', value: 'employed' },
+        { label: 'Self Employed', value: 'selfemployed' },
+        { label: 'Retired', value: 'retired' },
+        { label: 'Student', value: 'student' },
+        { label: 'Not Employee', value: 'notemployee' },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+  employer: {
+    key: 'employer',
+    value: '',
+    label: 'Employer',
+    error: undefined,
+    rule: 'required|string',
+  },
+  currentPosition: {
+    key: 'currentPosition',
+    value: '',
+    label: 'Current Position Held',
+    error: undefined,
+    rule: 'required|string',
+  },
+};
+
+export const INVESTOR_PROFILE = {
+  profileType: {
+    key: 'profileType',
+    value: true,
+    values: [{ label: 'Individual', value: 'individual' }, { label: 'Joint(Married)', value: 'joint' }],
+    error: undefined,
+    rule: 'required',
+  },
+};

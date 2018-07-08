@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import Employment from '../../components/establishProfile/Employment';
+import AccountCreation from './AccountCreation';
 
 @withRouter
 export default class EstablishProfile extends Component {
@@ -10,9 +10,7 @@ export default class EstablishProfile extends Component {
   render() {
     return (
       <div>
-        <Employment
-          close={this.handleCloseModal}
-        />
+        <AccountCreation />
       </div>
     );
   }
