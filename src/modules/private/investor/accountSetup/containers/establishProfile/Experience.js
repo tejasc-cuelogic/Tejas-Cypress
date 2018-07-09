@@ -39,7 +39,9 @@ export default class Experience extends Component {
             defaults
             containerclassname="ui relaxed list"
           />
-          <Button primary size="large">Send verification request</Button>
+          <div className="center-align mt-30">
+            <Button primary size="large">Send verification request</Button>
+          </div>
         </Form>
       </div>
     );
