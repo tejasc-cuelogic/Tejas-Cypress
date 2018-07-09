@@ -6,7 +6,7 @@ import { Icon, Header, Button, Confirm, Responsive } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import FillingsList from '../components/FillingsList';
-import { uiActions, businessActions } from '../../../../../services/actions';
+import { businessActions } from '../../../../../services/actions';
 import NewBusinessForm from '../containers/NewBusinessForm';
 import { Spinner } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
@@ -18,7 +18,7 @@ export default class BusinessDetails extends React.Component {
     businessActions.getBusinessDetails(this.props.match.params.businessId);
   }
 
-  handleAccordionTitleClick = (e, { dataid }) => uiActions.setOpenAccordion(dataid);
+  handleAccordionTitleClick = (e, { dataid }) => this.props.uiStore.setOpenAccordion(dataid);
 
   handleNewFiling = () => this.props.history.push(`/app/edgar/${this.props.match.params.businessId}/edgar`);
 

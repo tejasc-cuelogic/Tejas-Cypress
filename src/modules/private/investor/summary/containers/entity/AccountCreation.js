@@ -8,10 +8,10 @@ import General from './General';
 import FinancilInfo from './FinancialInfo';
 import PersonalInformation from './PersonalInformation';
 import FormationDocuments from './FormationDocuments';
-import LinkBankAccount from '../individual/LinkBankPlaid';
+import { Plaid } from '../../../../shared/bankAccount';
 import Summary from './Summary';
 
-@inject('uiStore', 'accountStore', 'entityAccountStore', 'userDetailsStore', 'userStore')
+@inject('uiStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore')
 @observer
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
@@ -65,10 +65,10 @@ export default class AccountCreation extends React.Component {
       },
       {
         name: 'Link bank',
-        component: <LinkBankAccount />,
+        component: <Plaid />,
         isValid: '',
-        isDirty: !_.isEmpty(this.props.accountStore.plaidBankDetails) ||
-        this.props.accountStore.formLinkBankManually.meta.isDirty,
+        isDirty: !_.isEmpty(this.props.bankAccountStore.plaidBankDetails) ||
+        this.props.bankAccountStore.formLinkBankManually.meta.isDirty,
         validate: validationActions.validateLinkBankForm,
       },
       {

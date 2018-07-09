@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import _ from 'lodash';
 import { Header, Button, Image, Grid, Form, Loader, Input, Dimmer } from 'semantic-ui-react';
-import { accountActions } from '../../../../../../services/actions';
-import LinkBankForm from './LinkBankForm';
-import defaultBankLogo from '../../../../../../assets/images/banks/default.png';
-import { IND_BANK_LIST } from '../../../../../../constants/account';
+import { bankAccountActions } from '../../../../../services/actions';
+import ManualForm from './ManualForm';
+import defaultBankLogo from '../../../../../assets/images/banks/default.png';
+import { IND_BANK_LIST } from '../../../../../constants/account';
 
-@inject('accountStore', 'uiStore')
+@inject('bankAccountStore', 'uiStore')
 @withRouter
 @observer
-export default class LinkBankPlaid extends Component {
+export default class Plaid extends Component {
   render() {
     const {
       bankLinkInterface,
       formBankSearch,
       bankSearchChange,
       bankListing,
-    } = this.props.accountStore;
+    } = this.props.bankAccountStore;
     const { inProgress } = this.props.uiStore;
     if (bankLinkInterface === 'form') {
-      return <LinkBankForm />;
+      return <ManualForm />;
     }
     return (
       <div>
@@ -36,7 +35,7 @@ export default class LinkBankPlaid extends Component {
             iconPosition="left"
             value={formBankSearch.fields.bankName.value}
             onChange={bankSearchChange}
-            onKeyPress={accountActions.bankSearch}
+            onKeyPress={bankAccountActions.bankSearch}
           />
         </Form>
         <div className="bank-list">
@@ -51,13 +50,13 @@ export default class LinkBankPlaid extends Component {
           {
             <Grid centered>
               {
-                _.map(bankListing, bankData => (
+                bankListing.map(bankData => (
                   <Grid.Column key={bankData.institution_id} computer={5} tablet={5} mobile={8}>
                     <Link
                       as="a"
                       className="bank-link"
                       to={this.props.match.url}
-                      onClick={() => accountActions.bankSelect(bankData.institution_id)}
+                      onClick={() => bankAccountActions.bankSelect(bankData.institution_id)}
                     >
                       <span>
                         {bankData.logo !== null && <Image centered size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
@@ -69,17 +68,17 @@ export default class LinkBankPlaid extends Component {
                 ))
               }
               {typeof bankListing === 'undefined' &&
-                _.map(IND_BANK_LIST, bankData => (
+                IND_BANK_LIST.map(bankData => (
                   <Grid.Column key={bankData.institutionID} computer={5} tablet={5} mobile={8}>
                     <Link
                       as="a"
                       className="bank-link"
                       to={this.props.match.url}
-                      onClick={() => accountActions.bankSelect(bankData.institutionID)}
+                      onClick={() => bankAccountActions.bankSelect(bankData.institutionID)}
                     >
                       {/* eslint-disable import/no-dynamic-require */}
                       {/* eslint-disable global-require */}
-                      <Image centered src={require(`../../../../../../assets/images/banks/${bankData.institutionID}.png`)} />
+                      <Image centered src={require(`../../../../../assets/images/banks/${bankData.institutionID}.png`)} />
                     </Link>
                   </Grid.Column>
                 ))
@@ -88,7 +87,7 @@ export default class LinkBankPlaid extends Component {
           }
         </div>
         <div className="center-align">
-          <Button className="theme-link" primary onClick={() => this.props.accountStore.setBankLinkInterface('form')}>or enter it manually</Button>
+          <Button className="theme-link" primary onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')}>or enter it manually</Button>
         </div>
       </div>
     );

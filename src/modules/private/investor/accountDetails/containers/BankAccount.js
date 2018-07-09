@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import { Header, Grid, Card, Divider, Button } from 'semantic-ui-react';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import AccountDetailsView from '../components/bankaccount/AccountDetailsView';
 import { FaqWidget } from '../../../../../theme/shared';
 import LinkBankAccount from './LinkBankAccount';
@@ -33,10 +33,10 @@ const data = {
   ],
 };
 
-@inject('individualAccountStore')
+@inject('bankAccountStore')
 export default class BankAccount extends Component {
   handleLinkBankInterface = () => {
-    this.props.individualAccountStore.setBankLinkInterface('list');
+    this.props.bankAccountStore.setBankLinkInterface('list');
   }
 
   render() {
@@ -50,7 +50,7 @@ export default class BankAccount extends Component {
           nec malesuada fames ac turpis
         </p>
         <Grid>
-          {_.isEmpty(this.props.individualAccountStore.plaidAccDetails) &&
+          {isEmpty(this.props.bankAccountStore.plaidAccDetails) &&
           <Grid.Row>
             <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
               <Card fluid>
@@ -66,7 +66,7 @@ export default class BankAccount extends Component {
             </Grid.Column>
           </Grid.Row>
           }
-          {!_.isEmpty(this.props.individualAccountStore.plaidAccDetails) &&
+          {!isEmpty(this.props.bankAccountStore.plaidAccDetails) &&
             <AccountDetailsView accountDetails={data.accountDetails} />
           }
           <Grid.Row>

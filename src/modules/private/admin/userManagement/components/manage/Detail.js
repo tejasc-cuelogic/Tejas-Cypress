@@ -15,8 +15,8 @@ const states = {
 @observer
 export default class Detail extends Component {
   render() {
-    const { currentUser } = this.props.userDetailsStore;
-    const details = toJS({ ...currentUser.data.user });
+    const { detailsOfUser } = this.props.userDetailsStore;
+    const details = toJS({ ...detailsOfUser.data.user });
     const { legalAddress } = details.legalDetails;
     const { phone } = details.contactDetails;
 

@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import _ from 'lodash';
-import { accountStore, uiStore, userStore, userDetailsStore } from '../../index';
+import { accountStore, bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { createAccount, updateAccount } from '../../queries/account';
 import Helper from '../../../../helper/utility';
@@ -18,15 +18,7 @@ class IndividualAccountStore {
   investorAccId = '';
 
   @observable
-  depositMoneyNow = true;
-
-  @observable
   formStatus = 'draft';
-
-  @action
-  setDepositMoneyNow(status) {
-    this.depositMoneyNow = status;
-  }
 
   @action
   setInvestorAccId(id) {
@@ -41,15 +33,15 @@ class IndividualAccountStore {
   /* eslint-disable class-methods-use-this */
   accountAttributes() {
     const accountAttributes = {};
-    if (accountStore.bankLinkInterface === 'list' && !_.isEmpty(accountStore.plaidBankDetails)) {
-      accountAttributes.plaidAccessToken = accountStore.plaidBankDetails.plaidAccessToken;
-      accountAttributes.plaidAccountId = accountStore.plaidBankDetails.plaidAccountId;
-      accountAttributes.bankName = accountStore.plaidBankDetails.bankName;
-      accountAttributes.accountNumber = accountStore.plaidBankDetails.accountNumber;
-      accountAttributes.routingNumber = accountStore.plaidBankDetails.routingNumber;
-      accountAttributes.plaidItemId = accountStore.plaidBankDetails.plaidItemId;
+    if (bankAccountStore.bankLinkInterface === 'list' && !_.isEmpty(bankAccountStore.plaidBankDetails)) {
+      accountAttributes.plaidAccessToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
+      accountAttributes.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
+      accountAttributes.bankName = bankAccountStore.plaidBankDetails.bankName;
+      accountAttributes.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
+      accountAttributes.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
+      accountAttributes.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
     } else {
-      const { accountNumber, routingNumber } = accountStore.formLinkBankManually.fields;
+      const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
       accountAttributes.accountNumber = accountNumber.value;
       accountAttributes.routingNumber = routingNumber.value;
     }
@@ -142,16 +134,16 @@ class IndividualAccountStore {
       if (account) {
         if (account.accountDetails.plaidItemId) {
           const plaidAccDetails = account.accountDetails;
-          accountStore.setPlaidAccDetails(plaidAccDetails);
+          bankAccountStore.setPlaidAccDetails(plaidAccDetails);
         } else {
-          Object.keys(accountStore.formLinkBankManually.fields).map((f) => {
-            accountStore.formLinkBankManually.fields[f].value = account.accountDetails[f];
-            return accountStore.formLinkBankManually.fields[f];
+          Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
+            bankAccountStore.formLinkBankManually.fields[f].value = account.accountDetails[f];
+            return bankAccountStore.formLinkBankManually.fields[f];
           });
-          accountStore.onFieldChange('formLinkBankManually');
+          bankAccountStore.onFieldChange('formLinkBankManually');
         }
-        if (accountStore.formLinkBankManually.meta.isValid ||
-          !_.isEmpty(accountStore.plaidAccDetails)) {
+        if (bankAccountStore.formLinkBankManually.meta.isValid ||
+          !_.isEmpty(bankAccountStore.plaidAccDetails)) {
           this.setStepToBeRendered(2);
         }
       }

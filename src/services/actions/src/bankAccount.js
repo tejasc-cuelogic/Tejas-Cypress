@@ -1,28 +1,15 @@
-import validationActions from './validation';
 import {
   PLAID_ENV, PLAID_URL, PLAID_PUBLIC_KEY,
 } from '../../../constants/account';
 import apiService from '../../../api/restApi';
-import { accountStore, individualAccountStore, uiStore } from '../../stores';
+import { bankAccountStore, individualAccountStore, uiStore } from '../../stores';
 import Helper from '../../../helper/utility';
 
-export class Account {
-  /**
-   * @todo To create a common method for getting different address components
-   * from google autocomplete address
-   */
-  setAddressFieldsOnGoogleAutocomplete = (place) => {
-    const data = Helper.gAddressClean(place);
-    validationActions.validateEntityAccountField('street', data.residentalStreet);
-    validationActions.validateEntityAccountField('city', data.city);
-    validationActions.validateEntityAccountField('state', data.state);
-    validationActions.validateEntityAccountField('zipCode', data.zipCode);
-  }
-
+export class BankAccount {
   bankSearch = (e) => {
     if (e.charCode === 13) {
       uiStore.setProgress();
-      const { value } = accountStore.formBankSearch.fields.bankName;
+      const { value } = bankAccountStore.formBankSearch.fields.bankName;
       if (value !== '') {
         const payload = {
           public_key: PLAID_PUBLIC_KEY,
@@ -34,10 +21,10 @@ export class Account {
           },
         };
         apiService.postNoAuth(PLAID_URL, payload)
-          .then(data => accountStore.setBankListing(data.body.institutions))
+          .then(data => bankAccountStore.setBankListing(data.body.institutions))
           .finally(() => uiStore.setProgress(false));
       } else {
-        accountStore.setBankListing();
+        bankAccountStore.setBankListing();
         uiStore.setProgress(false);
       }
     }
@@ -54,10 +41,9 @@ export class Account {
         // The Link module finished loading.
       },
       onSuccess: (publicToken, metadata) => {
-        accountStore.setPlaidAccDetails(metadata);
-        accountStore.getPlaidAccountData().then(() => {
-        })
-          .catch(() => { });
+        bankAccountStore.setPlaidAccDetails(metadata);
+        bankAccountStore.getPlaidAccountData().then(() => {
+        }).catch(() => { });
         Helper.toast(`Bank ${metadata.institution.name} with account id ${Helper.encryptNumber(metadata.account_id)} successfully linked.`, 'success');
         individualAccountStore.setStepToBeRendered(1);
       },
@@ -73,4 +59,4 @@ export class Account {
   }
 }
 
-export default new Account();
+export default new BankAccount();

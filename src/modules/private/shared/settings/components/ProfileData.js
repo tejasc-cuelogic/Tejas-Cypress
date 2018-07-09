@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
 import { FormSelect, FormInput, MaskedInput, AutoComplete } from '../../../../../theme/form';
 import { US_STATES } from '../../../../../constants/account';
@@ -47,7 +47,7 @@ export default class ProfileData extends Component {
       updateProfileInfoChange,
       setAddressFields,
     } = this.props.profileStore;
-    if (_.isEmpty(this.props.userDetailsStore.userDetails)) {
+    if (isEmpty(this.props.userDetailsStore.userDetails)) {
       return (
         <div>
           <Spinner loaderMessage="Loading..." />
