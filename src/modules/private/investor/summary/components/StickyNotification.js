@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Statistic } from 'semantic-ui-react';
-import { isEmpty } from 'lodash';
+import _ from 'lodash';
 import Helper from '../../../../../helper/utility';
 
 const stepinfo = {
@@ -12,9 +12,11 @@ const stepinfo = {
 const checkStatus = (signupStatus) => {
   let accCreation = signupStatus.partialAccounts.concat(signupStatus.inActiveAccounts);
   accCreation = Helper.eleToUpperCaseInArray(accCreation);
-  if (signupStatus.idVerification !== 'PASS' && signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING' && signupStatus.phoneVerification !== 'DONE') {
+  if (signupStatus.idVerification !== 'PASS' && signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING') {
     stepinfo.title = 'Please verify your identity in order to proceed';
-  } else if (!isEmpty(signupStatus.accounts)) {
+  } else if (signupStatus.phoneVerification !== 'DONE') {
+    stepinfo.title = 'Please verify your phone number in order to proceed';
+  } else if (!_.isEmpty(signupStatus.accounts)) {
     stepinfo.title = 'You can open your another NextSeed account!';
     stepinfo.group = 'Congratulations!';
     if (accCreation.length === 1) {

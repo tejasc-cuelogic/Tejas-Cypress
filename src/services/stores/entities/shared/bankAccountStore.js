@@ -52,6 +52,11 @@ export class BankAccountStore {
   };
 
   @action
+  linkBankFormChange = () => {
+    this.formLinkBankManually = Validator.onChange(this.formLinkBankManually);
+  };
+
+  @action
   resetLinkBankForm() {
     Validator.resetFormData(this.formLinkBankManually);
   }

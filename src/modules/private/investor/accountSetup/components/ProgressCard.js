@@ -6,9 +6,7 @@ const progressMeta = Helper.Progress();
 
 const checkStatus = (signupStatus, key) => {
   let status = false;
-  if (key === 'envelope-line') {
-    status = 2;
-  } else if (key === 'contact-card') {
+  if (key === 'contact-card') {
     if (signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') {
       status = 2;
     } else {

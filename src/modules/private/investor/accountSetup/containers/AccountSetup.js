@@ -29,7 +29,7 @@ export default class AccountSetup extends Component {
     const { match } = this.props;
     const { signupStatus } = this.props.userDetailsStore;
     return (
-      <PrivateLayout {...this.props} P5={<StickyNotification />}>
+      <PrivateLayout {...this.props} P5={<StickyNotification signupStatus={signupStatus} />}>
         <h3>Progress of your account creation</h3>
         <ProgressCard
           renderStep={this.renderStep}

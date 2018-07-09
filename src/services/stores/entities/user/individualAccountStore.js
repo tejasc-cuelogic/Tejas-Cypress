@@ -136,7 +136,7 @@ class IndividualAccountStore {
             bankAccountStore.formLinkBankManually.fields[f].value = account.accountDetails[f];
             return bankAccountStore.formLinkBankManually.fields[f];
           });
-          bankAccountStore.onFieldChange('formLinkBankManually');
+          bankAccountStore.linkBankFormChange();
         }
         if (bankAccountStore.formLinkBankManually.meta.isValid ||
           !isEmpty(bankAccountStore.plaidAccDetails)) {
