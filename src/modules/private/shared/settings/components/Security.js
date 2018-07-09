@@ -45,7 +45,7 @@ export default class Security extends Component {
                           <dt>E-mail {activeMfa === 1 && <Label color="green" size="mini">Active MFA</Label> }</dt>
                           <dd>{userDetails.email} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-email-address">Update Email</Link></dd>
                           <dt>Phone {activeMfa === 0 && <Label color="green" size="mini">Active MFA</Label> }</dt>
-                          <dd>{userDetails.contactDetails ? userDetails.contactDetails.phone.number : 'loading...'} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-phone-number">Update Phone</Link></dd>
+                          <dd>{userDetails.contactDetails && userDetails.contactDetails.phone ? userDetails.contactDetails.phone.number : '--'} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-phone-number">Update Phone</Link></dd>
                         </dl>
                       ) : null}
                       {section.action[0] === 'social-connect' ? (
