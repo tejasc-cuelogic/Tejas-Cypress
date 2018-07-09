@@ -1,7 +1,7 @@
 class Helper {
   Progress = () => {
     const metaData = {
-      'contact-card': { step: 0, label: 'Identity Identity', action: false },
+      'contact-card': { step: 0, label: 'Verify identity', action: false },
       'phone-line': { step: 1, label: 'Establish Investor Profile', action: false },
       'envelope-line': { step: 2, label: 'Create Investment Account', action: false },
     };

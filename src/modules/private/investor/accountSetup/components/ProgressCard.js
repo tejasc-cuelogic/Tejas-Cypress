@@ -51,7 +51,7 @@ const ProgressCard = props => (
               <p><b>{currentCard.label}</b></p>
               <Button
                 color="green"
-                content="Verify Identity"
+                content="Continue"
                 onClick={() => props.renderStep(currentCard.step)}
               />
             </Card.Content>
