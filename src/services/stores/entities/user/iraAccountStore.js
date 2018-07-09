@@ -57,11 +57,16 @@ class IraAccountStore {
   }
 
   @action
-  finInfoChange = (e, result) => {
-    this.FIN_INFO_FRM = FormValidator.onChange(
-      this.FIN_INFO_FRM,
+  formChange = (e, result, form) => {
+    this[form] = FormValidator.onChange(
+      this[form],
       FormValidator.pullValues(e, result),
     );
+  }
+
+  @action
+  finInfoChange = (e, result) => {
+    this.formChange(e, result, 'FIN_INFO_FRM');
   }
 
   /**
@@ -69,26 +74,17 @@ class IraAccountStore {
    */
   @action
   identityInfoChange = (e, result) => {
-    this.IDENTITY_FRM = FormValidator.onChange(
-      this.IDENTITY_FRM,
-      FormValidator.pullValues(e, result),
-    );
+    this.formChange(e, result, 'IDENTITY_FRM');
   }
 
   @action
   accTypesChange = (e, result) => {
-    this.ACC_TYPES_FRM = FormValidator.onChange(
-      this.ACC_TYPES_FRM,
-      FormValidator.pullValues(e, result),
-    );
+    this.formChange(e, result, 'ACC_TYPES_FRM');
   }
 
   @action
   fundingChange = (e, result) => {
-    this.FUNDING_FRM = FormValidator.onChange(
-      this.FUNDING_FRM,
-      FormValidator.pullValues(e, result),
-    );
+    this.formChange(e, result, 'FUNDING_FRM');
   }
 
   @computed
