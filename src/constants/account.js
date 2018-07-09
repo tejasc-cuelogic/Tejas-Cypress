@@ -369,23 +369,120 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Employer',
     error: undefined,
-    rule: 'required|string',
+    rule: 'required_with:employmentStatus',
+    placeHolder: 'Type employer name',
   },
   currentPosition: {
     key: 'currentPosition',
     value: '',
     label: 'Current Position Held',
     error: undefined,
-    rule: 'required|string',
+    rule: 'required_with:employmentStatus',
+    placeHolder: 'E.g. CEO',
   },
 };
 
 export const INVESTOR_PROFILE = {
   profileType: {
-    key: 'profileType',
     value: true,
     values: [{ label: 'Individual', value: 'individual' }, { label: 'Joint(Married)', value: 'joint' }],
     error: undefined,
     rule: 'required',
+  },
+};
+
+export const FINANCES = {
+  netWorth: {
+    value: '',
+    label: 'Net Worth(Excluding Primary Residence)',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Net Worth',
+  },
+  annualIncome1: {
+    value: '',
+    label: 'Annual Income 2016',
+    error: undefined,
+    rule: 'required',
+    placeHolder: '$60,000',
+  },
+  annualIncome2: {
+    value: '',
+    label: 'Annual Income 2017',
+    error: undefined,
+    rule: 'required',
+    placeHolder: '$60,000',
+  },
+  annualIncome3: {
+    value: '',
+    label: 'Annual Income 2018',
+    error: undefined,
+    rule: 'required',
+    placeHolder: '$60,000',
+  },
+  checkbox1: {
+    value: [],
+    values: [
+      {
+        label: 'I am (or a member of my immediate family is) a director, 10% shareholder, or senior officer of a publicity traded company. The name of the company is ',
+        value: 'iamadirector',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  checkbox2: {
+    value: [],
+    values: [
+      {
+        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm od a stock exchange orFINRA. The name of firm is ',
+        value: 'iamamember',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  companyName: {
+    value: '',
+    label: ' ',
+    error: undefined,
+    rule: 'required_with: checkbox1',
+  },
+  firmName: {
+    value: '',
+    label: ' ',
+    error: undefined,
+    rule: 'required_with: checkbox2',
+  },
+};
+
+export const INVESTMENT_EXPERIENCE = {
+  experienceInfo: {
+    value: '',
+    values: [{ label: 'No experience', value: '1' }, { label: 'I know what I’m doing', value: '2' }, { label: 'I have some experience', value: '3' }, { label: 'I’m an expert', value: '4' }],
+    error: undefined,
+    rule: 'required',
+  },
+  checkbox1: {
+    value: [],
+    values: [
+      {
+        label: 'Investing in private business is not for investors with short-term time horizons.  Are you comfortable investing in securities that have limited liquidty?',
+        value: 'checkbox1',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  checkbox2: {
+    value: [],
+    values: [
+      {
+        label: 'Investing in private business involves risk.  When investing on NextSeed, are you willing to take on significant risk to potentially earn a return in your investment?',
+        value: 'checkbox2',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
   },
 };

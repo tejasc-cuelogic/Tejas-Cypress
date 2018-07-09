@@ -27,11 +27,13 @@ export default class AccountSetup extends Component {
 
   render() {
     const { match } = this.props;
+    const { signupStatus } = this.props.userDetailsStore;
     return (
       <PrivateLayout {...this.props} P5={<StickyNotification />}>
         <h3>Progress of your account creation</h3>
         <ProgressCard
           renderStep={this.renderStep}
+          signupStatus={signupStatus}
         />
         <Switch>
           <Route exact path={`${match.url}/identity-verification/:step`} component={IdentityVerification} />

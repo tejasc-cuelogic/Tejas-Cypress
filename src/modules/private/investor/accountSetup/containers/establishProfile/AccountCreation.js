@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import { MultiStep } from '../../../../../../helper';
 import Employment from './Employment';
 import InvestorProfile from './InvestorProfile';
@@ -7,10 +8,10 @@ import Finances from './Finances';
 import Experience from './Experience';
 
 @inject('uiStore')
+@withRouter
 @observer
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
-    this.updateUser();
     this.props.history.push('/app/summary');
   }
   render() {
