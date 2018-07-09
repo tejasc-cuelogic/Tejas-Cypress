@@ -24,14 +24,16 @@ export default class Employment extends Component {
             containerclassname="button-radio center-align"
           />
           {EMPLOYMENT_FORM.fields.employmentStatus.value === 'employed' &&
-          ['employer', 'currentPosition'].map(field => (
-            <FormInput
-              key={field}
-              fielddata={EMPLOYMENT_FORM.fields[field]}
-              name={field}
-              changed={employmentChange}
-            />
-          ))
+            <div className="field-wrap">{
+            ['employer', 'currentPosition'].map(field => (
+              <FormInput
+                key={field}
+                fielddata={EMPLOYMENT_FORM.fields[field]}
+                name={field}
+                changed={employmentChange}
+              />
+            ))}
+            </div>
           }
         </Form>
       </div>
