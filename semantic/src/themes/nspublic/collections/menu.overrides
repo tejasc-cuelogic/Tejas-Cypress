@@ -118,7 +118,7 @@ footer{
 				font-weight: @bold;
 				&:hover, &.active {
 					background-color: #3A4048;
-					border-left: @4px solid @primary-one;
+					border-color: @primary-one;
 					color: @primary-one;
 				}
 				>i.icon {

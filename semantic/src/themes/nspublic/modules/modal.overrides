@@ -31,10 +31,13 @@
 
             .ui.header {
                 position: relative;
+                line-height: 33px;
 
                 .sub.header {
                     text-transform: uppercase;
                     font-weight: bold;
+                    line-height: 28px;
+                    font-size: 13px;
                 }
 
                 &:after {
