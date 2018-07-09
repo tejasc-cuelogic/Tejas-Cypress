@@ -617,7 +617,7 @@ class EntityAccountStore {
           });
           if (account.accountDetails.bankDetails && account.accountDetails.bankDetails.routingNumber !== '' &&
           account.accountDetails.bankDetails.accountNumber !== '') {
-            bankAccountStore.linkBankManuallyChange('formLinkBankManually');
+            bankAccountStore.linkBankFormChange();
           }
         }
         if (!uiStore.errors) {

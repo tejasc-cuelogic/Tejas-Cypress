@@ -13,7 +13,7 @@ class FormValidator {
 
   onChange = (form, element, type, isDirty = true) => {
     const currentForm = form;
-    if (element.name) {
+    if (element && element.name) {
       if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[element.name].value)) && type !== 'dropdown')) {
         const index = currentForm.fields[element.name].value.indexOf(element.value);
         if (index === -1) {
@@ -30,7 +30,7 @@ class FormValidator {
       mapValues(currentForm.fields, f => f.rule),
     );
     currentForm.meta.isValid = validation.passes();
-    if (element.name) {
+    if (element && element.name) {
       currentForm.fields[element.name].error = validation.errors.first(element.name);
     }
     currentForm.meta.isDirty = isDirty;

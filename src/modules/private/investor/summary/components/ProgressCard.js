@@ -1,6 +1,6 @@
 import React from 'react';
 import Aux from 'react-aux';
-import _ from 'lodash';
+import { isEmpty, upperCase } from 'lodash';
 import { Card, Icon, Button } from 'semantic-ui-react';
 
 const checkStatus = (signupStatus, key) => {
@@ -43,7 +43,7 @@ const ProgressCard = ({
 }) => (
   <Card.Group stackable itemsPerRow={3}>
     {
-      _.isEmpty(signupStatus.accounts) &&
+      isEmpty(signupStatus.accounts) &&
       Object.keys(metaData).map((key) => {
         const status = checkStatus(signupStatus, key);
         return (
@@ -73,7 +73,7 @@ const ProgressCard = ({
         );
       })
     }
-    {_.isEmpty(signupStatus.accounts) &&
+    {isEmpty(signupStatus.accounts) &&
     <Card fluid className={getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
       <Card.Content>
         <Icon.Group size="huge">
@@ -96,7 +96,7 @@ const ProgressCard = ({
             <Icon.Group size="huge">
               <Icon className="ns-bar-line-chart" />
             </Icon.Group>
-            <p><b>{`You have not finished ${_.upperCase(accountType)} account creation`}</b></p>
+            <p><b>{`You have not finished ${upperCase(accountType)} account creation`}</b></p>
             <Button
               color={getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
               className="relaxed"
@@ -108,7 +108,7 @@ const ProgressCard = ({
         </Card>
       ))
     }
-    {!_.isEmpty(signupStatus.accounts) && signupStatus.inActiveAccounts.length > 0 &&
+    {!isEmpty(signupStatus.accounts) && signupStatus.inActiveAccounts.length > 0 &&
       <Card fluid className={getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
         <Card.Content>
           <Icon.Group size="huge">
