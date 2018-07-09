@@ -12,24 +12,38 @@ const checkStatus = (signupStatus, key) => {
     } else {
       status = 1;
     }
-  } else if (key === 'phone-line') {
-    if (signupStatus.idVerification !== 'PASS' && signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING') {
-      status = 0;
-    } else {
+  } else if (key === 'cash-dollar') {
+    if (signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') {
       status = 1;
-    }
-    if (signupStatus.phoneVerification === 'DONE') {
-      status = 2;
+    } else {
+      status = 0;
     }
   } else if (key === 'bar-line-chart') {
-    if (signupStatus.partialAccounts.length > 0) {
-      status = true;
-    }
-  } else if (key === 'chart-setting') {
-    if (signupStatus.inActiveAccounts.length > 0) {
-      status = true;
+    if (signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') {
+      status = 1;
+    } else {
+      status = 0;
     }
   }
+  // else if (key === 'phone-line') {
+  //   if (signupStatus.idVerification !== 'PASS' &&
+  // signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING') {
+  //     status = 0;
+  //   } else {
+  //     status = 1;
+  //   }
+  //   if (signupStatus.phoneVerification === 'DONE') {
+  //     status = 2;
+  //   }
+  // } else if (key === 'bar-line-chart') {
+  //   if (signupStatus.partialAccounts.length > 0) {
+  //     status = true;
+  //   }
+  // } else if (key === 'chart-setting') {
+  //   if (signupStatus.inActiveAccounts.length > 0) {
+  //     status = true;
+  //   }
+  // }
   return status;
 };
 
@@ -46,12 +60,20 @@ const ProgressCard = props => (
                 <Icon className={`ns-${key}`} />
                 <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `ns-${status === 2 ? 'check' : 'warning'}-circle`} />
               </Icon.Group>
-              <p><b>{currentCard.label}</b></p>
-              <Button
-                color="green"
-                content="Continue"
-                onClick={() => props.renderStep(currentCard.step)}
-              />
+              <p><b>{status === 2 ? currentCard.successMsg : currentCard.label}</b></p>
+              {status === 0 ?
+                <p>
+                  This option will be available
+                  when you verify your identity
+                </p> :
+                status !== 2 ?
+                  <Button
+                    color="green"
+                    content="Continue"
+                    onClick={() => props.renderStep(currentCard.step)}
+                  /> :
+                ''
+              }
             </Card.Content>
           </Card>
         );

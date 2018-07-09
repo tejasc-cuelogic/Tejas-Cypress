@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as client2 } from '../../../../api/gcoolApi';
 import {
-  uiStore, profileStore, iraAccountStore,
+  uiStore, profileStore, iraAccountStore, individualAccountStore, entityAccountStore,
 } from '../../index';
 import { BENEFICIARY_FRM, FIN_INFO } from '../../../../constants/user';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
@@ -55,8 +55,8 @@ export class UserDetailsStore {
   setUserAccDetails = () => {
     if (!_.isEmpty(this.userDetails)) {
       iraAccountStore.populateData(this.userDetails);
-      // individualAccountStore.populateData(this.userDetails);
-      // entityAccountStore.populateData(this.userDetails);
+      individualAccountStore.populateData(this.userDetails);
+      entityAccountStore.populateData(this.userDetails);
     }
   }
 
