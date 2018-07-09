@@ -18,21 +18,26 @@ export default class Finances extends Component {
           we can determine which investments we are allowed to show you
         </Header>
         <Form error>
-          {['netWorth', 'annualIncome1', 'annualIncome2', 'annualIncome3'].map(field => (
-            <FormInput
-              key={field}
-              fielddata={FINANCES.fields[field]}
-              name={field}
-              changed={financesChange}
-            />
-          ))
-          }
+          <FormInput
+            fielddata={FINANCES.fields.netWorth}
+            changed={financesChange}
+          />
+          <Form.Group widths="equal">
+            {['annualIncome1', 'annualIncome2', 'annualIncome3'].map(field => (
+              <FormInput
+                key={field}
+                fielddata={FINANCES.fields[field]}
+                name={field}
+                changed={financesChange}
+              />
+            ))
+            }
+          </Form.Group>
           <FormCheckbox
             fielddata={FINANCES.fields.checkbox1}
             name="checkbox1"
             changed={financesChange}
             defaults
-            containerclassname="ui relaxed list"
           />
           <FormInput
             fielddata={FINANCES.fields.companyName}
@@ -44,7 +49,6 @@ export default class Finances extends Component {
             name="checkbox2"
             changed={financesChange}
             defaults
-            containerclassname="ui relaxed list"
           />
           <FormInput
             fielddata={FINANCES.fields.firmName}
