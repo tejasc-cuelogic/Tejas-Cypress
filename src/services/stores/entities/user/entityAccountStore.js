@@ -74,6 +74,14 @@ class EntityAccountStore {
   }
 
   @action
+  entityInfoDateChange = (date) => {
+    this.TRUST_INFO_FRM = FormValidator.onChange(
+      this.TRUST_INFO_FRM,
+      { name: 'trustDate', value: date },
+    );
+  }
+
+  @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
   }
@@ -461,7 +469,6 @@ class EntityAccountStore {
         })
         .then((result) => {
           if (result.data.createInvestorAccount) {
-            this.setInvestorAccId(result.data.createInvestorAccount.accountId);
             accountStore.setAccountTypeCreated(result.data.createInvestorAccount.accountType);
           } else {
             accountStore.setAccountTypeCreated(result.data.updateInvestorAccount.accountType);
@@ -689,7 +696,10 @@ class EntityAccountStore {
           },
         })
         .then(() => {
-          this.onFieldChange(form, field, '');
+          this[form] = FormValidator.onChange(
+            this[form],
+            { name: field, value: '' },
+          );
           this[form].fields[field].fileId = '';
           this[form].fields[field].preSignedUrl = '';
           this.createAccount(currentStep, 'draft', true, field);

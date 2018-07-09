@@ -164,7 +164,7 @@ export class Validation {
    const { errors } =
   validationService.validate(iraAccountStore.IDENTITY_FRM.fields.identityDoc);
    // Store errors to store if any or else `undefined` will get set to it
-   iraAccountStore.setIraError('IDENTITY_FRM', 'IDENTITY_FRM', errors && errors.identityDoc[0]);
+   iraAccountStore.setIraError('IDENTITY_FRM', 'identityDoc', errors && errors.identityDoc[0]);
  }
 
  /**

@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { Header, Table, Button, Item, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
-import { DateTimeFormat, ListErrors } from '../../../../../../../theme/shared';
-import Helper from '../../../../../../../helper/utility';
+import { DateTimeFormat, ListErrors } from '../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
 
 @inject('entityAccountStore', 'uiStore', 'bankAccountStore')
 @withRouter
@@ -12,14 +12,13 @@ import Helper from '../../../../../../../helper/utility';
 export default class Summary extends Component {
   handleCreateAccount = () => {
     this.props.entityAccountStore.createAccount('Summary', 'submit');
-    this.props.history.push('/app/summary');
   }
   render() {
     const {
-      FIN_INFO_FRM,
-      PERSONAL_INFO_FRM,
-      GEN_INFO_FRM,
-      TRUST_INFO_FRM,
+      formFinInfo,
+      formPersonalInfo,
+      formGeneralInfo,
+      formEntityInfo,
     }
       = this.props.entityAccountStore;
     const { errors } = this.props.uiStore;
@@ -41,46 +40,46 @@ export default class Summary extends Component {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell><b>Entity net assest</b></Table.Cell>
-                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netAssets.value ?
-                      FIN_INFO_FRM.fields.netAssets.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.netAssets.value ?
+                      formFinInfo.fields.netAssets.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Other CF Investments</b></Table.Cell>
-                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.cfInvestment.value ?
-                      FIN_INFO_FRM.fields.cfInvestment.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.cfInvestment.value ?
+                      formFinInfo.fields.cfInvestment.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Entitys name</b></Table.Cell>
-                  <Table.Cell>{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
+                  <Table.Cell>{formPersonalInfo.fields.title.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Tax ID</b></Table.Cell>
-                  <Table.Cell>{GEN_INFO_FRM.fields.taxId.value}</Table.Cell>
+                  <Table.Cell>{formGeneralInfo.fields.taxId.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row verticalAlign="top">
                   <Table.Cell><b>Entity Address</b></Table.Cell>
-                  <Table.Cell>{GEN_INFO_FRM.fields.street.value}
+                  <Table.Cell>{formGeneralInfo.fields.street.value}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Is Entity a trust?</b></Table.Cell>
-                  <Table.Cell>{TRUST_INFO_FRM.fields.isTrust.value}
-                    {TRUST_INFO_FRM.fields.isTrust.value &&
+                  <Table.Cell>{formEntityInfo.fields.isTrust.value}
+                    {formEntityInfo.fields.isTrust.value &&
                       'Yes, since '
                     }
-                    {TRUST_INFO_FRM.fields.isTrust.value &&
-                      <DateTimeFormat datetime={TRUST_INFO_FRM.fields.trustDate.value} />
+                    {formEntityInfo.fields.isTrust.value &&
+                      <DateTimeFormat datetime={formEntityInfo.fields.trustDate.value} />
                     }
-                    {!TRUST_INFO_FRM.fields.isTrust.value &&
+                    {!formEntityInfo.fields.isTrust.value &&
                       'No'
                     }
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Title with the entity</b></Table.Cell>
-                  <Table.Cell>{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
+                  <Table.Cell>{formPersonalInfo.fields.title.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Bank account</b></Table.Cell>

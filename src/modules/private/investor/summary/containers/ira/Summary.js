@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Helper from '../../../../../../../helper/utility';
-import { ListErrors } from '../../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
+import { ListErrors } from '../../../../../../theme/shared';
 
 @inject('iraAccountStore', 'uiStore')
 @withRouter
@@ -12,23 +12,22 @@ import { ListErrors } from '../../../../../../../theme/shared';
 export default class Summary extends Component {
   handleCreateAccount = () => {
     this.props.iraAccountStore.createAccount('Summary', 'submit');
-    this.props.history.push('/app/summary');
   }
   render() {
     const {
-      FIN_INFO_FRM,
-      ACC_TYPES_FRM,
-      FUNDING_FRM,
-      IDENTITY_FRM,
+      formFinInfo,
+      formAccTypes,
+      formFunding,
+      formIdentity,
     } = this.props.iraAccountStore;
     const { errors } = this.props.uiStore;
     const accountType = _.find(
-      ACC_TYPES_FRM.fields.iraAccountType.values,
-      { value: ACC_TYPES_FRM.fields.iraAccountType.value },
+      formAccTypes.fields.iraAccountType.values,
+      { value: formAccTypes.fields.iraAccountType.value },
     );
     const fundingOption = _.find(
-      FUNDING_FRM.fields.fundingType.values,
-      { value: FUNDING_FRM.fields.fundingType.value },
+      formFunding.fields.fundingType.values,
+      { value: formFunding.fields.fundingType.value },
     );
     return (
       <div>
@@ -53,20 +52,20 @@ export default class Summary extends Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your networth</b></Table.Cell>
-                    <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value ?
-                      FIN_INFO_FRM.fields.netWorth.value : 0)}
+                    <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.netWorth.value ?
+                      formFinInfo.fields.netWorth.value : 0)}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your annual income</b></Table.Cell>
-                    <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value ?
-                      FIN_INFO_FRM.fields.annualIncome.value : 0)}
+                    <Table.Cell>{Helper.CurrencyFormat(formFinInfo.fields.annualIncome.value ?
+                      formFinInfo.fields.annualIncome.value : 0)}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Drivers licence</b></Table.Cell>
                     <Table.Cell>
-                      {IDENTITY_FRM.fields.identityDoc.value ?
+                      {formIdentity.fields.identityDoc.value ?
                         <span className="positive-text"><b>Uploaded</b></span> :
                         <span className="negative-text"><b>Not Uploaded</b></span>}
                     </Table.Cell>

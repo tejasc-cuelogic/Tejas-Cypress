@@ -1,19 +1,19 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { MultiStep } from '../../../../../../../helper';
+import { MultiStep } from '../../../../../../helper';
 import FinancialInformation from './FinancialInformation';
 import AccountType from './AccountType';
 import Funding from './Funding';
 import Identity from './Identity';
 import Summary from './Summary';
-import { validationActions } from '../../../../../../../services/actions';
+import { validationActions } from '../../../../../../services/actions';
 
 @inject('uiStore', 'iraAccountStore', 'userDetailsStore', 'userStore')
 @observer
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
     this.updateUser();
-    this.props.history.push('/app/summary');
+    this.props.setDashboardWizardStep();
   }
   handleStepChange = (step) => {
     this.props.iraAccountStore.setStepToBeRendered(step);
@@ -28,27 +28,27 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Financial info',
         component: <FinancialInformation />,
-        isValid: this.props.iraAccountStore.isValidFinancialInfo ? '' : 'error',
-        isDirty: this.props.iraAccountStore.FIN_INFO_FRM.meta.isDirty,
+        isValid: this.props.iraAccountStore.isValidIraFinancialInfo ? '' : 'error',
+        isDirty: this.props.iraAccountStore.formFinInfo.meta.isDirty,
         validate: validationActions.validateIRAFinancialInfo,
       },
       {
         name: 'Account type',
         component: <AccountType />,
         isValid: '',
-        isDirty: this.props.iraAccountStore.ACC_TYPES_FRM.meta.isDirty,
+        isDirty: this.props.iraAccountStore.formAccTypes.meta.isDirty,
       },
       {
         name: 'Funding',
         component: <Funding />,
         isValid: '',
-        isDirty: this.props.iraAccountStore.FUNDING_FRM.meta.isDirty,
+        isDirty: this.props.iraAccountStore.formFunding.meta.isDirty,
       },
       {
         name: 'Identity',
         component: <Identity />,
-        isValid: this.props.iraAccountStore.isValidIdentity ? '' : 'error',
-        isDirty: this.props.iraAccountStore.IDENTITY_FRM.meta.isDirty,
+        isValid: this.props.iraAccountStore.isValidIraIdentity ? '' : 'error',
+        isDirty: this.props.iraAccountStore.formIdentity.meta.isDirty,
         validate: validationActions.validateIRAIdentityInfo,
       },
       {
