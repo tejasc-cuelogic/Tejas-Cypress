@@ -2,21 +2,26 @@
          Theme Overrides
 *******************************/
 .ui.container{
-    &.home-banner{
-        min-height:80vh;
+    &.banner {
+        height:710px;
         padding-top:74px;
-        background:url(../../assets/images/home-banner.jpg) top center no-repeat / cover;
         >.ui.container{
             display:table;
-            height:~"calc(80vh - 74px)";
+            height: 100%;
             .banner-caption{
                 display:table-cell;
                 vertical-align:middle;
-                // margin:0;
-                // position:absolute;
-                // top:50%;
-                // transform:translate(0%, -50%);
             }
+        }
+        &.home-banner{
+            background:url(../../assets/images/home-banner.jpg) top center no-repeat / cover;
+        }
+        &.mission-banner{
+            background:url(../../assets/images/mission-banner.jpg) top center no-repeat / cover;
+        }
+        &.campaign-list-banner{
+            height:535px;
+            background:url(../../assets/images/campaign-list-banner.jpg) top center no-repeat / cover;
         }
     }
 }
