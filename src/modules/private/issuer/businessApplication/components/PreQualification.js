@@ -62,21 +62,21 @@ export default class PreQualification extends Component {
                         <FormInput
                           key={field}
                           name={field}
-                          value={fields[field].value}
-                          fielddata={fields[field]}
-                          changed={businessAppEleChange}
+                          value={fields.generalInfo[field].value}
+                          fielddata={fields.generalInfo[field]}
+                          changed={(e, res) => businessAppEleChange(e, res, 'generalInfo')}
                         />
                       ))
                     }
                     <MaskedInput2
                       name="phoneNumber"
-                      fielddata={fields.phoneNumber}
+                      fielddata={fields.generalInfo.phoneNumber}
                       changed={businessAppEleChange}
                     />
                     <FormInput
                       name="emailAddress"
-                      value={fields.emailAddress.value}
-                      fielddata={fields.emailAddress}
+                      value={fields.generalInfo.emailAddress.value}
+                      fielddata={fields.generalInfo.emailAddress}
                       changed={businessAppEleChange}
                     />
                   </div>
@@ -86,7 +86,7 @@ export default class PreQualification extends Component {
                     <Header as="h5">Business Address</Header>
                     <AutoComplete
                       name="businessStreet"
-                      fielddata={fields.businessStreet}
+                      fielddata={fields.generalInfo.businessStreet}
                       onplaceselected={setAddressFields}
                       changed={businessAppEleChange}
                     />
@@ -97,7 +97,7 @@ export default class PreQualification extends Component {
                             key={field}
                             type="text"
                             name={field}
-                            fielddata={fields[field]}
+                            fielddata={fields.generalInfo[field]}
                             changed={businessAppEleChange}
                           />
                         ))
@@ -124,37 +124,39 @@ export default class PreQualification extends Component {
                 containerclassname="iconic-radio"
               />
             </FormElementWrap>
-            <FormElementWrap header="Experience">
-              <Grid>
-                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <div className="field-wrap">
-                    {
-                      ['relatedExperience', 'estCreditScore'].map(field => (
-                        <FormInput
-                          key={field}
-                          name={field}
-                          value={fields[field].value}
-                          fielddata={fields[field]}
-                          changed={businessAppEleChange}
-                        />
-                      ))
-                    }
-                    {
-                      ['projectCost', 'raiseRequired'].map(field => (
-                        <MaskedInput2
-                          key={field}
-                          name={field}
-                          currency
-                          value={fields[field].value}
-                          fielddata={fields[field]}
-                          changed={businessAppEleChange}
-                        />
-                      ))
-                    }
-                  </div>
-                </Grid.Column>
-              </Grid>
-            </FormElementWrap>
+            { fields.businessHelp.value && fields.businessHelp.value !== 'newbusiness' ?
+              <FormElementWrap header="Experience">
+                <Grid>
+                  <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+                    <div className="field-wrap">
+                      {
+                        ['relatedExperience', 'estCreditScore'].map(field => (
+                          <FormInput
+                            key={field}
+                            name={field}
+                            value={fields.experience[field].value}
+                            fielddata={fields.experience[field]}
+                            changed={businessAppEleChange}
+                          />
+                        ))
+                      }
+                      {
+                        ['projectCost', 'raiseRequired'].map(field => (
+                          <MaskedInput2
+                            key={field}
+                            name={field}
+                            currency
+                            value={fields.experience[field].value}
+                            fielddata={fields.experience[field]}
+                            changed={businessAppEleChange}
+                          />
+                        ))
+                      }
+                    </div>
+                  </Grid.Column>
+                </Grid>
+              </FormElementWrap> : null
+            }
             <FormElementWrap header="What will the funds be used for?" subHeader="Please select all that apply.">
               <FormCheckbox
                 fielddata={fields.fundUsage}
@@ -176,8 +178,8 @@ export default class PreQualification extends Component {
                           key={field}
                           name={field}
                           currency
-                          value={fields[field].value}
-                          fielddata={fields[field]}
+                          value={fields.snapshot[field].value}
+                          fielddata={fields.snapshot[field]}
                           changed={businessAppEleChange}
                         />
                       ))

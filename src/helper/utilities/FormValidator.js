@@ -38,20 +38,22 @@ class FormValidator {
     return currentForm;
   }
 
-  onArrayFieldChange = (form, element, formIndex, type) => {
+  onArrayFieldChange = (form, element, formName, formIndex = -1, type) => {
     CustomeValidations.executet();
     const currentForm = form;
+    const formFields = formIndex >= 0 ? form.fields[formName][formIndex]
+      : form.fields[formName];
     if (element.name) {
-      if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields.beneficiary[formIndex][element.name].value)) && type !== 'dropdown')) {
-        const index = currentForm.fields.beneficiary[formIndex][element.name]
+      if (type === 'checkbox' || (Array.isArray(toJS(formFields[element.name].value)) && type !== 'dropdown')) {
+        const index = formFields[element.name]
           .value.indexOf(element.value);
         if (index === -1) {
-          currentForm.fields.beneficiary[formIndex][element.name].value.push(element.value);
+          formFields[element.name].value.push(element.value);
         } else {
-          currentForm.fields.beneficiary[formIndex][element.name].value.splice(index, 1);
+          formFields[element.name].value.splice(index, 1);
         }
       } else {
-        currentForm.fields.beneficiary[formIndex][element.name].value = element.value;
+        formFields[element.name].value = element.value;
       }
     }
     /* Beneficiary share percentage validation register */
@@ -71,7 +73,7 @@ class FormValidator {
     const validation = new Validator(formData, formRules);
     currentForm.meta.isValid = validation.passes();
     if (element.name) {
-      currentForm.fields.beneficiary[formIndex][element.name].error = validation.errors.first(`beneficiary.${formIndex}.${element.name}`) ?
+      formFields[element.name].error = validation.errors.first(`beneficiary.${formIndex}.${element.name}`) ?
         replace(
           validation.errors.first(`beneficiary.${formIndex}.${element.name}`),
           `beneficiary.${formIndex}.${element.name}`,
