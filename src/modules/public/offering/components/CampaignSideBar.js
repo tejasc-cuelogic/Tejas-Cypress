@@ -34,7 +34,7 @@ const CampaignSideBar = () => (
       </Statistic.Group>
       <Button secondary compact>Invest Now</Button>
     </div>
-    <Menu vertical>
+    <Menu vertical fluid>
       <Menu.Item name="inbox" active>
         <Icon name="home" />
         Overview

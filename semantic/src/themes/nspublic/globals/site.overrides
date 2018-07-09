@@ -132,7 +132,6 @@ footer{
 /** campaign filter **/
 .campaign-list-wrapper {
 	position: relative;
-
 	h5.ui.header {
 		color: @neutral-light;
 		margin-bottom: @35px;
@@ -145,13 +144,11 @@ footer{
     width: 100%;
     left: 0;
 	top: 0;
-	
 	.offer-filter-container {
 		background-color: #fff;
 		width: 100%;
 		height: auto;
 		padding: @17px 0 @59px; 
-
 		h6.ui.header {
 			font-size: @13px;
 			font-weight: @bold;
@@ -159,7 +156,6 @@ footer{
 			color: @neutral-light;
 			padding-bottom: @6px;
 		}
-
 		.ui.checkbox {
 			label {
 				font-size: @15px;
@@ -167,7 +163,6 @@ footer{
 				color: @neutral-light;
 			}
 		} 
-
 		i {
 			font-size: @16px;
 			line-height: @16px;
@@ -192,15 +187,19 @@ footer{
 	margin-top: 74px;
 	display: flex;
 	flex-direction: row;
-
 	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
 		width: 280px;
+		height: ~"calc(100vh - 74px)";
+		position: fixed;
+		z-index: 1;
+		overflow: auto;
 
 		.ui.menu, .ui.vertical.menu {
 			border: none;
 			box-shadow: none;
+			margin-bottom: @20px;
 		}
 		.offering-intro {
 			padding: @32px @20px;
@@ -209,7 +208,7 @@ footer{
 				> a {
 					position: absolute;
 					left: 0;
-					font-size: 12px;
+					font-size: @12px;
 					color: @neutral-light;
 				}
 			}
@@ -230,35 +229,30 @@ footer{
 		background-color: #F3F4F8;
 		flex-grow: 1;
 		height: 100%;
-		
-		.offering-no-early-bird-wrapper {
+		padding-left: 280px;
+		.offering-content-spacer {
 			padding: @17px @50px @50px;
 		}
 		.quick-bar {
 			padding: @10px 0;
 		}
-
 		p {
 			color: @neutral;
 			font-size: @15px;
 			letter-spacing: 1px;
-			line-height: @14px;
-
-			span {
-				font-weight: @bold;
-			}
+			line-height: @20px;
 			&.detail-section {
 				line-height: @20px;
 			}
-
 			&.note {
 				color: @neutral-light;
 				font-size: @12px;
 				line-height: @44px;
+				margin-top: 10px
 			}
 			&.early-bird-title {
 				font-weight: bold;
-				line-height: @28px;
+				line-height: @20px;
 				font-size: @15px;
 				text-align: center;
 			}
@@ -267,11 +261,10 @@ footer{
 				font-size: @15px;
 				text-align: center;
 			}
+			i.icon {
+				margin-left: @20px;
+			}
 		}
-		.ui.divider {
-			margin: @40px 0;
-		}
-
 		ul {
 			line-height: @26px;
 			font-size: @15px;
@@ -284,41 +277,37 @@ footer{
 				}
 			}
 		}
-
 		.ui.grid.investment-grid {
-			>.row {
-				>.column:last-child {
-					background-color: @primary-one;
-					position: relative;
-					&:before {
-						content: "";
-						position: absolute;
-						top: 50%;
-						left: -1px;
-						border-style: solid;
-						border-width: 10px 0px 10px 12px;
-						border-color: transparent #fff;
-						display: block;
-						width: 0;
-						z-index: 0;
-						-webkit-transform: translate(0,-50%);
-						-ms-transform: translate(0,-50%);
-						transform: translate(0,-50%);
-					}
+			>.column:last-child {
+				background-color: @primary-one;
+				position: relative;
+				&:before {
+					content: "";
+					position: absolute;
+					top: 50%;
+					left: -1px;
+					border-style: solid;
+					border-width: 10px 0px 10px 12px;
+					border-color: transparent #fff;
+					display: block;
+					width: 0;
+					z-index: 0;
+					-webkit-transform: translate(0,-50%);
+					-ms-transform: translate(0,-50%);
+					transform: translate(0,-50%);
+				}
 
-					.ui.statistic {
-			
-						>.label{
-							color: @white;
-						}
-						>.value {
-							color: @white;
-						}
+				.ui.statistic {
+		
+					>.label{
+						color: @white;
+					}
+					>.value {
+						color: @white;
 					}
 				}
 			}
 		}
-
 		.no-early-bird {
 			margin: @20px auto;
 		}
@@ -326,21 +315,15 @@ footer{
 			padding: @30px;
 			background-color: @white;
 			height: 100%;
-				&:hover, &.active {
-					background-color: #3A4048;
-					border-color: @primary-one;
-					color: @primary-one;
-				}
-
 			.carousel {
 				width: 100%;
+				margin-bottom: 38px;
 				img {
 					width: 100%;
 					height: 100%;
 					margin-top: 0;
 				}
 			}
-			
 			p {
 				line-height: @20px;
 				color: @neutral-light;
@@ -349,10 +332,14 @@ footer{
 					margin-bottom: @35px;
 				}
 			}
-
 			img {
 				width: 100%;
 				margin-top: @35px;
+			}
+			.embed {
+				img {
+					margin-top: 0;
+				}
 			}
 			.history-section {
 				margin-top: 140px;

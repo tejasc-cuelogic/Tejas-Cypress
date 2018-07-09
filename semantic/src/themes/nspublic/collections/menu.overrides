@@ -85,7 +85,6 @@ footer{
         }
     }
 }
-
 .filter-menu {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
@@ -107,42 +106,29 @@ footer{
         }
     }
 }
-
 .offer-details {
     .offering-side-menu {
         .ui.vertical.menu {
-			width: 100%;
-			margin: 0;
-			text-align: left;
 			background-color: transparent;
-			/* color: #fff; */
-
 			.item {
-				font-size: @14px;
 				color: #fff;
-				box-shadow: none;
 				border-left: @4px solid transparent;
 				border-radius: 0;
-				padding-left: @31px;
+				padding-left: @27px;
 				font-weight: @bold;
-
 				&:hover, &.active {
 					background-color: #3A4048;
 					border-left: @4px solid @primary-one;
-					border-radius: 0;
 					color: @primary-one;
 				}
-
 				>i.icon {
 					float: left;
 					margin-left: 0;
 					margin-right: 14px;
 				}
-
 				>.label.circular {
 					margin-top: -5px;
 				}
-
 				&.watch-deal-menu {
 					color: #616972;
 				}
@@ -152,23 +138,23 @@ footer{
 			}
 		}
     }
-
-    .offering-no-early-bird-wrapper {
+    .offering-content-spacer {
         .ui.secondary.menu .item {
             font-weight: bold;
             line-height: @20px;
             font-size: @15px;
             color: @neutral;
-
             >i.icon {
                 font-size: @20px;
             }
-
             &.span {
                 font-weight: bold;
                 line-height: @24px;
                 font-size: @13px;
                 color: #616972;
+            }
+            &:hover {
+                background-color: transparent;
             }
         }
     }

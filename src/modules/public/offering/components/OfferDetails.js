@@ -18,7 +18,7 @@ class offerDetails extends Component {
       <div className="offer-details">
         <CampaignSideBar />
         <div className="offering-wrapper">
-          <div className="offering-no-early-bird-wrapper">
+          <div className="offering-content-spacer">
             <div className="quick-bar">
               <Menu secondary>
                 <Menu.Item name="home" onClick={this.handleOpen}>
@@ -49,14 +49,16 @@ class offerDetails extends Component {
                             <Breadcrumb.Divider icon="right chevron" />
                           </Breadcrumb>
                           <Header as="h3">Top things to know</Header>
-                          <p><span>Industry: </span>Pub & Brewery</p>
-                          <p><span>Investment Type: </span>Revenue Sharing</p>
+                          <p><b>Industry: </b>Pub & Brewery <br />
+                            <b>Investment Type: </b>Revenue Sharing
+                            <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+                          </p>
                           <p className="detail-section">
                             Houston Brewery is expanding its facilities and launching the
                             new Buffbrew Taproom, complete with a full-service kitchen,
                             event space and over 40 beers on tap.
                           </p>
-                          <Divider />
+                          <Divider section />
                           <ul>
                             <li>
                               <span>Full-service kitchen, over 40 beers</span>
@@ -94,48 +96,46 @@ class offerDetails extends Component {
                       <Breadcrumb.Divider icon="right chevron" />
                     </Breadcrumb>
                     <Header as="h3">Investment Return Calculator</Header>
-                    <Grid columns={4} divided doubling className="investment-grid">
-                      <Grid.Row>
-                        <Grid.Column>
-                          <Statistic size="mini">
-                            <Statistic.Label>Investment Multiple</Statistic.Label>
-                            <Statistic.Value>1.70x–1.90x</Statistic.Value>
-                            <p>
-                              Monthly gross revenue to be shared is 6.5%.
-                              <Popup trigger={<Icon name="help circle" />} content="Help!" position="top center" />
-                            </p>
-                          </Statistic>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Statistic size="mini">
-                            <Statistic.Label>Maturity*</Statistic.Label>
-                            <Statistic.Value>78 months</Statistic.Value>
-                            <p>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                              <Popup trigger={<Icon name="help circle" />} content="Help!" position="top center" />
-                            </p>
-                          </Statistic>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Statistic size="mini">
-                            <Statistic.Label>Your Investment</Statistic.Label>
-                            <Statistic.Value>$25,000</Statistic.Value>
-                            <div className="slidecontainer">
-                              <input type="range" min="1" max="100" value="10" className="slider" id="myRange" />
-                            </div>
-                          </Statistic>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <Statistic size="mini">
-                            <Statistic.Label>Total Payment*</Statistic.Label>
-                            <Statistic.Value>
-                              $42,500
-                              <br />–<br />
-                              $47,500
-                            </Statistic.Value>
-                          </Statistic>
-                        </Grid.Column>
-                      </Grid.Row>
+                    <Grid columns={4} divided doubling className="investment-grid" padded="horizontally">
+                      <Grid.Column>
+                        <Statistic size="mini">
+                          <Statistic.Label>Investment Multiple</Statistic.Label>
+                          <Statistic.Value>1.70x–1.90x</Statistic.Value>
+                          <p>
+                            Monthly gross revenue to be shared is 6.5%.
+                            <Popup trigger={<Icon name="help circle" />} content="Help!" position="top center" />
+                          </p>
+                        </Statistic>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Statistic size="mini">
+                          <Statistic.Label>Maturity*</Statistic.Label>
+                          <Statistic.Value>78 months</Statistic.Value>
+                          <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            <Popup trigger={<Icon name="help circle" />} content="Help!" position="top center" />
+                          </p>
+                        </Statistic>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Statistic size="mini">
+                          <Statistic.Label>Your Investment</Statistic.Label>
+                          <Statistic.Value>$25,000</Statistic.Value>
+                          <div className="slidecontainer">
+                            <input type="range" min="1" max="100" value="10" className="slider" id="myRange" />
+                          </div>
+                        </Statistic>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Statistic size="mini">
+                          <Statistic.Label>Total Payment*</Statistic.Label>
+                          <Statistic.Value>
+                            $42,500
+                            <br />–<br />
+                            $47,500
+                          </Statistic.Value>
+                        </Statistic>
+                      </Grid.Column>
                     </Grid>
                     <p className="note">
                       * For illustration only. See expanded Payment Calculator view to

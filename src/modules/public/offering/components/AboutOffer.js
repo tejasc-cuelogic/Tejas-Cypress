@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
-import { Grid, Image, Header, Divider, Embed, Icon, List, Segment, Breadcrumb, Reveal } from 'semantic-ui-react';
+import { Grid, Image, Header, Divider, Embed, Icon, List, Segment, Breadcrumb, Reveal, Modal } from 'semantic-ui-react';
 import CampaignSideBar from './CampaignSideBar';
 import videoPoster from '../../../../assets/images/636206632.webp';
 import campainAboutImg from '../../../../assets/images/campaign_about.png';
@@ -9,11 +9,15 @@ import teamMember2 from '../../../../assets/images/owner-1.jpg';
 import teamMember3 from '../../../../assets/images/owner-2.jpg';
 import businessModel from '../../../../assets/images/business_model.png';
 
+
 const nsvideos = {
   embed: '218642510',
 };
 
 class aboutOffer extends Component {
+  state = { modalOpen: false }
+  handleOpen = () => this.setState({ modalOpen: true })
+  handleClose = () => this.setState({ modalOpen: false })
   render() {
     return (
       <div className="offer-details">
@@ -43,7 +47,7 @@ class aboutOffer extends Component {
                     quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
                     magni dolores eos qui ratione voluptatem sequi nesciunt.
                   </p>
-                  <Divider />
+                  <Divider section />
                   <Grid columns={2} stackable>
                     <Grid.Column verticalAlign="middle" textAlign="center">
                       <p>
@@ -60,7 +64,7 @@ class aboutOffer extends Component {
                       />
                     </Grid.Column>
                   </Grid>
-                  <Divider />
+                  <Divider section />
                   <p>
                     Sed ut perspiciatis unde omnis iste natus error sit voluptatem
                     accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
@@ -157,7 +161,7 @@ class aboutOffer extends Component {
                 <div className="campaign-right-sidebar">
                   <Segment padded>
                     <Breadcrumb>
-                      <Breadcrumb.Section>
+                      <Breadcrumb.Section onClick={this.handleOpen}>
                       Meet our team
                       </Breadcrumb.Section>
                       <Breadcrumb.Divider icon="right chevron" />
@@ -238,6 +242,59 @@ class aboutOffer extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
+
+          <Modal
+            open={this.state.modalOpen}
+            onClose={this.handleClose}
+            closeIcon
+            size="large"
+          >
+            <Header as="h3">
+            Meet the Team
+            </Header>
+            <Modal.Content scrolling>
+              <Grid doubling columns={2} className="compact" verticalAlign="middle">
+                <Grid.Column>
+                  <Image src={campainAboutImg} />
+                </Grid.Column>
+                <Grid.Column className="padded">
+                  <Header as="h3">
+                    Rassul Zainfar
+                    <Header.Subheader>co-founder & ceo</Header.Subheader>
+                  </Header>
+                  <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                  nisi ut aliquip ex ea commodo consequat.
+                  </p>
+                  <div>
+                    <Icon color="green" name="twitter" />
+                    <Icon color="green" name="linkedin in" />
+                  </div>
+                </Grid.Column>
+                <Grid.Column className="padded">
+                  <Header as="h3">
+                    Alex Grigss
+                    <Header.Subheader>co-founder & Director of projects</Header.Subheader>
+                  </Header>
+                  <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                  nisi ut aliquip ex ea commodo consequat.
+                  </p>
+                  <div>
+                    <Icon color="green" name="twitter" />
+                    <Icon color="green" name="linkedin in" />
+                  </div>
+                </Grid.Column>
+                <Grid.Column>
+                  <Image src={campainAboutImg} />
+                </Grid.Column>
+              </Grid>
+            </Modal.Content>
+          </Modal>
         </div>
       </div>
     );
