@@ -115,7 +115,6 @@ footer{
 				color: #676A73 !important;
 				font-size: @14px;
 				line-height: @16px;
-				font-family: @fontName; 
 				text-transform: inherit;
 				font-weight: normal;
 			}
@@ -124,7 +123,7 @@ footer{
 	p.disclaimer-text {
 		font-size: @10px;
 		line-height: @14px;
-		color: #676A73;
+		color: @neutral-light;
 		font-family: @fontName; 
 	}
 }
@@ -133,10 +132,15 @@ footer{
 /** campaign filter **/
 .campaign-list-wrapper {
 	position: relative;
+
+	h5.ui.header {
+		color: @neutral-light;
+		margin-bottom: @35px;
+	}
 }
 .offer-filter {
 	position: absolute;
-    background: rgba(0,0,0,0.5);
+    background: @unselectedTextColor ;
     height: 100%;
     width: 100%;
     left: 0;
@@ -160,17 +164,14 @@ footer{
 			label {
 				font-size: @15px;
 				line-height: @19px;
-				color: #616972;
+				color: @neutral-light;
 			}
 		} 
 
 		i {
 			font-size: @16px;
 			line-height: @16px;
-			color: #616972;
-			&.help {
-				color: @green;
-			}
+			color: @neutral-light;
 		}
 		.checkbox-group {
 			.ui.label {
@@ -321,11 +322,15 @@ footer{
 		.no-early-bird {
 			margin: @20px auto;
 		}
-
 		.campaign-about-wrapper {
 			padding: @30px;
 			background-color: @white;
 			height: 100%;
+				&:hover, &.active {
+					background-color: #3A4048;
+					border-color: @primary-one;
+					color: @primary-one;
+				}
 
 			.carousel {
 				width: 100%;

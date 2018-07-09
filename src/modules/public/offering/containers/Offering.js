@@ -8,13 +8,13 @@ import campaign3 from '../../../../assets/images/campaign-3.jpg';
 import filterIcon from '../../../../assets/images/icon_filter.png';
 import lockIcon from '../../../../assets/images/icon_lock.png';
 // import closeIcon from '../../../../assets/images/icon_close.png';
-// import OfferFilter from '../components/OfferFilter';
+import OfferFilter from '../components/OfferFilter';
 
 class Offering extends Component {
   render() {
     return (
       <Aux>
-        <Container fluid className="campaign-list-banner">
+        <Container fluid className="campaign-list-banner banner">
           <Container>
             <div className="banner-caption">
               <Header as="h1">
@@ -43,7 +43,7 @@ class Offering extends Component {
         </div>
         <section className="campaign-list-wrapper">
           <Container>
-            <Header as="h4" textAlign="center" caption>Active Campaigns</Header>
+            <Header as="h5" textAlign="center" caption>Active Campaigns</Header>
             <Card.Group itemsPerRow={3} stackable>
               <Card className="campaign">
                 <Image as={Link} to="/offerings/details" src={campaign1} />
@@ -113,10 +113,10 @@ class Offering extends Component {
                   </List>
                 </Card.Content>
                 <Card.Content className="card-hidden">
-                  <div className="hidden-card-lock-image">
+                  <div className="lock-image">
                     <Image src={lockIcon} />
                   </div>
-                  <div className="hidden-card-details">
+                  <div className="details">
                     <div className="tags">
                       hidden
                     </div>
@@ -127,7 +127,7 @@ class Offering extends Component {
               </Card>
             </Card.Group>
           </Container>
-          {/* <OfferFilter /> */}
+          <OfferFilter />
         </section>
       </Aux>
     );

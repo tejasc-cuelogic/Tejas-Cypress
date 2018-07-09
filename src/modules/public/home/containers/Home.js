@@ -17,7 +17,7 @@ class Home extends Component {
   render() {
     return (
       <Aux>
-        <Container fluid className="home-banner">
+        <Container fluid className="banner home-banner">
           <Container>
             <div className="banner-caption">
               <Header as="h1">
