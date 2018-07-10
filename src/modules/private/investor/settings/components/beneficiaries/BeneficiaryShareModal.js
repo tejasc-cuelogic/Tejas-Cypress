@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import Aux from 'react-aux';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
+// import Aux from 'react-aux';
+import { Modal, Button, Header, Form, Divider, Message, Table } from 'semantic-ui-react';
 import { MaskedInput2 } from '../../../../../../theme/form';
 import { ListErrors, FieldError } from '../../../../../../theme/shared';
 
@@ -57,30 +57,36 @@ export default class BeneficiaryShareModal extends Component {
             {showError &&
               <FieldError error="The sum of percentages must be 100" icon="warning circle" />
             }
-            <dl className="dl-horizontal">
-              {
-                BENEFICIARY_META.fields.beneficiary.length ?
-                BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
-                  <Aux>
-                    <dt>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</dt>
-                    <dd>
-                      <MaskedInput2
-                        percentage
-                        showErrorOnField
-                        tooltip={beneficiary.share.tooltip}
-                        type="text"
-                        name="share"
-                        fielddata={beneficiary.share}
-                        changed={values => beneficiaryShareChange(values, index)}
-                      />
-                    </dd>
-                  </Aux>
-                )) :
-                <p>loading...</p>
-              }
-            </dl>
-            <div className="center-align">
-              <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green" >Proceed</Button>
+            <Table unstackable singleLine className="investment-details">
+              <Table.Header>
+                <Table.HeaderCell><b>Name of Beneficiary</b></Table.HeaderCell>
+                <Table.HeaderCell><b>% of Share</b></Table.HeaderCell>
+              </Table.Header>
+              <Table.Body>
+                {
+                  BENEFICIARY_META.fields.beneficiary.length ?
+                  BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
+                    <Table.Row>
+                      <Table.Cell>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</Table.Cell>
+                      <Table.Cell>
+                        <MaskedInput2
+                          percentage
+                          showErrorOnField
+                          tooltip={beneficiary.share.tooltip}
+                          type="text"
+                          name="share"
+                          fielddata={beneficiary.share}
+                          changed={values => beneficiaryShareChange(values, index)}
+                        />
+                      </Table.Cell>
+                    </Table.Row>
+                  )) :
+                  <p>loading...</p>
+                }
+              </Table.Body>
+            </Table>
+            <div className="center-align mt-30">
+              <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
             </div>
           </Form>
         </Modal.Content>

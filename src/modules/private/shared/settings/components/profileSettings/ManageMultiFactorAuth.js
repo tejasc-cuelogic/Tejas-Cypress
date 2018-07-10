@@ -42,6 +42,13 @@ export default class ManageMultiFactorAuth extends Component {
                 changed={handleMfaModeTypeChanged}
                 containerclassname="button-radio center-align"
               />
+              <Header as="h4">How would you like to recive<br />the confirmation codes?</Header>
+              <FormRadioGroup
+                fielddata={MFA_MODE_TYPE_META.fields.mfaState}
+                name="mfaState"
+                changed={handleMfaModeTypeChanged}
+                containerclassname="button-radio center-align"
+              />
               <div className="mt-30 center-align">
                 <Button loading={inProgress} primary size="large" className="very relaxed">Select</Button>
               </div>
