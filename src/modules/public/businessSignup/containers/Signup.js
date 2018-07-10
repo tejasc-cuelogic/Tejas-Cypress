@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Segment, Grid } from 'semantic-ui-react';
-import PreQualification from '../../../private/businessApplication/components/PreQualification';
+import PreQualification from '../../../private/issuer/businessApplication/components/PreQualification';
 import Success from '../components/Success';
 import Failure from '../components/Failure';
 import Application from '../components/lendio/Application';
