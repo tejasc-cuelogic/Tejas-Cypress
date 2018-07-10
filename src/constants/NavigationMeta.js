@@ -248,7 +248,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'history',
     title: 'Activity',
-    to: 'activity',
+    to: 'activities',
     accessibleTo: ['admin'],
   },
   {

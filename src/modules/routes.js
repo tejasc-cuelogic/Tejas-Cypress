@@ -24,6 +24,14 @@ import Referrals from './private/investor/referrals/containers/Referrals';
 import AccountDetails from './private/investor/accountDetails/containers/AccountDetails';
 import BusinessApplication from './private/issuer/businessApplication/containers/BusinessApplication';
 import Education from './private/shared/education/containers/Education';
+
+import Insights from './private/admin/insights';
+import Faqs from './private/admin/faqs';
+import Activities from './private/admin/activities';
+import Ambassadors from './private/admin/ambassadors';
+import Applications from './private/admin/applications';
+import Beneficiaries from './private/admin/beneficiaries';
+
 import {
   AdminAuthorization,
   BusinessAuthorization,
@@ -195,6 +203,36 @@ export const privateRoutes = [
     path: '/app/page/:pageId',
     component: Base,
     auth: UserAuthorization,
+  },
+  {
+    path: '/app/insights',
+    component: Insights,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/faqs',
+    component: Faqs,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/activities',
+    component: Activities,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/ambassadors',
+    component: Ambassadors,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/applications',
+    component: Applications,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/beneficiaries',
+    component: Beneficiaries,
+    auth: AdminAuthorization,
   },
 ];
 
