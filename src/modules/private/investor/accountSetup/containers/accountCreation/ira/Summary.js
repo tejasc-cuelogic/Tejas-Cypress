@@ -12,6 +12,7 @@ import { ListErrors } from '../../../../../../../theme/shared';
 export default class Summary extends Component {
   handleCreateAccount = () => {
     this.props.iraAccountStore.createAccount('Summary', 'submit');
+    this.props.history.push('/app/summary');
   }
   render() {
     const {

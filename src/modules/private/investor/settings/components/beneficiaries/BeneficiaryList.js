@@ -1,58 +1,94 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Card, Grid, Button, Header } from 'semantic-ui-react';
+import { Link, Route } from 'react-router-dom';
+import Aux from 'react-aux';
+import startCase from 'lodash/startCase';
+import moment from 'moment';
+import { Card, Grid, Button, Header, Icon, Item, Divider } from 'semantic-ui-react';
 import { DateTimeFormat } from '../../../../../../theme/shared';
+import { BENEFICIARY_STATUS } from '../../../../../../constants/user';
+import AddBeneficiary from './AddBeneficiary';
 
-const statuses = ['Rejected', 'Pending Approval', 'Approved'];
-const BeneficiaryList = props => (
-  <Grid.Row>
-    <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
-      {
-        props.beneficiaries.map(b => (
-          <Card fluid>
-            <Grid stackable celled="internally" padded="horizontally">
-              <Grid.Row>
-                <Grid.Column width={8}>
-                  <Card.Content>
-                    <dl className="dl-horizontal">
-                      <dt>Names</dt>
-                      <dd>{`${b.firstName} ${b.lastName}`}</dd>
-                      <dt>DOB</dt>
-                      <dd><DateTimeFormat datetime={b.dob} /></dd>
-                      <dt>Relationship</dt>
-                      <dd>{b.relationship}</dd>
-                    </dl>
-                  </Card.Content>
-                </Grid.Column>
-                <Grid.Column width={8}>
-                  <Card.Content>
-                    <dl className="dl-horizontal">
-                      <dt>Legal Address</dt>
-                      <dd>
-                        {`${b.residentalStreet}`}<br />{`${b.city} ${b.state} ${b.zipCode}`}
-                      </dd>
-                    </dl>
-                  </Card.Content>
-                  <Card.Content>
-                    <Header as="h6" color="orange" className="status">{statuses[(b.status + 1)]}</Header>
-                    <Button
-                      size="mini"
-                      color="red"
-                      className={`ghost-button ${props.deleting === b.id ? 'loading' : ''}`}
-                      onClick={() => props.delete(b.id)}
-                    >
-                        Remove Beneficiary
-                    </Button>
-                  </Card.Content>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Card>
-        ))
-      }
-      <Button as={Link} to={`${props.match.url}/add-beneficiary`} color="green" className="relaxed">Add new beneficiary</Button>
-    </Grid.Column>
-  </Grid.Row>
-);
+const BeneficiaryList = (props) => {
+  const title = props.title === 'ira' ? props.title.toUpperCase() : startCase(props.title);
+  const status = props.beneficiaries.requestStatus;
+  const statusImg = (BENEFICIARY_STATUS.PENDING === props.beneficiaries.requestStatus ? 'orange reload' : 'green check').split(' ');
+  const showButton = (props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary` && props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary/confirm`);
+  const headerMsg = `Pellentesque facilisis. Nulla imperdiet sit amet magna.
+                      Vestibulum dapibus, mauris nec malesuada fames ac turpis`;
+  return (
+    <Grid.Row>
+      <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
+        <Card fluid>
+          <Card.Content className="padded beneficiaries">
+            <Header as="h3">
+              <Icon color="green" className={`ns-${title.toLowerCase()}-line`} />
+              {`${title} Account beneficiaries`}
+            </Header>
+            { showButton ?
+              <Aux>
+                <div className="status">
+                  <span className="time-stamp">{`Updated: ${moment(props.updatedDate).format('MM-DD-YYYY')}`}</span>
+                  <Icon color={statusImg[0]} className={`ns-${statusImg[1]}-circle`} /> <span className="capitalize">{`${status}`}</span>
+                </div>
+                <p>{headerMsg}</p>
+                <Divider hidden />
+                <Item.Group>
+                  {
+                    props.beneficiaries.recipients ?
+                    props.beneficiaries.recipients.map(beneficiary => (
+                      <Item>
+                        <Grid stackable celled="internally" padded="horizontally">
+                          <Grid.Row>
+                            <Grid.Column width={8}>
+                              <Card.Content>
+                                <dl className="dl-horizontal">
+                                  <dt>Names</dt>
+                                  <dd>{`${beneficiary.firstName} ${beneficiary.lastName}`}</dd>
+                                  <dt>DOB</dt>
+                                  <dd>
+                                    <DateTimeFormat
+                                      datetime={moment(beneficiary.dob, 'MM-DD-YYYY')}
+                                    />
+                                  </dd>
+                                  <dt>Relationship</dt>
+                                  <dd>{beneficiary.relationship}</dd>
+                                </dl>
+                              </Card.Content>
+                            </Grid.Column>
+                            <Grid.Column width={8}>
+                              <Card.Content>
+                                <dl className="dl-horizontal">
+                                  <dt>Legal Address</dt>
+                                  <dd>
+                                    {`${beneficiary.address.street}`}<br />{`${beneficiary.address.city} ${beneficiary.address.state} ${beneficiary.address.zipCode}`}
+                                  </dd>
+                                </dl>
+                              </Card.Content>
+                              <Card.Content>
+                                <dl className="dl-horizontal">
+                                  <dt>Share</dt>
+                                  <dd>{`${beneficiary.shares}%`}</dd>
+                                </dl>
+                              </Card.Content>
+                            </Grid.Column>
+                          </Grid.Row>
+                        </Grid>
+                      </Item>
+                    )) :
+                    <div>loading...</div>
+                  }
+                </Item.Group>
+                <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} color="green">Manage beneficiaries</Button>
+              </Aux> :
+              <p>{headerMsg}</p>
+              }
+            <Divider hidden />
+            <Route path={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} render={props1 => <AddBeneficiary refLink={props.match.url} isDataAvailable accountId={props.accountId} {...props1} />} />
+          </Card.Content>
+        </Card>
+      </Grid.Column>
+    </Grid.Row>
+  );
+};
 
 export default BeneficiaryList;

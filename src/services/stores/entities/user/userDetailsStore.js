@@ -11,19 +11,16 @@ import { GqlClient as client2 } from '../../../../api/gcoolApi';
 import {
   uiStore, profileStore, iraAccountStore, individualAccountStore, entityAccountStore,
 } from '../../index';
-import { BENEFICIARY_FRM, FIN_INFO } from '../../../../constants/user';
+import { FIN_INFO } from '../../../../constants/user';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
-import { allBeneficiaries, createBeneficiaryMutation, deleteBeneficiary } from '../../queries/beneficiaries';
 import { finLimit, updateFinLimit } from '../../queries/financialLimits';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
   @observable detailsOfUser = {};
-  @observable beneficiariesData = [];
   @observable financialLimit = {};
   @observable editCard = 0;
-  @observable BENEFICIARY_META = { fields: { ...BENEFICIARY_FRM }, meta: { isValid: false, error: '' } };
   @observable deleting = 0;
   @observable FIN_INFO = { fields: { ...FIN_INFO }, meta: { isValid: false, error: '' } };
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
@@ -100,33 +97,6 @@ export class UserDetailsStore {
       .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
 
-  @action
-  getBeneficiaries = () => {
-    this.beneficiariesData = graphql({
-      client: client2,
-      query: allBeneficiaries,
-    });
-  }
-
-  @action beneficiaryReset = () => {
-    this.BENEFICIARY_META = { fields: { ...BENEFICIARY_FRM }, meta: { isValid: false, error: '' } };
-  }
-
-  @computed get beneficiaries() {
-    return (this.beneficiariesData.data
-      && this.beneficiariesData.data.allBeneficiaries
-      && toJS(this.beneficiariesData.data.allBeneficiaries)
-    ) || [];
-  }
-
-  @computed get bErr() {
-    return (this.beneficiariesData.error && this.beneficiariesData.error.message) || null;
-  }
-
-  @computed get bLoading() {
-    return this.beneficiariesData.loading;
-  }
-
   @computed get fLoading() {
     return this.financialLimit.loading;
   }
@@ -199,64 +169,9 @@ export class UserDetailsStore {
   }
 
   @action
-  createBeneficiary = () => {
-    const beneficiary = mapValues(this.BENEFICIARY_META.fields, f => f.value);
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client2
-        .mutate({
-          mutation: createBeneficiaryMutation,
-          variables: {
-            firstName: beneficiary.firstName,
-            lastName: beneficiary.lastName,
-            relationship: beneficiary.relationship,
-            residentalStreet: beneficiary.residentalStreet,
-            city: beneficiary.city,
-            state: beneficiary.state,
-            zipCode: parseInt(beneficiary.zipCode, 10),
-            dob: beneficiary.dob,
-          },
-          refetchQueries: [{ query: allBeneficiaries }],
-        })
-        .then(() => resolve())
-        .catch(() => reject())
-        .finally(() => {
-          this.beneficiaryReset();
-          uiStore.setProgress(false);
-        });
-    });
-  }
-
-  @action
   setDelStatus = (status) => {
     this.deleting = status;
   }
-
-  @action
-  deleteBeneficiary = (id) => {
-    this.deleting = id;
-    client2
-      .mutate({
-        mutation: deleteBeneficiary,
-        variables: { id },
-        refetchQueries: [{ query: allBeneficiaries }],
-      })
-      .then(() => Helper.toast('Beneficiary deleted!', 'success'))
-      .catch(error => Helper.toast(`Error while deleting Beneficiary- ${error}`, 'warn'))
-      .finally(() => this.setDelStatus(0));
-  }
-
-  @action
-  beneficiaryEleChange = (e, result) => {
-    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
-    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
-    this.onFieldChange('BENEFICIARY_META', fieldName, fieldValue);
-  };
-
-  @action
-  beneficiaryDateChange = (date) => {
-    this.onFieldChange('BENEFICIARY_META', 'dob', date);
-  };
 
   @action
   finInfoEleChange = (e, result) => {
@@ -280,15 +195,6 @@ export class UserDetailsStore {
       this[form].fields[field].error = validation.errors.first(field);
     }
   };
-
-  @action
-  setAddressFields = (place) => {
-    const data = Helper.gAddressClean(place);
-    this.onFieldChange('BENEFICIARY_META', 'residentalStreet', data.residentalStreet);
-    this.onFieldChange('BENEFICIARY_META', 'city', data.city);
-    this.onFieldChange('BENEFICIARY_META', 'state', data.state);
-    this.onFieldChange('BENEFICIARY_META', 'zipCode', data.zipCode);
-  }
 
   /*
   Financial Limits

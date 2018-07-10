@@ -15,6 +15,14 @@ export default class AccountSetup extends Component {
     this.props.userDetailsStore.setUserAccDetails();
   }
 
+  navToAccTypes = (step) => {
+    if (step) {
+      this.props.history.push(`${this.props.match.url}/account-creation/${step}`);
+    } else {
+      this.props.history.push(`${this.props.match.url}/account-creation`);
+    }
+  }
+
   renderStep = (step) => {
     if (step === 0) {
       this.props.history.push(`${this.props.match.url}/identity-verification/0`);
@@ -27,7 +35,7 @@ export default class AccountSetup extends Component {
 
   render() {
     const { match } = this.props;
-    const { signupStatus, currentUser } = this.props.userDetailsStore;
+    const { signupStatus, currentUser, getStepStatus } = this.props.userDetailsStore;
 
     return (
       <PrivateLayout {...this.props} P5={<StickyNotification signupStatus={signupStatus} />}>
@@ -36,6 +44,8 @@ export default class AccountSetup extends Component {
           <ProgressCard
             renderStep={this.renderStep}
             signupStatus={signupStatus}
+            getStepStatus={getStepStatus}
+            navToAccTypes={this.navToAccTypes}
           />
           )
         }

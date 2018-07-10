@@ -13,7 +13,7 @@ export default class Details extends Component {
     const { selected } = this.props.educationStore;
     return (
       <Card fluid>
-        <Card.Content className="padded knowledge-details">
+        <Card.Content className="very padded knowledge-details">
           {selected ? (
             <Aux>
               <Header as="h3">{selected.title}</Header>
