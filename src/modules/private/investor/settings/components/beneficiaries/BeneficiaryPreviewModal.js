@@ -9,6 +9,11 @@ import { ListErrors, DateTimeFormat } from '../../../../../../theme/shared';
 @withRouter
 @observer
 export default class BeneficiaryPreviewModal extends Component {
+  componentWillMount() {
+    if (!this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary.length) {
+      this.props.history.push(this.props.refLink);
+    }
+  }
   submit = (e) => {
     e.preventDefault();
     this.props.beneficiaryStore.resetFormData('OTP_VERIFY_META');
@@ -30,7 +35,7 @@ export default class BeneficiaryPreviewModal extends Component {
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Please confirm all the beneficiaries you have entered are correct.</Header>
+          <Header as="h2">Please confirm the beneficiaries details you entered.</Header>
           <Divider />
         </Modal.Header>
         <Modal.Content className="signup-content">
@@ -52,6 +57,7 @@ export default class BeneficiaryPreviewModal extends Component {
                         <dt>Date of birth</dt>
                         <dd>
                           <DateTimeFormat
+                            format="MM-DD-YYYY"
                             datetime={moment(beneficiary.dob.value, 'MM-DD-YYYY')}
                           />
                         </dd>
@@ -61,7 +67,7 @@ export default class BeneficiaryPreviewModal extends Component {
                         <dd>
                           {`${beneficiary.residentalStreet.value}`}, {`${beneficiary.city.value} ${beneficiary.state.value} ${beneficiary.zipCode.value}`}
                         </dd>
-                        <dt>Shares percentage</dt>
+                        <dt>Shares %</dt>
                         <dd>{`${beneficiary.share.value}%`}</dd>
                       </dl>
                     </Card.Content>

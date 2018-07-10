@@ -104,6 +104,7 @@ export default class AddBeneficiary extends Component {
                       <FormDatePicker
                         type="text"
                         name="dob"
+                        placeholderText={beneficiary.dob.placeHolder}
                         fielddata={beneficiary.dob}
                         selected={beneficiary.dob.value ?
                           moment(beneficiary.dob.value) : null}

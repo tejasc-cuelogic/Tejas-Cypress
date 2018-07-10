@@ -11,6 +11,9 @@ import { ListErrors, FieldError } from '../../../../../../theme/shared';
 @observer
 export default class BeneficiaryShareModal extends Component {
   componentWillMount() {
+    if (!this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary.length) {
+      this.props.history.push(this.props.refLink);
+    }
     this.props.beneficiaryStore.setShareModalData(false);
     this.props.beneficiaryStore.updateBeneficiaryRules();
   }

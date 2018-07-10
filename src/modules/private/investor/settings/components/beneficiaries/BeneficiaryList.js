@@ -47,6 +47,7 @@ const BeneficiaryList = (props) => {
                                   <dt>DOB</dt>
                                   <dd>
                                     <DateTimeFormat
+                                      format="MM-DD-YYYY"
                                       datetime={moment(beneficiary.dob, 'MM-DD-YYYY')}
                                     />
                                   </dd>
