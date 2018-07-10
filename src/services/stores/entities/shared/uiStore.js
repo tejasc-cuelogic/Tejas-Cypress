@@ -32,6 +32,16 @@ export class UiStore {
   @observable authWizardStep = undefined;
   @observable dashboardStep = undefined;
   @observable editMode = false;
+  @observable passwordInputType = 'password';
+
+  @action
+  setPasswordVisibilityStatus = () => {
+    if (this.passwordInputType === 'password') {
+      this.passwordInputType = 'text';
+    } else {
+      this.passwordInputType = 'password';
+    }
+  }
 
   @action
   setModalStatus(status) {

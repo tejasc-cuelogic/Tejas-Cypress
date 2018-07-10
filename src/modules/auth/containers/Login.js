@@ -28,10 +28,28 @@ class Login extends Component {
         }
       });
   };
+  passwordInputHandler = (field) => {
+    const { passwordInputType } = this.props.uiStore;
+    if (field === 'password' && passwordInputType === 'password') {
+      return {
+        className: 'ns-view',
+        link: true,
+        onClick: this.props.uiStore.setPasswordVisibilityStatus,
+      };
+    }
+    if (field === 'password' && passwordInputType === 'text') {
+      return {
+        className: 'ns-view',
+        link: true,
+        onClick: this.props.uiStore.setPasswordVisibilityStatus,
+      };
+    }
+    return null;
+  }
 
   render() {
     const { LOGIN_FRM, LoginChange } = this.props.authStore;
-    const { errors, inProgress } = this.props.uiStore;
+    const { errors, inProgress, passwordInputType } = this.props.uiStore;
     return (
       <Modal size="mini" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
@@ -54,7 +72,8 @@ class Login extends Component {
               Object.keys(LOGIN_FRM.fields).map(field => (
                 <FormInput
                   key={field}
-                  type={field !== 'email' ? 'password' : 'text'}
+                  type={field !== 'email' ? passwordInputType : 'text'}
+                  icon={this.passwordInputHandler(field)}
                   name={field}
                   fielddata={LOGIN_FRM.fields[field]}
                   changed={LoginChange}

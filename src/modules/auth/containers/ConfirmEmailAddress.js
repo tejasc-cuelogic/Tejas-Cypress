@@ -91,9 +91,10 @@ export default class ConfirmEmailAddress extends Component {
               size="huge"
               name="code"
               containerclassname="otp-field"
+              type="text"
               fielddata={CONFIRM_FRM.fields.code}
               changed={ConfirmChange}
-              maxLength={6}
+              maxlength={6}
             />
             <div className="center-align">
               <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!CONFIRM_FRM.meta.isValid}>Confirm</Button>
