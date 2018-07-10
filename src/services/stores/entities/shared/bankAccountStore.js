@@ -103,6 +103,12 @@ export class BankAccountStore {
     return !isEmpty(this.plaidBankDetails);
   }
 
+  @computed
+  get isValidAddFunds() {
+    const { error } = this.formAddFunds.fields.value;
+    return isEmpty(error);
+  }
+
   simpleErr = err => ({
     statusCode: err.statusCode,
     code: err.code,

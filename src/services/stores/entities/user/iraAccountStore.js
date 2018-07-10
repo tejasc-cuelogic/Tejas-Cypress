@@ -221,7 +221,9 @@ class IraAccountStore {
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
+      console.log(userDetailsStore.currentUser.data.user.accounts);
       const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'ira' });
+      console.log(accountDetails);
       if (accountDetails) {
         mutation = updateAccount;
         variables.accountId = accountDetails.accountId;
@@ -373,15 +375,14 @@ class IraAccountStore {
           this.IDENTITY_FRM.fields[field].preSignedUrl = preSignedUrl;
           resolve();
         }))
-        .catch((err) => {
+        .catch(action((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          this.onFieldChange('IDENTITY_FRM', field, '');
           this.IDENTITY_FRM = FormValidator.onChange(
             this.IDENTITY_FRM,
             { name: field, value: '' },
           );
           reject(err);
-        })
+        }))
         .finally(() => {
           uiStore.setProgress(false);
         });
