@@ -446,13 +446,13 @@ export const FINANCES = {
     value: '',
     label: ' ',
     error: undefined,
-    rule: 'required_with: checkbox1',
+    rule: 'required_with:checkbox1',
   },
   firmName: {
     value: '',
     label: ' ',
     error: undefined,
-    rule: 'required_with: checkbox2',
+    rule: 'required_with:checkbox2',
   },
 };
 
@@ -468,7 +468,7 @@ export const INVESTMENT_EXPERIENCE = {
     values: [
       {
         label: 'Investing in private business is not for investors with short-term time horizons.  Are you comfortable investing in securities that have limited liquidty?',
-        value: 'checkbox1',
+        value: 'checkbox',
       },
     ],
     error: undefined,
@@ -478,8 +478,8 @@ export const INVESTMENT_EXPERIENCE = {
     value: [],
     values: [
       {
-        label: 'Investing in private business involves risk.  When investing on NextSeed, are you willing to take on significant risk to potentially earn a return in your investment?',
-        value: 'checkbox2',
+        label: 'Investing in private business involves risk. When investing on NextSeed, are you willing to take on significant risk to potentially earn a return in your investment?',
+        value: 'checkbox',
       },
     ],
     error: undefined,

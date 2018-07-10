@@ -7,7 +7,7 @@ import InvestorProfile from './InvestorProfile';
 import Finances from './Finances';
 import Experience from './Experience';
 
-@inject('uiStore')
+@inject('uiStore', 'investorProfileStore')
 @withRouter
 @observer
 export default class AccountCreation extends React.Component {
@@ -21,25 +21,25 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Employment',
         component: <Employment />,
-        isValid: true,
+        isValid: this.props.investorProfileStore.isValidEmployment ? '' : 'error',
         isDirty: false,
       },
       {
         name: 'Investor Profile',
         component: <InvestorProfile />,
-        isValid: true,
+        isValid: this.props.investorProfileStore.isValidInvestorProfile ? '' : 'error',
         isDirty: false,
       },
       {
         name: 'Finances',
         component: <Finances />,
-        isValid: true,
+        isValid: this.props.investorProfileStore.isValidFinances ? '' : 'error',
         isDirty: false,
       },
       {
         name: 'Experience',
         component: <Experience />,
-        isValid: true,
+        isValid: this.props.investorProfileStore.isValidExperience ? '' : 'error',
         isDirty: false,
       },
     ];

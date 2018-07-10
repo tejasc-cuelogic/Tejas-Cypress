@@ -8,43 +8,27 @@ const progressMeta = Helper.Progress();
 const checkStatus = (signupStatus, key) => {
   let status = false;
   if (key === 'contact-card') {
-    if (signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') {
+    if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
+      signupStatus.phoneVerification === 'DONE') {
       status = 2;
     } else {
       status = 1;
     }
   } else if (key === 'cash-dollar') {
-    if (signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') {
+    if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
+    signupStatus.phoneVerification === 'DONE') {
       status = 1;
     } else {
       status = 0;
     }
   } else if (key === 'bar-line-chart') {
-    if (signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') {
+    if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
+    signupStatus.phoneVerification === 'DONE') {
       status = 1;
     } else {
       status = 0;
     }
   }
-  // else if (key === 'phone-line') {
-  //   if (signupStatus.idVerification !== 'PASS' &&
-  // signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING') {
-  //     status = 0;
-  //   } else {
-  //     status = 1;
-  //   }
-  //   if (signupStatus.phoneVerification === 'DONE') {
-  //     status = 2;
-  //   }
-  // } else if (key === 'bar-line-chart') {
-  //   if (signupStatus.partialAccounts.length > 0) {
-  //     status = true;
-  //   }
-  // } else if (key === 'chart-setting') {
-  //   if (signupStatus.inActiveAccounts.length > 0) {
-  //     status = true;
-  //   }
-  // }
   return status;
 };
 

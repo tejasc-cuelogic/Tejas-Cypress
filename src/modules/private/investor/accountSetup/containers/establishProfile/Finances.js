@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
-import { FormInput, FormCheckbox } from '../../../../../../theme/form';
+import { FormInput, MaskedInput2, FormCheckbox } from '../../../../../../theme/form';
 
 @inject('investorProfileStore')
 @observer
@@ -18,16 +18,20 @@ export default class Finances extends Component {
           we can determine which investments we are allowed to show you
         </Header>
         <Form error>
-          <FormInput
+          <MaskedInput2
+            name="netWorth"
+            currency
             fielddata={FINANCES.fields.netWorth}
             changed={financesChange}
           />
           <Form.Group widths="equal">
             {['annualIncome1', 'annualIncome2', 'annualIncome3'].map(field => (
-              <FormInput
+              <MaskedInput2
                 key={field}
-                fielddata={FINANCES.fields[field]}
                 name={field}
+                currency
+                value={FINANCES.fields[field].value}
+                fielddata={FINANCES.fields[field]}
                 changed={financesChange}
               />
             ))
@@ -43,6 +47,8 @@ export default class Finances extends Component {
             fielddata={FINANCES.fields.companyName}
             name="companyName"
             changed={financesChange}
+            disabled={FINANCES.fields.checkbox1.value &&
+              FINANCES.fields.checkbox1.value.length === 0}
           />
           <FormCheckbox
             fielddata={FINANCES.fields.checkbox2}
@@ -54,6 +60,8 @@ export default class Finances extends Component {
             fielddata={FINANCES.fields.firmName}
             name="firmName"
             changed={financesChange}
+            disabled={FINANCES.fields.checkbox2.value &&
+              FINANCES.fields.checkbox2.value.length === 0}
           />
         </Form>
       </div>
