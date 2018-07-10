@@ -9,6 +9,9 @@ import BeneficiaryList from '../components/beneficiaries/BeneficiaryList';
 export default class Beneficiaries extends Component {
   componentWillMount() {
     this.props.beneficiaryStore.getBeneficiaries();
+    if (this.props.match.url === this.props.location.pathname) {
+      this.props.beneficiaryStore.setShareModalData(false);
+    }
   }
 
   render() {

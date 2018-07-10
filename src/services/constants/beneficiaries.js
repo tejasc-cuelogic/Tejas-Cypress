@@ -52,10 +52,12 @@ export const BENEFICIARY_FRM = {
     },
     share: {
       value: '',
-      label: 'Shares percentage',
+      label: '',
+      // label: 'Shares percentage',
       error: undefined,
-      rule: 'required|sharePercentage:share',
-      tooltip: 'Tooltip content',
+      rule: 'optional',
+      // rule: 'required|sharePercentage:share',
+      // tooltip: 'Tooltip content',
     },
   }],
 };

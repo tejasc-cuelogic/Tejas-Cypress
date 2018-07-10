@@ -36,6 +36,7 @@ export default class ConfirmVerificationCode extends Component {
   resendVerification = (e) => {
     e.preventDefault();
     this.props.beneficiaryStore.setReSendVerificationCode(true);
+    this.props.beneficiaryStore.setShareModalData(false);
     this.props.beneficiaryStore.requestOtpForManageBeneficiary().then(() => {
       this.props.beneficiaryStore.setReSendVerificationCode(false);
       Helper.toast('The OTP is send to your number!', 'success');
@@ -87,7 +88,7 @@ export default class ConfirmVerificationCode extends Component {
               changed={verifyVerificationCodeChange}
             />
             <div className="center-align">
-              <Button loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!OTP_VERIFY_META.meta.isValid} >Confirm</Button>
+              <Button loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!OTP_VERIFY_META.meta.isValid} >Submit to approval</Button>
             </div>
             <div className="center-align">
               <Button loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="cancel-link" onClick={e => this.resendVerification(e)}>Resend the code to my phone</Button>

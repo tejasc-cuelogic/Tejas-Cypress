@@ -6,7 +6,7 @@ import AddBeneficiary from './AddBeneficiary';
 
 const NoBeneficiary = (props) => {
   const title = props.title === 'ira' ? props.title.toUpperCase() : startCase(props.title);
-  const showButton = props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary`;
+  const showButton = props.curLocation.pathname === props.match.url;
   return (
     <Grid.Row>
       <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>

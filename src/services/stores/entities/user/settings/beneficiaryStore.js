@@ -15,19 +15,16 @@ export class BeneficiaryStore {
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
   @observable removeBeneficiaryIndex = null;
   @observable beneficiaryModal = false;
+  @observable isShareModalDataSet = false;
   @observable beneficiaryOtpRequestId = null;
   @observable currentSelectedAccountId = null;
   @observable beneficiaryDisplayPhoneNumber = null;
   @observable reSendVerificationCode = null;
-  @observable removeBeneficiaryMessage = 'Are you sure you want to remove this beneficiary?';
 
   @action
   toggleBeneficiaryConfirmModal(index) {
     this.beneficiaryModal = !this.beneficiaryModal;
     this.removeBeneficiaryIndex = this.beneficiaryModal ? index : null;
-    this.removeBeneficiaryMessage = this.BENEFICIARY_META.fields.beneficiary.length === 1 ?
-      'You need to add at leat one beneficiary.' :
-      'Are you sure you want to remove this beneficiary?';
   }
 
   @action
@@ -36,8 +33,23 @@ export class BeneficiaryStore {
   }
 
   @action
+  setShareModalData(value) {
+    this.isShareModalDataSet = value;
+  }
+
+  @action
   resetFormData(form) {
     this[form] = Validator.resetFormData(this[form]);
+  }
+
+  @action
+  updateBeneficiaryRules() {
+    if (this.BENEFICIARY_META.fields.beneficiary.length) {
+      forEach(this.BENEFICIARY_META.fields.beneficiary, (beneficiary, key) => {
+        this.BENEFICIARY_META.fields.beneficiary[key].share.rule = !this.isShareModalDataSet ?
+          'required|sharePercentage:share' : 'optional';
+      });
+    }
   }
 
   @computed get bErr() {
@@ -68,8 +80,8 @@ export class BeneficiaryStore {
   }
 
   @action
-  removeBeneficiary(index) {
-    this.BENEFICIARY_META.fields.beneficiary.splice(index, 1);
+  removeBeneficiary() {
+    this.BENEFICIARY_META.fields.beneficiary.splice(this.removeBeneficiaryIndex, 1);
     const shareVal = this.BENEFICIARY_META.fields.beneficiary[0].share.value;
     this.BENEFICIARY_META = Validator
       .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: shareVal }, 0);
@@ -216,10 +228,9 @@ export class BeneficiaryStore {
   };
 
   @action
-  beneficiaryShareChange = (e, index) => {
-    const share = parseInt(e.target.value.slice(0, -1), 10);
+  beneficiaryShareChange = (values, index) => {
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: share }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: values.floatValue }, index);
   };
 
   @action

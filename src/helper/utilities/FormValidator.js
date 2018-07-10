@@ -60,7 +60,7 @@ class FormValidator {
         currentForm.fields.beneficiary[key][requirement].error = total === 100 ?
           undefined : true;
       });
-      return total === 100;
+      return total === 100 && value > 0;
     }, 'The sum of :attribute percentages must be 100.');
 
     const formData = this.ExtractFormValues(toJS(currentForm.fields));

@@ -60,7 +60,7 @@ const BeneficiaryList = (props) => {
                                 <dl className="dl-horizontal">
                                   <dt>Legal Address</dt>
                                   <dd>
-                                    {`${beneficiary.address.street}`}<br />{`${beneficiary.address.city} ${beneficiary.address.state} ${beneficiary.address.zipCode}`}
+                                    {`${beneficiary.address.street}`}, {`${beneficiary.address.city} ${beneficiary.address.state} ${beneficiary.address.zipCode}`}
                                   </dd>
                                 </dl>
                               </Card.Content>
