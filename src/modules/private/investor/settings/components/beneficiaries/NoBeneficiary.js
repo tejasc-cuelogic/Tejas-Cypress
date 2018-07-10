@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
 import { Card, Grid, Button, Header, Divider, Icon } from 'semantic-ui-react';
-import startCase from 'lodash/startCase';
+import { startCase, includes } from 'lodash';
 import AddBeneficiary from './AddBeneficiary';
 
 const NoBeneficiary = (props) => {
   const title = props.title === 'ira' ? props.title.toUpperCase() : startCase(props.title);
-  const showButton = props.curLocation.pathname === props.match.url;
+  const showButton = !includes(props.curLocation.pathname, `${props.match.url}/add-${title.toLowerCase()}-beneficiary`);
   return (
     <Grid.Row>
       <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>

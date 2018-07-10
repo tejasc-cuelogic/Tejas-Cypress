@@ -49,7 +49,7 @@ export const BENEFICIARY_FRM = {
       label: 'State',
       error: undefined,
       rule: 'required',
-      placeHolder: 'WC',
+      placeHolder: 'NY',
     },
     zipCode: {
       value: '',

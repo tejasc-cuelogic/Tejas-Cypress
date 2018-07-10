@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import moment from 'moment';
 import { Form, Header, Button, Confirm, Icon } from 'semantic-ui-react';
@@ -147,7 +147,8 @@ export default class AddBeneficiary extends Component {
           : null
           }
           <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
-          <Button inverted color="green" onClick={this.handleCloseModal} >Cancel</Button>
+          <Button as={Link} to={this.props.refLink} inverted color="green" >Cancel</Button>
+          {/* <Button inverted color="green" onClick={} >Cancel</Button> */}
         </Form>
         <Confirm
           header="Confirm"

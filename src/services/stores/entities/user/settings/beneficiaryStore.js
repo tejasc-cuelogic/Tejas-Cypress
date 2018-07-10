@@ -49,6 +49,8 @@ export class BeneficiaryStore {
         this.BENEFICIARY_META.fields.beneficiary[key].share.rule = !this.isShareModalDataSet ?
           'required|sharePercentage:share' : 'optional';
       });
+      this.BENEFICIARY_META = Validator
+        .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: this.BENEFICIARY_META.fields.beneficiary[0].firstName.value }, 0);
     }
   }
 
