@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import ManageFaqs from './containers/ManageFaqs';
-import FaqDetails from './containers/FaqDetails';
+import ManageTeam from './containers/ManageTeam';
+import TeamDetails from './containers/TeamDetails';
 
-export default class Insights extends Component {
+export default class Team extends Component {
   render() {
     const { match } = this.props;
     return (
       <Switch>
-        <Route exact path={`${match.url}`} component={ManageFaqs} />
-        <Route exact path={`${match.url}/:id`} component={FaqDetails} />
+        <Route exact path={`${match.url}`} component={ManageTeam} />
+        <Route exact path={`${match.url}/:id`} component={TeamDetails} />
       </Switch>
     );
   }

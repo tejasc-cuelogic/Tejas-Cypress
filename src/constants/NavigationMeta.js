@@ -163,7 +163,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'calendar',
     title: 'Events',
-    to: 'manage/events',
+    to: 'events',
     accessibleTo: ['bowner'],
   },
   {
@@ -186,7 +186,7 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin'],
   },
   {
-    icon: 'browser',
+    icon: 'ns-article',
     title: 'Knowledge Base',
     to: 'knowledge-base',
     accessibleTo: ['admin'],

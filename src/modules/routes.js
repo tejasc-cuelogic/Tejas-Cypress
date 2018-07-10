@@ -9,9 +9,8 @@ import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
-import Base from './private/shared/basemodule/Base';
 import Messages from './private/shared/messages/containers/Messages';
-import Dashboard from './private/shared/dashboard/containers/Dashboard';
+import Dashboard from './private/issuer/dashboard';
 import Users from './private/admin/userManagement/containers/Users';
 import UserDetails from './private/admin/userManagement/containers/UserDetails';
 import UsersNew from './private/admin/userManagement/containers/UsersNew';
@@ -31,6 +30,15 @@ import Activities from './private/admin/activities';
 import Ambassadors from './private/admin/ambassadors';
 import Applications from './private/admin/applications';
 import Beneficiaries from './private/admin/beneficiaries';
+import Campaigns from './private/admin/campaigns';
+import CrowdPay from './private/admin/crowdPay';
+import Deployments from './private/admin/deployments';
+import Investments from './private/admin/investments';
+import KnowledgeBase from './private/admin/knowledgeBase';
+import Repayments from './private/admin/repayments';
+import Team from './private/admin/team';
+import Transactions from './private/admin/transactions';
+import Events from './private/issuer/events';
 
 import {
   AdminAuthorization,
@@ -130,12 +138,6 @@ export const privateRoutes = [
     exact: true,
   },
   {
-    path: '/app/manage/:entity',
-    component: Base,
-    auth: BusinessAuthorization,
-    exact: true,
-  },
-  {
     path: '/app/users/new',
     component: UsersNew,
     auth: AdminAuthorization,
@@ -200,11 +202,6 @@ export const privateRoutes = [
     auth: UserAuthorization,
   },
   {
-    path: '/app/page/:pageId',
-    component: Base,
-    auth: UserAuthorization,
-  },
-  {
     path: '/app/insights',
     component: Insights,
     auth: AdminAuthorization,
@@ -234,5 +231,49 @@ export const privateRoutes = [
     component: Beneficiaries,
     auth: AdminAuthorization,
   },
+  {
+    path: '/app/campaigns',
+    component: Campaigns,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/crowdPay',
+    component: CrowdPay,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/deployments',
+    component: Deployments,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/investments',
+    component: Investments,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/knowledge-base',
+    component: KnowledgeBase,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/repayments',
+    component: Repayments,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/team',
+    component: Team,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/transactions',
+    component: Transactions,
+    auth: AdminAuthorization,
+  },
+  {
+    path: '/app/events',
+    component: Events,
+    auth: BusinessAuthorization,
+  },
 ];
-

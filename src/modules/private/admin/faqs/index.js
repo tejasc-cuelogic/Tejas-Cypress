@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import ManageFaqs from './containers/ManageFaqs';
 import FaqDetails from './containers/FaqDetails';
 
-export default class Insights extends Component {
+export default class Faqs extends Component {
   render() {
     const { match } = this.props;
     return (
