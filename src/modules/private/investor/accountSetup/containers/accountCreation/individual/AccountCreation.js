@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 
 import { MultiStep } from '../../../../../../../helper';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
@@ -11,7 +11,7 @@ import Summary from './Summary';
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
     this.updateUser();
-    this.props.setDashboardWizardStep();
+    this.props.history.push('/app/summary');
   }
   handleStepChange = (step) => {
     this.props.individualAccountStore.setStepToBeRendered(step);
@@ -27,7 +27,7 @@ export default class AccountCreation extends React.Component {
         name: 'Link Bank',
         component: <Plaid />,
         isValid: '',
-        isDirty: !_.isEmpty(this.props.bankAccountStore.plaidBankDetails) ||
+        isDirty: !isEmpty(this.props.bankAccountStore.plaidBankDetails) ||
         this.props.bankAccountStore.formLinkBankManually.meta.isDirty,
       },
       {

@@ -12,13 +12,13 @@ export default class AccountType extends Component {
     this.props.entityAccountStore.entityInfoDateChange(date);
   }
   render() {
-    const { formEntityInfo, entityInfoChange } = this.props.entityAccountStore;
+    const { TRUST_INFO_FRM, entityInfoChange } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Is entity a trust?</Header>
         <Form error className="account-type-tab">
           <FormRadioGroup
-            fielddata={formEntityInfo.fields.isTrust}
+            fielddata={TRUST_INFO_FRM.fields.isTrust}
             name="isTrust"
             changed={entityInfoChange}
             containerclassname="button-radio center-align"
@@ -26,10 +26,10 @@ export default class AccountType extends Component {
           <div className="field-wrap">
             <FormDatePicker
               name="trustDate"
-              fielddata={formEntityInfo.fields.trustDate}
-              selected={moment(formEntityInfo.fields.trustDate.value)}
+              fielddata={TRUST_INFO_FRM.fields.trustDate}
+              selected={moment(TRUST_INFO_FRM.fields.trustDate.value)}
               changed={this.handleDateChange}
-              isdisabled={!formEntityInfo.fields.isTrust.value}
+              isdisabled={!TRUST_INFO_FRM.fields.isTrust.value}
             />
           </div>
         </Form>

@@ -49,7 +49,7 @@ export default class Plaid extends Component {
           }
           {
             <Grid centered>
-              {
+              {typeof bankListing !== 'undefined' &&
                 bankListing.map(bankData => (
                   <Grid.Column key={bankData.institution_id} computer={5} tablet={5} mobile={8}>
                     <Link

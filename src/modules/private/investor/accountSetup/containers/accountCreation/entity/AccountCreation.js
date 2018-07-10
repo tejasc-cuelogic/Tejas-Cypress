@@ -16,7 +16,7 @@ import Summary from './Summary';
 export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
     this.updateUser();
-    this.props.setDashboardWizardStep();
+    this.props.history.push('/app/summary');
   }
   handleStepChange = (step) => {
     this.props.entityAccountStore.setStepToBeRendered(step);
@@ -32,35 +32,35 @@ export default class AccountCreation extends React.Component {
         name: 'Financial info',
         component: <FinancialInformation />,
         isValid: this.props.entityAccountStore.isValidEntityFinancialInfo ? '' : 'error',
-        isDirty: this.props.entityAccountStore.formFinInfo.meta.isDirty,
+        isDirty: this.props.entityAccountStore.FIN_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityFinancialInfo,
       },
       {
         name: 'General',
         component: <General />,
         isValid: this.props.entityAccountStore.isValidEntityGeneralInfo ? '' : 'error',
-        isDirty: this.props.entityAccountStore.formGeneralInfo.meta.isDirty,
+        isDirty: this.props.entityAccountStore.GEN_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityGeneralInformation,
       },
       {
         name: 'Entity info',
         component: <FinancilInfo />,
         isValid: this.props.entityAccountStore.isValidEntityInfo ? '' : 'error',
-        isDirty: this.props.entityAccountStore.formEntityInfo.meta.isDirty,
+        isDirty: this.props.entityAccountStore.TRUST_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityInfo,
       },
       {
         name: 'Personal info',
         component: <PersonalInformation />,
         isValid: this.props.entityAccountStore.isValidPersonalInfo ? '' : 'error',
-        isDirty: this.props.entityAccountStore.formPersonalInfo.meta.isDirty,
+        isDirty: this.props.entityAccountStore.PERSONAL_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityPersonalInfo,
       },
       {
         name: 'Formation doc',
         component: <FormationDocuments />,
         isValid: this.props.entityAccountStore.isValidFormationDoc ? '' : 'error',
-        isDirty: this.props.entityAccountStore.formFormationDocuments.meta.isDirty,
+        isDirty: this.props.entityAccountStore.FORM_DOCS_FRM.meta.isDirty,
         validate: validationActions.validateEntityFormationDoc,
       },
       {

@@ -12,7 +12,15 @@ import AccountCreation from './accountCreation';
 @observer
 export default class AccountSetup extends Component {
   componentWillMount() {
-    // this.props.userDetailsStore.setUserAccDetails();
+    this.props.userDetailsStore.setUserAccDetails();
+  }
+
+  navToAccTypes = (step) => {
+    if (step) {
+      this.props.history.push(`${this.props.match.url}/account-creation/${step}`);
+    } else {
+      this.props.history.push(`${this.props.match.url}/account-creation`);
+    }
   }
 
   renderStep = (step) => {
@@ -27,12 +35,20 @@ export default class AccountSetup extends Component {
 
   render() {
     const { match } = this.props;
+    const { signupStatus, currentUser, getStepStatus } = this.props.userDetailsStore;
+
     return (
-      <PrivateLayout {...this.props} P5={<StickyNotification />}>
+      <PrivateLayout {...this.props} P5={<StickyNotification signupStatus={signupStatus} />}>
         <h3>Progress of your account creation</h3>
-        <ProgressCard
-          renderStep={this.renderStep}
-        />
+        {!(currentUser.data && currentUser.data.user) ? 'Loading..' : (
+          <ProgressCard
+            renderStep={this.renderStep}
+            signupStatus={signupStatus}
+            getStepStatus={getStepStatus}
+            navToAccTypes={this.navToAccTypes}
+          />
+          )
+        }
         <Switch>
           <Route exact path={`${match.url}/identity-verification/:step`} component={IdentityVerification} />
           <Route exact path={`${match.url}/establish-profile`} component={EstablishProfile} />
