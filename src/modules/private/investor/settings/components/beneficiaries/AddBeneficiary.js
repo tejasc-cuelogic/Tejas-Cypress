@@ -146,6 +146,7 @@ export default class AddBeneficiary extends Component {
           : null
           }
           <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
+          <Button inverted color="green" onClick={this.handleCloseModal} >Cancel</Button>
         </Form>
         <Confirm
           header="Confirm"

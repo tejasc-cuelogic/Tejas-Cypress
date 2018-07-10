@@ -47,9 +47,9 @@ export default class BeneficiaryPreviewModal extends Component {
                   <Grid.Column width={16}>
                     <Card.Content>
                       <dl className="dl-horizontal">
-                        <dt>Names</dt>
+                        <dt>Full Name</dt>
                         <dd>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</dd>
-                        <dt>DOB</dt>
+                        <dt>Date of birth</dt>
                         <dd>
                           <DateTimeFormat
                             datetime={moment(beneficiary.dob.value, 'MM-DD-YYYY')}
@@ -61,7 +61,7 @@ export default class BeneficiaryPreviewModal extends Component {
                         <dd>
                           {`${beneficiary.residentalStreet.value}`}, {`${beneficiary.city.value} ${beneficiary.state.value} ${beneficiary.zipCode.value}`}
                         </dd>
-                        <dt>Share</dt>
+                        <dt>Shares percentage</dt>
                         <dd>{`${beneficiary.share.value}%`}</dd>
                       </dl>
                     </Card.Content>
