@@ -50,7 +50,7 @@ export class BeneficiaryStore {
           'required|sharePercentage:share' : 'optional';
       });
       this.BENEFICIARY_META = Validator
-        .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: this.BENEFICIARY_META.fields.beneficiary[0].firstName.value }, 0);
+        .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: this.BENEFICIARY_META.fields.beneficiary[0].firstName.value }, 'beneficiary', 0);
     }
   }
 
@@ -61,12 +61,12 @@ export class BeneficiaryStore {
       const val = (100 / this.BENEFICIARY_META.fields.beneficiary.length);
       forEach(this.BENEFICIARY_META.fields.beneficiary, (beneficiary, key) => {
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: key === 0 ? ceil(val) : floor(val) }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: key === 0 ? ceil(val) : floor(val) }, 'beneficiary', key);
       });
       url = 'confirm';
     } else {
       this.BENEFICIARY_META = Validator
-        .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: 100 }, 0);
+        .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: 100 }, 'beneficiary', 0);
       url = 'preview';
     }
     return url;
@@ -104,7 +104,7 @@ export class BeneficiaryStore {
     this.BENEFICIARY_META.fields.beneficiary.splice(this.removeBeneficiaryIndex, 1);
     const shareVal = this.BENEFICIARY_META.fields.beneficiary[0].share.value;
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: shareVal }, 0);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: shareVal }, 'beneficiary', 0);
     this.beneficiaryModal = !this.beneficiaryModal;
     this.removeBeneficiaryIndex = null;
   }
@@ -152,23 +152,23 @@ export class BeneficiaryStore {
     if (beneficiaryList.beneficiary) {
       forEach(beneficiaryList.beneficiary.recipients, (beneficiary, key) => {
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: beneficiary.firstName }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: beneficiary.firstName }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'lastName', value: beneficiary.lastName }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'lastName', value: beneficiary.lastName }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: beneficiary.address.city }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: beneficiary.address.city }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: beneficiary.address.state }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: beneficiary.address.state }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: beneficiary.address.street }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: beneficiary.address.street }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: beneficiary.address.zipCode }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: beneficiary.address.zipCode }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: moment(beneficiary.dob) }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: moment(beneficiary.dob) }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'relationship', value: beneficiary.relationship }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'relationship', value: beneficiary.relationship }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: beneficiary.shares }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: beneficiary.shares }, 'beneficiary', key);
         if (key < beneficiaryList.beneficiary.recipients.length - 1) {
           this.addMoreBeneficiary();
         }
@@ -244,33 +244,32 @@ export class BeneficiaryStore {
   @action
   beneficiaryEleChange = (e, result, index) => {
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, Validator.pullValues(e, result), index);
+      .onArrayFieldChange(this.BENEFICIARY_META, Validator.pullValues(e, result), 'beneficiary', index);
   };
 
   @action
   beneficiaryShareChange = (values, index) => {
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: values.floatValue }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: values.floatValue }, 'beneficiary', index);
   };
 
   @action
   beneficiaryDateChange = (date, index) => {
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: date }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: date }, 'beneficiary', index);
   };
 
   @action
   setAddressFields = (place, index) => {
     const data = Helper.gAddressClean(place);
-    console.log(data);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: data.residentalStreet ? data.residentalStreet : '' }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: data.residentalStreet ? data.residentalStreet : '' }, 'beneficiary', index);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: data.city ? data.city : '' }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: data.city ? data.city : '' }, 'beneficiary', index);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: data.state ? data.state : '' }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: data.state ? data.state : '' }, 'beneficiary', index);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: data.zipCode ? data.zipCode : '' }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: data.zipCode ? data.zipCode : '' }, 'beneficiary', index);
   }
 }
 

@@ -60,7 +60,6 @@ export class Utility {
   }
 
   gAddressClean = (place) => {
-    console.log(place);
     let result = {};
     const addressMap = {
       residentalStreet: ['street_number', 'route', 'sublocality_level_1', 'sublocality_level_2', 'sublocality_level_3'],

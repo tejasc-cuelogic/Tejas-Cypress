@@ -43,28 +43,40 @@ class FormValidator {
     return currentForm;
   }
 
-  onArrayFieldChange = (form, element, formIndex, type) => {
+  onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
     CustomeValidations.executet();
     const currentForm = form;
+    let currentFormRelative;
+    let fieldName = element.name;
+    if (formIndex > -1 && formName) {
+      currentFormRelative = currentForm.fields[formName][formIndex];
+      fieldName = `beneficiary.${formIndex}.${element.name}`;
+    } else if (formName) {
+      currentFormRelative = currentForm.fields[formName];
+      fieldName = `beneficiary.${element.name}`;
+    } else {
+      currentFormRelative = currentForm.fields;
+    }
+
     if (element.name) {
-      if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields.beneficiary[formIndex][element.name].value)) && type !== 'dropdown')) {
-        const index = currentForm.fields.beneficiary[formIndex][element.name]
+      if (type === 'checkbox' || (Array.isArray(toJS(currentFormRelative[element.name].value)) && type !== 'dropdown')) {
+        const index = currentFormRelative[element.name]
           .value.indexOf(element.value);
         if (index === -1) {
-          currentForm.fields.beneficiary[formIndex][element.name].value.push(element.value);
+          currentFormRelative[element.name].value.push(element.value);
         } else {
-          currentForm.fields.beneficiary[formIndex][element.name].value.splice(index, 1);
+          currentFormRelative[element.name].value.splice(index, 1);
         }
       } else {
-        currentForm.fields.beneficiary[formIndex][element.name].value = element.value;
+        currentFormRelative[element.name].value = element.value;
       }
     }
     /* Beneficiary share percentage validation register */
     Validator.register('sharePercentage', (value, requirement) => {
-      const total = sumBy(currentForm.fields.beneficiary, currentValue =>
+      const total = sumBy(currentForm.fields[formName], currentValue =>
         parseInt(currentValue[requirement].value, 10));
-      forEach(currentForm.fields.beneficiary, (ele, key) => {
-        currentForm.fields.beneficiary[key][requirement].error = total === 100 ?
+      forEach(currentForm.fields[formName], (ele, key) => {
+        currentForm.fields[formName][key][requirement].error = total === 100 ?
           undefined : true;
       });
       return total === 100 && value > 0;
@@ -73,14 +85,13 @@ class FormValidator {
     const formData = this.ExtractFormValues(toJS(currentForm.fields));
     const formRules = this.ExtractFormRules(toJS(currentForm.fields));
     const validation = new Validator(formData, formRules);
-    validation.setAttributeNames({ name: 'First Name' });
     currentForm.meta.isValid = validation.passes();
-    if (element.name) {
-      currentForm.fields.beneficiary[formIndex][element.name].error = validation.errors.first(`beneficiary.${formIndex}.${element.name}`) ?
+    if (element && element.name) {
+      currentFormRelative[element.name].error = validation.errors.first(fieldName) ?
         replace(
-          validation.errors.first(`beneficiary.${formIndex}.${element.name}`),
-          `beneficiary.${formIndex}.${element.name}`,
-          currentForm.fields.beneficiary[formIndex][element.name].label,
+          validation.errors.first(fieldName),
+          fieldName,
+          currentFormRelative[element.name].label,
         ) : undefined;
     }
     return currentForm;
