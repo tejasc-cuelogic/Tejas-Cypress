@@ -4,12 +4,27 @@
 .header-wrap{
     .ui.menu{
         height:74px;
-        background-color:fade(@neutral, 90%);
         border:none;
         border-radius:0;
         box-shadow:none;
         .menu{
-            margin:16px 0;
+            margin:16px;
+            .item{
+                color:@neutral;
+                &:hover, &.active{
+                    color:@primary-one;
+                    background-color:transparent;
+                }
+                &.active > span{
+                    padding-bottom:@2px;
+                    border-bottom:1px solid @primary-one;
+                    margin-bottom: 4px;
+                }
+            }
+            .ui.secondary.button {
+                font-weight: @fontMedium;
+                margin-left: @20px;
+            }
         }
         .item{
             padding:@3px @18px;
@@ -18,17 +33,24 @@
             > span{
                 padding:0.5em 0;
             }
-        }
-        &.primary .item{
-            color:@white;
-            &:hover, &.active{
-                color:@primary-one;
-                background-color:transparent;
+            &:hover {
+                background-color: transparent;
             }
-            &.active > span{
-                padding-bottom:@2px;
-                border-bottom:1px solid @primary-one;
-                margin-bottom: 4px;
+        }
+        &.inverted {
+            background-color:fade(@neutral, 90%);
+            .item{
+                color:@white;
+                &:hover, &.active{
+                    color:@primary-one;
+                    background-color:transparent;
+                }
+                &.active > span{
+                    padding-bottom:@2px;
+                    border-bottom:1px solid @primary-one;
+                    margin-bottom: 4px;
+                    color:@primary-one;
+                }
             }
         }
     }

@@ -4,7 +4,7 @@ import { Header, Icon, Statistic, Button, Menu, Label, Divider } from 'semantic-
 // import ShareModal from './ShareModal';
 
 class CampaignSideBar extends Component {
-  state = { activeItem: ' ' }
+  state = { activeItem: 'overview' }
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   render() {
@@ -64,7 +64,7 @@ class CampaignSideBar extends Component {
             <Icon name="home" />
             Disclosures
           </Menu.Item>
-          <Menu.Item name="comments" className={activeItem === 'comments' ? 'active' : ''} onClick={this.handleItemClick} as={Link} to="/offerings/comments">
+          <Menu.Item name="comments" className={activeItem === 'comments' ? 'active' : ''} onClick={this.handleItemClick} as={Link} to="/offerings/1/comments">
             <Icon name="home" />
             <Label circular color="blue" key="blue">11</Label>
             Comments

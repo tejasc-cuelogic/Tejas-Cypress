@@ -335,8 +335,8 @@
 @negativeBoxShadow: @coloredBoxShadow;
 
 /* Compact */
-@compactVerticalPadding: (@verticalPadding * 0.75);
-@compactHorizontalPadding: (@horizontalPadding * 0.75);
+@compactVerticalPadding: (@verticalPadding * 0.65);
+@compactHorizontalPadding: (@horizontalPadding * 1.2);
 
 /* Attached */
 @attachedOffset: -1px;

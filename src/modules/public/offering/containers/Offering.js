@@ -46,7 +46,7 @@ class Offering extends Component {
             <Header as="h5" textAlign="center" caption>Active Campaigns</Header>
             <Card.Group itemsPerRow={3} stackable>
               <Card className="campaign">
-                <Image as={Link} to="/offerings/details" src={campaign1} />
+                <Image as={Link} to="/offerings/1/overview" src={campaign1} />
                 <Label basic color="green">300% Funded</Label>
                 <Icon name="heart" />
                 <Card.Content>
@@ -69,7 +69,7 @@ class Offering extends Component {
                 </Card.Content>
               </Card>
               <Card className="campaign">
-                <Image src={campaign2} />
+                <Image as={Link} to="/offerings/1/overview" src={campaign2} />
                 <Label basic color="green">New</Label>
                 <Icon name="heart outline" />
                 <Card.Content>

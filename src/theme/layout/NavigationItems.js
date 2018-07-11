@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Container, Icon, Image, Menu, Dropdown, Label } from 'semantic-ui-react';
+import { Container, Icon, Image, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
-import LogoC from '../../assets/images/nextseed_logo_color.svg';
-import LogoW from '../../assets/images/nextseed_logo_white_green.svg';
+import LogoC from '../../assets/images/nextseed_logo_white.svg';
+import LogoW from '../../assets/images/logo.svg';
 import LogoNsAndLendio from '../../assets/images/nextseed_and_lendio.svg';
 
 @withRouter
@@ -81,13 +81,13 @@ export class NavItems extends Component {
 }
 
 const getLogo = path => (path.includes('/lendio') ? LogoNsAndLendio : (
-  (path.includes('business-application') ? LogoW : LogoC)
+  (path.includes('business-application') || path.includes('/offerings') ? LogoW : LogoC)
 ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
 export const NavigationItems = props => (
-  <Menu borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" className="primary">
+  <Menu borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" className={props.location.pathname.includes('/offerings') ? '' : 'inverted'}>
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
         <Image
@@ -101,6 +101,7 @@ export const NavigationItems = props => (
         {!props.location.pathname.includes('/business-application') &&
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
+        <Button secondary compact>Sign Up/Log In</Button>
       </Menu.Menu>
     </Container>
   </Menu>

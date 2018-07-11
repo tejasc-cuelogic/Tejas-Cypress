@@ -138,13 +138,13 @@ class Overview extends Component {
                 </p>
               </Segment>
             </Grid.Column>
-            <Grid.Column width={4} textAlign="center">
+            <Grid.Column width={4}>
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section>Bonus Rewards</Breadcrumb.Section>
                   <Breadcrumb.Divider icon="right chevron" />
                 </Breadcrumb>
-                <Header as="h3">Early Bird Rewards</Header>
+                <Header as="h3">Investor Rewards</Header>
                 <Image src={noEarlyBird} className="no-early-bird" />
                 <p className="early-bird-title">Invest more, recieve more.</p>
                 <p className="early-bird-desc">
@@ -152,6 +152,13 @@ class Overview extends Component {
                   levels of investment.
                 </p>
               </Segment>
+              {/* <Segment padded>
+                <Breadcrumb>
+                  <Breadcrumb.Section>Bonus Rewards</Breadcrumb.Section>
+                  <Breadcrumb.Divider icon="right chevron" />
+                </Breadcrumb>
+                <Header as="h3">Early Bird Rewards</Header>
+              </Segment> */}
             </Grid.Column>
           </Grid.Row>
         </Grid>
