@@ -14,7 +14,7 @@ export const MFA_MODE_TYPES = {
     error: undefined,
     rule: 'required',
   },
-  mfaState: {
+  mfaPhoneModeTypes: {
     value: 0,
     values: [
       {

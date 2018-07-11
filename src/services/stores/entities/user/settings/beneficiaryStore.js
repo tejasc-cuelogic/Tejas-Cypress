@@ -262,14 +262,15 @@ export class BeneficiaryStore {
   @action
   setAddressFields = (place, index) => {
     const data = Helper.gAddressClean(place);
+    const streetAddress = data.streetNumber ? `${data.streetNumber}, ${data.residentalStreet}` : data.residentalStreet;
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: data.residentalStreet }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: streetAddress }, index);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: data.city }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: data.city ? data.city : '' }, index);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: data.state }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: data.state ? data.state : '' }, index);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: data.zipCode }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: data.zipCode ? data.zipCode : '' }, index);
   }
 }
 

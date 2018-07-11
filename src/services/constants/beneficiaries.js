@@ -4,7 +4,7 @@ export const BENEFICIARY_FRM = {
   beneficiary: [{
     firstName: {
       value: '',
-      label: 'First name',
+      label: 'First Name',
       error: undefined,
       rule: 'required',
       placeHolder: 'John',

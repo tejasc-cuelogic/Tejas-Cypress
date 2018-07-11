@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
 import { Modal, Header, Divider, Form, Button } from 'semantic-ui-react';
 import { FormRadioGroup } from '../../../../../../theme/form';
 
@@ -20,7 +21,11 @@ export default class ManageMultiFactorAuth extends Component {
     this.props.history.goBack();
   }
   render() {
-    const { MFA_MODE_TYPE_META, handleMfaModeTypeChanged } = this.props.multiFactorAuthStore;
+    const {
+      MFA_MODE_TYPE_META,
+      handleMfaModeTypeChanged,
+      handleMfaModePhoneTypeChanged,
+    } = this.props.multiFactorAuthStore;
     const { inProgress } = this.props.uiStore;
     return (
       <div>
@@ -42,13 +47,17 @@ export default class ManageMultiFactorAuth extends Component {
                 changed={handleMfaModeTypeChanged}
                 containerclassname="button-radio center-align"
               />
-              <Header as="h4">How would you like to recive<br />the confirmation codes?</Header>
-              <FormRadioGroup
-                fielddata={MFA_MODE_TYPE_META.fields.mfaState}
-                name="mfaState"
-                changed={handleMfaModeTypeChanged}
-                containerclassname="button-radio center-align"
-              />
+              {MFA_MODE_TYPE_META.fields.mfaModeTypes.value === 0 ?
+                <Aux>
+                  <Header as="h4">How would you like to recive<br />the confirmation codes?</Header>
+                  <FormRadioGroup
+                    fielddata={MFA_MODE_TYPE_META.fields.mfaPhoneModeTypes}
+                    name="mfaPhoneModeTypes"
+                    changed={handleMfaModePhoneTypeChanged}
+                    containerclassname="button-radio center-align"
+                  />
+                </Aux> : null
+              }
               <div className="mt-30 center-align">
                 <Button loading={inProgress} primary size="large" className="very relaxed">Select</Button>
               </div>

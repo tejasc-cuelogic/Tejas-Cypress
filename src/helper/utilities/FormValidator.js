@@ -31,7 +31,12 @@ class FormValidator {
     );
     currentForm.meta.isValid = validation.passes();
     if (element.name) {
-      currentForm.fields[element.name].error = validation.errors.first(element.name);
+      currentForm.fields[element.name].error = validation.errors.first(element.name) ?
+        replace(
+          validation.errors.first(element.name),
+          element.name,
+          currentForm.fields[element.name].label,
+        ) : undefined;
     }
     return currentForm;
   }
@@ -65,15 +70,15 @@ class FormValidator {
 
     const formData = this.ExtractFormValues(toJS(currentForm.fields));
     const formRules = this.ExtractFormRules(toJS(currentForm.fields));
-
     const validation = new Validator(formData, formRules);
+    validation.setAttributeNames({ name: 'First Name' });
     currentForm.meta.isValid = validation.passes();
     if (element.name) {
       currentForm.fields.beneficiary[formIndex][element.name].error = validation.errors.first(`beneficiary.${formIndex}.${element.name}`) ?
         replace(
           validation.errors.first(`beneficiary.${formIndex}.${element.name}`),
           `beneficiary.${formIndex}.${element.name}`,
-          element.name,
+          currentForm.fields.beneficiary[formIndex][element.name].label,
         ) : undefined;
     }
     return currentForm;
