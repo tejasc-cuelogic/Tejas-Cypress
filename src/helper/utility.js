@@ -60,10 +60,10 @@ export class Utility {
   }
 
   gAddressClean = (place) => {
+    console.log(place);
     let result = {};
     const addressMap = {
-      streetNumber: ['street_number'],
-      residentalStreet: ['route', 'sublocality_level_3', 'sublocality_level_2', 'sublocality_level_1'],
+      residentalStreet: ['street_number', 'route', 'sublocality_level_1', 'sublocality_level_2', 'sublocality_level_3'],
       city: ['locality'],
       state: ['administrative_area_level_1'],
       zipCode: ['postal_code'],
@@ -71,7 +71,7 @@ export class Utility {
     Object.keys(addressMap).map(aK => place.address_components.map((c) => {
       if (_.intersection(addressMap[aK], c.types).length > 0) {
         const addressEle = {};
-        addressEle[aK] = c.long_name;
+        addressEle[aK] = addressMap[aK].length > 2 && result[aK] ? `${result[aK]}, ${c.long_name}` : c.long_name;
         result = _.has(result, aK) ? addressEle : { ...result, ...addressEle };
       }
       return result;

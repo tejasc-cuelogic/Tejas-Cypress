@@ -262,9 +262,9 @@ export class BeneficiaryStore {
   @action
   setAddressFields = (place, index) => {
     const data = Helper.gAddressClean(place);
-    const streetAddress = data.streetNumber ? `${data.streetNumber}, ${data.residentalStreet}` : data.residentalStreet;
+    console.log(data);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: streetAddress }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: data.residentalStreet ? data.residentalStreet : '' }, index);
     this.BENEFICIARY_META = Validator
       .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: data.city ? data.city : '' }, index);
     this.BENEFICIARY_META = Validator
