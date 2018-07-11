@@ -43,8 +43,9 @@ export default class AddBeneficiary extends Component {
 
   submit = (e) => {
     e.preventDefault();
+    const screenUrl = this.props.beneficiaryStore.calculateSharePercentage();
     this.props.beneficiaryStore.setShareModalData(true);
-    const location = `${this.props.match.url}/confirm`;
+    const location = `${this.props.match.url}/${screenUrl}`;
     this.props.history.push(location);
   }
 
@@ -147,7 +148,7 @@ export default class AddBeneficiary extends Component {
           : null
           }
           <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
-          <Button as={Link} to={this.props.refLink} inverted color="green" >Cancel</Button>
+          <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
           {/* <Button inverted color="green" onClick={} >Cancel</Button> */}
         </Form>
         <Confirm
@@ -161,7 +162,7 @@ export default class AddBeneficiary extends Component {
         />
         <Route path={`${this.props.match.url}/confirm`} render={() => <BeneficiaryShareModal refLink={this.props.match.url} />} />
         <Route path={`${this.props.match.url}/preview`} render={() => <BeneficiaryPreviewModal refLink={this.props.match.url} />} />
-        <Route path={`${this.props.match.url}/verify`} render={() => <ConfirmVerificationCode refLink={this.props.refLink} />} />
+        <Route path={`${this.props.match.url}/verify`} render={() => <ConfirmVerificationCode refLink={this.props.refLink} refLinkList={this.props.match.url} />} />
       </Aux>
     );
   }

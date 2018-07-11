@@ -13,8 +13,7 @@ const BeneficiaryList = (props) => {
   const status = props.beneficiaries.requestStatus;
   const statusImg = (BENEFICIARY_STATUS.PENDING === props.beneficiaries.requestStatus ? 'orange reload' : 'green check').split(' ');
   const showButton = (props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary` && props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary/confirm`);
-  const headerMsg = `Pellentesque facilisis. Nulla imperdiet sit amet magna.
-                      Vestibulum dapibus, mauris nec malesuada fames ac turpis`;
+  const headerMsg = '';
   return (
     <Grid.Row>
       <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
@@ -83,7 +82,6 @@ const BeneficiaryList = (props) => {
               </Aux> :
               <p>{headerMsg}</p>
               }
-            <Divider hidden />
             <Route path={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} render={props1 => <AddBeneficiary refLink={props.match.url} isDataAvailable accountId={props.accountId} {...props1} />} />
           </Card.Content>
         </Card>

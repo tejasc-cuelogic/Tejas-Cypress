@@ -44,8 +44,10 @@ export default class BeneficiaryShareModal extends Component {
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Please enter shares percentage for beneficiaries</Header>
+          <Header as="h2">Please enter the requested distribution of shares for each beneficiary.</Header>
           <Divider />
+          <p>The sum of all shares should equal 100%
+          </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {errors &&
@@ -59,7 +61,7 @@ export default class BeneficiaryShareModal extends Component {
             }
             <Table unstackable singleLine className="investment-details">
               <Table.Header>
-                <Table.HeaderCell><b>Name of Beneficiary</b></Table.HeaderCell>
+                <Table.HeaderCell><b>Beneficiary</b></Table.HeaderCell>
                 <Table.HeaderCell><b>% of Share</b></Table.HeaderCell>
               </Table.Header>
               <Table.Body>

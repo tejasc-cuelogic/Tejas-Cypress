@@ -30,7 +30,7 @@ export default class ConfirmVerificationCode extends Component {
   }
 
   gotoMfaSettings = () => {
-    this.props.history.push(this.props.refLink);
+    this.props.history.push('/app/profile-settings/security');
   }
 
   resendVerification = (e) => {
@@ -45,7 +45,7 @@ export default class ConfirmVerificationCode extends Component {
 
   handleCloseModal = (e) => {
     e.preventDefault();
-    this.props.history.goBack();
+    this.props.history.push(this.props.refLinkList);
   }
 
   render() {

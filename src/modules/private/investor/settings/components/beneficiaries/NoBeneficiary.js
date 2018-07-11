@@ -16,7 +16,7 @@ const NoBeneficiary = (props) => {
               <Icon color="green" className={`ns-${title.toLowerCase()}-line`} />
               {`You have no ${title} Account beneficiaries yet`}
             </Header>
-            <p>Add your first beneficiary and lorem ipsum dolor sit amet lorem ipsum dolor</p>
+            <p>Add your first beneficiary</p>
             <Divider hidden />
             { showButton ?
               <Card.Description>

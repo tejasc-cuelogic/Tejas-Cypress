@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import moment from 'moment';
 import { Modal, Button, Header, Divider, Message, Grid, Card } from 'semantic-ui-react';
 import { ListErrors, DateTimeFormat } from '../../../../../../theme/shared';
@@ -25,7 +25,7 @@ export default class BeneficiaryPreviewModal extends Component {
 
   handleCloseModal = (e) => {
     e.preventDefault();
-    this.props.history.goBack();
+    this.props.history.push(this.props.refLink);
   }
 
   render() {
@@ -35,7 +35,7 @@ export default class BeneficiaryPreviewModal extends Component {
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Please confirm the beneficiaries details you entered.</Header>
+          <Header as="h2">Summary</Header>
           <Divider />
         </Modal.Header>
         <Modal.Content className="signup-content">
@@ -78,7 +78,8 @@ export default class BeneficiaryPreviewModal extends Component {
             }
           </Grid>
           <div className="center-align mt-30">
-            <Button loading={inProgress} onClick={this.submit} disabled={!BENEFICIARY_META.meta.isValid} color="green" >Confirm</Button>
+            <Button loading={inProgress} onClick={this.submit} disabled={!BENEFICIARY_META.meta.isValid} color="green" >Submit</Button>
+            <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
           </div>
         </Modal.Content>
       </Modal>

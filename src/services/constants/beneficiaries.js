@@ -61,7 +61,6 @@ export const BENEFICIARY_FRM = {
     share: {
       value: '',
       label: '',
-      // label: 'Shares percentage',
       error: undefined,
       placeHolder: '50%',
       rule: 'optional',

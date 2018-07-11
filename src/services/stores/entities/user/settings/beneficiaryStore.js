@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { forEach } from 'lodash';
+import { forEach, floor, ceil } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore } from '../../../index';
@@ -52,6 +52,24 @@ export class BeneficiaryStore {
       this.BENEFICIARY_META = Validator
         .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: this.BENEFICIARY_META.fields.beneficiary[0].firstName.value }, 0);
     }
+  }
+
+  @action
+  calculateSharePercentage() {
+    let url = '';
+    if (this.BENEFICIARY_META.fields.beneficiary.length > 1) {
+      const val = (100 / this.BENEFICIARY_META.fields.beneficiary.length);
+      forEach(this.BENEFICIARY_META.fields.beneficiary, (beneficiary, key) => {
+        this.BENEFICIARY_META = Validator
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: key === 0 ? ceil(val) : floor(val) }, key);
+      });
+      url = 'confirm';
+    } else {
+      this.BENEFICIARY_META = Validator
+        .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: 100 }, 0);
+      url = 'preview';
+    }
+    return url;
   }
 
   @computed get bErr() {
