@@ -21,10 +21,6 @@
                     margin-bottom: 4px;
                 }
             }
-            .ui.secondary.button {
-                font-weight: @fontMedium;
-                margin-left: @20px;
-            }
         }
         .item{
             padding:@3px @18px;
