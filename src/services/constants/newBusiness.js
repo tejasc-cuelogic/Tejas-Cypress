@@ -12,7 +12,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g.  NextBrewery',
   },
   businessZipCode: {
-    value: '', label: 'Business ZIP Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6,
+    value: '', label: 'Business ZIP Code', error: undefined, rule: 'required', placeHolder: '10012', maxLength: 6,
   },
   webSite: {
     value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  NextBrewery',
@@ -33,7 +33,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '', label: 'State', error: undefined, rule: 'required',
   },
   zipCode: {
-    value: '', label: 'Zip Code', error: undefined, rule: 'required|numeric', maxLength: 6,
+    value: '', label: 'Zip Code', error: undefined, rule: 'required', maxLength: 6,
   },
   relatedExperience: {
     value: '',

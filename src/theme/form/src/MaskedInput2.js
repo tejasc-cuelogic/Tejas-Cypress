@@ -21,15 +21,29 @@ const MaskedInput2 = observer((props) => {
             trigger={<Icon name="help circle outline" />}
             content={props.tooltip}
             position="top center"
-            className="center-align"
+            className={props.containerClassname}
           />
         }
       </label>
-      {props.currency ? (
-        <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
-      ) : (
-        <NumberFormat format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
-      )
+      {props.currency &&
+        <NumberFormat
+          placeholder={placeHolder}
+          maxLength={18}
+          thousandSeparator
+          {...props}
+          value={value}
+          onChange={props.changed}
+          error={!!error}
+        />
+      }
+      {props.phoneNumber &&
+        <NumberFormat type="tel" format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} />
+      }
+      {props.businessZipCode &&
+        <NumberFormat format="#####" {...props} value={value} onChange={props.changed} error={!!error} />
+      }
+      {props.zipCode &&
+        <NumberFormat format="#####" {...props} value={value} onChange={props.changed} error={!!error} />
       }
       {error &&
         <FieldError error={error} />

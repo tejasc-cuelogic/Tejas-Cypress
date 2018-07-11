@@ -3,6 +3,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
+import NumberFormat from 'react-number-format';
 import { FieldError } from '../../shared';
 
 const FormDatePicker = observer((props) => {
@@ -25,8 +26,9 @@ const FormDatePicker = observer((props) => {
         showYearDropdown
         {...props}
         label={false}
-        dateFormat="MM-DD-YYYY"
+        dateFormat="MM/DD/YYYY"
         onClick={props.changed}
+        customInput={<NumberFormat format="##/##/####" />}
         onChange={props.changed}
         disabled={props.isdisabled}
       />

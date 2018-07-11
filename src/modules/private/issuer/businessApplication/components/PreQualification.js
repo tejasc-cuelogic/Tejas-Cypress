@@ -58,20 +58,34 @@ export default class PreQualification extends Component {
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                   <div className="field-wrap">
                     {
-                      ['businessName', 'businessZipCode', 'webSite'].map(field => (
+                      <div>
                         <FormInput
-                          key={field}
-                          name={field}
-                          value={fields[field].value}
-                          fielddata={fields[field]}
+                          key="businessName"
+                          name="businessName"
+                          value={fields.businessName.value}
+                          fielddata={fields.businessName}
                           changed={businessAppEleChange}
                         />
-                      ))
+                        <MaskedInput2
+                          name="businessZipCode"
+                          fielddata={fields.businessZipCode}
+                          changed={businessAppEleChange}
+                          businessZipCode
+                        />
+                        <FormInput
+                          key="webSite"
+                          name="webSite"
+                          value={fields.webSite.value}
+                          fielddata={fields.webSite}
+                          changed={businessAppEleChange}
+                        />
+                      </div>
                     }
                     <MaskedInput2
                       name="phoneNumber"
                       fielddata={fields.phoneNumber}
                       changed={businessAppEleChange}
+                      phoneNumber
                     />
                     <FormInput
                       name="emailAddress"
@@ -93,14 +107,21 @@ export default class PreQualification extends Component {
                     <Form.Group widths="equal">
                       {
                         ['city', 'state', 'zipCode'].map(field => (
-                          <FormInput
-                            key={field}
-                            type="text"
-                            name={field}
-                            fielddata={fields[field]}
-                            changed={businessAppEleChange}
-                          />
-                        ))
+                          field !== 'zipCode' ? (
+                            <FormInput
+                              key={field}
+                              type="text"
+                              name={field}
+                              fielddata={fields[field]}
+                              changed={businessAppEleChange}
+                            />) : (
+                              <MaskedInput2
+                                key={field}
+                                name={field}
+                                fielddata={fields[field]}
+                                changed={businessAppEleChange}
+                                zipCode
+                              />)))
                       }
                     </Form.Group>
                   </div>

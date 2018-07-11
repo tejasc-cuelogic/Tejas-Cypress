@@ -30,21 +30,18 @@ class Login extends Component {
   };
   passwordInputHandler = (field) => {
     const { passwordInputType } = this.props.uiStore;
+    let iconData = {
+      link: true,
+      onClick: this.props.uiStore.setPasswordVisibilityStatus,
+    };
     if (field === 'password' && passwordInputType === 'password') {
-      return {
-        className: 'ns-view',
-        link: true,
-        onClick: this.props.uiStore.setPasswordVisibilityStatus,
-      };
+      iconData.className = 'ns-view';
+    } else if (field === 'password' && passwordInputType === 'text') {
+      iconData.className = 'ns-view active';
+    } else {
+      iconData = null;
     }
-    if (field === 'password' && passwordInputType === 'text') {
-      return {
-        className: 'ns-view',
-        link: true,
-        onClick: this.props.uiStore.setPasswordVisibilityStatus,
-      };
-    }
-    return null;
+    return iconData;
   }
 
   render() {

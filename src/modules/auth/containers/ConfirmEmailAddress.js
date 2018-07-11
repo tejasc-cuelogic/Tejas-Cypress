@@ -94,7 +94,7 @@ export default class ConfirmEmailAddress extends Component {
               type="text"
               fielddata={CONFIRM_FRM.fields.code}
               changed={ConfirmChange}
-              maxlength={6}
+              maxLength={6}
             />
             <div className="center-align">
               <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!CONFIRM_FRM.meta.isValid}>Confirm</Button>

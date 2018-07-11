@@ -23,27 +23,9 @@ class InvestorSignup extends Component {
       .catch(() => { });
   };
   checkRouting = () => this.props.history.replace('/confirm');
-  passwordInputHandler = () => {
-    const { passwordInputType } = this.props.uiStore;
-    if (passwordInputType === 'password') {
-      return {
-        className: 'ns-view',
-        link: true,
-        onClick: this.props.uiStore.setPasswordVisibilityStatus,
-      };
-    }
-    if (passwordInputType === 'text') {
-      return {
-        className: 'ns-view',
-        link: true,
-        onClick: this.props.uiStore.setPasswordVisibilityStatus,
-      };
-    }
-    return null;
-  }
   render() {
     const { SIGNUP_FRM, signupChange } = this.props.authStore;
-    const { errors, inProgress, passwordInputType } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
 
     return (
       <Modal size="mini" open onClose={() => this.props.history.push('/')}>
@@ -79,9 +61,10 @@ class InvestorSignup extends Component {
                   />
                 ))
               }
+
             </Form.Group>
             <FormInput
-              type="text"
+              type="email"
               name="email"
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
@@ -90,9 +73,8 @@ class InvestorSignup extends Component {
               ['password', 'verify'].map(field => (
                 <FormInput
                   key={field}
-                  type={passwordInputType}
-                  icon={this.passwordInputHandler()}
                   name={field}
+                  type="password"
                   fielddata={SIGNUP_FRM.fields[field]}
                   changed={signupChange}
                 />

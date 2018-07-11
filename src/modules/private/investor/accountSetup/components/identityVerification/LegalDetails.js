@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Button, Modal, Divider, Header, Form, Message } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
 import {
-  FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete,
+  FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete, MaskedInput2,
 } from '../../../../../../theme/form';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
 
@@ -61,13 +61,21 @@ const LegalDetails = observer(({
         <Form.Group widths="equal">
           {
             ['city', 'state', 'zipCode'].map(field => (
-              <FormInput
-                key={field}
-                type="text"
-                name={field}
-                fielddata={form.fields[field]}
-                changed={change}
-              />
+              field !== 'zipCode' ? (
+                <FormInput
+                  key={field}
+                  type="text"
+                  name={field}
+                  fielddata={form.fields[field]}
+                  changed={change}
+                />) : (
+                  <MaskedInput2
+                    key={field}
+                    name={field}
+                    fielddata={form.fields[field]}
+                    changed={change}
+                    zipCode
+                  />)
             ))
           }
         </Form.Group>
