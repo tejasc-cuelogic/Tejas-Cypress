@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PrivateLayout from '../../shared/PrivateHOC';
 
-class Base extends Component {
+class Dashboard extends Component {
   render() {
-    const pathInfo = this.props.location.pathname.split('/app/');
     return (
       <PrivateLayout {...this.props}>
         <div
@@ -14,14 +13,11 @@ class Base extends Component {
             textAlign: 'center',
           }}
         >
-          {`
-            This is just a landing page to demonstrate real navigation of route
-            "${pathInfo[1].replace(/\//g, ' > ')}"
-          `}
+          This is just a landing page to demonstrate admin Dashboard
         </div>
       </PrivateLayout>
     );
   }
 }
 
-export default Base;
+export default Dashboard;
