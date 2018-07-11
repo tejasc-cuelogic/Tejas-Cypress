@@ -5,6 +5,7 @@ variables:
 
 stages:
   - build
+  - version
   - deploy
   - cleanup
 #---------------------------------Anchors--------------------------------------
@@ -104,7 +105,7 @@ version:dev:
     refs:
       - develop
   tags:
-    - ns-server
+    - ns-client
   stage: version
   script: 
     # Clone the changelog.js file from the ops repo
@@ -124,9 +125,9 @@ version:dev:
     # Commit the changes
     - git commit -m "Updated CHANGELOG.md [skip ci]"
     # Push the changes back to the develop branch
-    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-server.git/ HEAD:develop
+    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop
     # Push the tags
-    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-server.git/ HEAD:develop --tags
+    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop --tags
 
   dependencies:
     - build:dev
