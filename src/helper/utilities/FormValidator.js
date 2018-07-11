@@ -2,18 +2,19 @@ import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import { mapValues, replace, sumBy, forEach, mapKeys, isArray, toArray, reduce } from 'lodash';
 import CustomeValidations from './CustomeValidations';
+import Helper from '../utility';
 
 class FormValidator {
-  prepareFormObject = fields => ({ fields: { ...fields }, meta: { isValid: false, error: '' } });
+  prepareFormObject = (fields, isDirty = false, isValid = false) => ({ fields: { ...fields }, meta: { isValid, error: '', isDirty }, response: {} });
 
   pullValues = (e, data) => ({
     name: typeof data === 'undefined' ? e.target.name : data.name,
     value: typeof data === 'undefined' ? e.target.value : data.value,
   });
 
-  onChange = (form, element, type) => {
+  onChange = (form, element, type, isDirty = true) => {
     const currentForm = form;
-    if (element.name) {
+    if (element && element.name) {
       if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[element.name].value)) && type !== 'dropdown')) {
         const index = currentForm.fields[element.name].value.indexOf(element.value);
         if (index === -1) {
@@ -30,7 +31,7 @@ class FormValidator {
       mapValues(currentForm.fields, f => f.rule),
     );
     currentForm.meta.isValid = validation.passes();
-    if (element.name) {
+    if (element && element.name) {
       currentForm.fields[element.name].error = validation.errors.first(element.name) ?
         replace(
           validation.errors.first(element.name),
@@ -38,6 +39,7 @@ class FormValidator {
           currentForm.fields[element.name].label,
         ) : undefined;
     }
+    currentForm.meta.isDirty = isDirty;
     return currentForm;
   }
 
@@ -84,19 +86,6 @@ class FormValidator {
     return currentForm;
   }
 
-  resetFormData = (form) => {
-    const currentForm = form;
-    Object.keys(currentForm.fields).map((field) => {
-      currentForm.fields[field].value = '';
-      currentForm.fields[field].error = undefined;
-      return true;
-    });
-    currentForm.meta.isValid = false;
-    currentForm.meta.error = '';
-
-    return currentForm;
-  }
-
   ExtractValues = fields => mapValues(fields, f => f.value);
 
   ExtractFormValues = fields => mapValues(fields, f =>
@@ -106,6 +95,32 @@ class FormValidator {
   ExtractFormRules = fields => reduce(mapValues(fields, (f, key) =>
     (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`) :
       mapKeys(mapValues(f, k => k.rule), (s, v) => `${key}.${v}`))), (a, b) => Object.assign(a, b));
+
+  resetFormData = (form) => {
+    const currentForm = form;
+    Object.keys(currentForm.fields).map((field) => {
+      currentForm.fields[field].value = '';
+      currentForm.fields[field].error = undefined;
+      return true;
+    });
+    currentForm.meta.isValid = false;
+    currentForm.meta.error = '';
+    return currentForm;
+  }
+
+  setAddressFields = (place, form) => {
+    const { state, city, zipCode } = form.fields;
+    const currentForm = form;
+    const data = Helper.gAddressClean(place);
+    if (currentForm.fields.street) {
+      currentForm.fields.street.value = data.residentalStreet;
+    } else {
+      currentForm.fields.residentalStreet.value = data.residentalStreet;
+    }
+    state.value = data.state;
+    city.value = data.city;
+    zipCode.value = data.zipCode;
+  }
 }
 
 export default new FormValidator();

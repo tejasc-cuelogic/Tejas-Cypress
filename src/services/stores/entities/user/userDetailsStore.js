@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as client2 } from '../../../../api/gcoolApi';
 import {
-  uiStore, profileStore, iraAccountStore, entityAccountStore, individualAccountStore,
+  uiStore, profileStore, iraAccountStore, individualAccountStore, entityAccountStore,
 } from '../../index';
 import { FIN_INFO } from '../../../../constants/user';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
@@ -18,6 +18,7 @@ import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
+  @observable detailsOfUser = {};
   @observable financialLimit = {};
   @observable editCard = 0;
   @observable deleting = 0;
@@ -62,9 +63,7 @@ export class UserDetailsStore {
       client,
       query: userDetailsQuery,
       fetchPolicy: 'network-only',
-      variables: {
-        id,
-      },
+      variables: { id },
       onFetch: () => {
         profileStore.setProfileInfo(this.userDetails);
       },
@@ -72,8 +71,17 @@ export class UserDetailsStore {
   }
 
   @action
+  getUserProfileDetails = (id) => {
+    this.detailsOfUser = graphql({
+      client,
+      query: userDetailsQuery,
+      variables: { id },
+    });
+  }
+
+  @action
   updateUserStatus = (status) => {
-    this.currentUser.data.user.accountStatus = status;
+    this.detailsOfUser.data.user.accountStatus = status;
   }
 
   @action
@@ -131,20 +139,10 @@ export class UserDetailsStore {
     let status = '';
     if (statusDetails[step]) {
       if (step === 'idVerification') {
-        if (this.validAccStatus.includes(statusDetails[step])) {
+        if (this.validAccStatus.includes(statusDetails[step]) && statusDetails.phoneVerification === 'DONE') {
           status = 'done';
         } else {
           status = 'enable';
-        }
-      } else if (step === 'phoneVerification') {
-        if (this.validAccStatus.includes(statusDetails.idVerification)) {
-          if (statusDetails.phoneVerification === 'DONE') {
-            status = 'done';
-          } else {
-            status = 'enable';
-          }
-        } else {
-          status = 'disable';
         }
       } else if (step === 'accounts') {
         if (this.validAccStatus.includes(statusDetails.idVerification)) {

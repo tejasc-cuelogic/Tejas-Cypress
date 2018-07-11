@@ -77,49 +77,6 @@ export const US_STATES = [
   { key: '1V', value: '1V', text: 'NORTHERN MARIANA ISLANDS' },
 ];
 
-export const INDIVIDUAL_ACCOUNT_CREATION = {
-  routingNumber: {
-    value: '',
-    key: 'routingNumber',
-    error: undefined,
-    rule: 'required|numeric|digits:10',
-    label: 'Enter your bank routing number',
-  },
-  accountNumber: {
-    value: '',
-    key: 'accountNumber',
-    error: undefined,
-    rule: 'required|numeric|digits:12',
-    label: 'Enter your bank account number',
-  },
-};
-
-export const IRA_ACCOUNT_CREATION = {
-  networth: {
-    value: '',
-    key: 'networth',
-    error: undefined,
-    rule: 'required|numeric',
-    label: 'Your networth',
-    placeHolder: 'Your networth',
-  },
-  annualIncome: {
-    value: '',
-    key: 'annualIncome',
-    error: undefined,
-    rule: 'required|numeric',
-    label: 'Your annual income',
-    placeHolder: 'Your annual income',
-  },
-  driversLicence: {
-    value: '',
-    key: 'driversLicence',
-    error: undefined,
-    rule: 'required',
-    label: '',
-  },
-};
-
 export const IND_LINK_BANK_MANUALLY = {
   routingNumber: {
     key: 'routingNumber',
@@ -354,117 +311,6 @@ export const ENTITY_FORMATION_DOCS = {
   },
 };
 
-export const ENTITY_ACCOUNT_CREATION = {
-  entityNetAssets: {
-    value: '',
-    key: 'entityNetAssets',
-    error: undefined,
-    rule: 'required|numeric',
-    label: 'Entity Net Assets',
-  },
-  cfInvestments: {
-    value: '',
-    key: 'cfInvestments',
-    error: undefined,
-    rule: 'required|numeric',
-    label: 'Other religion CF investments made in prior 12 months',
-  },
-  nameOfEntity: {
-    value: '',
-    key: 'nameOfEntity',
-    error: undefined,
-    rule: 'required|string',
-    label: 'Name of Entity',
-    placeHolder: 'e.g Pad Wealth',
-  },
-  taxId: {
-    value: '',
-    key: 'taxId',
-    error: undefined,
-    rule: 'required|string',
-    label: 'Tax ID',
-    placeHolder: '12345',
-  },
-  street: {
-    value: '',
-    key: 'street',
-    error: undefined,
-    rule: 'required|string',
-    label: 'Street',
-  },
-  city: {
-    value: '',
-    key: 'city',
-    error: undefined,
-    rule: 'required|string',
-    label: 'City',
-  },
-  state: {
-    value: '',
-    key: 'state',
-    error: undefined,
-    rule: 'required|string',
-    label: 'State',
-  },
-  zipCode: {
-    value: '',
-    key: 'zipCode',
-    error: undefined,
-    rule: 'required|numeric',
-    label: 'ZIP Code',
-  },
-  isEntityTrust: {
-    value: 'yes',
-    key: 'isEntityTrust',
-    error: undefined,
-    rule: 'required',
-    label: '',
-  },
-  dateOfTrust: {
-    value: moment(),
-    key: 'dateOfTrust',
-    error: undefined,
-    rule: 'required',
-    label: 'Date of Trust',
-  },
-  entityTitle: {
-    value: '',
-    key: 'entityTitle',
-    error: undefined,
-    rule: 'required',
-    label: 'What is your title with the Entity',
-    placeHolder: 'e.g. CEO',
-  },
-  photoId: {
-    value: '',
-    key: 'photoId',
-    error: undefined,
-    rule: '',
-    label: '',
-  },
-  entityFormationDocument: {
-    value: '',
-    key: 'entityFormationDocument',
-    error: undefined,
-    rule: '',
-    label: 'Entity Formation Document',
-  },
-  entityOperatingDocument: {
-    value: '',
-    key: 'entityOperatingDocument',
-    error: undefined,
-    rule: '',
-    label: 'Entity Operating Document',
-  },
-  einVerification: {
-    value: '',
-    key: 'einVerification',
-    error: undefined,
-    rule: '',
-    label: 'EIN Verification',
-  },
-};
-
 export const ACC_TYPE = {
   accType: {
     value: 0,
@@ -500,5 +346,143 @@ export const ACC_TYPE = {
     ],
     error: undefined,
     rule: 'required',
+  },
+};
+
+export const EMPLOYMENT = {
+  employmentStatus: {
+    key: 'employmentStatus',
+    value: true,
+    values:
+      [
+        { label: 'Employed', value: 'employed' },
+        { label: 'Self Employed', value: 'selfemployed' },
+        { label: 'Retired', value: 'retired' },
+        { label: 'Student', value: 'student' },
+        { label: 'Not Employee', value: 'notemployee' },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+  employer: {
+    key: 'employer',
+    value: '',
+    label: 'Employer',
+    error: undefined,
+    rule: 'required_with:employmentStatus',
+    placeHolder: 'Type employer name',
+  },
+  currentPosition: {
+    key: 'currentPosition',
+    value: '',
+    label: 'Current Position Held',
+    error: undefined,
+    rule: 'required_with:employmentStatus',
+    placeHolder: 'E.g. CEO',
+  },
+};
+
+export const INVESTOR_PROFILE = {
+  profileType: {
+    value: true,
+    values: [{ label: 'Individual', value: 'individual' }, { label: 'Joint(Married)', value: 'joint' }],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+export const FINANCES = {
+  netWorth: {
+    value: '',
+    label: 'Net Worth(Excluding Primary Residence)',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Net Worth',
+  },
+  annualIncome1: {
+    value: '',
+    label: 'Annual Income 2016',
+    error: undefined,
+    rule: 'required',
+    placeHolder: '$60,000',
+  },
+  annualIncome2: {
+    value: '',
+    label: 'Annual Income 2017',
+    error: undefined,
+    rule: 'required',
+    placeHolder: '$60,000',
+  },
+  annualIncome3: {
+    value: '',
+    label: 'Annual Income 2018',
+    error: undefined,
+    rule: 'required',
+    placeHolder: '$60,000',
+  },
+  checkbox1: {
+    value: [],
+    values: [
+      {
+        label: 'I am (or a member of my immediate family is) a director, 10% shareholder, or senior officer of a publicity traded company. The name of the company is ',
+        value: 'iamadirector',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  checkbox2: {
+    value: [],
+    values: [
+      {
+        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm od a stock exchange orFINRA. The name of firm is ',
+        value: 'iamamember',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  companyName: {
+    value: '',
+    label: ' ',
+    error: undefined,
+    rule: 'required_with:checkbox1',
+  },
+  firmName: {
+    value: '',
+    label: ' ',
+    error: undefined,
+    rule: 'required_with:checkbox2',
+  },
+};
+
+export const INVESTMENT_EXPERIENCE = {
+  experienceInfo: {
+    value: '',
+    values: [{ label: 'No experience', value: '1' }, { label: 'I know what I’m doing', value: '2' }, { label: 'I have some experience', value: '3' }, { label: 'I’m an expert', value: '4' }],
+    error: undefined,
+    rule: 'required',
+  },
+  checkbox1: {
+    value: [],
+    values: [
+      {
+        label: 'Investing in private business is not for investors with short-term time horizons.  Are you comfortable investing in securities that have limited liquidty?',
+        value: 'checkbox',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  checkbox2: {
+    value: [],
+    values: [
+      {
+        label: 'Investing in private business involves risk. When investing on NextSeed, are you willing to take on significant risk to potentially earn a return in your investment?',
+        value: 'checkbox',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
   },
 };

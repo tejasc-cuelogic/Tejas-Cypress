@@ -26,7 +26,6 @@ export default class Private extends React.Component {
 
   render() {
     const User = { ...this.props.userStore.currentUser };
-    console.log(User, 'User');
     const { avatar } = this.props.userDetailsStore.userDetails;
     const { match } = this.props;
     const UserInfo = {

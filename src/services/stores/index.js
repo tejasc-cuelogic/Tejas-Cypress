@@ -20,3 +20,6 @@ export { default as navStore } from './entities/shared/navStore';
 export { default as messageStore } from './entities/message/messageStore';
 export { default as beneficiaryStore } from './entities/user/settings/beneficiaryStore';
 export { default as multiFactorAuthStore } from './entities/user/settings/multiFactorAuthStore';
+export { default as bankAccountStore } from './entities/shared/bankAccountStore';
+export { default as identityStore } from './entities/user/identityStore';
+export { default as investorProfileStore } from './entities/user/investorProfileStore';
