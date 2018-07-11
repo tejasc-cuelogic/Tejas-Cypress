@@ -14,7 +14,7 @@ import Helper from '../../../../../helper/utility';
 import { Spinner } from '../../../../../theme/shared';
 import Randavatar from '../../../../../theme/shared/Randavatar';
 
-@inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore', 'accountStore')
+@inject('userDetailsStore', 'userStore', 'identityStore', 'uiStore', 'accountStore')
 @observer
 export default class ProfileData extends Component {
   navigateToNewPhoneNumber = () => {
@@ -33,7 +33,7 @@ export default class ProfileData extends Component {
   }
   handleUpdateProfileInfo = (e) => {
     e.preventDefault();
-    this.props.profileStore.updateUserProfileData().then(() => {
+    this.props.identityStore.updateUserProfileData().then(() => {
       Helper.toast('Investor profile has been updated.', 'success');
     })
       .catch(() => {});
@@ -43,10 +43,10 @@ export default class ProfileData extends Component {
       email, legalDetails, avatar, firstName,
     } = this.props.userDetailsStore.userDetails;
     const {
-      updateProfileInfo,
-      updateProfileInfoChange,
-      setAddressFields,
-    } = this.props.profileStore;
+      ID_PROFILE_INFO,
+      profileInfoChange,
+      setAddressFieldsForProfile,
+    } = this.props.identityStore;
     if (isEmpty(this.props.userDetailsStore.userDetails)) {
       return (
         <div>
@@ -71,9 +71,9 @@ export default class ProfileData extends Component {
                   <FormInput
                     key={field}
                     name={field}
-                    value={updateProfileInfo.fields[field].value}
-                    fielddata={updateProfileInfo.fields[field]}
-                    changed={updateProfileInfoChange}
+                    value={ID_PROFILE_INFO.fields[field].value}
+                    fielddata={ID_PROFILE_INFO.fields[field]}
+                    changed={profileInfoChange}
                   />
                 ))}
               </Form.Group>
@@ -83,9 +83,9 @@ export default class ProfileData extends Component {
                 actionclass="link-button"
                 actioncolor="green"
                 name="phoneNumber"
-                fielddata={updateProfileInfo.fields.phoneNumber}
+                fielddata={ID_PROFILE_INFO.fields.phoneNumber}
                 mask="999-999-9999"
-                changed={updateProfileInfoChange}
+                changed={profileInfoChange}
                 clickonaction={this.navigateToNewPhoneNumber}
                 readOnly
               />
@@ -94,36 +94,36 @@ export default class ProfileData extends Component {
                   color: 'green', className: 'link-button', content: 'Change', onClick: () => this.props.history.replace(`${this.props.match.url}/new-email-address`),
                 }}
                 name="email"
-                fielddata={updateProfileInfo.fields.email}
-                changed={updateProfileInfoChange}
+                fielddata={ID_PROFILE_INFO.fields.email}
+                changed={profileInfoChange}
                 readOnly
               />
               <Header as="h4">Mailing Address</Header>
               <AutoComplete
                 name="street"
-                fielddata={updateProfileInfo.fields.street}
-                onplaceselected={setAddressFields}
-                changed={updateProfileInfoChange}
+                fielddata={ID_PROFILE_INFO.fields.street}
+                onplaceselected={setAddressFieldsForProfile}
+                changed={profileInfoChange}
               />
               <Form.Group widths="equal">
                 <FormInput
                   name="city"
-                  fielddata={updateProfileInfo.fields.city}
-                  changed={updateProfileInfoChange}
+                  fielddata={ID_PROFILE_INFO.fields.city}
+                  changed={profileInfoChange}
                 />
                 <FormSelect
                   name="state"
-                  fielddata={updateProfileInfo.fields.state}
+                  fielddata={ID_PROFILE_INFO.fields.state}
                   options={US_STATES}
-                  changed={updateProfileInfoChange}
+                  changed={profileInfoChange}
                 />
                 <FormInput
                   name="zipCode"
-                  fielddata={updateProfileInfo.fields.zipCode}
-                  changed={updateProfileInfoChange}
+                  fielddata={ID_PROFILE_INFO.fields.zipCode}
+                  changed={profileInfoChange}
                 />
               </Form.Group>
-              <Button inverted color="green" disabled={!updateProfileInfo.meta.isValid}>Update profile info</Button>
+              <Button inverted color="green" disabled={!ID_PROFILE_INFO.meta.isValid}>Update profile info</Button>
             </Form>
           </Card>
         </Grid.Column>

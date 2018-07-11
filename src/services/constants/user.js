@@ -117,3 +117,71 @@ export const PHONE_VERIFICATION = {
     rule: 'required|numeric',
   },
 };
+
+export const UPDATE_PROFILE_INFO = {
+  firstName: {
+    value: '',
+    label: 'First name',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'First name',
+  },
+  lastName: {
+    value: '',
+    label: 'Last name',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Last name',
+  },
+  phoneNumber: {
+    value: '',
+    label: 'Phone Number',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Phone Number',
+  },
+  email: {
+    value: '',
+    label: 'Email',
+    error: undefined,
+    rule: 'required|email',
+    placeHolder: 'Email',
+  },
+  street: {
+    value: '',
+    label: 'Residential Street',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'Residential Street',
+  },
+  city: {
+    value: '',
+    label: 'City',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'City',
+  },
+  state: {
+    value: '',
+    label: 'State',
+    error: undefined,
+    rule: 'required|string',
+  },
+  zipCode: {
+    value: '',
+    label: 'ZIP Code',
+    error: undefined,
+    rule: 'required|numeric',
+    placeHolder: 'ZIP Code',
+  },
+  profilePhoto: {
+    value: '',
+    key: 'profilePhoto',
+    error: undefined,
+    rule: '',
+    label: '',
+    src: '',
+    base64String: '',
+    responseUrl: '',
+  },
+};
