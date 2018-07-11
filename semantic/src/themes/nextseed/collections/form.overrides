@@ -344,3 +344,7 @@
         border-color:@negativeTextColor;
     }
 }
+
+.ui.icon.input>i.icon.ns-view.active{
+    color:@link-color;
+}
