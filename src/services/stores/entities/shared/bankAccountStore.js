@@ -52,6 +52,11 @@ export class BankAccountStore {
   };
 
   @action
+  linkBankFormChange = () => {
+    this.formLinkBankManually = Validator.onChange(this.formLinkBankManually);
+  };
+
+  @action
   resetLinkBankForm() {
     Validator.resetFormData(this.formLinkBankManually);
   }
@@ -96,6 +101,12 @@ export class BankAccountStore {
   @computed
   get isValidLinkBank() {
     return !isEmpty(this.plaidBankDetails);
+  }
+
+  @computed
+  get isValidAddFunds() {
+    const { error } = this.formAddFunds.fields.value;
+    return isEmpty(error);
   }
 
   simpleErr = err => ({

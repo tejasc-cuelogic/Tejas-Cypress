@@ -9,7 +9,7 @@ import _ from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as client2 } from '../../../../api/gcoolApi';
 import {
-  uiStore, profileStore, iraAccountStore, entityAccountStore, individualAccountStore,
+  uiStore, profileStore, iraAccountStore, individualAccountStore, entityAccountStore,
 } from '../../index';
 import { BENEFICIARY_FRM, FIN_INFO } from '../../../../constants/user';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
@@ -169,20 +169,10 @@ export class UserDetailsStore {
     let status = '';
     if (statusDetails[step]) {
       if (step === 'idVerification') {
-        if (this.validAccStatus.includes(statusDetails[step])) {
+        if (this.validAccStatus.includes(statusDetails[step]) && statusDetails.phoneVerification === 'DONE') {
           status = 'done';
         } else {
           status = 'enable';
-        }
-      } else if (step === 'phoneVerification') {
-        if (this.validAccStatus.includes(statusDetails.idVerification)) {
-          if (statusDetails.phoneVerification === 'DONE') {
-            status = 'done';
-          } else {
-            status = 'enable';
-          }
-        } else {
-          status = 'disable';
         }
       } else if (step === 'accounts') {
         if (this.validAccStatus.includes(statusDetails.idVerification)) {

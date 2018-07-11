@@ -23,6 +23,8 @@ class IraAccountStore {
 
   @observable formStatus = 'draft';
   @observable stepToBeRendered = 0;
+  @observable fundingNotSet = '';
+  @observable accountNotSet = '';
 
   @action
   setFormStatus(formStatus) {
@@ -45,11 +47,26 @@ class IraAccountStore {
   }
 
   @action
-  finInfoChange = (e, result) => {
-    this.FIN_INFO_FRM = FormValidator.onChange(
-      this.FIN_INFO_FRM,
+  setAccountNotSet(step) {
+    this.accountNotSet = step;
+  }
+
+  @action
+  setFundingNotSet(step) {
+    this.fundingNotSet = step;
+  }
+
+  @action
+  formChange = (e, result, form) => {
+    this[form] = FormValidator.onChange(
+      this[form],
       FormValidator.pullValues(e, result),
     );
+  }
+
+  @action
+  finInfoChange = (e, result) => {
+    this.formChange(e, result, 'FIN_INFO_FRM');
   }
 
   /**
@@ -57,26 +74,17 @@ class IraAccountStore {
    */
   @action
   identityInfoChange = (e, result) => {
-    this.IDENTITY_FRM = FormValidator.onChange(
-      this.IDENTITY_FRM,
-      FormValidator.pullValues(e, result),
-    );
+    this.formChange(e, result, 'IDENTITY_FRM');
   }
 
   @action
   accTypesChange = (e, result) => {
-    this.ACC_TYPES_FRM = FormValidator.onChange(
-      this.ACC_TYPES_FRM,
-      FormValidator.pullValues(e, result),
-    );
+    this.formChange(e, result, 'ACC_TYPES_FRM');
   }
 
   @action
   fundingChange = (e, result) => {
-    this.FUNDING_FRM = FormValidator.onChange(
-      this.FUNDING_FRM,
-      FormValidator.pullValues(e, result),
-    );
+    this.formChange(e, result, 'FUNDING_FRM');
   }
 
   @computed
@@ -213,7 +221,9 @@ class IraAccountStore {
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
+      console.log(userDetailsStore.currentUser.data.user.accounts);
       const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'ira' });
+      console.log(accountDetails);
       if (accountDetails) {
         mutation = updateAccount;
         variables.accountId = accountDetails.accountId;
@@ -274,11 +284,12 @@ class IraAccountStore {
     if (!isEmpty(userData)) {
       const account = find(userData.accounts, { accountType: 'ira' });
       if (account) {
+        // Financial Information
         Object.keys(this.FIN_INFO_FRM.fields).map((f) => {
           this.FIN_INFO_FRM.fields[f].value = account.accountDetails[f];
           return this.FIN_INFO_FRM.fields[f];
         });
-        this.onFieldChange('FIN_INFO_FRM', undefined, undefined, false);
+        FormValidator.onChange(this.FIN_INFO_FRM, '', '', false);
 
         // Funding Type
         let isDirty = false;
@@ -293,7 +304,7 @@ class IraAccountStore {
           }
           return this.FUNDING_FRM.fields[f];
         });
-        this.onFieldChange('FUNDING_FRM', undefined, undefined, isDirty);
+        FormValidator.onChange(this.FUNDING_FRM, '', '', isDirty);
 
         // Account Types
         isDirty = false;
@@ -308,7 +319,7 @@ class IraAccountStore {
           }
           return this.ACC_TYPES_FRM.fields[f];
         });
-        this.onFieldChange('ACC_TYPES_FRM', undefined, undefined, isDirty);
+        FormValidator.onChange(this.ACC_TYPES_FRM, '', '', isDirty);
 
         // Identity Form
         Object.keys(this.IDENTITY_FRM.fields).map((f) => {
@@ -318,7 +329,7 @@ class IraAccountStore {
           }
           return this.IDENTITY_FRM.fields[f];
         });
-        this.onFieldChange('IDENTITY_FRM', undefined, undefined, false);
+        FormValidator.onChange(this.IDENTITY_FRM, '', '', false);
 
         // Resume the step on opening the modal
         if (!uiStore.errors) {
@@ -342,7 +353,11 @@ class IraAccountStore {
   setFileUploadData(field, files) {
     this.IDENTITY_FRM.fields[field].fileData = files;
     const fileData = Helper.getFormattedFileData(files);
-    this.onFieldChange('IDENTITY_FRM', field, fileData.fileName);
+    // this.onFieldChange('IDENTITY_FRM', field, fileData.fileName);
+    this.IDENTITY_FRM = FormValidator.onChange(
+      this.IDENTITY_FRM,
+      { name: field, value: fileData.fileName },
+    );
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -360,11 +375,14 @@ class IraAccountStore {
           this.IDENTITY_FRM.fields[field].preSignedUrl = preSignedUrl;
           resolve();
         }))
-        .catch((err) => {
+        .catch(action((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          this.onFieldChange('IDENTITY_FRM', field, '');
+          this.IDENTITY_FRM = FormValidator.onChange(
+            this.IDENTITY_FRM,
+            { name: field, value: '' },
+          );
           reject(err);
-        })
+        }))
         .finally(() => {
           uiStore.setProgress(false);
         });

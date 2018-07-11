@@ -8,13 +8,13 @@ import { ListErrors } from '../../../../../../../theme/shared';
 @observer
 export default class FormationDocumemts extends Component {
   onFormationDocDrop = (files) => {
-    this.props.entityAccountStore.setFileUploadData('formFormationDocuments', 'formationDoc', files);
+    this.props.entityAccountStore.setFileUploadData('FORM_DOCS_FRM', 'formationDoc', files);
   }
   onOperatingAgreementDocDrop = (files) => {
-    this.props.entityAccountStore.setFileUploadData('formFormationDocuments', 'operatingAgreementDoc', files);
+    this.props.entityAccountStore.setFileUploadData('FORM_DOCS_FRM', 'operatingAgreementDoc', files);
   }
   onEinVerificationDocDrop = (files) => {
-    this.props.entityAccountStore.setFileUploadData('formFormationDocuments', 'einVerificationDoc', files);
+    this.props.entityAccountStore.setFileUploadData('FORM_DOCS_FRM', 'einVerificationDoc', files);
   }
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
@@ -23,11 +23,11 @@ export default class FormationDocumemts extends Component {
     this.props.uiStore.setConfirmBox(name);
   }
   handleDelDoc = (field) => {
-    this.props.entityAccountStore.removeUploadedData('formFormationDocuments', field, 'Formation doc');
+    this.props.entityAccountStore.removeUploadedData('FORM_DOCS_FRM', field, 'Formation doc');
     this.props.uiStore.setConfirmBox('');
   }
   render() {
-    const { formFormationDocuments } = this.props.entityAccountStore;
+    const { FORM_DOCS_FRM } = this.props.entityAccountStore;
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <div>
@@ -48,7 +48,7 @@ export default class FormationDocumemts extends Component {
               <Grid.Column width={9}>
                 <DropZone
                   name="formationDoc"
-                  fielddata={formFormationDocuments.fields.formationDoc}
+                  fielddata={FORM_DOCS_FRM.fields.formationDoc}
                   ondrop={this.onFormationDocDrop}
                   onremove={this.confirmRemoveDoc}
                 />
@@ -61,7 +61,7 @@ export default class FormationDocumemts extends Component {
               <Grid.Column width={9}>
                 <DropZone
                   name="operatingAgreementDoc"
-                  fielddata={formFormationDocuments.fields.operatingAgreementDoc}
+                  fielddata={FORM_DOCS_FRM.fields.operatingAgreementDoc}
                   ondrop={this.onOperatingAgreementDocDrop}
                   onremove={this.confirmRemoveDoc}
                 />
@@ -74,7 +74,7 @@ export default class FormationDocumemts extends Component {
               <Grid.Column width={9}>
                 <DropZone
                   name="einVerificationDoc"
-                  fielddata={formFormationDocuments.fields.einVerificationDoc}
+                  fielddata={FORM_DOCS_FRM.fields.einVerificationDoc}
                   ondrop={this.onEinVerificationDocDrop}
                   onremove={this.confirmRemoveDoc}
                 />

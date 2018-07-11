@@ -82,7 +82,7 @@ export default class MultiStep extends React.Component {
     const isAnyStepInvalid = _.find(this.props.steps, { isValid: 'error' });
     if (isAnyStepInvalid) {
       console.log(isAnyStepInvalid);
-    } else {
+    } else if (this.props.setStepTobeRendered) {
       this.props.setStepTobeRendered(evt.currentTarget.value);
       if (evt.currentTarget.value === (this.props.steps.length - 1) &&
         this.state.compState === (this.props.steps.length - 1)) {
@@ -96,6 +96,8 @@ export default class MultiStep extends React.Component {
       } else {
         this.setNavState(evt.currentTarget.value);
       }
+    } else {
+      this.setNavState(evt.currentTarget.value);
     }
   }
 

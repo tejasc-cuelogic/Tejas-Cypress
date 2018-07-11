@@ -8,7 +8,7 @@ import { FormInput } from '../../../../../../../theme/form';
 @observer
 export default class FinancialInformation extends Component {
   render() {
-    const { formFinInfo, finInfoChange } = this.props.entityAccountStore;
+    const { FIN_INFO_FRM, finInfoChange } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">Calculating your Entity`s <br /> investment limit</Header>
@@ -23,8 +23,8 @@ export default class FinancialInformation extends Component {
                 <FormInput
                   key={field}
                   name={field}
-                  fielddata={formFinInfo.fields[field]}
-                  maxLength={formFinInfo.fields[field].maxLength}
+                  fielddata={FIN_INFO_FRM.fields[field]}
+                  maxLength={FIN_INFO_FRM.fields[field].maxLength}
                   changed={finInfoChange}
                   prefix="$"
                 />

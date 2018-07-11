@@ -1,24 +1,20 @@
 import { action, observable } from 'mobx';
-import _ from 'lodash';
+import { isEmpty, find } from 'lodash';
 import { accountStore, bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { createAccount, updateAccount } from '../../queries/account';
+import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
 class IndividualAccountStore {
-  @observable
-  stepToBeRendered = '';
+  @observable stepToBeRendered = '';
+  @observable investorAccId = '';
+  @observable formStatus = 'draft';
 
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
   }
-
-  @observable
-  investorAccId = '';
-
-  @observable
-  formStatus = 'draft';
 
   @action
   setInvestorAccId(id) {
@@ -33,7 +29,7 @@ class IndividualAccountStore {
   /* eslint-disable class-methods-use-this */
   accountAttributes() {
     const accountAttributes = {};
-    if (bankAccountStore.bankLinkInterface === 'list' && !_.isEmpty(bankAccountStore.plaidBankDetails)) {
+    if (bankAccountStore.bankLinkInterface === 'list' && !isEmpty(bankAccountStore.plaidBankDetails)) {
       accountAttributes.plaidAccessToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
       accountAttributes.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
       accountAttributes.bankName = bankAccountStore.plaidBankDetails.bankName;
@@ -63,7 +59,7 @@ class IndividualAccountStore {
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = _.find(
+      const accountDetails = find(
         userDetailsStore.currentUser.data.user.accounts,
         { accountType: 'individual' },
       );
@@ -115,7 +111,7 @@ class IndividualAccountStore {
           resolve(result);
         })
         .catch(action((err) => {
-          uiStore.setErrors(this.simpleErr(err));
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject();
         }))
         .finally(() => {
@@ -126,8 +122,8 @@ class IndividualAccountStore {
 
   @action
   populateData = (userData) => {
-    if (!_.isEmpty(userData)) {
-      const account = _.find(
+    if (!isEmpty(userData)) {
+      const account = find(
         userData.accounts,
         { accountType: 'individual' },
       );
@@ -140,20 +136,14 @@ class IndividualAccountStore {
             bankAccountStore.formLinkBankManually.fields[f].value = account.accountDetails[f];
             return bankAccountStore.formLinkBankManually.fields[f];
           });
-          bankAccountStore.onFieldChange('formLinkBankManually');
+          bankAccountStore.linkBankFormChange();
         }
         if (bankAccountStore.formLinkBankManually.meta.isValid ||
-          !_.isEmpty(bankAccountStore.plaidAccDetails)) {
+          !isEmpty(bankAccountStore.plaidAccDetails)) {
           this.setStepToBeRendered(2);
         }
       }
     }
   }
-
-  simpleErr = err => ({
-    statusCode: err.statusCode,
-    code: err.code,
-    message: err.message,
-  });
 }
 export default new IndividualAccountStore();

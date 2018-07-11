@@ -8,13 +8,13 @@ import { FormInput, DropZone } from '../../../../../../../theme/form';
 @observer
 export default class PersonalInformation extends Component {
   onLegalDocUrlDrop = (files) => {
-    this.props.entityAccountStore.setFileUploadData('formPersonalInfo', 'legalDocUrl', files);
+    this.props.entityAccountStore.setFileUploadData('PERSONAL_INFO_FRM', 'legalDocUrl', files);
   }
   confirmRemoveDoc = (e, name) => {
     this.props.uiStore.setConfirmBox(name);
   }
   handleDelLegalDocUrl = () => {
-    this.props.entityAccountStore.removeUploadedData('formPersonalInfo', 'legalDocUrl', 'Personal info');
+    this.props.entityAccountStore.removeUploadedData('PERSONAL_INFO_FRM', 'legalDocUrl', 'Personal info');
     this.props.uiStore.setConfirmBox('');
   }
   handleDelCancel = () => {
@@ -22,7 +22,7 @@ export default class PersonalInformation extends Component {
   }
   render() {
     const {
-      formPersonalInfo,
+      PERSONAL_INFO_FRM,
       personalInfoChange,
     } = this.props.entityAccountStore;
     const { currentUser } = this.props.userStore;
@@ -52,7 +52,7 @@ export default class PersonalInformation extends Component {
             />
             <FormInput
               name="title"
-              fielddata={formPersonalInfo.fields.title}
+              fielddata={PERSONAL_INFO_FRM.fields.title}
               changed={personalInfoChange}
             />
           </div>
@@ -67,7 +67,7 @@ export default class PersonalInformation extends Component {
               <Grid.Column width={9}>
                 <DropZone
                   name="legalDocUrl"
-                  fielddata={formPersonalInfo.fields.legalDocUrl}
+                  fielddata={PERSONAL_INFO_FRM.fields.legalDocUrl}
                   ondrop={this.onLegalDocUrlDrop}
                   onremove={this.confirmRemoveDoc}
                 />
