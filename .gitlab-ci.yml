@@ -108,10 +108,13 @@ version:dev:
     - ns-client
   stage: version
   script: 
+    # Make a folder for the changelog utility
+    - mkdir changelog && cd changelog
     # Clone the changelog.js file from the ops repo
-    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fchangelog%2Ejs/raw?ref=$BRANCH > changelog.js"
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fchangelog%2Findex%2Ejs/raw?ref=master > index.js"
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fchangelog%2Fpackage%2Ejson/raw?ref=master > package.json"
     # Install conventional-changelog-cli for CHANGELOG.md generation
-    - npm install conventional-changelog-cli --no-save
+    - npm i && cd ..
     # Config git to avoid first usage questions. Set the identity
     - git config --global user.email ${CI_USER_EMAIL} && git config --global user.name ${CI_USER_NAME}
     # Fetch existing tags
@@ -119,7 +122,7 @@ version:dev:
     # Bump the patch version
     - npm version patch
     # Create/update the CHANGELOG.md file
-    - node changelog.js -p angular -i CHANGELOG.md -s -r 0
+    - node ./changelog/index.js --preset angular --infile CHANGELOG.md --same-file --release-count 0
     # Stage the changes 
     - git add CHANGELOG.md
     # Commit the changes
@@ -128,7 +131,6 @@ version:dev:
     - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop
     # Push the tags
     - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop --tags
-
   dependencies:
     - build:dev
 
