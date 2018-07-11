@@ -15,16 +15,6 @@ import BeneficiaryPreviewModal from './BeneficiaryPreviewModal';
 export default class AddBeneficiary extends Component {
   componentWillMount() {
     this.props.beneficiaryStore.setCurrentSelectedAccountId(this.props.accountId);
-    // const location = `${this.props.match.url}/verify`;
-    // if (this.props.location.pathname
-    //   !== location && !this.props.beneficiaryStore.isShareModalDataSet) {
-    //   this.props.beneficiaryStore.beneficiaryReset();
-    // }
-    // if (this.props.isDataAvailable &&
-    //   this.props.location.pathname !== location
-    //   && !this.props.beneficiaryStore.isShareModalDataSet) {
-    //   this.props.beneficiaryStore.setBeneficiariesInfo();
-    // }
     if (!this.props.beneficiaryStore.isShareModalDataSet) {
       this.props.beneficiaryStore.beneficiaryReset();
     }
