@@ -20,6 +20,9 @@
                     border-bottom:1px solid @primary-one;
                     margin-bottom: 4px;
                 }
+                button {
+                    font-weight: @fontMedium;
+                }
             }
         }
         .item{

@@ -7,7 +7,7 @@ body{
 section{
 	padding:@60px 0;
 	.caption{
-		margin-bottom:@50px;
+		margin-bottom:@50px !important;
 	}
 }
 .info-card{
@@ -398,4 +398,25 @@ footer{
 			}
 		}
 	}
+}
+
+/** Home Page **/
+.explore-campaign-button {
+	margin-top: 60px;
+	text-align: center;
+}
+.featured-section {
+	background-color: @neutral-lighten;
+}
+.learn-more {
+	background-color: @secondary-color;
+	color: @white;
+	.ui.header {
+		color: @white;
+	}
+	.ui.form {
+		.fields {
+			justify-content: center;
+		}
+	} 
 }
