@@ -6,6 +6,7 @@ import {
   FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete, MaskedInput2,
 } from '../../../../../../theme/form';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
+import { US_STATES } from '../../../../../../constants/account';
 
 const LegalDetails = observer(({
   form, change, dobChange, close, autoComplete, name, inProgress, errors, onSubmit,
@@ -59,25 +60,27 @@ const LegalDetails = observer(({
           changed={change}
         />
         <Form.Group widths="equal">
-          {
-            ['city', 'state', 'zipCode'].map(field => (
-              field !== 'zipCode' ? (
-                <FormInput
-                  key={field}
-                  type="text"
-                  name={field}
-                  fielddata={form.fields[field]}
-                  changed={change}
-                />) : (
-                  <MaskedInput2
-                    key={field}
-                    name={field}
-                    fielddata={form.fields[field]}
-                    changed={change}
-                    zipCode
-                  />)
-            ))
-          }
+          <FormInput
+            key="city"
+            type="text"
+            name="city"
+            fielddata={form.fields.city}
+            changed={change}
+          />
+          <FormSelect
+            key="state"
+            name="state"
+            fielddata={form.fields.state}
+            options={US_STATES}
+            changed={change}
+          />
+          <MaskedInput2
+            key="zipCode"
+            name="zipCode"
+            fielddata={form.fields.zipCode}
+            changed={change}
+            zipCode
+          />
         </Form.Group>
         <Form.Group widths="equal">
           <MaskedInput

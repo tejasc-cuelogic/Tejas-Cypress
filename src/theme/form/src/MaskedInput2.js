@@ -31,8 +31,8 @@ const MaskedInput2 = observer((props) => {
           maxLength={18}
           thousandSeparator
           {...props}
+          onValueChange={props.changed}
           value={value}
-          onChange={props.changed}
           error={!!error}
         />
       }
