@@ -51,6 +51,15 @@ h5, h5.ui.header{
 .mb-80 {
 	margin-bottom: 80px !important;
 }
+.mt-30 {
+	margin-top: @30px !important;
+}
+.mt-50 {
+	margin-top: @50px !important;
+}
+.mt-80 {
+	margin-top: 80px !important;
+}
 
 // Footer Styles
 footer{
@@ -433,4 +442,18 @@ footer{
 			justify-content: center;
 		}
 	} 
+}
+
+/** Business homepage **/
+.info-grid {
+	img {
+		display: inline-block;
+		width: 50px;
+		height: auto;
+		margin-right: 20px;
+	}
+	div {
+		display: inline-block;
+		width: ~"calc(100% - 70px)";
+	}
 }
