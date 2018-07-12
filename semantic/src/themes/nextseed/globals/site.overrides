@@ -942,3 +942,15 @@ svg:not(:root).recharts-surface{
 	border-bottom:@border-light 1px solid;
 	background:@border-light;
 }
+
+.table-info-wrap{
+	display:flex;
+	>p{
+		flex-grow:1;
+		margin:0;
+		padding-right:15px;
+		&:last-child{
+			padding-right:0;
+		}
+	}
+}

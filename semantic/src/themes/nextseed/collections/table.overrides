@@ -116,4 +116,15 @@
             color:@quaternary-text;
         }
     }
+    &.application-list{
+        thead th{
+            color:@quaternary-text;
+        }
+        h6.ui.header{
+            margin:0 0 @7px;
+        }
+        .item .extra{
+            font-size:@12px;
+        }
+    }
 }

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Form, Grid, Input, Button, Pagination, Card, Table } from 'semantic-ui-react';
+import { Form, Grid, Input, Button, Pagination, Card, Table, Header, Item, Rating, Label } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
 // import { FormCheckbox } from '../../../../../theme/form';
@@ -14,8 +13,8 @@ export default class AllApplications extends Component {
     this.props.helloWorldStore.initRequest(); // load data
   }
   render() {
-    const { match, helloWorldStore } = this.props;
-    const { allRecords } = helloWorldStore;
+    // const { match, helloWorldStore } = this.props;
+    // const { allRecords } = helloWorldStore;
     return (
       <Aux>
         <Form>
@@ -49,28 +48,59 @@ export default class AllApplications extends Component {
         </Form>
         <Card fluid>
           <div className="table-wrapper">
-            <Table unstackable striped sortable className="user-list">
+            <Table unstackable className="application-list">
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>Title</Table.HeaderCell>
-                  <Table.HeaderCell>Created date</Table.HeaderCell>
-                  <Table.HeaderCell textAlign="right">Action</Table.HeaderCell>
+                  <Table.HeaderCell>Info</Table.HeaderCell>
+                  <Table.HeaderCell width={4}>Comments</Table.HeaderCell>
+                  <Table.HeaderCell width={4}>Failed reasons</Table.HeaderCell>
+                  <Table.HeaderCell textAlign="center">Action</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {
-                  allRecords.map(record => (
-                    <Table.Row key={record.id}>
-                      <Table.Cell>{record.title}</Table.Cell>
-                      <Table.Cell>{record.createdAt}</Table.Cell>
-                      <Table.Cell textAlign="right">
-                        <div className="actions">
-                          <Link to={`${match.url}/${record.id}`} className="green">Details</Link>
-                        </div>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))
-                }
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>
+                    <Header as="h6">
+                      California 88
+                      <Label color="red" size="small" horizontal>Declined</Label>
+                    </Header>
+                    <div className="table-info-wrap">
+                      <p>John Doe<br />
+                        jdoe234@gmail.com<br />
+                        235-443-7851
+                      </p>
+                      <p>Sign-up Code <b>joedoe</b><br />
+                        Started <b>Apr 9, 2018</b><br />
+                        Updated <b>Apr 9, 2018</b>
+                      </p>
+                    </div>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Item>
+                      <Item.Header><Rating icon="heart" size="large" defaultRating={3} maxRating={5} /></Item.Header>
+                      <Item.Content>
+                        <Item.Description>
+                          Good application, several fail reasons, though. We should contact them
+                        </Item.Description>
+                        <Item.Extra><b>5/5/2018 | 1:33PM</b> by <b>Jack Black</b></Item.Extra>
+                      </Item.Content>
+                    </Item>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <p>
+                      Net income ($100) is lower than required $15,000. Net income ($100) is
+                      lower than required $15,000. Net income ($100) is lower than required $15,000.
+                    </p>
+                  </Table.Cell>
+                  <Table.Cell width={1} textAlign="center">
+                    <Button.Group vertical compact size="mini">
+                      <Button color="green">Pramote</Button>
+                      <Button color="red">Delete</Button>
+                      <Button color="blue" inverted className="relaxed">View</Button>
+                    </Button.Group>
+                  </Table.Cell>
+                </Table.Row>
+
               </Table.Body>
             </Table>
           </div>

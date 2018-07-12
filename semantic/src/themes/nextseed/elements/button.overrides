@@ -62,6 +62,11 @@
             }
         }
     }
+    &.vertical.buttons .button{
+        + .button{
+            margin:@7px 0 0 0;
+        }
+    }
 }
 
 .ui.button, .ui.buttons .button{
