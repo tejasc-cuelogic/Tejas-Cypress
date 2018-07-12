@@ -1,6 +1,7 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { FormValidator as Validator } from '../../../../helper';
-// import { GqlClient as client } from '../../services/graphqlCool';
+// import graphql from 'mobx-apollo';
+import { GqlClient as client } from '../../../../api/gcoolApi';
 import {
   BUSINESS_PRE_QUALIFICATION,
   BUSINESS_SIGNUP,
@@ -8,8 +9,11 @@ import {
   BUSINESS_PERF,
   BUSINESS_DOC,
   LENDIO_PRE_QUAL,
+  BUSINESS_APPLICATION_STATUS,
 } from '../../../constants/newBusiness';
 import Helper from '../../../../helper/utility';
+import { createBusinessApplicationPrequalificaiton } from '../../queries/businessApplication';
+import { uiStore } from '../../../../services/stores/index';
 
 export class NewBusinessStore {
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
@@ -19,6 +23,7 @@ export class NewBusinessStore {
   @observable BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
   @observable LENDIO_QUAL_FRM = Validator.prepareFormObject(LENDIO_PRE_QUAL);
   @observable BUSINESS_APP_STATUS = '';
+  @observable BUSINESS_APP_STEP_URL = 'pre-qualification';
 
   @action
   businessAccEleChange = (e, result) => {
@@ -68,65 +73,146 @@ export class NewBusinessStore {
     console.log(data);
   }
 
+  @computed get getFormatedData() {
+    const data = Validator.ExtractValues(toJS(this.BUSINESS_APP_FRM.fields));
+    return {
+      businessModel: data.businessModel,
+      businessGeneralInfo: {
+        businessName: data.businessName,
+        address: {
+          street: data.street,
+          city: data.city,
+          state: data.state,
+          zipCode: data.zipCode,
+        },
+      },
+      website: data.website,
+      contactDetails: {
+        phone: {
+          number: data.phoneNumber,
+          countryCode: '1',
+        },
+        email: data.email,
+      },
+      industryTypes: data.industryTypes,
+      businessGoal: data.businessGoal,
+      franchiseHolder: data.franchiseHolder,
+      existingBusinessInfo: {
+        ageYears: data.businessAgeYears,
+        ageMonths: data.businessAgeMonths,
+      },
+      businessExperience: {
+        industryExperience: data.industryExperience,
+        estimatedCreditScore: data.estimatedCreditScore,
+        totalProjectCost: data.totalProjectCost,
+        amountNeeded: data.amountNeeded,
+      },
+      fundUsage: data.fundUsage,
+      performanceSnapshot: {
+        pastYearSnapshot: {
+          grossSales: data.previousYearGrossSales,
+          cogSold: data.previousYearCogSold,
+          operatingExpenses: data.previousYearOperatingExpenses,
+          netIncome: data.previousYearNetIncome,
+        },
+        nextYearSnapshot: {
+          grossSales: data.nextYearGrossSales,
+          cogSold: data.nextYearCogSold,
+          operatingExpenses: data.nextYearOperatingExpenses,
+          netIncome: data.nextYearNetIncome,
+        },
+      },
+      businessEntityStructure: data.businessEntityStructure,
+      legalConfirmations: data.legalConfirmations,
+    };
+  }
+
   @action
-  businessPreQualification = () => {
-    const data = Validator.ExtractValues(this.BUSINESS_APP_FRM.fields);
-    if (data.businessName === 'SUCCESS') {
-      this.BUSINESS_APP_STATUS = 'success';
-    } else {
-      this.BUSINESS_APP_STATUS = 'failed';
-    }
+  businessPreQualificationFormSumbit = () => {
+    const data = this.getFormatedData;
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createBusinessApplicationPrequalificaiton,
+          variables: {
+            preQualificationData: data,
+          },
+        })
+        .then((result) => {
+          this.BUSINESS_APP_STATUS = result.data.status;
+          if (result.data.status === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED) {
+            this.BUSINESS_APP_STEP_URL = 'business-details';
+          } else if (result.data.status === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+            this.BUSINESS_APP_STEP_URL = 'failed';
+          }
+          resolve();
+        })
+        .catch(() => reject())
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 
   @action
   setAddressFields = (place) => {
     const data = Helper.gAddressClean(place);
-    this.onFieldChange('BUSINESS_APP_FRM', 'businessStreet', data.residentalStreet);
-    this.onFieldChange('BUSINESS_APP_FRM', 'city', data.city);
-    this.onFieldChange('BUSINESS_APP_FRM', 'state', data.state);
-    this.onFieldChange('BUSINESS_APP_FRM', 'zipCode', data.zipCode);
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'street', value: data.residentalStreet });
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'city', value: data.city });
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'state', value: data.state });
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'zipCode', value: data.zipCode });
   };
 
   @action
-  businessDetailsFiles = (name, files) => {
+  businessDetailsFiles = (fieldName, files) => {
     let uploadedFile = '';
     if (typeof files !== 'undefined' && files.length) {
       uploadedFile = files[0].name;
-      this.onFieldChange('BUSINESS_DETAILS_FRM', name, uploadedFile);
+      this.BUSINESS_DETAILS_FRM = Validator.onChange(
+        this.BUSINESS_DETAILS_FRM,
+        { name: fieldName, value: uploadedFile },
+      );
     }
   }
 
   @action
   businessDetailsReset = (field) => {
-    this.onFieldChange('BUSINESS_DETAILS_FRM', field, '');
+    this.BUSINESS_DETAILS_FRM = Validator.onChange(this.BUSINESS_DETAILS_FRM, { name: field, value: '' });
   };
 
   @action
-  performanceFiles = (name, files) => {
+  performanceFiles = (fieldName, files) => {
     let uploadedFile = '';
     if (typeof files !== 'undefined' && files.length) {
       uploadedFile = files[0].name;
-      this.onFieldChange('BUSINESS_PERF_FRM', name, uploadedFile);
+      this.BUSINESS_PERF_FRM = Validator.onChange(
+        this.BUSINESS_PERF_FRM,
+        { name: fieldName, value: uploadedFile },
+      );
     }
   }
 
   @action
   performanceReset = (field) => {
-    this.onFieldChange('BUSINESS_PERF_FRM', field, '');
+    this.BUSINESS_PERF_FRM = Validator.onChange(this.BUSINESS_PERF_FRM, { name: field, value: '' });
   };
 
   @action
-  docuFiles = (name, files) => {
+  docuFiles = (fieldName, files) => {
     let uploadedFile = '';
     if (typeof files !== 'undefined' && files.length) {
       uploadedFile = files[0].name;
-      this.onFieldChange('BUSINESS_DOC_FRM', name, uploadedFile);
+      this.BUSINESS_DOC_FRM = Validator.onChange(
+        this.BUSINESS_DOC_FRM,
+        { name: fieldName, value: uploadedFile },
+      );
     }
   }
 
   @action
   docuReset = (field) => {
-    this.onFieldChange('BUSINESS_DOC_FRM', field, '');
+    this.BUSINESS_DOC_FRM = Validator.onChange(this.BUSINESS_DOC_FRM, { name: field, value: '' });
   };
 }
 

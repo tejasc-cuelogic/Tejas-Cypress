@@ -1,9 +1,30 @@
+export const BUSINESS_GOAL = {
+  UPGRADE: 'UPGRADE',
+  RESTRUCTURE: 'RESTRUCTURE',
+  BRAND_NEW: 'BRAND_NEW',
+  FRANCHISE: 'FRANCHISE',
+};
+
+export const BUSINESS_APPLICATION_STATUS = {
+  PRE_QUALIFICATION_FAILED: 'PRE_QUALIFICATION_FAILED',
+  PRE_QUALIFICATION_SUCCESSFUL: 'PRE_QUALIFICATION_SUCCESSFUL',
+  PRE_QUALIFICATION_SUBMITTED: 'PRE_QUALIFICATION_SUBMITTED',
+  PRE_QUALIFICATION_PROMOTED: 'PRE_QUALIFICATION_PROMOTED',
+  APPLICATION_SUBMITTED: 'APPLICATION_SUBMITTED',
+  APPLICATION_REVIEWED: 'APPLICATION_REVIEWED',
+  APPLICATION_FAILED: 'APPLICATION_FAILED',
+  APPLICATION_SUCCESSFUL: 'APPLICATION_SUCCESSFUL',
+  REVIEWED: 'REVIEWED',
+  DECLINED: 'DECLINED',
+  APPLICATION_DELETED: 'APPLICATION_DELETED',
+};
+
 export const BUSINESS_PRE_QUALIFICATION = {
-  businessType: {
-    value: 'btoc',
+  businessModel: {
+    value: 'B2C',
     values: [
-      { label: 'Business to Consumer', value: 'btoc' },
-      { label: 'Business to Business', value: 'btob' },
+      { label: 'Business to Consumer', value: 'B2C' },
+      { label: 'Business to Business', value: 'B2B' },
     ],
     error: undefined,
     rule: 'required',
@@ -11,31 +32,28 @@ export const BUSINESS_PRE_QUALIFICATION = {
   businessName: {
     value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g.  NextBrewery',
   },
-  businessZipCode: {
-    value: '', label: 'Business ZIP Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6,
-  },
-  webSite: {
-    value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  NextBrewery',
+  website: {
+    value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  http://nextbrewery.com',
   },
   phoneNumber: {
     value: '', label: 'Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789',
   },
-  emailAddress: {
+  email: {
     value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g.next.brewery@contact.com',
   },
-  businessStreet: {
-    value: '', label: 'Street', error: undefined, rule: 'required',
+  street: {
+    value: '', label: 'Street', error: undefined, rule: 'required', placeHolder: 'e.g.  NextBrewery',
   },
   city: {
-    value: '', label: 'City', error: undefined, rule: 'required',
+    value: '', label: 'City', error: undefined, rule: 'required', placeHolder: 'e.g.  NY',
   },
   state: {
-    value: '', label: 'State', error: undefined, rule: 'required',
+    value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g.  NY',
   },
   zipCode: {
-    value: '', label: 'Zip Code', error: undefined, rule: 'required|numeric', maxLength: 6,
+    value: '', label: 'Zip Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6,
   },
-  relatedExperience: {
+  industryExperience: {
     value: '',
     label: 'How many years of related industry experience does your team have?',
     error: undefined,
@@ -43,13 +61,28 @@ export const BUSINESS_PRE_QUALIFICATION = {
     maxLength: 2,
     placeHolder: 'e.g. 5',
   },
-  estCreditScore: {
+  businessAgeYears: {
+    value: '', maxLength: 4, label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1',
+  },
+  businessAgeMonths: {
+    value: '', maxLength: 2, label: 'Months', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3',
+  },
+  franchiseHolder: {
+    value: true,
+    values: [
+      { label: 'Yes', value: true },
+      { label: 'No', value: false },
+    ],
+    error: undefined,
+    rule: 'required_if:businessGoal,FRANCHISE',
+  },
+  estimatedCreditScore: {
     value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700',
   },
-  projectCost: {
+  totalProjectCost: {
     value: '', maxLength: 16, label: 'What’s the total project cost?', error: undefined, rule: 'required', placeHolder: 'e.g. 100,000',
   },
-  raiseRequired: {
+  amountNeeded: {
     value: '',
     maxLength: 16,
     label: 'How much do you need to raise on NextSeed?',
@@ -58,40 +91,52 @@ export const BUSINESS_PRE_QUALIFICATION = {
     placeHolder: 'e.g. 50,000',
     tooltip: 'Minimum amount of funding is $50,000. For requirements on different levels of funding, click here.',
   },
-  grossSales: {
+  previousYearGrossSales: {
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 750,000',
+  },
+  previousYearCogSold: {
+    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 75,000',
+  },
+  previousYearOperatingExpenses: {
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 150,000',
+  },
+  previousYearNetIncome: {
+    value: '', label: 'Net Income', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 525,000',
+  },
+  nextYearGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. 750,000',
   },
-  goodsSold: {
+  nextYearCogSold: {
     value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. 75,000',
   },
-  operatingExpenses: {
+  nextYearOperatingExpenses: {
     value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: 'e.g. 150,000',
   },
-  netIncome: {
+  nextYearNetIncome: {
     value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. 525,000',
   },
-  industryType: {
+  industryTypes: {
     value: [],
     values: [
-      { label: 'Fashion & Merchandising', icon: 'ns-store', value: 'fashionmerchandising' },
-      { label: 'Beauty & Spa', icon: 'ns-beauty-spa', value: 'beautyspa' },
-      { label: 'Food & Beverage', icon: 'ns-food-light', value: 'foodbeverage' },
-      { label: 'Real Estate', icon: 'ns-real-estate', value: 'realestate' },
-      { label: 'Fitness & Wellness', icon: 'ns-dumbbells', value: 'fitnesswellness' },
-      { label: 'Hospitality', icon: 'ns-first-aid', value: 'hospitality' },
-      { label: 'Technology', icon: 'ns-technology', value: 'technology' },
-      { label: 'Other Industry Type', value: 'otherindustrytype' },
+      { label: 'Fashion & Merchandising', icon: 'ns-store', value: 'FASHION_AND_APPAREL' },
+      { label: 'Beauty & Spa', icon: 'ns-beauty-spa', value: 'BEAUTY_SALON' },
+      { label: 'Food & Beverage', icon: 'ns-food-light', value: 'FOOD_AND_BEVERAGE' },
+      { label: 'Real Estate', icon: 'ns-real-estate', value: 'REAL_ESTATE' },
+      { label: 'Fitness & Wellness', icon: 'ns-dumbbells', value: 'FITNESS_AND_WELLNESS' },
+      { label: 'Hospitality', icon: 'ns-first-aid', value: 'HOSPITALITY' },
+      { label: 'Technology', icon: 'ns-technology', value: 'TECHNOLOGY' },
+      { label: 'Other Industry Type', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
   },
-  businessHelp: {
+  businessGoal: {
     value: '',
     values: [
-      { label: 'Launch New Business', icon: 'ns-new-business', value: 'newbusiness' },
-      { label: 'Open Franchise', icon: 'ns-franchise', value: 'openfranchise' },
-      { label: 'Expand/Upgrade Existing Business', icon: 'ns-expand-business', value: 'expandbusiness' },
-      { label: 'Create Off-shoot of Existing Business', icon: 'ns-off-shoot-business', value: 'createoffshoot' },
+      { label: 'Launch New Business', icon: 'ns-new-business', value: BUSINESS_GOAL.BRAND_NEW },
+      { label: 'Open Franchise', icon: 'ns-franchise', value: BUSINESS_GOAL.FRANCHISE },
+      { label: 'Expand/Upgrade Existing Business', icon: 'ns-expand-business', value: BUSINESS_GOAL.UPGRADE },
+      { label: 'Create Off-shoot of Existing Business', icon: 'ns-off-shoot-business', value: BUSINESS_GOAL.RESTRUCTURE },
     ],
     error: undefined,
     rule: 'required',
@@ -99,26 +144,26 @@ export const BUSINESS_PRE_QUALIFICATION = {
   fundUsage: {
     value: [],
     values: [
-      { label: 'Renovations', icon: 'ns-renovations', value: 'renovations' },
-      { label: 'Equipment Purchase', icon: 'ns-equipment-purchase', value: 'equipmentpurchase' },
-      { label: 'Working Capital', icon: 'ns-working-capital', value: 'workingcapital' },
-      { label: 'Inventory', icon: 'ns-inventory', value: 'inventory' },
-      { label: 'New product line', icon: 'ns-new-product', value: 'newproductline' },
-      { label: 'New location', icon: 'ns-new-location', value: 'newlocation' },
-      { label: 'Restructure debt', icon: 'ns-restructure-debt', value: 'restructuredebt' },
-      { label: 'Other Industry Type', value: 'otherindustrytype' },
+      { label: 'Renovations', icon: 'ns-renovations', value: 'RENOVATIONS' },
+      { label: 'Equipment Purchase', icon: 'ns-equipment-purchase', value: 'EQUIPMENT_PURCHASE' },
+      { label: 'Working Capital', icon: 'ns-working-capital', value: 'WORKING_CAPITAL' },
+      { label: 'Inventory', icon: 'ns-inventory', value: 'INVENTORY' },
+      { label: 'New product line', icon: 'ns-new-product', value: 'NEW_PRODUCT_LINE' },
+      { label: 'New location', icon: 'ns-new-location', value: 'NEW_LOCATION' },
+      { label: 'Restructure debt', icon: 'ns-restructure-debt', value: 'RESTRUCTURE_DEBT' },
+      { label: 'Other Industry Type', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
   },
-  entityStructure: {
+  businessEntityStructure: {
     value: '',
     values: [
-      { label: 'Corporation', icon: 'ns-corporation', value: 'corporation' },
-      { label: 'LLC', icon: 'ns-business', value: 'llc' },
-      { label: 'Limited Partnership', icon: 'ns-partnership', value: 'limitedpartnership' },
-      { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'soleproprietor' },
-      { label: 'Other', value: 'other' },
+      { label: 'Corporation', icon: 'ns-corporation', value: 'CORPORATION' },
+      { label: 'LLC', icon: 'ns-business', value: 'LLC' },
+      { label: 'Limited Partnership', icon: 'ns-partnership', value: 'LIMITED_PARTNERSHIP' },
+      { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'SOLE_PROPRIETOR' },
+      { label: 'Other', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -128,55 +173,44 @@ export const BUSINESS_PRE_QUALIFICATION = {
     values: [
       {
         label: 'The company has not raised securities under Regulation Crowdfunding in the last 12 months.',
-        value: 'legalConfirmation01',
+        value: 'HAS_NOT_RAISED_SECURITIES',
       },
       {
         label: 'The company is not concurrently conducting an offering on another platform.',
-        value: 'legalConfirmation02',
+        value: 'IS_NOT_CONDUCTING_OFFERING',
       },
       {
         label: 'The company is not a broker-dealer.',
-        value: 'legalConfirmation03',
+        value: 'IS_NOT_BROKER_DEALER',
       },
       {
         label: 'The company is organized in the United States',
-        value: 'legalConfirmation04',
+        value: 'IS_ORGANIZED_IN_USA',
       },
       {
         label: 'The company is not an investment company.',
-        value: 'legalConfirmation05',
+        value: 'IS_NOT_INVESTMENT_COMPANY',
       },
       {
         label: 'The company has not sold securities registered under the Securities Exchange Act of 1934.',
-        value: 'legalConfirmation06',
+        value: 'HAS_NOT_SOLD_SECURITIES',
       },
       {
         label: 'I have never filed for bankruptcy.',
-        value: 'legalConfirmation07',
+        value: 'HAS_NEVER_FILED_BANKRUPTCY',
         tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy',
       },
       {
         label: 'I am not currently charged with or have ever been convicted of fraud.',
-        value: 'legalConfirmation08',
+        value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
       },
       {
         label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
-        value: 'legalConfirmation09',
+        value: 'HAS_NEVER_BEEN_CONVICTED_OF_CRIMINAL_OFFENCE',
       },
     ],
     error: undefined,
     rule: 'array',
-  },
-  subscribeTo: {
-    value: [],
-    values: [
-      {
-        label: 'Please check here if you wish to subscribe to the latest news and offers from NextSeed. You may unsubscribe at any time',
-        value: 'legalConfirmation10',
-      },
-    ],
-    error: undefined,
-    rule: 'alpha',
   },
 };
 
