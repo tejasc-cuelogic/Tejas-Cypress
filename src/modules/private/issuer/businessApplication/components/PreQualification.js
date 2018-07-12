@@ -3,9 +3,10 @@ import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Grid, Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { US_STATES } from '../../../../../constants/account';
 import Helper from '../../../../../helper/utility';
 import {
-  FormRadioGroup, FormCheckbox, FormInput, MaskedInput2, AutoComplete,
+  FormRadioGroup, FormSelect, FormCheckbox, FormInput, MaskedInput2, AutoComplete,
 } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 
@@ -23,7 +24,7 @@ export default class PreQualification extends Component {
   }
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
+      BUSINESS_APP_FRM, businessAppEleChange, preQualifInfoChange, setAddressFields,
     } = this.props.newBusinessStore;
     const { fields } = BUSINESS_APP_FRM;
     return (
@@ -89,6 +90,7 @@ export default class PreQualification extends Component {
                     />
                     <FormInput
                       name="emailAddress"
+                      type="email"
                       value={fields.emailAddress.value}
                       fielddata={fields.emailAddress}
                       changed={businessAppEleChange}
@@ -105,24 +107,27 @@ export default class PreQualification extends Component {
                       changed={businessAppEleChange}
                     />
                     <Form.Group widths="equal">
-                      {
-                        ['city', 'state', 'zipCode'].map(field => (
-                          field !== 'zipCode' ? (
-                            <FormInput
-                              key={field}
-                              type="text"
-                              name={field}
-                              fielddata={fields[field]}
-                              changed={businessAppEleChange}
-                            />) : (
-                              <MaskedInput2
-                                key={field}
-                                name={field}
-                                fielddata={fields[field]}
-                                changed={businessAppEleChange}
-                                zipCode
-                              />)))
-                      }
+                      <FormInput
+                        key="city"
+                        type="text"
+                        name="city"
+                        fielddata={fields.city}
+                        changed={businessAppEleChange}
+                      />
+                      <FormSelect
+                        key="state"
+                        name="state"
+                        fielddata={fields.state}
+                        options={US_STATES}
+                        changed={businessAppEleChange}
+                      />
+                      <MaskedInput2
+                        key="zipCode"
+                        name="zipCode"
+                        fielddata={fields.zipCode}
+                        changed={businessAppEleChange}
+                        zipCode
+                      />
                     </Form.Group>
                   </div>
                 </Grid.Column>
@@ -164,11 +169,12 @@ export default class PreQualification extends Component {
                       ['projectCost', 'raiseRequired'].map(field => (
                         <MaskedInput2
                           key={field}
+                          prefix="$ "
                           name={field}
                           currency
                           value={fields[field].value}
                           fielddata={fields[field]}
-                          changed={businessAppEleChange}
+                          changed={values => preQualifInfoChange(values, field)}
                         />
                       ))
                     }
@@ -196,10 +202,11 @@ export default class PreQualification extends Component {
                         <MaskedInput2
                           key={field}
                           name={field}
+                          prefix="$ "
                           currency
                           value={fields[field].value}
                           fielddata={fields[field]}
-                          changed={businessAppEleChange}
+                          changed={values => preQualifInfoChange(values, field)}
                         />
                       ))
                     }

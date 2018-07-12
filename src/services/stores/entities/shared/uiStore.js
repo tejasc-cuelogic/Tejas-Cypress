@@ -32,14 +32,14 @@ export class UiStore {
   @observable authWizardStep = undefined;
   @observable dashboardStep = undefined;
   @observable editMode = false;
-  @observable passwordInputType = 'password';
+  @observable pwdInputType = 'password';
 
   @action
-  setPasswordVisibilityStatus = () => {
-    if (this.passwordInputType === 'password') {
-      this.passwordInputType = 'text';
+  setPwdVisibilityStatus = () => {
+    if (this.pwdInputType === 'password') {
+      this.pwdInputType = 'text';
     } else {
-      this.passwordInputType = 'password';
+      this.pwdInputType = 'password';
     }
   }
 

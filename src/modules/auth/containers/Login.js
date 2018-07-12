@@ -28,15 +28,15 @@ class Login extends Component {
         }
       });
   };
-  passwordInputHandler = (field) => {
-    const { passwordInputType } = this.props.uiStore;
+  pwdInputHandler = (field) => {
+    const { pwdInputType } = this.props.uiStore;
     let iconData = {
       link: true,
-      onClick: this.props.uiStore.setPasswordVisibilityStatus,
+      onClick: this.props.uiStore.setPwdVisibilityStatus,
     };
-    if (field === 'password' && passwordInputType === 'password') {
+    if (field === 'password' && pwdInputType === 'password') {
       iconData.className = 'ns-view';
-    } else if (field === 'password' && passwordInputType === 'text') {
+    } else if (field === 'password' && pwdInputType === 'text') {
       iconData.className = 'ns-view active';
     } else {
       iconData = null;
@@ -46,7 +46,7 @@ class Login extends Component {
 
   render() {
     const { LOGIN_FRM, LoginChange } = this.props.authStore;
-    const { errors, inProgress, passwordInputType } = this.props.uiStore;
+    const { errors, inProgress, pwdInputType } = this.props.uiStore;
     return (
       <Modal size="mini" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
@@ -69,8 +69,8 @@ class Login extends Component {
               Object.keys(LOGIN_FRM.fields).map(field => (
                 <FormInput
                   key={field}
-                  type={field !== 'email' ? passwordInputType : 'text'}
-                  icon={this.passwordInputHandler(field)}
+                  type={field !== 'email' ? pwdInputType : 'email'}
+                  icon={this.pwdInputHandler(field)}
                   name={field}
                   fielddata={LOGIN_FRM.fields[field]}
                   changed={LoginChange}
