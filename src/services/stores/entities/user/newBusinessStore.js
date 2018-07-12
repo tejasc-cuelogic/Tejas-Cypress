@@ -47,12 +47,8 @@ export class NewBusinessStore {
   };
 
   @action
-  businessAppEleChange = (e, res, formName) => {
-    this.BUSINESS_APP_FRM = Validator.onArrayFieldChange(
-      this.BUSINESS_APP_FRM,
-      Validator.pullValues(e, res),
-      formName,
-    );
+  businessAppEleChange = (e, res) => {
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, Validator.pullValues(e, res));
   };
 
   @action

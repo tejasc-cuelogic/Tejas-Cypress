@@ -62,21 +62,21 @@ export default class PreQualification extends Component {
                         <FormInput
                           key={field}
                           name={field}
-                          value={fields.generalInfo[field].value}
-                          fielddata={fields.generalInfo[field]}
+                          value={fields[field].value}
+                          fielddata={fields[field]}
                           changed={(e, res) => businessAppEleChange(e, res, 'generalInfo')}
                         />
                       ))
                     }
                     <MaskedInput2
                       name="phoneNumber"
-                      fielddata={fields.generalInfo.phoneNumber}
+                      fielddata={fields.phoneNumber}
                       changed={businessAppEleChange}
                     />
                     <FormInput
                       name="emailAddress"
-                      value={fields.generalInfo.emailAddress.value}
-                      fielddata={fields.generalInfo.emailAddress}
+                      value={fields.emailAddress.value}
+                      fielddata={fields.emailAddress}
                       changed={businessAppEleChange}
                     />
                   </div>
@@ -86,7 +86,7 @@ export default class PreQualification extends Component {
                     <Header as="h5">Business Address</Header>
                     <AutoComplete
                       name="businessStreet"
-                      fielddata={fields.generalInfo.businessStreet}
+                      fielddata={fields.businessStreet}
                       onplaceselected={setAddressFields}
                       changed={businessAppEleChange}
                     />
@@ -97,7 +97,7 @@ export default class PreQualification extends Component {
                             key={field}
                             type="text"
                             name={field}
-                            fielddata={fields.generalInfo[field]}
+                            fielddata={fields[field]}
                             changed={businessAppEleChange}
                           />
                         ))
@@ -134,8 +134,8 @@ export default class PreQualification extends Component {
                           <FormInput
                             key={field}
                             name={field}
-                            value={fields.experience[field].value}
-                            fielddata={fields.experience[field]}
+                            value={fields[field].value}
+                            fielddata={fields[field]}
                             changed={businessAppEleChange}
                           />
                         ))
@@ -146,8 +146,8 @@ export default class PreQualification extends Component {
                             key={field}
                             name={field}
                             currency
-                            value={fields.experience[field].value}
-                            fielddata={fields.experience[field]}
+                            value={fields[field].value}
+                            fielddata={fields[field]}
                             changed={businessAppEleChange}
                           />
                         ))
@@ -178,8 +178,8 @@ export default class PreQualification extends Component {
                           key={field}
                           name={field}
                           currency
-                          value={fields.snapshot[field].value}
-                          fielddata={fields.snapshot[field]}
+                          value={fields[field].value}
+                          fielddata={fields[field]}
                           changed={businessAppEleChange}
                         />
                       ))
