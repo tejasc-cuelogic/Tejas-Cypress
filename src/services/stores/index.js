@@ -25,3 +25,5 @@ export { default as identityStore } from './entities/user/identityStore';
 export { default as investorProfileStore } from './entities/user/investorProfileStore';
 
 export { default as helloWorldStore } from './entities/helloWorldStore';
+
+export { default as businesssStore } from './entities/issuer/businessStore';

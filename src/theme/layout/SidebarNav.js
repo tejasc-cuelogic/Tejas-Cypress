@@ -13,6 +13,10 @@ import { NavItems } from './NavigationItems';
 export class SidebarNav extends Component {
   componentWillMount() {
     this.props.navStore.setAccessParams('roles', this.props.roles);
+    this.props.navStore.setAccessParams('currentNav', this.props.match.url);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.props.navStore.setAccessParams('currentNav', nextProps.match.url);
   }
   render() {
     const {
