@@ -8,7 +8,7 @@ import { FormInput, FormSelect, AutoComplete, MaskedInput } from '../../../../..
 @observer
 export default class General extends Component {
   render() {
-    const { formGeneralInfo, genInfoChange, setAddressFields } = this.props.entityAccountStore;
+    const { GEN_INFO_FRM, genInfoChange, setAddressFields } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h1" textAlign="center">General Information</Header>
@@ -16,37 +16,37 @@ export default class General extends Component {
           <div className="field-wrap">
             <FormInput
               name="name"
-              fielddata={formGeneralInfo.fields.name}
+              fielddata={GEN_INFO_FRM.fields.name}
               changed={genInfoChange}
             />
             <MaskedInput
               name="taxId"
-              fielddata={formGeneralInfo.fields.taxId}
+              fielddata={GEN_INFO_FRM.fields.taxId}
               mask="999-99-9999"
               changed={genInfoChange}
             />
             <h5>Entity Address</h5>
             <AutoComplete
               name="street"
-              fielddata={formGeneralInfo.fields.street}
+              fielddata={GEN_INFO_FRM.fields.street}
               onplaceselected={setAddressFields}
               changed={genInfoChange}
             />
             <Form.Group widths="equal">
               <FormInput
                 name="city"
-                fielddata={formGeneralInfo.fields.city}
+                fielddata={GEN_INFO_FRM.fields.city}
                 changed={genInfoChange}
               />
               <FormSelect
                 name="state"
-                fielddata={formGeneralInfo.fields.state}
+                fielddata={GEN_INFO_FRM.fields.state}
                 options={US_STATES}
                 changed={genInfoChange}
               />
               <FormInput
                 name="zipCode"
-                fielddata={formGeneralInfo.fields.zipCode}
+                fielddata={GEN_INFO_FRM.fields.zipCode}
                 changed={genInfoChange}
               />
             </Form.Group>

@@ -38,6 +38,14 @@
 //  NextSeed V-2 
 
 //  Button style radio buttons
+.ui.form{
+	.inline.fields.button-radio{
+		flex-wrap:wrap;
+		.field{
+			padding-top:@relative14px;
+		}
+	}
+}
 .button-radio{
 	.ui.radio.checkbox{
 		margin:0 @10px @10px 0;

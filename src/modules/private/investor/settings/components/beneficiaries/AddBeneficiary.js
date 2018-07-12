@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import moment from 'moment';
 import { Form, Header, Button, Confirm, Icon } from 'semantic-ui-react';
-import { FormInput, AutoComplete, FormDatePicker, MaskedInput2 } from '../../../../../../theme/form';
-import { FieldError } from '../../../../../../theme/shared';
+import { FormInput, AutoComplete, FormDatePicker } from '../../../../../../theme/form';
 import ConfirmVerificationCode from './ConfirmVerificationCode';
+import BeneficiaryShareModal from './BeneficiaryShareModal';
+import BeneficiaryPreviewModal from './BeneficiaryPreviewModal';
 
 @inject('beneficiaryStore', 'uiStore')
 @withRouter
@@ -14,12 +15,14 @@ import ConfirmVerificationCode from './ConfirmVerificationCode';
 export default class AddBeneficiary extends Component {
   componentWillMount() {
     this.props.beneficiaryStore.setCurrentSelectedAccountId(this.props.accountId);
-    const location = `${this.props.match.url}/confirm`;
-    if (this.props.location.pathname !== location) {
+    if (!this.props.beneficiaryStore.isShareModalDataSet) {
       this.props.beneficiaryStore.beneficiaryReset();
     }
-    if (this.props.isDataAvailable && this.props.location.pathname !== location) {
+    if (this.props.isDataAvailable && !this.props.beneficiaryStore.isShareModalDataSet) {
       this.props.beneficiaryStore.setBeneficiariesInfo();
+    }
+    if (this.props.match.url === this.props.location.pathname) {
+      this.props.beneficiaryStore.setShareModalData(false);
     }
   }
 
@@ -30,11 +33,10 @@ export default class AddBeneficiary extends Component {
 
   submit = (e) => {
     e.preventDefault();
-    this.props.beneficiaryStore.resetFormData('OTP_VERIFY_META');
-    this.props.beneficiaryStore.requestOtpForManageBeneficiary().then(() => {
-      const location = `${this.props.match.url}/confirm`;
-      this.props.history.push(location);
-    });
+    const screenUrl = this.props.beneficiaryStore.calculateSharePercentage();
+    this.props.beneficiaryStore.setShareModalData(true);
+    const location = `${this.props.match.url}/${screenUrl}`;
+    this.props.history.push(location);
   }
 
   addMoreBeneficiary = (e) => {
@@ -48,13 +50,7 @@ export default class AddBeneficiary extends Component {
   }
 
   removeBeneficiary = () => {
-    if (this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary.length === 1) {
-      // this.props.history.push(this.props.refLink);
-      this.props.beneficiaryStore.toggleBeneficiaryConfirmModal(null);
-    } else {
-      const index = this.props.beneficiaryStore.removeBeneficiaryIndex;
-      this.props.beneficiaryStore.removeBeneficiary(index);
-    }
+    this.props.beneficiaryStore.removeBeneficiary();
   }
 
   render() {
@@ -62,29 +58,24 @@ export default class AddBeneficiary extends Component {
     const {
       BENEFICIARY_META,
       beneficiaryEleChange,
-      beneficiaryShareChange,
       beneficiaryDateChange,
       setAddressFields,
       beneficiaryModal,
-      removeBeneficiaryMessage,
     } = this.props.beneficiaryStore;
-    const showError = BENEFICIARY_META.fields.beneficiary.length ?
-      BENEFICIARY_META.fields.beneficiary[0].share.error : false;
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          {showError &&
-            <FieldError error="The sum of percentages must be 100" icon="warning circle" />
-          }
           {
             BENEFICIARY_META.fields.beneficiary.length ?
               BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
                 <Aux>
                   <Header as="h4">
                     {`Beneficiary ${index + 1}`}
-                    <Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
-                      <Icon color="red" size="small" className="ns-trash" />
-                    </Button>
+                    {BENEFICIARY_META.fields.beneficiary.length > 1 &&
+                      <Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
+                        <Icon color="red" size="small" className="ns-trash" />
+                      </Button>
+                    }
                   </Header>
                   <div className="field-wrap">
                     <Form.Group widths="equal">
@@ -104,6 +95,7 @@ export default class AddBeneficiary extends Component {
                       <FormDatePicker
                         type="text"
                         name="dob"
+                        placeholderText={beneficiary.dob.placeHolder}
                         fielddata={beneficiary.dob}
                         selected={beneficiary.dob.value ?
                           moment(beneficiary.dob.value) : null}
@@ -136,16 +128,6 @@ export default class AddBeneficiary extends Component {
                         ))
                       }
                     </Form.Group>
-                    <Header as="h4">Shares</Header>
-                    <MaskedInput2
-                      percentage
-                      showErrorOnField
-                      tooltip={beneficiary.share.tooltip}
-                      type="text"
-                      name="share"
-                      fielddata={beneficiary.share}
-                      changed={e => beneficiaryShareChange(e, index)}
-                    />
                   </div>
                 </Aux>
               )) :
@@ -155,18 +137,22 @@ export default class AddBeneficiary extends Component {
             <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
           : null
           }
-          <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Submit to approval</Button>
+          <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
+          <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
+          {/* <Button inverted color="green" onClick={} >Cancel</Button> */}
         </Form>
         <Confirm
           header="Confirm"
-          content={removeBeneficiaryMessage}
+          content="Are you sure you want to remove this beneficiary?"
           open={beneficiaryModal}
           onCancel={this.toggleConfirm}
           onConfirm={this.removeBeneficiary}
           size="mini"
           className="deletion"
         />
-        <Route path={`${this.props.match.url}/confirm`} render={() => <ConfirmVerificationCode refLink={this.props.refLink} />} />
+        <Route path={`${this.props.match.url}/confirm`} render={() => <BeneficiaryShareModal refLink={this.props.match.url} />} />
+        <Route path={`${this.props.match.url}/preview`} render={() => <BeneficiaryPreviewModal refLink={this.props.match.url} />} />
+        <Route path={`${this.props.match.url}/verify`} render={() => <ConfirmVerificationCode refLink={this.props.refLink} refLinkList={this.props.match.url} />} />
       </Aux>
     );
   }

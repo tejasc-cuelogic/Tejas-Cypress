@@ -9,6 +9,9 @@ import BeneficiaryList from '../components/beneficiaries/BeneficiaryList';
 export default class Beneficiaries extends Component {
   componentWillMount() {
     this.props.beneficiaryStore.getBeneficiaries();
+    if (this.props.match.url === this.props.location.pathname) {
+      this.props.beneficiaryStore.setShareModalData(false);
+    }
   }
 
   render() {
@@ -40,7 +43,7 @@ export default class Beneficiaries extends Component {
     return (
       <div>
         <Header as="h3">Beneficiaries</Header>
-        <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis</p>
+        {/* <p className="intro-text">Pellentesque facilisis</p> */}
         {bLoading ? <div>loading...</div> : (
           <Grid columns={1} stackable>
             { beneficiaryList }

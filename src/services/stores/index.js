@@ -22,3 +22,4 @@ export { default as beneficiaryStore } from './entities/user/settings/beneficiar
 export { default as multiFactorAuthStore } from './entities/user/settings/multiFactorAuthStore';
 export { default as bankAccountStore } from './entities/shared/bankAccountStore';
 export { default as identityStore } from './entities/user/identityStore';
+export { default as investorProfileStore } from './entities/user/investorProfileStore';

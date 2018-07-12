@@ -14,7 +14,7 @@ class FormValidator {
 
   onChange = (form, element, type, isDirty = true) => {
     const currentForm = form;
-    if (element.name) {
+    if (element && element.name) {
       if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[element.name].value)) && type !== 'dropdown')) {
         const index = currentForm.fields[element.name].value.indexOf(element.value);
         if (index === -1) {
@@ -31,68 +31,70 @@ class FormValidator {
       mapValues(currentForm.fields, f => f.rule),
     );
     currentForm.meta.isValid = validation.passes();
-    if (element.name) {
-      currentForm.fields[element.name].error = validation.errors.first(element.name);
+    if (element && element.name) {
+      currentForm.fields[element.name].error = validation.errors.first(element.name) ?
+        replace(
+          validation.errors.first(element.name),
+          element.name,
+          currentForm.fields[element.name].label,
+        ) : undefined;
     }
     currentForm.meta.isDirty = isDirty;
     return currentForm;
   }
 
-  onArrayFieldChange = (form, element, formName, formIndex = -1, type) => {
+  onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
     CustomeValidations.executet();
     const currentForm = form;
-    const formFields = formIndex >= 0 ? form.fields[formName][formIndex]
-      : form.fields[formName];
+    let currentFormRelative;
+    let fieldName = element.name;
+    if (formIndex > -1 && formName) {
+      currentFormRelative = currentForm.fields[formName][formIndex];
+      fieldName = `beneficiary.${formIndex}.${element.name}`;
+    } else if (formName) {
+      currentFormRelative = currentForm.fields[formName];
+      fieldName = `beneficiary.${element.name}`;
+    } else {
+      currentFormRelative = currentForm.fields;
+    }
+
     if (element.name) {
-      if (type === 'checkbox' || (Array.isArray(toJS(formFields[element.name].value)) && type !== 'dropdown')) {
-        const index = formFields[element.name]
+      if (type === 'checkbox' || (Array.isArray(toJS(currentFormRelative[element.name].value)) && type !== 'dropdown')) {
+        const index = currentFormRelative[element.name]
           .value.indexOf(element.value);
         if (index === -1) {
-          formFields[element.name].value.push(element.value);
+          currentFormRelative[element.name].value.push(element.value);
         } else {
-          formFields[element.name].value.splice(index, 1);
+          currentFormRelative[element.name].value.splice(index, 1);
         }
       } else {
-        formFields[element.name].value = element.value;
+        currentFormRelative[element.name].value = element.value;
       }
     }
     /* Beneficiary share percentage validation register */
     Validator.register('sharePercentage', (value, requirement) => {
-      const total = sumBy(currentForm.fields.beneficiary, currentValue =>
+      const total = sumBy(currentForm.fields[formName], currentValue =>
         parseInt(currentValue[requirement].value, 10));
-      forEach(currentForm.fields.beneficiary, (ele, key) => {
-        currentForm.fields.beneficiary[key][requirement].error = total === 100 ?
+      forEach(currentForm.fields[formName], (ele, key) => {
+        currentForm.fields[formName][key][requirement].error = total === 100 ?
           undefined : true;
       });
-      return total === 100;
+      return total === 100 && value > 0;
     }, 'The sum of :attribute percentages must be 100.');
 
     const formData = this.ExtractFormValues(toJS(currentForm.fields));
     const formRules = this.ExtractFormRules(toJS(currentForm.fields));
-
     const validation = new Validator(formData, formRules);
     currentForm.meta.isValid = validation.passes();
-    if (element.name) {
-      formFields[element.name].error = validation.errors.first(`beneficiary.${formIndex}.${element.name}`) ?
+
+    if (element && element.name) {
+      currentFormRelative[element.name].error = validation.errors.first(fieldName) ?
         replace(
-          validation.errors.first(`beneficiary.${formIndex}.${element.name}`),
-          `beneficiary.${formIndex}.${element.name}`,
-          element.name,
+          validation.errors.first(fieldName),
+          fieldName,
+          currentFormRelative[element.name].label,
         ) : undefined;
     }
-    return currentForm;
-  }
-
-  resetFormData = (form) => {
-    const currentForm = form;
-    Object.keys(currentForm.fields).map((field) => {
-      currentForm.fields[field].value = '';
-      currentForm.fields[field].error = undefined;
-      return true;
-    });
-    currentForm.meta.isValid = false;
-    currentForm.meta.error = '';
-
     return currentForm;
   }
 
@@ -122,7 +124,11 @@ class FormValidator {
     const { state, city, zipCode } = form.fields;
     const currentForm = form;
     const data = Helper.gAddressClean(place);
-    currentForm.fields.residentalStreet.value = data.residentalStreet;
+    if (currentForm.fields.street) {
+      currentForm.fields.street.value = data.residentalStreet;
+    } else {
+      currentForm.fields.residentalStreet.value = data.residentalStreet;
+    }
     state.value = data.state;
     city.value = data.city;
     zipCode.value = data.zipCode;
