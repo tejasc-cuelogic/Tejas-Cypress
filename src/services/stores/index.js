@@ -23,3 +23,5 @@ export { default as multiFactorAuthStore } from './entities/user/settings/multiF
 export { default as bankAccountStore } from './entities/shared/bankAccountStore';
 export { default as identityStore } from './entities/user/identityStore';
 export { default as investorProfileStore } from './entities/user/investorProfileStore';
+
+export { default as helloWorldStore } from './entities/helloWorldStore';

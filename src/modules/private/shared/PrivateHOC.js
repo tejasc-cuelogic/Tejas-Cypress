@@ -11,9 +11,9 @@ import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 @observer
 class PrivateHOC extends Component {
   render() {
-    const pathInfo = this.props.location.pathname.split('/app/');
-    const pageMeta = GetNavMeta(pathInfo[1]);
     const { roles } = toJS(this.props.userStore.currentUser);
+    const pathInfo = this.props.location.pathname.split('/app/');
+    const pageMeta = GetNavMeta(pathInfo[1], roles);
     return (
       <Aux>
         <div className="page-header-section">
