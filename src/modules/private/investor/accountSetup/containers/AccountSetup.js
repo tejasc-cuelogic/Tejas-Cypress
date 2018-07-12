@@ -65,7 +65,7 @@ export default class AccountSetup extends Component {
         }
         <Switch>
           <Route exact path={`${match.url}/identity-verification/:step`} component={IdentityVerification} />
-          <Route exact path={`${match.url}/establish-profile`} component={EstablishProfile} />
+          <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
           <Route path={`${match.url}/account-creation`} component={AccountCreation} />
         </Switch>
       </PrivateLayout>

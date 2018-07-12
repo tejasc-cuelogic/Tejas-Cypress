@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 import { FormInput, MaskedInput2, FormCheckbox } from '../../../../../../theme/form';
 
 @inject('investorProfileStore')
+@withRouter
 @observer
 export default class Finances extends Component {
+  handleTick = (e, values) => {
+    this.props.investorProfileStore.setchkBoxTicked(values.name);
+    this.props.history.push(`${this.props.match.url}/fields-form`);
+  }
+
   render() {
     const { FINANCES, financesChange } = this.props.investorProfileStore;
     return (
@@ -40,7 +47,7 @@ export default class Finances extends Component {
           <FormCheckbox
             fielddata={FINANCES.fields.checkbox1}
             name="checkbox1"
-            changed={financesChange}
+            changed={this.handleTick}
             defaults
           />
           <FormInput
@@ -53,7 +60,7 @@ export default class Finances extends Component {
           <FormCheckbox
             fielddata={FINANCES.fields.checkbox2}
             name="checkbox2"
-            changed={financesChange}
+            changed={this.handleTick}
             defaults
           />
           <FormInput

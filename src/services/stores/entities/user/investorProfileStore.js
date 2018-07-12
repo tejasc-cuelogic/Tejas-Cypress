@@ -13,6 +13,12 @@ class InvestorProfileStore {
   @observable INVESTOR_PROFILE_FORM = FormValidator.prepareFormObject(INVESTOR_PROFILE);
   @observable FINANCES = FormValidator.prepareFormObject(FINANCES);
   @observable INVESTMENT_EXPERIENCE = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE);
+  @observable chkboxTicked = null;
+
+  @action
+  setchkBoxTicked = (fieldName) => {
+    this.chkboxTicked = fieldName;
+  }
 
   @action
   formChange = (e, result, form) => {
