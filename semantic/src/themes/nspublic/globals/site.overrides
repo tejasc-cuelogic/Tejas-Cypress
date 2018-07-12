@@ -42,6 +42,15 @@ h5, h5.ui.header{
 .pull-right{
 	float:right;
 }
+.mb-30 {
+	margin-bottom: @30px !important;
+}
+.mb-50 {
+	margin-bottom: @50px !important;
+}
+.mb-80 {
+	margin-bottom: 80px !important;
+}
 
 // Footer Styles
 footer{
@@ -401,6 +410,11 @@ footer{
 }
 
 /** Home Page **/
+.how-it-works {
+	.ui.embed.centered-video {
+		margin: 0;
+	}
+}
 .explore-campaign-button {
 	margin-top: 60px;
 	text-align: center;

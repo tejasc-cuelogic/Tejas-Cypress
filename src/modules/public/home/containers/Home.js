@@ -45,10 +45,10 @@ class Home extends Component {
         </Container>
         <section>
           <Container text textAlign="center">
-            <Header as="h2">
+            <Header as="h2" className="mb-30">
               A community-driven platform for fundraising and investing.
             </Header>
-            <p className="caption">
+            <p className="mb-80">
               Welcome to capital investing reinvented. NextSeed connects entrepreneurs with
               everyday people to help businesses, investors and communities grow together.
             </p>
@@ -81,7 +81,7 @@ class Home extends Component {
           </Container>
         </section>
         <Divider fitted as={Container} />
-        <section>
+        <section className="how-it-works">
           <Container>
             <Header as="h2" textAlign="center">How does NextSeed work?</Header>
             <Grid centered>
@@ -100,7 +100,7 @@ class Home extends Component {
         <section>
           <Container>
             <Header as="h2" textAlign="center">Latest Campaigns</Header>
-            <p className="caption center-align">Browse the newest investment opportunities on NextSeed. The next big thing may be inviting you to participate.</p>
+            <p className="mb-30 center-align">Browse the newest investment opportunities on NextSeed. The next big thing may be inviting you to participate.</p>
             <Card.Group itemsPerRow={3} stackable>
               <Card className="campaign">
                 <Image src={campaign1} />
@@ -178,7 +178,7 @@ class Home extends Component {
         </section>
         <section className="featured-section">
           <Container>
-            <Header as="h2" textAlign="center" className="caption">As seen on…</Header>
+            <Header as="h2" textAlign="center" className="mb-50">As seen on…</Header>
             <Grid columns="equal" doubling>
               <Grid.Row>
                 <Grid.Column>
@@ -229,7 +229,7 @@ class Home extends Component {
         <section className="learn-more">
           <Container textAlign="center">
             <Header as="h2">Want to learn more about NextSeed?</Header>
-            <p className="caption">
+            <p className="mb-30">
               Leave us your contact information and we’ll keep you posted
               with the latest news and updates.
             </p>

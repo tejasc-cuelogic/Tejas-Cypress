@@ -191,5 +191,5 @@ export const PRIVATE_NAV = [
 
 export const PUBLIC_NAV = [
   { title: 'Explore Campaigns', to: 'offerings' },
-  { title: 'How NextSeed Works', to: 'invest' },
+  { title: 'How NextSeed Works', to: 'business' },
 ];
