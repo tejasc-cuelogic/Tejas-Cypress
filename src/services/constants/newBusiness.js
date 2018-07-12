@@ -225,7 +225,7 @@ export const BUSINESS_SIGNUP = {
 
 export const BUSINESS_DETAILS = {
   businessPlan: {
-    value: '', label: 'Upload your business plan', error: undefined, rule: 'required',
+    value: [], label: 'Upload your business plan', error: undefined, rule: 'required',
   },
   existingDebt1: {
     value: '', label: 'Existing Debt 1', error: undefined, rule: 'required', placeHolder: '500,000',

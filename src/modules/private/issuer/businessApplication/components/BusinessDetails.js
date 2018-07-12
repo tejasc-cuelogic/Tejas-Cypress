@@ -38,6 +38,7 @@ export default class BusinessDetails extends Component {
               subHeader="Upload your business plan"
             >
               <FileUploader
+                multiple
                 name="businessPlan"
                 fielddata={fields.businessPlan}
                 uploadDocument={businessDetailsFiles}

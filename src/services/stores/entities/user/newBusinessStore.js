@@ -1,4 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
+import { forEach } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 // import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gcoolApi';
@@ -166,13 +167,20 @@ export class NewBusinessStore {
 
   @action
   businessDetailsFiles = (fieldName, files) => {
-    let uploadedFile = '';
+    console.log(fieldName, files);
+    // let uploadedFile = '';
     if (typeof files !== 'undefined' && files.length) {
-      uploadedFile = files[0].name;
-      this.BUSINESS_DETAILS_FRM = Validator.onChange(
-        this.BUSINESS_DETAILS_FRM,
-        { name: fieldName, value: uploadedFile },
-      );
+      // uploadedFile = files[0].name;
+      forEach(files, (file, key) => {
+        this.BUSINESS_DETAILS_FRM.fields[fieldName].value =
+        [...this.BUSINESS_DETAILS_FRM.fields[fieldName].value,
+          files[key].name];
+      });
+      console.log(this.BUSINESS_DETAILS_FRM.fields[fieldName]);
+      // this.BUSINESS_DETAILS_FRM = Validator.onChange(
+      //   this.BUSINESS_DETAILS_FRM,
+      //   { name: fieldName, value: uploadedFile },
+      // );
     }
   }
 
