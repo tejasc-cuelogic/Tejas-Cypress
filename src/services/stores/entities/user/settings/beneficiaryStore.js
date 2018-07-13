@@ -94,7 +94,6 @@ export class BeneficiaryStore {
       meta: {
         ...this.BENEFICIARY_META.meta,
         isValid: false,
-        isShareValid: false,
       },
     };
   }

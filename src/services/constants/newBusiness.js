@@ -224,42 +224,52 @@ export const BUSINESS_SIGNUP = {
 };
 
 export const BUSINESS_DETAILS = {
+  // businessPlan: [{
+  //   planDoc: {
+  //     value: [], label: 'Upload your business plan',
+  //  error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+  //   },
+  // }],
   businessPlan: {
-    value: [], label: 'Upload your business plan', error: undefined, rule: 'required',
+    value: [], label: 'Upload your business plan', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
-  existingDebt1: {
-    value: '', label: 'Existing Debt 1', error: undefined, rule: 'required', placeHolder: '500,000',
-  },
-  remainingPrincipal: {
-    value: '', label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000',
-  },
-  interestExpenses: {
-    value: '', label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %',
-  },
-  termMonths: {
-    value: '', label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5',
-  },
-  fullLegalName: {
-    value: '', label: 'Full Legal Name', error: undefined, rule: 'required', placeHolder: 'John Doe',
-  },
-  yearsExperience: {
-    value: '', label: 'Years Experience', error: undefined, rule: 'required', placeHolder: '5',
-  },
-  ssnNumber: {
-    value: '', label: 'SSN', error: undefined, rule: 'required', placeHolder: '123-456-7890',
-  },
-  ownershipOfCompany: {
-    value: '', label: 'Ownership of Company', error: undefined, rule: 'required', placeHolder: '40.0%',
-  },
-  linkedInURL: {
-    value: '', label: 'LinkedIn URL', error: undefined, rule: 'required', placeHolder: 'http://linkedin.com/username',
-  },
-  title: {
-    value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO',
-  },
-  ownerResume: {
-    value: '', label: 'Upload Resume/CV', error: undefined, rule: 'required',
-  },
+  debts: [{
+    amount: {
+      value: '', label: 'Existing Debt', error: undefined, rule: 'required', placeHolder: '500,000',
+    },
+    remainingPrincipal: {
+      value: '', label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000',
+    },
+    interestExpenses: {
+      value: '', label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %',
+    },
+    term: {
+      value: '', label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5',
+    },
+  }],
+  owners: [{
+    fullLegalName: {
+      value: '', label: 'Full Legal Name', error: undefined, rule: 'required', placeHolder: 'John Doe',
+    },
+    yearsOfExp: {
+      value: '', label: 'Years Experience', error: undefined, rule: 'required', placeHolder: '5',
+    },
+    ssn: {
+      value: '', label: 'SSN', error: undefined, rule: 'required', placeHolder: '123-456-7890',
+    },
+    companyOwnerShip: {
+      value: '', label: 'Ownership of Company', error: undefined, rule: 'required', placeHolder: '40.0%',
+    },
+    linkedInUrl: {
+      value: '', label: 'LinkedIn URL', error: undefined, rule: 'required', placeHolder: 'http://linkedin.com/username',
+    },
+    title: {
+      value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO',
+    },
+    resume: {
+      value: [], label: 'Upload Resume/CV', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    },
+  }],
 };
 
 export const BUSINESS_PERF = {

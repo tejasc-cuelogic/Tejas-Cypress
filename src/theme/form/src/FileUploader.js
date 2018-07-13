@@ -6,13 +6,12 @@ import { FieldError } from '../../shared';
 
 const FileUploader = observer((props) => {
   const { label, error, value } = props.fielddata;
-  console.log(value);
   return (
     <div className="file-uploader-wrap">
       {label &&
         <label>{label}</label>
       }
-      {!value.length || props.multiple ?
+      {!value &&
         <div className="file-uploader">
           <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
           <input
@@ -21,9 +20,9 @@ const FileUploader = observer((props) => {
             type="file"
             onChange={e => props.uploadDocument(e.target.name, e.target.files)}
           />
-        </div> : null
+        </div>
       }
-      {value.length &&
+      {value &&
         value.map(item => (
           <div className="file-uploader attached">
             <Responsive

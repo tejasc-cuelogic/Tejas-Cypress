@@ -133,9 +133,8 @@ export default class AddBeneficiary extends Component {
               )) :
               <p>loading...</p>
           }
-          {BENEFICIARY_META.fields.beneficiary.length !== 5 ?
+          {BENEFICIARY_META.fields.beneficiary.length !== 5 &&
             <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
-          : null
           }
           <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
           <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>

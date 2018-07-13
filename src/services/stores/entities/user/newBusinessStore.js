@@ -12,9 +12,10 @@ import {
   LENDIO_PRE_QUAL,
   BUSINESS_APPLICATION_STATUS,
 } from '../../../constants/newBusiness';
+import { createUploadEntry, removeUploadedFile } from '../../queries/common';
 import Helper from '../../../../helper/utility';
 import { createBusinessApplicationPrequalificaiton } from '../../queries/businessApplication';
-import { uiStore } from '../../../../services/stores/index';
+import { uiStore } from '../../index';
 
 export class NewBusinessStore {
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
@@ -166,27 +167,87 @@ export class NewBusinessStore {
   };
 
   @action
-  businessDetailsFiles = (fieldName, files) => {
-    console.log(fieldName, files);
-    // let uploadedFile = '';
+  businessDetailsFiles = (files, fieldName) => {
+    console.log(createUploadEntry, removeUploadedFile);
+    console.log(files);
     if (typeof files !== 'undefined' && files.length) {
-      // uploadedFile = files[0].name;
-      forEach(files, (file, key) => {
-        this.BUSINESS_DETAILS_FRM.fields[fieldName].value =
-        [...this.BUSINESS_DETAILS_FRM.fields[fieldName].value,
-          files[key].name];
+      forEach(files, (file) => {
+        const fileData = Helper.getFormattedFileData(file);
+        // uiStore.setProgress();
+        // return new Promise((resolve, reject) => {
+        //   client
+        //     .mutate({
+        //       mutation: createUploadEntry,
+        //       variables: {
+        //         userId: userStore.currentUser.sub,
+        //         stepName: 'BUSINESS_DETAILS',
+        //         fileData,
+        //       },
+        //     })
+        //     .then((result) => {
+        //       console.log(result);
+        //       this.BUSINESS_DETAILS_FRM.fields[fieldName].value =
+        //       [...this.BUSINESS_DETAILS_FRM.fields[fieldName].value,
+        //         fileData.fileName];
+        //       // const { fileId, preSignedUrl } = result.data.createUploadEntry;
+        //       // this.confirmIdentityDocuments.fields[field].fileId = fileId;
+        //       // this.confirmIdentityDocuments.fields[field].preSignedUrl = preSignedUrl;
+        //       resolve();
+        //     })
+        //     .catch((err) => {
+        //       uiStore.setErrors(this.simpleErr(err));
+        //       reject(err);
+        //     })
+        //     .finally(() => {
+        //       uiStore.setProgress(false);
+        //     });
+        // });
+        if (fieldName === 'resume') {
+          this.BUSINESS_DETAILS_FRM.fields[fieldName].value =
+          [...this.BUSINESS_DETAILS_FRM.fields[fieldName].value,
+            fileData.fileName];
+        } else {
+          this.BUSINESS_DETAILS_FRM.fields[fieldName].value =
+          [...this.BUSINESS_DETAILS_FRM.fields[fieldName].value,
+            fileData.fileName];
+        }
       });
-      console.log(this.BUSINESS_DETAILS_FRM.fields[fieldName]);
-      // this.BUSINESS_DETAILS_FRM = Validator.onChange(
-      //   this.BUSINESS_DETAILS_FRM,
-      //   { name: fieldName, value: uploadedFile },
-      // );
     }
+    console.log(this.BUSINESS_DETAILS_FRM.fields[fieldName].value);
   }
 
   @action
-  businessDetailsReset = (field) => {
-    this.BUSINESS_DETAILS_FRM = Validator.onChange(this.BUSINESS_DETAILS_FRM, { name: field, value: '' });
+  removeForm = (e, formName, index) => {
+    e.preventDefault();
+    this.BUSINESS_DETAILS_FRM.fields[formName].splice(index, 1);
+  }
+
+  @action
+  addMoreForms = (e, formName) => {
+    e.preventDefault();
+    console.log(formName);
+    this.BUSINESS_DETAILS_FRM = {
+      ...this.BUSINESS_DETAILS_FRM,
+      fields: {
+        ...this.BUSINESS_DETAILS_FRM.fields,
+        [formName]: [
+          ...this.BUSINESS_DETAILS_FRM.fields[formName],
+          BUSINESS_DETAILS[formName][0],
+        ],
+      },
+      meta: {
+        ...this.BUSINESS_DETAILS_FRM.meta,
+        isValid: false,
+      },
+    };
+  }
+
+  @action
+  businessDetailsReset = (e, fieldName, index) => {
+    console.log(e, fieldName, index);
+    this.BUSINESS_DETAILS_FRM.fields[fieldName].value.splice(index, 1);
+    // this.BUSINESS_DETAILS_FRM = Validator.onChange(this.BUSINESS_DETAILS_FRM,
+    // { name: field, value: '' });
   };
 
   @action
