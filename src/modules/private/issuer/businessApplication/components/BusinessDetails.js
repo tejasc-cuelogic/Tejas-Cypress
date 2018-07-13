@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormInput, DropZone } from '../../../../../theme/form';
+import { FormInput, DropZone, MaskedInput2 } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 // import Helper from '../../../../helper/utility';
@@ -22,6 +22,7 @@ export default class BusinessDetails extends Component {
       businessDetailsReset,
       addMoreForms,
       removeForm,
+      businessDetailsMaskingChange,
     } = this.props.newBusinessStore;
     return (
       <Grid container>
@@ -68,13 +69,21 @@ export default class BusinessDetails extends Component {
                       <div className="field-wrap">
                         {
                           ['amount', 'remainingPrincipal'].map(field => (
-                            <FormInput
+                            <MaskedInput2
                               key={field}
+                              currency
                               type="text"
                               name={field}
                               fielddata={debt[field]}
-                              changed={businessDetailsChange}
+                              changed={values => businessDetailsMaskingChange(field, values, 'debts', index)}
                             />
+                            // <FormInput
+                            //   key={field}
+                            //   type="text"
+                            //   name={field}
+                            //   fielddata={debt[field]}
+                            //   changed={(e, res) => businessDetailsChange(e, res, 'debts', index)}
+                            // />
                           ))
                         }
                       </div>
@@ -94,17 +103,20 @@ export default class BusinessDetails extends Component {
                         }
                       </Header>
                       <div className="field-wrap">
-                        {
-                          ['interestExpenses', 'term'].map(field => (
-                            <FormInput
-                              key={field}
-                              type="text"
-                              name={field}
-                              fielddata={debt[field]}
-                              changed={businessDetailsChange}
-                            />
-                          ))
-                        }
+                        <MaskedInput2
+                          percentage
+                          type="text"
+                          name="interestExpenses"
+                          fielddata={debt.interestExpenses}
+                          changed={values => businessDetailsMaskingChange('interestExpenses', values, 'debts', index)}
+                        />
+                        <MaskedInput2
+                          number
+                          type="text"
+                          name="term"
+                          fielddata={debt.term}
+                          changed={values => businessDetailsMaskingChange('term', values, 'debts', index)}
+                        />
                       </div>
                     </Grid.Column>
                   </Grid>
@@ -135,30 +147,35 @@ export default class BusinessDetails extends Component {
                       </Header>
                       <div className="field-wrap">
                         <Form.Group widths="equal">
-                          {
-                            ['fullLegalName', 'yearsOfExp'].map(field => (
-                              <FormInput
-                                key={field}
-                                type="text"
-                                name={field}
-                                fielddata={owner[field]}
-                                changed={businessDetailsChange}
-                              />
-                            ))
-                          }
+                          <FormInput
+                            type="text"
+                            name="fullLegalName"
+                            fielddata={owner.fullLegalName}
+                            changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
+                          />
+                          <MaskedInput2
+                            number
+                            type="text"
+                            name="yearsOfExp"
+                            fielddata={owner.yearsOfExp}
+                            changed={values => businessDetailsMaskingChange('yearsOfExp', values, 'owners', index)}
+                          />
                         </Form.Group>
                         <Form.Group widths="equal">
-                          {
-                            ['ssn', 'companyOwnerShip'].map(field => (
-                              <FormInput
-                                key={field}
-                                type="text"
-                                name={field}
-                                fielddata={owner[field]}
-                                changed={businessDetailsChange}
-                              />
-                            ))
-                          }
+                          <MaskedInput2
+                            number
+                            type="text"
+                            name="ssn"
+                            fielddata={owner.ssn}
+                            changed={values => businessDetailsMaskingChange('ssn', values, 'owners', index)}
+                          />
+                          <MaskedInput2
+                            percentage
+                            type="text"
+                            name="companyOwnerShip"
+                            fielddata={owner.companyOwnerShip}
+                            changed={values => businessDetailsMaskingChange('companyOwnerShip', values, 'owners', index)}
+                          />
                         </Form.Group>
                         <Form.Group widths="equal">
                           {
@@ -168,7 +185,7 @@ export default class BusinessDetails extends Component {
                                 type="text"
                                 name={field}
                                 fielddata={owner[field]}
-                                changed={businessDetailsChange}
+                                changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
                               />
                             ))
                           }
@@ -176,8 +193,9 @@ export default class BusinessDetails extends Component {
                         <DropZone
                           name="resume"
                           fielddata={owner.resume}
-                          ondrop={businessDetailsFiles}
-                          onremove={businessDetailsReset}
+                          ondrop={(files, fieldName) =>
+                            businessDetailsFiles(files, fieldName, index)}
+                          onremove={(e, fieldName) => businessDetailsReset(e, fieldName, index)}
                         />
                       </div>
                     </Grid.Column>

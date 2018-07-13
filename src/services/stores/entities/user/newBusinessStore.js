@@ -46,11 +46,37 @@ export class NewBusinessStore {
   };
 
   @action
-  businessDetailsChange = (e, res) => {
-    this.BUSINESS_DETAILS_FRM = Validator.onChange(
-      this.BUSINESS_DETAILS_FRM,
-      Validator.pullValues(e, res),
-    );
+  businessDetailsMaskingChange = (field, values, formName = '', index = -1) => {
+    if (formName) {
+      this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(
+        this.BUSINESS_DETAILS_FRM,
+        { name: field, value: values.floatValue },
+        formName,
+        index,
+      );
+    } else {
+      this.BUSINESS_DETAILS_FRM = Validator.onChange(
+        this.BUSINESS_DETAILS_FRM,
+        { name: field, value: values.floatValue },
+      );
+    }
+  };
+
+  @action
+  businessDetailsChange = (e, res, formName = '', index = -1) => {
+    if (formName) {
+      this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(
+        this.BUSINESS_DETAILS_FRM,
+        Validator.pullValues(e, res),
+        formName,
+        index,
+      );
+    } else {
+      this.BUSINESS_DETAILS_FRM = Validator.onChange(
+        this.BUSINESS_DETAILS_FRM,
+        Validator.pullValues(e, res),
+      );
+    }
   };
 
   @action
@@ -167,7 +193,7 @@ export class NewBusinessStore {
   };
 
   @action
-  businessDetailsFiles = (files, fieldName) => {
+  businessDetailsFiles = (files, fieldName, index = null) => {
     console.log(createUploadEntry, removeUploadedFile);
     console.log(files);
     if (typeof files !== 'undefined' && files.length) {
@@ -203,8 +229,8 @@ export class NewBusinessStore {
         //     });
         // });
         if (fieldName === 'resume') {
-          this.BUSINESS_DETAILS_FRM.fields[fieldName].value =
-          [...this.BUSINESS_DETAILS_FRM.fields[fieldName].value,
+          this.BUSINESS_DETAILS_FRM.fields.owners[index][fieldName].value =
+          [...this.BUSINESS_DETAILS_FRM.fields.owners[index][fieldName].value,
             fileData.fileName];
         } else {
           this.BUSINESS_DETAILS_FRM.fields[fieldName].value =
@@ -213,7 +239,6 @@ export class NewBusinessStore {
         }
       });
     }
-    console.log(this.BUSINESS_DETAILS_FRM.fields[fieldName].value);
   }
 
   @action
@@ -225,7 +250,6 @@ export class NewBusinessStore {
   @action
   addMoreForms = (e, formName) => {
     e.preventDefault();
-    console.log(formName);
     this.BUSINESS_DETAILS_FRM = {
       ...this.BUSINESS_DETAILS_FRM,
       fields: {
@@ -244,8 +268,11 @@ export class NewBusinessStore {
 
   @action
   businessDetailsReset = (e, fieldName, index) => {
-    console.log(e, fieldName, index);
-    this.BUSINESS_DETAILS_FRM.fields[fieldName].value.splice(index, 1);
+    if (fieldName === 'resume') {
+      this.BUSINESS_DETAILS_FRM.fields.owners[index][fieldName].value = [];
+    } else {
+      this.BUSINESS_DETAILS_FRM.fields[fieldName].value.splice(index, 1);
+    }
     // this.BUSINESS_DETAILS_FRM = Validator.onChange(this.BUSINESS_DETAILS_FRM,
     // { name: field, value: '' });
   };

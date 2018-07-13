@@ -21,7 +21,7 @@ export const BUSINESS_APPLICATION_STATUS = {
 
 export const BUSINESS_PRE_QUALIFICATION = {
   businessModel: {
-    value: 'B2C',
+    value: '',
     values: [
       { label: 'Business to Consumer', value: 'B2C' },
       { label: 'Business to Business', value: 'B2B' },
@@ -68,7 +68,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '', maxLength: 2, label: 'Months', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3',
   },
   franchiseHolder: {
-    value: true,
+    value: '',
     values: [
       { label: 'Yes', value: true },
       { label: 'No', value: false },
@@ -231,7 +231,7 @@ export const BUSINESS_DETAILS = {
   //   },
   // }],
   businessPlan: {
-    value: [], label: 'Upload your business plan', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    value: '', label: 'Upload your business plan', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   debts: [{
     amount: {

@@ -50,10 +50,10 @@ class FormValidator {
     let fieldName = element.name;
     if (formIndex > -1 && formName) {
       currentFormRelative = currentForm.fields[formName][formIndex];
-      fieldName = `beneficiary.${formIndex}.${element.name}`;
+      fieldName = `${formName}.${formIndex}.${element.name}`;
     } else if (formName) {
       currentFormRelative = currentForm.fields[formName];
-      fieldName = `beneficiary.${element.name}`;
+      fieldName = `${formName}.${element.name}`;
     } else {
       currentFormRelative = currentForm.fields;
     }
@@ -81,7 +81,6 @@ class FormValidator {
       });
       return total === 100 && value > 0;
     }, 'The sum of :attribute percentages must be 100.');
-
     const formData = this.ExtractFormValues(toJS(currentForm.fields));
     const formRules = this.ExtractFormRules(toJS(currentForm.fields));
     const validation = new Validator(formData, formRules);
@@ -102,11 +101,11 @@ class FormValidator {
 
   ExtractFormValues = fields => mapValues(fields, f =>
     (isArray(f) ? toArray(mapValues(f, d => mapValues(d, s => s.value))) :
-      mapValues(f, p => p.value)));
+      f.value));
 
   ExtractFormRules = fields => reduce(mapValues(fields, (f, key) =>
     (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`) :
-      mapKeys(mapValues(f, k => k.rule), (s, v) => `${key}.${v}`))), (a, b) => Object.assign(a, b));
+      mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
 
   resetFormData = (form) => {
     const currentForm = form;
