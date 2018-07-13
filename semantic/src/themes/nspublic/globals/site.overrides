@@ -42,6 +42,12 @@ h5, h5.ui.header{
 .pull-right{
 	float:right;
 }
+.mb-10 {
+	margin-bottom: @10px !important;
+}
+.mb-20 {
+	margin-bottom: @20px !important;
+}
 .mb-30 {
 	margin-bottom: @30px !important;
 }
@@ -59,6 +65,13 @@ h5, h5.ui.header{
 }
 .mt-80 {
 	margin-top: 80px !important;
+}
+.note {
+	color: @neutral-light;
+	font-size: @12px !important;
+	line-height: @44px;
+	margin-top: 10px;
+	display: inline-block;
 }
 
 // Footer Styles
@@ -260,12 +273,6 @@ footer{
 			&.detail-section {
 				line-height: @20px;
 			}
-			&.note {
-				color: @neutral-light;
-				font-size: @12px;
-				line-height: @44px;
-				margin-top: 10px
-			}
 			&.early-bird-title {
 				font-weight: bold;
 				line-height: @20px;
@@ -455,5 +462,31 @@ footer{
 	div {
 		display: inline-block;
 		width: ~"calc(100% - 70px)";
+	}
+}
+.testimonial-slider {
+	.ui.grid {
+		>.column {
+			&.testimonial-details {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				h3 {
+					line-height: 40px;
+					margin-top: 0;
+				}
+				.testimonial-user-details {
+					p {
+						color: @neutral;
+						margin-bottom: 0;
+					}
+					span {
+						line-height: @24px;
+						color: @primary-one;
+						font-weight: @bold;
+					}
+				}
+			}
+		}
 	}
 }

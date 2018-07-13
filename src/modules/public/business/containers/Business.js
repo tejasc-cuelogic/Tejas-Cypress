@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
-import { Header, Container, Button, Menu, Grid, Image, Divider } from 'semantic-ui-react';
+import { Header, Container, Button, Menu, Grid, Image, Divider, Embed, Statistic } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import supportIcon from '../../../../assets/images/support.svg';
 import sellingIcon from '../../../../assets/images/selling.svg';
 import networkIcon from '../../../../assets/images/network.svg';
+import carouselImg from '../../../../assets/images/lian.jpg';
+import videoPoster from '../../../../assets/images/636206632.webp';
+
+const nsvideos = {
+  embed: '247714163',
+};
 
 class Business extends Component {
   render() {
@@ -17,7 +23,7 @@ class Business extends Component {
               growth with the<br />
               power of the crowd
               </Header>
-              <Button secondary>Apply Now</Button>
+              <Button secondary className="mt-50">Apply Now</Button>
             </div>
           </Container>
         </Container>
@@ -75,10 +81,90 @@ class Business extends Component {
           </Container>
         </section>
         <Divider fitted as={Container} />
-        <section>
-          <Grid />
+        <section className="testimonial-slider">
+          <Container>
+            <Grid stackable>
+              <Grid.Column width={6}>
+                <Image src={carouselImg} circular />
+              </Grid.Column>
+              <Grid.Column width={10} className="testimonial-details">
+                <Header as="h2" className="mb-20">Real sucess stories.</Header>
+                <h3 className="mb-50">
+                  “Loved the experience! Financing this way allowed me to focus
+                  on my passion and not on pitching investors.”
+                </h3>
+                <div className="testimonial-user-details">
+                  <p><b>Lian Nguyen,</b> Bravery Chef Hall</p>
+                  <span>$1,000,000 | 539 Investors</span>
+                </div>
+              </Grid.Column>
+            </Grid>
+          </Container>
         </section>
         <Divider fitted as={Container} />
+        <section className="proven-result-section">
+          <Container>
+            <Grid columns={2} stackable>
+              <Grid.Column>
+                <Header as="h2">Proven results.</Header>
+                <p className="mb-30">
+                  Every day, entrepreneurs like you are raising capital on
+                  NextSeed to bring their concepts to life.
+                </p>
+                <Grid columns={2}>
+                  <Grid.Row>
+                    <Grid.Column>
+                      <Statistic color="green" size="mini">
+                        <Statistic.Value>$9M+</Statistic.Value>
+                        <Statistic.Label>In capital deployed by NextSeed investors</Statistic.Label>
+                      </Statistic>
+                    </Grid.Column>
+                    <Grid.Column>
+                      <Statistic color="green" size="mini">
+                        <Statistic.Value>35+</Statistic.Value>
+                        <Statistic.Label>Businesses successfully funded</Statistic.Label>
+                      </Statistic>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Grid.Column>
+                      <Statistic color="green" size="mini">
+                        <Statistic.Value>135</Statistic.Value>
+                        <Statistic.Label>Avg. number of investors per offering</Statistic.Label>
+                      </Statistic>
+                    </Grid.Column>
+                    <Grid.Column>
+                      <Statistic color="green" size="mini">
+                        <Statistic.Value>11,630</Statistic.Value>
+                        <Statistic.Label>Avg. unique page views per offering</Statistic.Label>
+                      </Statistic>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+                <p className="mt-30">
+                  The above figures include data from both the Texas and Reg CF NextSeed platforms.
+                  The total amount raised from debt crowdfunding as of Nov 2017 figure includes
+                  amounts invested in offerings completed through NextSeed US LLC
+                  (&quot;NextSeed&quot;) or NextSeed TX LLC (&quot;NextSeed TX&quot;),
+                  an affiliate of NextSeed. The aggregate amount invested through NextSeed is
+                  $6,745,700 and the aggregate amount invested through NextSeed TX is $1,303,500.
+                  Historical figures only. Past performance of one business is not a guarantee of
+                  future results of another business.
+                </p>
+              </Grid.Column>
+              <Grid.Column>
+                <Embed
+                  id={nsvideos.embed}
+                  placeholder={videoPoster}
+                  source="vimeo"
+                />
+                <p className="note">
+                  <i>The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.</i>
+                </p>
+              </Grid.Column>
+            </Grid>
+          </Container>
+        </section>
       </Aux>
     );
   }

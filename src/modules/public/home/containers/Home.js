@@ -52,8 +52,6 @@ class Home extends Component {
               Welcome to capital investing reinvented. NextSeed connects entrepreneurs with
               everyday people to help businesses, investors and communities grow together.
             </p>
-            {/* <Button primary content="Primary Button" />
-            <Button secondary content="Secondary Button" /> */}
           </Container>
           <Container>
             <Grid centered relaxed="very" stackable>
