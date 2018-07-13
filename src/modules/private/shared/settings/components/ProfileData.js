@@ -14,7 +14,7 @@ import Helper from '../../../../../helper/utility';
 import { Spinner } from '../../../../../theme/shared';
 import Randavatar from '../../../../../theme/shared/Randavatar';
 
-@inject('userDetailsStore', 'userStore', 'identityStore', 'uiStore', 'accountStore')
+@inject('userDetailsStore', 'userStore', 'identityStore', 'uiStore')
 @observer
 export default class ProfileData extends Component {
   navigateToNewPhoneNumber = () => {
@@ -27,7 +27,7 @@ export default class ProfileData extends Component {
     let checkStatus = '';
     if (cipStatus !== null) {
       checkStatus = cipStatus.status;
-      return this.props.accountStore.validAccStatus.includes(checkStatus);
+      return this.props.userDetailsStore.validAccStatus.includes(checkStatus);
     }
     return false;
   }

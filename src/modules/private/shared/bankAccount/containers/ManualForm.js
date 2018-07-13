@@ -10,7 +10,7 @@ import { validationActions } from '../../../../../services/actions';
 export default class ManualForm extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
-    if (this.props.accountStore.accountType.type === 'individual') {
+    if (this.props.accountStore.investmentAccType === 'individual') {
       this.props.individualAccountStore.createAccount().then(() => {
         this.props.individualAccountStore.setStepToBeRendered(1);
       });

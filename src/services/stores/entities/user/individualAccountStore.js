@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find } from 'lodash';
-import { accountStore, bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
+import { bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { createAccount, updateAccount } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
@@ -9,7 +9,6 @@ import Helper from '../../../../helper/utility';
 class IndividualAccountStore {
   @observable stepToBeRendered = '';
   @observable investorAccId = '';
-  @observable formStatus = 'draft';
 
   @action
   setStepToBeRendered(step) {
@@ -19,11 +18,6 @@ class IndividualAccountStore {
   @action
   setInvestorAccId(id) {
     this.investorAccId = id;
-  }
-
-  @action
-  setFormStatus(formStatus) {
-    this.formStatus = formStatus;
   }
 
   /* eslint-disable class-methods-use-this */
@@ -46,9 +40,6 @@ class IndividualAccountStore {
 
   /* eslint-disable arrow-body-style */
   createAccount = (currentStep, formStatus = 'draft') => {
-    if (formStatus === 'submit') {
-      this.setFormStatus('submit');
-    }
     uiStore.setProgress();
     let mutation = createAccount;
     let variables = {
@@ -95,14 +86,10 @@ class IndividualAccountStore {
         .then((result) => {
           if (result.data.createInvestorAccount) {
             this.setInvestorAccId(result.data.createInvestorAccount.accountId);
-            accountStore.setAccountTypeCreated(result.data.createInvestorAccount.accountType);
-          } else {
-            accountStore.setAccountTypeCreated(result.data.updateInvestorAccount.accountType);
           }
           if (formStatus === 'submit') {
             userDetailsStore.getUser(userStore.currentUser.sub);
             Helper.toast('Individual account created successfully.', 'success');
-            uiStore.setDashboardWizardStep();
           } else if (currentStep) {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           } else {
@@ -123,10 +110,7 @@ class IndividualAccountStore {
   @action
   populateData = (userData) => {
     if (!isEmpty(userData)) {
-      const account = find(
-        userData.accounts,
-        { accountType: 'individual' },
-      );
+      const account = find(userData.accounts, { accountType: 'individual' });
       if (account) {
         if (account.accountDetails.plaidItemId) {
           const plaidAccDetails = account.accountDetails;

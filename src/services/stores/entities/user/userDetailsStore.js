@@ -5,7 +5,7 @@ import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
-import _ from 'lodash';
+import { isEmpty, difference } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as client2 } from '../../../../api/gcoolApi';
 import {
@@ -53,7 +53,7 @@ export class UserDetailsStore {
 
   @action
   setUserAccDetails = () => {
-    if (!_.isEmpty(this.userDetails)) {
+    if (!isEmpty(this.userDetails)) {
       iraAccountStore.populateData(this.userDetails);
       individualAccountStore.populateData(this.userDetails);
       entityAccountStore.populateData(this.userDetails);
@@ -148,7 +148,7 @@ export class UserDetailsStore {
         accTypes.push(details.accounts[key].accountType);
         return true;
       });
-      details.inActiveAccounts = _.difference(validAccTypes, accTypes);
+      details.inActiveAccounts = difference(validAccTypes, accTypes);
       details.partialAccounts = map(filter(details.accounts, a => a.status === 'PARTIAL'), 'accountType');
       details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
       details.phoneVerification = (this.userDetails.contactDetails &&
@@ -177,7 +177,7 @@ export class UserDetailsStore {
       } else if (step === 'accounts') {
         if (this.validAccStatus.includes(statusDetails.idVerification)) {
           if (statusDetails.phoneVerification === 'DONE') {
-            if (!_.isEmpty(statusDetails.accounts)) {
+            if (!isEmpty(statusDetails.accounts)) {
               status = 'done';
             } else {
               status = 'enable';

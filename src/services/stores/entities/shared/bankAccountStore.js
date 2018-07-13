@@ -80,7 +80,7 @@ export class BankAccountStore {
           plaidPublicToken: this.plaidAccDetails.public_token,
           plaidAccountId: this.plaidAccDetails.account_id,
           bankName: this.plaidAccDetails.institution.name,
-          accountType: accountStore.accountType.type,
+          accountType: accountStore.investmentAccType,
         },
       })
       .then((result) => {
