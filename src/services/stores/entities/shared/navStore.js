@@ -23,8 +23,7 @@ export class NavStore {
     );
   }
 
-  @computed get myNavItems() {
-    const reject = ['profile-settings', 'business-application'];
+  @computed get allNavItems() {
     const navItems = [...this.myRoutes];
     const bIndex = navItems.findIndex(r => r.title === 'Offering');
     if (bIndex !== -1) {
@@ -38,7 +37,12 @@ export class NavStore {
         );
       });
     }
-    return navItems.filter(r => !reject.includes(r.to) && r.title !== 'Offering');
+    return navItems;
+  }
+
+  @computed get sidebarItems() {
+    const reject = ['profile-settings', 'business-application'];
+    return this.allNavItems.filter(r => !reject.includes(r.to) && r.title !== 'Offering');
   }
 
   @action
@@ -46,7 +50,7 @@ export class NavStore {
     this.params[key] = value;
     const { roles, currentNav } = this.params;
     if (roles && currentNav) {
-      const nav = _.find(this.NAV_ITEMS, i => matchPath(currentNav, { path: `/app/${i.to}` }));
+      const nav = _.find(this.allNavItems, i => matchPath(currentNav, { path: `/app/${i.to}` }));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
         nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
