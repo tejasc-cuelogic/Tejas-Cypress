@@ -26,7 +26,7 @@ const BeneficiaryList = (props) => {
             { showButton ?
               <Aux>
                 <div className="status">
-                  <span className="time-stamp">{`Updated: ${moment(props.updatedDate).format('MM-DD-YYYY')}`}</span>
+                  <span className="time-stamp">{`Updated: ${moment(props.updatedDate).format('MM/DD/YYYY')}`}</span>
                   <Icon color={statusImg[0]} className={`ns-${statusImg[1]}-circle`} /> <span className="capitalize">{`${status}`}</span>
                 </div>
                 <p>{headerMsg}</p>
@@ -46,8 +46,8 @@ const BeneficiaryList = (props) => {
                                   <dt>DOB</dt>
                                   <dd>
                                     <DateTimeFormat
-                                      format="MM-DD-YYYY"
-                                      datetime={moment(beneficiary.dob, 'MM-DD-YYYY')}
+                                      format="MM/DD/YYYY"
+                                      datetime={moment(beneficiary.dob, 'MM/DD/YYYY')}
                                     />
                                   </dd>
                                   <dt>Relationship</dt>

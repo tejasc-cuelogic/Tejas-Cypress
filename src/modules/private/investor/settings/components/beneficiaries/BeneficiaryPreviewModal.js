@@ -57,8 +57,8 @@ export default class BeneficiaryPreviewModal extends Component {
                         <dt>Date of birth</dt>
                         <dd>
                           <DateTimeFormat
-                            format="MM-DD-YYYY"
-                            datetime={moment(beneficiary.dob.value, 'MM-DD-YYYY')}
+                            format="MM/DD/YYYY"
+                            datetime={moment(beneficiary.dob.value, 'MM/DD/YYYY')}
                           />
                         </dd>
                         <dt>Relationship</dt>

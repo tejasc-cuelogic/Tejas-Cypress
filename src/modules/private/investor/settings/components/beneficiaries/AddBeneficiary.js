@@ -95,6 +95,7 @@ export default class AddBeneficiary extends Component {
                       <FormDatePicker
                         type="text"
                         name="dob"
+                        maxDate={moment()}
                         placeholderText={beneficiary.dob.placeHolder}
                         fielddata={beneficiary.dob}
                         selected={beneficiary.dob.value ?
@@ -108,7 +109,7 @@ export default class AddBeneficiary extends Component {
                         changed={(e, result) => beneficiaryEleChange(e, result, index)}
                       />
                     </Form.Group>
-                    <Header as="h4">Pernament address</Header>
+                    <Header as="h4">Permanent address</Header>
                     <AutoComplete
                       name="residentalStreet"
                       fielddata={beneficiary.residentalStreet}

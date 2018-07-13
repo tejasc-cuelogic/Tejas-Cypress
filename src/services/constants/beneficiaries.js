@@ -32,7 +32,7 @@ export const BENEFICIARY_FRM = {
     },
     residentalStreet: {
       value: '',
-      label: 'Residental Street',
+      label: 'Residential Street',
       error: undefined,
       rule: 'required',
       placeHolder: '139 Street',
