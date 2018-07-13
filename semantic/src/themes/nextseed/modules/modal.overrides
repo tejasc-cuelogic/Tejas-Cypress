@@ -149,6 +149,11 @@
         &.relaxed{
             padding:@50px @70px;
         }
+        .option-details{
+            padding:@14px 0;
+            line-height:@22px;
+            text-align:center;
+        }
     }
     .actions{
         font-size:@14px;
@@ -268,11 +273,6 @@
                     font-weight:700;
                 }
             }
-        }
-        .option-details{
-            padding:@14px 0;
-            line-height:@22px;
-            text-align:center;
         }
         .summary-wrap{
             text-align:center;
