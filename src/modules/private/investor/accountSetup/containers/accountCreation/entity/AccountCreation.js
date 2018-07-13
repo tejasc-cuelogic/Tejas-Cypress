@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import _ from 'lodash';
 import { MultiStep } from '../../../../../../../helper';
 import FinancialInformation from './FinancialInformation';
 import { validationActions } from '../../../../../../../services/actions';
@@ -31,37 +30,47 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Financial info',
         component: <FinancialInformation />,
-        isValid: this.props.entityAccountStore.isValidEntityFinancialInfo ? '' : 'error',
+        isValid: this.props.entityAccountStore.FIN_INFO_FRM.meta.isFieldValid ? '' : 'error',
         isDirty: this.props.entityAccountStore.FIN_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityFinancialInfo,
+        form: 'FIN_INFO_FRM',
+        stepToBeRendered: 1,
       },
       {
         name: 'General',
         component: <General />,
-        isValid: this.props.entityAccountStore.isValidEntityGeneralInfo ? '' : 'error',
+        isValid: this.props.entityAccountStore.GEN_INFO_FRM.meta.isFieldValid ? '' : 'error',
         isDirty: this.props.entityAccountStore.GEN_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityGeneralInformation,
+        form: 'GEN_INFO_FRM',
+        stepToBeRendered: 2,
       },
       {
         name: 'Entity info',
         component: <FinancilInfo />,
-        isValid: this.props.entityAccountStore.isValidEntityInfo ? '' : 'error',
+        isValid: this.props.entityAccountStore.TRUST_INFO_FRM.meta.isFieldValid ? '' : 'error',
         isDirty: this.props.entityAccountStore.TRUST_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityInfo,
+        form: 'TRUST_INFO_FRM',
+        stepToBeRendered: 3,
       },
       {
         name: 'Personal info',
         component: <PersonalInformation />,
-        isValid: this.props.entityAccountStore.isValidPersonalInfo ? '' : 'error',
+        isValid: this.props.entityAccountStore.PERSONAL_INFO_FRM.meta.isFieldValid ? '' : 'error',
         isDirty: this.props.entityAccountStore.PERSONAL_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityPersonalInfo,
+        form: 'PERSONAL_INFO_FRM',
+        stepToBeRendered: 4,
       },
       {
         name: 'Formation doc',
         component: <FormationDocuments />,
-        isValid: this.props.entityAccountStore.isValidFormationDoc ? '' : 'error',
+        isValid: this.props.entityAccountStore.FORM_DOCS_FRM.meta.isFieldValid ? '' : 'error',
         isDirty: this.props.entityAccountStore.FORM_DOCS_FRM.meta.isDirty,
         validate: validationActions.validateEntityFormationDoc,
+        form: 'FORM_DOCS_FRM',
+        stepToBeRendered: 5,
       },
       {
         name: 'Link bank',
@@ -70,6 +79,7 @@ export default class AccountCreation extends React.Component {
         isDirty: !_.isEmpty(this.props.bankAccountStore.plaidBankDetails) ||
         this.props.bankAccountStore.formLinkBankManually.meta.isDirty,
         validate: validationActions.validateLinkBankForm,
+        stepToBeRendered: 6,
       },
       {
         name: 'Summary',

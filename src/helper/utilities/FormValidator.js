@@ -4,7 +4,16 @@ import mapValues from 'lodash/mapValues';
 import Helper from '../utility';
 
 class FormValidator {
-  prepareFormObject = (fields, isDirty = false, isValid = false) => ({ fields: { ...fields }, meta: { isValid, error: '', isDirty }, response: {} });
+  prepareFormObject = (fields, isDirty = false, isFieldValid = true, isValid = false) => ({
+    fields: { ...fields },
+    meta: {
+      isValid,
+      error: '',
+      isDirty,
+      isFieldValid,
+    },
+    response: {},
+  });
 
   pullValues = (e, data) => ({
     name: typeof data === 'undefined' ? e.target.name : data.name,
@@ -32,6 +41,11 @@ class FormValidator {
     currentForm.meta.isValid = validation.passes();
     if (element && element.name) {
       currentForm.fields[element.name].error = validation.errors.first(element.name);
+      if (currentForm.fields[element.name].error === false) {
+        currentForm.meta.isFieldValid = true;
+      } else {
+        currentForm.meta.isFieldValid = false;
+      }
     }
     currentForm.meta.isDirty = isDirty;
     return currentForm;
