@@ -17,9 +17,7 @@ export class NavItems extends Component {
   isActive = (to, location, app) => (to !== '' && this.state.active === to) || location.pathname.startsWith(`/${app}/${to}`);
   render() {
     const {
-      location,
-      isApp,
-      refLoc,
+      location, isApp, refLoc, roles,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = [...this.props.navItems];
@@ -41,7 +39,9 @@ export class NavItems extends Component {
                 {item.icon &&
                   <Icon className={item.icon} />
                 }
-                <span>{item.title}</span>
+                <span>
+                  {typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}
+                </span>
               </Aux>
             }
           >

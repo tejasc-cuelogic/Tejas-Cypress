@@ -1,19 +1,19 @@
-/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
-import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Grid, Header, Icon, Responsive } from 'semantic-ui-react';
-import { GetNavMeta } from '../../../theme/layout/SidebarNav';
+import { Grid, Header, Icon } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
+import NotFound from '../../shared/NotFound';
 
-@inject('userStore', 'uiStore')
+@inject('uiStore', 'navStore')
 @observer
 class PrivateHOC extends Component {
   render() {
-    const pathInfo = this.props.location.pathname.split('/app/');
-    const pageMeta = GetNavMeta(pathInfo[1]);
-    const { roles } = toJS(this.props.userStore.currentUser);
+    const pageMeta = this.props.navStore.navMeta;
+
+    if (!pageMeta) {
+      return <NotFound />;
+    }
     return (
       <Aux>
         <div className="page-header-section">
@@ -30,7 +30,7 @@ class PrivateHOC extends Component {
               {this.props.P3}
               {!this.props.P4 ? (
                 <span className="item notification">
-                  <Icon className="ns-bell" />
+                  <Icon className="ns-bell" onClick={() => this.props.uiStore.updateLayoutState('notificationPanel')} />
                   <span className="unread-count">3</span>
                 </span>
                 ) : (

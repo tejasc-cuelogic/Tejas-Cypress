@@ -15,6 +15,7 @@ class FormValidator {
   onChange = (form, element, type, isDirty = true) => {
     CustomeValidations.execute();
     const currentForm = form;
+    let customErrMsg = {};
     if (element && element.name) {
       if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[element.name].value)) && type !== 'dropdown')) {
         const index = currentForm.fields[element.name].value.indexOf(element.value);
@@ -26,11 +27,15 @@ class FormValidator {
       } else {
         currentForm.fields[element.name].value = element.value;
       }
+      customErrMsg = (currentForm.fields[element.name] &&
+        currentForm.fields[element.name].customErrors) ?
+        currentForm.fields[element.name].customErrors : {};
     }
+
     const validation = new Validator(
       mapValues(currentForm.fields, f => f.value),
       mapValues(currentForm.fields, f => f.rule),
-      currentForm.fields[element.name].customErrors,
+      customErrMsg,
     );
     currentForm.meta.isValid = validation.passes();
     if (element && element.name) {
@@ -50,6 +55,7 @@ class FormValidator {
     const currentForm = form;
     let currentFormRelative;
     let fieldName = element.name;
+    let customErrMsg = {};
     if (formIndex > -1 && formName) {
       currentFormRelative = currentForm.fields[formName][formIndex];
       fieldName = `${formName}.${formIndex}.${element.name}`;
@@ -72,6 +78,9 @@ class FormValidator {
       } else {
         currentFormRelative[element.name].value = element.value;
       }
+      customErrMsg = (currentFormRelative[element.name] &&
+        currentFormRelative[element.name].customErrors) ?
+        currentFormRelative[element.name].customErrors : {};
     }
     /* Beneficiary share percentage validation register */
     Validator.register('sharePercentage', (value, requirement) => {
@@ -88,7 +97,7 @@ class FormValidator {
     const validation = new Validator(
       formData,
       formRules,
-      currentFormRelative[element.name].customErrors,
+      customErrMsg,
     );
     currentForm.meta.isValid = validation.passes();
 

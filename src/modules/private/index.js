@@ -1,12 +1,13 @@
 import React from 'react';
 import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
+import Loadable from 'react-loadable';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { authActions } from '../../services/actions';
 import { privateRoutes } from '../../modules/routes';
 import SidebarLeftOverlay from './../../theme/layout/SidebarLeftOverlay';
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
 export default class Private extends React.Component {
@@ -15,6 +16,26 @@ export default class Private extends React.Component {
       this.props.uiStore.setRedirectURL(this.props.history.location);
       this.props.history.push('/auth/login');
     }
+  }
+
+  getPrivateRoutes = (roles) => {
+    const routes = [];
+    this.props.navStore.myRoutes.forEach((item) => {
+      if (item.path) {
+        routes[item.path] = (
+          <Route
+            path={`/app/${item.to}`}
+            component={Loadable({
+              loader: () => import(`./${typeof item.path === 'object' && roles ? item.path[roles[0]] :
+    item.path}`),
+              loading: 'loading...',
+            })}
+            key={item.path}
+          />
+        );
+      }
+    });
+    return routes;
   }
 
   handleLogOut = () => {
@@ -35,6 +56,7 @@ export default class Private extends React.Component {
       accountType: User.roles ? User.roles[0] : '',
       roles: toJS(User.roles),
     };
+    const routes = this.getPrivateRoutes(UserInfo.roles);
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <SidebarLeftOverlay match={match} UserInfo={UserInfo} handleLogOut={this.handleLogOut}>
@@ -48,6 +70,7 @@ export default class Private extends React.Component {
                 key={route.path}
               />
             ))}
+            {Object.keys(routes).map(route => routes[route])}
           </Switch>
         </SidebarLeftOverlay>
       );
