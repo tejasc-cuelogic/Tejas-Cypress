@@ -126,7 +126,7 @@ version:dev:
     # Commit the changes
     - git commit -m "Updated CHANGELOG.md [skip ci]"
     # Push the changes back to the develop branch
-    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-server.git/ HEAD:develop
+    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop
   dependencies:
     - build:dev
 
