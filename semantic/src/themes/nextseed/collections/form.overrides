@@ -266,8 +266,9 @@
 }
 
 .file-uploader{
-    min-height:58px;
-    padding:@14px;
+    min-height:44px;
+    padding:@7px @14px;
+    margin:@5px 0;
     border-radius:@4px;
     border:@inverse-secondary-text 1px dashed;
     position:relative;
