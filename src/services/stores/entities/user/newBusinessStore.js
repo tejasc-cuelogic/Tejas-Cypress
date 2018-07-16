@@ -201,41 +201,44 @@ export class NewBusinessStore {
   };
 
   @action
+  uploadFile = (fileData, stepName) => {
+    console.log(fileData, stepName);
+    // uiStore.setProgress();
+    // return new Promise((resolve, reject) => {
+    //   client
+    //     .mutate({
+    //       mutation: createUploadEntry,
+    //       variables: {
+    //         userId: userStore.currentUser.sub,
+    //         stepName: 'BUSINESS_DETAILS',
+    //         fileData,
+    //       },
+    //     })
+    //     .then((result) => {
+    //       console.log(result);
+    //       const { fileId, preSignedUrl } = result.data.createUploadEntry;
+    //       this.confirmIdentityDocuments.fields[field].fileId = fileId;
+    //       this.confirmIdentityDocuments.fields[field].preSignedUrl = preSignedUrl;
+    //       resolve();
+    //     })
+    //     .catch((err) => {
+    //       uiStore.setErrors(this.simpleErr(err));
+    //       reject(err);
+    //     })
+    //     .finally(() => {
+    //       uiStore.setProgress(false);
+    //     });
+    // });
+  }
+
+  @action
   businessDetailsFiles = (files, fieldName, index = null) => {
     console.log(createUploadEntry, removeUploadedFile);
     console.log(files, fieldName);
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
-        // uiStore.setProgress();
-        // return new Promise((resolve, reject) => {
-        //   client
-        //     .mutate({
-        //       mutation: createUploadEntry,
-        //       variables: {
-        //         userId: userStore.currentUser.sub,
-        //         stepName: 'BUSINESS_DETAILS',
-        //         fileData,
-        //       },
-        //     })
-        //     .then((result) => {
-        //       console.log(result);
-        //       this.BUSINESS_DETAILS_FRM.fields[fieldName].value =
-        //       [...this.BUSINESS_DETAILS_FRM.fields[fieldName].value,
-        //         fileData.fileName];
-        //       // const { fileId, preSignedUrl } = result.data.createUploadEntry;
-        //       // this.confirmIdentityDocuments.fields[field].fileId = fileId;
-        //       // this.confirmIdentityDocuments.fields[field].preSignedUrl = preSignedUrl;
-        //       resolve();
-        //     })
-        //     .catch((err) => {
-        //       uiStore.setErrors(this.simpleErr(err));
-        //       reject(err);
-        //     })
-        //     .finally(() => {
-        //       uiStore.setProgress(false);
-        //     });
-        // });
+        this.uploadFile(fileData, '');
         this.setFormFileArray('BUSINESS_DETAILS_FRM', fieldName, 'value', fileData.fileName, index);
       });
     }
@@ -244,9 +247,7 @@ export class NewBusinessStore {
   @action
   setFormFileArray = (formName, field, getField, value, index) => {
     if (field === 'resume') {
-      this[formName].fields.owners[index][field][getField] =
-      [...this[formName].fields.owners[index][field][getField],
-        value];
+      this[formName].fields.owners[index][field][getField] = value;
     } else {
       this[formName].fields[field][getField] =
       [...this[formName].fields[field][getField],
@@ -282,7 +283,7 @@ export class NewBusinessStore {
   @action
   businessDetailsReset = (e, fieldName, index) => {
     if (fieldName === 'resume') {
-      this.BUSINESS_DETAILS_FRM.fields.owners[index][fieldName].value = [];
+      this.BUSINESS_DETAILS_FRM.fields.owners[index][fieldName].value = '';
     } else {
       this.BUSINESS_DETAILS_FRM.fields[fieldName].value.splice(index, 1);
     }

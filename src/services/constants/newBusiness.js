@@ -272,7 +272,7 @@ export const BUSINESS_DETAILS = {
       value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO', customErrors: { required: '* required.' },
     },
     resume: {
-      value: [], label: 'Upload Resume/CV', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: '* required.' },
+      value: '', label: 'Upload Resume/CV', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: '* required.' },
     },
   }],
 };

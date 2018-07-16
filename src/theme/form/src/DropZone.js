@@ -1,8 +1,10 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { Icon, Responsive, Button } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
+import { isArray } from 'lodash';
 import { FieldError } from '../../shared';
 
 const DropZone = observer((props) => {
@@ -23,9 +25,9 @@ const DropZone = observer((props) => {
           </Dropzone>
         </div> : null
       }
-      {(value && value.length) ?
+      {(isArray(toJS(value)) && value.length) ?
         value.map((item, key) => (
-          <div className="file-uploader attached">
+          <div className="file-uploader attached 111">
             <Responsive
               as={Button}
               minWidth={768}
@@ -45,7 +47,27 @@ const DropZone = observer((props) => {
             />
             <span title={item}>{item}</span>
           </div>
-        )) : null
+        )) : !isArray(toJS(value)) && value &&
+        <div className="file-uploader attached">
+          <Responsive
+            as={Button}
+            minWidth={768}
+            size="tiny"
+            compact
+            className="remove pull-right"
+            onClick={e => props.onremove(e, props.name)}
+          >
+            Remove
+          </Responsive>
+          <Responsive
+            as={Icon}
+            maxWidth={767}
+            name="remove"
+            className="pull-right"
+            onClick={e => props.onremove(e, props.name)}
+          />
+          <span title={value}>{value}</span>
+        </div>
       }
       {error &&
         <FieldError error={error} />
