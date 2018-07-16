@@ -13,7 +13,7 @@ const MaskedInput2 = observer((props) => {
     placeHolder,
   } = props.fielddata;
   return (
-    <Form.Field>
+    <Form.Field error={!!error}>
       <label>
         {label}
         {props.tooltip &&
@@ -25,27 +25,15 @@ const MaskedInput2 = observer((props) => {
           />
         }
       </label>
-      {props.currency &&
-        <NumberFormat
-          placeholder={placeHolder}
-          maxLength={18}
-          thousandSeparator
-          {...props}
-          onValueChange={props.changed}
-          value={value}
-          error={!!error}
-        />
+      {props.currency ? (
+        <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
+      ) : props.percentage ? (
+        <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={props.changed} error={!!error} mask="%" suffix="%" />
+      ) : (
+        <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
+      )
       }
-      {props.phoneNumber &&
-        <NumberFormat type="tel" format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} />
-      }
-      {props.businessZipCode &&
-        <NumberFormat format="#####" {...props} value={value} onChange={props.changed} error={!!error} />
-      }
-      {props.zipCode &&
-        <NumberFormat format="#####" {...props} value={value} onChange={props.changed} error={!!error} />
-      }
-      {error &&
+      {error && !props.showErrorOnField &&
         <FieldError error={error} />
       }
     </Form.Field>

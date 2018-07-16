@@ -17,26 +17,73 @@ export const allBeneficiaries = gql`
   }
 `;
 
+export const getBeneficiaries = gql`
+  query getBeneficiaries {
+    beneficiaries {   
+        accountId   
+        accountType
+        status
+        updatedDate
+        createdDate   
+        beneficiary {     
+            requestStatus    
+            recipients {     
+                firstName    
+                lastName    
+                dob     
+                relationship     
+                shares     
+                address {     
+                    street    
+                    city     
+                    state     
+                    zipCode    
+                }     
+            }    
+        }    
+    }     
+  }
+`;
+
 export const createBeneficiaryMutation = gql`
-  mutation createBeneficiary($firstName: String!, $lastName: String!, $relationship: String!, $residentalStreet: String!, $city: String!, $state: String!, $zipCode: Int!, $dob: String!, ) {
-    createBeneficiary(firstName: $firstName, lastName: $lastName, relationship: $relationship, residentalStreet: $residentalStreet, city: $city, state: $state, zipCode: $zipCode, dob: $dob) {
-      id
-      firstName
-      lastName
-      relationship
-      residentalStreet
-      city
-      state
-      zipCode
-      dob
+mutation _createBeneficiaries($requestId: String!, $verificationCode: String!, $accountId: String!, $beneficiaries: [BeneficiaryRecipientInput]!) {
+  createBeneficiaries(requestId: $requestId, accountId: $accountId, verificationCode: $verificationCode, beneficiaries: $beneficiaries) {
+    userId
+    accountId
+    beneficiary {
+      requestedDate
+      requestStatus
+      recipients {
+        firstName
+        lastName
+        dob
+        relationship
+        shares
+        address {
+          street
+          city
+          state
+          zipCode
+        }
+      }
     }
   }
+}
 `;
 
 export const deleteBeneficiary = gql`
   mutation deleteBeneficiary($id:  ID! ) {
     deleteBeneficiary(id: $id) {
       id
+    }
+  }
+`;
+
+export const requestOptForBeneficiaries = gql`
+  mutation _requestOtp($scopeType: mfaEnum!, $method: PhoneVerificationMethodsEnum!) {
+    requestOtp(scopeType: $scopeType, method: $method) {
+      requestId
+      phoneNumber
     }
   }
 `;

@@ -16,8 +16,6 @@ export default class InvestmentLimits extends Component {
     return (
       <div>
         <Route exact path={`${this.props.match.url}/verify-accreditation`} component={VerifyAccreditation} />
-        <Header as="h3">Regulation Crowdfunding Limits</Header>
-        <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis</p>
         <Grid columns={1} stackable>
           <FinancialInfo />
         </Grid>

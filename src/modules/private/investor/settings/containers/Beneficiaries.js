@@ -1,39 +1,52 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route } from 'react-router-dom';
 import { Grid, Header } from 'semantic-ui-react';
 import NoBeneficiary from '../components/beneficiaries/NoBeneficiary';
 import BeneficiaryList from '../components/beneficiaries/BeneficiaryList';
-import AddBeneficiary from '../components/beneficiaries/AddBeneficiary';
 
-@inject('userDetailsStore')
+@inject('beneficiaryStore')
 @observer
 export default class Beneficiaries extends Component {
   componentWillMount() {
-    this.props.userDetailsStore.getBeneficiaries();
+    this.props.beneficiaryStore.getBeneficiaries();
+    if (this.props.match.url === this.props.location.pathname) {
+      this.props.beneficiaryStore.setShareModalData(false);
+    }
   }
 
   render() {
     const {
-      beneficiaries, bLoading, bErr, deleteBeneficiary, deleting,
-    } = this.props.userDetailsStore;
+      beneficiaries, bLoading,
+    } = this.props.beneficiaryStore;
+    const beneficiaryList = beneficiaries ? beneficiaries.map(beneficiary => (
+      beneficiary.beneficiary ?
+        <BeneficiaryList
+          accountId={beneficiary.accountId}
+          updatedDate={beneficiary.updatedDate ? beneficiary.updatedDate : beneficiary.createdDate}
+          key={beneficiary.accountId}
+          title={beneficiary.accountType}
+          match={this.props.match}
+          beneficiaries={beneficiary.beneficiary}
+          loading={bLoading}
+          curLocation={this.props.location}
+        /> :
+        (beneficiary.status === 'FULL' ?
+          <NoBeneficiary
+            accountId={beneficiary.accountId}
+            match={this.props.match}
+            title={beneficiary.accountType}
+            key={beneficiary.accountId}
+            curLocation={this.props.location}
+          /> : null)
+    )) :
+          <div>loading</div>;
     return (
       <div>
-        <Route exact path={`${this.props.match.url}/add-beneficiary`} render={props => <AddBeneficiary refLink={this.props.match.url} {...props} />} />
         <Header as="h3">Beneficiaries</Header>
-        <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis</p>
+        {/* <p className="intro-text">Pellentesque facilisis</p> */}
         {bLoading ? <div>loading...</div> : (
           <Grid columns={1} stackable>
-            {(bErr || beneficiaries.length === 0) ?
-              <NoBeneficiary match={this.props.match} /> :
-              <BeneficiaryList
-                match={this.props.match}
-                delete={deleteBeneficiary}
-                beneficiaries={beneficiaries}
-                deleting={deleting}
-                loading={bLoading}
-              />
-            }
+            { beneficiaryList }
           </Grid>
           )
         }

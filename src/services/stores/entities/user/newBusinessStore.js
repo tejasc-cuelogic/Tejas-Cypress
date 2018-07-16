@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { FormValidator as Validator } from '../../../../helper';
 // import { GqlClient as client } from '../../services/graphqlCool';
 import {
@@ -79,7 +79,8 @@ export class NewBusinessStore {
 
   @action
   businessPreQualification = () => {
-    const data = Validator.ExtractValues(this.BUSINESS_APP_FRM.fields);
+    const data = toJS(Validator.ExtractValues(this.BUSINESS_APP_FRM.fields));
+    console.log(data);
     if (data.businessName === 'SUCCESS') {
       this.BUSINESS_APP_STATUS = 'success';
     } else {
@@ -90,52 +91,61 @@ export class NewBusinessStore {
   @action
   setAddressFields = (place) => {
     const data = Helper.gAddressClean(place);
-    this.onFieldChange('BUSINESS_APP_FRM', 'businessStreet', data.residentalStreet);
-    this.onFieldChange('BUSINESS_APP_FRM', 'city', data.city);
-    this.onFieldChange('BUSINESS_APP_FRM', 'state', data.state);
-    this.onFieldChange('BUSINESS_APP_FRM', 'zipCode', data.zipCode);
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'businessStreet', value: data.residentalStreet });
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'city', value: data.city });
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'state', value: data.state });
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'zipCode', value: data.zipCode });
   };
 
   @action
-  businessDetailsFiles = (name, files) => {
+  businessDetailsFiles = (fieldName, files) => {
     let uploadedFile = '';
     if (typeof files !== 'undefined' && files.length) {
       uploadedFile = files[0].name;
-      this.onFieldChange('BUSINESS_DETAILS_FRM', name, uploadedFile);
+      this.BUSINESS_DETAILS_FRM = Validator.onChange(
+        this.BUSINESS_DETAILS_FRM,
+        { name: fieldName, value: uploadedFile },
+      );
     }
   }
 
   @action
   businessDetailsReset = (field) => {
-    this.onFieldChange('BUSINESS_DETAILS_FRM', field, '');
+    this.BUSINESS_DETAILS_FRM = Validator.onChange(this.BUSINESS_DETAILS_FRM, { name: field, value: '' });
   };
 
   @action
-  performanceFiles = (name, files) => {
+  performanceFiles = (fieldName, files) => {
     let uploadedFile = '';
     if (typeof files !== 'undefined' && files.length) {
       uploadedFile = files[0].name;
-      this.onFieldChange('BUSINESS_PERF_FRM', name, uploadedFile);
+      this.BUSINESS_PERF_FRM = Validator.onChange(
+        this.BUSINESS_PERF_FRM,
+        { name: fieldName, value: uploadedFile },
+      );
     }
   }
 
   @action
   performanceReset = (field) => {
-    this.onFieldChange('BUSINESS_PERF_FRM', field, '');
+    this.BUSINESS_PERF_FRM = Validator.onChange(this.BUSINESS_PERF_FRM, { name: field, value: '' });
   };
 
   @action
-  docuFiles = (name, files) => {
+  docuFiles = (fieldName, files) => {
     let uploadedFile = '';
     if (typeof files !== 'undefined' && files.length) {
       uploadedFile = files[0].name;
-      this.onFieldChange('BUSINESS_DOC_FRM', name, uploadedFile);
+      this.BUSINESS_DOC_FRM = Validator.onChange(
+        this.BUSINESS_DOC_FRM,
+        { name: fieldName, value: uploadedFile },
+      );
     }
   }
 
   @action
   docuReset = (field) => {
-    this.onFieldChange('BUSINESS_DOC_FRM', field, '');
+    this.BUSINESS_DOC_FRM = Validator.onChange(this.BUSINESS_DOC_FRM, { name: field, value: '' });
   };
 }
 
