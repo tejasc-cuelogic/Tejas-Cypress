@@ -132,26 +132,23 @@ footer{
 /** campaign filter **/
 .campaign-list-wrapper {
 	position: relative;
-
 	h5.ui.header {
 		color: @neutral-light;
 		margin-bottom: @35px;
 	}
 }
-.offerfilter {
+.offer-filter {
 	position: absolute;
     background: @unselectedTextColor ;
     height: 100%;
     width: 100%;
     left: 0;
 	top: 0;
-	
-	.offerFilterContainer {
+	.offer-filter-container {
 		background-color: #fff;
 		width: 100%;
 		height: auto;
 		padding: @17px 0 @59px; 
-
 		h6.ui.header {
 			font-size: @13px;
 			font-weight: @bold;
@@ -159,7 +156,6 @@ footer{
 			color: @neutral-light;
 			padding-bottom: @6px;
 		}
-
 		.ui.checkbox {
 			label {
 				font-size: @15px;
@@ -167,13 +163,12 @@ footer{
 				color: @neutral-light;
 			}
 		} 
-
 		i {
 			font-size: @16px;
 			line-height: @16px;
 			color: @neutral-light;
 		}
-		.checkboxGroup {
+		.checkbox-group {
 			.ui.label {
 				background-color: transparent;
 				font-size: @15px;
@@ -188,99 +183,222 @@ footer{
 }
 
 /** Campaign Details **/
-.offerDetails {
+.offer-details {
 	margin-top: 74px;
-
-	.offeringSideMenu {
+	display: flex;
+	flex-direction: row;
+	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
-		height: 100%;
+		width: 280px;
+		height: ~"calc(100vh - 74px)";
+		position: fixed;
+		z-index: 1;
+		overflow: auto;
 
-		.offeringIntro {
+		.ui.menu, .ui.vertical.menu {
+			border: none;
+			box-shadow: none;
+			margin-bottom: @20px;
+		}
+		.offering-intro {
 			padding: @32px @20px;
 			h4.ui.header {
 				position: relative;
 				> a {
 					position: absolute;
 					left: 0;
-					font-size: 12px;
+					font-size: @12px;
 					color: @neutral-light;
 				}
 			}
 		}
-		.progressBar {
-			height: 209px;
+		.progress-bar {
+			height: 210px;
 			width: 210px;
 			background-color: @white;
 			margin: auto auto @16px;
 		}
-
 		p {
 			font-size: @13px;
 			color: @white;
 			text-align: center;
 		}
+	}
+	.offering-wrapper {
+		background-color: #F3F4F8;
+		flex-grow: 1;
+		height: 100%;
+		padding-left: 280px;
+		.offering-content-spacer {
+			padding: @17px @50px @50px;
+		}
+		.quick-bar {
+			padding: @10px 0;
+		}
+		p {
+			color: @neutral;
+			font-size: @15px;
+			letter-spacing: 1px;
+			line-height: @20px;
+			&.detail-section {
+				line-height: @20px;
+			}
+			&.note {
+				color: @neutral-light;
+				font-size: @12px;
+				line-height: @44px;
+				margin-top: 10px
+			}
+			&.early-bird-title {
+				font-weight: bold;
+				line-height: @20px;
+				font-size: @15px;
+				text-align: center;
+			}
+			&.early-bird-desc {
+				line-height: @27px;
+				font-size: @15px;
+				text-align: center;
+			}
+			i.icon {
+				margin-left: @20px;
+			}
+		}
+		ul {
+			line-height: @26px;
+			font-size: @15px;
+			color: @neutral-light;
+			padding-left: @20px;
 
-		.ui.statistics {
-			.statistic {
-				>.value, >.label {
-					font-size: 13px !important;
-					line-height: 15px;
-					color: #fff;
-					font-weight: normal;
-					text-transform: none;
-				}
-
-				>.label {
+			li {
+				span {
 					font-weight: @bold;
 				}
 			}
 		}
-
-		.ui.secondary.button {
-			margin: 24px auto 50px;
-		}
-
-		.ui.vertical.menu {
-			width: 100%;
-			margin: 0;
-			text-align: left;
-			background-color: transparent;
-			/* color: #fff; */
-
-			.item {
-				font-size: @14px;
-				color: #fff;
-				box-shadow: none;
-				border-left: @4px solid transparent;
-				border-radius: 0;
-				padding-left: @31px;
-				font-weight: @bold;
-
-				&:hover, &.active {
-					background-color: #3A4048;
-					border-color: @primary-one;
-					color: @primary-one;
+		.ui.grid.investment-grid {
+			>.column:last-child {
+				background-color: @primary-one;
+				position: relative;
+				&:before {
+					content: "";
+					position: absolute;
+					top: 50%;
+					left: -1px;
+					border-style: solid;
+					border-width: 10px 0px 10px 12px;
+					border-color: transparent #fff;
+					display: block;
+					width: 0;
+					z-index: 0;
+					-webkit-transform: translate(0,-50%);
+					-ms-transform: translate(0,-50%);
+					transform: translate(0,-50%);
 				}
 
-				>i.icon {
-					float: left;
-					margin-left: 0;
-					margin-right: 14px;
-				}
-
-				>.label.circular {
-					margin-top: -5px;
-				}
-
-				&.watchDealMenu {
-					color: #616972;
+				.ui.statistic {
+		
+					>.label{
+						color: @white;
+					}
+					>.value {
+						color: @white;
+					}
 				}
 			}
-			.ui.divider {
-				margin: 64px 29px 0;
+		}
+		.no-early-bird {
+			margin: @20px auto;
+		}
+		.campaign-about-wrapper {
+			padding: @30px;
+			background-color: @white;
+			height: 100%;
+			.carousel {
+				width: 100%;
+				margin-bottom: 38px;
+				img {
+					width: 100%;
+					height: 100%;
+					margin-top: 0;
+				}
+			}
+			p {
+				line-height: @20px;
+				color: @neutral-light;
+				&.note {
+					font-style: italic;
+					margin-bottom: @35px;
+				}
+			}
+			img {
+				width: 100%;
+				margin-top: @35px;
+			}
+			.embed {
+				img {
+					margin-top: 0;
+				}
+			}
+			.history-section {
+				margin-top: 140px;
+				.ui.list {
+					>.item {
+						margin-bottom: @30px;
+    					padding-bottom: 0;
+					}
+				}
 			}
 		}
+		.campaign-right-sidebar {
+			padding: @30px @30px @30px 0;
+			height: 100%;
+			.ui.padded.segment {
+				padding: @15px @30px @25px;
+				margin-bottom: @20px;
+				.ui.breadcrumb {
+					margin-bottom: @20px;
+				}
+				iframe {
+					width: 100%;
+					height: 100%;
+					border: none;
+				}
+			}
+		}
+	}
+}
 
+/** Share icons **/
+.share-icons {
+	margin-bottom: 30px;
+	i.icon {
+		color: @white;
+		background: @neutral-lighter;
+		box-shadow: none !important;
+		font-size: @40px !important;
+		margin-bottom: @10px;
+		&.default {
+			color: inherit;
+		}
+		&.fb-color {
+			background: @facebookColor;
+			&:hover {
+				background: @facebookHoverColor;
+			}
+		}
+		&.tw-color {
+			background: @twitterColor;
+			&:hover {
+				background: @twitterHoverColor;
+			}
+		}
+		&.in-color {
+			background:@linkedInColor;
+			&:hover {
+				background: @linkedInHoverColor;
+			}
+		}
 	}
 }

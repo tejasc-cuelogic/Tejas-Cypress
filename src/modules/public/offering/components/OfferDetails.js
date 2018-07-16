@@ -1,96 +1,181 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Grid, Header, Icon, Statistic, Button, Menu, Label, Divider } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { Grid, Header, Icon, Statistic, Menu, Label, Divider, Segment, Embed, Breadcrumb, Image, Popup, Modal } from 'semantic-ui-react';
+import CampaignSideBar from './CampaignSideBar';
+import videoPoster from '../../../../assets/images/636206632.webp';
+import noEarlyBird from '../../../../assets/images/illustration.png';
 
-// const colors = [
-//   'blue',
-// ];
+const nsvideos = {
+  embed: '218642510',
+};
 
-const offerDetails = () => (
-  <div className="offerDetails">
-    <Grid>
-      <Grid.Row>
-        <Grid.Column width={3} textAlign="center">
-          <div className="offeringSideMenu">
-            <div className="offeringIntro">
-              <Header as="h4" inverted textAlign="center">
-                <Link to="/">
-                  <Icon name="arrow left" />
-                </Link>
-                Account Settings
-                <Header.Subheader>Manage your preferences</Header.Subheader>
-              </Header>
-              <div className="progressBar">
-                dfshgf
-              </div>
-              <p>
-                <Icon name="flag" /> Min reached on 10 days ago
-              </p>
+class offerDetails extends Component {
+  state = { modalOpen: false }
+  handleOpen = () => this.setState({ modalOpen: true })
+  handleClose = () => this.setState({ modalOpen: false })
 
-              <Statistic.Group widths="three">
-                <Statistic size="mini">
-                  <Statistic.Value>28</Statistic.Value>
-                  <Statistic.Label>Days left</Statistic.Label>
-                </Statistic>
-
-                <Statistic size="mini">
-                  <Statistic.Value>106</Statistic.Value>
-                  <Statistic.Label>Investors</Statistic.Label>
-                </Statistic>
-
-                <Statistic size="mini">
-                  <Statistic.Value>49</Statistic.Value>
-                  <Statistic.Label>Early Birds</Statistic.Label>
-                </Statistic>
-              </Statistic.Group>
-
-              <Button secondary compact>Invest Now</Button>
+  render() {
+    return (
+      <div className="offer-details">
+        <CampaignSideBar />
+        <div className="offering-wrapper">
+          <div className="offering-content-spacer">
+            <div className="quick-bar">
+              <Menu secondary>
+                <Menu.Item name="home" onClick={this.handleOpen}>
+                  <Icon name="list alternate outline" />
+                  Updates
+                  <Label circular color="blue" key="blue">7</Label>
+                </Menu.Item>
+                <Menu.Menu position="right">
+                  <Menu.Item name="home">
+                    <Icon name="list alternate outline" />
+                    Trending
+                  </Menu.Item>
+                  <Menu.Item as="span" className="span">
+                    35 views | 8 investments
+                  </Menu.Item>
+                </Menu.Menu>
+              </Menu>
             </div>
-            <Menu vertical>
-              <Menu.Item name="inbox" active>
-                <Icon name="home" />
-                Overview
-              </Menu.Item>
-              <Menu.Item name="inbox">
-                <Icon name="home" />
-                About the Company
-              </Menu.Item>
-              <Menu.Item name="inbox">
-                <Icon name="home" />
-                Investment Details
-              </Menu.Item>
-              <Menu.Item name="inbox">
-                <Icon name="home" />
-                <Label circular color="blue" key="blue">49</Label>
-                Bonus Rewards
-              </Menu.Item>
-              <Menu.Item name="inbox">
-                <Icon name="home" />
-                Disclosures
-              </Menu.Item>
-              <Menu.Item name="inbox">
-                <Icon name="home" />
-                <Label circular color="blue" key="blue">11</Label>
-                Comments
-              </Menu.Item>
-              <Menu.Item name="inbox">
-                <Icon name="share alternate" />
-                Share
-              </Menu.Item>
-              <Divider />
-              <Menu.Item name="inbox" className="watchDealMenu">
-                <Icon name="heart outline" />
-                Watch Deal
-              </Menu.Item>
-            </Menu>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column width={16}>
+                  <Segment padded>
+                    <Grid stackable>
+                      <Grid.Row>
+                        <Grid.Column width={6}>
+                          <Breadcrumb>
+                            <Breadcrumb.Section>About the Company</Breadcrumb.Section>
+                            <Breadcrumb.Divider icon="right chevron" />
+                          </Breadcrumb>
+                          <Header as="h3">Top things to know</Header>
+                          <p><b>Industry: </b>Pub & Brewery <br />
+                            <b>Investment Type: </b>Revenue Sharing
+                            <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+                          </p>
+                          <p className="detail-section">
+                            Houston Brewery is expanding its facilities and launching the
+                            new Buffbrew Taproom, complete with a full-service kitchen,
+                            event space and over 40 beers on tap.
+                          </p>
+                          <Divider section />
+                          <ul>
+                            <li>
+                              <span>Full-service kitchen, over 40 beers</span>
+                              on tap, open 7 days a week
+                            </li>
+                            <li>
+                              <span>Joining the Sawyer Yards Creative Campus </span>
+                              of 40 acres, 10 buildings,  400+ Studios, 500+ Artists
+                            </li>
+                            <li>
+                              <span>Get “Free Beer for Life”</span> with any investment over $1,000
+                            </li>
+                            <li>
+                              Investment secured by a blanket lien on all assets of the business
+                            </li>
+                          </ul>
+                        </Grid.Column>
+                        <Grid.Column width={10}>
+                          <Embed
+                            id={nsvideos.embed}
+                            placeholder={videoPoster}
+                            source="vimeo"
+                          />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
+                  </Segment>
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column width={12}>
+                  <Segment padded>
+                    <Breadcrumb>
+                      <Breadcrumb.Section>Investment Details</Breadcrumb.Section>
+                      <Breadcrumb.Divider icon="right chevron" />
+                    </Breadcrumb>
+                    <Header as="h3">Investment Return Calculator</Header>
+                    <Grid columns={4} divided doubling className="investment-grid" padded="horizontally">
+                      <Grid.Column>
+                        <Statistic size="mini">
+                          <Statistic.Label>Investment Multiple</Statistic.Label>
+                          <Statistic.Value>1.70x–1.90x</Statistic.Value>
+                          <p>
+                            Monthly gross revenue to be shared is 6.5%.
+                            <Popup trigger={<Icon name="help circle" />} content="Help!" position="top center" />
+                          </p>
+                        </Statistic>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Statistic size="mini">
+                          <Statistic.Label>Maturity*</Statistic.Label>
+                          <Statistic.Value>78 months</Statistic.Value>
+                          <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            <Popup trigger={<Icon name="help circle" />} content="Help!" position="top center" />
+                          </p>
+                        </Statistic>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Statistic size="mini">
+                          <Statistic.Label>Your Investment</Statistic.Label>
+                          <Statistic.Value>$25,000</Statistic.Value>
+                          <div className="slidecontainer">
+                            <input type="range" min="1" max="100" value="10" className="slider" id="myRange" />
+                          </div>
+                        </Statistic>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Statistic size="mini">
+                          <Statistic.Label>Total Payment*</Statistic.Label>
+                          <Statistic.Value>
+                            $42,500
+                            <br />–<br />
+                            $47,500
+                          </Statistic.Value>
+                        </Statistic>
+                      </Grid.Column>
+                    </Grid>
+                    <p className="note">
+                      * For illustration only. See expanded Payment Calculator view to
+                      read more regarding actual performance variables.
+                    </p>
+                  </Segment>
+                </Grid.Column>
+                <Grid.Column width={4} textAlign="center">
+                  <Segment padded>
+                    <Breadcrumb>
+                      <Breadcrumb.Section>Bonus Rewards</Breadcrumb.Section>
+                      <Breadcrumb.Divider icon="right chevron" />
+                    </Breadcrumb>
+                    <Header as="h3">Early Bird Rewards</Header>
+                    <Image src={noEarlyBird} className="no-early-bird" />
+                    <p className="early-bird-title">Invest more, recieve more.</p>
+                    <p className="early-bird-desc">
+                      See the bonus rewards BuffBrew Taproom is offering for higher
+                      levels of investment.
+                    </p>
+                  </Segment>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </div>
-        </Grid.Column>
-        <Grid.Column width={13}>
-          <p>dfsgf</p>
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-  </div>
-);
+          <Modal
+            open={this.state.modalOpen}
+            onClose={this.handleClose}
+            closeIcon
+          >
+            <Header as="h3">
+              Updates
+              <Label circular color="blue" key="blue">7</Label>
+            </Header>
+            <Modal.Content />
+          </Modal>
+        </div>
+      </div>
+    );
+  }
+}
 
 export default offerDetails;

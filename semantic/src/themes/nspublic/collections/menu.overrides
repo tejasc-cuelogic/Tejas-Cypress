@@ -85,7 +85,6 @@ footer{
         }
     }
 }
-
 .filter-menu {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
@@ -103,6 +102,59 @@ footer{
             }
             .ui.image.closeIcon {
                 margin-left: 117px;
+            }
+        }
+    }
+}
+.offer-details {
+    .offering-side-menu {
+        .ui.vertical.menu {
+			background-color: transparent;
+			.item {
+				color: #fff;
+				border-left: @4px solid transparent;
+				border-radius: 0;
+				padding-left: @27px;
+				font-weight: @bold;
+				&:hover, &.active {
+					background-color: #3A4048;
+					border-color: @primary-one;
+					color: @primary-one;
+				}
+				>i.icon {
+					float: left;
+					margin-left: 0;
+					margin-right: 14px;
+				}
+				>.label.circular {
+					margin-top: -5px;
+				}
+				&.watch-deal-menu {
+					color: #616972;
+				}
+			}
+			.ui.divider {
+				margin: 64px 29px 0;
+			}
+		}
+    }
+    .offering-content-spacer {
+        .ui.secondary.menu .item {
+            font-weight: bold;
+            line-height: @20px;
+            font-size: @15px;
+            color: @neutral;
+            >i.icon {
+                font-size: @20px;
+            }
+            &.span {
+                font-weight: bold;
+                line-height: @24px;
+                font-size: @13px;
+                color: #616972;
+            }
+            &:hover {
+                background-color: transparent;
             }
         }
     }

@@ -47,7 +47,7 @@
 @invertedShadowColor: @borderColor;
 
 /* Section */
-@sectionMargin: 2rem;
+@sectionMargin: 2.5rem;
 
 /* Sizes */
 @medium: 1rem;

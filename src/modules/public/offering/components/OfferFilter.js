@@ -2,8 +2,8 @@ import React from 'react';
 import { Container, Grid, Header, Checkbox, Form, Icon, Popup, Label } from 'semantic-ui-react';
 
 const offerFilter = () => (
-  <div className="offerfilter">
-    <div className="offerFilterContainer">
+  <div className="offer-filter">
+    <div className="offer-filter-container">
       <Container>
         <Grid stackable>
           <Grid.Row>
@@ -21,7 +21,7 @@ const offerFilter = () => (
               <Header as="h6" dividing>
                 Investment Type
               </Header>
-              <div className="checkboxGroup">
+              <div className="checkbox-group">
                 <Form>
                   <Form.Field>
                     <Checkbox
@@ -46,7 +46,7 @@ const offerFilter = () => (
               <Header as="h6" dividing>
                 Funding Type
               </Header>
-              <div className="checkboxGroup">
+              <div className="checkbox-group">
                 <Form>
                   <Form.Field>
                     <Checkbox
@@ -77,7 +77,7 @@ const offerFilter = () => (
               <Header as="h6" dividing>
                 More Options
               </Header>
-              <div className="checkboxGroup">
+              <div className="checkbox-group">
                 <Icon name="eye" />
                 <Label> Funded Campaigns </Label>
               </div>
