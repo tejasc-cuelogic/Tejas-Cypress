@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, Divider } from 'semantic-ui-react';
-import GridListing from '../../../../theme/ui/GridListing';
+import { GridListing } from '../../../../theme/shared';
 import CStudyDetails from '../components/CStudyDetails';
 
 class CaseStudies extends Component {
