@@ -28,27 +28,28 @@ export const BUSINESS_PRE_QUALIFICATION = {
     ],
     error: undefined,
     rule: 'required',
+    customErrors: { required: '* required.' },
   },
   businessName: {
-    value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g.  NextBrewery',
+    value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g.  NextBrewery', customErrors: { required: '* required.' },
   },
   website: {
-    value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  http://nextbrewery.com',
+    value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  http://nextbrewery.com', customErrors: { required: '* required.' },
   },
   phoneNumber: {
-    value: '', label: 'Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789',
+    value: '', label: 'Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789', customErrors: { required: '* required.' },
   },
   street: {
-    value: '', label: 'Street', error: undefined, rule: 'required', placeHolder: 'e.g.  NextBrewery',
+    value: '', label: 'Street', error: undefined, rule: 'required', placeHolder: 'e.g.  NextBrewery', customErrors: { required: '* required.' },
   },
   city: {
-    value: '', label: 'City', error: undefined, rule: 'required', placeHolder: 'e.g.  NY',
+    value: '', label: 'City', error: undefined, rule: 'required', placeHolder: 'e.g.  NY', customErrors: { required: '* required.' },
   },
   state: {
-    value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g.  NY',
+    value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g.  NY', customErrors: { required: '* required.' },
   },
   zipCode: {
-    value: '', label: 'Zip Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6,
+    value: '', label: 'Zip Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6, customErrors: { required: '* required.' },
   },
   industryExperience: {
     value: '',
@@ -57,12 +58,13 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: 'required|numeric',
     maxLength: 2,
     placeHolder: 'e.g. 5',
+    customErrors: { required: '* required.' },
   },
   businessAgeYears: {
-    value: '', maxLength: 4, label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1',
+    value: '', maxLength: 4, label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required: '* required.' },
   },
   businessAgeMonths: {
-    value: '', maxLength: 2, label: 'Months', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3',
+    value: '', maxLength: 2, label: 'Months', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required: '* required.' },
   },
   franchiseHolder: {
     value: '',
@@ -72,12 +74,13 @@ export const BUSINESS_PRE_QUALIFICATION = {
     ],
     error: undefined,
     rule: 'required_if:businessGoal,FRANCHISE',
+    customErrors: { required: '* required.' },
   },
   estimatedCreditScore: {
-    value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700',
+    value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700', customErrors: { required: '* required.' },
   },
   totalProjectCost: {
-    value: '', maxLength: 16, label: 'What’s the total project cost?', error: undefined, rule: 'required', placeHolder: 'e.g. 100,000',
+    value: '', maxLength: 16, label: 'What’s the total project cost?', error: undefined, rule: 'required', placeHolder: 'e.g. 100,000', customErrors: { required: '* required.' },
   },
   amountNeeded: {
     value: '',
@@ -85,32 +88,33 @@ export const BUSINESS_PRE_QUALIFICATION = {
     label: 'How much do you need to raise on NextSeed?',
     error: undefined,
     rule: 'required',
+    customErrors: { required: '* required.' },
     placeHolder: 'e.g. 50,000',
     tooltip: 'Minimum amount of funding is $50,000. For requirements on different levels of funding, click here.',
   },
   previousYearGrossSales: {
-    value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 750,000',
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 750,000', customErrors: { required: '* required.' },
   },
   previousYearCogSold: {
-    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 75,000',
+    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 75,000', customErrors: { required: '* required.' },
   },
   previousYearOperatingExpenses: {
-    value: '', label: 'Operating Expenses', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 150,000',
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 150,000', customErrors: { required: '* required.' },
   },
   previousYearNetIncome: {
-    value: '', label: 'Net Income', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 525,000',
+    value: '', label: 'Net Income', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 525,000', customErrors: { required: '* required.' },
   },
   nextYearGrossSales: {
-    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. 750,000',
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. 750,000', customErrors: { required: '* required.' },
   },
   nextYearCogSold: {
-    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. 75,000',
+    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. 75,000', customErrors: { required: '* required.' },
   },
   nextYearOperatingExpenses: {
-    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: 'e.g. 150,000',
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: 'e.g. 150,000', customErrors: { required: '* required.' },
   },
   nextYearNetIncome: {
-    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. 525,000',
+    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. 525,000', customErrors: { required: '* required.' },
   },
   industryTypes: {
     value: [],
@@ -126,6 +130,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     ],
     error: undefined,
     rule: 'required',
+    customErrors: { required: '* required.' },
   },
   businessGoal: {
     value: '',
@@ -137,6 +142,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     ],
     error: undefined,
     rule: 'required',
+    customErrors: { required: '* required.' },
   },
   fundUsage: {
     value: [],
@@ -152,6 +158,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     ],
     error: undefined,
     rule: 'required',
+    customErrors: { required: '* required.' },
   },
   businessEntityStructure: {
     value: '',
@@ -164,6 +171,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     ],
     error: undefined,
     rule: 'required',
+    customErrors: { required: '* required.' },
   },
   legalConfirmation: {
     value: [],

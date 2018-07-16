@@ -85,6 +85,14 @@ export class NewBusinessStore {
   };
 
   @action
+  businessAppEleMaskChange = (values, field) => {
+    this.BUSINESS_APP_FRM = Validator.onChange(
+      this.BUSINESS_APP_FRM,
+      { name: field, value: values.floatValue },
+    );
+  };
+
+  @action
   lendioEleChange = (e, res) => {
     this.LENDIO_QUAL_FRM = Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res));
   };
@@ -150,13 +158,14 @@ export class NewBusinessStore {
         },
       },
       businessEntityStructure: data.businessEntityStructure,
-      legalConfirmations: data.legalConfirmations,
+      legalConfirmations: data.legalConfirmation,
     };
   }
 
   @action
   businessPreQualificationFormSumbit = () => {
     const data = this.getFormatedData;
+    console.log(data);
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client

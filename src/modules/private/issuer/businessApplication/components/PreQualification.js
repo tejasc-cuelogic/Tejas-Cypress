@@ -23,7 +23,7 @@ export default class PreQualification extends Component {
   }
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
+      BUSINESS_APP_FRM, businessAppEleChange, setAddressFields, businessAppEleMaskChange,
     } = this.props.newBusinessStore;
     const { fields } = BUSINESS_APP_FRM;
     return (
@@ -72,7 +72,7 @@ export default class PreQualification extends Component {
                     <MaskedInput2
                       name="phoneNumber"
                       fielddata={fields.phoneNumber}
-                      changed={businessAppEleChange}
+                      changed={values => businessAppEleMaskChange(values, 'phoneNumber')}
                     />
                   </div>
                 </Grid.Column>
@@ -144,12 +144,13 @@ export default class PreQualification extends Component {
                         <Form.Group widths="equal">
                           {
                             ['businessAgeYears', 'businessAgeMonths'].map(field => (
-                              <FormInput
+                              <MaskedInput2
                                 key={field}
                                 name={field}
+                                number
                                 value={fields[field].value}
                                 fielddata={fields[field]}
-                                changed={businessAppEleChange}
+                                changed={values => businessAppEleMaskChange(values, field)}
                               />
                             ))
                           }
@@ -159,12 +160,14 @@ export default class PreQualification extends Component {
                     }
                     {
                       ['industryExperience', 'estimatedCreditScore'].map(field => (
-                        <FormInput
+                        <MaskedInput2
                           key={field}
                           name={field}
+                          number
+                          tooltip={fields[field].tooltip}
                           value={fields[field].value}
                           fielddata={fields[field]}
-                          changed={businessAppEleChange}
+                          changed={values => businessAppEleMaskChange(values, field)}
                         />
                       ))
                     }
@@ -177,7 +180,7 @@ export default class PreQualification extends Component {
                           tooltip={fields[field].tooltip}
                           value={fields[field].value}
                           fielddata={fields[field]}
-                          changed={businessAppEleChange}
+                          changed={values => businessAppEleMaskChange(values, field)}
                         />
                       ))
                     }
@@ -217,7 +220,7 @@ export default class PreQualification extends Component {
                               currency
                               value={fields[field].value}
                               fielddata={fields[field]}
-                              changed={businessAppEleChange}
+                              changed={values => businessAppEleMaskChange(values, field)}
                             />
                           ))
                         }
@@ -234,7 +237,7 @@ export default class PreQualification extends Component {
                           currency
                           value={fields[field].value}
                           fielddata={fields[field]}
-                          changed={businessAppEleChange}
+                          changed={values => businessAppEleMaskChange(values, field)}
                         />
                       ))
                     }
