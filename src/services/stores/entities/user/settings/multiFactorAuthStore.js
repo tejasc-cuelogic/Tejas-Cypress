@@ -14,6 +14,11 @@ export class MultiFactorAuthStore {
   }
 
   @action
+  handleMfaModePhoneTypeChanged = (e, { value }) => {
+    this.MFA_MODE_TYPE_META.fields.mfaPhoneModeTypes.value = value;
+  }
+
+  @action
   setMfaModeType = () => {
     uiStore.setProgress();
     // return new Promise((resolve, reject) => {

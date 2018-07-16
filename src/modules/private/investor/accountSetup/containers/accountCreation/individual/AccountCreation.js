@@ -33,7 +33,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Add funds',
         component: <AddFunds />,
-        isValid: this.props.bankAccountStore.formAddFunds.meta.isValid ? '' : 'error',
+        isValid: this.props.bankAccountStore.isValidAddFunds ? '' : 'error',
       },
       {
         name: 'Summary',

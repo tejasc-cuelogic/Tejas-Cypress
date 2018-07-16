@@ -351,7 +351,6 @@ class IraAccountStore {
   setFileUploadData(field, files) {
     this.IDENTITY_FRM.fields[field].fileData = files;
     const fileData = Helper.getFormattedFileData(files);
-    // this.onFieldChange('IDENTITY_FRM', field, fileData.fileName);
     this.IDENTITY_FRM = FormValidator.onChange(
       this.IDENTITY_FRM,
       { name: field, value: fileData.fileName },
@@ -373,15 +372,14 @@ class IraAccountStore {
           this.IDENTITY_FRM.fields[field].preSignedUrl = preSignedUrl;
           resolve();
         }))
-        .catch((err) => {
+        .catch(action((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          this.onFieldChange('IDENTITY_FRM', field, '');
           this.IDENTITY_FRM = FormValidator.onChange(
             this.IDENTITY_FRM,
             { name: field, value: '' },
           );
           reject(err);
-        })
+        }))
         .finally(() => {
           uiStore.setProgress(false);
         });
