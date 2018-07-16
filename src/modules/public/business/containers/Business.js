@@ -163,6 +163,9 @@ class Business extends Component {
                 </p>
               </Grid.Column>
             </Grid>
+            <div className="mt-80 mb-30 center-align">
+              <Button primary content="See Funding Options" />
+            </div>
           </Container>
         </section>
       </Aux>
