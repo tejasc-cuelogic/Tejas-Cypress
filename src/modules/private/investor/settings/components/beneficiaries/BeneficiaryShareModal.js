@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 // import Aux from 'react-aux';
 import { Modal, Button, Header, Form, Divider, Message, Table } from 'semantic-ui-react';
 import { MaskedInput2 } from '../../../../../../theme/form';
@@ -88,6 +88,7 @@ export default class BeneficiaryShareModal extends Component {
               </Table.Body>
             </Table>
             <div className="center-align mt-30">
+              <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
               <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
             </div>
           </Form>

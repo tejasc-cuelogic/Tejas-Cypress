@@ -138,9 +138,8 @@ export default class AddBeneficiary extends Component {
             <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
           : null
           }
-          <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
           <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
-          {/* <Button inverted color="green" onClick={} >Cancel</Button> */}
+          <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
         </Form>
         <Confirm
           header="Confirm"
