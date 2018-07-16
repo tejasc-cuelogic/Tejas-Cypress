@@ -120,7 +120,6 @@ export class NewBusinessStore {
           number: data.phoneNumber,
           countryCode: '1',
         },
-        email: data.email,
       },
       industryTypes: data.industryTypes,
       businessGoal: data.businessGoal,

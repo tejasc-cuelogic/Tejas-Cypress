@@ -57,12 +57,27 @@ export default class PreQualification extends Component {
               <Grid>
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                   <div className="field-wrap">
-                    <FormInput
-                      name="businessName"
-                      value={fields.businessName.value}
-                      fielddata={fields.businessName}
+                    {
+                      ['businessName', 'website'].map(field => (
+                        <FormInput
+                          key={field}
+                          type="text"
+                          name={field}
+                          value={fields[field].value}
+                          fielddata={fields[field]}
+                          changed={businessAppEleChange}
+                        />
+                      ))
+                    }
+                    <MaskedInput2
+                      name="phoneNumber"
+                      fielddata={fields.phoneNumber}
                       changed={businessAppEleChange}
                     />
+                  </div>
+                </Grid.Column>
+                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+                  <div className="field-wrap">
                     <Header as="h5">Business Address</Header>
                     <AutoComplete
                       name="street"
@@ -83,27 +98,6 @@ export default class PreQualification extends Component {
                         ))
                       }
                     </Form.Group>
-                  </div>
-                </Grid.Column>
-                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <div className="field-wrap">
-                    <FormInput
-                      name="website"
-                      value={fields.website.value}
-                      fielddata={fields.website}
-                      changed={businessAppEleChange}
-                    />
-                    <MaskedInput2
-                      name="phoneNumber"
-                      fielddata={fields.phoneNumber}
-                      changed={businessAppEleChange}
-                    />
-                    <FormInput
-                      name="email"
-                      value={fields.email.value}
-                      fielddata={fields.email}
-                      changed={businessAppEleChange}
-                    />
                   </div>
                 </Grid.Column>
               </Grid>

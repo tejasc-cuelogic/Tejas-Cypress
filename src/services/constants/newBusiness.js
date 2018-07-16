@@ -38,9 +38,6 @@ export const BUSINESS_PRE_QUALIFICATION = {
   phoneNumber: {
     value: '', label: 'Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789',
   },
-  email: {
-    value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g.next.brewery@contact.com',
-  },
   street: {
     value: '', label: 'Street', error: undefined, rule: 'required', placeHolder: 'e.g.  NextBrewery',
   },
@@ -231,7 +228,7 @@ export const BUSINESS_DETAILS = {
   //   },
   // }],
   businessPlan: {
-    value: '', label: 'Upload your business plan', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    value: [], label: 'Upload your business plan', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   debts: [{
     amount: {
