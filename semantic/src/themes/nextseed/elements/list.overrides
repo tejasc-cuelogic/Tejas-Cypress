@@ -184,3 +184,35 @@
         }
     }
 }
+
+//  Used for Admin application list table
+ol.ui.list.step-list{
+    margin-left:@28px;
+    li{
+        color:@border-color;
+        &:before{
+            margin-left:-@28px;
+            width:18px;
+            font-size:@12px;
+            font-weight:@bold;
+            color:@border-color;
+            text-align:center;
+            border-radius:50%;
+            border:@border-color 1px solid;
+        }
+        &.current{
+            color:@blue;
+            &:before{
+                color:@blue;
+                border-color:@blue;
+            }
+        }
+        &.done{
+            color:@green;
+            &:before{
+                color:@green;
+                border-color:@green;
+            }
+        }
+    }
+}

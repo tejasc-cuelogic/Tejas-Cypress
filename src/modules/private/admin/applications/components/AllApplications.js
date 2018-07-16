@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Grid, Input, Button, Pagination, Card, Table, Header, Item, Rating, Label } from 'semantic-ui-react';
+import { Form, Grid, Input, Button, Pagination, Card, Table, Header, Item, Rating, Label, List } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
 // import { FormCheckbox } from '../../../../../theme/form';
@@ -91,6 +91,50 @@ export default class AllApplications extends Component {
                       Net income ($100) is lower than required $15,000. Net income ($100) is
                       lower than required $15,000. Net income ($100) is lower than required $15,000.
                     </p>
+                  </Table.Cell>
+                  <Table.Cell width={1} textAlign="center">
+                    <Button.Group vertical compact size="mini">
+                      <Button color="green">Pramote</Button>
+                      <Button color="red">Delete</Button>
+                      <Button color="blue" inverted className="relaxed">View</Button>
+                    </Button.Group>
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>
+                    <Header as="h6">
+                      California 88
+                      <Label color="red" size="small" horizontal>Declined</Label>
+                    </Header>
+                    <div className="table-info-wrap">
+                      <p>John Doe<br />
+                        jdoe234@gmail.com<br />
+                        235-443-7851
+                      </p>
+                      <p>Sign-up Code <b>joedoe</b><br />
+                        Started <b>Apr 9, 2018</b><br />
+                        Updated <b>Apr 9, 2018</b>
+                      </p>
+                    </div>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Item>
+                      <Item.Header><Rating size="large" defaultRating={3} maxRating={5} /></Item.Header>
+                      <Item.Content>
+                        <Item.Description>
+                          Good application, several fail reasons, though. We should contact them
+                        </Item.Description>
+                        <Item.Extra><b>5/5/2018 | 1:33PM</b> by <b>Jack Black</b></Item.Extra>
+                      </Item.Content>
+                    </Item>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <List as="ol" className="step-list">
+                      <List.Item as="li" className="done">Completed</List.Item>
+                      <List.Item as="li" className="done">Completed</List.Item>
+                      <List.Item as="li" className="current">Continue</List.Item>
+                      <List.Item as="li">Not Completed</List.Item>
+                    </List>
                   </Table.Cell>
                   <Table.Cell width={1} textAlign="center">
                     <Button.Group vertical compact size="mini">
