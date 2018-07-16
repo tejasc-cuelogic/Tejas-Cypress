@@ -36,7 +36,7 @@ class ShareModal extends Component {
               Facebook
             </Link>
           </div>
-          <Input action={{ color: 'green', content: 'COPY' }} fluid value="https://nextseed.com/offerings/buffbrew-taproom" />
+          <Input disabled action={{ color: 'green', content: 'COPY' }} fluid value="https://nextseed.com/offerings/buffbrew-taproom" />
         </Modal.Content>
       </Modal>
     );

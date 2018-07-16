@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Container, Icon, Menu, Dropdown, Label } from 'semantic-ui-react';
+import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
 
@@ -79,13 +79,13 @@ export class NavItems extends Component {
 }
 
 const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  (path.includes('business-application') ? 'LogoWhite' : 'LogoColor')
+  (path.includes('business-application') || path.includes('offerings') ? 'LogoWhite' : 'LogoColor')
 ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
 export const NavigationItems = props => (
-  <Menu borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" className="primary">
+  <Menu stackable borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" className={props.location.pathname.includes('/offerings') ? '' : 'inverted'}>
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
         <Logo
@@ -99,6 +99,9 @@ export const NavigationItems = props => (
         {!props.location.pathname.includes('/business-application') &&
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
+        <Menu.Item as={Link} to="/">
+          <Button secondary compact>Sign Up/Log In</Button>
+        </Menu.Item>
       </Menu.Menu>
     </Container>
   </Menu>

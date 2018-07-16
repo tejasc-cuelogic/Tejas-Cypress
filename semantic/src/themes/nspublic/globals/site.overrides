@@ -7,7 +7,7 @@ body{
 section{
 	padding:@60px 0;
 	.caption{
-		margin-bottom:@50px;
+		margin-bottom:@50px !important;
 	}
 }
 .info-card{
@@ -41,6 +41,15 @@ h5, h5.ui.header{
 }
 .pull-right{
 	float:right;
+}
+.mb-30 {
+	margin-bottom: @30px !important;
+}
+.mb-50 {
+	margin-bottom: @50px !important;
+}
+.mb-80 {
+	margin-bottom: 80px !important;
 }
 
 // Footer Styles
@@ -184,9 +193,10 @@ footer{
 
 /** Campaign Details **/
 .offer-details {
-	margin-top: 74px;
-	display: flex;
-	flex-direction: row;
+	padding-top: 74px;
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
 	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
@@ -195,7 +205,6 @@ footer{
 		position: fixed;
 		z-index: 1;
 		overflow: auto;
-
 		.ui.menu, .ui.vertical.menu {
 			border: none;
 			box-shadow: none;
@@ -216,7 +225,6 @@ footer{
 		.progress-bar {
 			height: 210px;
 			width: 210px;
-			background-color: @white;
 			margin: auto auto @16px;
 		}
 		p {
@@ -228,7 +236,6 @@ footer{
 	.offering-wrapper {
 		background-color: #F3F4F8;
 		flex-grow: 1;
-		height: 100%;
 		padding-left: 280px;
 		.offering-content-spacer {
 			padding: @17px @50px @50px;
@@ -369,7 +376,6 @@ footer{
 		}
 	}
 }
-
 /** Share icons **/
 .share-icons {
 	margin-bottom: 30px;
@@ -401,4 +407,30 @@ footer{
 			}
 		}
 	}
+}
+
+/** Home Page **/
+.how-it-works {
+	.ui.embed.centered-video {
+		margin: 0;
+	}
+}
+.explore-campaign-button {
+	margin-top: 60px;
+	text-align: center;
+}
+.featured-section {
+	background-color: @neutral-lighten;
+}
+.learn-more {
+	background-color: @secondary-color;
+	color: @white;
+	.ui.header {
+		color: @white;
+	}
+	.ui.form {
+		.fields {
+			justify-content: center;
+		}
+	} 
 }

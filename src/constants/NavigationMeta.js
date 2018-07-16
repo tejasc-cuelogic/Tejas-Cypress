@@ -303,29 +303,6 @@ export const PRIVATE_NAV = [
 ];
 
 export const PUBLIC_NAV = [
-  { title: 'Browse Deals', to: 'offerings' },
-  { title: 'For Investers', to: 'invest' },
-  { title: 'For Businesses', to: 'business' },
-  {
-    title: 'Learn',
-    subPanel: 1,
-    to: '',
-    subNavigations: [
-      { title: 'Team', to: 'about/team' },
-      { title: 'Ambassadors', to: 'about/ambassadors' },
-      { title: 'Blog', to: 'blog' },
-      { title: 'Case Studies', to: 'case-studies' },
-      { title: 'FAQ', to: 'about/faq' },
-    ],
-  },
-  {
-    title: 'Log In or Sign Up',
-    subPanel: 1,
-    to: 'auth',
-    subNavigations: [
-      { title: 'Log In', to: 'login' },
-      { title: 'Register', to: 'register' },
-    ],
-  },
-  { title: 'Dashboard', to: 'app/dashboard' },
+  { title: 'Explore Campaigns', to: 'offerings' },
+  { title: 'How NextSeed Works', to: 'business' },
 ];
