@@ -13,8 +13,7 @@ const BeneficiaryList = (props) => {
   const status = props.beneficiaries.requestStatus;
   const statusImg = (BENEFICIARY_STATUS.PENDING === props.beneficiaries.requestStatus ? 'orange reload' : 'green check').split(' ');
   const showButton = (props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary` && props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary/confirm`);
-  const headerMsg = `Pellentesque facilisis. Nulla imperdiet sit amet magna.
-                      Vestibulum dapibus, mauris nec malesuada fames ac turpis`;
+  const headerMsg = '';
   return (
     <Grid.Row>
       <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
@@ -27,7 +26,7 @@ const BeneficiaryList = (props) => {
             { showButton ?
               <Aux>
                 <div className="status">
-                  <span className="time-stamp">{`Updated: ${moment(props.updatedDate).format('MM-DD-YYYY')}`}</span>
+                  <span className="time-stamp">{`Updated: ${moment(props.updatedDate).format('MM/DD/YYYY')}`}</span>
                   <Icon color={statusImg[0]} className={`ns-${statusImg[1]}-circle`} /> <span className="capitalize">{`${status}`}</span>
                 </div>
                 <p>{headerMsg}</p>
@@ -47,7 +46,8 @@ const BeneficiaryList = (props) => {
                                   <dt>DOB</dt>
                                   <dd>
                                     <DateTimeFormat
-                                      datetime={moment(beneficiary.dob, 'MM-DD-YYYY')}
+                                      format="MM/DD/YYYY"
+                                      datetime={moment(beneficiary.dob, 'MM/DD/YYYY')}
                                     />
                                   </dd>
                                   <dt>Relationship</dt>
@@ -60,7 +60,7 @@ const BeneficiaryList = (props) => {
                                 <dl className="dl-horizontal">
                                   <dt>Legal Address</dt>
                                   <dd>
-                                    {`${beneficiary.address.street}`}<br />{`${beneficiary.address.city} ${beneficiary.address.state} ${beneficiary.address.zipCode}`}
+                                    {`${beneficiary.address.street}`}, {`${beneficiary.address.city} ${beneficiary.address.state} ${beneficiary.address.zipCode}`}
                                   </dd>
                                 </dl>
                               </Card.Content>
@@ -82,7 +82,6 @@ const BeneficiaryList = (props) => {
               </Aux> :
               <p>{headerMsg}</p>
               }
-            <Divider hidden />
             <Route path={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} render={props1 => <AddBeneficiary refLink={props.match.url} isDataAvailable accountId={props.accountId} {...props1} />} />
           </Card.Content>
         </Card>

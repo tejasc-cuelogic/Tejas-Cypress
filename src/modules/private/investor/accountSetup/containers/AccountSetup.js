@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
+import { find } from 'lodash';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
 import ProgressCard from '../components/ProgressCard';
@@ -8,11 +9,24 @@ import IdentityVerification from './identityVerification';
 import EstablishProfile from './establishProfile';
 import AccountCreation from './accountCreation';
 
-@inject('userDetailsStore')
+@inject('userDetailsStore', 'accountStore')
 @observer
 export default class AccountSetup extends Component {
   componentWillMount() {
     this.props.userDetailsStore.setUserAccDetails();
+    const validPanes = [];
+    const { inActiveAccounts } = this.props.userDetailsStore.signupStatus;
+    const accTypesValues = this.props.accountStore.investmentAccTypes.fields.accType.values;
+    inActiveAccounts.map((key) => {
+      const acc = find(accTypesValues, { accType: key });
+      if (acc) {
+        validPanes.push(acc);
+      }
+      return validPanes;
+    });
+    if (inActiveAccounts.length !== 3) {
+      this.props.accountStore.setInvestmentAccTypeValues(validPanes);
+    }
   }
 
   navToAccTypes = (step) => {

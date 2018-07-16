@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { Header, Form, Button } from 'semantic-ui-react';
 import { FormRadioGroup, FormCheckbox } from '../../../../../../theme/form';
 
@@ -40,7 +41,7 @@ export default class Experience extends Component {
             containerclassname="ui relaxed list"
           />
           <div className="center-align mt-30">
-            <Button primary size="large">Send verification request</Button>
+            <Button primary size="large" as={Link} to="/app/summary/account-creation">Send verification request</Button>
           </div>
         </Form>
       </div>

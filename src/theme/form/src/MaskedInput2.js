@@ -28,9 +28,9 @@ const MaskedInput2 = observer((props) => {
       {props.currency ? (
         <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
       ) : props.percentage ? (
-        <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onChange={props.changed} error={!!error} mask="%" suffix="%" />
+        <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={props.changed} error={!!error} mask="%" suffix="%" />
       ) : (
-        <NumberFormat format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
+        <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
       )
       }
       {error && !props.showErrorOnField &&
