@@ -49,7 +49,15 @@ class UserListing extends Component {
                   <Table.Cell collapsing>
                     {!user.profilepic &&
                       <div className="user-image">
-                        <Randavatar avatarKey={user.id} avatarUrl={user.avatar ? user.avatar.url : ''} name={user.id} accountType={user.accountType} size="mini" />
+                        <Randavatar
+                          UserInfo={{
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            avatarUrl: user.avatar ? user.avatar.url : '',
+                            roles: ['admin'],
+                          }}
+                          size="mini"
+                        />
                       </div>
                     }
                   </Table.Cell>

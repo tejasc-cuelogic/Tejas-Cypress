@@ -52,7 +52,7 @@ const MySidebar = observer(props => (
         />
         {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
         <div className="user-picture">
-          <Randavatar name={props.UserInfo.fullname} accountType={props.UserInfo.accountType} avatarUrl={props.UserInfo.avatarUrl} avatarKey={props.UserInfo.avatarKey} size="small" />
+          <Randavatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : ''} />
           <h2>{props.UserInfo.fullname}</h2>
           {GetNavItem('profile-settings', props.UserInfo.roles)}
         </div>

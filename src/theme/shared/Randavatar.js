@@ -1,36 +1,33 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { Image } from 'semantic-ui-react';
-import Identicon from 'identicon.js';
+import Avatar from 'react-avatar';
 
-const optionsDefault = {
-  foreground: [132, 176, 43, 1], background: [255, 255, 255, 255], margin: 0.2, size: 420, format: 'png',
+const userColors = {
+  admin: '000000', bowner: '27AE60', investor: 'F2994A', default: '7eab1d',
 };
 
-const UserTypeColor = {
-  ADMIN: [0, 0, 0, 255],
-  BUSINESS: [39, 174, 96],
-  IRA: [39, 174, 96],
-  INDIVIDUAL: [39, 174, 96],
-  ENTITY: [242, 153, 74],
-};
+const randavatar = observer((props) => {
+  const { UserInfo, size } = props;
+  if (UserInfo.avatarUrl) {
+    return (
+      <Image
+        src={UserInfo.avatarUrl}
+        alt={UserInfo.firstName}
+        size={size || 'huge'}
+        avatar
+        circular
+      />);
+  }
 
-const randavatar = (props) => {
-  const options = {
-    ...optionsDefault,
-    ...{ foreground: UserTypeColor[props.accountType[0].toUpperCase()] },
-  };
-  const imgContent = (!props.avatarUrl && props.avatarKey.length > 15) ?
-    `data:image/png;base64, ${new Identicon(props.avatarKey, options).toString()}` : props.avatarUrl;
-  const alt = (props.name) ? props.name[0] : 'N';
-  const size = props.size || 'huge';
   return (
-    <Image
-      src={`${imgContent}`}
-      alt={alt}
-      size={size}
-      avatar
-      circular
-    />);
-};
+    <Avatar
+      name={`${UserInfo.firstName} ${UserInfo.lastName}`}
+      round
+      color={`#${userColors[UserInfo.roles[0]] || userColors.default}`}
+      size={size === 'mini' ? '35' : 58}
+    />
+  );
+});
 
 export default randavatar;
