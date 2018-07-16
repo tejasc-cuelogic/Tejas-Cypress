@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { forEach } from 'lodash';
+import { forEach, floor, ceil } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore } from '../../../index';
@@ -15,19 +15,16 @@ export class BeneficiaryStore {
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
   @observable removeBeneficiaryIndex = null;
   @observable beneficiaryModal = false;
+  @observable isShareModalDataSet = false;
   @observable beneficiaryOtpRequestId = null;
   @observable currentSelectedAccountId = null;
   @observable beneficiaryDisplayPhoneNumber = null;
   @observable reSendVerificationCode = null;
-  @observable removeBeneficiaryMessage = 'Are you sure you want to remove this beneficiary?';
 
   @action
   toggleBeneficiaryConfirmModal(index) {
     this.beneficiaryModal = !this.beneficiaryModal;
     this.removeBeneficiaryIndex = this.beneficiaryModal ? index : null;
-    this.removeBeneficiaryMessage = this.BENEFICIARY_META.fields.beneficiary.length === 1 ?
-      'You need to add at leat one beneficiary.' :
-      'Are you sure you want to remove this beneficiary?';
   }
 
   @action
@@ -36,8 +33,43 @@ export class BeneficiaryStore {
   }
 
   @action
+  setShareModalData(value) {
+    this.isShareModalDataSet = value;
+  }
+
+  @action
   resetFormData(form) {
     this[form] = Validator.resetFormData(this[form]);
+  }
+
+  @action
+  updateBeneficiaryRules() {
+    if (this.BENEFICIARY_META.fields.beneficiary.length) {
+      forEach(this.BENEFICIARY_META.fields.beneficiary, (beneficiary, key) => {
+        this.BENEFICIARY_META.fields.beneficiary[key].share.rule = !this.isShareModalDataSet ?
+          'required|sharePercentage:share' : 'optional';
+      });
+      this.BENEFICIARY_META = Validator
+        .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: this.BENEFICIARY_META.fields.beneficiary[0].firstName.value }, 'beneficiary', 0);
+    }
+  }
+
+  @action
+  calculateSharePercentage() {
+    let url = '';
+    if (this.BENEFICIARY_META.fields.beneficiary.length > 1) {
+      const val = (100 / this.BENEFICIARY_META.fields.beneficiary.length);
+      forEach(this.BENEFICIARY_META.fields.beneficiary, (beneficiary, key) => {
+        this.BENEFICIARY_META = Validator
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: key === 0 ? ceil(val) : floor(val) }, 'beneficiary', key);
+      });
+      url = 'confirm';
+    } else {
+      this.BENEFICIARY_META = Validator
+        .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: 100 }, 'beneficiary', 0);
+      url = 'preview';
+    }
+    return url;
   }
 
   @computed get bErr() {
@@ -68,11 +100,11 @@ export class BeneficiaryStore {
   }
 
   @action
-  removeBeneficiary(index) {
-    this.BENEFICIARY_META.fields.beneficiary.splice(index, 1);
+  removeBeneficiary() {
+    this.BENEFICIARY_META.fields.beneficiary.splice(this.removeBeneficiaryIndex, 1);
     const shareVal = this.BENEFICIARY_META.fields.beneficiary[0].share.value;
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: shareVal }, 0);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: shareVal }, 'beneficiary', 0);
     this.beneficiaryModal = !this.beneficiaryModal;
     this.removeBeneficiaryIndex = null;
   }
@@ -120,23 +152,23 @@ export class BeneficiaryStore {
     if (beneficiaryList.beneficiary) {
       forEach(beneficiaryList.beneficiary.recipients, (beneficiary, key) => {
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: beneficiary.firstName }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'firstName', value: beneficiary.firstName }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'lastName', value: beneficiary.lastName }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'lastName', value: beneficiary.lastName }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: beneficiary.address.city }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: beneficiary.address.city }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: beneficiary.address.state }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: beneficiary.address.state }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: beneficiary.address.street }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: beneficiary.address.street }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: beneficiary.address.zipCode }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: beneficiary.address.zipCode }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: moment(beneficiary.dob) }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: moment(beneficiary.dob) }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'relationship', value: beneficiary.relationship }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'relationship', value: beneficiary.relationship }, 'beneficiary', key);
         this.BENEFICIARY_META = Validator
-          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: beneficiary.shares }, key);
+          .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: beneficiary.shares }, 'beneficiary', key);
         if (key < beneficiaryList.beneficiary.recipients.length - 1) {
           this.addMoreBeneficiary();
         }
@@ -172,7 +204,11 @@ export class BeneficiaryStore {
           this.beneficiaryDisplayPhoneNumber = result.data.requestOtp.phoneNumber;
           resolve();
         })
-        .catch(() => reject())
+        .catch((error) => {
+          console.log(toJS(error.message));
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
         .finally(() => {
           uiStore.setProgress(false);
         });
@@ -212,33 +248,32 @@ export class BeneficiaryStore {
   @action
   beneficiaryEleChange = (e, result, index) => {
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, Validator.pullValues(e, result), index);
+      .onArrayFieldChange(this.BENEFICIARY_META, Validator.pullValues(e, result), 'beneficiary', index);
   };
 
   @action
-  beneficiaryShareChange = (e, index) => {
-    const share = parseInt(e.target.value.slice(0, -1), 10);
+  beneficiaryShareChange = (values, index) => {
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: share }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'share', value: values.floatValue }, 'beneficiary', index);
   };
 
   @action
   beneficiaryDateChange = (date, index) => {
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: date }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'dob', value: date }, 'beneficiary', index);
   };
 
   @action
   setAddressFields = (place, index) => {
     const data = Helper.gAddressClean(place);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: data.residentalStreet }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'residentalStreet', value: data.residentalStreet ? data.residentalStreet : '' }, 'beneficiary', index);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: data.city }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'city', value: data.city ? data.city : '' }, 'beneficiary', index);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: data.state }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'state', value: data.state ? data.state : '' }, 'beneficiary', index);
     this.BENEFICIARY_META = Validator
-      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: data.zipCode }, index);
+      .onArrayFieldChange(this.BENEFICIARY_META, { name: 'zipCode', value: data.zipCode ? data.zipCode : '' }, 'beneficiary', index);
   }
 }
 

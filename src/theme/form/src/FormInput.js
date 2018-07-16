@@ -17,17 +17,19 @@ const FormInput = observer((props) => {
   );
   return (
     <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''} error={!!error}>
-      <label>
-        {label}
-        {tooltip &&
-          <Popup
-            trigger={<Icon name="help circle outline" />}
-            content={tooltip}
-            position="top center"
-            className="center-align"
-          />
-        }
-      </label>
+      {label !== '' &&
+        <label>
+          {label}
+          {tooltip &&
+            <Popup
+              trigger={<Icon name="help circle outline" />}
+              content={tooltip}
+              position="top center"
+              className="center-align"
+            />
+          }
+        </label>
+      }
       {props.type === 'password' &&
         <input style={{ opacity: 0, position: 'absolute' }} value="something" />
       }

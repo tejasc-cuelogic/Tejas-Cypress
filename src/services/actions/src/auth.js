@@ -2,7 +2,6 @@ import * as AWSCognito from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk';
 import camel from 'to-camel-case';
 import _ from 'lodash';
-
 import { GqlClient as client } from '../../../api/gqlApi';
 import {
   USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
