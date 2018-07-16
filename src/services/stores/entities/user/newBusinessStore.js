@@ -203,7 +203,7 @@ export class NewBusinessStore {
   @action
   businessDetailsFiles = (files, fieldName, index = null) => {
     console.log(createUploadEntry, removeUploadedFile);
-    console.log(files);
+    console.log(files, fieldName);
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
@@ -236,16 +236,21 @@ export class NewBusinessStore {
         //       uiStore.setProgress(false);
         //     });
         // });
-        if (fieldName === 'resume') {
-          this.BUSINESS_DETAILS_FRM.fields.owners[index][fieldName].value =
-          [...this.BUSINESS_DETAILS_FRM.fields.owners[index][fieldName].value,
-            fileData.fileName];
-        } else {
-          this.BUSINESS_DETAILS_FRM.fields[fieldName].value =
-          [...this.BUSINESS_DETAILS_FRM.fields[fieldName].value,
-            fileData.fileName];
-        }
+        this.setFormFileArray('BUSINESS_DETAILS_FRM', fieldName, 'value', fileData.fileName, index);
       });
+    }
+  }
+
+  @action
+  setFormFileArray = (formName, field, getField, value, index) => {
+    if (field === 'resume') {
+      this[formName].fields.owners[index][field][getField] =
+      [...this[formName].fields.owners[index][field][getField],
+        value];
+    } else {
+      this[formName].fields[field][getField] =
+      [...this[formName].fields[field][getField],
+        value];
     }
   }
 

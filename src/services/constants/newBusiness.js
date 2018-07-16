@@ -231,48 +231,48 @@ export const BUSINESS_SIGNUP = {
 export const BUSINESS_DETAILS = {
   // businessPlan: [{
   //   planDoc: {
-  //     value: [], label: 'Upload your business plan',
-  //  error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+  //     value: '', label: 'Upload your business plan', error: undefined, rule:
+  // 'required', preSignedUrl: '', fileId: '', fileData: '',
   //   },
   // }],
   businessPlan: {
-    value: [], label: 'Upload your business plan', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    value: [], label: 'Upload your business plan', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: '* required.' },
   },
   debts: [{
     amount: {
-      value: '', label: 'Existing Debt', error: undefined, rule: 'required', placeHolder: '500,000',
+      value: '', label: 'Existing Debt', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: '* required.' },
     },
     remainingPrincipal: {
-      value: '', label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000',
+      value: '', label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: '* required.' },
     },
     interestExpenses: {
-      value: '', label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %',
+      value: '', label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %', customErrors: { required: '* required.' },
     },
     term: {
-      value: '', label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5',
+      value: '', label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: '* required.' },
     },
   }],
   owners: [{
     fullLegalName: {
-      value: '', label: 'Full Legal Name', error: undefined, rule: 'required', placeHolder: 'John Doe',
+      value: '', label: 'Full Legal Name', error: undefined, rule: 'required', placeHolder: 'John Doe', customErrors: { required: '* required.' },
     },
     yearsOfExp: {
-      value: '', label: 'Years Experience', error: undefined, rule: 'required', placeHolder: '5',
+      value: '', label: 'Years Experience', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: '* required.' },
     },
     ssn: {
-      value: '', label: 'SSN', error: undefined, rule: 'required', placeHolder: '123-456-7890',
+      value: '', label: 'SSN', error: undefined, rule: 'required', placeHolder: '123-456-7890', customErrors: { required: '* required.' },
     },
     companyOwnerShip: {
-      value: '', label: 'Ownership of Company', error: undefined, rule: 'required', placeHolder: '40.0%',
+      value: '', label: 'Ownership of Company', error: undefined, rule: 'required', placeHolder: '40.0%', customErrors: { required: '* required.' },
     },
     linkedInUrl: {
-      value: '', label: 'LinkedIn URL', error: undefined, rule: 'required', placeHolder: 'http://linkedin.com/username',
+      value: '', label: 'LinkedIn URL', error: undefined, rule: 'required|url', placeHolder: 'http://linkedin.com/username', customErrors: { required: '* required.', url: 'Please enter valid URL.' },
     },
     title: {
-      value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO',
+      value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO', customErrors: { required: '* required.' },
     },
     resume: {
-      value: [], label: 'Upload Resume/CV', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+      value: [], label: 'Upload Resume/CV', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: '* required.' },
     },
   }],
 };

@@ -45,7 +45,6 @@ export default class BusinessDetails extends Component {
               <DropZone
                 multiple
                 name="businessPlan"
-                // fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan[0].planDoc}
                 fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
                 ondrop={businessDetailsFiles}
                 onremove={businessDetailsReset}
@@ -204,7 +203,7 @@ export default class BusinessDetails extends Component {
               }
               <Divider hidden />
               {BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
-                <Button onClick={e => addMoreForms(e, 'owners')} inverted color="green">+ Add other owners</Button>
+                <Button size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
               }
             </FormElementWrap>
             <AppNavigation action={this.submit} />
