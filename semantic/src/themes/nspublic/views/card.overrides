@@ -16,6 +16,7 @@
             position:absolute;
             top:12px;
             left:12px;
+            background-color: #fff !important;
         }
         .icon.heart{
             font-size:@18px;

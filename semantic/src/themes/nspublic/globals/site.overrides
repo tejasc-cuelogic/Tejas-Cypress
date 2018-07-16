@@ -96,7 +96,7 @@ footer{
 	}
 }
 
-/** About Us **/
+// About Us - mission page
 .mission-statistic-section {
 	background-color: @neutral-lighten;
 	.mission-block {
@@ -158,9 +158,7 @@ footer{
 		font-family: @fontName; 
 	}
 }
-
-
-/** campaign filter **/
+// campaign filter
 .campaign-list-wrapper {
 	position: relative;
 	h5.ui.header {
@@ -212,8 +210,7 @@ footer{
 		}
 	}
 }
-
-/** Campaign Details **/
+// Campaign Details
 .offer-details {
 	padding-top: 74px;
     display: flex;
@@ -392,7 +389,7 @@ footer{
 		}
 	}
 }
-/** Share icons **/
+// Share icons
 .share-icons {
 	margin-bottom: 30px;
 	i.icon {
@@ -424,8 +421,7 @@ footer{
 		}
 	}
 }
-
-/** Home Page **/
+// Home Page
 .how-it-works {
 	.ui.embed.centered-video {
 		margin: 0;
@@ -450,8 +446,7 @@ footer{
 		}
 	} 
 }
-
-/** Business homepage **/
+// Business homepage
 .info-grid {
 	img {
 		display: inline-block;
