@@ -196,38 +196,43 @@ export default class PreQualification extends Component {
                 containerclassname="iconic-checkbox"
               />
             </FormElementWrap>
-            <FormElementWrap
-              header="Next year projections"
-              subHeader="For your business, give us a quick snapshot of what the next year will look like."
-            >
+            <FormElementWrap>
               <Grid>
                 {fields.businessGoal.value &&
                   fields.businessGoal.value !== BUSINESS_GOAL.FRANCHISE
-                    && fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW &&
-                    <Grid.Column
-                      widescreen={7}
-                      largeScreen={7}
-                      computer={8}
-                      tablet={16}
-                      mobile={16}
-                    >
-                      <div className="field-wrap">
-                        {
-                          ['previousYearGrossSales', 'previousYearCogSold', 'previousYearOperatingExpenses', 'previousYearNetIncome'].map(field => (
-                            <MaskedInput2
-                              key={field}
-                              name={field}
-                              currency
-                              value={fields[field].value}
-                              fielddata={fields[field]}
-                              changed={values => businessAppEleMaskChange(values, field)}
-                            />
-                          ))
-                        }
-                      </div>
-                    </Grid.Column>
+                  && fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW &&
+                  <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
+                    <Header as="h2">
+                      Previous year
+                      <Header.Subheader>
+                        For your business, give us a quick snapshot
+                        of what the prior year looked like.
+                      </Header.Subheader>
+                    </Header>
+                    <div className="field-wrap">
+                      {
+                        ['previousYearGrossSales', 'previousYearCogSold', 'previousYearOperatingExpenses', 'previousYearNetIncome'].map(field => (
+                          <MaskedInput2
+                            key={field}
+                            name={field}
+                            currency
+                            value={fields[field].value}
+                            fielddata={fields[field]}
+                            changed={values => businessAppEleMaskChange(values, field)}
+                          />
+                        ))
+                      }
+                    </div>
+                  </Grid.Column>
                 }
-                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+                <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
+                  <Header as="h2">
+                    Next year projections
+                    <Header.Subheader>
+                      For your business, give us a quick snapshot
+                      of what the next year will look like.
+                    </Header.Subheader>
+                  </Header>
                   <div className="field-wrap">
                     {
                       ['nextYearGrossSales', 'nextYearCogSold', 'nextYearOperatingExpenses', 'nextYearNetIncome'].map(field => (
