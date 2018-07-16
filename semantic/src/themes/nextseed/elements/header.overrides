@@ -65,3 +65,19 @@
         }
     }
 }
+
+.notification-panel{
+	h3.ui.header{
+		margin:0;
+        padding:@14px;
+        position:relative;
+        background-color:@darken-bg-color;
+        .sub.header{
+            font-size:@12px !important;
+            color:@quaternary-text;
+            position:absolute;
+            right:0;
+            top:0;
+        }
+	}
+}
