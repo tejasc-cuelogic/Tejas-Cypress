@@ -2,7 +2,7 @@ import { Component } from 'react';
 import Validator from 'validatorjs';
 
 class CustomeValidations extends Component {
-  executet = () => {
+  execute = () => {
     /* Optional field validation register */
     Validator.register('optional', () => true);
   }

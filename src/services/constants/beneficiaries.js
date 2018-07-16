@@ -8,6 +8,9 @@ export const BENEFICIARY_FRM = {
       error: undefined,
       rule: 'required',
       placeHolder: 'John',
+      customErrors: {
+        required: '* required.',
+      },
     },
     lastName: {
       value: '',
@@ -15,6 +18,9 @@ export const BENEFICIARY_FRM = {
       error: undefined,
       rule: 'required',
       placeHolder: 'Smith',
+      customErrors: {
+        required: '* required.',
+      },
     },
     dob: {
       value: null,
@@ -22,6 +28,9 @@ export const BENEFICIARY_FRM = {
       error: undefined,
       rule: 'required',
       placeHolder: '01-01-1989',
+      customErrors: {
+        required: '* required.',
+      },
     },
     relationship: {
       value: '',
@@ -29,13 +38,19 @@ export const BENEFICIARY_FRM = {
       error: undefined,
       rule: 'required',
       placeHolder: 'Son',
+      customErrors: {
+        required: '* required.',
+      },
     },
     residentalStreet: {
       value: '',
-      label: 'Residental Street',
+      label: 'Residential Street',
       error: undefined,
       rule: 'required',
       placeHolder: '139 Street',
+      customErrors: {
+        required: '* required.',
+      },
     },
     city: {
       value: '',
@@ -43,6 +58,9 @@ export const BENEFICIARY_FRM = {
       error: undefined,
       rule: 'required',
       placeHolder: 'New York',
+      customErrors: {
+        required: '* required.',
+      },
     },
     state: {
       value: '',
@@ -50,6 +68,9 @@ export const BENEFICIARY_FRM = {
       error: undefined,
       rule: 'required',
       placeHolder: 'NY',
+      customErrors: {
+        required: '* required.',
+      },
     },
     zipCode: {
       value: '',
@@ -57,6 +78,10 @@ export const BENEFICIARY_FRM = {
       error: undefined,
       rule: 'required|numeric',
       placeHolder: '12345',
+      customErrors: {
+        required: '* required.',
+        numeric: 'Allowed only numbers.',
+      },
     },
     share: {
       value: '',
@@ -78,5 +103,8 @@ export const DISPLAY_NUMBER = {
     label: '',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
 };

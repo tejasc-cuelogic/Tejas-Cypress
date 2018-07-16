@@ -13,6 +13,7 @@ class FormValidator {
   });
 
   onChange = (form, element, type, isDirty = true) => {
+    CustomeValidations.execute();
     const currentForm = form;
     if (element && element.name) {
       if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[element.name].value)) && type !== 'dropdown')) {
@@ -29,6 +30,7 @@ class FormValidator {
     const validation = new Validator(
       mapValues(currentForm.fields, f => f.value),
       mapValues(currentForm.fields, f => f.rule),
+      currentForm.fields[element.name].customErrors,
     );
     currentForm.meta.isValid = validation.passes();
     if (element && element.name) {
@@ -44,7 +46,7 @@ class FormValidator {
   }
 
   onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
-    CustomeValidations.executet();
+    CustomeValidations.execute();
     const currentForm = form;
     let currentFormRelative;
     let fieldName = element.name;
@@ -83,16 +85,15 @@ class FormValidator {
     }, 'The sum of :attribute percentages must be 100.');
     const formData = this.ExtractFormValues(toJS(currentForm.fields));
     const formRules = this.ExtractFormRules(toJS(currentForm.fields));
-    const validation = new Validator(formData, formRules);
+    const validation = new Validator(
+      formData,
+      formRules,
+      currentFormRelative[element.name].customErrors,
+    );
     currentForm.meta.isValid = validation.passes();
 
     if (element && element.name) {
-      currentFormRelative[element.name].error = validation.errors.first(fieldName) ?
-        replace(
-          validation.errors.first(fieldName),
-          fieldName,
-          currentFormRelative[element.name].label,
-        ) : undefined;
+      currentFormRelative[element.name].error = validation.errors.first(fieldName);
     }
     return currentForm;
   }

@@ -203,7 +203,11 @@ export class BeneficiaryStore {
           this.beneficiaryDisplayPhoneNumber = result.data.requestOtp.phoneNumber;
           resolve();
         })
-        .catch(() => reject())
+        .catch((error) => {
+          console.log(toJS(error.message));
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
         .finally(() => {
           uiStore.setProgress(false);
         });

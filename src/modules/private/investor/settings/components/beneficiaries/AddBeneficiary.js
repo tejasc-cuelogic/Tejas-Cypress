@@ -95,6 +95,7 @@ export default class AddBeneficiary extends Component {
                       <FormDatePicker
                         type="text"
                         name="dob"
+                        maxDate={moment()}
                         placeholderText={beneficiary.dob.placeHolder}
                         fielddata={beneficiary.dob}
                         selected={beneficiary.dob.value ?
@@ -108,7 +109,7 @@ export default class AddBeneficiary extends Component {
                         changed={(e, result) => beneficiaryEleChange(e, result, index)}
                       />
                     </Form.Group>
-                    <Header as="h4">Pernament address</Header>
+                    <Header as="h4">Permanent address</Header>
                     <AutoComplete
                       name="residentalStreet"
                       fielddata={beneficiary.residentalStreet}
@@ -136,9 +137,8 @@ export default class AddBeneficiary extends Component {
           {BENEFICIARY_META.fields.beneficiary.length !== 5 &&
             <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
           }
-          <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
           <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
-          {/* <Button inverted color="green" onClick={} >Cancel</Button> */}
+          <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
         </Form>
         <Confirm
           header="Confirm"
