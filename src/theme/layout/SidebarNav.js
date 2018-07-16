@@ -13,21 +13,20 @@ import { NavItems } from './NavigationItems';
 export class SidebarNav extends Component {
   componentWillMount() {
     this.props.navStore.setAccessParams('roles', this.props.roles);
+    this.props.navStore.setAccessParams('currentNav', this.props.match.url);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.props.navStore.setAccessParams('currentNav', nextProps.match.url);
   }
   render() {
     const {
-      roles,
-      location,
-      isVerified,
-      createdAccount,
-      navStore,
+      roles, location, isVerified, createdAccount, navStore,
     } = this.props;
-    const navItems = navStore.myNavItems;
     return (
       <Aux>
         <NavItems
           location={location}
-          navItems={navItems}
+          navItems={navStore.sidebarItems}
           roles={roles}
           isUserVerified={isVerified}
           createdAccount={createdAccount}
@@ -45,13 +44,18 @@ export class SidebarNav extends Component {
 export const GetNavItem = (item, roles) => {
   const result = _.find(PRIVATE_NAV, i => i.to === item);
   const link = <h3><Link to={`/app/${result.to}`}>{result.title}</Link></h3>;
-  return (
-    result && (
-      result.accessibleTo.length === 0 ||
-      _.intersection(result.accessibleTo, roles).length > 0)) ? link : false;
+  return (result && (result.accessibleTo.length === 0 ||
+    _.intersection(result.accessibleTo, roles).length > 0)) ? link : false;
 };
 
-export const GetNavMeta = (item) => {
+export const GetNavMeta = (item, roles) => {
   const navMeta = _.find(PRIVATE_NAV, i => item.includes(i.to));
+  navMeta.title = typeof navMeta.title === 'object' && roles ? navMeta.title[roles[0]] :
+    navMeta.title;
+  if (navMeta.subNavigations && roles) {
+    navMeta.subNavigations = navMeta.subNavigations.filter(n =>
+      !n.accessibleTo || n.accessibleTo.length === 0 ||
+      _.intersection(n.accessibleTo, roles).length > 0);
+  }
   return navMeta;
 };

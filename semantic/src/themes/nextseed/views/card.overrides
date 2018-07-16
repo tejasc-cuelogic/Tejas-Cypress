@@ -48,9 +48,6 @@
     }
 }
 .ui.card, .ui.cards>.card{
-    .ui.header{
-        text-transform:capitalize;
-    }
     &.welcome-card{
         >.content{
             padding:@25px;
@@ -105,7 +102,32 @@
             }
         }
         &.padded{
-            padding:@42px;
+            padding:@30px;
+            &.very{
+                padding:@42px;
+            }
+        }
+        &.beneficiaries{
+            .status{
+                padding:0;
+                position:absolute;
+                font-size:@13px;
+                font-weight:700;
+                right:30px;
+                top:20px;
+                > .time-stamp{
+                    margin-right:@10px;
+                    font-weight:400;
+                    color:@border-color;
+                }
+            }
+        }
+        .field-wrap{
+            padding:@25px @40px;
+            margin:@14px 0;
+            &:last-child{
+                margin-bottom:0;
+            }
         }
     }
 }
@@ -137,11 +159,12 @@
             }
         }
     }
-    &.investment-summary{
-        .header i.icon{
-            font-size:24px;
-            color:@highlight-tertiary;
-            vertical-align:top;
+    .header.with-icon i.icon{
+        font-size:24px;
+        color:@highlight-tertiary;
+        vertical-align:top;
+        &:not(:first-of-type){
+            margin-left:@20px;
         }
     }
     &.linked-bank{

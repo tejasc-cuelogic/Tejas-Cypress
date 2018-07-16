@@ -1,3 +1,5 @@
+import { camelCase, upperFirst } from 'lodash';
+
 class DataFormatter {
   unMaskInput = maskedInput => (
     maskedInput.split('-').join('')
@@ -15,6 +17,8 @@ class DataFormatter {
     formattedErr.message = err.message;
     return formattedErr;
   }
+
+  upperCamelCase = str => upperFirst(camelCase(str));
 }
 
 export default new DataFormatter();
