@@ -78,6 +78,20 @@ class FormValidator {
     city.value = data.city;
     zipCode.value = data.zipCode;
   }
+
+  setIsDirty = (form, status) => {
+    const currentForm = form;
+    currentForm.meta.isDirty = status;
+  }
+
+  setFormError = (form, key, error) => {
+    const currentForm = form;
+    currentForm.fields[key].error = error;
+    if (error) {
+      currentForm.meta.isValid = false;
+      currentForm.meta.isFieldValid = false;
+    }
+  }
 }
 
 export default new FormValidator();

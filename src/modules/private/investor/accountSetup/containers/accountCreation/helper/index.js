@@ -1,13 +1,4 @@
 class Helper {
-  getFundingType = (label) => {
-    if (label === 'check') {
-      return label;
-    } else if (label === 'ira transfer') {
-      return 'iraTransfer';
-    }
-    return 'directRollOver';
-  }
-
   getFundingTypeIndex = (value) => {
     let index = '';
     if (value === 'check') {

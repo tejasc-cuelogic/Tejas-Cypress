@@ -1,10 +1,13 @@
 import { observable, action, computed } from 'mobx';
 import cookie from 'react-cookies';
-import { FormValidator as Validator } from '../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
+import { requestEmailChnage, verifyAndUpdateEmail } from '../../queries/profile';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import { uiStore, userStore } from '../../index';
 
 export class AuthStore {
   @observable hasSession = false;
@@ -95,6 +98,54 @@ export class AuthStore {
       case 'CONFIRM': this.CONFIRM_FRM = Validator.prepareFormObject(CONFIRM); break;
       default: this.LOGIN_FRM = Validator.prepareFormObject(LOGIN);
     }
+  }
+
+  verifyAndUpdateEmail = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: verifyAndUpdateEmail,
+          variables: {
+            userId: userStore.currentUser.sub,
+            confirmationCode: this.CONFIRM_FRM.fields.code.value,
+          },
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  requestEmailChange = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: requestEmailChnage,
+          variables: {
+            userId: userStore.currentUser.sub,
+            newEmail: this.CONFIRM_FRM.fields.email.value,
+          },
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 }
 

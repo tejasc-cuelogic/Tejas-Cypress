@@ -8,12 +8,12 @@ import { validationActions } from '../../../../../../services/actions';
 import Helper from '../../../../../../helper/utility';
 import ConfirmEmailAddress from '../../../../../auth/containers/ConfirmEmailAddress';
 
-@inject('authStore', 'uiStore', 'profileStore')
+@inject('authStore', 'uiStore')
 @withRouter
 @observer
 export default class NewEmailAddress extends Component {
   handleChangeEmailAddress = () => {
-    this.props.profileStore.requestEmailChange().then(() => {
+    this.props.authStore.requestEmailChange().then(() => {
       Helper.toast('Email Change request has been accepted', 'success');
       this.props.history.push(`${this.props.match.url}/confirm`);
     })

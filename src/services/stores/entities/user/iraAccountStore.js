@@ -30,20 +30,6 @@ class IraAccountStore {
   }
 
   @action
-  setIsDirty = (form, status) => {
-    this[form].meta.isDirty = status;
-  }
-
-  @action
-  setIraError = (form, key, error) => {
-    this[form].fields[key].error = error;
-    if (error) {
-      this[form].meta.isValid = false;
-      this[form].meta.isFieldValid = false;
-    }
-  }
-
-  @action
   setAccountNotSet(step) {
     this.accountNotSet = step;
   }
@@ -198,7 +184,7 @@ class IraAccountStore {
           mutation,
           variables,
         })
-        .then((result) => {
+        .then(action((result) => {
           if (result.data.createInvestorAccount || formStatus === 'submit') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
@@ -206,11 +192,11 @@ class IraAccountStore {
             if (removeUploadedData) {
               validationActions.validateIRAIdentityInfo();
             } else {
-              this.setIsDirty(currentStep.form, false);
+              FormValidator.setIsDirty(this[currentStep.form], false);
               this.setStepToBeRendered(currentStep.stepToBeRendered);
             }
           } else if (formStatus !== 'submit') {
-            this.setIsDirty(currentStep.form, false);
+            FormValidator.setIsDirty(this[currentStep.form], false);
             this.setStepToBeRendered(currentStep.stepToBeRendered);
           }
           if (formStatus === 'submit') {
@@ -219,7 +205,7 @@ class IraAccountStore {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           }
           resolve(result);
-        })
+        }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
@@ -241,9 +227,9 @@ class IraAccountStore {
         this.setFormData('IDENTITY_FRM', account.accountDetails);
         if (!this.FIN_INFO_FRM.meta.isValid) {
           this.setStepToBeRendered(0);
-        } else if (!this.ACC_TYPES_FRM.meta.isValid || this.accountNotSet === 'accType') {
+        } else if (!this.ACC_TYPES_FRM.meta.isValid || this.accountNotSet) {
           this.setStepToBeRendered(1);
-        } else if (!this.FUNDING_FRM.meta.isValid || this.fundingNotSet === 'funding') {
+        } else if (!this.FUNDING_FRM.meta.isValid || this.fundingNotSet) {
           this.setStepToBeRendered(2);
         } else if (!this.IDENTITY_FRM.meta.isValid) {
           this.setStepToBeRendered(3);
@@ -276,9 +262,9 @@ class IraAccountStore {
           this[form].fields[f].value = value;
         } else {
           if (form === 'FUNDING_FRM') {
-            this.setFundingNotSet('funding');
+            this.setFundingNotSet(true);
           } else {
-            this.setAccountNotSet('accType');
+            this.setAccountNotSet(true);
           }
           this[form].fields[f].value = 0;
           isDirty = true;
@@ -291,17 +277,14 @@ class IraAccountStore {
 
   @action
   setFileUploadData = (field, files) => {
-    accountActions.setFileUploadData(this.IDENTITY_FRM, field, files, 'IRAAccountDocuments');
+    accountActions.setFileUploadData(this.IDENTITY_FRM, field, files, 'ACCOUNT_IRA_CREATION_CIP');
   }
 
   @action
   removeUploadedData = (field) => {
     const currentStep = { name: 'Identity' };
-    accountActions.removeUploadedData(this.IDENTITY_FRM, field, 'IRAAccountDocuments').then(() => {
-      this.IDENTITY_FRM = FormValidator.onChange(
-        this.IDENTITY_FRM,
-        { name: field, value: '' },
-      );
+    accountActions.removeUploadedData(this.IDENTITY_FRM, field, 'ACCOUNT_IRA_CREATION_CIP').then(() => {
+      this.IDENTITY_FRM.fields[field].value = '';
       this.IDENTITY_FRM.fields[field].fileId = '';
       this.IDENTITY_FRM.fields[field].preSignedUrl = '';
       this.createAccount(currentStep, 'draft', true);

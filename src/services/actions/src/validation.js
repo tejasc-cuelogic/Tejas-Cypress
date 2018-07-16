@@ -1,16 +1,16 @@
-import _ from 'lodash';
+import { map } from 'lodash';
 import validationService from '../../../api/validation';
 import {
   authStore,
   businessStore,
-  profileStore,
   bankAccountStore,
   iraAccountStore,
   entityAccountStore,
 } from '../../stores';
 import {
-  REGISTRATION, CONDITIONAL_REQUIRE, CONFIRM_IDENTITY_DOCUMENTS_FORM,
+  CONDITIONAL_REQUIRE,
 } from '../../../constants/validation';
+import { FormValidator } from '../../../helper';
 
 /**
  * @desc Validation class for form inputs
@@ -38,35 +38,6 @@ export class Validation {
   }
 
   /**
-   * @desc validates signature information on XML form, validate and update store
-   * @return null
-   */
-  validateSignatureInfo = (field) => {
-    const { errors } = validationService.validate(businessStore.signature[field]);
-    this.formValidationErrors(errors, field);
-    businessStore.setSignatureError(field, errors && errors[field][0]);
-  }
-
-  /**
-  * @desc Validated complete Registration form after clicking submit button
-  * @return null
-  */
-  validateRegisterForm = () => {
-    _.map(authStore.values, (value) => {
-      const { key } = value;
-      // Select only required values and exclude others from being checked
-      if (REGISTRATION.includes(key)) {
-        const { errors } = validationService.validate(
-          value,
-          authStore.values.password,
-        );
-        // Store errors to store if any or else `undefined` will get set to it
-        authStore.setError(key, errors && errors[key][0]);
-      }
-    });
-  }
-
-  /**
    * @desc Validates fields on new offering creation in business panel
    * @param $field @type String - field on form that need to be validated
    * @param $value @type String/Object - value that need to be set to field
@@ -85,7 +56,7 @@ export class Validation {
    */
   validateXmlFormData = (data) => {
     const newData = {};
-    _.map(data, (field) => {
+    map(data, (field) => {
       const { errors } = validationService.validate(
         field,
         data[CONDITIONAL_REQUIRE[field.key]],
@@ -109,50 +80,15 @@ export class Validation {
   }
 
   /**
-   * @desc This method checks if error is present or not, and update store
-   * @param $errors @type Object - Error for particular field
-   * @param $field @type String - Name of field for which error is present
-   * @return null
-   */
-  formValidationErrors = (errors, field) => {
-    if (errors) {
-      const newErrors = { ...businessStore.xmlErrors };
-      /* eslint-disable prefer-destructuring */
-      newErrors[field] = errors[field][0];
-      businessStore.setXmlError(newErrors);
-    } else {
-      /* eslint-disable no-lonely-if */
-      if (field !== 'notificationEmailElement') {
-        businessStore.removeXmlError(field);
-      }
-    }
-  }
-
-  /**
-   * @desc Validates Confirm Identity Documents Form
-   */
-  validateConfirmIdentityDocumentsForm = () => {
-    _.map(profileStore.confirmIdentityDocuments, (value) => {
-      const { key } = value;
-      // Select only required values and exclude others from being checked
-      if (CONFIRM_IDENTITY_DOCUMENTS_FORM.includes(key)) {
-        const { errors } = validationService.validate(value);
-        // Store errors to store if any or else `undefined` will get set to it
-        profileStore.setConfirmIdentityDocumentsError(key, errors && errors[key][0]);
-      }
-    });
-  }
-
-  /**
   * @desc Validates IRA - financial info after clicking next/submit button
   * @return null
   */
  validateIRAFinancialInfo = () => {
-   _.map(iraAccountStore.FIN_INFO_FRM.fields, (value) => {
+   map(iraAccountStore.FIN_INFO_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     iraAccountStore.setIraError('FIN_INFO_FRM', key, errors && errors[key][0]);
+     FormValidator.setFormError(iraAccountStore.FIN_INFO_FRM, key, errors && errors[key][0]);
    });
  }
 
@@ -164,19 +100,18 @@ export class Validation {
    const { errors } =
   validationService.validate(iraAccountStore.IDENTITY_FRM.fields.identityDoc);
    // Store errors to store if any or else `undefined` will get set to it
-   console.log(errors && errors.identityDoc[0]);
-   iraAccountStore.setIraError('IDENTITY_FRM', 'identityDoc', errors && errors.identityDoc[0]);
+   FormValidator.setFormError(iraAccountStore.IDENTITY_FRM, 'identityDoc', errors && errors.identityDoc[0]);
  }
 
  /**
   * @desc Validates Entity - Financial Information on next/submit button
   */
  validateEntityFinancialInfo = () => {
-   _.map(entityAccountStore.FIN_INFO_FRM.fields, (value) => {
+   map(entityAccountStore.FIN_INFO_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     entityAccountStore.setEntityError('FIN_INFO_FRM', key, errors && errors[key][0]);
+     FormValidator.setFormError(entityAccountStore.FIN_INFO_FRM, key, errors && errors[key][0]);
    });
  }
 
@@ -184,11 +119,11 @@ export class Validation {
   * @desc Validates Entity - General Information on next/submit button
   */
  validateEntityGeneralInformation = () => {
-   _.map(entityAccountStore.GEN_INFO_FRM.fields, (value) => {
+   map(entityAccountStore.GEN_INFO_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     entityAccountStore.setEntityError('GEN_INFO_FRM', key, errors && errors[key][0]);
+     FormValidator.setFormError(entityAccountStore.GEN_INFO_FRM, key, errors && errors[key][0]);
    });
  }
 
@@ -196,11 +131,11 @@ export class Validation {
   * @desc Validates Entity - Info on next/submit button
   */
  validateEntityInfo = () => {
-   _.map(entityAccountStore.TRUST_INFO_FRM.fields, (value) => {
+   map(entityAccountStore.TRUST_INFO_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     entityAccountStore.setEntityError('TRUST_INFO_FRM', key, errors && errors[key][0]);
+     FormValidator.setFormError(entityAccountStore.TRUST_INFO_FRM, key, errors && errors[key][0]);
    });
  }
 
@@ -208,11 +143,15 @@ export class Validation {
   * @desc Validates Entity - Personal Info on next/submit button
   */
  validateEntityPersonalInfo = () => {
-   _.map(entityAccountStore.PERSONAL_INFO_FRM.fields, (value) => {
+   map(entityAccountStore.PERSONAL_INFO_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     entityAccountStore.setEntityError('PERSONAL_INFO_FRM', key, errors && errors[key][0]);
+     FormValidator.setFormError(
+       entityAccountStore.PERSONAL_INFO_FRM,
+       key,
+       errors && errors[key][0],
+     );
    });
  }
 
@@ -220,11 +159,11 @@ export class Validation {
   * @desc Validates Entity - Formation Docs on next/submit button
   */
  validateEntityFormationDoc = () => {
-   _.map(entityAccountStore.FORM_DOCS_FRM.fields, (value) => {
+   map(entityAccountStore.FORM_DOCS_FRM.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     entityAccountStore.setEntityError('FORM_DOCS_FRM', key, errors && errors[key][0]);
+     FormValidator.setFormError(entityAccountStore.FORM_DOCS_FRM, key, errors && errors[key][0]);
    });
  }
 
@@ -232,11 +171,15 @@ export class Validation {
   * @desc Validates Entity - Formation Docs on next/submit button
   */
  validateLinkBankForm = () => {
-   _.map(bankAccountStore.formLinkBankManually.fields, (value) => {
+   map(bankAccountStore.formLinkBankManually.fields, (value) => {
      const { key } = value;
      const { errors } = validationService.validate(value);
      // Store errors to store if any or else `undefined` will get set to it
-     bankAccountStore.setAccountError('formLinkBankManually', key, errors && errors[key][0]);
+     FormValidator.setFormError(
+       bankAccountStore.formLinkBankManually,
+       key,
+       errors && errors[key][0],
+     );
    });
  }
 

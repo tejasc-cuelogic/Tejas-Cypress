@@ -121,7 +121,7 @@ export default class IdentityVerification extends Component {
       personalInfoChange,
       submitVerificationsDocs,
       identityQuestionAnswerChange,
-      setAddressFieldsOnGoogleAutocomplete,
+      setAddressFieldsForUserVerification,
     } = this.props.identityStore;
     const { errors, confirmBox, inProgress } = this.props.uiStore;
     const { givenName } = this.props.userStore.currentUser;
@@ -136,7 +136,7 @@ export default class IdentityVerification extends Component {
             close={this.handleCloseModal}
             change={personalInfoChange}
             dobChange={dobChange}
-            autoComplete={setAddressFieldsOnGoogleAutocomplete}
+            autoComplete={setAddressFieldsForUserVerification}
             onSubmit={this.handleVerifyUserIdentity}
             errors={errors}
           />

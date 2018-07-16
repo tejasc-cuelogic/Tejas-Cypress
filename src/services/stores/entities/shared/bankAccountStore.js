@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
-import isEmpty from 'lodash/isEmpty';
-import { FormValidator as Validator } from '../../../../helper';
+import { omit, isEmpty } from 'lodash';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getPlaidAccountdata } from './../../queries/account';
 import { uiStore, userStore, accountStore } from '../../index';
@@ -71,6 +71,20 @@ export class BankAccountStore {
     this.plaidBankDetails = plaidBankDetails;
   }
 
+  @computed
+  get accountAttributes() {
+    let accountAttributes = {};
+    if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidBankDetails)) {
+      const plaidBankDetails = omit(this.plaidBankDetails, '__typename');
+      accountAttributes = { ...plaidBankDetails };
+    } else {
+      const { accountNumber, routingNumber } = this.formLinkBankManually.fields;
+      accountAttributes.accountNumber = accountNumber.value;
+      accountAttributes.routingNumber = routingNumber.value;
+    }
+    return accountAttributes;
+  }
+
   getPlaidAccountData = () => new Promise((resolve, reject) => {
     client
       .mutate({
@@ -88,32 +102,15 @@ export class BankAccountStore {
         resolve();
       })
       .catch(action((err) => {
-        uiStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
         reject();
       }));
   });
-
-  @action
-  setAccountError = (form, key, error) => {
-    this[form].fields[key].error = error;
-  }
 
   @computed
   get isValidLinkBank() {
     return !isEmpty(this.plaidBankDetails);
   }
-
-  @computed
-  get isValidAddFunds() {
-    const { error } = this.formAddFunds.fields.value;
-    return isEmpty(error);
-  }
-
-  simpleErr = err => ({
-    statusCode: err.statusCode,
-    code: err.code,
-    message: err.message,
-  });
 }
 
 export default new BankAccountStore();

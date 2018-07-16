@@ -16,7 +16,7 @@ export default class AccountSetup extends Component {
     this.props.userDetailsStore.setUserAccDetails();
     const validPanes = [];
     const { inActiveAccounts } = this.props.userDetailsStore.signupStatus;
-    const accTypesValues = this.props.accountStore.investmentAccTypes.fields.accType.values;
+    const accTypesValues = this.props.accountStore.INVESTMENT_ACC_TYPES.fields.accType.values;
     inActiveAccounts.map((key) => {
       const acc = find(accTypesValues, { accType: key });
       if (acc) {

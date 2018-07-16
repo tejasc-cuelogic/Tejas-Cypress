@@ -7,7 +7,7 @@ import { FormInput } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 
-@inject('authStore', 'uiStore', 'userStore', 'profileStore')
+@inject('authStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
@@ -23,7 +23,7 @@ export default class ConfirmEmailAddress extends Component {
     e.preventDefault();
     this.props.authStore.setProgress('confirm');
     if (this.props.userStore.currentUser) {
-      this.props.profileStore.verifyAndUpdateEmail().then(() => {
+      this.props.authStore.verifyAndUpdateEmail().then(() => {
         Helper.toast('Email has been verified and updated', 'success');
         this.props.history.push('/app/profile-settings/profile-data');
       })
@@ -49,7 +49,7 @@ export default class ConfirmEmailAddress extends Component {
   handleResendCode = () => {
     this.props.authStore.setProgress('resend');
     if (this.props.refLink) {
-      this.props.profileStore.requestEmailChange().then(() => {
+      this.props.authStore.requestEmailChange().then(() => {
         Helper.toast('Re-sent the verification code', 'success');
       })
         .catch(() => {});

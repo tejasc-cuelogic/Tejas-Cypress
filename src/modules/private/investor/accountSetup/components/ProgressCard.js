@@ -57,9 +57,8 @@ const ProgressCard = props => (
                     color="green"
                     content="Continue"
                     onClick={() => props.renderStep(currentCard.step)}
-                  />
-              :
-                ''
+                  /> :
+                  ''
               }
             </Card.Content>
           </Card>

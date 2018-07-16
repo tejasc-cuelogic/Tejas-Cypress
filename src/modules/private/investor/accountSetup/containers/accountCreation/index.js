@@ -10,9 +10,6 @@ import EntityAccCreation from './entity/AccountCreation';
 @withRouter
 @observer
 export default class AccountCreation extends Component {
-  handleAccTypeChange = (e, { value }) => {
-    this.props.accountStore.setInvestmentAccType(value);
-  }
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
   }
@@ -21,7 +18,7 @@ export default class AccountCreation extends Component {
     this.props.history.push(`${this.props.match.url}/${investmentAccType}`);
   }
   render() {
-    const { investmentAccTypes } = this.props.accountStore;
+    const { INVESTMENT_ACC_TYPES, setInvestmentAccType } = this.props.accountStore;
     return (
       <div>
         <Switch>
@@ -30,10 +27,10 @@ export default class AccountCreation extends Component {
             path={this.props.match.url}
             render={props =>
               (<AccountTypes
-                form={investmentAccTypes}
+                form={INVESTMENT_ACC_TYPES}
                 close={this.handleCloseModal}
                 renderAccType={this.renderAccType}
-                handleAccTypeChange={this.handleAccTypeChange}
+                handleAccTypeChange={setInvestmentAccType}
                 {...props}
               />)}
           />

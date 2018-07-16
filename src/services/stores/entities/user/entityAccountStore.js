@@ -28,20 +28,6 @@ class EntityAccountStore {
   }
 
   @action
-  setEntityError = (form, key, error) => {
-    this[form].fields[key].error = error;
-    if (error) {
-      this[form].meta.isValid = false;
-      this[form].meta.isFieldValid = false;
-    }
-  }
-
-  @action
-  setIsDirty = (form, status) => {
-    this[form].meta.isDirty = status;
-  }
-
-  @action
   formChange = (e, result, form) => {
     this[form] = FormValidator.onChange(
       this[form],
@@ -106,7 +92,6 @@ class EntityAccountStore {
   @action
   setEntityAttributes = (step, removeUploadedData, field) => {
     switch (step) {
-      /* eslint-disable no-unused-expressions */
       case 'General':
         this.entityData.name = this.GEN_INFO_FRM.fields.name.value;
         this.entityData.taxId = this.GEN_INFO_FRM.fields.taxId.value;
@@ -343,7 +328,10 @@ class EntityAccountStore {
           mutation,
           variables,
         })
-        .then((result) => {
+        .then(action((result) => {
+          if (result.data.createInvestorAccount || formStatus === 'submit') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
+          }
           if (formStatus !== 'submit') {
             if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
               if (removeUploadedData) {
@@ -353,24 +341,23 @@ class EntityAccountStore {
                   validationActions.validateEntityFormationDoc();
                 }
               } else {
-                this.setIsDirty(currentStep.form, false);
+                FormValidator.setIsDirty(this[currentStep.form], false);
                 this.setStepToBeRendered(currentStep.stepToBeRendered);
               }
             } else {
               if (currentStep.name !== 'Link bank') {
-                this.setIsDirty(currentStep.form, false);
+                FormValidator.setIsDirty(this[currentStep.form], false);
               }
               this.setStepToBeRendered(currentStep.stepToBeRendered);
             }
           }
           if (formStatus === 'submit') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
             Helper.toast('Entity account created successfully.', 'success');
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           }
           resolve(result);
-        })
+        }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
@@ -498,7 +485,7 @@ class EntityAccountStore {
 
   @action
   setFileUploadData(form, field, files) {
-    accountActions.setFileUploadData(this[form], field, files, 'EntityDocuments');
+    accountActions.setFileUploadData(this[form], field, files, 'ACCOUNT_ENTITY_CREATION');
   }
 
   @action

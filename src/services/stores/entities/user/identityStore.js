@@ -7,7 +7,7 @@ import { uiStore, userStore, userDetailsStore } from '../../index';
 import { verifyCIPUser, updateUserCIPInfo, startUserPhoneVerification, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { createUploadEntry, removeUploadedFile } from '../../queries/common';
+import { accountActions } from '../../../actions';
 import { COUNTRY_CODES } from '../../../../constants/profile';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
 import apiService from '../../../../api/restApi';
@@ -64,7 +64,7 @@ export class IdentityStore {
   }
 
   @action
-  setAddressFieldsOnGoogleAutocomplete = (place) => {
+  setAddressFieldsForUserVerification = (place) => {
     FormValidator.setAddressFields(place, this.ID_VERIFICATION_FRM);
   }
 
@@ -148,8 +148,13 @@ export class IdentityStore {
           resolve();
         })
         .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
+          if (err.response) {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            reject(err);
+          } else {
+            uiStore.setErrors(JSON.stringify('Something went wrong'));
+            reject(err);
+          }
         })
         .finally(() => {
           uiStore.setProgress(false);
@@ -166,59 +171,20 @@ export class IdentityStore {
 
   @action
   setFileUploadData(field, files) {
-    this.ID_VERIFICATION_DOCS_FRM.fields[field].fileData = files;
-    const fileData = Helper.getFormattedFileData(files);
-    this.ID_VERIFICATION_DOCS_FRM = FormValidator.onChange(
-      this.ID_VERIFICATION_DOCS_FRM,
-      { name: field, value: fileData.fileName },
-    );
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: createUploadEntry,
-        variables: {
-          userId: userStore.currentUser.sub,
-          stepName: 'CIPDocuments',
-          fileData,
-        },
-      })
-      .then((result) => {
-        const { fileId, preSignedUrl } = result.data.createUploadEntry;
-        this.ID_VERIFICATION_DOCS_FRM.fields[field].fileId = fileId;
-        this.ID_VERIFICATION_DOCS_FRM.fields[field].preSignedUrl = preSignedUrl;
-      })
-      .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+    accountActions.setFileUploadData(this.ID_VERIFICATION_DOCS_FRM, field, files, 'PROFILE_CIP');
   }
 
   @action
   removeUploadedData(field) {
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: removeUploadedFile,
-        variables: {
-          fileId: this.ID_VERIFICATION_DOCS_FRM.fields[field].fileId,
-        },
-      })
-      .then(() => {
-        this.ID_VERIFICATION_DOCS_FRM = FormValidator.onChange(
-          this.ID_VERIFICATION_DOCS_FRM,
-          { name: field, value: '' },
-        );
-        this.ID_VERIFICATION_DOCS_FRM.fields[field].fileId = '';
-        this.ID_VERIFICATION_DOCS_FRM.fields[field].preSignedUrl = '';
-      })
-      .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+    accountActions.removeUploadedData(this.ID_VERIFICATION_DOCS_FRM, field, 'PROFILE_CIP').then(() => {
+      this.ID_VERIFICATION_DOCS_FRM = FormValidator.onChange(
+        this.ID_VERIFICATION_DOCS_FRM,
+        { name: field, value: '' },
+      );
+      this.ID_VERIFICATION_DOCS_FRM.fields[field].fileId = '';
+      this.ID_VERIFICATION_DOCS_FRM.fields[field].preSignedUrl = '';
+    })
+      .catch(() => { });
   }
 
   uploadAndUpdateCIPInfo = () => {
@@ -383,13 +349,13 @@ export class IdentityStore {
   }
 
   updateUserInfo = (cipStatus) => {
-    console.log(cipStatus);
+    const userId = userStore.currentUser.sub;
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: updateUserCIPInfo,
           variables: {
-            userId: userStore.currentUser.sub,
+            userId,
             user: this.formattedUserInfo.userInfo,
             phoneDetails: this.formattedUserInfo.phoneDetails,
             cipStatus,
@@ -418,12 +384,7 @@ export class IdentityStore {
           },
         },
       })
-      .then(action(() => {
-        this.ID_VERIFICATION_FRM = FormValidator.onChange(
-          this.ID_VERIFICATION_FRM,
-          { name: 'phoneNumber', value: this.ID_VERIFICATION_FRM.fields.phoneNumber.value },
-        );
-      }))
+      .then(() => { })
       .catch(() => { });
   }
 

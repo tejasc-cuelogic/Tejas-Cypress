@@ -8,74 +8,29 @@ import Helper from '../../../../helper/utility';
 
 class IndividualAccountStore {
   @observable stepToBeRendered = '';
-  @observable investorAccId = '';
 
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
   }
 
-  @action
-  setInvestorAccId(id) {
-    this.investorAccId = id;
-  }
-
-  /* eslint-disable class-methods-use-this */
-  accountAttributes() {
-    const accountAttributes = {};
-    if (bankAccountStore.bankLinkInterface === 'list' && !isEmpty(bankAccountStore.plaidBankDetails)) {
-      accountAttributes.plaidAccessToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
-      accountAttributes.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
-      accountAttributes.bankName = bankAccountStore.plaidBankDetails.bankName;
-      accountAttributes.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
-      accountAttributes.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
-      accountAttributes.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
-    } else {
-      const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
-      accountAttributes.accountNumber = accountNumber.value;
-      accountAttributes.routingNumber = routingNumber.value;
-    }
-    return accountAttributes;
-  }
-
-  /* eslint-disable arrow-body-style */
   createAccount = (currentStep, formStatus = 'draft') => {
     uiStore.setProgress();
     let mutation = createAccount;
-    let variables = {
+    const variables = {
       userId: userStore.currentUser.sub,
-      accountAttributes: this.accountAttributes(),
+      accountAttributes: bankAccountStore.accountAttributes,
       status: formStatus,
       accountType: 'individual',
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(
-        userDetailsStore.currentUser.data.user.accounts,
-        { accountType: 'individual' },
-      );
+      const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'individual' });
       if (accountDetails) {
         mutation = updateAccount;
-        variables = {
-          userId: userStore.currentUser.sub,
-          accountId: accountDetails.accountId,
-          accountAttributes: this.accountAttributes(),
-          status: formStatus,
-          accountType: 'individual',
-        };
+        variables.accountId = accountDetails.accountId;
         actionPerformed = 'updated';
       }
-    }
-    if (this.investorAccId) {
-      mutation = updateAccount;
-      variables = {
-        userId: userStore.currentUser.sub,
-        accountId: this.investorAccId,
-        accountAttributes: this.accountAttributes(),
-        status: formStatus,
-        accountType: 'individual',
-      };
-      actionPerformed = 'updated';
     }
     return new Promise((resolve, reject) => {
       client
@@ -84,11 +39,10 @@ class IndividualAccountStore {
           variables,
         })
         .then((result) => {
-          if (result.data.createInvestorAccount) {
-            this.setInvestorAccId(result.data.createInvestorAccount.accountId);
+          if (result.data.createInvestorAccount || formStatus === 'submit') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
           }
           if (formStatus === 'submit') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
             Helper.toast('Individual account created successfully.', 'success');
           } else if (currentStep) {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
