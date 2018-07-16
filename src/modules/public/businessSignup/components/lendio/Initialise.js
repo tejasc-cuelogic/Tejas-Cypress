@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Divider, Image, Button } from 'semantic-ui-react';
-import LogoLendio from '../../../../../assets/images/lendio_logo.svg';
+import { Divider, Button } from 'semantic-ui-react';
+import { Logo } from '../../../../../theme/shared';
 
 const Initialise = () => (
   <Aux>
-    <Image className="small" src={LogoLendio} alt="Lendio.com" />
+    <Logo className="small" alt="Lendio.com" dataSrc="LogoLendio" />
     <Divider hidden />
     <p>
       We`ve partnered with Lendio, a leading small business loan marketplace where

@@ -1,55 +1,58 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Modal, Header, Button } from 'semantic-ui-react';
-
-import authActions from './../../../actions/auth';
+import { Modal, Header, Form, Button } from 'semantic-ui-react';
+import { FormInput } from '../../../theme/form';
+import { authActions } from '../../../services/actions';
 
 @inject('authStore', 'uiStore')
 @observer
-export default class ChangePassword extends React.Component {
-  componentWillUnmount() {
-    this.props.uiStore.clearErrors();
-    this.props.authStore.reset();
-  }
-
-  handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
-  handleVerifyChange = e => this.props.authStore.setVerify(e.target.value);
-  handleClick = (e) => {
+export default class ChangePassword extends Component {
+  onSubmit = (e) => {
     e.preventDefault();
-    authActions.changePassword()
+    authActions.updatePassword()
       .then(() => {
-        this.props.history.push('/auth/login');
+        this.props.history.goBack();
+      })
+      .catch(() => {
+        this.props.authStore.forceSetError(
+          'CHANGE_PASS_FRM',
+          'oldPasswd',
+          'Entered password is incorrect, please try again.',
+        );
       });
   }
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    this.props.history.goBack();
+  }
   render() {
+    const { CHANGE_PASS_FRM, changePassChange } = this.props.authStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.props.history.push('/')}>
-        <Modal.Header className="center-align signup-header">
-          <Header as="h2">Change Password for</Header>
-          <p>{(this.props.authStore.values.email) ? this.props.authStore.values.email.value : ''}</p>
-        </Modal.Header>
-        <Modal.Content className="signup-content center-align">
-          <Form onSubmit={this.handleSubmitForm}>
-            <Form.Input
-              fluid
-              icon={{ className: 'ns-lock' }}
-              iconPosition="left"
-              type="password"
-              placeholder="New Password"
-              onChange={this.handlePasswordChange}
-            />
-            <Form.Input
-              fluid
-              icon={{ className: 'ns-lock' }}
-              iconPosition="left"
-              type="password"
-              placeholder="Confirm Password"
-              onChange={this.handleVerifyChange}
-            />
-            <Button fluid primary onClick={this.handleClick}>Change Password</Button>
-          </Form>
-        </Modal.Content>
-      </Modal>
+      <div>
+        <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
+          <Modal.Header className="center-align signup-header">
+            <Header as="h2">Change your Password</Header>
+          </Modal.Header>
+          <Modal.Content className="signup-content">
+            <Form onSubmit={this.onSubmit}>
+              {
+                Object.keys(CHANGE_PASS_FRM.fields).map(field => (
+                  <FormInput
+                    key={field}
+                    type="password"
+                    name={field}
+                    fielddata={CHANGE_PASS_FRM.fields[field]}
+                    changed={changePassChange}
+                  />
+                ))
+              }
+              <div className="mt-30 center-align">
+                <Button loading={this.props.uiStore.inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} primary size="large">Set new password</Button>
+              </div>
+            </Form>
+          </Modal.Content>
+        </Modal>
+      </div>
     );
   }
 }

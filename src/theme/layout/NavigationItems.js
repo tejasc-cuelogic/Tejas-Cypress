@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Container, Icon, Image, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
+import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
-import LogoC from '../../assets/images/nextseed_logo_white.svg';
-import LogoW from '../../assets/images/logo.svg';
-import LogoNsAndLendio from '../../assets/images/nextseed_and_lendio.svg';
+import { Logo } from '../shared';
 
 @withRouter
 export class NavItems extends Component {
@@ -19,9 +17,7 @@ export class NavItems extends Component {
   isActive = (to, location, app) => (to !== '' && this.state.active === to) || location.pathname.startsWith(`/${app}/${to}`);
   render() {
     const {
-      location,
-      isApp,
-      refLoc,
+      location, isApp, refLoc, roles,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = [...this.props.navItems];
@@ -43,7 +39,9 @@ export class NavItems extends Component {
                 {item.icon &&
                   <Icon className={item.icon} />
                 }
-                <span>{item.title}</span>
+                <span>
+                  {typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}
+                </span>
               </Aux>
             }
           >
@@ -80,8 +78,8 @@ export class NavItems extends Component {
   }
 }
 
-const getLogo = path => (path.includes('/lendio') ? LogoNsAndLendio : (
-  (path.includes('business-application') || path.includes('/offerings') ? LogoW : LogoC)
+const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
+  (path.includes('business-application') || path.includes('offerings') ? 'LogoWhite' : 'LogoColor')
 ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
@@ -90,11 +88,11 @@ export const NavigationItems = props => (
   <Menu stackable borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" className={props.location.pathname.includes('/offerings') ? '' : 'inverted'}>
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
-        <Image
+        <Logo
           size="small"
-          src={getLogo(props.location.pathname)}
-          style={getLogoStyle(props.location.pathname)}
           alt="NextSeed.com"
+          dataSrc={getLogo(props.location.pathname)}
+          style={getLogoStyle(props.location.pathname)}
         />
       </Menu.Item>
       <Menu.Menu position="right">
