@@ -6,7 +6,9 @@ import Autocomplete from 'react-google-autocomplete';
 import { FieldError } from '../../shared';
 
 const AutoComplete = observer((props) => {
-  const { label, error, value } = props.fielddata;
+  const {
+    label, error, value, placeholder,
+  } = props.fielddata;
   return (
     <Form.Field error={error}>
       <label>{label}</label>
@@ -16,9 +18,9 @@ const AutoComplete = observer((props) => {
           props.onplaceselected(place);
         }}
         value={value}
+        placeholder={placeholder}
         types={['address']}
         onChange={props.changed}
-        placeholder=""
       />
       {error &&
         <FieldError error={error} />

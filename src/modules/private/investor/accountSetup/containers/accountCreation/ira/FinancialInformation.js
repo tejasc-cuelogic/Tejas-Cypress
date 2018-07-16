@@ -19,6 +19,7 @@ export default class FinancialInformation extends React.Component {
               ['netWorth', 'annualIncome'].map(field => (
                 <MaskedInput2
                   key={field}
+                  type="tel"
                   fielddata={FIN_INFO_FRM.fields[field]}
                   name={field}
                   changed={values => finInfoChange(values, field)}

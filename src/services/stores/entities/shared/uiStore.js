@@ -35,15 +35,6 @@ export class UiStore {
   @observable pwdInputType = 'password';
 
   @action
-  setPwdVisibilityStatus = () => {
-    if (this.pwdInputType === 'password') {
-      this.pwdInputType = 'text';
-    } else {
-      this.pwdInputType = 'password';
-    }
-  }
-
-  @action
   setModalStatus(status) {
     this.modalStatus = status;
   }

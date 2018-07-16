@@ -127,6 +127,7 @@ export default class OfferingInformation extends React.Component {
             <FormDatePicker
               name="deadlineDate"
               id="deadlinedate"
+              placeholder="Select date"
               minDate={moment()}
               fielddata={formOfferingInfo.fields.deadlineDate}
               selected={formOfferingInfo.fields.deadlineDate.value}

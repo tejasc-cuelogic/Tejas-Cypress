@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
-import { FormInput } from '../../../../../theme/form';
+import { MaskedInput2 } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { validationActions } from '../../../../../services/actions';
 
@@ -41,17 +41,20 @@ export default class ManualForm extends Component {
         }
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
-            {
-              ['routingNumber', 'accountNumber'].map(field => (
-                <FormInput
-                  key={field}
-                  name={field}
-                  fielddata={formLinkBankManually.fields[field]}
-                  changed={linkBankManuallyChange}
-                  maxLength={formLinkBankManually.fields[field].maxLength}
-                />
-              ))
-            }
+            <MaskedInput2
+              key="routingNumber"
+              name="routingNumber"
+              fielddata={formLinkBankManually.fields.routingNumber}
+              changed={linkBankManuallyChange}
+              routingNumber
+            />
+            <MaskedInput2
+              key="accountNumber"
+              name="accountNumber"
+              fielddata={formLinkBankManually.fields.accountNumber}
+              changed={linkBankManuallyChange}
+              accountNumber
+            />
           </div>
           <div className="center-align">
             <Button primary size="large" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>

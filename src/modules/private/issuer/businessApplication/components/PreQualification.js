@@ -83,7 +83,9 @@ export default class PreQualification extends Component {
                       </div>
                     }
                     <MaskedInput2
+                      type="tel"
                       name="phoneNumber"
+                      format="(###)-###-####"
                       fielddata={fields.phoneNumber}
                       changed={businessAppEleChange}
                       phoneNumber
@@ -168,6 +170,7 @@ export default class PreQualification extends Component {
                     {
                       ['projectCost', 'raiseRequired'].map(field => (
                         <MaskedInput2
+                          type="tel"
                           key={field}
                           prefix="$ "
                           name={field}
@@ -200,6 +203,7 @@ export default class PreQualification extends Component {
                     {
                       ['grossSales', 'goodsSold', 'operatingExpenses', 'netIncome'].map(field => (
                         <MaskedInput2
+                          type="tel"
                           key={field}
                           name={field}
                           prefix="$ "

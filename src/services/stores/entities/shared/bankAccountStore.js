@@ -39,8 +39,9 @@ export class BankAccountStore {
   };
 
   @action
-  addFundChange = (e, result) => {
-    this.formAddFunds = Validator.onChange(this.formAddFunds, Validator.pullValues(e, result));
+  addFundChange = (values, field) => {
+    this.formAddFunds =
+    Validator.onChange(this.formAddFunds, { name: field, value: values.floatValue });
   };
 
   @action

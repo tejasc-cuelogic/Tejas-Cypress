@@ -24,7 +24,9 @@ class InvestorSignup extends Component {
   };
   checkRouting = () => this.props.history.replace('/confirm');
   render() {
-    const { SIGNUP_FRM, signupChange } = this.props.authStore;
+    const {
+      SIGNUP_FRM, signupChange, togglePasswordType, pwdInputType,
+    } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
 
     return (
@@ -69,17 +71,21 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
             />
-            {
-              ['password', 'verify'].map(field => (
-                <FormInput
-                  key={field}
-                  name={field}
-                  type="password"
-                  fielddata={SIGNUP_FRM.fields[field]}
-                  changed={signupChange}
-                />
-              ))
-            }
+            <FormInput
+              key="password"
+              name="password"
+              type={pwdInputType}
+              icon={togglePasswordType()}
+              fielddata={SIGNUP_FRM.fields.password}
+              changed={signupChange}
+            />
+            <FormInput
+              key="verify"
+              name="verify"
+              type="password"
+              fielddata={SIGNUP_FRM.fields.verify}
+              changed={signupChange}
+            />
             <div className="center-align">
               <Button primary size="large" className="very relaxed" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid}>Register</Button>
             </div>

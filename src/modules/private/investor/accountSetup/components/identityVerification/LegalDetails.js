@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Button, Modal, Divider, Header, Form, Message } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
 import {
-  FormInput, FormSelect, FormDatePicker, MaskedInput, AutoComplete, MaskedInput2,
+  FormInput, FormSelect, FormDatePicker, AutoComplete, MaskedInput2,
 } from '../../../../../../theme/form';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
 import { US_STATES } from '../../../../../../constants/account';
@@ -58,6 +58,7 @@ const LegalDetails = observer(({
           fielddata={form.fields.residentalStreet}
           onplaceselected={autoComplete}
           changed={change}
+          placeHolder="Baker Street 221B"
         />
         <Form.Group widths="equal">
           <FormInput
@@ -83,23 +84,26 @@ const LegalDetails = observer(({
           />
         </Form.Group>
         <Form.Group widths="equal">
-          <MaskedInput
+          <MaskedInput2
             name="phoneNumber"
+            type="tel"
             fielddata={form.fields.phoneNumber}
-            mask="999-999-9999"
+            format="###-###-####"
             changed={change}
+            phoneNumber
           />
           <FormDatePicker
             name="dateOfBirth"
+            placeholder="Select date"
             fielddata={form.fields.dateOfBirth}
             selected={form.fields.dateOfBirth.value}
             changed={dobChange}
           />
         </Form.Group>
-        <MaskedInput
+        <MaskedInput2
           name="ssn"
           fielddata={form.fields.ssn}
-          mask="999-99-9999"
+          ssn
           changed={change}
         />
         <div className="center-align">

@@ -22,6 +22,34 @@ export class AuthStore {
   @observable FORGOT_PASS_FRM = Validator.prepareFormObject(FORGOT_PASS);
   @observable RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
   @observable confirmProgress = false;
+  @observable pwdInputType = 'password';
+
+
+  @action
+  setPwdVisibilityStatus = () => {
+    console.log('hii');
+    if (this.pwdInputType === 'password') {
+      this.pwdInputType = 'text';
+    } else {
+      this.pwdInputType = 'password';
+    }
+  }
+
+  @action
+  togglePasswordType = () => {
+    let iconData = {
+      link: true,
+      onClick: this.setPwdVisibilityStatus,
+    };
+    if (this.pwdInputType === 'password') {
+      iconData.className = 'ns-view';
+    } else if (this.pwdInputType === 'text') {
+      iconData.className = 'ns-view active';
+    } else {
+      iconData = null;
+    }
+    return iconData;
+  }
 
   @action
   LoginChange = (e, result) => {

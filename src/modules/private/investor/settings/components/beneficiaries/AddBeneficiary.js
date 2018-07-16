@@ -51,6 +51,7 @@ export default class AddBeneficiary extends Component {
               <FormDatePicker
                 type="text"
                 name="dob"
+                placeholder="Select date"
                 fielddata={BENEFICIARY_META.fields.dob}
                 selected={BENEFICIARY_META.fields.dob.value}
                 changed={beneficiaryDateChange}

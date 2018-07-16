@@ -34,10 +34,10 @@ class EntityAccountStore {
   }
 
   @action
-  finInfoChange = (e, result) => {
+  finInfoChange = (values, field) => {
     this.FIN_INFO_FRM = FormValidator.onChange(
       this.FIN_INFO_FRM,
-      FormValidator.pullValues(e, result),
+      { name: field, value: values.floatValue },
     );
   }
 

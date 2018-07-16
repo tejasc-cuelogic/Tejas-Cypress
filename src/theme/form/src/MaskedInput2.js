@@ -25,25 +25,23 @@ const MaskedInput2 = observer((props) => {
           />
         }
       </label>
-      {props.currency &&
-        <NumberFormat
-          placeholder={placeHolder}
-          maxLength={18}
-          thousandSeparator
-          {...props}
-          onValueChange={props.changed}
-          value={value}
-          error={!!error}
-        />
-      }
-      {props.phoneNumber &&
-        <NumberFormat type="tel" format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} />
-      }
-      {props.businessZipCode &&
+      {props.currency ? (
+        <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onValueChange={props.changed} error={!!error} mask="_" />
+      ) : props.percentage ? (
+        <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={props.changed} error={!!error} mask="%" suffix="%" />
+      ) : props.phoneNumber ? (
+        <NumberFormat type="tel" format={props.format} {...props} value={value} onChange={props.changed} error={!!error} />
+      ) : props.zipCode ? (
         <NumberFormat format="#####" {...props} value={value} onChange={props.changed} error={!!error} />
-      }
-      {props.zipCode &&
-        <NumberFormat format="#####" {...props} value={value} onChange={props.changed} error={!!error} />
+      ) : props.ssn ? (
+        <NumberFormat type="tel" format="###-##-####" placeholder={placeHolder} {...props} value={value} onChange={props.changed} error={!!error} />
+      ) : props.routingNumber ? (
+        <NumberFormat type="text" format="##########" placeholder={placeHolder} {...props} value={value} onChange={props.changed} error={!!error} />
+      ) : props.accountNumber ? (
+        <NumberFormat type="text" format="############" placeholder={placeHolder} {...props} value={value} onChange={props.changed} error={!!error} />
+      ) : (
+        <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
+      )
       }
       {error &&
         <FieldError error={error} />

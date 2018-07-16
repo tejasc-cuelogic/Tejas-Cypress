@@ -230,9 +230,7 @@ class IraAccountStore {
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      console.log(userDetailsStore.currentUser.data.user.accounts);
       const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'ira' });
-      console.log(accountDetails);
       if (accountDetails) {
         mutation = updateAccount;
         variables.accountId = accountDetails.accountId;
