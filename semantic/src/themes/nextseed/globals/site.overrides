@@ -134,6 +134,9 @@ h6{
 }
 
 // Helper classes
+*:focus{
+	outline:none;
+}
 .mb-half{
 	margin-bottom:@7px !important;
 }

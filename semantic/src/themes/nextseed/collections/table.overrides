@@ -126,5 +126,10 @@
         .item .extra{
             font-size:@12px;
         }
+        .ui.rating{
+            .icon{
+                font-family:'Nextseed';
+            }
+        }
     }
 }

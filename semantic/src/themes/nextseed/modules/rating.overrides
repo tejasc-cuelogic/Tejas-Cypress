@@ -22,11 +22,11 @@
 
 /* Empty Star */
 .ui.rating .icon:before {
-  content: '\f005';
+  content: '\e981';
 }
 /* Active Star */
 .ui.rating .active.icon:before {
-  content: '\f005';
+  content: '\e981';
 }
 
 /*-------------------
@@ -35,11 +35,11 @@
 
 /* Unfilled Star */
 .ui.star.rating .icon:before {
-  content: '\f005';
+  content: '\e981';
 }
 /* Active Star */
 .ui.star.rating .active.icon:before {
-  content: '\f005';
+  content: '\e981';
 }
 
 /* Partial */

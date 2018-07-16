@@ -77,7 +77,7 @@ export default class AllApplications extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <Item>
-                      <Item.Header><Rating icon="heart" size="large" defaultRating={3} maxRating={5} /></Item.Header>
+                      <Item.Header><Rating size="large" defaultRating={3} maxRating={5} /></Item.Header>
                       <Item.Content>
                         <Item.Description>
                           Good application, several fail reasons, though. We should contact them

@@ -26,10 +26,10 @@
 @inactiveColor: rgba(0, 0, 0, 0.15);
 
 @selectedBackground: @inactiveBackground;
-@selectedColor: @textColor;
+@selectedColor: @highlight-quaternary;
 
 @activeBackground: @inactiveBackground;
-@activeColor: @darkTextColor;
+@activeColor: @highlight-quaternary;
 
 /* Star */
 @starIconWidth: @iconWidth;
