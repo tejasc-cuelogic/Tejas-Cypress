@@ -40,26 +40,17 @@ export class Account {
     });
   }
 
-  removeUploadedData = (form, field, step) => {
-    let currentForm = form;
-    const currentStep = { name: step };
+  removeUploadedData = (form, field) => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: removeUploadedFile,
           variables: {
-            fileId: currentForm.fields[field].fileId,
+            fileId: form.fields[field].fileId,
           },
         })
         .then(() => {
-          currentForm = FormValidator.onChange(
-            currentForm,
-            { name: field, value: '' },
-          );
-          currentForm.fields[field].fileId = '';
-          currentForm.fields[field].preSignedUrl = '';
-          this.createAccount(currentStep, 'draft', true, field);
           resolve();
         })
         .catch((err) => {

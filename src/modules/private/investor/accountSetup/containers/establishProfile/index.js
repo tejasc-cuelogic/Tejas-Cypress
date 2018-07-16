@@ -12,28 +12,38 @@ export default class EstablishProfile extends Component {
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
   }
+  handleCloseNestedModal = () => {
+    this.props.history.push('/app/summary/establish-profile');
+  }
+  handleFormSubmit = () => {
+    this.props.investorProfileStore.submitFieldsForm();
+    this.props.history.push('/app/summary/establish-profile');
+  }
   render() {
-    const { FINANCES, chkboxTicked } = this.props.investorProfileStore;
+    const {
+      FINANCES,
+      canSubmitFieldsForm,
+      financesChange,
+      chkboxTicked,
+    } = this.props.investorProfileStore;
     return (
       <div>
+        <AccountCreation
+          close={this.handleCloseModal}
+          {...this.props}
+        />
         <Switch>
-          <Route
-            exact
-            path={this.props.match.url}
-            render={props =>
-              (<AccountCreation
-                close={this.handleCloseModal}
-                {...props}
-              />)}
-          />
           <Route
             exact
             path={`${this.props.match.url}/fields-form`}
             render={props =>
               (<FieldsForm
-                close={this.handleCloseModal}
-                form={FINANCES}
+                canSubmitFieldsForm={canSubmitFieldsForm}
+                close={this.handleCloseNestedModal}
+                handleFormSubmit={this.handleFormSubmit}
+                financesChange={financesChange}
                 chkboxTicked={chkboxTicked}
+                form={FINANCES}
                 {...props}
               />)}
           />

@@ -23,6 +23,7 @@ export default class Identity extends Component {
   render() {
     const { IDENTITY_FRM } = this.props.iraAccountStore;
     const { errors, confirmBox } = this.props.uiStore;
+    console.log(IDENTITY_FRM);
     return (
       <div>
         <Header as="h1" textAlign="center">Confirm your identity and upload your <br /> Driver’s License, state-issued ID, or U.S. <br /> passport</Header>

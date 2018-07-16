@@ -108,6 +108,7 @@ class IraAccountStore {
 
   @action
   createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false) => {
+    alert('createaccount');
     if (formStatus === 'submit') {
       this.submitForm(currentStep, formStatus, this.accountAttributes);
     } else {
@@ -139,7 +140,9 @@ class IraAccountStore {
         this.submitForm(currentStep, formStatus, accountAttributes);
         break;
       case 'Identity':
+        alert('here11');
         if (removeUploadedData) {
+          alert('here22');
           accountAttributes.identityDoc = {
             fileId: '',
             fileName: '',
@@ -175,6 +178,7 @@ class IraAccountStore {
 
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
+    alert('submit');
     uiStore.setProgress();
     let mutation = createAccount;
     const variables = {
@@ -200,6 +204,7 @@ class IraAccountStore {
         })
         .then((result) => {
           if (currentStep.name === 'Identity') {
+            alert('submitform');
             if (removeUploadedData) {
               validationActions.validateIRAIdentityInfo();
             } else {
@@ -294,7 +299,17 @@ class IraAccountStore {
 
   @action
   removeUploadedData = (field) => {
-    accountActions.removeUploadedData(this.IDENTITY_FRM, field, 'IRAAccountDocuments');
+    const currentStep = { name: 'Identity' };
+    accountActions.removeUploadedData(this.IDENTITY_FRM, field, 'IRAAccountDocuments').then(() => {
+      this.IDENTITY_FRM = FormValidator.onChange(
+        this.IDENTITY_FRM,
+        { name: field, value: '' },
+      );
+      this.IDENTITY_FRM.fields[field].fileId = '';
+      this.IDENTITY_FRM.fields[field].preSignedUrl = '';
+      this.createAccount(currentStep, 'draft', true);
+    })
+      .catch(() => { });
   }
 }
 export default new IraAccountStore();

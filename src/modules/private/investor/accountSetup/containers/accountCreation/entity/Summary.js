@@ -12,7 +12,6 @@ import Helper from '../../../../../../../helper/utility';
 export default class Summary extends Component {
   handleCreateAccount = () => {
     this.props.entityAccountStore.createAccount('Summary', 'submit');
-    this.props.history.push('/app/summary');
   }
   render() {
     const {

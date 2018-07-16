@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { isEmpty } from 'lodash';
 import { MultiStep } from '../../../../../../../helper';
 import FinancialInformation from './FinancialInformation';
 import { validationActions } from '../../../../../../../services/actions';
@@ -76,7 +77,7 @@ export default class AccountCreation extends React.Component {
         name: 'Link bank',
         component: <Plaid />,
         isValid: '',
-        isDirty: !_.isEmpty(this.props.bankAccountStore.plaidBankDetails) ||
+        isDirty: !isEmpty(this.props.bankAccountStore.plaidBankDetails) ||
         this.props.bankAccountStore.formLinkBankManually.meta.isDirty,
         validate: validationActions.validateLinkBankForm,
         stepToBeRendered: 6,

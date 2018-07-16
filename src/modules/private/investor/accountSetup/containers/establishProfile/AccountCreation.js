@@ -21,25 +21,25 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Employment',
         component: <Employment />,
-        isValid: this.props.investorProfileStore.isValidEmployment ? '' : 'error',
+        isValid: this.props.investorProfileStore.EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: false,
       },
       {
         name: 'Investor Profile',
         component: <InvestorProfile />,
-        isValid: this.props.investorProfileStore.isValidInvestorProfile ? '' : 'error',
+        isValid: this.props.investorProfileStore.INVESTOR_PROFILE_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: false,
       },
       {
         name: 'Finances',
         component: <Finances />,
-        isValid: this.props.investorProfileStore.isValidFinances ? '' : 'error',
+        isValid: this.props.investorProfileStore.FINANCES.meta.isFieldValid ? '' : 'error',
         isDirty: false,
       },
       {
         name: 'Experience',
         component: <Experience />,
-        isValid: this.props.investorProfileStore.isValidExperience ? '' : 'error',
+        isValid: this.props.investorProfileStore.INVESTMENT_EXPERIENCE.meta.isFieldValid ? '' : 'error',
         isDirty: false,
       },
     ];

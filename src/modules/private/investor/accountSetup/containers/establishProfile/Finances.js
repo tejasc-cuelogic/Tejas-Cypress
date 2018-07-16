@@ -2,15 +2,19 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { FormInput, MaskedInput2, FormCheckbox } from '../../../../../../theme/form';
+import { MaskedInput2, FormCheckbox } from '../../../../../../theme/form';
 
 @inject('investorProfileStore')
 @withRouter
 @observer
 export default class Finances extends Component {
   handleTick = (e, values) => {
-    this.props.investorProfileStore.setchkBoxTicked(values.name);
-    this.props.history.push(`${this.props.match.url}/fields-form`);
+    if (this.props.investorProfileStore.FINANCES.fields[values.name].value[0]) {
+      this.props.investorProfileStore.resetData(values.name);
+    } else {
+      this.props.investorProfileStore.setchkBoxTicked(values.name);
+      this.props.history.push(`${this.props.match.url}/fields-form`);
+    }
   }
 
   render() {
@@ -50,26 +54,14 @@ export default class Finances extends Component {
             changed={this.handleTick}
             defaults
           />
-          <FormInput
-            fielddata={FINANCES.fields.companyName}
-            name="companyName"
-            changed={financesChange}
-            disabled={FINANCES.fields.checkbox1.value &&
-              FINANCES.fields.checkbox1.value.length === 0}
-          />
+          {FINANCES.fields.companyName.value}
           <FormCheckbox
             fielddata={FINANCES.fields.checkbox2}
             name="checkbox2"
             changed={this.handleTick}
             defaults
           />
-          <FormInput
-            fielddata={FINANCES.fields.firmName}
-            name="firmName"
-            changed={financesChange}
-            disabled={FINANCES.fields.checkbox2.value &&
-              FINANCES.fields.checkbox2.value.length === 0}
-          />
+          {FINANCES.fields.firmName.value}
         </Form>
       </div>
     );

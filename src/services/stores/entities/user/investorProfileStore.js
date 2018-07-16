@@ -49,39 +49,41 @@ class InvestorProfileStore {
   }
 
   @computed
-  get isValidEmployment() {
-    const { employmentStatus, employer, currentPosition } = this.EMPLOYMENT_FORM.fields;
-    return isEmpty(employmentStatus.error) && isEmpty(employer.error) &&
-      isEmpty(currentPosition.error);
+  get canSubmitFieldsForm() {
+    if (this.chkboxTicked === 'checkbox1') {
+      return !isEmpty(this.FINANCES.fields.companyName.value);
+    } else if (this.chkboxTicked === 'checkbox2') {
+      return !isEmpty(this.FINANCES.fields.firmName.value);
+    }
+    return false;
   }
 
-  @computed
-  get isValidInvestorProfile() {
-    const { profileType } = this.INVESTOR_PROFILE_FORM.fields;
-    return isEmpty(profileType.error);
+  @action
+  submitFieldsForm = () => {
+    let name = '';
+    let value = '';
+    if (this.chkboxTicked === 'checkbox1') {
+      name = 'checkbox1';
+      value = 'iamadirector';
+    } else {
+      name = 'checkbox2';
+      value = 'iamamember';
+    }
+    this.FINANCES = FormValidator.onChange(
+      this.FINANCES,
+      { name, value },
+      'checkbox',
+    );
   }
 
-  @computed
-  get isValidFinances() {
-    const {
-      netWorth,
-      annualIncome1,
-      annualIncome2,
-      annualIncome3,
-      checkbox1,
-      checkbox2,
-      companyName,
-      firmName,
-    } = this.FINANCES.fields;
-    return isEmpty(netWorth.error) && isEmpty(annualIncome1.error) && isEmpty(annualIncome2.error)
-    && isEmpty(annualIncome3.error) && isEmpty(checkbox1.error) && isEmpty(checkbox2.error)
-    && isEmpty(companyName.error) && isEmpty(firmName.error);
-  }
-
-  @computed
-  get isValidExperience() {
-    const { experienceInfo, checkbox1, checkbox2 } = this.INVESTMENT_EXPERIENCE.fields;
-    return isEmpty(experienceInfo.error) && isEmpty(checkbox1.error) && isEmpty(checkbox2.error);
+  @action
+  resetData = (fieldName) => {
+    this.FINANCES.fields[fieldName].value = [];
+    if (fieldName === 'checkbox1') {
+      this.FINANCES.fields.companyName.value = '';
+    } else {
+      this.FINANCES.fields.firmName.value = '';
+    }
   }
 }
 
