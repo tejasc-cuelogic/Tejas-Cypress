@@ -322,7 +322,7 @@ class EntityAccountStore {
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
     uiStore.setProgress();
     let mutation = createAccount;
-    let variables = {
+    const variables = {
       userId: userStore.currentUser.sub,
       accountAttributes,
       status: formStatus,
@@ -330,32 +330,12 @@ class EntityAccountStore {
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(
-        userDetailsStore.currentUser.data.user.accounts,
-        { accountType: 'entity' },
-      );
+      const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'entity' });
       if (accountDetails) {
         mutation = updateAccount;
-        variables = {
-          userId: userStore.currentUser.sub,
-          accountId: accountDetails.accountId,
-          accountAttributes,
-          status: formStatus,
-          accountType: 'entity',
-        };
+        variables.accountId = accountDetails.accountId;
         actionPerformed = 'updated';
       }
-    }
-    if (this.investorAccId) {
-      mutation = updateAccount;
-      variables = {
-        userId: userStore.currentUser.sub,
-        accountId: this.investorAccId,
-        accountAttributes,
-        status: formStatus,
-        accountType: 'entity',
-      };
-      actionPerformed = 'updated';
     }
     return new Promise((resolve, reject) => {
       client

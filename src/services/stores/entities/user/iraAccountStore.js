@@ -108,7 +108,6 @@ class IraAccountStore {
 
   @action
   createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false) => {
-    alert('createaccount');
     if (formStatus === 'submit') {
       this.submitForm(currentStep, formStatus, this.accountAttributes);
     } else {
@@ -140,9 +139,7 @@ class IraAccountStore {
         this.submitForm(currentStep, formStatus, accountAttributes);
         break;
       case 'Identity':
-        alert('here11');
         if (removeUploadedData) {
-          alert('here22');
           accountAttributes.identityDoc = {
             fileId: '',
             fileName: '',
@@ -178,7 +175,6 @@ class IraAccountStore {
 
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
-    alert('submit');
     uiStore.setProgress();
     let mutation = createAccount;
     const variables = {
@@ -203,8 +199,10 @@ class IraAccountStore {
           variables,
         })
         .then((result) => {
+          if (result.data.createInvestorAccount || formStatus === 'submit') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
+          }
           if (currentStep.name === 'Identity') {
-            alert('submitform');
             if (removeUploadedData) {
               validationActions.validateIRAIdentityInfo();
             } else {
@@ -217,7 +215,6 @@ class IraAccountStore {
           }
           if (formStatus === 'submit') {
             Helper.toast('IRA account created successfully.', 'success');
-            userDetailsStore.getUser(userStore.currentUser.sub);
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           }
