@@ -1,6 +1,13 @@
 /*******************************
          Theme Overrides
 *******************************/
+.beneficiaries{
+    .ui.items{
+        .item{
+            background-color:@lighten-bg-color;
+        }
+    }
+}
 .ui.items.messages{
     .item{
         margin:@35px 0;
@@ -55,5 +62,3 @@
         }
     }
 }
-
-
