@@ -13,3 +13,71 @@
         }
     }
 }
+
+.notification-panel{
+    .ui.message{
+        min-height:113px;
+        padding:@10px @14px;
+        border-radius:@6px;
+        background-color:@tertiary-text;
+        box-shadow:0 0 20px fade(@fullBlack, 32%);
+        .timestamp{
+            font-size:@13px;
+            color:@inverse-secondary-text;
+        }
+        .header:not(.ui){
+            margin:@7px 0;
+            font-size:@14px;
+            font-weight:400;
+            color:@midWhite;
+            line-height:18px;
+            >b{
+                color:@white;
+                font-weight:700;
+            }
+        }
+        h2.ui.header{
+            margin:0 0 @7px 0;
+            color:@white;
+        }
+        a.link{
+            font-weight:700;
+            color:@theme-primary;
+            &:hover, &:focus{
+                color:@theme-primary-darken;
+            }
+        }
+        i.icon:not(.ns-close-light){
+            font-size:@32px;
+            margin:0 0 0 0.6em;
+            color:@theme-primary;
+        }
+        .link-button.close{
+            font-size:@12px;
+            color:@grey;
+            position:absolute;
+            right:7px;
+        }
+        .confirm-dismiss{
+            padding:@10px @14px;
+            background:@tertiary-text;
+            display:flex;
+            flex-direction:column;
+            border-radius:6px;
+            position:absolute;
+            left:0;
+            top:0;
+            bottom:0;
+            right:0;
+            >p{
+                color:@midWhite;
+                flex-grow:1;
+            }
+        }
+        // h4.ui.header{
+        //     font-size:@20px;
+        //     font-weight:900;
+        //     color:@theme-primary;
+        // }
+    }
+}
