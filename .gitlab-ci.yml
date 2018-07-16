@@ -119,8 +119,6 @@ version:dev:
     - git config --global user.email ${CI_USER_EMAIL} && git config --global user.name ${CI_USER_NAME}
     # Fetch existing tags
     - git fetch --tags
-    # Bump the patch version
-    - npm version patch
     # Create/update the CHANGELOG.md file
     - node ./changelog/index.js --preset angular --infile CHANGELOG.md --same-file --release-count 0
     # Stage the changes 
@@ -128,9 +126,7 @@ version:dev:
     # Commit the changes
     - git commit -m "Updated CHANGELOG.md [skip ci]"
     # Push the changes back to the develop branch
-    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop
-    # Push the tags
-    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop --tags
+    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-server.git/ HEAD:develop
   dependencies:
     - build:dev
 
