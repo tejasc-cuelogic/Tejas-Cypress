@@ -1,0 +1,13 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.campaign{
+    .ui.horizontal.list>.item{
+        font-size:@12px;
+        font-weight:700;
+        color:@primary-one;
+        &:hover{
+            text-decoration:underline;
+        }
+    }
+}
