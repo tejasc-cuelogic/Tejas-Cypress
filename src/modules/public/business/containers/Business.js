@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Container, Button, Menu, Grid, Image, Divider, Embed, Statistic } from 'semantic-ui-react';
+import { Header, Container, Button, Menu, Grid, Image, Divider, Embed, Statistic, List } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import supportIcon from '../../../../assets/images/support.svg';
 import sellingIcon from '../../../../assets/images/selling.svg';
@@ -75,9 +75,30 @@ class Business extends Component {
                 </div>
               </Grid.Column>
             </Grid>
-            <div className="mt-80 mb-30 center-align">
+            <div className="mt-80 mb-80 center-align">
               <Button secondary content="Apply now" />
             </div>
+            <Grid className="business-learn-more">
+              <Grid.Row centered columns={2}>
+                <Grid.Column className="center-align">
+                  <p><b>Learn more</b></p>
+                  <List horizontal>
+                    <List.Item>
+                      <List.Icon name="arrow right" color="green" />
+                      <List.Content as="a">
+                      Why fundraise on NextSeed?
+                      </List.Content>
+                    </List.Item>
+                    <List.Item>
+                      <List.Icon name="arrow right" color="green" />
+                      <List.Content as="a">
+                      Is fundraising on NextSeed risky?
+                      </List.Content>
+                    </List.Item>
+                  </List>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Container>
         </section>
         <Divider fitted as={Container} />

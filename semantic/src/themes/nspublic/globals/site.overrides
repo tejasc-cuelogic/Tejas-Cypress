@@ -485,3 +485,23 @@ footer{
 		}
 	}
 }
+.business-learn-more {
+	p {
+		text-align: left;
+		margin-left: 56px;
+	}
+
+	.ui.horizontal.list {
+		&:not(.celled) {
+		   >.item:first-child {
+			   margin-right: 20px;
+		   }
+		}
+		>.item {
+			>.icon+.content {
+				font-size: @13px;
+				color: @neutral-light;
+			}
+		}
+	}
+}
