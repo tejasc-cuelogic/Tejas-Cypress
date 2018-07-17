@@ -357,7 +357,7 @@ export const ACC_TYPE = {
 export const EMPLOYMENT = {
   employmentStatus: {
     key: 'employmentStatus',
-    value: true,
+    value: 'employed',
     values:
       [
         { label: 'Employed', value: 'employed' },
@@ -374,7 +374,7 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Employer',
     error: undefined,
-    rule: 'required_with:employmentStatus',
+    rule: 'required_if:employmentStatus,employed',
     placeHolder: 'Type employer name',
   },
   currentPosition: {
@@ -382,14 +382,14 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Current Position Held',
     error: undefined,
-    rule: 'required_with:employmentStatus',
+    rule: 'required_if:employmentStatus,employed',
     placeHolder: 'E.g. CEO',
   },
 };
 
 export const INVESTOR_PROFILE = {
   profileType: {
-    value: true,
+    value: 'individual',
     values: [{ label: 'Individual', value: 'individual' }, { label: 'Joint(Married)', value: 'joint' }],
     error: undefined,
     rule: 'required',
@@ -463,7 +463,7 @@ export const FINANCES = {
 
 export const INVESTMENT_EXPERIENCE = {
   experienceInfo: {
-    value: '',
+    value: '1',
     values: [{ label: 'No experience', value: '1' }, { label: 'I know what I’m doing', value: '2' }, { label: 'I have some experience', value: '3' }, { label: 'I’m an expert', value: '4' }],
     error: undefined,
     rule: 'required',

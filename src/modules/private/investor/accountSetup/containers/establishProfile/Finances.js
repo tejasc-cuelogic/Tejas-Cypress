@@ -32,6 +32,7 @@ export default class Finances extends Component {
           <MaskedInput2
             name="netWorth"
             currency
+            value={FINANCES.fields.netWorth.value}
             fielddata={FINANCES.fields.netWorth}
             changed={financesChange}
           />
