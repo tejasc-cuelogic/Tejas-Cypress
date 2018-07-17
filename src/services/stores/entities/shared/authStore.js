@@ -27,7 +27,6 @@ export class AuthStore {
 
   @action
   setPwdVisibilityStatus = () => {
-    console.log('hii');
     if (this.pwdInputType === 'password') {
       this.pwdInputType = 'text';
     } else {
@@ -62,8 +61,13 @@ export class AuthStore {
   };
 
   @action
-  ConfirmChange = (e, result) => {
-    this.CONFIRM_FRM = Validator.onChange(this.CONFIRM_FRM, Validator.pullValues(e, result));
+  ConfirmChange = (e) => {
+    if (e.length === 6) {
+      this.CONFIRM_FRM = Validator.onChange(
+        this.CONFIRM_FRM,
+        { name: 'code', value: e },
+      );
+    }
   };
 
   @action

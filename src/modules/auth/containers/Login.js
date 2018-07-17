@@ -59,6 +59,7 @@ class Login extends Component {
                   type={field === 'password' ? pwdInputType : 'email'}
                   icon={field === 'password' ? togglePasswordType() : null}
                   name={field}
+                  autoFocus={field === 'email'}
                   fielddata={LOGIN_FRM.fields[field]}
                   changed={LoginChange}
                 />

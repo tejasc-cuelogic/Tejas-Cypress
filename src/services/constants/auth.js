@@ -15,7 +15,7 @@ const COMMON = {
   code: {
     value: '',
     error: undefined,
-    rule: 'required|numeric',
+    rule: 'required',
     key: 'code',
     label: 'Enter verification code here:',
   },

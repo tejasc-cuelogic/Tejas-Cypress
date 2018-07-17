@@ -57,6 +57,7 @@ class InvestorSignup extends Component {
                   <FormInput
                     key={field}
                     type="text"
+                    autoFocus={field === 'givenName'}
                     name={field}
                     fielddata={SIGNUP_FRM.fields[field]}
                     changed={signupChange}
