@@ -137,7 +137,7 @@ export default class ProfileData extends Component {
             <Card fluid className="form-card">
               <h3>Profile Photo</h3>
               <div>
-                <Randavatar size="mini" UserInfo={userAvatar} />
+                <Randavatar UserInfo={userAvatar} />
                 <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
               </div>
             </Card>
