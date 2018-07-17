@@ -1,7 +1,5 @@
-/* eslint-disable class-methods-use-this, arrow-body-style, no-return-assign */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import Validator from 'validatorjs';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
@@ -14,6 +12,7 @@ import {
 import { FIN_INFO } from '../../../../constants/user';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
 import { finLimit, updateFinLimit } from '../../queries/financialLimits';
+import { FormValidator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
@@ -173,29 +172,6 @@ export class UserDetailsStore {
     this.deleting = status;
   }
 
-  @action
-  finInfoEleChange = (e, result) => {
-    const fieldName = typeof result === 'undefined' ? e.target.name : result.name;
-    const fieldValue = typeof result === 'undefined' ? e.target.value : result.value;
-    this.onFieldChange('FIN_INFO', fieldName, fieldValue);
-  };
-
-  @action
-  onFieldChange = (currentForm, field, value) => {
-    const form = currentForm || 'formFinInfo';
-    if (field) {
-      this[form].fields[field].value = value;
-    }
-    const validation = new Validator(
-      mapValues(this[form].fields, f => f.value),
-      mapValues(this[form].fields, f => f.rule),
-    );
-    this[form].meta.isValid = validation.passes();
-    if (field) {
-      this[form].fields[field].error = validation.errors.first(field);
-    }
-  };
-
   /*
   Financial Limits
   */
@@ -209,7 +185,7 @@ export class UserDetailsStore {
           this.FIN_INFO.fields[f].value = data.FinancialLimits[f];
           return this.FIN_INFO.fields[f];
         });
-        this.onFieldChange('FIN_INFO');
+        FormValidator.onChange(this.FIN_INFO);
       },
     });
   }
