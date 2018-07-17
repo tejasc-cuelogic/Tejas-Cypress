@@ -3,24 +3,50 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MaskedInput2, FormCheckbox } from '../../../../../../theme/form';
+import FieldsForm from '../../components/establishProfile/FieldsForm';
 
-@inject('investorProfileStore')
+@inject('investorProfileStore', 'uiStore')
 @withRouter
 @observer
 export default class Finances extends Component {
+  handleCloseNestedModal = () => {
+    this.props.uiStore.setModalStatus(false);
+    this.props.investorProfileStore.resetData(this.props.investorProfileStore.chkboxTicked);
+  }
+  handleFormSubmit = () => {
+    this.props.investorProfileStore.submitFieldsForm();
+    this.props.uiStore.setModalStatus(false);
+  }
+
   handleTick = (e, values) => {
     if (this.props.investorProfileStore.FINANCES.fields[values.name].value[0]) {
       this.props.investorProfileStore.resetData(values.name);
     } else {
       this.props.investorProfileStore.setchkBoxTicked(values.name);
-      this.props.history.push(`${this.props.match.url}/fields-form`);
+      this.props.uiStore.setModalStatus(true);
     }
   }
 
   render() {
-    const { FINANCES, financesChange } = this.props.investorProfileStore;
+    const {
+      FINANCES,
+      financesChange,
+      canSubmitFieldsForm,
+      chkboxTicked,
+    } = this.props.investorProfileStore;
+    const { modalStatus } = this.props.uiStore;
     return (
       <div>
+        <FieldsForm
+          canSubmitFieldsForm={canSubmitFieldsForm}
+          close={this.handleCloseNestedModal}
+          handleFormSubmit={this.handleFormSubmit}
+          financesChange={financesChange}
+          chkboxTicked={chkboxTicked}
+          modalStatus={modalStatus}
+          form={FINANCES}
+          {...this.props}
+        />
         <Header as="h1" textAlign="center">
           Financial Information
         </Header>

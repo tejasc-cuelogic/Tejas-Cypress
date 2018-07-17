@@ -449,13 +449,13 @@ export const FINANCES = {
   },
   companyName: {
     value: '',
-    label: ' ',
+    label: 'Company Name',
     error: undefined,
     rule: 'required_with:checkbox1',
   },
   firmName: {
     value: '',
-    label: ' ',
+    label: 'Firm Name',
     error: undefined,
     rule: 'required_with:checkbox2',
   },
