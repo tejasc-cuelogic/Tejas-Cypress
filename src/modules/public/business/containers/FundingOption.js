@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Container, Menu, Segment, Grid, List } from 'semantic-ui-react';
+import { Header, Container, Menu, Segment, Grid, List, Button } from 'semantic-ui-react';
 import Aux from 'react-aux';
 
 class FundingOption extends Component {
@@ -7,7 +7,7 @@ class FundingOption extends Component {
     return (
       <Aux>
         <Container>
-          <section>
+          <section className="funding-option">
             <Header as="h2">Choose a funding option that fits your business.</Header>
             <p className="mb-50 center-align">
               Whether you need working capital for your existing business,
@@ -21,7 +21,7 @@ class FundingOption extends Component {
               <Menu.Item name="Tab Option 4" />
             </Menu>
             <Segment attached="bottom" padded>
-              {/* <Grid doubling columns={2}>
+              <Grid doubling columns={2}>
                 <Grid.Column>
                   <Header as="h4">Term Notes</Header>
                   <Header as="h3" color="blue">Raise $50,000—$1 Million</Header>
@@ -56,8 +56,8 @@ class FundingOption extends Component {
                   </List>
                 </Grid.Column>
                 <Grid.Column />
-              </Grid> */}
-              <Grid doubling columns={2}>
+              </Grid>
+              {/* <Grid doubling columns={2}>
                 <Grid.Column>
                   <Header as="h4">Revenue Sharing Notes</Header>
                   <Header as="h3" color="blue">Raise $100,000—$1 Million</Header>
@@ -92,8 +92,12 @@ class FundingOption extends Component {
                   </List>
                 </Grid.Column>
                 <Grid.Column />
-              </Grid>
+              </Grid> */}
             </Segment>
+            <div className="center-align">
+              <Button secondary compact>Apply Now</Button>
+              <Button primary compact>See Process</Button>
+            </div>
           </section>
         </Container>
       </Aux>

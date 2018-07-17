@@ -491,3 +491,49 @@ footer{
 		margin-left: 56px;
 	}
 }
+.funding-option {
+	padding-top: 174px;
+	.ui.compact.button {
+		margin: 0 10px; 
+	}
+}
+.process {
+	margin-top: 74px;
+	padding: 0;
+	&.process-banner {
+		background:url(../../assets/images/process.png) 0px center no-repeat;
+	}
+	.column.process-right-section {
+		counter-reset: section;
+		background-color: rgba(255, 255, 255, 0.81);
+		padding-bottom: 4.28571429rem;
+		padding-top: 4.28571429rem;
+		.ui.card {
+			border: 0;
+			background-color: transparent;
+			&:hover {
+				box-shadow: none;
+			}
+			>.content {
+				text-align: left;
+				padding: 0 0 0 40px;
+				position: relative;
+				&:before {
+					counter-increment: section;
+  					content: counter(section);  
+					position: absolute;
+					left: 0;
+					top: 5px;
+					font-weight: 500;
+					line-height: 24px;
+					font-size: 40px;
+					color: #20C86D;
+				}
+				p {
+					line-height: 24px;
+					font-size: 15px;
+				}
+			}
+		}
+	}
+}
