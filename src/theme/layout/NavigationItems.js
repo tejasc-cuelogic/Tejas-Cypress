@@ -99,10 +99,18 @@ export const NavigationItems = props => (
         {!props.location.pathname.includes('/business-application') &&
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
-        <Menu.Item as={Link} to="/">
-          <Button secondary compact>Sign Up/Log In</Button>
-        </Menu.Item>
       </Menu.Menu>
+      {/* <Menu.Menu secondary className="center-align menu-secondary">
+        <Menu.Item name="Fundraising" />
+        <Menu.Item name="How it Works" active />
+        <Menu.Item name="Funding Options" />
+        <Menu.Item name="Process" />
+        <Menu.Item name="All-Inclusive" />
+        <Menu.Item name="Compare" />
+      </Menu.Menu> */}
+      <Menu.Item as={Link} to="/">
+        <Button secondary compact>Sign Up/Log In</Button>
+      </Menu.Item>
     </Container>
   </Menu>
 );

@@ -11,3 +11,19 @@
         }
     }
 }
+.ui.horizontal.list {
+    &:not(.celled) {
+       >.item:first-child {
+           margin-right: @20px;
+       }
+    }
+    >.item {
+        .header {
+            margin-bottom: @10px;
+        }
+        >.icon+.content {
+            font-size: @13px;
+            color: @neutral-light;
+        }
+    }
+}

@@ -8,6 +8,7 @@ import OfferDetails from './public/offering/containers/OfferDetails';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
+import FundingOption from './public/business/containers/FundingOption';
 
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
@@ -70,6 +71,10 @@ export const publicRoutes = [
   {
     path: '/business',
     component: Business,
+  },
+  {
+    path: '/funding',
+    component: FundingOption,
   },
   {
     path: '/business-application',
