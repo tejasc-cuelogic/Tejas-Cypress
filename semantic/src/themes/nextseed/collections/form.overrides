@@ -13,25 +13,25 @@
             display:inline-block;
             line-height:@18px;
         }
-        &.otp-field{
-            margin:3rem 0;
-            label{
-                font-size:@14px;
-            }
-            .ui.input > input{
-                max-width:290px;
-                margin:0 auto;
-                padding-left:13px;
-                letter-spacing:38px;
-                border:none;
-                background-image:linear-gradient(to left, @border-color 75%, rgba(0, 0, 0, 0) 0%);
-                background-position:bottom;
-                background-size:51px 1px;
-                background-repeat:repeat-x;
-                background-position-x:35px;
-                &:focus{
-                    background-image:linear-gradient(to left, @theme-primary 75%, rgba(0, 0, 0, 0) 0%);
-                }
+    }
+    .otp-field{
+        min-width:300px;
+        margin:3rem 0;
+        label{
+            font-size:@14px;
+        }
+        > input{
+            max-width:30px;
+            margin:0 @10px;
+            font-size:@22px;
+            padding:@12px 0;
+            text-align:center;
+            &[type=number]::-webkit-inner-spin-button, 
+            &[type=number]::-webkit-outer-spin-button { 
+                -webkit-appearance: none;
+                -moz-appearance:textfield;
+                appearance: none;
+                margin: 0; 
             }
         }
     }
