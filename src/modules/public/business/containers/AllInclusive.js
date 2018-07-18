@@ -3,15 +3,15 @@ import { Header, Grid, Card, List, Button, Container } from 'semantic-ui-react';
 import Aux from 'react-aux';
 // import ProcessImage from '../../../../assets/images/process.png';
 
-class Process extends Component {
+class AllInclusive extends Component {
   render() {
     return (
       <Aux>
-        <section className="content-spacer process-banner">
+        <section className="content-spacer inclusive-banner">
           <Container>
             <Grid padded="horizontally">
               <Grid.Row>
-                <Grid.Column floated="right" width={10} verticalAlign="middle" className="process-right-section">
+                <Grid.Column floated="left" width={10} verticalAlign="middle" className="process-right-section">
                   <Header as="h2">From approved to funded</Header>
                   <p className="mb-30">
                   Once your application is approved, we make connecting with investors easy,
@@ -80,4 +80,4 @@ class Process extends Component {
   }
 }
 
-export default Process;
+export default AllInclusive;

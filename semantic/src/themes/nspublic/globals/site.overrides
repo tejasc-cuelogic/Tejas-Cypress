@@ -497,13 +497,8 @@ footer{
 		margin: 0 10px; 
 	}
 }
-.process {
-	margin-top: 74px;
-	padding: 0;
-	&.process-banner {
-		background:url(../../assets/images/process.png) 0px center no-repeat;
-	}
-	.column.process-right-section {
+.content-spacer {
+	&.column.process-right-section {
 		counter-reset: section;
 		background-color: rgba(255, 255, 255, 0.81);
 		padding-bottom: 4.28571429rem;
@@ -535,5 +530,15 @@ footer{
 				}
 			}
 		}
+	}
+}
+.content-spacer {
+	margin-top: 74px;
+	padding: 0;
+	&.process-banner {
+		background:url(../../assets/images/process.png) 0px center no-repeat;
+	}
+	&.inclusive-banner {
+		background:url(../../assets/images/inclusive.png) 0px right no-repeat;
 	}
 }
