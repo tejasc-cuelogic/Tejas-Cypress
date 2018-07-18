@@ -543,10 +543,18 @@ export class NewBusinessStore {
   }
 
   @action
-  businessAppParitalSubmit = () => {
+  businessAppParitalSubmit = (step) => {
+    console.log(step);
     console.log(this.applicationStep);
     let data = this.getFormatedBusinessDetailsData;
-    const stepName = 'BUSINESS_DETAILS';
+    let stepName = 'BUSINESS_DETAILS';
+    if (step === 'business-details') {
+      stepName = 'BUSINESS_DETAILS';
+    } else if (step === 'performance') {
+      stepName = 'PERFORMANCE';
+    } else if (step === 'documentation') {
+      stepName = 'DOCUMENTATION';
+    }
     let mutationQuery = upsertBusinessApplicationInformationBusinessDetails;
     let variableData = {
       applicationId: this.currentApplicationId,
@@ -689,6 +697,11 @@ export class NewBusinessStore {
         isValid: false,
       },
     };
+  }
+
+  @action
+  formReset = () => {
+    this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
   }
 
   @action

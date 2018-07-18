@@ -10,9 +10,13 @@ import { Modal, Button, Header, Form } from 'semantic-ui-react';
 @withRouter
 @observer
 export default class ConfirmModal extends Component {
+  componentWillMount() {
+    console.log(this.props.stepLink);
+  }
   submit = (e) => {
     e.preventDefault();
-    this.props.newBusinessStore.businessAppParitalSubmit().then(() => {
+    const stepUrl = this.props.stepLink.split('/');
+    this.props.newBusinessStore.businessAppParitalSubmit(stepUrl[3]).then(() => {
     //   Helper.toast('Business application saved!', 'success');
     //   this.props.history.push('/app/dashboard');
     });
