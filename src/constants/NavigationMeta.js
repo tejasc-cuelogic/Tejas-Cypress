@@ -73,9 +73,10 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-article',
     title: 'Application',
-    to: 'business-application',
+    to: 'business-application/:applicationId',
     accessibleTo: ['bowner'],
     subPanel: 1,
+    path: 'issuer/businessApplication/containers/BusinessApplication',
     subNavigations: [
       {
         icon: 'ns-check-circle',

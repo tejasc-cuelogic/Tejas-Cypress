@@ -117,6 +117,19 @@ export class Utility {
       });
   });
 
+  putUploadedFile1 = urlArray => new Promise((resolve, reject) => {
+    const funcArray = [];
+    _.forEach(urlArray.preSignedUrl, (item, key) => {
+      funcArray.push(apiService.uploadOnS3(item[key], urlArray[key].fileData));
+    });
+    Promise.all(funcArray).then(() => {
+      resolve();
+    })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
   maskPhoneNumber = (phoneNumber) => {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
     return maskPhoneNumber;

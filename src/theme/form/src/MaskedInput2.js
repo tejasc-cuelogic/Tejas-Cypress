@@ -26,13 +26,13 @@ const MaskedInput2 = observer((props) => {
         }
       </label>
       {props.currency ? (
-        <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onValueChange={props.changed} error={!!error} mask="_" />
+        <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : props.number ? (
-        <NumberFormat placeholder={placeHolder} maxLength={18} {...props} value={value} onValueChange={props.changed} error={!!error} mask="_" />
+        <NumberFormat placeholder={placeHolder} maxLength={18} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : props.percentage ? (
-        <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={props.changed} error={!!error} mask="%" suffix="%" />
+        <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="%" suffix="%" />
       ) : (
-        <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onValueChange={props.changed} error={!!error} mask="_" />
+        <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       )
       }
       {error && !props.showErrorOnField &&

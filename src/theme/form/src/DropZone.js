@@ -2,7 +2,7 @@
 import React from 'react';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
-import { Icon, Responsive, Button } from 'semantic-ui-react';
+import { Icon, Responsive, Button, Popup } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
 import { isArray } from 'lodash';
 import { FieldError } from '../../shared';
@@ -16,7 +16,17 @@ const DropZone = observer((props) => {
   return (
     <div className="file-uploader-wrap">
       {label &&
-        <label>{label}</label>
+        <label>
+          {label}
+          {props.tooltip &&
+          <Popup
+            trigger={<Icon name="help circle outline" />}
+            content={props.tooltip}
+            position="top center"
+            className="center-align"
+          />
+        }
+        </label>
       }
       {!value.length || props.multiple ?
         <div className="file-uploader">

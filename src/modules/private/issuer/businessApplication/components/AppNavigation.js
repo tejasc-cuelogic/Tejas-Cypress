@@ -2,21 +2,24 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
 import Aux from 'react-aux';
+import { inject, observer } from 'mobx-react';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 
+@inject('newBusinessStore')
 @withRouter
+@observer
 export default class AppNavigation extends Component {
   state = { step: -1, navItems: [] };
   componentWillMount() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url).subNavigations;
-    const step = navItems.findIndex(i => i.to === (match.url.split('/')[3]));
+    const step = navItems.findIndex(i => i.to === (match.url.split('/')[4]));
     this.setState({ step, navItems });
   }
   actualSubmit = (where) => {
     this.props.action();
 
-    this.props.history.push(`/app/business-application/${this.state.navItems[this.state.step + where].to}`);
+    this.props.history.push(`/app/business-application/${this.props.newBusinessStore.currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
   }
   render() {
     return (

@@ -30,7 +30,7 @@ export default SidebarLeftPush;
 
 const MySidebar = observer(props => (
   <Sidebar.Pushable>
-    {!props.match.url.includes('/business-application') &&
+    {(!props.match.url.includes('/business-application') || true) &&
     <Aux>
       <Sidebar
         as={Menu}

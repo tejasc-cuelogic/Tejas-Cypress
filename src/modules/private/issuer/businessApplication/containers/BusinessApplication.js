@@ -7,6 +7,9 @@ import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import { Logo } from '../../../../../theme/shared';
+import Failure from '../components/Failure';
+import Success from '../components/Success';
+import ConfirmModal from '../components/confirmModal';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -19,13 +22,21 @@ const getModule = component => Loadable({
 @observer
 export default class BusinessApplication extends Component {
   componentWillMount() {
-    if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/pre-qualification`);
+    console.log(this.props.match.params.applicationId);
+    console.log(this.props.newBusinessStore.isFetchedData);
+    this.props.newBusinessStore.setCurrentApplicationId(this.props.match.params.applicationId);
+    if (this.props.match.params.applicationId !== 'new' &&
+      this.props.newBusinessStore.isFetchedData !== this.props.match.params.applicationId) {
+      this.props.newBusinessStore.fetchApplicationDataById(this.props.match.params.applicationId);
+      // this.props.history.replace(`${this.props.match.url}/pre-qualification`);
+      this.props.newBusinessStore.setFetchedData(this.props.match.params.applicationId);
     }
   }
+
   saveContinue = () => {
+    console.log(this.props.match.params.applicationId);
     Helper.toast('Business application saved!', 'success');
-    this.props.history.push('/app/dashboard');
+    this.props.history.push(`${this.props.match.url}/confirm`);
   }
   submit = () => {
     Helper.toast('Business application submitted successfully!', 'success');
@@ -63,12 +74,15 @@ export default class BusinessApplication extends Component {
       >
         <Switch>
           <Route exact path={match.url} component={getModule(navItems[0].component)} />
+          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/failed`} component={Failure} />
+          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/success`} render={props1 => <Success refLink={this.props.match.url} applicationId={this.props.match.params.applicationId} {...props1} />} />
           {
             navItems.map(item => (
-              <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+              <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
             ))
           }
         </Switch>
+        <Route exact path={`${this.props.match.url}/confirm`} render={() => <ConfirmModal refLink={this.props.match.url} />} />
       </PrivateLayout>
     );
   }

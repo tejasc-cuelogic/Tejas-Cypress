@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Divider, Form, Button, Icon, Accordion } from 'semantic-ui-react';
+import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormInput, DropZone, MaskedInput2 } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
@@ -10,6 +10,30 @@ import AppNavigation from './AppNavigation';
 @inject('newBusinessStore')
 @observer
 export default class BusinessDetails extends Component {
+  state = {
+    showConfirmModal: false,
+    currentForm: '',
+    currentIndex: 0,
+  }
+
+  componentWillMount() {
+    this.props.newBusinessStore.setApplicationStep('business-details');
+  }
+
+  removeForm = (e) => {
+    this.setState({ showConfirmModal: !this.state.showConfirmModal });
+    this.props.newBusinessStore.removeForm(e, this.state.currentForm, this.state.currentIndex);
+  }
+
+  toggleConfirm = (formName, index) => {
+    this.setState({
+      ...this.state,
+      showConfirmModal: !this.state.showConfirmModal,
+      currentForm: formName,
+      currentIndex: index,
+    });
+  }
+
   submit = () => {
     // e.preventDefault();
     console.log(111);
@@ -18,10 +42,9 @@ export default class BusinessDetails extends Component {
     const {
       BUSINESS_DETAILS_FRM,
       businessDetailsChange,
-      businessDetailsFiles,
-      businessDetailsReset,
+      businessAppUploadFiles,
+      businessAppRemoveFiles,
       addMoreForms,
-      removeForm,
       businessDetailsMaskingChange,
     } = this.props.newBusinessStore;
     return (
@@ -46,8 +69,10 @@ export default class BusinessDetails extends Component {
                 multiple
                 name="businessPlan"
                 fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
-                ondrop={businessDetailsFiles}
-                onremove={businessDetailsReset}
+                ondrop={(files, fieldName) =>
+                  businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
+                onremove={(e, fieldName, index) =>
+                  businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
               />
             </FormElementWrap>
             <FormElementWrap
@@ -61,7 +86,7 @@ export default class BusinessDetails extends Component {
                     <Header as="h3">
                       Existing Debt {index + 1}
                       {BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
-                        <Button icon className="link-button pull-right" onClick={e => removeForm(e, 'debts', index)}>
+                        <Button icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
                       }
@@ -73,14 +98,14 @@ export default class BusinessDetails extends Component {
                           type="text"
                           name="amount"
                           fielddata={debt.amount}
-                          changed={values => businessDetailsMaskingChange('amount', values, 'debts', index)}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                         />
                         <MaskedInput2
                           percentage
                           type="text"
                           name="interestExpenses"
                           fielddata={debt.interestExpenses}
-                          changed={values => businessDetailsMaskingChange('interestExpenses', values, 'debts', index)}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                         />
                       </Form.Group>
                       <Form.Group widths="equal">
@@ -89,14 +114,14 @@ export default class BusinessDetails extends Component {
                           type="text"
                           name="remainingPrincipal"
                           fielddata={debt.remainingPrincipal}
-                          changed={values => businessDetailsMaskingChange('remainingPrincipal', values, 'debts', index)}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                         />
                         <MaskedInput2
                           number
                           type="text"
                           name="term"
                           fielddata={debt.term}
-                          changed={values => businessDetailsMaskingChange('term', values, 'debts', index)}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                         />
                       </Form.Group>
                     </div>
@@ -143,7 +168,7 @@ export default class BusinessDetails extends Component {
                   <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
                     <Header as="h3">Owner {index + 1}
                       {BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
-                        <Button icon className="link-button pull-right" onClick={e => removeForm(e, 'owners', index)}>
+                        <Button icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
                       }
@@ -161,7 +186,7 @@ export default class BusinessDetails extends Component {
                           type="text"
                           name="yearsOfExp"
                           fielddata={owner.yearsOfExp}
-                          changed={values => businessDetailsMaskingChange('yearsOfExp', values, 'owners', index)}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                         />
                       </Form.Group>
                       <Form.Group widths="equal">
@@ -170,14 +195,14 @@ export default class BusinessDetails extends Component {
                           type="text"
                           name="ssn"
                           fielddata={owner.ssn}
-                          changed={values => businessDetailsMaskingChange('ssn', values, 'owners', index)}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                         />
                         <MaskedInput2
                           percentage
                           type="text"
                           name="companyOwnerShip"
                           fielddata={owner.companyOwnerShip}
-                          changed={values => businessDetailsMaskingChange('companyOwnerShip', values, 'owners', index)}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                         />
                       </Form.Group>
                       <Form.Group widths="equal">
@@ -197,8 +222,8 @@ export default class BusinessDetails extends Component {
                         name="resume"
                         fielddata={owner.resume}
                         ondrop={(files, fieldName) =>
-                          businessDetailsFiles(files, fieldName, index)}
-                        onremove={(e, fieldName) => businessDetailsReset(e, fieldName, index)}
+                          businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                        onremove={(e, fieldName) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
                       />
                     </div>
                   </Grid.Column>
@@ -212,6 +237,16 @@ export default class BusinessDetails extends Component {
             </FormElementWrap>
             <AppNavigation action={this.submit} />
           </Form>
+          <Confirm
+            header="Confirm"
+            content={`Are you sure you want to remove this ${this.state.currentForm}?`}
+            open={this.state.showConfirmModal}
+            onCancel={this.toggleConfirm}
+            onConfirm={
+              e => this.removeForm(e)}
+            size="mini"
+            className="deletion"
+          />
         </Grid.Column>
       </Grid>
     );
