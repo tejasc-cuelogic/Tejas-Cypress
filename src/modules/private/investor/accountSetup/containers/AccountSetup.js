@@ -53,7 +53,7 @@ export default class AccountSetup extends Component {
 
     return (
       <PrivateLayout {...this.props} P5={<StickyNotification signupStatus={signupStatus} />}>
-        <h3>Progress of your account creation</h3>
+        <h3>Complete your account setup</h3>
         {!(currentUser.data && currentUser.data.user) ? 'Loading..' : (
           <ProgressCard
             renderStep={this.renderStep}

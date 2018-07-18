@@ -48,10 +48,7 @@ const ProgressCard = props => (
               </Icon.Group>
               <p><b>{status === 2 ? currentCard.successMsg : currentCard.label}</b></p>
               {status === 0 ?
-                <p>
-                  This option will be available
-                  when you verify your identity
-                </p> :
+                '' :
                 status !== 2 ?
                   <Button
                     color="green"

@@ -3,14 +3,15 @@ class Helper {
     const metaData = {
       'contact-card': {
         step: 0,
-        label: 'Verify identity',
+        label: 'Verify Identity',
         action: false,
-        successMsg: 'Identity verified',
+        successMsg: 'Completed',
       },
       'cash-dollar': {
         step: 1,
         label: 'Establish Investor Profile',
         action: false,
+        successMsg: 'Completed',
       },
       'bar-line-chart': {
         step: 2,
@@ -26,7 +27,7 @@ class Helper {
       A: {
         group: 'Investor Account Creation',
         title: '',
-        label: 'You’re a few steps away from being able to invest!',
+        label: 'Check your inbox for a confirmation email from NextSeed, and click the link to verify your address.',
       },
     };
     return metaData.A;
