@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Visibility, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { DateTimeFormat } from './../../../../../../theme/shared';
-import Randavatar from './../../../../../../theme/shared/Randavatar';
+import { DateTimeFormat, UserAvatar } from './../../../../../../theme/shared';
 import UserTypeIcon from './UserTypeIcon';
 
 class UserListing extends Component {
@@ -49,7 +48,15 @@ class UserListing extends Component {
                   <Table.Cell collapsing>
                     {!user.profilepic &&
                       <div className="user-image">
-                        <Randavatar avatarKey={user.id} avatarUrl={user.avatar ? user.avatar.url : ''} name={user.id} accountType={user.accountType} size="mini" />
+                        <UserAvatar
+                          UserInfo={{
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            avatarUrl: user.avatar ? user.avatar.url : '',
+                            roles: user.accountType,
+                          }}
+                          size="mini"
+                        />
                       </div>
                     }
                   </Table.Cell>

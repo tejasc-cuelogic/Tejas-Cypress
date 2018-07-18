@@ -53,12 +53,6 @@ export const FILTER_META = {
     { text: 'West Virginia', value: 'west virginia' },
   ],
 };
-/* eslint-disable */
-export const USER_POOL = {"id":"5acc7be47498ac534eed4f84","email":"pickettbryan@securia.com","firstName":"Ada","lastName":"Mccullough","createdDate":"2015-03-07T06:02:12 -06:-30","updatedDate":"2018-01-16T01:47:07 -06:-30","legalDetails":{"verificationStartDate":"2014-01-07T04:21:39 -06:-30","verificationCompletionDate":"2014-05-14T12:34:12 -06:-30","legalName":{"firstLegalName":"Tanner","lastLegalName":"Guerra"},"dateOfBirth":"02-03-1980","ssn":"145-47-8825","legalAddress":{"street1":"Willow Street","street2":"Coles Street","city":"Lisco","state":"Connecticut","zipCode":2103}},"contactDetails":{"email":{"email":"tannerguerra@securia.com","verificationDate":"2017-11-29T11:46:08 -06:-30"},"phone":{"number":"+1 (871) 523-3343"}}};
-
-export const RANDOM_USER = () => {
-  return USER_POOL;
-}
 
 export const TRANSACTION_TYPES = [
   { text: 'Deposit', value: 'Deposit' },
@@ -126,6 +120,6 @@ export const NEW_USER = {
 };
 
 export const BENEFICIARY_STATUS = {
-  PENDING : 'PENDING',
-  APPROVED : 'APPROVED',
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
 };

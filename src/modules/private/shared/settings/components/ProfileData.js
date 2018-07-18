@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
@@ -11,8 +12,7 @@ import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
 import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
-import { Spinner } from '../../../../../theme/shared';
-import Randavatar from '../../../../../theme/shared/Randavatar';
+import { Spinner, UserAvatar } from '../../../../../theme/shared';
 
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore', 'accountStore')
 @observer
@@ -40,8 +40,12 @@ export default class ProfileData extends Component {
   }
   render() {
     const {
-      email, legalDetails, avatar, firstName,
+      email, legalDetails, avatar, firstName, lastName,
     } = this.props.userDetailsStore.userDetails;
+    const User = { ...this.props.userStore.currentUser };
+    const userAvatar = {
+      firstName, lastName, avatarUrl: avatar ? avatar.url : '', roles: toJS(User.roles),
+    };
     const {
       updateProfileInfo,
       updateProfileInfoChange,
@@ -132,7 +136,7 @@ export default class ProfileData extends Component {
             <Card fluid className="form-card">
               <h3>Profile Photo</h3>
               <div>
-                <Randavatar name={firstName} accountType={this.props.userStore.currentUser.roles} avatarKey={this.props.userStore.currentUser.sub} avatarUrl={avatar ? avatar.url : ''} />
+                <UserAvatar UserInfo={userAvatar} />
                 <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
               </div>
             </Card>

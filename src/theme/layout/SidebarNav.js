@@ -20,8 +20,9 @@ export class SidebarNav extends Component {
   }
   render() {
     const {
-      roles, location, isVerified, createdAccount, navStore,
+      roles, location, isVerified, createdAccount, navStore, onlyMount,
     } = this.props;
+    if (onlyMount) return null;
     return (
       <Aux>
         <NavItems
