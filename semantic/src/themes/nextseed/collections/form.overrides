@@ -26,13 +26,6 @@
             font-size:@22px;
             padding:@12px 0;
             text-align:center;
-            &[type=number]::-webkit-inner-spin-button, 
-            &[type=number]::-webkit-outer-spin-button { 
-                -webkit-appearance: none;
-                -moz-appearance:textfield;
-                appearance: none;
-                margin: 0; 
-            }
         }
     }
     .fields .field, .fields .wide.field{
