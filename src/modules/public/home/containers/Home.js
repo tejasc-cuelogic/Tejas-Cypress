@@ -5,7 +5,7 @@ import Banner from '../components/Banner';
 import HowItWorksSummary from '../components/HowItWorksSummary';
 import HowItWorks from '../components/HowItWorks';
 import FeaturedOn from '../../shared/components/FeaturedOn';
-import CampaignList from '../../offering/components/CampaignList';
+import CampaignList from '../../offering/components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 
 class Home extends Component {

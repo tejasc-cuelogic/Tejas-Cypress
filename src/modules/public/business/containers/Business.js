@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Container, Button, Menu, Grid, Image, Divider, Embed, Statistic, List } from 'semantic-ui-react';
 import Aux from 'react-aux';
+import Banner from '../components/Banner';
 import supportIcon from '../../../../assets/images/support.svg';
 import sellingIcon from '../../../../assets/images/selling.svg';
 import networkIcon from '../../../../assets/images/network.svg';
@@ -15,18 +16,7 @@ class Business extends Component {
   render() {
     return (
       <Aux>
-        <Container fluid className="banner business-banner">
-          <Container>
-            <div className="banner-caption">
-              <Header as="h1">
-              Accelerate your<br />
-              growth with the<br />
-              power of the crowd
-              </Header>
-              <Button secondary className="mt-50">Apply Now</Button>
-            </div>
-          </Container>
-        </Container>
+        <Banner />
         <Menu secondary className="center-align menu-secondary">
           <Menu.Item name="Fundraising" />
           <Menu.Item name="How it Works" active />
@@ -35,6 +25,14 @@ class Business extends Component {
           <Menu.Item name="All-Inclusive" />
           <Menu.Item name="Compare" />
         </Menu>
+        <Switch>
+          <Route exact path={match.url} component={getModule(navItems[0].component)} />
+          {
+            navItems.map(item => (
+              <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+            ))
+          }
+        </Switch>
         <section>
           <Container>
             <Header as="h2" className="mb-80" textAlign="center">
