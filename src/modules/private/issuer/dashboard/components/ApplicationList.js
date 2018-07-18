@@ -46,7 +46,7 @@ export default class ApplicationList extends Component {
                   }
                 </Card.Content>
               </Card>
-            )) : <div>loading...</div>
+            )) : null
           }
         </Card.Group>
       </Aux>

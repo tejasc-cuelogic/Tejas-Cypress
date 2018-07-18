@@ -17,8 +17,8 @@ export default class ConfirmModal extends Component {
     e.preventDefault();
     const stepUrl = this.props.stepLink.split('/');
     this.props.newBusinessStore.businessAppParitalSubmit(stepUrl[3]).then(() => {
-    //   Helper.toast('Business application saved!', 'success');
-    //   this.props.history.push('/app/dashboard');
+      // Helper.toast('Business application saved!', 'success');
+      this.props.history.push('/app/dashboard');
     });
     // const location = `${this.props.refLink}/preview`;
     // this.props.history.push(location);
