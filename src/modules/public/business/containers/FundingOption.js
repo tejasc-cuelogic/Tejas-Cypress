@@ -57,6 +57,7 @@ class FundingOption extends Component {
                 </Grid.Column>
                 <Grid.Column />
               </Grid>
+              {/* Revenue tab pane - do not remove */}
               {/* <Grid doubling columns={2}>
                 <Grid.Column>
                   <Header as="h4">Revenue Sharing Notes</Header>

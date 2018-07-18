@@ -28,3 +28,13 @@
         }
     }
 }
+.content-spacer {
+	margin-top: 74px;
+	padding: 0;
+	&.process-banner {
+		background:url(../../assets/images/business/process.png) 0px center no-repeat;
+	}
+	&.inclusive-banner {
+		background:url(../../assets/images/business/inclusive.png) right center no-repeat;
+	}
+}

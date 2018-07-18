@@ -11,6 +11,7 @@ import Business from './public/business/containers/Business';
 import FundingOption from './public/business/containers/FundingOption';
 import Process from './public/business/containers/Process';
 import AllInclusive from './public/business/containers/AllInclusive';
+import Compare from './public/business/containers/Compare';
 
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
@@ -85,6 +86,10 @@ export const publicRoutes = [
   {
     path: '/inclusive',
     component: AllInclusive,
+  },
+  {
+    path: '/compare',
+    component: Compare,
   },
   {
     path: '/business-application',

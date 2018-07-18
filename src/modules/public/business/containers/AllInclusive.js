@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
-import { Header, Grid, Card, List, Button, Container } from 'semantic-ui-react';
+import { Header, Grid, List, Button, Container, Item } from 'semantic-ui-react';
 import Aux from 'react-aux';
-// import ProcessImage from '../../../../assets/images/process.png';
+import MarketingIcon from '../../../../assets/images/business/marketing.svg';
+import EscrowIcon from '../../../../assets/images/business/escrow.svg';
+import CampaignIcon from '../../../../assets/images/business/campaign.svg';
+import PaymentIcon from '../../../../assets/images/business/payment.svg';
+import QuestionIcon from '../../../../assets/images/business/questions.svg';
+import PreparationIcon from '../../../../assets/images/business/preparation.svg';
+import ServicesIcon from '../../../../assets/images/business/services.svg';
+import TaxIcon from '../../../../assets/images/business/tax.svg';
 
 class AllInclusive extends Component {
   render() {
@@ -9,66 +16,90 @@ class AllInclusive extends Component {
       <Aux>
         <section className="content-spacer inclusive-banner">
           <Container>
-            <Grid padded="horizontally">
+            <Grid relaxed padded="vertically">
               <Grid.Row>
-                <Grid.Column floated="left" width={10} verticalAlign="middle" className="process-right-section">
-                  <Header as="h2">From approved to funded</Header>
+                <Grid.Column floated="left" width={10} verticalAlign="middle" className="side-section inclusive-left-section">
+                  <Header as="h2">Reach your goals with full-service support included.</Header>
                   <p className="mb-30">
-                  Once your application is approved, we make connecting with investors easy,
-                  so you can find funding and get back to your business.
+                  Our one-time fee comes with everything you need to launch, promote and service
+                  your campaign. Best of all, we only charge you if your offering is successful.
                   </p>
-                  <Card.Group itemsPerRow={2} className="mb-30">
-                    <Card>
-                      <Card.Content>
-                        <Header as="h5">Save time with our online application.</Header>
-                        <p>
-                          Find out quickly if NextSeed is right for your business. Our online
-                          application guides you through the process, and we’re here to answer
-                          questions along the way.
-                        </p>
-                      </Card.Content>
-                    </Card>
-                    <Card>
-                      <Card.Content>
-                        <Header as="h5">Easily create and launch your campaign.</Header>
-                        <p>
-                          Our team of financial, legal and marketing specialists will be there to
-                          help at every step. From the content to the paperwork, our team will
-                          provide the frameworks and templates to make the process a breeze.
-                        </p>
-                      </Card.Content>
-                    </Card>
-                    <Card>
-                      <Card.Content>
-                        <Header as="h5">Tell your story and amplify your message.</Header>
-                        <p>
-                          Tap into our marketing, advertising and PR experts. We’ll provide the
-                          tools and support you need to raise funds and tap into a base of
-                          thousands of local investors.
-                        </p>
-                      </Card.Content>
-                    </Card>
-                    <Card>
-                      <Card.Content>
-                        <Header as="h5">Pay and engage investors painlessly.</Header>
-                        <p>
-                          Our investor management support streamlines your monthly payments,
-                          investor updates, reward fulfillment and even annual tax forms.
-                        </p>
-                      </Card.Content>
-                    </Card>
-                  </Card.Group>
+                  <Item.Group>
+                    <Item>
+                      <Item.Image size="mini" src={MarketingIcon} />
+                      <Item.Content>
+                        <Item.Header>Marketing</Item.Header>
+                        <Item.Meta>Expert advertising, marketing and PR resources.</Item.Meta>
+                      </Item.Content>
+                    </Item>
+                    <Item>
+                      <Item.Image size="mini" src={EscrowIcon} />
+                      <Item.Content>
+                        <Item.Header>Escrow</Item.Header>
+                        <Item.Meta>Handling all banking, escrow and processing fees.</Item.Meta>
+                      </Item.Content>
+                    </Item>
+                    <Item>
+                      <Item.Image size="mini" src={CampaignIcon} />
+                      <Item.Content>
+                        <Item.Header>Campaign Development</Item.Header>
+                        <Item.Meta>Design and content creation services.</Item.Meta>
+                      </Item.Content>
+                    </Item>
+                    <Item>
+                      <Item.Image size="mini" src={PaymentIcon} />
+                      <Item.Content>
+                        <Item.Header>Payment Processing</Item.Header>
+                        <Item.Meta>Collecting commitments and distributing funds.</Item.Meta>
+                      </Item.Content>
+                    </Item>
+                    <Item>
+                      <Item.Image size="mini" src={QuestionIcon} />
+                      <Item.Content>
+                        <Item.Header>Q&A</Item.Header>
+                        <Item.Meta>Facilitating investor questions during the offering.</Item.Meta>
+                      </Item.Content>
+                    </Item>
+                    <Item>
+                      <Item.Image size="mini" src={PreparationIcon} />
+                      <Item.Content>
+                        <Item.Header>Disclosure Preparation</Item.Header>
+                        <Item.Meta>Legal templates and SEC documents.</Item.Meta>
+                      </Item.Content>
+                    </Item>
+                    <Item>
+                      <Item.Image size="mini" src={ServicesIcon} />
+                      <Item.Content>
+                        <Item.Header>Investor Services</Item.Header>
+                        <Item.Meta>Servicing note payments to underlying investors.</Item.Meta>
+                      </Item.Content>
+                    </Item>
+                    <Item>
+                      <Item.Image size="mini" src={TaxIcon} />
+                      <Item.Content>
+                        <Item.Header>Tax Form Preparation</Item.Header>
+                        <Item.Meta>Distributing year-end documents to investors.</Item.Meta>
+                      </Item.Content>
+                    </Item>
+                  </Item.Group>
                   <List horizontal className="mb-50">
                     <List.Item>
                       <List.Header>Learn more</List.Header>
                       <List.Icon name="arrow right" color="green" />
                       <List.Content as="a">
-                        Why fundraise on NextSeed?
+                      Small businesses and NextSeed
+                      </List.Content>
+                    </List.Item>
+                    <List.Item>
+                      <List.Header>Learn more</List.Header>
+                      <List.Icon name="arrow right" color="green" />
+                      <List.Content as="a">
+                      Commercial real estate and NextSeed
                       </List.Content>
                     </List.Item>
                   </List>
                   <div className="center-align">
-                    <Button primary compact>See All-Inclusive</Button>
+                    <Button primary compact>See How NextSeed Compares</Button>
                   </div>
                 </Grid.Column>
               </Grid.Row>

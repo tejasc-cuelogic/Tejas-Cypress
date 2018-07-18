@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Header, Container, Button, Menu, Grid, Image, Divider, Embed, Statistic, List } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import supportIcon from '../../../../assets/images/support.svg';
-import sellingIcon from '../../../../assets/images/selling.svg';
-import networkIcon from '../../../../assets/images/network.svg';
-import carouselImg from '../../../../assets/images/lian.jpg';
+import supportIcon from '../../../../assets/images/business/support.svg';
+import sellingIcon from '../../../../assets/images/business/selling.svg';
+import networkIcon from '../../../../assets/images/business/network.svg';
+import carouselImg from '../../../../assets/images/business/lian.jpg';
 import videoPoster from '../../../../assets/images/636206632.webp';
 
 const nsvideos = {
