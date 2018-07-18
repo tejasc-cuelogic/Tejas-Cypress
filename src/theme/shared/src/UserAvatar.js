@@ -7,7 +7,7 @@ const userRoles = {
   admin: 'admin', bowner: 'bowner', investor: 'investor',
 };
 
-const randavatar = observer((props) => {
+const UserAvatar = observer((props) => {
   const { UserInfo, size } = props;
   if (UserInfo.avatarUrl) {
     return (
@@ -30,4 +30,4 @@ const randavatar = observer((props) => {
   );
 });
 
-export default randavatar;
+export default UserAvatar;

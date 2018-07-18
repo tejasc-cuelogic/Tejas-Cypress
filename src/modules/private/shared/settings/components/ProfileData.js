@@ -12,8 +12,7 @@ import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
 import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
-import { Spinner } from '../../../../../theme/shared';
-import Randavatar from '../../../../../theme/shared/Randavatar';
+import { Spinner, UserAvatar } from '../../../../../theme/shared';
 
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore', 'accountStore')
 @observer
@@ -137,7 +136,7 @@ export default class ProfileData extends Component {
             <Card fluid className="form-card">
               <h3>Profile Photo</h3>
               <div>
-                <Randavatar UserInfo={userAvatar} />
+                <UserAvatar UserInfo={userAvatar} />
                 <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
               </div>
             </Card>
