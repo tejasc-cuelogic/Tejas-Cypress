@@ -4,8 +4,7 @@ import Aux from 'react-aux';
 import { Responsive, Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav, GetNavItem } from './SidebarNav';
-import Randavatar from '../shared/Randavatar';
-import { Logo } from '../shared';
+import { UserAvatar, Logo } from '../shared';
 
 @inject('uiStore')
 @observer
@@ -52,7 +51,7 @@ const MySidebar = observer(props => (
         />
         {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
         <div className="user-picture">
-          <Randavatar name={props.UserInfo.fullname} accountType={props.UserInfo.accountType} avatarUrl={props.UserInfo.avatarUrl} avatarKey={props.UserInfo.avatarKey} size="small" />
+          <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : ''} />
           <h2>{props.UserInfo.fullname}</h2>
           {GetNavItem('profile-settings', props.UserInfo.roles)}
         </div>
