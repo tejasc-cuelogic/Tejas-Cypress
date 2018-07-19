@@ -976,7 +976,7 @@ svg:not(:root).recharts-surface{
 	&.admin{
 		background-color:@highlight-primary;
 	}
-	&.bowner{
+	&.issuer{
 		background-color:@fullBlack;
 	}
 	&.investor{
