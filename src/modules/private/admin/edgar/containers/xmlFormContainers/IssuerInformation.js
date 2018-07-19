@@ -63,6 +63,7 @@ export default class IssuerInformation extends React.Component {
             <FormDatePicker
               type="text"
               name="dateIncorporation"
+              placeholder="Select date"
               maxDate={moment()}
               fielddata={formIssuerInfo.fields.dateIncorporation}
               selected={formIssuerInfo.fields.dateIncorporation.value}

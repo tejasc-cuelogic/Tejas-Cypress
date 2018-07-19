@@ -3,8 +3,8 @@ import Validator from 'validatorjs';
 
 /* eslint-disable no-unused-vars, arrow-body-style */
 Validator.register('taxId', (value, requirement, attribute) => {
-  return value.match(/^\d{3}-\d{2}-\d{4}$/);
-}, 'The :attribute is not in the format XXX-XX-XXXX.');
+  return value.match(/^\d{2}-\d{7}$/);
+}, 'The :attribute is not in the format XX-XXXXXXX.');
 
 export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
 
@@ -82,19 +82,19 @@ export const IND_LINK_BANK_MANUALLY = {
     key: 'routingNumber',
     value: '',
     error: undefined,
-    rule: 'required|numeric|digits:10',
+    rule: 'required|numeric|digits:9',
     label: 'Enter your bank routing number',
-    tooltip: 'Put your 10 digit bank routing number',
-    maxLength: 10,
+    tooltip: 'Put your 9 digit bank routing number',
+    maxLength: 9,
   },
   accountNumber: {
     key: 'accountNumber',
     value: '',
     error: undefined,
-    rule: 'required|numeric|digits:12',
+    rule: 'required|min:4|max:17',
     label: 'Enter your bank account number',
-    tooltip: 'Put your 12 digit bank account number',
-    maxLength: 12,
+    tooltip: 'Put your 4 to 17 digit bank account number',
+    maxLength: 17,
   },
 };
 

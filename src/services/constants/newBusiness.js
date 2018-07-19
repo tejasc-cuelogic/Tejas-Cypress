@@ -18,8 +18,8 @@ export const BUSINESS_PRE_QUALIFICATION = {
   businessName: {
     value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g.  NextBrewery',
   },
-  website: {
-    value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  http://nextbrewery.com',
+  webSite: {
+    value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  NextBrewery',
   },
   phoneNumber: {
     value: '', label: 'Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789',
@@ -37,7 +37,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g.  NY',
   },
   zipCode: {
-    value: '', label: 'Zip Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6,
+    value: '', label: 'Zip Code', error: undefined, rule: 'required', maxLength: 6,
   },
   industryExperience: {
     value: '',

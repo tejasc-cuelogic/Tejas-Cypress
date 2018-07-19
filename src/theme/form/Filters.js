@@ -3,9 +3,9 @@ import React from 'react';
 import { toJS } from 'mobx';
 import { Grid, Input, Dropdown, Form, Label, Icon, List } from 'semantic-ui-react';
 import moment from 'moment';
-import DatePicker from 'react-datepicker';
 import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
+import DatePicker from './src/FormDatePicker';
 
 export const DropdownFilter = props => (
   <Form.Field className="dropdown-field">
@@ -40,28 +40,18 @@ export const DateRangeFilter = props => (
   <Form.Field>
     <label>{props.label}</label>
     <Form.Group widths="equal">
-      <Form.Field>
-        <DatePicker
-          showMonthDropdown
-          showYearDropdown
-          dateFormat="MM/DD/YYYY"
-          selected={props.filters.startDate}
-          placeholderText="MM/DD/YYYY"
-          maxDate={moment()}
-          onChange={props.changeStart}
-        />
-      </Form.Field>
-      <Form.Field>
-        <DatePicker
-          showMonthDropdown
-          showYearDropdown
-          dateFormat="MM/DD/YYYY"
-          selected={props.filters.endDate}
-          placeholderText="MM/DD/YYYY"
-          maxDate={moment()}
-          onChange={props.changeEnd}
-        />
-      </Form.Field>
+      <DatePicker
+        selected={props.filters.startDate}
+        placeholder="MM/DD/YYYY"
+        maxdate={moment()}
+        onchange={props.changeStart}
+      />
+      <DatePicker
+        selected={props.filters.endDate}
+        placeholder="MM/DD/YYYY"
+        maxdate={moment()}
+        onchange={props.changeEnd}
+      />
     </Form.Group>
   </Form.Field>
 );

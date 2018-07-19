@@ -36,8 +36,11 @@ class EntityAccountStore {
   }
 
   @action
-  finInfoChange = (e, result) => {
-    this.formChange(e, result, 'FIN_INFO_FRM');
+  finInfoChange = (values, field) => {
+    this.FIN_INFO_FRM = FormValidator.onChange(
+      this.FIN_INFO_FRM,
+      { name: field, value: values.floatValue },
+    );
   }
 
   @action
@@ -465,7 +468,7 @@ class EntityAccountStore {
   }
 
   @action
-  setFileUploadData(form, field, files) {
+  setFileUploadData = (form, field, files) => {
     accountActions.setFileUploadData(this[form], field, files, 'ACCOUNT_ENTITY_CREATION', 'INVESTOR').then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this[form].fields[field].fileId = fileId;

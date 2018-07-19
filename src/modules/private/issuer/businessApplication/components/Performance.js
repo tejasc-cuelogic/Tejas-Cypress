@@ -58,6 +58,7 @@ export default class Performance extends Component {
                       ['pyGrossSales', 'pyOperatingExpenses', 'pyNetIncome', 'pyCogs'].map(field => (
                         <MaskedInput2
                           key={field}
+                          type="tel"
                           name={field}
                           currency
                           value={fields[field].value}

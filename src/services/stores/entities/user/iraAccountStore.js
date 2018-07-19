@@ -48,8 +48,17 @@ class IraAccountStore {
   }
 
   @action
-  finInfoChange = (e, result) => {
-    this.formChange(e, result, 'FIN_INFO_FRM');
+  finInfoChange = (values, field) => {
+    this.FIN_INFO_FRM = FormValidator.onChange(
+      this.FIN_INFO_FRM,
+      { name: field, value: values.floatValue },
+    );
+  }
+
+  @action
+  finCurrencyValueChange = (values) => {
+    const { value } = values;
+    console.log(value);
   }
 
   @action
@@ -267,7 +276,7 @@ class IraAccountStore {
 
   @action
   setFileUploadData = (field, files) => {
-    accountActions.setFileUploadData(this.IDENTITY_FRM, field, files, 'ACCOUNT_IRA_CREATION_CIP').then(action((result) => {
+    accountActions.setFileUploadData(this.IDENTITY_FRM, field, files, 'ACCOUNT_IRA_CREATION_CIP', 'INVESTOR').then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this.IDENTITY_FRM.fields[field].fileId = fileId;
       this.IDENTITY_FRM.fields[field].preSignedUrl = preSignedUrl;

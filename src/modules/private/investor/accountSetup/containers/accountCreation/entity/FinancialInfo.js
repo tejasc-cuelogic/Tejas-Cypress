@@ -26,6 +26,7 @@ export default class AccountType extends Component {
           <div className="field-wrap">
             <FormDatePicker
               name="trustDate"
+              placeholder="Select date"
               fielddata={TRUST_INFO_FRM.fields.trustDate}
               selected={moment(TRUST_INFO_FRM.fields.trustDate.value)}
               changed={this.handleDateChange}

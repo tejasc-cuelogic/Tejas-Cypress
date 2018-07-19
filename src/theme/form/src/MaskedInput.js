@@ -6,7 +6,9 @@ import InputMask from 'react-input-mask';
 import { FieldError } from '../../shared';
 
 const MaskedInput = observer((props) => {
-  const { label, error, value } = props.fielddata;
+  const {
+    label, error, value, placeHolder,
+  } = props.fielddata;
   return (
     <Form.Field error={!!error}>
       <label>
@@ -27,6 +29,7 @@ const MaskedInput = observer((props) => {
             value={value}
             onChange={props.changed}
             error={!!error}
+            placeHolder={placeHolder}
             alwaysShowMask
             maskChar=" "
           />
@@ -43,6 +46,7 @@ const MaskedInput = observer((props) => {
           value={value}
           onChange={props.changed}
           error={!!error}
+          placeHolder={placeHolder}
           alwaysShowMask
           maskChar=" "
         />
