@@ -1,9 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, matchPath } from 'react-router-dom';
 import { Segment, Grid } from 'semantic-ui-react';
-import { includes } from 'lodash';
 import { publicRoutes } from './../../modules/routes';
 import { uiStore } from '../../services/stores';
 import Footer from './../../theme/layout/Footer';
@@ -13,14 +12,8 @@ import Footer from './../../theme/layout/Footer';
 export default class Public extends React.Component {
   render() {
     const { location } = this.props;
-    const NoFooterPages = [
-      '/offerings/1/overview',
-      '/offerings/1/about',
-      '/offerings/1/investment-details',
-      '/offerings/1/bonus-rewards',
-      '/offerings/1/disclosures',
-      '/offerings/1/comments',
-      '/business-application',
+    const NoFooter = [
+      '/offerings/:id/:section', '/business-application', '/auth/:section',
     ];
     return (
       <Aux>
@@ -43,7 +36,8 @@ export default class Public extends React.Component {
             </Grid.Row>
           </Grid>
         </Segment>
-        {(!includes(NoFooterPages, location.pathname) && !location.pathname.startsWith('/auth')) &&
+        {}
+        {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
           <Footer />
         }
       </Aux>
