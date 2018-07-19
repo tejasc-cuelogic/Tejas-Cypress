@@ -1,6 +1,15 @@
 /*******************************
          Theme Overrides
 *******************************/
+input[type=number]{
+    -moz-appearance:textfield;
+    &::-webkit-inner-spin-button, 
+    &::-webkit-outer-spin-button { 
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+
 .ui.action.input{
     &:not([class*="left"])>input{
         padding-right:@14px;

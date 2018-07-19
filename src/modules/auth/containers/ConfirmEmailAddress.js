@@ -92,7 +92,6 @@ export default class ConfirmEmailAddress extends Component {
             <ReactCodeInput
               fields={6}
               type="number"
-              inputStyle={{ maxWidth: '40px', margin: '0 auto', paddingLeft: '13px' }}
               className="otp-field"
               fielddata={CONFIRM_FRM.fields.code}
               onChange={ConfirmChange}
