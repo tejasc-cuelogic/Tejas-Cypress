@@ -1,6 +1,12 @@
 /*******************************
          Theme Overrides
 *******************************/
+//  Public page Starts
+.ui.padded.segment {
+    padding: 30px;
+}
+//  Public page Ends
+
 //  User Account details
 .ui.segment[class*="bottom attached"]{
     border-radius:0;

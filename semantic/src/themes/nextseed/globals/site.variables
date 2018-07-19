@@ -13,7 +13,8 @@
 /*-------------------
        Fonts
 --------------------*/
-@fontName          : 'Lato';
+
+@fontName          : 'Roboto';
 @fontSmoothing     : antialiased;
 
 @headerFont        : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -21,15 +22,16 @@
 
 @googleFontName    : @fontName;
 @importGoogleFonts : true;
-@googleFontSizes   : '400,700,400italic,700italic';
+@googleFontSizes   : '400,500,700,400italic,500italic,700italic';
 @googleSubset      : 'latin';
 
 @googleProtocol    : 'https://';
 @googleFontRequest : '@{googleFontName}:@{googleFontSizes}&subset=@{googleSubset}';
 
 
-@bold              : bold;
-@normal            : normal;
+@bold              : 700;
+@fontMedium        : 500;
+@normal            : 400;
 
 /*-------------------
       Base Sizes
@@ -58,8 +60,8 @@
     Brand Colors
 --------------------*/
 
-@primaryColor        : @theme-primary;
-@secondaryColor      : @black;
+@primaryColor        : @primary-one;
+@secondaryColor      : @primary-two;
 
 @lightPrimaryColor   : @lightBlue;
 @lightSecondaryColor : @lightBlack;
@@ -68,7 +70,7 @@
   Page Heading
 ---------------*/
 
-@headerFontWeight : 900;
+@headerFontWeight : @bold;
 @headerLineHeight : unit((18 / 14), em);
 
 @h1 : unit((28 / 14), rem);
@@ -90,8 +92,8 @@
 
 /* Input Text Color */
 @inputColor: @textColor;
-@inputPlaceholderColor: lighten(@inputColor, 75);
-@inputPlaceholderFocusColor: lighten(@inputColor, 45);
+@inputPlaceholderColor: lighten(@inputColor, 60);
+@inputPlaceholderFocusColor: lighten(@inputColor, 35);
 
 /* Line Height Default For Inputs in Browser (Descendors are 17px at 14px base em) */
 @inputLineHeight: unit((17 / 14), em);
@@ -133,7 +135,7 @@
 @pageOverflowX       : hidden;
 
 @lineHeight          : 1.571428em;
-@textColor           : @fullBlack;
+@textColor           : @neutral;
 
 /*-------------------
       Paragraph
@@ -233,10 +235,10 @@
 @orange           : @highlight-secondary;
 @yellow           : #FBBD08;
 @olive            : #B5CC18;
-@green            : @theme-primary;
+@green            : @primary-one;
 @teal             : @highlight-tertiary;
 @blue             : #2185D0;
-@violet           : @link-color;
+@violet           : #6435C9;
 @purple           : #A333C8;
 @pink             : #E03997;
 @brown            : #A5673F;
@@ -507,7 +509,7 @@
 
 /* Header Spacing */
 @headerTopMargin    : ~"calc(2rem - "@headerLineHeightOffset~")";
-@headerBottomMargin : 1.5rem;
+@headerBottomMargin : 1rem;
 @headerMargin       : @headerTopMargin 0em @headerBottomMargin;
 
 /* Minimum Mobile Width */
@@ -739,8 +741,8 @@
 ;
 
 /*---  Colors  ---*/
-@primaryColorHover    : saturate(darken(@primaryColor, 5), 10, relative);
-@secondaryColorHover  : saturate(lighten(@secondaryColor, 5), 10, relative);
+@primaryColorHover    : @primary-one-darken;
+@secondaryColorHover  : @primary-two-darken;
 
 @redHover             : saturate(darken(@red, 5), 10, relative);
 @orangeHover          : saturate(darken(@orange, 5), 10, relative);
@@ -974,6 +976,31 @@
 -------------------------------*/
 
 //  THEME BASE COLORS
+@primary-one:#20C86D;
+@primary-one-darken:#189652;
+@primary-one-lighten:#58D692;
+
+@primary-two:#1781FB;
+@primary-two-darken:#0073E6;
+@primary-two-lighten:#55A2FB;
+
+@secondary-color:#263E64;
+@secondary-color-darken:#1C2E4B;
+@secondary-color-lighten:#5C6E8B;
+
+@neutral:#31333D;
+@neutral-light:#676A73;
+@neutral-lighter:#E6E6E8;
+@neutral-lightest:#EDEEF2;
+@neutral-lighten:#F7F8FC;
+
+@commonShadow:0px 1px 1px @thumbInactiveBackground;
+
+
+
+/* --------------------------------------------
+      OLD VARIABLE VALUES TO BE REMOVED
+-------------------------------------------- */
 @theme-primary:#98CE23;
 @theme-primary-darken:darken(@theme-primary, 8%);					//  #81AD23 ~ 85B02B
 

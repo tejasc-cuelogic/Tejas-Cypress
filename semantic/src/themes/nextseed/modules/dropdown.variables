@@ -27,11 +27,11 @@
 @textTransition: none;
 
 /* Menu */
-@menuBackground:@white;
+@menuBackground: #FFFFFF;
 @menuGutterWidth: @14px;
-@menuMargin:@2px -@menuGutterWidth 0;
+@menuMargin: 0em;
 @menuPadding: 0em 0em;
-@menuTop: ~"calc(100% + "(@menuBorderWidth * 2)~")";
+@menuTop: 100%;
 @menuTextAlign: left;
 
 @menuBorderWidth: 1px;
@@ -58,7 +58,7 @@
 @itemVerticalPadding: @mini;
 @itemHorizontalPadding: 0;
 @itemPadding: @itemVerticalPadding @itemHorizontalPadding;
-@itemFontWeight: normal;
+@itemFontWeight: @normal;
 @itemLineHeight: 1em;
 @itemLineHeightOffset: (@itemLineHeight - 1em);
 @itemTextTransform: none;
@@ -76,7 +76,7 @@
 /* Menu Header */
 @menuHeaderColor: @darkTextColor;
 @menuHeaderFontSize: @relative11px;
-@menuHeaderFontWeight: bold;
+@menuHeaderFontWeight: @bold;
 @menuHeaderTextTransform: uppercase;
 @menuHeaderMargin: 1rem 0rem 0.75rem;
 @menuHeaderPadding: 0em @itemHorizontalPadding;
@@ -114,7 +114,7 @@
 
 /* Message */
 @messagePadding: @selectionItemPadding;
-@messageFontWeight: normal;
+@messageFontWeight: @normal;
 @messageColor: @unselectedTextColor;
 
 /* Floated Content */
@@ -236,7 +236,7 @@
 /* Inline */
 @inlineIconMargin: 0em @relative7px 0em @relative3px;
 @inlineTextColor: inherit;
-@inlineTextFontWeight: bold;
+@inlineTextFontWeight: @bold;
 @inlineMenuDistance: @relative3px;
 @inlineMenuBorderRadius: @borderRadius;
 
@@ -296,7 +296,7 @@
 @activeItemZIndex: @menuZIndex + 1;
 @activeItemBackground: transparent;
 @activeItemBoxShadow: none;
-@activeItemFontWeight: bold;
+@activeItemFontWeight: @bold;
 @activeItemColor: @selectedTextColor;
 
 /* Selected */

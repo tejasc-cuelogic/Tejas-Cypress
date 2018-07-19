@@ -48,7 +48,7 @@ const SummaryHeader = props => (
             props.details.summary.map(row => (
               <Grid.Column key={snakeCase(row.title)}>
                 <Card.Content>
-                  <Statistic size="tiny">
+                  <Statistic size="mini">
                     <Statistic.Label>
                       {row.title}
                       <Popup

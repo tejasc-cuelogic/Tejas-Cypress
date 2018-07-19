@@ -105,7 +105,7 @@
             color:@quaternary-text;
         }
         tbody{
-            font-weight:700;
+            font-weight:@fontMedium;
             i.offering-icon{
                 color:@border-color;
             }

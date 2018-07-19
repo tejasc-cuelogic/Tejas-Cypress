@@ -9,6 +9,80 @@
         margin:0 !important;
     }
 }
+//  Public pages Starts
+.ui.modal{
+    // padding: @35px;
+
+    // >.close {
+    //     top: @28px;
+    //     right: @20px;
+    //     color: #DADADA;
+    // }
+    // >.header {
+    //     padding: 0 0 @20px 0;
+    // }
+    .ui.grid.compact {
+        padding: @25px 0 @30px;
+        >.column:not(.row) {
+            padding: 0;
+        }
+        >.column {
+            &.padded {
+                padding: @30px;
+            }
+        }
+        .ui.header {
+            position: relative;
+            line-height: 33px;
+            .sub.header {
+                text-transform: uppercase;
+                font-weight: bold;
+                line-height: 28px;
+                font-size: 13px;
+            }
+            &:after {
+                content: "";
+                height: 6px;
+                background: #EAECEC;
+                width: 145px;
+                position: absolute;
+                bottom: -20px;
+            }
+        }
+        .ui.header+p {
+            margin-top: 34px;
+        }
+    }
+    .demographics {
+        margin: @10px;
+    }
+    &.share-modal {
+        >.header {
+            border: none;
+            color: @neutral-light;
+        }
+        >.content {
+            padding: 0
+        }
+        .share-icons {
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            a {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin-right: 10px;
+                color: @neutral-light;
+            }
+        }
+    }
+}
+//  Public pages Ends
+
 .ui.modal{
     &.mini{
         @media only screen and (min-width:@tabletBreakpoint){
@@ -371,6 +445,7 @@
     .title-meta{
         margin-left:1.5rem;
         font-size:0.5833334em;
+        font-weight:@fontMedium;
         color:@tertiary-text;
         vertical-align:top;
         i.icon{

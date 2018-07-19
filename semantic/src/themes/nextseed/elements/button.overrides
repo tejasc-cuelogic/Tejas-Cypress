@@ -1,6 +1,23 @@
 /*******************************
          Theme Overrides
 *******************************/
+//  Public page Starts
+.ui.button{
+    &:hover{
+        box-shadow:@buttonHoverShadow;
+    }
+}
+.offer-details {
+	.offering-side-menu {
+        .ui.secondary.button {
+            margin: 24px auto 0;
+            display: block;
+		}
+    }
+}
+//  Public Page Ends
+
+
 //  Buttons style CSS
 .ui{
     &.button, &.buttons .button{

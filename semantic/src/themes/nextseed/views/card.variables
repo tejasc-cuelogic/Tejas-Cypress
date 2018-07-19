@@ -21,11 +21,9 @@
 @width: 290px;
 @borderWidth: 1px;
 @borderShadow: 0px 0px 0px @borderWidth @solidBorderColor;
-@boxShadow:0 0 10px fade(@fullBlack, 10%);
-  // @shadowBoxShadow,
-  // @borderShadow
-;
-@border: none;
+@boxShadow:none;
+@cardHoverShadow:0px 4px 10px 0px @thumbInactiveBackground;
+@border: @borderWidth solid @neutral-lighter;
 @zIndex: '';
 @transition:
   box-shadow @defaultDuration @defaultEasing,
@@ -71,9 +69,9 @@
 
 /* Header */
 @headerMargin: '';
-@headerFontWeight: bold;
+@headerFontWeight: @bold;
 @headerFontSize: @relativeBig;
-@headerLineHeightOffset: -(@lineHeight - 1em) / 2;
+@headerLineHeightOffset:0;
 @headerColor: @darkTextColor;
 
 /* Metadata */

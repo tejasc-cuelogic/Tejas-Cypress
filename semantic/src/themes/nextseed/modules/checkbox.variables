@@ -12,7 +12,7 @@
 
 /* Checkbox */
 @checkboxBackground: @white;
-@checkboxBorder:@border-light 1px solid;
+@checkboxBorder: 1px solid @neutral-light;
 @checkboxBorderRadius: @4px;
 @checkboxTransition:
   border @defaultDuration @defaultEasing,
@@ -49,7 +49,7 @@
 
 /* Focus */
 @checkboxFocusBackground: @white;
-@checkboxFocusBorderColor: @border-light;
+@checkboxFocusBorderColor: @neutral-light;
 @checkboxFocusCheckColor: @selectedTextColor;
 @labelFocusColor: @selectedTextColor;
 

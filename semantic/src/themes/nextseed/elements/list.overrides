@@ -1,6 +1,18 @@
 /*******************************
          Theme Overrides
 *******************************/
+//  Public page Starts
+.campaign{
+    .ui.horizontal.list>.item{
+        font-size:@12px;
+        font-weight:@bold;
+        color:@primary-one;
+        &:hover{
+            text-decoration:underline;
+        }
+    }
+}
+//  Public page Ends
 
 .filter-meta{
     .ui.horizontal.list{
