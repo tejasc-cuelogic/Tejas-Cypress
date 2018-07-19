@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Header, Container, Menu, Segment, Grid, Button } from 'semantic-ui-react';
+import { Header, Container, Menu, Segment, Button } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../helper';
@@ -37,27 +37,22 @@ export default class FundingOption extends Component {
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
             </Menu>
             <Segment attached="bottom" padded>
-              <Grid doubling columns={2}>
-                <Grid.Column>
-                  <Switch>
+              <Switch>
+                <Route
+                  exact
+                  path={match.url}
+                  component={getModule(this.module(navItems[0].title))}
+                />
+                {
+                  navItems.map(item => (
                     <Route
-                      exact
-                      path={match.url}
-                      component={getModule(this.module(navItems[0].title))}
+                      key={item.to}
+                      path={`${match.url}/${item.to}`}
+                      component={getModule(this.module(item.title))}
                     />
-                    {
-                      navItems.map(item => (
-                        <Route
-                          key={item.to}
-                          path={`${match.url}/${item.to}`}
-                          component={getModule(this.module(item.title))}
-                        />
-                      ))
-                    }
-                  </Switch>
-                </Grid.Column>
-                <Grid.Column />
-              </Grid>
+                  ))
+                }
+              </Switch>
             </Segment>
             <div className="center-align">
               <Button secondary compact>Apply Now</Button>
