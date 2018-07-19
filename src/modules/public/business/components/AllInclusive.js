@@ -20,7 +20,7 @@ const AllInclusive = () => (
             Our one-time fee comes with everything you need to launch, promote and service
             your campaign. Best of all, we only charge you if your offering is successful.
             </p>
-            <Item.Group>
+            <Item.Group className="horizontal-items">
               <Item>
                 <Item.Image size="mini" src={MarketingIcon} />
                 <Item.Content>

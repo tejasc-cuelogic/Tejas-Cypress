@@ -162,7 +162,7 @@ const HowItWorks = () => (
             </p>
           </Grid.Column>
         </Grid>
-        <div className="mt-80 mb-30 center-align">
+        <div className="mt-80 mb-50 center-align">
           <Button primary content="See Funding Options" />
         </div>
       </Container>

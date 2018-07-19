@@ -560,3 +560,41 @@ footer{
 		margin-right: auto;
 	}
 }
+.investor-bottom-buttons {
+	.ui.compact.button {
+		margin: 0 10px; 
+	}
+}
+.how-it-works-steps {
+	counter-reset: section;
+	.ui.grid {
+		>.column {
+			text-align: left;
+			padding-left: 40px !important;
+			position: relative;
+			&:before {
+				counter-increment: section;
+				content: counter(section);  
+				position: absolute;
+				left: 0;
+				top: 15px;
+				font-weight: 500;
+				line-height: 24px;
+				font-size: 40px;
+				color: #20C86D;
+			}
+		}
+	}
+}
+.ui.grid.flex-column {
+	.column {
+		display: flex !important;
+		flex-direction: column;
+		.flex-content {
+			flex-grow: 1;
+			img {
+				width: 100%;
+			}
+		}
+	}
+}

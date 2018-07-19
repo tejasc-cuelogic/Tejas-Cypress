@@ -24,6 +24,7 @@ class Business extends Component {
       <Aux>
         <Banner />
         <Menu secondary className="center-align menu-secondary">
+          <Menu.Item>Fundraising</Menu.Item>
           <NavItems sub refLoc="public" location={location} navItems={navItems} />
         </Menu>
         <Switch>
