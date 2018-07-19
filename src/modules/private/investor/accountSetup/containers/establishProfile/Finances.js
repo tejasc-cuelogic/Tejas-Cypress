@@ -61,6 +61,7 @@ export default class Finances extends Component {
             value={FINANCES.fields.netWorth.value}
             fielddata={FINANCES.fields.netWorth}
             changed={financesChange}
+            prefix="$ "
           />
           <Form.Group widths="equal">
             {['annualIncome1', 'annualIncome2', 'annualIncome3'].map(field => (
@@ -72,6 +73,7 @@ export default class Finances extends Component {
                 value={FINANCES.fields[field].value}
                 fielddata={FINANCES.fields[field]}
                 changed={financesChange}
+                prefix="$ "
               />
             ))
             }

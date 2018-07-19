@@ -276,7 +276,7 @@ class IraAccountStore {
 
   @action
   setFileUploadData = (field, files) => {
-    accountActions.setFileUploadData(this.IDENTITY_FRM, field, files, 'ACCOUNT_IRA_CREATION_CIP').then(action((result) => {
+    accountActions.setFileUploadData(this.IDENTITY_FRM, field, files, 'ACCOUNT_IRA_CREATION_CIP', 'INVESTOR').then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this.IDENTITY_FRM.fields[field].fileId = fileId;
       this.IDENTITY_FRM.fields[field].preSignedUrl = preSignedUrl;

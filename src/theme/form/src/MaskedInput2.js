@@ -35,6 +35,8 @@ const MaskedInput2 = observer((props) => {
         <NumberFormat format="#####" {...props} placeholder={placeHolder} value={value} onChange={props.changed} error={!!error} />
       ) : props.ssn ? (
         <NumberFormat type="tel" format="###-##-####" placeholder={placeHolder} {...props} value={value} onChange={props.changed} error={!!error} />
+      ) : props.taxId ? (
+        <NumberFormat type="text" format="##-#######" placeholder={placeHolder} {...props} value={value} onChange={props.changed} error={!!error} />
       ) : (
         <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
       )

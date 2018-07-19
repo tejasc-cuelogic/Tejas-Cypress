@@ -3,8 +3,8 @@ import Validator from 'validatorjs';
 
 /* eslint-disable no-unused-vars, arrow-body-style */
 Validator.register('taxId', (value, requirement, attribute) => {
-  return value.match(/^\d{3}-\d{2}-\d{4}$/);
-}, 'The :attribute is not in the format XXX-XX-XXXX.');
+  return value.match(/^\d{2}-\d{7}$/);
+}, 'The :attribute is not in the format XX-XXXXXXX.');
 
 export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
 
