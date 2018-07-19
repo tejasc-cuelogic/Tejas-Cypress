@@ -2,11 +2,11 @@ import React from 'react';
 import { Header, Grid, Card, List, Button, Container } from 'semantic-ui-react';
 
 const Process = () => (
-  <section className="process process-banner">
+  <section className="content-spacer process-banner">
     <Container>
-      <Grid padded="horizontally">
+      <Grid padded="vertically">
         <Grid.Row>
-          <Grid.Column floated="right" width={10} verticalAlign="middle" className="process-right-section">
+          <Grid.Column floated="right" width={10} verticalAlign="middle" className="side-section process-right-section">
             <Header as="h2">From approved to funded</Header>
             <p className="mb-30">
             Once your application is approved, we make connecting with investors easy,
