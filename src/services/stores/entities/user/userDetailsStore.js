@@ -209,6 +209,20 @@ export class UserDetailsStore {
       .catch(error => Helper.toast(`Error while updating Financial Info- ${error}`, 'warn'))
       .finally(() => uiStore.setProgress(false));
   }
+
+  @computed
+  get pendingStep() {
+    let routingUrl = '';
+    const { accounts, idVerification, phoneVerification } = this.signupStatus;
+    if (phoneVerification !== 'DONE' && !this.validAccStatus.includes(idVerification)) {
+      routingUrl = 'summary/identity-verification/0';
+    } else if (isEmpty(accounts)) {
+      routingUrl = 'summary/establish-profile';
+    } else {
+      routingUrl = 'summary/account-creation';
+    }
+    return routingUrl;
+  }
 }
 
 export default new UserDetailsStore();

@@ -41,7 +41,6 @@ export class IdentityStore {
 
   @action
   dobChange = (date) => {
-    console.log('date is ', date);
     this.ID_VERIFICATION_FRM = FormValidator.onChange(
       this.ID_VERIFICATION_FRM,
       { name: 'dateOfBirth', value: date },
@@ -174,7 +173,7 @@ export class IdentityStore {
   }
 
   @action
-  setFileUploadData(field, files) {
+  setFileUploadData = (field, files) => {
     accountActions.setFileUploadData(this.ID_VERIFICATION_DOCS_FRM, field, files, 'PROFILE_CIP', 'INVESTOR').then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this.ID_VERIFICATION_DOCS_FRM.fields[field].fileId = fileId;

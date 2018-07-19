@@ -6,7 +6,7 @@ import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
-@inject('authStore', 'uiStore', 'userStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 class Login extends Component {
@@ -23,8 +23,12 @@ class Login extends Component {
           this.props.history.push('/auth/change-password');
         } else {
           this.props.authStore.reset();
-          const redirectUrl = roles && roles.includes('investor') ? 'summary' : 'dashboard';
-          this.props.history.replace(`/app/${redirectUrl}`);
+          const { pendingStep } = this.props.userDetailsStore;
+          if (roles && roles.includes('investor')) {
+            this.props.history.push(`/app/${pendingStep}`);
+          } else {
+            this.props.history.push('/app/dashboard');
+          }
         }
       });
   };
@@ -36,6 +40,7 @@ class Login extends Component {
     const { errors, inProgress } = this.props.uiStore;
     return (
       <Modal
+        closeOnRootNodeClick={false}
         size="mini"
         open
         onClose={() => {

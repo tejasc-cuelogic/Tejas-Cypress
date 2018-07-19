@@ -46,6 +46,7 @@ export class BankAccount {
         }).catch(() => { });
         Helper.toast(`Bank ${metadata.institution.name} with account id ${Helper.encryptNumber(metadata.account_id)} successfully linked.`, 'success');
         individualAccountStore.setStepToBeRendered(1);
+        this.props.bankAccountStore.setShowAddFunds();
       },
       onExit: (err) => {
         // The user exited the Link flow.

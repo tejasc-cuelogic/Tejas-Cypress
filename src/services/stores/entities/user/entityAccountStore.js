@@ -468,7 +468,7 @@ class EntityAccountStore {
   }
 
   @action
-  setFileUploadData(form, field, files) {
+  setFileUploadData = (form, field, files) => {
     accountActions.setFileUploadData(this[form], field, files, 'ACCOUNT_ENTITY_CREATION', 'INVESTOR').then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this[form].fields[field].fileId = fileId;
