@@ -404,10 +404,10 @@ export const OFFERING_INFORMATION = {
     value: '',
     placeHolder: 'Add text here',
     label: 'Amount of compensation to be paid to the intermediary,' +
-    'whether as a dollar amount or a percentage of the offering amount, ' +
-    'or a good faith estimate if the exact amount is not available at the' +
-    'time of the filing, for conducting the offering, including the amount' +
-    'of referral and any other fees associated with the offering',
+      'whether as a dollar amount or a percentage of the offering amount, ' +
+      'or a good faith estimate if the exact amount is not available at the' +
+      'time of the filing, for conducting the offering, including the amount' +
+      'of referral and any other fees associated with the offering',
     key: 'compensationAmount',
     error: undefined,
     rule: 'required|max:256',
@@ -420,7 +420,7 @@ export const OFFERING_INFORMATION = {
     value: '',
     placeHolder: 'Add text here',
     label: 'Any other financial interest in the issuer held by the intermediary, ' +
-    'or any arrangement for the intermediary to acquire such an interest',
+      'or any arrangement for the intermediary to acquire such an interest',
     key: 'financialInterest',
     error: undefined,
     rule: 'required|max:256',
@@ -459,7 +459,7 @@ export const OFFERING_INFORMATION = {
     key: 'noOfSecurityOffered',
     error: undefined,
     rule: 'numeric|required_if:securityOfferedType,Other|required_if:securityOfferedType,Common Stock|' +
-    'required_if:securityOfferedType,Preferred Stock|max:9999999999',
+      'required_if:securityOfferedType,Preferred Stock|max:9999999999',
     customErrors: {
       numeric: 'Please provide numeric values.',
       max: 'The No. of securities offered is too long. Max length is :max.',
@@ -1267,3 +1267,371 @@ export const XML_SUBMISSION_TABS = [{
   label: 'Documents',
   errorClass: '',
 }];
+
+export const LENDING_PARTNER_LENDIO = {
+  yrsInBusiness: [
+    {
+      key: 'NOT_IN_BUSINESS',
+      value: 'NOT_IN_BUSINESS',
+      text: 'Not yet in business, still in planning stages',
+    },
+    {
+      key: 'LOOKING_BUY_BUSINESS',
+      value: 'LOOKING_BUY_BUSINESS',
+      text: 'Looking to buy an existing business',
+    },
+    {
+      key: 'DURATION_0_2_MONTHS',
+      value: 'DURATION_0_2_MONTHS',
+      text: '0-2 months',
+    },
+    {
+      key: 'DURATION_3_5_MONTHS',
+      value: 'DURATION_3_5_MONTHS',
+      text: '3-5 months',
+    },
+    {
+      key: 'DURATION_6_11_MONTHS',
+      value: 'DURATION_6_11_MONTHS',
+      text: '6-11 months',
+    },
+    {
+      key: 'DURATION_1_2_YEARS',
+      value: 'DURATION_1_2_YEARS',
+      text: '1-2 years',
+    },
+    {
+      key: 'DURATION_2_3_YEARS',
+      value: 'DURATION_2_3_YEARS',
+      text: '2-3 years',
+    },
+    {
+      key: 'DURATION_3_5_YEARS',
+      value: 'DURATION_3_5_YEARS',
+      text: '3-5 years',
+    },
+    {
+      key: 'DURATION_5_OR_MORE_YEARS',
+      value: 'DURATION_5_OR_MORE_YEARS',
+      text: '5 or more years',
+    },
+  ],
+  avgSales: [
+    {
+      key: 'NO_REVENUES',
+      value: 'NO_REVENUES',
+      text: '$0, No revenues',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_1_4000',
+      value: 'AVERAGE_MONTHLY_SALES_1_4000',
+      text: '$1 - $4,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_4001_8000',
+      value: 'AVERAGE_MONTHLY_SALES_4001_8000',
+      text: '$4,001 - $8,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_8001_15000',
+      value: 'AVERAGE_MONTHLY_SALES_8001_15000',
+      text: '$8,001 - $15,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_15001_20000',
+      value: 'AVERAGE_MONTHLY_SALES_15001_20000',
+      text: '$15,001 - $20,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_20001_40000',
+      value: 'AVERAGE_MONTHLY_SALES_20001_40000',
+      text: '$20,001 - $40,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_40001_80000',
+      value: 'AVERAGE_MONTHLY_SALES_40001_80000',
+      text: '$40,001 - $80,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_80001_200000',
+      value: 'AVERAGE_MONTHLY_SALES_80001_200000',
+      text: '$80,001 - $200,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_200001_400000',
+      value: 'AVERAGE_MONTHLY_SALES_200001_400000',
+      text: '$200,001 - $400,000',
+    },
+    {
+      key: 'GREATER_THAN_400000',
+      value: 'GREATER_THAN_400000',
+      text: 'More than $400,000',
+    },
+  ],
+  personalCreditRating: [
+    {
+      key: 'POOR',
+      value: 'POOR',
+      text: '(499 or Below) Poor',
+    },
+    {
+      key: 'NOT_SO_GOOD',
+      value: 'NOT_SO_GOOD',
+      text: '(500 - 599) Not so good',
+    },
+    {
+      key: 'OKAY',
+      value: 'OKAY',
+      text: '(600 - 649) Okay',
+    },
+    {
+      key: 'GOOD',
+      value: 'GOOD',
+      text: '(650 - 679) Good',
+    },
+    {
+      key: 'GREAT',
+      value: 'GREAT',
+      text: '(680 - 719) Great',
+    },
+    {
+      key: 'EXCELLENT',
+      value: 'EXCELLENT',
+      text: '(720 or Higher) Excellent',
+    },
+  ],
+  industry: [
+    {
+      key: 'ISTRATIVE_SUPPORT_SERVICES',
+      value: 'ISTRATIVE_SUPPORT_SERVICES',
+      description: 'Administrative and support services',
+    },
+    {
+      key: 'AGRICULTURE',
+      value: 'AGRICULTURE',
+      description: 'Agriculture',
+    },
+    {
+      key: 'ARTS_ENTERTAINMENT_RECREATION',
+      value: 'ARTS_ENTERTAINMENT_RECREATION',
+      description: 'Arts, entertainment, and recreation',
+    },
+    {
+      key: 'AUTOMOBILE_DEALERS',
+      value: 'AUTOMOBILE_DEALERS',
+      description: 'Automobile dealers',
+    },
+    {
+      key: 'AUTOMOTIVE_REPAIR_MAINTENANCE',
+      value: 'AUTOMOTIVE_REPAIR_MAINTENANCE',
+      description: 'Automotive repair and maintenance',
+    },
+    {
+      key: 'BUSINESS_SERVICES',
+      value: 'BUSINESS_SERVICES',
+      description: 'Business services',
+    },
+    {
+      key: 'CONSTRUCTION',
+      value: 'CONSTRUCTION',
+      description: 'Construction',
+    },
+    {
+      key: 'EDUCATIONAL_SERVICES',
+      value: 'EDUCATIONAL_SERVICES',
+      description: 'Educational services',
+    },
+    {
+      key: 'FINANCE_INSURANCE',
+      value: 'FINANCE_INSURANCE',
+      description: 'Finance and insurance',
+    },
+    {
+      key: 'FORESTRY_FISHING_HUNTING',
+      value: 'FORESTRY_FISHING_HUNTING',
+      description: 'Forestry, fishing, and hunting',
+    },
+    {
+      key: 'FREIGHT_TRUCKING',
+      value: 'FREIGHT_TRUCKING',
+      description: 'Freight trucking',
+    },
+    {
+      key: 'GAMBLING_INDUSTRIES',
+      value: 'GAMBLING_INDUSTRIES',
+      description: 'Gambling industries',
+    },
+    {
+      key: 'GAS_STATIONS',
+      value: 'GAS_STATIONS',
+      description: 'Gas stations',
+    },
+    {
+      key: 'GREENHOUSE_NURSERY_FLORICULTURE',
+      value: 'GREENHOUSE_NURSERY_FLORICULTURE',
+      description: 'Greenhouse, nursery, and floriculture',
+    },
+    {
+      key: 'HEALTHCARE_SOCIAL_ASSISTANCE',
+      value: 'HEALTHCARE_SOCIAL_ASSISTANCE',
+      description: 'Healthcare and social assistance',
+    },
+    {
+      key: 'HOTELS_TRAVEL_ACCOMODATIONS',
+      value: 'HOTELS_TRAVEL_ACCOMODATIONS',
+      description: 'Hotels and travel accomodations',
+    },
+    {
+      key: 'INFORMATION_TECHNOLOGY',
+      value: 'INFORMATION_TECHNOLOGY',
+      description: 'Information and technology',
+    },
+    {
+      key: 'LEGAL_SERVICES',
+      value: 'LEGAL_SERVICES',
+      description: 'Legal services',
+    },
+    {
+      key: 'MANAGEMENT_COMPANIES',
+      value: 'MANAGEMENT_COMPANIES',
+      description: 'Management of companies',
+    },
+    {
+      key: 'MANUFACTURING',
+      value: 'MANUFACTURING',
+      description: 'Manufacturing',
+    },
+    {
+      key: 'MINING1068',
+      value: 'MINING1068',
+      description: 'Mining',
+    },
+    {
+      key: 'NON_PROFIT_ORGANIZATIONS',
+      value: 'NON_PROFIT_ORGANIZATIONS',
+      description: 'Non-Profit organizations',
+    },
+    {
+      key: 'OTHER_SERVICES',
+      value: 'OTHER_SERVICES',
+      description: 'Other services',
+    },
+    {
+      key: 'PERSONAL_CARE_SERVICES',
+      value: 'PERSONAL_CARE_SERVICES',
+      description: 'Personal care services',
+    },
+    {
+      key: 'PHYSICIAN_DENTIST_HEALTH_PRACTITIONER',
+      value: 'PHYSICIAN_DENTIST_HEALTH_PRACTITIONER',
+      description: 'Physician, dentist, or health practitioner',
+    },
+    {
+      key: 'PUBLIC_ADMINISTRATION',
+      value: 'PUBLIC_ADMINISTRATION',
+      description: 'Public administration',
+    },
+    {
+      key: 'REAL_ESTATE',
+      value: 'REAL_ESTATE',
+      description: 'Real estate',
+    },
+    {
+      key: 'RELIGIOUS_INSTITUTIONS',
+      value: 'RELIGIOUS_INSTITUTIONS',
+      description: 'Religious institutions',
+    },
+    {
+      key: 'RENTAL_LEASING',
+      value: 'RENTAL_LEASING',
+      description: 'Rental and leasing',
+    },
+    {
+      key: 'RESTAURANTS_FOOD_SERVICES',
+      value: 'RESTAURANTS_FOOD_SERVICES',
+      description: 'Restaurants and food services',
+    },
+    {
+      key: 'RETAIL_STORES',
+      value: 'RETAIL_STORES',
+      description: 'Retail stores',
+    },
+    {
+      key: 'TRANSPORTATION',
+      value: 'TRANSPORTATION',
+      description: 'Transportation',
+    },
+    {
+      key: 'UTILITIES2',
+      value: 'UTILITIES2',
+      description: 'Utilities',
+    },
+    {
+      key: 'VETERINARIANS',
+      value: 'VETERINARIANS',
+      description: 'Veterinarians',
+    },
+    {
+      key: 'WAREHOUSING_STORAGE',
+      value: 'WAREHOUSING_STORAGE',
+      description: 'Warehousing and storage',
+    },
+    {
+      key: 'WASTE_MANAGEMENT_REMEDIATION_SERVICES',
+      value: 'WASTE_MANAGEMENT_REMEDIATION_SERVICES',
+      description: 'Waste management & remediation services',
+    },
+    {
+      key: 'WHOLESALE_TRADE',
+      value: 'WHOLESALE_TRADE',
+      description: 'Wholesale trade',
+    },
+    {
+      key: 'PROFESSIONAL_SCIENTIFIC_TECHNICAL_SERVICES',
+      value: 'PROFESSIONAL_SCIENTIFIC_TECHNICAL_SERVICES',
+      description: 'Professional, scientific, and technical services',
+    },
+  ],
+  raiseAmount: [
+    {
+      key: 'AMT_1_5000',
+      value: 'AMT_1_5000',
+      description: '$1 - $5,000',
+    },
+    {
+      key: 'AMT_5001_25000',
+      value: 'AMT_5001_25000',
+      description: '$5,001 - $25,000',
+    },
+    {
+      key: 'AMT_25001_50000',
+      value: 'AMT_25001_50000',
+      description: '$25,001 - $50,000',
+    },
+    {
+      key: 'AMT_50001_100000',
+      value: 'AMT_50001_100000',
+      description: '$50,001 - $100,000',
+    },
+    {
+      key: 'AMT_100001_250000',
+      value: 'AMT_100001_250000',
+      description: '$100,001 - $250,000',
+    },
+    {
+      key: 'AMT_250001_500000',
+      value: 'AMT_250001_500000',
+      description: '$250,001 - $500,000',
+    },
+    {
+      key: 'AMT_500001_1M',
+      value: 'AMT_500001_1M',
+      description: '$500,001 - $1M',
+    },
+    {
+      key: 'GREATER_THAN_1M',
+      value: 'GREATER_THAN_1M',
+      description: 'Over $1M',
+    },
+  ],
+};

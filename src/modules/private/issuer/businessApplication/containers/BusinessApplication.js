@@ -9,6 +9,7 @@ import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import { Logo } from '../../../../../theme/shared';
 import Failure from '../components/Failure';
 import Success from '../components/Success';
+import Application from '../components/lendio/Application';
 import ConfirmModal from '../components/confirmModal';
 
 const getModule = component => Loadable({
@@ -86,7 +87,8 @@ export default class BusinessApplication extends Component {
       >
         <Switch>
           <Route exact path={match.url} component={getModule(navItems[0].component)} />
-          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/failed`} component={Failure} />
+          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/failed/:reason?`} component={Failure} />
+          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/lendio`} component={Application} />
           <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/success`} render={props1 => <Success refLink={this.props.match.url} applicationId={this.props.match.params.applicationId} {...props1} />} />
           {
             navItems.map(item => (

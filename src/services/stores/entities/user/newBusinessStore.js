@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { forEach, includes } from 'lodash';
+import { forEach, includes, find, isEmpty } from 'lodash';
 import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -13,6 +13,8 @@ import {
   BUSINESS_APPLICATION_STATUS,
   BUSINESS_GOAL,
   BUSINESS_APP_FILE_UPLOAD_ENUMS,
+  AFFILIATED_PARTNERS,
+  LENDIO,
 } from '../../../constants/newBusiness';
 // import { createUploadEntry, removeUploadedFile } from '../../queries/common';
 import Helper from '../../../../helper/utility';
@@ -654,6 +656,19 @@ export class NewBusinessStore {
         .then((result) => {
           console.log(result);
           this.setBusinessAppStatus(result.data.createBusinessApplicationPrequalification.status);
+          const {
+            data: {
+              createBusinessApplicationPrequalification: {
+                partnerStatus,
+              },
+            },
+          } = result;
+
+          let lendioPartners = '';
+          if (!isEmpty(partnerStatus)) {
+            lendioPartners = find(partnerStatus, { partnerId: AFFILIATED_PARTNERS.LENDIO });
+          }
+
           const applicationId = result.data.createBusinessApplicationPrequalification.id;
           this.setFetchedData(null);
           if (this.BUSINESS_APP_STATUS ===
@@ -662,7 +677,8 @@ export class NewBusinessStore {
             this.setBusinessAppStepUrl(`${applicationId}/success`);
           } else if (this.BUSINESS_APP_STATUS ===
               BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
-            this.setBusinessAppStepUrl(`${applicationId}/failed`);
+            const url = (isEmpty(lendioPartners) || lendioPartners.status === LENDIO.PRE_QUALIFICATION_FAILED) ? `${applicationId}/failed` : `${applicationId}/failed/lendio`;
+            this.setBusinessAppStepUrl(url);
             console.log('Failer');
           } else {
             this.setBusinessAppStepUrl(`${applicationId}/failed`);

@@ -389,10 +389,34 @@ export const LENDIO_PRE_QUAL = {
   personalCreditRating: {
     value: '', error: undefined, rule: 'required', label: 'How would you rate your personal credit?',
   },
-  industryType: {
+  industry: {
     value: '', error: undefined, rule: 'required', label: 'What type of industry is your business in?',
   },
-  money: {
+  raiseAmount: {
     value: '', error: undefined, rule: 'required', label: 'How much money you are looking for today? (Optional)',
   },
+  applicationAgreeConditions: {
+    value: ['agreeConditions'],
+    values: [
+      {
+        label: 'I agree to the conditions above.', value: 'agreeConditions',
+      },
+      {
+        label: 'I agree to send data to Lendio, our partner.', value: 'sendDataToLendio',
+      },
+    ],
+    error: undefined,
+    rule: 'array',
+  },
+};
+
+// Affiliated partners
+export const AFFILIATED_PARTNERS = {
+  LENDIO: 'LENDIO',
+};
+
+// Lendio partner related data
+export const LENDIO = {
+  PRE_QUALIFICATION_SUCCESSFUL: 'LENDIO_PRE_QUALIFICATION_SUCCESSFUL',
+  PRE_QUALIFICATION_FAILED: 'LENDIO_PRE_QUALIFICATION_FAILED',
 };
