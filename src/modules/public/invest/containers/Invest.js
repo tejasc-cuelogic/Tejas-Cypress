@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Header } from 'semantic-ui-react';
+// import { Header } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import Banner from '../components/Banner';
 
 class Invest extends Component {
   render() {
     return (
-      <Header as="h1">NextSeed for Investers
-        <Header.Subheader>Invest in exclusive, pre-vetted deals</Header.Subheader>
-      </Header>
+      <Aux>
+        <Banner />
+      </Aux>
     );
   }
 }

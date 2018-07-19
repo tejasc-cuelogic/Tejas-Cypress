@@ -26,6 +26,9 @@
         &.business-banner{
             background:url(../../assets/images/how-it-works-banner.jpg) top center no-repeat / cover;
         }
+        &.invest-banner{
+            background:url(../../assets/images/how-it-works-banner.jpg) top center no-repeat / cover;
+        }
     }
 }
 .content-spacer {
