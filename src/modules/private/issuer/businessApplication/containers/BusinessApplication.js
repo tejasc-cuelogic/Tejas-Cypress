@@ -3,6 +3,7 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { Button } from 'semantic-ui-react';
+import { includes } from 'lodash';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
@@ -19,11 +20,10 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('newBusinessStore', 'uiStore')
+@inject('newBusinessStore', 'uiStore', 'navStore')
 @observer
 export default class BusinessApplication extends Component {
   componentWillMount() {
-    // console.log(this.props.newBusinessStore.getBusinessAppStepStatus);
     this.props.newBusinessStore.setCurrentApplicationId(this.props.match.params.applicationId);
     if (this.props.match.params.applicationId !== 'new' &&
     this.props.newBusinessStore.isFetchedData !== this.props.match.params.applicationId) {
@@ -31,6 +31,7 @@ export default class BusinessApplication extends Component {
       this.props.newBusinessStore.setFetchedData(this.props.match.params.applicationId);
       // this.props.history.replace(`${this.props.match.url}/pre-qualification`);
     } else if (this.props.match.params.applicationId === 'new') {
+      this.props.navStore.setAccessParams('appStatus', 'NEW');
       this.props.newBusinessStore.formReset();
     }
   }
@@ -57,10 +58,14 @@ export default class BusinessApplication extends Component {
 
   render() {
     const { match } = this.props;
+    const { pathname } = this.props.location;
+    const showSubNav = includes(pathname, 'failed') || includes(pathname, 'success') || includes(pathname, 'lendio');
+    const preQualPage = includes(pathname, 'pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
     const { canSubmitApp } = this.props.newBusinessStore;
     return (
       <PrivateLayout
+        subNav={!showSubNav}
         {...this.props}
         P0={
           <Logo
@@ -68,11 +73,11 @@ export default class BusinessApplication extends Component {
             verticalAlign="middle"
             dataSrc="LogoWhite"
             as={Link}
-            to="/app/business-application"
+            to="/app/dashboard"
             size="small"
           />
         }
-        P4={
+        P4={!showSubNav && !preQualPage &&
           <Button.Group>
             <Button inverted onClick={this.saveContinue} color="green">Save and Continue later</Button>
             <Button

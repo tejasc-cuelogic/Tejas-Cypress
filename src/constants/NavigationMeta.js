@@ -75,7 +75,7 @@ export const PRIVATE_NAV = [
     title: 'Application',
     to: 'business-application/:applicationId',
     accessibleTo: ['issuer'],
-    subPanel: 1,
+    subPanel: 0,
     path: 'issuer/businessApplication/containers/BusinessApplication',
     subNavigations: [
       {
@@ -88,18 +88,21 @@ export const PRIVATE_NAV = [
         icon: 'ns-check-circle',
         title: 'Business Details',
         to: 'business-details',
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
         component: 'BusinessDetails',
       },
       {
         icon: 'ns-check-circle',
         title: 'Performance',
         to: 'performance',
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
         component: 'Performance',
       },
       {
         icon: 'ns-check-circle',
         title: 'Documentation',
         to: 'documentation',
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
         component: 'Documentation',
       },
     ],

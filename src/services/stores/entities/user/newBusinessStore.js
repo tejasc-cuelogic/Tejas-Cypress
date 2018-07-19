@@ -27,7 +27,7 @@ import {
   upsertBusinessApplicationInformationDocumentation,
   submitApplication,
 } from '../../queries/businessApplication';
-import { uiStore } from '../../index';
+import { uiStore, navStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class NewBusinessStore {
@@ -114,16 +114,18 @@ export class NewBusinessStore {
   };
 
   @action
-  fetchApplicationDataById = async (applicationId) => {
-    this.businessApplicationsDataById = await graphql({
+  fetchApplicationDataById = (applicationId) => {
+    this.businessApplicationsDataById = graphql({
       client,
       query: getBusinessApplicationsById,
       variables: {
         id: applicationId,
       },
       fetchPolicy: 'network-only',
+      onFetch: () => {
+        this.setBusinessApplicationData();
+      },
     });
-    this.setBusinessApplicationData();
   }
 
   @action
@@ -184,6 +186,10 @@ export class NewBusinessStore {
     this.setbusinessDetails(data.businessDetails);
     this.setperformanceDetails(data.businessPerformance);
     this.setDocumentationDetails(data.businessDocumentation);
+    console.log(this.calculateStepToRender);
+    navStore.setAccessParams('appStatus', this.fetchBusinessApplicationsStatusById);
+    // this.props.history.push(`/app/business-application/$
+    // {this.currentApplicationId}/${this.calculateStepToRender}`);
   };
 
   @action
@@ -358,6 +364,13 @@ export class NewBusinessStore {
     ) || [];
   }
 
+  @computed get fetchBusinessApplicationsStatusById() {
+    return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
+      && this.businessApplicationsDataById.data.businessApplication
+      && toJS(this.businessApplicationsDataById.data.businessApplication.applicationStatus)
+    ) || null;
+  }
+
   @computed get fetchBusinessApplication() {
     return (this.businessApplicationsList && this.businessApplicationsList.data
       && this.businessApplicationsList.data.businessApplications
@@ -447,17 +460,26 @@ export class NewBusinessStore {
 
   @action
   getFilesArray = (data, form) => {
-    const arr = data.map((item, key) => (
-      { fileId: form.fileId[key] ? form.fileId[key] : '123', fileName: item }
-    ));
+    const arr = data ? data.map((item, key) => (
+      { fileId: form.fileId[key] ? form.fileId[key] : '', fileName: item }
+    )) : { fileId: '', fileName: '' };
     return arr;
   }
 
   @action
   getValidDataForString = (data) => {
     let val = '';
-    if (data && data.value !== '' && data.value !== null && !data.error) {
+    if (data && data.value !== '' && data.value !== undefined && data.value !== null && !data.error) {
       val = data.value;
+    }
+    return val;
+  }
+
+  @action
+  getValidDataForInt = (data, decimal = 0) => {
+    let val = decimal ? 0.00 : 0;
+    if (data && data.value !== '' && data.value !== undefined && data.value !== null && !data.error) {
+      val = decimal ? parseFloat(data.value, 2) : parseInt(data.value, 10);
     }
     return val;
   }
@@ -468,22 +490,22 @@ export class NewBusinessStore {
     return {
       planDocs: this.getFilesArray(data.businessPlan.value, data.businessPlan),
       debts: data.debts.map(item => ({
-        amount: item.amount.value !== '' ? parseInt(item.amount.value, 10) : 0,
+        amount: this.getValidDataForInt(item.amount),
         interestExpenses: item.interestExpenses.value !== '' ? parseInt(item.interestExpenses.value, 10) : 0,
         remainingPrincipal: item.remainingPrincipal.value !== '' ? parseInt(item.remainingPrincipal.value, 10) : 0,
-        term: item.term.value !== '' ? parseInt(item.term.value, 10) : 0,
+        term: this.getValidDataForInt(item.term),
       })),
       owners: data.owners.map(item => ({
         fullLegalName: this.getValidDataForString(item.fullLegalName),
-        yearsOfExp: item.yearsOfExp.value !== '' ? parseInt(item.yearsOfExp.value, 10) : 0,
+        yearsOfExp: this.getValidDataForInt(item.yearsOfExp),
         ssn: this.getValidDataForString(item.ssn),
-        companyOwnerShip: item.companyOwnerShip.value !== '' ? parseFloat(item.companyOwnerShip.value, 2) : 0.00,
+        companyOwnerShip: this.getValidDataForInt(item.companyOwnerShip, 1),
         linkedInUrl: this.getValidDataForString(item.linkedInUrl),
         title: this.getValidDataForString(item.title),
         resume: [
           {
-            fileId: (item && item.resume.fileId !== '' && item.resume.fileId !== null && !item.resume.error) ? item.resume.fileId : '',
-            fileName: (item && item.resume.value !== '' && item.resume.value !== null && !item.resume.error) ? item.resume.value : '',
+            fileId: (item && item.resume.fileId !== undefined && item.resume.fileId !== '' && item.resume.fileId !== null && !item.resume.error) ? item.resume.fileId : '',
+            fileName: (item && item.resume.value !== undefined && item.resume.value !== '' && item.resume.value !== null && !item.resume.error) ? item.resume.value : '',
           },
         ],
       })),
@@ -491,31 +513,32 @@ export class NewBusinessStore {
   }
 
   @computed get getFormatedPerformanceData() {
-    const data = Validator.ExtractValues(toJS(this.BUSINESS_PERF_FRM.fields));
+    const data = toJS(this.BUSINESS_PERF_FRM.fields);
+    console.log(data);
     return {
       financialStatements: {
         priorToThreeYear: this.getFilesArray(
-          data.priorToThreeYear,
+          data.priorToThreeYear.value,
           this.BUSINESS_PERF_FRM.fields.priorToThreeYear,
         ),
-        ytd: this.getFilesArray(data.ytd, this.BUSINESS_PERF_FRM.fields.ytd),
+        ytd: this.getFilesArray(data.ytd.value, this.BUSINESS_PERF_FRM.fields.ytd),
         fiveYearProjection: this.getFilesArray(
-          data.fiveYearProjection,
+          data.fiveYearProjection.value,
           this.BUSINESS_PERF_FRM.fields.fiveYearProjection,
         ),
       },
       performance: {
         nextYearSnapshot: {
-          grossSales: data.nyGrossSales !== '' ? data.nyGrossSales : 0,
-          cogSold: data.nyCogs !== '' ? data.nyCogs : 0,
-          operatingExpenses: data.nyOperatingExpenses !== '' ? data.nyOperatingExpenses : 0,
-          netIncome: data.nyNetIncome !== '' ? data.nyNetIncome : 0,
+          grossSales: this.getValidDataForInt(data.nyGrossSales),
+          cogSold: this.getValidDataForInt(data.nyCogs),
+          operatingExpenses: this.getValidDataForInt(data.nyOperatingExpenses),
+          netIncome: this.getValidDataForInt(data.nyNetIncome),
         },
         pastYearSnapshot: {
-          grossSales: data.pyGrossSales !== '' ? data.pyGrossSales : 0,
-          cogSold: data.pyCogs !== '' ? data.pyCogs : 0,
-          operatingExpenses: data.pyOperatingExpenses !== '' ? data.pyOperatingExpenses : 0,
-          netIncome: data.pyNetIncome !== '' ? data.pyNetIncome : 0,
+          grossSales: this.getValidDataForInt(data.pyGrossSales),
+          cogSold: this.getValidDataForInt(data.pyCogs),
+          operatingExpenses: this.getValidDataForInt(data.pyOperatingExpenses),
+          netIncome: this.getValidDataForInt(data.pyNetIncome),
         },
       },
     };
@@ -525,23 +548,23 @@ export class NewBusinessStore {
     const data = Validator.ExtractValues(toJS(this.BUSINESS_DOC_FRM.fields));
     return {
       bankStatements: this.getFilesArray(
-        data.bankStatements,
+        data.bankStatements.value,
         this.BUSINESS_DOC_FRM.fields.bankStatements,
       ),
       leaseAgreementsOrLOIs: this.getFilesArray(
-        data.leaseAgreementsOrLOIs,
+        data.leaseAgreementsOrLOIs.value,
         this.BUSINESS_DOC_FRM.fields.leaseAgreementsOrLOIs,
       ),
       personalTaxReturns: this.getFilesArray(
-        data.personalTaxReturn,
+        data.personalTaxReturn.value,
         this.BUSINESS_DOC_FRM.fields.personalTaxReturn,
       ),
       businessTaxReturns: this.getFilesArray(
-        data.businessTaxReturn,
+        data.businessTaxReturn.value,
         this.BUSINESS_DOC_FRM.fields.businessTaxReturn,
       ),
       personalGuarantee: this.getFilesArray(
-        data.personalGuaranteeForm,
+        data.personalGuaranteeForm.value,
         this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
       ),
       blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value !== '' ? this.BUSINESS_DOC_FRM.fields.blanketLien.value : false,
@@ -590,10 +613,10 @@ export class NewBusinessStore {
           netIncome: data.previousYearNetIncome !== '' ? data.previousYearNetIncome : 0,
         },
         nextYearSnapshot: {
-          grossSales: data.nextYearGrossSales,
-          cogSold: data.nextYearCogSold,
-          operatingExpenses: data.nextYearOperatingExpenses,
-          netIncome: data.nextYearNetIncome,
+          grossSales: data.nextYearGrossSales !== '' ? data.nextYearGrossSales : 0,
+          cogSold: data.nextYearCogSold !== '' ? data.nextYearCogSold : 0,
+          operatingExpenses: data.nextYearOperatingExpenses !== '' ? data.nextYearOperatingExpenses : 0,
+          netIncome: data.nextYearNetIncome !== '' ? data.nextYearNetIncome : 0,
         },
       },
       businessEntityStructure: data.businessEntityStructure,
@@ -731,7 +754,7 @@ export class NewBusinessStore {
     console.log(this.BUSINESS_PERF_FRM);
     if (step === 'business-details') {
       stepName = 'BUSINESS_DETAILS';
-      Validator.validateForm(this.BUSINESS_DETAILS_FRM);
+      Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
       isPartialDataFlag = !this.BUSINESS_DETAILS_FRM.meta.isValid;
     } else if (this.applicationStep === 'performance') {
       stepName = 'PERFORMANCE';

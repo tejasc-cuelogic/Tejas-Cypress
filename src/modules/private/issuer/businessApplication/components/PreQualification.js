@@ -13,13 +13,6 @@ import FormElementWrap from './FormElementWrap';
 @inject('newBusinessStore', 'uiStore')
 @observer
 export default class PreQualification extends Component {
-  componentWillMount() {
-    console.log(this.props.newBusinessStore.calculateStepToRender);
-    // const url = replace(this.props.match.url, 'pre-qualification',
-    // this.props.newBusinessStore.calculateStepToRender);
-    // this.props.history.push(url);
-  }
-
   submit = (e) => {
     e.preventDefault();
     this.props.newBusinessStore.businessPreQualificationFormSumbit().then(() => {

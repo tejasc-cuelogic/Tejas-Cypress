@@ -22,12 +22,12 @@ export default class AppNavigation extends Component {
       if (this.props.newBusinessStore.checkFormisValid(`${this.state.navItems[this.state.step].to}`)) {
         console.log('Next Step process', `${this.state.navItems[this.state.step].to}`);
         this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
+        this.props.action();
+        this.props.history.push(`/app/business-application/${this.props.newBusinessStore.currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
       } else {
         this.props.history.push(`/app/business-application/${this.props.newBusinessStore.currentApplicationId}/confirm`);
       }
     }
-    this.props.action();
-    this.props.history.push(`/app/business-application/${this.props.newBusinessStore.currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
   }
 
   submitSaveContinue = (stepUrl) => {

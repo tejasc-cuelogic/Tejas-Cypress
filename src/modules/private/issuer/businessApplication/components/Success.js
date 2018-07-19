@@ -12,20 +12,22 @@ class Success extends Component {
     // } = this.props.newBusinessStore;
     // const { fields } = BUSINESS_ACCOUNT;
     return (
-      <Grid.Column className="issuer-signup">
-        <Icon className="ns-paper-plane" size="massive" color="green" />
-        <Header as="h1">Congratulations!</Header>
-        <p>
-          <b>You have been pre-qualified for a NextSeed campaign.</b>
-        </p>
-        <p>
-          Thanks for submitting Tstbsn`s application, Jane Doee! A NextSeed representative
-          will be reaching out to you shortly.<br />
-          In the meantime, please set up a user account to continue with your application.
-        </p>
-        <Divider section hidden />
-        <Button as={Link} to={`${this.props.refLink}/business-details`} size="large" color="green" className="very relaxed">Proceed</Button>
-      </Grid.Column>
+      <Grid container>
+        <Grid.Column className="issuer-signup">
+          <Icon className="ns-paper-plane" size="massive" color="green" />
+          <Header as="h1">Congratulations!</Header>
+          <p>
+            <b>You have been pre-qualified for a NextSeed campaign.</b>
+          </p>
+          <p>
+            Thanks for submitting Tstbsn`s application, Jane Doee! A NextSeed representative
+            will be reaching out to you shortly.<br />
+            In the meantime, please set up a user account to continue with your application.
+          </p>
+          <Divider section hidden />
+          <Button as={Link} to={`${this.props.refLink}/business-details`} size="large" color="green" className="very relaxed">Proceed</Button>
+        </Grid.Column>
+      </Grid>
     );
   }
 }

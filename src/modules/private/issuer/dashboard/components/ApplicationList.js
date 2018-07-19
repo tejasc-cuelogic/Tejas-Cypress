@@ -41,7 +41,7 @@ export default class ApplicationList extends Component {
                     <dt>Last Updated Date</dt>
                     <dd>{application.updatedDate ? moment(application.updatedDate).format('MM/DD/YYYY') : '--'}</dd>
                   </dl>
-                  {application.applicationStatus !== 'PRE_QUALIFICATION_FAILED' &&
+                  {application.applicationStatus === 'PRE_QUALIFICATION_SUBMITTED' &&
                     <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/pre-qualification`}>Continue application</Button>
                   }
                 </Card.Content>
