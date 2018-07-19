@@ -1,0 +1,27 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.ui.container{
+    &.banner {
+        height:710px;
+        padding-top:74px;
+        >.ui.container{
+            display:table;
+            height: 100%;
+            .banner-caption{
+                display:table-cell;
+                vertical-align:middle;
+            }
+        }
+        &.home-banner{
+            background:url(../../assets/images/home-banner.jpg) top center no-repeat / cover;
+        }
+        &.mission-banner{
+            background:url(../../assets/images/mission-banner.jpg) top center no-repeat / cover;
+        }
+        &.campaign-list-banner{
+            height:535px;
+            background:url(../../assets/images/campaign-list-banner.jpg) top center no-repeat / cover;
+        }
+    }
+}
