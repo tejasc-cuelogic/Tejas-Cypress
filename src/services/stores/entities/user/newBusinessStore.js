@@ -112,16 +112,18 @@ export class NewBusinessStore {
   };
 
   @action
-  fetchApplicationDataById = async (applicationId) => {
-    this.businessApplicationsDataById = await graphql({
+  fetchApplicationDataById = (applicationId) => {
+    this.businessApplicationsDataById = graphql({
       client,
       query: getBusinessApplicationsById,
       variables: {
         id: applicationId,
       },
       fetchPolicy: 'network-only',
+      onFetch: () => {
+        this.setBusinessApplicationData();
+      },
     });
-    this.setBusinessApplicationData();
   }
 
   @action
