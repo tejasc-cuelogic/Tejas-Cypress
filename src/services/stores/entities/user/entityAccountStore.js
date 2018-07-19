@@ -256,27 +256,8 @@ class EntityAccountStore {
         currentStep.validate();
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
-          let payloadData = '';
-          uiStore.setProgress();
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
-          if (currentStep.name === 'Personal info') {
-            payloadData = [this.PERSONAL_INFO_FRM.fields.legalDocUrl];
-          } else if (currentStep.name === 'Formation doc') {
-            payloadData = [this.FORM_DOCS_FRM.fields.formationDoc,
-              this.FORM_DOCS_FRM.fields.operatingAgreementDoc,
-              this.FORM_DOCS_FRM.fields.einVerificationDoc];
-          }
-          return new Promise((resolve, reject) => {
-            Helper.putUploadedFile(payloadData)
-              .then(() => {
-                this.submitForm(currentStep, formStatus, accountAttributes);
-              })
-              .catch((err) => {
-                uiStore.setProgress(false);
-                uiStore.setErrors(DataFormatter.getSimpleErr(err));
-                reject(err);
-              });
-          });
+          this.submitForm(currentStep, formStatus, accountAttributes);
         }
       }
     } else if (currentStep.name === 'Link bank') {
@@ -488,13 +469,30 @@ class EntityAccountStore {
 
   @action
   setFileUploadData(form, field, files) {
-    accountActions.setFileUploadData(this[form], field, files, 'ACCOUNT_ENTITY_CREATION');
+    accountActions.setFileUploadData(this[form], field, files, 'ACCOUNT_ENTITY_CREATION', 'INVESTOR').then(action((result) => {
+      const { fileId, preSignedUrl } = result.data.createUploadEntry;
+      this[form].fields[field].fileId = fileId;
+      this[form].fields[field].preSignedUrl = preSignedUrl;
+      const payloadData = [this.PERSONAL_INFO_FRM.fields[field]];
+      const fileData = Helper.getFormattedFileData(files);
+      this[form] = FormValidator.onChange(
+        this[form],
+        { name: field, value: fileData.fileName },
+      );
+      uiStore.setProgress();
+      Helper.putUploadedFile(payloadData)
+        .then(() => { })
+        .catch((err) => {
+          uiStore.setProgress(false);
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        });
+    }));
   }
 
   @action
   removeUploadedData = (form, field, step) => {
     const currentStep = { name: step };
-    accountActions.removeUploadedData(this[form], field, step, 'entity').then(() => {
+    accountActions.removeUploadedData(this[form], field, step, 'entity').then(action(() => {
       this[form] = FormValidator.onChange(
         this[form],
         { name: field, value: '' },
@@ -502,7 +500,7 @@ class EntityAccountStore {
       this[form].fields[field].fileId = '';
       this[form].fields[field].preSignedUrl = '';
       this.createAccount(currentStep, 'draft', true, field);
-    })
+    }))
       .catch(() => { });
   }
 }

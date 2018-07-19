@@ -5,7 +5,7 @@ class Helper {
         step: 0,
         label: 'Verify Identity',
         action: false,
-        successMsg: 'Completed',
+        successMsg: 'Complete',
       },
       'cash-dollar': {
         step: 1,

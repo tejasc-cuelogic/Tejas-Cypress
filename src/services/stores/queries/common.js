@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const createUploadEntry = gql`
-  mutation createUploadEntry($userId:String!, $stepName: stepsEnum!, $fileData: UploadFileMetaInput!) {
-    createUploadEntry(userId: $userId, stepName: $stepName, fileData: $fileData) {
+  mutation createUploadEntry($stepName: stepsEnum!, $userRole: UserRoleEnum! $fileData: UploadFileMetaInput!) {
+    createUploadEntry(stepName: $stepName, userRole: $userRole, fileData: $fileData) {
       preSignedUrl
       fileId
     }

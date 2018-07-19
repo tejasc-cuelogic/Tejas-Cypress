@@ -175,47 +175,63 @@ export class IdentityStore {
 
   @action
   setFileUploadData(field, files) {
-    accountActions.setFileUploadData(this.ID_VERIFICATION_DOCS_FRM, field, files, 'PROFILE_CIP');
+    accountActions.setFileUploadData(this.ID_VERIFICATION_DOCS_FRM, field, files, 'PROFILE_CIP', 'INVESTOR').then(action((result) => {
+      const { fileId, preSignedUrl } = result.data.createUploadEntry;
+      this.ID_VERIFICATION_DOCS_FRM.fields[field].fileId = fileId;
+      this.ID_VERIFICATION_DOCS_FRM.fields[field].preSignedUrl = preSignedUrl;
+      this.ID_VERIFICATION_DOCS_FRM.fields[field].fileData = files;
+      const fileData = Helper.getFormattedFileData(files);
+      this.ID_VERIFICATION_DOCS_FRM = FormValidator.onChange(
+        this.ID_VERIFICATION_DOCS_FRM,
+        { name: field, value: fileData.fileName },
+      );
+      Helper.putUploadedFile([this.ID_VERIFICATION_DOCS_FRM.fields[field]])
+        .then(() => {})
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    }));
   }
 
   @action
   removeUploadedData(field) {
-    accountActions.removeUploadedData(this.ID_VERIFICATION_DOCS_FRM, field, 'PROFILE_CIP').then(() => {
+    accountActions.removeUploadedData(this.ID_VERIFICATION_DOCS_FRM, field, 'PROFILE_CIP').then(action(() => {
       this.ID_VERIFICATION_DOCS_FRM = FormValidator.onChange(
         this.ID_VERIFICATION_DOCS_FRM,
         { name: field, value: '' },
       );
       this.ID_VERIFICATION_DOCS_FRM.fields[field].fileId = '';
       this.ID_VERIFICATION_DOCS_FRM.fields[field].preSignedUrl = '';
-    })
+    }))
       .catch(() => { });
   }
 
   uploadAndUpdateCIPInfo = () => {
     uiStore.setProgress();
     const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
+    const cipStatus = {
+      status: 'MANUAL_VERIFICATION_PENDING',
+      verificationDocs:
+      {
+        idProof: {
+          fileId: photoId.fileId,
+          fileName: photoId.value,
+        },
+        addressProof: {
+          fileId: proofOfResidence.fileId,
+          fileName: proofOfResidence.value,
+        },
+      },
+    };
     return new Promise((resolve, reject) => {
-      Helper.putUploadedFile([photoId, proofOfResidence])
+      this.updateUserInfo(cipStatus)
         .then(() => {
-          const cipStatus = {
-            status: 'MANUAL_VERIFICATION_PENDING',
-            verificationDocs:
-            {
-              idProof: {
-                fileId: photoId.fileId,
-                fileName: photoId.value,
-              },
-              addressProof: {
-                fileId: proofOfResidence.fileId,
-                fileName: proofOfResidence.value,
-              },
-            },
-          };
-          this.updateUserInfo(cipStatus);
           resolve();
         })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        .catch(() => {
           reject();
         })
         .finally(() => {

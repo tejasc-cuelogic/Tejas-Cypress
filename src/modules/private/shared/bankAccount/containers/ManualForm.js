@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
-import { validationActions } from '../../../../../services/actions';
+// import { validationActions } from '../../../../../services/actions';
+import AddFunds from './AddFunds';
 
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore')
 @observer
@@ -15,21 +16,26 @@ export default class ManualForm extends Component {
         this.props.individualAccountStore.setStepToBeRendered(1);
       });
     } else {
-      const currentStep = {
-        name: 'Link bank',
-        validate: validationActions.validateLinkBankForm,
-      };
-      this.props.entityAccountStore.createAccount(currentStep);
+      // const currentStep = {
+      //   name: 'Link bank',
+      //   validate: validationActions.validateLinkBankForm,
+      // };
+      // this.props.entityAccountStore.createAccount(currentStep);
+      this.props.bankAccountStore.setShowAddFunds();
     }
   }
 
   render() {
     const { errors } = this.props.uiStore;
     const {
+      showAddFunds,
       formLinkBankManually,
       linkBankManuallyChange,
     }
       = this.props.bankAccountStore;
+    if (showAddFunds) {
+      return <AddFunds />;
+    }
     return (
       <div>
         <Header as="h1" textAlign="center">Link Bank Account</Header>

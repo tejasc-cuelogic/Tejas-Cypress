@@ -17,6 +17,14 @@ export class AccountStore {
   }
 
   @action
+  setAccTypeChange = (value) => {
+    this.INVESTMENT_ACC_TYPES = FormValidator.onChange(
+      this.INVESTMENT_ACC_TYPES,
+      { name: 'accType', value },
+    );
+  }
+
+  @action
   setInvestmentAccTypeValues = (values) => {
     this.INVESTMENT_ACC_TYPES.fields.accType.values = values;
   }

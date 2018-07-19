@@ -148,17 +148,7 @@ class IraAccountStore {
             accountAttributes.identityDoc = {};
             accountAttributes.identityDoc.fileId = this.IDENTITY_FRM.fields.identityDoc.fileId;
             accountAttributes.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
-            return new Promise((resolve, reject) => {
-              Helper.putUploadedFile([this.IDENTITY_FRM.fields.identityDoc])
-                .then(() => {
-                  this.submitForm(currentStep, formStatus, accountAttributes);
-                })
-                .catch((err) => {
-                  uiStore.setProgress(false);
-                  uiStore.setErrors(DataFormatter.getSimpleErr(err));
-                  reject(err);
-                });
-            });
+            this.submitForm(currentStep, formStatus, accountAttributes);
           }
         }
         break;
@@ -286,18 +276,35 @@ class IraAccountStore {
 
   @action
   setFileUploadData = (field, files) => {
-    accountActions.setFileUploadData(this.IDENTITY_FRM, field, files, 'ACCOUNT_IRA_CREATION_CIP');
+    accountActions.setFileUploadData(this.IDENTITY_FRM, field, files, 'ACCOUNT_IRA_CREATION_CIP').then(action((result) => {
+      const { fileId, preSignedUrl } = result.data.createUploadEntry;
+      this.IDENTITY_FRM.fields[field].fileId = fileId;
+      this.IDENTITY_FRM.fields[field].preSignedUrl = preSignedUrl;
+      const fileData = Helper.getFormattedFileData(files);
+      this.IDENTITY_FRM = FormValidator.onChange(
+        this.IDENTITY_FRM,
+        { name: field, value: fileData.fileName },
+      );
+      uiStore.setProgress();
+      Helper.putUploadedFile([this.IDENTITY_FRM.fields.identityDoc])
+        .then(() => {
+        })
+        .catch((err) => {
+          uiStore.setProgress(false);
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        });
+    }));
   }
 
   @action
   removeUploadedData = (field) => {
     const currentStep = { name: 'Identity' };
-    accountActions.removeUploadedData(this.IDENTITY_FRM, field, 'ACCOUNT_IRA_CREATION_CIP').then(() => {
+    accountActions.removeUploadedData(this.IDENTITY_FRM, field, 'ACCOUNT_IRA_CREATION_CIP').then(action(() => {
       this.IDENTITY_FRM.fields[field].value = '';
       this.IDENTITY_FRM.fields[field].fileId = '';
       this.IDENTITY_FRM.fields[field].preSignedUrl = '';
       this.createAccount(currentStep, 'draft', true);
-    })
+    }))
       .catch(() => { });
   }
 }

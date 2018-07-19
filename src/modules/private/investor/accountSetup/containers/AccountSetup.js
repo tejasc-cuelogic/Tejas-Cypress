@@ -52,8 +52,12 @@ export default class AccountSetup extends Component {
     const { signupStatus, currentUser, getStepStatus } = this.props.userDetailsStore;
 
     return (
-      <PrivateLayout {...this.props} P5={<StickyNotification signupStatus={signupStatus} />}>
-        <h3>Complete your account setup</h3>
+      <PrivateLayout
+        {...this.props}
+        P5={!signupStatus.finalStatus &&
+        <StickyNotification signupStatus={signupStatus} />}
+      >
+        <h3>{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</h3>
         {!(currentUser.data && currentUser.data.user) ? 'Loading..' : (
           <ProgressCard
             renderStep={this.renderStep}

@@ -46,13 +46,14 @@ const ProgressCard = props => (
                 <Icon className={`ns-${key}`} />
                 <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `ns-${status === 2 ? 'check' : 'warning'}-circle`} />
               </Icon.Group>
-              <p><b>{status === 2 ? currentCard.successMsg : currentCard.label}</b></p>
+              <p><b>{currentCard.label}</b></p>
+              {status === 2 ? <p>{currentCard.successMsg}</p> : '' }
               {status === 0 ?
                 '' :
                 status !== 2 ?
                   <Button
                     color="green"
-                    content="Continue"
+                    content={currentCard.step === 2 ? 'Create' : 'Continue'}
                     onClick={() => props.renderStep(currentCard.step)}
                   /> :
                   ''
