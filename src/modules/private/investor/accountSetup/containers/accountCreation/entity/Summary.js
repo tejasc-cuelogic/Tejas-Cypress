@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Header, Table, Button, Item, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { DateTimeFormat, ListErrors } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 
@@ -12,6 +12,7 @@ import Helper from '../../../../../../../helper/utility';
 export default class Summary extends Component {
   handleCreateAccount = () => {
     this.props.entityAccountStore.createAccount('Summary', 'submit');
+    this.props.history.push('summary');
   }
   render() {
     const {
@@ -23,7 +24,7 @@ export default class Summary extends Component {
       = this.props.entityAccountStore;
     const { errors } = this.props.uiStore;
     const { plaidBankDetails, formLinkBankManually } = this.props.bankAccountStore;
-    const bankAccountNumber = !_.isEmpty(plaidBankDetails) ?
+    const bankAccountNumber = !isEmpty(plaidBankDetails) ?
       plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>

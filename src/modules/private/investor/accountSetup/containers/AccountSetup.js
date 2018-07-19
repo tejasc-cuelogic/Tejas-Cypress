@@ -13,6 +13,7 @@ import AccountCreation from './accountCreation';
 @observer
 export default class AccountSetup extends Component {
   componentWillMount() {
+    localStorage.removeItem('encryptedPwd');
     this.props.userDetailsStore.setUserAccDetails();
     const validPanes = [];
     const { inActiveAccounts } = this.props.userDetailsStore.signupStatus;

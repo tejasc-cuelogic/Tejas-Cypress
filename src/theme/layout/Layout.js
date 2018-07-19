@@ -40,7 +40,7 @@ class Layout extends Component {
             <Route path="/auth/login" component={Login} />
             <Route path="/auth/register" component={SignupInitial} />
             <Route path="/auth/register-investor" component={InvestorSignup} />
-            <Route path="/auth/confirm-email/:id/:pwd" component={ConfirmEmailAddress} />
+            <Route path="/auth/confirm-email/:id" component={ConfirmEmailAddress} />
             <Route path="/auth/change-password" component={ChangePassword} />
             <Route path="/auth/reset-password" component={ResetPassword} />
             <Route path="/auth/forgot-password" component={ForgotPassword} />

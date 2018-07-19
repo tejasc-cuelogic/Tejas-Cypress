@@ -6,7 +6,7 @@ import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
-@inject('authStore', 'uiStore', 'userStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 class Login extends Component {
@@ -23,8 +23,12 @@ class Login extends Component {
           this.props.history.push('/auth/change-password');
         } else {
           this.props.authStore.reset();
-          const redirectUrl = roles && roles.includes('investor') ? 'summary' : 'dashboard';
-          this.props.history.replace(`/app/${redirectUrl}`);
+          const { pendingStep } = this.props.userDetailsStore;
+          if (roles && roles.includes('investor')) {
+            this.props.history.push(`/app/${pendingStep}`);
+          } else {
+            this.props.history.push('/app/dashboard');
+          }
         }
       });
   };
@@ -33,7 +37,7 @@ class Login extends Component {
     const { LOGIN_FRM, LoginChange } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
-      <Modal size="mini" open onClose={() => this.props.history.push('/')}>
+      <Modal size="mini" closeOnRootNodeClick={false} open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Log in to NextSeed</Header>
         </Modal.Header>
