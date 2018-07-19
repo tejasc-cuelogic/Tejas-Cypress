@@ -17,13 +17,12 @@ class InvestorSignup extends Component {
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/auth/change-password');
         } else {
-          this.props.history.push('/auth/confirm-email');
+          const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+          this.props.history.push(`/auth/confirm-email/${email.value}/${password.value}`);
         }
       })
       .catch(() => { });
   };
-
-  checkRouting = () => this.props.history.replace('/confirm');
 
   render() {
     const { SIGNUP_FRM, signupChange } = this.props.authStore;

@@ -23,7 +23,7 @@ const checkStatus = (signupStatus) => {
       stepinfo.label = `Choose between an ${Helper.getCommaSeparatedArrStr(accCreation)} account to get started.`;
     }
   } else {
-    stepinfo.title = 'Now you can open your first NextSeed account!';
+    stepinfo.title = 'Now you can open your first NextSeed Investment Account';
     stepinfo.group = 'Congratulations!';
     stepinfo.label = 'Choose between an Individual, IRA or Entity account to get started.';
   }

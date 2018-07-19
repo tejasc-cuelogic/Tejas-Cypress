@@ -14,6 +14,7 @@ export class BankAccountStore {
   @observable plaidBankDetails = {};
   @observable bankListing = undefined;
   @observable depositMoneyNow = true;
+  @observable showAddFunds = false;
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
   @observable formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
@@ -110,6 +111,11 @@ export class BankAccountStore {
   @computed
   get isValidLinkBank() {
     return !isEmpty(this.plaidBankDetails);
+  }
+
+  @action
+  setShowAddFunds = () => {
+    this.showAddFunds = true;
   }
 }
 

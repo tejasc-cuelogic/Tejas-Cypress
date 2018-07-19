@@ -1,34 +1,27 @@
 import { createUploadEntry, removeUploadedFile } from '../../stores/queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
-import { FormValidator, DataFormatter } from '../../../helper';
-import { uiStore, userStore } from '../../stores';
+import { DataFormatter } from '../../../helper';
+import { uiStore } from '../../stores';
 import Helper from '../../../helper/utility';
 
 export class Account {
-  setFileUploadData = (form, field, files, stepName) => {
-    let currentForm = form;
+  setFileUploadData = (form, field, files, stepName, userRole) => {
+    const currentForm = form;
     currentForm.fields[field].fileData = files;
     const fileData = Helper.getFormattedFileData(files);
-    currentForm = FormValidator.onChange(
-      currentForm,
-      { name: field, value: fileData.fileName },
-    );
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: createUploadEntry,
           variables: {
-            userId: userStore.currentUser.sub,
             stepName,
+            userRole,
             fileData,
           },
         })
         .then((result) => {
-          const { fileId, preSignedUrl } = result.data.createUploadEntry;
-          currentForm.fields[field].fileId = fileId;
-          currentForm.fields[field].preSignedUrl = preSignedUrl;
-          resolve();
+          resolve(result);
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -55,7 +48,7 @@ export class Account {
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
+          reject();
         })
         .finally(() => {
           uiStore.setProgress(false);

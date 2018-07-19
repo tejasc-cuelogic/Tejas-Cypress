@@ -12,9 +12,9 @@ import Helper from '../../../helper/utility';
 @observer
 export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
-    const { CONFIRM_FRM, SIGNUP_FRM } = this.props.authStore;
-    CONFIRM_FRM.fields.email.value = SIGNUP_FRM.fields.email.value;
-    CONFIRM_FRM.fields.password.value = SIGNUP_FRM.fields.password.value;
+    const { CONFIRM_FRM } = this.props.authStore;
+    CONFIRM_FRM.fields.email.value = this.props.match.params.id;
+    CONFIRM_FRM.fields.password.value = this.props.match.params.pwd;
   }
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
