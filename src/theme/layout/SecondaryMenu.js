@@ -8,6 +8,7 @@ import mapKeys from 'lodash/mapKeys';
 const iMap = { to: 'key', title: 'text' };
 const NavItems = ({ navItems, match }) => navItems.map(item => (
   <Menu.Item key={item.to} as={NavLink} to={`${match.url}/${item.to}`}>
+    {/* <Icon name="circle green tick" /> */}
     {item.title}
   </Menu.Item>
 ));

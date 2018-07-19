@@ -52,16 +52,16 @@ export class NavStore {
   @action
   setAccessParams(key, value) {
     this.params[key] = value;
-    const { roles, currentNav } = this.params;
+    const { roles, currentNav, appStatus } = this.params;
     if (roles && currentNav) {
       const nav = toJS(this.allNavItems.find(i => matchPath(currentNav, { path: `/app/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
         nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
           n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0);
-        // if (nav.title === 'Application' && key === 'appStatus') {
-        //   nav.subNavigations = this.filterByAccess(nav.subNavigations, appStatus);
-        // }
+        if (nav.title === 'Application' && key === 'appStatus') {
+          nav.subNavigations = this.filterByAccess(nav.subNavigations, appStatus);
+        }
       }
       this.navMeta = nav;
     }

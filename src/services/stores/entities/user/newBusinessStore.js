@@ -184,7 +184,10 @@ export class NewBusinessStore {
     this.setbusinessDetails(data.businessDetails);
     this.setperformanceDetails(data.businessPerformance);
     this.setDocumentationDetails(data.businessDocumentation);
+    console.log(this.calculateStepToRender);
     navStore.setAccessParams('appStatus', this.fetchBusinessApplicationsStatusById);
+    // this.props.history.push(`/app/business-application/$
+    // {this.currentApplicationId}/${this.calculateStepToRender}`);
   };
 
   @action
