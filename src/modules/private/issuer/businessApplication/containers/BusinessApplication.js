@@ -3,6 +3,7 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { Button } from 'semantic-ui-react';
+import { includes } from 'lodash';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
@@ -56,10 +57,14 @@ export default class BusinessApplication extends Component {
 
   render() {
     const { match } = this.props;
+    const { pathname } = this.props.location;
+    const showSubNav = includes(pathname, 'failed') || includes(pathname, 'success') || includes(pathname, 'lendio');
+    const preQualPage = includes(pathname, 'pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
     const { canSubmitApp } = this.props.newBusinessStore;
     return (
       <PrivateLayout
+        subNav={!showSubNav}
         {...this.props}
         P0={
           <Logo
@@ -71,7 +76,7 @@ export default class BusinessApplication extends Component {
             size="small"
           />
         }
-        P4={
+        P4={!showSubNav && !preQualPage &&
           <Button.Group>
             <Button inverted onClick={this.saveContinue} color="green">Save and Continue later</Button>
             <Button

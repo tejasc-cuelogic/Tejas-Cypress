@@ -5,7 +5,6 @@ import { Grid, Icon, Header, Divider } from 'semantic-ui-react';
 
 export default class Failure extends Component {
   render() {
-    // const { match } = this.props;
     // const reason = match.params.reason ? match.params.reason : '';
     return (
       <Grid.Column className="issuer-signup">

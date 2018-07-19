@@ -75,7 +75,7 @@ export const PRIVATE_NAV = [
     title: 'Application',
     to: 'business-application/:applicationId',
     accessibleTo: ['issuer'],
-    subPanel: 1,
+    subPanel: 0,
     path: 'issuer/businessApplication/containers/BusinessApplication',
     subNavigations: [
       {
