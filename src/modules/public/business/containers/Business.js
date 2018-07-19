@@ -28,7 +28,7 @@ class Business extends Component {
       <div>
         {location.pathname === '/business' && <Banner />}
         <Visibility onUpdate={this.handleUpdate} continuous>
-          <Menu secondary className={`center-align menu-secondary ${this.state.subnavOnTop ? 'top' : ''}`}>
+          <Menu secondary className={`center-align menu-secondary ${this.state.subnavOnTop ? 'active' : ''}`}>
             <NavItems sub refLoc="public" location={location} navItems={navItems} />
           </Menu>
           <Switch>
