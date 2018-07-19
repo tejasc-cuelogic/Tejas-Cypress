@@ -12,6 +12,7 @@ import { ListErrors } from '../../../../../theme/shared';
 export default class ConfirmModal extends Component {
   handleCloseModal = (e) => {
     e.preventDefault();
+    this.props.uiStore.setErrors(null);
     this.props.history.goBack();
   }
 
