@@ -31,6 +31,7 @@ export default class AddFunds extends Component {
               name="value"
               type="tel"
               currency
+              placeholder="$ 15,000"
               fielddata={formAddFunds.fields.value}
               changed={values => addFundChange(values, 'value')}
               maxLength={formAddFunds.fields.value.maxLength}

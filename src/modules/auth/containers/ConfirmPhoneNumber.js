@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { FormInput, MaskedInput } from '../../../theme/form';
+import { MaskedInput } from '../../../theme/form';
 import Helper from '../../../helper/utility';
 import { ListErrors } from '../../../theme/shared';
 
@@ -114,13 +115,13 @@ export default class ConfirmPhoneNumber extends Component {
             </p>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
-            <FormInput
+            <ReactCodeInput
               name="code"
-              size="huge"
-              containerclassname="otp-field"
-              maxLength={6}
+              fields={6}
+              type="number"
+              className="otp-field"
               fielddata={ID_PHONE_VERIFICATION.fields.code}
-              changed={phoneVerificationChange}
+              onChange={phoneVerificationChange}
             />
             <div className="center-align">
               <Button loading={!reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!ID_PHONE_VERIFICATION.meta.isValid}>Confirm</Button>

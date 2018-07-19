@@ -10,16 +10,17 @@ const MaskedInput2 = observer((props) => {
     label,
     error,
     value,
+    tooltip,
     placeHolder,
   } = props.fielddata;
   return (
     <Form.Field error={!!error}>
       <label>
         {label}
-        {props.tooltip &&
+        {tooltip &&
           <Popup
             trigger={<Icon name="help circle outline" />}
-            content={props.tooltip}
+            content={tooltip}
             position="top center"
             className={props.containerClassname}
           />

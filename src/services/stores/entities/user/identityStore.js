@@ -80,10 +80,10 @@ export class IdentityStore {
   }
 
   @action
-  phoneVerificationChange = (e, result) => {
+  phoneVerificationChange = (e) => {
     this.ID_PHONE_VERIFICATION = FormValidator.onChange(
       this.ID_PHONE_VERIFICATION,
-      FormValidator.pullValues(e, result),
+      { name: 'code', value: e },
     );
   };
 
@@ -130,7 +130,7 @@ export class IdentityStore {
     const cipStatus = identityHelper.getCipStatus(key, questions);
     return cipStatus;
   }
-
+  @action
   verifyUserIdentity = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {

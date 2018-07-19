@@ -22,6 +22,7 @@ export const securitySections = [
 
 export const USER_IDENTITY = {
   title: {
+    key: 'title',
     value: '',
     label: 'Title',
     placeHolder: 'Mrs',
@@ -29,6 +30,7 @@ export const USER_IDENTITY = {
     rule: 'string',
   },
   firstLegalName: {
+    key: 'firstLegalName',
     value: '',
     label: 'First Name (Legal)',
     placeHolder: 'John',
@@ -36,6 +38,7 @@ export const USER_IDENTITY = {
     rule: 'required',
   },
   lastLegalName: {
+    key: 'lastLegalName',
     value: '',
     label: 'Last Name (Legal)',
     placeHolder: 'Smith',
@@ -43,6 +46,7 @@ export const USER_IDENTITY = {
     rule: 'required',
   },
   residentalStreet: {
+    key: 'residentalStreet',
     value: '',
     label: 'Residential Address',
     placeHolder: 'Baker Street 221B',
@@ -50,6 +54,7 @@ export const USER_IDENTITY = {
     rule: 'required',
   },
   city: {
+    key: 'city',
     value: '',
     label: 'City',
     placeHolder: 'New York',
@@ -57,6 +62,7 @@ export const USER_IDENTITY = {
     rule: 'required',
   },
   state: {
+    key: 'state',
     value: '',
     label: 'State',
     placeHolder: 'NY',
@@ -64,6 +70,7 @@ export const USER_IDENTITY = {
     rule: 'required',
   },
   zipCode: {
+    key: 'zipCode',
     value: '',
     label: 'Zip Code',
     placeHolder: '10011',
@@ -71,6 +78,7 @@ export const USER_IDENTITY = {
     rule: 'required',
   },
   phoneNumber: {
+    key: 'phoneNumber',
     value: '',
     label: 'Phone Number',
     placeHolder: '123-456-7890',
@@ -78,6 +86,7 @@ export const USER_IDENTITY = {
     rule: 'required|maskedPhoneNumber',
   },
   dateOfBirth: {
+    key: 'dateOfBirth',
     value: '',
     label: 'Date of Birth',
     placeHolder: 'Select date',
@@ -85,6 +94,7 @@ export const USER_IDENTITY = {
     rule: 'required',
   },
   ssn: {
+    key: 'ssn',
     value: '',
     label: 'Social Security Number',
     placeHolder: '123-456-7890',

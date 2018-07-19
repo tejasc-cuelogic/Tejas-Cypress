@@ -65,12 +65,10 @@ export class AuthStore {
 
   @action
   ConfirmChange = (e) => {
-    if (e.length === 6) {
-      this.CONFIRM_FRM = Validator.onChange(
-        this.CONFIRM_FRM,
-        { name: 'code', value: e },
-      );
-    }
+    this.CONFIRM_FRM = Validator.onChange(
+      this.CONFIRM_FRM,
+      { name: 'code', value: e },
+    );
   };
 
   @action
