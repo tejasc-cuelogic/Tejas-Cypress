@@ -25,7 +25,7 @@ import {
   upsertBusinessApplicationInformationDocumentation,
   submitApplication,
 } from '../../queries/businessApplication';
-import { uiStore } from '../../index';
+import { uiStore, navStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class NewBusinessStore {
@@ -182,6 +182,7 @@ export class NewBusinessStore {
     this.setbusinessDetails(data.businessDetails);
     this.setperformanceDetails(data.businessPerformance);
     this.setDocumentationDetails(data.businessDocumentation);
+    navStore.setAccessParams('appStatus', this.fetchBusinessApplicationsStatusById);
   };
 
   @action
@@ -354,6 +355,13 @@ export class NewBusinessStore {
       && this.businessApplicationsDataById.data.businessApplication
       && toJS(this.businessApplicationsDataById.data.businessApplication)
     ) || [];
+  }
+
+  @computed get fetchBusinessApplicationsStatusById() {
+    return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
+      && this.businessApplicationsDataById.data.businessApplication
+      && toJS(this.businessApplicationsDataById.data.businessApplication.applicationStatus)
+    ) || null;
   }
 
   @computed get fetchBusinessApplication() {

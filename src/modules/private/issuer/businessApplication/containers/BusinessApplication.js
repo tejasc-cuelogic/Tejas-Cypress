@@ -18,11 +18,10 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('newBusinessStore', 'uiStore')
+@inject('newBusinessStore', 'uiStore', 'navStore')
 @observer
 export default class BusinessApplication extends Component {
   componentWillMount() {
-    // console.log(this.props.newBusinessStore.getBusinessAppStepStatus);
     this.props.newBusinessStore.setCurrentApplicationId(this.props.match.params.applicationId);
     if (this.props.match.params.applicationId !== 'new' &&
     this.props.newBusinessStore.isFetchedData !== this.props.match.params.applicationId) {
@@ -30,6 +29,7 @@ export default class BusinessApplication extends Component {
       this.props.newBusinessStore.setFetchedData(this.props.match.params.applicationId);
       // this.props.history.replace(`${this.props.match.url}/pre-qualification`);
     } else if (this.props.match.params.applicationId === 'new') {
+      // this.props.navStore.setAccessParams('appStatus', null);
       this.props.newBusinessStore.formReset();
     }
   }
@@ -67,7 +67,7 @@ export default class BusinessApplication extends Component {
             verticalAlign="middle"
             dataSrc="LogoWhite"
             as={Link}
-            to="/app/business-application"
+            to="/app/dashboard"
             size="small"
           />
         }
