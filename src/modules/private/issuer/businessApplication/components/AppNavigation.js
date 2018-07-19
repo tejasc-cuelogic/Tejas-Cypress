@@ -18,10 +18,27 @@ export default class AppNavigation extends Component {
     this.setState({ step, navItems });
   }
   actualSubmit = (where) => {
+    if (where) {
+      if (this.props.newBusinessStore.checkFormisValid(`${this.state.navItems[this.state.step].to}`)) {
+        console.log('Next Step process', `${this.state.navItems[this.state.step].to}`);
+        this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
+      } else {
+        this.props.history.push(`/app/business-application/${this.props.newBusinessStore.currentApplicationId}/confirm`);
+      }
+    }
     this.props.action();
     this.props.history.push(`/app/business-application/${this.props.newBusinessStore.currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
   }
-  submit = () => {
+
+  submitSaveContinue = (stepUrl) => {
+    this.props.newBusinessStore.businessAppParitalSubmit(stepUrl).then(() => {
+      // Helper.toast('Business application saved!', 'success');
+      // this.props.history.push('/app/dashboard');
+    });
+  }
+
+  submit = (e) => {
+    e.preventDefalult();
     this.props.newBusinessStore.businessApplicationSubmitAction().then(() => {
       Helper.toast('Business application submitted successfully!', 'success');
       this.props.history.push('/app/dashboard');
@@ -46,7 +63,7 @@ export default class AppNavigation extends Component {
                 <Icon className="ns-arrow-right" />
               </Button>
             </Aux>
-          ) : <Button disabled={!this.props.canSubmitApp} primary className="very relaxed" content="Submit" />
+          ) : <Button onClick={this.submit} disabled={!this.props.canSubmitApp} primary className="very relaxed" content="Submit" />
           }
         </div>
       </div>
