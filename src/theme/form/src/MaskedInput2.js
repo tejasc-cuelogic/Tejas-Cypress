@@ -21,14 +21,20 @@ const MaskedInput2 = observer((props) => {
             trigger={<Icon name="help circle outline" />}
             content={props.tooltip}
             position="top center"
-            className="center-align"
+            className={props.containerClassname}
           />
         }
       </label>
       {props.currency ? (
-        <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
+        <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onValueChange={props.changed} error={!!error} mask="_" />
       ) : props.percentage ? (
         <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={props.changed} error={!!error} mask="%" suffix="%" />
+      ) : props.phoneNumber ? (
+        <NumberFormat type="tel" format={props.format} {...props} placeholder={placeHolder} value={value} onChange={props.changed} error={!!error} />
+      ) : props.zipCode ? (
+        <NumberFormat format="#####" {...props} placeholder={placeHolder} value={value} onChange={props.changed} error={!!error} />
+      ) : props.ssn ? (
+        <NumberFormat type="tel" format="###-##-####" placeholder={placeHolder} {...props} value={value} onChange={props.changed} error={!!error} />
       ) : (
         <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
       )

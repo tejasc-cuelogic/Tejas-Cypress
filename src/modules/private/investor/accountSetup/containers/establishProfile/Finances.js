@@ -65,6 +65,7 @@ export default class Finances extends Component {
           <Form.Group widths="equal">
             {['annualIncome1', 'annualIncome2', 'annualIncome3'].map(field => (
               <MaskedInput2
+                type="tel"
                 key={field}
                 name={field}
                 currency

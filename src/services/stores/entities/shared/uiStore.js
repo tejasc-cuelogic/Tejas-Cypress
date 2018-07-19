@@ -32,6 +32,7 @@ export class UiStore {
   @observable authWizardStep = undefined;
   @observable dashboardStep = undefined;
   @observable editMode = false;
+  @observable pwdInputType = 'password';
 
   @action
   setModalStatus(status) {

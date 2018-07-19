@@ -41,17 +41,16 @@ export default class ManualForm extends Component {
         }
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
-            {
-              ['routingNumber', 'accountNumber'].map(field => (
-                <FormInput
-                  key={field}
-                  name={field}
-                  fielddata={formLinkBankManually.fields[field]}
-                  changed={linkBankManuallyChange}
-                  maxLength={formLinkBankManually.fields[field].maxLength}
-                />
-              ))
-            }
+            <FormInput
+              name="routingNumber"
+              fielddata={formLinkBankManually.fields.routingNumber}
+              changed={linkBankManuallyChange}
+            />
+            <FormInput
+              name="accountNumber"
+              fielddata={formLinkBankManually.fields.accountNumber}
+              changed={linkBankManuallyChange}
+            />
           </div>
           <div className="center-align">
             <Button primary size="large" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>

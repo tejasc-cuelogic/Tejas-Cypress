@@ -26,6 +26,14 @@ export class NewBusinessStore {
   };
 
   @action
+  preQualifInfoChange = (values, field) => {
+    this.BUSINESS_APP_FRM = Validator.onChange(
+      this.BUSINESS_APP_FRM,
+      { name: field, value: values.floatValue },
+    );
+  }
+
+  @action
   businessDocChange = (e, res) => {
     this.BUSINESS_ACCOUNT = Validator.onChange(this.BUSINESS_ACCOUNT, Validator.pullValues(e, res));
   };

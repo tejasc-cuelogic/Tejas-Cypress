@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { authActions, validationActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
@@ -42,6 +43,7 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   handleCloseModal = () => {
+    this.props.authStore.reset('CONFIRM');
     this.props.history.push(this.props.refLink || '/');
     this.props.uiStore.clearErrors();
   }
@@ -87,13 +89,12 @@ export default class ConfirmEmailAddress extends Component {
             </Message>
           }
           <Form onSubmit={this.handleSubmitForm}>
-            <FormInput
-              size="huge"
-              name="code"
-              containerclassname="otp-field"
+            <ReactCodeInput
+              fields={6}
+              type="number"
+              className="otp-field"
               fielddata={CONFIRM_FRM.fields.code}
-              changed={ConfirmChange}
-              maxLength={6}
+              onChange={ConfirmChange}
             />
             <div className="center-align">
               <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!CONFIRM_FRM.meta.isValid}>Confirm</Button>

@@ -30,10 +30,20 @@ class Login extends Component {
   };
 
   render() {
-    const { LOGIN_FRM, LoginChange } = this.props.authStore;
+    const {
+      LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType, reset,
+    } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
-      <Modal size="mini" open onClose={() => this.props.history.push('/')}>
+      <Modal
+        size="mini"
+        open
+        onClose={() => {
+          reset('LOGIN');
+          this.props.history.push('/');
+          }
+        }
+      >
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Log in to NextSeed</Header>
         </Modal.Header>
@@ -54,8 +64,10 @@ class Login extends Component {
               Object.keys(LOGIN_FRM.fields).map(field => (
                 <FormInput
                   key={field}
-                  type={field !== 'email' ? 'password' : 'text'}
+                  type={field === 'password' ? pwdInputType : 'email'}
+                  icon={field === 'password' ? togglePasswordType() : null}
                   name={field}
+                  autoFocus={field === 'email'}
                   fielddata={LOGIN_FRM.fields[field]}
                   changed={LoginChange}
                 />

@@ -25,6 +25,33 @@ export class AuthStore {
   @observable FORGOT_PASS_FRM = Validator.prepareFormObject(FORGOT_PASS);
   @observable RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
   @observable confirmProgress = false;
+  @observable pwdInputType = 'password';
+
+
+  @action
+  setPwdVisibilityStatus = () => {
+    if (this.pwdInputType === 'password') {
+      this.pwdInputType = 'text';
+    } else {
+      this.pwdInputType = 'password';
+    }
+  }
+
+  @action
+  togglePasswordType = () => {
+    let iconData = {
+      link: true,
+      onClick: this.setPwdVisibilityStatus,
+    };
+    if (this.pwdInputType === 'password') {
+      iconData.className = 'ns-view';
+    } else if (this.pwdInputType === 'text') {
+      iconData.className = 'ns-view active';
+    } else {
+      iconData = null;
+    }
+    return iconData;
+  }
 
   @action
   LoginChange = (e, result) => {
@@ -37,8 +64,13 @@ export class AuthStore {
   };
 
   @action
-  ConfirmChange = (e, result) => {
-    this.CONFIRM_FRM = Validator.onChange(this.CONFIRM_FRM, Validator.pullValues(e, result));
+  ConfirmChange = (e) => {
+    if (e.length === 6) {
+      this.CONFIRM_FRM = Validator.onChange(
+        this.CONFIRM_FRM,
+        { name: 'code', value: e },
+      );
+    }
   };
 
   @action
@@ -92,10 +124,17 @@ export class AuthStore {
   }
 
   @action
-  reset(form) {
+  reset = (form) => {
     switch (form) {
-      case 'LOGIN': this.LOGIN_FRM = Validator.prepareFormObject(LOGIN); break;
-      case 'CONFIRM': this.CONFIRM_FRM = Validator.prepareFormObject(CONFIRM); break;
+      case 'LOGIN':
+        this.LOGIN_FRM = Validator.prepareFormObject(LOGIN);
+        break;
+      case 'CONFIRM':
+        this.CONFIRM_FRM = Validator.prepareFormObject(CONFIRM);
+        break;
+      case 'SIGNUP':
+        this.SIGNUP_FRM = Validator.prepareFormObject(SIGNUP);
+        break;
       default: this.LOGIN_FRM = Validator.prepareFormObject(LOGIN);
     }
   }

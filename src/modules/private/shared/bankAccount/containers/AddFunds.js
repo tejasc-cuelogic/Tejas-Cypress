@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button } from 'semantic-ui-react';
 
-import { FormInput } from '../../../../../theme/form';
+import { MaskedInput2 } from '../../../../../theme/form';
 
 @inject('bankAccountStore', 'individualAccountStore')
 @observer
@@ -27,12 +27,14 @@ export default class AddFunds extends Component {
         <Header as="h4" textAlign="center">How much would you like to deposit into your account today?</Header>
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
-            <FormInput
+            <MaskedInput2
               name="value"
+              type="tel"
+              currency
               fielddata={formAddFunds.fields.value}
-              changed={addFundChange}
+              changed={values => addFundChange(values, 'value')}
               maxLength={formAddFunds.fields.value.maxLength}
-              prefix="$"
+              prefix="$ "
             />
           </div>
           <div className="center-align">

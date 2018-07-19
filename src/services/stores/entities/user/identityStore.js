@@ -41,6 +41,7 @@ export class IdentityStore {
 
   @action
   dobChange = (date) => {
+    console.log('date is ', date);
     this.ID_VERIFICATION_FRM = FormValidator.onChange(
       this.ID_VERIFICATION_FRM,
       { name: 'dateOfBirth', value: date },
@@ -152,8 +153,11 @@ export class IdentityStore {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             reject(err);
           } else {
-            uiStore.setErrors(JSON.stringify('Something went wrong'));
-            reject(err);
+            // uiStore.setErrors(JSON.stringify('Something went wrong'));
+            const status = { status: 'FAIL' };
+            this.updateUserInfo(status);
+            resolve();
+            // reject(err);
           }
         })
         .finally(() => {
