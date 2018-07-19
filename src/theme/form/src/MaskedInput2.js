@@ -31,6 +31,8 @@ const MaskedInput2 = observer((props) => {
         <NumberFormat placeholder={placeHolder} maxLength={18} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : props.percentage ? (
         <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="%" suffix="%" />
+      ) : props.ssn ? (
+        <NumberFormat placeholder={placeHolder} maxLength={12} format="###-##-####" {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : (
         <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       )

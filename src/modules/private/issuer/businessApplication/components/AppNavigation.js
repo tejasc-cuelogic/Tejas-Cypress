@@ -4,6 +4,7 @@ import { Button, Icon } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
+import Helper from '../../../../../helper/utility';
 
 @inject('newBusinessStore')
 @withRouter
@@ -18,8 +19,13 @@ export default class AppNavigation extends Component {
   }
   actualSubmit = (where) => {
     this.props.action();
-
     this.props.history.push(`/app/business-application/${this.props.newBusinessStore.currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
+  }
+  submit = () => {
+    this.props.newBusinessStore.businessApplicationSubmitAction().then(() => {
+      Helper.toast('Business application submitted successfully!', 'success');
+      this.props.history.push('/app/dashboard');
+    });
   }
   render() {
     return (

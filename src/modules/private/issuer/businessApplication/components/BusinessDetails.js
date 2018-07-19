@@ -14,6 +14,7 @@ export default class BusinessDetails extends Component {
     showConfirmModal: false,
     currentForm: '',
     currentIndex: 0,
+    showHandle: false,
   }
 
   componentWillMount() {
@@ -23,6 +24,10 @@ export default class BusinessDetails extends Component {
   removeForm = (e) => {
     this.setState({ showConfirmModal: !this.state.showConfirmModal });
     this.props.newBusinessStore.removeForm(e, this.state.currentForm, this.state.currentIndex);
+  }
+
+  toggleHandel = () => {
+    this.setState({ showHandle: !this.state.toggleHandel });
   }
 
   toggleConfirm = (formName, index) => {
@@ -137,11 +142,11 @@ export default class BusinessDetails extends Component {
               subHeader="Please list all individuals with at least 20% ownership."
             >
               <Accordion>
-                <Accordion.Title active>
-                  <Icon className="ns-chevron-up" />
+                <Accordion.Title onClick={this.toggleHandel} active={this.state.showHandle}>
+                  <Icon className={this.state.showHandle ? 'ns-chevron-up' : 'ns-chevron-down'} />
                   Hide legal note
                 </Accordion.Title>
-                <Accordion.Content active>
+                <Accordion.Content active={this.state.showHandle}>
                   <p>
                     You hereby authorize NextSeed Management LLC, its assignee, assigns or
                     potential assigns to review your personal credit and business profile
@@ -191,7 +196,7 @@ export default class BusinessDetails extends Component {
                       </Form.Group>
                       <Form.Group widths="equal">
                         <MaskedInput2
-                          number
+                          ssn
                           type="text"
                           name="ssn"
                           fielddata={owner.ssn}

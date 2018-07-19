@@ -117,12 +117,8 @@ export class Utility {
       });
   });
 
-  putUploadedFile1 = urlArray => new Promise((resolve, reject) => {
-    const funcArray = [];
-    _.forEach(urlArray.preSignedUrl, (item, key) => {
-      funcArray.push(apiService.uploadOnS3(item[key], urlArray[key].fileData));
-    });
-    Promise.all(funcArray).then(() => {
+  putUploadedFileOnS3 = fileObj => new Promise((resolve, reject) => {
+    apiService.uploadOnS3(fileObj.preSignedUrl, fileObj.fileData).then(() => {
       resolve();
     })
       .catch((err) => {

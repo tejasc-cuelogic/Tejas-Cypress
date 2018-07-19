@@ -12,6 +12,7 @@ import {
   LENDIO_PRE_QUAL,
   BUSINESS_APPLICATION_STATUS,
   BUSINESS_GOAL,
+  BUSINESS_APP_FILE_UPLOAD_ENUMS,
 } from '../../../constants/newBusiness';
 // import { createUploadEntry, removeUploadedFile } from '../../queries/common';
 import Helper from '../../../../helper/utility';
@@ -22,6 +23,7 @@ import {
   upsertBusinessApplicationInformationPerformance,
   upsertBusinessApplicationInformationBusinessDetails,
   upsertBusinessApplicationInformationDocumentation,
+  submitApplication,
 } from '../../queries/businessApplication';
 import { uiStore } from '../../index';
 import { fileUpload } from '../../../actions';
@@ -71,6 +73,19 @@ export class NewBusinessStore {
     this.BUSINESS_DOC_FRM = Validator.onChange(this.BUSINESS_DOC_FRM, Validator.pullValues(e, res));
   };
 
+  @action
+  checkFormisValid = (step) => {
+    let status = false;
+    if (step === 'business-details') {
+      status = this.BUSINESS_DETAILS_FRM.meta.isValid;
+    } else if (step === 'performance') {
+      status = this.BUSINESS_PERF_FRM.meta.isValid;
+    } else if (step === 'documentation') {
+      status = this.BUSINESS_DOC_FRM.meta.isValid;
+    }
+    return status;
+  }
+
   @computed get getGuaranteeCondtion() {
     return this.BUSINESS_DOC_FRM.fields.personalGuarantee.value;
   }
@@ -97,8 +112,8 @@ export class NewBusinessStore {
   };
 
   @action
-  fetchApplicationDataById = (applicationId) => {
-    this.businessApplicationsDataById = graphql({
+  fetchApplicationDataById = async (applicationId) => {
+    this.businessApplicationsDataById = await graphql({
       client,
       query: getBusinessApplicationsById,
       variables: {
@@ -106,9 +121,7 @@ export class NewBusinessStore {
       },
       fetchPolicy: 'network-only',
     });
-    setTimeout(() => {
-      this.setBusinessApplicationData();
-    }, 500);
+    this.setBusinessApplicationData();
   }
 
   @action
@@ -121,15 +134,39 @@ export class NewBusinessStore {
     console.log(this.businessApplicationsList);
   }
 
+  @computed get getBusinessAppStepStatus() {
+    let stepStatus = [];
+    const data = this.fetchBusinessApplicationsDataById;
+    if (data && data.businessApplication) {
+      if (data.businessApplication.businessDetails) {
+        stepStatus = [
+          ...stepStatus,
+          { businessDetails: data.businessApplication.businessDetails.stepStatus },
+        ];
+      } else if (data.businessApplication.businessPerformance) {
+        stepStatus = [
+          ...stepStatus,
+          { performance: data.businessApplication.businessPerformance.stepStatus },
+        ];
+      } else if (data.businessApplication.businessDocumentation) {
+        stepStatus = [
+          ...stepStatus,
+          { documentation: data.businessApplication.businessDocumentation.stepStatus },
+        ];
+      }
+    }
+    return stepStatus;
+  }
+
   @computed get calculateStepToRender() {
     const data = this.fetchBusinessApplicationsDataById;
     let url = 'business-details';
     if (data && data.businessApplication) {
       if (data.businessApplication.businessDetails && data.businessApplication.businessDetails.stepStatus === 'IN_PROGRESS') {
         url = 'business-details';
-      } else if (data.businessApplication.businessPerformance && data.businessApplication.businessDetails.stepStatus === 'IN_PROGRESS') {
+      } else if (data.businessApplication.businessPerformance && data.businessApplication.businessPerformance.stepStatus === 'IN_PROGRESS') {
         url = 'performance';
-      } else if (data.businessApplication.businessDocumentation && data.businessApplication.businessDetails.stepStatus === 'IN_PROGRESS') {
+      } else if (data.businessApplication.businessDocumentation && data.businessApplication.businessDocumentation.stepStatus === 'IN_PROGRESS') {
         url = 'documentation';
       }
     }
@@ -143,6 +180,8 @@ export class NewBusinessStore {
     console.log(this.fetchBusinessApplicationsDataById);
     this.setPrequalDetails(data.prequalDetails);
     this.setbusinessDetails(data.businessDetails);
+    this.setperformanceDetails(data.businessPerformance);
+    this.setDocumentationDetails(data.businessDocumentation);
   };
 
   @action
@@ -199,8 +238,13 @@ export class NewBusinessStore {
         }
       });
       data.owners.forEach((ele, key) => {
-        ['companyOwnerShip', 'fullLegalName', 'linkedInUrl', 'ssn', 'yearsOfExp', 'title'].forEach((field) => {
-          this.BUSINESS_DETAILS_FRM.fields.owners[key][field].value = ele[field];
+        ['companyOwnerShip', 'fullLegalName', 'linkedInUrl', 'ssn', 'yearsOfExp', 'title', 'resume'].forEach((field) => {
+          if (field === 'resume') {
+            this.BUSINESS_DETAILS_FRM.fields.owners[key][field].value = ele[field][0].fileName;
+            this.BUSINESS_DETAILS_FRM.fields.owners[key][field].fileId = ele[field][0].fileId;
+          } else {
+            this.BUSINESS_DETAILS_FRM.fields.owners[key][field].value = ele[field];
+          }
         });
         if (key < data.owners.length - 1) {
           this.addMoreForms(null, 'owners');
@@ -215,6 +259,94 @@ export class NewBusinessStore {
         this.BUSINESS_DETAILS_FRM.fields.businessPlan.fileId.push(ele.fileId);
       });
     }
+    Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
+  }
+
+  @action
+  setperformanceDetails = (data) => {
+    if (data) {
+      this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
+      ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
+        const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
+        this.BUSINESS_PERF_FRM.fields[field[key]].value =
+          data.performance.nextYearSnapshot[ele];
+      });
+      if (this.getBusinessTypeCondtion) {
+        ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
+          const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
+          this.BUSINESS_PERF_FRM.fields[field[key]].value =
+            data.performance.pastYearSnapshot[ele];
+          this.BUSINESS_PERF_FRM.fields[field[key]].rule = 'required';
+        });
+      } else {
+        ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
+          this.BUSINESS_PERF_FRM.fields[ele].rule = '';
+        });
+      }
+
+      if (data.financialStatements.fiveYearProjection &&
+        data.financialStatements.fiveYearProjection.length) {
+        this.BUSINESS_PERF_FRM.fields.fiveYearProjection.value = [];
+        this.BUSINESS_PERF_FRM.fields.fiveYearProjection.fileId = [];
+      }
+      data.financialStatements.fiveYearProjection.forEach((ele) => {
+        this.BUSINESS_PERF_FRM.fields.fiveYearProjection.value.push(ele.fileName);
+        this.BUSINESS_PERF_FRM.fields.fiveYearProjection.fileId.push(ele.fileId);
+      });
+      if (this.getBusinessTypeCondtion) {
+        ['priorToThreeYear', 'ytd'].forEach((field) => {
+          if (data.financialStatements[field] && data.financialStatements[field].length) {
+            this.BUSINESS_PERF_FRM.fields[field].value = [];
+            this.BUSINESS_PERF_FRM.fields[field].fileId = [];
+            this.BUSINESS_PERF_FRM.fields[field].rule = 'required';
+          }
+          data.financialStatements[field].forEach((ele) => {
+            this.BUSINESS_PERF_FRM.fields[field].value.push(ele.fileName);
+            this.BUSINESS_PERF_FRM.fields[field].fileId.push(ele.fileId);
+          });
+        });
+      } else {
+        ['priorToThreeYear', 'ytd'].forEach((ele) => {
+          this.BUSINESS_PERF_FRM.fields[ele].rule = '';
+        });
+      }
+    }
+    Validator.validateForm(this.BUSINESS_PERF_FRM);
+  }
+
+  @action
+  setDocumentationDetails = (data) => {
+    if (data) {
+      this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
+      this.BUSINESS_DOC_FRM.fields.blanketLien.value = data.blanketLien !== '' ? data.blanketLien : '';
+      this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGurantee !== '' ? data.providePersonalGurantee : '';
+      if (data.personalGuarantee &&
+        data.personalGuarantee.length) {
+        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value = [];
+        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.fileId = [];
+      }
+      data.personalGuarantee.forEach((ele) => {
+        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.push(ele.fileName);
+        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.fileId.push(ele.fileId);
+      });
+      ['bankStatements', 'businessTaxReturns', 'leaseAgreementsOrLOIs', 'personalTaxReturns'].forEach((field, key) => {
+        const formField = ['bankStatements', 'businessTaxReturn', 'leaseAgreementsOrLOIs', 'personalTaxReturn'];
+        if (!this.getBusinessTypeCondtion && (field === 'leaseAgreementsOrLOIs' || field === 'personalTaxReturns')) {
+          if (data[field] && data[field].length) {
+            this.BUSINESS_DOC_FRM.fields[formField[key]].value = [];
+            this.BUSINESS_DOC_FRM.fields[formField[key]].fileId = [];
+            this.BUSINESS_DOC_FRM.fields[formField[key]].rule = 'required';
+          }
+          data[field].forEach((ele) => {
+            this.BUSINESS_DOC_FRM.fields[formField[key]].value.push(ele.fileName);
+            this.BUSINESS_DOC_FRM.fields[formField[key]].fileId.push(ele.fileId);
+          });
+        } else {
+          this.BUSINESS_DOC_FRM.fields[formField[key]].rule = '';
+        }
+      });
+    }
+    Validator.validateForm(this.BUSINESS_DOC_FRM);
   }
 
   @computed get fetchBusinessApplicationsDataById() {
@@ -295,8 +427,13 @@ export class NewBusinessStore {
   }
 
   @computed get canSubmitApp() {
-    const notOkForms = ['BUSINESS_APP_FRM', 'BUSINESS_DETAILS_FRM', 'BUSINESS_PERF_FRM', 'BUSINESS_DOC_FRM']
+    // console.log(this.getBusinessAppStepStatus);
+    // Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
+    // Validator.validateForm(this.BUSINESS_PERF_FRM);
+    // Validator.validateForm(this.BUSINESS_DOC_FRM);
+    const notOkForms = ['BUSINESS_DETAILS_FRM', 'BUSINESS_PERF_FRM', 'BUSINESS_DOC_FRM']
       .filter(form => !this[form].meta.isValid);
+
     return notOkForms.length === 0;
   }
 
@@ -317,7 +454,7 @@ export class NewBusinessStore {
   @action
   getValidDataForString = (data) => {
     let val = '';
-    if (data && data.value !== '' && data.value !== null && data.error === undefined) {
+    if (data && data.value !== '' && data.value !== null && !data.error) {
       val = data.value;
     }
     return val;
@@ -339,12 +476,12 @@ export class NewBusinessStore {
         yearsOfExp: item.yearsOfExp.value !== '' ? parseInt(item.yearsOfExp.value, 10) : 0,
         ssn: this.getValidDataForString(item.ssn),
         companyOwnerShip: item.companyOwnerShip.value !== '' ? parseFloat(item.companyOwnerShip.value, 2) : 0.00,
-        linkedInUrl: this.getValidDataForString(item.linkedInUrl.value),
-        title: this.getValidDataForString(item.title.value),
+        linkedInUrl: this.getValidDataForString(item.linkedInUrl),
+        title: this.getValidDataForString(item.title),
         resume: [
           {
-            fileId: this.getValidDataForString(item.resume.fileId),
-            fileName: this.getValidDataForString(item.resume.value),
+            fileId: (item && item.resume.fileId !== '' && item.resume.fileId !== null && !item.resume.error) ? item.resume.fileId : '',
+            fileName: (item && item.resume.value !== '' && item.resume.value !== null && !item.resume.error) ? item.resume.value : '',
           },
         ],
       })),
@@ -534,6 +671,33 @@ export class NewBusinessStore {
         })
         .catch((error) => {
           console.log(error);
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  businessApplicationSubmitAction = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: submitApplication,
+          variables: {
+            applicationId: this.currentApplicationId,
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          resolve();
+        })
+        .catch((error) => {
+          console.log(error);
+          uiStore.setErrors(error.message);
           reject(error);
         })
         .finally(() => {
@@ -544,21 +708,28 @@ export class NewBusinessStore {
 
   @action
   businessAppParitalSubmit = (step) => {
-    console.log(step);
     console.log(this.applicationStep);
     let data = this.getFormatedBusinessDetailsData;
     let stepName = 'BUSINESS_DETAILS';
+    let isPartialDataFlag = true;
+    console.log(this.BUSINESS_PERF_FRM);
     if (step === 'business-details') {
       stepName = 'BUSINESS_DETAILS';
-    } else if (step === 'performance') {
+      Validator.validateForm(this.BUSINESS_DETAILS_FRM);
+      isPartialDataFlag = !this.BUSINESS_DETAILS_FRM.meta.isValid;
+    } else if (this.applicationStep === 'performance') {
       stepName = 'PERFORMANCE';
-    } else if (step === 'documentation') {
+      Validator.validateForm(this.BUSINESS_PERF_FRM);
+      isPartialDataFlag = !this.BUSINESS_PERF_FRM.meta.isValid;
+    } else if (this.applicationStep === 'documentation') {
       stepName = 'DOCUMENTATION';
+      Validator.validateForm(this.BUSINESS_DOC_FRM);
+      isPartialDataFlag = !this.BUSINESS_DOC_FRM.meta.isValid;
     }
     let mutationQuery = upsertBusinessApplicationInformationBusinessDetails;
     let variableData = {
       applicationId: this.currentApplicationId,
-      isPartialData: true,
+      isPartialData: isPartialDataFlag,
       businessGoal: this.BUSINESS_APP_FRM.fields.businessGoal.value,
     };
     if (stepName === 'BUSINESS_DETAILS') {
@@ -594,24 +765,11 @@ export class NewBusinessStore {
         })
         .then((result) => {
           console.log(result);
-          // this.setBusinessAppStatus
-          // (result.data.createBusinessApplicationPrequalification.status);
-          // const applicationId = result.data.createBusinessApplicationPrequalification.id;
-          // if (this.BUSINESS_APP_STATUS ===
-          //     BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED) {
-          //   console.log('Success');
-          //   this.setBusinessAppStepUrl(`${applicationId}/success`);
-          // } else if (this.BUSINESS_APP_STATUS ===
-          //     BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
-          //   this.setBusinessAppStepUrl(`${applicationId}/failed`);
-          //   console.log('Failer');
-          // } else {
-          //   this.setBusinessAppStepUrl(`${applicationId}/failed`);
-          // }
           resolve();
         })
         .catch((error) => {
           console.log(error);
+          uiStore.setErrors(error.message);
           reject(error);
         })
         .finally(() => {
@@ -640,25 +798,35 @@ export class NewBusinessStore {
 
   @action
   businessAppUploadFiles = (files, fieldName, formName, index = null) => {
-    console.log(fieldName);
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
-        this.setFormFileArray(formName, fieldName, 'fileData', file, index);
         const fileData = Helper.getFormattedFileData(file);
-        const stepName = 'BUSINESS_PLAN';
-        // applicationId, fileData, stepName, userRole
+        const stepName = this.getStepName(fieldName, index);
         fileUpload.setFileUploadData(this.currentApplicationId, fileData, stepName, 'ISSUER').then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
-          this.setFormFileArray(formName, fieldName, 'preSignedUrl', preSignedUrl, index);
-          this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
-          // Helper.putUploadedFile1(this.BUSINESS_DETAILS_FRM.fields.businessPlan);
+          Helper.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+            this.setFormFileArray(formName, fieldName, 'fileData', file, index);
+            this.setFormFileArray(formName, fieldName, 'preSignedUrl', preSignedUrl, index);
+            this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
+            this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
+          });
           console.log(result);
         }).catch((error) => {
           console.log(error);
         });
-        this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
       });
     }
+  }
+
+  @action
+  getStepName = (fieldName, index) => {
+    let step = '';
+    if (fieldName === 'resume') {
+      step = BUSINESS_APP_FILE_UPLOAD_ENUMS[`${fieldName}${index + 1}`];
+    } else {
+      step = BUSINESS_APP_FILE_UPLOAD_ENUMS[fieldName];
+    }
+    return step;
   }
 
   @action
@@ -701,7 +869,11 @@ export class NewBusinessStore {
 
   @action
   formReset = () => {
-    this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
+    this.BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
+    this.preQualFormDisabled = false;
+    this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
+    this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
+    this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
   }
 
   @action

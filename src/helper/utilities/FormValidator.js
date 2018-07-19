@@ -50,6 +50,26 @@ class FormValidator {
     return currentForm;
   }
 
+  validateForm = (form, isMultiForm = false) => {
+    const currentForm = form;
+    let validation;
+    if (!isMultiForm) {
+      validation = new Validator(
+        mapValues(currentForm.fields, f => f.value),
+        mapValues(currentForm.fields, f => f.rule),
+      );
+    } else {
+      const formData = this.ExtractFormValues(toJS(currentForm.fields));
+      const formRules = this.ExtractFormRules(toJS(currentForm.fields));
+      validation = new Validator(
+        formData,
+        formRules,
+      );
+    }
+    currentForm.meta.isValid = validation.passes();
+    console.log(validation);
+  }
+
   onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
     CustomeValidations.execute();
     const currentForm = form;

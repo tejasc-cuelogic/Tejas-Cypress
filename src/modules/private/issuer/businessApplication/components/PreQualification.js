@@ -15,7 +15,6 @@ import FormElementWrap from './FormElementWrap';
 export default class PreQualification extends Component {
   componentWillMount() {
     console.log(this.props.newBusinessStore.calculateStepToRender);
-    console.log(this.props.match);
     // const url = replace(this.props.match.url, 'pre-qualification',
     // this.props.newBusinessStore.calculateStepToRender);
     // this.props.history.push(url);

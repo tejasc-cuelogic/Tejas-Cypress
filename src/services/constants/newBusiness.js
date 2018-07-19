@@ -19,6 +19,23 @@ export const BUSINESS_APPLICATION_STATUS = {
   APPLICATION_DELETED: 'APPLICATION_DELETED',
 };
 
+export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
+  businessPlan: 'BUSINESS_PLAN',
+  resume1: 'OWNER1',
+  resume2: 'OWNER2',
+  resume3: 'OWNER3',
+  resume4: 'OWNER4',
+  resume5: 'OWNER5',
+  ytd: 'YTD',
+  priorToThreeYear: 'PRIOR',
+  fiveYearProjection: 'PROJECTIONS',
+  personalTaxReturn: 'PERSONAL_TAX',
+  businessTaxReturn: 'BUSINESS_TAX',
+  leaseAgreementsOrLOIs: 'LEASE',
+  bankStatements: 'BANK_STATEMENTS',
+  personalGuaranteeForm: 'PERSONAL_GUARANTEE',
+};
+
 export const BUSINESS_PRE_QUALIFICATION = {
   businessModel: {
     value: '',
@@ -34,7 +51,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g.  NextBrewery', customErrors: { required: 'required' },
   },
   website: {
-    value: '', label: 'Website', error: undefined, rule: 'required', placeHolder: 'e.g.  http://nextbrewery.com', customErrors: { required: 'required' },
+    value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  http://nextbrewery.com', customErrors: { required: 'required' },
   },
   phoneNumber: {
     value: '', label: 'Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789', customErrors: { required: 'required' },
@@ -234,16 +251,16 @@ export const BUSINESS_DETAILS = {
   },
   debts: [{
     amount: {
-      value: '', label: 'Existing Debt', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
+      value: 0, label: 'Existing Debt', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     remainingPrincipal: {
-      value: '', label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
+      value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     interestExpenses: {
-      value: '', label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %', customErrors: { required: 'required' },
+      value: 0, label: 'Interest Expenses', error: undefined, rule: 'required', placeHolder: '10.0 %', customErrors: { required: 'required' },
     },
     term: {
-      value: '', label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
+      value: 0, label: 'Term (in months)', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
     },
   }],
   owners: [{
@@ -339,7 +356,7 @@ export const BUSINESS_DOC = {
     rule: 'required',
   },
   personalGuaranteeForm: {
-    value: [], label: 'Personal Guarantee Form', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Personal Guarantee Form', error: undefined, rule: 'required_if:personalGuarantee,true', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
 };
 

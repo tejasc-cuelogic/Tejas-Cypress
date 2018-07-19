@@ -2,28 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 // import Aux from 'react-aux';
-import { Modal, Button, Header, Form } from 'semantic-ui-react';
-// import { ListErrors } from '../../../../../theme/shared';
+import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
+import { ListErrors } from '../../../../../theme/shared';
 // import { Helper } from '../../../../../helper/utility';
 
 @inject('newBusinessStore', 'uiStore')
 @withRouter
 @observer
 export default class ConfirmModal extends Component {
-  componentWillMount() {
-    console.log(this.props.stepLink);
-  }
-  submit = (e) => {
-    e.preventDefault();
-    const stepUrl = this.props.stepLink.split('/');
-    this.props.newBusinessStore.businessAppParitalSubmit(stepUrl[3]).then(() => {
-      // Helper.toast('Business application saved!', 'success');
-      this.props.history.push('/app/dashboard');
-    });
-    // const location = `${this.props.refLink}/preview`;
-    // this.props.history.push(location);
-  }
-
   handleCloseModal = (e) => {
     e.preventDefault();
     this.props.history.goBack();
@@ -31,23 +17,24 @@ export default class ConfirmModal extends Component {
 
   render() {
     const { inProgress } = this.props.uiStore;
-    // const {     // } = this.props.newBusinessStore;
-    // const { errors } = this.props.uiStore;
+    const { errors } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Do you want to save your progress?</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {/* {errors &&
+          {errors &&
             <Message error>
               <ListErrors errors={[errors]} />
             </Message>
-          } */}
-          <Form error onSubmit={this.submit}>
+          }
+          <Form error onSubmit={this.props.partialSave}>
             <div className="center-align mt-30">
-              <Button inverted onClick={this.handleCloseModal} color="green" >Cancel</Button>
-              <Button loading={inProgress} color="green">Proceed</Button>
+              <Button.Group>
+                <Button loading={inProgress} color="green">Yes, save it</Button>
+                <Button inverted onClick={this.handleCloseModal} color="green" >No, thank you</Button>
+              </Button.Group>
             </div>
           </Form>
         </Modal.Content>

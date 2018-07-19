@@ -9,6 +9,15 @@ mutation _submitBusinessApplicationPreQualStepSuccessScenario($preQualificationD
 }
 `;
 
+export const submitApplication = gql`
+mutation submitApplication($applicationId: String!) {
+  submitApplication(applicationId: $applicationId) {
+    status
+    id
+  }
+}
+`;
+
 export const upsertBusinessApplicationInformationBusinessDetails = gql`
 mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID!,
   $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!,
@@ -148,6 +157,10 @@ query _getBusinessApplicationById ($id: String!) {
         companyOwnerShip
         linkedInUrl
         title
+        resume {
+          fileId
+          fileName
+        }
       }
       stepStatus
     }

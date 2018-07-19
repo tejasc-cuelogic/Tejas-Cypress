@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { Button } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
-// import Helper from '../../../../../helper/utility';
+import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import { Logo } from '../../../../../theme/shared';
 import Failure from '../components/Failure';
@@ -22,9 +22,7 @@ const getModule = component => Loadable({
 @observer
 export default class BusinessApplication extends Component {
   componentWillMount() {
-    console.log(this.props);
-    console.log(this.props.match.params.applicationId);
-    console.log(this.props.newBusinessStore.isFetchedData);
+    // console.log(this.props.newBusinessStore.getBusinessAppStepStatus);
     this.props.newBusinessStore.setCurrentApplicationId(this.props.match.params.applicationId);
     if (this.props.match.params.applicationId !== 'new' &&
     this.props.newBusinessStore.isFetchedData !== this.props.match.params.applicationId) {
@@ -37,14 +35,25 @@ export default class BusinessApplication extends Component {
   }
 
   saveContinue = () => {
-    console.log(this.props.match.params.applicationId);
-    // Helper.toast('Business application saved!', 'success');
     this.props.history.push(`${this.props.match.url}/confirm`);
   }
-  submit = () => {
-    // Helper.toast('Business application submitted successfully!', 'success');
-    this.props.history.push('/app/dashboard');
+
+  submitSaveContinue = (e) => {
+    e.preventDefault();
+    const stepUrl = this.props.location.pathname.split('/');
+    this.props.newBusinessStore.businessAppParitalSubmit(stepUrl[4]).then(() => {
+      Helper.toast('Business application saved!', 'success');
+      this.props.history.push('/app/dashboard');
+    });
   }
+
+  submit = () => {
+    this.props.newBusinessStore.businessApplicationSubmitAction().then(() => {
+      Helper.toast('Business application submitted successfully!', 'success');
+      this.props.history.push('/app/dashboard');
+    });
+  }
+
   render() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url).subNavigations;
@@ -85,7 +94,7 @@ export default class BusinessApplication extends Component {
             ))
           }
         </Switch>
-        <Route exact path={`${this.props.match.url}/confirm`} render={() => <ConfirmModal stepLink={this.props.location.pathname} refLink={this.props.match.url} />} />
+        <Route exact path={`${this.props.match.url}/confirm`} render={() => <ConfirmModal partialSave={this.submitSaveContinue} stepLink={this.props.location.pathname} refLink={this.props.match.url} />} />
       </PrivateLayout>
     );
   }
