@@ -10,7 +10,7 @@ import {
 } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 
-@inject('newBusinessStore', 'uiStore', 'navStore')
+@inject('newBusinessStore', 'uiStore')
 @observer
 export default class PreQualification extends Component {
   componentWillMount() {
@@ -19,14 +19,6 @@ export default class PreQualification extends Component {
     // this.props.newBusinessStore.calculateStepToRender);
     // this.props.history.push(url);
     console.log(this.props.newBusinessStore.fetchBusinessApplicationsStatusById);
-    // if (this.props.newBusinessStore.setCurrentApplicationId === 'new') {
-    //   this.props.navStore.setAccessParams('appStatus', null);
-    // } else {
-    //   this.props.navStore.setAccessParams('appStatus',
-    // this.props.newBusinessStore.fetchBusinessApplicationsStatusById);
-    // }
-    // this.props.navStore.setAccessParams('appStatus', '');
-    console.log(this.props.navStore.params.appStatus);
   }
 
   submit = (e) => {

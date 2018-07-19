@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { toJS, observable, action, computed } from 'mobx';
 import { matchPath } from 'react-router-dom';
 import _ from 'lodash';
 import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
@@ -23,8 +23,9 @@ export class NavStore {
     );
   }
 
-  filterByAccess = (sNavs, phase) => sNavs.filter(sN => !sN.accessFor ||
-    sN.accessFor.includes(phase));
+  @action
+  filterByAccess = (sNavs, phase) => toJS(sNavs.filter(sN => !sN.accessFor ||
+      sN.accessFor.includes(phase)));
 
   @computed get allNavItems() {
     const navItems = [...this.myRoutes];
@@ -53,7 +54,7 @@ export class NavStore {
     this.params[key] = value;
     const { roles, currentNav, appStatus } = this.params;
     if (roles && currentNav) {
-      const nav = [...this.allNavItems].find(i => matchPath(currentNav, { path: `/app/${i.to}` }));
+      const nav = toJS(this.allNavItems.find(i => matchPath(currentNav, { path: `/app/${i.to}` })));
       if (nav && nav.subNavigations) {
         nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
         nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
