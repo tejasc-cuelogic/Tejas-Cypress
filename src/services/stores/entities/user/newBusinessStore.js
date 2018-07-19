@@ -723,7 +723,7 @@ export class NewBusinessStore {
     console.log(this.BUSINESS_PERF_FRM);
     if (step === 'business-details') {
       stepName = 'BUSINESS_DETAILS';
-      Validator.validateForm(this.BUSINESS_DETAILS_FRM);
+      Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
       isPartialDataFlag = !this.BUSINESS_DETAILS_FRM.meta.isValid;
     } else if (this.applicationStep === 'performance') {
       stepName = 'PERFORMANCE';

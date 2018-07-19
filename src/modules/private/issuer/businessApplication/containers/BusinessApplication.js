@@ -29,7 +29,7 @@ export default class BusinessApplication extends Component {
       this.props.newBusinessStore.setFetchedData(this.props.match.params.applicationId);
       // this.props.history.replace(`${this.props.match.url}/pre-qualification`);
     } else if (this.props.match.params.applicationId === 'new') {
-      // this.props.navStore.setAccessParams('appStatus', null);
+      this.props.navStore.setAccessParams('appStatus', null);
       this.props.newBusinessStore.formReset();
     }
   }
