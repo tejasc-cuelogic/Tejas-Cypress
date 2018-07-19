@@ -17,7 +17,7 @@ export class NavItems extends Component {
   isActive = (to, location, app) => (to !== '' && this.state.active === to) || location.pathname.startsWith(`/${app}/${to}`);
   render() {
     const {
-      location, isApp, refLoc, roles,
+      location, isApp, refLoc, roles, match,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = [...this.props.navItems];
@@ -62,7 +62,7 @@ export class NavItems extends Component {
             key={item.to}
             name={item.to}
             as={NavLink}
-            to={`${(isApp) ? '/app' : ''}/${item.to}`}
+            to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
           >
             {item.icon &&
               <Icon className={item.icon} />
@@ -100,14 +100,6 @@ export const NavigationItems = props => (
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
       </Menu.Menu>
-      {/* <Menu.Menu secondary className="center-align menu-secondary">
-        <Menu.Item name="Fundraising" />
-        <Menu.Item name="How it Works" active />
-        <Menu.Item name="Funding Options" />
-        <Menu.Item name="Process" />
-        <Menu.Item name="All-Inclusive" />
-        <Menu.Item name="Compare" />
-      </Menu.Menu> */}
       <Menu.Item as={Link} to="/">
         <Button secondary compact>Sign Up/Log In</Button>
       </Menu.Item>

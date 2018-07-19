@@ -8,11 +8,6 @@ import OfferDetails from './public/offering/containers/OfferDetails';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
-import FundingOption from './public/business/containers/FundingOption';
-import Process from './public/business/containers/Process';
-import AllInclusive from './public/business/containers/AllInclusive';
-import Compare from './public/business/containers/Compare';
-
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
 import XmlForm from './private/admin/edgar/containers/XmlForm';
@@ -74,22 +69,6 @@ export const publicRoutes = [
   {
     path: '/business',
     component: Business,
-  },
-  {
-    path: '/funding',
-    component: FundingOption,
-  },
-  {
-    path: '/process',
-    component: Process,
-  },
-  {
-    path: '/inclusive',
-    component: AllInclusive,
-  },
-  {
-    path: '/compare',
-    component: Compare,
   },
   {
     path: '/business-application',
