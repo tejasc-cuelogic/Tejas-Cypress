@@ -25,12 +25,21 @@ class InvestorSignup extends Component {
   checkRouting = () => this.props.history.replace('/confirm');
   render() {
     const {
-      SIGNUP_FRM, signupChange, togglePasswordType, pwdInputType,
+      SIGNUP_FRM, signupChange, togglePasswordType, pwdInputType, reset,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
 
     return (
-      <Modal size="mini" open onClose={() => this.props.history.push('/')}>
+      <Modal
+        size="mini"
+        open
+        onClose={
+          () => {
+            reset('SIGNUP');
+            this.props.history.push('/');
+          }
+        }
+      >
         <Modal.Header className="center-align signup-header">
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
           <Header as="h2">

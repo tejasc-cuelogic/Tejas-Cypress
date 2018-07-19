@@ -97,7 +97,7 @@ const LegalDetails = observer(({
             placeholder="Select date"
             fielddata={form.fields.dateOfBirth}
             selected={form.fields.dateOfBirth.value}
-            changed={dobChange}
+            onchange={dobChange}
           />
         </Form.Group>
         <MaskedInput2

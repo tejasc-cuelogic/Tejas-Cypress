@@ -39,6 +39,7 @@ export class IdentityStore {
 
   @action
   dobChange = (date) => {
+    console.log('date is ', date);
     this.ID_VERIFICATION_FRM = FormValidator.onChange(
       this.ID_VERIFICATION_FRM,
       { name: 'dateOfBirth', value: date },

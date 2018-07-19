@@ -34,7 +34,7 @@ const FormDatePicker = observer(props =>
         onChange={props.onchange}
         disabled={props.isdisabled}
         maxDate={props.maxdate}
-        selected={props.select}
+        selected={props.selected}
       />
       {props.fielddata && props.fielddata.error &&
         <FieldError error={props.fielddata.error} />

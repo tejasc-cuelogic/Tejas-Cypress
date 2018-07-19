@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
-import { MaskedInput2 } from '../../../../../theme/form';
+import { FormInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { validationActions } from '../../../../../services/actions';
 
@@ -41,19 +41,15 @@ export default class ManualForm extends Component {
         }
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
-            <MaskedInput2
-              key="routingNumber"
+            <FormInput
               name="routingNumber"
               fielddata={formLinkBankManually.fields.routingNumber}
               changed={linkBankManuallyChange}
-              routingNumber
             />
-            <MaskedInput2
-              key="accountNumber"
+            <FormInput
               name="accountNumber"
               fielddata={formLinkBankManually.fields.accountNumber}
               changed={linkBankManuallyChange}
-              accountNumber
             />
           </div>
           <div className="center-align">

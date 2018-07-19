@@ -41,13 +41,13 @@ export const DateRangeFilter = props => (
     <label>{props.label}</label>
     <Form.Group widths="equal">
       <DatePicker
-        select={props.filters.startDate}
+        selected={props.filters.startDate}
         placeholder="MM/DD/YYYY"
         maxdate={moment()}
         onchange={props.changeStart}
       />
       <DatePicker
-        select={props.filters.endDate}
+        selected={props.filters.endDate}
         placeholder="MM/DD/YYYY"
         maxdate={moment()}
         onchange={props.changeEnd}
