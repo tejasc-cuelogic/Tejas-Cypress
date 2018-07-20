@@ -83,7 +83,6 @@
             border-bottom: 2px solid transparent !important;
             border-radius: 0 !important;
             padding: 0px @18px @10px;
-            margin: 0 @21px;
             &:hover, &:active, &:focus, &:visited, &.active {
                 border-color: @primary-one !important;
                 background-color: transparent !important;
