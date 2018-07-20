@@ -504,7 +504,7 @@ footer{
 	}
 }
 .funding-option {
-	padding-top: 174px;
+	padding-top: 74px;
 	.ui.compact.button {
 		margin: 0 10px; 
 	}
@@ -618,5 +618,10 @@ footer{
 				width: 100%;
 			}
 		}
+	}
+}
+.why-nextseed-section {
+	.ui.compact.button {
+		margin: 0 10px;
 	}
 }

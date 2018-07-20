@@ -2,7 +2,7 @@ import React from 'react';
 import { Header, Container } from 'semantic-ui-react';
 
 const Banner = () => (
-  <Container fluid className="banner home-banner">
+  <section className="banner home-banner">
     <Container>
       <div className="banner-caption">
         <Header as="h1">
@@ -14,7 +14,7 @@ const Banner = () => (
         </Header>
       </div>
     </Container>
-  </Container>
+  </section>
 );
 
 export default Banner;

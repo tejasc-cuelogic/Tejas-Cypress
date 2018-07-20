@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Header, Grid, List, Button, Container, Item } from 'semantic-ui-react';
 import MarketingIcon from '../../../../assets/images/business/marketing.svg';
 import EscrowIcon from '../../../../assets/images/business/escrow.svg';
@@ -95,7 +96,7 @@ const AllInclusive = () => (
               </List.Item>
             </List>
             <div className="center-align">
-              <Button primary compact>See How NextSeed Compares</Button>
+              <Button as={Link} to="/business/compare" primary compact>See How NextSeed Compares</Button>
             </div>
           </Grid.Column>
         </Grid.Row>

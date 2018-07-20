@@ -3,10 +3,18 @@ import { Link } from 'react-router-dom';
 import { Header, Icon, Modal, Input } from 'semantic-ui-react';
 
 const shareVia = [
-  { icon: 'default', title: 'Email', action: '' },
-  { icon: 'in-color', title: 'LinkedIn', action: '' },
-  { icon: 'tw-color', title: 'Twitter', action: '' },
-  { icon: 'fb-color', title: 'Facebook', action: '' },
+  {
+    icon: 'default', title: 'Email', action: '', name: 'envelope outline',
+  },
+  {
+    icon: 'in-color', title: 'LinkedIn', action: '', name: 'linkedin in',
+  },
+  {
+    icon: 'tw-color', title: 'Twitter', action: '', name: 'twitter',
+  },
+  {
+    icon: 'fb-color', title: 'Facebook', action: '', name: 'facebook f',
+  },
 ];
 export default class Share extends Component {
   render() {
@@ -19,7 +27,7 @@ export default class Share extends Component {
           <div className="share-icons">
             {
               shareVia.map(share => (
-                <Link to="/"><Icon circular className={share.icon} />{share.title}</Link>
+                <Link to="/"><Icon name={share.name} circular className={share.icon} />{share.title}</Link>
               ))
             }
           </div>
