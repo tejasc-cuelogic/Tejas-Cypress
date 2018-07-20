@@ -332,24 +332,11 @@ export const PUBLIC_NAV = [
   },
   {
     title: 'How NextSeed Works',
-    to: 'business',
+    to: '/',
+    subPanel: 1,
     subNavigations: [
-      { title: 'How it Works', to: 'how-it-works' },
-      { title: 'Funding Options', to: 'funding-options' },
-      { title: 'Process', to: 'process', component: 'InvestmentDetails' },
-      { title: 'All-Inclusive', to: 'all-inclusive', component: 'BonusRewards' },
-      { title: 'Compare', to: 'compare', component: 'Disclosures' },
-    ],
-  },
-  {
-    title: 'Why NextSeed',
-    to: 'invest',
-    subNavigations: [
-      { title: 'Why Nextseed', to: 'why-nextseed' },
-      { title: 'How it Works', to: 'how-it-works' },
-      { title: 'Account Types', to: 'account-types' },
-      { title: 'Security', to: 'security' },
-      { title: 'Track', to: 'track' },
+      { title: 'For Investors', to: '/invest' },
+      { title: 'For Businesses', to: '/business' },
     ],
   },
 ];
