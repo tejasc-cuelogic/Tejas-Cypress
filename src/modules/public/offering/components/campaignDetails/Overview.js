@@ -132,10 +132,10 @@ class Overview extends Component {
                     </Statistic>
                   </Grid.Column>
                 </Grid>
-                <p className="note">
+                <span className="note">
                   * For illustration only. See expanded Payment Calculator view to
                   read more regarding actual performance variables.
-                </p>
+                </span>
               </Segment>
             </Grid.Column>
             <Grid.Column width={4}>

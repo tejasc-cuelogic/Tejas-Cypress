@@ -1,6 +1,8 @@
 /*******************************
          Theme Overrides
 *******************************/
+
+// Offer Details page
 .offer-details {
 	.offering-side-menu {
         .ui.statistics {
@@ -80,10 +82,26 @@
 		}
 	}
 }
+// Modal
 .ui.modal{ 
 	.ui.statistic>.label {
 		color: @neutral-light;
 		text-transform: capitalize;
 		font-weight: @fontMedium;
+	}
+}
+// Business - how it works
+.proven-result-section {
+	.ui.mini.statistic {
+		>.value {
+			text-align: left;
+		}
+		>.label {
+			font-size: 15px;
+			color: @neutral-light;
+			text-align: left;
+			text-transform: none;
+			font-weight: @normal;
+		}
 	}
 }

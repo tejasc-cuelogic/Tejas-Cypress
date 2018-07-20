@@ -23,5 +23,8 @@
             height:535px;
             background:url(../../assets/images/campaign-list-banner.jpg) top center no-repeat / cover;
         }
+        &.business-banner{
+            background:url(../../assets/images/how-it-works-banner.jpg) top center no-repeat / cover;
+        }
     }
 }
