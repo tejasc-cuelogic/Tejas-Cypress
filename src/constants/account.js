@@ -276,13 +276,13 @@ export const ENTITY_GEN_INFO = {
     key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
   },
   city: {
-    key: 'city', value: '', label: 'City', error: undefined, rule: 'required|string',
+    key: 'city', value: '', placeHolder: 'New York', label: 'City', error: undefined, rule: 'required|string',
   },
   state: {
-    key: 'state', value: '', label: 'State', error: undefined, rule: 'required|string',
+    key: 'state', value: '', placeHolder: 'NY', label: 'State', error: undefined, rule: 'required|string',
   },
   zipCode: {
-    key: 'zipCode', value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric',
+    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: '1001', error: undefined, rule: 'required|numeric',
   },
 };
 

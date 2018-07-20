@@ -40,33 +40,36 @@ export default class IdentityVerification extends Component {
 
   handleVerifyUserIdentity = (e) => {
     e.preventDefault();
-    this.props.identityStore.verifyUserIdentity().then(() => {
-      const {
-        key,
-        alertMsg,
-        msgType,
-        route,
-      } = this.props.identityStore.userVerficationStatus;
-      if (key === 'id.success') {
-        const { phoneVerification } = this.props.userDetailsStore.signupStatus;
-        if (phoneVerification === 'DONE') {
-          Helper.toast(alertMsg, msgType);
-          this.props.history.push(route);
+    this.props.identityStore.setFormError();
+    if (this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid) {
+      this.props.identityStore.verifyUserIdentity().then(() => {
+        const {
+          key,
+          alertMsg,
+          msgType,
+          route,
+        } = this.props.identityStore.userVerficationStatus;
+        if (key === 'id.success') {
+          const { phoneVerification } = this.props.userDetailsStore.signupStatus;
+          if (phoneVerification === 'DONE') {
+            Helper.toast(alertMsg, msgType);
+            this.props.history.push(route);
+          } else {
+            this.props.identityStore.startPhoneVerification().then(() => {
+              this.props.history.push('/app/summary/identity-verification/3');
+            })
+              .catch((err) => { this.props.uiStore.setErrors(JSON.stringify(err.message)); });
+          }
         } else {
-          this.props.identityStore.startPhoneVerification().then(() => {
-            this.props.history.push('/app/summary/identity-verification/3');
-          })
-            .catch((err) => { this.props.uiStore.setErrors(JSON.stringify(err.message)); });
+          Helper.toast(alertMsg, msgType);
+          if (key === 'id.failure') {
+            this.props.identityStore.setIdentityQuestions();
+          }
+          this.props.history.push(route);
         }
-      } else {
-        Helper.toast(alertMsg, msgType);
-        if (key === 'id.failure') {
-          this.props.identityStore.setIdentityQuestions();
-        }
-        this.props.history.push(route);
-      }
-    })
-      .catch(() => { });
+      })
+        .catch(() => { });
+    }
   }
 
   handleUploadDocuments = (e) => {

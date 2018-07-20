@@ -28,6 +28,9 @@ export const USER_IDENTITY = {
     placeHolder: 'Mrs',
     error: undefined,
     rule: 'string',
+    customErrors: {
+      required: '* required.',
+    },
   },
   firstLegalName: {
     key: 'firstLegalName',
@@ -36,6 +39,9 @@ export const USER_IDENTITY = {
     placeHolder: 'John',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   lastLegalName: {
     key: 'lastLegalName',
@@ -44,6 +50,9 @@ export const USER_IDENTITY = {
     placeHolder: 'Smith',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   residentalStreet: {
     key: 'residentalStreet',
@@ -52,6 +61,9 @@ export const USER_IDENTITY = {
     placeHolder: 'Baker Street 221B',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   city: {
     key: 'city',
@@ -60,6 +72,9 @@ export const USER_IDENTITY = {
     placeHolder: 'New York',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   state: {
     key: 'state',
@@ -68,6 +83,9 @@ export const USER_IDENTITY = {
     placeHolder: 'NY',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   zipCode: {
     key: 'zipCode',
@@ -76,6 +94,9 @@ export const USER_IDENTITY = {
     placeHolder: '10011',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   phoneNumber: {
     key: 'phoneNumber',
@@ -84,6 +105,9 @@ export const USER_IDENTITY = {
     placeHolder: '123-456-7890',
     error: undefined,
     rule: 'required|maskedPhoneNumber',
+    customErrors: {
+      required: '* required.',
+    },
   },
   dateOfBirth: {
     key: 'dateOfBirth',
@@ -92,6 +116,9 @@ export const USER_IDENTITY = {
     placeHolder: 'Select date',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   ssn: {
     key: 'ssn',
@@ -100,6 +127,9 @@ export const USER_IDENTITY = {
     placeHolder: '123-456-7890',
     error: undefined,
     rule: 'required|maskedSSN',
+    customErrors: {
+      required: '* required.',
+    },
   },
 };
 
