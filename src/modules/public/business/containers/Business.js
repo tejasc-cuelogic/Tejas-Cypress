@@ -34,7 +34,7 @@ class Business extends Component {
     return (
       <Aux>
         {location.pathname === '/business' && <Banner />}
-        <Visibility as={Aux} onUpdate={this.handleUpdate} continuous>
+        <Visibility onUpdate={this.handleUpdate} continuous>
           <Menu secondary className={`center-align menu-secondary-fixed ${this.state.subnavOnTop ? 'active' : ''}`}>
             <Container fluid>
               <Menu.Item as={Link} to="/" header>
