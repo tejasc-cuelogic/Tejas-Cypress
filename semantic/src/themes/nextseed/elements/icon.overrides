@@ -1839,6 +1839,9 @@ i.icon[class*="ns-"]{
 .ns-coments-info:before{
     content:@ns-coments-info;
 }
+.ns-coments-q-a:before{
+    content:@ns-coments-q-a;
+}
 .ns-comments-edit:before{
     content:@ns-comments-edit;
 }
@@ -1863,6 +1866,9 @@ i.icon[class*="ns-"]{
 .ns-document:before{
     content:@ns-document;
 }
+.ns-document-search:before{
+    content:@ns-document-search;
+}
 .ns-doller-circle:before{
     content:@ns-doller-circle;
 }
@@ -1871,6 +1877,9 @@ i.icon[class*="ns-"]{
 }
 .ns-dumbbells:before{
     content:@ns-dumbbells;
+}
+.ns-edu-center:before{
+    content:@ns-edu-center;
 }
 .ns-ellipsis:before{
     content:@ns-ellipsis;
@@ -1905,6 +1914,9 @@ i.icon[class*="ns-"]{
 .ns-fitness:before{
     content:@ns-fitness;
 }
+.ns-flag-line:before{
+    content:@ns-flag-line;
+}
 .ns-food:before{
     content:@ns-food;
 }
@@ -1919,6 +1931,9 @@ i.icon[class*="ns-"]{
 }
 .ns-help-circle:before{
     content:@ns-help-circle;
+}
+.ns-home-line:before{
+    content:@ns-home-line;
 }
 .ns-hospitality:before{
     content:@ns-hospitality;
@@ -1937,6 +1952,9 @@ i.icon[class*="ns-"]{
 }
 .ns-inventory:before{
     content:@ns-inventory;
+}
+.ns-investment:before{
+    content:@ns-investment;
 }
 .ns-investor:before{
     content:@ns-investor;
@@ -2019,6 +2037,9 @@ i.icon[class*="ns-"]{
 .ns-restructure-debt:before{
     content:@ns-restructure-debt;
 }
+.ns-rewards:before{
+    content:@ns-rewards;
+}
 .ns-rss-feed:before{
     content:@ns-rss-feed;
 }
@@ -2030,6 +2051,9 @@ i.icon[class*="ns-"]{
 }
 .ns-shield-check:before{
     content:@ns-shield-check;
+}
+.ns-star:before{
+    content:@ns-star;
 }
 .ns-statement:before{
     content:@ns-statement;
@@ -2058,11 +2082,17 @@ i.icon[class*="ns-"]{
 .ns-trash:before{
     content:@ns-trash;
 }
+.ns-trending:before{
+    content:@ns-trending;
+}
 .ns-twitter:before{
     content:@ns-twitter;
 }
 .ns-unlock:before{
     content:@ns-unlock;
+}
+.ns-updates:before{
+    content:@ns-updates;
 }
 .ns-upload:before{
     content:@ns-upload;
