@@ -25,7 +25,7 @@ const DropZone = observer((props) => {
             position="top center"
             className="center-align"
           />
-        }
+          }
         </label>
       }
       { !(value && !value.length) || props.multiple ?
