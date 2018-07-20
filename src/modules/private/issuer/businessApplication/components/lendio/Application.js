@@ -63,7 +63,7 @@ export default class Application extends Component {
                           value={fields[field].value}
                           name={field}
                           options={LENDING_PARTNER_LENDIO[field]}
-                          onChange={lendioEleChange}
+                          onChange={(e, res) => lendioEleChange(e, res, 'dropdown')}
                         />
                       ))
                     }
@@ -115,7 +115,7 @@ export default class Application extends Component {
             <FormCheckbox
               fielddata={fields.applicationAgreeConditions}
               name="applicationAgreeConditions"
-              changed={lendioEleChange}
+              changed={(e, res) => lendioEleChange(e, res, 'checkbox')}
               defaults
               containerclassname="ui relaxed list"
             />

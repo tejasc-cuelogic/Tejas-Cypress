@@ -548,8 +548,9 @@ export class NewBusinessStore {
   };
 
   @action
-  lendioEleChange = (e, res) => {
-    this.LENDIO_QUAL_FRM = Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res), 'dropdown');
+  lendioEleChange = (e, res, type) => {
+    this.LENDIO_QUAL_FRM =
+      Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res, type));
   };
 
   @computed get getBusinessTypeCondtion() {
