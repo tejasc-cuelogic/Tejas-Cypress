@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { forEach, includes } from 'lodash';
+import { forEach, includes, find, isEmpty, isUndefined } from 'lodash';
 import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -13,6 +13,8 @@ import {
   BUSINESS_APPLICATION_STATUS,
   BUSINESS_GOAL,
   BUSINESS_APP_FILE_UPLOAD_ENUMS,
+  AFFILIATED_PARTNERS,
+  LENDIO,
 } from '../../../constants/newBusiness';
 // import { createUploadEntry, removeUploadedFile } from '../../queries/common';
 import Helper from '../../../../helper/utility';
@@ -25,7 +27,7 @@ import {
   upsertBusinessApplicationInformationDocumentation,
   submitApplication,
 } from '../../queries/businessApplication';
-import { uiStore, navStore } from '../../index';
+import { uiStore, navStore, userStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class NewBusinessStore {
@@ -183,8 +185,103 @@ export class NewBusinessStore {
     this.setbusinessDetails(data.businessDetails);
     this.setperformanceDetails(data.businessPerformance, data.prequalDetails);
     this.setDocumentationDetails(data.businessDocumentation);
-    console.log(this.calculateStepToRender);
     navStore.setAccessParams('appStatus', this.fetchBusinessApplicationsStatusById);
+    if (!isUndefined(data.lendio)) {
+      const lendioPartners = data.lendio.status;
+      if (lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
+        this.setPartneredLendioData(data);
+      }
+    }
+  };
+
+  @action
+  setPartneredLendioData = (preQualificationData) => {
+    const {
+      prequalDetails: {
+        businessGeneralInfo: {
+          businessName,
+          contactDetails: {
+            phone: {
+              number,
+            },
+          },
+        },
+        existingBusinessInfo: {
+          ageMonths,
+          ageYears,
+        },
+        performanceSnapshot: {
+          pastYearSnapshot: {
+            grossSales,
+          },
+        },
+        businessExperience: {
+          estimatedCreditScore,
+          amountNeeded,
+        },
+      },
+    } = preQualificationData;
+
+    const {
+      email,
+      givenName,
+      familyName,
+    } = userStore.currentUser;
+
+    this.LENDIO_QUAL_FRM.fields.businessName.value = businessName;
+    this.LENDIO_QUAL_FRM.fields.phoneNumber.value = number;
+    this.LENDIO_QUAL_FRM.fields.emailAddress.value = email;
+    this.LENDIO_QUAL_FRM.fields.businessOwnerName.value = `${givenName} ${familyName}`;
+
+    // Extract and map business age (months)
+    const ageInMonths = (12 * ageYears) + ageMonths;
+    let selectedDuration = '';
+    forEach(LENDIO.LENDING_PARTNER_LENDIO_DURATION_MAP, (value, months) => {
+      selectedDuration = value;
+      if (ageInMonths <= months) {
+        return false;
+      }
+      return true;
+    });
+
+    this.LENDIO_QUAL_FRM.fields.yrsInBusiness.value = selectedDuration;
+
+    // Extract and map monthly sales
+    const monthlySales = Math.floor(grossSales / 12);
+    let selectedSales = '';
+    forEach(LENDIO.LENDING_PARTNER_LENDIO_MO_SALES_MAP, (value, sales) => {
+      selectedSales = value;
+      if (monthlySales <= sales) {
+        return false;
+      }
+      return true;
+    });
+
+    this.LENDIO_QUAL_FRM.fields.avgSales.value = selectedSales;
+
+    // Extract and map personal credit
+    let selectedCredit = '';
+    forEach(LENDIO.LENDING_PARTNER_LENDIO_SALES_CREDIT_MAP, (value, credit) => {
+      selectedCredit = value;
+      if (estimatedCreditScore <= credit) {
+        return false;
+      }
+      return true;
+    });
+
+    this.LENDIO_QUAL_FRM.fields.personalCreditRating.value = selectedCredit;
+
+    // Extract and map raise amount
+    let selectedRaiseAmt = '';
+    forEach(LENDIO.LENDING_PARTNER_LENDIO_RAISE_AMT_MAP, (value, amount) => {
+      selectedRaiseAmt = value;
+      if (amountNeeded <= amount) {
+        return false;
+      }
+      return true;
+    });
+
+    this.LENDIO_QUAL_FRM.fields.raiseAmount.value = selectedRaiseAmt;
   };
 
   @action
@@ -475,12 +572,6 @@ export class NewBusinessStore {
   }
 
   @action
-  businessLendioPreQual = () => {
-    const data = Validator.ExtractValues(this.LENDIO_QUAL_FRM.fields);
-    console.log(data);
-  }
-
-  @action
   getFilesArray = (data, form) => {
     const arr = data ? data.map((item, key) => (
       { fileId: form.fileId[key] ? form.fileId[key] : '', fileName: item }
@@ -505,6 +596,11 @@ export class NewBusinessStore {
     }
     return val;
   }
+
+  @action
+  businessLendioEleChange = (e, res) => {
+    this.LENDIO_QUAL_FRM = Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res));
+  };
 
   @computed get getFormatedBusinessDetailsData() {
     const data = toJS(this.BUSINESS_DETAILS_FRM.fields);
@@ -698,6 +794,19 @@ export class NewBusinessStore {
         })
         .then((result) => {
           this.setBusinessAppStatus(result.data.createBusinessApplicationPrequalification.status);
+          const {
+            data: {
+              createBusinessApplicationPrequalification: {
+                partnerStatus,
+              },
+            },
+          } = result;
+
+          let lendioPartners = '';
+          if (!isEmpty(partnerStatus)) {
+            lendioPartners = find(partnerStatus, { partnerId: AFFILIATED_PARTNERS.LENDIO });
+          }
+
           const applicationId = result.data.createBusinessApplicationPrequalification.id;
           this.setFetchedData(null);
           if (this.BUSINESS_APP_STATUS ===
@@ -705,7 +814,8 @@ export class NewBusinessStore {
             this.setBusinessAppStepUrl(`${applicationId}/success`);
           } else if (this.BUSINESS_APP_STATUS ===
               BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
-            this.setBusinessAppStepUrl(`${applicationId}/failed`);
+            const url = (isEmpty(lendioPartners) || lendioPartners.status === LENDIO.PRE_QUALIFICATION_FAILED) ? `${applicationId}/failed` : `${applicationId}/failed/lendio`;
+            this.setBusinessAppStepUrl(url);
           } else {
             this.setBusinessAppStepUrl(`${applicationId}/failed`);
           }

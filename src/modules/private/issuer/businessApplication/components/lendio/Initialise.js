@@ -4,9 +4,9 @@ import Aux from 'react-aux';
 import { Divider, Button } from 'semantic-ui-react';
 import { Logo } from '../../../../../../theme/shared';
 
-const Initialise = () => (
+const Initialise = props => (
   <Aux>
-    <Logo className="small" alt="Lendio.com" dataSrc="LogoLendio" />
+    <Logo size="small" alt="Lendio.com" dataSrc="LogoLendio" />
     <Divider hidden />
     <p>
       We`ve partnered with Lendio, a leading small business loan marketplace where
@@ -16,8 +16,8 @@ const Initialise = () => (
     </p>
     <Divider section hidden />
     <Button.Group>
-      <Button as={Link} to="/business-application/lendio" color="green" className="relaxed">I’m interested in Lendio</Button>
-      <Button as={Link} to="/" inverted color="green" className="relaxed">Return to Home Page</Button>
+      <Button as={Link} to={`/app/business-application/${props.applicationId}/lendio`} color="green" className="relaxed">I’m interested in Lendio</Button>
+      <Button as={Link} to="/app/dashboard" inverted color="green" className="relaxed">Return to Home Page</Button>
     </Button.Group>
   </Aux>
 );

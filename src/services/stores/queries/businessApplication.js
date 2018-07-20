@@ -5,6 +5,11 @@ mutation _submitBusinessApplicationPreQualStepSuccessScenario($preQualificationD
   createBusinessApplicationPrequalification(prequalificationDetails: $preQualificationData) {
     status
     id
+    partnerStatus {
+      partnerId
+      status
+      failReasons
+    }
   }
 }
 `;
@@ -84,6 +89,10 @@ query _getBusinessApplicationById ($id: String!) {
   ){
     applicationId
     applicationStatus
+    lendio {
+      status
+      failReasons
+    }
     createdDate
     updatedDate
     prequalDetails {
@@ -104,7 +113,6 @@ query _getBusinessApplicationById ($id: String!) {
             countryCode
           }
         }
-        
       }
       industryTypes
       existingBusinessInfo {
