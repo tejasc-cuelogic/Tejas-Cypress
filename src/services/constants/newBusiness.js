@@ -277,10 +277,10 @@ export const BUSINESS_DETAILS = {
       value: '', label: 'Ownership of Company', error: undefined, rule: 'required', placeHolder: '40.0%', customErrors: { required: 'required' },
     },
     linkedInUrl: {
-      value: '', label: 'LinkedIn URL', error: undefined, rule: 'required|url', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },
+      value: '', label: 'LinkedIn URL', error: undefined, rule: 'url', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },
     },
     title: {
-      value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO', customErrors: { required: 'required' },
+      value: '', label: 'Title', error: undefined, rule: '', placeHolder: 'e.g. CEO', customErrors: { required: 'required' },
     },
     resume: {
       value: '', label: 'Upload Resume/CV', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },

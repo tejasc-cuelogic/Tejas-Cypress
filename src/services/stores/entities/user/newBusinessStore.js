@@ -182,7 +182,7 @@ export class NewBusinessStore {
     const data = this.fetchBusinessApplicationsDataById;
     this.setPrequalDetails(data.prequalDetails);
     this.setbusinessDetails(data.businessDetails);
-    this.setperformanceDetails(data.businessPerformance);
+    this.setperformanceDetails(data.businessPerformance, data.prequalDetails);
     this.setDocumentationDetails(data.businessDocumentation);
     console.log(data);
     console.log(this.calculateStepToRender);
@@ -270,7 +270,7 @@ export class NewBusinessStore {
   }
 
   @action
-  setperformanceDetails = (data) => {
+  setperformanceDetails = (data, prequalData) => {
     console.log(data);
     if (data) {
       this.appStepsStatus[2] = data.stepStatus;
@@ -317,6 +317,19 @@ export class NewBusinessStore {
       } else {
         ['priorToThreeYear', 'ytd'].forEach((ele) => {
           this.BUSINESS_PERF_FRM.fields[ele].rule = '';
+        });
+      }
+    } else {
+      ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
+        const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
+        this.BUSINESS_PERF_FRM.fields[field[key]].value =
+        prequalData.performanceSnapshot.nextYearSnapshot[ele];
+      });
+      if (this.getBusinessTypeCondtion) {
+        ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
+          const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
+          this.BUSINESS_PERF_FRM.fields[field[key]].value =
+          prequalData.performanceSnapshot.pastYearSnapshot[ele];
         });
       }
     }
