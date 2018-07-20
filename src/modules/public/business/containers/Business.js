@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { inject, observer } from 'mobx-react';
 import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { Menu, Visibility, Container, Button } from 'semantic-ui-react';
@@ -19,23 +20,27 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
   (path.includes('business-application') || path.includes('business') ? 'LogoWhite' : 'LogoColor')
 ));
 
+@inject('navStore')
+@observer
 class Business extends Component {
-  state = { subnavOnTop: false };
-  module = name => DataFormatter.upperCamelCase(name);
-  handleUpdate = (e, { calculations }) => {
-    const { percentagePassed, topVisible } = calculations;
-    this.setState({ subnavOnTop: percentagePassed > 0 && !topVisible });
+  componentWillMount() {
+    if (this.props.match.isExact) {
+      this.props.history.replace(`${this.props.match.url}/how-it-works`);
+    }
   }
+  module = name => DataFormatter.upperCamelCase(name);
+  handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   render() {
-    const {
-      location, match,
-    } = this.props;
+    const { location, match, navStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <Aux>
-        {location.pathname === '/business' && <Banner />}
+        {location.pathname === '/business/how-it-works' && <Banner />}
         <Visibility onUpdate={this.handleUpdate} continuous>
-          <Menu secondary className={`center-align menu-secondary-fixed ${this.state.subnavOnTop ? 'active' : ''}`}>
+          <Menu
+            secondary
+            className={`center-align menu-secondary-fixed ${navStore.navStatus === 'sub' ? 'active' : ''}`}
+          >
             <Container fluid>
               <Menu.Item as={Link} to="/" header>
                 <Logo

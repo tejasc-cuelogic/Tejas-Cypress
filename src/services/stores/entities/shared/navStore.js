@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 import { observable, action, computed } from 'mobx';
 import { matchPath } from 'react-router-dom';
 import _ from 'lodash';
@@ -7,6 +8,7 @@ import { userStore, userDetailsStore, businesssStore } from '../../index';
 export class NavStore {
   @observable NAV_ITEMS = { ...PRIVATE_NAV };
   @observable params = { roles: [], currentNav: [] };
+  @observable navStatus = 'main';
   @observable navMeta = [];
 
   constructor() {
@@ -58,6 +60,12 @@ export class NavStore {
       }
       this.navMeta = nav;
     }
+  }
+
+  @action
+  setNavStatus(calculations, forced) {
+    const { percentagePassed, topVisible } = calculations;
+    this.navStatus = forced ? forced : ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
   }
 }
 

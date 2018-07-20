@@ -20,6 +20,11 @@ const navItems = [
 ];
 
 export default class FundingOption extends Component {
+  componentWillMount() {
+    if (this.props.match.isExact) {
+      this.props.history.replace(`${this.props.match.url}/term-notes`);
+    }
+  }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match, location } = this.props;

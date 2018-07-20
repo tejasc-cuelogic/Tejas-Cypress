@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Visibility } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -15,30 +16,43 @@ const getModule = component => Loadable({
   },
 });
 
+@inject('navStore')
+@observer
 class Invest extends Component {
+  componentWillMount() {
+    if (this.props.match.isExact) {
+      this.props.history.replace(`${this.props.match.url}/why-nextseed`);
+    }
+  }
   module = name => DataFormatter.upperCamelCase(name);
+  handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   render() {
-    const { match, location } = this.props;
+    const { match, location, navStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <Aux>
-        <Banner />
-        <Menu secondary className="center-align menu-secondary">
-          <Menu.Item>Investing</Menu.Item>
-          <NavItems sub refLoc="public" location={location} navItems={navItems} />
-        </Menu>
-        <Switch>
-          <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
-          {
-            navItems.map(item => (
-              <Route
-                key={item.to}
-                path={`${match.url}/${item.to}`}
-                component={getModule(this.module(item.title))}
-              />
-            ))
-          }
-        </Switch>
+        {location.pathname === '/invest/why-nextseed' && <Banner />}
+        <Visibility onUpdate={this.handleUpdate} continuous>
+          <Menu
+            secondary
+            className={`center-align menu-secondary-fixed ${navStore.navStatus === 'sub' ? 'active' : ''}`}
+          >
+            <Menu.Item>Investing</Menu.Item>
+            <NavItems sub refLoc="public" location={location} navItems={navItems} />
+          </Menu>
+          <Switch>
+            <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+            {
+              navItems.map(item => (
+                <Route
+                  key={item.to}
+                  path={`${match.url}/${item.to}`}
+                  component={getModule(this.module(item.title))}
+                />
+              ))
+            }
+          </Switch>
+        </Visibility>
       </Aux>
     );
   }

@@ -7,9 +7,12 @@ import { publicRoutes } from './../../modules/routes';
 import { uiStore } from '../../services/stores';
 import Footer from './../../theme/layout/Footer';
 
-@inject('uiStore')
+@inject('uiStore', 'navStore')
 @observer
 export default class Public extends React.Component {
+  componentWillUpdate() {
+    this.props.navStore.setNavStatus({}, 'main');
+  }
   render() {
     const { location } = this.props;
     const NoFooter = [

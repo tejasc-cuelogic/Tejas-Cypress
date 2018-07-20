@@ -85,7 +85,13 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
 export const NavigationItems = props => (
-  <Menu stackable borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" className={props.location.pathname.includes('/offerings') ? '' : 'inverted'}>
+  <Menu
+    stackable
+    borderless
+    inverted={props.location.pathname.includes('/offerings')}
+    fixed="top"
+    className={props.navStatus === 'sub' ? 'slide-up' : ''}
+  >
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
         <Logo
@@ -100,7 +106,7 @@ export const NavigationItems = props => (
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
       </Menu.Menu>
-      <Menu.Item as={Link} to="/">
+      <Menu.Item as={Link} to="/auth/login">
         <Button secondary compact>Sign Up/Log In</Button>
       </Menu.Item>
     </Container>
