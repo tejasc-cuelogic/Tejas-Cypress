@@ -157,7 +157,7 @@ const HowItWorks = () => (
           Register for an account with just your email.
           </Header>
           <Button as={Link} to="/auth/register"secondary compact>Sign Up Free</Button>
-          <Button as={Link} to="/invest/how-it-works" primary compact>See Account Types</Button>
+          <Button as={Link} to="/invest/account-types" primary compact>See Account Types</Button>
         </div>
       </Container>
     </div>

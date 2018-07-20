@@ -1,5 +1,6 @@
 import React from 'react';
 import Aux from 'react-aux';
+import { Link } from 'react-router-dom';
 import { Header, Grid, Button, Image, Container, Embed, List, Statistic, Divider } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import supportIcon from '../../../../assets/images/icons/support.svg';
@@ -170,7 +171,7 @@ const HowItWorks = () => (
           </Grid.Column>
         </Grid>
         <div className="mt-80 mb-50 center-align">
-          <Button primary content="See Funding Options" />
+          <Button as={Link} to="/business/funding-options/term-notes" primary content="See Funding Options" />
         </div>
       </Container>
     </section>

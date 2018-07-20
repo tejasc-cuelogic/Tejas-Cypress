@@ -79,7 +79,7 @@ export class NavItems extends Component {
 }
 
 const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  (path.includes('business-application') || path.includes('offerings') ? 'LogoWhite' : 'LogoColor')
+  (path.includes('business-application') || path.includes('offerings') ? 'LogoColor' : 'LogoWhite')
 ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
@@ -88,7 +88,7 @@ export const NavigationItems = props => (
   <Menu
     stackable
     borderless
-    inverted={props.location.pathname.includes('/offerings')}
+    inverted={!props.location.pathname.includes('/offerings')}
     fixed="top"
     className={props.navStatus === 'sub' ? 'slide-up' : ''}
   >

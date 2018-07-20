@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { Header, Container, Menu, Segment, Button } from 'semantic-ui-react';
 import Aux from 'react-aux';
@@ -61,7 +61,7 @@ export default class FundingOption extends Component {
             </Segment>
             <div className="center-align">
               <Button secondary compact>Apply Now</Button>
-              <Button primary compact>See Process</Button>
+              <Button as={Link} to="/business/process" primary compact>See Process</Button>
             </div>
           </section>
         </Container>

@@ -11,7 +11,7 @@ import Returns from '../../../../assets/images/icons/returns.svg';
 
 const WhyNextseed = () => (
   <Aux>
-    <section>
+    <section className="why-nextseed-section">
       <Container>
         <Header as="h2" className="mb-80" textAlign="center">
           Local investing, made easy.

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
-import { Menu, Visibility } from 'semantic-ui-react';
+import { Visibility } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import { NavItems } from '../../../../theme/layout/NavigationItems';
 import Banner from '../components/Banner';
+import { PublicSubNav } from '../../../../theme/shared/';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -32,14 +32,13 @@ class Invest extends Component {
     return (
       <Aux>
         {location.pathname === '/invest/why-nextseed' && <Banner />}
-        <Visibility onUpdate={this.handleUpdate} continuous>
-          <Menu
-            secondary
-            className={`center-align menu-secondary-fixed ${navStore.navStatus === 'sub' ? 'active' : ''}`}
-          >
-            <Menu.Item>Investing</Menu.Item>
-            <NavItems sub refLoc="public" location={location} navItems={navItems} />
-          </Menu>
+        <Visibility onUpdate={this.handleUpdate} continuous className="slide-down">
+          <PublicSubNav
+            navStatus={navStore.navStatus}
+            location={location}
+            navItems={navItems}
+            title="Investing"
+          />
           <Switch>
             <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
             {

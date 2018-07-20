@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Header, Grid, Card, List, Button, Container } from 'semantic-ui-react';
 
 const Process = () => (
@@ -63,7 +64,7 @@ const Process = () => (
               </List.Item>
             </List>
             <div className="center-align">
-              <Button primary compact>See All-Inclusive</Button>
+              <Button as={Link} to="/business/all-inclusive" primary compact>See All-Inclusive</Button>
             </div>
           </Grid.Column>
         </Grid.Row>

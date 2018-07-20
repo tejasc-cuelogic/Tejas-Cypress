@@ -1,7 +1,7 @@
 /*******************************
          Theme Overrides
 *******************************/
-.ui.container{
+section{
     &.banner {
         height:710px;
         padding-top:74px;
@@ -27,12 +27,15 @@
             background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat / cover;
         }
         &.invest-banner{
-            background:url(../../assets/images/banners/investor.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat / cover;
+        }
+        +.slide-down {
+            margin-top: 0;
         }
     }
 }
+// business and invest pages
 .content-spacer {
-	margin-top: 74px;
 	padding: 0;
 	&.process-banner {
 		background:url(../../assets/images/business/process.png) 0px center no-repeat;
@@ -40,4 +43,8 @@
 	&.inclusive-banner {
 		background:url(../../assets/images/business/inclusive.png) right center no-repeat;
 	}
+}
+// for PublicSubNav on business and invest inner pages
+.slide-down {
+    margin-top: 74px;
 }
