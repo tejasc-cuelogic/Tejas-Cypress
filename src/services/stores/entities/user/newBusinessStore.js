@@ -551,6 +551,7 @@ export class NewBusinessStore {
   lendioEleChange = (e, res, type) => {
     this.LENDIO_QUAL_FRM =
       Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res, type));
+    console.log('this.LENDIO_QUAL_FRM==> ', this.LENDIO_QUAL_FRM);
   };
 
   @computed get getBusinessTypeCondtion() {

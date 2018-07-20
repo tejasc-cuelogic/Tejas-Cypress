@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
@@ -22,6 +23,7 @@ export default class Application extends Component {
       lendioEleChange,
     } = this.props.newBusinessStore;
     const { fields } = LENDIO_QUAL_FRM;
+    const checkIsPresent = _.indexOf(fields.applicationAgreeConditions.value, 'agreeConditions');
     return (
       <Grid container>
         <Grid.Column className="issuer-signup">
@@ -122,7 +124,7 @@ export default class Application extends Component {
             <Divider hidden />
             <Button
               loading={this.props.uiStore.inProgress}
-              disabled={!LENDIO_QUAL_FRM.meta.isValid}
+              disabled={!LENDIO_QUAL_FRM.meta.isValid || checkIsPresent === -1}
               primary
               className="very relaxed"
             >
