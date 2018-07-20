@@ -29,6 +29,9 @@
         &.invest-banner{
             background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat / cover;
         }
+        +.slide-down {
+            margin-top: 0;
+        }
     }
 }
 .content-spacer {
@@ -40,4 +43,7 @@
 	&.inclusive-banner {
 		background:url(../../assets/images/business/inclusive.png) right center no-repeat;
 	}
+}
+.slide-down {
+    margin-top: 74px;
 }

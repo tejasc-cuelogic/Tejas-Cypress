@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Header, Grid, Button, Container, List, Divider, Segment, Image } from 'semantic-ui-react';
 import InvestorImg from '../../../../assets/images/investor-img.png';
@@ -155,8 +156,8 @@ const HowItWorks = () => (
           <Header textAlign="center" as="h2" className="mb-30">
           Register for an account with just your email.
           </Header>
-          <Button secondary compact>Sign Up Free</Button>
-          <Button primary compact>See Account Types</Button>
+          <Button as={Link} to="/auth/register"secondary compact>Sign Up Free</Button>
+          <Button as={Link} to="/invest/how-it-works" primary compact>See Account Types</Button>
         </div>
       </Container>
     </div>

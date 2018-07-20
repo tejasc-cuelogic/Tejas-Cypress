@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Header, Grid, Button, Container, List, Item } from 'semantic-ui-react';
 import Businesses from '../../../../assets/images/icons/businesses.svg';
@@ -98,8 +99,8 @@ const WhyNextseed = () => (
           </Grid.Column>
         </Grid>
         <div className="center-align mt-50">
-          <Button secondary compact>Sign Up Free</Button>
-          <Button primary compact>See How it Works</Button>
+          <Button as={Link} to="/auth/register" secondary compact>Sign Up Free</Button>
+          <Button as={Link} to="/invest/how-it-works" primary compact>See How it Works</Button>
         </div>
       </Container>
     </section>

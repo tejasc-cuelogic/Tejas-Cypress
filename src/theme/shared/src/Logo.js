@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image } from 'semantic-ui-react';
-import LogoWhite from '../../../assets/images/logo.svg';
-import LogoColor from '../../../assets/images/nextseed_logo_white.svg';
+import LogoColor from '../../../assets/images/logo.svg';
+import LogoWhite from '../../../assets/images/nextseed_logo_white.svg';
 import LogoSmall from '../../../assets/images/ns-logo-small.svg';
 import LogoLendio from '../../../assets/images/lendio_logo.svg';
 import LogoNsAndLendio from '../../../assets/images/nextseed_and_lendio.svg';
