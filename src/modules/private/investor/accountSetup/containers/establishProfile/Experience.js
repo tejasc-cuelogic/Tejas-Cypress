@@ -49,7 +49,7 @@ export default class Experience extends Component {
             containerclassname="ui relaxed list"
           />
           <div className="center-align mt-30">
-            <Button type="button" onClick={this.handleSubmit} primary size="large" as={Link} to="/app/summary/account-creation">Send verification request</Button>
+            <Button onClick={this.handleSubmit} primary size="large" as={Link} to="/app/summary/account-creation">Send verification request</Button>
           </div>
         </Form>
       </div>

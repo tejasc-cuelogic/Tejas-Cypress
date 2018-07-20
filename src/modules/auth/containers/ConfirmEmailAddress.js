@@ -74,6 +74,7 @@ export default class ConfirmEmailAddress extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput
+            ishidelabel
             type="email"
             size="huge"
             name="email"

@@ -35,7 +35,7 @@ const checkStatus = (signupStatus, key) => {
 const ProgressCard = props => (
   <Card.Group stackable itemsPerRow={3}>
     {
-      isEmpty(props.signupStatus.accounts) &&
+      isEmpty(props.signupStatus.activeAccounts) &&
       Object.keys(progressMeta).map((key) => {
         const currentCard = progressMeta[key];
         const status = checkStatus(props.signupStatus, key);

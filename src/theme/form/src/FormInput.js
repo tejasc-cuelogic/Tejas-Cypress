@@ -17,7 +17,7 @@ const FormInput = observer((props) => {
   );
   return (
     <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''} error={!!error}>
-      {label !== '' &&
+      {!props.ishidelabel && label !== '' &&
         <label>
           {label}
           {tooltip &&
