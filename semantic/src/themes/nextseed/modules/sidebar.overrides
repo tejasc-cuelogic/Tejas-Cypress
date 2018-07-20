@@ -332,7 +332,7 @@
 		background-color:transparent;
 		color:@quaternary-text;
 	}
-	&.bowner{
+	&.issuer{
 		background-color:@primary-text;
 		.item{
 			&:hover, &:focus, &.active, &.active:hover{
