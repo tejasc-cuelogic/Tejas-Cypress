@@ -813,6 +813,7 @@ export class NewBusinessStore {
         .mutate({
           mutation: mutationQuery,
           variables: variableData,
+          refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           console.log(result);

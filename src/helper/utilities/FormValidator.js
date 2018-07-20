@@ -51,6 +51,7 @@ class FormValidator {
   }
 
   validateForm = (form, isMultiForm = false) => {
+    CustomeValidations.execute();
     const currentForm = form;
     let validation;
     if (!isMultiForm) {
