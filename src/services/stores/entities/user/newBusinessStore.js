@@ -37,7 +37,7 @@ export class NewBusinessStore {
   @observable LENDIO_QUAL_FRM = Validator.prepareFormObject(LENDIO_PRE_QUAL);
   @observable BUSINESS_APP_STATUS = '';
   @observable preQualFormDisabled = false;
-  @observable BUSINESS_APP_STEP_URL = 'pre-qualification';
+  @observable BUSINESS_APP_STEP_URL = 'new/pre-qualification';
   @observable BUSINESS_APPLICATION_DATA = null;
   @observable isPartialData = null;
   @observable applicationId = null;
@@ -271,6 +271,7 @@ export class NewBusinessStore {
 
   @action
   setperformanceDetails = (data) => {
+    console.log(data);
     if (data) {
       this.appStepsStatus[2] = data.stepStatus;
       this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
@@ -686,6 +687,7 @@ export class NewBusinessStore {
           variables: {
             preQualificationData: data,
           },
+          refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           console.log(result);
@@ -726,6 +728,7 @@ export class NewBusinessStore {
           variables: {
             applicationId: this.currentApplicationId,
           },
+          refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           console.log(result);

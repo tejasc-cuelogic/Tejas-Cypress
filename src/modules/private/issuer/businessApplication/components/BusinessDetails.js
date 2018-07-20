@@ -143,7 +143,7 @@ export default class BusinessDetails extends Component {
             >
               <Accordion>
                 <Accordion.Title onClick={this.toggleHandel} active={this.state.showHandle}>
-                  <Icon className={this.state.showHandle ? 'ns-chevron-up' : 'ns-chevron-down'} />
+                  <Icon className="ns-chevron-up" />
                   Hide legal note
                 </Accordion.Title>
                 <Accordion.Content active={this.state.showHandle}>
