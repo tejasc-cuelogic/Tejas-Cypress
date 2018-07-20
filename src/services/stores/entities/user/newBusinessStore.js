@@ -39,7 +39,7 @@ export class NewBusinessStore {
   @observable LENDIO_QUAL_FRM = Validator.prepareFormObject(LENDIO_PRE_QUAL);
   @observable BUSINESS_APP_STATUS = '';
   @observable preQualFormDisabled = false;
-  @observable BUSINESS_APP_STEP_URL = 'pre-qualification';
+  @observable BUSINESS_APP_STEP_URL = 'new/pre-qualification';
   @observable BUSINESS_APPLICATION_DATA = null;
   @observable isPartialData = null;
   @observable applicationId = null;
@@ -49,6 +49,7 @@ export class NewBusinessStore {
   @observable currentApplicationId = null;
   @observable businessApplicationsDataById = null;
   @observable isFetchedData = null;
+  @observable appStepsStatus = ['IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS'];
 
   @action
   businessAccEleChange = (e, result) => {
@@ -179,11 +180,13 @@ export class NewBusinessStore {
 
   @action
   setBusinessApplicationData = () => {
+    this.formReset();
     const data = this.fetchBusinessApplicationsDataById;
     this.setPrequalDetails(data.prequalDetails);
     this.setbusinessDetails(data.businessDetails);
-    this.setperformanceDetails(data.businessPerformance);
+    this.setperformanceDetails(data.businessPerformance, data.prequalDetails);
     this.setDocumentationDetails(data.businessDocumentation);
+
     navStore.setAccessParams('appStatus', this.fetchBusinessApplicationsStatusById);
     if (!isUndefined(data.lendio)) {
       const lendioPartners = data.lendio.status;
@@ -191,13 +194,10 @@ export class NewBusinessStore {
         this.setPartneredLendioData(data);
       }
     }
-    // this.props.history.push(`/app/business-application/$
-    // {this.currentApplicationId}/${this.calculateStepToRender}`);
   };
 
   @action
   setPartneredLendioData = (preQualificationData) => {
-    console.log('HHHHHHHHHHH data=> ', preQualificationData);
     const {
       prequalDetails: {
         businessGeneralInfo: {
@@ -289,6 +289,7 @@ export class NewBusinessStore {
   @action
   setPrequalDetails = (data) => {
     if (data) {
+      this.appStepsStatus[0] = 'COMPLETE';
       ['street', 'city', 'state', 'zipCode'].forEach((ele) => {
         this.BUSINESS_APP_FRM.fields[ele].value = data.businessGeneralInfo.address[ele];
       });
@@ -330,6 +331,7 @@ export class NewBusinessStore {
   @action
   setbusinessDetails = (data) => {
     if (data) {
+      this.appStepsStatus[1] = data.stepStatus;
       this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
       data.debts.forEach((ele, key) => {
         ['amount', 'interestExpenses', 'remainingPrincipal', 'term'].forEach((field) => {
@@ -365,8 +367,10 @@ export class NewBusinessStore {
   }
 
   @action
-  setperformanceDetails = (data) => {
+  setperformanceDetails = (data, prequalData) => {
+    console.log(data);
     if (data) {
+      this.appStepsStatus[2] = data.stepStatus;
       this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
       ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
         const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
@@ -412,6 +416,19 @@ export class NewBusinessStore {
           this.BUSINESS_PERF_FRM.fields[ele].rule = '';
         });
       }
+    } else {
+      ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
+        const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
+        this.BUSINESS_PERF_FRM.fields[field[key]].value =
+        prequalData.performanceSnapshot.nextYearSnapshot[ele];
+      });
+      if (this.getBusinessTypeCondtion) {
+        ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
+          const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
+          this.BUSINESS_PERF_FRM.fields[field[key]].value =
+          prequalData.performanceSnapshot.pastYearSnapshot[ele];
+        });
+      }
     }
     Validator.validateForm(this.BUSINESS_PERF_FRM);
   }
@@ -419,25 +436,39 @@ export class NewBusinessStore {
   @action
   setDocumentationDetails = (data) => {
     if (data) {
+      this.appStepsStatus[3] = data.stepStatus;
       this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
       this.BUSINESS_DOC_FRM.fields.blanketLien.value = data.blanketLien !== '' ? data.blanketLien : '';
       this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGurantee !== '' ? data.providePersonalGurantee : '';
+      if (!data.providePersonalGurantee) {
+        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.rule = '';
+      }
       if (data.personalGuarantee &&
         data.personalGuarantee.length) {
         this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value = [];
         this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.fileId = [];
+        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.rule = 'required';
       }
       data.personalGuarantee.forEach((ele) => {
         this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.push(ele.fileName);
         this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.fileId.push(ele.fileId);
       });
+
       ['bankStatements', 'businessTaxReturns', 'leaseAgreementsOrLOIs', 'personalTaxReturns'].forEach((field, key) => {
         const formField = ['bankStatements', 'businessTaxReturn', 'leaseAgreementsOrLOIs', 'personalTaxReturn'];
-        if (!this.getBusinessTypeCondtion && (field === 'leaseAgreementsOrLOIs' || field === 'personalTaxReturns')) {
+        if (this.getBusinessTypeCondtion) {
           if (data[field] && data[field].length) {
             this.BUSINESS_DOC_FRM.fields[formField[key]].value = [];
             this.BUSINESS_DOC_FRM.fields[formField[key]].fileId = [];
-            this.BUSINESS_DOC_FRM.fields[formField[key]].rule = 'required';
+          }
+          data[field].forEach((ele) => {
+            this.BUSINESS_DOC_FRM.fields[formField[key]].value.push(ele.fileName);
+            this.BUSINESS_DOC_FRM.fields[formField[key]].fileId.push(ele.fileId);
+          });
+        } else if (field === 'leaseAgreementsOrLOIs' || field === 'personalTaxReturns') {
+          if (data[field] && data[field].length) {
+            this.BUSINESS_DOC_FRM.fields[formField[key]].value = [];
+            this.BUSINESS_DOC_FRM.fields[formField[key]].fileId = [];
           }
           data[field].forEach((ele) => {
             this.BUSINESS_DOC_FRM.fields[formField[key]].value.push(ele.fileName);
@@ -536,21 +567,18 @@ export class NewBusinessStore {
   }
 
   @computed get canSubmitApp() {
-    // console.log(this.getBusinessAppStepStatus);
-    // Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
-    // Validator.validateForm(this.BUSINESS_PERF_FRM);
-    // Validator.validateForm(this.BUSINESS_DOC_FRM);
     const notOkForms = ['BUSINESS_DETAILS_FRM', 'BUSINESS_PERF_FRM', 'BUSINESS_DOC_FRM']
       .filter(form => !this[form].meta.isValid);
+    const isPartial = this.appStepsStatus.filter(step => step === 'IN_PROGRESS');
 
-    return notOkForms.length === 0;
+    return notOkForms.length === 0 && isPartial.length === 0;
   }
 
   @action
   getFilesArray = (data, form) => {
     const arr = data ? data.map((item, key) => (
       { fileId: form.fileId[key] ? form.fileId[key] : '', fileName: item }
-    )) : { fileId: '', fileName: '' };
+    )) : [];
     return arr;
   }
 
@@ -638,7 +666,8 @@ export class NewBusinessStore {
   }
 
   @computed get getFormatedDocumentationData() {
-    const data = Validator.ExtractValues(toJS(this.BUSINESS_DOC_FRM.fields));
+    const data = toJS(this.BUSINESS_DOC_FRM.fields);
+    console.log(data);
     return {
       bankStatements: this.getFilesArray(
         data.bankStatements.value,
@@ -759,7 +788,6 @@ export class NewBusinessStore {
   @action
   businessPreQualificationFormSumbit = () => {
     const data = this.getFormatedPreQualificationData;
-    console.log(data);
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -768,6 +796,7 @@ export class NewBusinessStore {
           variables: {
             preQualificationData: data,
           },
+          refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           console.log(result);
@@ -822,6 +851,7 @@ export class NewBusinessStore {
           variables: {
             applicationId: this.currentApplicationId,
           },
+          refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           console.log(result);
@@ -847,7 +877,6 @@ export class NewBusinessStore {
     if (this.applicationStep === 'business-details') {
       stepName = 'BUSINESS_DETAILS';
       Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
-      console.log(this.BUSINESS_DETAILS_FRM);
       isPartialDataFlag = !this.BUSINESS_DETAILS_FRM.meta.isValid;
     } else if (this.applicationStep === 'performance') {
       stepName = 'PERFORMANCE';
@@ -894,6 +923,7 @@ export class NewBusinessStore {
         .mutate({
           mutation: mutationQuery,
           variables: variableData,
+          refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           console.log(result);
@@ -1006,6 +1036,7 @@ export class NewBusinessStore {
     this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
     this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
     this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
+    this.appStepsStatus = ['IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS'];
   }
 
   @action

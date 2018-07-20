@@ -83,6 +83,7 @@ export const PRIVATE_NAV = [
         title: 'Pre-qualification',
         to: 'pre-qualification',
         component: 'PreQualification',
+        showIcon: true,
       },
       {
         icon: 'ns-check-circle',
@@ -90,6 +91,7 @@ export const PRIVATE_NAV = [
         to: 'business-details',
         accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
         component: 'BusinessDetails',
+        showIcon: true,
       },
       {
         icon: 'ns-check-circle',
@@ -97,6 +99,7 @@ export const PRIVATE_NAV = [
         to: 'performance',
         accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
         component: 'Performance',
+        showIcon: true,
       },
       {
         icon: 'ns-check-circle',
@@ -104,6 +107,7 @@ export const PRIVATE_NAV = [
         to: 'documentation',
         accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
         component: 'Documentation',
+        showIcon: true,
       },
     ],
   },
