@@ -89,6 +89,10 @@ query _getBusinessApplicationById ($id: String!) {
   ){
     applicationId
     applicationStatus
+    lendio {
+      status
+      failReasons
+    }
     createdDate
     updatedDate
     prequalDetails {

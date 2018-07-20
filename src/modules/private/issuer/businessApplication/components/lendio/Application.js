@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
-import { FormInput, FormDropDown, FormCheckbox } from '../../../../../../theme/form';
+import { FormInput, FormDropDown, FormCheckbox, MaskedInput2 } from '../../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 import { LENDING_PARTNER_LENDIO } from '../../../../../../constants/business';
 
-@inject('newBusinessStore')
+@inject('newBusinessStore', 'uiStore')
 @observer
 export default class Application extends Component {
   submit = (e) => {
@@ -20,7 +20,6 @@ export default class Application extends Component {
     const {
       LENDIO_QUAL_FRM,
       lendioEleChange,
-      businessAppEleChange,
     } = this.props.newBusinessStore;
     const { fields } = LENDIO_QUAL_FRM;
     return (
@@ -61,6 +60,7 @@ export default class Application extends Component {
                           selection
                           placeholder="Please Select"
                           containerclassname="dropdown-field"
+                          value={fields[field].value}
                           name={field}
                           options={LENDING_PARTNER_LENDIO[field]}
                           changed={lendioEleChange}
@@ -73,7 +73,7 @@ export default class Application extends Component {
                   <Header as="h2">Customer Information</Header>
                   <div className="field-wrap">
                     {
-                      ['businessName', 'businessOwnerName', 'emailAddress', 'phoneNumber', 'comments'].map(field => (
+                      ['businessName', 'businessOwnerName', 'emailAddress'].map(field => (
                         <FormInput
                           key={field}
                           type="text"
@@ -83,6 +83,18 @@ export default class Application extends Component {
                         />
                       ))
                     }
+                    <MaskedInput2
+                      name="phoneNumber"
+                      fielddata={fields.phoneNumber}
+                      changed={lendioEleChange}
+                    />
+                    <FormInput
+                      key="comments"
+                      type="text"
+                      name="comments"
+                      fielddata={fields.comments}
+                      changed={lendioEleChange}
+                    />
                   </div>
                 </Grid.Column>
               </Grid>
@@ -103,12 +115,19 @@ export default class Application extends Component {
             <FormCheckbox
               fielddata={fields.applicationAgreeConditions}
               name="applicationAgreeConditions"
-              changed={businessAppEleChange}
+              changed={lendioEleChange}
               defaults
               containerclassname="ui relaxed list"
             />
             <Divider hidden />
-            <Button primary className="very relaxed">Submit</Button>
+            <Button
+              loading={this.props.uiStore.inProgress}
+              disabled={!LENDIO_QUAL_FRM.meta.isValid}
+              primary
+              className="very relaxed"
+            >
+              Submit
+            </Button>
           </Form>
         </Grid.Column>
       </Grid>
