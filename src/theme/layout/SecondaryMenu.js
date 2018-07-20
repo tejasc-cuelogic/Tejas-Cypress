@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { NavLink } from 'react-router-dom';
-import { Responsive, Menu, Dropdown } from 'semantic-ui-react';
+import { Responsive, Menu, Dropdown, Icon } from 'semantic-ui-react';
 import map from 'lodash/map';
 import mapKeys from 'lodash/mapKeys';
 
 const iMap = { to: 'key', title: 'text' };
-const NavItems = ({ navItems, match }) => navItems.map(item => (
+const NavItems = ({ navItems, match, stepsStatus }) => navItems.map((item, key) => (
   <Menu.Item key={item.to} as={NavLink} to={`${match.url}/${item.to}`}>
-    {/* <Icon name="circle green tick" /> */}
+    {item.showIcon &&
+      <Icon color={stepsStatus[key] === 'COMPLETE' ? 'green' : ''} name={stepsStatus[key] === 'COMPLETE' ? item.icon : 'circle'} />
+    }
     {item.title}
   </Menu.Item>
 ));
@@ -29,7 +31,7 @@ class SecondaryMenu extends Component {
             vertical={this.props.vertical}
             attached={this.props.attached}
           >
-            <NavItems navItems={navItems} match={match} />
+            <NavItems navItems={navItems} match={match} stepsStatus={this.props.stepsStatus} />
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767}>

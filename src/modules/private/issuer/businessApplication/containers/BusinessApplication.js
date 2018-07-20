@@ -58,10 +58,11 @@ export default class BusinessApplication extends Component {
   render() {
     const { match } = this.props;
     const { pathname } = this.props.location;
-    const showSubNav = includes(pathname, 'failed') || includes(pathname, 'success') || includes(pathname, 'lendio');
+    const { canSubmitApp, appStepsStatus } = this.props.newBusinessStore;
+    const showSubNav = (includes(pathname, 'pre-qualification') && appStepsStatus[0] === 'IN_PROGRESS')
+      || includes(pathname, 'failed') || includes(pathname, 'success') || includes(pathname, 'lendio');
     const preQualPage = includes(pathname, 'pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
-    const { canSubmitApp } = this.props.newBusinessStore;
     return (
       <PrivateLayout
         subNav={!showSubNav}

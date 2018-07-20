@@ -356,7 +356,7 @@ export const BUSINESS_DOC = {
     rule: 'required',
   },
   personalGuaranteeForm: {
-    value: [], label: 'Personal Guarantee Form', error: undefined, rule: 'required_if:personalGuarantee,true', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Personal Guarantee Form', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
 };
 

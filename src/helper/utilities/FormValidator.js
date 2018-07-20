@@ -67,6 +67,7 @@ class FormValidator {
       );
     }
     currentForm.meta.isValid = validation.passes();
+    console.log(validation);
   }
 
   onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
