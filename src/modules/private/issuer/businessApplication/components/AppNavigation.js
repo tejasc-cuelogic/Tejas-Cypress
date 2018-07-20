@@ -38,7 +38,7 @@ export default class AppNavigation extends Component {
   }
 
   submit = (e) => {
-    e.preventDefalult();
+    e.preventDefault();
     this.props.newBusinessStore.businessApplicationSubmitAction().then(() => {
       Helper.toast('Business application submitted successfully!', 'success');
       this.props.history.push('/app/dashboard');

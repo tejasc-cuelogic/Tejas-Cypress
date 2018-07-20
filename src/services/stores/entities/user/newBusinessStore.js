@@ -747,14 +747,14 @@ export class NewBusinessStore {
 
   @action
   businessAppParitalSubmit = (step) => {
-    console.log(this.applicationStep);
+    console.log(this.applicationStep, step);
     let data = this.getFormatedBusinessDetailsData;
     let stepName = 'BUSINESS_DETAILS';
     let isPartialDataFlag = true;
-    console.log(this.BUSINESS_PERF_FRM);
-    if (step === 'business-details') {
+    if (this.applicationStep === 'business-details') {
       stepName = 'BUSINESS_DETAILS';
       Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
+      console.log(this.BUSINESS_DETAILS_FRM);
       isPartialDataFlag = !this.BUSINESS_DETAILS_FRM.meta.isValid;
     } else if (this.applicationStep === 'performance') {
       stepName = 'PERFORMANCE';
