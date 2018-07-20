@@ -63,7 +63,7 @@ export default class Application extends Component {
                           value={fields[field].value}
                           name={field}
                           options={LENDING_PARTNER_LENDIO[field]}
-                          changed={lendioEleChange}
+                          onChange={lendioEleChange}
                         />
                       ))
                     }

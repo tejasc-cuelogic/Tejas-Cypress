@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { forEach, includes, find, isEmpty, isUndefined } from 'lodash';
+import { forEach, includes, find, isEmpty } from 'lodash';
 import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -186,7 +186,7 @@ export class NewBusinessStore {
     this.setperformanceDetails(data.businessPerformance, data.prequalDetails);
     this.setDocumentationDetails(data.businessDocumentation);
     navStore.setAccessParams('appStatus', this.fetchBusinessApplicationsStatusById);
-    if (!isUndefined(data.lendio)) {
+    if (data.lendio) {
       const lendioPartners = data.lendio.status;
       if (lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
         this.setPartneredLendioData(data);
@@ -549,7 +549,7 @@ export class NewBusinessStore {
 
   @action
   lendioEleChange = (e, res) => {
-    this.LENDIO_QUAL_FRM = Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res));
+    this.LENDIO_QUAL_FRM = Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res), 'dropdown');
   };
 
   @computed get getBusinessTypeCondtion() {
