@@ -5,7 +5,7 @@ import { NsCarousel } from '../../../../theme/shared';
 import supportIcon from '../../../../assets/images/icons/support.svg';
 import sellingIcon from '../../../../assets/images/icons/selling.svg';
 import networkIcon from '../../../../assets/images/icons/network.svg';
-import carouselImg from '../../../../assets/images/lian.jpg';
+import carouselImg from '../../../../assets/images/business/lian.jpg';
 import videoPoster from '../../../../assets/images/636206632.webp';
 
 const nsvideos = {
@@ -169,7 +169,7 @@ const HowItWorks = () => (
             </p>
           </Grid.Column>
         </Grid>
-        <div className="mt-80 mb-30 center-align">
+        <div className="mt-80 mb-50 center-align">
           <Button primary content="See Funding Options" />
         </div>
       </Container>

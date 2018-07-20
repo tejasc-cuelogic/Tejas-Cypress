@@ -341,4 +341,15 @@ export const PUBLIC_NAV = [
       { title: 'Compare', to: 'compare', component: 'Disclosures' },
     ],
   },
+  {
+    title: 'Why NextSeed',
+    to: 'invest',
+    subNavigations: [
+      { title: 'Why Nextseed', to: 'why-nextseed' },
+      { title: 'How it Works', to: 'how-it-works' },
+      { title: 'Account Types', to: 'account-types' },
+      { title: 'Security', to: 'security' },
+      { title: 'Track', to: 'track' },
+    ],
+  },
 ];
