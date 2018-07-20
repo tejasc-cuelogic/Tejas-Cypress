@@ -59,7 +59,7 @@ class Home extends Component {
             <Grid centered relaxed="very" stackable>
               <Grid.Column textAlign="center" width={6} className="info-card">
                 <Image src={UserOne} size="small" circular centered />
-                <Header as="h4">Raise funds without giving up ownership.</Header>
+                <Header as="h5">Raise funds without giving up ownership.</Header>
                 <p>
                   Access flexible debt financing while avoiding the hassles of traditional
                   fundraising. No need to sell ownership of your business. Simply create a
@@ -69,7 +69,7 @@ class Home extends Component {
               </Grid.Column>
               <Grid.Column textAlign="center" width={6} className="info-card">
                 <Image src={UserTwo} size="small" circular centered />
-                <Header as="h4">Invest in businesses you believe in.</Header>
+                <Header as="h5">Invest in businesses you believe in.</Header>
                 <p>
                   Investing isn’t just for Wall Street and Silicon Valley. Now anyone can access
                   exclusive investment opportunities. Make an impact for local businesses and

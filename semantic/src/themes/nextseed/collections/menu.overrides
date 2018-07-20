@@ -3,12 +3,12 @@
 *******************************/
 .header-wrap{
     .ui.menu{
-        height:74px;
+        height:58px;
         border:none;
         border-radius:0;
         box-shadow:none;
         .menu{
-            margin:16px;
+            margin:@11px @16px;
             .item{
                 color:@neutral;
                 &:hover, &.active{

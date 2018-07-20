@@ -582,6 +582,13 @@ div.login-form {
 }
 
 //	Heading font sizes
+h1.ui.header{
+	font-weight:@normal;
+	line-height:62px;
+}
+h2.ui.header{
+	line-height:44px;
+}
 h6{
 	font-size:@13px;
 }
