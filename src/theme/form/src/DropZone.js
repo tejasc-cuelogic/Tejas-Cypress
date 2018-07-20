@@ -28,7 +28,7 @@ const DropZone = observer((props) => {
         }
         </label>
       }
-      {!value.length || props.multiple ?
+      { !(value && !value.length) || props.multiple ?
         <div className="file-uploader">
           <Dropzone onDrop={files => props.ondrop(files, props.name)} className="test" style={{}}>
             <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
