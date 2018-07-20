@@ -1,12 +1,12 @@
 // import moment from 'moment';
 
-export const USER_ROLES = ['admin', 'bowner', 'investor'];
+export const USER_ROLES = ['admin', 'issuer', 'investor'];
 export const USER_TYPES_META = [
   {
     key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Invest in existing businesses and get revenue',
   },
   {
-    key: 'o', icon: 'ns-business', text: 'Business Owner', value: 'bowner', desc: 'Apply for funding with your business',
+    key: 'o', icon: 'ns-business', text: 'Business Owner', value: 'issuer', desc: 'Apply for funding with your business',
   },
 ];
 
@@ -24,7 +24,7 @@ export const USER_LIST_META = [
 export const FILTER_META = {
   accountType: [
     { text: 'Admin', value: 'admin' },
-    { text: 'Business', value: 'bowner' },
+    { text: 'Business', value: 'issuer' },
     { text: 'IRA', value: 'ira' },
     { text: 'Individual', value: 'individual' },
     { text: 'Entity', value: 'entity' },
@@ -94,7 +94,7 @@ export const FIN_INFO = {
 
 export const ROLES = [
   { key: 'admin', value: 'admin', text: 'Admin' },
-  { key: 'bowner', value: 'bowner', text: 'Business Owner' },
+  { key: 'issuer', value: 'issuer', text: 'Business Owner' },
   { key: 'investor', value: 'investor', text: 'Investor' },
 ];
 
