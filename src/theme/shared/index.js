@@ -13,3 +13,4 @@ export { default as Spinner } from './src/Spinner';
 export { default as GridListing } from './src/GridListing';
 export { default as Logo } from './src/Logo';
 export { default as UserAvatar } from './src/UserAvatar';
+export { default as NsCarousel } from './src/NsCarousel';
