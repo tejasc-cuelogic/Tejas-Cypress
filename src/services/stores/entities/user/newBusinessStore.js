@@ -134,7 +134,6 @@ export class NewBusinessStore {
       client,
       query: getBusinessApplications,
     });
-    console.log(this.businessApplicationsList);
   }
 
   @computed get getBusinessAppStepStatus() {
@@ -184,7 +183,6 @@ export class NewBusinessStore {
     this.setbusinessDetails(data.businessDetails);
     this.setperformanceDetails(data.businessPerformance, data.prequalDetails);
     this.setDocumentationDetails(data.businessDocumentation);
-    console.log(data);
     console.log(this.calculateStepToRender);
     navStore.setAccessParams('appStatus', this.fetchBusinessApplicationsStatusById);
   };
@@ -271,7 +269,6 @@ export class NewBusinessStore {
 
   @action
   setperformanceDetails = (data, prequalData) => {
-    console.log(data);
     if (data) {
       this.appStepsStatus[2] = data.stepStatus;
       this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
@@ -511,7 +508,6 @@ export class NewBusinessStore {
 
   @computed get getFormatedBusinessDetailsData() {
     const data = toJS(this.BUSINESS_DETAILS_FRM.fields);
-    console.log(this.BUSINESS_DETAILS_FRM.fields);
     return {
       planDocs: this.getFilesArray(data.businessPlan.value, data.businessPlan),
       debts: data.debts.map(item => ({
@@ -539,7 +535,6 @@ export class NewBusinessStore {
 
   @computed get getFormatedPerformanceData() {
     const data = toJS(this.BUSINESS_PERF_FRM.fields);
-    console.log(data);
     return {
       financialStatements: {
         priorToThreeYear: this.getFilesArray(
@@ -571,7 +566,6 @@ export class NewBusinessStore {
 
   @computed get getFormatedDocumentationData() {
     const data = toJS(this.BUSINESS_DOC_FRM.fields);
-    console.log(data);
     return {
       bankStatements: this.getFilesArray(
         data.bankStatements.value,
@@ -703,18 +697,15 @@ export class NewBusinessStore {
           refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
-          console.log(result);
           this.setBusinessAppStatus(result.data.createBusinessApplicationPrequalification.status);
           const applicationId = result.data.createBusinessApplicationPrequalification.id;
           this.setFetchedData(null);
           if (this.BUSINESS_APP_STATUS ===
               BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED) {
-            console.log('Success');
             this.setBusinessAppStepUrl(`${applicationId}/success`);
           } else if (this.BUSINESS_APP_STATUS ===
               BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
             this.setBusinessAppStepUrl(`${applicationId}/failed`);
-            console.log('Failer');
           } else {
             this.setBusinessAppStepUrl(`${applicationId}/failed`);
           }
@@ -759,8 +750,7 @@ export class NewBusinessStore {
   }
 
   @action
-  businessAppParitalSubmit = (step) => {
-    console.log(this.applicationStep, step);
+  businessAppParitalSubmit = () => {
     let data = this.getFormatedBusinessDetailsData;
     let stepName = 'BUSINESS_DETAILS';
     let isPartialDataFlag = true;
@@ -806,7 +796,6 @@ export class NewBusinessStore {
       };
       mutationQuery = upsertBusinessApplicationInformationDocumentation;
     }
-    console.log(variableData);
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -862,7 +851,6 @@ export class NewBusinessStore {
             this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
             this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
           });
-          console.log(result);
         }).catch((error) => {
           console.log(error);
         });

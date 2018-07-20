@@ -41,8 +41,7 @@ export default class BusinessApplication extends Component {
 
   submitSaveContinue = (e) => {
     e.preventDefault();
-    const stepUrl = this.props.location.pathname.split('/');
-    this.props.newBusinessStore.businessAppParitalSubmit(stepUrl[4]).then(() => {
+    this.props.newBusinessStore.businessAppParitalSubmit().then(() => {
       Helper.toast('Business application saved!', 'success');
       this.props.history.push('/app/dashboard');
     });

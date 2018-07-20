@@ -7,10 +7,6 @@ import { inject, observer } from 'mobx-react';
 @observer
 class Success extends Component {
   render() {
-    // const {
-    //   BUSINESS_ACCOUNT, businessAccEleChange,
-    // } = this.props.newBusinessStore;
-    // const { fields } = BUSINESS_ACCOUNT;
     return (
       <Grid container>
         <Grid.Column className="issuer-signup">
