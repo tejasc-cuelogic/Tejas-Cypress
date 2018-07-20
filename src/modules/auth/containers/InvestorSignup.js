@@ -18,7 +18,8 @@ class InvestorSignup extends Component {
           this.props.history.push('/auth/change-password');
         } else {
           const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
-          localStorage.setItem('encryptedPwd', password.value);
+          const encryptedPwd = btoa(password.value);
+          localStorage.setItem('encryptedPwd', encryptedPwd);
           this.props.history.push(`/auth/confirm-email/${email.value}`);
         }
       })
