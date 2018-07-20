@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 
-// queries, mutations and subscriptions
+// queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
   query getUsers($search: String, $orderBy: userOrderBy, $filters: [UserFilter]) {
-    users(search: $search, limit: "10", orderBy: $orderBy, filters: $filters) {
+    users(search: $search, orderBy: $orderBy, filters: $filters) {
       resultCount
       totalCount
       lek {
@@ -95,6 +95,27 @@ query getUserDetails($id: ID!) {
     avatar {
       name
       url
+    }
+    investorProfileData {
+      employmentStatusInfo {
+        employmentStatus
+        employer
+        currentPosition
+      }
+      investorProfileType
+      financialInfo {
+        netWorth
+        annualIncomeThirdLastYear
+        annualIncomeLastYear
+        annualIncomeCurrentYear
+        directorShareHolderOfCompany
+        employedOrAssoWithFINRAFirmName
+      }
+      investmentExperienceInfo {
+        investmentExperienceLevel
+        readyInvestingInLimitedLiquiditySecurities
+        readyForRisksInvolved
+      }
     }
     accountStatus 
   }

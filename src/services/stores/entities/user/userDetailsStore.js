@@ -7,7 +7,12 @@ import { isEmpty, difference } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as client2 } from '../../../../api/gcoolApi';
 import {
-  uiStore, identityStore, individualAccountStore, iraAccountStore, entityAccountStore,
+  uiStore,
+  identityStore,
+  individualAccountStore,
+  iraAccountStore,
+  entityAccountStore,
+  investorProfileStore,
 } from '../../index';
 import { FIN_INFO } from '../../../../constants/user';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
@@ -53,6 +58,7 @@ export class UserDetailsStore {
       iraAccountStore.populateData(this.userDetails);
       individualAccountStore.populateData(this.userDetails);
       entityAccountStore.populateData(this.userDetails);
+      investorProfileStore.populateData(this.userDetails);
     }
   }
 

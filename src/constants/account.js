@@ -361,14 +361,14 @@ export const ACC_TYPE = {
 export const EMPLOYMENT = {
   employmentStatus: {
     key: 'employmentStatus',
-    value: 'employed',
+    value: 'EMPLOYED',
     values:
       [
-        { label: 'Employed', value: 'employed' },
-        { label: 'Self Employed', value: 'selfemployed' },
-        { label: 'Retired', value: 'retired' },
-        { label: 'Student', value: 'student' },
-        { label: 'Not Employee', value: 'notemployee' },
+        { label: 'Employed', value: 'EMPLOYED' },
+        { label: 'Self Employed', value: 'SELF_EMPLOYED' },
+        { label: 'Retired', value: 'RETIRED' },
+        { label: 'Student', value: 'STUDENT' },
+        { label: 'Not Employee', value: 'NOT_EMPLOYED' },
       ],
     error: undefined,
     rule: 'required',
@@ -392,9 +392,9 @@ export const EMPLOYMENT = {
 };
 
 export const INVESTOR_PROFILE = {
-  profileType: {
-    value: 'individual',
-    values: [{ label: 'Individual', value: 'individual' }, { label: 'Joint(Married)', value: 'joint' }],
+  investorProfileType: {
+    value: 'INDIVIDUAL',
+    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint(Married)', value: 'JOINT' }],
     error: undefined,
     rule: 'required',
   },
@@ -408,21 +408,21 @@ export const FINANCES = {
     rule: 'required',
     placeHolder: 'Net Worth',
   },
-  annualIncome1: {
+  annualIncomeThirdLastYear: {
     value: '',
     label: 'Annual Income 2016',
     error: undefined,
     rule: 'required',
     placeHolder: '$60,000',
   },
-  annualIncome2: {
+  annualIncomeLastYear: {
     value: '',
     label: 'Annual Income 2017',
     error: undefined,
     rule: 'required',
     placeHolder: '$60,000',
   },
-  annualIncome3: {
+  annualIncomeCurrentYear: {
     value: '',
     label: 'Annual Income 2018',
     error: undefined,
@@ -451,13 +451,13 @@ export const FINANCES = {
     error: undefined,
     rule: 'alpha',
   },
-  companyName: {
+  directorShareHolderOfCompany: {
     value: '',
     label: 'Company Name',
     error: undefined,
     rule: 'required_with:checkbox1',
   },
-  firmName: {
+  employedOrAssoWithFINRAFirmName: {
     value: '',
     label: 'Firm Name',
     error: undefined,
@@ -466,29 +466,29 @@ export const FINANCES = {
 };
 
 export const INVESTMENT_EXPERIENCE = {
-  experienceInfo: {
-    value: '1',
-    values: [{ label: 'No experience', value: '1' }, { label: 'I know what I’m doing', value: '2' }, { label: 'I have some experience', value: '3' }, { label: 'I’m an expert', value: '4' }],
+  investmentExperienceLevel: {
+    value: 'NO_EXPERINCE',
+    values: [{ label: 'No experience', value: 'NO_EXPERINCE' }, { label: 'I know what I’m doing', value: 'KNOW_AWARE' }, { label: 'I have some experience', value: 'SOME_EXPERIENCE' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
   },
-  checkbox1: {
+  readyInvestingInLimitedLiquiditySecurities: {
     value: [],
     values: [
       {
         label: 'Investing in private business is not for investors with short-term time horizons.  Are you comfortable investing in securities that have limited liquidty?',
-        value: 'checkbox',
+        value: 'checked',
       },
     ],
     error: undefined,
     rule: 'alpha',
   },
-  checkbox2: {
+  readyForRisksInvolved: {
     value: [],
     values: [
       {
         label: 'Investing in private business involves risk. When investing on NextSeed, are you willing to take on significant risk to potentially earn a return in your investment?',
-        value: 'checkbox',
+        value: 'checked',
       },
     ],
     error: undefined,

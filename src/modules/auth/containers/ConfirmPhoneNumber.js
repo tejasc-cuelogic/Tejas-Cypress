@@ -13,7 +13,8 @@ import { ListErrors } from '../../../theme/shared';
 export default class ConfirmPhoneNumber extends Component {
   componentWillMount() {
     if (this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
-      if (this.props.userDetailsStore.userDetails.contactDetails.phone) {
+      if (this.props.userDetailsStore.userDetails.contactDetails &&
+        this.props.userDetailsStore.userDetails.contactDetails.phone) {
         const fieldValue =
         Helper.maskPhoneNumber(this.props.userDetailsStore.userDetails.contactDetails.phone.number);
         this.props.identityStore.phoneNumberChange(fieldValue);

@@ -23,7 +23,7 @@ export default class Employment extends Component {
             changed={employmentChange}
             containerclassname="button-radio center-align"
           />
-          {EMPLOYMENT_FORM.fields.employmentStatus.value === 'employed' &&
+          {EMPLOYMENT_FORM.fields.employmentStatus.value === 'EMPLOYED' &&
           <div className="field-wrap">
             <Form.Group widths="equal">{
               ['employer', 'currentPosition'].map(field => (
