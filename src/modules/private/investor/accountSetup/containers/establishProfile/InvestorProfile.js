@@ -19,8 +19,8 @@ export default class InvestorProfile extends Component {
         </Header>
         <Form error>
           <FormRadioGroup
-            fielddata={INVESTOR_PROFILE_FORM.fields.profileType}
-            name="profileType"
+            fielddata={INVESTOR_PROFILE_FORM.fields.investorProfileType}
+            name="investorProfileType"
             changed={investorProfileChange}
             containerclassname="button-radio center-align"
           />

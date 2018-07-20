@@ -56,12 +56,6 @@ class IraAccountStore {
   }
 
   @action
-  finCurrencyValueChange = (values) => {
-    const { value } = values;
-    console.log(value);
-  }
-
-  @action
   accTypesChange = (e, result) => {
     this.formChange(e, result, 'ACC_TYPES_FRM');
   }

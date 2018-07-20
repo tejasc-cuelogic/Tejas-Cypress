@@ -54,3 +54,38 @@ export const getPlaidAccountdata = gql`
     plaidItemId
     }
   }`;
+
+export const updateInvestorProfileData = gql`
+  mutation _updateInvestorProfileData($employmentStatusInfo: EmploymentStatusInput $investorProfileType: InvestorProfileTypeEnum $financialInfo: InvestorFinInfoInput $investmentExperienceInfo: InvestmentExperienceInput) {
+    createInvestorProfile(
+      employmentStatusInfo: $employmentStatusInfo
+      investorProfileType: $investorProfileType
+      financialInfo: $financialInfo
+      investmentExperienceInfo: $investmentExperienceInfo
+    ) {
+      id
+      investorProfileData {
+        employmentStatusInfo {
+          employmentStatus
+          employer
+          currentPosition
+        }
+
+        investorProfileType
+        financialInfo {
+          netWorth
+          annualIncomeThirdLastYear
+          annualIncomeLastYear
+          annualIncomeCurrentYear
+          directorShareHolderOfCompany
+          employedOrAssoWithFINRAFirmName
+        }
+
+        investmentExperienceInfo {
+          investmentExperienceLevel
+          readyInvestingInLimitedLiquiditySecurities
+          readyForRisksInvolved
+        }
+      }
+    }
+  }`;

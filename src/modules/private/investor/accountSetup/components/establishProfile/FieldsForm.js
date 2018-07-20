@@ -10,8 +10,8 @@ const FieldsForm = observer(({
     <Modal.Content className="signup-content">
       <Form onSubmit={handleFormSubmit}>
         <FormInput
-          fielddata={chkboxTicked === 'checkbox1' ? form.fields.companyName : form.fields.firmName}
-          name={chkboxTicked === 'checkbox1' ? 'companyName' : 'firmName'}
+          fielddata={chkboxTicked === 'checkbox1' ? form.fields.directorShareHolderOfCompany : form.fields.employedOrAssoWithFINRAFirmName}
+          name={chkboxTicked === 'checkbox1' ? 'directorShareHolderOfCompany' : 'employedOrAssoWithFINRAFirmName'}
           changed={financesChange}
         />
         <Button.Group>
