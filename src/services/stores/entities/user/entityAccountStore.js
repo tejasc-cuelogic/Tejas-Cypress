@@ -473,7 +473,7 @@ class EntityAccountStore {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this[form].fields[field].fileId = fileId;
       this[form].fields[field].preSignedUrl = preSignedUrl;
-      const payloadData = [this.PERSONAL_INFO_FRM.fields[field]];
+      const payloadData = [this[form].fields[field]];
       const fileData = Helper.getFormattedFileData(files);
       this[form] = FormValidator.onChange(
         this[form],

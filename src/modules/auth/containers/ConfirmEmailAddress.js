@@ -15,7 +15,8 @@ export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
     const { CONFIRM_FRM } = this.props.authStore;
     CONFIRM_FRM.fields.email.value = this.props.match.params.id;
-    CONFIRM_FRM.fields.password.value = localStorage.getItem('encryptedPwd');
+    const decryptedPwd = atob(localStorage.getItem('encryptedPwd'));
+    CONFIRM_FRM.fields.password.value = decryptedPwd;
   }
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
