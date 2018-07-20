@@ -22,74 +22,114 @@ export const securitySections = [
 
 export const USER_IDENTITY = {
   title: {
+    key: 'title',
     value: '',
     label: 'Title',
     placeHolder: 'Mrs',
     error: undefined,
     rule: 'string',
+    customErrors: {
+      required: '* required.',
+    },
   },
   firstLegalName: {
+    key: 'firstLegalName',
     value: '',
     label: 'First Name (Legal)',
     placeHolder: 'John',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   lastLegalName: {
+    key: 'lastLegalName',
     value: '',
     label: 'Last Name (Legal)',
     placeHolder: 'Smith',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   residentalStreet: {
+    key: 'residentalStreet',
     value: '',
     label: 'Residential Address',
     placeHolder: 'Baker Street 221B',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   city: {
+    key: 'city',
     value: '',
     label: 'City',
     placeHolder: 'New York',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   state: {
+    key: 'state',
     value: '',
     label: 'State',
     placeHolder: 'NY',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   zipCode: {
+    key: 'zipCode',
     value: '',
     label: 'Zip Code',
     placeHolder: '10011',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   phoneNumber: {
+    key: 'phoneNumber',
     value: '',
     label: 'Phone Number',
     placeHolder: '123-456-7890',
     error: undefined,
     rule: 'required|maskedPhoneNumber',
+    customErrors: {
+      required: '* required.',
+    },
   },
   dateOfBirth: {
+    key: 'dateOfBirth',
     value: '',
     label: 'Date of Birth',
     placeHolder: 'Select date',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
   },
   ssn: {
+    key: 'ssn',
     value: '',
     label: 'Social Security Number',
     placeHolder: '123-456-7890',
     error: undefined,
     rule: 'required|maskedSSN',
+    customErrors: {
+      required: '* required.',
+    },
   },
 };
 

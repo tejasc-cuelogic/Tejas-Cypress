@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { mapValues, keyBy, find, flatMap } from 'lodash';
+import { mapValues, keyBy, find, flatMap, map } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
@@ -7,6 +7,7 @@ import { uiStore, userStore, userDetailsStore } from '../../index';
 import { verifyCIPUser, updateUserCIPInfo, startUserPhoneVerification, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
+import validationService from '../../../../api/validation';
 import { accountActions } from '../../../actions';
 import { COUNTRY_CODES } from '../../../../constants/profile';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
@@ -79,10 +80,10 @@ export class IdentityStore {
   }
 
   @action
-  phoneVerificationChange = (e, result) => {
+  phoneVerificationChange = (e) => {
     this.ID_PHONE_VERIFICATION = FormValidator.onChange(
       this.ID_PHONE_VERIFICATION,
-      FormValidator.pullValues(e, result),
+      { name: 'code', value: e },
     );
   };
 
@@ -129,7 +130,7 @@ export class IdentityStore {
     const cipStatus = identityHelper.getCipStatus(key, questions);
     return cipStatus;
   }
-
+  @action
   verifyUserIdentity = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -500,6 +501,16 @@ export class IdentityStore {
       this.ID_PROFILE_INFO,
       { name: field, value },
     );
+  }
+
+  @action
+  setFormError = () => {
+    map(this.ID_VERIFICATION_FRM.fields, (value) => {
+      const { key } = value;
+      const { errors } = validationService.validate(value);
+      // store errors to store if any or else 'undefied' will get set to it
+      FormValidator.setFormError(this.ID_VERIFICATION_FRM, key, errors && errors[key][0]);
+    });
   }
 
   @action

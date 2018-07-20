@@ -107,7 +107,7 @@ const LegalDetails = observer(({
           changed={change}
         />
         <div className="center-align">
-          <Button loading={inProgress} size="large" color="green" className="very relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
+          <Button loading={inProgress} size="large" color="green" className="very relaxed" >Verify my identity</Button>
         </div>
         <div className="center-align">
           <Button className="cancel-link" onClick={close}>I’ll finish this later</Button>

@@ -83,6 +83,7 @@ export const IND_LINK_BANK_MANUALLY = {
     value: '',
     error: undefined,
     rule: 'required|numeric|digits:9',
+    placeHolder: '123456789',
     label: 'Enter your bank routing number',
     tooltip: 'Put your 9 digit bank routing number',
     maxLength: 9,
@@ -91,6 +92,7 @@ export const IND_LINK_BANK_MANUALLY = {
     key: 'accountNumber',
     value: '',
     error: undefined,
+    placeHolder: '123456789',
     rule: 'required|min:4|max:17',
     label: 'Enter your bank account number',
     tooltip: 'Put your 4 to 17 digit bank account number',
@@ -104,7 +106,7 @@ export const IND_ADD_FUND = {
     key: 'value',
     error: undefined,
     rule: 'required|numeric',
-    label: 'Value',
+    label: 'Deposit Amount',
     maxLength: 15,
   },
 };
@@ -214,6 +216,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
+    tooltip: ' Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the SEC`s Investor Bulletin for the latest information',
     label: 'Net worth',
     placeHolder: 'Your networth',
     maxLength: 15,
@@ -223,6 +226,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
+    tooltip: 'This includes your primary and ancillary income sources. Your joint income with your spouse can also be included.',
     label: 'Annual income',
     placeHolder: 'Your annual income',
     maxLength: 15,
@@ -272,13 +276,13 @@ export const ENTITY_GEN_INFO = {
     key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
   },
   city: {
-    key: 'city', value: '', label: 'City', error: undefined, rule: 'required|string',
+    key: 'city', value: '', placeHolder: 'New York', label: 'City', error: undefined, rule: 'required|string',
   },
   state: {
-    key: 'state', value: '', label: 'State', error: undefined, rule: 'required|string',
+    key: 'state', value: '', placeHolder: 'NY', label: 'State', error: undefined, rule: 'required|string',
   },
   zipCode: {
-    key: 'zipCode', value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric',
+    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: '1001', error: undefined, rule: 'required|numeric',
   },
 };
 
