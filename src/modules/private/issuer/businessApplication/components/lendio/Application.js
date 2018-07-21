@@ -8,12 +8,12 @@ import { FormInput, FormDropDown, FormCheckbox, MaskedInput2 } from '../../../..
 import FormElementWrap from '../FormElementWrap';
 import { LENDING_PARTNER_LENDIO } from '../../../../../../constants/business';
 
-@inject('newBusinessStore', 'uiStore')
+@inject('businessAppStore', 'uiStore')
 @observer
 export default class Application extends Component {
   submit = (e) => {
     e.preventDefault();
-    this.props.newBusinessStore.businessLendioPreQual();
+    this.props.businessAppStore.businessLendioPreQual();
     Helper.toast('Business pre-qualification request submitted!', 'success');
     this.props.history.push('/business-application/success/lendio');
   }
@@ -21,7 +21,7 @@ export default class Application extends Component {
     const {
       LENDIO_QUAL_FRM,
       lendioEleChange,
-    } = this.props.newBusinessStore;
+    } = this.props.businessAppStore;
     const { fields } = LENDIO_QUAL_FRM;
     const checkIsPresent = _.indexOf(fields.applicationAgreeConditions.value, 'agreeConditions');
     return (

@@ -6,7 +6,7 @@ import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { ListErrors } from '../../../../../theme/shared';
 // import { Helper } from '../../../../../helper/utility';
 
-@inject('newBusinessStore', 'uiStore')
+@inject('businessAppStore', 'uiStore')
 @withRouter
 @observer
 export default class ConfirmModal extends Component {

@@ -20,19 +20,19 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('newBusinessStore', 'uiStore', 'navStore')
+@inject('businessAppStore', 'uiStore', 'navStore')
 @observer
 export default class BusinessApplication extends Component {
   componentWillMount() {
-    this.props.newBusinessStore.setCurrentApplicationId(this.props.match.params.applicationId);
+    this.props.businessAppStore.setCurrentApplicationId(this.props.match.params.applicationId);
     if (this.props.match.params.applicationId !== 'new' &&
-    this.props.newBusinessStore.isFetchedData !== this.props.match.params.applicationId) {
-      this.props.newBusinessStore.fetchApplicationDataById(this.props.match.params.applicationId);
-      this.props.newBusinessStore.setFetchedData(this.props.match.params.applicationId);
+    this.props.businessAppStore.isFetchedData !== this.props.match.params.applicationId) {
+      this.props.businessAppStore.fetchApplicationDataById(this.props.match.params.applicationId);
+      this.props.businessAppStore.setFetchedData(this.props.match.params.applicationId);
       // this.props.history.replace(`${this.props.match.url}/pre-qualification`);
     } else if (this.props.match.params.applicationId === 'new') {
       this.props.navStore.setAccessParams('appStatus', 'NEW');
-      this.props.newBusinessStore.formReset();
+      this.props.businessAppStore.formReset();
     }
   }
 
@@ -42,14 +42,14 @@ export default class BusinessApplication extends Component {
 
   submitSaveContinue = (e) => {
     e.preventDefault();
-    this.props.newBusinessStore.businessAppParitalSubmit().then(() => {
+    this.props.businessAppStore.businessAppParitalSubmit().then(() => {
       Helper.toast('Business application saved!', 'success');
       this.props.history.push('/app/dashboard');
     });
   }
 
   submit = () => {
-    this.props.newBusinessStore.businessApplicationSubmitAction().then(() => {
+    this.props.businessAppStore.businessApplicationSubmitAction().then(() => {
       Helper.toast('Business application submitted successfully!', 'success');
       this.props.history.push('/app/dashboard');
     });
@@ -58,7 +58,7 @@ export default class BusinessApplication extends Component {
   render() {
     const { match } = this.props;
     const { pathname } = this.props.location;
-    const { canSubmitApp, appStepsStatus } = this.props.newBusinessStore;
+    const { canSubmitApp, appStepsStatus } = this.props.businessAppStore;
     const showSubNav = (includes(pathname, 'pre-qualification') && appStepsStatus[0] === 'IN_PROGRESS')
       || includes(pathname, 'failed') || includes(pathname, 'success') || includes(pathname, 'lendio');
     const preQualPage = includes(pathname, 'pre-qualification');

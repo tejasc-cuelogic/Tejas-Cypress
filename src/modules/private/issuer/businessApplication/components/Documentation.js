@@ -5,11 +5,11 @@ import { FormRadioGroup, DropZone } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('newBusinessStore')
+@inject('businessAppStore')
 @observer
 export default class Documentation extends Component {
   componentWillMount() {
-    this.props.newBusinessStore.setApplicationStep('documentation');
+    this.props.businessAppStore.setApplicationStep('documentation');
   }
   submit = () => {
     // e.preventDefault();
@@ -25,7 +25,7 @@ export default class Documentation extends Component {
       canSubmitApp,
       getBusinessTypeCondtion,
       getGuaranteeCondtion,
-    } = this.props.newBusinessStore;
+    } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
     const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
     const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];

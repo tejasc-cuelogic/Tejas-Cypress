@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Grid, Icon, Header, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-@inject('newBusinessStore', 'uiStore')
+@inject('businessAppStore', 'uiStore')
 @observer
 class Success extends Component {
   render() {

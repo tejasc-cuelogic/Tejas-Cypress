@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Grid, Icon, Header, Divider } from 'semantic-ui-react';
 import Initialise from './lendio/Initialise';
 
-@inject('newBusinessStore')
+@inject('businessAppStore')
 @observer
 export default class Failure extends Component {
   render() {
@@ -26,7 +26,7 @@ export default class Failure extends Component {
           </p>
           <Divider section hidden />
           {reason && reason === 'lendio' &&
-            <Initialise applicationId={this.props.newBusinessStore.currentApplicationId} />
+            <Initialise applicationId={this.props.businessAppStore.currentApplicationId} />
           }
         </Grid.Column>
       </Grid>

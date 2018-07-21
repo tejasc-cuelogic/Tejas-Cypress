@@ -7,7 +7,7 @@ import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 // import Helper from '../../../../helper/utility';
 
-@inject('newBusinessStore')
+@inject('businessAppStore')
 @observer
 export default class BusinessDetails extends Component {
   state = {
@@ -18,12 +18,12 @@ export default class BusinessDetails extends Component {
   }
 
   componentWillMount() {
-    this.props.newBusinessStore.setApplicationStep('business-details');
+    this.props.businessAppStore.setApplicationStep('business-details');
   }
 
   removeForm = (e) => {
     this.setState({ showConfirmModal: !this.state.showConfirmModal });
-    this.props.newBusinessStore.removeForm(e, this.state.currentForm, this.state.currentIndex);
+    this.props.businessAppStore.removeForm(e, this.state.currentForm, this.state.currentIndex);
   }
 
   toggleHandel = () => {
@@ -51,7 +51,7 @@ export default class BusinessDetails extends Component {
       businessAppRemoveFiles,
       addMoreForms,
       businessDetailsMaskingChange,
-    } = this.props.newBusinessStore;
+    } = this.props.businessAppStore;
     return (
       <Grid container>
         <Grid.Column>

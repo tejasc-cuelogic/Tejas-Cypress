@@ -10,13 +10,13 @@ import {
 } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 
-@inject('newBusinessStore', 'uiStore')
+@inject('businessAppStore', 'uiStore')
 @observer
 export default class PreQualification extends Component {
   submit = (e) => {
     e.preventDefault();
-    this.props.newBusinessStore.businessPreQualificationFormSumbit().then(() => {
-      const url = this.props.newBusinessStore.getBusinessAppStepUrl;
+    this.props.businessAppStore.businessPreQualificationFormSumbit().then(() => {
+      const url = this.props.businessAppStore.getBusinessAppStepUrl;
       Helper.toast('Business pre-qualification request submitted!', 'success');
       this.props.history.push(`/app/business-application/${url}`);
     });
@@ -27,7 +27,7 @@ export default class PreQualification extends Component {
       businessAppEleMaskChange, getFranchiseCondition,
       getBusinessTypeCondtion,
       preQualFormDisabled,
-    } = this.props.newBusinessStore;
+    } = this.props.businessAppStore;
     const { fields } = BUSINESS_APP_FRM;
     return (
       <Grid container>

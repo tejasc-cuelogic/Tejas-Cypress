@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import Helper from '../../../../../helper/utility';
 
-@inject('newBusinessStore')
+@inject('businessAppStore')
 @withRouter
 @observer
 export default class AppNavigation extends Component {
@@ -19,24 +19,24 @@ export default class AppNavigation extends Component {
   }
   actualSubmit = (where) => {
     if (where) {
-      if (this.props.newBusinessStore.checkFormisValid(`${this.state.navItems[this.state.step].to}`)) {
+      if (this.props.businessAppStore.checkFormisValid(`${this.state.navItems[this.state.step].to}`)) {
         this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
         this.props.action();
-        this.props.history.push(`/app/business-application/${this.props.newBusinessStore.currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
+        this.props.history.push(`/app/business-application/${this.props.businessAppStore.currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
       } else {
-        this.props.history.push(`/app/business-application/${this.props.newBusinessStore.currentApplicationId}/confirm`);
+        this.props.history.push(`/app/business-application/${this.props.businessAppStore.currentApplicationId}/confirm`);
       }
     }
   }
 
   submitSaveContinue = (stepUrl) => {
-    this.props.newBusinessStore.businessAppParitalSubmit(stepUrl).then(() => {
+    this.props.businessAppStore.businessAppParitalSubmit(stepUrl).then(() => {
     });
   }
 
   submit = (e) => {
     e.preventDefault();
-    this.props.newBusinessStore.businessApplicationSubmitAction().then(() => {
+    this.props.businessAppStore.businessApplicationSubmitAction().then(() => {
       Helper.toast('Business application submitted successfully!', 'success');
       this.props.history.push('/app/dashboard');
     });

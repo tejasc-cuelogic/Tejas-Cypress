@@ -30,7 +30,7 @@ import {
 import { uiStore, navStore, userStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
-export class NewBusinessStore {
+export class BusinessAppStore {
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
   @observable BUSINESS_ACCOUNT =Validator.prepareFormObject(BUSINESS_SIGNUP);
   @observable BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
@@ -1035,4 +1035,4 @@ export class NewBusinessStore {
   };
 }
 
-export default new NewBusinessStore();
+export default new BusinessAppStore();

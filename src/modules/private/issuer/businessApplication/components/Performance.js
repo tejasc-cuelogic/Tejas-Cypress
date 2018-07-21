@@ -5,11 +5,11 @@ import { MaskedInput2, DropZone } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('newBusinessStore')
+@inject('businessAppStore')
 @observer
 export default class Performance extends Component {
   componentWillMount() {
-    this.props.newBusinessStore.setApplicationStep('performance');
+    this.props.businessAppStore.setApplicationStep('performance');
   }
   submit = () => {
     // e.preventDefault();
@@ -22,7 +22,7 @@ export default class Performance extends Component {
       BUSINESS_PERF_FRM,
       businessPerfMaskingChange, getBusinessTypeCondtion,
       businessAppUploadFiles, businessAppRemoveFiles,
-    } = this.props.newBusinessStore;
+    } = this.props.businessAppStore;
     const { fields } = BUSINESS_PERF_FRM;
     const statmentConst = getBusinessTypeCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
     return (

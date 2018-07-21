@@ -5,15 +5,15 @@ import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
 
-@inject('newBusinessStore', 'uiStore')
+@inject('businessAppStore', 'uiStore')
 @observer
 export default class ApplicationList extends Component {
   componentWillMount() {
-    this.props.newBusinessStore.getBusinessApplications();
-    this.props.newBusinessStore.setFetchedData(null);
+    this.props.businessAppStore.getBusinessApplications();
+    this.props.businessAppStore.setFetchedData(null);
   }
   render() {
-    const { fetchBusinessApplication } = this.props.newBusinessStore;
+    const { fetchBusinessApplication } = this.props.businessAppStore;
     return (
       <Aux>
         <Header as="h3">Applications</Header>

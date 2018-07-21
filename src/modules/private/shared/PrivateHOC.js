@@ -5,12 +5,12 @@ import { Grid, Header, Icon } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
 
-@inject('uiStore', 'navStore', 'newBusinessStore')
+@inject('uiStore', 'navStore', 'businessAppStore')
 @observer
 class PrivateHOC extends Component {
   render() {
     const pageMeta = this.props.navStore.navMeta;
-    const { appStepsStatus } = this.props.newBusinessStore;
+    const { appStepsStatus } = this.props.businessAppStore;
     if (!pageMeta) {
       return <NotFound />;
     }
