@@ -5,7 +5,7 @@ import { sumBy, forEach } from 'lodash';
 class CustomValidations extends Component {
   loadCustomValidations = (form) => {
     const currentForm = form;
-    Validator.register('maskedSSN', value => value.toString().match(/^\d{3}-\d{2}-\d{4}$/), 'The SSN is not in the format XXX-XX-XXXX.');
+    Validator.register('maskedSSN', value => value.toString().length === 9);
     /* Optional field validation register */
     Validator.register('optional', () => true);
 

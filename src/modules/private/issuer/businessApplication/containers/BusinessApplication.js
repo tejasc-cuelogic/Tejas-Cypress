@@ -24,15 +24,19 @@ const getModule = component => Loadable({
 @observer
 export default class BusinessApplication extends Component {
   componentWillMount() {
-    this.props.businessAppStore.setCurrentApplicationId(this.props.match.params.applicationId);
-    if (this.props.match.params.applicationId !== 'new' &&
-    this.props.businessAppStore.isFetchedData !== this.props.match.params.applicationId) {
-      this.props.businessAppStore.fetchApplicationDataById(this.props.match.params.applicationId);
-      this.props.businessAppStore.setFetchedData(this.props.match.params.applicationId);
-      // this.props.history.replace(`${this.props.match.url}/pre-qualification`);
-    } else if (this.props.match.params.applicationId === 'new') {
+    const { params } = this.props.match;
+    const {
+      setCurrentApplicationId, isFetchedData, fetchApplicationDataById, setFetchedAppId, formReset,
+      // calculateStepToRender,
+    } = this.props.businessAppStore;
+    setCurrentApplicationId(params.applicationId);
+    if (params.applicationId !== 'new' && isFetchedData !== params.applicationId) {
+      fetchApplicationDataById(params.applicationId);
+      setFetchedAppId(params.applicationId);
+      // this.props.history.replace(`${this.props.match.url}/${calculateStepToRender}`);
+    } else if (params.applicationId === 'new') {
       this.props.navStore.setAccessParams('appStatus', 'NEW');
-      this.props.businessAppStore.formReset();
+      formReset();
     }
   }
 

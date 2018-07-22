@@ -7,10 +7,6 @@ import { inject, observer } from 'mobx-react';
 @observer
 class Success extends Component {
   render() {
-    // const {
-    //   BUSINESS_ACCOUNT, businessAccEleChange,
-    // } = this.props.businessAppStore;
-    // const { fields } = BUSINESS_ACCOUNT;
     return (
       <Grid.Column className="issuer-signup">
         <Icon className="ns-paper-plane" size="massive" color="green" />

@@ -10,7 +10,7 @@ import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
 export default class ApplicationList extends Component {
   componentWillMount() {
     this.props.businessAppStore.getBusinessApplications();
-    this.props.businessAppStore.setFetchedData(null);
+    this.props.businessAppStore.setFetchedAppId(null);
   }
   render() {
     const { fetchBusinessApplication } = this.props.businessAppStore;

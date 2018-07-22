@@ -39,7 +39,6 @@ export class BusinessAppStore {
   @observable LENDIO_QUAL_FRM = Validator.prepareFormObject(LENDIO_PRE_QUAL);
   @observable BUSINESS_APP_STATUS = '';
   @observable preQualFormDisabled = false;
-  @observable BUSINESS_APP_STEP_URL = 'new/pre-qualification';
   @observable BUSINESS_APPLICATION_DATA = null;
   @observable isPartialData = null;
   @observable applicationId = null;
@@ -52,12 +51,7 @@ export class BusinessAppStore {
   @observable appStepsStatus = ['IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS'];
 
   @action
-  businessAccEleChange = (e, result) => {
-    this.LOGIN_FRM = Validator.onChange(this.LOGIN_FRM, Validator.pullValues(e, result));
-  };
-
-  @action
-  setFetchedData = (val) => {
+  setFetchedAppId = (val) => {
     this.isFetchedData = val;
   };
 
@@ -89,21 +83,13 @@ export class BusinessAppStore {
     return status;
   }
 
-  @computed get getGuaranteeCondtion() {
+  @computed get getPersonalGuaranteeCondtion() {
     return this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true';
   }
 
   @action
-  setBusinessAppStepUrl = (url) => {
-    this.BUSINESS_APP_STEP_URL = url;
-  }
-  @action
   setBusinessAppStatus = (status) => {
     this.BUSINESS_APP_STATUS = status;
-  }
-
-  @computed get getBusinessAppStepUrl() {
-    return this.BUSINESS_APP_STEP_URL;
   }
 
   @action
@@ -140,7 +126,7 @@ export class BusinessAppStore {
 
   @computed get calculateStepToRender() {
     const data = this.fetchBusinessApplicationsDataById;
-    let url = 'business-details';
+    let url = 'pre-qualification';
     if (data && data.businessApplication) {
       if (data.businessApplication.businessDetails && data.businessApplication.businessDetails.stepStatus === 'IN_PROGRESS') {
         url = 'business-details';
@@ -158,8 +144,8 @@ export class BusinessAppStore {
     this.formReset();
     const data = this.fetchBusinessApplicationsDataById;
     this.setPrequalDetails(data.prequalDetails);
-    this.setbusinessDetails(data.businessDetails);
-    this.setperformanceDetails(data.businessPerformance, data.prequalDetails);
+    this.setBusinessDetails(data.businessDetails);
+    this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
     this.setDocumentationDetails(data.businessDocumentation);
     navStore.setAccessParams('appStatus', this.fetchBusinessApplicationsStatusById);
     if (data.lendio) {
@@ -311,7 +297,7 @@ export class BusinessAppStore {
   }
 
   @action
-  setbusinessDetails = (data) => {
+  setBusinessDetails = (data) => {
     if (data) {
       this.appStepsStatus[1] = data.stepStatus;
       this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
@@ -348,7 +334,7 @@ export class BusinessAppStore {
   }
 
   @action
-  setperformanceDetails = (data, prequalData) => {
+  setPerformanceDetails = (data, prequalData) => {
     if (data) {
       this.appStepsStatus[2] = data.stepStatus;
       this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
@@ -588,8 +574,8 @@ export class BusinessAppStore {
       planDocs: this.getFilesArray(data.businessPlan.value, data.businessPlan),
       debts: data.debts.map(item => ({
         amount: this.getValidDataForInt(item.amount),
-        interestExpenses: item.interestExpenses.value !== '' ? parseInt(item.interestExpenses.value, 10) : 0,
-        remainingPrincipal: item.remainingPrincipal.value !== '' ? parseInt(item.remainingPrincipal.value, 10) : 0,
+        interestExpenses: this.getValidDataForInt(item.interestExpenses),
+        remainingPrincipal: this.getValidDataForInt(item.remainingPrincipal),
         term: this.getValidDataForInt(item.term),
       })),
       owners: data.owners.map(item => ({
@@ -788,7 +774,7 @@ export class BusinessAppStore {
           }
 
           const applicationId = result.data.createBusinessApplicationPrequalification.id;
-          this.setFetchedData(null);
+          this.setFetchedAppId(null);
           if (this.BUSINESS_APP_STATUS ===
               BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED) {
             this.setBusinessAppStepUrl(`${applicationId}/success`);
@@ -862,19 +848,18 @@ export class BusinessAppStore {
       applicationId: this.currentApplicationId,
       isPartialData: isPartialDataFlag,
       businessGoal: this.BUSINESS_APP_FRM.fields.businessGoal.value,
+      applicationStep: stepName,
     };
     if (stepName === 'BUSINESS_DETAILS') {
       variableData = {
         ...variableData,
         businessDetails: data,
-        applicationStep: stepName,
       };
     } else if (stepName === 'PERFORMANCE') {
       data = this.getFormatedPerformanceData;
       variableData = {
         ...variableData,
         businessPerformance: data,
-        applicationStep: stepName,
       };
       mutationQuery = upsertBusinessApplicationInformationPerformance;
     } else if (stepName === 'DOCUMENTATION') {
@@ -882,7 +867,6 @@ export class BusinessAppStore {
       variableData = {
         ...variableData,
         businessDocumentation: data,
-        applicationStep: stepName,
       };
       mutationQuery = upsertBusinessApplicationInformationDocumentation;
     }
@@ -932,7 +916,7 @@ export class BusinessAppStore {
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
-        const stepName = this.getStepName(fieldName, index);
+        const stepName = this.getFileUploadEnum(fieldName, index);
         fileUpload.setFileUploadData(this.currentApplicationId, fileData, stepName, 'ISSUER').then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           Helper.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
@@ -949,7 +933,7 @@ export class BusinessAppStore {
   }
 
   @action
-  getStepName = (fieldName, index) => {
+  getFileUploadEnum = (fieldName, index) => {
     let step = '';
     if (fieldName === 'resume') {
       step = BUSINESS_APP_FILE_UPLOAD_ENUMS[`${fieldName}${index + 1}`];
