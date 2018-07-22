@@ -138,30 +138,6 @@ export class BusinessAppStore {
     });
   }
 
-  @computed get getBusinessAppStepStatus() {
-    let stepStatus = [];
-    const data = this.fetchBusinessApplicationsDataById;
-    if (data && data.businessApplication) {
-      if (data.businessApplication.businessDetails) {
-        stepStatus = [
-          ...stepStatus,
-          { businessDetails: data.businessApplication.businessDetails.stepStatus },
-        ];
-      } else if (data.businessApplication.businessPerformance) {
-        stepStatus = [
-          ...stepStatus,
-          { performance: data.businessApplication.businessPerformance.stepStatus },
-        ];
-      } else if (data.businessApplication.businessDocumentation) {
-        stepStatus = [
-          ...stepStatus,
-          { documentation: data.businessApplication.businessDocumentation.stepStatus },
-        ];
-      }
-    }
-    return stepStatus;
-  }
-
   @computed get calculateStepToRender() {
     const data = this.fetchBusinessApplicationsDataById;
     let url = 'business-details';
@@ -285,6 +261,14 @@ export class BusinessAppStore {
   };
 
   @action
+  resetFileObj = (obj) => {
+    const field = obj;
+    field.value = [];
+    field.fileId = [];
+    field.rule = 'required';
+  }
+
+  @action
   setPrequalDetails = (data) => {
     if (data) {
       this.appStepsStatus[0] = 'COMPLETE';
@@ -353,13 +337,12 @@ export class BusinessAppStore {
         }
       });
       if (data.planDocs && data.planDocs.length) {
-        this.BUSINESS_DETAILS_FRM.fields.businessPlan.value = [];
-        this.BUSINESS_DETAILS_FRM.fields.businessPlan.fileId = [];
+        this.resetFileObj(this.BUSINESS_DETAILS_FRM.fields.businessPlan);
+        data.planDocs.forEach((ele) => {
+          this.BUSINESS_DETAILS_FRM.fields.businessPlan.value.push(ele.fileName);
+          this.BUSINESS_DETAILS_FRM.fields.businessPlan.fileId.push(ele.fileId);
+        });
       }
-      data.planDocs.forEach((ele) => {
-        this.BUSINESS_DETAILS_FRM.fields.businessPlan.value.push(ele.fileName);
-        this.BUSINESS_DETAILS_FRM.fields.businessPlan.fileId.push(ele.fileId);
-      });
     }
     Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
   }
@@ -371,14 +354,12 @@ export class BusinessAppStore {
       this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
       ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
         const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
-        this.BUSINESS_PERF_FRM.fields[field[key]].value =
-          data.performance.nextYearSnapshot[ele];
+        this.BUSINESS_PERF_FRM.fields[field[key]].value = data.performance.nextYearSnapshot[ele];
       });
       if (this.getBusinessTypeCondtion) {
         ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
           const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
-          this.BUSINESS_PERF_FRM.fields[field[key]].value =
-            data.performance.pastYearSnapshot[ele];
+          this.BUSINESS_PERF_FRM.fields[field[key]].value = data.performance.pastYearSnapshot[ele];
           this.BUSINESS_PERF_FRM.fields[field[key]].rule = 'required';
         });
       } else {
@@ -389,24 +370,21 @@ export class BusinessAppStore {
 
       if (data.financialStatements.fiveYearProjection &&
         data.financialStatements.fiveYearProjection.length) {
-        this.BUSINESS_PERF_FRM.fields.fiveYearProjection.value = [];
-        this.BUSINESS_PERF_FRM.fields.fiveYearProjection.fileId = [];
+        this.resetFileObj(this.BUSINESS_PERF_FRM.fields.fiveYearProjection);
+        data.financialStatements.fiveYearProjection.forEach((ele) => {
+          this.BUSINESS_PERF_FRM.fields.fiveYearProjection.value.push(ele.fileName);
+          this.BUSINESS_PERF_FRM.fields.fiveYearProjection.fileId.push(ele.fileId);
+        });
       }
-      data.financialStatements.fiveYearProjection.forEach((ele) => {
-        this.BUSINESS_PERF_FRM.fields.fiveYearProjection.value.push(ele.fileName);
-        this.BUSINESS_PERF_FRM.fields.fiveYearProjection.fileId.push(ele.fileId);
-      });
       if (this.getBusinessTypeCondtion) {
         ['priorToThreeYear', 'ytd'].forEach((field) => {
           if (data.financialStatements[field] && data.financialStatements[field].length) {
-            this.BUSINESS_PERF_FRM.fields[field].value = [];
-            this.BUSINESS_PERF_FRM.fields[field].fileId = [];
-            this.BUSINESS_PERF_FRM.fields[field].rule = 'required';
+            this.resetFileObj(this.BUSINESS_PERF_FRM.fields[field]);
+            data.financialStatements[field].forEach((ele) => {
+              this.BUSINESS_PERF_FRM.fields[field].value.push(ele.fileName);
+              this.BUSINESS_PERF_FRM.fields[field].fileId.push(ele.fileId);
+            });
           }
-          data.financialStatements[field].forEach((ele) => {
-            this.BUSINESS_PERF_FRM.fields[field].value.push(ele.fileName);
-            this.BUSINESS_PERF_FRM.fields[field].fileId.push(ele.fileId);
-          });
         });
       } else {
         ['priorToThreeYear', 'ytd'].forEach((ele) => {
@@ -441,40 +419,32 @@ export class BusinessAppStore {
       this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
       this.BUSINESS_DOC_FRM.fields.blanketLien.value = data.blanketLien !== '' ? data.blanketLien : '';
       this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGurantee !== '' ? data.providePersonalGurantee ? 'true' : 'false' : '';
-      if (!data.providePersonalGurantee) {
-        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.rule = '';
+      if (data.personalGuarantee && data.personalGuarantee.length) {
+        this.resetFileObj(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm);
+        data.personalGuarantee.forEach((ele) => {
+          this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.push(ele.fileName);
+          this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.fileId.push(ele.fileId);
+        });
       }
-      if (data.personalGuarantee &&
-        data.personalGuarantee.length) {
-        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value = [];
-        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.fileId = [];
-        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.rule = 'required';
-      }
-      data.personalGuarantee.forEach((ele) => {
-        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.push(ele.fileName);
-        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.fileId.push(ele.fileId);
-      });
 
       ['bankStatements', 'businessTaxReturns', 'leaseAgreementsOrLOIs', 'personalTaxReturns'].forEach((field, key) => {
         const formField = ['bankStatements', 'businessTaxReturn', 'leaseAgreementsOrLOIs', 'personalTaxReturn'];
         if (this.getBusinessTypeCondtion) {
           if (data[field] && data[field].length) {
-            this.BUSINESS_DOC_FRM.fields[formField[key]].value = [];
-            this.BUSINESS_DOC_FRM.fields[formField[key]].fileId = [];
+            this.resetFileObj(this.BUSINESS_DOC_FRM.fields[formField[key]]);
+            data[field].forEach((ele) => {
+              this.BUSINESS_DOC_FRM.fields[formField[key]].value.push(ele.fileName);
+              this.BUSINESS_DOC_FRM.fields[formField[key]].fileId.push(ele.fileId);
+            });
           }
-          data[field].forEach((ele) => {
-            this.BUSINESS_DOC_FRM.fields[formField[key]].value.push(ele.fileName);
-            this.BUSINESS_DOC_FRM.fields[formField[key]].fileId.push(ele.fileId);
-          });
         } else if (field === 'leaseAgreementsOrLOIs' || field === 'personalTaxReturns') {
           if (data[field] && data[field].length) {
-            this.BUSINESS_DOC_FRM.fields[formField[key]].value = [];
-            this.BUSINESS_DOC_FRM.fields[formField[key]].fileId = [];
+            this.resetFileObj(this.BUSINESS_DOC_FRM.fields[formField[key]]);
+            data[field].forEach((ele) => {
+              this.BUSINESS_DOC_FRM.fields[formField[key]].value.push(ele.fileName);
+              this.BUSINESS_DOC_FRM.fields[formField[key]].fileId.push(ele.fileId);
+            });
           }
-          data[field].forEach((ele) => {
-            this.BUSINESS_DOC_FRM.fields[formField[key]].value.push(ele.fileName);
-            this.BUSINESS_DOC_FRM.fields[formField[key]].fileId.push(ele.fileId);
-          });
         } else {
           this.BUSINESS_DOC_FRM.fields[formField[key]].rule = '';
         }
@@ -689,10 +659,10 @@ export class BusinessAppStore {
         data.businessTaxReturn.value,
         this.BUSINESS_DOC_FRM.fields.businessTaxReturn,
       ),
-      personalGuarantee: this.getFilesArray(
+      personalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true' ? this.getFilesArray(
         data.personalGuaranteeForm.value,
         this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
-      ),
+      ) : [],
       blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value !== '' ? this.BUSINESS_DOC_FRM.fields.blanketLien.value : false,
       providePersonalGurantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
     };

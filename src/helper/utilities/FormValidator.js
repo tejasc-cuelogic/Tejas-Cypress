@@ -1,7 +1,7 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
-import { mapValues, replace, sumBy, forEach, mapKeys, isArray, toArray, reduce } from 'lodash';
-import CustomeValidations from './CustomeValidations';
+import { mapValues, replace, mapKeys, isArray, toArray, reduce } from 'lodash';
+import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
 class FormValidator {
@@ -13,7 +13,7 @@ class FormValidator {
   });
 
   onChange = (form, element, type, isDirty = true) => {
-    CustomeValidations.execute();
+    CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let customErrMsg = {};
     if (element && element.name) {
@@ -51,7 +51,8 @@ class FormValidator {
   }
 
   validateForm = (form, isMultiForm = false) => {
-    CustomeValidations.execute();
+    console.log(form);
+    CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let validation;
     if (!isMultiForm) {
@@ -68,10 +69,11 @@ class FormValidator {
       );
     }
     currentForm.meta.isValid = validation.passes();
+    console.log(validation);
   }
 
   onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
-    CustomeValidations.execute();
+    CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let currentFormRelative;
     let fieldName = element.name;
@@ -103,15 +105,15 @@ class FormValidator {
         currentFormRelative[element.name].customErrors : {};
     }
     /* Beneficiary share percentage validation register */
-    Validator.register('sharePercentage', (value, requirement) => {
-      const total = sumBy(currentForm.fields[formName], currentValue =>
-        parseInt(currentValue[requirement].value, 10));
-      forEach(currentForm.fields[formName], (ele, key) => {
-        currentForm.fields[formName][key][requirement].error = total === 100 ?
-          undefined : true;
-      });
-      return total === 100 && value > 0;
-    }, 'The sum of :attribute percentages must be 100.');
+    // Validator.register('sharePercentage', (value, requirement) => {
+    //   const total = sumBy(currentForm.fields[formName], currentValue =>
+    //     parseInt(currentValue[requirement].value, 10));
+    //   forEach(currentForm.fields[formName], (ele, key) => {
+    //     currentForm.fields[formName][key][requirement].error = total === 100 ?
+    //       undefined : true;
+    //   });
+    //   return total === 100 && value > 0;
+    // }, 'The sum of :attribute percentages must be 100.');
     const formData = this.ExtractFormValues(toJS(currentForm.fields));
     const formRules = this.ExtractFormRules(toJS(currentForm.fields));
     const validation = new Validator(

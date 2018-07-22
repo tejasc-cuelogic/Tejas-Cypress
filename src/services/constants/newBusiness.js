@@ -271,10 +271,10 @@ export const BUSINESS_DETAILS = {
       value: '', label: 'Years Experience', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
     },
     ssn: {
-      value: '', label: 'SSN', error: undefined, rule: 'required', placeHolder: '123-456-7890', customErrors: { required: 'required' },
+      value: '', label: 'SSN', error: undefined, rule: 'required|maskedSSN', placeHolder: '123-456-7890', customErrors: { required: 'required' },
     },
     companyOwnerShip: {
-      value: '', label: 'Ownership of Company', error: undefined, rule: 'required', placeHolder: '40.0%', customErrors: { required: 'required' },
+      value: '', label: 'Ownership of Company', error: undefined, rule: 'required|ownerPercentage:companyOwnerShip', placeHolder: '40.0%', customErrors: { required: 'required' },
     },
     linkedInUrl: {
       value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional|url', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },
