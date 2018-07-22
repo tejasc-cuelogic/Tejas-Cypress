@@ -39,6 +39,7 @@ export class BusinessAppStore {
   @observable LENDIO_QUAL_FRM = Validator.prepareFormObject(LENDIO_PRE_QUAL);
   @observable BUSINESS_APP_STATUS = '';
   @observable preQualFormDisabled = false;
+  @observable BUSINESS_APP_STEP_URL = 'new/pre-qualification';
   @observable BUSINESS_APPLICATION_DATA = null;
   @observable isPartialData = null;
   @observable applicationId = null;
@@ -88,8 +89,16 @@ export class BusinessAppStore {
   }
 
   @action
+  setBusinessAppStepUrl = (url) => {
+    this.BUSINESS_APP_STEP_URL = url;
+  }
+  @action
   setBusinessAppStatus = (status) => {
     this.BUSINESS_APP_STATUS = status;
+  }
+
+  @computed get getBusinessAppStepUrl() {
+    return this.BUSINESS_APP_STEP_URL;
   }
 
   @action
