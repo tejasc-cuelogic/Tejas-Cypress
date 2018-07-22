@@ -39,5 +39,6 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 export const GqlClient = new ApolloClient({
   link: authLink.concat(new HttpLink({ uri })),
   cache: new InMemoryCache({ fragmentMatcher }),
+  connectToDevTools: true,
   // defaultOptions,
 });

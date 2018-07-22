@@ -90,7 +90,7 @@ export class BusinessAppStore {
   }
 
   @computed get getGuaranteeCondtion() {
-    return this.BUSINESS_DOC_FRM.fields.personalGuarantee.value;
+    return this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true';
   }
 
   @action
@@ -425,6 +425,10 @@ export class BusinessAppStore {
           this.BUSINESS_PERF_FRM.fields[field[key]].value =
           prequalData.performanceSnapshot.pastYearSnapshot[ele];
         });
+      } else {
+        ['priorToThreeYear', 'ytd', 'pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
+          this.BUSINESS_PERF_FRM.fields[ele].rule = '';
+        });
       }
     }
     Validator.validateForm(this.BUSINESS_PERF_FRM);
@@ -436,7 +440,7 @@ export class BusinessAppStore {
       this.appStepsStatus[3] = data.stepStatus;
       this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
       this.BUSINESS_DOC_FRM.fields.blanketLien.value = data.blanketLien !== '' ? data.blanketLien : '';
-      this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGurantee !== '' ? data.providePersonalGurantee : '';
+      this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGurantee !== '' ? data.providePersonalGurantee ? 'true' : 'false' : '';
       if (!data.providePersonalGurantee) {
         this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.rule = '';
       }
@@ -474,6 +478,10 @@ export class BusinessAppStore {
         } else {
           this.BUSINESS_DOC_FRM.fields[formField[key]].rule = '';
         }
+      });
+    } else if (!this.getBusinessTypeCondtion) {
+      ['bankStatements', 'businessTaxReturn'].forEach((ele) => {
+        this.BUSINESS_DOC_FRM.fields[ele].rule = '';
       });
     }
     Validator.validateForm(this.BUSINESS_DOC_FRM);
@@ -686,7 +694,7 @@ export class BusinessAppStore {
         this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
       ),
       blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value !== '' ? this.BUSINESS_DOC_FRM.fields.blanketLien.value : false,
-      providePersonalGurantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value !== '' ? this.BUSINESS_DOC_FRM.fields.personalGuarantee.value : false,
+      providePersonalGurantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
     };
   }
 
