@@ -9,7 +9,7 @@ import AppNavigation from './AppNavigation';
 @observer
 export default class Performance extends Component {
   componentWillMount() {
-    this.props.businessAppStore.setApplicationStep('performance');
+    this.props.businessAppStore.setFieldvalue('applicationStep', 'performance');
   }
   submit = () => {
     // e.preventDefault();

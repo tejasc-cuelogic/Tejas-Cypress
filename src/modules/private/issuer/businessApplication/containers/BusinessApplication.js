@@ -26,13 +26,13 @@ export default class BusinessApplication extends Component {
   componentWillMount() {
     const { params } = this.props.match;
     const {
-      setCurrentApplicationId, isFetchedData, fetchApplicationDataById, setFetchedAppId, formReset,
+      isFetchedData, fetchApplicationDataById, setFieldvalue, formReset,
       // calculateStepToRender,
     } = this.props.businessAppStore;
-    setCurrentApplicationId(params.applicationId);
+    setFieldvalue('currentApplicationId', params.applicationId);
     if (params.applicationId !== 'new' && isFetchedData !== params.applicationId) {
       fetchApplicationDataById(params.applicationId);
-      setFetchedAppId(params.applicationId);
+      setFieldvalue('isFetchedData', params.applicationId);
       // this.props.history.replace(`${this.props.match.url}/${calculateStepToRender}`);
     } else if (params.applicationId === 'new') {
       this.props.navStore.setAccessParams('appStatus', 'NEW');

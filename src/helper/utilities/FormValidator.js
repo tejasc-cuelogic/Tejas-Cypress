@@ -60,6 +60,7 @@ class FormValidator {
         mapValues(currentForm.fields, f => f.rule),
         {
           required: 'required',
+          required_if: 'required',
         },
       );
     } else {

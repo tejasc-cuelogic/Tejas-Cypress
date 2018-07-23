@@ -18,7 +18,7 @@ export default class BusinessDetails extends Component {
   }
 
   componentWillMount() {
-    this.props.businessAppStore.setApplicationStep('business-details');
+    this.props.businessAppStore.setFieldvalue('applicationStep', 'business-details');
   }
 
   removeForm = (e) => {

@@ -10,7 +10,7 @@ import { BUSINESS_APP_USER_STATUS } from '../../../../../services/constants/newB
 export default class ApplicationList extends Component {
   componentWillMount() {
     this.props.businessAppStore.getBusinessApplications();
-    this.props.businessAppStore.setFetchedAppId(null);
+    this.props.businessAppStore.setFieldvalue('isFetchedData', null);
   }
   render() {
     const { fetchBusinessApplication } = this.props.businessAppStore;
