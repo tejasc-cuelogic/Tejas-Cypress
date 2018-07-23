@@ -120,9 +120,9 @@ export default class IdentityVerification extends Component {
       ID_VERIFICATION_FRM,
       ID_VERIFICATION_DOCS_FRM,
       ID_VERIFICATION_QUESTIONS,
-      dobChange,
       personalInfoChange,
       submitVerificationsDocs,
+      personalInfoMaskedChange,
       identityQuestionAnswerChange,
       setAddressFieldsForUserVerification,
     } = this.props.identityStore;
@@ -138,7 +138,7 @@ export default class IdentityVerification extends Component {
             inProgress={inProgress}
             close={this.handleCloseModal}
             change={personalInfoChange}
-            dobChange={dobChange}
+            maskChange={personalInfoMaskedChange}
             autoComplete={setAddressFieldsForUserVerification}
             onSubmit={this.handleVerifyUserIdentity}
             errors={errors}

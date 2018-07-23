@@ -113,9 +113,9 @@ export const USER_IDENTITY = {
     key: 'dateOfBirth',
     value: '',
     label: 'Date of Birth',
-    placeHolder: 'Select date',
+    placeHolder: 'mm/dd/yyyy',
     error: undefined,
-    rule: 'required',
+    rule: 'required|date',
     customErrors: {
       required: '* required.',
     },

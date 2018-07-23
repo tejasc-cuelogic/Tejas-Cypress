@@ -10,7 +10,7 @@ const MaskedInput = observer((props) => {
     label, error, value, placeHolder,
   } = props.fielddata;
   return (
-    <Form.Field error={!!error}>
+    <Form.Field error={!!error} className={props.containerclassname || ''}>
       <label>
         {!props.hidelabel && label}
         {props.tooltip &&

@@ -7,7 +7,6 @@ import { authActions, validationActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
-
 @inject('authStore', 'uiStore', 'userStore')
 @withRouter
 @observer

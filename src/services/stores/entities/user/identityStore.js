@@ -41,12 +41,13 @@ export class IdentityStore {
   };
 
   @action
-  dobChange = (date) => {
+  personalInfoMaskedChange = (values, field) => {
+    const finalValue = (field === 'dateOfBirth') ? values.formattedValue : values.value;
     this.ID_VERIFICATION_FRM = FormValidator.onChange(
       this.ID_VERIFICATION_FRM,
-      { name: 'dateOfBirth', value: date },
+      { name: field, value: finalValue },
     );
-  };
+  }
 
   @action
   phoneNumberChange = (value) => {
@@ -99,7 +100,7 @@ export class IdentityStore {
       firstLegalName: this.ID_VERIFICATION_FRM.fields.firstLegalName.value,
       lastLegalName: this.ID_VERIFICATION_FRM.fields.lastLegalName.value,
       dateOfBirth: this.ID_VERIFICATION_FRM.fields.dateOfBirth.value,
-      ssn: Helper.unMaskInput(this.ID_VERIFICATION_FRM.fields.ssn.value),
+      ssn: this.ID_VERIFICATION_FRM.fields.ssn.value,
       legalAddress: {
         street: this.ID_VERIFICATION_FRM.fields.residentalStreet.value,
         city: this.ID_VERIFICATION_FRM.fields.city.value,
@@ -112,7 +113,7 @@ export class IdentityStore {
       this.ID_VERIFICATION_FRM.fields.phoneNumber.value :
       userDetailsStore.userDetails.contactDetails.phone.number;
     const phoneDetails = {
-      number: Helper.unMaskInput(number),
+      number,
       countryCode: COUNTRY_CODES.US,
     };
 
@@ -399,7 +400,7 @@ export class IdentityStore {
         variables: {
           userId: userStore.currentUser.sub,
           phoneDetails: {
-            number: Helper.unMaskInput(this.ID_VERIFICATION_FRM.fields.phoneNumber.value),
+            number: this.ID_VERIFICATION_FRM.fields.phoneNumber.value,
             countryCode: COUNTRY_CODES.US,
           },
         },
