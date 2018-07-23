@@ -296,7 +296,7 @@
 @activeItemZIndex: @menuZIndex + 1;
 @activeItemBackground: transparent;
 @activeItemBoxShadow: none;
-@activeItemFontWeight: @bold;
+@activeItemFontWeight: @normal;
 @activeItemColor: @selectedTextColor;
 
 /* Selected */

@@ -142,7 +142,7 @@
 				.sb-avatar__text{
 					width:30px;
 					height:30px;
-					font-size:@20px;
+					font-size:@14px;
 					line-height:30px;
 				}
 			}
@@ -239,7 +239,7 @@
 		h3{
 			margin:@5px 0 0;
 			font-size:14px;
-			font-weight:700;
+			font-weight:@fontMedium;
 			color:@border-color;
 		}
 		.sb-avatar{

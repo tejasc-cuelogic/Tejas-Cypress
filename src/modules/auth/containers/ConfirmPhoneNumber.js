@@ -77,7 +77,7 @@ export default class ConfirmPhoneNumber extends Component {
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Confirm your phone number</Header>
+          <Header as="h3">Confirm your phone number</Header>
           <Divider />
           <p>We are about to text a verification code to:</p>
         </Modal.Header>

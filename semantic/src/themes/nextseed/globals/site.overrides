@@ -51,6 +51,9 @@ h5, h5.ui.header{
 .mb-half{
 	margin-bottom:@7px !important;
 }
+.mt-half{
+	margin-top:@7px !important;
+}
 .pull-left{
 	float:left !important;
 }
@@ -589,8 +592,12 @@ h1.ui.header{
 h2.ui.header{
 	line-height:44px;
 }
+h5.ui.header{
+	font-weight:@bold;
+}
 h6{
-	font-size:@13px;
+	font-size:@14px;
+	font-weight:@fontMedium;
 }
 
 // Helper classes
@@ -613,6 +620,7 @@ h6{
 	h1.ui.header{
 		font-size:@30px;
 		line-height:@42px;
+		font-weight:@fontMedium;
 		color:@inverse-text;
 		position:relative;
 		@media only screen and (max-width : @largestSmallMonitor){
@@ -1372,7 +1380,7 @@ svg:not(:root).recharts-surface{
 		text-align: center;
 		text-transform: uppercase;
 		color:@white;
-		font-weight:@bold;
+		font-weight:@fontMedium;
 		border-radius:100%;
 	}
 	&.admin{

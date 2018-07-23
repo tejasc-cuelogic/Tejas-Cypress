@@ -30,7 +30,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
         </Card>
         <Card.Group stackable itemsPerRow={2}>
           <Card fluid className="form-card">
-            <Header as="h3">Total Assets</Header>
+            <Header as="h5">Total Assets</Header>
             <FormInput
               type="text"
               fielddata={formAnnualInfo.fields.totalAssetMostRecentFiscalYear}
@@ -47,7 +47,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             />
           </Card>
           <Card fluid className="form-card">
-            <Header as="h3">Cash and Cash Equivalents</Header>
+            <Header as="h5">Cash and Cash Equivalents</Header>
             <FormInput
               type="text"
               fielddata={formAnnualInfo.fields.cashEquiMostRecentFiscalYear}
@@ -64,7 +64,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             />
           </Card>
           <Card fluid className="form-card">
-            <Header as="h3">Accounts Receivable</Header>
+            <Header as="h5">Accounts Receivable</Header>
             <FormInput
               type="text"
               fielddata={formAnnualInfo.fields.actReceivedMostRecentFiscalYear}
@@ -81,7 +81,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             />
           </Card>
           <Card fluid className="form-card">
-            <Header as="h3">Short-term Debt</Header>
+            <Header as="h5">Short-term Debt</Header>
             <FormInput
               type="text"
               fielddata={formAnnualInfo.fields.shortTermDebtMostRecentFiscalYear}
@@ -98,7 +98,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             />
           </Card>
           <Card fluid className="form-card">
-            <Header as="h3">Long-term Debt</Header>
+            <Header as="h5">Long-term Debt</Header>
             <FormInput
               type="text"
               fielddata={formAnnualInfo.fields.longTermDebtMostRecentFiscalYear}
@@ -115,7 +115,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             />
           </Card>
           <Card fluid className="form-card">
-            <Header as="h3">Revenue/Sales</Header>
+            <Header as="h5">Revenue/Sales</Header>
             <FormInput
               type="text"
               fielddata={formAnnualInfo.fields.revenueMostRecentFiscalYear}
@@ -132,7 +132,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             />
           </Card>
           <Card fluid className="form-card">
-            <Header as="h3">Cost of Goods Sold</Header>
+            <Header as="h5">Cost of Goods Sold</Header>
             <FormInput
               type="text"
               fielddata={formAnnualInfo.fields.costGoodsSoldMostRecentFiscalYear}
@@ -149,7 +149,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             />
           </Card>
           <Card fluid className="form-card">
-            <Header as="h3">Taxes Paid</Header>
+            <Header as="h5">Taxes Paid</Header>
             <FormInput
               type="text"
               fielddata={formAnnualInfo.fields.taxPaidMostRecentFiscalYear}
@@ -166,7 +166,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             />
           </Card>
           <Card fluid className="form-card">
-            <Header as="h3">Net Income</Header>
+            <Header as="h5">Net Income</Header>
             <FormInput
               type="text"
               fielddata={formAnnualInfo.fields.netIncomeMostRecentFiscalYear}
@@ -183,7 +183,7 @@ export default class AnnualReportDisclosureRequirements extends React.Component 
             />
           </Card>
           <Card fluid className="form-card">
-            <Header as="h3">Select States and Jurisdictions</Header>
+            <Header as="h5">Select States and Jurisdictions</Header>
             <FormDropDown
               fielddata={formAnnualInfo.fields.issueJurisdictionSecuritiesOffering}
               multiple

@@ -31,8 +31,8 @@ export default class FormationDocumemts extends Component {
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">Upload required documentation</Header>
-        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</Header>
+        <Header as="h3" textAlign="center">Upload required documentation</Header>
+        <p className="center-align">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
         <Divider hidden />
         {errors &&
           <Message error>
@@ -43,7 +43,7 @@ export default class FormationDocumemts extends Component {
           <Grid verticalAlign="middle" divided="vertically">
             <Grid.Row>
               <Grid.Column width={7}>
-                <Header as="h3">Entity Formation Document</Header>
+                <Header as="h4">Entity Formation Document</Header>
               </Grid.Column>
               <Grid.Column width={9}>
                 <DropZone
@@ -56,7 +56,7 @@ export default class FormationDocumemts extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column width={7}>
-                <Header as="h3">Entity Operating Document</Header>
+                <Header as="h4">Entity Operating Document</Header>
               </Grid.Column>
               <Grid.Column width={9}>
                 <DropZone
@@ -69,7 +69,7 @@ export default class FormationDocumemts extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column width={7}>
-                <Header as="h3">EIN Verification</Header>
+                <Header as="h4">EIN Verification</Header>
               </Grid.Column>
               <Grid.Column width={9}>
                 <DropZone

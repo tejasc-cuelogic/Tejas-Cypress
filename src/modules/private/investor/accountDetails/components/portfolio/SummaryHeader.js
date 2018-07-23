@@ -17,7 +17,7 @@ const showValue = props => ((props.type === 1) ?
   ((props.type === 2) ? `date ${props.content}` : props.content));
 
 const SummaryTitle = props => ((props.details.businessName) ? (
-  <Header as="h2">
+  <Header as="h3">
     {props.details.businessName}
     <span className="title-meta"><AccTypeTitle moreText="investment" /></span>
     <span className="title-meta">

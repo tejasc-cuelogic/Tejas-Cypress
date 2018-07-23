@@ -93,7 +93,8 @@
 		~ .dropdown-effect{
 			height:90px;
 			padding:@6px @14px;
-			font-size:13px;
+			font-size:@13px;
+			line-height:18px;
 			background-color:@white;
 			box-shadow:0 0 20px @veryStrongTransparentBlack;
 		}

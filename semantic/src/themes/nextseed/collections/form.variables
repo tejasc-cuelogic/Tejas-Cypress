@@ -23,9 +23,9 @@
 @labelDistance: @4px;
 @labelMargin: 0em 0em @labelDistance 0em;
 @labelFontSize:@13px;
-@labelFontWeight:@bold;
+@labelFontWeight:@fontMedium;
 @labelTextTransform: none;
-@labelColor:@fullBlack;
+@labelColor:@neutral;
 
 /* Input */
 @inputFont: @pageFont;

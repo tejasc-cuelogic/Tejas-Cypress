@@ -37,7 +37,7 @@ export default class FinancialInfo extends Component {
                 <Grid.Row>
                   <Grid.Column width={8}>
                     <Card.Content>
-                      <Header as="h3">Regulation Crowdfunding Limits</Header>
+                      <Header as="h4">Regulation Crowdfunding Limits</Header>
                       <p className="intro-text">
                         Pellentesque facilisis. Nulla imperdiet sit amet magna.
                         Vestibulum dapibus, mauris nec malesuada fames ac turpis
@@ -63,7 +63,7 @@ export default class FinancialInfo extends Component {
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <Card.Content>
-                      <Header as="h3">Accreditation</Header>
+                      <Header as="h4">Accreditation</Header>
                       <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
                       <Divider hidden />
                       <Card.Description>
@@ -71,7 +71,7 @@ export default class FinancialInfo extends Component {
                       </Card.Description>
                     </Card.Content>
                     <Card.Content>
-                      <Header as="h3">Reg A+ Elligible</Header>
+                      <Header as="h4">Reg A+ Elligible</Header>
                       <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
                       <Divider hidden />
                       <Card.Description>
@@ -97,7 +97,7 @@ export default class FinancialInfo extends Component {
                 <Grid.Row>
                   <Grid.Column width={8}>
                     <Card.Content>
-                      <Header as="h3">Regulation Crowdfunding Limits</Header>
+                      <Header as="h4">Regulation Crowdfunding Limits</Header>
                       <p className="intro-text">
                         Pellentesque facilisis. Nulla imperdiet sit amet magna.
                         Vestibulum dapibus, mauris nec malesuada fames ac turpis
@@ -121,7 +121,7 @@ export default class FinancialInfo extends Component {
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <Card.Content>
-                      <Header as="h3">Accreditation <Link to="/" className="link"><small>Update accreditation</small></Link></Header>
+                      <Header as="h4">Accreditation <Link to="/" className="link"><small>Update accreditation</small></Link></Header>
                       <dl className="dl-horizontal">
                         <dt>Status</dt>
                         <dd className="negative-text"><b>Failed</b></dd>
@@ -130,7 +130,7 @@ export default class FinancialInfo extends Component {
                       </dl>
                     </Card.Content>
                     <Card.Content>
-                      <Header as="h3">Reg A+ Elligible</Header>
+                      <Header as="h4">Reg A+ Elligible</Header>
                       <dl className="dl-horizontal">
                         <dt>Status</dt>
                         <dd className="positive-text"><b>Verified</b></dd>

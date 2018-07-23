@@ -134,14 +134,14 @@
         }
         p{
             font-family:@pageFont;
-            font-weight:500;
+            font-weight:@normal;
             font-size:@14px;
             color:@secondary-text;
         }
     }
-    h4.ui.header{
-        font-weight:400;
-    }
+    // h4.ui.header{
+    //     font-weight:400;
+    // }
     > .content{
         padding-top:@20px;
         &.login-modal{
@@ -157,7 +157,7 @@
             border-radius:@defaultBorderRadius * 1.5;
             border:darken(@light-bg-color, 9%) 1px solid;
             cursor:pointer;
-            h3{
+            h4{
                 margin:@7px 0;
             }
             p{
@@ -326,7 +326,8 @@
         padding:@50px @70px;
         .field-wrap{
             margin:@30px auto;
-            h5{
+            h6{
+                font-weight:@fontMedium;
                 margin-bottom:@10px;
             }
             >.fields:last-child, .field:last-child{

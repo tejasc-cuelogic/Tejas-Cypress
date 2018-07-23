@@ -15,8 +15,8 @@ export default class IncomeEvidence extends Component {
     const { formAccTypes, AccTypesChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">What type of IRA account you want to create?</Header>
-        <Header as="h4" textAlign="center">Choose an account type</Header>
+        <Header as="h3" textAlign="center">What type of IRA account you want to create?</Header>
+        <p className="center-align">Choose an account type</p>
         <Form error className="account-type-tab">
           <FormRadioGroup
             fielddata={formAccTypes.fields.accountType}

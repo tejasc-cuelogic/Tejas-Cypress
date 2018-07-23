@@ -20,7 +20,7 @@ const list = [
 const BonusRewards = ({ match }) => (
   <div className="inner-content-spacer">
     <InvestmentTimeline title="Your investment" />
-    <Header as="h3">Your rewards</Header>
+    <Header as="h4">Your rewards</Header>
     <RewardList title="Your investment" match={match} list={list} />
     <Route exact path={`${match.url}/redeem/:id`} component={Redeem} />
   </div>
