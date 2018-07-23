@@ -15,7 +15,7 @@ import {
   BUSINESS_APP_FILE_UPLOAD_ENUMS,
   AFFILIATED_PARTNERS,
   LENDIO,
-} from '../../../constants/newBusiness';
+} from '../../../constants/businessApplication';
 // import { createUploadEntry, removeUploadedFile } from '../../queries/common';
 import Helper from '../../../../helper/utility';
 import {

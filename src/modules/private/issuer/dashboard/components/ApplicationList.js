@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
-import { BUSINESS_APP_USER_STATUS } from '../../../../../services/constants/newBusiness';
+import { BUSINESS_APP_USER_STATUS, BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 @inject('businessAppStore', 'uiStore')
 @observer
 export default class ApplicationList extends Component {
@@ -41,8 +41,15 @@ export default class ApplicationList extends Component {
                     <dt>Last Updated Date</dt>
                     <dd>{application.updatedDate ? moment(application.updatedDate).format('MM/DD/YYYY') : '--'}</dd>
                   </dl>
-                  {application.applicationStatus === 'PRE_QUALIFICATION_SUBMITTED' &&
+                  {application.applicationStatus ===
+                  BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
                     <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/pre-qualification`}>Continue application</Button>
+                  }
+                  {application.applicationStatus ===
+                  BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+                  && application.lendio && application.lendio.status ===
+                  BUSINESS_APPLICATION_STATUS.LENDIO_PRE_QUALIFICATION_SUCCESSFUL &&
+                    <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/lendio`}>View Lendio</Button>
                   }
                 </Card.Content>
               </Card>

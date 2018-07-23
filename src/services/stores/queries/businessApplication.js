@@ -73,6 +73,10 @@ query _getBusinessApplications {
     applicationStatus
     createdDate
     updatedDate
+    lendio {
+      status
+      failReasons
+    }
     prequalDetails {
       businessGeneralInfo {
         businessName
