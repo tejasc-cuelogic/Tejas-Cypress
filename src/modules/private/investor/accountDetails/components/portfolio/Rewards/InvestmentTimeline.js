@@ -99,10 +99,8 @@ const InvestmentTimeline = (props) => {
                   on="click"
                 >
                   <Popup.Content>
-                    <Header as="h4" className="mb-half">
-                      {milestone.reward.head}
-                      <Header.Subheader>{milestone.reward.subHead}</Header.Subheader>
-                    </Header>
+                    <Header as="h3" className="mb-half">{milestone.reward.head}</Header>
+                    <Header as="h5">{milestone.reward.subHead}</Header>
                     <List bulleted>
                       {
                         milestone.reward.highlights.map(h => (
