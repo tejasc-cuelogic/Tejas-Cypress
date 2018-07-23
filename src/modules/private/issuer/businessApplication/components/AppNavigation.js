@@ -18,14 +18,14 @@ export default class AppNavigation extends Component {
     this.setState({ step, navItems });
   }
   actualSubmit = (where) => {
-    if (where) {
+    if (where >= 0) {
       const { checkFormisValid, currentApplicationId } = this.props.businessAppStore;
       if (checkFormisValid(`${this.state.navItems[this.state.step].to}`)) {
         this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
         this.props.action();
         this.props.history.push(`/app/business-application/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
       } else {
-        this.props.history.push(`/app/business-application/${currentApplicationId}/confirm`);
+        // this.props.history.push(`/app/business-application/${currentApplicationId}/confirm`);
       }
     }
   }
@@ -43,6 +43,7 @@ export default class AppNavigation extends Component {
     });
   }
   render() {
+    const { isFileUploading } = this.props.businessAppStore;
     return (
       <div className="navigation-buttons">
         {this.state.step > 0 &&
@@ -61,7 +62,11 @@ export default class AppNavigation extends Component {
                 <Icon className="ns-arrow-right" />
               </Button>
             </Aux>
-          ) : <Button onClick={this.submit} disabled={!this.props.canSubmitApp} primary className="very relaxed" content="Submit" />
+          ) :
+            <Aux>
+              <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : 'Save'} />
+              <Button onClick={this.submit} disabled={!this.props.canSubmitApp} primary className="very relaxed" content="Submit" />
+            </Aux>
           }
         </div>
       </div>

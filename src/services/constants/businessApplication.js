@@ -17,20 +17,22 @@ export const BUSINESS_APPLICATION_STATUS = {
   REVIEWED: 'REVIEWED',
   DECLINED: 'DECLINED',
   APPLICATION_DELETED: 'APPLICATION_DELETED',
+  LENDIO_PRE_QUALIFICATION_SUCCESSFUL: 'LENDIO_PRE_QUALIFICATION_SUCCESSFUL',
+  LENDIO_PRE_QUALIFICATION_FAILED: 'LENDIO_PRE_QUALIFICATION_FAILED',
 };
 
 export const BUSINESS_APP_USER_STATUS = {
-  PRE_QUALIFICATION_FAILED: 'In-progress',
-  PRE_QUALIFICATION_SUCCESSFUL: 'In-progress',
-  PRE_QUALIFICATION_SUBMITTED: 'In-progress',
-  PRE_QUALIFICATION_PROMOTED: 'PRE_QUALIFICATION_PROMOTED',
-  APPLICATION_SUBMITTED: 'Pending Review',
-  APPLICATION_REVIEWED: 'APPLICATION_REVIEWED',
-  APPLICATION_FAILED: 'APPLICATION_FAILED',
-  APPLICATION_SUCCESSFUL: 'APPLICATION_SUCCESSFUL',
-  REVIEWED: 'REVIEWED',
-  DECLINED: 'DECLINED',
-  APPLICATION_DELETED: 'APPLICATION_DELETED',
+  PRE_QUALIFICATION_FAILED: { status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange' },
+  PRE_QUALIFICATION_SUCCESSFUL: { status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange' },
+  PRE_QUALIFICATION_SUBMITTED: { status: 'In-progress', icon: 'ns-pencil-circle-line', color: '' },
+  PRE_QUALIFICATION_PROMOTED: { status: 'Promoted', icon: 'ns-reload-circle-line', color: '' },
+  APPLICATION_SUBMITTED: { status: 'Pending Review', icon: 'ns-check-circle-line', color: 'green' },
+  APPLICATION_REVIEWED: { status: 'Reviewed', icon: 'ns-reload-circle-line', color: '' },
+  APPLICATION_FAILED: { status: 'Failed', icon: 'ns-reload-circle-line', color: '' },
+  APPLICATION_SUCCESSFUL: { status: 'Successful', icon: 'ns-reload-circle-line', color: '' },
+  REVIEWED: { status: 'Reviewed', icon: 'ns-reload-circle-line', color: '' },
+  DECLINED: { status: 'Declined Offer', icon: 'ns-reload-circle-line', color: '' },
+  APPLICATION_DELETED: { status: 'Deleted', icon: 'ns-reload-circle-line', color: '' },
 };
 
 export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
@@ -370,7 +372,7 @@ export const BUSINESS_DOC = {
     rule: 'required',
   },
   personalGuaranteeForm: {
-    value: [], label: 'Personal Guarantee Form', error: undefined, rule: 'required_if:personalGuarantee,true', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Personal Guarantee Form', error: undefined, rule: 'required_if:personalGuarantee,true', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required_if: 'required' },
   },
 };
 

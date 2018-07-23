@@ -15,7 +15,7 @@ import {
   BUSINESS_APP_FILE_UPLOAD_ENUMS,
   AFFILIATED_PARTNERS,
   LENDIO,
-} from '../../../constants/newBusiness';
+} from '../../../constants/businessApplication';
 // import { createUploadEntry, removeUploadedFile } from '../../queries/common';
 import Helper from '../../../../helper/utility';
 import {
@@ -53,25 +53,16 @@ export class BusinessAppStore {
   @observable removeFileIdsList = [];
   @observable appStepsStatus = ['IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS'];
   @observable lendioUrl = null;
+  @observable isFileUploading = false;
 
   @action
-  setFetchedAppId = (val) => {
-    this.isFetchedData = val;
-  };
-
-  @action
-  setApplicationStep = (step) => {
-    this.applicationStep = step;
+  setFieldvalue = (field, value) => {
+    this[field] = value;
   }
 
   @action
   setAppStepsStatus = (key, value) => {
     this.appStepsStatus[key] = value;
-  }
-
-  @action
-  setCurrentApplicationId = (id) => {
-    this.currentApplicationId = id;
   }
 
   @action
@@ -83,13 +74,13 @@ export class BusinessAppStore {
   checkFormisValid = (step) => {
     let status = false;
     if (step === 'business-details') {
-      Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
+      Validator.validateForm(this.BUSINESS_DETAILS_FRM, true, true);
       status = this.BUSINESS_DETAILS_FRM.meta.isValid;
     } else if (step === 'performance') {
-      Validator.validateForm(this.BUSINESS_PERF_FRM);
+      Validator.validateForm(this.BUSINESS_PERF_FRM, false, true);
       status = this.BUSINESS_PERF_FRM.meta.isValid;
     } else if (step === 'documentation') {
-      Validator.validateForm(this.BUSINESS_DOC_FRM);
+      Validator.validateForm(this.BUSINESS_DOC_FRM, false, true);
       status = this.BUSINESS_DOC_FRM.meta.isValid;
     }
     return status;
@@ -97,15 +88,6 @@ export class BusinessAppStore {
 
   @computed get getPersonalGuaranteeCondtion() {
     return this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true';
-  }
-
-  @action
-  setBusinessAppStepUrl = (url) => {
-    this.BUSINESS_APP_STEP_URL = url;
-  }
-  @action
-  setBusinessAppStatus = (status) => {
-    this.BUSINESS_APP_STATUS = status;
   }
 
   @computed get getBusinessAppStepUrl() {
@@ -806,7 +788,7 @@ export class BusinessAppStore {
           refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
-          this.setBusinessAppStatus(result.data.createBusinessApplicationPrequalification.status);
+          this.setFieldvalue('BUSINESS_APP_STATUS', result.data.createBusinessApplicationPrequalification.status);
           const {
             data: {
               createBusinessApplicationPrequalification: {
@@ -821,16 +803,16 @@ export class BusinessAppStore {
           }
 
           const applicationId = result.data.createBusinessApplicationPrequalification.id;
-          this.setFetchedAppId(null);
+          this.setFieldvalue('isFetchedData', null);
           if (this.BUSINESS_APP_STATUS ===
               BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED) {
-            this.setBusinessAppStepUrl(`${applicationId}/success`);
+            this.setFieldvalue('BUSINESS_APP_STEP_URL', `${applicationId}/success`);
           } else if (this.BUSINESS_APP_STATUS ===
               BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
             const url = (isEmpty(lendioPartners) || lendioPartners.status === LENDIO.PRE_QUALIFICATION_FAILED) ? `${applicationId}/failed` : `${applicationId}/failed/lendio`;
-            this.setBusinessAppStepUrl(url);
+            this.setFieldvalue('BUSINESS_APP_STEP_URL', url);
           } else {
-            this.setBusinessAppStepUrl(`${applicationId}/failed`);
+            this.setFieldvalue('BUSINESS_APP_STEP_URL', `${applicationId}/failed`);
           }
           resolve();
         })
@@ -968,6 +950,7 @@ export class BusinessAppStore {
       this[formName].fields[fieldName].value.splice(index, 1);
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds[0]];
     }
+    this.checkFormisValid(this.applicationStep);
   };
 
   @action
@@ -976,6 +959,7 @@ export class BusinessAppStore {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
         const stepName = this.getFileUploadEnum(fieldName, index);
+        this.setFieldvalue('isFileUploading', true);
         this.setFormFileArray(formName, fieldName, 'showLoader', true, index);
         fileUpload.setFileUploadData(this.currentApplicationId, fileData, stepName, 'ISSUER').then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
@@ -984,10 +968,12 @@ export class BusinessAppStore {
             this.setFormFileArray(formName, fieldName, 'preSignedUrl', preSignedUrl, index);
             this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
             this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
+            this.setFormFileArray(formName, fieldName, 'error', undefined, index);
           }).catch((error) => {
             console.log(error);
           }).finally(() => {
             this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
+            this.setFieldvalue('isFileUploading', false);
           });
         }).catch((error) => {
           console.log(error);
@@ -1025,7 +1011,7 @@ export class BusinessAppStore {
   setFormFileArray = (formName, field, getField, value, index) => {
     if (field === 'resume') {
       this[formName].fields.owners[index][field][getField] = value;
-    } else if (getField === 'showLoader') {
+    } else if (getField === 'showLoader' || getField === 'error') {
       this[formName].fields[field][getField] = value;
     } else {
       this[formName].fields[field][getField] =

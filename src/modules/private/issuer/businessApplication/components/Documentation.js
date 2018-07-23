@@ -9,7 +9,7 @@ import AppNavigation from './AppNavigation';
 @observer
 export default class Documentation extends Component {
   componentWillMount() {
-    this.props.businessAppStore.setApplicationStep('documentation');
+    this.props.businessAppStore.setFieldvalue('applicationStep', 'documentation');
   }
   submit = () => {
     // e.preventDefault();
