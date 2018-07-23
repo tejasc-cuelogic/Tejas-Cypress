@@ -49,6 +49,7 @@ export class BusinessAppStore {
   @observable currentApplicationId = null;
   @observable businessApplicationsDataById = null;
   @observable isFetchedData = null;
+  @observable removeFileIdsList = [];
   @observable appStepsStatus = ['IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS'];
 
   @action
@@ -59,6 +60,11 @@ export class BusinessAppStore {
   @action
   setApplicationStep = (step) => {
     this.applicationStep = step;
+  }
+
+  @action
+  setAppStepsStatus = (key, value) => {
+    this.appStepsStatus[key] = value;
   }
 
   @action
@@ -75,10 +81,13 @@ export class BusinessAppStore {
   checkFormisValid = (step) => {
     let status = false;
     if (step === 'business-details') {
+      Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
       status = this.BUSINESS_DETAILS_FRM.meta.isValid;
     } else if (step === 'performance') {
+      Validator.validateForm(this.BUSINESS_PERF_FRM);
       status = this.BUSINESS_PERF_FRM.meta.isValid;
     } else if (step === 'documentation') {
+      Validator.validateForm(this.BUSINESS_DOC_FRM);
       status = this.BUSINESS_DOC_FRM.meta.isValid;
     }
     return status;
@@ -839,19 +848,25 @@ export class BusinessAppStore {
     let data = this.getFormatedBusinessDetailsData;
     let stepName = 'BUSINESS_DETAILS';
     let isPartialDataFlag = true;
+    let key = 0;
+    let stepStatus = 'COMPLETE';
     if (this.applicationStep === 'business-details') {
       stepName = 'BUSINESS_DETAILS';
       Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
       isPartialDataFlag = !this.BUSINESS_DETAILS_FRM.meta.isValid;
+      key = 1;
     } else if (this.applicationStep === 'performance') {
       stepName = 'PERFORMANCE';
       Validator.validateForm(this.BUSINESS_PERF_FRM);
       isPartialDataFlag = !this.BUSINESS_PERF_FRM.meta.isValid;
+      key = 2;
     } else if (this.applicationStep === 'documentation') {
       stepName = 'DOCUMENTATION';
       Validator.validateForm(this.BUSINESS_DOC_FRM);
       isPartialDataFlag = !this.BUSINESS_DOC_FRM.meta.isValid;
+      key = 3;
     }
+    stepStatus = isPartialDataFlag ? 'IN_PROGRESS' : 'COMPLETE';
     let mutationQuery = upsertBusinessApplicationInformationBusinessDetails;
     let variableData = {
       applicationId: this.currentApplicationId,
@@ -888,6 +903,8 @@ export class BusinessAppStore {
           refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
+          this.setAppStepsStatus(key, stepStatus);
+          this.businessAppRemoveUploadedFiles();
           console.log(result);
           resolve();
         })
@@ -914,9 +931,13 @@ export class BusinessAppStore {
   @action
   businessAppRemoveFiles = (e, fieldName, formName, index) => {
     if (fieldName === 'resume') {
+      const removeFileIds = this[formName].fields.owners[index][fieldName].fileId;
       this[formName].fields.owners[index][fieldName].value = '';
+      this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
     } else {
+      const removeFileIds = this[formName].fields[fieldName].fileId.splice(index, 1);
       this[formName].fields[fieldName].value.splice(index, 1);
+      this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds[0]];
     }
   };
 
@@ -926,6 +947,7 @@ export class BusinessAppStore {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
         const stepName = this.getFileUploadEnum(fieldName, index);
+        this.setFormFileArray(formName, fieldName, 'showLoader', true, index);
         fileUpload.setFileUploadData(this.currentApplicationId, fileData, stepName, 'ISSUER').then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           Helper.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
@@ -933,11 +955,29 @@ export class BusinessAppStore {
             this.setFormFileArray(formName, fieldName, 'preSignedUrl', preSignedUrl, index);
             this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
             this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
+          }).catch((error) => {
+            console.log(error);
+          }).finally(() => {
+            this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
           });
         }).catch((error) => {
           console.log(error);
         });
       });
+    }
+  }
+
+  @action
+  businessAppRemoveUploadedFiles = () => {
+    const fileList = toJS(this.removeFileIdsList);
+    if (fileList.length) {
+      forEach(fileList, (fileId) => {
+        fileUpload.removeUploadedData(fileId).then(() => {
+        }).catch((error) => {
+          console.log(error);
+        });
+      });
+      this.removeFileIdsList = [];
     }
   }
 
@@ -956,6 +996,8 @@ export class BusinessAppStore {
   setFormFileArray = (formName, field, getField, value, index) => {
     if (field === 'resume') {
       this[formName].fields.owners[index][field][getField] = value;
+    } else if (getField === 'showLoader') {
+      this[formName].fields[field][getField] = value;
     } else {
       this[formName].fields[field][getField] =
       [...this[formName].fields[field][getField],

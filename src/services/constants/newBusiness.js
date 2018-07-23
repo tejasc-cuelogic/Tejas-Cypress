@@ -19,6 +19,20 @@ export const BUSINESS_APPLICATION_STATUS = {
   APPLICATION_DELETED: 'APPLICATION_DELETED',
 };
 
+export const BUSINESS_APP_USER_STATUS = {
+  PRE_QUALIFICATION_FAILED: 'In-progress',
+  PRE_QUALIFICATION_SUCCESSFUL: 'In-progress',
+  PRE_QUALIFICATION_SUBMITTED: 'In-progress',
+  PRE_QUALIFICATION_PROMOTED: 'PRE_QUALIFICATION_PROMOTED',
+  APPLICATION_SUBMITTED: 'Pending Review',
+  APPLICATION_REVIEWED: 'APPLICATION_REVIEWED',
+  APPLICATION_FAILED: 'APPLICATION_FAILED',
+  APPLICATION_SUCCESSFUL: 'APPLICATION_SUCCESSFUL',
+  REVIEWED: 'REVIEWED',
+  DECLINED: 'DECLINED',
+  APPLICATION_DELETED: 'APPLICATION_DELETED',
+};
+
 export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
   businessPlan: 'BUSINESS_PLAN',
   resume1: 'OWNER1',
@@ -247,7 +261,7 @@ export const BUSINESS_SIGNUP = {
 
 export const BUSINESS_DETAILS = {
   businessPlan: {
-    value: [], label: 'Upload your business plan', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Upload your business plan', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   debts: [{
     amount: {
@@ -283,20 +297,20 @@ export const BUSINESS_DETAILS = {
       value: '', label: 'Title', error: undefined, rule: 'optional', placeHolder: 'e.g. CEO', customErrors: { required: 'required' },
     },
     resume: {
-      value: '', label: 'Upload Resume/CV', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+      value: '', label: 'Upload Resume/CV', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
     },
   }],
 };
 
 export const BUSINESS_PERF = {
   priorToThreeYear: {
-    value: [], label: 'Prior 3 Year Statements', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 3 Year Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   ytd: {
-    value: [], label: 'YTD Statements', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'YTD Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   fiveYearProjection: {
-    value: [], label: '5 Year Projections', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   pyGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: '1,250,000', customErrors: { required: 'required' },
@@ -326,16 +340,16 @@ export const BUSINESS_PERF = {
 
 export const BUSINESS_DOC = {
   bankStatements: {
-    value: [], label: 'Prior 6 months Bank Statements', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 6 months Bank Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   leaseAgreementsOrLOIs: {
-    value: [], label: 'Lease Agreement / Letter of Intent', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], tooltip: 'NextSeed requires a lease or LOI prior to launching your campaign. Before disbursing funds, the executed lease is required. If you are currently still in negotiations with your lease, please submit a draft of the current terms.', customErrors: { required: 'required' },
+    value: [], label: 'Lease Agreement / Letter of Intent', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], tooltip: 'NextSeed requires a lease or LOI prior to launching your campaign. Before disbursing funds, the executed lease is required. If you are currently still in negotiations with your lease, please submit a draft of the current terms.', customErrors: { required: 'required' },
   },
   personalTaxReturn: {
-    value: [], label: 'Prior 2 Years of Personal Tax Returns', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 2 Years of Personal Tax Returns', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   businessTaxReturn: {
-    value: [], label: 'Prior 3 Years of Business Tax Returns', error: undefined, rule: 'required', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 3 Years of Business Tax Returns', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   blanketLien: {
     value: '',
@@ -356,7 +370,7 @@ export const BUSINESS_DOC = {
     rule: 'required',
   },
   personalGuaranteeForm: {
-    value: [], label: 'Personal Guarantee Form', error: undefined, rule: 'required_if:personalGuarantee,true', preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Personal Guarantee Form', error: undefined, rule: 'required_if:personalGuarantee,true', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
 };
 

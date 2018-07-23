@@ -19,12 +19,13 @@ export default class AppNavigation extends Component {
   }
   actualSubmit = (where) => {
     if (where) {
-      if (this.props.businessAppStore.checkFormisValid(`${this.state.navItems[this.state.step].to}`)) {
+      const { checkFormisValid, currentApplicationId } = this.props.businessAppStore;
+      if (checkFormisValid(`${this.state.navItems[this.state.step].to}`)) {
         this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
         this.props.action();
-        this.props.history.push(`/app/business-application/${this.props.businessAppStore.currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
+        this.props.history.push(`/app/business-application/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
       } else {
-        this.props.history.push(`/app/business-application/${this.props.businessAppStore.currentApplicationId}/confirm`);
+        this.props.history.push(`/app/business-application/${currentApplicationId}/confirm`);
       }
     }
   }

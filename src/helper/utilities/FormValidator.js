@@ -51,7 +51,6 @@ class FormValidator {
   }
 
   validateForm = (form, isMultiForm = false) => {
-    console.log(form);
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let validation;
@@ -69,7 +68,6 @@ class FormValidator {
       );
     }
     currentForm.meta.isValid = validation.passes();
-    console.log(validation);
   }
 
   onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
