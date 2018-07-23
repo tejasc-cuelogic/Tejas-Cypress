@@ -32,7 +32,7 @@ export default class LendioSuccess extends Component {
                   className="relaxed"
                   onClick={() => window.open(`${this.props.businessAppStore.lendioUrl}`, '_blank')}
                 >
-                  I’m interested in Lendio
+                  Proceed to Lendio
                 </Button>
               </Aux> :
               <Aux>
