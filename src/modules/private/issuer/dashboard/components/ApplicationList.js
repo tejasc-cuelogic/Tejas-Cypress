@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
-
+import { BUSINESS_APP_USER_STATUS } from '../../../../../services/constants/newBusiness';
 @inject('businessAppStore', 'uiStore')
 @observer
 export default class ApplicationList extends Component {
@@ -30,12 +30,12 @@ export default class ApplicationList extends Component {
             fetchBusinessApplication.map(application => (
               <Card fluid>
                 <Card.Content>
-                  <Header as="h3"><Icon name="ns-pencil-circle-line" /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
+                  <Header as="h3"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
                 </Card.Content>
                 <Card.Content>
                   <dl className="dl-horizontal">
                     <dt>Application status</dt>
-                    <dd>{application.applicationStatus}</dd>
+                    <dd>{BUSINESS_APP_USER_STATUS[application.applicationStatus].status}</dd>
                     <dt>Started on</dt>
                     <dd>{moment(application.createdDate).format('MM/DD/YYYY')}</dd>
                     <dt>Last Updated Date</dt>

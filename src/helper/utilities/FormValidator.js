@@ -1,6 +1,6 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
-import { mapValues, replace, mapKeys, isArray, toArray, reduce } from 'lodash';
+import { mapValues, replace, map, mapKeys, isArray, toArray, reduce, includes } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
@@ -50,7 +50,7 @@ class FormValidator {
     return currentForm;
   }
 
-  validateForm = (form, isMultiForm = false) => {
+  validateForm = (form, isMultiForm = false, showErrors = false) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let validation;
@@ -58,16 +58,43 @@ class FormValidator {
       validation = new Validator(
         mapValues(currentForm.fields, f => f.value),
         mapValues(currentForm.fields, f => f.rule),
+        {
+          required: 'required',
+        },
       );
     } else {
       const formData = this.ExtractFormValues(toJS(currentForm.fields));
-      const formRules = this.ExtractFormRules(toJS(currentForm.fields));
+      let formRules = this.ExtractFormRules(toJS(currentForm.fields));
+      formRules = {
+        ...formRules,
+        businessPlan: 'required',
+      };
       validation = new Validator(
         formData,
         formRules,
+        {
+          required: 'required',
+        },
       );
     }
     currentForm.meta.isValid = validation.passes();
+    console.log(validation);
+    if (validation.errorCount && showErrors) {
+      const { errors } = validation.errors;
+      map(errors, (error, key) => {
+        const [err] = error;
+        if (includes(key, '.')) {
+          const field = key.split('.');
+          if (field[0] === 'businessPlan') {
+            currentForm.fields[field[0]].error = err;
+          } else {
+            currentForm.fields[field[0]][field[1]][field[2]].error = err;
+          }
+        } else {
+          currentForm.fields[key].error = err;
+        }
+      });
+    }
   }
 
   onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
@@ -102,16 +129,6 @@ class FormValidator {
         currentFormRelative[element.name].customErrors) ?
         currentFormRelative[element.name].customErrors : {};
     }
-    /* Beneficiary share percentage validation register */
-    // Validator.register('sharePercentage', (value, requirement) => {
-    //   const total = sumBy(currentForm.fields[formName], currentValue =>
-    //     parseInt(currentValue[requirement].value, 10));
-    //   forEach(currentForm.fields[formName], (ele, key) => {
-    //     currentForm.fields[formName][key][requirement].error = total === 100 ?
-    //       undefined : true;
-    //   });
-    //   return total === 100 && value > 0;
-    // }, 'The sum of :attribute percentages must be 100.');
     const formData = this.ExtractFormValues(toJS(currentForm.fields));
     const formRules = this.ExtractFormRules(toJS(currentForm.fields));
     const validation = new Validator(

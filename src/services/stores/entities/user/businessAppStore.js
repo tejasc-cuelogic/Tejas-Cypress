@@ -51,11 +51,17 @@ export class BusinessAppStore {
   @observable isFetchedData = null;
   @observable removeFileIdsList = [];
   @observable appStepsStatus = ['IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS'];
+  @observable isFileUploading = false;
 
   @action
   setFetchedAppId = (val) => {
     this.isFetchedData = val;
   };
+
+  @action
+  setIsFileUploading = (val) => {
+    this.isFileUploading = val;
+  }
 
   @action
   setApplicationStep = (step) => {
@@ -81,13 +87,13 @@ export class BusinessAppStore {
   checkFormisValid = (step) => {
     let status = false;
     if (step === 'business-details') {
-      Validator.validateForm(this.BUSINESS_DETAILS_FRM, true);
+      Validator.validateForm(this.BUSINESS_DETAILS_FRM, true, true);
       status = this.BUSINESS_DETAILS_FRM.meta.isValid;
     } else if (step === 'performance') {
-      Validator.validateForm(this.BUSINESS_PERF_FRM);
+      Validator.validateForm(this.BUSINESS_PERF_FRM, false, true);
       status = this.BUSINESS_PERF_FRM.meta.isValid;
     } else if (step === 'documentation') {
-      Validator.validateForm(this.BUSINESS_DOC_FRM);
+      Validator.validateForm(this.BUSINESS_DOC_FRM, false, true);
       status = this.BUSINESS_DOC_FRM.meta.isValid;
     }
     return status;
@@ -939,6 +945,7 @@ export class BusinessAppStore {
       this[formName].fields[fieldName].value.splice(index, 1);
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds[0]];
     }
+    this.checkFormisValid(this.applicationStep);
   };
 
   @action
@@ -947,6 +954,7 @@ export class BusinessAppStore {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
         const stepName = this.getFileUploadEnum(fieldName, index);
+        this.setIsFileUploading(true);
         this.setFormFileArray(formName, fieldName, 'showLoader', true, index);
         fileUpload.setFileUploadData(this.currentApplicationId, fileData, stepName, 'ISSUER').then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
@@ -955,10 +963,12 @@ export class BusinessAppStore {
             this.setFormFileArray(formName, fieldName, 'preSignedUrl', preSignedUrl, index);
             this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
             this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
+            this.setFormFileArray(formName, fieldName, 'error', undefined, index);
           }).catch((error) => {
             console.log(error);
           }).finally(() => {
             this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
+            this.setIsFileUploading(false);
           });
         }).catch((error) => {
           console.log(error);
@@ -996,7 +1006,7 @@ export class BusinessAppStore {
   setFormFileArray = (formName, field, getField, value, index) => {
     if (field === 'resume') {
       this[formName].fields.owners[index][field][getField] = value;
-    } else if (getField === 'showLoader') {
+    } else if (getField === 'showLoader' || getField === 'error') {
       this[formName].fields[field][getField] = value;
     } else {
       this[formName].fields[field][getField] =

@@ -62,7 +62,7 @@ export default class BusinessApplication extends Component {
   render() {
     const { match } = this.props;
     const { pathname } = this.props.location;
-    const { canSubmitApp, appStepsStatus } = this.props.businessAppStore;
+    const { canSubmitApp, appStepsStatus, isFileUploading } = this.props.businessAppStore;
     const showSubNav = (includes(pathname, 'pre-qualification') && appStepsStatus[0] === 'IN_PROGRESS')
       || includes(pathname, 'failed') || includes(pathname, 'success') || includes(pathname, 'lendio');
     const preQualPage = includes(pathname, 'pre-qualification');
@@ -83,7 +83,7 @@ export default class BusinessApplication extends Component {
         }
         P4={!showSubNav && !preQualPage &&
           <Button.Group>
-            <Button inverted onClick={this.saveContinue} color="green">Save and Continue later</Button>
+            <Button inverted onClick={this.saveContinue} disabled={isFileUploading} color="green">{isFileUploading ? 'File operation in process' : 'Save and Continue later'}</Button>
             <Button
               onClick={this.submit}
               className={canSubmitApp ? 'primary' : 'grey'}
