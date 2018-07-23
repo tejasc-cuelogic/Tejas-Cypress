@@ -1,20 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
-import { Header, Form, Button } from 'semantic-ui-react';
+import { Header, Form } from 'semantic-ui-react';
 import { FormRadioGroup, FormCheckbox } from '../../../../../../theme/form';
 
 @inject('investorProfileStore')
 @observer
 export default class Experience extends Component {
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const currentStep = {
-      form: 'INVESTMENT_EXPERIENCE',
-      stepToBeRendered: 3,
-    };
-    this.props.investorProfileStore.updateInvestorProfileData(currentStep);
-  }
   render() {
     const { INVESTMENT_EXPERIENCE, experiencesChange } = this.props.investorProfileStore;
     return (
@@ -48,9 +39,6 @@ export default class Experience extends Component {
             defaults
             containerclassname="ui relaxed list"
           />
-          <div className="center-align mt-30">
-            <Button onClick={this.handleSubmit} primary size="large" as={Link} to="/app/summary/account-creation">Send verification request</Button>
-          </div>
         </Form>
       </div>
     );

@@ -4,7 +4,6 @@ import { Header, Form } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MaskedInput2, FormCheckbox } from '../../../../../../theme/form';
 import FieldsForm from '../../components/establishProfile/FieldsForm';
-
 @inject('investorProfileStore', 'uiStore')
 @withRouter
 @observer
@@ -83,14 +82,16 @@ export default class Finances extends Component {
             changed={this.handleTick}
             defaults
           />
-          {FINANCES_FORM.fields.directorShareHolderOfCompany.value}
+          The name of the company is
+          <span> {FINANCES_FORM.fields.directorShareHolderOfCompany.value}</span>
           <FormCheckbox
             fielddata={FINANCES_FORM.fields.checkbox2}
             name="checkbox2"
             changed={this.handleTick}
             defaults
           />
-          {FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}
+          The name of firm is
+          <span> {FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}</span>
         </Form>
       </div>
     );

@@ -104,6 +104,12 @@ class InvestorProfileStore {
     }
   }
 
+  @computed
+  get isValidInvestorProfileForm() {
+    return this.EMPLOYMENT_FORM.meta.isValid && this.INVESTOR_PROFILE_FORM.meta.isValid
+    && this.FINANCES_FORM.meta.isValid && this.INVESTMENT_EXPERIENCE.meta.isValid;
+  }
+
   @action
   updateInvestorProfileData = (currentStep) => {
     let formPayload = '';
@@ -146,9 +152,9 @@ class InvestorProfileStore {
           readyForRisksInvolved: readyForRisksInvolvedValue,
           readyInvestingInLimitedLiquiditySecurities: liquiditySecurities,
         },
-        // FormValidator.ExtractValues(this.INVESTMENT_EXPERIENCE.fields),
       };
     }
+    formPayload.isPartialProfile = !this.isValidInvestorProfileForm;
     this.submitForm(currentStep, formPayload);
   }
 
