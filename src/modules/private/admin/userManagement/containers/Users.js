@@ -44,7 +44,7 @@ class Users extends Component {
 
   render() {
     const {
-      users, loading, error, usersSummary, requestState,
+      users, loading, error, usersSummary, requestState, filters,
     } = this.props.userListingStore;
     return (
       <PrivateLayout
@@ -59,6 +59,7 @@ class Users extends Component {
           dateFilterEnd={this.dateFilterEnd}
           summary={usersSummary}
           removeFilter={this.removeFilter}
+          filters={filters}
         />}
       >
         <UserListing
