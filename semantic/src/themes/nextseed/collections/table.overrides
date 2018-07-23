@@ -13,7 +13,7 @@
             color:@tertiary-text;
             &:after{
                 font-size:@16px;
-                color:@theme-primary;
+                color:@primary-one;
             }
         }
     }

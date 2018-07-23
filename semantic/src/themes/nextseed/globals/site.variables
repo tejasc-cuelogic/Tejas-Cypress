@@ -148,9 +148,9 @@
        Links
 --------------------*/
 
-@linkColor           : @theme-primary;
+@linkColor           : @primary-one;
 @linkUnderline       : none;
-@linkHoverColor      : @theme-primary-darken;
+@linkHoverColor      : @primary-one-darken;
 @linkHoverUnderline  : @linkUnderline;
 
 /*-------------------
@@ -250,7 +250,7 @@
 @lightOrange      : #FF851B;
 @lightYellow      : #FFE21F;
 @lightOlive       : #D9E778;
-@lightGreen       : @theme-primary;
+@lightGreen       : @primary-one-lighten;
 @lightTeal        : #6DFFFF;
 @lightBlue        : #54C8FF;
 @lightViolet      : #A291FB;
@@ -1001,8 +1001,8 @@
 /* --------------------------------------------
       OLD VARIABLE VALUES TO BE REMOVED
 -------------------------------------------- */
-@theme-primary:#98CE23;
-@theme-primary-darken:darken(@theme-primary, 8%);					//  #81AD23 ~ 85B02B
+// @theme-primary:#98CE23;
+// @theme-primary-darken:darken(@theme-primary, 8%);					//  #81AD23 ~ 85B02B
 
 //  BACKGROUND COLORS
 @dark-bg-color:#424242;

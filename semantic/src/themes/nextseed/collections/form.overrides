@@ -30,7 +30,7 @@
                 background-repeat:repeat-x;
                 background-position-x:35px;
                 &:focus{
-                    background-image:linear-gradient(to left, @theme-primary 75%, rgba(0, 0, 0, 0) 0%);
+                    background-image:linear-gradient(to left, @primary-one 75%, rgba(0, 0, 0, 0) 0%);
                 }
             }
         }
@@ -80,7 +80,7 @@
         input[type=time],
         input[type=url]{
             &:focus{
-                border-color:@theme-primary;
+                border-color:@primary-one;
             }
             &::placeholder{
                 color:@quaternary-text;
@@ -151,12 +151,12 @@
                 line-height:@20px;
                 font-weight:500;
                 text-transform:uppercase;
-                color:@theme-primary;
+                color:@primary-one;
                 &:last-child{
                     margin-right:0;
                 }
                 &:hover, &:focus, &:active{
-                    color:darken(@theme-primary, 8%);
+                    color:darken(@primary-one, 8%);
                 }
                 &.negative{
                     color:@quaternary-text;

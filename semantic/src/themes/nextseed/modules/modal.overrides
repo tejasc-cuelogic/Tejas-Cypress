@@ -165,9 +165,9 @@
                 color:@fullBlack;
             }
             &:hover, &:focus, &.active{
-                border-color:@theme-primary-darken;
+                border-color:@primary-one-darken;
                 i.icon{
-                    color:@theme-primary-darken;
+                    color:@primary-one-darken;
                 }
             }
         }
@@ -187,9 +187,10 @@
             font-size:@16px;
             color:@quaternary-text;
             text-transform:none;
+            box-shadow:none;
         }
         a.theme-link, .button.theme-link{
-            color:@theme-primary;
+            color:@primary-one;
         }
         .display-only input[type=tel]:read-only,
         .display-only input[type=email]:read-only,
@@ -213,7 +214,7 @@
         input[type=email].display-only:not(:read-only){
             background-color:@white;
             &:focus{
-                border-color:@theme-primary;
+                border-color:@primary-one;
                 outline:none;
             }
         }

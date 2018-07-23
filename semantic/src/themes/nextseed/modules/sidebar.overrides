@@ -71,7 +71,7 @@
 			&:hover, &:focus, &.active{
 				background:@light-bg-color;
 				.icon:not(.dropdown){
-					color:@theme-primary;
+					color:@primary-one;
 				}
 			}
 		}
@@ -91,7 +91,7 @@
 						font-family:'Nextseed';
 						height:24px;
 						line-height:24px;
-						color:@theme-primary;
+						color:@primary-one;
 						&:before{
 							content:"\e914";
 						}
@@ -305,7 +305,7 @@
 	.item{
 		&:hover, &:focus, &.active, &.active:hover{
 			background-color:@secondary-text;
-			color:@theme-primary !important;
+			color:@primary-one !important;
 			.icon:not(.dropdown){
 				color:@quaternary-text;
 			}
@@ -318,7 +318,7 @@
 				.item{
 					color:@white !important;
 					&:hover, &:focus, &.active{
-						color:@theme-primary !important;
+						color:@primary-one !important;
 						background-color:@secondary-text !important;
 					}
 				}

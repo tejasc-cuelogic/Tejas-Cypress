@@ -220,7 +220,7 @@ footer{
             color:@border-light;
         }
         &.done >.icon{
-            color:@theme-primary;
+            color:@primary-one;
         }
     }
 }

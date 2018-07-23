@@ -42,15 +42,16 @@
         }
         a.link{
             font-weight:700;
-            color:@theme-primary;
+            color:@primary-one;
             &:hover, &:focus{
-                color:@theme-primary-darken;
+                color:@primary-one;
+                text-decoration:underline;
             }
         }
         i.icon:not(.ns-close-light){
             font-size:@32px;
             margin:0 0 0 0.6em;
-            color:@theme-primary;
+            color:@primary-one;
         }
         .link-button.close{
             font-size:@12px;
@@ -74,10 +75,5 @@
                 flex-grow:1;
             }
         }
-        // h4.ui.header{
-        //     font-size:@20px;
-        //     font-weight:900;
-        //     color:@theme-primary;
-        // }
     }
 }

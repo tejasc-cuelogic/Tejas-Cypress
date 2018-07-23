@@ -84,7 +84,7 @@
 
 /* Input Focus */
 @inputFocusBackground: @inputBackground;
-@inputFocusBorderColor: @theme-primary;
+@inputFocusBorderColor: @primary-one;
 @inputFocusColor: @fullBlack;
 @inputFocusBoxShadow: @inputFocusPointerSize 0em 0em 0em @selectedBorderColor inset;
 @inputFocusBorderRadius: @inputBorderRadius;
@@ -108,7 +108,7 @@
 @inputAutoFillBackground:@white;
 @inputAutoFillBorder:@border-color;
 @inputAutoFillFocusBackground:@white;
-@inputAutoFillFocusBorder:@theme-primary;
+@inputAutoFillFocusBorder:@primary-one;
 @inputAutoFillErrorBackground: #FFFAF0;
 @inputAutoFillErrorBorder: #E0B4B4;
 

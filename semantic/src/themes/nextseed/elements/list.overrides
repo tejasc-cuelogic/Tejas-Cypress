@@ -23,7 +23,7 @@
         a.item{
             color:@inverse-secondary-text;
             &:hover, &:focus, &.active{
-                color:@theme-primary;
+                color:@primary-one;
             }
         }
     }
@@ -52,7 +52,7 @@
             border-bottom:2px solid transparent;
             &:hover, &:focus, &.active{
                 color:@primary-text;
-                border-color:@theme-primary;
+                border-color:@primary-one;
             }
         }
     }
@@ -154,7 +154,7 @@
             display:block;
             padding:0;
             margin:0 auto @10px;
-            color:@theme-primary;
+            color:@primary-one;
         }
     }
 }

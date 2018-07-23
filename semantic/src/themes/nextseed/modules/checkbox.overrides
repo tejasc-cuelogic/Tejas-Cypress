@@ -69,7 +69,7 @@
 			height:100%;
 		}
 		input:checked ~ label{
-			border-color:@theme-primary;
+			border-color:@primary-one;
 		}
 	}
 }
@@ -114,9 +114,9 @@
 			height:100%;
 		}
 		input:checked ~ label{
-			border-color:@theme-primary;
+			border-color:@primary-one;
 			>.icon:not(.help){
-				color:@theme-primary;
+				color:@primary-one;
 			}
 		}
 	}

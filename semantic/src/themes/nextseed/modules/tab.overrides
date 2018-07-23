@@ -77,10 +77,10 @@
             }
             &.active{
                 .account-tab{
-                    border-color:@theme-primary;
+                    border-color:@primary-one;
                     .account-type{
-                        color:@theme-primary;
-                        border-color:@theme-primary;
+                        color:@primary-one;
+                        border-color:@primary-one;
                     }
                 }
             }

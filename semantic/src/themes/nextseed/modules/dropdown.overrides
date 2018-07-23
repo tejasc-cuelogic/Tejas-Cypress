@@ -70,7 +70,7 @@
 		margin:@2px -@menuGutterWidth 0;
 	}
 	>.dropdown.icon{
-		color:@theme-primary;
+		color:@primary-one;
 	}
 	~ .dropdown-effect{
 		position:absolute;

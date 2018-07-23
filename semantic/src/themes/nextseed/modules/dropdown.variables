@@ -191,11 +191,11 @@
 @selectionWidescreenMaxMenuHeight: (@selectionItemHeight * @selectionWidescreenMaxItems);
 
 /* Hover */
-@selectionHoverBorderColor: @theme-primary;
+@selectionHoverBorderColor: @primary-one;
 @selectionHoverBoxShadow: none;
 
 /* Focus */
-@selectionFocusBorderColor: @theme-primary;
+@selectionFocusBorderColor: @primary-one;
 @selectionFocusBoxShadow: none;
 @selectionFocusMenuBoxShadow:@customShadow;
 
@@ -203,12 +203,12 @@
 @selectionVisibleTextFontWeight: normal;
 @selectionVisibleTextColor: @hoveredTextColor;
 
-@selectionVisibleBorderColor: @theme-primary;
+@selectionVisibleBorderColor: @primary-one;
 @selectionVisibleBoxShadow:none;
 @selectionVisibleMenuBoxShadow:@customShadow;
 
 /* Visible Hover */
-@selectionActiveHoverBorderColor: @theme-primary;
+@selectionActiveHoverBorderColor: @primary-one;
 @selectionActiveHoverBoxShadow: @selectionVisibleBoxShadow;
 @selectionActiveHoverMenuBoxShadow: @selectionVisibleMenuBoxShadow;
 

@@ -89,7 +89,7 @@ h5, h5.ui.header{
 	color:@inverse-text !important;
 }
 .positive-text{
-	color:@theme-primary !important;
+	color:@primary-one !important;
 }
 .negative-text{
 	color:@highlight-primary !important;
@@ -633,14 +633,14 @@ h6{
 			position:absolute;
 			left:-30px;
 			top:0;
-			color:@theme-primary;
+			color:@primary-one;
 			> i.icon, i.icons{
 				font-size:@14px;
 				line-height:1;
 				vertical-align:middle;
 			}
 			&:hover, &:active, &:focus{
-				color:darken(@theme-primary, 8%);
+				color:darken(@primary-one, 8%);
 			}
 		}
 	}
@@ -652,7 +652,7 @@ h6{
 		min-width:19px;
 		padding:0 4px;
 		margin-right:1rem;
-		background:@theme-primary;
+		background:@primary-one;
 		display:inline-block;
 		font-size:@11px;
 		line-height:@19px;
@@ -1003,7 +1003,7 @@ a.disabled, a.disabled:hover, a.disabled:focus{
 		i.icon{
 			color:@border-color;
 			&.check.circle{
-				color:@theme-primary;
+				color:@primary-one;
 			}
 		}
 	}
@@ -1078,9 +1078,9 @@ ol.progtrckr{
 			}
 		}
 		&.progtrckr-done{
-			color:@theme-primary;
+			color:@primary-one;
 			&:after{
-				background:@theme-primary;
+				background:@primary-one;
 			}
 		}
 		&.progtrckr-todo, &.progtrckr-doing, &.progtrckr-done{

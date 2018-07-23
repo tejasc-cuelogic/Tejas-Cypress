@@ -48,7 +48,7 @@
 		.ns-chevron-down.icon {
 			margin:0;
 			height:@21px;
-			color:@theme-primary;
+			color:@primary-one;
 			line-height:@21px;
 			position:absolute;
 			right:0;
@@ -102,7 +102,7 @@
 					left:0;
 					top:0;
 					bottom:0;
-					background-color:@theme-primary;
+					background-color:@primary-one;
 				}
 			}
 		}
