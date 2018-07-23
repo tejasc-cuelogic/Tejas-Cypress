@@ -1245,6 +1245,8 @@ svg:not(:root).recharts-surface{
 		font-size:@32px;
 		.sub.header{
 			font-size:@14px;
+			line-height:18px;
+			font-weight:@normal;
 			> a{
 				font-weight:700;
 			}
