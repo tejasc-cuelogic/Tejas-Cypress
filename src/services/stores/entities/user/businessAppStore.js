@@ -103,16 +103,20 @@ export class BusinessAppStore {
 
   @action
   fetchApplicationDataById = (applicationId) => {
-    this.businessApplicationsDataById = graphql({
-      client,
-      query: getBusinessApplicationsById,
-      variables: {
-        id: applicationId,
-      },
-      fetchPolicy: 'network-only',
-      onFetch: () => {
-        this.setBusinessApplicationData();
-      },
+    console.log(applicationId);
+    return new Promise((resolve) => {
+      this.businessApplicationsDataById = graphql({
+        client,
+        query: getBusinessApplicationsById,
+        variables: {
+          id: applicationId,
+        },
+        fetchPolicy: 'network-only',
+        onFetch: () => {
+          this.setBusinessApplicationData();
+          resolve();
+        },
+      });
     });
   }
 
@@ -128,12 +132,14 @@ export class BusinessAppStore {
   @computed get calculateStepToRender() {
     const data = this.fetchBusinessApplicationsDataById;
     let url = 'pre-qualification';
-    if (data && data.businessApplication) {
-      if (data.businessApplication.businessDetails && data.businessApplication.businessDetails.stepStatus === 'IN_PROGRESS') {
+    if (data) {
+      if (!data.businessDetails || (data.businessDetails && data.businessDetails.stepStatus === 'IN_PROGRESS')) {
         url = 'business-details';
-      } else if (data.businessApplication.businessPerformance && data.businessApplication.businessPerformance.stepStatus === 'IN_PROGRESS') {
+      } else if (!data.businessPerformance || (data.businessPerformance && data.businessPerformance.stepStatus === 'IN_PROGRESS')) {
         url = 'performance';
-      } else if (data.businessApplication.businessDocumentation && data.businessApplication.businessDocumentation.stepStatus === 'IN_PROGRESS') {
+      } else if (!data.businessDocumentation || (data.businessDocumentation && data.businessDocumentation.stepStatus === 'IN_PROGRESS')) {
+        url = 'documentation';
+      } else if ((data.businessDocumentation && data.businessDocumentation.stepStatus === 'COMPLETE') && (data.businessPerformance && data.businessPerformance.stepStatus === 'COMPLETE') && (data.businessDetails && data.businessDetails.stepStatus === 'COMPLETE')) {
         url = 'documentation';
       }
     }
