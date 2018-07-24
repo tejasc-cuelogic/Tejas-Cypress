@@ -303,6 +303,53 @@ export const PRIVATE_NAV = [
 ];
 
 export const PUBLIC_NAV = [
-  { title: 'Explore Campaigns', to: 'offerings' },
-  { title: 'How NextSeed Works', to: 'business' },
+  {
+    title: 'Explore Campaigns',
+    to: 'offerings',
+    subNavigations: [
+      {
+        icon: 'home', title: 'Overview', to: 'overview', component: 'Overview',
+      },
+      {
+        icon: 'home', title: 'About the Company', to: 'about', component: 'AboutCompany',
+      },
+      {
+        icon: 'home', title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
+      },
+      {
+        icon: 'home', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
+      },
+      {
+        icon: 'home', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
+      },
+      {
+        icon: 'home', title: 'Comments', to: 'comments', component: 'Comments',
+      },
+      {
+        icon: 'share alternate', title: 'Share', to: 'share', component: 'Share',
+      },
+    ],
+  },
+  {
+    title: 'How NextSeed Works',
+    to: 'business',
+    subNavigations: [
+      { title: 'How it Works', to: 'how-it-works' },
+      { title: 'Funding Options', to: 'funding-options' },
+      { title: 'Process', to: 'process', component: 'InvestmentDetails' },
+      { title: 'All-Inclusive', to: 'all-inclusive', component: 'BonusRewards' },
+      { title: 'Compare', to: 'compare', component: 'Disclosures' },
+    ],
+  },
+  {
+    title: 'Why NextSeed',
+    to: 'invest',
+    subNavigations: [
+      { title: 'Why Nextseed', to: 'why-nextseed' },
+      { title: 'How it Works', to: 'how-it-works' },
+      { title: 'Account Types', to: 'account-types' },
+      { title: 'Security', to: 'security' },
+      { title: 'Track', to: 'track' },
+    ],
+  },
 ];

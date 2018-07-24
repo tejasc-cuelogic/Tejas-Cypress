@@ -42,6 +42,12 @@ h5, h5.ui.header{
 .pull-right{
 	float:right;
 }
+.mb-10 {
+	margin-bottom: @10px !important;
+}
+.mb-20 {
+	margin-bottom: @20px !important;
+}
 .mb-30 {
 	margin-bottom: @30px !important;
 }
@@ -50,6 +56,25 @@ h5, h5.ui.header{
 }
 .mb-80 {
 	margin-bottom: 80px !important;
+}
+.mt-30 {
+	margin-top: @30px !important;
+}
+.mt-50 {
+	margin-top: @50px !important;
+}
+.mt-74 {
+	margin-top: 74px;
+}
+.mt-80 {
+	margin-top: 80px !important;
+}
+.note {
+	color: @neutral-light;
+	font-size: @12px !important;
+	line-height: @44px;
+	margin-top: 10px;
+	display: inline-block;
 }
 
 // Footer Styles
@@ -74,7 +99,7 @@ footer{
 	}
 }
 
-/** About Us **/
+// About Us - mission page
 .mission-statistic-section {
 	background-color: @neutral-lighten;
 	.mission-block {
@@ -136,23 +161,30 @@ footer{
 		font-family: @fontName; 
 	}
 }
-
-
-/** campaign filter **/
+// campaign filter
 .campaign-list-wrapper {
 	position: relative;
 	h5.ui.header {
 		color: @neutral-light;
 		margin-bottom: @35px;
 	}
+	.overlay {
+		background: @unselectedTextColor ;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 100%;
+	}
 }
 .offer-filter {
 	position: absolute;
-    background: @unselectedTextColor ;
-    height: 100%;
     width: 100%;
     left: 0;
-	top: 0;
+    top: 100%;
+    z-index: 9999;
+    bottom: 0;
 	.offer-filter-container {
 		background-color: #fff;
 		width: 100%;
@@ -190,8 +222,7 @@ footer{
 		}
 	}
 }
-
-/** Campaign Details **/
+// Campaign Details
 .offer-details {
 	padding-top: 74px;
     display: flex;
@@ -250,12 +281,6 @@ footer{
 			line-height: @20px;
 			&.detail-section {
 				line-height: @20px;
-			}
-			&.note {
-				color: @neutral-light;
-				font-size: @12px;
-				line-height: @44px;
-				margin-top: 10px
 			}
 			&.early-bird-title {
 				font-weight: bold;
@@ -376,7 +401,7 @@ footer{
 		}
 	}
 }
-/** Share icons **/
+// Share icons
 .share-icons {
 	margin-bottom: 30px;
 	i.icon {
@@ -408,8 +433,7 @@ footer{
 		}
 	}
 }
-
-/** Home Page **/
+// Home Page
 .how-it-works {
 	.ui.embed.centered-video {
 		margin: 0;
@@ -433,4 +457,171 @@ footer{
 			justify-content: center;
 		}
 	} 
+}
+// Business homepage
+.info-grid {
+	img {
+		display: inline-block;
+		width: 50px;
+		height: auto;
+		margin-right: 20px;
+	}
+	div {
+		display: inline-block;
+		width: ~"calc(100% - 70px)";
+	}
+}
+.testimonial-slider {
+	.ui.grid {
+		>.column {
+			&.testimonial-details {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				h3 {
+					line-height: 40px;
+					margin-top: 0;
+				}
+				.testimonial-user-details {
+					p {
+						color: @neutral;
+						margin-bottom: 0;
+					}
+					span {
+						line-height: @24px;
+						color: @primary-one;
+						font-weight: @bold;
+					}
+				}
+			}
+		}
+	}
+}
+.business-learn-more {
+	p {
+		text-align: left;
+		margin-left: 56px;
+	}
+}
+.funding-option {
+	padding-top: 74px;
+	.ui.compact.button {
+		margin: 0 10px; 
+	}
+}
+.content-spacer {
+	.column.side-section {
+		background-color: rgba(255, 255, 255, 0.81);
+		padding-bottom: 4.28571429rem;
+		padding-top: 4.28571429rem;
+		h2.ui.header {
+			line-height: 52px;
+		}
+		p {
+			line-height: 24px;
+			font-size: 15px;
+		}
+		&.process-right-section {
+			counter-reset: section;
+			.ui.card {
+				border: 0;
+				background-color: transparent;
+				&:hover {
+					box-shadow: none;
+				}
+				>.content {
+					text-align: left;
+					padding: 0 0 0 40px;
+					position: relative;
+					&:before {
+						counter-increment: section;
+						content: counter(section);  
+						position: absolute;
+						left: 0;
+						top: 5px;
+						font-weight: 500;
+						line-height: 24px;
+						font-size: 40px;
+						color: #20C86D;
+					}
+				}
+			}
+		}
+	}
+}
+.compare-section {
+	.note {
+		text-align: center;
+		display: block;
+		display: block;
+		width: 50%;
+		line-height: 20px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+.slick-slider {
+	.slick-slide {
+		.ui.grid {
+			display: flex !important;
+		}
+	}
+	.slick-prev, .slick-next {
+		width: 50px;
+		height: 50px;
+		&:before {
+			font-size: 30px;
+			color: #676A73;
+		}
+	}
+	.slick-next {
+		right: -50px;
+	}
+	.slick-prev {
+		left: -50px;
+	}
+}
+//Investor homepage
+.investor-bottom-buttons {
+	.ui.compact.button {
+		margin: 0 10px; 
+	}
+}
+.how-it-works-steps {
+	counter-reset: section;
+	.ui.grid {
+		>.column {
+			text-align: left;
+			padding-left: 40px !important;
+			position: relative;
+			&:before {
+				counter-increment: section;
+				content: counter(section);  
+				position: absolute;
+				left: 0;
+				top: 15px;
+				font-weight: 500;
+				line-height: 24px;
+				font-size: 40px;
+				color: #20C86D;
+			}
+		}
+	}
+}
+.ui.grid.flex-column {
+	.column {
+		display: flex !important;
+		flex-direction: column;
+		.flex-content {
+			flex-grow: 1;
+			img {
+				width: 100%;
+			}
+		}
+	}
+}
+.why-nextseed-section {
+	.ui.compact.button {
+		margin: 0 10px;
+	}
 }

@@ -17,7 +17,7 @@ export class NavItems extends Component {
   isActive = (to, location, app) => (to !== '' && this.state.active === to) || location.pathname.startsWith(`/${app}/${to}`);
   render() {
     const {
-      location, isApp, refLoc, roles,
+      location, isApp, refLoc, roles, match,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = [...this.props.navItems];
@@ -62,7 +62,7 @@ export class NavItems extends Component {
             key={item.to}
             name={item.to}
             as={NavLink}
-            to={`${(isApp) ? '/app' : ''}/${item.to}`}
+            to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
           >
             {item.icon &&
               <Icon className={item.icon} />
@@ -86,7 +86,13 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
 export const NavigationItems = props => (
-  <Menu stackable borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" className={props.location.pathname.includes('/offerings') ? '' : 'inverted'}>
+  <Menu
+    stackable
+    borderless
+    inverted={!props.location.pathname.includes('/offerings')}
+    fixed="top"
+    className={props.navStatus === 'sub' ? 'slide-up' : ''}
+  >
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
         <Logo
@@ -100,10 +106,10 @@ export const NavigationItems = props => (
         {!props.location.pathname.includes('/business-application') &&
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
-        <Menu.Item as={Link} to="/">
-          <Button secondary compact>Sign Up/Log In</Button>
-        </Menu.Item>
       </Menu.Menu>
+      <Menu.Item as={Link} to="/auth/login">
+        <Button secondary compact>Sign Up/Log In</Button>
+      </Menu.Item>
     </Container>
   </Menu>
 );

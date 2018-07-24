@@ -1,0 +1,19 @@
+<svg width="47" height="45" viewBox="0 0 47 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M32.0713 10V6.10352e-06H3.05855e-06V43H32.0713V33" transform="translate(1 1)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M1.1655 24C-0.538286 21.3 -0.0371784 16.4 0.564158 14.6L2.16773 14.2C2.16773 14.2 1.76684 11.7 3.67107 9.3C5.97619 6.4 12.3904 0.599997 24.9183 -3.05176e-06C20.4083 5.1 17.1009 13.7 16.2991 15C14.5953 16.1 12.9918 16.9 12.9918 16.9L14.4951 18.4C14.4951 18.3 6.27686 25.4 1.1655 24Z" transform="translate(21.082 10.6001)" stroke="#505050" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M16.4365 3.05176e-06C6.91537 7.2 2.00445 16.3 -3.05855e-06 22.3" transform="translate(19.9424 17.7002)" stroke="#505050" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M3.05855e-06 6.10352e-06H32.0713" transform="translate(1 7)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M3.05855e-06 6.10352e-06H2.00446" transform="translate(4.00684 4)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M3.05855e-06 6.10352e-06H2.00446" transform="translate(8.01562 4)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M3.05856e-06 6.10352e-06H2.00446" transform="translate(12.0244 4)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M11.0245 6.10352e-06H3.05855e-06V10H11.0245V6.10352e-06Z" transform="translate(5.00879 11)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M3.05855e-06 6.10352e-06H10.0223" transform="translate(19.04 12)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M3.05855e-06 6.10352e-06H4.00891" transform="translate(19.04 17)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M3.05855e-06 6.10352e-06H13.029" transform="translate(4.00684 26)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M3.05855e-06 6.10352e-06H13.029" transform="translate(4.00684 31)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10"/>
+<g opacity="0.5">
+<g opacity="0.5">
+<path opacity="0.5" d="M11.0245 6.10352e-06H3.05855e-06V10H11.0245V6.10352e-06Z" transform="translate(5.00879 11)" fill="#00CA69"/>
+</g>
+</g>
+</svg>
