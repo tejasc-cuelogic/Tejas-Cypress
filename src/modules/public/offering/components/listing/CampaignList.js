@@ -94,7 +94,7 @@ export default class CampaignList extends Component {
             </Card.Group>
             {this.props.explore && (
               <div className="explore-campaign-button">
-                <Button secondary compact as={Link} to="/offerings/">Explore Campaigns</Button>
+                <Button secondary as={Link} to="/offerings/">Explore Campaigns</Button>
               </div>
             )
             }

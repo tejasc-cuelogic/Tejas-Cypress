@@ -377,7 +377,7 @@
 
 /* Inverted */
 @dimmerColor: rgba(0, 0, 0, 0.4);
-@invertedBackground:@tertiary-text;
+@invertedBackground:@neutral;
 @invertedBoxShadow:none;
 @invertedBorder:none;
 @invertedHeaderBackground: transparent;

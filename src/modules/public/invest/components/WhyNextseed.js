@@ -99,8 +99,8 @@ const WhyNextseed = () => (
           </Grid.Column>
         </Grid>
         <div className="center-align mt-50">
-          <Button as={Link} to="/auth/register" secondary compact>Sign Up Free</Button>
-          <Button as={Link} to="/invest/how-it-works" primary compact>See How it Works</Button>
+          <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+          <Button as={Link} to="/invest/how-it-works" primary>See How it Works</Button>
         </div>
       </Container>
     </section>

@@ -34,7 +34,7 @@ export default class CampaignSideBar extends Component {
               <Statistic.Label>Early Birds</Statistic.Label>
             </Statistic>
           </Statistic.Group>
-          <Button secondary compact>Invest Now</Button>
+          <Button secondary>Invest Now</Button>
         </div>
         <Menu vertical fluid>
           <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} />

@@ -274,7 +274,6 @@ footer{
 
 /** Campaign Details **/
 .offer-details {
-	padding-top: 74px;
     display: flex;
     flex-direction: row;
     min-height: 100vh;
@@ -282,7 +281,7 @@ footer{
 		background-color: @neutral ;
 		padding: 0;
 		width: 280px;
-		height: ~"calc(100vh - 74px)";
+		height: ~"calc(100vh - 58px)";
 		position: fixed;
 		z-index: 1;
 		overflow: auto;
@@ -327,7 +326,6 @@ footer{
 		p {
 			color: @neutral;
 			font-size: @15px;
-			letter-spacing: 1px;
 			line-height: @20px;
 			&.detail-section {
 				line-height: @20px;

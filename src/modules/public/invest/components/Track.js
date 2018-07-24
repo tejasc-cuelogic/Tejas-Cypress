@@ -13,7 +13,7 @@ const Track = () => (
       </Container>
     </section>
     <div className="center-align mb-50 investor-bottom-buttons">
-      <Button as={Link} to="/auth/register" secondary compact>Sign Up Free</Button>
+      <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
     </div>
   </Aux>
 );

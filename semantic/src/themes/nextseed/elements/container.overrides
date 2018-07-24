@@ -4,7 +4,8 @@
 section{
     &.banner {
         height:710px;
-        padding-top:74px;
+        padding-top:58px;
+        margin-top:-58px;
         >.ui.container{
             display:table;
             height: 100%;
@@ -29,14 +30,14 @@ section{
         &.invest-banner{
             background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat / cover;
         }
-        +.slide-down {
-            margin-top: 0;
-        }
+        // +.slide-down {
+        //     margin-top: 0;
+        // }
     }
 }
 // business and invest pages
 .content-spacer {
-	padding: 0;
+	// padding: 0;
 	&.process-banner {
 		background:url(../../assets/images/business/process.png) 0px center no-repeat;
 	}
@@ -45,6 +46,6 @@ section{
 	}
 }
 // for PublicSubNav on business and invest inner pages
-.slide-down {
-    margin-top: 74px;
-}
+// .slide-down {
+//     margin-top: 74px;
+// }

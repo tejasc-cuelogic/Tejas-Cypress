@@ -13,7 +13,7 @@ const AccountTypes = () => (
       </Container>
     </section>
     <div className="center-align mb-50 investor-bottom-buttons">
-      <Button as={Link} to="/invest/security" primary compact>See Security</Button>
+      <Button as={Link} to="/invest/security" primary>See Security</Button>
     </div>
   </Aux>
 );

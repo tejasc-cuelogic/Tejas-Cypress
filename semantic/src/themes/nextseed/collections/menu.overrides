@@ -60,7 +60,7 @@
 }
 .ui.secondary.menu.menu-secondary-fixed {
     border:none;
-    height:74px;
+    height:58px;
     border-radius:0;
     box-shadow:none;
     .item{
