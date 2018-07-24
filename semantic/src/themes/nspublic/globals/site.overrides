@@ -165,14 +165,23 @@ footer{
 		color: @neutral-light;
 		margin-bottom: @35px;
 	}
+	.overlay {
+		background: @unselectedTextColor ;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 100%;
+	}
 }
 .offer-filter {
 	position: absolute;
-    background: @unselectedTextColor ;
-    height: 100%;
     width: 100%;
     left: 0;
-	top: 0;
+    top: 100%;
+    z-index: 9999;
+    bottom: 0;
 	.offer-filter-container {
 		background-color: #fff;
 		width: 100%;
@@ -490,17 +499,49 @@ footer{
 		text-align: left;
 		margin-left: 56px;
 	}
-
-	.ui.horizontal.list {
-		&:not(.celled) {
-		   >.item:first-child {
-			   margin-right: 20px;
-		   }
-		}
-		>.item {
-			>.icon+.content {
-				font-size: @13px;
-				color: @neutral-light;
+}
+.funding-option {
+	padding-top: 174px;
+	.ui.compact.button {
+		margin: 0 10px; 
+	}
+}
+.process {
+	margin-top: 74px;
+	padding: 0;
+	&.process-banner {
+		background:url(../../assets/images/process.png) 0px center no-repeat;
+	}
+	.column.process-right-section {
+		counter-reset: section;
+		background-color: rgba(255, 255, 255, 0.81);
+		padding-bottom: 4.28571429rem;
+		padding-top: 4.28571429rem;
+		.ui.card {
+			border: 0;
+			background-color: transparent;
+			&:hover {
+				box-shadow: none;
+			}
+			>.content {
+				text-align: left;
+				padding: 0 0 0 40px;
+				position: relative;
+				&:before {
+					counter-increment: section;
+  					content: counter(section);  
+					position: absolute;
+					left: 0;
+					top: 5px;
+					font-weight: 500;
+					line-height: 24px;
+					font-size: 40px;
+					color: #20C86D;
+				}
+				p {
+					line-height: 24px;
+					font-size: 15px;
+				}
 			}
 		}
 	}
