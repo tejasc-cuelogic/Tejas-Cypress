@@ -46,10 +46,10 @@ export class BankAccountStore {
   };
 
   @action
-  linkBankManuallyChange = (e, result) => {
+  linkBankManuallyChange = (values, field) => {
     this.formLinkBankManually = Validator.onChange(
       this.formLinkBankManually,
-      Validator.pullValues(e, result),
+      { name: field, value: values.floatValue },
     );
   };
 
