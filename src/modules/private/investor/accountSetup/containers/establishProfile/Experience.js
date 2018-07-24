@@ -14,7 +14,7 @@ export default class Experience extends Component {
           Investment Experience
         </Header>
         <Header as="h4" textAlign="center">
-          We are collecting the information below to better understand yout investment experience.
+          We are collecting the information below to better understand your investment experience.
           We recognize your responses may change over time as you work with us.
           Please check the box that best descrives your investment experience to date
         </Header>

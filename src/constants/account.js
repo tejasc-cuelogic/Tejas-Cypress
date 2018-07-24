@@ -378,7 +378,7 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Employer',
     error: undefined,
-    rule: 'required_if:employmentStatus,employed',
+    rule: 'required_if:employmentStatus,EMPLOYED',
     placeHolder: 'Type employer name',
   },
   currentPosition: {
@@ -386,7 +386,7 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Current Position Held',
     error: undefined,
-    rule: 'required_if:employmentStatus,employed',
+    rule: 'required_if:employmentStatus,EMPLOYED',
     placeHolder: 'E.g. CEO',
   },
 };

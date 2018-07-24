@@ -34,7 +34,6 @@ export default class IdentityVerification extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
     this.props.history.push('/app/summary');
   }
 
