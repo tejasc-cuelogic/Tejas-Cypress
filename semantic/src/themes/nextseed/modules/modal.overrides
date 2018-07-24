@@ -79,6 +79,7 @@
         }
         .user-type{
             height:100%;
+            min-height:165px;
             padding:@14px;
             border-radius:@defaultBorderRadius * 1.5;
             border:darken(@light-bg-color, 9%) 1px solid;
