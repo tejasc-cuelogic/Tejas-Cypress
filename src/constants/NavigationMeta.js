@@ -42,8 +42,8 @@ export const PRIVATE_NAV = [
     icon: 'ns-dashboard',
     title: 'Dashboard',
     to: 'dashboard',
-    path: { bowner: 'issuer/dashboard', admin: 'admin/dashboard/Dashboard' },
-    accessibleTo: ['bowner', 'admin'],
+    path: { issuer: 'issuer/dashboard', admin: 'admin/dashboard/Dashboard' },
+    accessibleTo: ['issuer', 'admin'],
     subPanel: 0,
   },
   {
@@ -74,7 +74,7 @@ export const PRIVATE_NAV = [
     icon: 'ns-article',
     title: 'Application',
     to: 'business-application',
-    accessibleTo: ['bowner'],
+    accessibleTo: ['issuer'],
     subPanel: 1,
     subNavigations: [
       {
@@ -151,7 +151,7 @@ export const PRIVATE_NAV = [
     icon: 'gift',
     title: 'Offering',
     to: 'offering/:id',
-    accessibleTo: ['bowner'],
+    accessibleTo: ['issuer'],
     path: 'issuer/offering',
     subPanel: 1,
     subNavigations: [
@@ -170,9 +170,9 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'ns-article',
-    title: { bowner: 'Resources', investor: 'Education Centre' },
+    title: { issuer: 'Resources', investor: 'Education Centre' },
     to: 'resources',
-    accessibleTo: ['investor', 'bowner'],
+    accessibleTo: ['investor', 'issuer'],
     subPanel: 1,
     path: 'shared/education/containers/Education',
     subNavigations: [
@@ -186,7 +186,7 @@ export const PRIVATE_NAV = [
     title: 'Events',
     to: 'events',
     path: 'issuer/events',
-    accessibleTo: ['bowner'],
+    accessibleTo: ['issuer'],
   },
   {
     icon: 'legal',

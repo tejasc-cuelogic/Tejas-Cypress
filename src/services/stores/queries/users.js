@@ -97,6 +97,7 @@ query getUserDetails($id: ID!) {
       url
     }
     investorProfileData {
+      isPartialProfile
       employmentStatusInfo {
         employmentStatus
         employer
@@ -145,7 +146,7 @@ export const deleteUserMutation = gql`
 `;
 
 export const toggleUserAccount = gql`
-  mutation updateUserStatus($id: String!, $status: UserProfileStatusEnum!) {
+  mutation updateUserStatus($id: String!, $status: profileEnum!) {
     updateUserStatus(userId: $id, accountStatus:$status) {
       id
     }

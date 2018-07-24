@@ -29,10 +29,12 @@ export const ByKeyword = ({
   w, executeSearch, placeholder, fLabel,
 }) => (
   <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
-    <Form.Field inverted>
-      {fLabel && <label className="invisible">{placeholder}</label>}
-      <Input fluid onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />
-    </Form.Field>
+    <Form>
+      <Form.Field inverted>
+        {fLabel && <label className="invisible">{placeholder}</label>}
+        <Input fluid onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />
+      </Form.Field>
+    </Form>
   </Grid.Column>
 );
 

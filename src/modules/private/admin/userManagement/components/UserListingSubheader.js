@@ -24,7 +24,7 @@ export const P3 = () => (
 
 export const P5 = props => (
   <Aux>
-    <div className="search-filters">
+    <div className={`search-filters ${props.filters ? '' : 'collapsed'}`}>
       <Form inverted>
         <Grid stackable>
           <Grid.Row>

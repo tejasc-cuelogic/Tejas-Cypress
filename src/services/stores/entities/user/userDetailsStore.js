@@ -129,7 +129,10 @@ export class UserDetailsStore {
       details.phoneVerification = (this.userDetails.contactDetails &&
         this.userDetails.contactDetails.phone &&
         this.userDetails.contactDetails.phone.verificationDate) ? 'DONE' : 'FAIL';
-
+      details.investorProfileCompleted =
+      this.userDetails.investorProfileData === null ?
+        false : this.userDetails.investorProfileData ?
+          !this.userDetails.investorProfileData.isPartialProfile : false;
       details.finalStatus = (details.activeAccounts.length > 2 &&
         this.validAccStatus.includes(details.idVerification) &&
         details.phoneVerification === 'DONE');
