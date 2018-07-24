@@ -42,7 +42,10 @@ section{
 	}
 	&.inclusive-banner {
 		background:url(../../assets/images/business/inclusive.png) right center no-repeat;
-	}
+    }
+    &.account-banner {
+        background:url(../../assets/images/investors/account_types.png) right top no-repeat;
+    }
 }
 // for PublicSubNav on business and invest inner pages
 .slide-down {
