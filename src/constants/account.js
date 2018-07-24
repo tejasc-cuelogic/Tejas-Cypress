@@ -6,6 +6,10 @@ Validator.register('taxId', (value, requirement, attribute) => {
   return value.match(/^\d{2}-\d{7}$/);
 }, 'The :attribute is not in the format XX-XXXXXXX.');
 
+Validator.register('minAcnum', (value, requirement, attribute) => {
+  return value.toString().length > 3 && value.toString().length < 18;
+}, 'The :attribute should be at least 4 digits and at most 17 digits');
+
 export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
 
 export const PLAID_PUBLIC_KEY = process.env.REACT_APP_PLAID_PUBLIC_KEY;
@@ -84,7 +88,7 @@ export const IND_LINK_BANK_MANUALLY = {
     error: undefined,
     rule: 'required|numeric|digits:9',
     placeHolder: '123456789',
-    label: 'Enter your bank routing number',
+    label: 'Bank routing number',
     tooltip: 'Put your 9 digit bank routing number',
     maxLength: 9,
   },
@@ -93,8 +97,8 @@ export const IND_LINK_BANK_MANUALLY = {
     value: '',
     error: undefined,
     placeHolder: '123456789',
-    rule: 'required|min:4|max:17',
-    label: 'Enter your bank account number',
+    rule: 'required|minAcnum',
+    label: 'Bank account number',
     tooltip: 'Put your 4 to 17 digit bank account number',
     maxLength: 17,
   },
