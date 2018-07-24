@@ -33,15 +33,15 @@
             line-height:18px;
             >b{
                 color:@white;
-                font-weight:700;
+                font-weight:@fontMedium;
             }
         }
-        h2.ui.header{
+        h3.ui.header{
             margin:0 0 @7px 0;
             color:@white;
         }
         a.link{
-            font-weight:700;
+            font-weight:@fontMedium;
             color:@primary-one;
             &:hover, &:focus{
                 color:@primary-one;

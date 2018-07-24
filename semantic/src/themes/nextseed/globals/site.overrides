@@ -17,8 +17,23 @@ section{
 	}
 }
 //	Helper Classes
+//	Heading font sizes
+h1, h1.ui.header{
+	font-weight:@normal;
+	line-height:62px;
+}
+h2, h2.ui.header{
+	line-height:44px;
+}
+h4, h4.ui.header{
+	line-height:24px;
+}
 h5, h5.ui.header{
 	font-weight:@bold;
+}
+h6{
+	font-size:@14px;
+	font-weight:@fontMedium;
 }
 .mb-10 {
 	margin-bottom: @10px !important;
@@ -584,23 +599,6 @@ div.login-form {
 	}
 }
 
-//	Heading font sizes
-h1.ui.header{
-	font-weight:@normal;
-	line-height:62px;
-}
-h2.ui.header{
-	line-height:44px;
-}
-h5.ui.header{
-	font-weight:@bold;
-}
-h6{
-	font-size:@14px;
-	font-weight:@fontMedium;
-}
-
-// Helper classes
 //	Admin Page Content Styles
 
 //	Page Header Styles
@@ -840,7 +838,7 @@ h6{
 	}
 	.notification-wrap{
 		height:~"calc(100vh - 80px)";
-		padding:0 @14px;
+		padding:@10px @14px;
 		overflow:auto;
 	}
 }

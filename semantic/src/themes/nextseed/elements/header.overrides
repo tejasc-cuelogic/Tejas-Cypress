@@ -71,7 +71,7 @@
 }
 
 .notification-panel{
-	h3.ui.header{
+	h4.ui.header{
 		margin:0;
         padding:@14px;
         position:relative;
