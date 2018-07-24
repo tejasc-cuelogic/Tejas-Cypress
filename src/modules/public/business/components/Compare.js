@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 
 const Compare = () => (
   <Aux>
-    <section className="mt-74 compare-section">
+    <section className="compare-section">
       <Container>
         <Header as="h2" textAlign="center" className="mb-30">See how we stack up.</Header>
         <Table fixed celled definition striped className="mb-50 compare-table">
