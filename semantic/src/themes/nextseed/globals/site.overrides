@@ -321,6 +321,9 @@ a.text-link{
 	@media only screen and (max-width : @largestMobileScreen){
 		padding:@7px @10px @14px;
 	}
+	&.collapsed {
+		display:none;
+	}
 }
 .filter-meta{
 	background-color:@secondary-text;
@@ -941,7 +944,7 @@ p.check-extra-info{
 	&.admin{
 		background-color:@highlight-primary;
 	}
-	&.bowner{
+	&.issuer{
 		background-color:@fullBlack;
 	}
 	&.investor{

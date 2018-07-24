@@ -1,5 +1,10 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-07-18)
+# 0.0.0 (2018-07-20)
+
+
+### Bug Fixes
+
+* **UserManagement[Issue [263](https://chaos.ns.team/nsv2/ns-ops/issues/263) - user management ui fixes from review]:** user management ui fixes from review ([b47f55e](https://chaos.ns.team/nsv2/ns-client/commits/b47f55e))
 
 
 ### Features
