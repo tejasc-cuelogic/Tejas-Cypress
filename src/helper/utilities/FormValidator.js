@@ -55,6 +55,7 @@ class FormValidator {
     const currentForm = form;
     let validation;
     if (!isMultiForm) {
+      console.log(currentForm.fields);
       validation = new Validator(
         mapValues(currentForm.fields, f => f.value),
         mapValues(currentForm.fields, f => f.rule),

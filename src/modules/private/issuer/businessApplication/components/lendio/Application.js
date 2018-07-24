@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
+import { indexOf } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
@@ -38,7 +38,7 @@ export default class Application extends Component {
       lendioEleChange,
     } = this.props.businessAppStore;
     const { fields } = LENDIO_QUAL_FRM;
-    const checkIsPresent = _.indexOf(fields.applicationAgreeConditions.value, 'agreeConditions');
+    const checkIsPresent = indexOf(fields.applicationAgreeConditions.value, 'agreeConditions');
     return (
       <Grid container>
         <Grid.Column className="issuer-signup">

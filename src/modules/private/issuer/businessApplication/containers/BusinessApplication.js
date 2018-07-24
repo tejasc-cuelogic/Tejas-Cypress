@@ -26,16 +26,17 @@ const getModule = component => Loadable({
 export default class BusinessApplication extends Component {
   componentWillMount() {
     const { params } = this.props.match;
+    const { pathname } = this.props.location;
     const {
       isFetchedData, fetchApplicationDataById, setFieldvalue, formReset,
-      calculateStepToRender,
     } = this.props.businessAppStore;
     setFieldvalue('currentApplicationId', params.applicationId);
     if (params.applicationId !== 'new' && isFetchedData !== params.applicationId) {
       setFieldvalue('isFetchedData', params.applicationId);
       fetchApplicationDataById(params.applicationId).then(() => {
-        console.log(`${this.props.match.url}/${calculateStepToRender}`);
-        // this.props.history.replace(`${this.props.match.url}/${calculateStepToRender}`);
+        if (includes(pathname, 'pre-qualification') || includes(pathname, 'business-details') || includes(pathname, 'performance') || includes(pathname, 'documentation')) {
+          this.props.history.replace(`${this.props.match.url}/${this.props.businessAppStore.stepToRender}`);
+        }
       });
     } else if (params.applicationId === 'new') {
       this.props.navStore.setAccessParams('appStatus', 'NEW');
@@ -70,6 +71,8 @@ export default class BusinessApplication extends Component {
       || includes(pathname, 'failed') || includes(pathname, 'success') || includes(pathname, 'lendio');
     const preQualPage = includes(pathname, 'pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
+    // LogoWhite LogoNsAndLendio
+    const logoUrl = includes(pathname, `${match.url}/lendio`) || includes(pathname, `${match.url}/success/lendio`) ? 'LogoNsAndLendio' : 'LogoWhite';
     return (
       <PrivateLayout
         subNav={!showSubNav}
@@ -78,10 +81,10 @@ export default class BusinessApplication extends Component {
           <Logo
             className="logo"
             verticalAlign="middle"
-            dataSrc="LogoWhite"
+            dataSrc={logoUrl}
             as={Link}
             to="/app/dashboard"
-            size="small"
+            size={logoUrl === 'LogoWhite' ? 'small' : 'medium'}
           />
         }
         P4={!showSubNav && !preQualPage &&
