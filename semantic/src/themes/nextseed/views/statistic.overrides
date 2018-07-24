@@ -104,8 +104,14 @@
 	}
 }
 //  Public page Ends
-
+.ui.statistics .statistic,
 .ui.statistic{
+	> .value, > .label{
+		text-align:inherit;
+	}
+}
+
+.ui.statistic:not(.basic){
     position:relative;
     padding-left:@relative16px;
     &:before{

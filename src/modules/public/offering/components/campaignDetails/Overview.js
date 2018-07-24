@@ -93,7 +93,7 @@ class Overview extends Component {
                 <Header as="h3">Investment Return Calculator</Header>
                 <Grid columns={4} divided doubling className="investment-grid" padded="horizontally">
                   <Grid.Column>
-                    <Statistic size="mini">
+                    <Statistic size="mini" className="basic">
                       <Statistic.Label>Investment Multiple</Statistic.Label>
                       <Statistic.Value>1.70x–1.90x</Statistic.Value>
                       <p>
@@ -103,7 +103,7 @@ class Overview extends Component {
                     </Statistic>
                   </Grid.Column>
                   <Grid.Column>
-                    <Statistic size="mini">
+                    <Statistic size="mini" className="basic">
                       <Statistic.Label>Maturity*</Statistic.Label>
                       <Statistic.Value>78 months</Statistic.Value>
                       <p>
@@ -113,7 +113,7 @@ class Overview extends Component {
                     </Statistic>
                   </Grid.Column>
                   <Grid.Column>
-                    <Statistic size="mini">
+                    <Statistic size="mini" className="basic">
                       <Statistic.Label>Your Investment</Statistic.Label>
                       <Statistic.Value>$25,000</Statistic.Value>
                       <div className="slidecontainer">
@@ -122,7 +122,7 @@ class Overview extends Component {
                     </Statistic>
                   </Grid.Column>
                   <Grid.Column>
-                    <Statistic size="mini">
+                    <Statistic size="mini" className="basic">
                       <Statistic.Label>Total Payment*</Statistic.Label>
                       <Statistic.Value>
                         $42,500

@@ -20,16 +20,16 @@ export default class CampaignSideBar extends Component {
           <p>
             <Icon name="flag" /> Min reached on 10 days ago
           </p>
-          <Statistic.Group widths="three">
-            <Statistic size="mini">
+          <Statistic.Group widths="three" className="center-align">
+            <Statistic size="mini" className="basic">
               <Statistic.Value>28</Statistic.Value>
               <Statistic.Label>Days left</Statistic.Label>
             </Statistic>
-            <Statistic size="mini">
+            <Statistic size="mini" className="basic">
               <Statistic.Value>106</Statistic.Value>
               <Statistic.Label>Investors</Statistic.Label>
             </Statistic>
-            <Statistic size="mini">
+            <Statistic size="mini" className="basic">
               <Statistic.Value>49</Statistic.Value>
               <Statistic.Label>Early Birds</Statistic.Label>
             </Statistic>

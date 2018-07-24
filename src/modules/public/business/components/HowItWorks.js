@@ -121,13 +121,13 @@ const HowItWorks = () => (
             <Grid columns={2}>
               <Grid.Row>
                 <Grid.Column>
-                  <Statistic color="green" size="mini">
+                  <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>$9M+</Statistic.Value>
                     <Statistic.Label>In capital deployed by NextSeed investors</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
                 <Grid.Column>
-                  <Statistic color="green" size="mini">
+                  <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>35+</Statistic.Value>
                     <Statistic.Label>Businesses successfully funded</Statistic.Label>
                   </Statistic>
@@ -135,13 +135,13 @@ const HowItWorks = () => (
               </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
-                  <Statistic color="green" size="mini">
+                  <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>135</Statistic.Value>
                     <Statistic.Label>Avg. number of investors per offering</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
                 <Grid.Column>
-                  <Statistic color="green" size="mini">
+                  <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>11,630</Statistic.Value>
                     <Statistic.Label>Avg. unique page views per offering</Statistic.Label>
                   </Statistic>

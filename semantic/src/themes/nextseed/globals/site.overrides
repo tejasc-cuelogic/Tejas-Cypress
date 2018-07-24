@@ -162,14 +162,12 @@ footer{
 		padding: @10px;
 		text-align: center;
 		color: #fff;
-		// border: 1px solid #fff;
 		&.green-block {
 			background-color: @primaryColor;
 		}
 		&.blue-block {
 			background-color: @secondary-color;
 		}
-	
 		.statistic {
 			margin-bottom: 0;
 			.value, .label {
@@ -178,22 +176,18 @@ footer{
 			}
 			.value~.label {
 				margin-top: 10px;
-				font-weight: 100;
 			}
 		}
-
 	}
 	.ui.grid.mission-base-block {
 		background-color: #fff;
 		padding: @10px;
 		margin-top: @10px;
-
 		.statistic {
 			.value {
 				font-family: @fontName; 
 				font-size: @28px;
 				line-height: @33px;
-	
 				&.primary-text {
 					color: @primaryColor !important;
 				}
