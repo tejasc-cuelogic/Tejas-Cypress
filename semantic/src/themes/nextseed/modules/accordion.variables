@@ -97,7 +97,7 @@
 @styledTitleHoverBackground: transparent;
 @styledTitleHoverColor: @textColor;
 @styledActiveTitleBackground: transparent;
-@styledActiveTitleColor: @primary-text;
+@styledActiveTitleColor: @neutral;
 
 /* Styled Child Title States */
 @styledHoverChildTitleBackground: @styledTitleHoverBackground;

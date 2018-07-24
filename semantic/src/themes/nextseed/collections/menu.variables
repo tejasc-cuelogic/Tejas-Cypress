@@ -390,23 +390,23 @@
 @invertedSubMenuColor: @invertedUnselectedTextColor;
 
 /* Inverted Hover */
-@invertedHoverBackground:@lighten-bg-color;
+@invertedHoverBackground:@neutral-offwhite;
 @invertedHoverColor:@link-color;
 
 @invertedSubMenuHoverBackground: transparent;
 @invertedSubMenuHoverColor: @invertedSelectedTextColor;
 
 /* Pressed */
-@invertedMenuPressedBackground:@lighten-bg-color;
+@invertedMenuPressedBackground:@neutral-offwhite;
 @invertedMenuPressedColor:@link-color;
 
 /* Inverted Active */
-@invertedActiveBackground: @lighten-bg-color;
+@invertedActiveBackground: @neutral-offwhite;
 @invertedActiveColor:@link-color;
 @invertedArrowActiveColor: #3D3E3F;
 
 /* Inverted Active Hover  */
-@invertedActiveHoverBackground:@lighten-bg-color;
+@invertedActiveHoverBackground:@neutral-offwhite;
 @invertedActiveHoverColor:@link-color;
 @invertedArrowActiveHoverColor: @invertedArrowActiveColor;
 

@@ -3,6 +3,6 @@
 *******************************/
 .ui.breadcrumb {
     a.section {
-        color: @neutral-light;
+        color: @neutral-middark;
     }
 }

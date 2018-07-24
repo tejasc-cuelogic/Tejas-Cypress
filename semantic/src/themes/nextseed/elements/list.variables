@@ -53,7 +53,7 @@
 /* Header */
 @itemHeaderFontFamily: @headerFont;
 @itemHeaderFontWeight: @bold;
-@itemHeaderColor: @quaternary-text;
+@itemHeaderColor: @neutral-middark;
 
 /* Description */
 @itemDescriptionColor: rgba(0, 0, 0, 0.7);

@@ -23,7 +23,7 @@
         box-shadow:0 0 20px fade(@fullBlack, 32%);
         .timestamp{
             font-size:@13px;
-            color:@inverse-secondary-text;
+            color:@neutral-offdark;
         }
         .header:not(.ui){
             margin:@7px 0;

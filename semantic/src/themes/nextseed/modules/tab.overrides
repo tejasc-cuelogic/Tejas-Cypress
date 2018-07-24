@@ -7,7 +7,7 @@
         height:100%;
         min-height:~"calc(100vh - 205px)";
         border:none;
-        background:@inverse-text;
+        background:@white;
         .item{
             padding:@18px @20px;
             border-radius:0 !important;
@@ -18,7 +18,7 @@
                 margin-right:@18px;
             }
             &.active{
-                background:@lighten-bg-color;
+                background:@neutral-offwhite;
             }
         }
     }

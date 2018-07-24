@@ -158,7 +158,7 @@
 @invertedInputBorderColor: @border-color;
 @invertedInputBoxShadow: @inputBoxShadow;
 @invertedInputColor: @white;
-@invertedLabelColor: @quaternary-text;
+@invertedLabelColor: @neutral-offdark;
 @invertedInputBoxShadow: none;
 
 /*-------------------

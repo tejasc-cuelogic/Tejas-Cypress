@@ -23,7 +23,7 @@
 @borderShadow: 0px 0px 0px @borderWidth @solidBorderColor;
 @boxShadow:none;
 @cardHoverShadow:0px 4px 10px 0px @thumbInactiveBackground;
-@border: @borderWidth solid @neutral-lighter;
+@border: @borderWidth solid @neutral-darkwhite;
 @zIndex: '';
 @transition:
   box-shadow @defaultDuration @defaultEasing,
@@ -103,7 +103,7 @@
 
 /* Description */
 @descriptionDistance: 1.5em;
-@descriptionColor:@primary-text;
+@descriptionColor:@neutral;
 
 /* Content Image */
 @contentImageWidth: '';

@@ -59,7 +59,7 @@
     &.share-modal {
         >.header {
             border: none;
-            color: @neutral-light;
+            color:@neutral-middark;
         }
         >.content {
             padding: 0
@@ -76,7 +76,7 @@
                 align-items: center;
                 justify-content: center;
                 margin-right: 10px;
-                color: @neutral-light;
+                color:@neutral-middark;
             }
         }
     }
@@ -108,7 +108,7 @@
         top:@7px;
         right:@7px;
         opacity:0.5;
-        color:@quaternary-text;
+        color:@neutral-middark;
         @media only screen and (max-width:@largestMobileScreen){
             top:.25rem !important;
             right:.25rem !important;
@@ -136,7 +136,7 @@
             font-family:@pageFont;
             font-weight:@normal;
             font-size:@14px;
-            color:@secondary-text;
+            color:@neutral-middark;
         }
     }
     // h4.ui.header{
@@ -155,7 +155,7 @@
             height:100%;
             padding:@14px;
             border-radius:@defaultBorderRadius * 1.5;
-            border:darken(@light-bg-color, 9%) 1px solid;
+            border:darken(@neutral-offwhite, 9%) 1px solid;
             cursor:pointer;
             h4{
                 margin:@7px 0;
@@ -185,7 +185,7 @@
             display:inline-block;
             background:transparent;
             font-size:@16px;
-            color:@quaternary-text;
+            color:@neutral-middark;
             text-transform:none;
             box-shadow:none;
         }
@@ -236,11 +236,11 @@
             padding-top:0;
             text-align:center;
             border:none;
-            background-color:@inverse-text;
+            background-color:@white;
         }
     }
     .ui.divider{
-        color:@quaternary-text;
+        color:@neutral-middark;
         &:before, &:after{
             background:none;
         }
@@ -275,7 +275,7 @@
             padding:@18px @25px;
             margin-bottom:@18px;
             text-align:left;
-            background-color:@lighten-bg-color;
+            background-color:@neutral-offwhite;
             .ui.header{
                 margin-bottom:@12px;
             }
@@ -301,7 +301,7 @@
 
 //  Multistep form Modal styles
 .ui.modal.basic.multistep-modal{
-    color:@primary-text;
+    color:@neutral;
     will-change:auto;
     >.close{
         height:30px;
@@ -314,7 +314,7 @@
         top:1rem;
         right:1rem;
         @media only screen and (max-width:@largestTabletScreen){
-            color:@quaternary-text;
+            color:@neutral-middark;
         }
     }
     .ui.header{
@@ -336,12 +336,12 @@
             }
             .field.readonly{
                 label, input{
-                    color:@quaternary-text;
+                    color:@neutral-middark;
                     border-color:transparent;
                 }
             }
             .table-wrapper table{
-                color:@quaternary-text;
+                color:@neutral-middark;
                 td > b{
                     color:@fullBlack;
                 }
@@ -386,7 +386,7 @@
 }
 .field-wrap{
     padding:@25px @60px;
-    background:@lighten-bg-color;
+    background:@neutral-offwhite;
     @media only screen and (max-width:@largestMobileScreen){
         padding:@25px;
     }

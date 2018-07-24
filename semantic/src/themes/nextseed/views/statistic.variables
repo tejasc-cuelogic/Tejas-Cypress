@@ -36,7 +36,7 @@
 @bottomLabelDistance: 0rem;
 @labelFont:@pageFont;
 @labelFontWeight:@normal;
-@labelColor:@quaternary-text;
+@labelColor:@neutral-middark;
 @labelLineHeight: @relativeLarge;
 @labelTextTransform: none;
 

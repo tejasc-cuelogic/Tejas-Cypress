@@ -18,10 +18,10 @@
     .ui.horizontal.list{
         .item{
             font-size:@12px;
-            color:@inverse-text;
+            color:@white;
         }
         a.item{
-            color:@inverse-secondary-text;
+            color:@neutral-offdark;
             &:hover, &:focus, &.active{
                 color:@primary-one;
             }
@@ -38,7 +38,7 @@
             color:@white;
             &:hover, &:focus, &.active{
                 color:@link-color !important;
-                background-color:@lighten-bg-color;
+                background-color:@neutral-offwhite;
             }
         }
 	}
@@ -51,7 +51,7 @@
             color:@tertiary-text;
             border-bottom:2px solid transparent;
             &:hover, &:focus, &.active{
-                color:@primary-text;
+                color:@neutral;
                 border-color:@primary-one;
             }
         }
@@ -83,7 +83,7 @@
 }
 
 .update-list{
-	background-color:@light-bg-color;
+	background-color:@neutral-offwhite;
     .ui.list{
         margin-left:@5px;
         border-left:@border-color 1px solid;
@@ -92,24 +92,24 @@
             font-size:@13px;
             font-weight:700;
             line-height:@16px;
-            color:@quaternary-text;
+            color:@neutral-middark;
             position:relative;
             &:before{
                 content:"";
                 width:9px;
                 height:9px;
                 border-radius:@5px;
-                background-color:@quaternary-text;
+                background-color:@neutral-middark;
                 position:absolute;
                 left:-1px;
                 top:50%;
                 z-index:2;
                 transform:translate(-50%, -50%);
                 border:2px solid white;
-                box-shadow:0px 0px 4px 1px @quaternary-text;
+                box-shadow:0px 0px 4px 1px @neutral-middark;
             }
             &:hover, &.active{
-                color:@primary-text;
+                color:@neutral;
                 &:before{
                     background-color:@link-color;
                     box-shadow:0 0 4px 1px @link-color;
@@ -122,7 +122,7 @@
                 position:absolute;
                 left:-1px;
                 z-index:1;
-                background-color:@light-bg-color;
+                background-color:@neutral-offwhite;
             }
             &:first-child{
                 &:before{
@@ -181,7 +181,7 @@
             }
             .extra{
                 font-size:@13px;
-                color:@quaternary-text;
+                color:@neutral-offdark;
                 position:absolute;
                 right:12px;
             }

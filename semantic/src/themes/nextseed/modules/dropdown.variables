@@ -148,7 +148,7 @@
 @selectVisibility: visible;
 @selectHeight: 38px;
 
-@selectionTextColor: @secondary-text;
+@selectionTextColor: @neutral;
 
 @selectionTextUnderlayIconOpacity: @disabledOpacity;
 @selectionTextUnderlayColor: @inputPlaceholderFocusColor;
@@ -286,7 +286,7 @@
 @hoveredZIndex: @menuZIndex + 2;
 
 /* Default Text */
-@defaultTextColor:@quaternary-text;
+@defaultTextColor:@neutral-middark;
 @defaultTextFocusColor: @inputPlaceholderFocusColor;
 
 /* Loading */

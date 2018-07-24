@@ -14,10 +14,10 @@
             font-size:1rem;
         }
         .menu .item{
-            color:@primary-text;
+            color:@neutral;
             padding:@13px @30px;
             &.active{
-                color:@inverse-text;
+                color:@white;
                 background-color:@primary-one;
             }
             &.notification{
@@ -32,7 +32,7 @@
                     padding:0 5px;
                     border-radius:10px;
                     font-size:@12px;
-                    color:@inverse-text;
+                    color:@white;
                     line-height:@18px;
                     display:block;
                     text-align:center;
@@ -78,7 +78,7 @@
         background-color:@darken-bg-color;
         .sub.header{
             font-size:@12px !important;
-            color:@quaternary-text;
+            color:@neutral-middark;
             position:absolute;
             right:0;
             top:0;
@@ -94,6 +94,6 @@
 h6.ui.header{
     .sub.header{
         font-size:@relative14px;
-        color:@neutral-light;
+        color:@neutral-middark;
     }
 }
