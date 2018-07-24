@@ -82,16 +82,20 @@ export default class Finances extends Component {
             changed={this.handleTick}
             defaults
           />
-          The name of the company is
-          <span> {FINANCES_FORM.fields.directorShareHolderOfCompany.value}</span>
+          <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
+            The name of the company is{' '}
+            <span style={{ textDecoration: 'underline' }}>{FINANCES_FORM.fields.directorShareHolderOfCompany.value}</span>
+          </p>
           <FormCheckbox
             fielddata={FINANCES_FORM.fields.checkbox2}
             name="checkbox2"
             changed={this.handleTick}
             defaults
           />
-          The name of firm is
-          <span> {FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}</span>
+          <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
+            The name of firm is{' '}
+            <span style={{ textDecoration: 'underline' }}>{FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}</span>
+          </p>
         </Form>
       </div>
     );
