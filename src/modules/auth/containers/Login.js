@@ -23,9 +23,8 @@ class Login extends Component {
           this.props.history.push('/auth/change-password');
         } else {
           this.props.authStore.reset();
-          const { pendingStep } = this.props.userDetailsStore;
           if (roles && roles.includes('investor')) {
-            this.props.history.push(`/app/${pendingStep}`);
+            this.props.history.push(`/app/${this.props.userDetailsStore.pendingStep}`);
           } else {
             this.props.history.push('/app/dashboard');
           }

@@ -222,13 +222,14 @@ export class UserDetailsStore {
   @computed
   get pendingStep() {
     let routingUrl = '';
-    const { accounts, idVerification, phoneVerification } = this.signupStatus;
-    if (phoneVerification !== 'DONE' && !this.validAccStatus.includes(idVerification)) {
+    if (this.signupStatus.phoneVerification !== 'DONE' && !this.validAccStatus.includes(this.signupStatus.idVerification)) {
       routingUrl = 'summary/identity-verification/0';
-    } else if (isEmpty(accounts)) {
+    } else if (!this.signupStatus.investorProfileCompleted) {
       routingUrl = 'summary/establish-profile';
-    } else {
+    } else if (isEmpty(this.signupStatus.accounts)) {
       routingUrl = 'summary/account-creation';
+    } else {
+      routingUrl = 'summary/account-creation/ira';
     }
     return routingUrl;
   }

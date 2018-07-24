@@ -18,6 +18,7 @@ export class Account {
             stepName,
             userRole,
             fileData,
+            applicationId: '',
           },
         })
         .then((result) => {
