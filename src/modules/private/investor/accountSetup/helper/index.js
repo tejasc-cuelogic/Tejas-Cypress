@@ -11,7 +11,7 @@ class Helper {
         step: 1,
         label: 'Establish Investor Profile',
         action: false,
-        successMsg: 'Completed',
+        successMsg: 'Complete',
       },
       'bar-line-chart': {
         step: 2,

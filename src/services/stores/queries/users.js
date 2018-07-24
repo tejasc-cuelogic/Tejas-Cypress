@@ -97,6 +97,7 @@ query getUserDetails($id: ID!) {
       url
     }
     investorProfileData {
+      isPartialProfile
       employmentStatusInfo {
         employmentStatus
         employer

@@ -15,15 +15,16 @@ const checkStatus = (signupStatus, key) => {
       status = 1;
     }
   } else if (key === 'cash-dollar') {
-    if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
+    if (signupStatus.investorProfileCompleted) {
+      status = 2;
+    } else if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
     signupStatus.phoneVerification === 'DONE') {
       status = 1;
     } else {
       status = 0;
     }
   } else if (key === 'bar-line-chart') {
-    if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
-    signupStatus.phoneVerification === 'DONE') {
+    if (signupStatus.investorProfileCompleted) {
       status = 1;
     } else {
       status = 0;
@@ -39,6 +40,9 @@ const ProgressCard = props => (
       Object.keys(progressMeta).map((key) => {
         const currentCard = progressMeta[key];
         const status = checkStatus(props.signupStatus, key);
+        if (props.signupStatus.partialAccounts.length > 0 && currentCard.step === 2) {
+          return null;
+        }
         return (
           <Card fluid className={`verification ${status === 2 ? 'done' : status === 0 ? 'disabled' : ''}`}>
             <Card.Content>
@@ -70,34 +74,28 @@ const ProgressCard = props => (
             <Icon.Group size="huge">
               <Icon className="ns-bar-line-chart" />
             </Icon.Group>
-            <p><b>{`You have not finished ${upperCase(accountType)} account creation`}</b></p>
-            <Button
-              color={props.getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
-              className="relaxed"
-              content="Continue"
-              disabled={props.getStepStatus('accounts') === 'disable'}
-              onClick={() => props.navToAccTypes(accountType)}
-            />
+            <p><b>Create Investment Account</b></p>
+            <Button.Group vertical>
+              <Button
+                color={props.getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
+                content={`Continue ${upperCase(accountType)} Account Creation`}
+                disabled={props.getStepStatus('accounts') === 'disable'}
+                onClick={() => props.navToAccTypes(accountType)}
+              />
+              {!isEmpty(props.signupStatus.accounts) &&
+              props.signupStatus.inActiveAccounts.length > 0 &&
+                <Button
+                  className="ui link-button button"
+                  color="green"
+                  content="or create a different investment account"
+                  disabled={props.getStepStatus('accounts') === 'disable'}
+                  onClick={() => props.navToAccTypes()}
+                />
+              }
+            </Button.Group>
           </Card.Content>
         </Card>
       ))
-    }
-    {!isEmpty(props.signupStatus.accounts) && props.signupStatus.inActiveAccounts.length > 0 &&
-      <Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
-        <Card.Content>
-          <Icon.Group size="huge">
-            <Icon className="ns-chart-setting" />
-          </Icon.Group>
-          <p><b>Start creation process of another type of account</b></p>
-          <Button
-            inverted
-            color={props.getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
-            content="Create another account"
-            disabled={props.getStepStatus('accounts') === 'disable'}
-            onClick={() => props.navToAccTypes()}
-          />
-        </Card.Content>
-      </Card>
     }
   </Card.Group>
 );

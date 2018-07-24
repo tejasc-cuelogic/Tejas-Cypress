@@ -56,15 +56,17 @@ export const getPlaidAccountdata = gql`
   }`;
 
 export const updateInvestorProfileData = gql`
-  mutation _updateInvestorProfileData($employmentStatusInfo: EmploymentStatusInput $investorProfileType: InvestorProfileTypeEnum $financialInfo: InvestorFinInfoInput $investmentExperienceInfo: InvestmentExperienceInput) {
+  mutation _updateInvestorProfileData($isPartialProfile: Boolean! $employmentStatusInfo: EmploymentStatusInput $investorProfileType: InvestorProfileTypeEnum $financialInfo: InvestorFinInfoInput $investmentExperienceInfo: InvestmentExperienceInput) {
     createInvestorProfile(
       employmentStatusInfo: $employmentStatusInfo
       investorProfileType: $investorProfileType
       financialInfo: $financialInfo
       investmentExperienceInfo: $investmentExperienceInfo
+      isPartialProfile: $isPartialProfile
     ) {
       id
       investorProfileData {
+        isPartialProfile
         employmentStatusInfo {
           employmentStatus
           employer

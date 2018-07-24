@@ -5,7 +5,6 @@ import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { ListErrors } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
-
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userStore')
 @withRouter
 @observer
@@ -53,14 +52,14 @@ export default class Summary extends React.Component {
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.account_id ?
                       plaidAccDetails.plaidAccountId ? Helper.encryptNumber(plaidAccDetails.plaidAccountId) : '' :
                       Helper.encryptNumber(plaidAccDetails.account_id)}
-                      {formLinkBankManually.fields.accountNumber.value ? Helper.encryptNumber(formLinkBankManually.fields.accountNumber.value) : ''}
+                      {formLinkBankManually.fields.accountNumber.value ? formLinkBankManually.fields.accountNumber.value : ''}
                     </Table.Cell>
                   </Table.Row>
                   {formLinkBankManually.fields.routingNumber.value &&
                   <Table.Row>
                     <Table.Cell><b>Routing Number</b></Table.Cell>
                     <Table.Cell>
-                      {Helper.encryptNumber(formLinkBankManually.fields.routingNumber.value)}
+                      {formLinkBankManually.fields.routingNumber.value}
                     </Table.Cell>
                   </Table.Row>
                   }
