@@ -156,8 +156,8 @@ const HowItWorks = () => (
           <Header textAlign="center" as="h2" className="mb-30">
           Register for an account with just your email.
           </Header>
-          <Button as={Link} to="/auth/register"secondary compact>Sign Up Free</Button>
-          <Button as={Link} to="/invest/account-types" primary compact>See Account Types</Button>
+          <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+          <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
         </div>
       </Container>
     </div>

@@ -64,7 +64,7 @@ const Process = () => (
               </List.Item>
             </List>
             <div className="center-align">
-              <Button as={Link} to="/business/all-inclusive" primary compact>See All-Inclusive</Button>
+              <Button as={Link} to="/business/all-inclusive" primary>See All-Inclusive</Button>
             </div>
           </Grid.Column>
         </Grid.Row>

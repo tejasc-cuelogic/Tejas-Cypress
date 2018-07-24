@@ -96,7 +96,7 @@ const AllInclusive = () => (
               </List.Item>
             </List>
             <div className="center-align">
-              <Button as={Link} to="/business/compare" primary compact>See How NextSeed Compares</Button>
+              <Button as={Link} to="/business/compare" primary>See How NextSeed Compares</Button>
             </div>
           </Grid.Column>
         </Grid.Row>

@@ -8,15 +8,3 @@
     line-height: 24px;
     font-size: 15px;
 }
-.account-types-section {
-	.ui.horizontal.segments {
-		margin-left: -14px;
-		margin-right: -14px;
-		box-shadow: none;
-		border: 0;
-		.ui.segment {
-			padding-left: 14px;
-			padding-right: 14px;
-		}
-	}
-}
