@@ -97,8 +97,9 @@ export default class ConfirmPhoneNumber extends Component {
             mask="999-999-9999"
             readOnly={!editMode}
             changed={personalInfoChange}
-            hidelabel
+            containerclassname="display-only"
             className="display-only"
+            hidelabel
           />
           {editMode ?
             <p>

@@ -8,7 +8,6 @@ import ProgressCard from '../components/ProgressCard';
 import IdentityVerification from './identityVerification';
 import EstablishProfile from './establishProfile';
 import AccountCreation from './accountCreation';
-
 @inject('userDetailsStore', 'accountStore')
 @observer
 export default class AccountSetup extends Component {

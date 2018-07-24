@@ -433,7 +433,7 @@ export const FINANCES = {
     value: [],
     values: [
       {
-        label: 'I am (or a member of my immediate family is) a director, 10% shareholder, or senior officer of a publicity traded company. The name of the company is ',
+        label: 'I am (or a member of my immediate family is) a director, 10% shareholder, or senior officer of a publicity traded company.',
         value: 'iamadirector',
       },
     ],
@@ -444,7 +444,7 @@ export const FINANCES = {
     value: [],
     values: [
       {
-        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm od a stock exchange orFINRA. The name of firm is ',
+        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm od a stock exchange orFINRA.',
         value: 'iamamember',
       },
     ],
@@ -467,8 +467,8 @@ export const FINANCES = {
 
 export const INVESTMENT_EXPERIENCE = {
   investmentExperienceLevel: {
-    value: 'NO_EXPERINCE',
-    values: [{ label: 'No experience', value: 'NO_EXPERINCE' }, { label: 'I know what I’m doing', value: 'KNOW_AWARE' }, { label: 'I have some experience', value: 'SOME_EXPERIENCE' }, { label: 'I’m an expert', value: 'EXPERT' }],
+    value: 'NO_EXPERIENCE',
+    values: [{ label: 'No experience', value: 'NO_EXPERIENCE' }, { label: 'I know what I’m doing', value: 'KNOW_AWARE' }, { label: 'I have some experience', value: 'SOME_EXPERIENCE' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
   },

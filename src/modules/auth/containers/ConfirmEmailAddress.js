@@ -7,7 +7,6 @@ import { authActions, validationActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
-
 @inject('authStore', 'uiStore', 'userStore')
 @withRouter
 @observer
@@ -75,6 +74,7 @@ export default class ConfirmEmailAddress extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput
+            ishidelabel
             type="email"
             size="huge"
             name="email"

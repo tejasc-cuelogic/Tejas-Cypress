@@ -42,10 +42,12 @@ export default class Summary extends React.Component {
                     <Table.Cell><b>Investor Name</b></Table.Cell>
                     <Table.Cell>{currentUser.givenName}</Table.Cell>
                   </Table.Row>
+                  {!isEmpty(plaidAccDetails) &&
                   <Table.Row>
                     <Table.Cell><b>Bank Name</b></Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
+                  }
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.account_id ?
@@ -54,6 +56,14 @@ export default class Summary extends React.Component {
                       {formLinkBankManually.fields.accountNumber.value ? Helper.encryptNumber(formLinkBankManually.fields.accountNumber.value) : ''}
                     </Table.Cell>
                   </Table.Row>
+                  {formLinkBankManually.fields.routingNumber.value &&
+                  <Table.Row>
+                    <Table.Cell><b>Routing Number</b></Table.Cell>
+                    <Table.Cell>
+                      {Helper.encryptNumber(formLinkBankManually.fields.routingNumber.value)}
+                    </Table.Cell>
+                  </Table.Row>
+                  }
                   <Table.Row>
                     <Table.Cell><b>Your initial deposit</b></Table.Cell>
                     <Table.Cell>

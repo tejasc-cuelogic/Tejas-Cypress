@@ -102,7 +102,12 @@ export default class MultiStep extends React.Component {
   }
 
   next() {
-    if (!this.props.steps[this.state.compState].isDirty) {
+    if (this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience') {
+      this.props.createAccount(this.props.steps[this.state.compState]);
+      if (!this.props.steps[this.state.compState].isDirty) {
+        this.props.actionOnNextBtn();
+      }
+    } else if (!this.props.steps[this.state.compState].isDirty) {
       this.setNavState(this.state.compState + 1);
     } else {
       this.props.createAccount(this.props.steps[this.state.compState]);
@@ -158,7 +163,7 @@ export default class MultiStep extends React.Component {
             <Button
               circular
               icon={{ className: 'ns-arrow-right' }}
-              className={(this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
+              className={(this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience' ? 'multistep__btn next active' : this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
               onClick={this.next}
             />
           </Modal.Content>

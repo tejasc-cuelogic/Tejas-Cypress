@@ -31,11 +31,13 @@ const MaskedInput2 = observer((props) => {
       ) : props.percentage ? (
         <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={props.changed} error={!!error} mask="%" suffix="%" />
       ) : props.phoneNumber ? (
-        <NumberFormat type="tel" format={props.format} {...props} placeholder={placeHolder} value={value} onChange={props.changed} error={!!error} />
+        <NumberFormat type="tel" format={props.format} {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.zipCode ? (
-        <NumberFormat format="#####" {...props} placeholder={placeHolder} value={value} onChange={props.changed} error={!!error} />
+        <NumberFormat format="#####" {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.ssn ? (
-        <NumberFormat type="tel" format="###-##-####" placeholder={placeHolder} {...props} value={value} onChange={props.changed} error={!!error} />
+        <NumberFormat type="tel" format="###-##-####" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
+      ) : props.dateOfBirth ? (
+        <NumberFormat type="text" format="##/##/####" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.taxId ? (
         <NumberFormat type="text" format="##-#######" placeholder={placeHolder} {...props} value={value} onChange={props.changed} error={!!error} />
       ) : (

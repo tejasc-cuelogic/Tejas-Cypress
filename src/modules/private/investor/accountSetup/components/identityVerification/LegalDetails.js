@@ -3,13 +3,13 @@ import { observer } from 'mobx-react';
 import { Button, Modal, Divider, Header, Form, Message } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
 import {
-  FormInput, FormSelect, FormDatePicker, AutoComplete, MaskedInput2,
+  FormInput, FormSelect, AutoComplete, MaskedInput2,
 } from '../../../../../../theme/form';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
 import { US_STATES } from '../../../../../../constants/account';
 
 const LegalDetails = observer(({
-  form, change, dobChange, close, autoComplete, name, inProgress, errors, onSubmit,
+  form, change, close, autoComplete, name, inProgress, errors, onSubmit, maskChange,
 }) => (
   <Modal size="mini" open closeIcon onClose={close}>
     <Modal.Header className="center-align signup-header">
@@ -79,7 +79,7 @@ const LegalDetails = observer(({
             key="zipCode"
             name="zipCode"
             fielddata={form.fields.zipCode}
-            changed={change}
+            changed={maskChange}
             zipCode
           />
         </Form.Group>
@@ -89,22 +89,22 @@ const LegalDetails = observer(({
             type="tel"
             fielddata={form.fields.phoneNumber}
             format="###-###-####"
-            changed={change}
+            changed={maskChange}
             phoneNumber
           />
-          <FormDatePicker
+          <MaskedInput2
             name="dateOfBirth"
-            placeholder="Select date"
             fielddata={form.fields.dateOfBirth}
-            selected={form.fields.dateOfBirth.value}
-            onchange={dobChange}
+            format="##/##/####"
+            changed={maskChange}
+            dateOfBirth
           />
         </Form.Group>
         <MaskedInput2
           name="ssn"
           fielddata={form.fields.ssn}
           ssn
-          changed={change}
+          changed={maskChange}
         />
         <div className="center-align">
           <Button loading={inProgress} size="large" color="green" className="very relaxed" >Verify my identity</Button>
