@@ -1,3 +1,29 @@
 /*******************************
          Theme Overrides
 *******************************/
+.content-spacer {
+	.column.side-section {
+        &.inclusive-left-section {
+			.ui.items {
+				display: flex;
+				flex-wrap: wrap;
+				>.item {
+					width: 50%;
+					margin-top: 0;
+					margin-bottom: 20px;
+					align-items: center;
+					.ui.mini.image {
+						width: 45px;
+						+.content {
+							padding-left: 10px;
+						}
+					}
+					.meta {
+						line-height: 24px;
+						margin: 0;
+					}
+				}
+			}
+		}
+	}
+}
