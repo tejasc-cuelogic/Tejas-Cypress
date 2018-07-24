@@ -83,11 +83,27 @@
 }
 // .ui.modal{ 
 // 	.ui.statistic>.label {
-// 		color: @neutral-light;
+// 		color: @neutral-offdark;
 // 		text-transform: capitalize;
 // 		font-weight: @fontMedium;
 // 	}
 // }
+
+// Business - how it works
+.proven-result-section {
+	.ui.mini.statistic {
+		>.value {
+			text-align: left;
+		}
+		>.label {
+			font-size: 15px;
+			color: @neutral-offdark;
+			text-align: left;
+			text-transform: none;
+			font-weight: @normal;
+		}
+	}
+}
 //  Public page Ends
 
 .ui.statistic{
@@ -148,5 +164,6 @@
         .label{
             font-size:@14px;
         }
-    }
+	}
 }
+

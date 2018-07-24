@@ -7,6 +7,7 @@
         border:none;
         border-radius:0;
         box-shadow:none;
+        transition: all ease-in-out 0.5s;
         .menu{
             margin:@11px @16px;
             .item{
@@ -52,26 +53,72 @@
                 }
             }
         }
-    }
-}
-.ui.secondary.menu.menu-secondary {
-    .item {
-        font-family: @fontName;
-        font-size: 12px;
-        line-height: 14px;
-        text-align: center;
-        text-transform: uppercase;
-        border-bottom: 2px solid transparent;
-        border-radius: 0;
-        padding: 0px 0 10px;
-        margin: 0 1.357143em;
-        
-        &:hover, &:active, &:focus, &:visited, &.active {
-            border-bottom: 2px solid @primary-one;
-            background-color: transparent;
+        &.slide-up {
+            top: -100px;
         }
     }
-
+}
+.ui.secondary.menu.menu-secondary-fixed {
+    border:none;
+    height:74px;
+    border-radius:0;
+    box-shadow:none;
+    .item{
+        padding:@3px @18px;
+        &:hover {
+            background-color: transparent;
+        }
+        img.ui.image.logo{
+            transform: scale(0);
+        } 
+        >.button {
+            transform: scale(0);
+        }
+    }
+    .menu.menu-secondary {
+        flex-grow: 1;
+        display: flex;
+        .item {
+            font-family: @fontName;
+            font-size: 12px;
+            line-height: 14px;
+            text-align: center;
+            text-transform: uppercase;
+            border-bottom: 2px solid transparent !important;
+            border-radius: 0 !important;
+            padding: @10px @18px;
+            &:hover, &:active, &:focus, &:visited, &.active {
+                border-color: @primary-one !important;
+                background-color: transparent !important;
+            }
+            &:first-child {
+                border-color: transparent !important;
+            }
+        }
+    }
+    &.active {
+        background-color: @white;
+        box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        left: 0;
+        right: 0;
+        margin: 0;
+        z-index: 1001;
+        -webkit-font-smoothing: antialiased;
+        transition: all .3s ease;
+        .item {
+            img.ui.image.logo{
+                transform: scale(1);
+                transition: transform .3s ease;
+            } 
+            >.button {
+                transform: scale(1);
+                transition: transform .3s ease;
+            }
+        }
+    }
 }
 .footer-head{
     .ui.menu{
@@ -114,6 +161,7 @@ footer{
     .ui.text.menu {
         margin: 0;
         height: @60px;
+        position: relative;
         .item {
             font-weight: @fontMedium;
             font-size: @14px;

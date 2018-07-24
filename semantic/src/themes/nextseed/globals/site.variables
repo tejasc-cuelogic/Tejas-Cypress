@@ -237,7 +237,7 @@
 @olive            : #B5CC18;
 @green            : @primary-one;
 @teal             : @highlight-tertiary;
-@blue             : #2185D0;
+@blue             : @primary-two;
 @violet           : #6435C9;
 @purple           : #A333C8;
 @pink             : #E03997;
@@ -990,10 +990,10 @@
 
 @neutral:#31333D;
 @neutral-middark:#676A73;
-@neutral-offdark:#CDCDD1;
-@neutral-darkwhite:#E6E6E8;
-@neutral-midwhite:#E9ECF0;
-@neutral-offwhite:#F7F8FC;
+@neutral-offdark:#CDCDD1;             //  @neutral-light
+@neutral-darkwhite:#E6E6E8;           //  @neutral-lighter
+@neutral-midwhite:#E9ECF0;            //  @neutral-lightest
+@neutral-offwhite:#F7F8FC;            //  @neutral-lighten
 
 @commonShadow:0px 1px 1px @thumbInactiveBackground;
 

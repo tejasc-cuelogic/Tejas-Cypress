@@ -97,3 +97,8 @@ h6.ui.header{
         color:@neutral-middark;
     }
 }
+.ui.top.attached.header {
+    padding-left: 0;
+    padding-right: 0;
+    border: 0;
+}

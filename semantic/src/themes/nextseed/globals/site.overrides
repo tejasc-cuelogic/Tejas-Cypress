@@ -516,6 +516,170 @@ footer{
 		}
 	} 
 }
+// Business homepage
+.info-grid {
+	img {
+		display: inline-block;
+		width: 50px;
+		height: auto;
+		margin-right: 20px;
+	}
+	div {
+		display: inline-block;
+		width: ~"calc(100% - 70px)";
+	}
+}
+.testimonial-slider {
+	&.testimonial-details {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		h3 {
+			line-height: 40px;
+			margin-top: 0;
+		}
+		.testimonial-user-details {
+			p {
+				color: @neutral;
+				margin-bottom: 0;
+			}
+			span {
+				line-height: @24px;
+				color: @primary-one;
+				font-weight: @bold;
+			}
+		}
+	}
+}
+.business-learn-more {
+	p {
+		text-align: left;
+		margin-left: 56px;
+	}
+}
+.funding-option {
+	padding-top: 74px;
+	.ui.compact.button {
+		margin: 0 10px; 
+	}
+}
+.content-spacer {
+	.column.side-section {
+		background-color: rgba(255, 255, 255, 0.81);
+		padding-bottom: 4.28571429rem;
+		padding-top: 4.28571429rem;
+		h2.ui.header {
+			line-height: 52px;
+		}
+		p {
+			line-height: 24px;
+			font-size: 15px;
+		}
+		&.process-right-section {
+			counter-reset: section;
+			.ui.card {
+				border: 0;
+				background-color: transparent;
+				&:hover {
+					box-shadow: none;
+				}
+				>.content {
+					text-align: left;
+					padding: 0 0 0 40px;
+					position: relative;
+					&:before {
+						counter-increment: section;
+						content: counter(section);  
+						position: absolute;
+						left: 0;
+						top: 5px;
+						font-weight: 500;
+						line-height: 24px;
+						font-size: 40px;
+						color: #20C86D;
+					}
+				}
+			}
+		}
+	}
+}
+.compare-section {
+	.note {
+		text-align: center;
+		display: block;
+		display: block;
+		width: 50%;
+		line-height: 20px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+.slick-slider {
+	.slick-slide {
+		.ui.grid {
+			display: flex !important;
+		}
+	}
+	.slick-prev, .slick-next {
+		width: 50px;
+		height: 50px;
+		&:before {
+			font-size: 30px;
+			color: #676A73;
+		}
+	}
+	.slick-next {
+		right: -50px;
+	}
+	.slick-prev {
+		left: -50px;
+	}
+}
+//Investor homepage
+.investor-bottom-buttons {
+	.ui.compact.button {
+		margin: 0 10px; 
+	}
+}
+.how-it-works-steps {
+	counter-reset: section;
+	.ui.grid {
+		>.column {
+			text-align: left;
+			padding-left: 40px !important;
+			position: relative;
+			&:before {
+				counter-increment: section;
+				content: counter(section);  
+				position: absolute;
+				left: 0;
+				top: 15px;
+				font-weight: 500;
+				line-height: 24px;
+				font-size: 40px;
+				color: #20C86D;
+			}
+		}
+	}
+}
+.ui.grid.flex-column {
+	.column {
+		display: flex !important;
+		flex-direction: column;
+		.flex-content {
+			flex-grow: 1;
+			img {
+				width: 100%;
+			}
+		}
+	}
+}
+.why-nextseed-section {
+	.ui.compact.button {
+		margin: 0 10px;
+	}
+}
+
 /* END <== PUBLIC PAGES UI STYLES */
 
 .content-wrapper{
