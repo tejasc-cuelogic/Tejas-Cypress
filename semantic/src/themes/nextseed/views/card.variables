@@ -92,7 +92,7 @@
 
 /* Links */
 @contentLinkColor:@link-color;
-@contentLinkHoverColor:@link-color-darken;
+@contentLinkHoverColor:@link-color;
 @contentLinkTransition: color @defaultDuration @defaultEasing;
 
 @headerLinkColor: @headerColor;

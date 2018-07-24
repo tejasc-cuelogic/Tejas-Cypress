@@ -58,7 +58,7 @@ export default class CampaignList extends Component {
                     centered
                     src={require(`../../../../../assets/images/campaign/campaign-${campaign.id}.jpg`)}
                   />
-                  <Label basic color="green">{campaign.label}</Label>
+                  <Label color="green">{campaign.label}</Label>
                   <Icon name="heart" />
                   <Card.Content>
                     <div className="tags">

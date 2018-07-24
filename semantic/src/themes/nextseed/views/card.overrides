@@ -32,8 +32,8 @@
             line-height:@24px;
             padding:@21px @28px;
             .tags{
-                font-size:@12px;
-                font-weight:700;
+                font-size:@13px;
+                font-weight:@bold;
                 color:@neutral-middark;
                 text-transform:uppercase;
                 >span{
@@ -47,7 +47,7 @@
                 height:80px;
                 margin:@14px 0;
                 overflow:hidden;
-                font-size:@12px;
+                font-size:@13px;
                 line-height:@20px;
             }
         }

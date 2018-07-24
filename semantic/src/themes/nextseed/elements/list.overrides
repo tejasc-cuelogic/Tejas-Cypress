@@ -5,21 +5,21 @@
 .campaign{
     .ui.horizontal.list>.item{
         font-size:@12px;
-        font-weight:@bold;
-        color:@primary-one;
-        &:hover{
-            text-decoration:underline;
-        }
+        font-weight:@fontMedium;
+        // color:@primary-one;
+        // &:hover{
+        //     text-decoration:underline;
+        // }
     }
 }
 .ui.horizontal.list {
-    &:not(.celled) {
-       >.item {
-           &:first-child {
-               margin-right: @20px;
-            }
-        }
-    }
+    // &:not(.celled) {
+    //    >.item {
+    //        &:first-child {
+    //            margin-right: @20px;
+    //         }
+    //     }
+    // }
     &.why-nextseed-learnmore{
         .item:last-child {
             margin-left: 0px;
