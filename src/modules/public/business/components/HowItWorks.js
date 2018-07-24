@@ -1,6 +1,8 @@
 import React from 'react';
 import Aux from 'react-aux';
+import { Link } from 'react-router-dom';
 import { Header, Grid, Button, Image, Container, Embed, List, Statistic, Divider } from 'semantic-ui-react';
+import { NsCarousel } from '../../../../theme/shared';
 import supportIcon from '../../../../assets/images/icons/support.svg';
 import sellingIcon from '../../../../assets/images/icons/selling.svg';
 import networkIcon from '../../../../assets/images/icons/network.svg';
@@ -82,22 +84,28 @@ const HowItWorks = () => (
     <Divider fitted as={Container} />
     <section className="testimonial-slider">
       <Container>
-        <Grid stackable>
-          <Grid.Column width={6}>
-            <Image src={carouselImg} circular />
-          </Grid.Column>
-          <Grid.Column width={10} className="testimonial-details">
-            <Header as="h2" className="mb-20">Real sucess stories.</Header>
-            <h3 className="mb-50">
-              “Loved the experience! Financing this way allowed me to focus
-              on my passion and not on pitching investors.”
-            </h3>
-            <div className="testimonial-user-details">
-              <p><b>Lian Nguyen,</b> Bravery Chef Hall</p>
-              <span>$1,000,000 | 539 Investors</span>
-            </div>
-          </Grid.Column>
-        </Grid>
+        <NsCarousel>
+          {
+            [1, 2, 3].map(i => (
+              <Grid stackable key={i}>
+                <Grid.Column width={6}>
+                  <Image src={carouselImg} circular />
+                </Grid.Column>
+                <Grid.Column width={10} className="testimonial-details">
+                  <Header as="h2" className="mb-20">Real sucess stories {i}.</Header>
+                  <h3 className="mb-50">
+                    “Loved the experience! Financing this way allowed me to focus
+                    on my passion and not on pitching investors.”
+                  </h3>
+                  <div className="testimonial-user-details">
+                    <p><b>Lian Nguyen,</b> Bravery Chef Hall</p>
+                    <span>$1,000,000 | 539 Investors</span>
+                  </div>
+                </Grid.Column>
+              </Grid>
+            ))
+          }
+        </NsCarousel>
       </Container>
     </section>
     <Divider fitted as={Container} />
@@ -162,8 +170,8 @@ const HowItWorks = () => (
             </p>
           </Grid.Column>
         </Grid>
-        <div className="mt-80 mb-30 center-align">
-          <Button primary content="See Funding Options" />
+        <div className="mt-80 mb-50 center-align">
+          <Button as={Link} to="/business/funding-options/term-notes" primary content="See Funding Options" />
         </div>
       </Container>
     </section>

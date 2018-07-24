@@ -13,9 +13,16 @@
 }
 .ui.horizontal.list {
     &:not(.celled) {
-       >.item:first-child {
-           margin-right: @20px;
-       }
+       >.item {
+           &:first-child {
+               margin-right: @20px;
+            }
+        }
+    }
+    &.why-nextseed-learnmore{
+        .item:last-child {
+            margin-left: 0px;
+        }
     }
     >.item {
         .header {
