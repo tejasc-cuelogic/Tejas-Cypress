@@ -16,12 +16,13 @@ import Users from './private/admin/userManagement/containers/Users';
 import UserDetails from './private/admin/userManagement/containers/UserDetails';
 import UsersNew from './private/admin/userManagement/containers/UsersNew';
 
-import BusinessApplication from './private/issuer/businessApplication/containers/BusinessApplication';
+// import BusinessApplication from
+// './private/issuer/businessApplication/containers/BusinessApplication';
 
 import {
   AdminAuthorization,
   BusinessAuthorization,
-  UserAuthorization,
+  // UserAuthorization,
 } from '../modules/shared/Authorization';
 
 export const publicRoutes = [
@@ -128,11 +129,5 @@ export const privateRoutes = [
     path: '/app/users',
     component: Users,
     auth: AdminAuthorization,
-  },
-  {
-    path: '/app/business-application',
-    exact: false,
-    component: BusinessApplication,
-    auth: UserAuthorization,
   },
 ];

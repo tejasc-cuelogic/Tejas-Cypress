@@ -135,6 +135,17 @@
 				line-height:0;
 				margin:0;
 			}
+			.sb-avatar{
+				width:30px;
+				height:30px;
+				margin-bottom:@10px;
+				.sb-avatar__text{
+					width:30px;
+					height:30px;
+					font-size:@20px;
+					line-height:30px;
+				}
+			}
 		}
 		.item{
 			overflow:visible;
@@ -170,10 +181,22 @@
 		.user-picture{
 			text-align:left;
 			padding:@10px;
-			>img{
+			>img, .sb-avatar{
 				float:left;
 				max-width:42px;
-				margin:0 @10px 0 0;
+				margin:-@7px @10px 0 0;
+			}
+			.sb-avatar{
+				height:42px;
+				.sb-avatar__text{
+					width:42px;
+					height:42px;
+					font-size:@16px;
+					line-height:42px;
+				}
+			}
+			h3{
+				margin-bottom:@5px;
 			}
 		}
 		.ui.divider{
@@ -219,7 +242,18 @@
 			font-weight:700;
 			color:@border-color;
 		}
-		> img, h2, h3{
+		.sb-avatar{
+			width:58px;
+			height:58px;
+			margin-bottom:@10px;
+			.sb-avatar__text{
+				width:58px;
+				height:58px;
+				font-size:@20px;
+				line-height:58px;
+			}
+		}
+		> img, h2, h3, .sb-avatar, .sb-avatar__text{
 			transition:all .5s ease;
 			white-space:nowrap;
 			overflow:hidden;
@@ -298,7 +332,7 @@
 		background-color:transparent;
 		color:@quaternary-text;
 	}
-	&.bowner{
+	&.issuer{
 		background-color:@primary-text;
 		.item{
 			&:hover, &:focus, &.active, &.active:hover{

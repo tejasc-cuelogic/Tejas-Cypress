@@ -34,7 +34,7 @@ export default class ConfirmEmailAddress extends Component {
           this.props.authStore.reset('CONFIRM');
           const { roles } = this.props.userStore.currentUser;
           const redirectUrl = !roles ? '/auth/login' :
-            (roles.includes('investor') ? '/app/summary' : '/app/dashboard');
+            (roles.includes('investor') ? '/app/summary' : '/app/business-application/new/pre-qualification');
           this.props.history.replace(redirectUrl);
         })
         .catch(() => { });

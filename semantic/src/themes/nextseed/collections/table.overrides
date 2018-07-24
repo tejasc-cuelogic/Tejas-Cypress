@@ -57,9 +57,14 @@
                 margin-right:0;
                 border:1px solid @border-color;
                 &.mini{
-                    width:35px;
+                    width:36px;
                     height:auto;
                 }
+            }
+            .sb-avatar{
+                width:36px;
+                height:36px;
+                line-height:36px;
             }
         }
         .user-name{
