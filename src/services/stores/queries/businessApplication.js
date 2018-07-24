@@ -76,6 +76,7 @@ query _getBusinessApplications {
     lendio {
       status
       failReasons
+      url
     }
     prequalDetails {
       businessGeneralInfo {

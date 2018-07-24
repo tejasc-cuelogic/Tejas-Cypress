@@ -52,7 +52,7 @@ export class BusinessAppStore {
   @observable removeFileIdsList = [];
   @observable appStepsStatus = ['IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS'];
   @observable isFileUploading = false;
-
+  @observable stepToRender = 'pre-qualification';
 
   @action
   setFieldvalue = (field, value) => {
@@ -129,27 +129,27 @@ export class BusinessAppStore {
     });
   }
 
-  @computed get calculateStepToRender() {
-    const data = this.fetchBusinessApplicationsDataById;
-    let url = 'pre-qualification';
+  @action
+  calculateStepToRender(data) {
     if (data) {
       if (!data.businessDetails || (data.businessDetails && data.businessDetails.stepStatus === 'IN_PROGRESS')) {
-        url = 'business-details';
+        this.stepToRender = 'business-details';
       } else if (!data.businessPerformance || (data.businessPerformance && data.businessPerformance.stepStatus === 'IN_PROGRESS')) {
-        url = 'performance';
+        this.stepToRender = 'performance';
       } else if (!data.businessDocumentation || (data.businessDocumentation && data.businessDocumentation.stepStatus === 'IN_PROGRESS')) {
-        url = 'documentation';
+        this.stepToRender = 'documentation';
       } else if ((data.businessDocumentation && data.businessDocumentation.stepStatus === 'COMPLETE') && (data.businessPerformance && data.businessPerformance.stepStatus === 'COMPLETE') && (data.businessDetails && data.businessDetails.stepStatus === 'COMPLETE')) {
-        url = 'documentation';
+        this.stepToRender = 'documentation';
       }
     }
-    return url;
   }
 
   @action
   setBusinessApplicationData = () => {
     this.formReset();
+    this.step = 'performace';
     const data = this.fetchBusinessApplicationsDataById;
+    this.calculateStepToRender(data);
     this.setPrequalDetails(data.prequalDetails);
     this.setBusinessDetails(data.businessDetails);
     this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
@@ -454,7 +454,7 @@ export class BusinessAppStore {
     return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
       && this.businessApplicationsDataById.data.businessApplication
       && toJS(this.businessApplicationsDataById.data.businessApplication)
-    ) || [];
+    ) || null;
   }
 
   @computed get fetchBusinessApplicationsStatusById() {
