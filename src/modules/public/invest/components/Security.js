@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Button, Container, Grid } from 'semantic-ui-react';
+import { Header, Button, Container, Grid, Image } from 'semantic-ui-react';
+import Secure from '../../../../assets/images/secure-horizontal.png';
 
 const Security = () => (
   <section className="content-spacer security-banner">
@@ -19,6 +20,7 @@ const Security = () => (
                 <p>
                 We safeguard your information with bank-level security measures
                 </p>
+                <Image src={Secure} />
               </Grid.Column>
               <Grid.Column>
                 <Header as="h5">First SEC-registered funding portal in the U.S.</Header>
