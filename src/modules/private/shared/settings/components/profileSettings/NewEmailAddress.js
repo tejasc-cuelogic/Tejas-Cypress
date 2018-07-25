@@ -38,7 +38,7 @@ export default class NewEmailAddress extends Component {
           render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
         />
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Enter new email address</Header>
+          <Header as="h3">Enter new email address</Header>
           <p>We will send you a verification code to the email address you provide.</p>
         </Modal.Header>
         <Modal.Content>

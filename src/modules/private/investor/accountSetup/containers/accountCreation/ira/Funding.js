@@ -15,8 +15,8 @@ export default class Funding extends Component {
     const { FUNDING_FRM, fundingChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">How would you like to fund your IRA?</Header>
-        <Header as="h4" textAlign="center">Choose funding option</Header>
+        <Header as="h3" textAlign="center">How would you like to fund your IRA?</Header>
+        <p className="center-align">Choose funding option</p>
         <Form error className="account-type-tab">
           <FormRadioGroup
             fielddata={FUNDING_FRM.fields.fundingType}

@@ -14,8 +14,10 @@ const updates = {
 
 const UpdateDetails = () => (
   <Aux>
-    <Header as="h3" className="mb-half">{updates.title}</Header>
-    <Header as="h5">{updates.date}</Header>
+    <Header as="h4">
+      {updates.title}
+      <Header.Subheader className="mt-half">{updates.date}</Header.Subheader>
+    </Header>
     <Embed
       id={updates.embed}
       placeholder={videoPoster}

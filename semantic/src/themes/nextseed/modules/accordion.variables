@@ -84,7 +84,7 @@
 /* Styled Title */
 @styledTitleMargin: 0em;
 @styledTitlePadding: 0.75em 1em;
-@styledTitleFontWeight: normal;
+@styledTitleFontWeight:@normal;
 @styledTitleColor: @tertiary-text;
 @styledTitleTransition: background-color @defaultDuration @defaultEasing;
 @styledTitleBorder: 1px solid @borderColor;
@@ -97,7 +97,7 @@
 @styledTitleHoverBackground: transparent;
 @styledTitleHoverColor: @textColor;
 @styledActiveTitleBackground: transparent;
-@styledActiveTitleColor: @primary-text;
+@styledActiveTitleColor: @neutral;
 
 /* Styled Child Title States */
 @styledHoverChildTitleBackground: @styledTitleHoverBackground;

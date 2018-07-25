@@ -1,0 +1,21 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.ui.form {
+    .fields {
+        input {
+            &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+                color: @neutral-light;
+            }
+            &::-moz-placeholder { /* Firefox 19+ */
+                color: @neutral-light;
+            }
+            &:-ms-input-placeholder { /* IE 10+ */
+                color: @neutral-light;
+            }
+            &:-moz-placeholder { /* Firefox 18- */
+                color: @neutral-light;
+            }
+        }
+    }
+}

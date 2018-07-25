@@ -10,13 +10,11 @@ export default class Finances extends Component {
     const { FINANCES, financesChange } = this.props.investorProfileStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">
-          Financial Information
-        </Header>
-        <Header as="h4" textAlign="center">
+        <Header as="h3" textAlign="center">Financial Information</Header>
+        <p className="center-align mb-50">
           Please provide the following information so that
           we can determine which investments we are allowed to show you
-        </Header>
+        </p>
         <Form error>
           <MaskedInput2
             name="netWorth"

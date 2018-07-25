@@ -32,8 +32,8 @@ export default class ManualForm extends Component {
       = this.props.bankAccountStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">Link Bank Account</Header>
-        <Header as="h4" textAlign="center">We need this information to lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
+        <Header as="h3" textAlign="center">Link Bank Account</Header>
+        <p className="center-align">We need this information to lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -57,7 +57,7 @@ export default class ManualForm extends Component {
             <Button primary size="large" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button type="button" className="theme-link" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
+            <Button type="button" className="cancel-link" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
           </div>
         </Form>
       </div>
