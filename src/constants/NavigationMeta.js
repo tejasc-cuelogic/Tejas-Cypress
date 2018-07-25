@@ -352,4 +352,16 @@ export const PUBLIC_NAV = [
       { title: 'Track', to: 'track' },
     ],
   },
+  {
+    title: 'About Us',
+    to: 'about',
+    subNavigations: [
+      { title: 'Mission', to: 'mission' },
+      { title: 'Team', to: 'team' },
+      { title: 'Careers', to: 'careers' },
+      { title: 'Impact', to: 'impact' },
+      { title: 'Ambassadors', to: 'ambassadors' },
+      { title: 'Press', to: 'press' },
+    ],
+  },
 ];

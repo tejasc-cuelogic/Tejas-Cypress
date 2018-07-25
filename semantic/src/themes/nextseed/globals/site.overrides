@@ -1,4 +1,4 @@
-/*******************************
+ /*******************************
         Global Overrides
 *******************************/
 /* PUBLIC PAGES UI STYLES ==> START */
@@ -132,6 +132,9 @@ a.text-link{
 .invisible{
 	opacity:0 !important;
 }
+.bg-offwhite {
+	background-color: @neutral-offwhite;
+}
 
 // Footer Styles
 footer{
@@ -156,33 +159,24 @@ footer{
 }
 
 /** About Us **/
-.mission-statistic-section {
-	background-color: @neutral-offwhite;
-	.mission-block {
-		padding: @10px;
-		text-align: center;
-		color: #fff;
-		&.green-block {
-			background-color: @primaryColor;
-		}
-		&.blue-block {
-			background-color: @secondary-color;
-		}
-		.statistic {
-			margin-bottom: 0;
-			.value, .label {
-				color: #fff;
-				text-transform: none;
-			}
-			.value~.label {
-				margin-top: 10px;
-			}
+.statistic-section {
+	.green-block {
+		background-color: @primaryColor;
+	}
+	.blue-block {
+		background-color: @secondary-color;
+	}
+	.statistic {
+		margin-bottom: 0;
+		.value, .label {
+			color: @white !important;
+			text-transform: none !important;
 		}
 	}
-	.ui.grid.mission-base-block {
-		background-color: #fff;
-		padding: @10px;
-		margin-top: @10px;
+	.ui.grid.secondary-statistic {
+		background: @white;
+		padding: @14px;
+		margin-top: @14px;
 		.statistic {
 			.value {
 				font-family: @fontName; 
@@ -196,19 +190,13 @@ footer{
 				}
 			}
 			.label {
-				color: #676A73 !important;
+				color: @neutral-middark !important;
 				font-size: @14px;
 				line-height: @16px;
 				text-transform: inherit;
 				font-weight: normal;
 			}
 		}
-	}
-	p.disclaimer-text {
-		font-size: @10px;
-		line-height: @14px;
-		color: @neutral-middark;
-		font-family: @fontName; 
 	}
 }
 

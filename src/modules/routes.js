@@ -35,7 +35,7 @@ export const publicRoutes = [
     component: Agreements,
   },
   {
-    path: '/about/:section',
+    path: '/about',
     component: About,
   },
   {
