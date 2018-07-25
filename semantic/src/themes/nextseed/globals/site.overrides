@@ -768,7 +768,7 @@ div.login-form {
 
 //	Page Header Styles
 .page-header-section{
-	background-color:@neutral;
+	background-color:@neutral-middark;
 	position:relative;
 	padding:@20px @40px;
 	@media only screen and (max-width : @largestSmallMonitor){
@@ -906,7 +906,6 @@ div.login-form {
 	padding:@14px @40px;
 }
 .secondary-menu{
-	background-color:@tertiary-text;
 	padding:0 @40px;
 	@media only screen and (max-width : @largestLargeMonitor){
 		padding:0 @20px;

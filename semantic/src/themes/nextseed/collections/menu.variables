@@ -301,7 +301,7 @@
 
 /* Icon */
 @iconMenuTextAlign: center;
-@iconMenuItemColor: @white;
+@iconMenuItemColor: @tertiary-text;
 @iconMenuInvertedItemColor: @white;
 
 

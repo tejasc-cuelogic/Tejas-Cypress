@@ -264,6 +264,9 @@ footer{
 }
 
 .ui.menu.secondary-menu{
+    &.inverted{
+        background-color:@neutral-darkwhite;
+    }
     a.item{
         padding:@16px @20px;
         >.icon{
