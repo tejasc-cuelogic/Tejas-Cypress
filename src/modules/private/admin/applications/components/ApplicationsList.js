@@ -108,8 +108,8 @@ export default class ApplicationsList extends Component {
                               {application.comment.content}
                             </Item.Description>
                             <Item.Extra>
-                              <b>5/5/2018 | 1:33PM</b> by
-                              <b>{application.comment.user}</b>
+                              <b>5/5/2018 | 1:33PM</b>
+                              <b>`by {application.comment.user}`</b>
                             </Item.Extra>
                           </Item.Content>
                         </Item>
