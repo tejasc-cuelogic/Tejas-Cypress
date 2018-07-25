@@ -580,12 +580,12 @@ p i.icon {
 		background-color: rgba(255, 255, 255, 0.81);
 		padding-bottom: 4.28571429rem;
 		padding-top: 4.28571429rem;
-		h2.ui.header {
-			line-height: 52px;
+		.ui.header{
+			margin-bottom:@4px;
 		}
 		p {
 			line-height: 24px;
-			font-size: 15px;
+			margin-bottom:@24px;
 		}
 		&.process-right-section {
 			counter-reset: section;
@@ -648,11 +648,6 @@ p i.icon {
 	}
 }
 //Investor homepage
-.investor-bottom-buttons {
-	.ui.button {
-		margin: 0 10px; 
-	}
-}
 .how-it-works-steps {
 	counter-reset: section;
 	.ui.grid {
