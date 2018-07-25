@@ -3,20 +3,35 @@ import { indexOf } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
-import Helper from '../../../../../../helper/utility';
 import { FormInput, FormDropDown, FormCheckbox, MaskedInput2 } from '../../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 import { LENDING_PARTNER_LENDIO } from '../../../../../../constants/business';
+import { LENDIO } from '../../../../../../services/constants/businessApplication';
+import Helper from '../../../../../../helper/utility';
 
 @inject('businessAppStore', 'uiStore')
 @observer
 export default class Application extends Component {
   submit = (e) => {
     e.preventDefault();
-    this.props.businessAppStore.businessLendioPreQual();
-    Helper.toast('Business pre-qualification request submitted!', 'success');
-    this.props.history.push('/business-application/success/lendio');
-  }
+    this.props.businessAppStore.businessLendioPreQual()
+      .then((data) => {
+        const {
+          submitPartneredWithLendio: {
+            status,
+            url,
+          },
+        } = data;
+        const redirectParam = (status === LENDIO.LENDIO_SUCCESS) ? 'yes' : 'no';
+
+        this.props.history.push(`/app/business-application/${this.props.businessAppStore.currentApplicationId}/lendio/${redirectParam}`);
+        this.props.businessAppStore.setLendioUrl(url);
+      })
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      });
+  };
+
   render() {
     const {
       LENDIO_QUAL_FRM,
@@ -48,7 +63,7 @@ export default class Application extends Component {
             </List.Item>
           </List>
           <Divider section />
-          <Form onSubmit={this.submit}>
+          <Form>
             <FormElementWrap>
               <Grid>
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
@@ -125,6 +140,7 @@ export default class Application extends Component {
             <Button
               loading={this.props.uiStore.inProgress}
               disabled={!LENDIO_QUAL_FRM.meta.isValid || checkIsPresent === -1}
+              onClick={this.submit}
               primary
               className="very relaxed"
             >
