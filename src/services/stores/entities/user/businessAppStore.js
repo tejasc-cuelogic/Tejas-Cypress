@@ -1080,11 +1080,9 @@ export class BusinessAppStore {
           variables: formatedData,
         })
         .then((result) => {
-          console.log(result);
           resolve(result.data);
         })
         .catch((error) => {
-          console.log(error);
           uiStore.setErrors('Something went wrong, please try again later.');
           reject(error);
         })
