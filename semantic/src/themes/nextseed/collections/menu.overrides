@@ -263,17 +263,27 @@ footer{
     }
 }
 
-.ui.menu.secondary-menu{
-    &.inverted{
-        background-color:@neutral-darkwhite;
+.ui.menu{
+    &.attached:not(.tabular){
+        border:none;
     }
-    a.item{
-        padding:@16px @20px;
-        >.icon{
-            color:@border-light;
-        }
-        &.done >.icon{
-            color:@primary-one;
+    &.secondary-menu{
+        background-color:@neutral-darkwhite;
+        a.item{
+            padding:@16px @20px;
+            font-weight:@fontMedium;
+            &:before{
+                background-color:@neutral-darkwhite;
+            }
+            &:hover, &.active{
+                background-color:@neutral-offwhite;
+            }
+            >.icon{
+                color:@neutral-darkwhite;
+            }
+            &.done >.icon{
+                color:@primary-one;
+            }
         }
     }
 }
