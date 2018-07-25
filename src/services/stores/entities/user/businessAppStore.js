@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { forEach, includes, find, isEmpty } from 'lodash';
+import { forEach, includes, find, isEmpty, indexOf } from 'lodash';
 import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -26,6 +26,7 @@ import {
   upsertBusinessApplicationInformationBusinessDetails,
   upsertBusinessApplicationInformationDocumentation,
   submitApplication,
+  submitPartneredWithLendio,
 } from '../../queries/businessApplication';
 import { uiStore, navStore, userStore } from '../../index';
 import { fileUpload } from '../../../actions';
@@ -51,6 +52,7 @@ export class BusinessAppStore {
   @observable isFetchedData = null;
   @observable removeFileIdsList = [];
   @observable appStepsStatus = ['IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS'];
+  @observable lendioUrl = null;
   @observable isFileUploading = false;
   @observable stepToRender = 'pre-qualification';
 
@@ -522,7 +524,6 @@ export class BusinessAppStore {
   lendioEleChange = (e, res, type) => {
     this.LENDIO_QUAL_FRM =
       Validator.onChange(this.LENDIO_QUAL_FRM, Validator.pullValues(e, res, type));
-    console.log('this.LENDIO_QUAL_FRM==> ', this.LENDIO_QUAL_FRM);
   };
 
   @computed get getBusinessTypeCondtion() {
@@ -750,6 +751,34 @@ export class BusinessAppStore {
 
     return this.getFranchiseCondition ?
       { ...preQualData, franchiseHolder: data.franchiseHolder } : preQualData;
+  }
+
+  @computed get getFormatedofLendioData() {
+    const data = Validator.ExtractValues(toJS(this.LENDIO_QUAL_FRM.fields));
+    const agreeConditionsValue = indexOf(data.applicationAgreeConditions, 'agreeConditions') !== -1;
+    const sendDataToLendioValue = indexOf(data.applicationAgreeConditions, 'sendDataToLendio') !== -1;
+
+    const lendioData = {
+      applicationId: this.currentApplicationId,
+      preQualificationQuestions: {
+        duration: data.yrsInBusiness,
+        averageMonthlySales: data.avgSales,
+        ratePersonalCredit: data.personalCreditRating,
+        industry: data.industry,
+        raiseAmount: data.raiseAmount,
+      },
+      customerInformation: {
+        businessName: data.businessName,
+        ownerFullName: data.businessOwnerName,
+        realEmail: data.emailAddress,
+        phoneNumber: data.phoneNumber,
+        comments: data.comments,
+      },
+      agreeConditions: agreeConditionsValue,
+      sendDataToLendio: sendDataToLendioValue,
+    };
+
+    return lendioData;
   }
 
   @action
@@ -1038,6 +1067,34 @@ export class BusinessAppStore {
   @action
   performanceReset = (field) => {
     this.BUSINESS_PERF_FRM = Validator.onChange(this.BUSINESS_PERF_FRM, { name: field, value: '' });
+  };
+
+  @action
+  businessLendioPreQual = () => {
+    const formatedData = this.getFormatedofLendioData;
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: submitPartneredWithLendio,
+          variables: formatedData,
+        })
+        .then((result) => {
+          resolve(result.data);
+        })
+        .catch((error) => {
+          uiStore.setErrors('Something went wrong, please try again later.');
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  };
+
+  @action
+  setLendioUrl = (val) => {
+    this.lendioUrl = val;
   };
 }
 
