@@ -73,7 +73,7 @@ const ambassadors = () => (
               <Grid.Column width={7} className="green-block mission-block" textAlign="center">
                 {/* <Header as="h2">$17,819,390</Header>
                 <p>Economic impact of businesses funded1</p> */}
-                <Statistic size="tiny">
+                <Statistic size="tiny" className="basic">
                   <Statistic.Value>$17,819,39</Statistic.Value>
                   <Statistic.Label>Economic impact of businesses funded1</Statistic.Label>
                 </Statistic>
@@ -81,7 +81,7 @@ const ambassadors = () => (
                   <Grid.Column width={8} textAlign="center">
                     {/* <Header as="h3" className="primary-text">14</Header>
                     <p>Cities with NextSeed Issuers</p> */}
-                    <Statistic size="tiny">
+                    <Statistic size="tiny" className="basic">
                       <Statistic.Value className="primary-text">14</Statistic.Value>
                       <Statistic.Label>Cities with NextSeed Issuers</Statistic.Label>
                     </Statistic>
@@ -89,7 +89,7 @@ const ambassadors = () => (
                   <Grid.Column width={8} textAlign="center">
                     {/* <Header as="h3" className="primary-text">290</Header>
                     <p>Jobs created2</p> */}
-                    <Statistic size="tiny">
+                    <Statistic size="tiny" className="basic">
                       <Statistic.Value className="primary-text">290</Statistic.Value>
                       <Statistic.Label>Jobs created2</Statistic.Label>
                     </Statistic>
@@ -99,7 +99,7 @@ const ambassadors = () => (
               <Grid.Column width={7} className="blue-block mission-block" textAlign="center">
                 {/* <Header as="h2">$6.3M</Header>
                 <p>Total amount raised via debt crowdfunding</p> */}
-                <Statistic size="tiny">
+                <Statistic size="tiny" className="basic">
                   <Statistic.Value>$6.3M</Statistic.Value>
                   <Statistic.Label>Total amount raised via debt crowdfunding</Statistic.Label>
                 </Statistic>
@@ -107,7 +107,7 @@ const ambassadors = () => (
                   <Grid.Column width={8} textAlign="center">
                     {/* <Header as="h3" className="secondary-text">$217,360</Header>
                     <p>Average closed offering size</p> */}
-                    <Statistic size="tiny">
+                    <Statistic size="tiny" className="basic">
                       <Statistic.Value className="secondary-text">$217,360</Statistic.Value>
                       <Statistic.Label>Average closed offering size</Statistic.Label>
                     </Statistic>
@@ -115,7 +115,7 @@ const ambassadors = () => (
                   <Grid.Column width={8} textAlign="center">
                     {/* <Header as="h3" className="secondary-text">45 Days</Header>
                     <p>Average time to complete offering</p> */}
-                    <Statistic size="tiny">
+                    <Statistic size="tiny" className="basic">
                       <Statistic.Value className="secondary-text">45 Days</Statistic.Value>
                       <Statistic.Label>Average time to complete offering</Statistic.Label>
                     </Statistic>

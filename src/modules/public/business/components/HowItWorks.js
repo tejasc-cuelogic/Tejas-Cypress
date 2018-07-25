@@ -61,19 +61,17 @@ const HowItWorks = () => (
         <Grid className="business-learn-more">
           <Grid.Row centered columns={2}>
             <Grid.Column className="center-align">
-              <p><b>Learn more</b></p>
-              <List horizontal>
+              {/* <p><b>Learn more</b></p> */}
+              <List horizontal relaxed className="learn-more-list left-align">
                 <List.Item>
-                  <List.Icon name="arrow right" color="green" />
-                  <List.Content as="a">
-                  Why fundraise on NextSeed?
-                  </List.Content>
+                  <List.Header>Learn more</List.Header>
+                  <List.Icon className="ns-arrow-right" color="green" />
+                  <List.Content as="a">Why fundraise on NextSeed?</List.Content>
                 </List.Item>
                 <List.Item>
-                  <List.Icon name="arrow right" color="green" />
-                  <List.Content as="a">
-                  Is fundraising on NextSeed risky?
-                  </List.Content>
+                  <List.Header>&nbsp;</List.Header>
+                  <List.Icon className="ns-arrow-right" color="green" />
+                  <List.Content as="a">Is fundraising on NextSeed risky?</List.Content>
                 </List.Item>
               </List>
             </Grid.Column>
@@ -121,13 +119,13 @@ const HowItWorks = () => (
             <Grid columns={2}>
               <Grid.Row>
                 <Grid.Column>
-                  <Statistic color="green" size="mini">
+                  <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>$9M+</Statistic.Value>
                     <Statistic.Label>In capital deployed by NextSeed investors</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
                 <Grid.Column>
-                  <Statistic color="green" size="mini">
+                  <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>35+</Statistic.Value>
                     <Statistic.Label>Businesses successfully funded</Statistic.Label>
                   </Statistic>
@@ -135,13 +133,13 @@ const HowItWorks = () => (
               </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
-                  <Statistic color="green" size="mini">
+                  <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>135</Statistic.Value>
                     <Statistic.Label>Avg. number of investors per offering</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
                 <Grid.Column>
-                  <Statistic color="green" size="mini">
+                  <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>11,630</Statistic.Value>
                     <Statistic.Label>Avg. unique page views per offering</Statistic.Label>
                   </Statistic>

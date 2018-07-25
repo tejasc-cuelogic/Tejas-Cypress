@@ -67,13 +67,11 @@ const HowItWorks = () => (
                   </Segment>
                 </div>
               </div>
-              <List horizontal>
+              <List horizontal className="learn-more-list">
                 <List.Item>
                   <List.Header>Learn more</List.Header>
-                  <List.Icon name="arrow right" color="green" />
-                  <List.Content as="a">
-                  See an example of a Term Note investment
-                  </List.Content>
+                  <List.Icon className="ns-arrow-right" color="green" />
+                  <List.Content as="a">See an example of a Term Note investment</List.Content>
                 </List.Item>
               </List>
             </Grid.Column>
@@ -100,13 +98,11 @@ const HowItWorks = () => (
                   </Segment>
                 </div>
               </div>
-              <List horizontal>
+              <List horizontal className="learn-more-list">
                 <List.Item>
                   <List.Header>Learn more</List.Header>
-                  <List.Icon name="arrow right" color="green" />
-                  <List.Content as="a">
-                  See an example of a Revenue Sharing investment
-                  </List.Content>
+                  <List.Icon className="ns-arrow-right" color="green" />
+                  <List.Content as="a">See an example of a Revenue Sharing investment</List.Content>
                 </List.Item>
               </List>
             </Grid.Column>
@@ -130,19 +126,15 @@ const HowItWorks = () => (
             </p>
           </Grid.Column>
           <Grid.Column>
-            <List horizontal className="mb-50 why-nextseed-learnmore">
+            <List relaxed className="mb-50 learn-more-list">
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                <List.Icon name="arrow right" color="green" />
-                <List.Content as="a">
-                Is investing on NextSeed risky?
-                </List.Content>
+                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Content as="a">Is investing on NextSeed risky?</List.Content>
               </List.Item>
               <List.Item>
-                <List.Icon name="arrow right" color="green" />
-                <List.Content as="a">
-                Are bonus rewards covered by my investment agreements?
-                </List.Content>
+                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Content as="a">Are bonus rewards covered by my investment agreements?</List.Content>
               </List.Item>
             </List>
           </Grid.Column>

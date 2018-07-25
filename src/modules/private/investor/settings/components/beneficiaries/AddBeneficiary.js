@@ -69,7 +69,7 @@ export default class AddBeneficiary extends Component {
             BENEFICIARY_META.fields.beneficiary.length ?
               BENEFICIARY_META.fields.beneficiary.map((beneficiary, index) => (
                 <Aux>
-                  <Header as="h4">
+                  <Header as="h5">
                     {`Beneficiary ${index + 1}`}
                     {BENEFICIARY_META.fields.beneficiary.length > 1 &&
                       <Button icon className="link-button pull-right" onClick={e => this.toggleConfirm(e, index)}>
@@ -109,7 +109,7 @@ export default class AddBeneficiary extends Component {
                         changed={(e, result) => beneficiaryEleChange(e, result, index)}
                       />
                     </Form.Group>
-                    <Header as="h4">Permanent address</Header>
+                    <Header as="h6">Permanent address</Header>
                     <AutoComplete
                       name="residentalStreet"
                       fielddata={beneficiary.residentalStreet}

@@ -51,7 +51,7 @@ class LocationAnalysisModal extends Component {
                     <Grid.Column />
                     <Grid.Column />
                     <Grid.Column>
-                      <Statistic size="tiny">
+                      <Statistic size="tiny" className="basic">
                         <Statistic.Value>$82,000/yr</Statistic.Value>
                         <Statistic.Label>Average Income</Statistic.Label>
                       </Statistic>

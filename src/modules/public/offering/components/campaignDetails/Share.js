@@ -4,16 +4,16 @@ import { Header, Icon, Modal, Input } from 'semantic-ui-react';
 
 const shareVia = [
   {
-    icon: 'default', title: 'Email', action: '', name: 'envelope outline',
+    class: 'default', title: 'Email', action: '', name: 'envelope outline',
   },
   {
-    icon: 'in-color', title: 'LinkedIn', action: '', name: 'linkedin in',
+    class: 'in-color', title: 'LinkedIn', action: '', name: 'linkedin in',
   },
   {
-    icon: 'tw-color', title: 'Twitter', action: '', name: 'twitter',
+    class: 'tw-color', title: 'Twitter', action: '', name: 'twitter',
   },
   {
-    icon: 'fb-color', title: 'Facebook', action: '', name: 'facebook f',
+    class: 'fb-color', title: 'Facebook', action: '', name: 'facebook f',
   },
 ];
 export default class Share extends Component {
@@ -24,14 +24,14 @@ export default class Share extends Component {
         Share
         </Header>
         <Modal.Content>
-          <div className="share-icons">
+          <div className="share-icons center-align">
             {
               shareVia.map(share => (
-                <Link to="/"><Icon name={share.name} circular className={share.icon} />{share.title}</Link>
+                <Link to="/"><Icon name={share.name} circular inverted className={share.class} size="big" />{share.title}</Link>
               ))
             }
           </div>
-          <Input disabled action={{ color: 'green', content: 'COPY' }} fluid value="https://nextseed.com/offerings/buffbrew-taproom" />
+          <Input readOnly action={{ color: 'green', content: 'COPY' }} fluid value="https://nextseed.com/offerings/buffbrew-taproom" />
         </Modal.Content>
       </Modal>
     );

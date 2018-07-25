@@ -46,7 +46,7 @@ const MySidebar = observer(props => (
           <Logo
             className="logo"
             dataSrc={((props.layoutState.leftPanel) ?
-              (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhite' : 'LogoColor') :
+              (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
               'LogoSmall')}
           />
           {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}

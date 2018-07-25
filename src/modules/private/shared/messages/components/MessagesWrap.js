@@ -35,7 +35,7 @@ export default class MessagesWrap extends Component {
               <Icon className="ns-trash" />
             </Button>
           </Button.Group>
-          <Header as="h3">Business model</Header>
+          <Header as="h4">Business model</Header>
         </div>
         <Body current="2" thread={thread} error={tError} loading={tLoading} />
         <Compose />

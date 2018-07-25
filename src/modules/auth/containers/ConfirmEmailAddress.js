@@ -66,7 +66,7 @@ export default class ConfirmEmailAddress extends Component {
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Confirm your email address</Header>
+          <Header as="h3">Confirm your email address</Header>
           <Divider />
           <p>Please check the verification code in the email we sent to:</p>
         </Modal.Header>

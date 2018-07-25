@@ -29,7 +29,7 @@ const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'
 
 const PortfolioAllocations = () => (
   <Aux>
-    <Header as="h3">Portfolio Allocations</Header>
+    <Header as="h4">Portfolio Allocations</Header>
     <Grid columns={3} celled="internally">
       <Grid.Row>
         <Grid.Column widescreen={5} largeScreen={5} computer={16} mobile={16}>

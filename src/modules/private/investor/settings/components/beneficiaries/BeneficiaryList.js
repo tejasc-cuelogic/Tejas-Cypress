@@ -19,7 +19,7 @@ const BeneficiaryList = (props) => {
       <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
         <Card fluid>
           <Card.Content className="padded beneficiaries">
-            <Header as="h3">
+            <Header as="h4">
               <Icon color="green" className={`ns-${title.toLowerCase()}-line`} />
               {`${title} Account beneficiaries`}
             </Header>

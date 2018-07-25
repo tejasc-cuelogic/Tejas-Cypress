@@ -11,10 +11,10 @@ const AccountTypes = ({
 }) => (
   <Modal open closeIcon onClose={close}>
     <Modal.Header className="center-align signup-header">
-      <Header as="h1">What type of Investment Account would you like to start?</Header>
+      <Header as="h3">What type of Investment Account would you like to start?</Header>
     </Modal.Header>
     <Modal.Content className="signup-content">
-      <Header as="h4" textAlign="center">Choose an account type</Header>
+      <Header as="h6" textAlign="center">Choose an account type</Header>
       <Grid textAlign="center">
         <Form error className="account-type-tab">
           <FormRadioGroup
