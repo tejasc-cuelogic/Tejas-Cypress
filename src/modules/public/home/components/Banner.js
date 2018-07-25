@@ -8,9 +8,7 @@ const Banner = () => (
         <Header as="h1">
           Raise capital.<br />
           Invest local.<br />
-          <span className="highlight-text">Thrive as a<br />
-            community.
-          </span>
+          <span className="highlight-text">Grow together</span>
         </Header>
       </div>
     </Container>

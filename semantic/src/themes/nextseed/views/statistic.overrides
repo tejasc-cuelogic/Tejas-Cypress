@@ -23,6 +23,7 @@
 		.ui.statistic {
 			width: 100%;
 			padding: 0;
+			text-align: center;
 			>.label{
 				color:@neutral-middark;
 				line-height: @44px;
@@ -96,7 +97,6 @@
 		}
 		>.label {
 			font-size: 15px;
-			color: @neutral-offdark;
 			text-align: left;
 			text-transform: none;
 			font-weight: @normal;

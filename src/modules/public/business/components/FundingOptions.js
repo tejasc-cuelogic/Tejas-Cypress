@@ -31,7 +31,7 @@ export default class FundingOption extends Component {
     return (
       <Aux>
         <Container>
-          <section className="funding-option">
+          <section className="funding-option account-type-tab">
             <Header as="h2">Choose a funding option that fits your business.</Header>
             <p className="mb-50 center-align">
               Whether you need working capital for your existing business,

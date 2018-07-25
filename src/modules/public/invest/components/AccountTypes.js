@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Button, Container, Grid, Segment } from 'semantic-ui-react';
+import { Header, Button, Container, Grid } from 'semantic-ui-react';
 
 const AccountTypes = () => (
   <section className="content-spacer account-banner">
@@ -9,8 +9,8 @@ const AccountTypes = () => (
         <Grid.Row>
           <Grid.Column floated="left" width={10} verticalAlign="middle" className="side-section account-types-section">
             <Header as="h2">Set up the right account for your investment needs.</Header>
-            <Segment.Group horizontal className="mt-30 mb-30">
-              <Segment>
+            <Grid columns={2} className="mt-30 mb-30">
+              <Grid.Column>
                 <Header as="h5">Individual</Header>
                 <p>
                 Create a NextSeed Investment Account by linking your checking account.
@@ -25,8 +25,8 @@ const AccountTypes = () => (
                 Minimum opening deposit of $5,000. Please note
                   <Link as={Link} to="/" color="green"> investment limits apply</Link>.
                 </p>
-              </Segment>
-              <Segment>
+              </Grid.Column>
+              <Grid.Column>
                 <Header as="h5">Self-Directed IRA</Header>
                 <p>
                   Begin investing in local businesses with a self-directed NextSeed IRA.
@@ -42,8 +42,8 @@ const AccountTypes = () => (
                   the one-time setup fee and annual account fees for four years! For
                   full details, go to the <Link as={Link} to="/">Terms and Conditions</Link>.
                 </p>
-              </Segment>
-            </Segment.Group>
+              </Grid.Column>
+            </Grid>
             <p className="note mb-50">
               NextSeed is not a tax, investment or legal advisor and does not provide any tax,
               investment, or legal advice; please consult your own advisors or IRS guidelines
