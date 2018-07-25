@@ -12,7 +12,7 @@
 
 /* Checkbox */
 @checkboxBackground: @white;
-@checkboxBorder: 1px solid @neutral-middark;
+@checkboxBorder: 2px solid @neutral-middark;
 @checkboxBorderRadius: @4px;
 @checkboxTransition:
   border @defaultDuration @defaultEasing,
@@ -38,12 +38,12 @@
 
 /* Hover */
 @checkboxHoverBackground: @checkboxBackground;
-@checkboxHoverBorderColor: @selectedBorderColor;
+@checkboxHoverBorderColor: @primary-one-lighten;
 @labelHoverColor: @hoveredTextColor;
 
 /* Pressed */
 @checkboxPressedBackground: @primary-one;
-@checkboxPressedBorderColor: @selectedBorderColor;
+@checkboxPressedBorderColor: @primary-one-lighten;
 @checkboxPressedColor: @white;
 @labelPressedColor: @selectedTextColor;
 
@@ -62,7 +62,7 @@
 
 /* Active Focus */
 @checkboxActiveFocusBackground: @primary-one;
-@checkboxActiveFocusBorderColor: @checkboxFocusBorderColor;
+@checkboxActiveFocusBorderColor: @primary-one;
 @checkboxActiveFocusCheckColor: @white;
 
 /* Indeterminate */

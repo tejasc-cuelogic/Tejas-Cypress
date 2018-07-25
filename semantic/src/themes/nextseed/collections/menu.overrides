@@ -264,14 +264,27 @@ footer{
     }
 }
 
-.ui.menu.secondary-menu{
-    a.item{
-        padding:@16px @20px;
-        >.icon{
-            color:@border-light;
-        }
-        &.done >.icon{
-            color:@primary-one;
+.ui.menu{
+    &.attached:not(.tabular){
+        border:none;
+    }
+    &.secondary-menu{
+        background-color:@neutral-darkwhite;
+        a.item{
+            padding:@16px @20px;
+            font-weight:@fontMedium;
+            &:before{
+                background-color:@neutral-darkwhite;
+            }
+            &:hover, &.active{
+                background-color:@neutral-offwhite;
+            }
+            >.icon{
+                color:@neutral-darkwhite;
+            }
+            &.done >.icon{
+                color:@primary-one;
+            }
         }
     }
 }
