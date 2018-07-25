@@ -52,6 +52,48 @@ export const FILTER_META = {
     { text: 'Delaware', value: 'delaware' },
     { text: 'West Virginia', value: 'west virginia' },
   ],
+  businessAppSortOption: [
+    { text: 'Started date (ascending)', value: 'unlocked' },
+    { text: 'Started date (locked)', value: 'locked' },
+    { text: 'Released', value: 'released' },
+  ],
+  applicationStatus: {
+    value: ['New'],
+    values: [
+      {
+        label: 'New',
+        value: 'New',
+      },
+      {
+        label: 'Accepted',
+        value: 'Accepted',
+      },
+      {
+        label: 'Declined',
+        value: 'Declined',
+      },
+      {
+        label: 'Reviewing',
+        value: 'Reviewing',
+      },
+      {
+        label: 'Offered',
+        value: 'Offered',
+      },
+      {
+        label: 'Deleted',
+        value: 'Deleted',
+      },
+      {
+        label: 'Unstashed',
+        value: 'Unstashed',
+      },
+      {
+        label: 'Stashed',
+        value: 'Stashed',
+      },
+    ],
+  },
 };
 
 export const TRANSACTION_TYPES = [

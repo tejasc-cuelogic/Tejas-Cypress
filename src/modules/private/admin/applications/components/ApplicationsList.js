@@ -1,32 +1,49 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
+import { includes } from 'lodash';
 import { Form, Grid, Input, Button, Pagination, Card, Table, Header, Item, Rating, Label, List } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
-// import { FormCheckbox } from '../../../../../theme/form';
+import { FormCheckbox } from '../../../../../theme/form';
+import { BUSINESS_APP_STATUS2, BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
 @inject('businessAppAdminStore')
 @observer
 export default class ApplicationsList extends Component {
   componentWillMount() {
+    console.log(BUSINESS_APP_STATUS2);
     const { match } = this.props;
     const { fetchBusinessApplicationsByStatus } = this.props.businessAppAdminStore;
     fetchBusinessApplicationsByStatus(match.url);
   }
+  setSearchParam = (e, { name, value }) =>
+    this.props.businessAppAdminStore.setInitiateSrch(name, value);
+
+
+  executeSearch = (e) => {
+    if (e.charCode === 13) {
+      this.props.businessAppAdminStore.setInitiateSrch('keyword', e.target.value);
+    }
+  }
+
   render() {
     // const { match, helloWorldStore } = this.props;
-    const { getBusinessApplication } = this.props.businessAppAdminStore;
+    const {
+      getBusinessApplication,
+      requestState,
+      filterApplicationStatus,
+    } = this.props.businessAppAdminStore;
     return (
       <Aux>
         <Form>
           <Grid>
             <Grid.Row verticalAlign="bottom">
               <Grid.Column width={8}>
-                <Input fluid icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Search by keyword or phrase" />
+                <Input fluid onKeyPress={this.executeSearch} icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Search by keyword or phrase" />
               </Grid.Column>
               <Grid.Column width={3}>
-                <DropdownFilter name="Status" keyName="accountStatus" options={FILTER_META.accountStatus} />
+                <DropdownFilter name="Sort By" keyName="businessAppSortOption" change={this.setSearchParam} value={requestState.search.businessAppSortOption} options={FILTER_META.businessAppSortOption} />
               </Grid.Column>
               <Grid.Column width={3} floated="right" textAlign="right">
                 <Button primary className="relaxed" content="Export" />
@@ -34,13 +51,14 @@ export default class ApplicationsList extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column width={10}>
-                <Form.Group inline>
-                  <Form.Checkbox label="New (3)" />
-                  <Form.Checkbox label="Offered (1)" />
-                  <Form.Checkbox label="Review (1)" />
-                  <Form.Checkbox label="Accepted (1)" />
-                  <Form.Checkbox label="Deleted (1)" />
-                </Form.Group>
+                <FormCheckbox
+                  checked={requestState.search.applicationStatus}
+                  fielddata={filterApplicationStatus}
+                  name="applicationStatus"
+                  changed={this.setSearchParam}
+                  defaults
+                  containerclassname="ui list horizontal"
+                />
               </Grid.Column>
               <Grid.Column width={6} textAlign="right">
                 <Pagination defaultActivePage={1} totalPages={20} />
@@ -74,8 +92,8 @@ export default class ApplicationsList extends Component {
                             {application.info.phone}
                           </p>
                           <p>Sign-up Code <b>-</b><br />
-                            Started <b>{application.startDate}</b><br />
-                            Updated <b>{application.lastUpdatedDate}</b>
+                            Started <b>{application.createdDate}</b><br />
+                            Updated <b>{application.updatedDate}</b>
                           </p>
                         </div>
                       </Table.Cell>
@@ -84,18 +102,20 @@ export default class ApplicationsList extends Component {
                           <Item.Header><Rating size="large" defaultRating={0} maxRating={5} /></Item.Header>
                           <Item.Content>
                             <Item.Description>
-                              Good application, several fail reasons, though. We should contact them
+                              {application.comment.content}
                             </Item.Description>
-                            <Item.Extra><b>5/5/2018 | 1:33PM</b> by <b>Jack Black</b></Item.Extra>
+                            <Item.Extra>
+                              <b>5/5/2018 | 1:33PM</b> by
+                              <b>{application.comment.user}</b>
+                            </Item.Extra>
                           </Item.Content>
                         </Item>
                       </Table.Cell>
                       <Table.Cell>
-                        {application.statusType === 'FAILED' ?
+                        {application.applicationStatus ===
+                        BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ?
                           <p>
-                            Net income ($100) is lower than required $15,000.
-                            Net income ($100) is lower than required $15,000.
-                            Net income ($100) is lower than required $15,000.
+                            {application.failedReasons}
                           </p> :
                           <List as="ol" className="step-list">
                             <List.Item as="li" className="done">Completed</List.Item>
@@ -107,8 +127,31 @@ export default class ApplicationsList extends Component {
                       </Table.Cell>
                       <Table.Cell width={1} textAlign="center">
                         <Button.Group vertical compact size="mini">
-                          <Button color="green">Pramote</Button>
+                          {includes(['DELETED'], application.status) &&
+                          <Aux>
+                            <Button color="blue">Restore</Button>
+                            <Button color="red">Remove</Button>
+                          </Aux>
+                          }
+                          {!includes(['DELETED', 'REMOVED'], application.status) &&
                           <Button color="red">Delete</Button>
+                          }
+                          {!includes(['DELETED', 'REMOVED'], application.status) &&
+                          application.applicationStatus ===
+                          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
+                          <Button color="green">Promote</Button>
+                          }
+                          {application.applicationStatus ===
+                          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
+                          <Aux>
+                            {!includes(['DELETED', 'REMOVED', 'STASH'], application.status) &&
+                            <Button color="green">Stash</Button>
+                            }
+                            {includes(['STASH'], application.status) &&
+                            <Button color="green" inverted className="relaxed">UnStash</Button>
+                            }
+                          </Aux>
+                          }
                           <Button color="blue" inverted className="relaxed">View</Button>
                         </Button.Group>
                       </Table.Cell>

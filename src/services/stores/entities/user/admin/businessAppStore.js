@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { includes } from 'lodash';
+import { includes, isArray } from 'lodash';
 // import graphql from 'mobx-apollo';
 // import { FormValidator as Validator } from '../../../../../helper';
 // import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -11,49 +11,44 @@ import { includes } from 'lodash';
 // import {
 //     submitApplication,
 //   } from '../../../queries/businessApplication';
+import { FILTER_META } from '../../../../../constants/user';
 
 export class BusinessAppStore {
-  // @observable businessApplicationsList = [];
-  @observable businessApplicationsList = {
-    data: [{
-      info: {
-        businessName: 'Test Business',
-        name: 'Chetan',
-        email: 'chetan.cuelogic@nextseed.com',
-        phone: 21313213213,
-      },
-      comment: {
-        content: 'Testing comment',
-        date: '07/07/2018',
-      },
-      startDate: '07/07/2018',
-      lastUpdatedDate: '07/07/2018',
-      failedReasons: ['Netincome', 'not eligible'],
-      statusType: 'FAILED',
-      ratings: 0,
+  @observable businessApplicationsList = [];
+  @observable requestState = {
+    lek: null,
+    filters: false,
+    sort: {
+      by: 'lastLoginDate',
+      direction: 'desc',
     },
-    {
-      info: {
-        businessName: 'Test Business',
-        name: 'Chetan',
-        email: 'chetan.cuelogic@nextseed.com',
-        phone: 21313213213,
-      },
-      comment: {
-        content: 'Testing comment',
-        date: '23/23/2322',
-      },
-      startDate: '23/23/2322',
-      lastUpdatedDate: '23/23/2322',
-      statusType: 'IN-PROGRESS',
-      ratings: 0,
-    }],
+    search: {
+    },
   };
-  @observable details = 'This is just a hello world page details!';
+
+  @observable filterApplicationStatus = FILTER_META.applicationStatus;
 
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  initiateSearch = (srchParams) => {
+    this.requestState.lek = null;
+    this.requestState.search = srchParams;
+    // this.initRequest();
+  }
+
+  @action
+  setInitiateSrch = (name, value) => {
+    const srchParams = { ...this.requestState.search };
+    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+      srchParams[name] = value;
+    } else {
+      delete srchParams[name];
+    }
+    this.initiateSearch(srchParams);
   }
 
   @computed get getBusinessApplication() {
@@ -88,6 +83,7 @@ export class BusinessAppStore {
     if (appType === 'in-progress') {
       this.businessApplicationsList = {
         data: [{
+          applicationId: 'sdf3',
           info: {
             businessName: 'Test Business',
             name: 'Chetan',
@@ -97,14 +93,17 @@ export class BusinessAppStore {
           comment: {
             content: 'Testing comment',
             date: '07/07/2018',
+            user: 'Jhone',
           },
-          startDate: '07/07/2018',
-          lastUpdatedDate: '07/07/2018',
-          failedReasons: ['Netincome', 'not eligible'],
-          statusType: 'FAILED',
+          createdDate: '07/07/2018',
+          updatedDate: '07/07/2018',
+          failedReasons: 'Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000',
+          applicationStatus: 'PRE_QUALIFICATION_FAILED',
+          status: 'NEW',
           ratings: 0,
         },
         {
+          applicationId: 'sdf3',
           info: {
             businessName: 'Test Business',
             name: 'Chetan',
@@ -113,17 +112,20 @@ export class BusinessAppStore {
           },
           comment: {
             content: 'Testing comment',
-            date: '23/23/2322',
+            date: '07/07/2018',
+            user: 'Mack',
           },
-          startDate: '23/23/2322',
-          lastUpdatedDate: '23/23/2322',
-          statusType: 'IN-PROGRESS',
+          createdDate: '07/07/2018',
+          updatedDate: '07/07/2018',
+          applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
+          status: 'NEW',
           ratings: 0,
         }],
       };
     } else {
       this.businessApplicationsList = {
         data: [{
+          applicationId: 'sdf3',
           info: {
             businessName: 'Test Business',
             name: 'Jhon',
@@ -133,14 +135,17 @@ export class BusinessAppStore {
           comment: {
             content: 'Testing comment',
             date: '07/07/2018',
+            user: 'Jhone',
           },
-          startDate: '07/07/2018',
-          lastUpdatedDate: '07/07/2018',
-          failedReasons: ['Netincome', 'not eligible'],
-          statusType: 'FAILED',
+          createdDate: '07/07/2018',
+          updatedDate: '07/07/2018',
+          failedReasons: 'Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000',
+          applicationStatus: 'PRE_QUALIFICATION_FAILED',
+          status: 'DELETED',
           ratings: 0,
         },
         {
+          applicationId: 'sdf3',
           info: {
             businessName: 'Test Business',
             name: 'Jone',
@@ -149,11 +154,14 @@ export class BusinessAppStore {
           },
           comment: {
             content: 'Testing comment',
-            date: '23/23/2322',
+            date: '07/08/2018',
+            user: 'Alex',
           },
-          startDate: '23/23/2322',
-          lastUpdatedDate: '23/23/2322',
-          statusType: 'FAILED',
+          createdDate: '07/08/2018',
+          updatedDate: '07/08/2018',
+          failedReasons: 'Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000',
+          applicationStatus: 'PRE_QUALIFICATION_FAILED',
+          status: 'REMOVED',
           ratings: 0,
         }],
       };

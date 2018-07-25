@@ -22,6 +22,17 @@ export const BUSINESS_APPLICATION_STATUS = {
   LENDIO_SUCCESS: 'SUCCESS',
 };
 
+export const BUSINESS_APP_STATUS2 = {
+  NEW: 'NEW',
+  STASH: 'STASH',
+  UNSTASH: 'UNSTASH',
+  DECLIENED: 'DECLIENED',
+  ACCEPTED: 'ACCEPTED',
+  OFFERED: 'OFFERED',
+  DELETED: 'DELETED',
+  REMOVED: 'REMOVED',
+};
+
 export const BUSINESS_APP_USER_STATUS = {
   PRE_QUALIFICATION_FAILED: { status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange' },
   PRE_QUALIFICATION_SUCCESSFUL: { status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange' },
