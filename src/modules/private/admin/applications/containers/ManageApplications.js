@@ -15,7 +15,9 @@ const getModule = component => Loadable({
 
 export default class ManageApplications extends Component {
   componentWillMount() {
-    // this.props.history.push(`${this.props.match.url}/prequal-failed`);
+    if (this.props.match.isExact) {
+      this.props.history.push(`${this.props.match.url}/prequal-failed`);
+    }
   }
 
   search = (e) => {
@@ -38,7 +40,6 @@ export default class ManageApplications extends Component {
             ))
           }
         </Switch>
-        {/* <ApplicationsList match={match} /> */}
       </PrivateLayout>
     );
   }

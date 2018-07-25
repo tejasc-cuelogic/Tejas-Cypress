@@ -11,6 +11,7 @@ export const COMMON = {
     label: 'Password',
     placeHolder: 'Password',
     rule: 'required|min:8|max:15',
+    error: undefined,
   },
   code: {
     value: '',

@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { includes } from 'lodash';
-import { Form, Grid, Input, Button, Pagination, Card, Table, Header, Item, Rating, Label, List } from 'semantic-ui-react';
+// import { includes } from 'lodash';
+import { Form, Grid, Input, Button, Pagination, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
 import { FormCheckbox } from '../../../../../theme/form';
-import { BUSINESS_APP_STATUS2, BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
+import { ApplicationListStepColumn } from './ApplicationListStepColumn';
+import { ApplicationListButtons } from './ApplicationListButtons';
+import { AppStatusLabel } from './AppStatusLabel';
 
 @inject('businessAppAdminStore')
 @observer
 export default class ApplicationsList extends Component {
   componentWillMount() {
-    console.log(BUSINESS_APP_STATUS2);
     const { match } = this.props;
     const { fetchBusinessApplicationsByStatus } = this.props.businessAppAdminStore;
     fetchBusinessApplicationsByStatus(match.url);
@@ -33,6 +34,7 @@ export default class ApplicationsList extends Component {
       getBusinessApplication,
       requestState,
       filterApplicationStatus,
+      columnTitle,
     } = this.props.businessAppAdminStore;
     return (
       <Aux>
@@ -73,7 +75,7 @@ export default class ApplicationsList extends Component {
                 <Table.Row>
                   <Table.HeaderCell>Info</Table.HeaderCell>
                   <Table.HeaderCell width={4}>Comments</Table.HeaderCell>
-                  <Table.HeaderCell width={4}>Failed reasons</Table.HeaderCell>
+                  <Table.HeaderCell width={4}>{columnTitle}</Table.HeaderCell>
                   <Table.HeaderCell textAlign="center">Action</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
@@ -84,7 +86,8 @@ export default class ApplicationsList extends Component {
                       <Table.Cell>
                         <Header as="h6">
                           {application.info.businessName}
-                          <Label color="red" size="small" horizontal>Declined</Label>
+                          <AppStatusLabel status={application.status} />
+                          {/* <Label color="red" size="small" horizontal>Declined</Label> */}
                         </Header>
                         <div className="table-info-wrap">
                           <p>{application.info.name}<br />
@@ -111,50 +114,14 @@ export default class ApplicationsList extends Component {
                           </Item.Content>
                         </Item>
                       </Table.Cell>
-                      <Table.Cell>
-                        {application.applicationStatus ===
-                        BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ?
-                          <p>
-                            {application.failedReasons}
-                          </p> :
-                          <List as="ol" className="step-list">
-                            <List.Item as="li" className="done">Completed</List.Item>
-                            <List.Item as="li" className="done">Completed</List.Item>
-                            <List.Item as="li" className="current">Continue</List.Item>
-                            <List.Item as="li">Not Completed</List.Item>
-                          </List>
-                        }
-                      </Table.Cell>
-                      <Table.Cell width={1} textAlign="center">
-                        <Button.Group vertical compact size="mini">
-                          {includes(['DELETED'], application.status) &&
-                          <Aux>
-                            <Button color="blue">Restore</Button>
-                            <Button color="red">Remove</Button>
-                          </Aux>
-                          }
-                          {!includes(['DELETED', 'REMOVED'], application.status) &&
-                          <Button color="red">Delete</Button>
-                          }
-                          {!includes(['DELETED', 'REMOVED'], application.status) &&
-                          application.applicationStatus ===
-                          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
-                          <Button color="green">Promote</Button>
-                          }
-                          {application.applicationStatus ===
-                          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
-                          <Aux>
-                            {!includes(['DELETED', 'REMOVED', 'STASH'], application.status) &&
-                            <Button color="green">Stash</Button>
-                            }
-                            {includes(['STASH'], application.status) &&
-                            <Button color="green" inverted className="relaxed">UnStash</Button>
-                            }
-                          </Aux>
-                          }
-                          <Button color="blue" inverted className="relaxed">View</Button>
-                        </Button.Group>
-                      </Table.Cell>
+                      <ApplicationListStepColumn
+                        appStatus={application.applicationStatus}
+                        failedReasons={application.failedReasons}
+                      />
+                      <ApplicationListButtons
+                        appStatus={application.applicationStatus}
+                        status={application.status}
+                      />
                     </Table.Row>
                   )) : null
                 }

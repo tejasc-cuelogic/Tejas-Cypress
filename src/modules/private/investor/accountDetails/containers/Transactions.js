@@ -33,7 +33,7 @@ export default class Transactions extends Component {
               <Card.Content>
                 <Form>
                   <DateRangeFilter filters={this.props.userListingStore.requestState.search} label="Date Range" name="createdAt" changeStart={this.props.dateFilterStart} changeEnd={this.props.dateFilterEnd} />
-                  <DropdownFilter value={this.props.userListingStore.requestState.search.accountType} name="Transaction Type" change={this.props.setSearchParam} options={TRANSACTION_TYPES} isMultiple />
+                  <DropdownFilter className="inverted" value={this.props.userListingStore.requestState.search.accountType} name="Transaction Type" change={this.props.setSearchParam} options={TRANSACTION_TYPES} isMultiple />
                 </Form>
               </Card.Content>
             </Card>
