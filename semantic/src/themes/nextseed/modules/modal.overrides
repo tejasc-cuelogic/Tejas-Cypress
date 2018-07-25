@@ -61,23 +61,8 @@
             border: none;
             color:@neutral-middark;
         }
-        >.content {
-            padding: 0
-        }
-        .share-icons {
-            text-align: center;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            a {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                margin-right: 10px;
-                color:@neutral-middark;
-            }
+        .ui.action.input input{
+            padding-left:@14px;
         }
     }
 }
@@ -133,9 +118,8 @@
             margin-right:auto;
         }
         p{
-            font-family:@pageFont;
-            font-weight:@normal;
             font-size:@14px;
+            font-weight:@normal;
             color:@neutral-middark;
         }
     }

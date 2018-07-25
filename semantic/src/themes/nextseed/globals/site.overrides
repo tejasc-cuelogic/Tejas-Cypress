@@ -453,31 +453,40 @@ footer{
 /** Share icons **/
 .share-icons {
 	margin-bottom: 30px;
-	i.icon {
-		color: @white;
-		background: @neutral-darkwhite;
-		box-shadow: none !important;
-		font-size: @40px !important;
-		margin-bottom: @10px;
+    display: flex;
+    flex-direction: row;
+    a {
+        display: flex;
+        flex-direction: column;
+        margin:0 10px;
+		color:@neutral-middark;
+		&:hover, &:active, &:focus{
+			text-decoration:none;
+		}
+    }
+	i.icon.circular.inverted{
+		color:@white;
+		background-color:@neutral-darkwhite !important;
+		margin:0 0 @10px;
 		&.default {
-			color: inherit;
+			color:inherit !important;
 		}
 		&.fb-color {
-			background: @facebookColor;
+			background-color:@facebookColor !important;
 			&:hover {
-				background: @facebookHoverColor;
+				background-color:@facebookHoverColor !important;
 			}
 		}
 		&.tw-color {
-			background: @twitterColor;
+			background-color:@twitterColor !important;
 			&:hover {
-				background: @twitterHoverColor;
+				background-color:@twitterHoverColor !important;
 			}
 		}
 		&.in-color {
-			background:@linkedInColor;
+			background-color:@linkedInColor !important;
 			&:hover {
-                background: @linkedInHoverColor;
+                background-color:@linkedInHoverColor !important;
             }
         }
     }

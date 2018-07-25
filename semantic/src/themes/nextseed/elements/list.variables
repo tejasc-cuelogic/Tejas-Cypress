@@ -53,10 +53,10 @@
 /* Header */
 @itemHeaderFontFamily: @headerFont;
 @itemHeaderFontWeight: @bold;
-@itemHeaderColor: @neutral-middark;
+@itemHeaderColor: @neutral;
 
 /* Description */
-@itemDescriptionColor: rgba(0, 0, 0, 0.7);
+@itemDescriptionColor:@neutral-middark;
 
 /* Link */
 @itemLinkColor: @linkColor;

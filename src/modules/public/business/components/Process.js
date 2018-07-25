@@ -54,13 +54,11 @@ const Process = () => (
                 </Card.Content>
               </Card>
             </Card.Group>
-            <List horizontal className="mb-50">
+            <List horizontal relaxed className="learn-more-list mb-50">
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                <List.Icon name="arrow right" color="green" />
-                <List.Content as="a">
-                  Why fundraise on NextSeed?
-                </List.Content>
+                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Content as="a">Why fundraise on NextSeed?</List.Content>
               </List.Item>
             </List>
             <div className="center-align">

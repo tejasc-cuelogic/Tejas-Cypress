@@ -150,7 +150,7 @@
 
 @linkColor           : @primary-one;
 @linkUnderline       : none;
-@linkHoverColor      : @primary-one-darken;
+@linkHoverColor      : @primary-one;
 @linkHoverUnderline  : @linkUnderline;
 
 /*-------------------

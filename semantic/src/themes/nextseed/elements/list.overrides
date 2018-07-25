@@ -6,32 +6,19 @@
     .ui.horizontal.list>.item{
         font-size:@12px;
         font-weight:@fontMedium;
-        // color:@primary-one;
-        // &:hover{
-        //     text-decoration:underline;
-        // }
     }
 }
-.ui.horizontal.list {
-    // &:not(.celled) {
-    //    >.item {
-    //        &:first-child {
-    //            margin-right: @20px;
-    //         }
-    //     }
-    // }
-    &.why-nextseed-learnmore{
-        .item:last-child {
-            margin-left: 0px;
-        }
-    }
-    >.item {
+.ui.list {
+    &.learn-more-list >.item {
         .header {
             margin-bottom: @10px;
         }
-        >.icon+.content {
-            font-size: @13px;
-            color: @neutral-offdark;
+        >.icon{
+            display:table-cell;
+            +.content {
+                display:table-cell;
+                color: @neutral-middark;
+            }
         }
     }
 }
