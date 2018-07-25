@@ -135,17 +135,16 @@ class FormValidator {
   }
 
   setAddressFields = (place, form) => {
-    const { state, city, zipCode } = form.fields;
     const currentForm = form;
     const data = Helper.gAddressClean(place);
     if (currentForm.fields.street) {
-      currentForm.fields.street.value = data.residentalStreet;
+      this.onChange(currentForm, { name: 'street', value: data.residentalStreet });
     } else {
-      currentForm.fields.residentalStreet.value = data.residentalStreet;
+      this.onChange(currentForm, { name: 'residentalStreet', value: data.residentalStreet });
     }
-    state.value = data.state;
-    city.value = data.city;
-    zipCode.value = data.zipCode;
+    this.onChange(currentForm, { name: 'state', value: data.state });
+    this.onChange(currentForm, { name: 'city', value: data.city });
+    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode });
   }
 
   setIsDirty = (form, status) => {

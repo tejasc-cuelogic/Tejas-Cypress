@@ -58,7 +58,7 @@ const LegalDetails = observer(({
           fielddata={form.fields.residentalStreet}
           onplaceselected={autoComplete}
           changed={change}
-          placeHolder="Baker Street 221B"
+          placeHolder="Street Address, City, State, Zip"
         />
         <Form.Group widths="equal">
           <FormInput
