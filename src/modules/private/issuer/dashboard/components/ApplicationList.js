@@ -49,7 +49,13 @@ export default class ApplicationList extends Component {
                   BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
                   && application.lendio && application.lendio.status ===
                   BUSINESS_APPLICATION_STATUS.LENDIO_PRE_QUALIFICATION_SUCCESSFUL &&
-                    <Button inverted color="green" as={Link} to={application.lendio.url ? application.lendio.url : `business-application/${application.applicationId}/lendio`} target={application.lendio.url ? '_blank' : ''}>View Lendio</Button>
+                    <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/lendio`}>View Lendio</Button>
+                  }
+                  {application.applicationStatus ===
+                  BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+                  && application.lendio && application.lendio.status ===
+                  BUSINESS_APPLICATION_STATUS.LENDIO_SUCCESS &&
+                    <Button inverted color="green" onClick={() => window.open(`${application.lendio.url}`, '_blank')} target="_blank">View Lendio</Button>
                   }
                 </Card.Content>
               </Card>

@@ -55,7 +55,6 @@ class FormValidator {
     const currentForm = form;
     let validation;
     if (!isMultiForm) {
-      console.log(currentForm.fields);
       validation = new Validator(
         mapValues(currentForm.fields, f => f.value),
         mapValues(currentForm.fields, f => f.rule),
@@ -80,7 +79,6 @@ class FormValidator {
       );
     }
     currentForm.meta.isValid = validation.passes();
-    console.log(validation);
     if (validation.errorCount && showErrors) {
       const { errors } = validation.errors;
       map(errors, (error, key) => {

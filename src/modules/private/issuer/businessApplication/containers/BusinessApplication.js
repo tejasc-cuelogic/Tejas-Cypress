@@ -64,6 +64,7 @@ export default class BusinessApplication extends Component {
   }
 
   render() {
+    const { inProgress } = this.props.uiStore;
     const { match } = this.props;
     const { pathname } = this.props.location;
     const { canSubmitApp, appStepsStatus, isFileUploading } = this.props.businessAppStore;
@@ -91,6 +92,7 @@ export default class BusinessApplication extends Component {
           <Button.Group>
             <Button inverted onClick={this.saveContinue} disabled={isFileUploading} color="green">{isFileUploading ? 'File operation in process' : 'Save and Continue later'}</Button>
             <Button
+              loading={inProgress}
               onClick={this.submit}
               className={canSubmitApp ? 'primary' : 'grey'}
               disabled={!canSubmitApp}

@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import Helper from '../../../../../helper/utility';
 
-@inject('businessAppStore')
+@inject('businessAppStore', 'uiStore')
 @withRouter
 @observer
 export default class AppNavigation extends Component {
@@ -44,6 +44,7 @@ export default class AppNavigation extends Component {
   }
   render() {
     const { isFileUploading } = this.props.businessAppStore;
+    const { inProgress } = this.props.uiStore;
     return (
       <div className="navigation-buttons">
         {this.state.step > 0 &&
@@ -65,7 +66,7 @@ export default class AppNavigation extends Component {
           ) :
             <Aux>
               <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : 'Save'} />
-              <Button onClick={this.submit} disabled={!this.props.canSubmitApp} primary className="very relaxed" content="Submit" />
+              <Button loading={inProgress} onClick={this.submit} disabled={!this.props.canSubmitApp} primary className="very relaxed" content="Submit" />
             </Aux>
           }
         </div>
