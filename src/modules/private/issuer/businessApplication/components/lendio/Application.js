@@ -27,7 +27,7 @@ export default class Application extends Component {
     return (
       <Grid container>
         <Grid.Column className="issuer-signup">
-          <Header as="h1">NextSeed has Partnered with Lendio</Header>
+          <Header as="h1">NextSeed has partnered with Lendio</Header>
           <p>
             Lendio is a leading small business loan marketplace where
             completing one free application will put you in front of 75+ lenders.<br />

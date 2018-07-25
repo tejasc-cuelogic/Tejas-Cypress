@@ -62,16 +62,29 @@ export default class BusinessApplication extends Component {
     });
   }
 
+  preQualSubmit = (e) => {
+    e.preventDefault();
+    this.props.businessAppStore.businessPreQualificationFormSumbit().then(() => {
+      const url = this.props.businessAppStore.getBusinessAppStepUrl;
+      Helper.toast('Business pre-qualification request submitted!', 'success');
+      this.props.history.push(`/app/business-application/${url}`);
+    });
+  }
+
   render() {
     const { inProgress } = this.props.uiStore;
     const { match } = this.props;
     const { pathname } = this.props.location;
-    const { canSubmitApp, appStepsStatus, isFileUploading } = this.props.businessAppStore;
+    const {
+      canSubmitApp,
+      appStepsStatus,
+      isFileUploading,
+      BUSINESS_APP_FRM,
+    } = this.props.businessAppStore;
     const showSubNav = (includes(pathname, 'pre-qualification') && appStepsStatus[0] === 'IN_PROGRESS')
       || includes(pathname, 'failed') || includes(pathname, 'success') || includes(pathname, 'lendio');
     const preQualPage = includes(pathname, 'pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
-    // LogoWhite LogoNsAndLendio
     const logoUrl = includes(pathname, `${match.url}/lendio`) || includes(pathname, `${match.url}/success/lendio`) ? 'LogoNsAndLendio' : 'LogoWhite';
     return (
       <PrivateLayout
@@ -87,7 +100,7 @@ export default class BusinessApplication extends Component {
             size={logoUrl === 'LogoWhite' ? 'small' : 'medium'}
           />
         }
-        P4={!showSubNav && !preQualPage &&
+        P4={!showSubNav && !preQualPage ?
           <Button.Group>
             <Button inverted onClick={this.saveContinue} disabled={isFileUploading} color="green">{isFileUploading ? 'File operation in process' : 'Save and Continue later'}</Button>
             <Button
@@ -95,6 +108,17 @@ export default class BusinessApplication extends Component {
               onClick={this.submit}
               className={canSubmitApp ? 'primary' : 'grey'}
               disabled={!canSubmitApp}
+            >
+              Submit
+            </Button>
+          </Button.Group> : preQualPage &&
+          <Button.Group>
+            <Button as={Link} to="/app/dashboard" inverted onClick={this.saveContinue} color="red">Cancel</Button>
+            <Button
+              loading={inProgress}
+              onClick={this.preQualSubmit}
+              className={BUSINESS_APP_FRM.meta.isValid ? 'primary' : 'grey'}
+              disabled={!BUSINESS_APP_FRM.meta.isValid}
             >
               Submit
             </Button>

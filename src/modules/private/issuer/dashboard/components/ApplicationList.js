@@ -23,7 +23,7 @@ export default class ApplicationList extends Component {
               <Header as="h3"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
               <p>Want to start a new campaing? Start new application process to proceed</p>
               <Divider hidden />
-              <Button primary as={Link} to="business-application/new/pre-qualification">Start new application</Button>
+              <Button primary as={Link} to="business-application/new/pre-qualification">Start application</Button>
             </Card.Content>
           </Card>
           {fetchBusinessApplication.length ?
@@ -36,9 +36,13 @@ export default class ApplicationList extends Component {
                   <dl className="dl-horizontal">
                     <dt>Application status</dt>
                     <dd>{BUSINESS_APP_USER_STATUS[application.applicationStatus].status}</dd>
-                    <dt>Started on</dt>
+                    <dt>Started</dt>
                     <dd>{moment(application.createdDate).format('MM/DD/YYYY')}</dd>
-                    <dt>Last Updated Date</dt>
+                    <dt>{application.applicationStatus ===
+                      BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ?
+                      'Submitted' : 'Last updated'
+                    }
+                    </dt>
                     <dd>{application.updatedDate ? moment(application.updatedDate).format('MM/DD/YYYY') : '--'}</dd>
                   </dl>
                   {application.applicationStatus ===

@@ -16,9 +16,9 @@ class Success extends Component {
             <b>You have been pre-qualified for a NextSeed campaign.</b>
           </p>
           <p>
-            Thanks for submitting Tstbsn`s application, Jane Doee! A NextSeed representative
-            will be reaching out to you shortly.<br />
-            In the meantime, please set up a user account to continue with your application.
+          In the meantime, please begin filling out the rest of the application and submitting the
+          necessary paperwork. Our step-by-step guide will walk you through the steps and keep
+          the process organized.
           </p>
           <Divider section hidden />
           <Button as={Link} to={`${this.props.refLink}/business-details`} size="large" color="green" className="very relaxed">Proceed</Button>
