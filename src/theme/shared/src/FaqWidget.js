@@ -19,7 +19,7 @@ class FaqWidget extends React.Component {
       return (
         <Card fluid>
           <Card.Content>
-            <Header as="h3">{`${heading} FAQs`}</Header>
+            <Header as="h4">{`${heading} FAQs`}</Header>
             <Accordion>
               {
                 faqs.map(faq => (

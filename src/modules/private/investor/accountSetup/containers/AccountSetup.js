@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import { find } from 'lodash';
+import { Header } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
 import ProgressCard from '../components/ProgressCard';
@@ -53,7 +54,7 @@ export default class AccountSetup extends Component {
 
     return (
       <PrivateLayout {...this.props} P5={<StickyNotification signupStatus={signupStatus} />}>
-        <h3>Progress of your account creation</h3>
+        <Header as="h4">Progress of your account creation</Header>
         {!(currentUser.data && currentUser.data.user) ? 'Loading..' : (
           <ProgressCard
             renderStep={this.renderStep}

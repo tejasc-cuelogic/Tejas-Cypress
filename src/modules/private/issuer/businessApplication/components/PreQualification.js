@@ -84,7 +84,7 @@ export default class PreQualification extends Component {
                 </Grid.Column>
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                   <div className="field-wrap">
-                    <Header as="h5">Business Address</Header>
+                    <Header as="h6">Business Address</Header>
                     <AutoComplete
                       disabled={preQualFormDisabled}
                       name="street"
@@ -135,7 +135,7 @@ export default class PreQualification extends Component {
                   <div className="field-wrap">
                     {getFranchiseCondition &&
                       <Aux>
-                        <Header as="h5" content="Are you an existing or previous franchise holder?" />
+                        <Header as="h6" content="Are you an existing or previous franchise holder?" />
                         <FormRadioGroup
                           disabled={preQualFormDisabled}
                           fielddata={fields.franchiseHolder}
@@ -148,7 +148,7 @@ export default class PreQualification extends Component {
                     }
                     {getBusinessTypeCondtion &&
                       <Aux>
-                        <Header as="h5" content="How long has the existing business been operating?" />
+                        <Header as="h6" content="How long has the existing business been operating?" />
                         <Form.Group widths="equal">
                           {
                             ['businessAgeYears', 'businessAgeMonths'].map(field => (

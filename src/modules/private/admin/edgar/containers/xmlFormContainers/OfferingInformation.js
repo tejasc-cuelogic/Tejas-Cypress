@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Card } from 'semantic-ui-react';
+import { Form, Card, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 import moment from 'moment';
@@ -86,7 +86,7 @@ export default class OfferingInformation extends React.Component {
           />
           <Form.Group widths="equal">
             <div className="six wide field">
-              <h5>Is oversubscription Accepted?</h5>
+              <Header as="label">Is oversubscription Accepted?</Header>
               <Form.Group inline>
                 <FormRadioGroup
                   fielddata={formOfferingInfo.fields.overSubscriptionAccepted}

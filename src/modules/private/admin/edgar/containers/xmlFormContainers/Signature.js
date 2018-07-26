@@ -37,7 +37,7 @@ export default class Signature extends React.Component {
     return (
       <div>
         <Card fluid className="form-card">
-          <Header as="h3" textAlign="left">Issuer Signature</Header>
+          <Header as="h5" textAlign="left">Issuer Signature</Header>
           <Form.Group widths="3">
             {
               ['issuer', 'issuerSignature', 'issuerTitle'].map(field => (
@@ -53,7 +53,7 @@ export default class Signature extends React.Component {
           </Form.Group>
         </Card>
         <Card fluid className="form-card">
-          <Header as="h3" textAlign="left">Personal Signatures</Header>
+          <Header as="h5" textAlign="left">Personal Signatures</Header>
           <PersonalSignature
             signaturePersons={formSignatureInfo.fields.signaturePersons}
             handleChange={this.handlePersonalSignatureChange}

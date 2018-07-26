@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import Aux from 'react-aux';
 import { Menu, Icon } from 'semantic-ui-react';
-import { PRIVATE_NAV } from '../../constants/NavigationMeta';
+import { PRIVATE_NAV, PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { NavItems } from './NavigationItems';
 
 @inject('navStore')
@@ -49,8 +49,9 @@ export const GetNavItem = (item, roles) => {
     _.intersection(result.accessibleTo, roles).length > 0)) ? link : false;
 };
 
-export const GetNavMeta = (item, roles) => {
-  const navMeta = _.find(PRIVATE_NAV, i => matchPath(item, { path: `/app/${i.to}` }));
+export const GetNavMeta = (item, roles, nonprivate) => {
+  const navMeta = !nonprivate ? _.find(PRIVATE_NAV, i => item.includes(i.to)) :
+    _.find(PUBLIC_NAV, i => matchPath(item, { path: `/${i.to}` }));
   navMeta.title = typeof navMeta.title === 'object' && roles ? navMeta.title[roles[0]] :
     navMeta.title;
   if (navMeta.subNavigations && roles) {

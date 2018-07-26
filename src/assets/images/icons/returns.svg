@@ -1,0 +1,14 @@
+<svg width="44" height="42" viewBox="0 0 44 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path opacity="0.5" d="M11 22C17.0751 22 22 17.0751 22 11C22 4.92487 17.0751 6.10352e-06 11 6.10352e-06C4.92484 6.10352e-06 -2.44141e-05 4.92487 -2.44141e-05 11C-2.44141e-05 17.0751 4.92484 22 11 22Z" transform="translate(1 19)" fill="#00CA69"/>
+<path d="M-2.44141e-05 14V3.00001C-2.44141e-05 1.30001 1.29998 6.10352e-06 2.99998 6.10352e-06H33C34.7 6.10352e-06 36 1.30001 36 3.00001V28C36 29.7 34.7 31 33 31H18" transform="translate(7 3)" stroke="#505050" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M36 7.00001H-2.44141e-05V2.00001C-2.44141e-05 0.900006 0.899976 6.10352e-06 1.99998 6.10352e-06H34C35.1 6.10352e-06 36 0.900006 36 2.00001V7.00001Z" transform="translate(7 3)" stroke="#505050" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M-2.44141e-05 6.10352e-06V6.00001" transform="translate(13)" stroke="#505050" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M-2.44141e-05 6.10352e-06V6.00001" transform="translate(19)" stroke="#505050" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M-2.44141e-05 6.10352e-06V6.00001" transform="translate(25)" stroke="#505050" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M-2.44141e-05 6.10352e-06V6.00001" transform="translate(31)" stroke="#505050" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M-2.44141e-05 6.10352e-06V6.00001" transform="translate(37)" stroke="#505050" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M11 22C17.0751 22 22 17.0751 22 11C22 4.92487 17.0751 6.10352e-06 11 6.10352e-06C4.92484 6.10352e-06 -2.44141e-05 4.92487 -2.44141e-05 11C-2.44141e-05 17.0751 4.92484 22 11 22Z" transform="translate(1 19)" stroke="#00CA69" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M-2.44141e-05 7.10001V8.10001C-2.44141e-05 9.20001 0.899976 10.1 1.99998 10.1H3.99998C5.09998 10.1 5.99998 9.20001 5.99998 8.10001V7.5C5.99998 6.6 5.40001 5.90001 4.60001 5.60001L1.4 4.5C0.6 4.2 -2.44141e-05 3.50001 -2.44141e-05 2.60001V2C-2.44141e-05 0.9 0.899976 0 1.99998 0H3.99998C5.09998 0 5.99998 0.9 5.99998 2V3" transform="translate(9 24.9004)" stroke="#505050" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M-2.44141e-05 3.00001V6.10352e-06" transform="translate(12 22)" stroke="#505050" stroke-width="2" stroke-miterlimit="10"/>
+<path d="M-2.44141e-05 6.10352e-06V3.00001" transform="translate(12 35)" stroke="#505050" stroke-width="2" stroke-miterlimit="10"/>
+</svg>

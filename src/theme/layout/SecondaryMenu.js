@@ -21,12 +21,12 @@ class SecondaryMenu extends Component {
     const mobnavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
       <Aux>
-        <Responsive minWidth={768}>
+        <Responsive minWidth={768} as={Aux}>
           <Menu
             className={this.props.className || ''}
             celled={!this.props.vertical}
             horizontal={!this.props.vertical}
-            inverted={!this.props.vertical}
+            // inverted={!this.props.vertical}
             secondary={this.props.vertical}
             vertical={this.props.vertical}
             attached={this.props.attached}
@@ -34,7 +34,7 @@ class SecondaryMenu extends Component {
             <NavItems navItems={navItems} match={match} stepsStatus={this.props.stepsStatus} />
           </Menu>
         </Responsive>
-        <Responsive className="secondary-menu" maxWidth={767}>
+        <Responsive className="secondary-menu" maxWidth={767} as={Aux}>
           <Dropdown fluid selection options={mobnavItems} />
         </Responsive>
       </Aux>

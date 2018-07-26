@@ -16,11 +16,11 @@ export default class NetWorth extends Component {
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick={false}>
         <Modal.Content>
-          <Header as="h1" textAlign="center">What is your net worth?</Header>
-          <Header as="h4" textAlign="center">
+          <Header as="h3" textAlign="center">What is your net worth?</Header>
+          <p className="center-align">
             Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          </Header>
+          </p>
           <Form error className="account-type-tab">
             <FormRadioGroup
               fielddata={formAccTypes.fields.iraAccountType}

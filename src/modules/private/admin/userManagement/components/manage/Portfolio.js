@@ -9,7 +9,7 @@ const Portfolio = () => {
   return (
     <Aux>
       <div className="content-spacer secondary-section">
-        <Header as="h3">All accounts overview</Header>
+        <Header as="h4">All accounts overview</Header>
         <Card fluid>
           <Grid divided stackable padded="horizontally" columns={5} doubling>
             <Grid.Row>
@@ -101,7 +101,7 @@ const Portfolio = () => {
         <Grid stackable verticalAlign="middle" relaxed="very">
           <Grid.Row>
             <Grid.Column mobile={1} tablet={8} computer={4}>
-              <Header as="h3">Account details</Header>
+              <Header as="h4">Account details</Header>
             </Grid.Column>
             <Grid.Column mobile={1} tablet={8} computer={3}>
               <Card>
@@ -202,7 +202,7 @@ const Portfolio = () => {
             </Grid.Row>
           </Grid>
         </Card>
-        <Header as="h3">Investments</Header>
+        <Header as="h4">Investments</Header>
         <Accordion fluid styled className="card-style">
           <Accordion.Title active>
             <Icon className="ns-chevron-up" />
