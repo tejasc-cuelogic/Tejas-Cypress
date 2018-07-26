@@ -31,7 +31,7 @@ export default class ManageMultiFactorAuth extends Component {
       <div>
         <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
-            <Header as="h2">Your active MFA factor</Header>
+            <Header as="h3">Your active MFA factor</Header>
             <Divider />
             <p>
               All major actions will require additional confirmation with
@@ -39,7 +39,7 @@ export default class ManageMultiFactorAuth extends Component {
             </p>
           </Modal.Header>
           <Modal.Content className="signup-content center-align">
-            <Header as="h3">Where do you want to get<br />the confirmation codes?</Header>
+            <Header as="h4">Where do you want to get<br />the confirmation codes?</Header>
             <Form onSubmit={this.submit} error className="account-type-tab">
               <FormRadioGroup
                 fielddata={MFA_MODE_TYPE_META.fields.mfaModeTypes}
@@ -49,7 +49,7 @@ export default class ManageMultiFactorAuth extends Component {
               />
               {MFA_MODE_TYPE_META.fields.mfaModeTypes.value === 0 ?
                 <Aux>
-                  <Header as="h4">How would you like to recive<br />the confirmation codes?</Header>
+                  <Header as="h5">How would you like to recive<br />the confirmation codes?</Header>
                   <FormRadioGroup
                     fielddata={MFA_MODE_TYPE_META.fields.mfaPhoneModeTypes}
                     name="mfaPhoneModeTypes"

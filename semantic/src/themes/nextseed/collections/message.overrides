@@ -23,7 +23,7 @@
         box-shadow:0 0 20px fade(@fullBlack, 32%);
         .timestamp{
             font-size:@13px;
-            color:@inverse-secondary-text;
+            color:@neutral-offdark;
         }
         .header:not(.ui){
             margin:@7px 0;
@@ -33,24 +33,25 @@
             line-height:18px;
             >b{
                 color:@white;
-                font-weight:700;
+                font-weight:@fontMedium;
             }
         }
-        h2.ui.header{
+        h3.ui.header{
             margin:0 0 @7px 0;
             color:@white;
         }
         a.link{
-            font-weight:700;
-            color:@theme-primary;
+            font-weight:@fontMedium;
+            color:@primary-one;
             &:hover, &:focus{
-                color:@theme-primary-darken;
+                color:@primary-one;
+                text-decoration:underline;
             }
         }
         i.icon:not(.ns-close-light){
             font-size:@32px;
             margin:0 0 0 0.6em;
-            color:@theme-primary;
+            color:@primary-one;
         }
         .link-button.close{
             font-size:@12px;
@@ -74,10 +75,5 @@
                 flex-grow:1;
             }
         }
-        // h4.ui.header{
-        //     font-size:@20px;
-        //     font-weight:900;
-        //     color:@theme-primary;
-        // }
     }
 }

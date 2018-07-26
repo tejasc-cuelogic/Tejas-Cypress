@@ -45,7 +45,7 @@ export default class BankAccount extends Component {
         <Switch>
           <Route exact path={`${this.props.match.url}/link-bank-account`} component={LinkBankAccount} />
         </Switch>
-        <Header as="h3">Bank Account</Header>
+        <Header as="h4">Bank Account</Header>
         <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris<br />
           nec malesuada fames ac turpis
         </p>
@@ -55,7 +55,7 @@ export default class BankAccount extends Component {
             <Grid.Column widescreen={6} largeScreen={8} computer={10} tablet={13} mobile={16}>
               <Card fluid>
                 <Card.Content>
-                  <Header as="h3">You haven’t linked bank account yet</Header>
+                  <Header as="h4">You haven’t linked bank account yet</Header>
                   <p>Link your bank account to be able to invest in offerings.</p>
                   <Divider hidden />
                   <Card.Description>

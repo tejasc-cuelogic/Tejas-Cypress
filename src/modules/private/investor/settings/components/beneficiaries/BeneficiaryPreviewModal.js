@@ -35,7 +35,7 @@ export default class BeneficiaryPreviewModal extends Component {
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Summary</Header>
+          <Header as="h3">Summary</Header>
           <Divider />
         </Modal.Header>
         <Modal.Content className="signup-content">

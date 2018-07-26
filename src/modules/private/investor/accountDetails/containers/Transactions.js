@@ -21,7 +21,7 @@ export default class Transactions extends Component {
   render() {
     return (
       <div>
-        <Header as="h3">Transactions</Header>
+        <Header as="h4">Transactions</Header>
         <Grid>
           <Grid.Column widescreen={12} largeScreen={11} computer={10} tablet={10} mobile={16}>
             <Card fluid>

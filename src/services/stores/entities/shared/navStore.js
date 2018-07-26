@@ -7,6 +7,7 @@ import { userStore, userDetailsStore, businesssStore } from '../../index';
 export class NavStore {
   @observable NAV_ITEMS = { ...PRIVATE_NAV };
   @observable params = { roles: [], currentNav: [], appStatus: null };
+  @observable navStatus = 'main';
   @observable navMeta = [];
 
   constructor() {
@@ -65,6 +66,13 @@ export class NavStore {
       }
       this.navMeta = nav;
     }
+  }
+
+  @action
+  setNavStatus(calculations, forced) {
+    const { percentagePassed, topVisible } = calculations;
+    /* eslint-disable no-unneeded-ternary */
+    this.navStatus = forced ? forced : ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
   }
 }
 

@@ -26,14 +26,14 @@ export default class Detail extends Component {
           <Grid.Column width={8}>
             <Card fluid>
               <Card.Content>
-                <Header as="h3">Personal Profile</Header>
+                <Header as="h4">Personal Profile</Header>
                 <Form>
                   <Form.Group widths="equal">
                     <Form.Input fluid label="First name" placeholder="First name" value={details.firstName || ''} />
                     <Form.Input fluid label="Last name" placeholder="Last name" value={details.lastName || ''} />
                   </Form.Group>
                   <Form.Input fluid label="Phone number" placeholder="Phone number" defaultValue={(phone) ? phone.number : ''} />
-                  <Header as="h4">Mailing Address</Header>
+                  <Header as="h6">Mailing Address</Header>
                   <Form.Input fluid label="Residendial Street" placeholder="Residendial Street" defaultValue={legalAddress ? legalAddress.street1 : ''} />
                   <Form.Group widths="equal">
                     <Form.Input fluid label="City" placeholder="City" defaultValue={legalAddress ? legalAddress.city : ''} />
@@ -46,7 +46,7 @@ export default class Detail extends Component {
             </Card>
             <Card fluid>
               <Card.Content>
-                <Header as="h3">Verified identity</Header>
+                <Header as="h4">Verified identity</Header>
                 <Form>
                   <Form.Group widths="equal">
                     <Form.Input fluid label="Legal First name" placeholder="Legal First name" readOnly value={details.firstLegalName || ''} />
@@ -64,7 +64,7 @@ export default class Detail extends Component {
           <Grid.Column width={8}>
             <Card fluid>
               <Card.Content>
-                <Header as="h3">Activity</Header>
+                <Header as="h4">Activity</Header>
                 <Form>
                   <Form.Field inline>
                     <Checkbox label="User activity" />

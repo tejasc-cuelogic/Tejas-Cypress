@@ -1,10 +1,10 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button, Icon, Header } from 'semantic-ui-react';
 
 const ToggleEdit = props => (
   <Aux>
-    <h3>{props.title}</h3>
+    <Header as="h4">{props.title}</Header>
     <div className="actions">
       {(props.editCard === props.card) ? (
         <Aux>

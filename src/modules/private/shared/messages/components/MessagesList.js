@@ -22,7 +22,7 @@ const MessagesList = props => (
           </Item.Extra>
           <Image avatar src={ProfilePicTemp} />
           <List.Content>
-            <List.Header as="h4">Sarah Gainsborough</List.Header>
+            <List.Header as="h5">Sarah Gainsborough</List.Header>
           </List.Content>
           <List.Content>
             <List.Header>{msg.subject}</List.Header>
