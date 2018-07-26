@@ -114,7 +114,7 @@ export default class BusinessApplication extends Component {
             </Button>
           </Button.Group> : preQualPage &&
           <Button.Group>
-            <Button as={Link} to="/app/dashboard" inverted onClick={this.saveContinue} color="red">Cancel</Button>
+            <Button as={Link} to="/app/dashboard" inverted color="red">Cancel</Button>
             <Button
               loading={inProgress}
               onClick={this.preQualSubmit}
@@ -129,7 +129,7 @@ export default class BusinessApplication extends Component {
         <Switch>
           <Route exact path={match.url} component={getModule(navItems[0].component)} />
           <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/failed/:reason?`} component={Failure} />
-          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/lendio`} component={Application} />
+          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/lendio`} render={props1 => <Application applicationId={this.props.match.params.applicationId} {...props1} />} />
           <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/lendio/:condition`} component={LendioSuccess} />
           <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/success`} render={props1 => <Success refLink={this.props.match.url} applicationId={this.props.match.params.applicationId} {...props1} />} />
           {

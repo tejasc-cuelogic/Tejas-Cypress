@@ -71,7 +71,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  http://nextbrewery.com', customErrors: { required: 'required' },
   },
   phoneNumber: {
-    value: '', label: 'Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789', customErrors: { required: 'required' },
+    value: '', label: 'Phone Number', error: undefined, rule: 'required|maskedField:10', placeHolder: '(123)-456-7890', customErrors: { required: 'required', maskedField: 'required' },
   },
   street: {
     value: '', label: 'Street', error: undefined, rule: 'required', placeHolder: 'e.g.  NextBrewery', customErrors: { required: 'required' },
@@ -288,7 +288,7 @@ export const BUSINESS_DETAILS = {
       value: '', label: 'Years Experience', error: undefined, rule: 'required', placeHolder: '5', customErrors: { required: 'required' },
     },
     ssn: {
-      value: '', label: 'SSN', error: undefined, rule: 'required|maskedSSN', placeHolder: '123-456-7890', customErrors: { required: 'required', maskedSSN: 'required' },
+      value: '', label: 'SSN', error: undefined, rule: 'required|maskedField:9', placeHolder: '123-46-7890', customErrors: { required: 'required', maskedField: 'required' },
     },
     companyOwnerShip: {
       value: '', label: 'Ownership of Company', error: undefined, rule: 'required|ownerPercentage:companyOwnerShip', placeHolder: '40.0%', customErrors: { required: 'required' },

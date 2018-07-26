@@ -5,7 +5,6 @@ import { inject, observer } from 'mobx-react';
 import { FormInput, DropZone, MaskedInput2 } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
-// import Helper from '../../../../helper/utility';
 
 @inject('businessAppStore')
 @observer
@@ -39,10 +38,6 @@ export default class BusinessDetails extends Component {
     });
   }
 
-  submit = () => {
-    // e.preventDefault();
-    console.log(111);
-  }
   render() {
     const {
       BUSINESS_DETAILS_FRM,
@@ -240,7 +235,7 @@ export default class BusinessDetails extends Component {
                 <Button size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
               }
             </FormElementWrap>
-            <AppNavigation action={this.submit} />
+            <AppNavigation />
           </Form>
           <Confirm
             header="Confirm"

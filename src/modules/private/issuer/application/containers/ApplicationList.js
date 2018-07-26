@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
-import ApplicationCards from './ApplicationCards';
+import ApplicationCards from '../components/ApplicationCards';
 
 export default class ApplicationList extends Component {
   render() {

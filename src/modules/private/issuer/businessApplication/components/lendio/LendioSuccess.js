@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Icon, Header, Button, Divider } from 'semantic-ui-react';
 
-@inject('businessAppStore')
+@inject('businessAppLendioStore')
 @observer
 export default class LendioSuccess extends Component {
   render() {
@@ -12,8 +12,10 @@ export default class LendioSuccess extends Component {
       match: {
         params,
       },
+      businessAppLendioStore: {
+        lendioUrl,
+      },
     } = this.props;
-
     return (
       <Grid container>
         <Grid.Column className="issuer-signup">
@@ -30,7 +32,7 @@ export default class LendioSuccess extends Component {
                 <Button
                   color="green"
                   className="relaxed"
-                  onClick={() => window.open(`${this.props.businessAppStore.lendioUrl}`, '_blank')}
+                  onClick={() => window.open(`${lendioUrl}`, '_blank')}
                 >
                   Proceed to Lendio
                 </Button>

@@ -11,11 +11,6 @@ export default class Performance extends Component {
   componentWillMount() {
     this.props.businessAppStore.setFieldvalue('applicationStep', 'performance');
   }
-  submit = () => {
-    // e.preventDefault();
-    console.log(111);
-    // this.props.history.push(`/app/business-application/${APP_STATUS}`);
-  }
 
   render() {
     const {
@@ -100,7 +95,7 @@ export default class Performance extends Component {
                 </Grid.Column>
               </Grid>
             </FormElementWrap>
-            <AppNavigation action={this.submit} />
+            <AppNavigation />
           </Form>
         </Grid.Column>
       </Grid>

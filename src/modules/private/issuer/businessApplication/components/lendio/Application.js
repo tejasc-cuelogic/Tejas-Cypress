@@ -9,12 +9,12 @@ import { LENDING_PARTNER_LENDIO } from '../../../../../../constants/business';
 import { LENDIO } from '../../../../../../services/constants/businessApplication';
 import Helper from '../../../../../../helper/utility';
 
-@inject('businessAppStore', 'uiStore')
+@inject('businessAppLendioStore', 'uiStore')
 @observer
 export default class Application extends Component {
   submit = (e) => {
     e.preventDefault();
-    this.props.businessAppStore.businessLendioPreQual()
+    this.props.businessAppLendioStore.businessLendioPreQual(this.props.applicationId)
       .then((data) => {
         const {
           submitPartneredWithLendio: {
@@ -24,8 +24,8 @@ export default class Application extends Component {
         } = data;
         const redirectParam = (status === LENDIO.LENDIO_SUCCESS) ? 'yes' : 'no';
 
-        this.props.history.push(`/app/business-application/${this.props.businessAppStore.currentApplicationId}/lendio/${redirectParam}`);
-        this.props.businessAppStore.setLendioUrl(url);
+        this.props.history.push(`/app/business-application/${this.props.applicationId}/lendio/${redirectParam}`);
+        this.props.businessAppLendioStore.setLendioUrl(url);
       })
       .catch(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -36,7 +36,7 @@ export default class Application extends Component {
     const {
       LENDIO_QUAL_FRM,
       lendioEleChange,
-    } = this.props.businessAppStore;
+    } = this.props.businessAppLendioStore;
     const { fields } = LENDIO_QUAL_FRM;
     const checkIsPresent = indexOf(fields.applicationAgreeConditions.value, 'agreeConditions');
     return (

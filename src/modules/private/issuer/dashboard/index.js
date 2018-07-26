@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import PrivateLayout from '../../shared/PrivateHOC';
 import StickyNotification from './components/StickyNotification';
-import Applications from './components/Applications';
+import ApplicationList from '../application/containers/ApplicationList';
 
 @inject('userStore')
 @observer
@@ -13,7 +13,7 @@ class Dashboard extends Component {
         {...this.props}
         P5={<StickyNotification />}
       >
-        <Applications />
+        <ApplicationList />
       </PrivateLayout>
     );
   }

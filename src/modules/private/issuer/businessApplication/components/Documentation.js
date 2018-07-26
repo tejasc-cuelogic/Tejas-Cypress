@@ -11,11 +11,6 @@ export default class Documentation extends Component {
   componentWillMount() {
     this.props.businessAppStore.setFieldvalue('applicationStep', 'documentation');
   }
-  submit = () => {
-    // e.preventDefault();
-    console.log(111);
-    // this.props.history.push(`/app/business-application/${APP_STATUS}`);
-  }
   render() {
     const {
       BUSINESS_DOC_FRM,
@@ -148,7 +143,7 @@ export default class Documentation extends Component {
                 </div>
               }
             </FormElementWrap>
-            <AppNavigation canSubmitApp={canSubmitApp} action={this.submit} />
+            <AppNavigation canSubmitApp={canSubmitApp} />
           </Form>
         </Grid.Column>
       </Grid>
