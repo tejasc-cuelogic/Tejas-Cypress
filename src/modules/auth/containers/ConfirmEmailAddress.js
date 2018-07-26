@@ -23,7 +23,7 @@ export default class ConfirmEmailAddress extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.authStore.setProgress('confirm');
-    if (this.props.userStore.currentUser) {
+    if (this.props.refLink) {
       this.props.authStore.verifyAndUpdateEmail().then(() => {
         Helper.toast('Email has been verified and updated', 'success');
         this.props.history.push('/app/profile-settings/profile-data');
