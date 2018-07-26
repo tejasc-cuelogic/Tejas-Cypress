@@ -8,6 +8,7 @@ import { FormInput, AutoComplete, FormDatePicker } from '../../../../../../theme
 import ConfirmVerificationCode from './ConfirmVerificationCode';
 import BeneficiaryShareModal from './BeneficiaryShareModal';
 import BeneficiaryPreviewModal from './BeneficiaryPreviewModal';
+import { MAX_BENEFICIARY_LIMIT } from '../../../../../../constants/common';
 
 @inject('beneficiaryStore', 'uiStore')
 @withRouter
@@ -134,7 +135,7 @@ export default class AddBeneficiary extends Component {
               )) :
               <p>loading...</p>
           }
-          {BENEFICIARY_META.fields.beneficiary.length !== 5 &&
+          {BENEFICIARY_META.fields.beneficiary.length !== MAX_BENEFICIARY_LIMIT &&
             <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>
           }
           <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>

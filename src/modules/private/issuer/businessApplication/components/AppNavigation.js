@@ -20,7 +20,7 @@ export default class AppNavigation extends Component {
   actualSubmit = (where) => {
     if (where >= 0) {
       const { checkFormisValid, currentApplicationId } = this.props.businessAppStore;
-      if (checkFormisValid(`${this.state.navItems[this.state.step].to}`)) {
+      if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
         this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
         this.props.action();
         this.props.history.push(`/app/business-application/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);

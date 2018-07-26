@@ -62,6 +62,13 @@ export class FileUpload {
         reject(err);
       });
   });
+
+  resetFileObj = (obj) => {
+    const field = obj;
+    field.value = [];
+    field.fileId = [];
+    field.rule = 'required';
+  }
 }
 
 export default new FileUpload();

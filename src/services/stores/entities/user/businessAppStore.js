@@ -72,27 +72,23 @@ export class BusinessAppStore {
   };
 
   @action
-  checkFormisValid = (step) => {
+  checkFormisValid = (step, showErrors = false) => {
     let status = false;
     if (step === 'business-details') {
-      Validator.validateForm(this.BUSINESS_DETAILS_FRM, true, true);
+      Validator.validateForm(this.BUSINESS_DETAILS_FRM, true, showErrors);
       status = this.BUSINESS_DETAILS_FRM.meta.isValid;
     } else if (step === 'performance') {
-      Validator.validateForm(this.BUSINESS_PERF_FRM, false, true);
+      Validator.validateForm(this.BUSINESS_PERF_FRM, false, showErrors);
       status = this.BUSINESS_PERF_FRM.meta.isValid;
     } else if (step === 'documentation') {
-      Validator.validateForm(this.BUSINESS_DOC_FRM, false, true);
+      Validator.validateForm(this.BUSINESS_DOC_FRM, false, showErrors);
       status = this.BUSINESS_DOC_FRM.meta.isValid;
     }
     return status;
   }
 
-  @computed get getPersonalGuaranteeCondtion() {
+  @computed get getPersonalGuaranteeCondition() {
     return this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true';
-  }
-
-  @computed get getBusinessAppStepUrl() {
-    return this.BUSINESS_APP_STEP_URL;
   }
 
   @action
@@ -104,23 +100,20 @@ export class BusinessAppStore {
   };
 
   @action
-  fetchApplicationDataById = (applicationId) => {
-    console.log(applicationId);
-    return new Promise((resolve) => {
-      this.businessApplicationsDataById = graphql({
-        client,
-        query: getBusinessApplicationsById,
-        variables: {
-          id: applicationId,
-        },
-        fetchPolicy: 'network-only',
-        onFetch: () => {
-          this.setBusinessApplicationData();
-          resolve();
-        },
-      });
+  fetchApplicationDataById = applicationId => new Promise((resolve) => {
+    this.businessApplicationsDataById = graphql({
+      client,
+      query: getBusinessApplicationsById,
+      variables: {
+        id: applicationId,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: () => {
+        this.setBusinessApplicationData();
+        resolve();
+      },
     });
-  }
+  });
 
   @action
   getBusinessApplications = () => {
@@ -156,7 +149,7 @@ export class BusinessAppStore {
     this.setBusinessDetails(data.businessDetails);
     this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
     this.setDocumentationDetails(data.businessDocumentation);
-    navStore.setAccessParams('appStatus', this.fetchBusinessApplicationsStatusById);
+    navStore.setAccessParams('appStatus', data.applicationStatus);
     if (data.lendio) {
       const lendioPartners = data.lendio.status;
       if (lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
@@ -256,14 +249,6 @@ export class BusinessAppStore {
   };
 
   @action
-  resetFileObj = (obj) => {
-    const field = obj;
-    field.value = [];
-    field.fileId = [];
-    field.rule = 'required';
-  }
-
-  @action
   setPrequalDetails = (data) => {
     if (data) {
       this.appStepsStatus[0] = 'COMPLETE';
@@ -332,7 +317,7 @@ export class BusinessAppStore {
         }
       });
       if (data.planDocs && data.planDocs.length) {
-        this.resetFileObj(this.BUSINESS_DETAILS_FRM.fields.businessPlan);
+        fileUpload.resetFileObj(this.BUSINESS_DETAILS_FRM.fields.businessPlan);
         data.planDocs.forEach((ele) => {
           this.BUSINESS_DETAILS_FRM.fields.businessPlan.value.push(ele.fileName);
           this.BUSINESS_DETAILS_FRM.fields.businessPlan.fileId.push(ele.fileId);
@@ -365,7 +350,7 @@ export class BusinessAppStore {
 
       if (data.financialStatements.fiveYearProjection &&
         data.financialStatements.fiveYearProjection.length) {
-        this.resetFileObj(this.BUSINESS_PERF_FRM.fields.fiveYearProjection);
+        fileUpload.resetFileObj(this.BUSINESS_PERF_FRM.fields.fiveYearProjection);
         data.financialStatements.fiveYearProjection.forEach((ele) => {
           this.BUSINESS_PERF_FRM.fields.fiveYearProjection.value.push(ele.fileName);
           this.BUSINESS_PERF_FRM.fields.fiveYearProjection.fileId.push(ele.fileId);
@@ -374,7 +359,7 @@ export class BusinessAppStore {
       if (this.getBusinessTypeCondtion) {
         ['priorToThreeYear', 'ytd'].forEach((field) => {
           if (data.financialStatements[field] && data.financialStatements[field].length) {
-            this.resetFileObj(this.BUSINESS_PERF_FRM.fields[field]);
+            fileUpload.resetFileObj(this.BUSINESS_PERF_FRM.fields[field]);
             data.financialStatements[field].forEach((ele) => {
               this.BUSINESS_PERF_FRM.fields[field].value.push(ele.fileName);
               this.BUSINESS_PERF_FRM.fields[field].fileId.push(ele.fileId);
@@ -415,7 +400,7 @@ export class BusinessAppStore {
       this.BUSINESS_DOC_FRM.fields.blanketLien.value = data.blanketLien !== '' ? data.blanketLien : '';
       this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGurantee !== '' ? data.providePersonalGurantee ? 'true' : 'false' : '';
       if (data.personalGuarantee && data.personalGuarantee.length) {
-        this.resetFileObj(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm);
+        fileUpload.resetFileObj(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm);
         data.personalGuarantee.forEach((ele) => {
           this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.push(ele.fileName);
           this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.fileId.push(ele.fileId);
@@ -426,7 +411,7 @@ export class BusinessAppStore {
         const formField = ['bankStatements', 'businessTaxReturn', 'leaseAgreementsOrLOIs', 'personalTaxReturn'];
         if (this.getBusinessTypeCondtion) {
           if (data[field] && data[field].length) {
-            this.resetFileObj(this.BUSINESS_DOC_FRM.fields[formField[key]]);
+            fileUpload.resetFileObj(this.BUSINESS_DOC_FRM.fields[formField[key]]);
             data[field].forEach((ele) => {
               this.BUSINESS_DOC_FRM.fields[formField[key]].value.push(ele.fileName);
               this.BUSINESS_DOC_FRM.fields[formField[key]].fileId.push(ele.fileId);
@@ -434,7 +419,7 @@ export class BusinessAppStore {
           }
         } else if (field === 'leaseAgreementsOrLOIs' || field === 'personalTaxReturns') {
           if (data[field] && data[field].length) {
-            this.resetFileObj(this.BUSINESS_DOC_FRM.fields[formField[key]]);
+            fileUpload.resetFileObj(this.BUSINESS_DOC_FRM.fields[formField[key]]);
             data[field].forEach((ele) => {
               this.BUSINESS_DOC_FRM.fields[formField[key]].value.push(ele.fileName);
               this.BUSINESS_DOC_FRM.fields[formField[key]].fileId.push(ele.fileId);
@@ -456,13 +441,6 @@ export class BusinessAppStore {
     return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
       && this.businessApplicationsDataById.data.businessApplication
       && toJS(this.businessApplicationsDataById.data.businessApplication)
-    ) || null;
-  }
-
-  @computed get fetchBusinessApplicationsStatusById() {
-    return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
-      && this.businessApplicationsDataById.data.businessApplication
-      && toJS(this.businessApplicationsDataById.data.businessApplication.applicationStatus)
     ) || null;
   }
 
@@ -545,7 +523,6 @@ export class BusinessAppStore {
     return notOkForms.length === 0 && isPartial.length === 0;
   }
 
-  @action
   getFilesArray = (data, form) => {
     const arr = data ? data.map((item, key) => (
       { fileId: form.fileId[key] ? form.fileId[key] : '', fileName: item }
@@ -957,7 +934,7 @@ export class BusinessAppStore {
       this[formName].fields[fieldName].value.splice(index, 1);
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds[0]];
     }
-    this.checkFormisValid(this.applicationStep);
+    this.checkFormisValid(this.applicationStep, false);
   };
 
   @action

@@ -66,7 +66,7 @@ export default class BusinessApplication extends Component {
   preQualSubmit = (e) => {
     e.preventDefault();
     this.props.businessAppStore.businessPreQualificationFormSumbit().then(() => {
-      const url = this.props.businessAppStore.getBusinessAppStepUrl;
+      const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
       Helper.toast('Business pre-qualification request submitted!', 'success');
       this.props.history.push(`/app/business-application/${url}`);
     });

@@ -7,6 +7,7 @@ import { userStore, userDetailsStore, businesssStore } from '../../index';
 export class NavStore {
   @observable NAV_ITEMS = { ...PRIVATE_NAV };
   @observable params = { roles: [], currentNav: [], appStatus: null };
+  @observable navStatus = 'main';
   @observable navMeta = [];
 
   constructor() {

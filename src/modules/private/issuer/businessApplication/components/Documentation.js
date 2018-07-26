@@ -24,7 +24,7 @@ export default class Documentation extends Component {
       businessAppRemoveFiles,
       canSubmitApp,
       getBusinessTypeCondtion,
-      getPersonalGuaranteeCondtion,
+      getPersonalGuaranteeCondition,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
     const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
@@ -130,7 +130,7 @@ export default class Documentation extends Component {
                 changed={businessDocChange}
                 containerclassname="button-radio"
               />
-              {getPersonalGuaranteeCondtion &&
+              {getPersonalGuaranteeCondition &&
                 <div>
                   <p>
                     Please <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>, fill out and upload the
