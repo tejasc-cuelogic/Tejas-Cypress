@@ -28,7 +28,12 @@ export default class AccountCreation extends React.Component {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
   render() {
-    const { inProgress } = this.props.uiStore;
+    const {
+      inProgress,
+      isEnterPressed,
+      resetIsEnterPressed,
+      setIsEnterPressed,
+    } = this.props.uiStore;
     const steps =
     [
       {
@@ -92,8 +97,8 @@ export default class AccountCreation extends React.Component {
       },
     ];
     return (
-      <div className="step-progress">
-        <MultiStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.entityAccountStore.stepToBeRendered} createAccount={this.props.entityAccountStore.createAccount} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+      <div className="step-progress" >
+        <MultiStep setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.entityAccountStore.stepToBeRendered} createAccount={this.props.entityAccountStore.createAccount} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

@@ -18,7 +18,12 @@ export default class AccountCreation extends React.Component {
     this.props.history.push('/app/summary/account-creation');
   }
   render() {
-    const { inProgress } = this.props.uiStore;
+    const {
+      inProgress,
+      isEnterPressed,
+      resetIsEnterPressed,
+      setIsEnterPressed,
+    } = this.props.uiStore;
     const steps =
     [
       {
@@ -56,8 +61,8 @@ export default class AccountCreation extends React.Component {
     ];
 
     return (
-      <div className="step-progress">
-        <MultiStep actionOnNextBtn={this.navigateToAccCreation} stepToBeRendered={this.props.investorProfileStore.stepToBeRendered} createAccount={this.props.investorProfileStore.updateInvestorProfileData} inProgress={inProgress} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+      <div className="step-progress" >
+        <MultiStep setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} actionOnNextBtn={this.navigateToAccCreation} stepToBeRendered={this.props.investorProfileStore.stepToBeRendered} createAccount={this.props.investorProfileStore.updateInvestorProfileData} inProgress={inProgress} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

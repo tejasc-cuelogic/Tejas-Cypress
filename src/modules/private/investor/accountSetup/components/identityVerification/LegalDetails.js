@@ -107,10 +107,10 @@ const LegalDetails = observer(({
           changed={maskChange}
         />
         <div className="center-align">
-          <Button loading={inProgress} size="large" color="green" className="very relaxed" >Verify my identity</Button>
+          <Button type="button" onClick={onSubmit} loading={inProgress} size="large" color="green" className="very relaxed" >Verify my identity</Button>
         </div>
         <div className="center-align">
-          <Button className="cancel-link" onClick={close}>I’ll finish this later</Button>
+          <Button type="button" className="cancel-link" onClick={close}>I’ll finish this later</Button>
         </div>
       </Form>
     </Modal.Content>

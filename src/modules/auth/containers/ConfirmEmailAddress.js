@@ -13,7 +13,8 @@ import Helper from '../../../helper/utility';
 export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
     const { CONFIRM_FRM } = this.props.authStore;
-    CONFIRM_FRM.fields.email.value = this.props.match.params.id;
+    const encryptedEmail = this.props.match.params.id;
+    CONFIRM_FRM.fields.email.value = atob(encryptedEmail);
     const decryptedPwd = atob(localStorage.getItem('encryptedPwd'));
     CONFIRM_FRM.fields.password.value = decryptedPwd;
   }
