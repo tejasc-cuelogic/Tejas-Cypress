@@ -21,7 +21,7 @@ const DropZone = observer((props) => {
           {label}
           {props.tooltip &&
           <Popup
-            trigger={<Icon name="help circle outline" />}
+            trigger={<Icon name="help circle" />}
             content={props.tooltip}
             position="top center"
             className="center-align"
@@ -39,13 +39,13 @@ const DropZone = observer((props) => {
       }
       {(isArray(toJS(value)) && value.length) ?
         value.map((item, key) => (
-          <div className="file-uploader attached 111">
+          <div className="file-uploader attached">
             <Responsive
               as={Button}
               minWidth={768}
               size="tiny"
               compact
-              className="remove pull-right"
+              className="ghost-button remove pull-right"
               onClick={e => props.onremove(e, props.name, key)}
             >
               Remove

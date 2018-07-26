@@ -16,11 +16,11 @@ export default class ApplicationList extends Component {
     const { fetchBusinessApplication } = this.props.businessAppStore;
     return (
       <Aux>
-        <Header as="h3">Applications</Header>
-        <Card.Group stackable itemsPerRow={4}>
+        <Header as="h4">Applications</Header>
+        <Card.Group stackable itemsPerRow={3} className="application-cards">
           <Card fluid>
             <Card.Content>
-              <Header as="h3"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
+              <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
               <p>Want to start a new campaing? Start new application process to proceed</p>
               <Divider hidden />
               <Button primary as={Link} to="business-application/new/pre-qualification">Start new application</Button>
@@ -30,7 +30,7 @@ export default class ApplicationList extends Component {
             fetchBusinessApplication.map(application => (
               <Card fluid>
                 <Card.Content>
-                  <Header as="h3"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
+                  <Header as="h4"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
                 </Card.Content>
                 <Card.Content>
                   <dl className="dl-horizontal">

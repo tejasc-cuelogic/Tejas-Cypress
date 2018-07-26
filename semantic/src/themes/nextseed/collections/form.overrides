@@ -259,7 +259,7 @@
     max-width:360px;
     label{
         font-size:13px;
-        font-weight:700;
+        font-weight:@fontMedium;
         margin-bottom:@4px;
         display:inline-block;
     }
@@ -274,7 +274,7 @@
     position:relative;
     color:@link-color;
     line-height:@28px;
-    font-weight:700;
+    font-weight:@fontMedium;
     text-align:center;
     cursor:pointer;
     .icon{
@@ -297,7 +297,7 @@
     &.attached{
         color:@fullBlack;
         border:none;
-        background:@border-light;
+        background:@strongTransparentBlack;
         text-align:left;
         overflow:hidden;
         text-overflow:ellipsis;
