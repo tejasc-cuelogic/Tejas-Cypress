@@ -35,6 +35,9 @@ h6{
 	font-size:@14px;
 	font-weight:@fontMedium;
 }
+*:focus{
+	outline:none;
+}
 .mb-10 {
 	margin-bottom: @10px !important;
 }
@@ -128,10 +131,10 @@ a.text-link{
 		color:@neutral;
 	}
 }
-
 .invisible{
 	opacity:0 !important;
 }
+// Helper classes
 
 // Footer Styles
 footer{
@@ -767,70 +770,6 @@ div.login-form {
 	}
 }
 
-//	Heading font sizes
-h6{
-	font-size:@13px;
-}
-
-// Helper classes
-*:focus{
-	outline:none;
-}
-.mb-half{
-	margin-bottom:@7px !important;
-}
-.mt-30{
-	margin-top:@30px !important;
-}
-.pull-left{
-	float:left !important;
-}
-.pull-right{
-	float:right !important;
-}
-.left-align{
-	text-align:left !important;
-}
-.right-align{
-	text-align:right !important;
-}
-.center-align{
-	text-align:center !important;
-	justify-content:center;
-}
-.inverse-text{
-	color:@inverse-text !important;
-}
-.positive-text{
-	color:@theme-primary !important;
-}
-.negative-text{
-	color:@highlight-primary !important;
-}
-.tertiary-text{
-	color:@tertiary-text !important;
-}
-.intro-text, .note{
-	color:@quaternary-text;
-	// margin-bottom:@28px;
-}
-a.link{
-	color:@link-color;
-	&:hover{
-		color:darken(@link-color, 10%);
-	}
-}
-
-a.text-link{
-	color:@tertiary-text;
-	&:hover, &:active, &.active{
-		color:@primary-text;
-	}
-}
-
-.invisible{
-	opacity:0 !important;
-}
 //	Admin Page Content Styles
 
 //	Page Header Styles

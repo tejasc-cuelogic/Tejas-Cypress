@@ -123,7 +123,7 @@
     }
     &.application-list{
         thead th{
-            color:@quaternary-text;
+            color:@neutral;
         }
         h6.ui.header{
             margin:0 0 @7px;

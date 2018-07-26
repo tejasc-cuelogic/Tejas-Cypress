@@ -235,18 +235,22 @@ footer{
 .ui.menu{
     &.pagination.text{
         margin:0;
+        padding:@10px @5px;
         border-radius:@4px;
         background-color:@white;
         box-shadow:0 0px 10px rgba(0,0,0,.1);
         .item{
             min-width:2em;
-            >.ui.input{
+            font-weight:@fontMedium;
+            color:@neutral-offdark;
+            >.ui.input input{
                 margin:0;
-                width:30px;
-                height:30px;
+                width:40px;
+                height:24px;
                 padding:0 5px;
-                border:red;
+                border:@neutral-offdark 1px solid;
                 border-radius:4px;
+                text-align:center;
             }
         }
     }
@@ -278,6 +282,9 @@ footer{
 .ui.menu{
     &.attached:not(.tabular){
         border:none;
+    }
+    &[class*="bottom attached"]{
+        margin-bottom:0;
     }
     &.secondary-menu{
         background-color:@neutral-darkwhite;

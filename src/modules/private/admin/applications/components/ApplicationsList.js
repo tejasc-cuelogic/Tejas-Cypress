@@ -70,10 +70,10 @@ export default class ApplicationsList extends Component {
                     <Icon className="ns-chevron-left" color="green" />
                   </Menu.Item>
                   <Menu.Item>
-                    <Input value="3" />
+                    <Input placeholder="1" />
                   </Menu.Item>
-                  <Menu.Item name="of" />
-                  <Menu.Item name="20" />
+                  <Menu.Item>of</Menu.Item>
+                  <Menu.Item>20</Menu.Item>
                   <Menu.Item as={Link} to="/">
                     <Icon className="ns-chevron-right" color="green" />
                   </Menu.Item>
