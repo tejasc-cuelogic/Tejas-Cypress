@@ -5,7 +5,7 @@ import Aux from 'react-aux';
 
 const UpdatesTimeline = props => (
   <Aux>
-    <Header as="h3">{props.heading}</Header>
+    <Header as="h4">{props.heading}</Header>
     <List relaxed="very">
       {
         props.list.map(item => (

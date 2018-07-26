@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import _ from 'lodash';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -32,7 +32,7 @@ export default class Summary extends Component {
     );
     return (
       <div>
-        <Header as="h1" textAlign="center">Verify the information and create IRA account</Header>
+        <Header as="h3" textAlign="center">Verify the information and create IRA account</Header>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -76,6 +76,11 @@ export default class Summary extends Component {
             </div>
           </div>
         </div>
+        <p className="center-align mb-30">
+          By continuing, I acknowledge that I have read and agree to the
+          terms of the <Link to="/" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/" className="link">Substitute IRS Form W-9 Certification</Link>,
+          and the <Link to="/" className="link">NextSeed Membership Agreement</Link>.
+        </p>
         <div className="center-align">
           <Button primary size="large" onClick={() => this.handleCreateAccount()} className="relaxed" disabled={!this.props.iraAccountStore.isValidIraForm}>Create the account</Button>
         </div>

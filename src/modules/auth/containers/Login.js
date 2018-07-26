@@ -49,7 +49,7 @@ class Login extends Component {
         }
       >
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Log in to NextSeed</Header>
+          <Header as="h3">Log in to NextSeed</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {errors &&

@@ -13,7 +13,8 @@
 /*-------------------
        Fonts
 --------------------*/
-@fontName          : 'Lato';
+
+@fontName          : 'Roboto';
 @fontSmoothing     : antialiased;
 
 @headerFont        : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -21,15 +22,16 @@
 
 @googleFontName    : @fontName;
 @importGoogleFonts : true;
-@googleFontSizes   : '400,700,400italic,700italic';
+@googleFontSizes   : '400,500,700,400italic,500italic,700italic';
 @googleSubset      : 'latin';
 
 @googleProtocol    : 'https://';
 @googleFontRequest : '@{googleFontName}:@{googleFontSizes}&subset=@{googleSubset}';
 
 
-@bold              : bold;
-@normal            : normal;
+@bold              : 700;
+@fontMedium        : 500;
+@normal            : 400;
 
 /*-------------------
       Base Sizes
@@ -58,8 +60,8 @@
     Brand Colors
 --------------------*/
 
-@primaryColor        : @theme-primary;
-@secondaryColor      : @black;
+@primaryColor        : @primary-one;
+@secondaryColor      : @primary-two;
 
 @lightPrimaryColor   : @lightBlue;
 @lightSecondaryColor : @lightBlack;
@@ -68,15 +70,15 @@
   Page Heading
 ---------------*/
 
-@headerFontWeight : 900;
+@headerFontWeight : @fontMedium;
 @headerLineHeight : unit((18 / 14), em);
 
-@h1 : unit((28 / 14), rem);
-@h2 : unit((24 / 14), rem);
-@h3 : unit((18 / 14), rem);
-@h4 : unit((15 / 14), rem);
-@h5 : unit((14 / 14), rem);
-@h6 : unit((13 / 14), rem);
+@h1 : unit((60 / 14), rem);
+@h2 : unit((40 / 14), rem);
+@h3 : unit((28 / 14), rem);
+@h4 : unit((20 / 14), rem);
+@h5 : unit((16 / 14), rem);
+@h6 : unit((15 / 14), rem);
 
 /*--------------
    Form Input
@@ -90,8 +92,8 @@
 
 /* Input Text Color */
 @inputColor: @textColor;
-@inputPlaceholderColor: lighten(@inputColor, 75);
-@inputPlaceholderFocusColor: lighten(@inputColor, 45);
+@inputPlaceholderColor: lighten(@inputColor, 60);
+@inputPlaceholderFocusColor: lighten(@inputColor, 35);
 
 /* Line Height Default For Inputs in Browser (Descendors are 17px at 14px base em) */
 @inputLineHeight: unit((17 / 14), em);
@@ -133,7 +135,7 @@
 @pageOverflowX       : hidden;
 
 @lineHeight          : 1.571428em;
-@textColor           : @fullBlack;
+@textColor           : @neutral;
 
 /*-------------------
       Paragraph
@@ -146,9 +148,9 @@
        Links
 --------------------*/
 
-@linkColor           : @theme-primary;
+@linkColor           : @primary-one;
 @linkUnderline       : none;
-@linkHoverColor      : @theme-primary-darken;
+@linkHoverColor      : @primary-one;
 @linkHoverUnderline  : @linkUnderline;
 
 /*-------------------
@@ -233,10 +235,10 @@
 @orange           : @highlight-secondary;
 @yellow           : #FBBD08;
 @olive            : #B5CC18;
-@green            : @theme-primary;
+@green            : @primary-one;
 @teal             : @highlight-tertiary;
-@blue             : #2185D0;
-@violet           : @link-color;
+@blue             : @primary-two;
+@violet           : #6435C9;
 @purple           : #A333C8;
 @pink             : #E03997;
 @brown            : #A5673F;
@@ -248,7 +250,7 @@
 @lightOrange      : #FF851B;
 @lightYellow      : #FFE21F;
 @lightOlive       : #D9E778;
-@lightGreen       : @theme-primary;
+@lightGreen       : @primary-one-lighten;
 @lightTeal        : #6DFFFF;
 @lightBlue        : #54C8FF;
 @lightViolet      : #A291FB;
@@ -507,7 +509,7 @@
 
 /* Header Spacing */
 @headerTopMargin    : ~"calc(2rem - "@headerLineHeightOffset~")";
-@headerBottomMargin : 1.5rem;
+@headerBottomMargin : 1rem;
 @headerMargin       : @headerTopMargin 0em @headerBottomMargin;
 
 /* Minimum Mobile Width */
@@ -739,8 +741,8 @@
 ;
 
 /*---  Colors  ---*/
-@primaryColorHover    : saturate(darken(@primaryColor, 5), 10, relative);
-@secondaryColorHover  : saturate(lighten(@secondaryColor, 5), 10, relative);
+@primaryColorHover    : @primary-one-darken;
+@secondaryColorHover  : @primary-two-darken;
 
 @redHover             : saturate(darken(@red, 5), 10, relative);
 @orangeHover          : saturate(darken(@orange, 5), 10, relative);
@@ -974,28 +976,53 @@
 -------------------------------*/
 
 //  THEME BASE COLORS
-@theme-primary:#98CE23;
-@theme-primary-darken:darken(@theme-primary, 8%);					//  #81AD23 ~ 85B02B
+@primary-one:#20C86D;
+@primary-one-darken:#189652;
+@primary-one-lighten:#58D692;
+
+@primary-two:#1781FB;
+@primary-two-darken:#0073E6;
+@primary-two-lighten:#55A2FB;
+
+@secondary-color:#263E64;
+@secondary-color-darken:#1C2E4B;
+@secondary-color-lighten:#5C6E8B;
+
+@neutral:#31333D;
+@neutral-middark:#676A73;
+@neutral-offdark:#CDCDD1;             //  @neutral-light
+@neutral-darkwhite:#E6E6E8;           //  @neutral-lighter
+@neutral-midwhite:#E9ECF0;            //  @neutral-lightest
+@neutral-offwhite:#F7F8FC;            //  @neutral-lighten
+
+@commonShadow:0px 1px 1px @thumbInactiveBackground;
+
+
+/* --------------------------------------------
+      OLD VARIABLE VALUES TO BE REMOVED
+-------------------------------------------- */
+// @theme-primary:#98CE23;
+// @theme-primary-darken:darken(@theme-primary, 8%);					//  #81AD23 ~ 85B02B
 
 //  BACKGROUND COLORS
 @dark-bg-color:#424242;
 @darken-bg-color:darken(@dark-bg-color, 4%);				    		//  #383838           (when base = 424242)
 @darker-bg-color:darken(@dark-bg-color, 11%);			    			//  #262626           (when base = 424242)
 
-@light-bg-color:#F7F7F7;
-@lighten-bg-color:lighten(@light-bg-color, 1%);			  			//  #FAFAFA           (when base = F7F7F7)
-@lighter-bg-color:lighten(@light-bg-color, 4%);			  			//  #FFFFFF           (when base = F7F7F7)
+// @light-bg-color:#F7F7F7;
+// @lighten-bg-color:lighten(@light-bg-color, 1%);			  			//  #FAFAFA           (when base = F7F7F7)
+// @lighter-bg-color:lighten(@light-bg-color, 4%);			  			//  #FFFFFF           (when base = F7F7F7)
 
 //  TEXT COLORS
-@primary-text:#242424;
-@secondary-text:#383838;
+// @primary-text:#242424;
+// @secondary-text:#383838;
 @tertiary-text:#4F4F4F;
-@quaternary-text:#989898;
-@inverse-text:#FFFFFF;
-@inverse-secondary-text:darken(@inverse-text, 51%);				     //  #7D7D7D           (when base = FFFFFF)
-@inverse-darken:darken(@inverse-text, 5%);                     //  #F2F2F2         (when base = FFFFFF)
+// @quaternary-text:#989898;
+// @inverse-text:#FFFFFF;
+// @inverse-secondary-text:darken(@inverse-text, 51%);				     //  #7D7D7D           (when base = FFFFFF)
+// @inverse-darken:darken(@inverse-text, 5%);                     //  #F2F2F2         (when base = FFFFFF)
 
-@link-color:#772df9;
+@link-color:@primary-one;
 @link-color-darken:darken(@link-color, 10%);
 
 @border-color:#BDBDBD;

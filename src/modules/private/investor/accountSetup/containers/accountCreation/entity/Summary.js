@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Header, Table, Button, Item, Message } from 'semantic-ui-react';
+import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { isEmpty } from 'lodash';
 import { DateTimeFormat, ListErrors } from '../../../../../../../theme/shared';
@@ -28,8 +28,8 @@ export default class Summary extends Component {
       plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>
-        <Header as="h1" textAlign="center">Verify the info and create Entity account</Header>
-        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
+        <Header as="h3" textAlign="center">Verify the info and create Entity account</Header>
+        <p className="center-align">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -84,15 +84,7 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Bank account</b></Table.Cell>
-                  <Table.Cell>
-                    <Item.Group>
-                      <Item>
-                        <Item.Content>
-                          <h5>{Helper.encryptNumber(bankAccountNumber)}</h5>
-                        </Item.Content>
-                      </Item>
-                    </Item.Group>
-                  </Table.Cell>
+                  <Table.Cell>{Helper.encryptNumber(bankAccountNumber)}</Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>

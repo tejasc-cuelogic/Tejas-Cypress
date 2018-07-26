@@ -23,8 +23,8 @@ export default class AddFunds extends Component {
     const { formAddFunds, addFundChange } = this.props.bankAccountStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">Add funds</Header>
-        <Header as="h4" textAlign="center">How much would you like to deposit into your account today?</Header>
+        <Header as="h3" textAlign="center">Add funds</Header>
+        <p className="center-align">How much would you like to deposit into your account today?</p>
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
             <MaskedInput2
@@ -42,7 +42,7 @@ export default class AddFunds extends Component {
             <Button primary size="large" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button className="theme-link" onClick={() => this.doNotDepositMoneyNow()}>I don`t want to deposit any money now</Button>
+            <Button className="cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I don`t want to deposit any money now</Button>
           </div>
         </Form>
       </div>

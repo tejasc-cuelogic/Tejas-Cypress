@@ -22,7 +22,7 @@ input[type=number]{
         border-radius:0 !important;
     }
     >input:focus ~ .ui.button.link-button{
-        border-color:@theme-primary;
+        border-color:@primary-one;
     }
 }
 .field.error{

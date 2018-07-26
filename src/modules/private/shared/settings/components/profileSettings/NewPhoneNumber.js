@@ -38,7 +38,7 @@ export default class NewPhoneNumber extends Component {
           render={props => <ConfirmPhoneNumber newPhoneNumber refLink={match.url} {...props} />}
         />
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Enter new phone number</Header>
+          <Header as="h3">Enter new phone number</Header>
           <p>We will send you a verification code to the phone number you provide.</p>
         </Modal.Header>
         <Modal.Content>
