@@ -21,6 +21,9 @@ export default class ApplicationsList extends Component {
   setSearchParam = (e, { name, value }) =>
     this.props.businessAppAdminStore.setInitiateSrch(name, value);
 
+  checkClicked = () => {
+    console.log('clicked');
+  }
 
   executeSearch = (e) => {
     if (e.charCode === 13) {
@@ -54,7 +57,6 @@ export default class ApplicationsList extends Component {
             <Grid.Row>
               <Grid.Column width={10}>
                 <FormCheckbox
-                  checked={requestState.search.applicationStatus}
                   fielddata={filterApplicationStatus}
                   name="applicationStatus"
                   changed={this.setSearchParam}
@@ -109,14 +111,13 @@ export default class ApplicationsList extends Component {
                             </Item.Description>
                             <Item.Extra>
                               <b>5/5/2018 | 1:33PM</b>
-                              <b>`by {application.comment.user}`</b>
+                              <b> by {application.comment.user}</b>
                             </Item.Extra>
                           </Item.Content>
                         </Item>
                       </Table.Cell>
                       <ApplicationListStepColumn
-                        appStatus={application.applicationStatus}
-                        failedReasons={application.failedReasons}
+                        application={application}
                       />
                       <ApplicationListButtons
                         appStatus={application.applicationStatus}

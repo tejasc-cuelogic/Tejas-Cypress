@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import PrivateLayout from '../../../shared/PrivateHOC';
-// import ApplicationsList from '../components/ApplicationsList';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 
 

@@ -44,7 +44,16 @@ export class BusinessAppStore {
   @action
   setInitiateSrch = (name, value) => {
     const srchParams = { ...this.requestState.search };
-    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+    if (name === 'applicationStatus') {
+      const index = this.filterApplicationStatus
+        .value.indexOf(value);
+      if (index === -1) {
+        this.filterApplicationStatus.value.push(value);
+      } else {
+        this.filterApplicationStatus.value.splice(index, 1);
+      }
+      srchParams[name] = this.filterApplicationStatus.value;
+    } else if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
       srchParams[name] = value;
     } else {
       delete srchParams[name];
@@ -56,6 +65,28 @@ export class BusinessAppStore {
     return (this.businessApplicationsList && this.businessApplicationsList.data
       && toJS(this.businessApplicationsList.data)
     ) || [];
+  }
+
+  @action
+  reInitiateApplicationStatusFilterValues(section) {
+    this.requestState.search = {};
+    this.filterApplicationStatus = FILTER_META.applicationStatus;
+    const { values } = this.filterApplicationStatus;
+    switch (section) {
+      case 'prequal-failed':
+        this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, 'prequal-failed'));
+        break;
+      case 'in-progress':
+        this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, 'in-progress'));
+        this.filterApplicationStatus.value = ['Unstashed'];
+        break;
+      case 'completed':
+        this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, 'completed'));
+        this.filterApplicationStatus.value = ['New', 'Reviewing'];
+        break;
+      default: break;
+    }
+    this.requestState.search.applicationStatus = this.filterApplicationStatus.value;
   }
 
   // @action
@@ -80,6 +111,7 @@ export class BusinessAppStore {
   @action
   fetchBusinessApplicationsByStatus = (url) => {
     const appType = includes(url, 'prequal-failed') ? 'prequal-failed' : includes(url, 'in-progress') ? 'in-progress' : 'completed';
+    this.reInitiateApplicationStatusFilterValues(appType);
     if (appType === 'prequal-failed') {
       this.columnTitle = 'Failed reasons';
       this.businessApplicationsList = {
@@ -146,6 +178,13 @@ export class BusinessAppStore {
           applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
           status: 'DELETED',
           ratings: 0,
+          businessDetails: {
+            stepStatus: 'COMPLETE',
+          },
+          businessPerformance: {
+            stepStatus: 'IN-PROGRESS',
+          },
+          businessDocumentation: null,
         },
         {
           applicationId: 'sdf3',
@@ -166,6 +205,15 @@ export class BusinessAppStore {
           applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
           status: 'REMOVED',
           ratings: 0,
+          businessDetails: {
+            stepStatus: 'COMPLETE',
+          },
+          businessPerformance: {
+            stepStatus: 'IN-PROGRESS',
+          },
+          businessDocumentation: {
+            stepStatus: 'COMPLETE',
+          },
         }],
       };
     } else if (appType === 'completed') {
@@ -190,6 +238,15 @@ export class BusinessAppStore {
           applicationStatus: 'APPLICATION_SUBMITTED',
           status: 'DELETED',
           ratings: 0,
+          businessDetails: {
+            stepStatus: 'COMPLETE',
+          },
+          businessPerformance: {
+            stepStatus: 'COMPLETE',
+          },
+          businessDocumentation: {
+            stepStatus: 'COMPLETE',
+          },
         },
         {
           applicationId: 'sdf3',
@@ -210,6 +267,15 @@ export class BusinessAppStore {
           applicationStatus: 'APPLICATION_SUBMITTED',
           status: 'REMOVED',
           ratings: 0,
+          businessDetails: {
+            stepStatus: 'COMPLETE',
+          },
+          businessPerformance: {
+            stepStatus: 'COMPLETE',
+          },
+          businessDocumentation: {
+            stepStatus: 'COMPLETE',
+          },
         }],
       };
     }
