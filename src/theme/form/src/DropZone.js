@@ -2,7 +2,7 @@
 import React from 'react';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
-import { Icon, Responsive, Button, Popup, Loader } from 'semantic-ui-react';
+import { Icon, Responsive, Button, Popup, Dimmer, Loader } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
 import { isArray } from 'lodash';
 import { FieldError } from '../../shared';
@@ -29,9 +29,11 @@ const DropZone = observer((props) => {
           }
         </label>
       }
-      { !(value && !value.length) || props.multiple ?
+      { (!value && !value.length) || props.multiple ?
         <div className="file-uploader">
-          <Loader active={showLoader} />
+          <Dimmer active={showLoader}>
+            <Loader />
+          </Dimmer>
           <Dropzone onDrop={files => props.ondrop(files, props.name)} className="test" style={{}}>
             <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
           </Dropzone>
