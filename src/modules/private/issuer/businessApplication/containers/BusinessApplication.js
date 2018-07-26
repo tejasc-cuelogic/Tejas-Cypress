@@ -12,6 +12,7 @@ import Failure from '../components/Failure';
 import Success from '../components/Success';
 import Application from '../components/lendio/Application';
 import ConfirmModal from '../components/confirmModal';
+import LendioSuccess from '../components/lendio/LendioSuccess';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -129,6 +130,7 @@ export default class BusinessApplication extends Component {
           <Route exact path={match.url} component={getModule(navItems[0].component)} />
           <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/failed/:reason?`} component={Failure} />
           <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/lendio`} component={Application} />
+          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/lendio/:condition`} component={LendioSuccess} />
           <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/success`} render={props1 => <Success refLink={this.props.match.url} applicationId={this.props.match.params.applicationId} {...props1} />} />
           {
             navItems.map(item => (
