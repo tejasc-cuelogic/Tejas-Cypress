@@ -13,7 +13,9 @@ class FormValidator {
   });
 
   onChange = (form, element, type, isDirty = true) => {
+    CustomeValidations.execute();
     const currentForm = form;
+    let customErrMsg = {};
     if (element && element.name) {
       if (type === 'checkbox' || (Array.isArray(toJS(currentForm.fields[element.name].value)) && type !== 'dropdown')) {
         const index = currentForm.fields[element.name].value.indexOf(element.value);
@@ -25,10 +27,15 @@ class FormValidator {
       } else {
         currentForm.fields[element.name].value = element.value;
       }
+      customErrMsg = (currentForm.fields[element.name] &&
+        currentForm.fields[element.name].customErrors) ?
+        currentForm.fields[element.name].customErrors : {};
     }
+
     const validation = new Validator(
       mapValues(currentForm.fields, f => f.value),
       mapValues(currentForm.fields, f => f.rule),
+      customErrMsg,
     );
     currentForm.meta.isValid = validation.passes();
     if (element && element.name) {
@@ -44,10 +51,11 @@ class FormValidator {
   }
 
   onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
-    CustomeValidations.executet();
+    CustomeValidations.execute();
     const currentForm = form;
     let currentFormRelative;
     let fieldName = element.name;
+    let customErrMsg = {};
     if (formIndex > -1 && formName) {
       currentFormRelative = currentForm.fields[formName][formIndex];
       fieldName = `beneficiary.${formIndex}.${element.name}`;
@@ -70,6 +78,9 @@ class FormValidator {
       } else {
         currentFormRelative[element.name].value = element.value;
       }
+      customErrMsg = (currentFormRelative[element.name] &&
+        currentFormRelative[element.name].customErrors) ?
+        currentFormRelative[element.name].customErrors : {};
     }
     /* Beneficiary share percentage validation register */
     Validator.register('sharePercentage', (value, requirement) => {
@@ -84,15 +95,14 @@ class FormValidator {
 
     const formData = this.ExtractFormValues(toJS(currentForm.fields));
     const formRules = this.ExtractFormRules(toJS(currentForm.fields));
-    const validation = new Validator(formData, formRules);
+    const validation = new Validator(
+      formData,
+      formRules,
+      customErrMsg,
+    );
     currentForm.meta.isValid = validation.passes();
     if (element && element.name) {
-      currentFormRelative[element.name].error = validation.errors.first(fieldName) ?
-        replace(
-          validation.errors.first(fieldName),
-          fieldName,
-          currentFormRelative[element.name].label,
-        ) : undefined;
+      currentFormRelative[element.name].error = validation.errors.first(fieldName);
     }
     return currentForm;
   }
