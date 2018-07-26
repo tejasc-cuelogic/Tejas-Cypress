@@ -2,9 +2,21 @@
          Theme Overrides
 *******************************/
 .ui.menu{
-    &.pagination{
-        &.right.floated{
-            margin:1rem;
+    &.pagination.text{
+        margin:0;
+        border-radius:@4px;
+        background-color:@white;
+        box-shadow:0 0px 10px rgba(0,0,0,.1);
+        .item{
+            min-width:2em;
+            >.ui.input{
+                margin:0;
+                width:30px;
+                height:30px;
+                padding:0 5px;
+                border:red;
+                border-radius:4px;
+            }
         }
     }
     &.secondary.vertical{

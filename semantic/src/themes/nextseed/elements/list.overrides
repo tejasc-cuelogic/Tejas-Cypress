@@ -216,3 +216,11 @@ ol.ui.list.step-list{
         }
     }
 }
+
+.ui.list.horizontal{
+    .item.ui.checkbox{
+        min-width:33%;
+        margin:0;
+        padding-right:@14px;
+    }
+}

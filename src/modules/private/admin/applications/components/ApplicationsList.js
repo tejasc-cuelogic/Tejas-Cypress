@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 // import { includes } from 'lodash';
-import { Form, Grid, Input, Button, Pagination, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
+import { Form, Grid, Input, Button, Menu, Icon, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
 import { FormCheckbox } from '../../../../../theme/form';
@@ -63,7 +64,20 @@ export default class ApplicationsList extends Component {
                 />
               </Grid.Column>
               <Grid.Column width={6} textAlign="right">
-                <Pagination defaultActivePage={1} totalPages={20} />
+                {/* <Pagination defaultActivePage={1} totalPages={20} /> */}
+                <Menu pagination text>
+                  <Menu.Item as={Link} to="/">
+                    <Icon className="ns-chevron-left" color="green" />
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Input value="3" />
+                  </Menu.Item>
+                  <Menu.Item name="of" />
+                  <Menu.Item name="20" />
+                  <Menu.Item as={Link} to="/">
+                    <Icon className="ns-chevron-right" color="green" />
+                  </Menu.Item>
+                </Menu>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -102,7 +116,7 @@ export default class ApplicationsList extends Component {
                       </Table.Cell>
                       <Table.Cell>
                         <Item>
-                          <Item.Header><Rating size="large" defaultRating={0} maxRating={5} /></Item.Header>
+                          <Item.Header><Rating size="large" disabled defaultRating={3} maxRating={5} /></Item.Header>
                           <Item.Content>
                             <Item.Description>
                               {application.comment.content}
