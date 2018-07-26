@@ -117,15 +117,6 @@ export class Utility {
       });
   });
 
-  putUploadedFileOnS3 = fileObj => new Promise((resolve, reject) => {
-    apiService.uploadOnS3(fileObj.preSignedUrl, fileObj.fileData).then(() => {
-      resolve();
-    })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-
   maskPhoneNumber = (phoneNumber) => {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
     return maskPhoneNumber;
