@@ -79,21 +79,17 @@
         flex-grow: 1;
         display: flex;
         .item {
-            // font-family: @fontName;
-            // font-size: 12px;
-            // line-height: 14px;
-            // text-align: center;
             font-weight:@fontMedium;
             text-transform:uppercase;
             border-bottom:2px solid transparent !important;
             border-radius:0 !important;
             padding:@10px 0;
             margin:0 @18px;
-            &:hover, &:active, &:focus, &:visited, &.active {
+            &:hover, &:active, &:focus, &.active {
                 border-color:@primary-one !important;
                 background-color:transparent !important;
             }
-            &:first-child {
+            .header{
                 border-color:transparent !important;
             }
         }
@@ -103,12 +99,10 @@
         box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
         position: fixed;
         top: 0;
-        width: 100%;
         left: 0;
         right: 0;
         margin: 0;
         z-index: 1001;
-        -webkit-font-smoothing: antialiased;
         transition: all .3s ease;
         .item {
             img.ui.image.logo{

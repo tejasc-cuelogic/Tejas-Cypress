@@ -7,7 +7,7 @@ import Logo from './Logo';
 const PublicSubNav = props => (
   <Menu
     secondary
-    className={`center-align menu-secondary-fixed ${props.navStatus === 'sub' ? 'active' : ''}`}
+    className={`menu-secondary-fixed ${props.navStatus === 'sub' ? 'active' : ''}`}
   >
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
@@ -18,7 +18,7 @@ const PublicSubNav = props => (
         />
       </Menu.Item>
       <Menu.Menu secondary className="center-align menu-secondary">
-        <Menu.Item>{props.title}</Menu.Item>
+        <Menu.Item header>{props.title}</Menu.Item>
         <NavItems sub refLoc="public" location={props.location} navItems={props.navItems} />
       </Menu.Menu>
       <Menu.Item as={Link} to="/" position="right">
