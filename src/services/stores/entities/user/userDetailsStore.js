@@ -228,8 +228,10 @@ export class UserDetailsStore {
       routingUrl = 'summary/establish-profile';
     } else if (isEmpty(this.signupStatus.accounts)) {
       routingUrl = 'summary/account-creation';
-    } else {
-      routingUrl = 'summary/account-creation/ira';
+    } else if (this.signupStatus.partialAccounts > 0) {
+      routingUrl = `summary/account-creation/${this.signupStatus.partialAccounts[0].accountType}`;
+    } else if (this.signupStatus.inActiveAccounts > 0) {
+      routingUrl = `summary/account-creation/${this.signupStatus.inActiveAccounts[0].accountType}`;
     }
     return routingUrl;
   }

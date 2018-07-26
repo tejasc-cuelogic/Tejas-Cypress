@@ -97,6 +97,26 @@ const ProgressCard = props => (
         </Card>
       ))
     }
+    {props.signupStatus.partialAccounts.length === 0 &&
+    props.signupStatus.accounts.length > 0 &&
+    props.signupStatus.inActiveAccounts.length > 0 &&
+      <Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
+        <Card.Content>
+          <Icon.Group size="huge">
+            <Icon className="ns-bar-line-chart" />
+          </Icon.Group>
+          <p><b>Create Investment Account</b></p>
+          <Button.Group vertical>
+            <Button
+              color={props.getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
+              content="Continue Account Creation"
+              disabled={props.getStepStatus('accounts') === 'disable'}
+              onClick={() => props.navToAccTypes()}
+            />
+          </Button.Group>
+        </Card.Content>
+      </Card>
+    }
   </Card.Group>
 );
 

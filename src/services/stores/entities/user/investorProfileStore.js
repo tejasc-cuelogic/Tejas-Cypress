@@ -13,10 +13,10 @@ import Helper from '../../../../helper/utility';
 import { uiStore } from '../../index';
 
 class InvestorProfileStore {
-  @observable EMPLOYMENT_FORM = FormValidator.prepareFormObject(EMPLOYMENT);
-  @observable INVESTOR_PROFILE_FORM = FormValidator.prepareFormObject(INVESTOR_PROFILE);
+  @observable EMPLOYMENT_FORM = FormValidator.prepareFormObject(EMPLOYMENT, true);
+  @observable INVESTOR_PROFILE_FORM = FormValidator.prepareFormObject(INVESTOR_PROFILE, true);
   @observable FINANCES_FORM = FormValidator.prepareFormObject(FINANCES);
-  @observable INVESTMENT_EXPERIENCE = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE);
+  @observable INVESTMENT_EXP_FORM = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
   @observable chkboxTicked = null;
   @observable stepToBeRendered = 0;
   @observable investorProfileNotSet = '';
@@ -69,7 +69,7 @@ class InvestorProfileStore {
 
   @action
   experiencesChange = (e, result) => {
-    this.formChange(e, result, 'INVESTMENT_EXPERIENCE');
+    this.formChange(e, result, 'INVESTMENT_EXP_FORM');
   }
 
   @computed
@@ -113,7 +113,7 @@ class InvestorProfileStore {
   @computed
   get isValidInvestorProfileForm() {
     return this.EMPLOYMENT_FORM.meta.isValid && this.INVESTOR_PROFILE_FORM.meta.isValid
-    && this.FINANCES_FORM.meta.isValid && this.INVESTMENT_EXPERIENCE.meta.isValid;
+    && this.FINANCES_FORM.meta.isValid && this.INVESTMENT_EXP_FORM.meta.isValid;
   }
 
   @action
@@ -144,19 +144,19 @@ class InvestorProfileStore {
               this.FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value : null,
           },
         };
-      } else if (currentStep.form === 'INVESTMENT_EXPERIENCE') {
+      } else if (currentStep.form === 'INVESTMENT_EXP_FORM') {
         let readyForRisksInvolvedValue = false;
         let liquiditySecurities = false;
-        if (this.INVESTMENT_EXPERIENCE.fields.readyForRisksInvolved.value[0] === 'checked') {
+        if (this.INVESTMENT_EXP_FORM.fields.readyForRisksInvolved.value[0] === 'checked') {
           readyForRisksInvolvedValue = true;
         }
-        if (this.INVESTMENT_EXPERIENCE.fields.readyInvestingInLimitedLiquiditySecurities.value[0] === 'checked') {
+        if (this.INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities.value[0] === 'checked') {
           liquiditySecurities = true;
         }
         formPayload = {
           investmentExperienceInfo: {
             investmentExperienceLevel:
-            this.INVESTMENT_EXPERIENCE.fields.investmentExperienceLevel.value,
+            this.INVESTMENT_EXP_FORM.fields.investmentExperienceLevel.value,
             readyForRisksInvolved: readyForRisksInvolvedValue,
             readyInvestingInLimitedLiquiditySecurities: liquiditySecurities,
           },
@@ -180,7 +180,6 @@ class InvestorProfileStore {
           Helper.toast('Investor profile updated successfully.', 'success');
           FormValidator.setIsDirty(this[currentStep.form], false);
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          resolve();
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -199,8 +198,12 @@ class InvestorProfileStore {
       const { investorProfileData } = userData;
       if (investorProfileData) {
         Object.keys(this.EMPLOYMENT_FORM.fields).map((f) => {
+          if (f === 'employmentStatus') {
+            if (isNull(investorProfileData.employmentStatusInfo[f])) {
+              isDirty = true;
+            }
+          }
           this.EMPLOYMENT_FORM.fields[f].value = investorProfileData.employmentStatusInfo[f];
-          isDirty = true;
           return true;
         });
         FormValidator.onChange(this.EMPLOYMENT_FORM, '', '', isDirty);
@@ -233,32 +236,32 @@ class InvestorProfileStore {
         });
         FormValidator.onChange(this.INVESTOR_PROFILE_FORM, '', '', isDirty);
         isDirty = false;
-        Object.keys(this.INVESTMENT_EXPERIENCE.fields).map((f) => {
+        Object.keys(this.INVESTMENT_EXP_FORM.fields).map((f) => {
           if (f !== 'readyInvestingInLimitedLiquiditySecurities' && f !== 'readyForRisksInvolved') {
-            if (!isNull(investorProfileData.investmentExperienceInfo)) {
-              this.INVESTMENT_EXPERIENCE.fields[f].value =
+            if (!isNull(investorProfileData.investmentExperienceInfo[f])) {
+              this.INVESTMENT_EXP_FORM.fields[f].value =
               investorProfileData.investmentExperienceInfo[f];
             } else {
-              this.INVESTMENT_EXPERIENCE.fields[f].value = 'NO_EXPERIENCE';
+              this.INVESTMENT_EXP_FORM.fields[f].value = 'NO_EXPERIENCE';
               isDirty = true;
             }
           } else if (f === 'readyInvestingInLimitedLiquiditySecurities' &&
           investorProfileData.investmentExperienceInfo[f]) {
-            this.INVESTMENT_EXPERIENCE.fields.readyInvestingInLimitedLiquiditySecurities.value = 'checked';
+            this.INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities.value = 'checked';
           } else if (f === 'readyForRisksInvolved' &&
           investorProfileData.investmentExperienceInfo[f]) {
-            this.INVESTMENT_EXPERIENCE.fields.readyForRisksInvolved.value = 'checked';
+            this.INVESTMENT_EXP_FORM.fields.readyForRisksInvolved.value = 'checked';
           }
           return true;
         });
-        FormValidator.onChange(this.INVESTMENT_EXPERIENCE, '', '', isDirty);
+        FormValidator.onChange(this.INVESTMENT_EXP_FORM, '', '', isDirty);
         if (!this.EMPLOYMENT_FORM.meta.isValid) {
           this.setStepToBeRendered(0);
         } else if (!this.INVESTOR_PROFILE_FORM.meta.isValid || this.investorProfileNotSet) {
           this.setStepToBeRendered(1);
         } else if (!this.FINANCES_FORM.meta.isValid) {
           this.setStepToBeRendered(2);
-        } else if (!this.INVESTMENT_EXPERIENCE.meta.isValid) {
+        } else if (!this.INVESTMENT_EXP_FORM.meta.isValid) {
           this.setStepToBeRendered(3);
         } else {
           this.setStepToBeRendered(3);

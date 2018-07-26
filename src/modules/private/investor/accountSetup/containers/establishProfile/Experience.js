@@ -7,7 +7,7 @@ import { FormRadioGroup, FormCheckbox } from '../../../../../../theme/form';
 @observer
 export default class Experience extends Component {
   render() {
-    const { INVESTMENT_EXPERIENCE, experiencesChange } = this.props.investorProfileStore;
+    const { INVESTMENT_EXP_FORM, experiencesChange } = this.props.investorProfileStore;
     return (
       <div>
         <Header as="h1" textAlign="center">
@@ -20,20 +20,20 @@ export default class Experience extends Component {
         </Header>
         <Form error>
           <FormRadioGroup
-            fielddata={INVESTMENT_EXPERIENCE.fields.investmentExperienceLevel}
+            fielddata={INVESTMENT_EXP_FORM.fields.investmentExperienceLevel}
             name="investmentExperienceLevel"
             changed={experiencesChange}
             containerclassname="button-radio center-align"
           />
           <FormCheckbox
-            fielddata={INVESTMENT_EXPERIENCE.fields.readyInvestingInLimitedLiquiditySecurities}
+            fielddata={INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities}
             name="readyInvestingInLimitedLiquiditySecurities"
             changed={experiencesChange}
             defaults
             containerclassname="ui relaxed list"
           />
           <FormCheckbox
-            fielddata={INVESTMENT_EXPERIENCE.fields.readyForRisksInvolved}
+            fielddata={INVESTMENT_EXP_FORM.fields.readyForRisksInvolved}
             name="readyForRisksInvolved"
             changed={experiencesChange}
             defaults

@@ -459,13 +459,13 @@ export const FINANCES = {
     value: '',
     label: 'Company Name',
     error: undefined,
-    rule: 'required_with:checkbox1',
+    rule: 'string',
   },
   employedOrAssoWithFINRAFirmName: {
     value: '',
     label: 'Firm Name',
     error: undefined,
-    rule: 'required_with:checkbox2',
+    rule: 'string',
   },
 };
 

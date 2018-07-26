@@ -198,6 +198,9 @@ class FormValidator {
           }
         } else {
           currentForm.fields[key].error = err;
+          if (err) {
+            currentForm.meta.isFieldValid = false;
+          }
         }
       });
     }

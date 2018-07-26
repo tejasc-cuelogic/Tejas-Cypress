@@ -51,9 +51,9 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Experience',
         component: <Experience />,
-        isValid: this.props.investorProfileStore.INVESTMENT_EXPERIENCE.meta.isFieldValid ? '' : 'error',
-        isDirty: this.props.investorProfileStore.INVESTMENT_EXPERIENCE.meta.isDirty,
-        form: 'INVESTMENT_EXPERIENCE',
+        isValid: this.props.investorProfileStore.INVESTMENT_EXP_FORM.meta.isFieldValid ? '' : 'error',
+        isDirty: this.props.investorProfileStore.INVESTMENT_EXP_FORM.meta.isDirty,
+        form: 'INVESTMENT_EXP_FORM',
         stepToBeRendered: 3,
       },
     ];
