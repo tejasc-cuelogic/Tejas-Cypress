@@ -89,7 +89,7 @@ export default class BusinessDetails extends Component {
             >
               <Grid>
                 <Grid.Column widescreen={14} largeScreen={14} computer={14} tablet={16} mobile={16}>
-                  <Header as="h3">Owner 1</Header>
+                  <Header as="h4">Owner 1</Header>
                   <div className="field-wrap">
                     <Form.Group widths="equal">
                       {

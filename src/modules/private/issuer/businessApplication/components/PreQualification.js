@@ -92,7 +92,7 @@ export default class PreQualification extends Component {
                       fielddata={fields.emailAddress}
                       changed={businessAppEleChange}
                     />
-                    <Header as="h5">Business Address</Header>
+                    <Header as="h6">Business Address</Header>
                     <AutoComplete
                       name="street"
                       fielddata={fields.street}
@@ -171,7 +171,7 @@ export default class PreQualification extends Component {
                     {fields.businessGoal.value &&
                       fields.businessGoal.value === BUSINESS_GOAL.FRANCHISE &&
                       <Aux>
-                        <Header as="h5" content="Are you an existing or previous franchise holder?" />
+                        <Header as="h6" content="Are you an existing or previous franchise holder?" />
                         <FormRadioGroup
                           fielddata={fields.franchiseHolder}
                           name="franchiseHolder"
@@ -185,7 +185,7 @@ export default class PreQualification extends Component {
                       fields.businessGoal.value !== BUSINESS_GOAL.FRANCHISE
                       && fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW &&
                       <Aux>
-                        <Header as="h5" content="How long has the existing business been operating?" />
+                        <Header as="h6" content="How long has the existing business been operating?" />
                         <Form.Group widths="equal">
                           {
                             ['businessAgeYears', 'businessAgeMonths'].map(field => (

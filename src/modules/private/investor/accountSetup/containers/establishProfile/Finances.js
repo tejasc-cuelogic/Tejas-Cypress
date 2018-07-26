@@ -47,13 +47,11 @@ export default class Finances extends Component {
           form={FINANCES_FORM}
           {...this.props}
         />
-        <Header as="h1" textAlign="center">
-          Financial Information
-        </Header>
-        <Header as="h4" textAlign="center">
+        <Header as="h3" textAlign="center">Financial Information</Header>
+        <p className="center-align mb-50">
           Please provide the following information so that
           we can determine which investments we are allowed to show you
-        </Header>
+        </p>
         <Form error>
           <MaskedInput2
             name="netWorth"
@@ -82,16 +80,20 @@ export default class Finances extends Component {
             changed={this.handleTick}
             defaults
           />
-          The name of the company is
-          <span> {FINANCES_FORM.fields.directorShareHolderOfCompany.value}</span>
+          <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
+            The name of the company is{' '}
+            <span style={{ textDecoration: 'underline' }}>{FINANCES_FORM.fields.directorShareHolderOfCompany.value}</span>
+          </p>
           <FormCheckbox
             fielddata={FINANCES_FORM.fields.checkbox2}
             name="checkbox2"
             changed={this.handleTick}
             defaults
           />
-          The name of firm is
-          <span> {FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}</span>
+          <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
+            The name of firm is{' '}
+            <span style={{ textDecoration: 'underline' }}>{FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}</span>
+          </p>
         </Form>
       </div>
     );

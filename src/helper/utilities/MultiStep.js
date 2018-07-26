@@ -104,9 +104,7 @@ export default class MultiStep extends React.Component {
   next() {
     if (this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience') {
       this.props.createAccount(this.props.steps[this.state.compState]);
-      if (!this.props.steps[this.state.compState].isDirty) {
-        this.props.actionOnNextBtn();
-      }
+      this.props.actionOnNextBtn();
     } else if (!this.props.steps[this.state.compState].isDirty) {
       this.setNavState(this.state.compState + 1);
     } else {
@@ -157,7 +155,7 @@ export default class MultiStep extends React.Component {
           closeOnRootNodeClick={false}
           onClose={() => this.props.handleMultiStepModalclose()}
         >
-          <Header as="h1" textAlign="center">{this.props.formTitle}</Header>
+          <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
           <ol className="progtrckr">
             {this.renderSteps()}
           </ol>

@@ -15,7 +15,7 @@ const LegalIdentityQuestions = observer(({
 }) => (
   <Modal size="mini" open closeIcon onClose={() => close()}>
     <Modal.Header className="center-align signup-header">
-      <Header as="h2">We need to confirm your identity</Header>
+      <Header as="h3">We need to confirm your identity</Header>
       <Divider />
       <p>
         We were unable to match your information with the<br />

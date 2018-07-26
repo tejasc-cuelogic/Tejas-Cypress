@@ -24,7 +24,7 @@ export default class ConfirmEmailAddress extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.authStore.setProgress('confirm');
-    if (this.props.userStore.currentUser) {
+    if (this.props.refLink) {
       this.props.authStore.verifyAndUpdateEmail().then(() => {
         Helper.toast('Email has been verified and updated', 'success');
         this.props.history.push('/app/profile-settings/profile-data');
@@ -69,7 +69,7 @@ export default class ConfirmEmailAddress extends Component {
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Confirm your email address</Header>
+          <Header as="h3">Confirm your email address</Header>
           <Divider />
           <p>Please check the verification code in the email we sent to:</p>
         </Modal.Header>

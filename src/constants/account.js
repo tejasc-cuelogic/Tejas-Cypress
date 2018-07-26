@@ -382,7 +382,7 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Employer',
     error: undefined,
-    rule: 'required_if:employmentStatus,employed',
+    rule: 'required_if:employmentStatus,EMPLOYED',
     placeHolder: 'Type employer name',
   },
   currentPosition: {
@@ -390,7 +390,7 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Current Position Held',
     error: undefined,
-    rule: 'required_if:employmentStatus,employed',
+    rule: 'required_if:employmentStatus,EMPLOYED',
     placeHolder: 'E.g. CEO',
   },
 };
@@ -459,13 +459,13 @@ export const FINANCES = {
     value: '',
     label: 'Company Name',
     error: undefined,
-    rule: 'required_with:checkbox1',
+    rule: 'string',
   },
   employedOrAssoWithFINRAFirmName: {
     value: '',
     label: 'Firm Name',
     error: undefined,
-    rule: 'required_with:checkbox2',
+    rule: 'string',
   },
 };
 

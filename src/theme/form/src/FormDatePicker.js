@@ -9,12 +9,12 @@ import { FieldError } from '../../shared';
 const FormDatePicker = observer(props =>
   (
     <Form.Field>
-      {props.fielddata !== undefined ? (
+      {props.fielddata ? (
         <label>
           {props.fielddata.label}
           {props.tooltip &&
             <Popup
-              trigger={<Icon name="help circle outline" />}
+              trigger={<Icon name="help circle" />}
               content={props.tooltip}
               position="top center"
               className="center-align"
@@ -31,7 +31,7 @@ const FormDatePicker = observer(props =>
         onClick={props.changed}
         customInput={<NumberFormat format="##/##/####" />}
         placeholderText={props.placeholder}
-        onChange={props.onchange}
+        onChange={props.changed}
         disabled={props.isdisabled}
         maxDate={props.maxdate}
         selected={props.selected}

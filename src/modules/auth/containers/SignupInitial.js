@@ -9,7 +9,7 @@ const GetBtn = ({ type }) => {
     investor: { label: 'Start', to: '/auth/register-investor' },
     issuer: { label: 'Start application process', to: '/business-application' },
   };
-  return <Button as={Link} to={BtnMeta[type].to} primary size="large" className="very relaxed" content={BtnMeta[type].label} />;
+  return <Button as={Link} to={BtnMeta[type].to} primary size="large" className="relaxed" content={BtnMeta[type].label} />;
 };
 
 @inject('authStore')
@@ -22,7 +22,7 @@ class signupInitial extends Component {
     return (
       <Modal size="tiny" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">How can NextSeed Help you?</Header>
+          <Header as="h3">How can NextSeed Help you?</Header>
           <p>Do you want to invest or apply for funding?</p>
         </Modal.Header>
         <Modal.Content className="signup-content">
@@ -37,7 +37,7 @@ class signupInitial extends Component {
               >
                 <div className={`user-type ${(selectedType.value === type.value ? 'active' : '')}`}>
                   <Icon className={type.icon} size="huge" />
-                  <h3>{type.text}</h3>
+                  <h4>{type.text}</h4>
                   <p>{selectedType.value === type.value ? type.desc : ''}</p>
                 </div>
               </Grid.Column>

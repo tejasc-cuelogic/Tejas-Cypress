@@ -1,6 +1,6 @@
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
-import { mapValues, replace, sumBy, forEach, mapKeys, isArray, toArray, reduce } from 'lodash';
+import { mapValues, replace, sumBy, forEach, mapKeys, isArray, toArray, reduce, map, includes } from 'lodash';
 import CustomeValidations from './CustomeValidations';
 import Helper from '../utility';
 
@@ -135,17 +135,16 @@ class FormValidator {
   }
 
   setAddressFields = (place, form) => {
-    const { state, city, zipCode } = form.fields;
     const currentForm = form;
     const data = Helper.gAddressClean(place);
     if (currentForm.fields.street) {
-      currentForm.fields.street.value = data.residentalStreet;
+      this.onChange(currentForm, { name: 'street', value: data.residentalStreet });
     } else {
-      currentForm.fields.residentalStreet.value = data.residentalStreet;
+      this.onChange(currentForm, { name: 'residentalStreet', value: data.residentalStreet });
     }
-    state.value = data.state;
-    city.value = data.city;
-    zipCode.value = data.zipCode;
+    this.onChange(currentForm, { name: 'state', value: data.state });
+    this.onChange(currentForm, { name: 'city', value: data.city });
+    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode });
   }
 
   setIsDirty = (form, status) => {
@@ -159,6 +158,51 @@ class FormValidator {
     if (error) {
       currentForm.meta.isValid = false;
       currentForm.meta.isFieldValid = false;
+    }
+  }
+
+  validateForm = (form, isMultiForm = false, showErrors = false) => {
+    const currentForm = form;
+    let validation;
+    if (!isMultiForm) {
+      validation = new Validator(
+        mapValues(currentForm.fields, f => f.value),
+        mapValues(currentForm.fields, f => f.rule),
+      );
+    } else {
+      const formData = this.ExtractFormValues(toJS(currentForm.fields));
+      let formRules = this.ExtractFormRules(toJS(currentForm.fields));
+      formRules = {
+        ...formRules,
+        businessPlan: 'required',
+      };
+      validation = new Validator(
+        formData,
+        formRules,
+        {
+          required: 'required',
+        },
+      );
+    }
+    currentForm.meta.isValid = validation.passes();
+    if (validation.errorCount && showErrors) {
+      const { errors } = validation.errors;
+      map(errors, (error, key) => {
+        const [err] = error;
+        if (includes(key, '.')) {
+          const field = key.split('.');
+          if (field[0] === 'businessPlan') {
+            currentForm.fields[field[0]].error = err;
+          } else {
+            currentForm.fields[field[0]][field[1]][field[2]].error = err;
+          }
+        } else {
+          currentForm.fields[key].error = err;
+          if (err) {
+            currentForm.meta.isFieldValid = false;
+          }
+        }
+      });
     }
   }
 }

@@ -23,9 +23,8 @@ class Login extends Component {
           this.props.history.push('/auth/change-password');
         } else {
           this.props.authStore.reset();
-          const { pendingStep } = this.props.userDetailsStore;
           if (roles && roles.includes('investor')) {
-            this.props.history.push(`/app/${pendingStep}`);
+            this.props.history.push(`/app/${this.props.userDetailsStore.pendingStep}`);
           } else {
             this.props.history.push('/app/dashboard');
           }
@@ -50,7 +49,7 @@ class Login extends Component {
         }
       >
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Log in to NextSeed</Header>
+          <Header as="h3">Log in to NextSeed</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {errors &&

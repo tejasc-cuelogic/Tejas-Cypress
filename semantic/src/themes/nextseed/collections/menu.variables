@@ -13,7 +13,7 @@
 @background: #FFFFFF;
 @fontFamily: @pageFont;
 @itemBackground: none;
-@fontWeight: 700;
+@fontWeight:@bold;
 @borderWidth: 1px;
 @border:none;
 @boxShadow: @subtleShadow;
@@ -29,7 +29,7 @@
   box-shadow @defaultDuration @defaultEasing,
   color @defaultDuration @defaultEasing
 ;
-@itemFontWeight:700;
+@itemFontWeight:@normal;
 @itemTextColor: @textColor;
 
 /* Divider */
@@ -64,8 +64,8 @@
 
 /* Header */
 @headerBackground: '';
-@headerWeight: bold;
-@headerTextTransform: normal;
+@headerWeight:@bold;
+@headerTextTransform:@normal;
 
 /* Vertical Icon */
 @verticalIconFloat: right;
@@ -74,7 +74,7 @@
 /* Vertical Header */
 @verticalHeaderMargin: 0em 0em 0.5em;
 @verticalHeaderFontSize: @relativeMedium;
-@verticalHeaderFontWeight: bold;
+@verticalHeaderFontWeight:@bold;
 
 /* Pointing Arrow */
 @arrowSize: @relative8px;
@@ -131,12 +131,12 @@
 @dropdownMenuDistance: 0em;
 @dropdownMenuBorderRadius: @borderRadius;
 
-@dropdownItemFontSize: @relativeMedium;
+@dropdownItemFontSize: @relativeSmall;
 @dropdownItemPadding: @relativeMini @relativeLarge;
 @dropdownItemBackground: transparent;
 @dropdownItemColor: @textColor;
 @dropdownItemTextTransform: none;
-@dropdownItemFontWeight: normal;
+@dropdownItemFontWeight: @normal;
 @dropdownItemBoxShadow: none;
 @dropdownItemTransition: none;
 
@@ -169,7 +169,7 @@
 /* Active Item */
 @activeItemBackground: @transparentBlack;
 @activeItemTextColor: @selectedTextColor;
-@activeItemFontWeight:700;
+@activeItemFontWeight: @normal;
 @activeIconOpacity: 1;
 @activeItemBoxShadow: none;
 
@@ -184,12 +184,12 @@
 /* Active Dropdown */
 @dropdownActiveItemBackground: @subtleTransparentBlack;
 @dropdownActiveItemColor: @selectedTextColor;
-@dropdownActiveItemFontWeight: 500;
+@dropdownActiveItemFontWeight: @normal;
 
 /* Active Sub Menu */
 @subMenuActiveBackground: transparent;
 @subMenuActiveTextColor: @activeItemTextColor;
-@subMenuActiveFontWeight: bold;
+@subMenuActiveFontWeight: @bold;
 
 
 /*--------------
@@ -252,7 +252,7 @@
 
 @secondaryPointingActiveBorderColor: @black;
 @secondaryPointingActiveTextColor: @selectedTextColor;
-@secondaryPointingActiveFontWeight: bold;
+@secondaryPointingActiveFontWeight: @bold;
 
 @secondaryPointingActiveDropdownBorderColor: transparent;
 
@@ -285,8 +285,8 @@
 @tieredActiveItemBackground: #FCFCFC;
 @tieredActiveMenuBackground: #FCFCFC;
 
-@tieredSubMenuTextTransform: normal;
-@tieredSubMenuFontWeight: normal;
+@tieredSubMenuTextTransform: @normal;
+@tieredSubMenuFontWeight: @normal;
 
 @tieredSubMenuColor: @lightTextColor;
 
@@ -318,7 +318,7 @@
 
 @tabularHoveredTextColor: @hoveredTextColor;
 
-@tabularVerticalBackground: none;
+@tabularVerticalBackground: none @tabularBackgroundColor;
 
 @tabularFluidOffset: 1px;
 @tabularFluidWidth: ~"calc(100% + "(@tabularFluidOffset * 2)~")";
@@ -326,7 +326,7 @@
 @tabularActiveBackground: none @white;
 @tabularActiveColor: @selectedTextColor;
 @tabularActiveBoxShadow: none;
-@tabularActiveWeight: bold;
+@tabularActiveWeight: @bold;
 
 
 
@@ -346,7 +346,7 @@
 @textMenuItemSpacing: @relative7px;
 @textMenuMargin: @relativeMedium -(@textMenuItemSpacing);
 @textMenuItemColor: @mutedTextColor;
-@textMenuItemFontWeight: normal;
+@textMenuItemFontWeight: @normal;
 @textMenuItemMargin: 0em 0em;
 @textMenuItemPadding: @relative5px @textMenuItemSpacing;
 @textMenuItemTransition: opacity @defaultDuration @defaultEasing;
@@ -355,12 +355,12 @@
 @textMenuSubMenuItemMargin: 0em;
 @textMenuSubMenuItemPadding: @relative7px 0em;
 
-@textMenuActiveItemFontWeight: normal;
+@textMenuActiveItemFontWeight: @normal;
 @textMenuActiveItemColor: @selectedTextColor;
 
 @textMenuHeaderSize: @relativeSmall;
 @textMenuHeaderColor: @darkTextColor;
-@textMenuHeaderFontWeight: bold;
+@textMenuHeaderFontWeight: @bold;
 @textMenuHeaderTextTransform: uppercase;
 
 @textVerticalMenuMargin: @relativeMedium 0em;
@@ -377,7 +377,7 @@
 
 /* Inverted */
 @dimmerColor: rgba(0, 0, 0, 0.4);
-@invertedBackground:@tertiary-text;
+@invertedBackground:@neutral;
 @invertedBoxShadow:none;
 @invertedBorder:none;
 @invertedHeaderBackground: transparent;
@@ -390,23 +390,23 @@
 @invertedSubMenuColor: @invertedUnselectedTextColor;
 
 /* Inverted Hover */
-@invertedHoverBackground:@lighten-bg-color;
+@invertedHoverBackground:@neutral-offwhite;
 @invertedHoverColor:@link-color;
 
 @invertedSubMenuHoverBackground: transparent;
 @invertedSubMenuHoverColor: @invertedSelectedTextColor;
 
 /* Pressed */
-@invertedMenuPressedBackground:@lighten-bg-color;
+@invertedMenuPressedBackground:@neutral-offwhite;
 @invertedMenuPressedColor:@link-color;
 
 /* Inverted Active */
-@invertedActiveBackground: @lighten-bg-color;
+@invertedActiveBackground: @neutral-offwhite;
 @invertedActiveColor:@link-color;
 @invertedArrowActiveColor: #3D3E3F;
 
 /* Inverted Active Hover  */
-@invertedActiveHoverBackground:@lighten-bg-color;
+@invertedActiveHoverBackground:@neutral-offwhite;
 @invertedActiveHoverColor:@link-color;
 @invertedArrowActiveHoverColor: @invertedArrowActiveColor;
 
@@ -444,8 +444,8 @@
 @tiny: @12px;
 @small: @13px;
 @large: @15px;
-@huge: @16px;
-@big: @17px;
+@big: @16px;
+@huge: @17px;
 @massive: @18px;
 
 /* Sizes */
@@ -454,6 +454,6 @@
 @smallWidth: 13rem;
 @mediumWidth: 15rem;
 @largeWidth: 18rem;
-@hugeWidth: 20rem;
-@bigWidth: 22rem;
+@bigWidth: 20rem;
+@hugeWidth: 22rem;
 @massiveWidth: 25rem;

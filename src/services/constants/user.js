@@ -58,7 +58,7 @@ export const USER_IDENTITY = {
     key: 'residentalStreet',
     value: '',
     label: 'Residential Address',
-    placeHolder: 'Baker Street 221B',
+    placeHolder: 'Street Address, City, State, Zip',
     error: undefined,
     rule: 'required',
     customErrors: {
