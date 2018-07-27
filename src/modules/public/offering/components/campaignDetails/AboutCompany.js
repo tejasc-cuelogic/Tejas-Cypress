@@ -162,7 +162,7 @@ class AboutCompany extends Component {
                 </Breadcrumb>
                 <Grid doubling columns={3}>
                   <Grid.Column>
-                    <Reveal animated="fade">
+                    <Reveal animated="small fade">
                       <Reveal.Content hidden>
                         <p>Lorem Ipsum</p>
                       </Reveal.Content>

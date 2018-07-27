@@ -671,6 +671,28 @@ footer{
 		}
 	}
 }
+//Team
+.team-gallery {
+	&.ui.grid {
+		margin: 0;
+		>.column {
+			padding: 0 !important;
+		}
+	}
+	.team-overlay {
+		h4.ui.header {
+			.sub.header {
+				font-size: @13px;
+				line-height: 20px;
+				color: @neutral-middark;
+				font-weight: @normal;
+			}
+			.icon:only-child {
+				margin-right: @5px;
+			}
+		}
+	}
+}
 /* END <== PUBLIC PAGES UI STYLES */
 
 .content-wrapper{
@@ -1538,3 +1560,4 @@ svg:not(:root).recharts-surface{
 		background-color:@highlight-tertiary;
 	}
 }
+
