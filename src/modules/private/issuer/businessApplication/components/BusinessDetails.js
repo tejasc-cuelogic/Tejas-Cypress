@@ -10,10 +10,10 @@ import AppNavigation from './AppNavigation';
 @observer
 export default class BusinessDetails extends Component {
   state = {
-    showConfirmModal: false,
+    showPartialSaveModal: false,
     currentForm: '',
     currentIndex: 0,
-    showHandle: false,
+    legalNoteToggle: false,
   }
 
   componentWillMount() {
@@ -21,18 +21,18 @@ export default class BusinessDetails extends Component {
   }
 
   removeForm = (e) => {
-    this.setState({ showConfirmModal: !this.state.showConfirmModal });
+    this.setState({ showPartialSaveModal: !this.state.showPartialSaveModal });
     this.props.businessAppStore.removeForm(e, this.state.currentForm, this.state.currentIndex);
   }
 
   toggleHandel = () => {
-    this.setState({ showHandle: !this.state.toggleHandel });
+    this.setState({ legalNoteToggle: !this.state.legalNoteToggle });
   }
 
   toggleConfirm = (formName, index) => {
     this.setState({
       ...this.state,
-      showConfirmModal: !this.state.showConfirmModal,
+      showPartialSaveModal: !this.state.showPartialSaveModal,
       currentForm: formName,
       currentIndex: index,
     });
@@ -137,11 +137,11 @@ export default class BusinessDetails extends Component {
               subHeader="Please list all individuals with at least 20% ownership."
             >
               <Accordion>
-                <Accordion.Title onClick={this.toggleHandel} active={this.state.showHandle}>
+                <Accordion.Title onClick={this.toggleHandel} active={this.state.legalNoteToggle}>
                   <Icon className="ns-chevron-up" />
                   Hide legal note
                 </Accordion.Title>
-                <Accordion.Content active={this.state.showHandle}>
+                <Accordion.Content active={this.state.legalNoteToggle}>
                   <p>
                     You hereby authorize NextSeed Management LLC, its assignee, assigns or
                     potential assigns to review your personal credit and business profile
@@ -240,7 +240,7 @@ export default class BusinessDetails extends Component {
           <Confirm
             header="Confirm"
             content={`Are you sure you want to remove this ${this.state.currentForm}?`}
-            open={this.state.showConfirmModal}
+            open={this.state.showPartialSaveModal}
             onCancel={this.toggleConfirm}
             onConfirm={
               e => this.removeForm(e)}

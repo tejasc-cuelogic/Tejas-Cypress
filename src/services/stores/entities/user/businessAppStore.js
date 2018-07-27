@@ -41,7 +41,7 @@ export class BusinessAppStore {
   @observable isPartialData = null;
   @observable applicationId = null;
   @observable applicationStep = null;
-  @observable showConfirmModal = false;
+  // @observable showConfirmModal = false;
   @observable businessApplicationsList = null;
   @observable currentApplicationId = null;
   @observable businessApplicationsDataById = null;

@@ -17,7 +17,6 @@ export default class Documentation extends Component {
       businessDocChange,
       businessAppUploadFiles,
       businessAppRemoveFiles,
-      canSubmitApp,
       getBusinessTypeCondtion,
       getPersonalGuaranteeCondition,
     } = this.props.businessAppStore;
@@ -143,7 +142,7 @@ export default class Documentation extends Component {
                 </div>
               }
             </FormElementWrap>
-            <AppNavigation canSubmitApp={canSubmitApp} />
+            <AppNavigation />
           </Form>
         </Grid.Column>
       </Grid>
