@@ -245,7 +245,7 @@ class AboutCompany extends Component {
           <Header as="h3">
           Meet the Team
           </Header>
-          <Modal.Content scrolling>
+          <Modal.Content scrolling className="team-details-container">
             <Grid doubling columns={2} className="compact" verticalAlign="middle">
               <Grid.Column>
                 <Image src={campainAboutImg} />

@@ -193,25 +193,28 @@ class team extends Component {
             onClose={this.handleClose}
             closeIcon
             size="large"
+            className="team-member-modal"
           >
-            <Modal.Content scrolling>
+            <Modal.Content className="team-details-container">
               <Item.Group>
                 <Item>
                   <Image src={campainAboutImg} />
                   <Item.Content verticalAlign="middle">
-                    <Header as="h3">
-                      Abe Chu
-                      <Header.Subheader>co-founder & ceo</Header.Subheader>
-                    </Header>
-                    <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                    nisi ut aliquip ex ea commodo consequat.
-                    </p>
-                    <div>
-                      <Icon color="green" name="twitter" />
-                      <Icon color="green" name="linkedin in" />
+                    <div className="scrollable-content">
+                      <Header as="h4">
+                        Abe Chu
+                        <Header.Subheader>co-founder & ceo</Header.Subheader>
+                      </Header>
+                      <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                      sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                      nisi ut aliquip ex ea commodo consequat.
+                      </p>
+                      <div>
+                        <Icon color="green" name="twitter" />
+                        <Icon color="green" name="linkedin in" />
+                      </div>
                     </div>
                   </Item.Content>
                 </Item>
