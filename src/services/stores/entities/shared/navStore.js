@@ -65,6 +65,7 @@ export class NavStore {
   @action
   setNavStatus(calculations, forced) {
     const { percentagePassed, topVisible } = calculations;
+    console.log(calculations);
     this.navStatus = forced ? forced : ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
   }
 }
