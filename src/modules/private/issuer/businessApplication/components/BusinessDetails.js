@@ -83,7 +83,7 @@ export default class BusinessDetails extends Component {
               BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
                 <Grid>
                   <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                    <Header as="h3">
+                    <Header as="h5">
                       Existing Debt {index + 1}
                       {BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
                         <Button icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
@@ -166,7 +166,7 @@ export default class BusinessDetails extends Component {
               BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => (
                 <Grid>
                   <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                    <Header as="h3">Owner {index + 1}
+                    <Header as="h5">Owner {index + 1}
                       {BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
                         <Button icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                           <Icon color="red" size="small" className="ns-trash" />

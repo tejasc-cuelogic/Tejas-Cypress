@@ -40,7 +40,7 @@ export default class PreQualification extends Component {
               subHeader={
                 <Aux>
                   Welcome to NextSeed! Run through this quick form to get pre-qualified.
-                  <Link target="_blank" to="/about/faq" className="link"> Need help or have questions?</Link>
+                  <Link target="_blank" to="/about/faq" className="link">Need help or have questions?</Link>
                 </Aux>
               }
             />
@@ -212,7 +212,7 @@ export default class PreQualification extends Component {
               <Grid>
                 {getBusinessTypeCondtion &&
                   <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
-                    <Header as="h2">
+                    <Header as="h3">
                       Previous year
                       <Header.Subheader>
                         For your business, give us a quick snapshot
@@ -237,7 +237,7 @@ export default class PreQualification extends Component {
                   </Grid.Column>
                 }
                 <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
-                  <Header as="h2">
+                  <Header as="h3">
                     Next year projections
                     <Header.Subheader>
                       For your business, give us a quick snapshot
