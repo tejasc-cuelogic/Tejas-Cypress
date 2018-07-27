@@ -6,6 +6,7 @@ import { authActions, validationActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
+import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 
 @inject('authStore', 'uiStore', 'userStore', 'profileStore')
 @withRouter
@@ -34,7 +35,8 @@ export default class ConfirmEmailAddress extends Component {
           this.props.authStore.reset('CONFIRM');
           const { roles } = this.props.userStore.currentUser;
           const redirectUrl = !roles ? '/auth/login' :
-            (roles.includes('investor') ? '/app/summary' : '/app/business-application/new/pre-qualification');
+            SIGNUP_REDIRECT_ROLEWISE.find(user =>
+              roles.includes(user.role)).path;
           this.props.history.replace(redirectUrl);
         })
         .catch(() => { });
