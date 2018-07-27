@@ -96,7 +96,6 @@ const InvestmentTimeline = (props) => {
                   position="bottom center"
                   className="reward-info"
                   wide
-                  on="click"
                 >
                   <Popup.Content>
                     <Header as="h4" className="mb-half">
