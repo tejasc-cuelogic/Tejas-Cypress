@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -63,10 +64,10 @@ export default class BusinessDetails extends Component {
             />
             <FormElementWrap
               header={
-                <span>
+                <Aux>
                   Business Plan
                   <Link to="/" className="link"><small>Learn More</small></Link>
-                </span>
+                </Aux>
               }
               subHeader="Upload your business plan"
             >
@@ -88,7 +89,7 @@ export default class BusinessDetails extends Component {
               BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
                 <Grid>
                   <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                    <Header as="h3">
+                    <Header as="h5">
                       Existing Debt {index + 1}
                       {BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
                         <Button icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
@@ -171,7 +172,7 @@ export default class BusinessDetails extends Component {
               BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => (
                 <Grid>
                   <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                    <Header as="h3">Owner {index + 1}
+                    <Header as="h5">Owner {index + 1}
                       {BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
                         <Button icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                           <Icon color="red" size="small" className="ns-trash" />

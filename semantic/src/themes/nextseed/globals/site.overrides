@@ -20,10 +20,10 @@ section{
 //	Heading font sizes
 h1, h1.ui.header{
 	font-weight:@normal;
-	line-height:62px;
+	line-height:52px;
 }
 h2, h2.ui.header{
-	line-height:44px;
+	line-height:34px;
 }
 h4, h4.ui.header{
 	line-height:24px;
