@@ -11,7 +11,7 @@ export default class General extends Component {
     const { GEN_INFO_FRM,
       genInfoChange,
       setAddressFields,
-      MaskedInfoChange
+      MaskedInfoChange,
     } = this.props.entityAccountStore;
     return (
       <div>
