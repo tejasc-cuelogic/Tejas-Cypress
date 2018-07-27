@@ -38,7 +38,7 @@ export default class FundingOption extends Component {
               expansion projects or a new venture, our financial products
               put you in control. Grow your business on your own terms.
             </p>
-            <Menu tabular>
+            <Menu tabular fluid widths={3}>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
             </Menu>
             <Segment attached="bottom" padded>

@@ -79,21 +79,17 @@
         flex-grow: 1;
         display: flex;
         .item {
-            // font-family: @fontName;
-            // font-size: 12px;
-            // line-height: 14px;
-            // text-align: center;
             font-weight:@fontMedium;
             text-transform:uppercase;
             border-bottom:2px solid transparent !important;
             border-radius:0 !important;
             padding:@10px 0;
             margin:0 @18px;
-            &:hover, &:active, &:focus, &:visited, &.active {
+            &:hover, &:active, &:focus, &.active {
                 border-color:@primary-one !important;
                 background-color:transparent !important;
             }
-            &:first-child {
+            .header{
                 border-color:transparent !important;
             }
         }
@@ -103,12 +99,10 @@
         box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
         position: fixed;
         top: 0;
-        width: 100%;
         left: 0;
         right: 0;
         margin: 0;
         z-index: 1001;
-        -webkit-font-smoothing: antialiased;
         transition: all .3s ease;
         .item {
             img.ui.image.logo{
@@ -157,8 +151,8 @@ footer{
     }
 }
 .filter-menu {
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border-top: 1px solid @neutral-middark;
+    border-bottom: 1px solid @neutral-middark;
     height: @60px;
     position: relative;
     .ui.text.menu {
@@ -183,13 +177,13 @@ footer{
         .ui.vertical.menu {
 			background-color: transparent;
 			.item {
-				color: #fff;
+				color: @white;
 				border-left: @4px solid transparent;
 				border-radius: 0;
 				padding-left: @27px;
 				font-weight: @bold;
 				&:hover, &.active {
-					background-color: #3A4048;
+					background-color: @neutral;
 					border-color: @primary-one;
 					color: @primary-one;
 				}
@@ -202,7 +196,7 @@ footer{
 					margin-top: -5px;
 				}
 				&.watch-deal-menu {
-					color: #616972;
+					color: @neutral-middark;
 				}
 			}
 			.ui.divider {
@@ -223,7 +217,7 @@ footer{
                 font-weight: bold;
                 line-height: @24px;
                 font-size: @13px;
-                color: #616972;
+                color: @neutral-middark;
             }
             &:hover {
                 background-color: transparent;

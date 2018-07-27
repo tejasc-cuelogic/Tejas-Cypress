@@ -42,14 +42,14 @@ const HowItWorks = () => (
         <Header textAlign="center" as="h2">
         Choose how you want to invest.
         </Header>
-        <p className="center-align">Understand and choose the right opportunities with the right payment terms for you.</p>
+        <p className="center-align mb-30">Understand and choose the right opportunities with the right payment terms for you.</p>
         <Grid doubling columns={2} relaxed="very" className="flex-column">
           <Grid.Column>
             <div className="flex-content">
               <Image src={InvestorImg} />
               <Header as="h3">Term Notes</Header>
-              <Item.Group relaxed="very">
-                <Item>
+              <Item.Group>
+                <Item relaxed="very">
                   <Item.Content>
                     <Item.Header as="h5">
                       What are the benefits?
@@ -72,7 +72,7 @@ const HowItWorks = () => (
                 </Item>
               </Item.Group>
             </div>
-            <List horizontal className="learn-more-list">
+            <List horizontal className="learn-more-list mt-30">
               <List.Item>
                 <List.Header>Learn more</List.Header>
                 <List.Icon className="ns-arrow-right" color="green" />
@@ -84,7 +84,7 @@ const HowItWorks = () => (
             <div className="flex-content">
               <Image src={InvestorImg1} />
               <Header as="h3">Revenue Sharing Notes</Header>
-              <Item.Group relaxed="very">
+              <Item.Group>
                 <Item relaxed="very">
                   <Item.Content>
                     <Item.Header as="h5">
@@ -109,7 +109,7 @@ const HowItWorks = () => (
                 </Item>
               </Item.Group>
             </div>
-            <List horizontal className="learn-more-list">
+            <List horizontal className="learn-more-list mt-30">
               <List.Item>
                 <List.Header>Learn more</List.Header>
                 <List.Icon className="ns-arrow-right" color="green" />
@@ -153,14 +153,10 @@ const HowItWorks = () => (
     </section>
     <Divider fitted as={Container} />
     <section>
-      <Container>
-        <div className="center-align investor-bottom-buttons">
-          <Header textAlign="center" as="h2" className="mb-30">
-          Register for an account with just your email.
-          </Header>
-          <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
-          <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
-        </div>
+      <Container className="center-align">
+        <Header as="h2" className="mb-30">Register for an account with just your email.</Header>
+        <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+        <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
       </Container>
     </section>
   </Aux>
