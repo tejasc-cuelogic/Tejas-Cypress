@@ -57,10 +57,11 @@ export default class ConfirmVerificationCode extends Component {
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Please confirm with the code</Header>
+          <Header as="h3">Please confirm with the code</Header>
           <Divider />
-          <p>To proceed with updating beneficiary info please check the verification
-            code in the message we sent to:
+          <p>
+            To proceed with updating beneficiary info please
+            check the verification code in the message we sent to:
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">

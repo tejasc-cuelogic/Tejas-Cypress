@@ -13,7 +13,7 @@
             color:@tertiary-text;
             &:after{
                 font-size:@16px;
-                color:@theme-primary;
+                color:@primary-one;
             }
         }
     }
@@ -22,10 +22,10 @@
             background:transparent;
         }
         tbody{
-            background:@light-bg-color;
+            background:@neutral-offwhite;
             tr{
                 &:nth-child(2n){
-                    background:@inverse-text;
+                    background:@white;
                 }
                 td{
                     border-top:none;
@@ -35,13 +35,13 @@
     }
     &.user-list{
         tr.locked{
-            color:@inverse-secondary-text;
+            color:@neutral-offdark;
             .user-image:after{
                 content:"\F023";
                 font-family:"Icons";
                 font-size:20px;
                 color:@highlight-primary;
-                text-shadow:-2px 2px 0px @inverse-text, 2px 2px 0px @inverse-text, 2px -2px 0px @inverse-text, -2px -2px 0px @inverse-text, 0px -2px 0px @inverse-text;
+                text-shadow:-2px 2px 0px @white, 2px 2px 0px @white, 2px -2px 0px @white, -2px -2px 0px @white, 0px -2px 0px @white;
                 position:absolute;
                 bottom:-4px;
                 right:-4px;
@@ -76,7 +76,7 @@
     }
     a:not(.button){
         font-family:@pageFont;
-        color:@primary-text;
+        color:@neutral;
         text-decoration:none;
         &:hover{
             color:inherit;
@@ -94,7 +94,7 @@
     }
     &.statment-tables{
         td>i.icon{
-            color:@quaternary-text;
+            color:@neutral-middark;
             margin-left:@6px;
             vertical-align:middle;
         }
@@ -102,10 +102,10 @@
     &.investment-details{
         thead th{
             font-size:@12px;
-            color:@quaternary-text;
+            color:@neutral-middark;
         }
         tbody{
-            font-weight:700;
+            font-weight:@fontMedium;
             i.offering-icon{
                 color:@border-color;
             }
@@ -118,7 +118,59 @@
         tfoot th{
             background-color:@white;
             font-weight:700;
-            color:@quaternary-text;
+            color:@neutral-middark;
         }
     }
+}
+
+.compare-table {
+	&.ui.table {
+		border: 0;
+		thead th {
+			border-bottom: 0;
+			padding: 30px 0.7em;
+			text-align: center;
+			background: #263E64;
+			color: #fff;
+			border-left: 4px solid #fff;
+			&:nth-child(2) {
+				background: #20C86D !important;
+			}
+			&:last-child {
+				border-radius: 0;
+			}
+		}
+	}
+	&.ui.definition.table tr td:first-child:not(.ignored) {
+		background: transparent;
+	}
+	&.ui.striped.table tbody tr:nth-child(n) {
+		background: #F7F8FC;
+	}
+	&.ui.striped.table tbody tr:nth-child(2n) {
+		background-color: rgba(62, 213, 149, 0.0001) !important;
+	}
+	&.ui.striped.table tbody tr:nth-child(n) td:nth-child(2) {
+		background: #58D692;
+		color: #fff;
+		font-weight: @bold;
+		/* text-align: center; */
+	}
+	&.ui.striped.table tbody tr:nth-child(2n) td:nth-child(2) {
+		background-color: #20C86D !important;
+	}
+	&.ui.celled.table tr td {
+		border-left: 4px solid #fff;
+		border-top: 0;
+		text-align: center;
+		font-size: 13px;
+		color: #31333D;
+		padding: 15px 20px;
+		&:nth-child(2) {
+			border-left: 0;
+		}
+		&:first-child {
+			text-align: left
+		}
+	}
 }

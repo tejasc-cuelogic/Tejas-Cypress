@@ -27,13 +27,11 @@ const RevenueSharing = () => (
         to start making payments immediately.
         </Segment>
       </div>
-      <List horizontal>
+      <List horizontal relaxed className="learn-more-list">
         <List.Item>
           <List.Header>Learn more</List.Header>
-          <List.Icon name="arrow right" color="green" />
-          <List.Content as="a">
-            Why fundraise on NextSeed?
-          </List.Content>
+          <List.Icon className="ns-arrow-right" color="green" />
+          <List.Content as="a">Why fundraise on NextSeed?</List.Content>
         </List.Item>
       </List>
     </Grid.Column>

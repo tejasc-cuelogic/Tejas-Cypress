@@ -34,7 +34,7 @@ export default class CreateNew extends Component {
         <Card.Group stackable itemsPerRow={3}>
           <Card fluid>
             <Card.Content>
-              <Header as="h3">Personal Profile</Header>
+              <Header as="h4">Personal Profile</Header>
               <Form onSubmit={this.submit}>
                 <Form.Group widths="equal">
                   {

@@ -18,7 +18,7 @@ export default class Security extends Component {
       <div>
         <Route exact path={`${this.props.match.url}/change-password`} component={ChangePassword} />
         <Route exact path={`${this.props.match.url}/mfa`} component={ManageMultiFactorAuth} />
-        <Header as="h3">Security</Header>
+        <Header as="h4">Security</Header>
         <p className="intro-text">
           Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris<br />
           nec malesuada fames ac turpisPellentesque facilisis. Nulla imperdiet sit amet magna.
@@ -36,7 +36,7 @@ export default class Security extends Component {
               >
                 <Card fluid>
                   <Card.Content>
-                    <Header as="h3">{section.title}</Header>
+                    <Header as="h4">{section.title}</Header>
                     <p>{section.action[0] === 'mfa' ? (isMfaAvailalbe ? section.description : section.descriptionNotAvailable) : section.description}</p>
                     <Divider hidden />
                     <Card.Description>

@@ -17,7 +17,7 @@ const SubscribeForNewsletter = () => (
             name="email"
             width={4}
           />
-          <Form.Button primary content="Submit" compact width={2} />
+          <Form.Button primary fluid content="Submit" compact width={2} />
         </Form.Group>
       </Form>
     </Container>

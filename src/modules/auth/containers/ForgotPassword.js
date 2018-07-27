@@ -27,7 +27,7 @@ export default class ForgotPassword extends Component {
       <div>
         <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
-            <Header as="h2">Need a link to reset your password?</Header>
+            <Header as="h3">Need a link to reset your password?</Header>
           </Modal.Header>
           <Modal.Content className="signup-content">
             <Form onSubmit={this.onSubmit}>

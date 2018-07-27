@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 
 const Compare = () => (
   <Aux>
-    <section className="mt-74 compare-section">
+    <section className="compare-section">
       <Container>
         <Header as="h2" textAlign="center" className="mb-30">See how we stack up.</Header>
         <Table fixed celled definition striped className="mb-50 compare-table">
@@ -89,20 +89,16 @@ const Compare = () => (
             </Table.Row>
           </Table.Body>
         </Table>
-        <List horizontal className="mb-50">
+        <List horizontal relaxed className="learn-more-list mb-50">
           <List.Item>
             <List.Header>Learn more</List.Header>
-            <List.Icon name="arrow right" color="green" />
-            <List.Content as="a">
-            Is my business a good fit for NextSeed?
-            </List.Content>
+            <List.Icon className="ns-arrow-right" color="green" />
+            <List.Content as="a">Is my business a good fit for NextSeed?</List.Content>
           </List.Item>
           <List.Item>
             <List.Header>Learn more</List.Header>
-            <List.Icon name="arrow right" color="green" />
-            <List.Content as="a">
-            Does my business qualify for NextSeed?
-            </List.Content>
+            <List.Icon className="ns-arrow-right" color="green" />
+            <List.Content as="a">Does my business qualify for NextSeed?</List.Content>
           </List.Item>
         </List>
         <p className="note">

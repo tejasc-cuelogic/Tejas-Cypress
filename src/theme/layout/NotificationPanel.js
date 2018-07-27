@@ -41,7 +41,7 @@ class notificationPanel extends Component {
     const { layoutState } = this.props.uiStore;
     return (
       <div className={`notification-panel ${(layoutState.notificationPanel) ? 'slide-in' : ''}`}>
-        <Header as="h3" inverted>
+        <Header as="h4" inverted>
           Notifications center
           <Header.Subheader as={Button} className="link-button">
             <Icon onClick={() => this.props.uiStore.updateLayoutState('notificationPanel')} className="ns-close-light" />
@@ -62,7 +62,7 @@ class notificationPanel extends Component {
                       <b>{notification.module}</b>
                     </Message.Header>
                     {notification.money &&
-                      <Header as="h2">${notification.money}</Header>
+                      <Header as="h3">${notification.money}</Header>
                     }
                     <Link to="/dashboard" className="link">See Details</Link>
                   </Message.Content>

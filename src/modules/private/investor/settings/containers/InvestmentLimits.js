@@ -19,14 +19,14 @@ export default class InvestmentLimits extends Component {
         <Grid columns={1} stackable>
           <FinancialInfo />
         </Grid>
-        <Header as="h3">Accreditation</Header>
+        <Header as="h4">Accreditation</Header>
         <p className="intro-text">Aliquam erat ac ipsum. Integer aliquam purus. Quisque lorem tortor fringilla sed, vestibulum ideoso</p>
         <Grid columns={1} stackable>
           <Grid.Row>
             <Grid.Column widescreen={6} largeScreen={8} computer={13} tablet={16} mobile={16}>
               <Card fluid>
                 <Card.Content>
-                  <Header as="h3">Are you accredited investor?</Header>
+                  <Header as="h4">Are you accredited investor?</Header>
                   <p>Verify your accreditation now</p>
                   <Divider hidden />
                   <Card.Description>

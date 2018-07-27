@@ -81,26 +81,22 @@ const WhyNextseed = () => (
             </Item.Group>
           </Grid.Column>
           <Grid.Column width={6}>
-            <List horizontal className="mb-50 why-nextseed-learnmore">
+            <List relaxed className="mb-50 learn-more-list">
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                <List.Icon name="arrow right" color="green" />
-                <List.Content as="a">
-                Why invest on NextSeed?
-                </List.Content>
+                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Content as="a">Why invest on NextSeed?</List.Content>
               </List.Item>
               <List.Item>
-                <List.Icon name="arrow right" color="green" />
-                <List.Content as="a">
-                What type of NextSeed account is best for me?
-                </List.Content>
+                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Content as="a">What type of NextSeed account is best for me?</List.Content>
               </List.Item>
             </List>
           </Grid.Column>
         </Grid>
         <div className="center-align mt-50">
-          <Button as={Link} to="/auth/register" secondary compact>Sign Up Free</Button>
-          <Button as={Link} to="/invest/how-it-works" primary compact>See How it Works</Button>
+          <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+          <Button as={Link} to="/invest/how-it-works" primary>See How it Works</Button>
         </div>
       </Container>
     </section>

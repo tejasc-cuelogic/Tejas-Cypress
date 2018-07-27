@@ -68,7 +68,7 @@ export default class ProfileData extends Component {
         />
         <Grid.Column widescreen={8} largeScreen={10} tablet={16} mobile={16}>
           <Card fluid className="form-card">
-            <Header as="h3">Personal Profile</Header>
+            <Header as="h5">Personal Profile</Header>
             <Form onSubmit={this.handleUpdateProfileInfo}>
               <Form.Group widths="equal">
                 {['firstName', 'lastName'].map(field => (
@@ -102,7 +102,7 @@ export default class ProfileData extends Component {
                 changed={updateProfileInfoChange}
                 readOnly
               />
-              <Header as="h4">Mailing Address</Header>
+              <Header as="h5">Mailing Address</Header>
               <AutoComplete
                 name="street"
                 fielddata={updateProfileInfo.fields.street}
@@ -134,7 +134,7 @@ export default class ProfileData extends Component {
         <Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
           <Card.Group>
             <Card fluid className="form-card">
-              <h3>Profile Photo</h3>
+              <Header as="h5">Profile Photo</Header>
               <div>
                 <UserAvatar UserInfo={userAvatar} />
                 <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>

@@ -13,7 +13,7 @@ const Security = () => (
       </Container>
     </section>
     <div className="center-align mb-50 investor-bottom-buttons">
-      <Button as={Link} to="/invest/track" primary compact>See Track</Button>
+      <Button as={Link} to="/invest/track" primary>See Track</Button>
     </div>
   </Aux>
 );

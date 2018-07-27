@@ -4,25 +4,22 @@
 .ui.popup{
     .content{
         font-size:13px;
-        color:@tertiary-text;
+        color:@white;
     }
 }
 .ui.popup.reward-info{
     .content{
         padding:@7px;
     }
-    h3.ui.header{
-        color:@link-color;
-    }
-    h5.ui.header{
-        color:@fullBlack;
+    .ui.header{
+        color:@white;
         margin-bottom:@14px;
     }
     .ui.bulleted.list{
         font-size:@14px;
-        color:@fullBlack;
+        color:@white;
         .item:before{
-            color:@link-color;
+            color:@white;
         }
     }
 }

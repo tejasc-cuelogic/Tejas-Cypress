@@ -60,8 +60,8 @@ export default class FundingOption extends Component {
               </Switch>
             </Segment>
             <div className="center-align">
-              <Button secondary compact>Apply Now</Button>
-              <Button as={Link} to="/business/process" primary compact>See Process</Button>
+              <Button secondary>Apply Now</Button>
+              <Button as={Link} to="/business/process" primary>See Process</Button>
             </div>
           </section>
         </Container>

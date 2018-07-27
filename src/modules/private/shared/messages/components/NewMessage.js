@@ -10,7 +10,7 @@ export default class NewMessage extends Component {
     return (
       <div className="message-wrap">
         <div className="message-head">
-          <Header as="h3">New Message</Header>
+          <Header as="h4">New Message</Header>
         </div>
         <div className="message-body">
           <Form>
@@ -21,7 +21,7 @@ export default class NewMessage extends Component {
             </Form.Field>
           </Form>
           <div className="new-msg-intro">
-            <Header as="h3">
+            <Header as="h4">
               Need to contact with our support?
               <Header.Subheader>Let us know how we can help.</Header.Subheader>
             </Header>

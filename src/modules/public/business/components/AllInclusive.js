@@ -79,24 +79,20 @@ const AllInclusive = () => (
                 </Item.Content>
               </Item>
             </Item.Group>
-            <List horizontal className="mb-50">
+            <List horizontal relaxed className="learn-more-list mb-50">
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                <List.Icon name="arrow right" color="green" />
-                <List.Content as="a">
-                Small businesses and NextSeed
-                </List.Content>
+                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Content as="a">Small businesses and NextSeed</List.Content>
               </List.Item>
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                <List.Icon name="arrow right" color="green" />
-                <List.Content as="a">
-                Commercial real estate and NextSeed
-                </List.Content>
+                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Content as="a">Commercial real estate and NextSeed</List.Content>
               </List.Item>
             </List>
             <div className="center-align">
-              <Button as={Link} to="/business/compare" primary compact>See How NextSeed Compares</Button>
+              <Button as={Link} to="/business/compare" primary>See How NextSeed Compares</Button>
             </div>
           </Grid.Column>
         </Grid.Row>
