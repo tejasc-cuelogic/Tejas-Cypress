@@ -15,7 +15,7 @@ export default class InvestorProfile extends Component {
           Please provide the following information so that we can determine which investments
           we are allowed to show you
         </p>
-        <Form error>
+        <Form>
           <FormRadioGroup
             fielddata={INVESTOR_PROFILE_FORM.fields.investorProfileType}
             name="investorProfileType"

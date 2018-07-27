@@ -36,8 +36,8 @@ export class UiStore {
   @observable isEnterPressed = false;
 
   @action
-  setIsEnterPressed = (key) => {
-    if (key === 'Enter') {
+  setIsEnterPressed = (charCode) => {
+    if (charCode === 13) {
       this.isEnterPressed = true;
     }
   }

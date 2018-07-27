@@ -36,9 +36,9 @@ class EntityAccountStore {
   }
 
   @action
-  finInfoChange = (values, field) => {
-    this.FIN_INFO_FRM = FormValidator.onChange(
-      this.FIN_INFO_FRM,
+  MaskedInfoChange = (values, field) => {
+    this.GEN_INFO_FRM = FormValidator.onChange(
+      this.GEN_INFO_FRM,
       { name: field, value: values.floatValue },
     );
   }

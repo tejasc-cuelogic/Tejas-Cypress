@@ -147,7 +147,7 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/no-static-element-interactions */
       <div onKeyDown={this.handleKeyDown} >
         <Modal
-          onKeyPress={event => this.props.setIsEnterPressed(event.key)}
+          onKeyPress={event => this.props.setIsEnterPressed(event.charCode)}
           basic
           open
           closeIcon
