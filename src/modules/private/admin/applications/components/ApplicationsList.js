@@ -66,7 +66,10 @@ export default class ApplicationsList extends Component {
               <Grid.Column width={6} textAlign="right">
                 {/* <Pagination defaultActivePage={1} totalPages={20} /> */}
                 <Menu pagination text>
-                  <Menu.Item as={Link} to="/">
+                  <Menu.Item icon as={Link} to="/">
+                    <Icon className="ns-arrow-double-left" color="green" />
+                  </Menu.Item>
+                  <Menu.Item icon as={Link} to="/">
                     <Icon className="ns-chevron-left" color="green" />
                   </Menu.Item>
                   <Menu.Item>
@@ -74,8 +77,11 @@ export default class ApplicationsList extends Component {
                   </Menu.Item>
                   <Menu.Item>of</Menu.Item>
                   <Menu.Item>20</Menu.Item>
-                  <Menu.Item as={Link} to="/">
+                  <Menu.Item icon as={Link} to="/">
                     <Icon className="ns-chevron-right" color="green" />
+                  </Menu.Item>
+                  <Menu.Item icon as={Link} to="/">
+                    <Icon className="ns-arrow-double-right" color="green" />
                   </Menu.Item>
                 </Menu>
               </Grid.Column>
