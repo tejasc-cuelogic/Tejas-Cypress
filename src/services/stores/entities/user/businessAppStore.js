@@ -639,6 +639,7 @@ export class BusinessAppStore {
           resolve();
         })
         .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           reject(error);
         })
@@ -664,6 +665,7 @@ export class BusinessAppStore {
           resolve(result);
         })
         .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           reject(error);
         })
@@ -738,6 +740,7 @@ export class BusinessAppStore {
           resolve(result);
         })
         .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           reject(error);
         })
@@ -787,12 +790,14 @@ export class BusinessAppStore {
             this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
             this.setFormFileArray(formName, fieldName, 'error', undefined, index);
           }).catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
           }).finally(() => {
             this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
             this.setFieldvalue('isFileUploading', false);
           });
         }).catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
         });
       });
