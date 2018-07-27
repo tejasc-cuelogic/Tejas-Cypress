@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Form, Popup, Icon, List } from 'semantic-ui-react';
+import { Grid, Form, Popup, Icon, List, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormRadioGroup, DropZone } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
@@ -48,7 +48,7 @@ export default class Documentation extends Component {
                   Also provide the lease for your location. If only an LOIwith the landlord
                   is currently available, please upload the LOI for review purposes.
                   <Popup
-                    trigger={<Icon name="help circle outline" />}
+                    trigger={<Icon name="help circle" />}
                     content="If your campaign is successfully funded, an executed lease will be required at closing in order for you to receive funds."
                     position="top center"
                     className="center-align"
@@ -90,6 +90,7 @@ export default class Documentation extends Component {
                   <b>For existing entities</b>, please submit tax returns for the entity.
                 </List.Item>
               </List>
+              <Divider hidden />
               <Grid stackable columns="equal">
                 {
                   taxFileList.map(field => (

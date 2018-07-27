@@ -65,7 +65,7 @@ export default class AppNavigation extends Component {
             </Aux>
           ) :
             <Aux>
-              <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : 'Save'} />
+              <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading} secondary className="very relaxed" content={isFileUploading ? 'File operation in process' : 'Save'} />
               <Button loading={inProgress} onClick={this.submit} disabled={!this.props.canSubmitApp} primary className="very relaxed" content="Submit" />
             </Aux>
           }

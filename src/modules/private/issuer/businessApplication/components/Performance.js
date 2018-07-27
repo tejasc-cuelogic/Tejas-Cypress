@@ -64,7 +64,7 @@ export default class Performance extends Component {
               <Grid>
                 {getBusinessTypeCondtion &&
                   <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                    <Header as="h3" content="Prior Year" />
+                    <Header as="h5" content="Prior Year" />
                     <div className="field-wrap">
                       {
                         ['pyGrossSales', 'pyOperatingExpenses', 'pyNetIncome', 'pyCogs'].map(field => (
@@ -82,7 +82,7 @@ export default class Performance extends Component {
                   </Grid.Column>
                 }
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <Header as="h3" content="Future Year" />
+                  <Header as="h5" content="Future Year" />
                   <div className="field-wrap">
                     {
                       ['nyGrossSales', 'nyOperatingExpenses', 'nyNetIncome', 'nyCogs'].map(field => (
