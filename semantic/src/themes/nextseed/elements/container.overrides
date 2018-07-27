@@ -4,7 +4,7 @@
 section{
     &.banner {
         height:710px;
-        padding-top:58px;
+        padding-top:118px;
         margin-top:-58px;
         >.ui.container{
             display:table;

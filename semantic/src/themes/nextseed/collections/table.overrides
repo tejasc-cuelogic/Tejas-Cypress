@@ -132,7 +132,11 @@
 			text-align: center;
 			background: #263E64;
 			color: #fff;
-			border-left: 4px solid #fff;
+            border-left: 4px solid #fff;
+            font-weight: @bold;
+            &:hover {
+                background: #263E64 !important;
+            }
 			&:nth-child(2) {
 				background: #20C86D !important;
 			}
