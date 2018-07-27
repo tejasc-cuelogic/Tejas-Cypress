@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
-// import { Button } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
@@ -35,7 +34,7 @@ export default class BusinessApplication extends Component {
       setFieldvalue('isFetchedData', match.params.applicationId);
       fetchApplicationDataById(match.params.applicationId).then(() => {
         if (this.checkIncludes(['pre-qualification', 'business-details', 'performance', 'documentation'], pathname)) {
-          this.props.history.replace(`${match.url}/${this.props.businessAppStore.stepToRender}`);
+          this.props.history.replace(`${match.url}/${this.props.businessAppStore.stepToRender.path}`);
         }
       });
     } else if (match.params.applicationId === 'new') {
@@ -81,13 +80,14 @@ export default class BusinessApplication extends Component {
     const {
       canSubmitApp, appStepsStatus, isFileUploading, BUSINESS_APP_FRM,
     } = this.props.businessAppStore;
-    const showSubNav = this.calculateShowSubNav(['failed', 'success', 'lendio'], pathname, appStepsStatus[0]);
+    const showSubNav = this.calculateShowSubNav(['failed', 'success', 'lendio'], pathname, appStepsStatus[0].status);
     const preQualPage = pathname.includes('pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
     const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhite';
     return (
       <PrivateLayout
         subNav={!showSubNav}
+        appStepsStatus={appStepsStatus}
         {...this.props}
         P0={
           <Logo

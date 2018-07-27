@@ -9,7 +9,7 @@ const iMap = { to: 'key', title: 'text' };
 const NavItems = ({ navItems, match, stepsStatus }) => navItems.map((item, key) => (
   <Menu.Item key={item.to} as={NavLink} to={`${match.url}/${item.to}`}>
     {item.showIcon &&
-      <Icon color={stepsStatus[key] === 'COMPLETE' ? 'green' : ''} name={stepsStatus[key] === 'COMPLETE' ? item.icon : 'circle'} />
+      <Icon color={stepsStatus[key].status === 'COMPLETE' ? 'green' : ''} name={stepsStatus[key].status === 'COMPLETE' ? item.icon : 'circle'} />
     }
     {item.title}
   </Menu.Item>

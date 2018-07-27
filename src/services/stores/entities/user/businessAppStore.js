@@ -41,15 +41,13 @@ export class BusinessAppStore {
   @observable isPartialData = null;
   @observable applicationId = null;
   @observable applicationStep = null;
-  // @observable showConfirmModal = false;
   @observable businessApplicationsList = null;
   @observable currentApplicationId = null;
   @observable businessApplicationsDataById = null;
   @observable isFetchedData = null;
   @observable removeFileIdsList = [];
-  @observable appStepsStatus = ['IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS'];
+  @observable appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
   @observable isFileUploading = false;
-  @observable stepToRender = 'pre-qualification';
 
   @action
   setFieldvalue = (field, value) => {
@@ -57,8 +55,8 @@ export class BusinessAppStore {
   }
 
   @action
-  setAppStepsStatus = (key, value) => {
-    this.appStepsStatus[key] = value;
+  setAppStepsStatus = (index, key, value) => {
+    this.appStepsStatus[index][key] = value;
   }
 
   @action
@@ -119,19 +117,8 @@ export class BusinessAppStore {
     });
   }
 
-  @action
-  calculateStepToRender(data) {
-    if (data) {
-      if (!data.businessDetails || (data.businessDetails && data.businessDetails.stepStatus === 'IN_PROGRESS')) {
-        this.stepToRender = 'business-details';
-      } else if (!data.businessPerformance || (data.businessPerformance && data.businessPerformance.stepStatus === 'IN_PROGRESS')) {
-        this.stepToRender = 'performance';
-      } else if (!data.businessDocumentation || (data.businessDocumentation && data.businessDocumentation.stepStatus === 'IN_PROGRESS')) {
-        this.stepToRender = 'documentation';
-      } else if ((data.businessDocumentation && data.businessDocumentation.stepStatus === 'COMPLETE') && (data.businessPerformance && data.businessPerformance.stepStatus === 'COMPLETE') && (data.businessDetails && data.businessDetails.stepStatus === 'COMPLETE')) {
-        this.stepToRender = 'documentation';
-      }
-    }
+  @computed get stepToRender() {
+    return this.appStepsStatus.find(ele => ele.status === 'IN_PROGRESS');
   }
 
   @action
@@ -139,11 +126,11 @@ export class BusinessAppStore {
     this.formReset();
     this.step = 'performace';
     const data = this.fetchBusinessApplicationsDataById;
-    this.calculateStepToRender(data);
     this.setPrequalDetails(data.prequalDetails);
     this.setBusinessDetails(data.businessDetails);
     this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
     this.setDocumentationDetails(data.businessDocumentation);
+    // this.calculateStepToRender(data);
     navStore.setAccessParams('appStatus', data.applicationStatus);
     if (data.lendio) {
       const lendioPartners = data.lendio.status;
@@ -156,7 +143,7 @@ export class BusinessAppStore {
   @action
   setPrequalDetails = (data) => {
     if (data) {
-      this.appStepsStatus[0] = 'COMPLETE';
+      this.appStepsStatus[0].status = 'COMPLETE';
       ['street', 'city', 'state', 'zipCode'].forEach((ele) => {
         this.BUSINESS_APP_FRM.fields[ele].value = data.businessGeneralInfo.address[ele];
       });
@@ -207,7 +194,7 @@ export class BusinessAppStore {
   @action
   setBusinessDetails = (data) => {
     if (data) {
-      this.appStepsStatus[1] = data.stepStatus;
+      this.appStepsStatus[1].status = data.stepStatus;
       this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
       data.debts.forEach((ele, key) => {
         ['amount', 'interestExpenses', 'remainingPrincipal', 'term'].forEach((field) => {
@@ -240,7 +227,7 @@ export class BusinessAppStore {
   @action
   setPerformanceDetails = (data, prequalData) => {
     if (data) {
-      this.appStepsStatus[2] = data.stepStatus;
+      this.appStepsStatus[2].status = data.stepStatus;
       this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
       ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
         const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
@@ -297,7 +284,7 @@ export class BusinessAppStore {
   @action
   setDocumentationDetails = (data) => {
     if (data) {
-      this.appStepsStatus[3] = data.stepStatus;
+      this.appStepsStatus[3].status = data.stepStatus;
       this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
       this.BUSINESS_DOC_FRM.fields.blanketLien.value = data.blanketLien !== '' ? data.blanketLien : '';
       this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGurantee !== '' ? data.providePersonalGurantee ? 'true' : 'false' : '';
@@ -402,7 +389,7 @@ export class BusinessAppStore {
   @computed get canSubmitApp() {
     const notOkForms = ['BUSINESS_DETAILS_FRM', 'BUSINESS_PERF_FRM', 'BUSINESS_DOC_FRM']
       .filter(form => !this[form].meta.isValid);
-    const isPartial = this.appStepsStatus.filter(step => step === 'IN_PROGRESS');
+    const isPartial = this.appStepsStatus.filter(step => step.status === 'IN_PROGRESS');
 
     return notOkForms.length === 0 && isPartial.length === 0;
   }
@@ -746,7 +733,7 @@ export class BusinessAppStore {
           refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
-          this.setAppStepsStatus(key, stepStatus);
+          this.setAppStepsStatus(key, 'status', stepStatus);
           this.businessAppRemoveUploadedFiles();
           resolve(result);
         })
@@ -884,7 +871,7 @@ export class BusinessAppStore {
     this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
     this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
     this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
-    this.appStepsStatus = ['IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS', 'IN_PROGRESS'];
+    this.appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
   }
 
   @action
