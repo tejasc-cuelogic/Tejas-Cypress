@@ -105,6 +105,9 @@ export class BusinessAppStore {
         this.setBusinessApplicationData();
         resolve();
       },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
     });
   });
 
@@ -114,6 +117,9 @@ export class BusinessAppStore {
     this.businessApplicationsList = graphql({
       client,
       query: getBusinessApplications,
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
     });
   }
 
