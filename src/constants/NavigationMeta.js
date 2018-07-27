@@ -304,6 +304,18 @@ export const PRIVATE_NAV = [
 
 export const PUBLIC_NAV = [
   {
+    title: 'About Us',
+    to: 'about',
+    subNavigations: [
+      { title: 'Mission', to: 'mission' },
+      { title: 'Team', to: 'team' },
+      { title: 'Careers', to: 'careers' },
+      { title: 'Impact', to: 'impact' },
+      { title: 'Ambassadors', to: 'ambassadors' },
+      { title: 'Press', to: 'press' },
+    ],
+  },
+  {
     title: 'Explore Campaigns',
     to: 'offerings',
     subNavigations: [
@@ -361,18 +373,6 @@ export const PUBLIC_NAV = [
     subNavigations: [
       { title: 'For Investors', to: 'invest' },
       { title: 'For Businesses', to: 'business' },
-    ],
-  },
-  {
-    title: 'About Us',
-    to: 'about',
-    subNavigations: [
-      { title: 'Mission', to: 'mission' },
-      { title: 'Team', to: 'team' },
-      { title: 'Careers', to: 'careers' },
-      { title: 'Impact', to: 'impact' },
-      { title: 'Ambassadors', to: 'ambassadors' },
-      { title: 'Press', to: 'press' },
     ],
   },
 ];
