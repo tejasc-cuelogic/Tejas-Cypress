@@ -9,7 +9,7 @@
 				>.value, >.label {
 					font-size: 13px !important;
 					line-height: 15px;
-					color: #fff;
+					color: @white;
 					font-weight: normal;
 					text-transform: none;
 				}

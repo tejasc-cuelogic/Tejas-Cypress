@@ -126,7 +126,7 @@
 		.title{
 			border:@borderColor 1px solid;
 			&.active{
-				background-color:#F8F8F8;
+				background-color:@neutral-offdark;
 			}
 			time{
 				font-size:@12px;

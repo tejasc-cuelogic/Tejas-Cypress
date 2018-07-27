@@ -42,8 +42,8 @@ const HowItWorks = () => (
         <Header textAlign="center" as="h2">
         Choose how you want to invest.
         </Header>
-        <p className="center-align">Understand and choose the right opportunities with the right payment terms for you.</p>
-        <Grid doubling columns={2} relaxed="very" className="flex-column mt-30">
+        <p className="center-align mb-30">Understand and choose the right opportunities with the right payment terms for you.</p>
+        <Grid doubling columns={2} relaxed="very" className="flex-column">
           <Grid.Column>
             <div className="flex-content">
               <Image src={InvestorImg} />

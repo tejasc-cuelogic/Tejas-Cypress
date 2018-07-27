@@ -161,7 +161,7 @@ footer{
 	.mission-block {
 		padding: @10px;
 		text-align: center;
-		color: #fff;
+		color: @white;
 		&.green-block {
 			background-color: @primaryColor;
 		}
@@ -171,7 +171,7 @@ footer{
 		.statistic {
 			margin-bottom: 0;
 			.value, .label {
-				color: #fff;
+				color: @white;
 				text-transform: none;
 			}
 			.value~.label {
@@ -180,7 +180,7 @@ footer{
 		}
 	}
 	.ui.grid.mission-base-block {
-		background-color: #fff;
+		background-color: @white;
 		padding: @10px;
 		margin-top: @10px;
 		.statistic {
@@ -196,7 +196,7 @@ footer{
 				}
 			}
 			.label {
-				color: #676A73 !important;
+				color: @neutral-middark !important;
 				font-size: @14px;
 				line-height: @16px;
 				text-transform: inherit;
@@ -229,7 +229,7 @@ footer{
 	top: 100%;
 	z-index: 1;
 	.offer-filter-container {
-		background-color: #fff;
+		background-color: @white;
 		width: 100%;
 		height: auto;
 		padding: @17px 0 @59px; 
@@ -257,7 +257,7 @@ footer{
 				background-color: transparent;
 				font-size: @15px;
 				line-height: @19px;
-				color: #616972;
+				color: @neutral-middark;
 				padding: 0;
 				padding-left: @3px;
 				font-weight: normal; 
@@ -316,7 +316,7 @@ footer{
 		}
 	}
 	.offering-wrapper {
-		background-color: #F3F4F8;
+		background-color: @neutral-midwhite;
 		flex-grow: 1;
 		padding-left: 280px;
 		.offering-content-spacer {
@@ -373,7 +373,7 @@ footer{
 					left: -1px;
 					border-style: solid;
 					border-width: 10px 0px 10px 12px;
-					border-color: transparent #fff;
+					border-color: transparent @white;
 					display: block;
 					width: 0;
 					z-index: 0;
@@ -619,7 +619,7 @@ p i.icon {
 						font-weight: 500;
 						line-height: 24px;
 						font-size: 40px;
-						color: #20C86D;
+						color: @primary-one;
 					}
 				}
 			}
@@ -648,7 +648,7 @@ p i.icon {
 		height: 50px;
 		&:before {
 			font-size: 30px;
-			color: #676A73;
+			color: @neutral-middark;
 		}
 	}
 	.slick-next {
@@ -675,7 +675,7 @@ p i.icon {
 				font-weight: 500;
 				line-height: 24px;
 				font-size: 40px;
-				color: #20C86D;
+				color: @primary-one;
 			}
 		}
 	}
