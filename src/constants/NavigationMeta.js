@@ -306,6 +306,7 @@ export const PUBLIC_NAV = [
   {
     title: 'About Us',
     to: 'about',
+    noNav: true,
     subNavigations: [
       { title: 'Mission', to: 'mission' },
       { title: 'Team', to: 'team' },
