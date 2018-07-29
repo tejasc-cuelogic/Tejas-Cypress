@@ -118,6 +118,16 @@ export class BankAccountStore {
   setShowAddFunds = () => {
     this.showAddFunds = true;
   }
+
+  @action
+  resetLinkBank = () => {
+    Validator.resetFormData(this.formLinkBankManually);
+    Validator.resetFormData(this.formAddFunds);
+    this.plaidAccDetails = {};
+    this.plaidBankDetails = {};
+    this.depositMoneyNow = true;
+    this.showAddFunds = false;
+  }
 }
 
 export default new BankAccountStore();

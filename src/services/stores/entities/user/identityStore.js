@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import { mapValues, keyBy, find, flatMap, map } from 'lodash';
 import Validator from 'validatorjs';
-import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
+import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO, COUNTRY_CODES } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, userStore, userDetailsStore } from '../../index';
 import { verifyCIPUser, updateUserCIPInfo, startUserPhoneVerification, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
@@ -9,7 +9,6 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
 import { accountActions } from '../../../actions';
-import { COUNTRY_CODES } from '../../../../constants/profile';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
 import apiService from '../../../../api/restApi';
 
@@ -533,7 +532,10 @@ export class IdentityStore {
       this.setProfileInfoField('firstName', legalDetails.legalName.lastLegalName);
     }
     this.setProfileInfoField('email', email);
-    if (contactDetails && contactDetails.phone !== null) {
+    if (contactDetails &&
+      contactDetails.phone !== null &&
+      contactDetails.phone.verificationDate !== null
+    ) {
       this.setProfileInfoField('phoneNumber', contactDetails.phone.number);
     }
     if (address === null) {

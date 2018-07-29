@@ -8,7 +8,7 @@ import {
   IRA_FUNDING,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
-import { uiStore, userStore, userDetailsStore } from '../../index';
+import { uiStore, userStore, bankAccountStore, userDetailsStore } from '../../index';
 import { createAccount, updateAccount } from '../../queries/account';
 import { validationActions, accountActions } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -67,6 +67,11 @@ class IraAccountStore {
 
   @computed
   get isValidIraForm() {
+    if (this.FUNDING_FRM.fields.fundingType.value === 0) {
+      return this.FIN_INFO_FRM.meta.isValid && this.ACC_TYPES_FRM.meta.isValid
+      && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid &&
+      (bankAccountStore.formLinkBankManually.meta.isValid || bankAccountStore.isValidLinkBank);
+    }
     return this.FIN_INFO_FRM.meta.isValid && this.ACC_TYPES_FRM.meta.isValid
     && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid;
   }

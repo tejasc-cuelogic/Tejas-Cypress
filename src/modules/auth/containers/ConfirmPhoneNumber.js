@@ -15,8 +15,7 @@ export default class ConfirmPhoneNumber extends Component {
     if (this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       if (this.props.userDetailsStore.userDetails.contactDetails &&
         this.props.userDetailsStore.userDetails.contactDetails.phone) {
-        const fieldValue =
-        Helper.maskPhoneNumber(this.props.userDetailsStore.userDetails.contactDetails.phone.number);
+        const fieldValue = this.props.userDetailsStore.userDetails.contactDetails.phone.number;
         this.props.identityStore.phoneNumberChange(fieldValue);
       }
     }
@@ -61,7 +60,7 @@ export default class ConfirmPhoneNumber extends Component {
     if (this.props.refLink) {
       this.props.history.replace(this.props.refLink);
     } else {
-      this.props.history.push('app/summary');
+      this.props.history.push('/app/summary');
     }
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');

@@ -9,6 +9,9 @@ import Summary from './Summary';
 @inject('uiStore', 'bankAccountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
 @observer
 export default class AccountCreation extends React.Component {
+  componentWillMount() {
+    this.props.accountStore.setAccTypeChange(0);
+  }
   handleMultiStepModalclose = () => {
     this.updateUser();
     this.props.history.push('/app/summary');
@@ -21,19 +24,21 @@ export default class AccountCreation extends React.Component {
   }
   render() {
     const { inProgress } = this.props.uiStore;
+    const { plaidBankDetails, formLinkBankManually, formAddFunds } = this.props.bankAccountStore;
+    const { stepToBeRendered, createAccount } = this.props.individualAccountStore;
     const steps =
     [
       {
         name: 'Link Bank',
         component: <Plaid />,
         isValid: '',
-        isDirty: !isEmpty(this.props.bankAccountStore.plaidBankDetails) ||
-        this.props.bankAccountStore.formLinkBankManually.meta.isDirty,
+        isDirty: !isEmpty(plaidBankDetails) ||
+        formLinkBankManually.meta.isDirty,
       },
       {
         name: 'Add funds',
         component: <AddFunds />,
-        isValid: this.props.bankAccountStore.formAddFunds.meta.isFieldValid ? '' : 'error',
+        isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
       },
       {
         name: 'Summary',
@@ -43,7 +48,7 @@ export default class AccountCreation extends React.Component {
     ];
     return (
       <div className="step-progress">
-        <MultiStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.individualAccountStore.stepToBeRendered} formTitle="Individual Account Creation" steps={steps} createAccount={this.props.individualAccountStore.createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual Account Creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

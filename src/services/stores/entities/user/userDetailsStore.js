@@ -3,12 +3,14 @@ import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
-import { isEmpty, difference } from 'lodash';
+import { isEmpty, difference, find, findKey } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as client2 } from '../../../../api/gcoolApi';
 import {
   uiStore,
   identityStore,
+  accountStore,
+  bankAccountStore,
   individualAccountStore,
   iraAccountStore,
   entityAccountStore,
@@ -17,6 +19,9 @@ import {
 import { FIN_INFO } from '../../../../constants/user';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
 import { finLimit, updateFinLimit } from '../../queries/financialLimits';
+import {
+  INVESTMENT_ACCOUNT_TYPES,
+} from '../../../../constants/account';
 import { FormValidator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
@@ -53,17 +58,22 @@ export class UserDetailsStore {
   }
 
   @action
-  setUserAccDetails = () => {
+  setUserAccDetails = (investmentAccType) => {
     if (!isEmpty(this.userDetails)) {
-      iraAccountStore.populateData(this.userDetails);
-      individualAccountStore.populateData(this.userDetails);
-      entityAccountStore.populateData(this.userDetails);
+      bankAccountStore.resetLinkBank();
+      if (investmentAccType === 'ira') {
+        iraAccountStore.populateData(this.userDetails);
+      } else if (investmentAccType === 'individual') {
+        individualAccountStore.populateData(this.userDetails);
+      } else if (investmentAccType === 'entity') {
+        entityAccountStore.populateData(this.userDetails);
+      }
       investorProfileStore.populateData(this.userDetails);
     }
   }
 
   @action
-  getUser = (id) => {
+  getUser = id => new Promise((res) => {
     this.currentUser = graphql({
       client,
       query: userDetailsQuery,
@@ -71,9 +81,10 @@ export class UserDetailsStore {
       variables: { id },
       onFetch: () => {
         identityStore.setProfileInfo(this.userDetails);
+        res();
       },
     });
-  }
+  })
 
   @action
   getUserProfileDetails = (id) => {
@@ -222,18 +233,43 @@ export class UserDetailsStore {
   @computed
   get pendingStep() {
     let routingUrl = '';
-    if (this.signupStatus.phoneVerification !== 'DONE' && !this.validAccStatus.includes(this.signupStatus.idVerification)) {
+    if (!this.validAccStatus.includes(this.signupStatus.idVerification)) {
       routingUrl = 'summary/identity-verification/0';
+    } else if (this.signupStatus.phoneVerification !== 'DONE') {
+      routingUrl = 'summary/identity-verification/3';
     } else if (!this.signupStatus.investorProfileCompleted) {
       routingUrl = 'summary/establish-profile';
     } else if (isEmpty(this.signupStatus.accounts)) {
       routingUrl = 'summary/account-creation';
-    } else if (this.signupStatus.partialAccounts > 0) {
-      routingUrl = `summary/account-creation/${this.signupStatus.partialAccounts[0].accountType}`;
-    } else if (this.signupStatus.inActiveAccounts > 0) {
-      routingUrl = `summary/account-creation/${this.signupStatus.inActiveAccounts[0].accountType}`;
+    } else if (this.signupStatus.partialAccounts.length > 0) {
+      const accValue =
+      findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+      accountStore.setAccTypeChange(accValue);
+      routingUrl = `summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
+    } else if (this.signupStatus.inActiveAccounts.length > 0) {
+      const accValue =
+      findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+      accountStore.setAccTypeChange(accValue);
+      routingUrl = `summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
+    } else {
+      routingUrl = 'summary';
     }
     return routingUrl;
+  }
+
+  @computed
+  get validAccTypes() {
+    const validPanes = [];
+    const { inActiveAccounts } = this.signupStatus;
+    const accTypesValues = accountStore.INVESTMENT_ACC_TYPES.fields.accType.values;
+    inActiveAccounts.map((key) => {
+      const acc = find(accTypesValues, { accType: key });
+      if (acc) {
+        validPanes.push(acc);
+      }
+      return validPanes;
+    });
+    return validPanes;
   }
 }
 

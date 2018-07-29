@@ -29,13 +29,23 @@ export default class AccountCreation extends React.Component {
   }
   render() {
     const { inProgress } = this.props.uiStore;
+    const {
+      PERSONAL_INFO_FRM,
+      FIN_INFO_FRM,
+      GEN_INFO_FRM,
+      TRUST_INFO_FRM,
+      FORM_DOCS_FRM,
+      stepToBeRendered,
+      createAccount,
+    } = this.props.entityAccountStore;
+    const { plaidBankDetails, formLinkBankManually } = this.props.bankAccountStore;
     const steps =
     [
       {
         name: 'Financial info',
         component: <FinancialInformation />,
-        isValid: this.props.entityAccountStore.FIN_INFO_FRM.meta.isFieldValid ? '' : 'error',
-        isDirty: this.props.entityAccountStore.FIN_INFO_FRM.meta.isDirty,
+        isValid: FIN_INFO_FRM.meta.isFieldValid ? '' : 'error',
+        isDirty: FIN_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityFinancialInfo,
         form: 'FIN_INFO_FRM',
         stepToBeRendered: 1,
@@ -43,8 +53,8 @@ export default class AccountCreation extends React.Component {
       {
         name: 'General',
         component: <General />,
-        isValid: this.props.entityAccountStore.GEN_INFO_FRM.meta.isFieldValid ? '' : 'error',
-        isDirty: this.props.entityAccountStore.GEN_INFO_FRM.meta.isDirty,
+        isValid: GEN_INFO_FRM.meta.isFieldValid ? '' : 'error',
+        isDirty: GEN_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityGeneralInformation,
         form: 'GEN_INFO_FRM',
         stepToBeRendered: 2,
@@ -52,8 +62,8 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Entity info',
         component: <FinancilInfo />,
-        isValid: this.props.entityAccountStore.TRUST_INFO_FRM.meta.isFieldValid ? '' : 'error',
-        isDirty: this.props.entityAccountStore.TRUST_INFO_FRM.meta.isDirty,
+        isValid: TRUST_INFO_FRM.meta.isFieldValid ? '' : 'error',
+        isDirty: TRUST_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityInfo,
         form: 'TRUST_INFO_FRM',
         stepToBeRendered: 3,
@@ -61,8 +71,8 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Personal info',
         component: <PersonalInformation />,
-        isValid: this.props.entityAccountStore.PERSONAL_INFO_FRM.meta.isFieldValid ? '' : 'error',
-        isDirty: this.props.entityAccountStore.PERSONAL_INFO_FRM.meta.isDirty,
+        isValid: PERSONAL_INFO_FRM.meta.isFieldValid ? '' : 'error',
+        isDirty: PERSONAL_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityPersonalInfo,
         form: 'PERSONAL_INFO_FRM',
         stepToBeRendered: 4,
@@ -70,8 +80,8 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Formation doc',
         component: <FormationDocuments />,
-        isValid: this.props.entityAccountStore.FORM_DOCS_FRM.meta.isFieldValid ? '' : 'error',
-        isDirty: this.props.entityAccountStore.FORM_DOCS_FRM.meta.isDirty,
+        isValid: FORM_DOCS_FRM.meta.isFieldValid ? '' : 'error',
+        isDirty: FORM_DOCS_FRM.meta.isDirty,
         validate: validationActions.validateEntityFormationDoc,
         form: 'FORM_DOCS_FRM',
         stepToBeRendered: 5,
@@ -80,8 +90,8 @@ export default class AccountCreation extends React.Component {
         name: 'Link bank',
         component: <Plaid />,
         isValid: '',
-        isDirty: !isEmpty(this.props.bankAccountStore.plaidBankDetails) ||
-        this.props.bankAccountStore.formLinkBankManually.meta.isDirty,
+        isDirty: !isEmpty(plaidBankDetails) ||
+        formLinkBankManually.meta.isDirty,
         validate: validationActions.validateLinkBankForm,
         stepToBeRendered: 6,
       },
@@ -93,7 +103,7 @@ export default class AccountCreation extends React.Component {
     ];
     return (
       <div className="step-progress">
-        <MultiStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.entityAccountStore.stepToBeRendered} createAccount={this.props.entityAccountStore.createAccount} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

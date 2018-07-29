@@ -19,7 +19,7 @@ const LegalDocuments = observer(({
   submitVerificationsDocs,
   onSubmit,
 }) => (
-  <Modal size="tiny" open closeIcon onClose={() => close()}>
+  <Modal size="tiny" open closeIcon onClose={close}>
     <Modal.Header className="center-align signup-header">
       <Header as="h3">We need to confirm your identity</Header>
       <Divider />

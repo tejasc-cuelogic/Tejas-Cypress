@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
-import { find } from 'lodash';
 import { Header } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
@@ -13,20 +12,10 @@ import AccountCreation from './accountCreation';
 @observer
 export default class AccountSetup extends Component {
   componentWillMount() {
-    localStorage.removeItem('encryptedPwd');
-    this.props.userDetailsStore.setUserAccDetails();
-    const validPanes = [];
-    const { inActiveAccounts } = this.props.userDetailsStore.signupStatus;
-    const accTypesValues = this.props.accountStore.INVESTMENT_ACC_TYPES.fields.accType.values;
-    inActiveAccounts.map((key) => {
-      const acc = find(accTypesValues, { accType: key });
-      if (acc) {
-        validPanes.push(acc);
-      }
-      return validPanes;
-    });
-    if (inActiveAccounts.length !== 3) {
-      this.props.accountStore.setInvestmentAccTypeValues(validPanes);
+    this.props.userDetailsStore.setUserAccDetails(this.props.accountStore.investmentAccType);
+    const { signupStatus, validAccTypes } = this.props.userDetailsStore;
+    if (signupStatus.inActiveAccounts.length !== 3) {
+      this.props.accountStore.setInvestmentAccTypeValues(validAccTypes);
     }
   }
 
@@ -37,16 +26,6 @@ export default class AccountSetup extends Component {
       this.props.history.push(`${this.props.match.url}/account-creation`);
     }
   }
-
-  renderStep = (step) => {
-    if (step === 0) {
-      this.props.history.push(`${this.props.match.url}/identity-verification/0`);
-    } else if (step === 1) {
-      this.props.history.push(`${this.props.match.url}/establish-profile`);
-    } else if (step === 2) {
-      this.props.history.push(`${this.props.match.url}/account-creation`);
-    }
-  };
 
   render() {
     const { match } = this.props;
@@ -61,7 +40,7 @@ export default class AccountSetup extends Component {
         <Header as="h4">{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!(currentUser.data && currentUser.data.user) ? 'Loading..' : (
           <ProgressCard
-            renderStep={this.renderStep}
+            {...this.props}
             signupStatus={signupStatus}
             getStepStatus={getStepStatus}
             navToAccTypes={this.navToAccTypes}

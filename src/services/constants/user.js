@@ -1,3 +1,21 @@
+import Validator from 'validatorjs';
+
+/* eslint-disable no-unused-vars */
+/* eslint-disable arrow-body-style */
+Validator.register(
+  'maskedSSN', (value, attribute) => {
+    return value.toString().length === 9;
+  },
+  'The :attribute is not in the format XXX-XX-XXXX.',
+);
+
+Validator.register(
+  'maskedPhoneNumber', (value, attribute) => {
+    return value.toString().length === 10;
+  },
+  'The :attribute is not in the format XXX-XXX-XXXX.',
+);
+
 export const securitySections = [
   {
     title: 'Password',
@@ -235,4 +253,12 @@ export const UPDATE_PROFILE_INFO = {
     base64String: '',
     responseUrl: '',
   },
+};
+
+export const PROFILE_PHOTO_EXTENSIONS = ['jpeg', 'jpg', 'png'];
+
+export const PROFILE_PHOTO_BYTES = 5242880;
+
+export const COUNTRY_CODES = {
+  US: '91',
 };

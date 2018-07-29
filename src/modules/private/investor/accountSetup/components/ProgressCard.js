@@ -58,7 +58,7 @@ const ProgressCard = props => (
                   <Button
                     color="green"
                     content={currentCard.step === 2 ? 'Create' : 'Continue'}
-                    onClick={() => props.renderStep(currentCard.step)}
+                    onClick={() => props.history.push(`${props.match.url}${currentCard.route}`)}
                   /> :
                   ''
               }
@@ -98,7 +98,7 @@ const ProgressCard = props => (
       ))
     }
     {props.signupStatus.partialAccounts.length === 0 &&
-    props.signupStatus.accounts.length > 0 &&
+    !isEmpty(props.signupStatus.accounts) &&
     props.signupStatus.inActiveAccounts.length > 0 &&
       <Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
         <Card.Content>

@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import isEmpty from 'lodash/isEmpty';
 import { Route, withRouter } from 'react-router-dom';
 import { Header, Modal, Form, Button, Message } from 'semantic-ui-react';
-import { MaskedInput } from '../../../../../../theme/form';
+import { MaskedInput2 } from '../../../../../../theme/form';
 import ConfirmPhoneNumber from './ConfirmPhoneNumber';
 import { ListErrors } from '../../../../../../theme/shared';
 
@@ -27,7 +27,7 @@ export default class NewPhoneNumber extends Component {
   render() {
     const {
       ID_VERIFICATION_FRM,
-      personalInfoChange,
+      personalInfoMaskedChange,
     } = this.props.identityStore;
     const { match } = this.props;
     const { errors } = this.props.uiStore;
@@ -48,11 +48,13 @@ export default class NewPhoneNumber extends Component {
             </Message>
           }
           <Form error onSubmit={this.handleChangePhoneNumber}>
-            <MaskedInput
+            <MaskedInput2
               name="phoneNumber"
+              type="tel"
               fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-              mask="999-999-9999"
-              changed={personalInfoChange}
+              format="###-###-####"
+              changed={personalInfoMaskedChange}
+              phoneNumber
             />
             <div className="center-align">
               <Button loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)} primary size="large" className="very relaxed" >Change Phone Number</Button>

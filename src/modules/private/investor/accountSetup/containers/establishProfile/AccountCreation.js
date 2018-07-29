@@ -7,7 +7,7 @@ import InvestorProfile from './InvestorProfile';
 import Finances from './Finances';
 import Experience from './Experience';
 
-@inject('uiStore', 'investorProfileStore')
+@inject('uiStore')
 @withRouter
 @observer
 export default class AccountCreation extends React.Component {
@@ -22,37 +22,45 @@ export default class AccountCreation extends React.Component {
   }
   render() {
     const { inProgress } = this.props.uiStore;
+    const {
+      INVESTOR_PROFILE_FORM,
+      INVESTMENT_EXP_FORM,
+      EMPLOYMENT_FORM,
+      FINANCES_FORM,
+      updateInvestorProfileData,
+      stepToBeRendered,
+    } = this.props.investorProfileStore;
     const steps =
     [
       {
         name: 'Employment',
         component: <Employment />,
-        isValid: this.props.investorProfileStore.EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
-        isDirty: this.props.investorProfileStore.EMPLOYMENT_FORM.meta.isDirty,
+        isValid: EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
+        isDirty: EMPLOYMENT_FORM.meta.isDirty,
         form: 'EMPLOYMENT_FORM',
         stepToBeRendered: 1,
       },
       {
         name: 'Investor Profile',
         component: <InvestorProfile />,
-        isValid: this.props.investorProfileStore.INVESTOR_PROFILE_FORM.meta.isFieldValid ? '' : 'error',
-        isDirty: this.props.investorProfileStore.INVESTOR_PROFILE_FORM.meta.isDirty,
+        isValid: INVESTOR_PROFILE_FORM.meta.isFieldValid ? '' : 'error',
+        isDirty: INVESTOR_PROFILE_FORM.meta.isDirty,
         form: 'INVESTOR_PROFILE_FORM',
         stepToBeRendered: 2,
       },
       {
         name: 'Finances',
         component: <Finances />,
-        isValid: this.props.investorProfileStore.FINANCES_FORM.meta.isFieldValid ? '' : 'error',
-        isDirty: this.props.investorProfileStore.FINANCES_FORM.meta.isDirty,
+        isValid: FINANCES_FORM.meta.isFieldValid ? '' : 'error',
+        isDirty: FINANCES_FORM.meta.isDirty,
         form: 'FINANCES_FORM',
         stepToBeRendered: 3,
       },
       {
         name: 'Experience',
         component: <Experience />,
-        isValid: this.props.investorProfileStore.INVESTMENT_EXP_FORM.meta.isFieldValid ? '' : 'error',
-        isDirty: this.props.investorProfileStore.INVESTMENT_EXP_FORM.meta.isDirty,
+        isValid: INVESTMENT_EXP_FORM.meta.isFieldValid ? '' : 'error',
+        isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
         form: 'INVESTMENT_EXP_FORM',
         stepToBeRendered: 3,
       },
@@ -60,7 +68,7 @@ export default class AccountCreation extends React.Component {
 
     return (
       <div className="step-progress">
-        <MultiStep actionOnNextBtn={this.navigateToAccCreation} setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.investorProfileStore.stepToBeRendered} createAccount={this.props.investorProfileStore.updateInvestorProfileData} inProgress={inProgress} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep actionOnNextBtn={this.navigateToAccCreation} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={updateInvestorProfileData} inProgress={inProgress} steps={steps} formTitle="Complete your investor profile" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }
