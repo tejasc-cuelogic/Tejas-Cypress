@@ -200,6 +200,8 @@ class InvestorProfileStore {
         this.setFormData('FINANCES_FORM', investorProfileData);
         this.setFormData('INVESTOR_PROFILE_FORM', investorProfileData);
         this.setFormData('INVESTMENT_EXP_FORM', investorProfileData);
+        console.log(!this.INVESTOR_PROFILE_FORM.meta.isValid);
+        console.log(this.investorProfileNotSet);
         if (!this.EMPLOYMENT_FORM.meta.isValid) {
           this.setStepToBeRendered(0);
         } else if (!this.INVESTOR_PROFILE_FORM.meta.isValid || this.investorProfileNotSet) {
@@ -242,6 +244,7 @@ class InvestorProfileStore {
         if (!isNull(investorProfileData.investorProfileType)) {
           this.INVESTOR_PROFILE_FORM.fields[f].value =
           investorProfileData.investorProfileType;
+          this.setInvestorProfileNotSet(false);
         } else {
           this.setInvestorProfileNotSet(true);
           isDirty = true;

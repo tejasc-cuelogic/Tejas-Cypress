@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { findKey } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
@@ -8,6 +9,9 @@ import ProgressCard from '../components/ProgressCard';
 import IdentityVerification from './identityVerification';
 import EstablishProfile from './establishProfile';
 import AccountCreation from './accountCreation';
+import {
+  INVESTMENT_ACCOUNT_TYPES,
+} from '../../../../../constants/account';
 @inject('userDetailsStore', 'accountStore')
 @observer
 export default class AccountSetup extends Component {
@@ -21,6 +25,9 @@ export default class AccountSetup extends Component {
 
   navToAccTypes = (step) => {
     if (step) {
+      const accValue =
+      findKey(INVESTMENT_ACCOUNT_TYPES, val => val === step);
+      this.props.accountStore.setAccTypeChange(accValue);
       this.props.history.push(`${this.props.match.url}/account-creation/${step}`);
     } else {
       this.props.history.push(`${this.props.match.url}/account-creation`);

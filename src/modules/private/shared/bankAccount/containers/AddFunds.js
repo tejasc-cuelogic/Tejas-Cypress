@@ -4,7 +4,7 @@ import { Header, Form, Button } from 'semantic-ui-react';
 
 import { MaskedInput2 } from '../../../../../theme/form';
 
-@inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore')
+@inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore')
 @observer
 export default class AddFunds extends Component {
   componentDidMount() {
@@ -18,6 +18,9 @@ export default class AddFunds extends Component {
     if (this.props.accountStore.investmentAccType === 'entity') {
       this.props.entityAccountStore.setStepToBeRendered(6);
     }
+    if (this.props.accountStore.investmentAccType === 'ira') {
+      this.props.iraAccountStore.setStepToBeRendered(4);
+    }
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
@@ -27,6 +30,9 @@ export default class AddFunds extends Component {
     }
     if (this.props.accountStore.investmentAccType === 'entity') {
       this.props.entityAccountStore.setStepToBeRendered(6);
+    }
+    if (this.props.accountStore.investmentAccType === 'ira') {
+      this.props.iraAccountStore.setStepToBeRendered(4);
     }
   }
   render() {

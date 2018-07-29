@@ -6,7 +6,7 @@ import { MultiStep } from '../../../../../../../helper';
 import { Plaid, AddFunds } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
 
-@inject('uiStore', 'bankAccountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
+@inject('uiStore', 'accountStore', 'bankAccountStore', 'individualAccountStore', 'userStore', 'userDetailsStore')
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
