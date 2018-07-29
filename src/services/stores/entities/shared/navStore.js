@@ -19,10 +19,11 @@ export class NavStore {
 
   @computed get myRoutes() {
     const permitted = [...this.params.roles, ...userDetailsStore.signupStatus.activeAccounts];
-    return _.filter(
+    const routes = _.filter(
       this.NAV_ITEMS,
       n => n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0,
     );
+    return routes;
   }
 
   @computed get allNavItems() {
@@ -65,7 +66,6 @@ export class NavStore {
   @action
   setNavStatus(calculations, forced) {
     const { percentagePassed, topVisible } = calculations;
-    console.log(calculations);
     this.navStatus = forced ? forced : ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
   }
 }
