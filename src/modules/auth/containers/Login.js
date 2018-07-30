@@ -19,6 +19,7 @@ class Login extends Component {
     authActions.login()
       .then(() => {
         const { roles } = this.props.userStore.currentUser;
+        const { redirectURL } = this.props.uiStore;
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/auth/change-password');
         } else {
@@ -26,7 +27,8 @@ class Login extends Component {
           if (roles && roles.includes('investor')) {
             this.props.history.push(`/app/${this.props.userDetailsStore.pendingStep}`);
           } else {
-            this.props.history.push('/app/dashboard');
+            const redirectUrl = redirectURL ? redirectURL.pathname : '/app/dashboard';
+            this.props.history.push(redirectUrl);
           }
         }
       });

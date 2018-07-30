@@ -94,6 +94,8 @@ export class BusinessAppStore {
 
   @action
   fetchApplicationDataById = applicationId => new Promise((resolve) => {
+    uiStore.setAppLoader(true);
+    uiStore.setLoaderMessage('Getting application data');
     this.businessApplicationsDataById = graphql({
       client,
       query: getBusinessApplicationsById,
@@ -103,10 +105,12 @@ export class BusinessAppStore {
       fetchPolicy: 'network-only',
       onFetch: () => {
         this.setBusinessApplicationData();
+        uiStore.setAppLoader(false);
         resolve();
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setAppLoader(false);
       },
     });
   });
@@ -140,7 +144,8 @@ export class BusinessAppStore {
     navStore.setAccessParams('appStatus', data.applicationStatus);
     if (data.lendio) {
       const lendioPartners = data.lendio.status;
-      if (lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
+      if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+        && lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
         businessAppLendioStore.setPartneredLendioData(data);
       }
     }
