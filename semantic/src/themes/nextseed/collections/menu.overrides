@@ -158,6 +158,11 @@
                 background-color:transparent;
             }
         }
+        .menu {
+            a.item {
+                min-width: 0;
+            }
+        }
     }
 }
 footer{
@@ -205,7 +210,6 @@ footer{
 				border-left: @4px solid transparent;
 				border-radius: 0;
 				padding-left: @27px;
-				font-weight: @bold;
 				&:hover, &.active {
 					background-color: @neutral;
 					border-color: @primary-one;
@@ -214,7 +218,9 @@ footer{
 				>i.icon {
 					float: left;
 					margin-left: 0;
-					margin-right: 14px;
+                    margin-right: 14px;
+                    font-size: @20px;
+                    margin-top: -3px;
 				}
 				>.label.circular {
 					margin-top: -5px;
@@ -224,8 +230,8 @@ footer{
 				}
 			}
 			.ui.divider {
-				margin: 64px 29px 0;
-			}
+				margin: 60px 29px 0;
+            }
 		}
     }
     .offering-content-spacer {

@@ -1,3 +1,4 @@
+
 /*******************************
          Theme Overrides
 *******************************/
@@ -19,5 +20,13 @@
 .field.error{
     .ui.action.input>input ~ .ui.button.link-button{
         border-color:@highlight-primary;
+    }
+}
+.public-form {
+    .ui.input>input {
+        padding: .67857143em !important;
+        background: @white !important;
+        border-radius: .28571429rem !important;
+        border: 0 !important;
     }
 }
