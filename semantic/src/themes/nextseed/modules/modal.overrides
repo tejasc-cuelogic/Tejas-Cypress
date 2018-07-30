@@ -11,34 +11,19 @@
 }
 //  Public pages Starts
 .ui.modal{
-    // padding: @35px;
-
-    // >.close {
-    //     top: @28px;
-    //     right: @20px;
-    //     color: #DADADA;
-    // }
-    // >.header {
-    //     padding: 0 0 @20px 0;
-    // }
-    .ui.grid.compact {
-        padding: @25px 0 @30px;
-        >.column:not(.row) {
-            padding: 0;
-        }
-        >.column {
-            &.padded {
-                padding: @30px;
-            }
-        }
+    i.icon.close:before {
+        content: '\e950';
+        font-family: 'nextseed';
+    }
+    .team-details-container {
         .ui.header {
             position: relative;
-            line-height: 33px;
             .sub.header {
                 text-transform: uppercase;
-                font-weight: bold;
+                font-weight: @bold;
                 line-height: 28px;
                 font-size: 13px;
+                color: @neutral-middark;
             }
             &:after {
                 content: "";
@@ -51,6 +36,48 @@
         }
         .ui.header+p {
             margin-top: 34px;
+        }
+    }
+    &.team-member-modal {
+        .item {
+            img {
+                width: 50%;
+            }
+        }
+        .content {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            height: 50vh;
+            padding: 0;
+            border-radius: 0;
+            .scrollable-content {
+                min-height: 50vh;
+                overflow-y: scroll; 
+                padding: @20px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .ui.header {
+                line-height: 24px;
+                margin-bottom: 0;
+                &:after {
+                    height: 2px;
+                    bottom: -13px;
+                }
+            }
+        }
+    }
+    .ui.grid.compact {
+        padding: @25px 0 @30px;
+        >.column:not(.row) {
+            padding: 0;
+        }
+        >.column {
+            &.padded {
+                padding: @30px;
+            }
         }
     }
     .demographics {
