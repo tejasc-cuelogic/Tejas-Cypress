@@ -15,6 +15,7 @@
 * **Hello World structure [Issue [204](https://chaos.ns.team/nsv2/ns-ops/issues/204) - Setup Hello World structure for Issuer/Admin]:** Hello World structure for Issuer/Admin ([76810e0](https://chaos.ns.team/nsv2/ns-client/commits/76810e0))
 * **home page ui[Issue [228](https://chaos.ns.team/nsv2/ns-ops/issues/228) - public pages home page 2]:** created ui of home page ([e0e48e7](https://chaos.ns.team/nsv2/ns-client/commits/e0e48e7))
 * **Investor[Issue [235](https://chaos.ns.team/nsv2/ns-ops/issues/235) - manage-beneficiaries-feedback-changes]:** investor beneficiary feedback changes ([9718a27](https://chaos.ns.team/nsv2/ns-client/commits/9718a27))
+* **marketing pages[Issue [268](https://chaos.ns.team/nsv2/ns-ops/issues/268) - marketing pages investor account types and security]:** account types, security and track sections ([b11d369](https://chaos.ns.team/nsv2/ns-client/commits/b11d369))
 * **Notification[Issue 197 - Notification panel]:** Redesign Notification panel for private pages ([76744dd](https://chaos.ns.team/nsv2/ns-client/commits/76744dd))
 * **public business pages[Issue [244](https://chaos.ns.team/nsv2/ns-ops/issues/244) - public business pages how it works]:** completed design of how it works section. ([49e05ae](https://chaos.ns.team/nsv2/ns-client/commits/49e05ae))
 * **public business pages[Issue [249](https://chaos.ns.team/nsv2/ns-ops/issues/249) - public business funding options]:** completed design of business funding option and process ([9753070](https://chaos.ns.team/nsv2/ns-client/commits/9753070))
