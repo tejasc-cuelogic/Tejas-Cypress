@@ -1,19 +1,58 @@
 import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
-import upperFirst from 'lodash/upperFirst';
+import { Visibility } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { DataFormatter } from '../../../../helper';
+import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import Banner from '../components/Banner';
+import { PublicSubNav } from '../../../../theme/shared/';
 
+const getModule = component => Loadable({
+  loader: () => import(`../components/${component}`),
+  loading() {
+    return <div>Loading...</div>;
+  },
+});
+
+@inject('navStore')
+@observer
 class About extends Component {
+  componentWillMount() {
+    if (this.props.match.isExact) {
+      this.props.history.replace(`${this.props.match.url}/mission`);
+    }
+  }
+  module = name => DataFormatter.upperCamelCase(name);
+  handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   render() {
-    const loadSection = upperFirst(this.props.match.params.section) || 'Team';
-    const LoadableAbout = Loadable({
-      loader: () => import(`../components/${loadSection}`),
-      loading() {
-        return <div>Loading...</div>;
-      },
-    });
-
+    const { match, location, navStore } = this.props;
+    const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
-      <LoadableAbout />
+      <Aux>
+        {location.pathname === '/about/mission' && <Banner />}
+        <Visibility onUpdate={this.handleUpdate} continuous className="slide-down">
+          <PublicSubNav
+            navStatus={navStore.navStatus}
+            location={location}
+            navItems={navItems}
+            title="About Us"
+          />
+          <Switch>
+            <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+            {
+              navItems.map(item => (
+                <Route
+                  key={item.to}
+                  path={`${match.url}/${item.to}`}
+                  component={getModule(this.module(item.title))}
+                />
+              ))
+            }
+          </Switch>
+        </Visibility>
+      </Aux>
     );
   }
 }
