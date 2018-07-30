@@ -30,7 +30,7 @@ class DevPassProtected extends Component {
     return (
       <Aux>
         <Modal size="mini" basic open className="multistep-modal">
-          <Logo className="medium" centered dataSrc="LogoColor" />
+          <Logo size="medium" centered dataSrc="LogoWhiteGreen" />
           <Divider hidden />
           <Modal.Content className="signup-modal multistep">
             <Form onSubmit={this.submit}>

@@ -161,7 +161,7 @@ footer{
 	.mission-block {
 		padding: @10px;
 		text-align: center;
-		color: #fff;
+		color: @white;
 		&.green-block {
 			background-color: @primaryColor;
 		}
@@ -171,7 +171,7 @@ footer{
 		.statistic {
 			margin-bottom: 0;
 			.value, .label {
-				color: #fff;
+				color: @white;
 				text-transform: none;
 			}
 			.value~.label {
@@ -180,7 +180,7 @@ footer{
 		}
 	}
 	.ui.grid.mission-base-block {
-		background-color: #fff;
+		background-color: @white;
 		padding: @10px;
 		margin-top: @10px;
 		.statistic {
@@ -196,7 +196,7 @@ footer{
 				}
 			}
 			.label {
-				color: #676A73 !important;
+				color: @neutral-middark !important;
 				font-size: @14px;
 				line-height: @16px;
 				text-transform: inherit;
@@ -223,13 +223,13 @@ footer{
 }
 .offer-filter {
 	position: absolute;
-    background: @unselectedTextColor ;
     height: 100%;
     width: 100%;
     left: 0;
-	top: 0;
+	top: 100%;
+	z-index: 1;
 	.offer-filter-container {
-		background-color: #fff;
+		background-color: @white;
 		width: 100%;
 		height: auto;
 		padding: @17px 0 @59px; 
@@ -257,13 +257,21 @@ footer{
 				background-color: transparent;
 				font-size: @15px;
 				line-height: @19px;
-				color: #616972;
+				color: @neutral-middark;
 				padding: 0;
 				padding-left: @3px;
 				font-weight: normal; 
 			}
 		}
 	}
+}
+.overlay{
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	background-color:fade(@neutral, 30%);
 }
 
 /** Campaign Details **/
@@ -284,18 +292,6 @@ footer{
 			box-shadow: none;
 			margin-bottom: @20px;
 		}
-		.offering-intro {
-			padding: @32px @20px;
-			h4.ui.header {
-				position: relative;
-				> a {
-					position: absolute;
-					left: 0;
-					font-size: @12px;
-					color:@neutral-middark;
-				}
-			}
-		}
 		.progress-bar {
 			height: 210px;
 			width: 210px;
@@ -307,8 +303,20 @@ footer{
 			text-align: center;
 		}
 	}
+	.offering-intro {
+		padding: @32px @20px;
+		h4.ui.header {
+			position: relative;
+			> a {
+				position: absolute;
+				left: 0;
+				font-size: @12px;
+				color:@neutral-middark;
+			}
+		}
+	}
 	.offering-wrapper {
-		background-color: #F3F4F8;
+		background-color: @neutral-midwhite;
 		flex-grow: 1;
 		padding-left: 280px;
 		.offering-content-spacer {
@@ -341,16 +349,13 @@ footer{
 				font-size: @15px;
 				text-align: center;
 			}
-			// i.icon {
-			// 	margin-left: @20px;
-			// }
 		}
 		ul {
 			line-height: @26px;
 			font-size: @15px;
 			color:@neutral-middark;
 			padding-left: @20px;
-
+ 
 			li {
 				span {
 					font-weight: @bold;
@@ -368,7 +373,7 @@ footer{
 					left: -1px;
 					border-style: solid;
 					border-width: 10px 0px 10px 12px;
-					border-color: transparent #fff;
+					border-color: transparent @white;
 					display: block;
 					width: 0;
 					z-index: 0;
@@ -534,8 +539,8 @@ p i.icon {
 	}
 }
 .testimonial-slider {
-	&.testimonial-details {
-		display: flex;
+	.testimonial-details {
+		display: flex !important;
 		flex-direction: column;
 		justify-content: center;
 		h3 {
@@ -552,6 +557,20 @@ p i.icon {
 				color: @primary-one;
 				font-weight: @bold;
 			}
+		}
+	}
+	.slick-prev {
+		&:before {
+			content: "\e916";
+			font-family: 'nextseed';
+			font-size: 18px !important;
+		}
+	}
+	.slick-next {
+		&:before {
+			content: "\e918";
+			font-family: 'nextseed';
+			font-size: 18px !important;
 		}
 	}
 }
@@ -572,12 +591,12 @@ p i.icon {
 		background-color: rgba(255, 255, 255, 0.81);
 		padding-bottom: 4.28571429rem;
 		padding-top: 4.28571429rem;
-		h2.ui.header {
-			line-height: 52px;
+		.ui.header{
+			margin-bottom:@4px;
 		}
 		p {
 			line-height: 24px;
-			font-size: 15px;
+			margin-bottom:@24px;
 		}
 		&.process-right-section {
 			counter-reset: section;
@@ -600,7 +619,7 @@ p i.icon {
 						font-weight: 500;
 						line-height: 24px;
 						font-size: 40px;
-						color: #20C86D;
+						color: @primary-one;
 					}
 				}
 			}
@@ -629,7 +648,7 @@ p i.icon {
 		height: 50px;
 		&:before {
 			font-size: 30px;
-			color: #676A73;
+			color: @neutral-middark;
 		}
 	}
 	.slick-next {
@@ -640,11 +659,6 @@ p i.icon {
 	}
 }
 //Investor homepage
-.investor-bottom-buttons {
-	.ui.compact.button {
-		margin: 0 10px; 
-	}
-}
 .how-it-works-steps {
 	counter-reset: section;
 	.ui.grid {
@@ -661,9 +675,12 @@ p i.icon {
 				font-weight: 500;
 				line-height: 24px;
 				font-size: 40px;
-				color: #20C86D;
+				color: @primary-one;
 			}
 		}
+	}
+	h5.ui.header {
+		margin-bottom: 5px;
 	}
 }
 .ui.grid.flex-column {
@@ -677,13 +694,14 @@ p i.icon {
 			}
 		}
 	}
-}
-.why-nextseed-section {
-	.ui.compact.button {
-		margin: 0 10px;
+	.item {
+		>.content {
+			>.description {
+				margin-top: 0;
+			}
+		}
 	}
 }
-
 /* END <== PUBLIC PAGES UI STYLES */
 
 .content-wrapper{
@@ -720,19 +738,6 @@ p i.icon {
 }
 .secondary-section{
 	background-color:@neutral-offwhite;
-}
-.overlay{
-	position:absolute;
-	top:0;
-	right:0;
-	bottom:0;
-	left:0;
-	background-color:fade(@neutral, 30%);
-	transform:scale(0);
-	&.editing{
-		transform:scale(1);
-		z-index:1;
-	}
 }
 .webcontent-spacer{
 	padding:@20px @40px;
