@@ -48,8 +48,8 @@ const HowItWorks = () => (
             <div className="flex-content">
               <Image src={InvestorImg} />
               <Header as="h3">Term Notes</Header>
-              <Item.Group>
-                <Item relaxed="very">
+              <Item.Group relaxed="very">
+                <Item>
                   <Item.Content>
                     <Item.Header as="h5">
                       What are the benefits?
@@ -60,7 +60,7 @@ const HowItWorks = () => (
                     </Item.Description>
                   </Item.Content>
                 </Item>
-                <Item relaxed="very">
+                <Item>
                   <Item.Content>
                     <Item.Header as="h5">
                       Who is this option best for?
@@ -85,7 +85,7 @@ const HowItWorks = () => (
               <Image src={InvestorImg1} />
               <Header as="h3">Revenue Sharing Notes</Header>
               <Item.Group>
-                <Item relaxed="very">
+                <Item>
                   <Item.Content>
                     <Item.Header as="h5">
                     What are the benefits?
@@ -96,7 +96,7 @@ const HowItWorks = () => (
                     </Item.Description>
                   </Item.Content>
                 </Item>
-                <Item relaxed="very">
+                <Item>
                   <Item.Content>
                     <Item.Header as="h5">
                     Who is this option best for?
