@@ -134,6 +134,15 @@
         &.signup-content{
             // padding-top:0;
             padding-bottom:@20px;
+            .ui.header{
+                >.icon{
+                    display:inline-block;
+                    margin:0 0 0 0.25em;
+                }
+                .sub.header{
+                    font-weight:@normal;
+                }
+            }
         }
         .user-type{
             height:100%;

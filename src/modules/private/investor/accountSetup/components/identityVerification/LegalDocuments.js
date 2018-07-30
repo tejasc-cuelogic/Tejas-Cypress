@@ -42,7 +42,7 @@ const LegalDocuments = observer(({
         <Grid divided="vertically">
           <Grid.Row>
             <Grid.Column width={7}>
-              <Header as="h4">
+              <Header as="h5">
                 Upload a Photo ID
                 <Header.Subheader>Driving Liscence or passport</Header.Subheader>
               </Header>
@@ -58,7 +58,7 @@ const LegalDocuments = observer(({
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={7}>
-              <Header as="h4">Proof of Residence
+              <Header as="h5">Proof of Residence
                 <Popup className="test" trigger={<Icon className="ns-help-circle" />} position="top center" flowing hoverable>
                   <Popup.Content>
                     <p><b>Acceptable documents:</b></p>
