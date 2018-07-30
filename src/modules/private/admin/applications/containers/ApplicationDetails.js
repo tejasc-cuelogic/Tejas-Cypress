@@ -1,27 +1,50 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { Card } from 'semantic-ui-react';
-import { inject, observer } from 'mobx-react';
-import PrivateLayout from '../../../shared/PrivateHOC';
+import { Route, Switch } from 'react-router-dom';
+import { Modal, Card } from 'semantic-ui-react';
+import Loadable from 'react-loadable';
+import { DataFormatter } from '../../../../../helper';
+import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
-@inject('helloWorldStore')
-@withRouter
-@observer
+const navItems = [
+  { title: 'Activity History', to: 'activity-history' },
+  { title: 'Pre-qualification', to: 'pre-qualification' },
+];
+
+const getModule = component => Loadable({
+  loader: () => import(`../components/details/${component}`),
+  loading() {
+    return <div>Loading...</div>;
+  },
+});
 export default class ApplicationDetails extends Component {
+  module = name => DataFormatter.upperCamelCase(name);
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    this.props.history.replace(this.props.refLink);
+  };
   render() {
-    const { currentRecord } = this.props.helloWorldStore;
+    const { match } = this.props;
     return (
-      <PrivateLayout {...this.props}>
-        <Card.Group stackable itemsPerRow={1}>
+      <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal}>
+        <Modal.Content className="transaction-detials">
+          header...
           <Card fluid>
-            <Card.Content>
-              <div style={{ fontSize: '24px', color: '#666', textAlign: 'center' }}>
-                {currentRecord}
-              </div>
-            </Card.Content>
+            <SecondaryMenu match={match} navItems={navItems} />
+            <Switch>
+              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+              {
+                navItems.map(item => (
+                  <Route
+                    key={item.to}
+                    path={`${match.url}/${item.to}`}
+                    component={getModule(this.module(item.title))}
+                  />
+                ))
+              }
+            </Switch>
           </Card>
-        </Card.Group>
-      </PrivateLayout>
+        </Modal.Content>
+      </Modal>
     );
   }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Grid, Input, Button, Pagination, Card, Table, Header, Item, Rating, Label, List } from 'semantic-ui-react';
@@ -13,8 +14,7 @@ export default class AllApplications extends Component {
     this.props.helloWorldStore.initRequest(); // load data
   }
   render() {
-    // const { match, helloWorldStore } = this.props;
-    // const { allRecords } = helloWorldStore;
+    const { match } = this.props;
     return (
       <Aux>
         <Form>
@@ -96,7 +96,7 @@ export default class AllApplications extends Component {
                     <Button.Group vertical compact size="mini">
                       <Button color="green">Pramote</Button>
                       <Button color="red">Delete</Button>
-                      <Button color="blue" inverted className="relaxed">View</Button>
+                      <Button as={Link} to={`${match.url}/1`} color="blue" inverted className="relaxed">View</Button>
                     </Button.Group>
                   </Table.Cell>
                 </Table.Row>

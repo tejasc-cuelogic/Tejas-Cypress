@@ -9,7 +9,7 @@ export default class Applications extends Component {
     return (
       <Switch>
         <Route exact path={`${match.url}`} component={ManageApplications} />
-        <Route exact path={`${match.url}/:id`} component={ApplicationDetails} />
+        <Route path={`${match.url}/:id`} render={props => <ApplicationDetails refLink={match.url} {...props} />} />
       </Switch>
     );
   }
