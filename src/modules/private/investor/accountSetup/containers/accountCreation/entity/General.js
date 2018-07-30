@@ -8,10 +8,11 @@ import { FormInput, MaskedInput2, FormSelect, AutoComplete } from '../../../../.
 @observer
 export default class General extends Component {
   render() {
-    const { GEN_INFO_FRM,
+    const {
+      GEN_INFO_FRM,
       genInfoChange,
       setAddressFields,
-      MaskedInfoChange,
+      maskedGenInfoChange,
     } = this.props.entityAccountStore;
     return (
       <div>
@@ -26,7 +27,7 @@ export default class General extends Component {
             <MaskedInput2
               name="taxId"
               fielddata={GEN_INFO_FRM.fields.taxId}
-              changed={genInfoChange}
+              changed={maskedGenInfoChange}
               taxId
             />
             <h6>Entity Address</h6>
@@ -51,7 +52,7 @@ export default class General extends Component {
               <MaskedInput2
                 name="zipCode"
                 fielddata={GEN_INFO_FRM.fields.zipCode}
-                changed={MaskedInfoChange}
+                changed={maskedGenInfoChange}
                 zipCode
               />
             </Form.Group>

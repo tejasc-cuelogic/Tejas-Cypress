@@ -8,7 +8,7 @@ import { MaskedInput2 } from '../../../../../../../theme/form';
 @observer
 export default class FinancialInformation extends Component {
   render() {
-    const { FIN_INFO_FRM, MaskedInfoChange } = this.props.entityAccountStore;
+    const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h3" textAlign="center">Calculating your Entity`s <br /> investment limit</Header>
@@ -26,7 +26,7 @@ export default class FinancialInformation extends Component {
                   placeHolder={field === 'netAssets' ? '$ 1,000,000' : '$ 5,000'}
                   fielddata={FIN_INFO_FRM.fields[field]}
                   maxLength={FIN_INFO_FRM.fields[field].maxLength}
-                  changed={values => MaskedInfoChange(values, field)}
+                  changed={values => maskedFinInfoChange(values, field)}
                   currency
                   prefix="$ "
                 />

@@ -1,8 +1,9 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Form, Popup, Icon } from 'semantic-ui-react';
+import { Form, Popup, Icon, Button } from 'semantic-ui-react';
 import NumberFormat from 'react-number-format';
+import InputMask from 'react-input-mask';
 import { FieldError } from '../../shared';
 
 const MaskedInput2 = observer((props) => {
@@ -14,9 +15,9 @@ const MaskedInput2 = observer((props) => {
     placeHolder,
   } = props.fielddata;
   return (
-    <Form.Field error={!!error}>
+    <Form.Field error={!!error} className={props.containerclassname || ''}>
       <label>
-        {label}
+        { !props.hidelabel && label}
         {tooltip &&
           <Popup
             trigger={<Icon name="help circle" />}
@@ -26,8 +27,27 @@ const MaskedInput2 = observer((props) => {
           />
         }
       </label>
-      {props.currency ? (
-        <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
+      { props.action ? (
+        <div className="ui action input">
+          <InputMask
+            {...props}
+            value={value}
+            format={props.format}
+            onChange={props.changed}
+            error={!!error}
+            placeHolder={placeHolder}
+            alwaysShowMask
+            maskChar=" "
+          />
+          <Button
+            className={props.actionclass}
+            color={props.actioncolor}
+            onClick={() => props.clickonaction()}
+          >
+            {props.actionlabel}
+          </Button>
+        </div>) : props.currency ? (
+          <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : props.percentage ? (
         <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={props.changed} error={!!error} mask="%" suffix="%" />
       ) : props.phoneNumber ? (
@@ -44,9 +64,7 @@ const MaskedInput2 = observer((props) => {
         <NumberFormat type="text" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
       ) : props.routingNumber ? (
         <NumberFormat format="#########" type="text" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
-      ) : (
-        <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
-      )
+      ) : <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
       }
       {error && !props.showErrorOnField &&
         <FieldError error={error} />
