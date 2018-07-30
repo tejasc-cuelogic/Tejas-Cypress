@@ -30,8 +30,7 @@ class App extends Component {
         if (this.props.userStore.currentUser) {
           this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
         }
-      })
-      .then(() => this.props.uiStore.clearRedirectURL());
+      });
   }
 
   componentDidMount() {
