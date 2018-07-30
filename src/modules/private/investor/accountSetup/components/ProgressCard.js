@@ -61,11 +61,11 @@ const ProgressCard = props => (
                     color="green"
                     content={currentCard.step === 2 ? 'Create' : 'Continue'}
                     onClick={() =>
-                    (currentCard.step !== 0 ?
-                    props.history.push(`${props.match.url}${currentCard.route}`) :
-                    !verificationStatus
-                    ? props.history.push(`${props.match.url}${currentCard.route}`) :
-                    props.history.push(`${props.match.url}${currentCard.altRoute}`))
+                      (currentCard.step !== 0 ?
+                        props.history.push(`${props.match.url}${currentCard.route}`) :
+                        !verificationStatus
+                          ? props.history.push(`${props.match.url}${currentCard.route}`) :
+                          props.history.push(`${props.match.url}${currentCard.altRoute}`))
                     }
                   /> :
                   ''
