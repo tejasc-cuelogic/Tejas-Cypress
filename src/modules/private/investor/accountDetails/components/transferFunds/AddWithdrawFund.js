@@ -16,7 +16,7 @@ const AddWithdrawFund = ({ match, history, location }) => (
       <Header as="h3"><AccTypeTitle noText /> {(match.params.action === 'add' ? 'Add' : 'Withdraw')} funds</Header>
     </Modal.Header>
     <Modal.Content>
-      <Header as="h6">
+      <Header as="h6" className="mb-30">
         <Header.Subheader>Bank account</Header.Subheader>
         Bank of America ...7545 <Link to={location}>Change</Link>
       </Header>
