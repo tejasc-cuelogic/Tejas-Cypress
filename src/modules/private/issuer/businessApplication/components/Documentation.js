@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Grid, Form } from 'semantic-ui-react';
+import { Grid, Form, Popup, Icon, List, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormRadioGroup, FileUploader } from '../../../../../theme/form';
+import { FormRadioGroup, DropZone } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('newBusinessStore')
+@inject('businessAppStore')
 @observer
 export default class Documentation extends Component {
-  submit = () => {
-    // e.preventDefault();
-    console.log(111);
-    // this.props.history.push(`/app/business-application/${APP_STATUS}`);
+  componentWillMount() {
+    this.props.businessAppStore.setFieldvalue('applicationStep', 'documentation');
   }
   render() {
     const {
-      BUSINESS_DOC_FRM, businessDocChange, docuFiles, docuReset, canSubmitApp,
-    } = this.props.newBusinessStore;
+      BUSINESS_DOC_FRM,
+      businessDocChange,
+      businessAppUploadFiles,
+      businessAppRemoveFiles,
+      getBusinessTypeCondtion,
+      getPersonalGuaranteeCondition,
+    } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
+    const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
+    const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
     return (
       <Grid container>
         <Grid.Column>
@@ -32,72 +36,114 @@ export default class Documentation extends Component {
               header="Statements & Agreements"
               subHeader={
                 <span>
-                  Tax returns are used as part of NextSeed’s diligence process.<br />
-                  For new entities, please submit your personal tax returns and, if available,
-                  tax returns of a different business entity that you currently own.<br />
-                  For existing entities, please submit tax returns for the entity.
+                  Provide the most recent 6 months of bank statements for
+                  your business accounts. For new entities, provide if
+                  statements are available.<br />
+                  Also provide the lease for your location. If only an LOIwith the landlord
+                  is currently available, please upload the LOI for review purposes.
+                  <Popup
+                    trigger={<Icon name="help circle" />}
+                    content="If your campaign is successfully funded, an executed lease will be required at closing in order for you to receive funds."
+                    position="top center"
+                    className="center-align"
+                  />
                 </span>
               }
             >
               <Grid stackable columns="equal">
-                <Grid.Column>
-                  <FileUploader
-                    name="bankStatements"
-                    fielddata={fields.bankStatements}
-                    uploadDocument={docuFiles}
-                    removeUploadedDocument={docuReset}
-                  />
-                </Grid.Column>
-                <Grid.Column>
-                  <FileUploader
-                    name="leaseAgreement"
-                    fielddata={fields.leaseAgreement}
-                    uploadDocument={docuFiles}
-                    removeUploadedDocument={docuReset}
-                  />
-                </Grid.Column>
-                <Grid.Column>
-                  NextSeed requires a lease or LOI prior to launching your campaign. Before
-                  disbursing funds, the executed lease is required. If you are currently still
-                  in negotiations with your lease, please submit a draft of the current terms.
-                </Grid.Column>
+                {
+                  statementFileList.map(field => (
+                    <Grid.Column>
+                      <DropZone
+                        multiple
+                        key={field}
+                        name={field}
+                        fielddata={fields[field]}
+                        ondrop={(files, fieldName) =>
+                          businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                        onremove={(e, fieldName, index) =>
+                          businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                        tooltip={fields[field].tooltip}
+                      />
+                    </Grid.Column>
+                  ))
+                }
               </Grid>
             </FormElementWrap>
             <FormElementWrap
-              header="Do you accept Blanket Lien on the Business if your campain is successfully funded?."
+              header="Tax Returns"
+              subHeader="Tax returns are used as part of NextSeed’s diligence process."
+            >
+              <List bulleted>
+                <List.Item>
+                  <b>For new entities</b>, please submit your personal tax returns and,
+                  if available,
+                  tax returns of a different business entity that you currently own.
+                </List.Item>
+                <List.Item>
+                  <b>For existing entities</b>, please submit tax returns for the entity.
+                </List.Item>
+              </List>
+              <Divider hidden />
+              <Grid stackable columns="equal">
+                {
+                  taxFileList.map(field => (
+                    <Grid.Column>
+                      <DropZone
+                        multiple
+                        key={field}
+                        name={field}
+                        fielddata={fields[field]}
+                        ondrop={(files, fieldName) =>
+                          businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                        onremove={(e, fieldName, index) =>
+                          businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                      />
+                    </Grid.Column>
+                  ))
+                }
+              </Grid>
+            </FormElementWrap>
+            <FormElementWrap
+              header="Will you accept a blanket lien on the business if your campaign is successfully funded?"
               subHeader="NextSeed will require it. (Note that if you have existing debt with liens attached, a second lien will be accepted.)"
             >
               <FormRadioGroup
                 fielddata={fields.blanketLien}
                 name="blanketLien"
-                iconic
                 changed={businessDocChange}
                 containerclassname="button-radio"
               />
             </FormElementWrap>
             <FormElementWrap
-              header="Are you willing to provide a personal quarantee?"
+              header="Are you willing to provide a personal guarantee?"
               subHeader="(This is not a requirement, but a personal guarantee can positively impact the terms provided.)"
             >
               <FormRadioGroup
                 fielddata={fields.personalGuarantee}
                 name="personalGuarantee"
-                iconic
                 changed={businessDocChange}
                 containerclassname="button-radio"
               />
-              <p>
-                Please <Link to="/" className="link"><b>download</b></Link>, fill out and upload the
-                Personal Guarantee Form along with any supporting documentation
-              </p>
-              <FileUploader
-                name="personalGuaranteeForm"
-                fielddata={fields.personalGuaranteeForm}
-                uploadDocument={docuFiles}
-                removeUploadedDocument={docuReset}
-              />
+              {getPersonalGuaranteeCondition &&
+                <div>
+                  <p>
+                    Please <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>, fill out and upload the
+                    Personal Guarantee Form along with any supporting documentation
+                  </p>
+                  <DropZone
+                    multiple
+                    name="personalGuaranteeForm"
+                    fielddata={fields.personalGuaranteeForm}
+                    ondrop={(files, fieldName) =>
+                      businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                    onremove={(e, fieldName, index) =>
+                      businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                  />
+                </div>
+              }
             </FormElementWrap>
-            <AppNavigation canSubmitApp={canSubmitApp} action={this.submit} />
+            <AppNavigation />
           </Form>
         </Grid.Column>
       </Grid>

@@ -4,7 +4,7 @@ import { NEW_USER } from '../../../constants/user';
 
 export class UserStore {
   @observable currentUser;
-  @observable USR_FRM = Validator.prepareFormObject(NEW_USER);
+  // @observable USR_FRM = Validator.prepareFormObject(NEW_USER);
 
   @action
   userEleChange = (e, result) => {

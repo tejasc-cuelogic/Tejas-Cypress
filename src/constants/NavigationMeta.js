@@ -73,33 +73,41 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-article',
     title: 'Application',
-    to: 'business-application',
+    to: 'business-application/:applicationId',
     accessibleTo: ['issuer'],
-    subPanel: 1,
+    subPanel: 0,
+    path: 'issuer/businessApplication/containers/BusinessApplication',
     subNavigations: [
       {
         icon: 'ns-check-circle',
         title: 'Pre-qualification',
         to: 'pre-qualification',
         component: 'PreQualification',
+        showIcon: true,
       },
       {
         icon: 'ns-check-circle',
         title: 'Business Details',
         to: 'business-details',
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
         component: 'BusinessDetails',
+        showIcon: true,
       },
       {
         icon: 'ns-check-circle',
         title: 'Performance',
         to: 'performance',
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
         component: 'Performance',
+        showIcon: true,
       },
       {
         icon: 'ns-check-circle',
         title: 'Documentation',
         to: 'documentation',
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
         component: 'Documentation',
+        showIcon: true,
       },
     ],
   },
@@ -306,6 +314,7 @@ export const PUBLIC_NAV = [
   {
     title: 'About Us',
     to: 'about',
+    noNav: true,
     subNavigations: [
       { title: 'Mission', to: 'mission' },
       { title: 'Team', to: 'team' },

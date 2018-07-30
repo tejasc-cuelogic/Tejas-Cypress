@@ -92,10 +92,10 @@ export class Utility {
     return encryptedNumber;
   }
 
-  getFormattedFileData = (files) => {
+  getFormattedFileData = (file) => {
     const fileData = {};
-    if (files && files.length > 0) {
-      const fileInfo = files[0];
+    if (file) {
+      const fileInfo = file;
       fileData.fileName = fileInfo.name.replace(/ /g, '_');
       fileData.fileType = fileInfo.type;
       fileData.fileExtension = fileInfo.name.substr((fileInfo.name.lastIndexOf('.') + 1));

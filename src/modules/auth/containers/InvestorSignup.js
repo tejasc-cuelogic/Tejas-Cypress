@@ -68,7 +68,7 @@ class InvestorSignup extends Component {
               ['email', 'password', 'verify'].map(field => (
                 <FormInput
                   key={field}
-                  type={field === 'password' ? 'password' : 'text'}
+                  type={field !== 'email' ? 'password' : 'text'}
                   name={field}
                   fielddata={SIGNUP_FRM.fields[field]}
                   changed={signupChange}
