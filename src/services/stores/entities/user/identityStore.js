@@ -95,33 +95,23 @@ export class IdentityStore {
 
   @computed
   get formattedUserInfo() {
+    const { fields } = this.ID_VERIFICATION_FRM;
+    const { phone } = userDetailsStore.userDetails.contactDetails;
     const userInfo = {
-      firstLegalName: this.ID_VERIFICATION_FRM.fields.firstLegalName.value,
-      lastLegalName: this.ID_VERIFICATION_FRM.fields.lastLegalName.value,
-      dateOfBirth: this.ID_VERIFICATION_FRM.fields.dateOfBirth.value,
-      ssn: this.ID_VERIFICATION_FRM.fields.ssn.value,
+      firstLegalName: fields.firstLegalName.value,
+      lastLegalName: fields.lastLegalName.value,
+      dateOfBirth: fields.dateOfBirth.value,
+      ssn: fields.ssn.value,
       legalAddress: {
-        street: this.ID_VERIFICATION_FRM.fields.residentalStreet.value,
-        city: this.ID_VERIFICATION_FRM.fields.city.value,
-        state: this.ID_VERIFICATION_FRM.fields.state.value,
-        zipCode: this.ID_VERIFICATION_FRM.fields.zipCode.value,
+        street: fields.residentalStreet.value,
+        city: fields.city.value,
+        state: fields.state.value,
+        zipCode: fields.zipCode.value,
       },
     };
-
-    const number = this.ID_VERIFICATION_FRM.fields.phoneNumber.value ?
-      this.ID_VERIFICATION_FRM.fields.phoneNumber.value :
-      userDetailsStore.userDetails.contactDetails.phone.number;
-    const phoneDetails = {
-      number,
-      countryCode: COUNTRY_CODES.US,
-    };
-
-    const userData = {
-      userInfo,
-      phoneDetails,
-    };
-
-    return userData;
+    const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone.number;
+    const phoneDetails = { number, countryCode: COUNTRY_CODES.US };
+    return { userInfo, phoneDetails };
   }
 
   @computed
@@ -463,20 +453,21 @@ export class IdentityStore {
 
   @computed
   get profileDetails() {
+    const { fields } = this.ID_PROFILE_INFO;
     const profileDetails = {
-      firstName: this.ID_PROFILE_INFO.fields.firstName.value,
-      lastName: this.ID_PROFILE_INFO.fields.lastName.value,
+      firstName: fields.firstName.value,
+      lastName: fields.lastName.value,
       address: {
         mailing: {
-          street: this.ID_PROFILE_INFO.fields.street.value,
-          city: this.ID_PROFILE_INFO.fields.city.value,
-          state: this.ID_PROFILE_INFO.fields.state.value,
-          zipCode: this.ID_PROFILE_INFO.fields.zipCode.value,
+          street: fields.street.value,
+          city: fields.city.value,
+          state: fields.state.value,
+          zipCode: fields.zipCode.value,
         },
       },
       avatar: {
-        name: this.ID_PROFILE_INFO.fields.profilePhoto.value,
-        url: this.ID_PROFILE_INFO.fields.profilePhoto.responseUrl,
+        name: fields.profilePhoto.value,
+        url: fields.profilePhoto.responseUrl,
       },
     };
     return profileDetails;
@@ -484,10 +475,10 @@ export class IdentityStore {
 
   @action
   resetProfilePhoto = () => {
-    this.ID_PROFILE_INFO.fields.profilePhoto.src = '';
-    this.ID_PROFILE_INFO.fields.profilePhoto.error = '';
-    this.ID_PROFILE_INFO.fields.profilePhoto.value = '';
-    this.ID_PROFILE_INFO.fields.profilePhoto.base64String = '';
+    const attributes = ['src', 'error', 'value', 'base64String'];
+    attributes.forEach((val) => {
+      this.ID_PROFILE_INFO.fields.profilePhoto[val] = '';
+    });
   }
 
   @action
@@ -532,32 +523,25 @@ export class IdentityStore {
       this.setProfileInfoField('firstName', legalDetails.legalName.lastLegalName);
     }
     this.setProfileInfoField('email', email);
-    if (contactDetails &&
-      contactDetails.phone !== null &&
+    if (contactDetails && contactDetails.phone !== null &&
       contactDetails.phone.verificationDate !== null
     ) {
       this.setProfileInfoField('phoneNumber', contactDetails.phone.number);
     }
     if (address === null) {
+      const addressFields = ['street', 'city', 'state', 'zipCode'];
       if (legalDetails && legalDetails.legalAddress !== null) {
-        this.setProfileInfoField('street', legalDetails.legalAddress.street);
-        this.setProfileInfoField('city', legalDetails.legalAddress.city);
-        this.setProfileInfoField('state', legalDetails.legalAddress.state);
-        this.setProfileInfoField('zipCode', legalDetails.legalAddress.zipCode);
+        addressFields.forEach((val) => {
+          this.setProfileInfoField(val, legalDetails.legalAddress[val]);
+        });
       }
     } else if (address && address.mailing) {
-      if (address.mailing.street !== null) {
-        this.setProfileInfoField('street', address.mailing.street);
-      }
-      if (address.mailing.city !== null) {
-        this.setProfileInfoField('city', address.mailing.city);
-      }
-      if (address.mailing.state !== null) {
-        this.setProfileInfoField('state', address.mailing.state);
-      }
-      if (address.mailing.zipCode !== null) {
-        this.setProfileInfoField('zipCode', address.mailing.zipCode);
-      }
+      const mailingAddressFields = ['street', 'city', 'state', 'zipCode'];
+      mailingAddressFields.forEach((val) => {
+        if (address.mailing[val] !== null) {
+          this.setProfileInfoField(val, address.mailing[val]);
+        }
+      });
     }
   }
 

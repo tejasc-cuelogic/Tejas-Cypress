@@ -13,6 +13,7 @@ import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, accountActions } from '../../../actions';
 import Helper from '../../../../helper/utility';
+import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 
 class EntityAccountStore {
   @observable FIN_INFO_FRM = FormValidator.prepareFormObject(ENTITY_FIN_INFO);
@@ -449,21 +450,22 @@ class EntityAccountStore {
   }
 
   renderAfterPopulate = () => {
+    const getEntityStep = AccCreationHelper.entitySteps();
     if (!this.FIN_INFO_FRM.meta.isValid) {
-      this.setStepToBeRendered(0);
+      this.setStepToBeRendered(getEntityStep.FIN_INFO_FRM);
     } else if (!this.GEN_INFO_FRM.meta.isValid) {
-      this.setStepToBeRendered(1);
+      this.setStepToBeRendered(getEntityStep.GEN_INFO_FRM);
     } else if (!this.TRUST_INFO_FRM.meta.isValid) {
-      this.setStepToBeRendered(2);
+      this.setStepToBeRendered(getEntityStep.TRUST_INFO_FRM);
     } else if (!this.PERSONAL_INFO_FRM.meta.isValid) {
-      this.setStepToBeRendered(3);
+      this.setStepToBeRendered(getEntityStep.PERSONAL_INFO_FRM);
     } else if (!this.FORM_DOCS_FRM.meta.isValid) {
-      this.setStepToBeRendered(4);
+      this.setStepToBeRendered(getEntityStep.FORM_DOCS_FRM);
     } else if (!bankAccountStore.formLinkBankManually.meta.isValid &&
       isEmpty(bankAccountStore.plaidBankDetails)) {
-      this.setStepToBeRendered(5);
+      this.setStepToBeRendered(getEntityStep.formLinkBankManually);
     } else {
-      this.setStepToBeRendered(6);
+      this.setStepToBeRendered(getEntityStep.summary);
     }
   }
 

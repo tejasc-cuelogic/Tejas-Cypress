@@ -223,16 +223,17 @@ class IraAccountStore {
         this.setFormData('FUNDING_FRM', account.accountDetails);
         this.setFormData('ACC_TYPES_FRM', account.accountDetails);
         this.setFormData('IDENTITY_FRM', account.accountDetails);
+        const getIraStep = AccCreationHelper.iraSteps();
         if (!this.FIN_INFO_FRM.meta.isValid) {
-          this.setStepToBeRendered(0);
+          this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
         } else if (!this.ACC_TYPES_FRM.meta.isValid || this.accountNotSet) {
-          this.setStepToBeRendered(1);
+          this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
         } else if (!this.FUNDING_FRM.meta.isValid || this.fundingNotSet) {
-          this.setStepToBeRendered(2);
+          this.setStepToBeRendered(getIraStep.FUNDING_FRM);
         } else if (!this.IDENTITY_FRM.meta.isValid) {
-          this.setStepToBeRendered(3);
+          this.setStepToBeRendered(getIraStep.IDENTITY_FRM);
         } else {
-          this.setStepToBeRendered(4);
+          this.setStepToBeRendered(getIraStep.summary);
         }
       }
     }
