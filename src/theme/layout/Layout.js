@@ -12,7 +12,7 @@ import ChangePassword from '../../modules/auth/containers/ChangePassword';
 import ForgotPassword from '../../modules/auth/containers/ForgotPassword';
 import ResetPassword from '../../modules/auth/containers/ResetPassword';
 
-@inject('userStore', 'uiStore')
+@inject('userStore', 'uiStore', 'navStore')
 @withRouter
 @observer
 class Layout extends Component {
@@ -30,6 +30,7 @@ class Layout extends Component {
         {(!this.props.userStore.currentUser || !location.pathname.startsWith('/app')) &&
           <Header
             location={location}
+            navStatus={this.props.navStore.navStatus}
             currentUser={this.props.userStore.currentUser}
             handleLogOut={this.handleLogOut}
           />

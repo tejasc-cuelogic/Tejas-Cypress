@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
@@ -11,8 +12,7 @@ import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
 import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
-import { Spinner } from '../../../../../theme/shared';
-import Randavatar from '../../../../../theme/shared/Randavatar';
+import { Spinner, UserAvatar } from '../../../../../theme/shared';
 
 @inject('userDetailsStore', 'userStore', 'profileStore', 'uiStore', 'accountStore')
 @observer
@@ -40,8 +40,12 @@ export default class ProfileData extends Component {
   }
   render() {
     const {
-      email, legalDetails, avatar, firstName,
+      email, legalDetails, avatar, firstName, lastName,
     } = this.props.userDetailsStore.userDetails;
+    const User = { ...this.props.userStore.currentUser };
+    const userAvatar = {
+      firstName, lastName, avatarUrl: avatar ? avatar.url : '', roles: toJS(User.roles),
+    };
     const {
       updateProfileInfo,
       updateProfileInfoChange,
@@ -64,7 +68,7 @@ export default class ProfileData extends Component {
         />
         <Grid.Column widescreen={8} largeScreen={10} tablet={16} mobile={16}>
           <Card fluid className="form-card">
-            <Header as="h3">Personal Profile</Header>
+            <Header as="h5">Personal Profile</Header>
             <Form onSubmit={this.handleUpdateProfileInfo}>
               <Form.Group widths="equal">
                 {['firstName', 'lastName'].map(field => (
@@ -98,7 +102,7 @@ export default class ProfileData extends Component {
                 changed={updateProfileInfoChange}
                 readOnly
               />
-              <Header as="h4">Mailing Address</Header>
+              <Header as="h5">Mailing Address</Header>
               <AutoComplete
                 name="street"
                 fielddata={updateProfileInfo.fields.street}
@@ -130,9 +134,9 @@ export default class ProfileData extends Component {
         <Grid.Column widescreen={5} largeScreen={6} tablet={16} mobile={16}>
           <Card.Group>
             <Card fluid className="form-card">
-              <h3>Profile Photo</h3>
+              <Header as="h5">Profile Photo</Header>
               <div>
-                <Randavatar name={firstName} accountType={this.props.userStore.currentUser.roles} avatarKey={this.props.userStore.currentUser.sub} avatarUrl={avatar ? avatar.url : ''} />
+                <UserAvatar UserInfo={userAvatar} />
                 <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
               </div>
             </Card>

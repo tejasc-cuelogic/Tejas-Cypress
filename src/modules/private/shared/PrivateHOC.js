@@ -10,7 +10,6 @@ import NotFound from '../../shared/NotFound';
 class PrivateHOC extends Component {
   render() {
     const pageMeta = this.props.navStore.navMeta;
-
     if (!pageMeta) {
       return <NotFound />;
     }
@@ -42,7 +41,7 @@ class PrivateHOC extends Component {
         </div>
         {this.props.P5}
         {(pageMeta.subPanel === 1 || this.props.subNav) &&
-          <SecondaryMenu match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} />
+          <SecondaryMenu match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} />
         }
         <div className="content-spacer">
           {this.props.children}

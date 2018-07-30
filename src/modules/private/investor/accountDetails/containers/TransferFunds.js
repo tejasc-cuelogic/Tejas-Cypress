@@ -27,7 +27,7 @@ export default class TransferFunds extends Component {
   render() {
     return (
       <div>
-        <Header as="h3">Transfer funds</Header>
+        <Header as="h4">Transfer funds</Header>
         <Grid>
           <Grid.Row>
             <Grid.Column widescreen={8} largeScreen={11} computer={13} tablet={16} mobile={16}>

@@ -10,13 +10,11 @@ export default class InvestorProfile extends Component {
     const { INVESTOR_PROFILE_FORM, investorProfileChange } = this.props.investorProfileStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">
-          Investor Profile
-        </Header>
-        <Header as="h4" textAlign="center">
+        <Header as="h3" textAlign="center">Investor Profile</Header>
+        <p className="center-align mb-50">
           Please provide the following information so that we can determine which investments
           we are allowed to show you
-        </Header>
+        </p>
         <Form error>
           <FormRadioGroup
             fielddata={INVESTOR_PROFILE_FORM.fields.profileType}

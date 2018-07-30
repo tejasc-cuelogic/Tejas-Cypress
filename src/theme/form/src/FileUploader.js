@@ -15,6 +15,7 @@ const FileUploader = observer((props) => {
         <div className="file-uploader">
           <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
           <input
+            multiple={props.multiple}
             name={props.name}
             type="file"
             onChange={e => props.uploadDocument(e.target.name, e.target.files)}
@@ -22,26 +23,28 @@ const FileUploader = observer((props) => {
         </div>
       }
       {value &&
-      <div className="file-uploader attached">
-        <Responsive
-          as={Button}
-          minWidth={768}
-          size="tiny"
-          compact
-          className="remove pull-right"
-          onClick={() => props.removeUploadedDocument(props.name)}
-        >
-          Remove
-        </Responsive>
-        <Responsive
-          as={Icon}
-          maxWidth={767}
-          name="remove"
-          className="pull-right"
-          onClick={() => props.removeUploadedDocument(props.name)}
-        />
-        <span title={value}>{value}</span>
-      </div>
+        value.map(item => (
+          <div className="file-uploader attached">
+            <Responsive
+              as={Button}
+              minWidth={768}
+              size="tiny"
+              compact
+              className="remove pull-right"
+              onClick={() => props.removeUploadedDocument(props.name)}
+            >
+              Remove
+            </Responsive>
+            <Responsive
+              as={Icon}
+              maxWidth={767}
+              name="remove"
+              className="pull-right"
+              onClick={() => props.removeUploadedDocument(props.name)}
+            />
+            <span title={item}>{item}</span>
+          </div>
+        ))
       }
       {error &&
         <FieldError error={error} />

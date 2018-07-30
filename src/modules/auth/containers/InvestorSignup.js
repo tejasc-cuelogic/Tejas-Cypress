@@ -33,8 +33,8 @@ class InvestorSignup extends Component {
       <Modal size="mini" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
-          <Header as="h2">
-            Sign Up as&nbsp;
+          <Header as="h3">
+            Sign Up as {' '}
             {(SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
           </Header>
         </Modal.Header>
@@ -68,7 +68,7 @@ class InvestorSignup extends Component {
               ['email', 'password', 'verify'].map(field => (
                 <FormInput
                   key={field}
-                  type={field === 'password' ? 'password' : 'text'}
+                  type={field !== 'email' ? 'password' : 'text'}
                   name={field}
                   fielddata={SIGNUP_FRM.fields[field]}
                   changed={signupChange}

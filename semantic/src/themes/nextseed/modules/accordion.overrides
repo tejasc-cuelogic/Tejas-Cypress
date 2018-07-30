@@ -48,7 +48,7 @@
 		.ns-chevron-down.icon {
 			margin:0;
 			height:@21px;
-			color:@theme-primary;
+			color:@primary-one;
 			line-height:@21px;
 			position:absolute;
 			right:0;
@@ -59,6 +59,13 @@
 			.ns-chevron-down.icon{
 				transform:rotate(180deg);
 			}
+		}
+		.ns-chevron-up.icon{
+			height:auto;
+			transform:rotate(180deg);
+		}
+		&.active .ns-chevron-up.icon{
+			transform:rotate(0deg);
 		}
 	}
 	//	FAQ UI
@@ -102,7 +109,7 @@
 					left:0;
 					top:0;
 					bottom:0;
-					background-color:@theme-primary;
+					background-color:@primary-one;
 				}
 			}
 		}
@@ -126,7 +133,7 @@
 		.title{
 			border:@borderColor 1px solid;
 			&.active{
-				background-color:#F8F8F8;
+				background-color:@neutral-offdark;
 			}
 			time{
 				font-size:@12px;
@@ -146,9 +153,8 @@
 			float:right;
 			z-index:99;
 			a, .ui.button, .ui.buttons .button{
-				font-family:@pageFont;
 				font-size:@13px;
-				font-weight:400;
+				font-weight:@fontMedium;
 				text-transform:none;
 				margin:0;
 				padding:0 @8px;
@@ -193,7 +199,7 @@
 	.title{
 		padding:@12px 0;
 		font-weight:400;
-		color:@quaternary-text;
+		color:@neutral-middark;
 		border-top:@border-light 1px solid;
 		&:first-of-type{
 			border:none;

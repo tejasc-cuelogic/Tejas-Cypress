@@ -25,7 +25,7 @@ export default class ResetPassword extends Component {
       <div>
         <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
-            <Header as="h2">Reset Password</Header>
+            <Header as="h3">Reset Password</Header>
             <p>The verification code has been sent to your registered email address</p>
           </Modal.Header>
           <Modal.Content className="signup-content">

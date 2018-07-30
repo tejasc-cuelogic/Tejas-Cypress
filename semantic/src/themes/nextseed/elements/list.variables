@@ -52,11 +52,11 @@
 
 /* Header */
 @itemHeaderFontFamily: @headerFont;
-@itemHeaderFontWeight: 400;
-@itemHeaderColor: @quaternary-text;
+@itemHeaderFontWeight: @bold;
+@itemHeaderColor: @neutral;
 
 /* Description */
-@itemDescriptionColor: rgba(0, 0, 0, 0.7);
+@itemDescriptionColor:@neutral-middark;
 
 /* Link */
 @itemLinkColor: @linkColor;
@@ -208,7 +208,7 @@
 
 /* Divided Horizontal */
 @horizontalCelledSpacing: (@horizontalSpacing / 2);
-@horizontalCelledLineHeight:@16px;
+@horizontalCelledLineHeight: 0.6;
 
 /* Relaxed */
 @relaxedItemVerticalPadding: @relative6px;

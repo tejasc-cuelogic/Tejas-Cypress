@@ -11,7 +11,7 @@ const Redeem = props => (
     className="reward-modal"
   >
     <Modal.Header className="center-align">
-      <Header as="h1">Cooking Classes</Header>
+      <Header as="h3">Cooking Classes</Header>
     </Modal.Header>
     <Modal.Content className="reward-deatils">
       <Grid divided padded="horizontally" columns={2}>
@@ -35,7 +35,7 @@ const Redeem = props => (
     </Modal.Content>
     <Modal.Content className="center-align">
       <div className="reward-description">
-        <Header as="h5">Description Header</Header>
+        <Header as="h6">Description Header</Header>
         <p>
           The prime wagyu briskets from Akaushi Beef will go into the pit between midnight and 2am
           in preparation for lunch and dinner service that day.

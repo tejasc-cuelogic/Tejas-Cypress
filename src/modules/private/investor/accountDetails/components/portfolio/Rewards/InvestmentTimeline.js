@@ -78,7 +78,7 @@ const InvestmentTimeline = (props) => {
   const progress = calcSmartProgress(data.milestones, data.invested);
   return (
     <Aux>
-      <Header as="h3">{props.title}</Header>
+      <Header as="h4">{props.title}</Header>
       <Grid columns="equal" textAlign="center" className="investment-scale">
         <div className="invested">
           <span className="investment-progress" style={{ width: `${progress}%` }} />
@@ -98,8 +98,10 @@ const InvestmentTimeline = (props) => {
                   wide
                 >
                   <Popup.Content>
-                    <Header as="h3" className="mb-half">{milestone.reward.head}</Header>
-                    <Header as="h5">{milestone.reward.subHead}</Header>
+                    <Header as="h4" className="mb-half">
+                      {milestone.reward.head}
+                      <Header.Subheader>{milestone.reward.subHead}</Header.Subheader>
+                    </Header>
                     <List bulleted>
                       {
                         milestone.reward.highlights.map(h => (

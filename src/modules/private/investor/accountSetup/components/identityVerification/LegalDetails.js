@@ -12,7 +12,7 @@ const LegalDetails = observer(({
 }) => (
   <Modal size="mini" open closeIcon onClose={close}>
     <Modal.Header className="center-align signup-header">
-      <Header as="h2">Welcome {name}</Header>
+      <Header as="h3">Welcome {name}</Header>
       <p>Let’s get you set up with a NextSeed investment <br /> account.</p>
       <Divider />
       <p>

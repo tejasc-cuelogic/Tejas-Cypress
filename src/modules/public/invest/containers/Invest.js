@@ -1,12 +1,58 @@
 import React, { Component } from 'react';
-import { Header } from 'semantic-ui-react';
+import { Route, Switch } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import Loadable from 'react-loadable';
+import { Visibility } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { DataFormatter } from '../../../../helper';
+import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import Banner from '../components/Banner';
+import { PublicSubNav } from '../../../../theme/shared/';
 
+const getModule = component => Loadable({
+  loader: () => import(`../components/${component}`),
+  loading() {
+    return <div>Loading...</div>;
+  },
+});
+
+@inject('navStore')
+@observer
 class Invest extends Component {
+  componentWillMount() {
+    if (this.props.match.isExact) {
+      this.props.history.replace(`${this.props.match.url}/why-nextseed`);
+    }
+  }
+  module = name => DataFormatter.upperCamelCase(name);
+  handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   render() {
+    const { match, location, navStore } = this.props;
+    const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
-      <Header as="h1">NextSeed for Investers
-        <Header.Subheader>Invest in exclusive, pre-vetted deals</Header.Subheader>
-      </Header>
+      <Aux>
+        {location.pathname === '/invest/why-nextseed' && <Banner />}
+        <Visibility onUpdate={this.handleUpdate} continuous className="slide-down">
+          <PublicSubNav
+            navStatus={navStore.navStatus}
+            location={location}
+            navItems={navItems}
+            title="Investing"
+          />
+          <Switch>
+            <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+            {
+              navItems.map(item => (
+                <Route
+                  key={item.to}
+                  path={`${match.url}/${item.to}`}
+                  component={getModule(this.module(item.title))}
+                />
+              ))
+            }
+          </Switch>
+        </Visibility>
+      </Aux>
     );
   }
 }

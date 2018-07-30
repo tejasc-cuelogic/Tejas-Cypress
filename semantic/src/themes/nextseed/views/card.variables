@@ -21,11 +21,9 @@
 @width: 290px;
 @borderWidth: 1px;
 @borderShadow: 0px 0px 0px @borderWidth @solidBorderColor;
-@boxShadow:0 0 10px fade(@fullBlack, 10%);
-  // @shadowBoxShadow,
-  // @borderShadow
-;
-@border: none;
+@boxShadow:none;
+@cardHoverShadow:0px 4px 10px 0px @thumbInactiveBackground;
+@border: @borderWidth solid @neutral-darkwhite;
 @zIndex: '';
 @transition:
   box-shadow @defaultDuration @defaultEasing,
@@ -71,15 +69,15 @@
 
 /* Header */
 @headerMargin: '';
-@headerFontWeight: bold;
+@headerFontWeight: @bold;
 @headerFontSize: @relativeBig;
-@headerLineHeightOffset: -(@lineHeight - 1em) / 2;
+@headerLineHeightOffset:0;
 @headerColor: @darkTextColor;
 
 /* Metadata */
 @metaFontSize: @relativeMedium;
 @metaSpacing: 0.3em;
-@metaColor: @lightTextColor;
+@metaColor: @neutral-middark;
 
 /* Icons */
 @actionOpacity: 0.75;
@@ -94,7 +92,7 @@
 
 /* Links */
 @contentLinkColor:@link-color;
-@contentLinkHoverColor:@link-color-darken;
+@contentLinkHoverColor:@link-color;
 @contentLinkTransition: color @defaultDuration @defaultEasing;
 
 @headerLinkColor: @headerColor;
@@ -105,7 +103,7 @@
 
 /* Description */
 @descriptionDistance: 1.5em;
-@descriptionColor:@primary-text;
+@descriptionColor:@neutral;
 
 /* Content Image */
 @contentImageWidth: '';

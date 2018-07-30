@@ -6,7 +6,7 @@ import { Header, Grid, Card, Table, Icon } from 'semantic-ui-react';
 const Transactions = () => {
   return (
     <Aux>
-      <Header as="h3">Transactions</Header>
+      <Header as="h4">Transactions</Header>
       <Grid stackable>
         <Grid.Row>
           <Grid.Column mobile={1} tablet={8} computer={11}>
@@ -58,7 +58,7 @@ const Transactions = () => {
             </Card>
           </Grid.Column>
           <Grid.Column mobile={1} tablet={8} computer={5}>
-            <Header as="h3">Transactions</Header>
+            <Header as="h4">Transactions</Header>
           </Grid.Column>
         </Grid.Row>
       </Grid>
