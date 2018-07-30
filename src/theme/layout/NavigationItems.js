@@ -20,7 +20,7 @@ export class NavItems extends Component {
       location, isApp, refLoc, roles, match,
     } = this.props;
     const app = (isApp) ? 'app' : '';
-    const myNavItems = [...this.props.navItems];
+    const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
     if (refLoc === 'public') {
       const kickMe = this.props.currentUser ? 4 : 5;
       myNavItems.splice(kickMe, 1);

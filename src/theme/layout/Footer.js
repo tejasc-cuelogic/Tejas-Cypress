@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import { Container, Menu, Icon, Image } from 'semantic-ui-react';
 import secure from '../../assets/images/secure.png';
 
@@ -7,7 +8,7 @@ const footer = () => (
     <div className="footer-head">
       <Container>
         <Menu inverted borderless>
-          <Menu.Item href="#">Resources <Icon name="caret down" /></Menu.Item>
+          <Menu.Item as={Link} to="/resources/education-center">Resources <Icon name="caret down" /></Menu.Item>
           <Menu.Item>About Us <Icon name="caret down" /></Menu.Item>
           <Menu.Item>Contact</Menu.Item>
           <Menu.Item>Terms of Use</Menu.Item>
@@ -25,9 +26,9 @@ const footer = () => (
     <section>
       <Container>
         <Menu text vertical>
-          <Menu.Item>Ed Center</Menu.Item>
+          <Menu.Item as={NavLink} to="/resources/education-center">Ed Center</Menu.Item>
           <Menu.Item>Case Studies</Menu.Item>
-          <Menu.Item>Insights</Menu.Item>
+          <Menu.Item as={NavLink} to="/resources/insights">Insights</Menu.Item>
           <Menu.Item>Community</Menu.Item>
           <Menu.Item href="/about/faq">FAQs</Menu.Item>
         </Menu>
