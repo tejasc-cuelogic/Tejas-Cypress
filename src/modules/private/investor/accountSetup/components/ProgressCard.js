@@ -43,6 +43,8 @@ const ProgressCard = props => (
         if (props.signupStatus.partialAccounts.length > 0 && currentCard.step === 2) {
           return null;
         }
+        const verificationStatus =
+        props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification);
         return (
           <Card fluid className={`verification ${status === 2 ? 'done' : status === 0 ? 'disabled' : ''}`}>
             <Card.Content>
@@ -58,7 +60,13 @@ const ProgressCard = props => (
                   <Button
                     color="green"
                     content={currentCard.step === 2 ? 'Create' : 'Continue'}
-                    onClick={() => props.history.push(`${props.match.url}${currentCard.route}`)}
+                    onClick={() =>
+                    (currentCard.step !== 0 ?
+                    props.history.push(`${props.match.url}${currentCard.route}`) :
+                    !verificationStatus
+                    ? props.history.push(`${props.match.url}${currentCard.route}`) :
+                    props.history.push(`${props.match.url}${currentCard.altRoute}`))
+                    }
                   /> :
                   ''
               }

@@ -9,6 +9,7 @@ class Helper {
         action: false,
         successMsg: 'Complete',
         route: '/identity-verification/0',
+        altRoute: '/identity-verification/3',
       },
       'cash-dollar': {
         step: 1,
