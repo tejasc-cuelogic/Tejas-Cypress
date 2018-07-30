@@ -28,13 +28,12 @@ export default class AccountCreation extends React.Component {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
   render() {
-
     const {
       inProgress,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
-    } = this.props.uiStore;    
+    } = this.props.uiStore;
     const {
       PERSONAL_INFO_FRM,
       FIN_INFO_FRM,

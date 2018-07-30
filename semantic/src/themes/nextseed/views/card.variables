@@ -77,7 +77,7 @@
 /* Metadata */
 @metaFontSize: @relativeMedium;
 @metaSpacing: 0.3em;
-@metaColor: @lightTextColor;
+@metaColor: @neutral-middark;
 
 /* Icons */
 @actionOpacity: 0.75;

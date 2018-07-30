@@ -6,3 +6,4 @@ export { default as adminActions } from './src/admin';
 export { default as userActions } from './src/user';
 export { default as bankAccountActions } from './src/bankAccount';
 export { default as accountActions } from './src/account';
+export { default as fileUpload } from './src/fileUpload';

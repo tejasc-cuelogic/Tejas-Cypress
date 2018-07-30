@@ -1,20 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Button, Container } from 'semantic-ui-react';
+import { Header, Button, Container, Grid } from 'semantic-ui-react';
 
 const Track = () => (
   <Aux>
-    <section>
+    <section className="content-spacer track-banner">
       <Container>
-        <Header as="h2" textAlign="center">
-        Track
-        </Header>
+        <Grid padded="vertically">
+          <Grid.Row>
+            <Grid.Column floated="left" width={8} verticalAlign="middle" className="side-section security-right-section">
+              <Header as="h2">Track your investments.</Header>
+              <p className="mb-30">
+              See how you’re doing and reinvest any earnings effortlessly
+              with our easy-to-use dashboard.
+              </p>
+              <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Container>
     </section>
-    <div className="center-align mb-50 investor-bottom-buttons">
-      <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
-    </div>
   </Aux>
 );
 

@@ -33,7 +33,7 @@
             padding:@21px @28px;
             .tags{
                 font-size:@13px;
-                font-weight:@bold;
+                font-weight:@fontMedium;
                 color:@neutral-middark;
                 text-transform:uppercase;
                 >span{
@@ -41,7 +41,7 @@
                 }
             }
             > .meta{
-                color:@neutral-middark;
+                text-transform:none;
             }
             .description{
                 height:80px;

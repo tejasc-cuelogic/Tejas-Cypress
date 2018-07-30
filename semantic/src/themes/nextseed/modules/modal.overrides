@@ -43,7 +43,7 @@
             &:after {
                 content: "";
                 height: 6px;
-                background: #EAECEC;
+                background: @neutral-offdark;
                 width: 145px;
                 position: absolute;
                 bottom: -20px;

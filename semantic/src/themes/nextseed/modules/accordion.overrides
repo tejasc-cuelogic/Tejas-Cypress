@@ -60,6 +60,13 @@
 				transform:rotate(180deg);
 			}
 		}
+		.ns-chevron-up.icon{
+			height:auto;
+			transform:rotate(180deg);
+		}
+		&.active .ns-chevron-up.icon{
+			transform:rotate(0deg);
+		}
 	}
 	//	FAQ UI
 	&.splitted{
@@ -126,7 +133,7 @@
 		.title{
 			border:@borderColor 1px solid;
 			&.active{
-				background-color:#F8F8F8;
+				background-color:@neutral-offdark;
 			}
 			time{
 				font-size:@12px;

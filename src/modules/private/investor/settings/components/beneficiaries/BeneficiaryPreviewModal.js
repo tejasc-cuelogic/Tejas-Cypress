@@ -78,8 +78,8 @@ export default class BeneficiaryPreviewModal extends Component {
             }
           </Grid>
           <div className="center-align mt-30">
-            <Button loading={inProgress} onClick={this.submit} disabled={!BENEFICIARY_META.meta.isValid} color="green" >Submit</Button>
             <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
+            <Button loading={inProgress} onClick={this.submit} disabled={!BENEFICIARY_META.meta.isValid} color="green" >Submit</Button>
           </div>
         </Modal.Content>
       </Modal>
