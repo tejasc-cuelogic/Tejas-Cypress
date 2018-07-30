@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid, Form, Input } from 'semantic-ui-react';
@@ -27,7 +28,7 @@ export default class KnowledgeBase extends Component {
       return 'loading...';
     }
     return (
-      <div>
+      <Aux>
         <Grid>
           {!nosearch && (
             <Grid.Row>
@@ -63,7 +64,7 @@ export default class KnowledgeBase extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </div>
+      </Aux>
     );
   }
 }
