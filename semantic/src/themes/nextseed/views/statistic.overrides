@@ -88,7 +88,43 @@
 // 		font-weight: @fontMedium;
 // 	}
 // }
-
+/** About Us **/
+.statistic-section {
+	.statistic {
+		margin-bottom: 0;
+		.value, .label {
+			color: @white !important;
+			text-transform: none !important;
+		}
+	}
+	.ui.grid.secondary-statistic {
+		background: @white;
+		padding: @14px;
+		margin-top: @14px;
+		border: 2px solid @neutral-offwhite;
+		border-top: 0; 
+		.statistic {
+			.value {
+				font-family: @fontName; 
+				font-size: @28px;
+				line-height: @33px;
+				&.primary-text {
+					color: @primaryColor !important;
+				}
+				&.secondary-text {
+					color: @secondary-color !important;
+				}
+			}
+			.label {
+				color: @neutral-middark !important;
+				font-size: @14px;
+				line-height: @16px;
+				text-transform: inherit;
+				font-weight: normal;
+			}
+		}
+	}
+}
 // Business - how it works
 .proven-result-section {
 	.ui.mini.statistic {
@@ -100,6 +136,17 @@
 			text-align: left;
 			text-transform: none;
 			font-weight: @normal;
+		}
+	}
+}
+//Impact
+.featured-statistic { 
+	.ui.statistic{
+		>.value {
+			font-size: @60px !important;
+		}
+		&.small >.value {
+			font-size: @40px !important;
 		}
 	}
 }

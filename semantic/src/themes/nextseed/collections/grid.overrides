@@ -18,3 +18,22 @@
         }
     }
 }
+.featured-statistic {
+	counter-reset: section;
+	.ui.celled.grid {
+		position: relative;
+		&:before {
+			counter-increment: section;
+			content: "0"counter(section);  
+			top: 35%;
+			left: -11%;
+			position: absolute;
+			font-size: 270px;
+			color: @neutral-darkwhite;
+			background: @white;
+        }
+        >.row>.column {
+            padding: 60px;
+        }
+    }
+}
