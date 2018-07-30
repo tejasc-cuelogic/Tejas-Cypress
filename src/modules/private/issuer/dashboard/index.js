@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import PrivateLayout from '../../shared/PrivateHOC';
 import StickyNotification from './components/StickyNotification';
-import ApplicationList from './components/ApplicationList';
+import ApplicationList from '../application/containers/ApplicationList';
 
 @inject('userStore')
 @observer
