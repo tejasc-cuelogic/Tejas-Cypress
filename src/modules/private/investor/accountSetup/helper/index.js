@@ -1,3 +1,5 @@
+import { DataFormatter } from '../../../../../helper';
+
 class Helper {
   Progress = () => {
     const metaData = {
@@ -6,17 +8,20 @@ class Helper {
         label: 'Verify Identity',
         action: false,
         successMsg: 'Complete',
+        route: '/identity-verification/0',
       },
       'cash-dollar': {
         step: 1,
         label: 'Establish Investor Profile',
         action: false,
         successMsg: 'Complete',
+        route: '/establish-profile',
       },
       'bar-line-chart': {
         step: 2,
         label: 'Create Investment Account',
         action: false,
+        route: '/account-creation',
       },
     };
     return metaData;
@@ -32,6 +37,16 @@ class Helper {
     };
     return metaData.A;
   };
+
+  eleToUpperCaseInArray = (givenArray) => {
+    const upperCaseEleArray = givenArray.map((item) => {
+      if (item === 'ira') {
+        return item.toUpperCase();
+      }
+      return DataFormatter.upperCamelCase(item);
+    });
+    return upperCaseEleArray;
+  }
 }
 
 export default new Helper();

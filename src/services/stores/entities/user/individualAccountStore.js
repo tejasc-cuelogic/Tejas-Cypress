@@ -1,6 +1,7 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find } from 'lodash';
 import { bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
+import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { createAccount, updateAccount } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
@@ -78,7 +79,8 @@ class IndividualAccountStore {
         }
         if (bankAccountStore.formLinkBankManually.meta.isValid ||
           !isEmpty(bankAccountStore.plaidAccDetails)) {
-          this.setStepToBeRendered(2);
+          const getIndividualStep = AccCreationHelper.individualSteps();
+          this.setStepToBeRendered(getIndividualStep.formLinkBankManually);
         }
       }
     }

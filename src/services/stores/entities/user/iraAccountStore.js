@@ -8,7 +8,7 @@ import {
   IRA_FUNDING,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
-import { uiStore, userStore, userDetailsStore } from '../../index';
+import { uiStore, userStore, bankAccountStore, userDetailsStore } from '../../index';
 import { createAccount, updateAccount } from '../../queries/account';
 import { validationActions, accountActions } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -67,6 +67,11 @@ class IraAccountStore {
 
   @computed
   get isValidIraForm() {
+    if (this.FUNDING_FRM.fields.fundingType.value === 0) {
+      return this.FIN_INFO_FRM.meta.isValid && this.ACC_TYPES_FRM.meta.isValid
+      && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid &&
+      (bankAccountStore.formLinkBankManually.meta.isValid || bankAccountStore.isValidLinkBank);
+    }
     return this.FIN_INFO_FRM.meta.isValid && this.ACC_TYPES_FRM.meta.isValid
     && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid;
   }
@@ -218,16 +223,17 @@ class IraAccountStore {
         this.setFormData('FUNDING_FRM', account.accountDetails);
         this.setFormData('ACC_TYPES_FRM', account.accountDetails);
         this.setFormData('IDENTITY_FRM', account.accountDetails);
+        const getIraStep = AccCreationHelper.iraSteps();
         if (!this.FIN_INFO_FRM.meta.isValid) {
-          this.setStepToBeRendered(0);
+          this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
         } else if (!this.ACC_TYPES_FRM.meta.isValid || this.accountNotSet) {
-          this.setStepToBeRendered(1);
+          this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
         } else if (!this.FUNDING_FRM.meta.isValid || this.fundingNotSet) {
-          this.setStepToBeRendered(2);
+          this.setStepToBeRendered(getIraStep.FUNDING_FRM);
         } else if (!this.IDENTITY_FRM.meta.isValid) {
-          this.setStepToBeRendered(3);
+          this.setStepToBeRendered(getIraStep.IDENTITY_FRM);
         } else {
-          this.setStepToBeRendered(4);
+          this.setStepToBeRendered(getIraStep.summary);
         }
       }
     }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
@@ -18,10 +19,9 @@ class InvestorSignup extends Component {
           this.props.history.push('/auth/change-password');
         } else {
           const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
-          const encryptedPwd = btoa(password.value);
-          const encryptedEmail = btoa(email.value);
-          localStorage.setItem('encryptedPwd', encryptedPwd);
-          this.props.history.push(`/auth/confirm-email/${encryptedEmail}`);
+          const userCredentials = { email: email.value, password: btoa(password.value) };
+          cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 300 });
+          this.props.history.push('/auth/confirm-email');
         }
       })
       .catch(() => { });
@@ -36,6 +36,7 @@ class InvestorSignup extends Component {
       <Modal
         size="mini"
         open
+        closeOnRootNodeClick={false}
         onClose={
           () => {
             reset('SIGNUP');

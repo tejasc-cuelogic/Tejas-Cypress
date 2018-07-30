@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import cookie from 'react-cookies';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
@@ -13,10 +14,12 @@ import Helper from '../../../helper/utility';
 export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
     const { CONFIRM_FRM } = this.props.authStore;
-    const encryptedEmail = this.props.match.params.id;
-    CONFIRM_FRM.fields.email.value = atob(encryptedEmail);
-    const decryptedPwd = atob(localStorage.getItem('encryptedPwd'));
-    CONFIRM_FRM.fields.password.value = decryptedPwd;
+    const credentials = cookie.load('USER_CREDENTIALS');
+    CONFIRM_FRM.fields.email.value = credentials.email;
+    CONFIRM_FRM.fields.password.value = atob(credentials.password);
+  }
+  componentWillUnmount() {
+    cookie.remove('USER_CREDENTIALS', { maxAge: 300 });
   }
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
@@ -67,7 +70,7 @@ export default class ConfirmEmailAddress extends Component {
     const { CONFIRM_FRM, ConfirmChange, confirmProgress } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
+      <Modal size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
           <Divider />
@@ -94,6 +97,7 @@ export default class ConfirmEmailAddress extends Component {
             <ReactCodeInput
               fields={6}
               type="number"
+              filterChars
               className="otp-field"
               fielddata={CONFIRM_FRM.fields.code}
               onChange={ConfirmChange}

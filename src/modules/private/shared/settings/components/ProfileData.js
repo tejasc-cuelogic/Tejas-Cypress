@@ -20,9 +20,6 @@ export default class ProfileData extends Component {
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
   }
-  handleNavToVerifyIdentity = (step) => {
-    this.props.uiStore.setDashboardWizardStep(step);
-  }
   isVerified = (cipStatus) => {
     let checkStatus = '';
     if (cipStatus !== null) {
@@ -145,7 +142,6 @@ export default class ProfileData extends Component {
               email={email}
               legalDetails={legalDetails}
               isUserVerified={this.isVerified}
-              handleNavToVerifyIdentity={this.handleNavToVerifyIdentity}
             />
           </Card.Group>
         </Grid.Column>

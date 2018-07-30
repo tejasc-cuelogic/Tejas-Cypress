@@ -6,7 +6,7 @@ import { Modal, Form, Button } from 'semantic-ui-react';
 import { ImageCropper } from '../../../../../../theme/form';
 import {
   PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS,
-} from '../../../../../../constants/profile';
+} from '../../../../../../services/constants/user';
 
 @inject('identityStore', 'uiStore')
 @withRouter

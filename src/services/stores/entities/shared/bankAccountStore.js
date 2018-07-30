@@ -111,12 +111,22 @@ export class BankAccountStore {
 
   @computed
   get isValidLinkBank() {
-    return !isEmpty(this.plaidBankDetails);
+    return !isEmpty(this.plaidAccDetails);
   }
 
   @action
   setShowAddFunds = () => {
     this.showAddFunds = true;
+  }
+
+  @action
+  resetLinkBank = () => {
+    Validator.resetFormData(this.formLinkBankManually);
+    Validator.resetFormData(this.formAddFunds);
+    this.plaidAccDetails = {};
+    this.plaidBankDetails = {};
+    this.depositMoneyNow = true;
+    this.showAddFunds = false;
   }
 }
 

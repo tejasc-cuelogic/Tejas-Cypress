@@ -27,7 +27,7 @@ export default class NewPhoneNumber extends Component {
   render() {
     const {
       ID_VERIFICATION_FRM,
-      personalInfoChange,
+      personalInfoMaskedChange,
     } = this.props.identityStore;
     const { match } = this.props;
     const { errors } = this.props.uiStore;
@@ -50,9 +50,10 @@ export default class NewPhoneNumber extends Component {
           <Form error onSubmit={this.handleChangePhoneNumber}>
             <MaskedInput2
               name="phoneNumber"
+              type="tel"
               fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
               format="###-###-####"
-              changed={personalInfoChange}
+              changed={personalInfoMaskedChange}
               phoneNumber
             />
             <div className="center-align">

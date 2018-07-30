@@ -6,6 +6,7 @@ import {
   FINANCES,
   INVESTMENT_EXPERIENCE,
 } from '../../../../constants/account';
+import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { updateInvestorProfileData } from '../../queries/account';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { DataFormatter, FormValidator } from '../../../../helper';
@@ -200,16 +201,17 @@ class InvestorProfileStore {
         this.setFormData('FINANCES_FORM', investorProfileData);
         this.setFormData('INVESTOR_PROFILE_FORM', investorProfileData);
         this.setFormData('INVESTMENT_EXP_FORM', investorProfileData);
+        const getProfileStep = AccCreationHelper.establishProfileSteps();
         if (!this.EMPLOYMENT_FORM.meta.isValid) {
-          this.setStepToBeRendered(0);
+          this.setStepToBeRendered(getProfileStep.EMPLOYMENT_FORM);
         } else if (!this.INVESTOR_PROFILE_FORM.meta.isValid || this.investorProfileNotSet) {
-          this.setStepToBeRendered(1);
+          this.setStepToBeRendered(getProfileStep.INVESTOR_PROFILE_FORM);
         } else if (!this.FINANCES_FORM.meta.isValid) {
-          this.setStepToBeRendered(2);
+          this.setStepToBeRendered(getProfileStep.FINANCES_FORM);
         } else if (!this.INVESTMENT_EXP_FORM.meta.isValid) {
-          this.setStepToBeRendered(3);
+          this.setStepToBeRendered(getProfileStep.INVESTMENT_EXP_FORM);
         } else {
-          this.setStepToBeRendered(3);
+          this.setStepToBeRendered(getProfileStep.INVESTMENT_EXP_FORM);
         }
       }
     }
@@ -242,6 +244,7 @@ class InvestorProfileStore {
         if (!isNull(investorProfileData.investorProfileType)) {
           this.INVESTOR_PROFILE_FORM.fields[f].value =
           investorProfileData.investorProfileType;
+          this.setInvestorProfileNotSet(false);
         } else {
           this.setInvestorProfileNotSet(true);
           isDirty = true;
