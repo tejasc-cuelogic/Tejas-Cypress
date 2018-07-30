@@ -10,7 +10,7 @@ import {
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { uiStore, userStore, bankAccountStore, userDetailsStore } from '../../index';
 import { createAccount, updateAccount } from '../../queries/account';
-import { validationActions, accountActions } from '../../../actions';
+import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 
@@ -276,20 +276,23 @@ class IraAccountStore {
 
   @action
   setFileUploadData = (field, files) => {
-    accountActions.setFileUploadData(this.IDENTITY_FRM, field, files, 'ACCOUNT_IRA_CREATION_CIP', 'INVESTOR').then(action((result) => {
+    const file = files[0];
+    const fileData = Helper.getFormattedFileData(file);
+    fileUpload.setFileUploadData('', fileData, 'ACCOUNT_IRA_CREATION_CIP', 'INVESTOR').then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this.IDENTITY_FRM.fields[field].fileId = fileId;
       this.IDENTITY_FRM.fields[field].preSignedUrl = preSignedUrl;
-      const fileData = Helper.getFormattedFileData(files);
+      this.IDENTITY_FRM.fields[field].fileData = file;
       this.IDENTITY_FRM = FormValidator.onChange(
         this.IDENTITY_FRM,
         { name: field, value: fileData.fileName },
       );
       uiStore.setProgress();
-      Helper.putUploadedFile([this.IDENTITY_FRM.fields.identityDoc])
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
         .then(() => {
         })
         .catch((err) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setProgress(false);
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
         });
@@ -299,7 +302,8 @@ class IraAccountStore {
   @action
   removeUploadedData = (field) => {
     const currentStep = { name: 'Identity' };
-    accountActions.removeUploadedData(this.IDENTITY_FRM, field, 'ACCOUNT_IRA_CREATION_CIP').then(action(() => {
+    const { fileId } = this.IDENTITY_FRM.fields[field];
+    fileUpload.removeUploadedData(fileId).then(action(() => {
       this.IDENTITY_FRM.fields[field].value = '';
       this.IDENTITY_FRM.fields[field].fileId = '';
       this.IDENTITY_FRM.fields[field].preSignedUrl = '';

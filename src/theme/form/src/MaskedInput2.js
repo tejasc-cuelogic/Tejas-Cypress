@@ -59,7 +59,7 @@ const MaskedInput2 = observer((props) => {
       ) : props.dateOfBirth ? (
         <NumberFormat type="text" format="##/##/####" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.taxId ? (
-        <NumberFormat type="text" format="##-#######" placeholder={placeHolder} {...props} value={value} onChange={props.changed} error={!!error} />
+        <NumberFormat type="text" format="##-#######" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.accountNumber ? (
         <NumberFormat type="text" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
       ) : props.routingNumber ? (

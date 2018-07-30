@@ -8,7 +8,7 @@ import { verifyCIPUser, updateUserCIPInfo, startUserPhoneVerification, verifyCIP
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
-import { accountActions } from '../../../actions';
+import { fileUpload } from '../../../actions';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
 import apiService from '../../../../api/restApi';
 
@@ -165,19 +165,21 @@ export class IdentityStore {
 
   @action
   setFileUploadData = (field, files) => {
-    accountActions.setFileUploadData(this.ID_VERIFICATION_DOCS_FRM, field, files, 'PROFILE_CIP', 'INVESTOR').then(action((result) => {
+    const file = files[0];
+    const fileData = Helper.getFormattedFileData(file);
+    fileUpload.setFileUploadData('', fileData, 'PROFILE_CIP', 'INVESTOR').then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this.ID_VERIFICATION_DOCS_FRM.fields[field].fileId = fileId;
       this.ID_VERIFICATION_DOCS_FRM.fields[field].preSignedUrl = preSignedUrl;
-      this.ID_VERIFICATION_DOCS_FRM.fields[field].fileData = files;
-      const fileData = Helper.getFormattedFileData(files);
+      this.ID_VERIFICATION_DOCS_FRM.fields[field].fileData = file;
       this.ID_VERIFICATION_DOCS_FRM = FormValidator.onChange(
         this.ID_VERIFICATION_DOCS_FRM,
         { name: field, value: fileData.fileName },
       );
-      Helper.putUploadedFile([this.ID_VERIFICATION_DOCS_FRM.fields[field]])
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
         .then(() => {})
         .catch((err) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
         })
         .finally(() => {
@@ -188,7 +190,8 @@ export class IdentityStore {
 
   @action
   removeUploadedData(field) {
-    accountActions.removeUploadedData(this.ID_VERIFICATION_DOCS_FRM, field, 'PROFILE_CIP').then(action(() => {
+    const { fileId } = this.ID_VERIFICATION_DOCS_FRM.fields[field];
+    fileUpload.removeUploadedData(fileId).then(action(() => {
       this.ID_VERIFICATION_DOCS_FRM = FormValidator.onChange(
         this.ID_VERIFICATION_DOCS_FRM,
         { name: field, value: '' },

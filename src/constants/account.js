@@ -2,8 +2,8 @@ import moment from 'moment';
 import Validator from 'validatorjs';
 
 /* eslint-disable no-unused-vars, arrow-body-style */
-Validator.register('taxId', (value, requirement, attribute) => {
-  return value.match(/^\d{2}-\d{7}$/);
+Validator.register('taxId', (value, attribute) => {
+  return value.toString().length === 9;
 }, 'The :attribute is not in the format XX-XXXXXXX.');
 
 Validator.register('minAcnum', (value, requirement, attribute) => {

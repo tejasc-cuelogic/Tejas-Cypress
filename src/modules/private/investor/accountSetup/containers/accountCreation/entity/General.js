@@ -28,6 +28,7 @@ export default class General extends Component {
               name="taxId"
               fielddata={GEN_INFO_FRM.fields.taxId}
               changed={maskedGenInfoChange}
+              format="##-#######"
               taxId
             />
             <h6>Entity Address</h6>

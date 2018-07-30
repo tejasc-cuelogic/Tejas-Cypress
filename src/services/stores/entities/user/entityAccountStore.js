@@ -11,7 +11,7 @@ import { bankAccountStore, userDetailsStore, userStore, uiStore } from '../../in
 import { createAccount, updateAccount } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { validationActions, accountActions } from '../../../actions';
+import { validationActions, fileUpload } from '../../../actions';
 import Helper from '../../../../helper/utility';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 
@@ -479,18 +479,19 @@ class EntityAccountStore {
 
   @action
   setFileUploadData = (form, field, files) => {
-    accountActions.setFileUploadData(this[form], field, files, 'ACCOUNT_ENTITY_CREATION', 'INVESTOR').then(action((result) => {
+    const file = files[0];
+    const fileData = Helper.getFormattedFileData(file);
+    fileUpload.setFileUploadData('', fileData, 'ACCOUNT_ENTITY_CREATION', 'INVESTOR').then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this[form].fields[field].fileId = fileId;
       this[form].fields[field].preSignedUrl = preSignedUrl;
-      const payloadData = [this[form].fields[field]];
-      const fileData = Helper.getFormattedFileData(files);
+      this[form].fields[field].fileData = file;
       this[form] = FormValidator.onChange(
         this[form],
         { name: field, value: fileData.fileName },
       );
       uiStore.setProgress();
-      Helper.putUploadedFile(payloadData)
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
         .then(() => { })
         .catch((err) => {
           uiStore.setProgress(false);
@@ -502,7 +503,8 @@ class EntityAccountStore {
   @action
   removeUploadedData = (form, field, step) => {
     const currentStep = { name: step };
-    accountActions.removeUploadedData(this[form], field, step, 'entity').then(action(() => {
+    const { fileId } = this[form].fields[field];
+    fileUpload.removeUploadedData(fileId).then(action(() => {
       this[form] = FormValidator.onChange(
         this[form],
         { name: field, value: '' },
