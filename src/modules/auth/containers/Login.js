@@ -19,12 +19,14 @@ class Login extends Component {
     authActions.login()
       .then(() => {
         const { roles } = this.props.userStore.currentUser;
+        const { redirectURL } = this.props.uiStore;
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/auth/change-password');
         } else {
           this.props.authStore.reset();
-          const redirectUrl = roles && roles.includes('investor') ? 'summary' : 'dashboard';
-          this.props.history.replace(`/app/${redirectUrl}`);
+          const redirectUrl = redirectURL ? redirectURL.pathname :
+            `/app/${(roles && roles.includes('investor') ? 'summary' : 'dashboard')}`;
+          this.props.history.replace(redirectUrl);
         }
       });
   };
