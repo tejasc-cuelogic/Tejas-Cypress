@@ -1433,10 +1433,13 @@ svg:not(:root).recharts-surface{
 		}
 	}
 	>.ui.header{
-		margin-bottom:@42px;
+		margin-bottom:@28px;
 		.sub.header{
 			margin-top:@10px;
 		}
+	}
+	.ui.accordion{
+		margin-bottom:@28px;
 	}
 	.field-wrap{
 		padding:@40px;

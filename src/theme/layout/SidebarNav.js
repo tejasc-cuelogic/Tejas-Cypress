@@ -50,7 +50,7 @@ export const GetNavItem = (item, roles) => {
 };
 
 export const GetNavMeta = (item, roles, nonprivate) => {
-  const navMeta = !nonprivate ? _.find(PRIVATE_NAV, i => item.includes(i.to)) :
+  const navMeta = !nonprivate ? _.find(PRIVATE_NAV, i => matchPath(item, { path: `/app/${i.to}` })) :
     _.find(PUBLIC_NAV, i => matchPath(item, { path: `/${i.to}` }));
   navMeta.title = typeof navMeta.title === 'object' && roles ? navMeta.title[roles[0]] :
     navMeta.title;
