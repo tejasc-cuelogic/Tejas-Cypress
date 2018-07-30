@@ -7,7 +7,7 @@ import mapValues from 'lodash/mapValues';
 
 @inject('educationStore')
 @observer
-export default class Faq extends Component {
+export default class AccList extends Component {
   state = { activeIndex: 0 };
   toggleAction = (e, titleProps) => {
     const { index, refItem } = titleProps;

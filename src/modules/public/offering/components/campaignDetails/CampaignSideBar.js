@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Header, Icon, Statistic, Button, Menu } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
+import CampaignProgress from './CampaignProgress';
 
 @withRouter
 export default class CampaignSideBar extends Component {
@@ -16,7 +17,7 @@ export default class CampaignSideBar extends Component {
             Account Settings
             <Header.Subheader>Manage your preferences</Header.Subheader>
           </Header>
-          <div className="progress-bar" />
+          <CampaignProgress />
           <p>
             <Icon name="flag" /> Min reached on 10 days ago
           </p>

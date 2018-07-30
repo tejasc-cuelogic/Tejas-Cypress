@@ -56,6 +56,30 @@
         &.slide-up {
             top: -100px;
         }
+        .dropdown.item .menu {
+            top: 129%;
+            background: transparent;
+            &.transition:after {
+                content: "";
+                position: absolute;
+                top: -12px;
+                left: 42%;
+                border-width: 0 12px 12px;
+                border-style: solid;
+                border-color: @primary-one transparent;
+                display: block;
+                width: 0;
+            }
+            >.item {
+                background: @primary-one !important;
+                text-align: center;
+                color: @white !important;
+                &:hover, &.active {
+                    background: @primary-one-darken !important;
+                    color: @white !important;
+                }
+            }
+        }
     }
 }
 .ui.secondary.menu.menu-secondary-fixed {

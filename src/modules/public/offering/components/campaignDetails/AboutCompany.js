@@ -162,7 +162,7 @@ class AboutCompany extends Component {
                 </Breadcrumb>
                 <Grid doubling columns={3}>
                   <Grid.Column>
-                    <Reveal animated="fade">
+                    <Reveal animated="small fade">
                       <Reveal.Content hidden>
                         <p>Lorem Ipsum</p>
                       </Reveal.Content>
@@ -245,7 +245,7 @@ class AboutCompany extends Component {
           <Header as="h3">
           Meet the Team
           </Header>
-          <Modal.Content scrolling>
+          <Modal.Content scrolling className="team-details-container">
             <Grid doubling columns={2} className="compact" verticalAlign="middle">
               <Grid.Column>
                 <Image src={campainAboutImg} />

@@ -312,6 +312,19 @@ export const PRIVATE_NAV = [
 
 export const PUBLIC_NAV = [
   {
+    title: 'About Us',
+    to: 'about',
+    noNav: true,
+    subNavigations: [
+      { title: 'Mission', to: 'mission' },
+      { title: 'Team', to: 'team' },
+      { title: 'Careers', to: 'careers' },
+      { title: 'Impact', to: 'impact' },
+      { title: 'Ambassadors', to: 'ambassadors' },
+      { title: 'Press', to: 'press' },
+    ],
+  },
+  {
     title: 'Explore Campaigns',
     to: 'offerings',
     subNavigations: [
@@ -341,6 +354,7 @@ export const PUBLIC_NAV = [
   {
     title: 'How NextSeed Works',
     to: 'business',
+    noNav: true,
     subNavigations: [
       { title: 'How it Works', to: 'how-it-works' },
       { title: 'Funding Options', to: 'funding-options' },
@@ -352,12 +366,22 @@ export const PUBLIC_NAV = [
   {
     title: 'Why NextSeed',
     to: 'invest',
+    noNav: true,
     subNavigations: [
       { title: 'Why Nextseed', to: 'why-nextseed' },
       { title: 'How it Works', to: 'how-it-works' },
       { title: 'Account Types', to: 'account-types' },
       { title: 'Security', to: 'security' },
       { title: 'Track', to: 'track' },
+    ],
+  },
+  {
+    title: 'How NextSeed Works',
+    to: '',
+    subPanel: 1,
+    subNavigations: [
+      { title: 'For Investors', to: 'invest' },
+      { title: 'For Businesses', to: 'business' },
     ],
   },
 ];
