@@ -14,10 +14,20 @@ export default class Insights extends Component {
     };
     return (
       <Aux>
-        <NsCarousel {...settings} className="insight-slider">
+        <NsCarousel {...settings}>
           {
             [1, 2, 3, 4, 5].map(i => (
-              <Image src={Insight} key={i} />
+              <div className="insight-image-wrapper">
+                <Image src={Insight} key={i} />
+                <div className="image-caption">
+                  <p className="news-category">
+                  BUSINESS
+                  </p>
+                  <p className="news-title">
+                  Bring the local food movement home with hyper local sourcing.
+                  </p>
+                </div>
+              </div>
             ))
           }
         </NsCarousel>

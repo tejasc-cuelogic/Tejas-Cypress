@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Container, Grid, Image } from 'semantic-ui-react';
+import { Header, Container, Grid, Image, Breadcrumb } from 'semantic-ui-react';
 import InsightDetails from '../../../../assets/images/insight-details.jpg';
 
 export default class InsightsDetails extends Component {
@@ -9,6 +9,11 @@ export default class InsightsDetails extends Component {
       <Aux>
         <Container>
           <section>
+            <Breadcrumb className="mb-30">
+              <Breadcrumb.Section link>Insights</Breadcrumb.Section>
+              <Breadcrumb.Divider icon="right angle" />
+              <Breadcrumb.Section link>Short Blog Title Here</Breadcrumb.Section>
+            </Breadcrumb>
             <Grid>
               <Grid.Column width={12}>
                 <Header as="h2">

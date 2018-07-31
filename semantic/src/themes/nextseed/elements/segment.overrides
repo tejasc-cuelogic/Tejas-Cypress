@@ -5,6 +5,14 @@
 .ui.padded.segment {
     padding: 30px;
 }
+.press-news {
+	.ui.segment {
+		padding: 0;
+		border: 0;
+		box-shadow: none;
+		margin: 0.9rem 0;
+    }
+}
 //  Public page Ends
 
 //  User Account details

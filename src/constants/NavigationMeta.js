@@ -29,6 +29,9 @@ export const PRIVATE_NAV = [
       {
         title: 'Beneficiaries', to: 'beneficiaries', component: 'Beneficiaries', accessibleTo: ['investor'],
       },
+      {
+        title: 'Agreements', to: 'agreements', component: 'Agreements', accessibleTo: ['investor'],
+      },
     ],
   },
   {
@@ -329,22 +332,22 @@ export const PUBLIC_NAV = [
     to: 'offerings',
     subNavigations: [
       {
-        icon: 'home', title: 'Overview', to: 'overview', component: 'Overview',
+        icon: 'ns-home-line', title: 'Overview', to: 'overview', component: 'Overview',
       },
       {
-        icon: 'home', title: 'About the Company', to: 'about', component: 'AboutCompany',
+        icon: 'ns-edu-center', title: 'About the Company', to: 'about', component: 'AboutCompany',
       },
       {
-        icon: 'home', title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
+        icon: 'ns-investment', title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
       },
       {
-        icon: 'home', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
+        icon: 'ns-rewards', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
       },
       {
-        icon: 'home', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
+        icon: 'ns-document-search', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
       },
       {
-        icon: 'home', title: 'Comments', to: 'comments', component: 'Comments',
+        icon: 'ns-coments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
       },
       {
         icon: 'share alternate', title: 'Share', to: 'share', component: 'Share',

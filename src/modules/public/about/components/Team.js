@@ -15,7 +15,7 @@ class team extends Component {
         <Grid stackable columns={2}>
           <Grid.Column>
             <Grid centered>
-              <Grid.Column width={8}>
+              <Grid.Column width={8} className="team-column">
                 <Header as="h2">Meet our team.</Header>
                 <p>
                   We&apos;re a team of entrepreneurs with backgrounds in business, finance,
