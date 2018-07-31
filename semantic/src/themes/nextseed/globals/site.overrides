@@ -183,9 +183,7 @@ footer{
 		margin-top: @14px;
 		.statistic {
 			.value {
-				font-family: @fontName; 
 				font-size: @28px;
-				line-height: @33px;
 				&.primary-text {
 					color: @primaryColor !important;
 				}
@@ -228,7 +226,6 @@ footer{
 		h6.ui.header {
 			font-size: @13px;
 			font-weight: @bold;
-			line-height: @16px;
 			color:@neutral-middark;
 			padding-bottom: @6px;
 		}
