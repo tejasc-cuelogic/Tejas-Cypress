@@ -206,7 +206,7 @@ footer{
             font-size: @14px;
             line-height: @20px;
             .ui.image.filterIcon {
-                margin-right: 10px;
+                margin-right: @10px;
             }
             .ui.image.closeIcon {
                 margin-left: 117px;
@@ -231,7 +231,7 @@ footer{
 				>i.icon {
 					float: left;
 					margin-left: 0;
-                    margin-right: 14px;
+                    margin-right: @14px;
                     font-size: @20px;
                     margin-top: -3px;
 				}

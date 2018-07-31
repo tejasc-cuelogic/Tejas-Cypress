@@ -140,7 +140,7 @@ a.text-link{
 	background-color: @neutral-offwhite;
 }
 .green-block {
-	background-color: @primaryColor;
+	background-color: @primary-one;
 }
 .blue-block {
 	background-color: @secondary-color;
@@ -691,7 +691,7 @@ p i.icon {
 		overflow: hidden;
 		img.ui.image {
 			width: auto;
-			max-width: inherit;
+			max-width: none;
 		}
 	}
 }
@@ -702,18 +702,18 @@ address {
 	}
 }
 .press-list {
-	padding: 20px 50px;
+	padding: @20px @50px;
 	.header{
 		color: @black !important;
 		font-weight: @bold;
 	}
 	.divider {
-		margin: 0.8rem 0 0.5rem !important;
+		margin: @11px 0 @7px !important;
 	}
 	a {
 		i {
 			color: @primary-two !important; 
-			margin-right: 10px !important;	
+			margin-right: @10px !important;	
 		}
 		color: @primary-two !important; 
 	}

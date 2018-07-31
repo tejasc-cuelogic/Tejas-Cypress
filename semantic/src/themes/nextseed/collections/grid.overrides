@@ -25,12 +25,13 @@
 		&:before {
 			counter-increment: section;
 			content: "0"counter(section);  
-			top: 35%;
+			top: 50px;
 			left: -11%;
 			position: absolute;
 			font-size: 270px;
 			color: @neutral-darkwhite;
-			background: @white;
+            height: 200px;
+            line-height: 200px;
         }
         >.row>.column {
             padding: 60px;
