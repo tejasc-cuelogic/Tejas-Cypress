@@ -22,6 +22,7 @@ class EntityAccountStore {
   @observable PERSONAL_INFO_FRM = FormValidator.prepareFormObject(ENTITY_PERSONAL_INFO);
   @observable FORM_DOCS_FRM = FormValidator.prepareFormObject(ENTITY_FORMATION_DOCS);
   @observable entityData = {};
+  @observable stepToBeRendered = '';
 
   @action
   setStepToBeRendered(step) {
