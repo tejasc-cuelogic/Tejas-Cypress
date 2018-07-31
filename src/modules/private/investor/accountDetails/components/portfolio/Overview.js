@@ -1,53 +1,95 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import { Header, Table } from 'semantic-ui-react';
-import { THeader } from '../../../../../../theme/table/NSTable';
+import { Header, Table, Grid, Statistic, Button, Divider } from 'semantic-ui-react';
 import { AccTypeTitle } from '../../../../../../theme/shared';
-import Helper from '../../../../../../helper/utility';
-
-const result = {
-  columns: [
-    { title: 'Payment Date', field: 'payDate', textAlign: 'left' },
-    { title: 'Payment Received', field: 'received', className: 'positive-text' },
-    { title: 'Interest Paid', field: 'interest' },
-    { title: 'Principal', field: 'principal' },
-    { title: 'Service Fees', field: 'fees' },
-    { title: 'Net Payment Received', field: 'netReceived' },
-  ],
-  rows: Array(12).fill({
-    payDate: '01-24-2018', received: 150, interest: 10, principal: 5, fees: 7, netReceived: 128,
-  }),
-};
 
 const Overview = () => (
   <Aux>
-    <div className="inner-content-spacer">
-      <Header as="h4">
-        <AccTypeTitle moreText="investment" />
-        <span className="title-meta pull-right">
-          <Link target="_blank" to="/" className="pull-right">View offering page</Link>
-        </span>
-      </Header>
+    <div className="inner-content-spacer offwhite-bg">
+      <span className="pull-left">
+        <Header as="h5">
+          <AccTypeTitle moreText="investment" />
+        </Header>
+      </span>
+      <span className="pull-right">
+        <Link target="_blank" to="/" className="pull-right">View offering page</Link>
+      </span>
     </div>
-    <div className="table-wrapper">
-      <Table unstackable singleLine className="investment-details" textAlign="right">
-        <THeader columns={result.columns} />
-        <Table.Body>
-          {
-            result.rows.map(row => (
-              <Table.Row key={Helper.guid()}>
-                <Table.Cell collapsing textAlign="left">{row.payDate}</Table.Cell>
-                <Table.Cell className="positive-text">{Helper.CurrencyFormat(row.received)}</Table.Cell>
-                <Table.Cell>{Helper.CurrencyFormat(row.interest)}</Table.Cell>
-                <Table.Cell>{Helper.CurrencyFormat(row.principal)}</Table.Cell>
-                <Table.Cell>{Helper.CurrencyFormat(row.fees)}</Table.Cell>
-                <Table.Cell>{Helper.CurrencyFormat(row.netReceived)}</Table.Cell>
-              </Table.Row>
-            ))
-          }
-        </Table.Body>
-      </Table>
+    <div className="inner-content-spacer">
+      <Grid>
+        <Grid.Column width={9}>
+          <Header as="h4">Offering Summary</Header>
+          <div className="table-wrapper">
+            <Table unstackable definition basic="very">
+              <Table.Body>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell width={5}>Issuer</Table.Cell>
+                  <Table.Cell>Vigilante Gaming Bar, LLC (“Vigilante”)</Table.Cell>
+                </Table.Row>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>Entity Type</Table.Cell>
+                  <Table.Cell>Limited liability company</Table.Cell>
+                </Table.Row>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>Anticipated Opening</Table.Cell>
+                  <Table.Cell>Sept 6th, 2018</Table.Cell>
+                </Table.Row>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>Maturity</Table.Cell>
+                  <Table.Cell>42 Months to Offering Summary</Table.Cell>
+                </Table.Row>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>Principal Office</Table.Cell>
+                  <Table.Cell>4102 Avenue H #A, Austin, TX 78751</Table.Cell>
+                </Table.Row>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>Security Interest</Table.Cell>
+                  <Table.Cell>Blanket lien on all assets of the business</Table.Cell>
+                </Table.Row>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>Ownership %</Table.Cell>
+                  <Table.Cell>Term Notes</Table.Cell>
+                </Table.Row>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>Interest Rate</Table.Cell>
+                  <Table.Cell>18%</Table.Cell>
+                </Table.Row>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>Securities</Table.Cell>
+                  <Table.Cell>
+                    0%. Investors will not receive any equity interests in
+                    the Issuer or any voting or management rights with respect
+                    to the Issuer as a result of an investment in Securities.
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell colSpan="2">
+                    <Button primary content="Fill SEC Form C" />
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </div>
+        </Grid.Column>
+        <Grid.Column width={4} floated="right">
+          <Header as="h4">Key Dates & Values</Header>
+          <Statistic.Group size="mini" className="vertical">
+            <Statistic>
+              <Statistic.Label>Open date</Statistic.Label>
+              <Statistic.Value>Sep 6<sup>th</sup>, 2016</Statistic.Value>
+            </Statistic>
+            <Statistic>
+              <Statistic.Label>Months to Maturity</Statistic.Label>
+              <Statistic.Value>38 months</Statistic.Value>
+            </Statistic>
+          </Statistic.Group>
+        </Grid.Column>
+      </Grid>
+    </div>
+    <Divider />
+    <div className="inner-content-spacer">
+      <Header as="h4">Pay Off Chart</Header>
     </div>
   </Aux>
 );

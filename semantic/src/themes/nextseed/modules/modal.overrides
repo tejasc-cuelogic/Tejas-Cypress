@@ -430,17 +430,15 @@
 .transaction-detials{
     .title-meta{
         margin-left:1.5rem;
-        font-size:0.5833334em;
+        font-size:@14px;
         font-weight:@fontMedium;
         color:@tertiary-text;
-        vertical-align:top;
+        vertical-align:middle;
         i.icon{
             font-size:1.428571em;
             line-height:1;
             color:@highlight-tertiary;
-        }
-        a{
-            vertical-align:top;
+            vertical-align:middle;
         }
     }
     .ui.card .update-list{
