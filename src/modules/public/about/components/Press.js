@@ -103,16 +103,16 @@ Quisque interdum elit sapien,
               <List link relaxed="very">
                 <List.Header>Documentation</List.Header>
                 <Divider />
-                <List.Item as="a"><Icon className="ns-download" /> History</List.Item>
-                <List.Item as="a"><Icon className="ns-download" /> Press Releases</List.Item>
-                <List.Item as="a"><Icon className="ns-download" /> White Papers</List.Item>
+                <List.Item as="a"><Icon className="ns-download" />History</List.Item>
+                <List.Item as="a"><Icon className="ns-download" />Press Releases</List.Item>
+                <List.Item as="a"><Icon className="ns-download" />White Papers</List.Item>
               </List>
               <List link relaxed="very">
                 <List.Header>Brand Assets</List.Header>
                 <Divider />
-                <List.Item as="a"><Icon className="ns-download" /> Brand Guide</List.Item>
-                <List.Item as="a"><Icon className="ns-download" /> Logos</List.Item>
-                <List.Item as="a"><Icon className="ns-download" /> Photography</List.Item>
+                <List.Item as="a"><Icon className="ns-download" />Brand Guide</List.Item>
+                <List.Item as="a"><Icon className="ns-download" />Logos</List.Item>
+                <List.Item as="a"><Icon className="ns-download" />Photography</List.Item>
               </List>
             </div>
           </Grid.Column>

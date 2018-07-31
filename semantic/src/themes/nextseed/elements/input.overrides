@@ -24,9 +24,9 @@
 }
 .public-form {
     .ui.input>input {
-        padding: .67857143em !important;
+        padding: @9px !important;
         background: @white !important;
-        border-radius: .28571429rem !important;
+        border-radius: @4px !important;
         border: 0 !important;
     }
 }
