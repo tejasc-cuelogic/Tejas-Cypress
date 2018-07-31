@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form, Button } from 'semantic-ui-react';
 
 import { MaskedInput2 } from '../../../../../theme/form';
+import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
 
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore')
 @observer
@@ -12,29 +13,27 @@ export default class AddFunds extends Component {
   }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);
-    if (this.props.accountStore.investmentAccType === 'individual') {
-      this.props.individualAccountStore.setStepToBeRendered(2);
-    }
-    if (this.props.accountStore.investmentAccType === 'entity') {
-      this.props.entityAccountStore.setStepToBeRendered(6);
-    }
-    if (this.props.accountStore.investmentAccType === 'ira') {
-      this.props.iraAccountStore.setStepToBeRendered(4);
-    }
+    this.renderStep();
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.bankAccountStore.setDepositMoneyNow(true);
+    this.renderStep();
+  }
+
+  renderStep = () => {
     if (this.props.accountStore.investmentAccType === 'individual') {
-      this.props.individualAccountStore.setStepToBeRendered(2);
+      const individualSteps = AccCreationHelper.individualSteps();
+      this.props.individualAccountStore.setStepToBeRendered(individualSteps.summary);
     }
     if (this.props.accountStore.investmentAccType === 'entity') {
-      this.props.entityAccountStore.setStepToBeRendered(6);
+      this.props.entityAccountStore.setStepToBeRendered(AccCreationHelper.entitySteps().summary);
     }
     if (this.props.accountStore.investmentAccType === 'ira') {
-      this.props.iraAccountStore.setStepToBeRendered(4);
+      this.props.iraAccountStore.setStepToBeRendered(AccCreationHelper.iraSteps().summary);
     }
   }
+
   render() {
     const { formAddFunds, addFundChange } = this.props.bankAccountStore;
     return (
@@ -58,7 +57,7 @@ export default class AddFunds extends Component {
             <Button primary size="large" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button className="cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I don`t want to deposit any money now</Button>
+            <Button type="button" className="cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I don`t want to deposit any money now</Button>
           </div>
         </Form>
       </div>

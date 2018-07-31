@@ -17,7 +17,9 @@ export default class UpdateProfilePhoto extends Component {
   }
 
   uploadProfilePhoto = () => {
-    this.props.identityStore.uploadProfilePhoto(this.props.history, this.props.refLink);
+    this.props.identityStore.uploadProfilePhoto().then(() => {
+      this.props.history.push(this.props.refLink);
+    });
   }
 
   handleVerifyFileSize = (fileSize) => {
