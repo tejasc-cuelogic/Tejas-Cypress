@@ -61,7 +61,21 @@ const MaskedInput2 = observer((props) => {
       ) : props.taxId ? (
         <NumberFormat type="text" format="##-#######" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.accountNumber ? (
-        <NumberFormat type="text" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
+        <NumberFormat
+          isAllowed={(values) => {
+              const accountNumber = values.value;
+              if (accountNumber.toString().length <= 17) {
+                return true;
+              }
+              return false;
+            }
+          }
+          type="text"
+          placeholder={placeHolder}
+          {...props}
+          value={value}
+          onValueChange={values => props.changed(values, props.name)}
+        />
       ) : props.routingNumber ? (
         <NumberFormat format="#########" type="text" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
       ) : <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
