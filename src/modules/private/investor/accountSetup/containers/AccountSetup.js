@@ -41,8 +41,8 @@ export default class AccountSetup extends Component {
     return (
       <PrivateLayout
         {...this.props}
-        P5={!signupStatus.finalStatus && !currentUser.loading ?
-          <StickyNotification signupStatus={signupStatus} /> : 'Loading...'}
+        P5={!signupStatus.finalStatus ? !currentUser.loading ?
+          <StickyNotification signupStatus={signupStatus} /> : 'Loading...' : ''}
       >
         <Header as="h4">{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!currentUser.loading ?

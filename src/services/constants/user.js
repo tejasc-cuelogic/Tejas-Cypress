@@ -183,7 +183,7 @@ export const PHONE_VERIFICATION = {
     value: '',
     label: 'Enter your verification code here:',
     error: undefined,
-    rule: 'required|numeric',
+    rule: 'required',
   },
 };
 
