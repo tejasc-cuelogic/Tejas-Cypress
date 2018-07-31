@@ -38,23 +38,21 @@ export default class AccountSetup extends Component {
     const { match } = this.props;
     const { signupStatus, currentUser, getStepStatus } = this.props.userDetailsStore;
 
-    if (currentUser.loading) {
-      return 'Loading...';
-    }
-
     return (
       <PrivateLayout
         {...this.props}
-        P5={!signupStatus.finalStatus &&
-        <StickyNotification signupStatus={signupStatus} />}
+        P5={!signupStatus.finalStatus && !currentUser.loading ?
+          <StickyNotification signupStatus={signupStatus} /> : 'Loading...'}
       >
         <Header as="h4">{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
-        <ProgressCard
-          {...this.props}
-          signupStatus={signupStatus}
-          getStepStatus={getStepStatus}
-          navToAccTypes={this.navToAccTypes}
-        />
+        {!currentUser.loading ?
+          <ProgressCard
+            {...this.props}
+            signupStatus={signupStatus}
+            getStepStatus={getStepStatus}
+            navToAccTypes={this.navToAccTypes}
+          /> : 'Loading...'
+        }
         <Switch>
           <Route exact path={`${match.url}/identity-verification/:step`} component={IdentityVerification} />
           <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
