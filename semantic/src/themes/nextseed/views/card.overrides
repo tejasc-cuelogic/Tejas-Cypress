@@ -193,6 +193,7 @@
             vertical-align:top;
             margin-left:@10px;
             color:@neutral-middark;
+            vertical-align:middle;
             >b{
                 color:@fullBlack;
             }
