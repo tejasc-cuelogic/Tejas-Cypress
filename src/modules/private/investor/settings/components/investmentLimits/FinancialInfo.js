@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 // import { FormInput } from '../../../../../theme/form/FormElements';
 import Helper from '../../../../../../helper/utility';
 
 @inject('userDetailsStore', 'uiStore')
+@withRouter
 @observer
 export default class FinancialInfo extends Component {
   submit = (e) => {
     e.preventDefault();
     this.props.userDetailsStore.updateFinInfo();
   }
-
+  handleUpdateInvestmentLimit =(e, accountType) => {
+    e.preventDefault();
+    console.log(accountType);
+    this.props.history.push(`${this.props.match.url}/update`);
+  }
   render() {
     const {
       FIN_INFO, fLoading,
@@ -58,7 +63,7 @@ export default class FinancialInfo extends Component {
                         </Statistic.Value>
                       </Statistic>
                       <Divider clearing hidden />
-                      <Button inverted color="green" content="Update investment limits" />
+                      <Button onClick={e => this.handleUpdateInvestmentLimit(e, 1)} inverted color="green" content="Update investment limits" />
                     </Card.Content>
                   </Grid.Column>
                   <Grid.Column width={8}>
@@ -116,7 +121,7 @@ export default class FinancialInfo extends Component {
                         <Statistic.Value>$50,000.00</Statistic.Value>
                       </Statistic>
                       <Divider clearing hidden />
-                      <Button inverted color="green" content="Update investment limits" />
+                      <Button onClick={e => this.handleUpdateInvestmentLimit(e, 2)} inverted color="green" content="Update investment limits" />
                     </Card.Content>
                   </Grid.Column>
                   <Grid.Column width={8}>
