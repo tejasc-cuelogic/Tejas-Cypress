@@ -49,7 +49,7 @@ export class BankAccountStore {
   linkBankManuallyChange = (values, field) => {
     this.formLinkBankManually = Validator.onChange(
       this.formLinkBankManually,
-      { name: field, value: values.floatValue },
+      { name: field, value: values.value },
     );
   };
 

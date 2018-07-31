@@ -118,6 +118,7 @@ export default class MultiStep extends React.Component {
   previous() {
     if (this.state.compState > 0) {
       this.setNavState(this.state.compState - 1);
+      this.props.setStepTobeRendered(this.state.compState - 1);
     }
   }
 

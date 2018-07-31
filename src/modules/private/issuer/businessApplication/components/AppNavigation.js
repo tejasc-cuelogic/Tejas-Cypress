@@ -41,33 +41,37 @@ export default class AppNavigation extends Component {
     });
   }
   render() {
-    const { isFileUploading, canSubmitApp } = this.props.businessAppStore;
+    const { isFileUploading, canSubmitApp, formReadOnlyMode } = this.props.businessAppStore;
     const { inProgress } = this.props.uiStore;
     return (
       <div className="navigation-buttons">
-        {this.state.step > 0 &&
-          <div className="pull-left">
-            <Button circular icon className="multistep__btn prev" onClick={() => this.actualSubmit(-1)}>
-              <Icon className="ns-arrow-left" />
-            </Button>
-            {this.state.navItems[this.state.step - 1].title}
-          </div>
+        {!formReadOnlyMode &&
+          <Aux>
+            {this.state.step > 0 &&
+              <div className="pull-left">
+                <Button circular icon className="multistep__btn prev" onClick={() => this.actualSubmit(-1)}>
+                  <Icon className="ns-arrow-left" />
+                </Button>
+                {this.state.navItems[this.state.step - 1].title}
+              </div>
+            }
+            <div className="pull-right">
+              {this.state.step < (this.state.navItems.length - 1) ? (
+                <Aux>
+                  {this.state.navItems[this.state.step + 1].title}
+                  <Button circular icon primary className="multistep__btn next active" onClick={() => this.actualSubmit(1)}>
+                    <Icon className="ns-arrow-right" />
+                  </Button>
+                </Aux>
+              ) :
+                <Aux>
+                  <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : 'Save'} />
+                  <Button loading={inProgress} onClick={this.submit} disabled={!canSubmitApp} primary className="very relaxed" content="Submit" />
+                </Aux>
+              }
+            </div>
+          </Aux>
         }
-        <div className="pull-right">
-          {this.state.step < (this.state.navItems.length - 1) ? (
-            <Aux>
-              {this.state.navItems[this.state.step + 1].title}
-              <Button circular icon primary className="multistep__btn next active" onClick={() => this.actualSubmit(1)}>
-                <Icon className="ns-arrow-right" />
-              </Button>
-            </Aux>
-          ) :
-            <Aux>
-              <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : 'Save'} />
-              <Button loading={inProgress} onClick={this.submit} disabled={!canSubmitApp} primary className="very relaxed" content="Submit" />
-            </Aux>
-          }
-        </div>
       </div>
     );
   }

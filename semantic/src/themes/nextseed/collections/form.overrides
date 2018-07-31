@@ -250,9 +250,15 @@
 
 .file-uploader-wrap{
     max-width:360px;
+    &.fluid{
+        min-width:100%;
+    }
+    + .file-uploader-wrap{
+        margin-top:30px;
+    }
     label{
         font-size:13px;
-        font-weight:700;
+        font-weight:@fontMedium;
         margin-bottom:@4px;
         display:inline-block;
     }
@@ -290,7 +296,7 @@
     &.attached{
         color:@fullBlack;
         border:none;
-        background:@border-light;
+        background:fade(@neutral-middark, 05);
         text-align:left;
         overflow:hidden;
         text-overflow:ellipsis;

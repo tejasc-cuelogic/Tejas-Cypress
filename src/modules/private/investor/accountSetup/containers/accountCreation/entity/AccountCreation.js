@@ -15,11 +15,13 @@ import Summary from './Summary';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
+    this.props.userDetailsStore.setUserAccDetails('entity');
     this.props.accountStore.setAccTypeChange(2);
   }
   handleMultiStepModalclose = () => {
     this.updateUser();
     this.props.history.push('/app/summary');
+    this.props.bankAccountStore.setBankLinkInterface('list');
   }
   handleStepChange = (step) => {
     this.props.entityAccountStore.setStepToBeRendered(step);

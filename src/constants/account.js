@@ -299,7 +299,7 @@ export const ENTITY_TRUST_INFO = {
     rule: 'required',
   },
   trustDate: {
-    key: 'trustDate', value: moment(), error: undefined, rule: 'required', label: 'Date of Trust',
+    key: 'trustDate', value: moment(`01/01/${new Date().getFullYear()}`), error: undefined, rule: 'required', label: 'Date of Trust',
   },
 };
 
@@ -314,13 +314,13 @@ export const ENTITY_PERSONAL_INFO = {
 
 export const ENTITY_FORMATION_DOCS = {
   formationDoc: {
-    key: 'formationDoc', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'formationDoc', label: 'Entity Formation Document', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   operatingAgreementDoc: {
-    key: 'operatingAgreementDoc', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'operatingAgreementDoc', label: 'Entity Operating Document', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   einVerificationDoc: {
-    key: 'einVerificationDoc', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'einVerificationDoc', label: 'EIN Verification', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
 };
 

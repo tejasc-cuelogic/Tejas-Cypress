@@ -78,9 +78,9 @@ export default class BusinessApplication extends Component {
     const { match } = this.props;
     const { pathname } = this.props.location;
     const {
-      canSubmitApp, appStepsStatus, isFileUploading, BUSINESS_APP_FRM,
+      canSubmitApp, appStepsStatus, isFileUploading, BUSINESS_APP_FRM, formReadOnlyMode,
     } = this.props.businessAppStore;
-    const showSubNav = this.calculateShowSubNav(['failed', 'success', 'lendio'], pathname, appStepsStatus[0].status);
+    const showSubNav = this.calculateShowSubNav(['failed', 'success', 'lendio'], pathname, appStepsStatus[0].status, formReadOnlyMode);
     const preQualPage = pathname.includes('pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
     const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhite';
@@ -101,6 +101,7 @@ export default class BusinessApplication extends Component {
         }
         P4={
           <HeaderButtons
+            disabled={formReadOnlyMode}
             saveContinue={this.saveContinue}
             submitApp={this.submit}
             showSubNav={showSubNav}

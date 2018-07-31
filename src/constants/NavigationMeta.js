@@ -29,6 +29,9 @@ export const PRIVATE_NAV = [
       {
         title: 'Beneficiaries', to: 'beneficiaries', component: 'Beneficiaries', accessibleTo: ['investor'],
       },
+      {
+        title: 'Agreements', to: 'agreements', component: 'Agreements', accessibleTo: ['investor'],
+      },
     ],
   },
   {
@@ -89,7 +92,7 @@ export const PRIVATE_NAV = [
         icon: 'ns-check-circle',
         title: 'Business Details',
         to: 'business-details',
-        accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
         component: 'BusinessDetails',
         showIcon: true,
       },
@@ -97,7 +100,7 @@ export const PRIVATE_NAV = [
         icon: 'ns-check-circle',
         title: 'Performance',
         to: 'performance',
-        accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
         component: 'Performance',
         showIcon: true,
       },
@@ -105,7 +108,7 @@ export const PRIVATE_NAV = [
         icon: 'ns-check-circle',
         title: 'Documentation',
         to: 'documentation',
-        accessFor: ['PRE_QUALIFICATION_SUBMITTED'],
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
         component: 'Documentation',
         showIcon: true,
       },

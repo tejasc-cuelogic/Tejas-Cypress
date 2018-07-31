@@ -401,33 +401,36 @@ export class IdentityStore {
       .catch(() => { });
   }
 
-  uploadProfilePhoto = (history, refLink) => {
+  uploadProfilePhoto = () => {
     uiStore.setProgress();
-    const profileData = this.ID_PROFILE_INFO.fields.profilePhoto.base64String;
-    const b64Text = profileData.split(',')[1];
-    const payload = {
-      userId: userStore.currentUser.sub,
-      base64String: b64Text,
-    };
-    apiService.post('/upload/file', payload)
-      .then(action((response) => {
-        if (!response.body.errorMessage) {
-          this.setProfilePhoto('responseUrl', response.body.fileFullPath);
-          this.updateUserProfileData().then(() => {
-            userDetailsStore.setProfilePhoto(response.body.fileFullPath);
-            Helper.toast('Profile photo updated successfully', 'success');
-            this.resetProfilePhoto();
-            history.push(refLink);
-          })
-            .catch((err) => {
-              uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            });
-        } else {
-          this.setProfilePhoto('error', 'Something went wrong.');
-          this.setProfilePhoto('value', '');
-        }
-      }))
-      .finally(action(() => { uiStore.setProgress(false); }));
+    return new Promise((resolve, reject) => {
+      const profileData = this.ID_PROFILE_INFO.fields.profilePhoto.base64String;
+      const b64Text = profileData.split(',')[1];
+      const payload = {
+        userId: userStore.currentUser.sub,
+        base64String: b64Text,
+      };
+      apiService.post('/upload/file', payload)
+        .then(action((response) => {
+          if (!response.body.errorMessage) {
+            this.setProfilePhoto('responseUrl', response.body.fileFullPath);
+            this.updateUserProfileData().then(() => {
+              userDetailsStore.setProfilePhoto(response.body.fileFullPath);
+              Helper.toast('Profile photo updated successfully', 'success');
+              this.resetProfilePhoto();
+              resolve(response);
+            })
+              .catch((err) => {
+                uiStore.setErrors(DataFormatter.getSimpleErr(err));
+                reject(err);
+              });
+          } else {
+            this.setProfilePhoto('error', 'Something went wrong.');
+            this.setProfilePhoto('value', '');
+          }
+        }))
+        .finally(action(() => { uiStore.setProgress(false); }));
+    });
   }
 
   updateUserProfileData = () => {

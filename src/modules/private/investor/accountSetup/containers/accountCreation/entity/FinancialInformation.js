@@ -14,7 +14,7 @@ export default class FinancialInformation extends Component {
         <Header as="h3" textAlign="center">Calculating your Entity`s <br /> investment limit</Header>
         <p className="center-align">
           Your entity`s net assets and annual income are used to determine its <br />
-          12-month investment limit. <Link to="/app/summary" className="link">How is this calculated?</Link>
+          12-month investment limit. <Link to="/app/summary/account-creation/entity" className="link">How is this calculated?</Link>
         </p>
         <Form error>
           <div className="field-wrap">
