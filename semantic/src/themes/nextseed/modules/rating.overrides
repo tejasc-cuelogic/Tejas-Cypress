@@ -66,3 +66,10 @@
 .ui.heart.rating .active.icon:before {
   content: '\f004';
 }
+
+.ui.rating{
+  .icon{
+    font-family:'Nextseed';
+    color:@thumbInactiveBackground !important;
+  }
+}
