@@ -15,7 +15,7 @@ const DropZone = observer((props) => {
     showLoader,
   } = props.fielddata;
   return (
-    <div className="file-uploader-wrap">
+    <div className={`file-uploader-wrap ${props.containerclassname}`}>
       {label &&
         <label>
           {label}
