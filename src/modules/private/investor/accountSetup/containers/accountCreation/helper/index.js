@@ -40,7 +40,7 @@ class Helper {
   });
 
   individualSteps = () => ({
-    formLinkBankManually: 2,
+    formLinkBankManually: 1,
   });
 
   establishProfileSteps = () => ({
