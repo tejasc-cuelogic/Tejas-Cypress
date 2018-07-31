@@ -27,3 +27,4 @@ export { default as helloWorldStore } from './entities/helloWorldStore';
 
 export { default as businesssStore } from './entities/issuer/businessStore';
 export { default as businessAppLendioStore } from './entities/user/businessAppLendioStore';
+export { default as agreementsStore } from './entities/user/settings/agreementsStore';

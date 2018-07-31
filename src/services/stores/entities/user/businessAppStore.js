@@ -36,6 +36,7 @@ export class BusinessAppStore {
   @observable BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
   @observable BUSINESS_APP_STATUS = '';
   @observable preQualFormDisabled = false;
+  @observable formReadOnlyMode = false;
   @observable BUSINESS_APP_STEP_URL = 'new/pre-qualification';
   @observable BUSINESS_APPLICATION_DATA = null;
   @observable isPartialData = null;
@@ -128,7 +129,9 @@ export class BusinessAppStore {
   }
 
   @computed get stepToRender() {
-    return this.appStepsStatus.find(ele => ele.status === 'IN_PROGRESS');
+    const url = this.appStepsStatus.find(ele => ele.status === 'IN_PROGRESS');
+    /* eslint-disable no-unneeded-ternary */
+    return this.formReadOnlyMode ? { path: 'pre-qualification' } : url ? url : { path: 'documentation' };
   }
 
   @action
@@ -140,7 +143,11 @@ export class BusinessAppStore {
     this.setBusinessDetails(data.businessDetails);
     this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
     this.setDocumentationDetails(data.businessDocumentation);
-    // this.calculateStepToRender(data);
+    if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
+      this.formReadOnlyMode = true;
+    } else if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+      this.appStepsStatus[0].status = 'IN_PROGRESS';
+    }
     navStore.setAccessParams('appStatus', data.applicationStatus);
     if (data.lendio) {
       const lendioPartners = data.lendio.status;
@@ -888,6 +895,7 @@ export class BusinessAppStore {
     this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
     this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
     this.appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
+    this.formReadOnlyMode = false;
   }
 
   @action
