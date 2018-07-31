@@ -14,7 +14,7 @@ export default class Performance extends Component {
 
   render() {
     const {
-      BUSINESS_PERF_FRM,
+      BUSINESS_PERF_FRM, formReadOnlyMode,
       businessPerfMaskingChange, getBusinessTypeCondtion,
       businessAppUploadFiles, businessAppRemoveFiles,
     } = this.props.businessAppStore;
@@ -38,6 +38,7 @@ export default class Performance extends Component {
                   statmentConst.map(field => (
                     <Grid.Column>
                       <DropZone
+                        disabled={formReadOnlyMode}
                         multiple
                         key={field}
                         name={field}
@@ -64,6 +65,7 @@ export default class Performance extends Component {
                       {
                         ['pyGrossSales', 'pyOperatingExpenses', 'pyNetIncome', 'pyCogs'].map(field => (
                           <MaskedInput2
+                            disabled={formReadOnlyMode}
                             key={field}
                             name={field}
                             currency
@@ -82,6 +84,7 @@ export default class Performance extends Component {
                     {
                       ['nyGrossSales', 'nyOperatingExpenses', 'nyNetIncome', 'nyCogs'].map(field => (
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           key={field}
                           name={field}
                           currency
