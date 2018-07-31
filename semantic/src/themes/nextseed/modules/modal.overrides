@@ -18,11 +18,12 @@
     .team-details-container {
         .ui.header {
             position: relative;
+            margin-bottom: 34px;
             .sub.header {
                 text-transform: uppercase;
                 font-weight: @bold;
                 line-height: 28px;
-                font-size: 13px;
+                font-size: @13px;
                 color: @neutral-middark;
             }
             &:after {
@@ -34,38 +35,27 @@
                 bottom: -20px;
             }
         }
-        .ui.header+p {
-            margin-top: 34px;
+        &.content {
+            padding: @40px @20px;
+            .scrollable-content {
+                max-height: 50vh;
+                overflow-y: auto; 
+                padding: @20px;
+            }
+            h4.ui.header:after {
+                height: 2px;
+                bottom: -13px;
+            }
         }
     }
     &.team-member-modal {
+        .content {
+            padding: 0;
+            border-radius: 0;
+        }
         .item {
             img {
                 width: 50%;
-            }
-        }
-        .content {
-            display: flex !important;
-            flex-direction: column;
-            justify-content: center;
-            height: 50vh;
-            padding: 0;
-            border-radius: 0;
-            .scrollable-content {
-                min-height: 50vh;
-                overflow-y: scroll; 
-                padding: @20px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-            .ui.header {
-                line-height: 24px;
-                margin-bottom: 0;
-                &:after {
-                    height: 2px;
-                    bottom: -13px;
-                }
             }
         }
     }
