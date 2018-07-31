@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Grid, Form, Input } from 'semantic-ui-react';
+import { Grid, Form, Input, Icon } from 'semantic-ui-react';
 import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
 
@@ -29,6 +29,11 @@ export default class KnowledgeBase extends Component {
     }
     return (
       <Aux>
+        <div className="mb-10 edu-back-link">
+          <Link to="/resources/education-center">
+            <Icon className="ns-chevron-left" /> Education Center
+          </Link>
+        </div>
         <Grid>
           {!nosearch && (
             <Grid.Row>

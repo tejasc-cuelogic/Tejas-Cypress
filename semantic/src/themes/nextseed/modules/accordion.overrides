@@ -228,6 +228,7 @@
 			font-weight: normal;
 			color: @neutral-middark;
 			background: @neutral-offwhite;
+			font-size: @14px;
 			&.active {
 				border-radius: 0;
 				background: @secondary-color;
