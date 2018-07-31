@@ -22,6 +22,7 @@ export default class AccountCreation extends React.Component {
     this.updateUser();
     this.props.history.push('/app/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
+    this.props.bankAccountStore.resetLinkBank();
   }
   handleStepChange = (step) => {
     this.props.entityAccountStore.setStepToBeRendered(step);
