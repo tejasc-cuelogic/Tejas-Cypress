@@ -190,7 +190,6 @@ footer{
 		h6.ui.header {
 			font-size: @13px;
 			font-weight: @bold;
-			line-height: @16px;
 			color:@neutral-middark;
 			padding-bottom: @6px;
 		}
@@ -657,6 +656,9 @@ p i.icon {
 	}
 }
 //Team
+.team-column {
+	margin-top: 25rem;
+}
 .team-gallery {
 	&.ui.grid {
 		margin: 0;

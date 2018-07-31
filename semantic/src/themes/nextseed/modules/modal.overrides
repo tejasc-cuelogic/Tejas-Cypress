@@ -18,10 +18,9 @@
     .team-details-container {
         .ui.header {
             position: relative;
-            line-height: 33px;
             .sub.header {
                 text-transform: uppercase;
-                font-weight: bold;
+                font-weight: @bold;
                 line-height: 28px;
                 font-size: 13px;
                 color: @neutral-middark;
