@@ -2,7 +2,7 @@ import React from 'react';
 import { Header, Container } from 'semantic-ui-react';
 
 const Banner = props => (
-  <section className="banner home-banner">
+  <section className="banner campaign-list-banner">
     <Container>
       <div className="banner-caption">
         <Header as="h1">{props.title}</Header>

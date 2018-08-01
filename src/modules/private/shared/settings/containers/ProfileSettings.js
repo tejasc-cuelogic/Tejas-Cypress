@@ -6,6 +6,7 @@ import ProfileData from '../components/ProfileData';
 import InvestmentLimits from '../../../investor/settings/containers/InvestmentLimits';
 import Security from '../components/Security';
 import Beneficiaries from '../../../investor/settings/containers/Beneficiaries';
+import Agreements from '../../../investor/settings/containers/Agreements';
 
 const getModule = (component) => {
   let c = null;
@@ -13,6 +14,7 @@ const getModule = (component) => {
     case 'InvestmentLimits': c = InvestmentLimits; break;
     case 'Security': c = Security; break;
     case 'Beneficiaries': c = Beneficiaries; break;
+    case 'Agreements': c = Agreements; break;
     default: c = ProfileData; break;
   }
   return c;

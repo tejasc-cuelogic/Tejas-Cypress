@@ -16,17 +16,17 @@ class TeamModal extends Component {
         size="large"
         className="team-member-modal"
       >
-        <Modal.Content className="team-details-container">
+        <Modal.Content>
           <Item.Group>
             <Item>
               <Image src={campainAboutImg} />
-              <Item.Content verticalAlign="middle">
+              <Item.Content verticalAlign="middle" className="team-details-container">
                 <div className="scrollable-content">
                   <Header as="h4">
                     Abe Chu
                     <Header.Subheader>co-founder & ceo</Header.Subheader>
                   </Header>
-                  <p>
+                  <p className="mb-30">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                   sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                   Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
