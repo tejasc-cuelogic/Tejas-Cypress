@@ -97,6 +97,7 @@ query _getBusinessApplicationById ($id: String!) {
     lendio {
       status
       failReasons
+      url
     }
     createdDate
     updatedDate

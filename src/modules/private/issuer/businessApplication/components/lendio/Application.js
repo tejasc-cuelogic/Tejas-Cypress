@@ -37,14 +37,16 @@ export default class Application extends Component {
     const {
       LENDIO_QUAL_FRM,
       lendioEleChange,
+      lendioObj,
     } = this.props.businessAppLendioStore;
     const { fields } = LENDIO_QUAL_FRM;
     const checkIsPresent = indexOf(fields.applicationAgreeConditions.value, 'agreeConditions');
-
     if (!fields.businessName.value && !this.props.uiStore.appLoader) {
       return <NotFound />;
     }
-
+    if (lendioObj && lendioObj.status === LENDIO.LENDIO_SUCCESS) {
+      window.location = lendioObj.url;
+    }
     return (
       <Grid container>
         <Grid.Column className="issuer-signup">
