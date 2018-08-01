@@ -1033,4 +1033,4 @@
 @highlight-secondary:#F2994A;	          									//  Orange
 @highlight-tertiary:#27AE60;						          				//  Green
 @primary-two-lighten:#2D9CDB;						        				//  Sky-Blue 
-@highlight-quinary:#9B51E0;			          								//  Violet
+@highlight-quaternary:#9B51E0;			          								//  Violet
