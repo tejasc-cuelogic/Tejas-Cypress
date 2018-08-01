@@ -54,14 +54,6 @@ export const FILTER_META = {
   ],
 };
 
-export const TRANSACTION_TYPES = [
-  { text: 'Deposit', value: 'Deposit' },
-  { text: 'Withdrawal', value: 'Withdrawal' },
-  { text: 'Repayment', value: 'Repayment' },
-  { text: 'Interest Accured', value: 'InterestAccured' },
-  { text: 'Referral Credits', value: 'ReferralCredits' },
-];
-
 export const FIN_INFO = {
   annualIncome: {
     value: '',
