@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const BUSINESS_GOAL = {
   UPGRADE: 'UPGRADE',
   RESTRUCTURE: 'RESTRUCTURE',
@@ -114,7 +116,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700', customErrors: { required: 'required' },
   },
   totalProjectCost: {
-    value: '', maxLength: 16, label: 'What’s the total project cost?', error: undefined, rule: 'required', placeHolder: 'e.g. 100,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'What’s the total project cost?', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
   },
   amountNeeded: {
     value: '',
@@ -123,32 +125,32 @@ export const BUSINESS_PRE_QUALIFICATION = {
     error: undefined,
     rule: 'required',
     customErrors: { required: 'required' },
-    placeHolder: 'e.g. 50,000',
-    tooltip: 'Minimum amount of funding is $50,000. For requirements on different levels of funding, click here.',
+    placeHolder: 'e.g. $50,000',
+    tooltip: (<span>Minimum amount of funding is $50,000. For requirements on different levels of funding, <a href="/business" target="_blank">click here.</a></span>),
   },
   previousYearGrossSales: {
-    value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 750,000', customErrors: { required: 'required' },
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $750,000', customErrors: { required: 'required' },
   },
   previousYearCogSold: {
-    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 75,000', customErrors: { required: 'required' },
+    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $75,000', customErrors: { required: 'required' },
   },
   previousYearOperatingExpenses: {
-    value: '', label: 'Operating Expenses', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 150,000', customErrors: { required: 'required' },
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
   },
   previousYearNetIncome: {
-    value: '', label: 'Net Income', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. 525,000', customErrors: { required: 'required' },
+    value: '', label: 'Net Income', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $525,000', customErrors: { required: 'required' },
   },
   nextYearGrossSales: {
-    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. 750,000', customErrors: { required: 'required' },
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. $750,000', customErrors: { required: 'required' },
   },
   nextYearCogSold: {
-    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. 75,000', customErrors: { required: 'required' },
+    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. $75,000', customErrors: { required: 'required' },
   },
   nextYearOperatingExpenses: {
-    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: 'e.g. 150,000', customErrors: { required: 'required' },
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: 'e.g. $150,000', customErrors: { required: 'required' },
   },
   nextYearNetIncome: {
-    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. 525,000', customErrors: { required: 'required' },
+    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. $525,000', customErrors: { required: 'required' },
   },
   industryTypes: {
     value: [],
@@ -316,28 +318,28 @@ export const BUSINESS_PERF = {
     value: [], label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   pyGrossSales: {
-    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: '1,250,000', customErrors: { required: 'required' },
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. $1,250,000', customErrors: { required: 'required' },
   },
   pyOperatingExpenses: {
-    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: '100,000', customErrors: { required: 'required' },
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
   },
   pyNetIncome: {
-    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: '550,000', customErrors: { required: 'required' },
+    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   pyCogs: {
-    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: '550,000', customErrors: { required: 'required' },
+    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   nyGrossSales: {
-    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: '1,250,000', customErrors: { required: 'required' },
+    value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. $1,250,000', customErrors: { required: 'required' },
   },
   nyOperatingExpenses: {
-    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: '100,000', customErrors: { required: 'required' },
+    value: '', label: 'Operating Expenses', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
   },
   nyNetIncome: {
-    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: '550,000', customErrors: { required: 'required' },
+    value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   nyCogs: {
-    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: '550,000', customErrors: { required: 'required' },
+    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
 };
 

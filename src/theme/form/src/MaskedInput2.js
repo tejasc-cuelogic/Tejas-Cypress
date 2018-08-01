@@ -20,11 +20,16 @@ const MaskedInput2 = observer((props) => {
         { !props.hidelabel && label}
         {tooltip &&
           <Popup
+            hoverable={props.hoverable}
             trigger={<Icon name="help circle" />}
-            content={tooltip}
+            // content={tooltip}
             position="top center"
             className={props.containerClassname}
-          />
+          >
+            <Popup.Content>
+              {tooltip}
+            </Popup.Content>
+          </Popup>
         }
       </label>
       { props.action ? (
