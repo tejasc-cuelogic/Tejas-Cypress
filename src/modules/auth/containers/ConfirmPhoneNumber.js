@@ -88,19 +88,21 @@ export default class ConfirmPhoneNumber extends Component {
               <ListErrors errors={[errors]} />
             </Message>
           }
-          <MaskedInput2
-            value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
-            type="tel"
-            name="phoneNumber"
-            fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-            format="###-###-####"
-            readOnly={!editMode}
-            changed={personalInfoMaskedChange}
-            containerclassname="display-only"
-            className="display-only"
-            phoneNumber
-            hidelabel
-          />
+          <Form>
+            <MaskedInput2
+              value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
+              type="tel"
+              name="phoneNumber"
+              fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
+              format="###-###-####"
+              readOnly={!editMode}
+              changed={personalInfoMaskedChange}
+              containerclassname="display-only"
+              className="display-only"
+              phoneNumber
+              hidelabel
+            />
+          </Form>
           {editMode ?
             <p>
               <Link to={this.props.match.url} onClick={this.startPhoneVerification}>

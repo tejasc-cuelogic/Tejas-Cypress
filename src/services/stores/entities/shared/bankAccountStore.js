@@ -120,6 +120,11 @@ export class BankAccountStore {
   }
 
   @action
+  resetShowAddFunds = () => {
+    this.showAddFunds = false;
+  }
+
+  @action
   resetLinkBank = () => {
     Validator.resetFormData(this.formLinkBankManually);
     Validator.resetFormData(this.formAddFunds);
