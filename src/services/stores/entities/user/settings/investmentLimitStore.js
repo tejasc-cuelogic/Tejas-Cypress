@@ -6,21 +6,26 @@ import { GqlClient as client2 } from '../../../../../api/gcoolApi';
 import { uiStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
-import { finLimit, updateFinLimit } from '../../../queries/financialLimits';
+import { finLimit, updateFinLimit } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 
 export class InvestmentLimitStore {
   @observable INVESTEMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
-  @observable financialLimit = {};
+  @observable investmentLimit = {};
   @observable currentLimit = 0;
 
   @computed get fLoading() {
-    return this.financialLimit.loading;
+    return this.investmentLimit.loading;
   }
 
   @action
   setInvestmentLimitInfo = (accountType) => {
-    this.currentLimit = 50000;
+    // set form values accountwise
+    if (accountType === 1) {
+      this.currentLimit = this.INVESTEMENT_LIMIT_META.fields.currentLimitIndividualOrIra.value;
+    } else {
+      this.currentLimit = this.INVESTEMENT_LIMIT_META.fields.currentLimitEntity.value;
+    }
     console.log(accountType);
   }
 
@@ -36,8 +41,8 @@ export class InvestmentLimitStore {
   Financial Limits
   */
  @action
- getFinancialLimit = () => {
-   this.financialLimit = graphql({
+ getInvestmentLimit = () => {
+   this.investmentLimit = graphql({
      client: client2,
      query: finLimit,
      onFetch: (data) => {
