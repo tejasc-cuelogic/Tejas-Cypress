@@ -5,10 +5,11 @@ import KnowledgeBase from '../../../private/shared/education/components/Knowledg
 export default class EducationCenterDetails extends Component {
   render() {
     const { match, location } = this.props;
+    console.log(match);
     return (
       <section>
         <Container className="edu-center">
-          <KnowledgeBase nosearch match={match} location={location} />
+          <KnowledgeBase marketing match={match} location={location} />
         </Container>
       </section>
     );

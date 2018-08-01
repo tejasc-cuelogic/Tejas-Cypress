@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Grid, Form, Input, Icon } from 'semantic-ui-react';
 import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
+import FaqsCombined from './FaqsCombined';
 
 @inject('educationStore')
 @observer
@@ -19,7 +20,7 @@ export default class KnowledgeBase extends Component {
     }
   }
   render() {
-    const { match, location, nosearch } = this.props;
+    const { match, location, marketing } = this.props;
     const {
       kbs, loading, error, searchParam,
     } = this.props.educationStore;
@@ -29,13 +30,15 @@ export default class KnowledgeBase extends Component {
     }
     return (
       <Aux>
-        <div className="mb-10 edu-back-link">
-          <Link to="/resources/education-center">
-            <Icon className="ns-chevron-left" /> Education Center
-          </Link>
-        </div>
+        {!marketing && (
+          <div className="mb-10 edu-back-link">
+            <Link to="/resources/education-center">
+              <Icon className="ns-chevron-left" /> Education Center
+            </Link>
+          </div>
+        )}
         <Grid>
-          {!nosearch && (
+          {!marketing && (
             <Grid.Row>
               <Grid.Column widescreen={7} largeScreen={7} computer={16} tablet={16} mobile={16}>
                 <Form>
@@ -54,17 +57,31 @@ export default class KnowledgeBase extends Component {
           )}
           <Grid.Row>
             <Grid.Column widescreen={7} largeScreen={7} computer={16} tablet={16} mobile={16}>
-              <AccList module={modul} location={location} match={match} error={error} data={kbs} />
+              <AccList
+                marketing={marketing}
+                module={modul}
+                location={location}
+                match={match}
+                error={error}
+                data={kbs}
+              />
             </Grid.Column>
             <Grid.Column widescreen={8} largeScreen={8} floated="right" only="large screen">
-              <Route
-                exact
-                path={match.url}
-                render={props => <Details module={modul} {...props} />}
-              />
+              {match.params.for === 'faq' ? (
+                <Route
+                  path={match.url}
+                  render={props => <FaqsCombined marketing={marketing} {...props} />}
+                />
+              ) : (
+                <Route
+                  exact
+                  path={match.url}
+                  render={props => <Details marketing={marketing} module={modul} {...props} />}
+                />
+              )}
               <Route
                 path={`${match.url}/:id`}
-                render={props => <Details module={modul} {...props} />}
+                render={props => <Details marketing={marketing} module={modul} {...props} />}
               />
             </Grid.Column>
           </Grid.Row>
