@@ -221,9 +221,10 @@
         .display-only input[type=email],
         input[type=tel].display-only,
         input[type=email].display-only{
-            padding:0;
-            margin-bottom:0;
+            padding:@14px @20px;
+            margin-bottom:@10px;
             font-size:@20px;
+            font-weight:@fontMedium;
             text-align:center;
             border:none;
             border-bottom:@border-light 1px solid;

@@ -1510,13 +1510,13 @@ svg:not(:root).recharts-surface{
 	}
 }
 
-.display-only{
+p.display-only{
 	min-width:280px;
 	display:inline-block;
 	padding:@14px @20px;
 	margin-bottom:@10px;
 	font-size:@20px;
-	font-weight:@bold;
+	font-weight:@fontMedium;
 	text-align:center;
 	border:none;
 	border-bottom:@border-light 1px solid;
