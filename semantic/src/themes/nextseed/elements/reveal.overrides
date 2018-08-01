@@ -3,6 +3,8 @@
 *******************************/
 .ui.fade.reveal {
     cursor: pointer;
+    height: 100%;
+    width: 100%;
     >.visible.content {
         z-index: 1 !important;
         position: relative !important;

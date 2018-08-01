@@ -3,7 +3,6 @@ import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Grid, Reveal, Image, Icon, Modal, Item } from 'semantic-ui-react';
 import teamMember from '../../../../assets/images/team-member.jpg';
-import campainAboutImg from '../../../../assets/images/campaign_about.png';
 
 class team extends Component {
   state = { modalOpen: false }
@@ -172,18 +171,15 @@ class team extends Component {
               </Grid.Column>
               <Grid.Column>
                 <Reveal animated="fade">
-                  <Reveal.Content visible>
-                    <div className="team-overlay">
-                      <Header as="h4" textAlign="center">
-                        Join our team
-                        <Header.Subheader as={Link} to="/">
-                          <Icon color="green" className="ns-arrow-right" />
-                          See open positions
-                        </Header.Subheader>
-                      </Header>
-                    </div>
-                  </Reveal.Content>
-                  <Reveal.Content hidden />
+                  <div className="team-overlay">
+                    <Header as="h4" textAlign="center">
+                      Join our team
+                      <Header.Subheader as={Link} to="/">
+                        <Icon color="green" className="ns-arrow-right" />
+                        See open positions
+                      </Header.Subheader>
+                    </Header>
+                  </div>
                 </Reveal>
               </Grid.Column>
             </Grid>
@@ -198,7 +194,7 @@ class team extends Component {
             <Modal.Content>
               <Item.Group>
                 <Item>
-                  <Image src={campainAboutImg} />
+                  <Image src={teamMember} />
                   <Item.Content verticalAlign="middle" className="team-details-container">
                     <div className="scrollable-content">
                       <Header as="h4">
