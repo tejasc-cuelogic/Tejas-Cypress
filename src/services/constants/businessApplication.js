@@ -349,10 +349,10 @@ export const BUSINESS_DOC = {
     value: [], label: 'Lease Agreement / Letter of Intent', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], tooltip: 'NextSeed requires a lease or LOI prior to launching your campaign. Before disbursing funds, the executed lease is required. If you are currently still in negotiations with your lease, please submit a draft of the current terms.', customErrors: { required: 'required' },
   },
   personalTaxReturn: {
-    value: [], label: 'Prior 2 Years of Personal Tax Returns', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 2 Years of Personal Tax Returns', error: undefined, rule: 'required_without:businessTaxReturn', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   businessTaxReturn: {
-    value: [], label: 'Prior 3 Years of Business Tax Returns', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Prior 3 Years of Business Tax Returns', error: undefined, rule: 'required_without:personalTaxReturn', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   blanketLien: {
     value: '',
