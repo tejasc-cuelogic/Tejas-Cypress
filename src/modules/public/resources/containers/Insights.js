@@ -46,9 +46,9 @@ export default class Insights extends Component {
               SORT BY
               <Dropdown item text="NEWEST">
                 <Dropdown.Menu>
-                  <Dropdown.Item>Electronics</Dropdown.Item>
-                  <Dropdown.Item>Automotive</Dropdown.Item>
-                  <Dropdown.Item>Home</Dropdown.Item>
+                  <Dropdown.Item>Newest</Dropdown.Item>
+                  <Dropdown.Item>Oldest</Dropdown.Item>
+                  <Dropdown.Item>Popular</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
