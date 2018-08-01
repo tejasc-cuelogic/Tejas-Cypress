@@ -56,6 +56,31 @@
         &.slide-up {
             top: -100px;
         }
+        .dropdown.item .menu {
+            top: 129%;
+            background: transparent;
+            &.transition:after {
+                content: "";
+                position: absolute;
+                top: -12px;
+                left: 50%;
+                margin-left: -6px;
+                border-width: 0 12px 12px;
+                border-style: solid;
+                border-color: @primary-one transparent;
+                display: block;
+                width: 0;
+            }
+            >.item {
+                background: @primary-one !important;
+                text-align: center;
+                color: @white !important;
+                &:hover, &.active {
+                    background: @primary-one-darken !important;
+                    color: @white !important;
+                }
+            }
+        }
     }
 }
 .ui.secondary.menu.menu-secondary-fixed {
@@ -134,6 +159,11 @@
                 background-color:transparent;
             }
         }
+        .menu {
+            a.item {
+                min-width: 0;
+            }
+        }
     }
 }
 footer{
@@ -164,7 +194,7 @@ footer{
             font-size: @14px;
             line-height: @20px;
             .ui.image.filterIcon {
-                margin-right: 10px;
+                margin-right: @10px;
             }
             .ui.image.closeIcon {
                 margin-left: 117px;
@@ -181,7 +211,6 @@ footer{
 				border-left: @4px solid transparent;
 				border-radius: 0;
 				padding-left: @27px;
-				font-weight: @bold;
 				&:hover, &.active {
 					background-color: @neutral;
 					border-color: @primary-one;
@@ -190,7 +219,9 @@ footer{
 				>i.icon {
 					float: left;
 					margin-left: 0;
-					margin-right: 14px;
+                    margin-right: @14px;
+                    font-size: @20px;
+                    margin-top: -3px;
 				}
 				>.label.circular {
 					margin-top: -5px;
@@ -200,8 +231,8 @@ footer{
 				}
 			}
 			.ui.divider {
-				margin: 64px 29px 0;
-			}
+				margin: 60px 29px 0;
+            }
 		}
     }
     .offering-content-spacer {
@@ -287,32 +318,6 @@ footer{
     .ui.inverted.menu .item{
         &:hover, &:active, &:focus, &.active{
             background-color:@white;
-        }
-    }
-}
-
-.ui.menu .dropdown.item .menu {
-    top: 129%;
-    background: transparent;
-    &.transition:after {
-        content: "";
-        position: absolute;
-        top: -12px;
-        left: 50%;
-        margin-left: -6px;
-        border-width: 0 12px 12px;
-        border-style: solid;
-        border-color: #20c86d transparent;
-        display: block;
-        width: 0;
-    }
-    >.item {
-        background: #20c86d !important;
-        text-align: center;
-        color: @white !important;
-        &:hover, &.active {
-            background: #00AD5A !important;
-            color: @white !important;
         }
     }
 }

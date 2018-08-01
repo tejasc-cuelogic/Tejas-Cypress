@@ -315,26 +315,39 @@ export const PRIVATE_NAV = [
 
 export const PUBLIC_NAV = [
   {
+    title: 'About Us',
+    to: 'about',
+    noNav: true,
+    subNavigations: [
+      { title: 'Mission', to: 'mission' },
+      { title: 'Team', to: 'team' },
+      { title: 'Careers', to: 'careers' },
+      { title: 'Impact', to: 'impact' },
+      { title: 'Ambassadors', to: 'ambassadors' },
+      { title: 'Press', to: 'press' },
+    ],
+  },
+  {
     title: 'Explore Campaigns',
     to: 'offerings',
     subNavigations: [
       {
-        icon: 'home', title: 'Overview', to: 'overview', component: 'Overview',
+        icon: 'ns-home-line', title: 'Overview', to: 'overview', component: 'Overview',
       },
       {
-        icon: 'home', title: 'About the Company', to: 'about', component: 'AboutCompany',
+        icon: 'ns-edu-center', title: 'About the Company', to: 'about', component: 'AboutCompany',
       },
       {
-        icon: 'home', title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
+        icon: 'ns-investment', title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
       },
       {
-        icon: 'home', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
+        icon: 'ns-rewards', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
       },
       {
-        icon: 'home', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
+        icon: 'ns-document-search', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
       },
       {
-        icon: 'home', title: 'Comments', to: 'comments', component: 'Comments',
+        icon: 'ns-coments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
       },
       {
         icon: 'share alternate', title: 'Share', to: 'share', component: 'Share',
@@ -372,18 +385,6 @@ export const PUBLIC_NAV = [
     subNavigations: [
       { title: 'For Investors', to: 'invest' },
       { title: 'For Businesses', to: 'business' },
-    ],
-  },
-  {
-    title: 'About Us',
-    to: 'about',
-    subNavigations: [
-      { title: 'Mission', to: 'mission' },
-      { title: 'Team', to: 'team' },
-      { title: 'Careers', to: 'careers' },
-      { title: 'Impact', to: 'impact' },
-      { title: 'Ambassadors', to: 'ambassadors' },
-      { title: 'Press', to: 'press' },
     ],
   },
 ];

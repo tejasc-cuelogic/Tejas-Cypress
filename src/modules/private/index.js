@@ -23,7 +23,7 @@ export default class Private extends React.Component {
     const routes = [];
     this.props.navStore.myRoutes.forEach((item) => {
       if (item.path) {
-        routes[item.path] = (
+        routes[`${item.path}_${item.to}`] = (
           <Route
             path={`/app/${item.to}`}
             component={Loadable({
