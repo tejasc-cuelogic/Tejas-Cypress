@@ -67,18 +67,15 @@ export default class KnowledgeBase extends Component {
               />
             </Grid.Column>
             <Grid.Column widescreen={8} largeScreen={8} floated="right" only="large screen">
-              {match.params.for === 'faq' ? (
-                <Route
-                  path={match.url}
-                  render={props => <FaqsCombined marketing={marketing} {...props} />}
-                />
-              ) : (
-                <Route
-                  exact
-                  path={match.url}
-                  render={props => <Details marketing={marketing} module={modul} {...props} />}
-                />
-              )}
+              <Route
+                exact
+                path={match.url}
+                render={props => <Details marketing={marketing} module={modul} {...props} />}
+              />
+              <Route
+                path={`${match.url}/faq`}
+                render={props => <FaqsCombined marketing={marketing} {...props} />}
+              />
               <Route
                 path={`${match.url}/:id`}
                 render={props => <Details marketing={marketing} module={modul} {...props} />}
