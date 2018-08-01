@@ -13,6 +13,7 @@ export class InvestmentLimitStore {
   @observable INVESTEMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
   @observable investmentLimit = {};
   @observable currentLimit = 0;
+  @observable activeAccounts = userDetailsStore.getActiveAccounts;
 
   @computed get fLoading() {
     return this.investmentLimit.loading;
@@ -42,7 +43,7 @@ export class InvestmentLimitStore {
   */
  @action
  getInvestmentLimit = () => {
-   console.log(userDetailsStore);
+   console.log(this.activeAccounts);
    this.investmentLimit = graphql({
      client: client2,
      query: finLimit,
