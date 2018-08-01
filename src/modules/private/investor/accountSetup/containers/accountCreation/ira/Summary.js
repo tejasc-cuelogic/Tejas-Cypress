@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import _ from 'lodash';
+import { isEmpty, find } from 'lodash';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../../theme/shared';
 
-@inject('iraAccountStore', 'uiStore')
+@inject('iraAccountStore', 'uiStore', 'bankAccountStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -22,14 +22,17 @@ export default class Summary extends Component {
       IDENTITY_FRM,
     } = this.props.iraAccountStore;
     const { errors } = this.props.uiStore;
-    const accountType = _.find(
+    const accountType = find(
       ACC_TYPES_FRM.fields.iraAccountType.values,
       { value: ACC_TYPES_FRM.fields.iraAccountType.value },
     );
-    const fundingOption = _.find(
+    const fundingOption = find(
       FUNDING_FRM.fields.fundingType.values,
       { value: FUNDING_FRM.fields.fundingType.value },
     );
+    const { plaidBankDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const bankAccountNumber = !isEmpty(plaidBankDetails) ?
+      plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>
         <Header as="h3" textAlign="center">Verify the information and create IRA account</Header>
@@ -71,6 +74,12 @@ export default class Summary extends Component {
                         <span className="negative-text"><b>Not Uploaded</b></span>}
                     </Table.Cell>
                   </Table.Row>
+                  {fundingOption.value === 0 &&
+                    <Table.Row>
+                      <Table.Cell><b>Bank account</b></Table.Cell>
+                      <Table.Cell>{Helper.encryptNumber(bankAccountNumber)}</Table.Cell>
+                    </Table.Row>
+                  }
                 </Table.Body>
               </Table>
             </div>
@@ -78,8 +87,8 @@ export default class Summary extends Component {
         </div>
         <p className="center-align mb-30">
           By continuing, I acknowledge that I have read and agree to the
-          terms of the <Link to="/" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/" className="link">Substitute IRS Form W-9 Certification</Link>,
-          and the <Link to="/" className="link">NextSeed Membership Agreement</Link>.
+          terms of the <Link to="/app/summary/account-creation/ira" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/app/summary/account-creation/ira" className="link">Substitute IRS Form W-9 Certification</Link>,
+          and the <Link to="/app/summary/account-creation/ira" className="link">NextSeed Membership Agreement</Link>.
         </p>
         <div className="center-align">
           <Button primary size="large" onClick={() => this.handleCreateAccount()} className="relaxed" disabled={!this.props.iraAccountStore.isValidIraForm}>Create the account</Button>

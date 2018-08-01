@@ -2,7 +2,6 @@ export { default as adminStore } from './entities/adminStore';
 export { default as authStore } from './entities/shared/authStore';
 export { default as businessStore } from './entities/businessStore';
 export { default as commonStore } from './entities/commonStore';
-export { default as profileStore } from './entities/profileStore';
 export { default as userStore } from './entities/userStore';
 export { default as uiStore } from './entities/shared/uiStore';
 export { default as userListingStore } from './entities/user/userListingStore';
