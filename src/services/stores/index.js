@@ -31,3 +31,4 @@ export { default as businesssStore } from './entities/issuer/businessStore';
 export { default as businessAppLendioStore } from './entities/user/businessAppLendioStore';
 
 export { default as campaignStore } from './entities/public/campaignStore';
+export { default as agreementsStore } from './entities/user/settings/agreementsStore';

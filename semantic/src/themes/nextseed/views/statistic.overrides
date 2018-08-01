@@ -91,15 +91,15 @@
 	.statistic {
 		margin-bottom: 0;
 		.value, .label {
-			color: @white !important;
-			text-transform: none !important;
+			color: @white;
+			text-transform: none;
 		}
 	}
 	.ui.grid.secondary-statistic {
 		background: @white;
 		padding: @14px;
 		margin-top: @14px;
-		border: 2px solid @neutral-offwhite;
+		border: 1px solid @neutral-offwhite;
 		border-top: 0; 
 		.statistic {
 			.value {
@@ -107,20 +107,23 @@
 				font-size: @28px;
 				line-height: @33px;
 				&.primary-text {
-					color: @primaryColor !important;
+					color: @primaryColor;
 				}
 				&.secondary-text {
-					color: @secondary-color !important;
+					color: @secondary-color;
 				}
 			}
 			.label {
-				color: @neutral-middark !important;
+				color: @neutral-middark;
 				font-size: @14px;
 				line-height: @16px;
 				text-transform: inherit;
 				font-weight: normal;
 			}
 		}
+	}
+	.ui.celled.grid>.row>.column {
+		box-shadow: -1px 0 0 0 @neutral-offwhite;
 	}
 }
 // Business - how it works
@@ -130,7 +133,7 @@
 			text-align: left;
 		}
 		>.label {
-			font-size: 15px;
+			font-size: @15px;
 			text-align: left;
 			text-transform: none;
 			font-weight: @normal;
@@ -146,6 +149,9 @@
 		&.small >.value {
 			font-size: @40px !important;
 		}
+	}
+	.ui.celled.grid>.row>.column {
+		box-shadow: none;
 	}
 }
 //  Public page Ends

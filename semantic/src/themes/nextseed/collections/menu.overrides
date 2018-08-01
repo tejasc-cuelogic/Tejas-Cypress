@@ -63,7 +63,8 @@
                 content: "";
                 position: absolute;
                 top: -12px;
-                left: 42%;
+                left: 50%;
+                margin-left: -6px;
                 border-width: 0 12px 12px;
                 border-style: solid;
                 border-color: @primary-one transparent;
@@ -139,6 +140,18 @@
             }
         }
     }
+    &.insight-menu {
+        margin: 0 -.35714286em;
+        .ui.dropdown {
+            color: @primary-one !important;
+            padding-left: 0;
+            padding-right: 0;
+            >.dropdown.icon:before {
+                content: '\e914';
+                font-family: "nextseed";
+            } 
+        }
+    }
 }
 .footer-head{
     .ui.menu{
@@ -193,7 +206,7 @@ footer{
             font-size: @14px;
             line-height: @20px;
             .ui.image.filterIcon {
-                margin-right: 10px;
+                margin-right: @10px;
             }
             .ui.image.closeIcon {
                 margin-left: 117px;
@@ -218,7 +231,7 @@ footer{
 				>i.icon {
 					float: left;
 					margin-left: 0;
-                    margin-right: 14px;
+                    margin-right: @14px;
                     font-size: @20px;
                     margin-top: -3px;
 				}
@@ -317,32 +330,6 @@ footer{
     .ui.inverted.menu .item{
         &:hover, &:active, &:focus, &.active{
             background-color:@white;
-        }
-    }
-}
-
-.ui.menu .dropdown.item .menu {
-    top: 129%;
-    background: transparent;
-    &.transition:after {
-        content: "";
-        position: absolute;
-        top: -12px;
-        left: 50%;
-        margin-left: -6px;
-        border-width: 0 12px 12px;
-        border-style: solid;
-        border-color: #20c86d transparent;
-        display: block;
-        width: 0;
-    }
-    >.item {
-        background: #20c86d !important;
-        text-align: center;
-        color: @white !important;
-        &:hover, &.active {
-            background: #00AD5A !important;
-            color: @white !important;
         }
     }
 }

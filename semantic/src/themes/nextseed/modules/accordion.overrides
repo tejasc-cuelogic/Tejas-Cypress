@@ -213,3 +213,53 @@
 		}
 	}
 }
+
+
+//education-center
+.edu-center {
+	.ui.accordion {
+		.active.content {
+			background: @neutral-offwhite;
+		}
+	}
+	.ui.accordion:not(.styled).splitted  {
+		.title {
+			box-shadow: none;
+			font-weight: normal;
+			color: @neutral-middark;
+			background: @neutral-offwhite;
+			font-size: @14px;
+			&.active {
+				border-radius: 0;
+				background: @secondary-color;
+				color: @white;
+				&::before{
+					display: none;
+				}
+				.ns-chevron-down.icon {
+					color: @white;
+				}
+			}
+			&:first-of-type {
+				border-radius: 0;
+			}
+			>.icon {
+				color: @neutral-middark;
+			}
+			~.content:not(.ui).active+.title {
+				box-shadow: none;
+				border-top: #e0e0e0 1px solid;
+				border-radius: 0;
+			}
+		}
+		.list a.item {
+			border-top: 0;
+			color: @neutral-middark;
+			background: @neutral-offwhite;
+			&.active {
+				color: @primary-one;
+				font-weight: @bold;
+			}
+		}
+	}
+}

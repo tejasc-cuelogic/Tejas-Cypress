@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+<<<<<<< HEAD
 import { Link, Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid, Reveal, Image, Icon } from 'semantic-ui-react';
 import TeamModal from '../components/TeamModal';
+=======
+import { Link } from 'react-router-dom';
+import { Header, Grid, Reveal, Image, Icon, Modal, Item } from 'semantic-ui-react';
+import teamMember from '../../../../assets/images/team-member.jpg';
+>>>>>>> a88d94acc30dd30fa103b6aa68fdc26e1e148393
 
 @inject('teamStore')
 @observer
@@ -47,18 +53,15 @@ class team extends Component {
              ))}
               <Grid.Column>
                 <Reveal animated="fade">
-                  <Reveal.Content visible>
-                    <div className="team-overlay">
-                      <Header as="h4" textAlign="center">
-                        Join our team
-                        <Header.Subheader as={Link} to="/">
-                          <Icon color="green" className="ns-arrow-right" />
-                          See open positions
-                        </Header.Subheader>
-                      </Header>
-                    </div>
-                  </Reveal.Content>
-                  <Reveal.Content hidden />
+                  <div className="team-overlay">
+                    <Header as="h4" textAlign="center">
+                      Join our team
+                      <Header.Subheader as={Link} to="/">
+                        <Icon color="green" className="ns-arrow-right" />
+                        See open positions
+                      </Header.Subheader>
+                    </Header>
+                  </div>
                 </Reveal>
               </Grid.Column>
             </Grid>

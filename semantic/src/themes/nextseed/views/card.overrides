@@ -85,6 +85,22 @@
             }
         }
     }
+    &.insights{
+        >.content{
+            padding:@14px;
+            .tags{
+                color:@primary-one;
+                text-transform:uppercase;
+                >span{
+                    color:@neutral-middark;
+                    text-transform:none;
+                }
+            }
+            .description{
+                height:50px;
+            }
+        }
+    }
 }
 //  Public page Ends
 

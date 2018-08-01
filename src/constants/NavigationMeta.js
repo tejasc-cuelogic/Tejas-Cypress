@@ -29,6 +29,9 @@ export const PRIVATE_NAV = [
       {
         title: 'Beneficiaries', to: 'beneficiaries', component: 'Beneficiaries', accessibleTo: ['investor'],
       },
+      {
+        title: 'Agreements', to: 'agreements', component: 'Agreements', accessibleTo: ['investor'],
+      },
     ],
   },
   {

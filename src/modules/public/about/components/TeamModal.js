@@ -22,7 +22,7 @@ class TeamModal extends Component {
         size="large"
         className="team-member-modal"
       >
-        <Modal.Content className="team-details-container">
+        <Modal.Content>
           <Item.Group>
             <Item>
               <Image src={member.avatar} />
