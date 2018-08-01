@@ -6,11 +6,11 @@ import FinancialInfo from '../components/investmentLimits/FinancialInfo';
 import VerifyAccreditation from './VerifyAccreditation';
 import UpdateInvestmentLimits from '../components/investmentLimits/UpdateInvestmentLimits';
 
-@inject('userDetailsStore')
+@inject('investmentLimitStore')
 @observer
 export default class InvestmentLimits extends Component {
   componentWillMount() {
-    this.props.userDetailsStore.getFinancialLimit();
+    this.props.investmentLimitStore.getFinancialLimit();
   }
 
   render() {

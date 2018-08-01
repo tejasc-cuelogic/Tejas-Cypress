@@ -20,7 +20,9 @@ export default class UpdateInvestmentLimits extends Component {
   render() {
     const errors = false;
     const { inProgress } = this.props.uiStore;
-    const { INVESTEMENT_LIMIT_META, maskingFieldChange } = this.props.investmentLimitStore;
+    const {
+      INVESTEMENT_LIMIT_META, maskingFieldChange, currentLimit,
+    } = this.props.investmentLimitStore;
     const { fields } = INVESTEMENT_LIMIT_META;
     return (
       <div>
@@ -43,7 +45,7 @@ export default class UpdateInvestmentLimits extends Component {
                 Estimated investment limit
               </Statistic.Label>
               <Statistic.Value>
-                {Helper.CurrencyFormat(35000)}
+                {Helper.CurrencyFormat(currentLimit)}
               </Statistic.Value>
             </Statistic>
             <Divider clearing hidden />
@@ -52,7 +54,7 @@ export default class UpdateInvestmentLimits extends Component {
                 <Grid.Column widescreen={16} largeScreen={16} computer={16} tablet={16} mobile={16}>
                   <div className="field-wrap">
                     {fields &&
-                      ['annualIncome', 'netWorth', 'otherInvestment'].map(field => (
+                      ['annualIncome', 'netWorth', 'otherInvestments'].map(field => (
                         <MaskedInput2
                           key={field}
                           name={field}

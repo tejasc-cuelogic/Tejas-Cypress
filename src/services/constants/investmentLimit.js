@@ -4,9 +4,9 @@ export const INVESTEMENT_LIMIT = {
     label: 'Annual Income',
     error: undefined,
     rule: 'required',
-    tooltip: 'Annual Income',
+    tooltip: 'Mention your Annual Income here',
     customErrors: {
-      required: '* required.',
+      required: 'required.',
     },
   },
   netWorth: {
@@ -14,19 +14,31 @@ export const INVESTEMENT_LIMIT = {
     label: 'Net Worth',
     error: undefined,
     rule: 'required',
-    tooltip: 'Net Worth',
+    tooltip: 'Mention your Net Worth here',
     customErrors: {
-      required: '* required.',
+      required: 'required.',
     },
   },
-  otherInvestment: {
+  otherInvestments: {
     value: '',
-    label: 'Other Regulation Crowdfunding investment made in prior 12 months',
+    label: 'Other Regulation Crowdfunding investments made in prior 12 months',
     error: undefined,
     rule: 'required',
-    tooltip: 'Other Regulation Crowdfunding investment made in prior 12 months',
+    tooltip: 'Other Crowdfunding investments',
     customErrors: {
-      required: '* required.',
+      required: 'required.',
     },
+  },
+  currentLimitIndividualOrIra: {
+    value: '',
+    label: 'Your current investment limit',
+    error: undefined,
+    rule: 'optional',
+  },
+  currentLimitEntity: {
+    value: '',
+    label: 'Your current investment limit',
+    error: undefined,
+    rule: 'optional',
   },
 };

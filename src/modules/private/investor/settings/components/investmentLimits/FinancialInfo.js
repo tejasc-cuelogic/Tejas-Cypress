@@ -6,23 +6,24 @@ import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'sem
 // import { FormInput } from '../../../../../theme/form/FormElements';
 import Helper from '../../../../../../helper/utility';
 
-@inject('userDetailsStore', 'uiStore')
+@inject('investmentLimitStore', 'uiStore')
 @withRouter
 @observer
 export default class FinancialInfo extends Component {
   submit = (e) => {
     e.preventDefault();
-    this.props.userDetailsStore.updateFinInfo();
+    this.props.investmentLimitStore.updateFinInfo();
   }
   handleUpdateInvestmentLimit =(e, accountType) => {
     e.preventDefault();
-    console.log(accountType);
+    this.props.investmentLimitStore.setInvestmentLimitInfo(accountType);
     this.props.history.push(`${this.props.match.url}/update`);
   }
   render() {
     const {
-      FIN_INFO, fLoading,
-    } = this.props.userDetailsStore;
+      INVESTEMENT_LIMIT_META, fLoading,
+    } = this.props.investmentLimitStore;
+    const { fields } = INVESTEMENT_LIMIT_META;
     if (fLoading) {
       return <div>loading...</div>;
     }
@@ -59,7 +60,7 @@ export default class FinancialInfo extends Component {
                           />
                         </Statistic.Label>
                         <Statistic.Value>
-                          {Helper.CurrencyFormat(FIN_INFO.fields.currentLimit.value)}
+                          {Helper.CurrencyFormat(fields.currentLimitIndividualOrIra.value)}
                         </Statistic.Value>
                       </Statistic>
                       <Divider clearing hidden />
@@ -118,7 +119,9 @@ export default class FinancialInfo extends Component {
                             className="center-align"
                           />
                         </Statistic.Label>
-                        <Statistic.Value>$50,000.00</Statistic.Value>
+                        <Statistic.Value>
+                          {Helper.CurrencyFormat(fields.currentLimitEntity.value)}
+                        </Statistic.Value>
                       </Statistic>
                       <Divider clearing hidden />
                       <Button onClick={e => this.handleUpdateInvestmentLimit(e, 2)} inverted color="green" content="Update investment limits" />
