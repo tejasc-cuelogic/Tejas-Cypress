@@ -4,6 +4,7 @@
 
 ### Bug Fixes
 
+* **Business Application[Issue [305](https://chaos.ns.team/nsv2/ns-ops/issues/305) - business-application-validation-issue-on-documentation-step]:** added or validation on doucmentation step for tax return section ([b9212ae](https://chaos.ns.team/nsv2/ns-client/commits/b9212ae))
 * **UserManagement[Issue [263](https://chaos.ns.team/nsv2/ns-ops/issues/263) - user management ui fixes from review]:** user management ui fixes from review ([b47f55e](https://chaos.ns.team/nsv2/ns-client/commits/b47f55e))
 
 
