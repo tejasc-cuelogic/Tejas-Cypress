@@ -7,10 +7,7 @@ import { FieldError } from '../../shared';
 
 const AutoComplete = observer((props) => {
   const {
-    label,
-    error,
-    value,
-    placeHolder,
+    label, error, value, placeholder,
   } = props.fielddata;
   return (
     <Form.Field error={error}>
@@ -21,9 +18,9 @@ const AutoComplete = observer((props) => {
           props.onplaceselected(place);
         }}
         value={value}
+        placeholder={placeholder}
         types={['address']}
         onChange={props.changed}
-        placeholder={placeHolder}
       />
       {error &&
         <FieldError error={error} />

@@ -59,7 +59,7 @@ export default class PersonalInformation extends Component {
           <Grid verticalAlign="middle">
             <Grid.Row>
               <Grid.Column width={7}>
-                <Header as="h4">
+                <Header as="h5">
                   Upload a Photo ID
                   <Header.Subheader>Drivers License or Passport</Header.Subheader>
                 </Header>

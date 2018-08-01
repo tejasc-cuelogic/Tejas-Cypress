@@ -19,6 +19,7 @@ export default class Documentation extends Component {
       businessAppRemoveFiles,
       getBusinessTypeCondtion,
       getPersonalGuaranteeCondition,
+      formReadOnlyMode,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
     const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
@@ -55,6 +56,7 @@ export default class Documentation extends Component {
                   statementFileList.map(field => (
                     <Grid.Column>
                       <DropZone
+                        disabled={formReadOnlyMode}
                         multiple
                         key={field}
                         name={field}
@@ -85,30 +87,30 @@ export default class Documentation extends Component {
                 </List.Item>
               </List>
               <Divider hidden />
-              <Grid stackable columns="equal">
+              <div className="or-divider">
                 {
                   taxFileList.map(field => (
-                    <Grid.Column>
-                      <DropZone
-                        multiple
-                        key={field}
-                        name={field}
-                        fielddata={fields[field]}
-                        ondrop={(files, fieldName) =>
-                          businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                        onremove={(e, fieldName, index) =>
-                          businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
-                      />
-                    </Grid.Column>
+                    <DropZone
+                      disabled={formReadOnlyMode}
+                      multiple
+                      key={field}
+                      name={field}
+                      fielddata={fields[field]}
+                      ondrop={(files, fieldName) =>
+                        businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                      onremove={(e, fieldName, index) =>
+                        businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                    />
                   ))
                 }
-              </Grid>
+              </div>
             </FormElementWrap>
             <FormElementWrap
               header="Will you accept a blanket lien on the business if your campaign is successfully funded?"
               subHeader="NextSeed will require it. (Note that if you have existing debt with liens attached, a second lien will be accepted.)"
             >
               <FormRadioGroup
+                disabled={formReadOnlyMode}
                 fielddata={fields.blanketLien}
                 name="blanketLien"
                 changed={businessDocChange}
@@ -120,6 +122,7 @@ export default class Documentation extends Component {
               subHeader="(This is not a requirement, but a personal guarantee can positively impact the terms provided.)"
             >
               <FormRadioGroup
+                disabled={formReadOnlyMode}
                 fielddata={fields.personalGuarantee}
                 name="personalGuarantee"
                 changed={businessDocChange}
@@ -132,6 +135,7 @@ export default class Documentation extends Component {
                     Personal Guarantee Form along with any supporting documentation
                   </p>
                   <DropZone
+                    disabled={formReadOnlyMode}
                     multiple
                     name="personalGuaranteeForm"
                     fielddata={fields.personalGuaranteeForm}

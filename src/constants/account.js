@@ -2,9 +2,13 @@ import moment from 'moment';
 import Validator from 'validatorjs';
 
 /* eslint-disable no-unused-vars, arrow-body-style */
-Validator.register('taxId', (value, requirement, attribute) => {
-  return value.match(/^\d{3}-\d{2}-\d{4}$/);
-}, 'The :attribute is not in the format XXX-XX-XXXX.');
+Validator.register('taxId', (value, attribute) => {
+  return value.toString().length === 9;
+}, 'The :attribute is not in the format XX-XXXXXXX.');
+
+Validator.register('minAcnum', (value, requirement, attribute) => {
+  return value.toString().length > 3 && value.toString().length < 18;
+}, 'The :attribute should be at least 4 digits and at most 17 digits');
 
 export const PLAID_URL = process.env.REACT_APP_PLAID_URL;
 
@@ -82,19 +86,21 @@ export const IND_LINK_BANK_MANUALLY = {
     key: 'routingNumber',
     value: '',
     error: undefined,
-    rule: 'required|numeric|digits:10',
-    label: 'Enter your bank routing number',
-    tooltip: 'Put your 10 digit bank routing number',
-    maxLength: 10,
+    rule: 'required|numeric|digits:9',
+    placeHolder: '123456789',
+    label: 'Bank routing number',
+    tooltip: 'Put your 9 digit bank routing number',
+    maxLength: 9,
   },
   accountNumber: {
     key: 'accountNumber',
     value: '',
     error: undefined,
-    rule: 'required|numeric|digits:12',
-    label: 'Enter your bank account number',
-    tooltip: 'Put your 12 digit bank account number',
-    maxLength: 12,
+    placeHolder: '123456789',
+    rule: 'required|minAcnum',
+    label: 'Bank account number',
+    tooltip: 'Put your 4 to 17 digit bank account number',
+    maxLength: 17,
   },
 };
 
@@ -104,7 +110,7 @@ export const IND_ADD_FUND = {
     key: 'value',
     error: undefined,
     rule: 'required|numeric',
-    label: 'Value',
+    label: 'Deposit Amount',
     maxLength: 15,
   },
 };
@@ -162,12 +168,14 @@ export const IRA_ACC_TYPES = {
       {
         label: 'Traditional',
         value: 0,
-        description: 'Earnings grow tax-deferred',
+        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
+        rawValue: 'traditional',
       },
       {
         label: 'Roth',
         value: 1,
-        description: 'Earnings grow tax-deferred',
+        description: 'Earnings from investments on a Roth Individual Retirement Account grow tax-free. ',
+        rawValue: 'roth',
       },
     ],
     error: undefined,
@@ -184,18 +192,21 @@ export const IRA_FUNDING = {
         value: 0,
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Check!,
         sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+        rawValue: 'check',
       },
       {
         label: 'IRA Transfer',
         value: 1,
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for IRA Transfer!,
         sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+        rawValue: 'iraTransfer',
       },
       {
         label: 'Direct Rollover',
         value: 2,
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit for Direct Rollover!,
         sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam`,
+        rawValue: 'directRollOver',
       },
     ],
     error: undefined,
@@ -209,6 +220,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
+    tooltip: ' Your net worth is calculated by subtracting your liabilities from your assets, excluding your primary residence. See the SEC`s Investor Bulletin for the latest information',
     label: 'Net worth',
     placeHolder: 'Your networth',
     maxLength: 15,
@@ -218,6 +230,7 @@ export const IRA_FIN_INFO = {
     value: '',
     error: undefined,
     rule: 'required|numeric',
+    tooltip: 'This includes your primary and ancillary income sources. Your joint income with your spouse can also be included.',
     label: 'Annual income',
     placeHolder: 'Your annual income',
     maxLength: 15,
@@ -267,13 +280,13 @@ export const ENTITY_GEN_INFO = {
     key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
   },
   city: {
-    key: 'city', value: '', label: 'City', error: undefined, rule: 'required|string',
+    key: 'city', value: '', placeHolder: 'New York', label: 'City', error: undefined, rule: 'required|string',
   },
   state: {
-    key: 'state', value: '', label: 'State', error: undefined, rule: 'required|string',
+    key: 'state', value: '', placeHolder: 'NY', label: 'State', error: undefined, rule: 'required|string',
   },
   zipCode: {
-    key: 'zipCode', value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric',
+    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: '1001', error: undefined, rule: 'required|numeric',
   },
 };
 
@@ -286,7 +299,7 @@ export const ENTITY_TRUST_INFO = {
     rule: 'required',
   },
   trustDate: {
-    key: 'trustDate', value: moment(), error: undefined, rule: 'required', label: 'Date of Trust',
+    key: 'trustDate', value: moment(`01/01/${new Date().getFullYear()}`), error: undefined, rule: 'required', label: 'Date of Trust',
   },
 };
 
@@ -301,13 +314,13 @@ export const ENTITY_PERSONAL_INFO = {
 
 export const ENTITY_FORMATION_DOCS = {
   formationDoc: {
-    key: 'formationDoc', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'formationDoc', label: 'Entity Formation Document', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   operatingAgreementDoc: {
-    key: 'operatingAgreementDoc', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'operatingAgreementDoc', label: 'Entity Operating Document', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   einVerificationDoc: {
-    key: 'einVerificationDoc', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'einVerificationDoc', label: 'EIN Verification', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
 };
 
@@ -352,14 +365,14 @@ export const ACC_TYPE = {
 export const EMPLOYMENT = {
   employmentStatus: {
     key: 'employmentStatus',
-    value: true,
+    value: 'EMPLOYED',
     values:
       [
-        { label: 'Employed', value: 'employed' },
-        { label: 'Self Employed', value: 'selfemployed' },
-        { label: 'Retired', value: 'retired' },
-        { label: 'Student', value: 'student' },
-        { label: 'Not Employee', value: 'notemployee' },
+        { label: 'Employed', value: 'EMPLOYED' },
+        { label: 'Self Employed', value: 'SELF_EMPLOYED' },
+        { label: 'Retired', value: 'RETIRED' },
+        { label: 'Student', value: 'STUDENT' },
+        { label: 'Not Employee', value: 'NOT_EMPLOYED' },
       ],
     error: undefined,
     rule: 'required',
@@ -369,7 +382,7 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Employer',
     error: undefined,
-    rule: 'required_with:employmentStatus',
+    rule: 'required_if:employmentStatus,EMPLOYED',
     placeHolder: 'Type employer name',
   },
   currentPosition: {
@@ -377,15 +390,15 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Current Position Held',
     error: undefined,
-    rule: 'required_with:employmentStatus',
+    rule: 'required_if:employmentStatus,EMPLOYED',
     placeHolder: 'E.g. CEO',
   },
 };
 
 export const INVESTOR_PROFILE = {
-  profileType: {
-    value: true,
-    values: [{ label: 'Individual', value: 'individual' }, { label: 'Joint(Married)', value: 'joint' }],
+  investorProfileType: {
+    value: 'INDIVIDUAL',
+    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint(Married)', value: 'JOINT' }],
     error: undefined,
     rule: 'required',
   },
@@ -399,21 +412,21 @@ export const FINANCES = {
     rule: 'required',
     placeHolder: 'Net Worth',
   },
-  annualIncome1: {
+  annualIncomeThirdLastYear: {
     value: '',
     label: 'Annual Income 2016',
     error: undefined,
     rule: 'required',
     placeHolder: '$60,000',
   },
-  annualIncome2: {
+  annualIncomeLastYear: {
     value: '',
     label: 'Annual Income 2017',
     error: undefined,
     rule: 'required',
     placeHolder: '$60,000',
   },
-  annualIncome3: {
+  annualIncomeCurrentYear: {
     value: '',
     label: 'Annual Income 2018',
     error: undefined,
@@ -424,7 +437,7 @@ export const FINANCES = {
     value: [],
     values: [
       {
-        label: 'I am (or a member of my immediate family is) a director, 10% shareholder, or senior officer of a publicity traded company. The name of the company is ',
+        label: 'I am (or a member of my immediate family is) a director, 10% shareholder, or senior officer of a publicity traded company.',
         value: 'iamadirector',
       },
     ],
@@ -435,51 +448,51 @@ export const FINANCES = {
     value: [],
     values: [
       {
-        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm od a stock exchange orFINRA. The name of firm is ',
+        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm od a stock exchange orFINRA.',
         value: 'iamamember',
       },
     ],
     error: undefined,
     rule: 'alpha',
   },
-  companyName: {
+  directorShareHolderOfCompany: {
     value: '',
-    label: ' ',
+    label: 'Company Name',
     error: undefined,
-    rule: 'required_with:checkbox1',
+    rule: 'string',
   },
-  firmName: {
+  employedOrAssoWithFINRAFirmName: {
     value: '',
-    label: ' ',
+    label: 'Firm Name',
     error: undefined,
-    rule: 'required_with:checkbox2',
+    rule: 'string',
   },
 };
 
 export const INVESTMENT_EXPERIENCE = {
-  experienceInfo: {
-    value: '',
-    values: [{ label: 'No experience', value: '1' }, { label: 'I know what I’m doing', value: '2' }, { label: 'I have some experience', value: '3' }, { label: 'I’m an expert', value: '4' }],
+  investmentExperienceLevel: {
+    value: 'NO_EXPERIENCE',
+    values: [{ label: 'No experience', value: 'NO_EXPERIENCE' }, { label: 'I know what I’m doing', value: 'KNOW_AWARE' }, { label: 'I have some experience', value: 'SOME_EXPERIENCE' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
   },
-  checkbox1: {
+  readyInvestingInLimitedLiquiditySecurities: {
     value: [],
     values: [
       {
         label: 'Investing in private business is not for investors with short-term time horizons.  Are you comfortable investing in securities that have limited liquidty?',
-        value: 'checkbox',
+        value: 'checked',
       },
     ],
     error: undefined,
     rule: 'alpha',
   },
-  checkbox2: {
+  readyForRisksInvolved: {
     value: [],
     values: [
       {
         label: 'Investing in private business involves risk. When investing on NextSeed, are you willing to take on significant risk to potentially earn a return in your investment?',
-        value: 'checkbox',
+        value: 'checked',
       },
     ],
     error: undefined,
