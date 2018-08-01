@@ -164,7 +164,9 @@ class AboutCompany extends Component {
                   <Grid.Column>
                     <Reveal animated="small fade">
                       <Reveal.Content hidden>
-                        <p>Lorem Ipsum</p>
+                        <div className="team-overlay">
+                          <p>Lorem Ipsum</p>
+                        </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
                         <Image src={teamMember1} circular />
@@ -174,7 +176,9 @@ class AboutCompany extends Component {
                   <Grid.Column>
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
-                        <p>Lorem Ipsum</p>
+                        <div className="team-overlay">
+                          <p>Lorem Ipsum</p>
+                        </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
                         <Image src={teamMember2} circular />
@@ -184,7 +188,9 @@ class AboutCompany extends Component {
                   <Grid.Column>
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
-                        <p>Lorem Ipsum</p>
+                        <div className="team-overlay">
+                          <p>Lorem Ipsum</p>
+                        </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
                         <Image src={teamMember3} circular />
@@ -194,7 +200,9 @@ class AboutCompany extends Component {
                   <Grid.Column>
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
-                        <p>Lorem Ipsum</p>
+                        <div className="team-overlay">
+                          <p>Lorem Ipsum</p>
+                        </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
                         <Image src={teamMember1} circular />
@@ -204,7 +212,9 @@ class AboutCompany extends Component {
                   <Grid.Column>
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
-                        <p>Lorem Ipsum</p>
+                        <div className="team-overlay">
+                          <p>Lorem Ipsum</p>
+                        </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
                         <Image src={teamMember2} circular />
@@ -245,12 +255,12 @@ class AboutCompany extends Component {
           <Header as="h3">
           Meet the Team
           </Header>
-          <Modal.Content scrolling className="team-details-container">
+          <Modal.Content scrolling>
             <Grid doubling columns={2} className="compact" verticalAlign="middle">
               <Grid.Column>
                 <Image src={campainAboutImg} />
               </Grid.Column>
-              <Grid.Column className="padded">
+              <Grid.Column className="padded team-details-container">
                 <Header as="h3">
                   Rassul Zainfar
                   <Header.Subheader>co-founder & ceo</Header.Subheader>
@@ -266,7 +276,7 @@ class AboutCompany extends Component {
                   <Icon color="green" name="linkedin in" />
                 </div>
               </Grid.Column>
-              <Grid.Column className="padded">
+              <Grid.Column className="padded team-details-container">
                 <Header as="h3">
                   Alex Grigss
                   <Header.Subheader>co-founder & Director of projects</Header.Subheader>

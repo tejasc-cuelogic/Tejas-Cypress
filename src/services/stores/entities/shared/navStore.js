@@ -18,10 +18,11 @@ export class NavStore {
 
   @computed get myRoutes() {
     const permitted = [...this.params.roles, ...userDetailsStore.signupStatus.activeAccounts];
-    return _.filter(
+    const routes = _.filter(
       this.NAV_ITEMS,
       n => n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0,
     );
+    return routes;
   }
 
   @action
