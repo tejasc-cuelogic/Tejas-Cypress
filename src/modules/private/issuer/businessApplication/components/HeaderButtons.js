@@ -8,7 +8,7 @@ export const SubmitButton = props => (
     loading={props.loading}
     onClick={props.click}
     className={props.canSubmitApp ? 'primary' : 'grey'}
-    disabled={!props.canSubmitApp}
+    disabled={!props.canSubmitApp || props.readOnlyForm}
     {...props}
   >
     Submit
@@ -19,11 +19,12 @@ export const HeaderButtons = props => (
   <Aux>
     {!props.showSubNav && !props.preQualPage ?
       <Button.Group>
-        <Button inverted onClick={props.saveContinue} disabled={props.isFileUploading} color="green">{props.isFileUploading ? 'File operation in process' : 'Save and Continue later'}</Button>
+        <Button inverted onClick={props.saveContinue} disabled={props.isFileUploading || props.disabled} color="green">{props.isFileUploading ? 'File operation in process' : 'Save and Continue later'}</Button>
         <SubmitButton
           loading={props.inProgress}
           click={props.submitApp}
           canSubmitApp={props.canSubmitApp}
+          readOnlyForm={props.disabled}
         />
       </Button.Group> : props.preQualPage &&
       <Button.Group>

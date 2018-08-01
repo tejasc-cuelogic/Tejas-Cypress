@@ -14,11 +14,14 @@ import { Plaid } from '../../../../../shared/bankAccount';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
+    this.props.userDetailsStore.setUserAccDetails('ira');
     this.props.accountStore.setAccTypeChange(1);
   }
   handleMultiStepModalclose = () => {
     this.updateUser();
     this.props.history.push('/app/summary');
+    this.props.bankAccountStore.setBankLinkInterface('list');
+    this.props.bankAccountStore.resetLinkBank();
   }
   handleStepChange = (step) => {
     this.props.iraAccountStore.setStepToBeRendered(step);

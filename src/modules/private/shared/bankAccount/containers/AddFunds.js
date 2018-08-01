@@ -13,7 +13,9 @@ export default class AddFunds extends Component {
   }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);
-    this.renderStep();
+    if (!this.props.bankAccountStore.formAddFunds.fields.value.error) {
+      this.renderStep();
+    }
   }
   handleSubmitForm = (e) => {
     e.preventDefault();

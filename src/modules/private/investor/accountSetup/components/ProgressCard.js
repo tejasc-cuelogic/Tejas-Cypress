@@ -50,7 +50,7 @@ const ProgressCard = props => (
             <Card.Content>
               <Icon.Group size="huge">
                 <Icon className={`ns-${key}`} />
-                <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `ns-${status === 2 ? 'check' : 'warning'}-circle`} />
+                <Icon corner color={status === 2 ? 'green' : status === 1 ? 'red' : ''} className={status === 0 ? '' : `${status === 2 ? 'ns-check-circle' : ''}`} />
               </Icon.Group>
               <p><b>{currentCard.label}</b></p>
               {status === 2 ? <p>{currentCard.successMsg}</p> : '' }

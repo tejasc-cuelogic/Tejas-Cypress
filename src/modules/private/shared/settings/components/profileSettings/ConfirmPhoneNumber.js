@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { FormInput, MaskedInput2 } from '../../../../../../theme/form';
+import { MaskedInput2 } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../theme/shared';
 
@@ -68,7 +69,7 @@ export default class ConfirmPhoneNumber extends Component {
     const {
       ID_VERIFICATION_FRM,
       ID_PHONE_VERIFICATION,
-      personalInfoChange,
+      personalInfoMaskedChange,
       phoneVerificationChange,
     } = this.props.identityStore;
     const { errors, editMode } = this.props.uiStore;
@@ -92,7 +93,7 @@ export default class ConfirmPhoneNumber extends Component {
             fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
             format="###-###-####"
             readOnly={!editMode}
-            changed={personalInfoChange}
+            changed={personalInfoMaskedChange}
             containerclassname="display-only"
             className="display-only"
             phoneNumber
@@ -114,13 +115,13 @@ export default class ConfirmPhoneNumber extends Component {
             </p>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
-            <FormInput
-              name="code"
-              size="huge"
-              containerclassname="otp-field"
-              maxLength={6}
+            <ReactCodeInput
+              fields={6}
+              type="number"
+              filterChars
+              className="otp-field"
               fielddata={ID_PHONE_VERIFICATION.fields.code}
-              changed={phoneVerificationChange}
+              onChange={phoneVerificationChange}
             />
             <div className="center-align">
               <Button loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!ID_PHONE_VERIFICATION.meta.isValid}>Confirm</Button>

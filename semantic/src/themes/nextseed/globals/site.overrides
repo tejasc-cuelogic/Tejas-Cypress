@@ -135,6 +135,15 @@ a.text-link{
 .bg-offwhite {
 	background-color: @neutral-offwhite;
 }
+.green-block {
+	background-color: @primary-one;
+}
+.blue-block {
+	background-color: @secondary-color;
+}
+.primary-block {
+	background-color: @primary-two;
+}
 
 // Footer Styles
 footer{
@@ -157,47 +166,6 @@ footer{
 		}
 	}
 }
-
-/** About Us **/
-.statistic-section {
-	.green-block {
-		background-color: @primaryColor;
-	}
-	.blue-block {
-		background-color: @secondary-color;
-	}
-	.statistic {
-		margin-bottom: 0;
-		.value, .label {
-			color: @white !important;
-			text-transform: none !important;
-		}
-	}
-	.ui.grid.secondary-statistic {
-		background: @white;
-		padding: @14px;
-		margin-top: @14px;
-		.statistic {
-			.value {
-				font-size: @28px;
-				&.primary-text {
-					color: @primaryColor !important;
-				}
-				&.secondary-text {
-					color: @secondary-color !important;
-				}
-			}
-			.label {
-				color: @neutral-middark !important;
-				font-size: @14px;
-				line-height: @16px;
-				text-transform: inherit;
-				font-weight: normal;
-			}
-		}
-	}
-}
-
 
 /** campaign filter **/
 .campaign-list-wrapper {
@@ -688,6 +656,9 @@ p i.icon {
 	}
 }
 //Team
+.team-column {
+	margin-top: 30vh;
+}
 .team-gallery {
 	&.ui.grid {
 		margin: 0;
@@ -707,6 +678,71 @@ p i.icon {
 				margin-right: @5px;
 			}
 		}
+	}
+}
+//press page
+.press-news {
+	.news {
+		position: relative;
+		overflow: hidden;
+		img.ui.image {
+			width: auto;
+			max-width: none;
+		}
+		.image-caption {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			padding: @20px;    
+			p {
+				background: @neutral;
+				padding: @5px @10px;
+				color: @white;
+				display: table;
+				margin-bottom: @5px;
+				&.news-category {
+					font-size: @13px;
+					text-transform: uppercase;
+				}
+				&.news-title {
+					font-size: @28px;
+					line-height: @30px;
+				}
+			}
+		}
+	}
+}
+address {
+	p {
+		margin: 0;
+		font-style: normal;	
+	}
+}
+.press-list {
+	padding: @20px @50px;
+	.header{
+		color: @black !important;
+		font-weight: @bold;
+	}
+	.divider {
+		margin: @11px 0 @7px !important;
+	}
+	a {
+		i {
+			color: @primary-two !important; 
+			margin-right: @10px !important;	
+		}
+		color: @primary-two !important; 
+	}
+}
+//impact page
+.featured-statistic {
+	h5.ui.header {
+		color: @white;
+		margin: auto;
+	}
+	h2.ui.header {
+		margin-bottom: 0px;
 	}
 }
 /* END <== PUBLIC PAGES UI STYLES */
@@ -1510,13 +1546,13 @@ svg:not(:root).recharts-surface{
 	}
 }
 
-.display-only{
+p.display-only{
 	min-width:280px;
 	display:inline-block;
 	padding:@14px @20px;
 	margin-bottom:@10px;
 	font-size:@20px;
-	font-weight:@bold;
+	font-weight:@fontMedium;
 	text-align:center;
 	border:none;
 	border-bottom:@border-light 1px solid;

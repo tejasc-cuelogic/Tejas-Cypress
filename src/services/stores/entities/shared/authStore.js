@@ -64,6 +64,11 @@ export class AuthStore {
   };
 
   @action
+  confirmFormChange = (e, result) => {
+    this.CONFIRM_FRM = Validator.onChange(this.CONFIRM_FRM, Validator.pullValues(e, result));
+  };
+
+  @action
   ConfirmChange = (e) => {
     this.CONFIRM_FRM = Validator.onChange(
       this.CONFIRM_FRM,

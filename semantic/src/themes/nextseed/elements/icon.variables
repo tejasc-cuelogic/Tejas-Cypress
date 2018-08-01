@@ -106,6 +106,8 @@
 
 //  NextSeed V2 custom Icon Variables
 @ns-activity-arrow: "\e900";
+@ns-arrow-double-left: "\e984";
+@ns-arrow-double-right: "\e985";
 @ns-arrow-down: "\e901";
 @ns-arrow-left: "\e902";
 @ns-arrow-right: "\e903";

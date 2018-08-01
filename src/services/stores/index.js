@@ -11,6 +11,8 @@ export { default as entityAccountStore } from './entities/user/entityAccountStor
 export { default as iraAccountStore } from './entities/user/iraAccountStore';
 export { default as individualAccountStore } from './entities/user/individualAccountStore';
 export { default as statementStore } from './entities/account/statementStore';
+export { default as transactionStore } from './entities/account/transactionStore';
+export { default as settingStore } from './entities/account/settingStore';
 
 export { default as educationStore } from './entities/education/educationStore';
 export { default as rewardStore } from './entities/rewardWallet/rewardStore';
@@ -28,3 +30,4 @@ export { default as helloWorldStore } from './entities/helloWorldStore';
 export { default as businesssStore } from './entities/issuer/businessStore';
 export { default as businessAppLendioStore } from './entities/user/businessAppLendioStore';
 export { default as investmentLimitStore } from './entities/user/settings/investmentLimitStore';
+export { default as agreementsStore } from './entities/user/settings/agreementsStore';

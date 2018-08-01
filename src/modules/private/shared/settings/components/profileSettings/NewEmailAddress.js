@@ -26,7 +26,7 @@ export default class NewEmailAddress extends Component {
     this.props.history.push('/app/profile-settings/profile-data');
   }
   render() {
-    const { values } = this.props.authStore;
+    const { CONFIRM_FRM, confirmFormChange } = this.props.authStore;
     const { errors } = this.props.uiStore;
     if (this.props.uiStore.authWizardStep === 'ConfirmEmailAddress') {
       return null;
@@ -53,13 +53,13 @@ export default class NewEmailAddress extends Component {
               label="E-mail"
               placeholder="E-mail address"
               name="email"
-              value={values.email.value}
-              onChange={this.handleInputChange}
-              error={!!values.email.error}
+              value={CONFIRM_FRM.fields.email.value}
+              onChange={confirmFormChange}
+              error={!!CONFIRM_FRM.fields.email.error}
             />
-            <FieldError error={values.email.error} />
+            <FieldError error={CONFIRM_FRM.fields.email.error} />
             <div className="center-align">
-              <Button disabled={typeof values.email.error !== 'undefined' || isEmpty(values.email.value)} loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed">Change Email Address</Button>
+              <Button disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value)} loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed">Change Email Address</Button>
             </div>
           </Form>
         </Modal.Content>
