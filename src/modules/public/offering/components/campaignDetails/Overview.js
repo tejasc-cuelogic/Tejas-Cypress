@@ -90,7 +90,7 @@ class Overview extends Component {
                   <Breadcrumb.Section>Investment Details</Breadcrumb.Section>
                   <Breadcrumb.Divider icon="right chevron" />
                 </Breadcrumb>
-                <Header as="h3">Investment Return Calculator</Header>
+                <Header as="h3" className="mb-30">Investment Return Calculator</Header>
                 <Grid columns={4} divided doubling className="investment-grid" padded="horizontally">
                   <Grid.Column>
                     <Statistic size="mini" className="basic">
@@ -132,10 +132,10 @@ class Overview extends Component {
                     </Statistic>
                   </Grid.Column>
                 </Grid>
-                <span className="note">
+                <p className="note">
                   * For illustration only. See expanded Payment Calculator view to
                   read more regarding actual performance variables.
-                </span>
+                </p>
               </Segment>
             </Grid.Column>
             <Grid.Column width={4}>
