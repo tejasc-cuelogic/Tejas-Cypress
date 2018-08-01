@@ -20,6 +20,8 @@ export default class AccountCreation extends React.Component {
   handleMultiStepModalclose = () => {
     this.updateUser();
     this.props.history.push('/app/summary');
+    this.props.bankAccountStore.setBankLinkInterface('list');
+    this.props.bankAccountStore.resetLinkBank();
   }
   handleStepChange = (step) => {
     this.props.iraAccountStore.setStepToBeRendered(step);

@@ -36,7 +36,7 @@ class Helper {
     ACC_TYPES_FRM: 1,
     FUNDING_FRM: 2,
     IDENTITY_FRM: 3,
-    LINK_BANK: 4,
+    LINK_BANK: 3,
     summary: 4,
   });
 

@@ -168,13 +168,13 @@ export const IRA_ACC_TYPES = {
       {
         label: 'Traditional',
         value: 0,
-        description: 'Earnings grow tax-deferred',
+        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
         rawValue: 'traditional',
       },
       {
         label: 'Roth',
         value: 1,
-        description: 'Earnings grow tax-deferred',
+        description: 'Earnings from investments on a Roth Individual Retirement Account grow tax-free. ',
         rawValue: 'roth',
       },
     ],

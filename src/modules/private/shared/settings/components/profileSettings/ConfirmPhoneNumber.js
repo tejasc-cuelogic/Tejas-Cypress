@@ -69,7 +69,7 @@ export default class ConfirmPhoneNumber extends Component {
     const {
       ID_VERIFICATION_FRM,
       ID_PHONE_VERIFICATION,
-      personalInfoChange,
+      personalInfoMaskedChange,
       phoneVerificationChange,
     } = this.props.identityStore;
     const { errors, editMode } = this.props.uiStore;
@@ -93,7 +93,7 @@ export default class ConfirmPhoneNumber extends Component {
             fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
             format="###-###-####"
             readOnly={!editMode}
-            changed={personalInfoChange}
+            changed={personalInfoMaskedChange}
             containerclassname="display-only"
             className="display-only"
             phoneNumber
