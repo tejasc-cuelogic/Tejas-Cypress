@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Grid, Divider, Message, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider, Message, Confirm } from 'semantic-ui-react';
 import { DropZone } from '../../../../../../../theme/form';
 import { ListErrors } from '../../../../../../../theme/shared';
 
@@ -39,48 +39,28 @@ export default class FormationDocumemts extends Component {
             <ListErrors errors={[errors.message]} />
           </Message>
         }
-        <Form className="file-uploader-inline">
-          <Grid verticalAlign="middle" divided="vertically">
-            <Grid.Row>
-              <Grid.Column width={7}>
-                <Header as="h4">Entity Formation Document</Header>
-              </Grid.Column>
-              <Grid.Column width={9}>
-                <DropZone
-                  name="formationDoc"
-                  fielddata={FORM_DOCS_FRM.fields.formationDoc}
-                  ondrop={this.onFormationDocDrop}
-                  onremove={this.confirmRemoveDoc}
-                />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column width={7}>
-                <Header as="h4">Entity Operating Document</Header>
-              </Grid.Column>
-              <Grid.Column width={9}>
-                <DropZone
-                  name="operatingAgreementDoc"
-                  fielddata={FORM_DOCS_FRM.fields.operatingAgreementDoc}
-                  ondrop={this.onOperatingAgreementDocDrop}
-                  onremove={this.confirmRemoveDoc}
-                />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column width={7}>
-                <Header as="h4">EIN Verification</Header>
-              </Grid.Column>
-              <Grid.Column width={9}>
-                <DropZone
-                  name="einVerificationDoc"
-                  fielddata={FORM_DOCS_FRM.fields.einVerificationDoc}
-                  ondrop={this.onEinVerificationDocDrop}
-                  onremove={this.confirmRemoveDoc}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+        <Form>
+          <DropZone
+            name="formationDoc"
+            fielddata={FORM_DOCS_FRM.fields.formationDoc}
+            ondrop={this.onFormationDocDrop}
+            onremove={this.confirmRemoveDoc}
+            containerclassname="fluid"
+          />
+          <DropZone
+            name="operatingAgreementDoc"
+            fielddata={FORM_DOCS_FRM.fields.operatingAgreementDoc}
+            ondrop={this.onOperatingAgreementDocDrop}
+            onremove={this.confirmRemoveDoc}
+            containerclassname="fluid"
+          />
+          <DropZone
+            name="einVerificationDoc"
+            fielddata={FORM_DOCS_FRM.fields.einVerificationDoc}
+            ondrop={this.onEinVerificationDocDrop}
+            onremove={this.confirmRemoveDoc}
+            containerclassname="fluid"
+          />
         </Form>
         <Confirm
           header="Confirm"

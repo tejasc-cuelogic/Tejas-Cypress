@@ -5,7 +5,6 @@ import { Card, Header } from 'semantic-ui-react';
 import { Spinner } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
-/* eslint-disable arrow-body-style */
 const userVerifiedDetails = (props) => {
   if (!props.legalDetails) {
     return (
@@ -24,7 +23,7 @@ const userVerifiedDetails = (props) => {
     return (
       <Card fluid className="form-card">
         <Header as="h5">Identity not verified</Header>
-        <Link to="/app/summary" onClick={() => props.handleNavToVerifyIdentity('InvestorPersonalDetails')} ><b>Verify Identity</b></Link>
+        <Link to="/app/summary/identity-verification/0" ><b>Verify Identity</b></Link>
       </Card>
     );
   }

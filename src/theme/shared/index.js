@@ -15,4 +15,5 @@ export { default as Logo } from './src/Logo';
 export { default as UserAvatar } from './src/UserAvatar';
 export { default as NsCarousel } from './src/NsCarousel';
 export { default as PublicSubNav } from './src/PublicSubNav';
+export { default as NsPagination } from './src/NsPagination';
 export { default as EmptyDataSet } from './src/EmptyDataSet';
