@@ -179,11 +179,18 @@ export class BusinessAppStore {
         this.BUSINESS_APP_FRM.fields[field[key]].value =
           data.performanceSnapshot.nextYearSnapshot[ele];
       });
-      ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
-        const field = ['previousYearCogSold', 'previousYearGrossSales', 'previousYearNetIncome', 'previousYearOperatingExpenses'];
-        this.BUSINESS_APP_FRM.fields[field[key]].value =
-          data.performanceSnapshot.pastYearSnapshot[ele];
-      });
+      if (this.getBusinessTypeCondtion) {
+        ['ageYears', 'ageMonths'].forEach((ele, key) => {
+          const field = ['businessAgeYears', 'businessAgeMonths'];
+          this.BUSINESS_APP_FRM.fields[field[key]].value =
+            data.existingBusinessInfo[ele];
+        });
+        ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
+          const field = ['previousYearCogSold', 'previousYearGrossSales', 'previousYearNetIncome', 'previousYearOperatingExpenses'];
+          this.BUSINESS_APP_FRM.fields[field[key]].value =
+            data.performanceSnapshot.pastYearSnapshot[ele];
+        });
+      }
       data.fundUsage.forEach((ele) => {
         this.BUSINESS_APP_FRM.fields.fundUsage.value = ele;
       });
@@ -526,7 +533,7 @@ export class BusinessAppStore {
 
   @computed get getFormatedPreQualificationData() {
     const data = toJS(this.BUSINESS_APP_FRM.fields);
-    const preQualData = {
+    let preQualData = {
       businessModel: data.businessModel.value,
       businessGeneralInfo: {
         businessName: data.businessName.value,
@@ -546,10 +553,6 @@ export class BusinessAppStore {
       },
       industryTypes: data.industryTypes.value,
       businessGoal: data.businessGoal.value,
-      existingBusinessInfo: {
-        ageYears: this.getValidDataForInt(data.businessAgeYears),
-        ageMonths: this.getValidDataForInt(data.businessAgeMonths),
-      },
       businessExperience: {
         industryExperience: data.industryExperience.value,
         estimatedCreditScore: data.estimatedCreditScore.value,
@@ -558,12 +561,6 @@ export class BusinessAppStore {
       },
       fundUsage: data.fundUsage.value,
       performanceSnapshot: {
-        pastYearSnapshot: {
-          grossSales: this.getValidDataForInt(data.previousYearGrossSales),
-          cogSold: this.getValidDataForInt(data.previousYearCogSold),
-          operatingExpenses: this.getValidDataForInt(data.previousYearOperatingExpenses),
-          netIncome: this.getValidDataForInt(data.previousYearNetIncome),
-        },
         nextYearSnapshot: {
           grossSales: this.getValidDataForInt(data.nextYearGrossSales),
           cogSold: this.getValidDataForInt(data.nextYearCogSold),
@@ -610,9 +607,28 @@ export class BusinessAppStore {
         value: includes(data.legalConfirmation.value, 'IS_NOT_INVESTMENT_COMPANY'),
       }],
     };
-
-    return this.getFranchiseCondition ?
-      { ...preQualData, franchiseHolder: data.franchiseHolder.value } : preQualData;
+    if (this.getFranchiseCondition) {
+      preQualData = { ...preQualData, franchiseHolder: data.franchiseHolder.value };
+    }
+    if (this.getBusinessTypeCondtion) {
+      preQualData = {
+        ...preQualData,
+        existingBusinessInfo: {
+          ageYears: this.getValidDataForInt(data.businessAgeYears),
+          ageMonths: this.getValidDataForInt(data.businessAgeMonths),
+        },
+        performanceSnapshot: {
+          ...preQualData.performanceSnapshot,
+          pastYearSnapshot: {
+            grossSales: this.getValidDataForInt(data.previousYearGrossSales),
+            cogSold: this.getValidDataForInt(data.previousYearCogSold),
+            operatingExpenses: this.getValidDataForInt(data.previousYearOperatingExpenses),
+            netIncome: this.getValidDataForInt(data.previousYearNetIncome),
+          },
+        },
+      };
+    }
+    return preQualData;
   }
 
   @action
