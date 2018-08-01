@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-07-31)
+# 0.0.0 (2018-08-01)
 
 
 ### Bug Fixes
@@ -20,6 +20,7 @@
 * **Issuer-Dashboard[Issue [296](https://chaos.ns.team/nsv2/ns-ops/issues/296) - issuer-manage-business-application-list-on-dashboard]:** issuer application lists on dashboard showing buttons as per app status ([6dbf80b](https://chaos.ns.team/nsv2/ns-client/commits/6dbf80b))
 * **marketing pages[Issue [268](https://chaos.ns.team/nsv2/ns-ops/issues/268) - marketing pages investor account types and security]:** account types, security and track sections ([b11d369](https://chaos.ns.team/nsv2/ns-client/commits/b11d369))
 * **marketing pages[Issue [273](https://chaos.ns.team/nsv2/ns-ops/issues/273) - marketing pages- about mission and careers]:** mission and careers section. ([16bcf4f](https://chaos.ns.team/nsv2/ns-client/commits/16bcf4f))
+* **marketing pages[Issue [291](https://chaos.ns.team/nsv2/ns-ops/issues/291) -  public about press and values]:** press and impact pages ([9f1c8d6](https://chaos.ns.team/nsv2/ns-client/commits/9f1c8d6))
 * **Notification[Issue 197 - Notification panel]:** Redesign Notification panel for private pages ([76744dd](https://chaos.ns.team/nsv2/ns-client/commits/76744dd))
 * **public business pages[Issue [244](https://chaos.ns.team/nsv2/ns-ops/issues/244) - public business pages how it works]:** completed design of how it works section. ([49e05ae](https://chaos.ns.team/nsv2/ns-client/commits/49e05ae))
 * **public business pages[Issue [249](https://chaos.ns.team/nsv2/ns-ops/issues/249) - public business funding options]:** completed design of business funding option and process ([9753070](https://chaos.ns.team/nsv2/ns-client/commits/9753070))

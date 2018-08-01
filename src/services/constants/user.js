@@ -262,3 +262,11 @@ export const PROFILE_PHOTO_BYTES = 5242880;
 export const COUNTRY_CODES = {
   US: '1',
 };
+
+export const TRANSACTION_TYPES = [
+  { text: 'Deposit', value: 'Deposit' },
+  { text: 'Withdrawal', value: 'Withdrawal' },
+  { text: 'Repayment', value: 'Repayment' },
+  { text: 'Interest Accured', value: 'Interest Accured' },
+  { text: 'Referral Credits', value: 'Referral Credits' },
+];

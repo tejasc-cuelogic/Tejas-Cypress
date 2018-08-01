@@ -12,30 +12,14 @@ const result = {
   ],
 };
 
-const faqs = [
-  {
-    id: 1,
-    title: 'Are these one-time investments or monthly investments?',
-    description: `Funds for your investment will first be taken from the available cash sitting in
-    your NextSeed account. If you have insufficient funds in your NextSeed account,
-    you will be prompted to request an immediate transfer of funds from your external banking account
-    to your NextSeed account.`,
-  },
-  {
-    id: 2,
-    title: 'Can I cancel my investment after the closing?',
-    description: `Unlike investing in in companies listed on a stock exchange where you can quickly
-    and easily trade securities, there is no public market for crowdfunded securities.`,
-  },
-];
-
-@inject('statementStore')
+@inject('statementStore', 'educationStore')
 @observer
 export default class MonthlyStatements extends Component {
   componentWillMount() {
     this.props.statementStore.initRequest('MonthlyStatements');
   }
   render() {
+    const { faqsOfModule } = this.props.educationStore;
     const { monthlyStatements, loading, error } = this.props.statementStore;
     result.rows = monthlyStatements;
     return (
@@ -49,7 +33,7 @@ export default class MonthlyStatements extends Component {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column widescreen={12} largeScreen={12} computer={12} tablet={16} mobile={16}>
-            <FaqWidget heading="Monthly Statements" faqs={faqs} />
+            <FaqWidget heading="Monthly Statements" faqs={faqsOfModule} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
