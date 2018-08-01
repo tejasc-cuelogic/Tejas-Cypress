@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find } from 'lodash';
+import { isEmpty, find, omit } from 'lodash';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import {
   IRA_ACC_TYPES,
@@ -97,6 +97,19 @@ class IraAccountStore {
     payload.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
     payload.iraAccountType = this.accountType.rawValue;
     payload.fundingType = this.fundingOption.rawValue;
+    if (this.fundingOption.rawValue === 'check' && !isEmpty(bankAccountStore.plaidBankDetails)) {
+      const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+      payload.iraBankDetails = plaidBankDetails;
+    } else {
+      const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
+      if (accountNumber && routingNumber) {
+        const plaidBankDetails = {
+          accountNumber: accountNumber.value,
+          routingNumber: routingNumber.value,
+        };
+        payload.iraBankDetails = plaidBankDetails;
+      }
+    }
     return payload;
   }
 
@@ -131,6 +144,30 @@ class IraAccountStore {
         isValidCurrentStep = true;
         accountAttributes.fundingType = this.fundingOption ? this.fundingOption.rawValue : '';
         this.submitForm(currentStep, formStatus, accountAttributes);
+        break;
+      case 'Link bank':
+        if (bankAccountStore.bankLinkInterface === 'list') {
+          currentStep.validate();
+        }
+        isValidCurrentStep = bankAccountStore.formLinkBankManually.meta.isValid ||
+          bankAccountStore.isValidLinkBank;
+        if (isValidCurrentStep) {
+          uiStore.setProgress();
+          if (!isEmpty(bankAccountStore.plaidBankDetails)) {
+            const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+            accountAttributes.iraBankDetails = plaidBankDetails;
+          } else {
+            const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
+            if (accountNumber && routingNumber) {
+              const plaidBankDetails = {
+                accountNumber: accountNumber.value,
+                routingNumber: routingNumber.value,
+              };
+              accountAttributes.iraBankDetails = plaidBankDetails;
+            }
+          }
+          this.submitForm(currentStep, formStatus, accountAttributes);
+        }
         break;
       case 'Identity':
         if (removeUploadedData) {
@@ -194,7 +231,9 @@ class IraAccountStore {
               this.setStepToBeRendered(currentStep.stepToBeRendered);
             }
           } else if (formStatus !== 'submit') {
-            FormValidator.setIsDirty(this[currentStep.form], false);
+            if (currentStep.name !== 'Link bank') {
+              FormValidator.setIsDirty(this[currentStep.form], false);
+            }
             this.setStepToBeRendered(currentStep.stepToBeRendered);
           }
           if (formStatus === 'submit') {
@@ -223,6 +262,25 @@ class IraAccountStore {
         this.setFormData('FUNDING_FRM', account.accountDetails);
         this.setFormData('ACC_TYPES_FRM', account.accountDetails);
         this.setFormData('IDENTITY_FRM', account.accountDetails);
+        if (account.accountDetails.iraBankDetails &&
+          account.accountDetails.iraBankDetails.plaidItemId) {
+          bankAccountStore.setPlaidBankDetails(account.accountDetails.iraBankDetails);
+        } else {
+          Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
+            const { accountDetails } = account;
+            if (accountDetails.iraBankDetails && accountDetails.iraBankDetails[f] !== '') {
+              bankAccountStore.formLinkBankManually.fields[f].value =
+              accountDetails.iraBankDetails[f];
+              return bankAccountStore.formLinkBankManually.fields[f];
+            }
+            return null;
+          });
+          if (account.accountDetails.iraBankDetails && account.accountDetails.iraBankDetails.routingNumber !== '' &&
+          account.accountDetails.iraBankDetails.accountNumber !== '') {
+            bankAccountStore.linkBankFormChange();
+          }
+        }
+
         const getIraStep = AccCreationHelper.iraSteps();
         if (!this.FIN_INFO_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
@@ -230,8 +288,18 @@ class IraAccountStore {
           this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
         } else if (!this.FUNDING_FRM.meta.isValid || this.fundingNotSet) {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
+        } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
+          !bankAccountStore.formLinkBankManually.meta.isValid &&
+          isEmpty(bankAccountStore.plaidBankDetails)) {
+          this.setStepToBeRendered(getIraStep.LINK_BANK);
         } else if (!this.IDENTITY_FRM.meta.isValid) {
-          this.setStepToBeRendered(getIraStep.IDENTITY_FRM);
+          if (this.FUNDING_FRM.fields.fundingType.value === 0) {
+            this.setStepToBeRendered(4);
+          } else {
+            this.setStepToBeRendered(getIraStep.IDENTITY_FRM);
+          }
+        } else if (this.FUNDING_FRM.fields.fundingType.value === 0) {
+          this.setStepToBeRendered(5);
         } else {
           this.setStepToBeRendered(getIraStep.summary);
         }
@@ -259,6 +327,11 @@ class IraAccountStore {
         }
         if (value !== '') {
           this[form].fields[f].value = value;
+          if (form === 'FUNDING_FRM') {
+            this.setFundingNotSet(false);
+          } else {
+            this.setAccountNotSet(false);
+          }
         } else {
           if (form === 'FUNDING_FRM') {
             this.setFundingNotSet(true);

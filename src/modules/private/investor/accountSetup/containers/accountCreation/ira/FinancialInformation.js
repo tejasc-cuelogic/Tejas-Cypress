@@ -12,7 +12,7 @@ export default class FinancialInformation extends React.Component {
     return (
       <div>
         <Header as="h3" textAlign="center">Your financial information</Header>
-        <p className="center-align">Your net worth and annual income are used to determine your 12-month<br />investment limit. <Link className="link" to="/app/summary">How is this calculated?</Link></p>
+        <p className="center-align">Your net worth and annual income are used to determine your 12-month<br />investment limit. <Link className="link" to="/app/summary/account-creation/ira">How is this calculated?</Link></p>
         <Form error>
           <div className="field-wrap">
             {

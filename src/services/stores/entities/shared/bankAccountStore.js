@@ -111,7 +111,7 @@ export class BankAccountStore {
 
   @computed
   get isValidLinkBank() {
-    return !isEmpty(this.plaidAccDetails);
+    return !isEmpty(this.plaidAccDetails) || !isEmpty(this.plaidBankDetails);
   }
 
   @action
