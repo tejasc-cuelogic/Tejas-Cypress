@@ -27,8 +27,8 @@ const AccTypeDescription = observer((props) => {
         <br /><br />
         <b>Promotional Offer:</b> For new NextSeed IRA accounts, NextSeed will cover the one-time
         setup fee and annual account fees for four years.<br /><br />
-        See the <Link to="/app/summary" className="link"><b>Terms and Conditions</b></Link> for full details.<br /><br />
-        Questions? Please see our <Link to="/app/summary" className="link"><b>FAQs on IRAs</b></Link>
+        See the <Link to="/app/summary/account-creation" className="link"><b>Terms and Conditions</b></Link> for full details.<br /><br />
+        Questions? Please see our <Link to="/app/summary/account-creation" className="link"><b>FAQs on IRAs</b></Link>
       </p>}
       { /* Entity */ }
       {isAccExist && value === 2 &&
