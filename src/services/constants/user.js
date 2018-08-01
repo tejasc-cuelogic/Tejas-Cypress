@@ -118,3 +118,11 @@ export const PHONE_VERIFICATION = {
     rule: 'required|numeric',
   },
 };
+
+export const TRANSACTION_TYPES = [
+  { text: 'Deposit', value: 'Deposit' },
+  { text: 'Withdrawal', value: 'Withdrawal' },
+  { text: 'Repayment', value: 'Repayment' },
+  { text: 'Interest Accured', value: 'Interest Accured' },
+  { text: 'Referral Credits', value: 'Referral Credits' },
+];

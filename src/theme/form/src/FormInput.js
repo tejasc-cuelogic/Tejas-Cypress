@@ -19,7 +19,7 @@ const FormInput = observer((props) => {
     <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''} error={!!error}>
       {label !== '' &&
         <label>
-          {label}
+          {props.label || label}
           {tooltip &&
             <Popup
               trigger={<Icon name="help circle" />}
