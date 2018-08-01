@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { mapValues } from 'lodash';
 // import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as client2 } from '../../../../../api/gcoolApi';
-import { uiStore } from '../../../index';
+import { uiStore, userDetailsStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
 import { finLimit, updateFinLimit } from '../../../queries/investementLimits';
@@ -42,6 +42,7 @@ export class InvestmentLimitStore {
   */
  @action
  getInvestmentLimit = () => {
+   console.log(userDetailsStore);
    this.investmentLimit = graphql({
      client: client2,
      query: finLimit,
