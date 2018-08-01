@@ -18,7 +18,7 @@ export default class ApplicationCards extends Component {
       <Aux>
         {fetchBusinessApplication.length ?
           fetchBusinessApplication.map(application => (
-            <Card fluid>
+            <Card fluid key={application.applicationId}>
               <Card.Content>
                 <Header as="h3"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
               </Card.Content>
@@ -40,10 +40,17 @@ export default class ApplicationCards extends Component {
                   <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/pre-qualification`}>Continue application</Button>
                 }
                 {application.applicationStatus ===
+                BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED &&
+                  <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/pre-qualification`}>View application</Button>
+                }
+                {application.applicationStatus ===
                 BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
                 && application.lendio && application.lendio.status ===
                 BUSINESS_APPLICATION_STATUS.LENDIO_PRE_QUALIFICATION_SUCCESSFUL &&
-                  <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/lendio`}>View Lendio</Button>
+                  <Aux>
+                    <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/pre-qualification`}>View application</Button>
+                    <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/lendio`}>View Lendio</Button>
+                  </Aux>
                 }
                 {application.applicationStatus ===
                 BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
