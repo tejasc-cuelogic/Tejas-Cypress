@@ -661,7 +661,7 @@ p i.icon {
 }
 //Team
 .team-column {
-	margin-top: 25rem;
+	margin-top: 30vh;
 }
 .team-gallery {
 	&.ui.grid {
