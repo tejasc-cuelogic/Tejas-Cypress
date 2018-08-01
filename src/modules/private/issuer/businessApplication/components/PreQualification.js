@@ -226,6 +226,7 @@ export default class PreQualification extends Component {
                             disabled={preQualFormDisabled}
                             key={field}
                             name={field}
+                            prefix="$ "
                             currency
                             value={fields[field].value}
                             fielddata={fields[field]}
