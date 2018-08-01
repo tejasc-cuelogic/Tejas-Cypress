@@ -1,6 +1,6 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { mapValues } from 'lodash';
+import { mapValues, filter, find } from 'lodash';
 // import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as client2 } from '../../../../../api/gcoolApi';
 import { uiStore, userDetailsStore } from '../../../index';
@@ -13,10 +13,25 @@ export class InvestmentLimitStore {
   @observable INVESTEMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
   @observable investmentLimit = {};
   @observable currentLimit = 0;
-  @observable activeAccounts = userDetailsStore.getActiveAccounts;
+  @observable activeAccounts = null;
 
   @computed get fLoading() {
     return this.investmentLimit.loading;
+  }
+
+  @computed get getActiveAccountList() {
+    let isIndividualAccount = false;
+    const accList = filter(this.activeAccounts, (account) => {
+      let status;
+      if (account.accountType === 'individual') {
+        isIndividualAccount = true;
+        status = !find(this.activeAccounts, acc => acc.accountType === 'ira');
+      } else {
+        status = true;
+      }
+      return status;
+    });
+    return toJS({ accountList: accList, isIndAccExist: isIndividualAccount });
   }
 
   @action
@@ -43,7 +58,7 @@ export class InvestmentLimitStore {
   */
  @action
  getInvestmentLimit = () => {
-   console.log(this.activeAccounts);
+   this.activeAccounts = userDetailsStore.getActiveAccounts;
    this.investmentLimit = graphql({
      client: client2,
      query: finLimit,
