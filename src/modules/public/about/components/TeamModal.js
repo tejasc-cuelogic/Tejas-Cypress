@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Header, Modal, Item, Image, Icon } from 'semantic-ui-react';
-import campainAboutImg from '../../../../assets/images/campaign_about.png';
 
 class TeamModal extends Component {
-  state = { modalOpen: false }
-  handleOpen = () => this.setState({ modalOpen: true })
-  handleClose = () => this.setState({ modalOpen: false })
+  state = {
+    modalOpen: true,
+  }
+  handleClose = () => this.props.history.push(this.props.refLink)
 
   render() {
+    const { member } = this.props;
+    const types = {
+      FACEBOOK: 'facebook f',
+      LINKEDIN: 'linkedin in',
+    };
     return (
       <Modal
         open={this.state.modalOpen}
@@ -19,22 +25,26 @@ class TeamModal extends Component {
         <Modal.Content className="team-details-container">
           <Item.Group>
             <Item>
-              <Image src={campainAboutImg} />
+              <Image src={member.avatar} />
               <Item.Content verticalAlign="middle">
                 <div className="scrollable-content">
                   <Header as="h4">
-                    Abe Chu
-                    <Header.Subheader>co-founder & ceo</Header.Subheader>
+                    {member.memberName}
+                    <Header.Subheader>{member.title}</Header.Subheader>
                   </Header>
                   <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                  nisi ut aliquip ex ea commodo consequat.
+                    {member.story}
                   </p>
                   <div>
-                    <Icon color="green" name="twitter" />
-                    <Icon color="green" name="linkedin in" />
+                    {member.social.map(stype => (
+                      <Link to={stype.url === null ? '/' : stype.url}>
+                        <Icon
+                          color="green"
+                          name={types[stype.type] || stype.type.toLowerCase()}
+                        />
+                      </Link>
+                    ))
+                    }
                   </div>
                 </div>
               </Item.Content>
