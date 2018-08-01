@@ -193,8 +193,8 @@ footer{
     }
 }
 .filter-menu {
-    border-top: 1px solid @neutral-middark;
-    border-bottom: 1px solid @neutral-middark;
+    border-top: 1px solid @neutral-darkwhite;
+    border-bottom: 1px solid @neutral-darkwhite;
     height: @60px;
     position: relative;
     .ui.text.menu {

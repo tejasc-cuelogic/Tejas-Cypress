@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Container, Card, Image, Button, Label, Icon, List } from 'semantic-ui-react';
+import { Container, Card, Image, Label, Icon, List } from 'semantic-ui-react';
 import Filters from './Filters';
 import lockIcon from '../../../../../assets/images/icon_lock.png';
 
@@ -92,12 +92,6 @@ export default class CampaignList extends Component {
                 </Card>
               ))}
             </Card.Group>
-            {this.props.explore && (
-              <div className="explore-campaign-button">
-                <Button secondary as={Link} to="/offerings/">Explore Campaigns</Button>
-              </div>
-            )
-            }
           </Container>
           {this.state.filters && <div className="overlay" />}
         </section>
