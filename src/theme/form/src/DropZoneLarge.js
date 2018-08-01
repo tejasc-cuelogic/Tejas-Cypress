@@ -30,7 +30,7 @@ const DropZone = observer((props) => {
           minWidth={768}
           size="tiny"
           compact
-          className="remove pull-right"
+          className="ghost-button remove pull-right"
           onClick={() => props.onremove(props.name)}
         >
           Remove
