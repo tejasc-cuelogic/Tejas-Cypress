@@ -36,7 +36,6 @@
             }
         }
         &.content {
-            padding: @40px @20px;
             .scrollable-content {
                 max-height: 50vh;
                 overflow-y: auto; 
@@ -48,13 +47,21 @@
             }
         }
     }
+    .ui.items>.item>.image+.content.team-details-container {
+        padding: 2.85714286rem 1.42857143rem;
+    }
     &.team-member-modal {
         .content {
             padding: 0;
             border-radius: 0;
         }
-        .item img {
-            width: 50%;
+        .item {
+            .image {
+                width: 50%;
+                +.team-details-container.content {
+                    padding: @40px @20px;
+                }
+            }
         }
     }
     .ui.grid.compact {
