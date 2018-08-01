@@ -93,7 +93,7 @@ const ProgressCard = props => (
               {!isEmpty(props.signupStatus.accounts) &&
               props.signupStatus.inActiveAccounts.length > 0 &&
                 <Button
-                  className="ui link-button button"
+                  className="link-button padded"
                   color="green"
                   content="or create a different investment account"
                   disabled={props.getStepStatus('accounts') === 'disable'}

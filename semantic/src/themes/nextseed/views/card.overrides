@@ -2,13 +2,14 @@
          Theme Overrides
 *******************************/
 //  Public page Starts
-.ui.card{
-    &:hover{
-        box-shadow:@cardHoverShadow;
-    }
-}
+// .ui.card{
+//     &:hover{
+//         box-shadow:@cardHoverShadow;
+//     }
+// }
 .ui.card{
     &.campaign{
+        box-shadow:none;
         .ui.label{
             border:none;
             text-transform:uppercase;
@@ -83,6 +84,9 @@
                     color: @darkTextColor;
                 }
             }
+        }
+        &:hover{
+            box-shadow:@cardHoverShadow;
         }
     }
 }
@@ -358,7 +362,7 @@
         color:@border-color;
     }
     &.done{
-        background-color:@neutral-offwhite;
+        // background-color:@neutral-offwhite;
         box-shadow:none;
     }
 }
