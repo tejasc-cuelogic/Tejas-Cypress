@@ -84,6 +84,14 @@ export const FIN_INFO = {
   },
 };
 
+export const TRANSACTION_TYPES = [
+  { text: 'Deposit', value: 'Deposit' },
+  { text: 'Withdrawal', value: 'Withdrawal' },
+  { text: 'Repayment', value: 'Repayment' },
+  { text: 'Interest Accured', value: 'InterestAccured' },
+  { text: 'Referral Credits', value: 'ReferralCredits' },
+];
+
 export const ROLES = [
   { key: 'admin', value: 'admin', text: 'Admin' },
   { key: 'issuer', value: 'issuer', text: 'Business Owner' },

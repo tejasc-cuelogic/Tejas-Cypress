@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
-// import { FormInput } from '../../../../../theme/form/FormElements';
 import Helper from '../../../../../../helper/utility';
 
-@inject('userDetailsStore', 'uiStore')
+@inject('investmentLimitStore', 'uiStore')
+@withRouter
 @observer
 export default class FinancialInfo extends Component {
   submit = (e) => {
     e.preventDefault();
-    this.props.userDetailsStore.updateFinInfo();
+    this.props.investmentLimitStore.updateFinInfo();
   }
-
+  handleUpdateInvestmentLimit =(e, accountType) => {
+    e.preventDefault();
+    this.props.investmentLimitStore.setInvestmentLimitInfo(accountType);
+    this.props.history.push(`${this.props.match.url}/update`);
+  }
   render() {
     const {
-      FIN_INFO, fLoading,
-    } = this.props.userDetailsStore;
+      INVESTEMENT_LIMIT_META, fLoading,
+    } = this.props.investmentLimitStore;
+    const { fields } = INVESTEMENT_LIMIT_META;
     if (fLoading) {
       return <div>loading...</div>;
     }
@@ -54,24 +59,16 @@ export default class FinancialInfo extends Component {
                           />
                         </Statistic.Label>
                         <Statistic.Value>
-                          {Helper.CurrencyFormat(FIN_INFO.fields.currentLimit.value)}
+                          {Helper.CurrencyFormat(fields.currentLimitIndividualOrIra.value)}
                         </Statistic.Value>
                       </Statistic>
                       <Divider clearing hidden />
-                      <Button inverted color="green" content="Update investment limits" />
+                      <Button onClick={e => this.handleUpdateInvestmentLimit(e, 1)} inverted color="green" content="Update investment limits" />
                     </Card.Content>
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <Card.Content>
                       <Header as="h4">Accreditation</Header>
-                      <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
-                      <Divider hidden />
-                      <Card.Description>
-                        <Button primary content="Verify accreditation" />
-                      </Card.Description>
-                    </Card.Content>
-                    <Card.Content>
-                      <Header as="h4">Reg A+ Elligible</Header>
                       <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
                       <Divider hidden />
                       <Card.Description>
@@ -84,7 +81,7 @@ export default class FinancialInfo extends Component {
             </Card>
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row>
+        {/* <Grid.Row>
           <Grid.Column widescreen={12} largeScreen={16} computer={16} tablet={16} mobile={16}>
             <Card fluid>
               <Card.Content>
@@ -113,27 +110,24 @@ export default class FinancialInfo extends Component {
                             className="center-align"
                           />
                         </Statistic.Label>
-                        <Statistic.Value>$50,000.00</Statistic.Value>
+                        <Statistic.Value>
+                          {Helper.CurrencyFormat(fields.currentLimitEntity.value)}
+                        </Statistic.Value>
                       </Statistic>
                       <Divider clearing hidden />
-                      <Button inverted color="green" content="Update investment limits" />
+                      <Button onClick={e => this.handleUpdateInvestmentLimit(e, 2)}
+                      inverted color="green"
+                      content="Update investment limits" />
                     </Card.Content>
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <Card.Content>
-                      <Header as="h4">Accreditation <Link to="/" className="link"><small>Update accreditation</small></Link></Header>
+                      <Header as="h4">Accreditation
+                      <Link to="/" className="link"><small>
+                      Update accreditation</small></Link></Header>
                       <dl className="dl-horizontal">
                         <dt>Status</dt>
                         <dd className="negative-text"><b>Failed</b></dd>
-                        <dt>Date</dt>
-                        <dd>12/2/12</dd>
-                      </dl>
-                    </Card.Content>
-                    <Card.Content>
-                      <Header as="h4">Reg A+ Elligible</Header>
-                      <dl className="dl-horizontal">
-                        <dt>Status</dt>
-                        <dd className="positive-text"><b>Verified</b></dd>
                         <dt>Date</dt>
                         <dd>12/2/12</dd>
                       </dl>
@@ -143,7 +137,7 @@ export default class FinancialInfo extends Component {
               </Grid>
             </Card>
           </Grid.Column>
-        </Grid.Row>
+        </Grid.Row> */}
       </Aux>
     );
   }
