@@ -6,10 +6,13 @@ import IraAccCreation from './ira/AccountCreation';
 import IndividualAccCreation from './individual/AccountCreation';
 import EntityAccCreation from './entity/AccountCreation';
 
-@inject('identityStore', 'accountStore')
+@inject('identityStore', 'accountStore', 'bankAccountStore')
 @withRouter
 @observer
 export default class AccountCreation extends Component {
+  componentWillMount() {
+    this.props.bankAccountStore.setBankLinkInterface('list');
+  }
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
   }
