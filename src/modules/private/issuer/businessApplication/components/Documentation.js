@@ -87,25 +87,23 @@ export default class Documentation extends Component {
                 </List.Item>
               </List>
               <Divider hidden />
-              <Grid stackable columns="equal">
+              <div className="or-divider">
                 {
                   taxFileList.map(field => (
-                    <Grid.Column>
-                      <DropZone
-                        disabled={formReadOnlyMode}
-                        multiple
-                        key={field}
-                        name={field}
-                        fielddata={fields[field]}
-                        ondrop={(files, fieldName) =>
-                          businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                        onremove={(e, fieldName, index) =>
-                          businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
-                      />
-                    </Grid.Column>
+                    <DropZone
+                      disabled={formReadOnlyMode}
+                      multiple
+                      key={field}
+                      name={field}
+                      fielddata={fields[field]}
+                      ondrop={(files, fieldName) =>
+                        businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                      onremove={(e, fieldName, index) =>
+                        businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                    />
                   ))
                 }
-              </Grid>
+              </div>
             </FormElementWrap>
             <FormElementWrap
               header="Will you accept a blanket lien on the business if your campaign is successfully funded?"
