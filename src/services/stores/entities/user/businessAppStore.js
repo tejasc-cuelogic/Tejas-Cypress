@@ -329,6 +329,7 @@ export class BusinessAppStore {
         this.BUSINESS_DOC_FRM.fields[ele].rule = '';
       });
     }
+    this.checkValidationForTaxReturn();
     Validator.validateForm(this.BUSINESS_DOC_FRM);
   }
 
@@ -788,8 +789,29 @@ export class BusinessAppStore {
       this[formName].fields[fieldName].value.splice(index, 1);
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds[0]];
     }
+    if (fieldName === 'personalTaxReturn' || fieldName === 'businessTaxReturn') {
+      this.checkValidationForTaxReturn();
+    }
     this.checkFormisValid(this.applicationStep, false);
   };
+
+  @action
+  checkValidationForTaxReturn = () => {
+    const { fields } = this.BUSINESS_DOC_FRM;
+    if (fields.personalTaxReturn.value.length && fields.businessTaxReturn.value.length) {
+      fields.personalTaxReturn.rule = 'required';
+      fields.businessTaxReturn.rule = 'required';
+    } else if (fields.personalTaxReturn.value.length) {
+      fields.businessTaxReturn.rule = '';
+      fields.businessTaxReturn.error = undefined;
+    } else if (fields.businessTaxReturn.value.length) {
+      fields.personalTaxReturn.rule = '';
+      fields.personalTaxReturn.error = undefined;
+    } else {
+      fields.personalTaxReturn.rule = 'required';
+      fields.businessTaxReturn.rule = 'required';
+    }
+  }
 
   @action
   businessAppUploadFiles = (files, fieldName, formName, index = null) => {
@@ -807,6 +829,9 @@ export class BusinessAppStore {
             this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
             this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
             this.setFormFileArray(formName, fieldName, 'error', undefined, index);
+            if (fieldName === 'personalTaxReturn' || fieldName === 'businessTaxReturn') {
+              this.checkValidationForTaxReturn();
+            }
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);

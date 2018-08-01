@@ -5,14 +5,11 @@ import { inject, observer } from 'mobx-react';
 
 import { FormRadioGroup, FormDatePicker } from '../../../../../../../theme/form';
 
-@inject('accountStore', 'entityAccountStore')
+@inject('entityAccountStore')
 @observer
 export default class AccountType extends Component {
-  handleDateChange = (date) => {
-    this.props.entityAccountStore.entityInfoDateChange(date);
-  }
   render() {
-    const { TRUST_INFO_FRM, entityInfoChange } = this.props.entityAccountStore;
+    const { TRUST_INFO_FRM, trustInfoChange, entityInfoDateChange } = this.props.entityAccountStore;
     return (
       <div>
         <Header as="h3" textAlign="center">Is entity a trust?</Header>
@@ -20,15 +17,16 @@ export default class AccountType extends Component {
           <FormRadioGroup
             fielddata={TRUST_INFO_FRM.fields.isTrust}
             name="isTrust"
-            changed={entityInfoChange}
+            changed={trustInfoChange}
             containerclassname="button-radio center-align"
           />
           <div className="field-wrap">
             <FormDatePicker
               name="trustDate"
+              placeholder="Select date"
               fielddata={TRUST_INFO_FRM.fields.trustDate}
               selected={moment(TRUST_INFO_FRM.fields.trustDate.value)}
-              changed={this.handleDateChange}
+              changed={date => entityInfoDateChange(date)}
               isdisabled={!TRUST_INFO_FRM.fields.isTrust.value}
             />
           </div>

@@ -8,38 +8,17 @@ import { FaqWidget } from '../../../../../theme/shared';
 import LinkBankAccount from './LinkBankAccount';
 
 const data = {
-  accountDetails: {
-    number: '..3456',
-    dateLinked: '3/20/18',
-    status: 'Active',
-  },
-  faqs: [
-    {
-      id: 1,
-      title: 'Lorem ipsum dolor sit amet enim ullamcorper?',
-      description: `Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum
-      dapibus, mauris nec malesuada fames ac turpis Pellentesque facilisis.
-      Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec
-      malesuada fames ac turpis`,
-    },
-    {
-      id: 2,
-      title: 'Lorem ipsum dolor sit amet enim ullamcorper?',
-      description: `Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum
-      dapibus, mauris nec malesuada fames ac turpis Pellentesque facilisis.
-      Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec
-      malesuada fames ac turpis`,
-    },
-  ],
+  accountDetails: { number: '..3456', dateLinked: '3/20/18', status: 'Active' },
 };
 
-@inject('bankAccountStore')
+@inject('bankAccountStore', 'educationStore')
 export default class BankAccount extends Component {
   handleLinkBankInterface = () => {
     this.props.bankAccountStore.setBankLinkInterface('list');
   }
 
   render() {
+    const { faqsOfModule } = this.props.educationStore;
     return (
       <div>
         <Switch>
@@ -71,7 +50,7 @@ export default class BankAccount extends Component {
           }
           <Grid.Row>
             <Grid.Column widescreen={6} largeScreen={10} computer={10} tablet={13} mobile={16}>
-              <FaqWidget heading="Bank Account" faqs={data.faqs} />
+              <FaqWidget heading="Bank Account" faqs={faqsOfModule} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

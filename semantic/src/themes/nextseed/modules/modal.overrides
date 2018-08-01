@@ -161,9 +161,19 @@
         &.signup-content{
             // padding-top:0;
             padding-bottom:@20px;
+            .ui.header{
+                >.icon{
+                    display:inline-block;
+                    margin:0 0 0 0.25em;
+                }
+                .sub.header{
+                    font-weight:@normal;
+                }
+            }
         }
         .user-type{
             height:100%;
+            min-height:165px;
             padding:@14px;
             border-radius:@defaultBorderRadius * 1.5;
             border:darken(@neutral-offwhite, 9%) 1px solid;
@@ -214,6 +224,7 @@
             padding:@14px @20px;
             margin-bottom:@10px;
             font-size:@20px;
+            font-weight:@fontMedium;
             text-align:center;
             border:none;
             border-bottom:@border-light 1px solid;
@@ -317,6 +328,7 @@
     >.close{
         height:30px;
         width:30px;
+        font-size:1em;
         line-height:30px;
         padding:0;
         margin:0;
@@ -391,6 +403,15 @@
                     right:0;
                     border-radius:0 @40px @40px 0;
                 }
+            }
+        }
+        .ui.header{
+            >.icon{
+                display:inline-block;
+                margin:0 0 0 0.25em;
+            }
+            .sub.header{
+                font-weight:@normal;
             }
         }
     }
