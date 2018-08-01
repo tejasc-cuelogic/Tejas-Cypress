@@ -9,7 +9,7 @@ export default class Resources extends Component {
     const { match } = this.props;
     return (
       <Switch>
-        <Route exact path={`${match.url}/education-center`} component={EducationCenter} />
+        <Route path={`${match.url}/education-center`} component={EducationCenter} />
         <Route exact path={`${match.url}/insights`} component={Insights} />
         <Route exact path={`${match.url}/insights/:id`} component={InsightsDetails} />
       </Switch>

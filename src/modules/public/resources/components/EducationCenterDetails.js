@@ -8,7 +8,7 @@ export default class EducationCenterDetails extends Component {
     return (
       <section>
         <Container className="edu-center">
-          <KnowledgeBase nosearch match={match} location={location} />
+          <KnowledgeBase marketing match={match} location={location} />
         </Container>
       </section>
     );

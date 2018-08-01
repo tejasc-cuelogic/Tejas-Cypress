@@ -9,18 +9,24 @@ export default class Details extends Component {
   componentWillMount() {
     this.props.educationStore.getOne(this.props.module, this.props.match.params.id);
   }
+  componentWillReceiveProps(nextProps) {
+    this.props.educationStore.getOne(this.props.module, nextProps.match.params.id);
+  }
   render() {
     const { selected } = this.props.educationStore;
+    const details = (selected ? (
+      <Aux>
+        <Header as="h3">{selected.title}</Header>
+        <p>{selected.body}</p>
+      </Aux>
+    ) : <div>Nothing to display !</div>);
+    if (this.props.marketing) {
+      return details;
+    }
     return (
       <Card fluid>
         <Card.Content className="padded knowledge-details">
-          {selected ? (
-            <Aux>
-              <Header as="h3">{selected.title}</Header>
-              <p>{selected.body}</p>
-            </Aux>
-            ) : <div>Nothing to display !</div>
-          }
+          {details}
         </Card.Content>
       </Card>
     );
