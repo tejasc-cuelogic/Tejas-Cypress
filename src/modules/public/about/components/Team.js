@@ -205,7 +205,7 @@ class team extends Component {
                         Abe Chu
                         <Header.Subheader>co-founder & ceo</Header.Subheader>
                       </Header>
-                      <p>
+                      <p className="mb-30">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                       Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
