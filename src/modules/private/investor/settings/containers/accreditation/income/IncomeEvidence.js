@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import find from 'lodash/find';
-import { FormRadioGroup } from '../../../../../../theme/form';
+import { FormRadioGroup } from '../../../../../../../theme/form';
 
 @inject('iraAccountStore')
 @observer
-export default class Verification extends Component {
+export default class IncomeEvidence extends Component {
   getOptionDetails = () => {
-    const { value, values } = this.props.iraAccountStore.formAccTypes.fields.iraAccountType;
+    const { value, values } = this.props.iraAccountStore.formAccTypes.fields.accountType;
     return find(values, v => v.value === value).description;
   };
   render() {
@@ -19,8 +19,8 @@ export default class Verification extends Component {
         <p className="center-align">Choose an account type</p>
         <Form error className="account-type-tab">
           <FormRadioGroup
-            fielddata={formAccTypes.fields.iraAccountType}
-            name="iraAccountType"
+            fielddata={formAccTypes.fields.accountType}
+            name="accountType"
             changed={AccTypesChange}
           />
           <div className="option-details">

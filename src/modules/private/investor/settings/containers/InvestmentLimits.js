@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid } from 'semantic-ui-react';
 import FinancialInfo from '../components/investmentLimits/FinancialInfo';
-import VerifyAccreditation from './VerifyAccreditation';
+import VerifyAccreditation from './accreditation/VerifyAccreditation';
 import UpdateInvestmentLimits from '../components/investmentLimits/UpdateInvestmentLimits';
 
 @inject('investmentLimitStore')

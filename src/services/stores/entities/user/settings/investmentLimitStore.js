@@ -13,6 +13,7 @@ export class InvestmentLimitStore {
   @observable INVESTEMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
   @observable financialLimit = {};
   @observable currentLimit = 0;
+  @observable validAccounts = [];
 
   @computed get fLoading() {
     return this.financialLimit.loading;

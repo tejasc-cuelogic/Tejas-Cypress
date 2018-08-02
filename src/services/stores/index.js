@@ -31,3 +31,4 @@ export { default as businesssStore } from './entities/issuer/businessStore';
 export { default as businessAppLendioStore } from './entities/user/businessAppLendioStore';
 export { default as agreementsStore } from './entities/user/settings/agreementsStore';
 export { default as investmentLimitStore } from './entities/user/settings/investmentLimitStore';
+export { default as accreditationStore } from './entities/user/settings/accreditationStore';

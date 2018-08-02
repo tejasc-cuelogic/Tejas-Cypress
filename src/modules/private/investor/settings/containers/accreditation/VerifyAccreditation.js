@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Divider, Grid, Button } from 'semantic-ui-react';
-import Accreditation from '../components/Accreditation';
+import { Modal, Header, Divider, Button } from 'semantic-ui-react';
+import { FormRadioGroup } from '../../../../../../theme/form';
+import AssetsAccreditation from './assets/Accreditation';
+import IncomeAccreditation from './income/Accreditation';
 
-@inject('uiStore')
+@inject('uiStore', 'accreditationStore')
 @observer
 export default class VerifyAccreditation extends Component {
   handleCloseModal = (e) => {
@@ -12,20 +14,30 @@ export default class VerifyAccreditation extends Component {
     this.props.history.goBack();
   }
   render() {
+    const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
     return (
       <div>
-        <Route exact path={`${this.props.match.url}/net-worth`} component={Accreditation} />
+        <Route exact path={`${this.props.match.url}/income`} component={IncomeAccreditation} />
+        <Route exact path={`${this.props.match.url}/assets`} component={AssetsAccreditation} />
         <Modal open closeIcon onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
             <Header as="h3">How are you accredited?</Header>
             <Divider />
             <p>
-              Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+            To invest in Regulation D or 506(c) offerings, you will need to verify that
+            you are an accredited investor.
+              <br />
+            Please confirm which of the following is applicable for you:
             </p>
           </Modal.Header>
           <Modal.Content>
-            <Grid stackable textAlign="center">
+            <FormRadioGroup
+              fielddata={ACCREDITATION_FORM.fields.accreditationMethods}
+              name="fundingType"
+              changed={accreditationMethodChange}
+              containerclassname="button-radio center-align"
+            />
+            {/* <Grid stackable textAlign="center">
               <Grid.Row columns={2}>
                 <Grid.Column>
                   <div className="user-type">
@@ -46,16 +58,14 @@ export default class VerifyAccreditation extends Component {
                   </div>
                 </Grid.Column>
               </Grid.Row>
-            </Grid>
+            </Grid> */}
             {/* <Divider section hidden /> */}
             <Button
               circular
               icon={{ className: 'ns-arrow-right' }}
               className="multistep__btn next active"
               as={Link}
-              to={`${this.props.match.url}/net-worth`}
-              // onClick={() =>
-              //   this.props.uiStore.setDashboardWizardStep('Accreditation')}
+              to={`${this.props.match.url}/${ACCREDITATION_FORM.fields.accreditationMethods.value}`}
             />
           </Modal.Content>
         </Modal>

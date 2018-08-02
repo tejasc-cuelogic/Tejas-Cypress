@@ -42,3 +42,23 @@ export const INVESTEMENT_LIMIT = {
     rule: 'optional',
   },
 };
+
+export const ACCREDITATION_METHODS = {
+  accreditationMethods: {
+    key: 'accreditationMethods',
+    value: 'EMPLOYED',
+    values:
+      [
+        {
+          label: 'have an income of $200,000 or more (or $300,000 or more with my spouse) in each of the past 2 years and am expecting the same or more this year.',
+          value: 'income',
+        },
+        {
+          label: 'I have a net worth of $1M or more (individually or with my spouse), exclusing my primary residence.',
+          value: 'assets',
+        },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+};

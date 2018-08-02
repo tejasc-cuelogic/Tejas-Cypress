@@ -18,6 +18,9 @@ export default class FinancialInfo extends Component {
     this.props.investmentLimitStore.setInvestmentLimitInfo(accountType);
     this.props.history.push(`${this.props.match.url}/update`);
   }
+  handleVerifyAccreditation = () => {
+    this.props.history.push(`${this.props.match.url}/verify-accreditation`);
+  }
   render() {
     const {
       INVESTEMENT_LIMIT_META, fLoading,
@@ -72,7 +75,7 @@ export default class FinancialInfo extends Component {
                       <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
                       <Divider hidden />
                       <Card.Description>
-                        <Button primary content="Verify accreditation" />
+                        <Button onClick={this.handleVerifyAccreditation} primary content="Verify accreditation" />
                       </Card.Description>
                     </Card.Content>
                   </Grid.Column>
