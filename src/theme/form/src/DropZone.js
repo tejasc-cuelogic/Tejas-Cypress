@@ -22,10 +22,11 @@ const DropZone = observer((props) => {
           {label}
           {props.tooltip &&
           <Popup
-            trigger={<Icon name="help circle" />}
+            trigger={<Icon className="ns-help-circle" />}
             content={props.tooltip}
             position="top center"
             className="center-align"
+            wide
           />
           }
         </label>
