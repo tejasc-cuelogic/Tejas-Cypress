@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Header, Divider, Button, Message, Grid, Form, Statistic } from 'semantic-ui-react';
+import { Modal, Header, Divider, Button, Message, Form, Statistic } from 'semantic-ui-react';
 import { MaskedInput2 } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
@@ -50,24 +50,18 @@ export default class UpdateInvestmentLimits extends Component {
             </Statistic>
             <Divider clearing hidden />
             <Form error onSubmit={this.submit}>
-              <Grid>
-                <Grid.Column widescreen={16} largeScreen={16} computer={16} tablet={16} mobile={16}>
-                  <div className="field-wrap">
-                    {fields &&
-                      ['annualIncome', 'netWorth', 'otherInvestments'].map(field => (
-                        <MaskedInput2
-                          key={field}
-                          name={field}
-                          currency
-                          value={fields[field].value}
-                          fielddata={fields[field]}
-                          changed={maskingFieldChange}
-                        />
-                      ))
-                    }
-                  </div>
-                </Grid.Column>
-              </Grid>
+              {fields &&
+                ['annualIncome', 'netWorth', 'otherInvestments'].map(field => (
+                  <MaskedInput2
+                    key={field}
+                    name={field}
+                    currency
+                    value={fields[field].value}
+                    fielddata={fields[field]}
+                    changed={maskingFieldChange}
+                  />
+                ))
+              }
               <div className="center-align mt-30">
                 <Button loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} color="green">Update investment limits</Button>
               </div>
