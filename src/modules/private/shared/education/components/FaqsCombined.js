@@ -30,7 +30,7 @@ export default class FaqsCombined extends Component {
             <Accordion.Content active={activeIndex === 0}>
               <Accordion>
                 <Accordion.Title active>
-                  <Icon name="add square" color="green" />
+                  <Icon className="ns-plus-square" color="green" />
                   Who can invest on NextSeed?
                 </Accordion.Title>
                 <Accordion.Content active>
@@ -42,7 +42,7 @@ export default class FaqsCombined extends Component {
               </Accordion>
             </Accordion.Content>
           </Accordion>
-          <p className="note">
+          <p className="note mt-30">
           If you still have questions, please don’t hesitate to contact us
           at <Link to="/">info@nextseed.com</Link>
           </p>
