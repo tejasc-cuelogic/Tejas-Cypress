@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { inject } from 'mobx-react';
 import { Header, Modal, Item, Image, Icon } from 'semantic-ui-react';
 
+@inject('teamStore')
 class TeamModal extends Component {
   state = {
     modalOpen: true,
@@ -9,7 +11,9 @@ class TeamModal extends Component {
   handleClose = () => this.props.history.push(this.props.refLink)
 
   render() {
-    const { member } = this.props;
+    const { teamMembers } = this.props.teamStore;
+    const { match } = this.props;
+    const member = teamMembers.find(obj => obj.id === match.params.id);
     const types = {
       FACEBOOK: 'facebook f',
       LINKEDIN: 'linkedin in',
