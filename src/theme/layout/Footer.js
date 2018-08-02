@@ -31,7 +31,6 @@ const footer = () => (
           <Menu.Item>Case Studies</Menu.Item>
           <Menu.Item as={NavLink} to="/resources/insights">Insights</Menu.Item>
           <Menu.Item>Community</Menu.Item>
-          <Menu.Item href="/about/faq">FAQs</Menu.Item>
         </Menu>
         <Menu text vertical>
           <Menu.Item as={NavLink} to="/about/mission">Mission</Menu.Item>

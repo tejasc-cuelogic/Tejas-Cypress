@@ -1,10 +1,11 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-08-01)
+# 0.0.0 (2018-08-02)
 
 
 ### Bug Fixes
 
 * **Business Application[Issue [305](https://chaos.ns.team/nsv2/ns-ops/issues/305) - business-application-validation-issue-on-documentation-step]:** added or validation on doucmentation step for tax return section ([b9212ae](https://chaos.ns.team/nsv2/ns-client/commits/b9212ae))
+* **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** business application finding fixes ([10c2ce1](https://chaos.ns.team/nsv2/ns-client/commits/10c2ce1))
 * **UserManagement[Issue [263](https://chaos.ns.team/nsv2/ns-ops/issues/263) - user management ui fixes from review]:** user management ui fixes from review ([b47f55e](https://chaos.ns.team/nsv2/ns-client/commits/b47f55e))
 
 

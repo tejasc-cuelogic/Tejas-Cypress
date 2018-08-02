@@ -183,6 +183,7 @@ export default class PreQualification extends Component {
                     {
                       ['totalProjectCost', 'amountNeeded'].map(field => (
                         <MaskedInput2
+                          hoverable
                           disabled={preQualFormDisabled}
                           key={field}
                           prefix="$ "
@@ -226,6 +227,7 @@ export default class PreQualification extends Component {
                             disabled={preQualFormDisabled}
                             key={field}
                             name={field}
+                            prefix="$ "
                             currency
                             value={fields[field].value}
                             fielddata={fields[field]}

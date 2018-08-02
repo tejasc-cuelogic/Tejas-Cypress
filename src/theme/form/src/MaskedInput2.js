@@ -20,11 +20,16 @@ const MaskedInput2 = observer((props) => {
         { !props.hidelabel && label}
         {tooltip &&
           <Popup
+            hoverable={props.hoverable}
             trigger={<Icon name="help circle" />}
-            content={tooltip}
+            // content={tooltip}
             position="top center"
             className={props.containerClassname}
-          />
+          >
+            <Popup.Content>
+              {tooltip}
+            </Popup.Content>
+          </Popup>
         }
       </label>
       { props.action ? (
@@ -48,8 +53,10 @@ const MaskedInput2 = observer((props) => {
           </Button>
         </div>) : props.currency ? (
           <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
+      ) : props.number ? (
+        <NumberFormat placeholder={placeHolder} maxLength={18} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : props.percentage ? (
-        <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={props.changed} error={!!error} mask="%" suffix="%" />
+        <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="%" suffix="%" />
       ) : props.phoneNumber ? (
         <NumberFormat type="tel" format={props.format} {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.zipCode ? (
@@ -78,7 +85,7 @@ const MaskedInput2 = observer((props) => {
         />
       ) : props.routingNumber ? (
         <NumberFormat format="#########" type="text" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
-      ) : <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onChange={props.changed} error={!!error} mask="_" />
+      ) : <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       }
       {error && !props.showErrorOnField &&
         <FieldError error={error} />

@@ -3,12 +3,13 @@ import { forEach, indexOf } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { LENDIO_PRE_QUAL, LENDIO } from '../../../constants/businessApplication';
-import { submitPartneredWithLendio } from '../../queries/businessApplication';
+import { submitPartneredWithLendio, getBusinessApplications } from '../../queries/businessApplication';
 import { uiStore, userStore } from '../../index';
 
 export class BusinessAppStore {
   @observable LENDIO_QUAL_FRM = Validator.prepareFormObject(LENDIO_PRE_QUAL);
   @observable lendioUrl = null;
+  @observable lendioObj = null;
 
   @action
   setPartneredLendioData = (preQualificationData) => {
@@ -43,7 +44,7 @@ export class BusinessAppStore {
       givenName,
       familyName,
     } = userStore.currentUser;
-
+    this.lendioObj = preQualificationData.lendio;
     this.LENDIO_QUAL_FRM.fields.businessName.value = businessName;
     this.LENDIO_QUAL_FRM.fields.phoneNumber.value = number;
     this.LENDIO_QUAL_FRM.fields.emailAddress.value = email;
@@ -149,6 +150,7 @@ export class BusinessAppStore {
         .mutate({
           mutation: submitPartneredWithLendio,
           variables: formatedData,
+          refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           resolve(result.data);
