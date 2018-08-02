@@ -157,4 +157,6 @@
 <glyph unicode="&#xe983;" glyph-name="updates" data-tags="updates" d="M0-3v780h122v122h902v-902zM942 817h-738v-656h-82v534h-40v-616h860zM450.001 531h-164v164h164zM860 367h-574v82h574zM778 203h-492v82h492zM532.001 613h328v-82h-328z" />
 <glyph unicode="&#xe984;" glyph-name="arrow-double-left" data-tags="arrow-double-left" d="M522.616-32l100.834 100.71-379.467 379.29 379.467 379.29-100.834 100.71-480.301-480zM880.92-32l100.766 100.71-379.467 379.29 379.467 379.29-100.766 100.71-480.301-480z" />
 <glyph unicode="&#xe985;" glyph-name="arrow-double-right" data-tags="arrow-double-right" d="M501.384-32l-100.834 100.71 379.467 379.29-379.467 379.29 100.834 100.71 480.301-480zM143.080-32l-100.766 100.71 379.467 379.29-379.467 379.29 100.766 100.71 480.301-480z" />
+<glyph unicode="&#xe986;" glyph-name="minus-square" data-tags="minus-square" d="M0-64v1024h1024v-1024zM944 880h-864v-864h864zM788 408h-552v80h552z" />
+<glyph unicode="&#xe987;" glyph-name="plus-square" data-tags="plus-square" d="M0-64v1024h1024v-1024zM944 880h-864v-864h864zM472 724h80v-236h236v-80h-236v-236h-80v236h-236v80h236z" />
 </font></defs></svg>

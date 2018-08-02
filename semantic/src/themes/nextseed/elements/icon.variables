@@ -193,6 +193,7 @@
 @ns-link: "\e943";
 @ns-lock: "\e92b";
 @ns-long-arrow-left: "\e92c";
+@ns-minus-square: "\e986";
 @ns-new-business: "\e95d";
 @ns-new-location: "\e95e";
 @ns-new-product: "\e95f";
@@ -207,6 +208,7 @@
 @ns-pencil-circle-line: "\e96e";
 @ns-phone-line: "\e973";
 @ns-proprietor: "\e963";
+@ns-plus-square: "\e987";
 @ns-real-estate: "\e964";
 @ns-reload-circle: "\e978";
 @ns-reload-circle-line: "\e979";
