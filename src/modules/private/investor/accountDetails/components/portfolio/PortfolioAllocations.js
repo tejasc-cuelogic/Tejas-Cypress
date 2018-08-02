@@ -32,13 +32,13 @@ const PortfolioAllocations = () => (
     <Header as="h4">Portfolio Allocations</Header>
     <Grid columns={3} celled="internally">
       <Grid.Row>
-        <Grid.Column widescreen={5} largeScreen={5} computer={16} mobile={16}>
+        <Grid.Column className="portfolio-allocation" widescreen={5} largeScreen={5} computer={16} mobile={16}>
           <ChartPie title="Investment Type" data={INVESTMENT_TYPE} colors={COLORS} />
         </Grid.Column>
-        <Grid.Column widescreen={5} largeScreen={5} computer={16} mobile={16}>
+        <Grid.Column className="portfolio-allocation" widescreen={5} largeScreen={5} computer={16} mobile={16}>
           <ChartPie title="Industry" data={INDUSTRY} colors={COLORS} />
         </Grid.Column>
-        <Grid.Column widescreen={5} largeScreen={5} computer={16} mobile={16}>
+        <Grid.Column className="portfolio-allocation" widescreen={5} largeScreen={5} computer={16} mobile={16}>
           <ChartPie title="Region" data={REGION} colors={COLORS} />
         </Grid.Column>
       </Grid.Row>

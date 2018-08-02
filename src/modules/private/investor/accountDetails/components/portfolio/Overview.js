@@ -89,7 +89,7 @@ const Overview = () => (
       </Grid>
     </div>
     <Divider />
-    <div className="inner-content-spacer">
+    <div className="inner-content-spacer payoff-chart">
       <Header as="h4">Pay Off Chart</Header>
       <PayOffChart />
     </div>
