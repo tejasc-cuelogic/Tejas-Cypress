@@ -2,8 +2,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
-import filter from 'lodash/filter';
-import { isEmpty, difference, find, findKey } from 'lodash';
+import { isEmpty, difference, find, findKey, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import {
   identityStore,
@@ -30,6 +29,14 @@ export class UserDetailsStore {
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
     return details;
+  }
+
+  @computed get getActiveAccounts() {
+    let accDetails;
+    if (this.userDetails) {
+      accDetails = filter(this.userDetails.accounts, account => account.status === 'FULL');
+    }
+    return accDetails;
   }
 
   @action

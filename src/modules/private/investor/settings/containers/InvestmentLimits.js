@@ -10,7 +10,7 @@ import UpdateInvestmentLimits from '../components/investmentLimits/UpdateInvestm
 @observer
 export default class InvestmentLimits extends Component {
   componentWillMount() {
-    this.props.investmentLimitStore.getFinancialLimit();
+    this.props.investmentLimitStore.getInvestmentLimit();
   }
 
   render() {
