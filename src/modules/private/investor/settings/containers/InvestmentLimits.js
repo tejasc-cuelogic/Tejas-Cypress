@@ -15,6 +15,10 @@ export default class InvestmentLimits extends Component {
     this.props.investmentLimitStore.getInvestmentLimit();
   }
 
+  closeModal = () => {
+    this.props.history.push('/app/profile-settings/investment-limits');
+  }
+
   render() {
     const { accreditationMethods } = this.props.accreditationStore.ACCREDITATION_FORM.fields;
     return (
@@ -22,7 +26,7 @@ export default class InvestmentLimits extends Component {
         <Route exact path={`${this.props.match.url}/verify-accreditation`} component={VerifyAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/income`} component={IncomeAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/assets`} component={AssetsAccreditation} />
-        <Route exact path={`${this.props.match.url}/verify-accreditation/${accreditationMethods.value}/thanksnote`} component={ThanksNote} />
+        <Route exact path={`${this.props.match.url}/verify-accreditation/${accreditationMethods.value}/thanksnote`} render={() => <ThanksNote closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/update`} component={UpdateInvestmentLimits} />
         <Grid columns={1} stackable>
           <FinancialInfo />

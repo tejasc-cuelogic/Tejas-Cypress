@@ -75,6 +75,19 @@ export const ACCREDITATION_METHODS = {
   },
 };
 
+export const INCOME_EVIDENCE_META = [
+  {
+    header: 'Send verification request to my lawyer, CPA, investment adviser or broker',
+    value: 'verificationrequest',
+    desc: 'They’ll be asked to confirm that they have seen evidence of your claimed status. No documentation required',
+  },
+  {
+    header: 'Upload document',
+    value: 'uploaddocument',
+    desc: 'W2, 1040, other IRS or foregin tax authority document containing salary for the past 2 years (2016 and 2017), or a letter from your lawyer accountatn, investment advisor or investment broker',
+  },
+];
+
 export const INCOME_EVIDENCE = {
   incEvidenceMethods: {
     value: 'verificationrequest',

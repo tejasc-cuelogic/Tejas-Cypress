@@ -10,6 +10,12 @@ export class AccreditationStore {
   @observable INCOME_UPLOAD_DOC_FORM = FormValidator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
   @observable ASSETS_UPLOAD_DOC_FORM = FormValidator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
   @observable NET_WORTH_FORM = FormValidator.prepareFormObject(NET_WORTH);
+  @observable stepToBeRendered = '';
+
+  @action
+  setStepToBeRendered(step) {
+    this.stepToBeRendered = step;
+  }
 
   @action
   formChange = (e, result, form) => {
@@ -27,7 +33,8 @@ export class AccreditationStore {
 
   @action
   incomeEvidenceChange = (e, result) => {
-    this.formChange(e, result, 'INCOME_EVIDENCE_FORM');
+    this.INCOME_EVIDENCE_FORM =
+    FormValidator.onChange(this.INCOME_EVIDENCE_FORM, FormValidator.pullValues(e, result));
   }
 
   @action

@@ -14,8 +14,15 @@ export default class Accreditation extends React.Component {
     this.props.accreditationStore.resetAccreditation(VERIFICATION_REQUEST_FORM);
     this.props.accreditationStore.resetAccreditation(INCOME_EVIDENCE_FORM);
   }
+  handleStepChange = (step) => {
+    this.props.accreditationStore.setStepToBeRendered(step);
+  }
   render() {
-    const { INCOME_EVIDENCE_FORM } = this.props.accreditationStore;
+    const {
+      INCOME_EVIDENCE_FORM,
+      VERIFICATION_REQUEST_FORM,
+      INCOME_UPLOAD_DOC_FORM,
+    } = this.props.accreditationStore;
     const steps =
     [
       {
@@ -26,7 +33,7 @@ export default class Accreditation extends React.Component {
       {
         name: 'Verification',
         component: <Verification />,
-        isValid: '',
+        isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
       },
     ];
     const {
@@ -46,6 +53,7 @@ export default class Accreditation extends React.Component {
           inProgress={inProgress}
           formTitle="Verify your accreditation"
           handleMultiStepModalclose={this.handleMultiStepModalclose}
+          setStepToBeRendered={this.handleStepChange}
         />
       </div>
     );
