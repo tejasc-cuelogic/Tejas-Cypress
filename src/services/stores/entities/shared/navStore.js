@@ -72,8 +72,7 @@ export class NavStore {
   @action
   setNavStatus(calculations, forced) {
     const { percentagePassed, topVisible } = calculations;
-    /* eslint-disable no-unneeded-ternary  */
-    this.navStatus = forced ? forced : ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
+    this.navStatus = forced || ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
   }
 }
 
