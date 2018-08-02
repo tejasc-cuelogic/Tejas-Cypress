@@ -1430,6 +1430,11 @@ svg:not(:root).recharts-surface{
 		}
 	}
 }
+.payoff-chart{
+	.xAxis, .yAxis{
+		font-size:@13px;
+	}
+}
 // Rechart Styles Ends
 
 .knowledge-details{

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ResponsiveContainer, Bar, ComposedChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { ResponsiveContainer, Bar, ComposedChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 const data = [
   { name: 'May 2017', Payment: 250, 'Paid to date': 250 },
@@ -24,7 +24,7 @@ const data = [
 export default class PayOffChart extends Component {
   render() {
     return (
-      <ResponsiveContainer height={220}>
+      <ResponsiveContainer height={320}>
         <ComposedChart
           width={600}
           height={200}
@@ -33,6 +33,7 @@ export default class PayOffChart extends Component {
             top: 10, right: 30, left: 0, bottom: 0,
           }}
         >
+          <Legend />
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis axisLine={false} dataKey="name" />
           <YAxis axisLine={false} orientation="right" />
