@@ -152,7 +152,7 @@ export class BusinessAppStore {
     if (data.lendio) {
       const lendioPartners = data.lendio.status;
       if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
-        && lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
+        && lendioPartners === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
         businessAppLendioStore.setPartneredLendioData(data);
       }
     }
