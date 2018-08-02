@@ -21,10 +21,11 @@ const MaskedInput2 = observer((props) => {
         {tooltip &&
           <Popup
             hoverable={props.hoverable}
-            trigger={<Icon name="help circle" />}
+            trigger={<Icon className="ns-help-circle" />}
             // content={tooltip}
             position="top center"
             className={props.containerClassname}
+            wide
           >
             <Popup.Content>
               {tooltip}

@@ -238,7 +238,7 @@ footer{
 .offer-details {
     display: flex;
     flex-direction: row;
-    min-height: 100vh;
+    min-height:~"calc(100vh - 58px)";
 	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
@@ -1626,10 +1626,13 @@ p.check-extra-info{
 .or-divider{
 	.file-uploader-wrap{
 		width:360px;
-		margin-right:@40px;
+		margin:0 @40px 0 0;
 		display:inline-block;
 		vertical-align:top;
 		position:relative;
+		+ .file-uploader-wrap{
+			margin-top:0;
+		}
 		&:after{
 			content:"or";
 			font-size:@14px;
