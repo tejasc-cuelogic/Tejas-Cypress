@@ -34,18 +34,17 @@ export default class NsPagination extends Component {
   }
   render() {
     const {
-      first,
-      currentPageNo,
-      totalPages,
-      stateOptions,
+      first, currentPageNo, totalPages, stateOptions, recPerPage,
     } = this.state;
     return (
       <Menu pagination text {...this.props}>
-        <Select
-          value={first}
-          options={stateOptions}
-          onChange={this.changeRecordsPerPage}
-        />
+        {recPerPage &&
+          <Select
+            value={first}
+            options={stateOptions}
+            onChange={this.changeRecordsPerPage}
+          />
+        }
         <Menu.Item
           onClick={() => this.goToPage(1)}
           className={currentPageNo === 1 && 'disabled'}

@@ -10,7 +10,6 @@ export default class FaqsCombined extends Component {
     const { index } = titleProps;
     const { activeIndex } = this.state;
     const newIndex = activeIndex === index ? -1 : index;
-
     this.setState({ activeIndex: newIndex });
   }
 
@@ -19,9 +18,9 @@ export default class FaqsCombined extends Component {
     return (
       <Aux>
         <Form>
-          <Input icon="search" placeholder="Search" />
+          <Input icon="search" placeholder="Search" fluid />
         </Form>
-        <section>
+        <div className="mt-30">
           <Accordion className="faq-accordion" >
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
               Investor Qualification
@@ -30,7 +29,7 @@ export default class FaqsCombined extends Component {
             <Accordion.Content active={activeIndex === 0}>
               <Accordion>
                 <Accordion.Title active>
-                  <Icon className="ns-plus-square" color="green" />
+                  <Icon className="ns-minus-square" color="green" />
                   Who can invest on NextSeed?
                 </Accordion.Title>
                 <Accordion.Content active>
@@ -46,7 +45,7 @@ export default class FaqsCombined extends Component {
           If you still have questions, please don’t hesitate to contact us
           at <Link to="/">info@nextseed.com</Link>
           </p>
-        </section>
+        </div>
       </Aux>
     );
   }

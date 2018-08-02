@@ -292,6 +292,7 @@
 		}
 		a.title {
 			display: block;
+			text-decoration: none;
 		}
 		.list a.item {
 			border-top: 0;

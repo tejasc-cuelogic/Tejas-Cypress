@@ -141,7 +141,7 @@
         }
     }
     &.insight-menu {
-        margin: 0 -.35714286em;
+        margin: 0 -@5px;
         .ui.dropdown {
             color: @primary-one !important;
             padding-left: 0;
@@ -186,6 +186,7 @@ footer{
             padding:0 @15px 0 0;
             flex-direction:row;
             display:inline-block;
+            vertical-align: top;
             .item{
                 margin:0;
             }

@@ -756,10 +756,6 @@ address {
 	}
 }
 .edu-center {
-	h3.ui.header {
-		font-size: @40px;
-		line-height: 50px;
-	}
 	.ui.card {
 		border: 0;
 		.content.padded {
