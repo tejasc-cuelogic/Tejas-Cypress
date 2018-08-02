@@ -31,12 +31,22 @@ input[type=number]{
         border-color:@highlight-primary;
     }
 }
-.public-form {
+.ui.form.public-form {
     .ui.input>input {
-        padding: @9px !important;
-        background: @white !important;
-        border-radius: @4px !important;
-        border: 0 !important;
+        padding: @13px;
+        background: @white;
+        border-radius: @4px;
+        border: 0;
+    }
+    textarea {
+        padding: @14px;
+        background: @white;
+        border: 1px solid rgba(34,36,38,.15);
+        margin: 0 0 @14px;
+        border-radius: @4px;
+    }
+    .reply.form {
+        padding: @30px 0;
     }
 }
 .edu-center {

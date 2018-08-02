@@ -87,6 +87,11 @@
             padding-left:@14px;
         }
     }
+    .content.scrolling {
+        .ui.image.large {
+            min-width: 400px;
+        }
+    }
 }
 //  Public pages Ends
 
