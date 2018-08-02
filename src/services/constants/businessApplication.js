@@ -397,7 +397,7 @@ export const LENDIO_PRE_QUAL = {
     value: '', label: 'Best Contact Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789',
   },
   comments: {
-    value: '', label: 'Comments (Optional)', error: undefined, rule: 'alpha_num', placeHolder: 'Add your comments here',
+    value: '', label: 'Comments (Optional)', error: undefined, rule: 'optional', placeHolder: 'Add your comments here',
   },
   yrsInBusiness: {
     value: '', error: undefined, rule: 'required', label: 'How long you have been in business?',
