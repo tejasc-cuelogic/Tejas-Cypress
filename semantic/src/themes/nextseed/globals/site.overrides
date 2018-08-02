@@ -1626,10 +1626,13 @@ p.check-extra-info{
 .or-divider{
 	.file-uploader-wrap{
 		width:360px;
-		margin-right:@40px;
+		margin:0 @40px 0 0;
 		display:inline-block;
 		vertical-align:top;
 		position:relative;
+		+ .file-uploader-wrap{
+			margin-top:0;
+		}
 		&:after{
 			content:"or";
 			font-size:@14px;
