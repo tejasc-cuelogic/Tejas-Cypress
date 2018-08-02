@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid } from 'semantic-ui-react';
 import TeamModal from '../components/TeamModal';
+import { InlineLoader } from '../../../../theme/shared';
 import TeamList from '../components/TeamList';
 
 
@@ -45,7 +46,7 @@ class team extends Component {
       </Grid>);
     return (
       <Aux>
-        {loading ? (<h2>Loading...</h2>)
+        {loading ? (<InlineLoader />)
         : teamMembers.length === 0 ? <h2>No Records to Display</h2>
         : teamInfo}
       </Aux>
