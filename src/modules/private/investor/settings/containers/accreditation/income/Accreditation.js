@@ -53,7 +53,7 @@ export default class Accreditation extends React.Component {
           inProgress={inProgress}
           formTitle="Verify your accreditation"
           handleMultiStepModalclose={this.handleMultiStepModalclose}
-          setStepToBeRendered={this.handleStepChange}
+          setStepTobeRendered={this.handleStepChange}
         />
       </div>
     );

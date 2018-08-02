@@ -60,7 +60,7 @@ export default class Accreditation extends React.Component {
           resetEnterPressed={resetIsEnterPressed}
           inProgress={inProgress}
           handleMultiStepModalclose={this.handleMultiStepModalclose}
-          setStepToBeRendered={this.handleStepChange}
+          setStepTobeRendered={this.handleStepChange}
         />
       </div>
     );
