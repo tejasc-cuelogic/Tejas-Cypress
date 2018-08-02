@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { Link } from 'react-router-dom';
 import { Input, Form, Accordion, Icon } from 'semantic-ui-react';
 
 export default class FaqsCombined extends Component {
@@ -41,6 +42,10 @@ export default class FaqsCombined extends Component {
               </Accordion>
             </Accordion.Content>
           </Accordion>
+          <p className="note">
+          If you still have questions, please don’t hesitate to contact us
+          at <Link to="/">info@nextseed.com</Link>
+          </p>
         </section>
       </Aux>
     );
