@@ -40,7 +40,7 @@ class team extends Component {
                   </div>
                 </Reveal.Content>
                 <Reveal.Content visible>
-                  <LazyLoad height={300} >
+                  <LazyLoad height={100} >
                     <Image src={member.avatar} />
                   </LazyLoad>
                 </Reveal.Content>
