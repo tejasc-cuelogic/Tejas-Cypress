@@ -1403,31 +1403,34 @@ ol.progtrckr{
 	}
 }
 
-// Rechart Styles
+// Rechart Styles Starts
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
-.recharts-wrapper{
-	.recharts-legend-wrapper{
-		z-index:-1;
-	}
-	.recharts-pie-sector .datavalue{
-		font-size:@20px;
-		font-weight:700;
-	}
-	tspan{
-		font-size:18px;
-		font-weight:700;
-	}
-	.chartLegends li{
-		font-size:22px;
-		span{
-			font-size:13px;
-			color:@fullBlack;
-			vertical-align:top;
+.portfolio-allocation{
+	.recharts-wrapper{
+		.recharts-legend-wrapper{
+			z-index:-1;
+		}
+		.recharts-pie-sector .datavalue{
+			font-size:@20px;
+			font-weight:@fontMedium;
+		}
+		tspan{
+			font-size:18px;
+			font-weight:@fontMedium;
+		}
+		.chartLegends li{
+			font-size:22px;
+			span{
+				font-size:13px;
+				color:@fullBlack;
+				vertical-align:top;
+			}
 		}
 	}
 }
+// Rechart Styles Ends
 
 .knowledge-details{
 	position:relative;
