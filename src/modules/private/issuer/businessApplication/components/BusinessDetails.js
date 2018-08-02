@@ -97,6 +97,7 @@ export default class BusinessDetails extends Component {
                       <Form.Group widths="equal">
                         <MaskedInput2
                           disabled={formReadOnlyMode}
+                          prefix="$ "
                           currency
                           type="text"
                           name="amount"
@@ -115,6 +116,7 @@ export default class BusinessDetails extends Component {
                       <Form.Group widths="equal">
                         <MaskedInput2
                           disabled={formReadOnlyMode}
+                          prefix="$ "
                           currency
                           type="text"
                           name="remainingPrincipal"
