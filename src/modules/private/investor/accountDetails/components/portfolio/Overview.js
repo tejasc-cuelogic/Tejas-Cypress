@@ -7,7 +7,7 @@ import PayOffChart from './PayOffChart';
 
 const Overview = () => (
   <Aux>
-    <div className="inner-content-spacer offwhite-bg">
+    <div className="inner-content-spacer bg-offwhite">
       <span className="pull-left">
         <Header as="h5">
           <AccTypeTitle moreText="investment" />

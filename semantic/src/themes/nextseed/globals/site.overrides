@@ -121,6 +121,9 @@ a{
 	&:hover{
 		text-decoration:underline;
 	}
+	&.inverted{
+		color:@white;
+	}
 }
 a.text-link{
 	color:@tertiary-text;
