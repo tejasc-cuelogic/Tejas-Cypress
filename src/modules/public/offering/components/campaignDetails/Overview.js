@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Header, Image, Icon, Embed, Statistic, Grid, Menu, Label, Divider, Segment, Breadcrumb, Popup, Modal } from 'semantic-ui-react';
 import videoPoster from '../../../../../assets/images/636206632.webp';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
@@ -7,11 +8,14 @@ const nsvideos = {
   embed: '218642510',
 };
 
+@inject('campaignStore')
+@observer
 class Overview extends Component {
   state = { modalOpen: false }
   handleOpen = () => this.setState({ modalOpen: true })
   handleClose = () => this.setState({ modalOpen: false })
   render() {
+    const { campaign } = this.props.campaignStore;
     return (
       <div className="offering-content-spacer">
         <div className="quick-bar">
@@ -44,15 +48,11 @@ class Overview extends Component {
                         <Breadcrumb.Divider icon="right chevron" />
                       </Breadcrumb>
                       <Header as="h3">Top things to know</Header>
-                      <p><b>Industry: </b>Pub & Brewery <br />
-                        <b>Investment Type: </b>Revenue Sharing
+                      <p><b>Industry: </b>{campaign.industry}<br />
+                        <b>Investment Type: </b>{campaign.investmentType}
                         <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
                       </p>
-                      <p className="detail-section">
-                        Houston Brewery is expanding its facilities and launching the
-                        new Buffbrew Taproom, complete with a full-service kitchen,
-                        event space and over 40 beers on tap.
-                      </p>
+                      <p className="detail-section">{campaign.description}</p>
                       <Divider section />
                       <ul>
                         <li>

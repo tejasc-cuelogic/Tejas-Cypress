@@ -68,6 +68,7 @@ export default class Performance extends Component {
                             disabled={formReadOnlyMode}
                             key={field}
                             name={field}
+                            prefix="$ "
                             currency
                             value={fields[field].value}
                             fielddata={fields[field]}
@@ -87,6 +88,7 @@ export default class Performance extends Component {
                           disabled={formReadOnlyMode}
                           key={field}
                           name={field}
+                          prefix="$ "
                           currency
                           value={fields[field].value}
                           fielddata={fields[field]}
