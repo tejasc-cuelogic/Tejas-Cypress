@@ -61,6 +61,7 @@ export default class UpdateInvestmentLimits extends Component {
                     key={field}
                     name={field}
                     currency
+                    prefix="$ "
                     value={fields[field].value}
                     fielddata={fields[field]}
                     changed={maskingFieldChange}
