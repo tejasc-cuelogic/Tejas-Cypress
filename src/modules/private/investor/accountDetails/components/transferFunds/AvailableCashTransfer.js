@@ -33,7 +33,11 @@ const AvailableCashTransfer = props => (
         </Grid>
       </Card.Content>
     </Card>
-    <Route exact path={`${props.match.url}/:action`} component={AddWithdrawFund} />
+    <Route
+      exact
+      path={`${props.match.url}/:action`}
+      render={params => <AddWithdrawFund refLink={props.match.url} {...params} />}
+    />
   </Aux>
 );
 

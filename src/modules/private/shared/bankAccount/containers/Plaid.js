@@ -6,6 +6,7 @@ import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
 import defaultBankLogo from '../../../../../assets/images/banks/default.png';
 import { IND_BANK_LIST } from '../../../../../constants/account';
+import AddFunds from './AddFunds';
 
 @inject('bankAccountStore', 'uiStore')
 @withRouter
@@ -17,8 +18,12 @@ export default class Plaid extends Component {
       formBankSearch,
       bankSearchChange,
       bankListing,
+      showAddFunds,
     } = this.props.bankAccountStore;
     const { inProgress } = this.props.uiStore;
+    if (showAddFunds) {
+      return <AddFunds />;
+    }
     if (bankLinkInterface === 'form') {
       return <ManualForm />;
     }

@@ -34,39 +34,41 @@ export default class IdentityVerification extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
     this.props.history.push('/app/summary');
   }
 
   handleVerifyUserIdentity = (e) => {
     e.preventDefault();
-    this.props.identityStore.verifyUserIdentity().then(() => {
-      const {
-        key,
-        alertMsg,
-        msgType,
-        route,
-      } = this.props.identityStore.userVerficationStatus;
-      if (key === 'id.success') {
-        const { phoneVerification } = this.props.userDetailsStore.signupStatus;
-        if (phoneVerification === 'DONE') {
-          Helper.toast(alertMsg, msgType);
-          this.props.history.push(route);
+    this.props.identityStore.setFormError();
+    if (this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid) {
+      this.props.identityStore.verifyUserIdentity().then(() => {
+        const {
+          key,
+          alertMsg,
+          msgType,
+          route,
+        } = this.props.identityStore.userVerficationStatus;
+        if (key === 'id.success') {
+          const { phoneVerification } = this.props.userDetailsStore.signupStatus;
+          if (phoneVerification === 'DONE') {
+            Helper.toast(alertMsg, msgType);
+            this.props.history.push(route);
+          } else {
+            this.props.identityStore.startPhoneVerification().then(() => {
+              this.props.history.push('/app/summary/identity-verification/3');
+            })
+              .catch((err) => { this.props.uiStore.setErrors(JSON.stringify(err.message)); });
+          }
         } else {
-          this.props.identityStore.startPhoneVerification().then(() => {
-            this.props.history.push('/app/summary/identity-verification/3');
-          })
-            .catch((err) => { this.props.uiStore.setErrors(JSON.stringify(err.message)); });
+          Helper.toast(alertMsg, msgType);
+          if (key === 'id.failure') {
+            this.props.identityStore.setIdentityQuestions();
+          }
+          this.props.history.push(route);
         }
-      } else {
-        Helper.toast(alertMsg, msgType);
-        if (key === 'id.failure') {
-          this.props.identityStore.setIdentityQuestions();
-        }
-        this.props.history.push(route);
-      }
-    })
-      .catch(() => { });
+      })
+        .catch(() => { });
+    }
   }
 
   handleUploadDocuments = (e) => {
@@ -117,58 +119,59 @@ export default class IdentityVerification extends Component {
       ID_VERIFICATION_FRM,
       ID_VERIFICATION_DOCS_FRM,
       ID_VERIFICATION_QUESTIONS,
-      dobChange,
       personalInfoChange,
       submitVerificationsDocs,
+      personalInfoMaskedChange,
       identityQuestionAnswerChange,
-      setAddressFieldsOnGoogleAutocomplete,
+      setAddressFieldsForUserVerification,
     } = this.props.identityStore;
     const { errors, confirmBox, inProgress } = this.props.uiStore;
     const { givenName } = this.props.userStore.currentUser;
     const { step } = this.props.match.params;
     return (
       <div>
-        {step === '0' &&
+        {step === '0' ?
           <LegalDetails
             form={ID_VERIFICATION_FRM}
             name={givenName}
             inProgress={inProgress}
             close={this.handleCloseModal}
             change={personalInfoChange}
-            dobChange={dobChange}
-            autoComplete={setAddressFieldsOnGoogleAutocomplete}
+            maskChange={personalInfoMaskedChange}
+            autoComplete={setAddressFieldsForUserVerification}
             onSubmit={this.handleVerifyUserIdentity}
             errors={errors}
           />
-        }
-        {step === '1' &&
-          <LegalDocuments
-            form={ID_VERIFICATION_DOCS_FRM}
-            confirmBox={confirmBox}
-            inProgress={inProgress}
-            close={this.handleCloseModal}
-            onPhotoIdDrop={this.onPhotoIdDrop}
-            onProofOfResidenceDrop={this.onProofOfResidenceDrop}
-            confirmRemoveDoc={this.confirmRemoveDoc}
-            handleDelCancel={this.handleDelCancel}
-            handleDelDoc={this.handleDelDoc}
-            submitVerificationsDocs={submitVerificationsDocs}
-            onSubmit={this.handleUploadDocuments}
-            errors={errors}
-          />
-        }
-        {step === '2' &&
-          <LegalIdentityQuestions
-            form={ID_VERIFICATION_QUESTIONS}
-            inProgress={inProgress}
-            close={this.handleCloseModal}
-            identityQuestionAnswerChange={identityQuestionAnswerChange}
-            onSubmit={this.handleSubmitIdentityQuestions}
-            errors={errors}
-          />
-        }
-        {step === '3' &&
-          <ConfirmPhoneNumber />
+          :
+          step === '1' ?
+            <LegalDocuments
+              form={ID_VERIFICATION_DOCS_FRM}
+              confirmBox={confirmBox}
+              inProgress={inProgress}
+              close={this.handleCloseModal}
+              onPhotoIdDrop={this.onPhotoIdDrop}
+              onProofOfResidenceDrop={this.onProofOfResidenceDrop}
+              confirmRemoveDoc={this.confirmRemoveDoc}
+              handleDelCancel={this.handleDelCancel}
+              handleDelDoc={this.handleDelDoc}
+              submitVerificationsDocs={submitVerificationsDocs}
+              onSubmit={this.handleUploadDocuments}
+              errors={errors}
+            />
+          :
+          step === '2' ?
+            <LegalIdentityQuestions
+              form={ID_VERIFICATION_QUESTIONS}
+              inProgress={inProgress}
+              close={this.handleCloseModal}
+              identityQuestionAnswerChange={identityQuestionAnswerChange}
+              onSubmit={this.handleSubmitIdentityQuestions}
+              errors={errors}
+            />
+          :
+          step === '3' ?
+            <ConfirmPhoneNumber />
+          : null
         }
       </div>
     );

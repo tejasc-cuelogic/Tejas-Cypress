@@ -30,7 +30,7 @@ class TeamModal extends Component {
           <Item.Group>
             <Item>
               <Image src={member.avatar} />
-              <Item.Content verticalAlign="middle">
+              <Item.Content verticalAlign="middle" className="team-details-container">
                 <div className="scrollable-content">
                   <Header as="h4">
                     {member.memberName}

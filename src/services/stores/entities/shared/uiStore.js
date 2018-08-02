@@ -32,6 +32,20 @@ export class UiStore {
   @observable authWizardStep = undefined;
   @observable dashboardStep = undefined;
   @observable editMode = false;
+  @observable pwdInputType = 'password';
+  @observable isEnterPressed = false;
+
+  @action
+  setIsEnterPressed = (charCode) => {
+    if (charCode === 13) {
+      this.isEnterPressed = true;
+    }
+  }
+
+  @action
+  resetIsEnterPressed = () => {
+    this.isEnterPressed = false;
+  }
 
   @action
   setModalStatus(status) {
