@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Grid, Form } from 'semantic-ui-react';
 import { FillTable } from '../../../../../theme/table/NSTable';
@@ -33,7 +34,7 @@ export default class Transactions extends Component {
     } = this.props.transactionStore;
     result.rows = getAllTransactions;
     return (
-      <div>
+      <Aux>
         <Header as="h4">Transactions</Header>
         <Grid>
           <Grid.Column widescreen={12} largeScreen={11} computer={10} tablet={10} mobile={16}>
@@ -54,7 +55,7 @@ export default class Transactions extends Component {
             </Card>
           </Grid.Column>
         </Grid>
-      </div>
+      </Aux>
     );
   }
 }
