@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ResponsiveContainer, Bar, ComposedChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import Helper from '../../../../../../helper/utility';
 
 const data = [
   { name: 'May 2017', Payment: 250, 'Paid to date': 250 },
@@ -22,6 +23,7 @@ const data = [
 ];
 
 export default class PayOffChart extends Component {
+  formatY = (item) => Helper.CurrencyFormat(item);
   render() {
     return (
       <ResponsiveContainer height={220}>
@@ -35,7 +37,7 @@ export default class PayOffChart extends Component {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis axisLine={false} dataKey="name" />
-          <YAxis axisLine={false} orientation="right" />
+          <YAxis tickFormatter={this.formatY} axisLine={false} orientation="right" />
           <Tooltip />
           <defs>
             <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
