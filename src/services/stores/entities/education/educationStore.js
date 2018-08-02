@@ -11,6 +11,24 @@ export class EducationStore {
   @observable data = [];
   @observable searchParam = '';
   @observable selected = { id: '', title: '', body: '' };
+  @observable faqsList = [
+    {
+      id: 1,
+      title: 'Lorem ipsum dolor sit amet enim ullamcorper?',
+      description: `Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum
+      dapibus, mauris nec malesuada fames ac turpis Pellentesque facilisis.
+      Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec
+      malesuada fames ac turpis`,
+    },
+    {
+      id: 2,
+      title: 'Lorem ipsum dolor sit amet enim ullamcorper?',
+      description: `Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum
+      dapibus, mauris nec malesuada fames ac turpis Pellentesque facilisis.
+      Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec
+      malesuada fames ac turpis`,
+    },
+  ];
 
   @action
   initRequest = (module) => {
@@ -65,6 +83,10 @@ export class EducationStore {
 
   @computed get loading() {
     return this.allData.loading;
+  }
+
+  @computed get faqsOfModule() {
+    return toJS(this.faqsList);
   }
 }
 

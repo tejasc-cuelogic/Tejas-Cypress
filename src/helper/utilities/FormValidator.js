@@ -5,7 +5,16 @@ import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
 class FormValidator {
-  prepareFormObject = (fields, isDirty = false, isValid = false) => ({ fields: { ...fields }, meta: { isValid, error: '', isDirty }, response: {} });
+  prepareFormObject = (fields, isDirty = false, isFieldValid = true, isValid = false) => ({
+    fields: { ...fields },
+    meta: {
+      isValid,
+      error: '',
+      isDirty,
+      isFieldValid,
+    },
+    response: {},
+  });
 
   pullValues = (e, data) => ({
     name: typeof data === 'undefined' ? e.target.name : data.name,
@@ -39,6 +48,12 @@ class FormValidator {
     );
     currentForm.meta.isValid = validation.passes();
     if (element && element.name) {
+      currentForm.fields[element.name].error = validation.errors.first(element.name);
+      if (currentForm.fields[element.name].error === false) {
+        currentForm.meta.isFieldValid = true;
+      } else {
+        currentForm.meta.isFieldValid = false;
+      }
       currentForm.fields[element.name].error = validation.errors.first(element.name) ?
         replace(
           validation.errors.first(element.name),
@@ -167,17 +182,30 @@ class FormValidator {
   }
 
   setAddressFields = (place, form) => {
-    const { state, city, zipCode } = form.fields;
     const currentForm = form;
     const data = Helper.gAddressClean(place);
     if (currentForm.fields.street) {
-      currentForm.fields.street.value = data.residentalStreet;
+      this.onChange(currentForm, { name: 'street', value: data.residentalStreet });
     } else {
-      currentForm.fields.residentalStreet.value = data.residentalStreet;
+      this.onChange(currentForm, { name: 'residentalStreet', value: data.residentalStreet });
     }
-    state.value = data.state;
-    city.value = data.city;
-    zipCode.value = data.zipCode;
+    this.onChange(currentForm, { name: 'state', value: data.state });
+    this.onChange(currentForm, { name: 'city', value: data.city });
+    this.onChange(currentForm, { name: 'zipCode', value: data.zipCode });
+  }
+
+  setIsDirty = (form, status) => {
+    const currentForm = form;
+    currentForm.meta.isDirty = status;
+  }
+
+  setFormError = (form, key, error) => {
+    const currentForm = form;
+    currentForm.fields[key].error = error;
+    if (error) {
+      currentForm.meta.isValid = false;
+      currentForm.meta.isFieldValid = false;
+    }
   }
 }
 

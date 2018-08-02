@@ -1,37 +1,68 @@
 /*******************************
          Theme Overrides
 *******************************/
+.ui.fade.reveal {
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    >.visible.content {
+        z-index: 1 !important;
+        position: relative !important;
+    }
+    >.hidden.content {
+        opacity: 0;
+        background-color: fade(@neutral, 80) ;
+        display:table-cell;
+        vertical-align:middle;
+        -webkit-transition: all .5s ease .1s;
+        transition: all .5s ease .1s;
+        position: absolute !important;
+        height: 100%;
+        width: 100%;
+        p {
+            text-align: center;
+            color: @white;
+        }
+    }
+    &:hover {
+        >.visible.content {
+            opacity: 1;
+        }
+        >.hidden.content {
+            opacity: 1;
+        }
+    }
+    .team-overlay {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        p {
+            margin-bottom: 0;
+            line-height: 24px;
+            text-transform: uppercase; 
+            b {
+                font-size: 18px;
+                text-transform: none; 
+            }
+        }
+    }
+}
 .campaign-right-sidebar {
     .ui.fade.reveal {
-        height: 75px;
         width: 75px;
+        height: 75px;
         border-radius: 50%;
-        >.visible.content {
-            z-index: 1 !important;
-        }
         >.hidden.content {
             height: 75px;
             width: 75px;
             border-radius: 50%;
-            opacity: 0;
-            background-color: @unselectedTextColor ;
-            display:table-cell;
-            vertical-align:middle;
-            -webkit-transition: all .5s ease .1s;
-            transition: all .5s ease .1s;
             p {
-                text-align: center;
-                color: @white;
                 font-weight: @bold;
+                text-transform: none;
             }
-        }
-        &:hover {
-            >.visible.content {
-                opacity: 1;
-            }
-            >.hidden.content {
-                opacity: 1;
-            }
-        }
+        }        
     }
 }

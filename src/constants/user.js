@@ -54,14 +54,6 @@ export const FILTER_META = {
   ],
 };
 
-export const TRANSACTION_TYPES = [
-  { text: 'Deposit', value: 'Deposit' },
-  { text: 'Withdrawal', value: 'Withdrawal' },
-  { text: 'Repayment', value: 'Repayment' },
-  { text: 'Interest Accured', value: 'InterestAccured' },
-  { text: 'Referral Credits', value: 'ReferralCredits' },
-];
-
 export const FIN_INFO = {
   annualIncome: {
     value: '',
@@ -121,4 +113,4 @@ export const NEW_USER = {
 
 export const BENEFICIARY_STATUS = { PENDING: 'PENDING', APPROVED: 'APPROVED' };
 
-export const SIGNUP_REDIRECT_ROLEWISE = [{ role: 'admin', path: '/app/dashboard' }, { role: 'issuer', path: '/app/business-application/new/pre-qualification' }, { role: 'investor', path: '/app/summary' }];
+export const SIGNUP_REDIRECT_ROLEWISE = [{ role: 'admin', path: '/app/dashboard' }, { role: 'issuer', path: '/app/business-application/new/pre-qualification' }, { role: 'investor', path: '/app/summary/identity-verification/0' }];

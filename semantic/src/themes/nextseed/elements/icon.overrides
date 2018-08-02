@@ -1722,6 +1722,12 @@ i.icon[class*="ns-"]{
 .ns-activity-arrow:before{
     content:@ns-activity-arrow;
 }
+.ns-arrow-double-left:before{
+    content:@ns-arrow-double-left;
+}
+.ns-arrow-double-right:before{
+    content:@ns-arrow-double-right;
+}
 .ns-arrow-down:before{
     content:@ns-arrow-down;
 }

@@ -6,7 +6,7 @@ import { FormInput } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../theme/shared';
 
-@inject('beneficiaryStore', 'profileStore', 'uiStore')
+@inject('beneficiaryStore', 'uiStore')
 @withRouter
 @observer
 export default class ConfirmVerificationCode extends Component {

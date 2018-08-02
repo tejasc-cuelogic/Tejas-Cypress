@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Header, Icon, Statistic, Button, Menu } from 'semantic-ui-react';
+import { Header, Icon, Statistic, Button, Menu, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
+import CampaignProgress from './CampaignProgress';
 
 @withRouter
 export default class CampaignSideBar extends Component {
@@ -16,7 +17,7 @@ export default class CampaignSideBar extends Component {
             Account Settings
             <Header.Subheader>Manage your preferences</Header.Subheader>
           </Header>
-          <div className="progress-bar" />
+          <CampaignProgress />
           <p>
             <Icon name="flag" /> Min reached on 10 days ago
           </p>
@@ -38,6 +39,10 @@ export default class CampaignSideBar extends Component {
         </div>
         <Menu vertical fluid>
           <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} />
+          <Divider />
+          <Menu.Item as={Link} to="/" className="watch-deal-menu">
+            <Icon name="heart outline" /> Watch Deal
+          </Menu.Item>
         </Menu>
       </div>
     );

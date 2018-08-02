@@ -17,9 +17,9 @@ const FormInput = observer((props) => {
   );
   return (
     <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''} error={!!error}>
-      {label !== '' &&
+      {!props.ishidelabel && label !== '' &&
         <label>
-          {label}
+          {props.label || label}
           {tooltip &&
             <Popup
               trigger={<Icon name="help circle" />}
@@ -31,7 +31,7 @@ const FormInput = observer((props) => {
         </label>
       }
       {props.type === 'password' &&
-        <input style={{ opacity: 0, position: 'absolute' }} value="something" />
+        <input style={{ opacity: 0, position: 'absolute' }} tabIndex={-1} value="something" />
       }
       <Input
         fluid

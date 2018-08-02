@@ -18,7 +18,7 @@ export default class KnowledgeBase extends Component {
     }
   }
   render() {
-    const { match, location } = this.props;
+    const { match, location, nosearch } = this.props;
     const {
       kbs, loading, error, searchParam,
     } = this.props.educationStore;
@@ -29,21 +29,23 @@ export default class KnowledgeBase extends Component {
     return (
       <div>
         <Grid>
-          <Grid.Row>
-            <Grid.Column widescreen={7} largeScreen={7} computer={16} tablet={16} mobile={16}>
-              <Form>
-                <Input
-                  fluid
-                  onChange={this.search}
-                  value={searchParam}
-                  inverted
-                  icon={{ className: 'ns-search' }}
-                  iconPosition="left"
-                  placeholder="Search by keyword or phrase"
-                />
-              </Form>
-            </Grid.Column>
-          </Grid.Row>
+          {!nosearch && (
+            <Grid.Row>
+              <Grid.Column widescreen={7} largeScreen={7} computer={16} tablet={16} mobile={16}>
+                <Form>
+                  <Input
+                    fluid
+                    onChange={this.search}
+                    value={searchParam}
+                    inverted
+                    icon={{ className: 'ns-search' }}
+                    iconPosition="left"
+                    placeholder="Search by keyword or phrase"
+                  />
+                </Form>
+              </Grid.Column>
+            </Grid.Row>
+          )}
           <Grid.Row>
             <Grid.Column widescreen={7} largeScreen={7} computer={16} tablet={16} mobile={16}>
               <AccList module={modul} location={location} match={match} error={error} data={kbs} />
