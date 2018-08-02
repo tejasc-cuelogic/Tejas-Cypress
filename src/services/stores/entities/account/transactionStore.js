@@ -10,14 +10,23 @@ import { TRANSFER_FUND } from '../../../constants/transaction';
 export class TransactionStore {
   @observable data = [];
   @observable filters = false;
-  @observable requestState = { search: {}, page: 1, perPage: 10 };
+  @observable requestState = {
+    search: {},
+    page: 1,
+    perPage: 10,
+    skip: 0,
+  };
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
   @observable cash = 9743.33;
 
   @action
   initRequest = (props) => {
     const { first, skip, page } = props ||
-      { first: this.requestState.perPage, skip: 0, page: this.requestState.page };
+      {
+        first: this.requestState.perPage,
+        skip: this.requestState.skip,
+        page: this.requestState.page,
+      };
     const filters = toJS({ ...this.requestState.search });
     const params = {};
     if (filters.transactionType && filters.transactionType.length > 0) {
@@ -25,6 +34,7 @@ export class TransactionStore {
     }
     this.requestState.page = page || this.requestState.page;
     this.requestState.perPage = first || this.requestState.perPage;
+    this.requestState.skip = skip || this.requestState.skip;
     this.data = graphql({
       client,
       query: allTransactions,

@@ -23,7 +23,7 @@ const data = [
 ];
 
 export default class PayOffChart extends Component {
-  formatY = (item) => Helper.CurrencyFormat(item);
+  formatY = item => Helper.CurrencyFormat(item);
   render() {
     return (
       <ResponsiveContainer height={220}>
@@ -36,7 +36,7 @@ export default class PayOffChart extends Component {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis axisLine={false} dataKey="name" />
+          <XAxis axisLine={false} dataKey="name" interval={4} />
           <YAxis tickFormatter={this.formatY} axisLine={false} orientation="right" />
           <Tooltip />
           <defs>
@@ -52,7 +52,7 @@ export default class PayOffChart extends Component {
             fillOpacity={1}
             fill="url(#gradient)"
           />
-          <Bar dataKey="Payment" barSize={10} fill="#1781FB" />
+          <Bar dataKey="Payment" barSize={7} fill="#1781FB" />
         </ComposedChart>
       </ResponsiveContainer>
     );

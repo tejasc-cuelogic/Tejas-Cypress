@@ -15,6 +15,10 @@ section{
 	p{
 		margin-bottom:@40px;
 	}
+	a {
+		color: @fullBlack;
+		font-weight: @bold;
+	}
 }
 //	Helper Classes
 //	Heading font sizes
@@ -692,27 +696,6 @@ p i.icon {
 			width: auto;
 			max-width: none;
 		}
-		.image-caption {
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			padding: @20px;    
-			p {
-				background: @neutral;
-				padding: @5px @10px;
-				color: @white;
-				display: table;
-				margin-bottom: @5px;
-				&.news-category {
-					font-size: @13px;
-					text-transform: uppercase;
-				}
-				&.news-title {
-					font-size: @28px;
-					line-height: @30px;
-				}
-			}
-		}
 	}
 }
 address {
@@ -738,6 +721,27 @@ address {
 		color: @primary-two !important; 
 	}
 }
+.image-caption {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding: 20px;    
+	p {
+		background: @neutral;
+		padding: 5px 10px;
+		color: @white;
+		display: table;
+		margin-bottom: 5px;
+		&.news-category {
+			font-size: 13px;
+			text-transform: uppercase;
+		}
+		&.news-title {
+			font-size: 28px;
+			line-height: 30px;
+		}
+	}
+}
 //impact page
 .featured-statistic {
 	h5.ui.header {
@@ -746,6 +750,31 @@ address {
 	}
 	h2.ui.header {
 		margin-bottom: 0px;
+	}
+}
+//Education center
+.edu-back-link {
+	a {
+		color: @neutral-middark;
+	}
+}
+.edu-center {
+	.ui.card {
+		border: 0;
+		.content.padded {
+			padding: 0;
+			border: 0;
+		}
+		&:hover {
+			box-shadow: none;
+		}
+	}
+}
+//Insight 
+.insight-image-wrapper {
+	position: relative;
+	img.ui.image {
+		width: 100%;
 	}
 }
 /* END <== PUBLIC PAGES UI STYLES */

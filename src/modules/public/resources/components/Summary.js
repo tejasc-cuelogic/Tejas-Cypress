@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Container, Button, Grid, Image } from 'semantic-ui-react';
+import { Header, Container, Grid, Image, Icon } from 'semantic-ui-react';
 import UserOne from '../../../../assets/images/owner-1.jpg';
 import UserTwo from '../../../../assets/images/owner-2.jpg';
 
@@ -22,7 +22,10 @@ const Summary = props => (
             how NextSeed investments work, and the risks and opportunities offered by
             this new way of investing.
           </p>
-          <Button as={Link} to={`${props.refUrl}/investor`} primary content="For Investors" />
+          <Link to={`${props.refUrl}/investor`}>
+            <Icon className="ns-arrow-right" color="green" />
+            For Investors
+          </Link>
         </Grid.Column>
         <Grid.Column textAlign="center" width={6} className="info-card">
           <Image src={UserTwo} size="small" circular centered />
@@ -30,7 +33,10 @@ const Summary = props => (
             Learn about the business implications of different types of fundraising,
             how to add NextSeed to your capital stack and how to get started.
           </p>
-          <Button as={Link} to={`${props.refUrl}/business`} primary content="For Businesses" />
+          <Link to={`${props.refUrl}/business`}>
+            <Icon className="ns-arrow-right" color="green" />
+            For Businesses
+          </Link>
         </Grid.Column>
       </Grid>
     </Container>

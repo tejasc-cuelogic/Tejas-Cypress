@@ -99,6 +99,7 @@ export default class BusinessApplication extends Component {
             size={logoUrl === 'LogoWhite' ? 'small' : 'medium'}
           />
         }
+        buttonWidth={6}
         P4={
           <HeaderButtons
             disabled={formReadOnlyMode}

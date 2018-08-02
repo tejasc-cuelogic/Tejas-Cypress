@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import { Spinner } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 
 const getModule = component => Loadable({
@@ -11,13 +13,23 @@ const getModule = component => Loadable({
   },
 });
 
+@inject('campaignStore')
+@observer
 class offerDetails extends Component {
+  componentWillMount() {
+    this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+  }
   render() {
-    const { match } = this.props;
+    const { match, campaignStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
+    const { details, campaign } = campaignStore;
+
+    if (!details || details.loading) {
+      return <Spinner loaderMessage="Loading.." />;
+    }
     return (
       <div className="offer-details">
-        <CampaignSideBar navItems={navItems} />
+        <CampaignSideBar details={campaign} navItems={navItems} />
         <div className="offering-wrapper">
           <Switch>
             <Route exact path={match.url} component={getModule(navItems[0].component)} />
