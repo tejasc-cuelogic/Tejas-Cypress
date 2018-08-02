@@ -37,10 +37,10 @@ export class InvestmentLimitStore {
   @action
   setInvestmentLimitInfo = (accountType) => {
     // set form values accountwise
-    if (accountType === 1) {
-      this.currentLimit = this.INVESTEMENT_LIMIT_META.fields.currentLimitIndividualOrIra.value;
-    } else {
+    if (accountType === 'entity') {
       this.currentLimit = this.INVESTEMENT_LIMIT_META.fields.currentLimitEntity.value;
+    } else {
+      this.currentLimit = this.INVESTEMENT_LIMIT_META.fields.currentLimitIndividualOrIra.value;
     }
     console.log(accountType);
   }
@@ -59,6 +59,8 @@ export class InvestmentLimitStore {
  @action
  getInvestmentLimit = () => {
    this.activeAccounts = userDetailsStore.getActiveAccounts;
+   const activeAccountList = this.getActiveAccountList;
+   console.log(activeAccountList);
    this.investmentLimit = graphql({
      client: client2,
      query: finLimit,
