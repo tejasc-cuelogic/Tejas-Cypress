@@ -658,7 +658,7 @@ export class BusinessAppStore {
           if (!isEmpty(partnerStatus)) {
             lendioPartners = find(partnerStatus, { partnerId: AFFILIATED_PARTNERS.LENDIO });
           }
-
+          // setting applicationid
           const applicationId = result.data.createBusinessApplicationPrequalification.id;
           this.setFieldvalue('isFetchedData', null);
           if (this.BUSINESS_APP_STATUS ===
