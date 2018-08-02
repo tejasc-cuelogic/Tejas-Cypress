@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Divider, Button } from 'semantic-ui-react';
-import { FormRadioGroup } from '../../../../../../theme/form';
-import AssetsAccreditation from './assets/Accreditation';
-import IncomeAccreditation from './income/Accreditation';
+import { Modal, Header, Divider, Button, Grid } from 'semantic-ui-react';
+import { ACCREDITATION_METHODS_META } from './../../../../../../services/constants/investmentLimit';
 
 @inject('uiStore', 'accreditationStore')
 @observer
@@ -14,11 +12,10 @@ export default class VerifyAccreditation extends Component {
     this.props.history.goBack();
   }
   render() {
+    const accreditationMethods = ACCREDITATION_METHODS_META.slice();
     const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
     return (
       <div>
-        <Route exact path={`${this.props.match.url}/income`} component={IncomeAccreditation} />
-        <Route exact path={`${this.props.match.url}/assets`} component={AssetsAccreditation} />
         <Modal open closeIcon onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
             <Header as="h3">How are you accredited?</Header>
@@ -31,16 +28,12 @@ export default class VerifyAccreditation extends Component {
             </p>
           </Modal.Header>
           <Modal.Content>
-            <FormRadioGroup
-              fielddata={ACCREDITATION_FORM.fields.accreditationMethods}
-              name="fundingType"
-              changed={accreditationMethodChange}
-              containerclassname="button-radio center-align"
-            />
-            {/* <Grid stackable textAlign="center">
+            <Grid stackable textAlign="center">
               <Grid.Row columns={2}>
-                <Grid.Column>
-                  <div className="user-type">
+                <Grid.Column
+                  onClick={e => accreditationMethodChange(e, { name: 'accreditationMethods', value: 'income' })}
+                >
+                  <div className={`user-type ${(ACCREDITATION_FORM.fields.accreditationMethods.value === 'income' ? 'active' : '')}`}>
                     <Header as="h4">Income</Header>
                     <p>
                       <b>Income of $200k, or $300k</b><br />
@@ -48,8 +41,10 @@ export default class VerifyAccreditation extends Component {
                     </p>
                   </div>
                 </Grid.Column>
-                <Grid.Column>
-                  <div className="user-type">
+                <Grid.Column
+                  onClick={e => accreditationMethodChange(e, { name: 'accreditationMethods', value: 'assets' })}
+                >
+                  <div className={`user-type ${(ACCREDITATION_FORM.fields.accreditationMethods.value === 'assets' ? 'active' : '')}`}>
                     <Header as="h4">Assets</Header>
                     <p>
                       <b>Net worth of $1M</b><br />
@@ -58,8 +53,7 @@ export default class VerifyAccreditation extends Component {
                   </div>
                 </Grid.Column>
               </Grid.Row>
-            </Grid> */}
-            {/* <Divider section hidden /> */}
+            </Grid>
             <Button
               circular
               icon={{ className: 'ns-arrow-right' }}

@@ -43,10 +43,22 @@ export const INVESTEMENT_LIMIT = {
   },
 };
 
+export const ACCREDITATION_METHODS_META = [
+  {
+    header: 'Income',
+    value: 'income',
+    desc: 'Income of $200k, or $300k with spouse, in each of past 2 years and expecting same or more this year',
+  },
+  {
+    header: 'Assets',
+    value: 'assets',
+    desc: 'Net worth of $1M individually or joint with spouse, excluding your primary residence',
+  },
+];
+
 export const ACCREDITATION_METHODS = {
   accreditationMethods: {
-    key: 'accreditationMethods',
-    value: 'EMPLOYED',
+    value: 'income',
     values:
       [
         {
@@ -56,6 +68,100 @@ export const ACCREDITATION_METHODS = {
         {
           label: 'I have a net worth of $1M or more (individually or with my spouse), exclusing my primary residence.',
           value: 'assets',
+        },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+export const INCOME_EVIDENCE = {
+  incEvidenceMethods: {
+    value: 'verificationrequest',
+    values:
+      [
+        {
+          label: `Send verification request to my lawyer, CPA, investment adviser or broker
+          They’ll be asked to confirm that they have seen evidence of your claimed status. No documentation required`,
+          value: 'verificationrequest',
+        },
+        {
+          label: 'I have a net worth of $1M or more (individually or with my spouse), exclusing my primary residence.',
+          value: 'uploaddocument',
+        },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+export const VERIFICATION_REQUEST = {
+  verifierRole: {
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Choose verifier role',
+    label: 'Verifier role',
+    tooltip: 'tool tip text',
+  },
+  verifierEmail: {
+    value: '',
+    error: undefined,
+    placeHolder: 'johndoe@contact.com',
+    rule: 'required|email',
+    label: 'Verifier e-mail address',
+  },
+};
+
+export const INCOME_UPLOAD_DOCUMENTS = {
+  incomeDocSecondLastYear: {
+    label: '2016 Income Documentation',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+  },
+  incomeDocLastYear: {
+    label: '2017 Income Documentation',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+  },
+};
+
+export const ASSETS_UPLOAD_DOCUMENTS = {
+  statementDoc: {
+    label: '',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+  },
+};
+
+export const NET_WORTH = {
+  netWorth: {
+    value: '$1,000,000',
+    values:
+      [
+        {
+          label: '$5,000,000',
+          value: '$5,000,000',
+        },
+        {
+          label: '$2,100,000',
+          value: '$2,100,000',
+        },
+        {
+          label: '$1,000,000',
+          value: '$1,000,000',
         },
       ],
     error: undefined,

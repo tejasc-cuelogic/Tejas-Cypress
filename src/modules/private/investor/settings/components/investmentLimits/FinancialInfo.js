@@ -85,15 +85,7 @@ export default class FinancialInfo extends Component {
                         <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
                         <Divider hidden />
                         <Card.Description>
-                          <Button primary content="Verify accreditation" />
-                        </Card.Description>
-                      </Card.Content>
-                      <Card.Content>
-                        <Header as="h4">Reg A+ Elligible</Header>
-                        <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
-                        <Divider hidden />
-                        <Card.Description>
-                          <Button primary content="Verify accreditation" />
+                          <Button onClick={this.handleVerifyAccreditation} primary content="Verify accreditation" />
                         </Card.Description>
                       </Card.Content>
                     </Grid.Column>
