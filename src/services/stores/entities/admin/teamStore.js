@@ -19,7 +19,7 @@ export class TeamStore {
     }
 
     @computed get loading() {
-      return this.data.data.loading;
+      return this.data.loading;
     }
 }
 

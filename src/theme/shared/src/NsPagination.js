@@ -5,7 +5,7 @@ import { Menu, Icon, Input, Select } from 'semantic-ui-react';
 @observer
 export default class NsPagination extends Component {
   state = {
-    skip: 0,
+    skip: this.props.meta.requestState.skip || 0,
     first: this.props.meta.requestState.perPage || 10,
     currentPageNo: this.props.meta.requestState.page || 1,
     totalPages: Math.ceil(this.props.meta.totalRecords / this.props.meta.requestState.perPage),
@@ -17,8 +17,9 @@ export default class NsPagination extends Component {
   changeRecordsPerPage = (e, result) => {
     const first = result.value;
     const totalPages = Math.ceil(this.props.totalRecords / first);
-    this.setState({ first, totalPages });
-    this.props.initRequest({ first, skip: this.state.skip, page: this.state.currentPageNo });
+    const currentPageNo = (2 * this.state.currentPageNo) - 1;// this will only work for first=5
+    this.setState({ first, totalPages, currentPageNo });
+    this.props.initRequest({ first, skip: this.state.skip, page: currentPageNo });
   }
   jumpToPage = (e) => {
     if (e.key === 'Enter') {
