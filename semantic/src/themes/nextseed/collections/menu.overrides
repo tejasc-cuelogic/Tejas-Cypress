@@ -140,6 +140,18 @@
             }
         }
     }
+    &.insight-menu {
+        margin: 0 -@5px;
+        .ui.dropdown {
+            color: @primary-one !important;
+            padding-left: 0;
+            padding-right: 0;
+            >.dropdown.icon:before {
+                content: '\e914';
+                font-family: "nextseed";
+            } 
+        }
+    }
 }
 .footer-head{
     .ui.menu{
@@ -174,6 +186,7 @@ footer{
             padding:0 @15px 0 0;
             flex-direction:row;
             display:inline-block;
+            vertical-align: top;
             .item{
                 margin:0;
             }
