@@ -122,6 +122,7 @@ export class BusinessAppStore {
     this.businessApplicationsList = graphql({
       client,
       query: getBusinessApplications,
+      fetchPolicy: 'network-only',
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
       },
