@@ -5,9 +5,13 @@ class ListErrors extends React.Component {
     const { errors } = this.props;
     if (errors) {
       return (
-        <ul className="error-messages">
-          {Object.keys(errors).map(key => <li key={key}>{errors[key]}</li>)}
-        </ul>
+        errors.length === 1 ? (
+          <p>{errors[0]}</p>
+        ) : (
+          <ul className="error-messages">
+            {Object.keys(errors).map(key => <li key={key}>{errors[key]}</li>)}
+          </ul>
+        )
       );
     }
     return null;

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { FormInput, MaskedInput } from '../../../theme/form';
+import { MaskedInput2 } from '../../../theme/form';
 import Helper from '../../../helper/utility';
 import { ListErrors } from '../../../theme/shared';
 
@@ -12,9 +13,9 @@ import { ListErrors } from '../../../theme/shared';
 export default class ConfirmPhoneNumber extends Component {
   componentWillMount() {
     if (this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
-      if (this.props.userDetailsStore.userDetails.contactDetails.phone) {
-        const fieldValue =
-        Helper.maskPhoneNumber(this.props.userDetailsStore.userDetails.contactDetails.phone.number);
+      if (this.props.userDetailsStore.userDetails.contactDetails &&
+        this.props.userDetailsStore.userDetails.contactDetails.phone) {
+        const fieldValue = this.props.userDetailsStore.userDetails.contactDetails.phone.number;
         this.props.identityStore.phoneNumberChange(fieldValue);
       }
     }
@@ -59,7 +60,7 @@ export default class ConfirmPhoneNumber extends Component {
     if (this.props.refLink) {
       this.props.history.replace(this.props.refLink);
     } else {
-      this.props.history.push('app/summary');
+      this.props.history.push('/app/summary');
     }
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
@@ -69,7 +70,7 @@ export default class ConfirmPhoneNumber extends Component {
     const {
       ID_VERIFICATION_FRM,
       ID_PHONE_VERIFICATION,
-      personalInfoChange,
+      personalInfoMaskedChange,
       phoneVerificationChange,
       reSendVerificationCode,
     } = this.props.identityStore;
@@ -87,17 +88,21 @@ export default class ConfirmPhoneNumber extends Component {
               <ListErrors errors={[errors]} />
             </Message>
           }
-          <MaskedInput
-            value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
-            type="tel"
-            name="phoneNumber"
-            fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-            mask="999-999-9999"
-            readOnly={!editMode}
-            changed={personalInfoChange}
-            hidelabel
-            className="display-only"
-          />
+          <Form>
+            <MaskedInput2
+              value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
+              type="tel"
+              name="phoneNumber"
+              fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
+              format="###-###-####"
+              readOnly={!editMode}
+              changed={personalInfoMaskedChange}
+              containerclassname="display-only"
+              className="display-only"
+              phoneNumber
+              hidelabel
+            />
+          </Form>
           {editMode ?
             <p>
               <Link to={this.props.match.url} onClick={this.startPhoneVerification}>
@@ -114,13 +119,13 @@ export default class ConfirmPhoneNumber extends Component {
             </p>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
-            <FormInput
+            <ReactCodeInput
               name="code"
-              size="huge"
-              containerclassname="otp-field"
-              maxLength={6}
+              fields={6}
+              type="number"
+              className="otp-field"
               fielddata={ID_PHONE_VERIFICATION.fields.code}
-              changed={phoneVerificationChange}
+              onChange={phoneVerificationChange}
             />
             <div className="center-align">
               <Button loading={!reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!ID_PHONE_VERIFICATION.meta.isValid}>Confirm</Button>
