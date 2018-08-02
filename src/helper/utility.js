@@ -39,21 +39,6 @@ export class Utility {
     return `${s4()}${s4()}-${s4()}${s4()}`;
   }
 
-  // Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
-  getInvestmentLimit = (data) => {
-    let limit = 0;
-    const refAmount = 107000;
-    const referThis = data.annualIncome > data.netWorth ? data.netWorth : data.annualIncome;
-    if ((data.annualIncome >= refAmount) && (data.netWorth >= refAmount)) {
-      const referThis2 = (referThis * 10) / 100;
-      limit = (refAmount > referThis2) ? referThis2 : refAmount;
-    } else if ((data.annualIncome < refAmount) || (data.netWorth < refAmount)) {
-      const referThis2 = (referThis * 5) / 100;
-      limit = (referThis2 < 2200) ? 2200 : referThis2;
-    }
-    return limit;
-  }
-
   getTotal = (from, key) => {
     const total = 0;
     return from.map(r => total + parseInt(r[key], 0)).reduce((sum, n) => sum + n);

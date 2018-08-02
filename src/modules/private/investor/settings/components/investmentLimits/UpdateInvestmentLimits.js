@@ -17,11 +17,16 @@ export default class UpdateInvestmentLimits extends Component {
     e.stopPropagation();
     this.props.history.goBack();
   }
+  updateInvestmentLimit = () => {
+    this.props.investmentLimitStore.updateInvestmentLimit().then(() => {
+      this.props.history.goBack();
+    });
+  }
   render() {
     const errors = false;
     const { inProgress } = this.props.uiStore;
     const {
-      INVESTEMENT_LIMIT_META, maskingFieldChange, currentLimit,
+      INVESTEMENT_LIMIT_META, maskingFieldChange, currentLimit, investmentCalculate,
     } = this.props.investmentLimitStore;
     const { fields } = INVESTEMENT_LIMIT_META;
     return (
@@ -59,11 +64,12 @@ export default class UpdateInvestmentLimits extends Component {
                     value={fields[field].value}
                     fielddata={fields[field]}
                     changed={maskingFieldChange}
+                    onBlur={investmentCalculate}
                   />
                 ))
               }
               <div className="center-align mt-30">
-                <Button loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} color="green">Update investment limits</Button>
+                <Button loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} onClick={this.updateInvestmentLimit} color="green">Update investment limits</Button>
               </div>
             </Form>
           </Modal.Content>

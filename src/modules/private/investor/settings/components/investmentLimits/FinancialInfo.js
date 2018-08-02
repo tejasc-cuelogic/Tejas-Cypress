@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { startCase } from 'lodash';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
-// import { FormInput } from '../../../../../theme/form/FormElements';
 import Helper from '../../../../../../helper/utility';
 
 @inject('investmentLimitStore', 'uiStore')
