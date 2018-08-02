@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Table, Grid, Statistic, Button, Divider } from 'semantic-ui-react';
 import { AccTypeTitle } from '../../../../../../theme/shared';
+import PayOffChart from './PayOffChart';
 
 const Overview = () => (
   <Aux>
@@ -13,7 +14,7 @@ const Overview = () => (
         </Header>
       </span>
       <span className="pull-right">
-        <Link target="_blank" to="/" className="pull-right">View offering page</Link>
+        <Link target="_blank" to="/offerings/cjk9i3tv31vh70197umi5y2ak/overview" className="pull-right">View offering page</Link>
       </span>
     </div>
     <div className="inner-content-spacer">
@@ -90,6 +91,7 @@ const Overview = () => (
     <Divider />
     <div className="inner-content-spacer">
       <Header as="h4">Pay Off Chart</Header>
+      <PayOffChart />
     </div>
   </Aux>
 );
