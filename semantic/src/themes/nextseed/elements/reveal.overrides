@@ -8,6 +8,9 @@
     >.visible.content {
         z-index: 1 !important;
         position: relative !important;
+        img.ui.image {
+            width:100%
+        }
     }
     >.hidden.content {
         opacity: 0;

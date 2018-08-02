@@ -4,6 +4,7 @@ import { Link, Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import LazyLoad from 'react-lazyload';
 import { Header, Grid, Reveal, Image, Icon } from 'semantic-ui-react';
+import { InlineLoader } from '../../../../theme/shared';
 import TeamModal from '../components/TeamModal';
 
 @inject('teamStore')
@@ -14,7 +15,6 @@ class team extends Component {
   }
   render() {
     const { teamMembers } = this.props.teamStore;
-    const load = <h1>Loading...</h1>;
     const teamInfo = (<Grid stackable columns={2}>
       <Grid.Column>
         <Grid centered>
@@ -71,7 +71,7 @@ class team extends Component {
                       </Grid>);// eslint-disable-line react/jsx-indent
     return (
       <Aux>
-        {teamMembers.length === 0 ? load : teamInfo}
+        {teamMembers.length === 0 ? <InlineLoader /> : teamInfo}
       </Aux>
     );
   }
