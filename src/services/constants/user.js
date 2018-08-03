@@ -159,6 +159,7 @@ export const USER_TITLE = [
 
 export const IDENTITY_DOCUMENTS = {
   photoId: {
+    label: '',
     key: 'photoId',
     value: '',
     error: undefined,
@@ -168,6 +169,7 @@ export const IDENTITY_DOCUMENTS = {
     fileData: '',
   },
   proofOfResidence: {
+    label: '',
     key: 'proofOfResidence',
     value: '',
     error: undefined,
