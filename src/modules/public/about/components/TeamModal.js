@@ -14,10 +14,7 @@ class TeamModal extends Component {
     const { teamMembers } = this.props.teamStore;
     const { match } = this.props;
     const member = teamMembers.find(obj => obj.id === match.params.id);
-    const types = {
-      FACEBOOK: 'facebook f',
-      LINKEDIN: 'linkedin in',
-    };
+    const types = { FACEBOOK: 'facebook f', LINKEDIN: 'linkedin in' };
     return (
       <Modal
         open={this.state.modalOpen}
