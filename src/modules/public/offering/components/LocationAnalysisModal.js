@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import { Header, Modal, Grid, Statistic } from 'semantic-ui-react';
 
 class LocationAnalysisModal extends Component {
-  state = { modalOpen: false }
-  handleOpen = () => this.setState({ modalOpen: true })
-  handleClose = () => this.setState({ modalOpen: false })
+  handleClose = () => this.props.history.goBack();
 
   render() {
     return (
       <Modal
-        open={this.state.modalOpen}
+        open
         onClose={this.handleClose}
         closeIcon
         size="large"
@@ -50,7 +48,7 @@ class LocationAnalysisModal extends Component {
                   <Grid.Row>
                     <Grid.Column />
                     <Grid.Column />
-                    <Grid.Column>
+                    <Grid.Column textAlign="center">
                       <Statistic size="tiny" className="basic">
                         <Statistic.Value>$82,000/yr</Statistic.Value>
                         <Statistic.Label>Average Income</Statistic.Label>

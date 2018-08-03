@@ -32,7 +32,11 @@ class Business extends Component {
     return (
       <Aux>
         {location.pathname === '/business/how-it-works' && <Banner />}
-        <Visibility onUpdate={this.handleUpdate} continuous className="slide-down">
+        <Visibility
+          onUpdate={this.handleUpdate}
+          continuous
+          className={`slide-down ${location.pathname.split('/')[2]}`}
+        >
           <PublicSubNav
             navStatus={navStore.navStatus}
             location={location}

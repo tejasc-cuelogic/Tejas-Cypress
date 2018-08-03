@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Header, Icon, Grid, Image, Embed, List, Divider, Breadcrumb, Segment, Reveal, Modal } from 'semantic-ui-react';
+import { Route, Link, Switch } from 'react-router-dom';
+import { Header, Icon, Grid, Image, Embed, List, Divider, Breadcrumb, Segment, Reveal } from 'semantic-ui-react';
+import Loadable from 'react-loadable';
 import videoPoster from '../../../../../assets/images/636206632.webp';
 import campainAboutImg from '../../../../../assets/images/campaign_about.png';
 import teamMember1 from '../../../../../assets/images/james-wright.png';
@@ -7,15 +9,24 @@ import teamMember2 from '../../../../../assets/images/owner-1.jpg';
 import teamMember3 from '../../../../../assets/images/owner-2.jpg';
 import businessModel from '../../../../../assets/images/business_model.png';
 
+const getModule = component => Loadable({
+  loader: () => import(`../${component}`),
+  loading() {
+    return <div>Loading...</div>;
+  },
+});
+
 const nsvideos = {
   embed: '218642510',
 };
 
 class AboutCompany extends Component {
-  state = { modalOpen: false }
-  handleOpen = () => this.setState({ modalOpen: true })
-  handleClose = () => this.setState({ modalOpen: false })
   render() {
+    const navItems = [
+      { to: 'business', component: 'BusinessModal' },
+      { to: 'locationanalysis', component: 'LocationAnalysisModal' },
+      { to: 'meetourteam', component: 'MeetTeamModal' },
+    ];
     return (
       <Grid>
         <Grid.Row>
@@ -155,7 +166,7 @@ class AboutCompany extends Component {
             <div className="campaign-right-sidebar">
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section onClick={this.handleOpen}>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/meetourteam`}>
                   Meet our team
                   </Breadcrumb.Section>
                   <Breadcrumb.Divider icon="right chevron" />
@@ -225,14 +236,14 @@ class AboutCompany extends Component {
               </Segment>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section>Business Model</Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/business`}>Business Model</Breadcrumb.Section>
                   <Breadcrumb.Divider icon="right chevron" />
                 </Breadcrumb>
                 <Image src={businessModel} />
               </Segment>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section onClick={this.handleOpen}>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/locationanalysis`}>
                     Location Analysis
                   </Breadcrumb.Section>
                   <Breadcrumb.Divider icon="right chevron" />
@@ -245,59 +256,13 @@ class AboutCompany extends Component {
             </div>
           </Grid.Column>
         </Grid.Row>
-
-        <Modal
-          open={this.state.modalOpen}
-          onClose={this.handleClose}
-          closeIcon
-          size="large"
-        >
-          <Header as="h3">
-          Meet the Team
-          </Header>
-          <Modal.Content scrolling>
-            <Grid doubling columns={2} className="compact" verticalAlign="middle">
-              <Grid.Column>
-                <Image src={campainAboutImg} />
-              </Grid.Column>
-              <Grid.Column className="padded team-details-container">
-                <Header as="h3">
-                  Rassul Zainfar
-                  <Header.Subheader>co-founder & ceo</Header.Subheader>
-                </Header>
-                <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-                </p>
-                <div>
-                  <Icon color="green" name="twitter" />
-                  <Icon color="green" name="linkedin in" />
-                </div>
-              </Grid.Column>
-              <Grid.Column className="padded team-details-container">
-                <Header as="h3">
-                  Alex Grigss
-                  <Header.Subheader>co-founder & Director of projects</Header.Subheader>
-                </Header>
-                <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-                </p>
-                <div>
-                  <Icon color="green" name="twitter" />
-                  <Icon color="green" name="linkedin in" />
-                </div>
-              </Grid.Column>
-              <Grid.Column>
-                <Image src={campainAboutImg} />
-              </Grid.Column>
-            </Grid>
-          </Modal.Content>
-        </Modal>
+        <Switch>
+          {
+            navItems.map(item => (
+              <Route key={item.to} path={`${this.props.match.url}/${item.to}`} component={getModule(item.component)} />
+            ))
+          }
+        </Switch>
       </Grid>
     );
   }
