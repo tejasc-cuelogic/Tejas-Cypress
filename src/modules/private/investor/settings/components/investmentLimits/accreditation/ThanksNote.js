@@ -7,7 +7,7 @@ const ThanksNote = props => (
       <Header as="h3">Thank you! We are verifying your request</Header>
       <Divider />
     </Modal.Header>
-    <Modal.Content>
+    <Modal.Content className="center-align">
     We are processing your Accreditation request and we will <br />notify you about status changes.
     </Modal.Content>
   </Modal>

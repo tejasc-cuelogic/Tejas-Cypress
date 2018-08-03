@@ -19,7 +19,7 @@ export default class IncomeEvidence extends Component {
         <p className="center-align">You can provide evidence of accreditation either through the verification of a professional advisor or by uploading the required documents.</p>
         <Form error className="account-type-tab">
           <Grid stackable textAlign="center">
-            <Grid.Row columns={2}>
+            <Grid.Row columns={1}>
               {incEvidenceMethods.map(method => (
                 <Grid.Column
                   onClick={e => incomeEvidenceChange(e, { name: 'incEvidenceMethods', value: method.value })}
