@@ -57,6 +57,9 @@ h6{
 .mt-30 {
 	margin-top: @30px !important;
 }
+.mt-40 {
+	margin-top: @40px !important;
+}
 .mt-50 {
 	margin-top: @50px !important;
 }
@@ -124,6 +127,9 @@ a{
 	color:@link-color;
 	&:hover{
 		text-decoration:underline;
+	}
+	&.inverted{
+		color:@white;
 	}
 }
 a.text-link{
@@ -208,6 +214,7 @@ footer{
 			font-size: @16px;
 			line-height: @16px;
 			color:@neutral-middark;
+			margin-top: @3px;
 		}
 		.checkbox-group {
 			.ui.label {
@@ -235,7 +242,7 @@ footer{
 .offer-details {
     display: flex;
     flex-direction: row;
-    min-height: 100vh;
+    min-height:~"calc(100vh - 58px)";
 	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
@@ -1429,31 +1436,39 @@ ol.progtrckr{
 	}
 }
 
-// Rechart Styles
+// Rechart Styles Starts
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
-.recharts-wrapper{
-	.recharts-legend-wrapper{
-		z-index:-1;
-	}
-	.recharts-pie-sector .datavalue{
-		font-size:@20px;
-		font-weight:700;
-	}
-	tspan{
-		font-size:18px;
-		font-weight:700;
-	}
-	.chartLegends li{
-		font-size:22px;
-		span{
-			font-size:13px;
-			color:@fullBlack;
-			vertical-align:top;
+.portfolio-allocation{
+	.recharts-wrapper{
+		.recharts-legend-wrapper{
+			z-index:-1;
+		}
+		.recharts-pie-sector .datavalue{
+			font-size:@20px;
+			font-weight:@fontMedium;
+		}
+		tspan{
+			font-size:18px;
+			font-weight:@fontMedium;
+		}
+		.chartLegends li{
+			font-size:22px;
+			span{
+				font-size:13px;
+				color:@fullBlack;
+				vertical-align:top;
+			}
 		}
 	}
 }
+.payoff-chart{
+	.xAxis, .yAxis{
+		font-size:@13px;
+	}
+}
+// Rechart Styles Ends
 
 .knowledge-details{
 	position:relative;
@@ -1615,10 +1630,13 @@ p.check-extra-info{
 .or-divider{
 	.file-uploader-wrap{
 		width:360px;
-		margin-right:@40px;
+		margin:0 @40px 0 0;
 		display:inline-block;
 		vertical-align:top;
 		position:relative;
+		+ .file-uploader-wrap{
+			margin-top:0;
+		}
 		&:after{
 			content:"or";
 			font-size:@14px;

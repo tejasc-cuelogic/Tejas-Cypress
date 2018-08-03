@@ -122,6 +122,7 @@ export class BusinessAppStore {
     this.businessApplicationsList = graphql({
       client,
       query: getBusinessApplications,
+      fetchPolicy: 'network-only',
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
       },
@@ -658,7 +659,7 @@ export class BusinessAppStore {
           if (!isEmpty(partnerStatus)) {
             lendioPartners = find(partnerStatus, { partnerId: AFFILIATED_PARTNERS.LENDIO });
           }
-
+          // setting applicationid
           const applicationId = result.data.createBusinessApplicationPrequalification.id;
           this.setFieldvalue('isFetchedData', null);
           if (this.BUSINESS_APP_STATUS ===
@@ -666,7 +667,7 @@ export class BusinessAppStore {
             this.setFieldvalue('BUSINESS_APP_STEP_URL', `${applicationId}/success`);
           } else if (this.BUSINESS_APP_STATUS ===
               BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
-            const url = (isEmpty(lendioPartners) || lendioPartners.status === LENDIO.PRE_QUALIFICATION_FAILED) ? `${applicationId}/failed` : `${applicationId}/failed/lendio`;
+            const url = (isEmpty(lendioPartners) || lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_FAILED) ? `${applicationId}/failed` : `${applicationId}/failed/lendio`;
             this.setFieldvalue('BUSINESS_APP_STEP_URL', url);
           } else {
             this.setFieldvalue('BUSINESS_APP_STEP_URL', `${applicationId}/failed`);

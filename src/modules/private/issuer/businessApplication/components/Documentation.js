@@ -43,10 +43,11 @@ export default class Documentation extends Component {
                   Also provide the lease for your location. If only an LOIwith the landlord
                   is currently available, please upload the LOI for review purposes.
                   <Popup
-                    trigger={<Icon name="help circle" />}
+                    trigger={<Icon className="ns-help-circle" />}
                     content="If your campaign is successfully funded, an executed lease will be required at closing in order for you to receive funds."
                     position="top center"
                     className="center-align"
+                    wide
                   />
                 </span>
               }
