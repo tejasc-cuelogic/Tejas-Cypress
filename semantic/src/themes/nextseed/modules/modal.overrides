@@ -131,9 +131,9 @@
             top:@12px;
             left:@12px;
         }
-        .ui.header{
-            margin:0 0 @7px;
-        }
+        // .ui.header{
+        //     margin:0 0 @7px;
+        // }
         .ui.divider{
             max-width:140px;
             margin-left:auto;
@@ -248,13 +248,13 @@
             line-height:@22px;
             text-align:center;
         }
-        i.icons{
-            color:@border-color;
-            .corner.icon{
-                font-size:0.5em;
-                right:-5px;
-                bottom:-5px;
-            }
+    }
+    i.icons{
+        color:@border-color;
+        .corner.icon{
+            font-size:0.5em;
+            right:-5px;
+            bottom:-5px;
         }
     }
     .actions{

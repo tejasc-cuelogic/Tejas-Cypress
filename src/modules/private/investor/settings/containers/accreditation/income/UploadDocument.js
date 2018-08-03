@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Button, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider, Button, Confirm } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { DropZone } from '../../../../../../../theme/form';
 
@@ -32,6 +32,7 @@ export default class UploadDocument extends Component {
       <div>
         <Header as="h3" textAlign="center">Upload documents</Header>
         <p className="center-align">Upload your W2, 1040, or other IRS or foreign tax authority documents containing your salary for the past 2 years, or a letter from your lawyer, CPA, investment advisor or investment broker verifying your income.</p>
+        <Divider hidden />
         <Form error>
           <DropZone
             name="incomeDocSecondLastYear"
@@ -47,6 +48,7 @@ export default class UploadDocument extends Component {
             onremove={this.confirmRemoveDoc}
             containerclassname="fluid"
           />
+          <Divider hidden />
           <div className="center-align">
             <Button onClick={this.showThanksNote} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Confirm</Button>
           </div>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Header, Form, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { INCOME_EVIDENCE_META } from './../../../../../../../services/constants/investmentLimit';
@@ -15,7 +14,7 @@ export default class IncomeEvidence extends Component {
     } = this.props.accreditationStore;
     const incEvidenceMethods = INCOME_EVIDENCE_META.slice();
     return (
-      <Aux>
+      <div>
         <Header as="h3" textAlign="center">{ACCREDITATION_FORM.fields.accreditationMethods.value === 'income' ? 'Income evidence' : 'Assets' }</Header>
         <p className="center-align">You can provide evidence of accreditation either through the verification of a professional advisor or by uploading the required documents.</p>
         <Form error className="account-type-tab">
@@ -34,7 +33,7 @@ export default class IncomeEvidence extends Component {
             ))}
           </Grid>
         </Form>
-      </Aux>
+      </div>
     );
   }
 }

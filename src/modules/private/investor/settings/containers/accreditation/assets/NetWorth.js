@@ -11,9 +11,7 @@ export default class NetWorth extends Component {
     return (
       <div>
         <Header as="h3" textAlign="center">What is your net worth?</Header>
-        <p className="center-align">
-          My net worth is at least
-        </p>
+        <p className="center-align">My net worth is at least</p>
         <Form error className="account-type-tab">
           <FormRadioGroup
             fielddata={NET_WORTH_FORM.fields.netWorth}
