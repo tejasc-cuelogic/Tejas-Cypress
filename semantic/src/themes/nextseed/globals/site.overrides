@@ -57,6 +57,9 @@ h6{
 .mt-30 {
 	margin-top: @30px !important;
 }
+.mt-40 {
+	margin-top: @40px !important;
+}
 .mt-50 {
 	margin-top: @50px !important;
 }
@@ -211,6 +214,7 @@ footer{
 			font-size: @16px;
 			line-height: @16px;
 			color:@neutral-middark;
+			margin-top: @3px;
 		}
 		.checkbox-group {
 			.ui.label {
