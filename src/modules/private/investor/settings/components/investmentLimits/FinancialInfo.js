@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { startCase } from 'lodash';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 
@@ -42,10 +43,10 @@ export default class FinancialInfo extends Component {
                     account.accountType === 'ira' && getActiveAccountList.isIndAccExist ?
                       <Aux>
                         <Icon color="teal" className="ns-individual-line" /> Individual
-                        <Icon color="teal" className={`ns-${account.accountType}-line`} /> {account.accountType}
+                        <Icon color="teal" className={`ns-${account.accountType}-line`} /> {account.accountType.toUpperCase()}
                       </Aux> :
                       <Aux>
-                        <Icon color="teal" className={`ns-${account.accountType}-line`} /> {account.accountType}
+                        <Icon color="teal" className={`ns-${account.accountType}-line`} /> {startCase(account.accountType)}
                       </Aux>
                     }
                   </Card.Header>
@@ -72,7 +73,7 @@ export default class FinancialInfo extends Component {
                             />
                           </Statistic.Label>
                           <Statistic.Value>
-                            {Helper.CurrencyFormat(fields.currentLimitIndividualOrIra.value)}
+                            {Helper.CurrencyFormat(account.accountType === 'entity' ? fields.currentLimitEntity.value : fields.currentLimitIndividualOrIra.value)}
                           </Statistic.Value>
                         </Statistic>
                         <Divider clearing hidden />
