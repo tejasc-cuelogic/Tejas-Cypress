@@ -52,7 +52,7 @@ export default class Summary extends Component {
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Funding option</b></Table.Cell>
-                    <Table.Cell>{fundingOption.label}</Table.Cell>
+                    <Table.Cell>{fundingOption ? fundingOption.label : ''}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Your networth</b></Table.Cell>
@@ -74,7 +74,7 @@ export default class Summary extends Component {
                         <span className="negative-text"><b>Not Uploaded</b></span>}
                     </Table.Cell>
                   </Table.Row>
-                  {fundingOption.value === 0 &&
+                  {fundingOption && fundingOption.value === 0 &&
                     <Table.Row>
                       <Table.Cell><b>Bank account</b></Table.Cell>
                       <Table.Cell>{Helper.encryptNumber(bankAccountNumber)}</Table.Cell>

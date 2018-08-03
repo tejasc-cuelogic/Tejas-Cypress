@@ -9,8 +9,8 @@ const Mission = () => (
       <Container>
         <Grid centered stackable>
           <Grid.Row>
-            <Grid.Column>
-              <Header as="h2" className="caption" textAlign="center">
+            <Grid.Column textAlign="center">
+              <Header as="h2">
               Our mission is to connect businesses and<br />
               individuals to build vibrant communities.
               </Header>

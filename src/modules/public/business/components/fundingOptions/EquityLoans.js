@@ -2,9 +2,9 @@ import React from 'react';
 import { Header, Segment, Grid } from 'semantic-ui-react';
 
 const EquityLoans = () => (
-  <Grid doubling columns={2}>
+  <Grid>
     <Grid.Column>
-      <Header as="h4">EquityLoans</Header>
+      <Header as="h4">Equity Loans</Header>
       <div className="mb-10">
         <Segment attached>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet magna
