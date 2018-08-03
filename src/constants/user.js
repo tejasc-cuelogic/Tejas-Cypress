@@ -53,45 +53,20 @@ export const FILTER_META = {
     { text: 'West Virginia', value: 'west virginia' },
   ],
   businessAppSortOption: [
-    { text: 'Started date (ascending)', value: 'unlocked' },
-    { text: 'Started date (locked)', value: 'locked' },
-    { text: 'Released', value: 'released' },
+    { text: 'Started date (ascending)', value: 'asc' },
+    { text: 'Started date (descending)', value: 'desc' },
   ],
   applicationStatus: {
-    value: ['New'],
+    value: [],
     values: [
-      {
-        label: 'New',
-        value: 'New',
-      },
-      {
-        label: 'Accepted',
-        value: 'Accepted',
-      },
-      {
-        label: 'Declined',
-        value: 'Declined',
-      },
-      {
-        label: 'Reviewing',
-        value: 'Reviewing',
-      },
-      {
-        label: 'Offered',
-        value: 'Offered',
-      },
-      {
-        label: 'Deleted',
-        value: 'Deleted',
-      },
-      {
-        label: 'Unstashed',
-        value: 'Unstashed',
-      },
-      {
-        label: 'Stashed',
-        value: 'Stashed',
-      },
+      { label: 'New', value: 'New', applicable: ['completed'] },
+      { label: 'Accepted', value: 'Accepted', applicable: ['completed'] },
+      { label: 'Declined', value: 'Declined', applicable: ['completed'] },
+      { label: 'Reviewing', value: 'Reviewing', applicable: ['completed'] },
+      { label: 'Offered', value: 'Offered', applicable: ['completed'] },
+      { label: 'Unstashed', value: 'Unstashed', applicable: ['in-progress'] },
+      { label: 'Stashed', value: 'Stashed', applicable: ['in-progress'] },
+      { label: 'Deleted', value: 'Deleted', applicable: ['prequal-failed', 'in-progress', 'completed'] },
     ],
   },
 };
