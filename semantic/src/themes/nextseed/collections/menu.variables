@@ -29,7 +29,7 @@
   box-shadow @defaultDuration @defaultEasing,
   color @defaultDuration @defaultEasing
 ;
-@itemFontWeight:@normal;
+@itemFontWeight:@fontMedium;
 @itemTextColor: @textColor;
 
 /* Divider */
