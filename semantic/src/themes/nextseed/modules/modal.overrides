@@ -87,9 +87,19 @@
             padding-left:@14px;
         }
     }
-    .content.scrolling {
-        .ui.image.large {
-            min-width: 400px;
+    .content{
+        &.scrolling {
+            .ui.image.large {
+                min-width: 400px;
+            }
+        }
+        .pdf-viewer {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            > object {
+                flex: 1;
+            }
         }
     }
 }

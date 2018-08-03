@@ -13,7 +13,11 @@ class Disclosures extends Component {
         <Header as="h3">
         Disclosures
         </Header>
-        <Modal.Content scrolling />
+        <Modal.Content>
+          <div className="pdf-viewer">
+            <object width="100%" height="100%" data="https://s3.amazonaws.com/dev-cdn.nextseed.qa/welcome-packet/offeringpageignited.pdf" type="application/pdf">failed to load..</object>
+          </div>
+        </Modal.Content>
       </Modal>
     );
   }
