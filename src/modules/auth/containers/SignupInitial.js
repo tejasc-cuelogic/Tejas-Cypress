@@ -7,44 +7,44 @@ import { USER_TYPES_META } from './../../../constants/user';
 const GetBtn = ({ type }) => {
   const BtnMeta = {
     investor: { label: 'Start', to: '/auth/register-investor' },
-    bowner: { label: 'Start application process', to: '/business-application' },
+    issuer: { label: 'Start', to: '/auth/register-investor' },
   };
-  return <Button as={Link} to={BtnMeta[type].to} primary size="large" className="very relaxed" content={BtnMeta[type].label} />;
+  return <Button as={Link} to={BtnMeta[type].to} primary size="large" className="relaxed" content={BtnMeta[type].label} />;
 };
 
-@inject('authStore', 'uiStore')
+@inject('authStore')
 @observer
 class signupInitial extends Component {
-  chooseType = type => this.props.authStore.updatesignupFlow('type', type);
   render() {
     const userTypes = USER_TYPES_META.slice();
-    const selectedType = this.props.authStore.signupFlow.type;
+    const { SIGNUP_FRM, signupChange } = this.props.authStore;
+    const selectedType = SIGNUP_FRM.fields.role;
     return (
       <Modal size="tiny" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">How can NextSeed Help you?</Header>
+          <Header as="h3">How can NextSeed Help you?</Header>
           <p>Do you want to invest or apply for funding?</p>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Grid stackable textAlign="center">
             {userTypes.map(type => (
               <Grid.Column
-                onClick={() => this.chooseType(type.value)}
+                onClick={e => signupChange(e, { name: 'role', value: type.value })}
                 key={type.key}
                 computer={8}
                 tablet={16}
                 mobile={16}
               >
-                <div className={(selectedType === type.value ? 'user-type active' : 'user-type')}>
+                <div className={`user-type ${(selectedType.value === type.value ? 'active' : '')}`}>
                   <Icon className={type.icon} size="huge" />
-                  <h3>{type.text}</h3>
-                  <p>{selectedType === type.value ? type.desc : ''}</p>
+                  <h4>{type.text}</h4>
+                  <p>{selectedType.value === type.value ? type.desc : ''}</p>
                 </div>
               </Grid.Column>
             ))}
             <Grid.Row>
               <Grid.Column>
-                {selectedType ? <GetBtn type={selectedType} /> : ''}
+                {selectedType.value ? <GetBtn type={selectedType.value} /> : ''}
               </Grid.Column>
             </Grid.Row>
           </Grid>

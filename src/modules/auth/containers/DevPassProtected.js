@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Modal, Button, Form, Image, Divider } from 'semantic-ui-react';
-import activityActions from '../../../actions/activity';
-import FieldError from '../../../theme/common/FieldError';
-import Logo from '../../../assets/images/nextseed_logo_white_green.svg';
+import { Modal, Button, Form, Divider } from 'semantic-ui-react';
+import { activityActions } from '../../../services/actions';
+import { Logo, FieldError } from '../../../theme/shared';
 
-@inject('authStore', 'uiStore')
+@inject('authStore')
 @withRouter
 @observer
 class DevPassProtected extends Component {
@@ -31,7 +30,7 @@ class DevPassProtected extends Component {
     return (
       <Aux>
         <Modal size="mini" basic open className="multistep-modal">
-          <Image className="medium" centered src={Logo} alt="NextSeed.com" />
+          <Logo size="medium" centered dataSrc="LogoWhiteGreen" />
           <Divider hidden />
           <Modal.Content className="signup-modal multistep">
             <Form onSubmit={this.submit}>

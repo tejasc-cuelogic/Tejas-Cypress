@@ -3,8 +3,7 @@
  */
 import { toast } from 'react-toastify';
 import _ from 'lodash';
-// import uploadApi from '../services/uploadApi';
-import api from '../services/api';
+import apiService from '../api/restApi';
 
 export class Utility {
   // Default options for the toast
@@ -61,43 +60,25 @@ export class Utility {
   }
 
   gAddressClean = (place) => {
-    const componentsForAddress = ['route', 'sublocality_level_3', 'sublocality_level_2', 'sublocality_level_1'];
-    const componentsForCity = ['locality'];
-    const componentForState = ['administrative_area_level_1'];
-    const componentForZipCode = ['postal_code'];
-
-    const residentalStreet = [];
-    const city = [];
-    const state = [];
-    const zipCode = [];
-
-    for (let i = 0; i < place.address_components.length; i += 1) {
-      const component = place.address_components[i];
-      const addressType = component.types[0];
-
-      if (componentsForAddress.includes(addressType)) {
-        residentalStreet.push(component.long_name);
-      }
-      if (componentsForCity.includes(addressType)) {
-        city.push(component.long_name);
-      }
-      if (componentForState.includes(addressType)) {
-        state.push(component.long_name);
-      }
-      if (componentForZipCode.includes(addressType)) {
-        zipCode.push(component.long_name);
-      }
-    }
-
-    return {
-      residentalStreet: residentalStreet.join(', '),
-      city: city.join(''),
-      state: state.join(''),
-      zipCode: zipCode.join(''),
+    let result = {};
+    const addressMap = {
+      residentalStreet: ['street_number', 'route', 'sublocality_level_1', 'sublocality_level_2', 'sublocality_level_3'],
+      city: ['locality'],
+      state: ['administrative_area_level_1'],
+      zipCode: ['postal_code'],
     };
+    Object.keys(addressMap).map(aK => place.address_components.map((c) => {
+      if (_.intersection(addressMap[aK], c.types).length > 0) {
+        const addressEle = {};
+        addressEle[aK] = addressMap[aK].length > 2 && result[aK] ? `${result[aK]} ${c.long_name}` : c.long_name;
+        result = _.has(result, aK) ? addressEle : { ...result, ...addressEle };
+      }
+      return result;
+    }));
+    return result;
   }
 
-  CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
+  CurrencyFormat = (amount, f) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: typeof (f) === 'number' ? f : 2 }).format(amount)
 
   cryptedSSNNumber = (ssnNumber) => {
     const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
@@ -111,10 +92,10 @@ export class Utility {
     return encryptedNumber;
   }
 
-  getFormattedFileData = (files) => {
+  getFormattedFileData = (file) => {
     const fileData = {};
-    if (files && files.length > 0) {
-      const fileInfo = files[0];
+    if (file) {
+      const fileInfo = file;
       fileData.fileName = fileInfo.name.replace(/ /g, '_');
       fileData.fileType = fileInfo.type;
       fileData.fileExtension = fileInfo.name.substr((fileInfo.name.lastIndexOf('.') + 1));
@@ -123,20 +104,10 @@ export class Utility {
     return fileData;
   }
 
-  // uploadOnS3 = (item, fileData) => new Promise((resolve, reject) => {
-  //   uploadApi.put(item, fileData)
-  //     .then(() => {
-  //       resolve();
-  //     })
-  //     .catch((err) => {
-  //       reject(err);
-  //     });
-  // });
-
   putUploadedFile = urlArray => new Promise((resolve, reject) => {
     const funcArray = [];
     _.forEach(urlArray, (item) => {
-      funcArray.push(api.uploadOnS3(item.preSignedUrl, item.fileData[0]));
+      funcArray.push(apiService.uploadOnS3(item.preSignedUrl, item.fileData[0]));
     });
     Promise.all(funcArray).then(() => {
       resolve();

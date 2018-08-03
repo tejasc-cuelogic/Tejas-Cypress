@@ -11,7 +11,7 @@
 		transition:all .5s ease;
 		height:100vh;
 		overflow-y:auto;
-		background-color:@lighten-bg-color;
+		background-color:@neutral-offwhite;
 		.ui.vertical.segment.content{
 			padding:0;
 			min-height:~"calc(100vh - 58px)";
@@ -69,9 +69,9 @@
 				overflow: hidden;
 			}
 			&:hover, &:focus, &.active{
-				background:@light-bg-color;
+				background:@neutral-offwhite;
 				.icon:not(.dropdown){
-					color:@theme-primary;
+					color:@primary-one;
 				}
 			}
 		}
@@ -91,7 +91,7 @@
 						font-family:'Nextseed';
 						height:24px;
 						line-height:24px;
-						color:@theme-primary;
+						color:@primary-one;
 						&:before{
 							content:"\e914";
 						}
@@ -135,6 +135,17 @@
 				line-height:0;
 				margin:0;
 			}
+			.sb-avatar{
+				width:30px;
+				height:30px;
+				margin-bottom:@10px;
+				.sb-avatar__text{
+					width:30px;
+					height:30px;
+					font-size:@14px;
+					line-height:30px;
+				}
+			}
 		}
 		.item{
 			overflow:visible;
@@ -170,10 +181,22 @@
 		.user-picture{
 			text-align:left;
 			padding:@10px;
-			>img{
+			>img, .sb-avatar{
 				float:left;
 				max-width:42px;
-				margin:0 @10px 0 0;
+				margin:-@7px @10px 0 0;
+			}
+			.sb-avatar{
+				height:42px;
+				.sb-avatar__text{
+					width:42px;
+					height:42px;
+					font-size:@16px;
+					line-height:42px;
+				}
+			}
+			h3{
+				margin-bottom:@5px;
 			}
 		}
 		.ui.divider{
@@ -182,7 +205,7 @@
 		}
 		~.pusher .icon.hamburger{
 			font-size:20px;
-			color:@quaternary-text;
+			color:@neutral-middark;
 			position:absolute;
 			top:20px;
 			left:18px;
@@ -201,7 +224,7 @@
 		margin:@14px 0;
 		padding:@10px 0;
 		text-align:center;
-		color:@secondary-text;
+		color:@neutral-middark;
 		border-radius:@4px;
 		> img{
 			max-width:58px;
@@ -216,10 +239,21 @@
 		h3{
 			margin:@5px 0 0;
 			font-size:14px;
-			font-weight:700;
+			font-weight:@fontMedium;
 			color:@border-color;
 		}
-		> img, h2, h3{
+		.sb-avatar{
+			width:58px;
+			height:58px;
+			margin-bottom:@10px;
+			.sb-avatar__text{
+				width:58px;
+				height:58px;
+				font-size:@20px;
+				line-height:58px;
+			}
+		}
+		> img, h2, h3, .sb-avatar, .sb-avatar__text{
 			transition:all .5s ease;
 			white-space:nowrap;
 			overflow:hidden;
@@ -228,7 +262,7 @@
 	}
 	&.visible .user-picture{
 		&:hover{
-			background-color:@light-bg-color;
+			background-color:@neutral-offwhite;
 		}
 	}
 	~ .ui.button.collapseIcon{
@@ -236,7 +270,7 @@
 		margin:0;
 		border-radius:0;
 		background-color:@white;
-		color:@quaternary-text;
+		color:@neutral-middark;
 		text-align:left;
 		position:absolute;
 		left:0;
@@ -261,51 +295,51 @@
 		color:@white;
 	}
 	.user-picture{
-		color:@inverse-text;
+		color:@white;
 	}
 	&.visible .user-picture{
 		&:hover{
-			background-color:@secondary-text;
+			background-color:@neutral;
 		}
 	}
 	.item{
 		&:hover, &:focus, &.active, &.active:hover{
-			background-color:@secondary-text;
-			color:@theme-primary !important;
+			background-color:@neutral;
+			color:@primary-one !important;
 			.icon:not(.dropdown){
-				color:@quaternary-text;
+				color:@neutral-offdark;
 			}
 		}
 		.icon:not(.dropdown){
-			color:@quaternary-text;
+			color:@neutral-offdark;
 		}
 		&.dropdown{
 			.menu.transition{
 				.item{
 					color:@white !important;
 					&:hover, &:focus, &.active{
-						color:@theme-primary !important;
-						background-color:@secondary-text !important;
+						color:@primary-one !important;
+						background-color:@neutral !important;
 					}
 				}
 			}
 		}
 	}
 	&:not(.visible) .dropdown .menu.transition{
-		background-color:@secondary-text;
+		background-color:@neutral;
 	}
 	~ .ui.button.collapseIcon{
 		background-color:transparent;
-		color:@quaternary-text;
+		color:@neutral-middark;
 	}
-	&.bowner{
-		background-color:@primary-text;
+	&.issuer{
+		// background-color:@neutral-middark;
 		.item{
 			&:hover, &:focus, &.active, &.active:hover{
-				background-color:@secondary-text;
+				background-color:@neutral;
 				color:@white !important;
 				.icon:not(.dropdown){
-					color:@quaternary-text;
+					color:@neutral-middark;
 				}
 			}
 		}
@@ -315,7 +349,7 @@
 			}
 			.item:hover, .item:focus, .item.active{
 				color:@white !important;
-				background-color:@secondary-text !important;
+				background-color:@neutral !important;
 			}
 		}
 	}

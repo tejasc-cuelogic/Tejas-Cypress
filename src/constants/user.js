@@ -1,12 +1,12 @@
 // import moment from 'moment';
 
-export const USER_ROLES = ['admin', 'bowner', 'investor'];
+export const USER_ROLES = ['admin', 'issuer', 'investor'];
 export const USER_TYPES_META = [
   {
     key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Invest in existing businesses and get revenue',
   },
   {
-    key: 'o', icon: 'ns-business', text: 'Business Owner', value: 'bowner', desc: 'Apply for funding with your business',
+    key: 'o', icon: 'ns-business', text: 'Business Owner', value: 'issuer', desc: 'Apply for funding with your business',
   },
 ];
 
@@ -24,7 +24,7 @@ export const USER_LIST_META = [
 export const FILTER_META = {
   accountType: [
     { text: 'Admin', value: 'admin' },
-    { text: 'Business', value: 'bowner' },
+    { text: 'Business', value: 'issuer' },
     { text: 'IRA', value: 'ira' },
     { text: 'Individual', value: 'individual' },
     { text: 'Entity', value: 'entity' },
@@ -52,72 +52,6 @@ export const FILTER_META = {
     { text: 'Delaware', value: 'delaware' },
     { text: 'West Virginia', value: 'west virginia' },
   ],
-};
-/* eslint-disable */
-export const USER_POOL = {"id":"5acc7be47498ac534eed4f84","email":"pickettbryan@securia.com","firstName":"Ada","lastName":"Mccullough","createdDate":"2015-03-07T06:02:12 -06:-30","updatedDate":"2018-01-16T01:47:07 -06:-30","legalDetails":{"verificationStartDate":"2014-01-07T04:21:39 -06:-30","verificationCompletionDate":"2014-05-14T12:34:12 -06:-30","legalName":{"firstLegalName":"Tanner","lastLegalName":"Guerra"},"dateOfBirth":"02-03-1980","ssn":"145-47-8825","legalAddress":{"street1":"Willow Street","street2":"Coles Street","city":"Lisco","state":"Connecticut","zipCode":2103}},"contactDetails":{"email":{"email":"tannerguerra@securia.com","verificationDate":"2017-11-29T11:46:08 -06:-30"},"phone":{"number":"+1 (871) 523-3343"}}};
-
-export const RANDOM_USER = () => {
-  return USER_POOL;
-}
-
-export const TRANSACTION_TYPES = [
-  { text: 'Deposit', value: 'Deposit' },
-  { text: 'Withdrawal', value: 'Withdrawal' },
-  { text: 'Repayment', value: 'Repayment' },
-  { text: 'Interest Accured', value: 'InterestAccured' },
-  { text: 'Referral Credits', value: 'ReferralCredits' },
-];
-
-
-export const BENEFICIARY_FRM = {
-  firstName: {
-    value: '',
-    label: 'First name',
-    error: undefined,
-    rule: 'required',
-  },
-  lastName: {
-    value: '',
-    label: 'Last Name',
-    error: undefined,
-    rule: 'required',
-  },
-  dob: {
-    value: null,
-    label: 'Date of Birth',
-    error: undefined,
-    rule: 'required',
-  },
-  relationship: {
-    value: '',
-    label: 'Relationship to Account Holder',
-    error: undefined,
-    rule: 'required',
-  },
-  residentalStreet: {
-    value: '',
-    label: 'Residental Street',
-    error: undefined,
-    rule: 'required',
-  },
-  city: {
-    value: '',
-    label: 'City',
-    error: undefined,
-    rule: 'required',
-  },
-  state: {
-    value: '',
-    label: 'State',
-    error: undefined,
-    rule: 'required',
-  },
-  zipCode: {
-    value: '',
-    label: 'Zip Code',
-    error: undefined,
-    rule: 'required|numeric',
-  },
 };
 
 export const FIN_INFO = {
@@ -152,7 +86,7 @@ export const FIN_INFO = {
 
 export const ROLES = [
   { key: 'admin', value: 'admin', text: 'Admin' },
-  { key: 'bowner', value: 'bowner', text: 'Business Owner' },
+  { key: 'issuer', value: 'issuer', text: 'Business Owner' },
   { key: 'investor', value: 'investor', text: 'Investor' },
 ];
 
@@ -176,3 +110,7 @@ export const NEW_USER = {
     value: [], label: 'Role', error: undefined, rule: 'required',
   },
 };
+
+export const BENEFICIARY_STATUS = { PENDING: 'PENDING', APPROVED: 'APPROVED' };
+
+export const SIGNUP_REDIRECT_ROLEWISE = [{ role: 'admin', path: '/app/dashboard' }, { role: 'issuer', path: '/app/business-application/new/pre-qualification' }, { role: 'investor', path: '/app/summary/identity-verification/0' }];

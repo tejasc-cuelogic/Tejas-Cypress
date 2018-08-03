@@ -8,8 +8,8 @@ import { useStrict } from 'mobx';
 import { Provider } from 'mobx-react';
 import 'react-datepicker/dist/react-datepicker.css';
 import App from './App';
-import * as stores from './stores/stores';
-import CustomErrorBoundry from './helper/ErrorBoundry';
+import * as stores from './services/stores';
+import { ErrorBoundry as CustomErrorBoundry } from './helper';
 
 // Set the default error boundry to the customErrorBoundry
 // and reassign it if one from Bugsnag is present

@@ -29,3 +29,6 @@ src/assets/semantic/*
 
 package-lock.json
 *.js.map
+
+# ignore vscode folder
+.vscode

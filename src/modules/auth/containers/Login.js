@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import authActions from './../../../actions/auth';
-import ListErrors from '../../../theme/common/ListErrors';
-import validationActions from '../../../actions/validation';
-import FieldError from '../../../theme/common/FieldError';
+import { FormInput } from '../../../theme/form';
+import { authActions } from '../../../services/actions';
+import { ListErrors } from '../../../theme/shared';
 
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
 @withRouter
@@ -13,39 +12,46 @@ import FieldError from '../../../theme/common/FieldError';
 class Login extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
-    this.props.authStore.reset();
+    this.props.authStore.reset('LOGIN');
   }
-  handleInputChange = (e, { name, value }) => validationActions.validateLoginField(name, value);
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.login()
       .then(() => {
         const { roles } = this.props.userStore.currentUser;
+        const { redirectURL } = this.props.uiStore;
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/auth/change-password');
         } else {
           this.props.authStore.reset();
-          if (roles) {
-            if (roles[0] === 'investor') {
-              this.props.history.replace('/app/summary');
-            } else {
-              this.props.history.replace('/app/dashboard');
-            }
+          if (roles && roles.includes('investor')) {
+            this.props.history.push(`/app/${this.props.userDetailsStore.pendingStep}`);
           } else {
-            this.props.history.replace('/app/dashboard');
+            const redirectUrl = redirectURL ? redirectURL.pathname : '/app/dashboard';
+            this.props.history.push(redirectUrl);
           }
         }
       });
   };
 
   render() {
-    const { values, canLogin } = this.props.authStore;
-    const { errors } = this.props.uiStore;
-
+    const {
+      LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType, reset,
+    } = this.props.authStore;
+    const { errors, inProgress } = this.props.uiStore;
     return (
-      <Modal size="mini" open onClose={() => this.props.history.push('/')}>
+      <Modal
+        closeOnRootNodeClick={false}
+        size="mini"
+        open
+        onClose={() => {
+          reset('LOGIN');
+          this.props.history.push('/');
+          }
+        }
+      >
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Log in to NextSeed</Header>
+          <Header as="h3">Log in to NextSeed</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {errors &&
@@ -60,29 +66,21 @@ class Login extends Component {
           </Form>
           <Divider horizontal section>Or</Divider>
           <Form error onSubmit={this.handleSubmitForm}>
-            <Form.Input
-              fluid
-              label="E-mail"
-              placeholder="E-mail address"
-              name="email"
-              value={values.email.value}
-              onChange={this.handleInputChange}
-              error={!!values.email.error}
-            />
-            <FieldError error={values.email.error} />
-            <Form.Input
-              fluid
-              label="Password"
-              placeholder="Password"
-              type="password"
-              name="password"
-              value={values.password.value}
-              onChange={this.handleInputChange}
-              error={!!values.password.error}
-            />
-            <FieldError error={values.password.error} />
+            {
+              Object.keys(LOGIN_FRM.fields).map(field => (
+                <FormInput
+                  key={field}
+                  type={field === 'password' ? pwdInputType : 'email'}
+                  icon={field === 'password' ? togglePasswordType() : null}
+                  name={field}
+                  autoFocus={field === 'email'}
+                  fielddata={LOGIN_FRM.fields[field]}
+                  changed={LoginChange}
+                />
+              ))
+            }
             <div className="center-align">
-              <Button primary size="large" className="very relaxed" loading={this.props.uiStore.inProgress} disabled={canLogin}>Log in</Button>
+              <Button primary size="large" className="very relaxed" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid}>Log in</Button>
             </div>
           </Form>
         </Modal.Content>

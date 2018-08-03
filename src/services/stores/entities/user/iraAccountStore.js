@@ -1,0 +1,388 @@
+import { observable, action, computed } from 'mobx';
+import { isEmpty, find, omit } from 'lodash';
+import { DataFormatter, FormValidator } from '../../../../helper';
+import {
+  IRA_ACC_TYPES,
+  IRA_FIN_INFO,
+  IRA_IDENTITY,
+  IRA_FUNDING,
+} from '../../../../constants/account';
+import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
+import { uiStore, userStore, bankAccountStore, userDetailsStore } from '../../index';
+import { createAccount, updateAccount } from '../../queries/account';
+import { validationActions, fileUpload } from '../../../actions';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import Helper from '../../../../helper/utility';
+
+class IraAccountStore {
+  @observable FIN_INFO_FRM = FormValidator.prepareFormObject(IRA_FIN_INFO);
+  @observable IDENTITY_FRM = FormValidator.prepareFormObject(IRA_IDENTITY);
+  @observable ACC_TYPES_FRM = FormValidator.prepareFormObject(IRA_ACC_TYPES, true, true);
+  @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING, true, true);
+
+  @observable stepToBeRendered = 0;
+  @observable fundingNotSet = '';
+  @observable accountNotSet = '';
+
+  @action
+  setStepToBeRendered(step) {
+    this.stepToBeRendered = step;
+  }
+
+  @action
+  setAccountNotSet(step) {
+    this.accountNotSet = step;
+  }
+
+  @action
+  setFundingNotSet(step) {
+    this.fundingNotSet = step;
+  }
+
+  @action
+  formChange = (e, result, form) => {
+    this[form] = FormValidator.onChange(
+      this[form],
+      FormValidator.pullValues(e, result),
+    );
+  }
+
+  @action
+  finInfoChange = (values, field) => {
+    this.FIN_INFO_FRM = FormValidator.onChange(
+      this.FIN_INFO_FRM,
+      { name: field, value: values.floatValue },
+    );
+  }
+
+  @action
+  accTypesChange = (e, result) => {
+    this.formChange(e, result, 'ACC_TYPES_FRM');
+  }
+
+  @action
+  fundingChange = (e, result) => {
+    this.formChange(e, result, 'FUNDING_FRM');
+  }
+
+  @computed
+  get isValidIraForm() {
+    if (this.FUNDING_FRM.fields.fundingType.value === 0) {
+      return this.FIN_INFO_FRM.meta.isValid && this.ACC_TYPES_FRM.meta.isValid
+      && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid &&
+      (bankAccountStore.formLinkBankManually.meta.isValid || bankAccountStore.isValidLinkBank);
+    }
+    return this.FIN_INFO_FRM.meta.isValid && this.ACC_TYPES_FRM.meta.isValid
+    && this.FUNDING_FRM.meta.isValid && this.IDENTITY_FRM.meta.isValid;
+  }
+
+  @computed
+  get accountType() {
+    const { values, value } = this.ACC_TYPES_FRM.fields.iraAccountType;
+    return find(values, { value });
+  }
+
+  @computed
+  get fundingOption() {
+    const { values, value } = this.FUNDING_FRM.fields.fundingType;
+    return find(values, { value });
+  }
+
+  @computed
+  get accountAttributes() {
+    let payload = {};
+    payload = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
+    payload.identityDoc = {};
+    payload.identityDoc.fileId = this.IDENTITY_FRM.fields.identityDoc.fileId;
+    payload.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
+    payload.iraAccountType = this.accountType.rawValue;
+    payload.fundingType = this.fundingOption.rawValue;
+    if (this.fundingOption.rawValue === 'check' && !isEmpty(bankAccountStore.plaidBankDetails)) {
+      const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+      payload.iraBankDetails = plaidBankDetails;
+    } else {
+      const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
+      if (accountNumber && routingNumber) {
+        const plaidBankDetails = {
+          accountNumber: accountNumber.value,
+          routingNumber: routingNumber.value,
+        };
+        payload.iraBankDetails = plaidBankDetails;
+      }
+    }
+    return payload;
+  }
+
+  @action
+  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false) => {
+    if (formStatus === 'submit') {
+      this.submitForm(currentStep, formStatus, this.accountAttributes);
+    } else {
+      this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData);
+    }
+  }
+
+  @action
+  validateAndSubmitStep = (currentStep, formStatus, removeUploadedData) => {
+    let isValidCurrentStep = true;
+    let accountAttributes = {};
+    switch (currentStep.name) {
+      case 'Financial info':
+        currentStep.validate();
+        isValidCurrentStep = this.FIN_INFO_FRM.meta.isValid;
+        if (isValidCurrentStep) {
+          accountAttributes = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
+          this.submitForm(currentStep, formStatus, accountAttributes);
+        }
+        break;
+      case 'Account type':
+        isValidCurrentStep = true;
+        accountAttributes.iraAccountType = this.accountType ? this.accountType.rawValue : '';
+        this.submitForm(currentStep, formStatus, accountAttributes);
+        break;
+      case 'Funding':
+        isValidCurrentStep = true;
+        accountAttributes.fundingType = this.fundingOption ? this.fundingOption.rawValue : '';
+        this.submitForm(currentStep, formStatus, accountAttributes);
+        break;
+      case 'Link bank':
+        if (bankAccountStore.bankLinkInterface === 'list') {
+          currentStep.validate();
+        }
+        isValidCurrentStep = bankAccountStore.formLinkBankManually.meta.isValid ||
+          bankAccountStore.isValidLinkBank;
+        if (isValidCurrentStep) {
+          uiStore.setProgress();
+          if (!isEmpty(bankAccountStore.plaidBankDetails)) {
+            const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+            accountAttributes.iraBankDetails = plaidBankDetails;
+          } else {
+            const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
+            if (accountNumber && routingNumber) {
+              const plaidBankDetails = {
+                accountNumber: accountNumber.value,
+                routingNumber: routingNumber.value,
+              };
+              accountAttributes.iraBankDetails = plaidBankDetails;
+            }
+          }
+          this.submitForm(currentStep, formStatus, accountAttributes);
+        }
+        break;
+      case 'Identity':
+        if (removeUploadedData) {
+          accountAttributes.identityDoc = {
+            fileId: '',
+            fileName: '',
+          };
+          this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData);
+        } else {
+          currentStep.validate();
+          isValidCurrentStep = this.IDENTITY_FRM.meta.isValid;
+          if (isValidCurrentStep) {
+            uiStore.setProgress();
+            accountAttributes.identityDoc = {};
+            accountAttributes.identityDoc.fileId = this.IDENTITY_FRM.fields.identityDoc.fileId;
+            accountAttributes.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
+            this.submitForm(currentStep, formStatus, accountAttributes);
+          }
+        }
+        break;
+      default:
+        break;
+    }
+    return true;
+  }
+
+  @action
+  submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
+    uiStore.setProgress();
+    let mutation = createAccount;
+    const variables = {
+      userId: userStore.currentUser.sub,
+      accountAttributes,
+      status: formStatus,
+      accountType: 'ira',
+    };
+    let actionPerformed = 'submitted';
+    if (userDetailsStore.currentUser.data) {
+      const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'ira' });
+      if (accountDetails) {
+        mutation = updateAccount;
+        variables.accountId = accountDetails.accountId;
+        actionPerformed = 'updated';
+      }
+    }
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation,
+          variables,
+        })
+        .then(action((result) => {
+          if (result.data.createInvestorAccount || formStatus === 'submit') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
+          }
+          if (currentStep.name === 'Identity') {
+            if (removeUploadedData) {
+              validationActions.validateIRAIdentityInfo();
+            } else {
+              FormValidator.setIsDirty(this[currentStep.form], false);
+              this.setStepToBeRendered(currentStep.stepToBeRendered);
+            }
+          } else if (formStatus !== 'submit') {
+            if (currentStep.name !== 'Link bank') {
+              FormValidator.setIsDirty(this[currentStep.form], false);
+            }
+            this.setStepToBeRendered(currentStep.stepToBeRendered);
+          }
+          if (formStatus === 'submit') {
+            Helper.toast('IRA account created successfully.', 'success');
+          } else {
+            Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+          }
+          resolve(result);
+        }))
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  populateData = (userData) => {
+    if (!isEmpty(userData)) {
+      const account = find(userData.accounts, { accountType: 'ira' });
+      if (account) {
+        this.setFormData('FIN_INFO_FRM', account.accountDetails);
+        this.setFormData('FUNDING_FRM', account.accountDetails);
+        this.setFormData('ACC_TYPES_FRM', account.accountDetails);
+        this.setFormData('IDENTITY_FRM', account.accountDetails);
+        if (account.accountDetails.iraBankDetails &&
+          account.accountDetails.iraBankDetails.plaidItemId) {
+          bankAccountStore.setPlaidBankDetails(account.accountDetails.iraBankDetails);
+        } else {
+          Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
+            const { accountDetails } = account;
+            if (accountDetails.iraBankDetails && accountDetails.iraBankDetails[f] !== '') {
+              bankAccountStore.formLinkBankManually.fields[f].value =
+              accountDetails.iraBankDetails[f];
+              return bankAccountStore.formLinkBankManually.fields[f];
+            }
+            return null;
+          });
+          if (account.accountDetails.iraBankDetails && account.accountDetails.iraBankDetails.routingNumber !== '' &&
+          account.accountDetails.iraBankDetails.accountNumber !== '') {
+            bankAccountStore.linkBankFormChange();
+          }
+        }
+
+        const getIraStep = AccCreationHelper.iraSteps();
+        if (!this.FIN_INFO_FRM.meta.isValid) {
+          this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
+        } else if (!this.ACC_TYPES_FRM.meta.isValid || this.accountNotSet) {
+          this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
+        } else if (!this.FUNDING_FRM.meta.isValid || this.fundingNotSet) {
+          this.setStepToBeRendered(getIraStep.FUNDING_FRM);
+        } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
+          !bankAccountStore.formLinkBankManually.meta.isValid &&
+          isEmpty(bankAccountStore.plaidBankDetails)) {
+          this.setStepToBeRendered(getIraStep.LINK_BANK);
+        } else if (!this.IDENTITY_FRM.meta.isValid) {
+          if (this.FUNDING_FRM.fields.fundingType.value === 0) {
+            this.setStepToBeRendered(4);
+          } else {
+            this.setStepToBeRendered(getIraStep.IDENTITY_FRM);
+          }
+        } else if (this.FUNDING_FRM.fields.fundingType.value === 0) {
+          this.setStepToBeRendered(5);
+        } else {
+          this.setStepToBeRendered(getIraStep.summary);
+        }
+      }
+    }
+  }
+
+  @action
+  setFormData = (form, accountDetails) => {
+    let isDirty = false;
+    Object.keys(this[form].fields).map((f) => {
+      if (form === 'FIN_INFO_FRM') {
+        this[form].fields[f].value = accountDetails[f];
+      } else if (form === 'IDENTITY_FRM') {
+        if (accountDetails[f]) {
+          this.IDENTITY_FRM.fields[f].value = accountDetails[f].fileName;
+          this.IDENTITY_FRM.fields[f].fileId = accountDetails[f].fileId;
+        }
+      } else if (form === 'FUNDING_FRM' || form === 'ACC_TYPES_FRM') {
+        let value = '';
+        if (form === 'FUNDING_FRM') {
+          value = AccCreationHelper.getFundingTypeIndex(accountDetails[f]);
+        } else {
+          value = AccCreationHelper.getAccountTypeIndex(accountDetails[f]);
+        }
+        if (value !== '') {
+          this[form].fields[f].value = value;
+          if (form === 'FUNDING_FRM') {
+            this.setFundingNotSet(false);
+          } else {
+            this.setAccountNotSet(false);
+          }
+        } else {
+          if (form === 'FUNDING_FRM') {
+            this.setFundingNotSet(true);
+          } else {
+            this.setAccountNotSet(true);
+          }
+          this[form].fields[f].value = 0;
+          isDirty = true;
+        }
+      }
+      return this[form].fields[f];
+    });
+    FormValidator.onChange(this[form], '', '', isDirty);
+  }
+
+  @action
+  setFileUploadData = (field, files) => {
+    const file = files[0];
+    const fileData = Helper.getFormattedFileData(file);
+    fileUpload.setFileUploadData('', fileData, 'ACCOUNT_IRA_CREATION_CIP', 'INVESTOR').then(action((result) => {
+      const { fileId, preSignedUrl } = result.data.createUploadEntry;
+      this.IDENTITY_FRM.fields[field].fileId = fileId;
+      this.IDENTITY_FRM.fields[field].preSignedUrl = preSignedUrl;
+      this.IDENTITY_FRM.fields[field].fileData = file;
+      this.IDENTITY_FRM = FormValidator.onChange(
+        this.IDENTITY_FRM,
+        { name: field, value: fileData.fileName },
+      );
+      uiStore.setProgress();
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+        .then(() => {
+        })
+        .catch((err) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setProgress(false);
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        });
+    }));
+  }
+
+  @action
+  removeUploadedData = (field) => {
+    const currentStep = { name: 'Identity' };
+    const { fileId } = this.IDENTITY_FRM.fields[field];
+    fileUpload.removeUploadedData(fileId).then(action(() => {
+      this.IDENTITY_FRM.fields[field].value = '';
+      this.IDENTITY_FRM.fields[field].fileId = '';
+      this.IDENTITY_FRM.fields[field].preSignedUrl = '';
+      this.createAccount(currentStep, 'draft', true);
+    }))
+      .catch(() => { });
+  }
+}
+export default new IraAccountStore();

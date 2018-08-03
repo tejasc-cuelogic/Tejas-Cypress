@@ -9,6 +9,87 @@
         margin:0 !important;
     }
 }
+//  Public pages Starts
+.ui.modal{
+    i.icon.close:before {
+        content: '\e950';
+        font-family: 'nextseed';
+    }
+    .team-details-container {
+        .ui.header {
+            position: relative;
+            margin-bottom: 34px;
+            .sub.header {
+                text-transform: uppercase;
+                font-weight: @bold;
+                line-height: 28px;
+                font-size: @13px;
+                color: @neutral-middark;
+            }
+            &:after {
+                content: "";
+                height: 6px;
+                background: @neutral-offdark;
+                width: 145px;
+                position: absolute;
+                bottom: -20px;
+            }
+        }
+        &.content {
+            .scrollable-content {
+                max-height: 50vh;
+                overflow-y: auto; 
+                padding: @20px;
+            }
+            h4.ui.header:after {
+                height: 2px;
+                bottom: -13px;
+            }
+        }
+    }
+    .ui.items>.item>.image+.content.team-details-container {
+        padding: 2.85714286rem 1.42857143rem;
+    }
+    &.team-member-modal {
+        .content {
+            padding: 0;
+            border-radius: 0;
+        }
+        .item {
+            .image {
+                width: 50%;
+                +.team-details-container.content {
+                    padding: @40px @20px;
+                }
+            }
+        }
+    }
+    .ui.grid.compact {
+        padding: @25px 0 @30px;
+        >.column:not(.row) {
+            padding: 0;
+        }
+        >.column {
+            &.padded {
+                padding: @30px;
+            }
+        }
+    }
+    .demographics {
+        margin: @10px;
+    }
+    &.share-modal {
+        >.header {
+            border: none;
+            color:@neutral-middark;
+        }
+        .ui.action.input input{
+            padding-left:@14px;
+        }
+    }
+}
+//  Public pages Ends
+
 .ui.modal{
     &.mini{
         @media only screen and (min-width:@tabletBreakpoint){
@@ -34,7 +115,7 @@
         top:@7px;
         right:@7px;
         opacity:0.5;
-        color:@quaternary-text;
+        color:@neutral-middark;
         @media only screen and (max-width:@largestMobileScreen){
             top:.25rem !important;
             right:.25rem !important;
@@ -59,15 +140,14 @@
             margin-right:auto;
         }
         p{
-            font-family:@pageFont;
-            font-weight:500;
             font-size:@14px;
-            color:@secondary-text;
+            font-weight:@normal;
+            color:@neutral-middark;
         }
     }
-    h4.ui.header{
-        font-weight:400;
-    }
+    // h4.ui.header{
+    //     font-weight:400;
+    // }
     > .content{
         padding-top:@20px;
         &.login-modal{
@@ -76,14 +156,24 @@
         &.signup-content{
             // padding-top:0;
             padding-bottom:@20px;
+            .ui.header{
+                >.icon{
+                    display:inline-block;
+                    margin:0 0 0 0.25em;
+                }
+                .sub.header{
+                    font-weight:@normal;
+                }
+            }
         }
         .user-type{
             height:100%;
+            min-height:165px;
             padding:@14px;
             border-radius:@defaultBorderRadius * 1.5;
-            border:darken(@light-bg-color, 9%) 1px solid;
+            border:darken(@neutral-offwhite, 9%) 1px solid;
             cursor:pointer;
-            h3{
+            h4{
                 margin:@7px 0;
             }
             p{
@@ -91,9 +181,9 @@
                 color:@fullBlack;
             }
             &:hover, &:focus, &.active{
-                border-color:@theme-primary-darken;
+                border-color:@primary-one-darken;
                 i.icon{
-                    color:@theme-primary-darken;
+                    color:@primary-one-darken;
                 }
             }
         }
@@ -111,11 +201,12 @@
             display:inline-block;
             background:transparent;
             font-size:@16px;
-            color:@quaternary-text;
+            color:@neutral-middark;
             text-transform:none;
+            box-shadow:none;
         }
         a.theme-link, .button.theme-link{
-            color:@theme-primary;
+            color:@primary-one;
         }
         .display-only input[type=tel]:read-only,
         .display-only input[type=email]:read-only,
@@ -128,6 +219,7 @@
             padding:@14px @20px;
             margin-bottom:@10px;
             font-size:@20px;
+            font-weight:@fontMedium;
             text-align:center;
             border:none;
             border-bottom:@border-light 1px solid;
@@ -139,7 +231,7 @@
         input[type=email].display-only:not(:read-only){
             background-color:@white;
             &:focus{
-                border-color:@theme-primary;
+                border-color:@primary-one;
                 outline:none;
             }
         }
@@ -149,6 +241,11 @@
         &.relaxed{
             padding:@50px @70px;
         }
+        .option-details{
+            padding:@14px 0;
+            line-height:@22px;
+            text-align:center;
+        }
     }
     .actions{
         font-size:@14px;
@@ -156,11 +253,11 @@
             padding-top:0;
             text-align:center;
             border:none;
-            background-color:@inverse-text;
+            background-color:@white;
         }
     }
     .ui.divider{
-        color:@quaternary-text;
+        color:@neutral-middark;
         &:before, &:after{
             background:none;
         }
@@ -195,7 +292,7 @@
             padding:@18px @25px;
             margin-bottom:@18px;
             text-align:left;
-            background-color:@lighten-bg-color;
+            background-color:@neutral-offwhite;
             .ui.header{
                 margin-bottom:@12px;
             }
@@ -221,11 +318,12 @@
 
 //  Multistep form Modal styles
 .ui.modal.basic.multistep-modal{
-    color:@primary-text;
+    color:@neutral;
     will-change:auto;
     >.close{
         height:30px;
         width:30px;
+        font-size:1em;
         line-height:30px;
         padding:0;
         margin:0;
@@ -234,7 +332,7 @@
         top:1rem;
         right:1rem;
         @media only screen and (max-width:@largestTabletScreen){
-            color:@quaternary-text;
+            color:@neutral-middark;
         }
     }
     .ui.header{
@@ -246,8 +344,8 @@
         position:relative;
         padding:@50px @70px;
         .field-wrap{
-            margin:@30px auto;
-            h5{
+            h6{
+                font-weight:@fontMedium;
                 margin-bottom:@10px;
             }
             >.fields:last-child, .field:last-child{
@@ -255,12 +353,12 @@
             }
             .field.readonly{
                 label, input{
-                    color:@quaternary-text;
+                    color:@neutral-middark;
                     border-color:transparent;
                 }
             }
             .table-wrapper table{
-                color:@quaternary-text;
+                color:@neutral-middark;
                 td > b{
                     color:@fullBlack;
                 }
@@ -268,11 +366,6 @@
                     font-weight:700;
                 }
             }
-        }
-        .option-details{
-            padding:@14px 0;
-            line-height:@22px;
-            text-align:center;
         }
         .summary-wrap{
             text-align:center;
@@ -306,11 +399,21 @@
                 }
             }
         }
+        .ui.header{
+            >.icon{
+                display:inline-block;
+                margin:0 0 0 0.25em;
+            }
+            .sub.header{
+                font-weight:@normal;
+            }
+        }
     }
 }
 .field-wrap{
+    margin:@30px auto;
     padding:@25px @60px;
-    background:@lighten-bg-color;
+    background:@neutral-offwhite;
     @media only screen and (max-width:@largestMobileScreen){
         padding:@25px;
     }
@@ -370,16 +473,15 @@
 .transaction-detials{
     .title-meta{
         margin-left:1.5rem;
-        font-size:0.5833334em;
+        font-size:@14px;
+        font-weight:@fontMedium;
         color:@tertiary-text;
-        vertical-align:top;
+        vertical-align:middle;
         i.icon{
             font-size:1.428571em;
             line-height:1;
             color:@highlight-tertiary;
-        }
-        a{
-            vertical-align:top;
+            vertical-align:middle;
         }
     }
     .ui.card .update-list{

@@ -3,22 +3,22 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button, Checkbox } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
-import { FormInput, FormDropDown } from '../../../../../theme/form/FormElements';
-import FormElementWrap from '../../../../private/businessApplication/components/FormElementWrap';
+import { FormInput, FormDropDown } from '../../../../../theme/form';
+import FormElementWrap from '../../../../private/issuer/businessApplication/components/FormElementWrap';
 
-@inject('newBusinessStore')
+@inject('businessAppStore')
 @observer
 export default class Application extends Component {
   submit = (e) => {
     e.preventDefault();
-    this.props.newBusinessStore.businessLendioPreQual();
+    this.props.businessAppStore.businessLendioPreQual();
     Helper.toast('Business pre-qualification request submitted!', 'success');
     this.props.history.push('/business-application/success/lendio');
   }
   render() {
     const {
       LENDIO_QUAL_FRM, lendioEleChange,
-    } = this.props.newBusinessStore;
+    } = this.props.businessAppStore;
     const { fields } = LENDIO_QUAL_FRM;
     return (
       <Grid.Column className="issuer-signup">

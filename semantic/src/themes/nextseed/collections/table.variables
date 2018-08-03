@@ -40,14 +40,14 @@
 /* Table Header */
 @headerBorder:1px solid @internalBorderColor;
 @headerDivider: none;
-@headerBackground: @inverse-text;
+@headerBackground: @white;
 @headerAlign: inherit;
 @headerVerticalAlign: inherit;
 @headerColor: @textColor;
 @headerVerticalPadding: @cellVerticalPadding;
 @headerHorizontalPadding: @cellHorizontalPadding;
 @headerFontStyle: none;
-@headerFontWeight: 500;
+@headerFontWeight: @normal;
 @headerTextTransform: none;
 @headerBoxShadow: none;
 
@@ -61,8 +61,8 @@
 @footerColor: @textColor;
 @footerVerticalPadding: @cellVerticalPadding;
 @footerHorizontalPadding: @cellHorizontalPadding;
-@footerFontStyle: normal;
-@footerFontWeight: 500;
+@footerFontStyle: @normal;
+@footerFontWeight: @fontMedium;
 @footerTextTransform: none;
 
 /* Responsive Size */
@@ -73,6 +73,7 @@
 @responsiveCellVerticalPadding: 0.25em;
 @responsiveCellHorizontalPadding: 0.75em;
 @responsiveCellBoxShadow: none !important;
+@responsiveCellHeaderFontWeight: @bold;
 
 /*-------------------
        Types
@@ -83,15 +84,15 @@
 
 @definitionHeaderBackground: transparent;
 @definitionHeaderColor: @unselectedTextColor;
-@definitionHeaderFontWeight: normal;
+@definitionHeaderFontWeight: @normal;
 
 @definitionFooterBackground: @definitionHeaderBackground;
 @definitionFooterColor: @definitionHeaderColor;
 @definitionFooterFontWeight: @definitionHeaderFontWeight;
 
-@definitionColumnBackground: @subtleTransparentBlack;
-@definitionColumnFontWeight: bold;
-@definitionColumnColor: @selectedTextColor;
+@definitionColumnBackground: transparent;
+@definitionColumnFontWeight: @normal;
+@definitionColumnColor: @neutral-middark;
 @definitionColumnFontSize: @relativeMedium;
 @definitionColumnTextTransform: '';
 @definitionColumnBoxShadow: '';
@@ -182,13 +183,13 @@
 @sortableIconDescending: '\f0d7';
 @sortableDisabledColor: @disabledTextColor;
 
-@sortableHoverBackground:'';
+@sortableHoverBackground: @transparentBlack;
 @sortableHoverColor: @hoveredTextColor;
 
-@sortableActiveBackground:'';
+@sortableActiveBackground: transparent;
 @sortableActiveColor: @selectedTextColor;
 
-@sortableActiveHoverBackground:'';
+@sortableActiveHoverBackground: @transparentBlack;
 @sortableActiveHoverColor: @selectedTextColor;
 
 @sortableInvertedBorderColor: transparent;
@@ -213,7 +214,7 @@
 
 @invertedDefinitionColumnBackground: @subtleTransparentWhite;
 @invertedDefinitionColumnColor: @invertedSelectedTextColor;
-@invertedDefinitionColumnFontWeight: bold;
+@invertedDefinitionColumnFontWeight: @bold;
 
 /* Basic */
 @basicTableBackground: transparent;
@@ -235,7 +236,7 @@
 
 /* Compact */
 @compactVerticalPadding: 0.5em;
-@compactHorizontalPadding:@relative10px;
+@compactHorizontalPadding: 0.7em;
 @veryCompactVerticalPadding: 0.4em;
 @veryCompactHorizontalPadding: 0.6em;
 

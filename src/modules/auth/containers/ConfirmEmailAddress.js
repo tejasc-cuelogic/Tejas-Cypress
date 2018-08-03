@@ -1,65 +1,64 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import cookie from 'react-cookies';
 import { Link, withRouter } from 'react-router-dom';
+import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-
-import validationActions from '../../../actions/validation';
-import authActions from '../../../actions/auth';
-import { FormInput } from '../../../theme/form/FormElements';
-import ListErrors from '../../../theme/common/ListErrors';
+import { authActions, validationActions } from '../../../services/actions';
+import { FormInput } from '../../../theme/form';
+import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
+import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 
-@inject('authStore', 'uiStore', 'userStore', 'profileStore')
+@inject('authStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
+  componentWillMount() {
+    const { CONFIRM_FRM } = this.props.authStore;
+    const credentials = cookie.load('USER_CREDENTIALS');
+    CONFIRM_FRM.fields.email.value = credentials.email;
+    CONFIRM_FRM.fields.password.value = atob(credentials.password);
+  }
+  componentWillUnmount() {
+    cookie.remove('USER_CREDENTIALS', { maxAge: 300 });
+  }
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
 
   handleSubmitForm = (e) => {
     e.preventDefault();
-    this.props.profileStore.setReSendVerificationCode(false);
-    validationActions.validateConfirmEmailAddressForm();
-    if (this.props.authStore.canSubmitEmailAddressVerification) {
-      if (this.props.userStore.currentUser) {
-        this.props.profileStore.verifyAndUpdateEmail().then(() => {
-          Helper.toast('Email has been verified and updated', 'success');
-          this.props.history.push('/app/profile-settings/profile-data');
+    this.props.authStore.setProgress('confirm');
+    if (this.props.refLink) {
+      this.props.authStore.verifyAndUpdateEmail().then(() => {
+        Helper.toast('Email has been verified and updated', 'success');
+        this.props.history.push('/app/profile-settings/profile-data');
+      })
+        .catch(() => { });
+    } else {
+      authActions.confirmCode()
+        .then(() => {
+          this.props.authStore.reset('CONFIRM');
+          const { roles } = this.props.userStore.currentUser;
+          const redirectUrl = !roles ? '/auth/login' :
+            SIGNUP_REDIRECT_ROLEWISE.find(user =>
+              roles.includes(user.role)).path;
+          this.props.history.replace(redirectUrl);
         })
-          .catch(() => { });
-      } else {
-        authActions.confirmCode()
-          .then(() => {
-            this.props.authStore.reset();
-            const { roles } = this.props.userStore.currentUser;
-            if (roles) {
-              if (roles[0] === 'investor') {
-                this.props.history.replace('/app/summary');
-              } else {
-                this.props.history.replace('/app/dashboard');
-              }
-            } else {
-              this.props.history.replace('/app/login');
-            }
-          })
-          .catch(() => { });
-      }
+        .catch(() => { });
     }
   }
 
   handleCloseModal = () => {
-    if (this.props.refLink) {
-      this.props.history.push(this.props.refLink);
-    } else {
-      this.props.history.push('/');
-    }
+    this.props.authStore.reset('CONFIRM');
+    this.props.history.push(this.props.refLink || '/');
     this.props.uiStore.clearErrors();
   }
 
   handleResendCode = () => {
-    this.props.profileStore.setReSendVerificationCode(true);
+    this.props.authStore.setProgress('resend');
     if (this.props.refLink) {
-      this.props.profileStore.requestEmailChange().then(() => {
+      this.props.authStore.requestEmailChange().then(() => {
         Helper.toast('Re-sent the verification code', 'success');
       })
         .catch(() => {});
@@ -71,22 +70,23 @@ export default class ConfirmEmailAddress extends Component {
   render() {
     const changeEmailAddressLink = this.props.refLink ?
       this.props.refLink : '/auth/register-investor';
-    const { values } = this.props.authStore;
-    const { errors } = this.props.uiStore;
+    const { CONFIRM_FRM, ConfirmChange, confirmProgress } = this.props.authStore;
+    const { errors, inProgress } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
+      <Modal size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Confirm your email address</Header>
+          <Header as="h3">Confirm your email address</Header>
           <Divider />
           <p>Please check the verification code in the email we sent to:</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput
-            fluid
-            size="huge"
+            ishidelabel
             type="email"
-            value={values.email.value}
-            fielddata={values.email}
+            size="huge"
+            name="email"
+            fielddata={CONFIRM_FRM.fields.email}
+            changed={ConfirmChange}
             readOnly
             className="display-only"
           />
@@ -96,20 +96,20 @@ export default class ConfirmEmailAddress extends Component {
               <ListErrors errors={[errors.message]} />
             </Message>
           }
-          <Form error onSubmit={this.handleSubmitForm}>
-            <FormInput
-              name="code"
-              size="huge"
-              containerclassname="otp-field"
-              fielddata={values.code}
-              maxLength={6}
-              changed={this.handleInputChange}
+          <Form onSubmit={this.handleSubmitForm}>
+            <ReactCodeInput
+              fields={6}
+              type="number"
+              filterChars
+              className="otp-field"
+              fielddata={CONFIRM_FRM.fields.code}
+              onChange={ConfirmChange}
             />
             <div className="center-align">
-              <Button primary size="large" className="very relaxed" loading={!this.props.profileStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!this.props.authStore.canSubmitEmailAddressVerification}>Confirm</Button>
+              <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!CONFIRM_FRM.meta.isValid}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Button type="button" className="cancel-link" loading={this.props.profileStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
+              <Button type="button" className="cancel-link" loading={confirmProgress === 'resend' && inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
             </div>
           </Form>
         </Modal.Content>

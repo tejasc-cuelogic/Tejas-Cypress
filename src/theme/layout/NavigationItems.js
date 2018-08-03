@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Container, Icon, Image, Menu, Dropdown, Label } from 'semantic-ui-react';
+import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
-import LogoC from '../../assets/images/nextseed_logo_color.svg';
-import LogoW from '../../assets/images/nextseed_logo_white_green.svg';
-import LogoNsAndLendio from '../../assets/images/nextseed_and_lendio.svg';
+import { Logo } from '../shared';
 
 @withRouter
 export class NavItems extends Component {
@@ -19,16 +17,10 @@ export class NavItems extends Component {
   isActive = (to, location, app) => (to !== '' && this.state.active === to) || location.pathname.startsWith(`/${app}/${to}`);
   render() {
     const {
-      location,
-      isApp,
-      refLoc,
+      location, isApp, roles, match,
     } = this.props;
     const app = (isApp) ? 'app' : '';
-    const myNavItems = [...this.props.navItems];
-    if (refLoc === 'public') {
-      const kickMe = this.props.currentUser ? 4 : 5;
-      myNavItems.splice(kickMe, 1);
-    }
+    const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
     return myNavItems.map(item => (
       <Aux>
         {(item.subPanel === 1 && item.subNavigations) ? (
@@ -43,7 +35,9 @@ export class NavItems extends Component {
                 {item.icon &&
                   <Icon className={item.icon} />
                 }
-                <span>{item.title}</span>
+                <span>
+                  {typeof item.title === 'object' && roles ? item.title[roles[0]] : item.title}
+                </span>
               </Aux>
             }
           >
@@ -64,7 +58,7 @@ export class NavItems extends Component {
             key={item.to}
             name={item.to}
             as={NavLink}
-            to={`${(isApp) ? '/app' : ''}/${item.to}`}
+            to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
           >
             {item.icon &&
               <Icon className={item.icon} />
@@ -80,21 +74,28 @@ export class NavItems extends Component {
   }
 }
 
-const getLogo = path => (path.includes('/lendio') ? LogoNsAndLendio : (
-  (path.includes('business-application') ? LogoW : LogoC)
+const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
+  // (path.includes('business-application') || path.includes('offerings') ? '' : 'LogoColor')
+  (path.includes('business-application') ? 'LogoWhite' : 'LogoColor')
 ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
 export const NavigationItems = props => (
-  <Menu borderless inverted={props.location.pathname.includes('/business-application')} fixed="top" size="large">
+  <Menu
+    stackable
+    borderless
+    inverted={!props.location.pathname.includes('/offerings')}
+    fixed="top"
+    className={props.navStatus === 'sub' ? 'slide-up' : ''}
+  >
     <Container fluid>
       <Menu.Item as={Link} to="/" header>
-        <Image
+        <Logo
           size="small"
-          src={getLogo(props.location.pathname)}
-          style={getLogoStyle(props.location.pathname)}
           alt="NextSeed.com"
+          dataSrc={getLogo(props.location.pathname)}
+          style={getLogoStyle(props.location.pathname)}
         />
       </Menu.Item>
       <Menu.Menu position="right">
@@ -102,6 +103,9 @@ export const NavigationItems = props => (
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
       </Menu.Menu>
+      <Menu.Item as={Link} to="/auth/login">
+        <Button secondary compact>Sign Up/Log In</Button>
+      </Menu.Item>
     </Container>
   </Menu>
 );

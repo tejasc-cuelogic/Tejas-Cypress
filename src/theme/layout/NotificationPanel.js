@@ -1,73 +1,95 @@
-import React from 'react';
-import _ from 'lodash';
-import Aux from 'react-aux';
-import { Divider, Icon, Button, Dropdown, Accordion } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
+import { Header, Icon, Message, Button } from 'semantic-ui-react';
 
-const notificationPanel = (props) => {
-  const { activeIndex } = 0;
-
-  const Notifications = {
-    set_up_your_account: [
-      { time: '2 mins ago', operation: 'Connect your', module: 'Bank Account' },
-      { time: '1 day ago', operation: 'Complete your', module: 'SSN number' },
-    ],
-    new_account_activity: [
-      {
-        time: '2 mins ago', who: 'Bravery', operation: 'has sent', module: 'a new repayment', money: '8459.78',
-      },
-      {
-        time: '1 day ago', who: 'Pokeology', operation: 'has achieved', module: 'minimum raise',
-      },
-      {
-        time: '2 days ago', who: 'Pokeology', operation: 'has added', module: 'New Update',
-      },
-    ],
-  };
-
-  const NotificationActions = (
-    <Dropdown icon={{ className: 'ns-ellipsis' }} pointing="right" className="icon pull-right">
-      <Dropdown.Menu>
-        <Dropdown.Item text="Remind me later" />
-        <Dropdown.Item text="Dismiss" />
-      </Dropdown.Menu>
-    </Dropdown>
-  );
-
-  return (
-    <div className={`notification-panel ${(props.status) ? 'slide-in animating' : ''}`}>
-      <h3>Notifications center</h3>
-      {
-        Object.keys(Notifications).map((item, key) => (
-          <Aux key={item}>
-            <p className="title">{_.replace(item, '_', '')}</p>
-            { _.map(Notifications[item], notification => (
-              <div className="notification-box" key={notification.module}>
-                <span className="timestamp">{notification.time}</span>
-                {NotificationActions}
-                <Divider clearing hidden />
-                <Accordion inverted>
-                  <Accordion.Title index={0} onClick={this.handleClick}>
-                    <strong>{notification.who}</strong> {notification.operation}
-                    <strong> {notification.module}</strong>
-                    <Icon className="ns-chevron-down" />
-                  </Accordion.Title>
-                  <Accordion.Content active={activeIndex === 0}>
-                    <p>Lorem ipsum doller sit amit, Pokeology has achieved minimum raise</p>
-                  </Accordion.Content>
-                </Accordion>
-                {notification.money &&
-                  <Button inverted size="small" primary className="link-button"><Icon className="ns-line-chart" />See full portfolio stats</Button>
-                }
-              </div>
-            ))}
-            {key < Object.keys(Notifications).length - 1 &&
-              <Divider inverted section />
-            }
-          </Aux>
-          ))
-      }
-    </div>
-  );
+const Notifications = {
+  set_up_your_account: [
+    {
+      id: 1, time: '2 mins ago', operation: 'Connect your', module: 'Bank Account',
+    },
+    {
+      id: 2, time: '1 day ago', operation: 'Complete your', module: 'SSN number',
+    },
+    {
+      id: 3, time: '15 mins ago', who: 'Mob Cycle', operation: 'has achieved', module: 'minimum raise', icon: 'ns-bar-line-chart',
+    },
+    {
+      id: 4, time: 'Yesterday', who: 'Mob Cycle', operation: 'has sent', module: 'a new repayment', money: '233.50', icon: 'ns-cash-dollar',
+    },
+    {
+      id: 5, time: '5/5/2018', operation: 'You have a', what: 'new message', from: 'from', module: 'NextSeed', icon: 'ns-envelope-line',
+    },
+  ],
 };
+@inject('uiStore')
+@observer
+class notificationPanel extends Component {
+  state = { notifications: Notifications };
+  dismiss = (index, action) => {
+    const { notifications } = this.state;
+    if (action === 0) {
+      notifications.set_up_your_account[index].confirmDismiss = false;
+    } else if (action === 1) {
+      notifications.set_up_your_account[index].confirmDismiss = true;
+    } else if (action === 2) {
+      notifications.set_up_your_account.splice(index, 1);
+    }
+    this.setState({ notifications });
+  }
+  render() {
+    const { layoutState } = this.props.uiStore;
+    return (
+      <div className={`notification-panel ${(layoutState.notificationPanel) ? 'slide-in' : ''}`}>
+        <Header as="h4" inverted>
+          Notifications center
+          <Header.Subheader as={Button} className="link-button">
+            <Icon onClick={() => this.props.uiStore.updateLayoutState('notificationPanel')} className="ns-close-light" />
+          </Header.Subheader>
+        </Header>
+        {
+          Object.keys(this.state.notifications).map(item => (
+            <div className="notification-wrap" key={item}>
+              { Notifications[item].map((notification, key) => (
+                <Message icon onDismiss={this.handleDismiss} key={notification.module}>
+                  <Message.Content>
+                    <span className="timestamp">{notification.time}</span>
+                    <Button icon className="link-button close" onClick={() => this.dismiss(key, 1)}>
+                      <Icon className="ns-close-light" />
+                    </Button>
+                    <Message.Header>
+                      <b>{notification.who}</b> {notification.operation} <b>{notification.what}</b> {notification.from} {' '}
+                      <b>{notification.module}</b>
+                    </Message.Header>
+                    {notification.money &&
+                      <Header as="h3">${notification.money}</Header>
+                    }
+                    <Link to="/dashboard" className="link">See Details</Link>
+                  </Message.Content>
+                  {notification.icon &&
+                    <Icon className={notification.icon} />
+                  }
+                  {notification.confirmDismiss &&
+                    <div className="confirm-dismiss">
+                      <p>Would you like to remove this notification?</p>
+                      <Button.Group fluid>
+                        <Button onClick={() => this.dismiss(key, 2)} compact color="red">
+                          Remove
+                        </Button>
+                        <Button onClick={() => this.dismiss(key, 0)} compact inverted basic>
+                          Cancel
+                        </Button>
+                      </Button.Group>
+                    </div>
+                  }
+                </Message>
+              ))}
+            </div>
+            ))
+        }
+      </div>
+    );
+  }
+}
 
 export default notificationPanel;
