@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Divider, Button, Grid } from 'semantic-ui-react';
+import { Modal, Header, Button, Grid } from 'semantic-ui-react';
 import { ACCREDITATION_METHODS_META } from './../../../../../../services/constants/investmentLimit';
 
 @inject('uiStore', 'accreditationStore')
@@ -16,16 +16,14 @@ export default class VerifyAccreditation extends Component {
     const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
     return (
       <div>
-        <Modal open closeIcon onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick={false}>
+        <Modal open onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick>
           <Modal.Header className="center-align signup-header">
             <Header as="h3">How are you accredited?</Header>
-            <Divider />
             <p>
-            To invest in Regulation D or 506(c) offerings, you will need to verify that
-            you are an accredited investor.
-              <br /><br />
-            Please confirm which of the following is applicable for you:
+              To invest in Regulation D or 506(c) offerings, you will need to verify that
+              you are an accredited investor.
             </p>
+            <p>Please confirm which of the following is applicable for you:</p>
           </Modal.Header>
           <Modal.Content>
             <Grid stackable textAlign="center">
