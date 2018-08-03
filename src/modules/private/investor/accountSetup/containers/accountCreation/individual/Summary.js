@@ -26,8 +26,6 @@ export default class Summary extends React.Component {
     return (
       <div>
         <Header as="h3" textAlign="center">Confirm Account</Header>
-        {/* <p className="center-align">Lorem psum dolor sit amet, consectetur adipiscing elit,
-        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p> */}
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -80,8 +78,8 @@ export default class Summary extends React.Component {
         </div>
         <p className="center-align mb-30">
           By continuing, I acknowledge that I have read and agree to the
-          terms of the <Link to="/app/summary/account-creation/individual" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/" className="link">Substitute IRS Form W-9 Certification</Link>,
-          and the <Link to="/app/summary/account-creation/individual" className="link">NextSeed Membership Agreement</Link>.
+          terms of the <Link to={this.props.match.url} className="link">CrowdPay Custodial Account Agreement</Link>, <Link to={this.props.match.url} className="link">Substitute IRS Form W-9 Certification</Link>,
+          and the <Link to={this.props.match.url} className="link">NextSeed Membership Agreement</Link>.
         </p>
         <div className="center-align">
           <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank}>Create the account</Button>

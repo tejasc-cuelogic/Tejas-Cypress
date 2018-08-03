@@ -185,7 +185,7 @@ export const IRA_ACC_TYPES = {
 
 export const IRA_FUNDING = {
   fundingType: {
-    value: 0,
+    value: '',
     values: [
       {
         label: 'Check',

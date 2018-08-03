@@ -18,10 +18,9 @@ class IraAccountStore {
   @observable FIN_INFO_FRM = FormValidator.prepareFormObject(IRA_FIN_INFO);
   @observable IDENTITY_FRM = FormValidator.prepareFormObject(IRA_IDENTITY);
   @observable ACC_TYPES_FRM = FormValidator.prepareFormObject(IRA_ACC_TYPES, true, true);
-  @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING, true, true);
+  @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING);
 
   @observable stepToBeRendered = 0;
-  @observable fundingNotSet = '';
   @observable accountNotSet = '';
 
   @action
@@ -32,11 +31,6 @@ class IraAccountStore {
   @action
   setAccountNotSet(step) {
     this.accountNotSet = step;
-  }
-
-  @action
-  setFundingNotSet(step) {
-    this.fundingNotSet = step;
   }
 
   @action
@@ -286,7 +280,7 @@ class IraAccountStore {
           this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
         } else if (!this.ACC_TYPES_FRM.meta.isValid || this.accountNotSet) {
           this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
-        } else if (!this.FUNDING_FRM.meta.isValid || this.fundingNotSet) {
+        } else if (!this.FUNDING_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
         } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
           !bankAccountStore.formLinkBankManually.meta.isValid &&
@@ -327,18 +321,14 @@ class IraAccountStore {
         }
         if (value !== '') {
           this[form].fields[f].value = value;
-          if (form === 'FUNDING_FRM') {
-            this.setFundingNotSet(false);
-          } else {
+          if (form === 'ACC_TYPES_FRM') {
             this.setAccountNotSet(false);
           }
+        } else if (form === 'FUNDING_FRM') {
+          this[form].fields[f].value = '';
         } else {
-          if (form === 'FUNDING_FRM') {
-            this.setFundingNotSet(true);
-          } else {
-            this.setAccountNotSet(true);
-          }
           this[form].fields[f].value = 0;
+          this.setAccountNotSet(true);
           isDirty = true;
         }
       }
