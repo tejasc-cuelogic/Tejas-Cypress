@@ -86,6 +86,10 @@
         }
     }
     &.insights{
+        height: 100%;
+        &:hover{
+            text-decoration: none;
+        }
         >.content{
             padding:@14px;
             .tags{
@@ -97,7 +101,8 @@
                 }
             }
             .description{
-                height:50px;
+                height:auto;
+                margin-bottom: 0;
             }
         }
     }
@@ -209,6 +214,7 @@
             vertical-align:top;
             margin-left:@10px;
             color:@neutral-middark;
+            vertical-align:middle;
             >b{
                 color:@fullBlack;
             }

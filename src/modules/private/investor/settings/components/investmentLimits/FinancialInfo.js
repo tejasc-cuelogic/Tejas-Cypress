@@ -28,8 +28,8 @@ export default class FinancialInfo extends Component {
             <Card fluid>
               <Card.Content>
                 <Card.Header className="with-icon">
-                  <Icon color="teal" className="ns-individual-line" /> Individual
-                  <Icon color="teal" className="ns-ira-line" /> IRA
+                  <Icon color="green" className="ns-individual-line" /> Individual
+                  <Icon color="green" className="ns-ira-line" /> IRA
                 </Card.Header>
               </Card.Content>
               <Divider horizontal className="only-border" />
@@ -89,7 +89,7 @@ export default class FinancialInfo extends Component {
             <Card fluid>
               <Card.Content>
                 <Card.Header className="with-icon">
-                  <Icon color="teal" className="ns-entity-line" /> Entity
+                  <Icon color="green" className="ns-entity-line" /> Entity
                 </Card.Header>
               </Card.Content>
               <Divider horizontal className="only-border" />

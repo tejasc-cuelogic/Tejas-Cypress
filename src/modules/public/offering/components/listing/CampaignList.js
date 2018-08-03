@@ -1,46 +1,23 @@
 /* eslint-disable import/no-dynamic-require, global-require */
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Container, Card, Image, Label, Icon, List } from 'semantic-ui-react';
 import Filters from './Filters';
+import { Spinner } from '../../../../../theme/shared';
 import lockIcon from '../../../../../assets/images/icon_lock.png';
 
-const campaigns = [
-  {
-    id: 1,
-    label: '300% Funded',
-    title: 'Buffbrew Taproom',
-    address: 'Houston, TX',
-    description: `Houston Brewery is expanding its facilities and launching the new Taproom,
-    complete with a full-service kitchen, event space and over 40 beers on tap.`,
-    category: { name: 'brewpub', details: '1.45x/48mos' },
-  },
-  {
-    id: 2,
-    label: 'New',
-    title: 'Mob Cycle',
-    address: 'Salt Lake City, UT',
-    description: `Experienced team opening one of the first indoor cycling studios
-    in downtown Salt Lake City. Skilled instructors and top of the line equipment.
-    Looking to expand throughout the state and region.`,
-    category: { name: 'fitness', details: '1.45x/48mos' },
-  },
-  {
-    id: 3,
-    label: '10 days left',
-    title: 'Avant Media Institute',
-    address: 'Houston, TX',
-    description: `Audio engineering program providing relevant, hands-on
-    training with experienced faculty. Seeking national accreditation.`,
-    category: { name: 'education', details: '11%/18mos' },
-  },
-];
-
+@inject('campaignStore')
+@observer
 export default class CampaignList extends Component {
   state = { filters: false };
+  componentWillMount() {
+    this.props.campaignStore.initRequest();
+  }
   toggleFilters = status => this.setState({ filters: status });
   render() {
+    const { campaigns, loading } = this.props.campaignStore;
     return (
       <Aux>
         {this.props.filters &&
@@ -50,26 +27,26 @@ export default class CampaignList extends Component {
           <Container>
             {this.props.heading}
             <Card.Group itemsPerRow={3} stackable>
-              {campaigns.map(campaign => (
+              {loading ? <Spinner loaderMessage="loading.." /> : campaigns.map(campaign => (
                 <Card className="campaign">
                   <Image
                     as={Link}
                     to={`/offerings/${campaign.id}/overview`}
                     centered
-                    src={require(`../../../../../assets/images/campaign/campaign-${campaign.id}.jpg`)}
+                    src={require(`../../../../../assets/images/campaign/campaign-${campaign.image}.jpg`)}
                   />
-                  <Label color="green">{campaign.label}</Label>
+                  <Label color="green">{campaign.flagged}</Label>
                   <Icon name="heart" />
                   <Card.Content>
                     <div className="tags">
-                      {campaign.category.name}
-                      <span className="pull-right">{campaign.category.details}</span>
+                      {campaign.label}
+                      <span className="pull-right">1.45x/48mos</span>
                     </div>
                     <Card.Header>{campaign.title}</Card.Header>
                     <Card.Meta>{campaign.address}</Card.Meta>
                     <Card.Description>{campaign.description}</Card.Description>
                     <List divided horizontal>
-                      <List.Item as={Link} to="/">{campaign.category.name}</List.Item>
+                      <List.Item as={Link} to="/">{campaign.label}</List.Item>
                       <List.Item as={Link} to="/">Shedule A</List.Item>
                       <List.Item as={Link} to="/">Revenue Sharing</List.Item>
                     </List>

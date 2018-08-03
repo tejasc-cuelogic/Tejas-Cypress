@@ -90,9 +90,9 @@
 @definitionFooterColor: @definitionHeaderColor;
 @definitionFooterFontWeight: @definitionHeaderFontWeight;
 
-@definitionColumnBackground: @subtleTransparentBlack;
-@definitionColumnFontWeight: @bold;
-@definitionColumnColor: @selectedTextColor;
+@definitionColumnBackground: transparent;
+@definitionColumnFontWeight: @normal;
+@definitionColumnColor: @neutral-middark;
 @definitionColumnFontSize: @relativeMedium;
 @definitionColumnTextTransform: '';
 @definitionColumnBoxShadow: '';

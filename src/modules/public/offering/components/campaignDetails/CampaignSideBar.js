@@ -7,6 +7,9 @@ import CampaignProgress from './CampaignProgress';
 @withRouter
 export default class CampaignSideBar extends Component {
   render() {
+    const {
+      needed, collected, title, address,
+    } = this.props.details;
     return (
       <div className="offering-side-menu">
         <div className="offering-intro">
@@ -14,10 +17,10 @@ export default class CampaignSideBar extends Component {
             <Link to="/offerings">
               <Icon name="arrow left" />
             </Link>
-            Account Settings
-            <Header.Subheader>Manage your preferences</Header.Subheader>
+            {title}
+            <Header.Subheader>{address}</Header.Subheader>
           </Header>
-          <CampaignProgress />
+          <CampaignProgress data={{ needed, collected }} />
           <p>
             <Icon name="flag" /> Min reached on 10 days ago
           </p>

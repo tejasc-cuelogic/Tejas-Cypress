@@ -9,6 +9,7 @@ import { BUSINESS_APP_USER_STATUS, BUSINESS_APPLICATION_STATUS } from '../../../
 @observer
 export default class ApplicationCards extends Component {
   componentWillMount() {
+    // getting all application list of user
     this.props.businessAppStore.getBusinessApplications();
     this.props.businessAppStore.setFieldvalue('isFetchedData', null);
   }

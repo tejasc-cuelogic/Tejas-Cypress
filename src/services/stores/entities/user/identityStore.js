@@ -1,10 +1,11 @@
+import graphql from 'mobx-apollo';
 import { observable, action, computed } from 'mobx';
 import { mapValues, keyBy, find, flatMap, map } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO, COUNTRY_CODES } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, userStore, userDetailsStore } from '../../index';
-import { verifyCIPUser, updateUserCIPInfo, startUserPhoneVerification, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
+import { isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, startUserPhoneVerification, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
@@ -177,7 +178,7 @@ export class IdentityStore {
         { name: field, value: fileData.fileName },
       );
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
-        .then(() => {})
+        .then(() => { })
         .catch((err) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -307,7 +308,7 @@ export class IdentityStore {
   @computed
   get formattedIdentityQuestionsAnswers() {
     const formattedIdentityQuestionsAnswers =
-    flatMap(this.ID_VERIFICATION_QUESTIONS.fields, n => [{ type: n.key, text: n.value }]);
+      flatMap(this.ID_VERIFICATION_QUESTIONS.fields, n => [{ type: n.key, text: n.value }]);
     return formattedIdentityQuestionsAnswers;
   }
 
@@ -502,10 +503,10 @@ export class IdentityStore {
 
   @action
   setFormError = () => {
+    // this.isSsnExist(this.ID_VERIFICATION_FRM.fields.ssn.value);
     map(this.ID_VERIFICATION_FRM.fields, (value) => {
       const { key } = value;
       const { errors } = validationService.validate(value);
-      // store errors to store if any or else 'undefied' will get set to it
       FormValidator.setFormError(this.ID_VERIFICATION_FRM, key, errors && errors[key][0]);
     });
   }
@@ -562,6 +563,20 @@ export class IdentityStore {
   get canUpdateProfilePhoto() {
     return this.ID_PROFILE_INFO.fields.profilePhoto.value !== '';
   }
+
+  @action
+  isSsnExist = ssn => new Promise((resolve) => {
+    uiStore.setProgress();
+    graphql({
+      client,
+      query: isSsnExistQuery,
+      fetchPolicy: 'network-only',
+      variables: { ssn },
+      onFetch: (data) => {
+        resolve(data.checkUserSSNCollision.alreadyExists);
+      },
+    });
+  })
 }
 
 export default new IdentityStore();
