@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
-import { Header, Icon, Grid, Image, Embed, List, Divider, Breadcrumb, Segment, Reveal } from 'semantic-ui-react';
+import { Header, Icon, Grid, Image, Embed, Container, List, Divider, Breadcrumb, Segment, Reveal } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
+import { NsCarousel } from '../../../../../theme/shared';
 import videoPoster from '../../../../../assets/images/636206632.webp';
 import campainAboutImg from '../../../../../assets/images/campaign_about.png';
 import teamMember1 from '../../../../../assets/images/james-wright.png';
@@ -15,6 +16,12 @@ const getModule = component => Loadable({
     return <div>Loading...</div>;
   },
 });
+
+const settings = {
+  dots: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
 
 const nsvideos = {
   embed: '218642510',
@@ -33,7 +40,13 @@ class AboutCompany extends Component {
           <Grid.Column width={12}>
             <div className="campaign-about-wrapper">
               <div className="carousel">
-                <Image src={videoPoster} />
+                <Container>
+                  <NsCarousel {...settings}>
+                    {[1, 2, 3].map(() => (
+                      <Image src={videoPoster} />
+                    ))}
+                  </NsCarousel>
+                </Container>
               </div>
               <Header as="h3">Buffbrew Taproom LLC</Header>
               <p>
