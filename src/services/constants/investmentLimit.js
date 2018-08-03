@@ -115,7 +115,7 @@ export const VERIFICATION_REQUEST = {
     rule: 'required',
     placeHolder: 'Choose verifier role',
     label: 'Verifier role',
-    tooltip: 'tool tip text',
+    tooltip: 'Lawyer, CPA, investment advisor or investment broker',
   },
   verifierEmail: {
     value: '',
