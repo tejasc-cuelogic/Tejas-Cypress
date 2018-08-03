@@ -15,7 +15,7 @@ export class InvestmentLimitStore {
   @observable currentAccountType = null;
 
   @computed get fLoading() {
-    return this.investmentLimit.loading;
+    return this.getActiveAccountList.loading;
   }
 
   @computed get getActiveAccountList() {

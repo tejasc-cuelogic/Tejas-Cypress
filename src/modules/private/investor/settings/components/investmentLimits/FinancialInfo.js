@@ -5,6 +5,8 @@ import { inject, observer } from 'mobx-react';
 import { startCase } from 'lodash';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
+import { EmptyDataSet } from '../../../../../../theme/shared';
+
 
 @inject('investmentLimitStore', 'uiStore')
 @withRouter
@@ -32,7 +34,7 @@ export default class FinancialInfo extends Component {
     }
     return (
       <Aux>
-        {getActiveAccountList && getActiveAccountList.accountList.length &&
+        {getActiveAccountList && getActiveAccountList.accountList.length ?
         getActiveAccountList.accountList.map(account => (
           <Grid.Row>
             <Grid.Column widescreen={12} largeScreen={16} computer={16} tablet={16} mobile={16}>
@@ -95,7 +97,7 @@ export default class FinancialInfo extends Component {
               </Card>
             </Grid.Column>
           </Grid.Row>
-          ))
+          )) : <EmptyDataSet title="No data available for investment limits." />
         }
       </Aux>
     );
