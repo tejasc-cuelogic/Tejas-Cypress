@@ -90,7 +90,7 @@ class Comments extends Component {
                   <Comment.Group>
                     <Comment>
                       <Comment.Content>
-                        <Comment.Author>John <Label color="blue" mini>ISSUER</Label></Comment.Author>
+                        <Comment.Author>John <Label color="blue" size="mini">ISSUER</Label></Comment.Author>
                         <Comment.Metadata className="text-uppercase">3 HOURS AGO</Comment.Metadata>
                         {/* add after sign up - do not remove */}
                         <Comment.Actions>
