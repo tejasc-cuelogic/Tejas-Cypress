@@ -28,9 +28,9 @@ const footer = () => (
       <Container>
         <Menu text vertical>
           <Menu.Item as={NavLink} to="/resources/education-center">Ed Center</Menu.Item>
-          <Menu.Item>Case Studies</Menu.Item>
+          <Menu.Item as={NavLink} to="/resources/case-studies">Case Studies</Menu.Item>
           <Menu.Item as={NavLink} to="/resources/insights">Insights</Menu.Item>
-          <Menu.Item>Community</Menu.Item>
+          <Menu.Item as={NavLink} to="/resources/community">Community</Menu.Item>
         </Menu>
         <Menu text vertical>
           <Menu.Item as={NavLink} to="/about/mission">Mission</Menu.Item>

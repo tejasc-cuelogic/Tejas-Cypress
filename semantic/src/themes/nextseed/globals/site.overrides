@@ -17,12 +17,11 @@ section{
 	}
 }
 .info-card{
-	p{
-		margin-bottom:@40px;
-	}
 	a {
 		color: @fullBlack;
 		font-weight: @bold;
+		margin-top: @40px;
+		display: block;
 	}
 }
 //	Helper Classes
@@ -393,7 +392,6 @@ footer{
 			}
 			img {
 				width: 100%;
-				margin-top: @35px;
 			}
 			.embed {
 				img {
@@ -765,7 +763,7 @@ address {
 	h2.ui.header {
 		margin-bottom: 0px;
 	}
-}
+}	 
 //Education center
 .edu-back-link {
 	a {
@@ -789,6 +787,20 @@ address {
 	position: relative;
 	img.ui.image {
 		width: 100%;
+	}
+}
+//investment details
+.investment-wrapper {
+	i.icon {
+		margin-left: 5px;
+	}
+	p{
+		b {
+			color: @fullBlack;
+		}
+		&.note {
+			font-style: normal !important;
+		}
 	}
 }
 /* END <== PUBLIC PAGES UI STYLES */
