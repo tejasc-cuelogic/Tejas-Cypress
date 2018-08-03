@@ -19,10 +19,13 @@ export default class Summary extends React.Component {
     const {
       formAddFunds,
       plaidAccDetails,
+      plaidBankDetails,
       isValidLinkBank,
       formLinkBankManually,
       depositMoneyNow,
     } = this.props.bankAccountStore;
+    const bankAccountNumber = !isEmpty(plaidBankDetails) ?
+      plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>
         <Header as="h3" textAlign="center">Confirm Account</Header>
@@ -50,11 +53,7 @@ export default class Summary extends React.Component {
                   }
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
-                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.account_id ?
-                      plaidAccDetails.plaidAccountId ? Helper.encryptNumber(plaidAccDetails.plaidAccountId) : '' :
-                      Helper.encryptNumber(plaidAccDetails.account_id)}
-                      {formLinkBankManually.fields.accountNumber.value ? formLinkBankManually.fields.accountNumber.value : ''}
-                    </Table.Cell>
+                    <Table.Cell>{Helper.encryptNumber(bankAccountNumber)}</Table.Cell>
                   </Table.Row>
                   {formLinkBankManually.fields.routingNumber.value &&
                   <Table.Row>
