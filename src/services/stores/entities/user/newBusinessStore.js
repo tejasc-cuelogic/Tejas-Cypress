@@ -27,7 +27,6 @@ export class NewBusinessStore {
 
   @action
   preQualifInfoChange = (values, field) => {
-    console.log('field', field, values);
     this.BUSINESS_APP_FRM = Validator.onChange(
       this.BUSINESS_APP_FRM,
       { name: field, value: values.floatValue },

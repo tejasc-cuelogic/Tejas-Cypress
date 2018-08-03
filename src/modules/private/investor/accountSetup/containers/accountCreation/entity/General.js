@@ -2,16 +2,21 @@ import React, { Component } from 'react';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { US_STATES } from '../../../../../../../constants/account';
-import { FormInput, MaskedInput2, FormSelect, AutoComplete, MaskedInput } from '../../../../../../../theme/form';
+import { FormInput, MaskedInput2, FormSelect, AutoComplete } from '../../../../../../../theme/form';
 
 @inject('entityAccountStore')
 @observer
 export default class General extends Component {
   render() {
-    const { GEN_INFO_FRM, genInfoChange, setAddressFields } = this.props.entityAccountStore;
+    const {
+      GEN_INFO_FRM,
+      genInfoChange,
+      setAddressFields,
+      maskedGenInfoChange,
+    } = this.props.entityAccountStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">General Information</Header>
+        <Header as="h3" textAlign="center">General Information</Header>
         <Form error>
           <div className="field-wrap">
             <FormInput
@@ -19,13 +24,14 @@ export default class General extends Component {
               fielddata={GEN_INFO_FRM.fields.name}
               changed={genInfoChange}
             />
-            <MaskedInput
+            <MaskedInput2
               name="taxId"
               fielddata={GEN_INFO_FRM.fields.taxId}
-              mask="999-99-9999"
-              changed={genInfoChange}
+              changed={maskedGenInfoChange}
+              format="##-#######"
+              taxId
             />
-            <h5>Entity Address</h5>
+            <h6>Entity Address</h6>
             <AutoComplete
               name="street"
               fielddata={GEN_INFO_FRM.fields.street}
@@ -47,7 +53,7 @@ export default class General extends Component {
               <MaskedInput2
                 name="zipCode"
                 fielddata={GEN_INFO_FRM.fields.zipCode}
-                changed={genInfoChange}
+                changed={maskedGenInfoChange}
                 zipCode
               />
             </Form.Group>

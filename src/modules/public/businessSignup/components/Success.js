@@ -3,14 +3,10 @@ import { Link } from 'react-router-dom';
 import { Grid, Icon, Header, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-@inject('newBusinessStore', 'uiStore')
+@inject('businessAppStore', 'uiStore')
 @observer
 class Success extends Component {
   render() {
-    // const {
-    //   BUSINESS_ACCOUNT, businessAccEleChange,
-    // } = this.props.newBusinessStore;
-    // const { fields } = BUSINESS_ACCOUNT;
     return (
       <Grid.Column className="issuer-signup">
         <Icon className="ns-paper-plane" size="massive" color="green" />

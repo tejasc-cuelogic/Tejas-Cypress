@@ -1,17 +1,17 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { ListErrors } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
-
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
   handleCreateAccount = () => {
     this.props.individualAccountStore.createAccount('Summary', 'submit');
+    this.props.history.push('summary');
   }
   render() {
     const { errors } = this.props.uiStore;
@@ -25,8 +25,9 @@ export default class Summary extends React.Component {
     } = this.props.bankAccountStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">Link Bank Account</Header>
-        <Header as="h4" textAlign="center">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Header>
+        <Header as="h3" textAlign="center">Confirm Account</Header>
+        {/* <p className="center-align">Lorem psum dolor sit amet, consectetur adipiscing elit,
+        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p> */}
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -41,18 +42,28 @@ export default class Summary extends React.Component {
                     <Table.Cell><b>Investor Name</b></Table.Cell>
                     <Table.Cell>{currentUser.givenName}</Table.Cell>
                   </Table.Row>
+                  {!isEmpty(plaidAccDetails) &&
                   <Table.Row>
                     <Table.Cell><b>Bank Name</b></Table.Cell>
-                    <Table.Cell>{_.isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
+                  }
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
-                    <Table.Cell>{_.isEmpty(plaidAccDetails) || !plaidAccDetails.account_id ?
+                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.account_id ?
                       plaidAccDetails.plaidAccountId ? Helper.encryptNumber(plaidAccDetails.plaidAccountId) : '' :
                       Helper.encryptNumber(plaidAccDetails.account_id)}
-                      {formLinkBankManually.fields.accountNumber.value ? Helper.encryptNumber(formLinkBankManually.fields.accountNumber.value) : ''}
+                      {formLinkBankManually.fields.accountNumber.value ? formLinkBankManually.fields.accountNumber.value : ''}
                     </Table.Cell>
                   </Table.Row>
+                  {formLinkBankManually.fields.routingNumber.value &&
+                  <Table.Row>
+                    <Table.Cell><b>Routing Number</b></Table.Cell>
+                    <Table.Cell>
+                      {formLinkBankManually.fields.routingNumber.value}
+                    </Table.Cell>
+                  </Table.Row>
+                  }
                   <Table.Row>
                     <Table.Cell><b>Your initial deposit</b></Table.Cell>
                     <Table.Cell>
@@ -67,6 +78,11 @@ export default class Summary extends React.Component {
             </div>
           </div>
         </div>
+        <p className="center-align mb-30">
+          By continuing, I acknowledge that I have read and agree to the
+          terms of the <Link to="/app/summary/account-creation/individual" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/" className="link">Substitute IRS Form W-9 Certification</Link>,
+          and the <Link to="/app/summary/account-creation/individual" className="link">NextSeed Membership Agreement</Link>.
+        </p>
         <div className="center-align">
           <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank}>Create the account</Button>
         </div>

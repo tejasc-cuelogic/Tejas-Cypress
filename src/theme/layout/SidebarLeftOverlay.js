@@ -4,8 +4,7 @@ import Aux from 'react-aux';
 import { Responsive, Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav, GetNavItem } from './SidebarNav';
-import Randavatar from '../shared/Randavatar';
-import { Logo } from '../shared';
+import { UserAvatar, Logo } from '../shared';
 
 @inject('uiStore')
 @observer
@@ -30,41 +29,42 @@ export default SidebarLeftPush;
 
 const MySidebar = observer(props => (
   <Sidebar.Pushable>
-    {!props.match.url.includes('/business-application') &&
-    <Aux>
-      <Sidebar
-        as={Menu}
-        animation={props.desktop ? 'push' : 'overlay'}
-        width="thin"
-        visible={
-          props.desktop ? props.layoutState.leftPanel : props.layoutState.leftPanelMobile
+    {!props.match.url.includes('/business-application') ? (
+      <Aux>
+        <Sidebar
+          as={Menu}
+          animation={props.desktop ? 'push' : 'overlay'}
+          width="thin"
+          visible={
+            props.desktop ? props.layoutState.leftPanel : props.layoutState.leftPanelMobile
+          }
+          icon
+          vertical
+          inverted={(props.UserInfo.roles[0] !== 'investor')}
+          className={props.UserInfo.roles[0]}
+        >
+          <Logo
+            className="logo"
+            dataSrc={((props.layoutState.leftPanel) ?
+              (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
+              'LogoSmall')}
+          />
+          {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
+          <div className="user-picture">
+            <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : ''} />
+            <h2>{props.UserInfo.fullname}</h2>
+            {GetNavItem('profile-settings', props.UserInfo.roles)}
+          </div>
+          <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />
+        </Sidebar>
+        {props.desktop &&
+          <Button onClick={props.toggle} className="item collapseIcon">
+            <i className={`angle ${(props.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
+            <span>Collapse</span>
+          </Button>
         }
-        icon
-        vertical
-        inverted={(props.UserInfo.roles[0] !== 'investor')}
-        className={props.UserInfo.roles[0]}
-      >
-        <Logo
-          className="logo"
-          dataSrc={((props.layoutState.leftPanel) ?
-            (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhite' : 'LogoColor') :
-            'LogoSmall')}
-        />
-        {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
-        <div className="user-picture">
-          <Randavatar name={props.UserInfo.fullname} accountType={props.UserInfo.accountType} avatarUrl={props.UserInfo.avatarUrl} avatarKey={props.UserInfo.avatarKey} size="small" />
-          <h2>{props.UserInfo.fullname}</h2>
-          {GetNavItem('profile-settings', props.UserInfo.roles)}
-        </div>
-        <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />
-      </Sidebar>
-      {props.desktop &&
-        <Button onClick={props.toggle} className="item collapseIcon">
-          <i className={`angle ${(props.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
-          <span>Collapse</span>
-        </Button>
-      }
-    </Aux>
+      </Aux>
+    ) : <SidebarNav roles={props.UserInfo.roles} onlyMount />
     }
     <Sidebar.Pusher
       className={`${props.match.url.includes('/business-application') ?

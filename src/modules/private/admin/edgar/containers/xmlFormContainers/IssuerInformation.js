@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Card } from 'semantic-ui-react';
+import { Form, Card, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
 import moment from 'moment';
@@ -37,7 +37,7 @@ export default class IssuerInformation extends React.Component {
             name="nameOfIssuer"
             changed={issuerInfoChange}
           />
-          <h4>Legal Status of Issuer</h4>
+          <Header as="h6">Legal Status of Issuer</Header>
           <Form.Group widths="equal">
             <FormSelect
               fielddata={formIssuerInfo.fields.legalStatusForm}
@@ -63,6 +63,7 @@ export default class IssuerInformation extends React.Component {
             <FormDatePicker
               type="text"
               name="dateIncorporation"
+              placeholder="Select date"
               maxDate={moment()}
               fielddata={formIssuerInfo.fields.dateIncorporation}
               selected={formIssuerInfo.fields.dateIncorporation.value}
@@ -71,7 +72,7 @@ export default class IssuerInformation extends React.Component {
           </Form.Group>
         </Card>
         <Card fluid className="form-card">
-          <h4>Physical Address of issuer</h4>
+          <Header as="h5">Physical Address of issuer</Header>
           <Form.Group widths="equal">
             <FormInput
               type="text"
@@ -118,7 +119,7 @@ export default class IssuerInformation extends React.Component {
           </Form.Group>
         </Card>
         <Card fluid className="form-card">
-          <h4>Intermediary through which the Offering will be Conducted</h4>
+          <Header as="h5">Intermediary through which the Offering will be Conducted</Header>
           <Form.Group widths="equal">
             <FormInput
               type="text"

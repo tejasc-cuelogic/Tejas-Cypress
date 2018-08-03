@@ -5,6 +5,7 @@ const INVESTER_ACC_SUB_NAV_ITEMS = {
     { title: 'Bank Accounts', to: 'bank-accounts', component: 'BankAccount' },
     { title: 'Transactions', to: 'transactions', component: 'Transactions' },
     { title: 'Statements', to: 'statements', component: 'Statements' },
+    { title: 'Settings', to: 'Settings', component: 'Settings' },
   ],
 };
 
@@ -29,6 +30,9 @@ export const PRIVATE_NAV = [
       {
         title: 'Beneficiaries', to: 'beneficiaries', component: 'Beneficiaries', accessibleTo: ['investor'],
       },
+      {
+        title: 'Agreements', to: 'agreements', component: 'Agreements', accessibleTo: ['investor'],
+      },
     ],
   },
   {
@@ -42,8 +46,8 @@ export const PRIVATE_NAV = [
     icon: 'ns-dashboard',
     title: 'Dashboard',
     to: 'dashboard',
-    path: { bowner: 'issuer/dashboard', admin: 'admin/dashboard/Dashboard' },
-    accessibleTo: ['bowner', 'admin'],
+    path: { issuer: 'issuer/dashboard', admin: 'admin/dashboard/Dashboard' },
+    accessibleTo: ['issuer', 'admin'],
     subPanel: 0,
   },
   {
@@ -73,33 +77,41 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-article',
     title: 'Application',
-    to: 'business-application',
-    accessibleTo: ['bowner'],
-    subPanel: 1,
+    to: 'business-application/:applicationId',
+    accessibleTo: ['issuer'],
+    subPanel: 0,
+    path: 'issuer/businessApplication/containers/BusinessApplication',
     subNavigations: [
       {
         icon: 'ns-check-circle',
         title: 'Pre-qualification',
         to: 'pre-qualification',
         component: 'PreQualification',
+        showIcon: true,
       },
       {
         icon: 'ns-check-circle',
         title: 'Business Details',
         to: 'business-details',
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
         component: 'BusinessDetails',
+        showIcon: true,
       },
       {
         icon: 'ns-check-circle',
         title: 'Performance',
         to: 'performance',
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
         component: 'Performance',
+        showIcon: true,
       },
       {
         icon: 'ns-check-circle',
         title: 'Documentation',
         to: 'documentation',
+        accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
         component: 'Documentation',
+        showIcon: true,
       },
     ],
   },
@@ -151,7 +163,7 @@ export const PRIVATE_NAV = [
     icon: 'gift',
     title: 'Offering',
     to: 'offering/:id',
-    accessibleTo: ['bowner'],
+    accessibleTo: ['issuer'],
     path: 'issuer/offering',
     subPanel: 1,
     subNavigations: [
@@ -170,9 +182,9 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'ns-article',
-    title: { bowner: 'Resources', investor: 'Education Centre' },
+    title: { issuer: 'Resources', investor: 'Education Centre' },
     to: 'resources',
-    accessibleTo: ['investor', 'bowner'],
+    accessibleTo: ['investor', 'issuer'],
     subPanel: 1,
     path: 'shared/education/containers/Education',
     subNavigations: [
@@ -186,7 +198,7 @@ export const PRIVATE_NAV = [
     title: 'Events',
     to: 'events',
     path: 'issuer/events',
-    accessibleTo: ['bowner'],
+    accessibleTo: ['issuer'],
   },
   {
     icon: 'legal',
@@ -303,29 +315,77 @@ export const PRIVATE_NAV = [
 ];
 
 export const PUBLIC_NAV = [
-  { title: 'Browse Deals', to: 'offerings' },
-  { title: 'For Investers', to: 'invest' },
-  { title: 'For Businesses', to: 'business' },
   {
-    title: 'Learn',
-    subPanel: 1,
+    title: 'About Us',
+    to: 'about',
+    noNav: true,
+    subNavigations: [
+      { title: 'Mission', to: 'mission' },
+      { title: 'Team', to: 'team' },
+      { title: 'Careers', to: 'careers' },
+      { title: 'Impact', to: 'impact' },
+      { title: 'Ambassadors', to: 'ambassadors' },
+      { title: 'Press', to: 'press' },
+    ],
+  },
+  {
+    title: 'Explore Campaigns',
+    to: 'offerings',
+    subNavigations: [
+      {
+        icon: 'ns-home-line', title: 'Overview', to: 'overview', component: 'Overview',
+      },
+      {
+        icon: 'ns-edu-center', title: 'About the Company', to: 'about', component: 'AboutCompany',
+      },
+      {
+        icon: 'ns-investment', title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
+      },
+      {
+        icon: 'ns-rewards', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
+      },
+      {
+        icon: 'ns-document-search', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
+      },
+      {
+        icon: 'ns-coments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
+      },
+      {
+        icon: 'share alternate', title: 'Share', to: 'share', component: 'Share',
+      },
+    ],
+  },
+  {
+    title: 'How NextSeed Works',
+    to: 'business',
+    noNav: true,
+    subNavigations: [
+      { title: 'How it Works', to: 'how-it-works' },
+      { title: 'Funding Options', to: 'funding-options' },
+      { title: 'Process', to: 'process', component: 'InvestmentDetails' },
+      { title: 'All-Inclusive', to: 'all-inclusive', component: 'BonusRewards' },
+      { title: 'Compare', to: 'compare', component: 'Disclosures' },
+    ],
+  },
+  {
+    title: 'Why NextSeed',
+    to: 'invest',
+    noNav: true,
+    subNavigations: [
+      { title: 'Why Nextseed', to: 'why-nextseed' },
+      { title: 'How it Works', to: 'how-it-works' },
+      { title: 'Account Types', to: 'account-types' },
+      { title: 'Security', to: 'security' },
+      { title: 'Track', to: 'track' },
+    ],
+  },
+  {
+    title: 'How NextSeed Works',
     to: '',
-    subNavigations: [
-      { title: 'Team', to: 'about/team' },
-      { title: 'Ambassadors', to: 'about/ambassadors' },
-      { title: 'Blog', to: 'blog' },
-      { title: 'Case Studies', to: 'case-studies' },
-      { title: 'FAQ', to: 'about/faq' },
-    ],
-  },
-  {
-    title: 'Log In or Sign Up',
     subPanel: 1,
-    to: 'auth',
     subNavigations: [
-      { title: 'Log In', to: 'login' },
-      { title: 'Register', to: 'register' },
+      { title: 'For Investors', to: 'invest' },
+      { title: 'For Businesses', to: 'business' },
     ],
   },
-  { title: 'Dashboard', to: 'app/dashboard' },
 ];

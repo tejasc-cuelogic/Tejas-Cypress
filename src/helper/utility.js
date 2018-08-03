@@ -70,7 +70,7 @@ export class Utility {
     Object.keys(addressMap).map(aK => place.address_components.map((c) => {
       if (_.intersection(addressMap[aK], c.types).length > 0) {
         const addressEle = {};
-        addressEle[aK] = addressMap[aK].length > 2 && result[aK] ? `${result[aK]}, ${c.long_name}` : c.long_name;
+        addressEle[aK] = addressMap[aK].length > 2 && result[aK] ? `${result[aK]} ${c.long_name}` : c.long_name;
         result = _.has(result, aK) ? addressEle : { ...result, ...addressEle };
       }
       return result;
@@ -78,7 +78,7 @@ export class Utility {
     return result;
   }
 
-  CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
+  CurrencyFormat = (amount, f) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: typeof (f) === 'number' ? f : 2 }).format(amount)
 
   cryptedSSNNumber = (ssnNumber) => {
     const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
@@ -92,10 +92,10 @@ export class Utility {
     return encryptedNumber;
   }
 
-  getFormattedFileData = (files) => {
+  getFormattedFileData = (file) => {
     const fileData = {};
-    if (files && files.length > 0) {
-      const fileInfo = files[0];
+    if (file) {
+      const fileInfo = file;
       fileData.fileName = fileInfo.name.replace(/ /g, '_');
       fileData.fileType = fileInfo.type;
       fileData.fileExtension = fileInfo.name.substr((fileInfo.name.lastIndexOf('.') + 1));
@@ -120,21 +120,6 @@ export class Utility {
   maskPhoneNumber = (phoneNumber) => {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
     return maskPhoneNumber;
-  }
-
-  eleToUpperCaseInArray = (givenArray) => {
-    const upperCaseEleArray = givenArray.map((item) => {
-      if (item === 'ira') {
-        return item.toUpperCase();
-      }
-      return _.upperFirst(item);
-    });
-    return upperCaseEleArray;
-  }
-
-  getCommaSeparatedArrStr = (array) => {
-    const formattedData = [array.slice(0, -1).join(', '), array.slice(-1)[0]].join(array.length < 2 ? '' : ' or ');
-    return formattedData;
   }
 }
 

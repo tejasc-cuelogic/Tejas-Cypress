@@ -4,7 +4,9 @@ import { observer } from 'mobx-react';
 import { Icon, Popup, Form } from 'semantic-ui-react';
 
 const FormRadioGroup = observer((props) => {
-  const { values, value, tooltip } = props.fielddata;
+  const {
+    values, value, tooltip, error,
+  } = props.fielddata;
 
   if (!props.iconic) {
     return (
@@ -14,6 +16,7 @@ const FormRadioGroup = observer((props) => {
             <Form.Radio
               key={radio.label}
               {...props}
+              error={error}
               label={radio.label}
               value={radio.value}
               className={`${props.value} ${radio.value}`}
@@ -39,10 +42,11 @@ const FormRadioGroup = observer((props) => {
               {radio.label}
               {tooltip &&
                 <Popup
-                  trigger={<Icon name="help circle outline" />}
+                  trigger={<Icon className="ns-help-circle" />}
                   content={tooltip}
                   position="top center"
                   className="center-align"
+                  wide
                 />
               }
             </label>

@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
-import { DevBanner, ListErrors, Spinner } from './theme/shared';
+import { DevBanner, Spinner } from './theme/shared';
 import Layout from './theme/layout/Layout';
 import Private from './modules/private';
 import Public from './modules/public';
@@ -30,8 +30,7 @@ class App extends Component {
         if (this.props.userStore.currentUser) {
           this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
         }
-      })
-      .then(() => this.props.uiStore.clearRedirectURL());
+      });
   }
 
   componentDidMount() {
@@ -74,7 +73,6 @@ class App extends Component {
           )
         }
         <ToastContainer className="toast-message" />
-        <ListErrors errors={this.props.uiStore.errors} />
         {this.props.uiStore.devBanner &&
           <DevBanner toggle={this.playDevBanner} />
         }

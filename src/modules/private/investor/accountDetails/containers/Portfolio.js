@@ -33,7 +33,7 @@ export default class Portfolio extends Component {
       <Aux>
         <SummaryHeader details={summaryDetails} />
         <PortfolioAllocations />
-        <Header as="h3">My Investments</Header>
+        <Header as="h4">My Investments</Header>
         <InvestmentList listOf="pending" match={match} />
         <InvestmentList listOf="active" match={match} />
         <InvestmentList listOf="completed" match={match} />

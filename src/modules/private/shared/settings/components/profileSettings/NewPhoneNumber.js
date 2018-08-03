@@ -3,11 +3,11 @@ import { inject, observer } from 'mobx-react';
 import isEmpty from 'lodash/isEmpty';
 import { Route, withRouter } from 'react-router-dom';
 import { Header, Modal, Form, Button, Message } from 'semantic-ui-react';
-import { MaskedInput } from '../../../../../../theme/form';
+import { MaskedInput2 } from '../../../../../../theme/form';
 import ConfirmPhoneNumber from './ConfirmPhoneNumber';
 import { ListErrors } from '../../../../../../theme/shared';
 
-@inject('profileStore', 'uiStore')
+@inject('uiStore', 'identityStore')
 @withRouter
 @observer
 export default class NewPhoneNumber extends Component {
@@ -15,20 +15,20 @@ export default class NewPhoneNumber extends Component {
     e.stopPropagation();
     this.props.history.push('/app/profile-settings/profile-data');
     this.props.uiStore.clearErrors();
-    this.props.profileStore.resetFormData('verifyIdentity01');
+    this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
   }
   handleChangePhoneNumber = () => {
-    this.props.profileStore.resetFormData('verifyIdentity04');
-    this.props.profileStore.startPhoneVerification().then(() => {
+    this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
+    this.props.identityStore.startPhoneVerification().then(() => {
       this.props.history.push(`${this.props.match.url}/confirm`);
     })
       .catch(() => {});
   }
   render() {
     const {
-      verifyIdentity01,
-      verifyIdentityEleChange,
-    } = this.props.profileStore;
+      ID_VERIFICATION_FRM,
+      personalInfoMaskedChange,
+    } = this.props.identityStore;
     const { match } = this.props;
     const { errors } = this.props.uiStore;
     return (
@@ -38,7 +38,7 @@ export default class NewPhoneNumber extends Component {
           render={props => <ConfirmPhoneNumber newPhoneNumber refLink={match.url} {...props} />}
         />
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Enter new phone number</Header>
+          <Header as="h3">Enter new phone number</Header>
           <p>We will send you a verification code to the phone number you provide.</p>
         </Modal.Header>
         <Modal.Content>
@@ -48,14 +48,16 @@ export default class NewPhoneNumber extends Component {
             </Message>
           }
           <Form error onSubmit={this.handleChangePhoneNumber}>
-            <MaskedInput
+            <MaskedInput2
               name="phoneNumber"
-              fielddata={verifyIdentity01.fields.phoneNumber}
-              mask="999-999-9999"
-              changed={verifyIdentityEleChange}
+              type="tel"
+              fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
+              format="###-###-####"
+              changed={personalInfoMaskedChange}
+              phoneNumber
             />
             <div className="center-align">
-              <Button loading={this.props.uiStore.inProgress} disabled={!!verifyIdentity01.fields.phoneNumber.error || isEmpty(verifyIdentity01.fields.phoneNumber.value)} primary size="large" className="very relaxed" >Change Phone Number</Button>
+              <Button loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)} primary size="large" className="very relaxed" >Change Phone Number</Button>
             </div>
           </Form>
         </Modal.Content>

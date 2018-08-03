@@ -19,9 +19,9 @@ const LegalDocuments = observer(({
   submitVerificationsDocs,
   onSubmit,
 }) => (
-  <Modal size="tiny" open closeIcon onClose={() => close()}>
+  <Modal size="tiny" open closeIcon onClose={close}>
     <Modal.Header className="center-align signup-header">
-      <Header as="h2">We need to confirm your identity</Header>
+      <Header as="h3">We need to confirm your identity</Header>
       <Divider />
       <p>
         Please upload two valid identity documents
@@ -42,8 +42,7 @@ const LegalDocuments = observer(({
         <Grid divided="vertically">
           <Grid.Row>
             <Grid.Column width={7}>
-              {/* eslint-disable jsx-a11y/label-has-for */}
-              <Header>
+              <Header as="h5">
                 Upload a Photo ID
                 <Header.Subheader>Driving Liscence or passport</Header.Subheader>
               </Header>
@@ -59,26 +58,24 @@ const LegalDocuments = observer(({
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={7}>
-              <label>
-                <h3>Proof of Residence
-                  <Popup className="test" trigger={<Icon className="ns-help-circle" />} position="top center" flowing hoverable>
-                    <Popup.Content>
-                      <p><b>Acceptable documents:</b></p>
-                      <List bulleted>
-                        <List.Item>Utility bill in your name for that address</List.Item>
-                        <List.Item>
-                          Signed lease (if an apartment) that shows the<br />
-                          address (just the signature page)
-                        </List.Item>
-                        <List.Item>Voided check with your name  and address on it</List.Item>
-                        <List.Item>A completed USPS mail forward form</List.Item>
-                        <List.Item>DMV registration form</List.Item>
-                      </List>
-                    </Popup.Content>
-                  </Popup>
-                </h3>
-                Utility Bill or USPS change of address format
-              </label>
+              <Header as="h5">Proof of Residence
+                <Popup className="test" trigger={<Icon className="ns-help-circle" />} position="top center" flowing hoverable>
+                  <Popup.Content>
+                    <p><b>Acceptable documents:</b></p>
+                    <List bulleted>
+                      <List.Item>Utility bill in your name for that address</List.Item>
+                      <List.Item>
+                        Signed lease (if an apartment) that shows the<br />
+                        address (just the signature page)
+                      </List.Item>
+                      <List.Item>Voided check with your name  and address on it</List.Item>
+                      <List.Item>A completed USPS mail forward form</List.Item>
+                      <List.Item>DMV registration form</List.Item>
+                    </List>
+                  </Popup.Content>
+                </Popup>
+                <Header.Subheader>Utility Bill or USPS change of address format</Header.Subheader>
+              </Header>
             </Grid.Column>
             <Grid.Column width={9}>
               <DropZone

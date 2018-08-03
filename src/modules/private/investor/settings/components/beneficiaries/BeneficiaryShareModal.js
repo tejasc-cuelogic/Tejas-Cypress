@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 // import Aux from 'react-aux';
 import { Modal, Button, Header, Form, Divider, Message, Table } from 'semantic-ui-react';
 import { MaskedInput2 } from '../../../../../../theme/form';
@@ -44,10 +44,9 @@ export default class BeneficiaryShareModal extends Component {
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h2">Please enter the requested distribution of shares for each beneficiary.</Header>
+          <Header as="h3">Please enter the requested distribution of shares for each beneficiary.</Header>
           <Divider />
-          <p>The sum of all shares should equal 100%
-          </p>
+          <p>The sum of all shares should equal 100%</p>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {errors &&
@@ -88,6 +87,7 @@ export default class BeneficiaryShareModal extends Component {
               </Table.Body>
             </Table>
             <div className="center-align mt-30">
+              <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
               <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>
             </div>
           </Form>

@@ -6,6 +6,7 @@ import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
 import defaultBankLogo from '../../../../../assets/images/banks/default.png';
 import { IND_BANK_LIST } from '../../../../../constants/account';
+import AddFunds from './AddFunds';
 
 @inject('bankAccountStore', 'uiStore')
 @withRouter
@@ -17,15 +18,19 @@ export default class Plaid extends Component {
       formBankSearch,
       bankSearchChange,
       bankListing,
+      showAddFunds,
     } = this.props.bankAccountStore;
     const { inProgress } = this.props.uiStore;
+    if (showAddFunds) {
+      return <AddFunds />;
+    }
     if (bankLinkInterface === 'form') {
       return <ManualForm />;
     }
     return (
       <div>
-        <Header as="h1" textAlign="center">Link Bank Account</Header>
-        <Header as="h4" textAlign="center">Select your bank from the list</Header>
+        <Header as="h3" textAlign="center">Link Bank Account</Header>
+        <Header as="h6" textAlign="center">Select your bank from the list</Header>
         <Form>
           <Input
             fluid
@@ -87,7 +92,7 @@ export default class Plaid extends Component {
           }
         </div>
         <div className="center-align">
-          <Button className="theme-link" primary onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')}>or enter it manually</Button>
+          <Button className="cancel-link" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')}>or enter it manually</Button>
         </div>
       </div>
     );

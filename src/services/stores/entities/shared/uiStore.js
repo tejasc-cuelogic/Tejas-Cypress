@@ -33,14 +33,18 @@ export class UiStore {
   @observable dashboardStep = undefined;
   @observable editMode = false;
   @observable pwdInputType = 'password';
+  @observable isEnterPressed = false;
 
   @action
-  setPwdVisibilityStatus = () => {
-    if (this.pwdInputType === 'password') {
-      this.pwdInputType = 'text';
-    } else {
-      this.pwdInputType = 'password';
+  setIsEnterPressed = (charCode) => {
+    if (charCode === 13) {
+      this.isEnterPressed = true;
     }
+  }
+
+  @action
+  resetIsEnterPressed = () => {
+    this.isEnterPressed = false;
   }
 
   @action

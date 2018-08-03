@@ -4,9 +4,11 @@ import Blog from './public/blog/containers/Blog';
 import Home from './public/home/containers/Home';
 import Invest from './public/invest/containers/Invest';
 import Offering from './public/offering/containers/Offering';
+import OfferDetails from './public/offering/containers/OfferDetails';
 import CaseStudies from './public/caseStudies/containers/CaseStudies';
 import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
+import Resources from './public/resources';
 
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
@@ -16,12 +18,13 @@ import Users from './private/admin/userManagement/containers/Users';
 import UserDetails from './private/admin/userManagement/containers/UserDetails';
 import UsersNew from './private/admin/userManagement/containers/UsersNew';
 
-import BusinessApplication from './private/issuer/businessApplication/containers/BusinessApplication';
+// import BusinessApplication from
+// './private/issuer/businessApplication/containers/BusinessApplication';
 
 import {
   AdminAuthorization,
   BusinessAuthorization,
-  UserAuthorization,
+  // UserAuthorization,
 } from '../modules/shared/Authorization';
 
 export const publicRoutes = [
@@ -35,7 +38,7 @@ export const publicRoutes = [
     component: Agreements,
   },
   {
-    path: '/about/:section',
+    path: '/about',
     component: About,
   },
   {
@@ -59,8 +62,8 @@ export const publicRoutes = [
     component: CaseStudies,
   },
   {
-    path: '/offerings/:offerId',
-    component: Offering,
+    path: '/offerings/:id',
+    component: OfferDetails,
   },
   {
     path: '/offerings',
@@ -69,6 +72,10 @@ export const publicRoutes = [
   {
     path: '/business',
     component: Business,
+  },
+  {
+    path: '/resources',
+    component: Resources,
   },
   {
     path: '/business-application',
@@ -128,11 +135,5 @@ export const privateRoutes = [
     path: '/app/users',
     component: Users,
     auth: AdminAuthorization,
-  },
-  {
-    path: '/app/business-application',
-    exact: false,
-    component: BusinessApplication,
-    auth: UserAuthorization,
   },
 ];

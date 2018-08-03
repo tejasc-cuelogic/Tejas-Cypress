@@ -8,7 +8,7 @@ import Redeem from './Redeem';
 
 const RewardList = props => props.rewards.map(offering => (
   <Aux>
-    <Header as="h3">{offering.name}</Header>
+    <Header as="h4">{offering.name}</Header>
     <Card fluid>
       <div className="table-wrapper">
         <Table unstackable singleLine className="investment-details">

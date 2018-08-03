@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 
-// queries, mutations and subscriptions
+// queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
   query getUsers($search: String, $orderBy: userOrderBy, $filters: [UserFilter]) {
-    users(search: $search, limit: "10", orderBy: $orderBy, filters: $filters) {
+    users(search: $search, orderBy: $orderBy, filters: $filters) {
       resultCount
       totalCount
       lek {
@@ -96,6 +96,28 @@ query getUserDetails($id: ID!) {
       name
       url
     }
+    investorProfileData {
+      isPartialProfile
+      employmentStatusInfo {
+        employmentStatus
+        employer
+        currentPosition
+      }
+      investorProfileType
+      financialInfo {
+        netWorth
+        annualIncomeThirdLastYear
+        annualIncomeLastYear
+        annualIncomeCurrentYear
+        directorShareHolderOfCompany
+        employedOrAssoWithFINRAFirmName
+      }
+      investmentExperienceInfo {
+        investmentExperienceLevel
+        readyInvestingInLimitedLiquiditySecurities
+        readyForRisksInvolved
+      }
+    }
     accountStatus 
   }
 }
@@ -124,7 +146,7 @@ export const deleteUserMutation = gql`
 `;
 
 export const toggleUserAccount = gql`
-  mutation updateUserStatus($id: String!, $status: UserProfileStatusEnum!) {
+  mutation updateUserStatus($id: String!, $status: profileEnum!) {
     updateUserStatus(userId: $id, accountStatus:$status) {
       id
     }

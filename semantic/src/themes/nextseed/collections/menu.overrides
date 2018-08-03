@@ -1,10 +1,296 @@
 /*******************************
          Theme Overrides
 *******************************/
+.header-wrap{
+    .ui.menu{
+        height:58px;
+        border:none;
+        border-radius:0;
+        box-shadow:none;
+        transition: all ease-in-out 0.5s;
+        .menu{
+            margin:@11px @16px;
+            .item{
+                color:@neutral;
+                &:hover, &.active{
+                    color:@primary-one;
+                    background-color:transparent;
+                }
+                &.active > span{
+                    padding-bottom:@2px;
+                    border-bottom:1px solid @primary-one;
+                    margin-bottom: 4px;
+                }
+                button {
+                    font-weight: @fontMedium;
+                }
+            }
+        }
+        .item{
+            padding:@3px @18px;
+            font-weight:@fontMedium;
+            text-transform:uppercase;
+            > span{
+                padding:0.5em 0;
+            }
+            &:hover {
+                background-color: transparent;
+            }
+        }
+        &.inverted {
+            background-color:fade(@neutral, 90%);
+            .item{
+                color:@white;
+                &:hover, &.active{
+                    color:@primary-one;
+                    background-color:transparent;
+                }
+                &.active > span{
+                    padding-bottom:@2px;
+                    border-bottom:1px solid @primary-one;
+                    margin-bottom: 4px;
+                    color:@primary-one;
+                }
+            }
+        }
+        &.slide-up {
+            top: -100px;
+        }
+        .dropdown.item .menu {
+            top: 129%;
+            background: transparent;
+            &.transition:after {
+                content: "";
+                position: absolute;
+                top: -12px;
+                left: 50%;
+                margin-left: -6px;
+                border-width: 0 12px 12px;
+                border-style: solid;
+                border-color: @primary-one transparent;
+                display: block;
+                width: 0;
+            }
+            >.item {
+                background: @primary-one !important;
+                text-align: center;
+                color: @white !important;
+                &:hover, &.active {
+                    background: @primary-one-darken !important;
+                    color: @white !important;
+                }
+            }
+        }
+    }
+}
+.ui.secondary.menu.menu-secondary-fixed {
+    border:none;
+    height:58px;
+    border-radius:0;
+    box-shadow:none;
+    .item{
+        padding:@3px @18px;
+        &:hover {
+            background-color: transparent;
+        }
+        img.ui.image.logo{
+            transform: scale(0);
+        } 
+        >.button {
+            transform: scale(0);
+        }
+    }
+    .menu.menu-secondary {
+        flex-grow: 1;
+        display: flex;
+        .item {
+            font-weight:@fontMedium;
+            text-transform:uppercase;
+            border-bottom:2px solid transparent !important;
+            border-radius:0 !important;
+            padding:@10px 0;
+            margin:0 @18px;
+            &:hover, &:active, &:focus, &.active {
+                border-color:@primary-one !important;
+                background-color:transparent !important;
+            }
+            .header{
+                border-color:transparent !important;
+            }
+        }
+    }
+    &.active {
+        background-color: @white;
+        box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        z-index: 1001;
+        transition: all .3s ease;
+        .item {
+            img.ui.image.logo{
+                transform: scale(1);
+                transition: transform .3s ease;
+            } 
+            >.button {
+                transform: scale(1);
+                transition: transform .3s ease;
+            }
+        }
+    }
+    &.insight-menu {
+        margin: 0 -@5px;
+        .ui.dropdown {
+            color: @primary-one !important;
+            padding-left: 0;
+            padding-right: 0;
+            >.dropdown.icon:before {
+                content: '\e914';
+                font-family: "nextseed";
+            } 
+        }
+    }
+}
+.footer-head{
+    .ui.menu{
+        &.inverted{
+            background-color:transparent;
+            .right.menu .item{
+                padding:@13px @7px;
+            }
+        }
+        .item > .icon{
+            margin:0;
+        }
+        >.item, a.item{
+            min-width:120px;
+            padding:@13px 0;
+            &:hover{
+                background-color:transparent;
+            }
+        }
+        .menu {
+            a.item {
+                min-width: 0;
+            }
+        }
+    }
+}
+footer{
+    section{
+        .ui.vertical.text.menu{
+            width:120px;
+            margin:0;
+            padding:0 @15px 0 0;
+            flex-direction:row;
+            display:inline-block;
+            vertical-align: top;
+            .item{
+                margin:0;
+            }
+        }
+    }
+}
+.filter-menu {
+    border-top: 1px solid @neutral-middark;
+    border-bottom: 1px solid @neutral-middark;
+    height: @60px;
+    position: relative;
+    .ui.text.menu {
+        margin: 0;
+        height: @60px;
+        position: relative;
+        .item {
+            font-weight: @fontMedium;
+            font-size: @14px;
+            line-height: @20px;
+            .ui.image.filterIcon {
+                margin-right: @10px;
+            }
+            .ui.image.closeIcon {
+                margin-left: 117px;
+            }
+        }
+    }
+}
+.offer-details {
+    .offering-side-menu {
+        .ui.vertical.menu {
+			background-color: transparent;
+			.item {
+				color: @white;
+				border-left: @4px solid transparent;
+				border-radius: 0;
+				padding-left: @27px;
+				&:hover, &.active {
+					background-color: @neutral;
+					border-color: @primary-one;
+					color: @primary-one;
+				}
+				>i.icon {
+					float: left;
+					margin-left: 0;
+                    margin-right: @14px;
+                    font-size: @20px;
+                    margin-top: -3px;
+				}
+				>.label.circular {
+					margin-top: -5px;
+				}
+				&.watch-deal-menu {
+					color: @neutral-middark;
+				}
+			}
+			.ui.divider {
+				margin: 60px 29px 0;
+            }
+		}
+    }
+    .offering-content-spacer {
+        .ui.secondary.menu .item {
+            font-weight: bold;
+            line-height: @20px;
+            font-size: @15px;
+            color: @neutral;
+            >i.icon {
+                font-size: @20px;
+            }
+            &.span {
+                font-weight: bold;
+                line-height: @24px;
+                font-size: @13px;
+                color: @neutral-middark;
+            }
+            &:hover {
+                background-color: transparent;
+            }
+        }
+    }
+}
+
+//  Private pages menus
 .ui.menu{
-    &.pagination{
-        &.right.floated{
-            margin:1rem;
+    &.pagination.text{
+        margin:0;
+        padding:@10px @5px;
+        border-radius:@4px;
+        background-color:@white;
+        box-shadow:0 0px 10px rgba(0,0,0,.1);
+        .item{
+            min-width:2em;
+            font-weight:@fontMedium;
+            color:@neutral-offdark;
+            >.ui.input input{
+                margin:0;
+                width:40px;
+                height:24px;
+                padding:0 5px;
+                border:@neutral-offdark 1px solid;
+                border-radius:4px;
+                text-align:center;
+            }
         }
     }
     &.secondary.vertical{
@@ -32,14 +318,27 @@
     }
 }
 
-.ui.menu.secondary-menu{
-    a.item{
-        padding:@16px @20px;
-        >.icon{
-            color:@border-light;
-        }
-        &.done >.icon{
-            color:@theme-primary;
+.ui.menu{
+    &.attached:not(.tabular){
+        border:none;
+    }
+    &.secondary-menu{
+        background-color:@neutral-darkwhite;
+        a.item{
+            padding:@16px @20px;
+            // font-weight:@fontMedium;
+            &:before{
+                background-color:@neutral-darkwhite;
+            }
+            &:hover, &.active{
+                background-color:@neutral-offwhite;
+            }
+            >.icon{
+                color:@neutral-darkwhite;
+            }
+            &.done >.icon{
+                color:@primary-one;
+            }
         }
     }
 }

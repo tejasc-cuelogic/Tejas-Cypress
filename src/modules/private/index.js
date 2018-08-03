@@ -6,6 +6,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { authActions } from '../../services/actions';
 import { privateRoutes } from '../../modules/routes';
 import SidebarLeftOverlay from './../../theme/layout/SidebarLeftOverlay';
+import NotFound from '../shared/NotFound';
 
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @withRouter
@@ -22,7 +23,7 @@ export default class Private extends React.Component {
     const routes = [];
     this.props.navStore.myRoutes.forEach((item) => {
       if (item.path) {
-        routes[item.path] = (
+        routes[`${item.path}_${item.to}`] = (
           <Route
             path={`/app/${item.to}`}
             component={Loadable({
@@ -50,10 +51,9 @@ export default class Private extends React.Component {
     const { avatar } = this.props.userDetailsStore.userDetails;
     const { match } = this.props;
     const UserInfo = {
-      fullname: `${User.givenName} ${User.familyName}`,
-      avatarKey: User.sub,
+      firstName: User.givenName,
+      lastName: User.familyName,
       avatarUrl: avatar ? avatar.url : '',
-      accountType: User.roles ? User.roles[0] : '',
       roles: toJS(User.roles),
     };
     const routes = this.getPrivateRoutes(UserInfo.roles);
@@ -71,6 +71,7 @@ export default class Private extends React.Component {
               />
             ))}
             {Object.keys(routes).map(route => routes[route])}
+            <Route component={NotFound} />
           </Switch>
         </SidebarLeftOverlay>
       );

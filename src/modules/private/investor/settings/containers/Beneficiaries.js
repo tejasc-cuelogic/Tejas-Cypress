@@ -42,7 +42,7 @@ export default class Beneficiaries extends Component {
           <div>loading</div>;
     return (
       <div>
-        <Header as="h3">Beneficiaries</Header>
+        <Header as="h4">Beneficiaries</Header>
         {/* <p className="intro-text">Pellentesque facilisis</p> */}
         {bLoading ? <div>loading...</div> : (
           <Grid columns={1} stackable>

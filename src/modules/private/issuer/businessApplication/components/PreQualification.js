@@ -3,30 +3,30 @@ import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Grid, Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { US_STATES } from '../../../../../constants/account';
 import Helper from '../../../../../helper/utility';
 import {
-  FormRadioGroup, FormSelect, FormCheckbox, FormInput, MaskedInput2, AutoComplete,
+  FormRadioGroup, FormCheckbox, FormInput, MaskedInput2, AutoComplete,
 } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
-import { BUSINESS_GOAL } from '../../../../../services/constants/newBusiness';
 
-@inject('newBusinessStore', 'uiStore')
+@inject('businessAppStore', 'uiStore')
 @observer
 export default class PreQualification extends Component {
   submit = (e) => {
     e.preventDefault();
-    this.props.newBusinessStore.businessPreQualification();
-    const APP_STATUS = this.props.newBusinessStore.BUSINESS_APP_STATUS;
-    if (APP_STATUS !== '') {
-      Helper.toast('Business pre-qualification request submitted!', APP_STATUS);
-      // this.props.history.push(`/business-application/${APP_STATUS}`);
-    }
+    this.props.businessAppStore.businessPreQualificationFormSumbit().then(() => {
+      const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
+      Helper.toast('Business pre-qualification request submitted!', 'success');
+      this.props.history.push(`/app/business-application/${url}`);
+    });
   }
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange, preQualifInfoChange, setAddressFields,
-    } = this.props.newBusinessStore;
+      BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
+      businessAppEleMaskChange, getFranchiseCondition,
+      getBusinessTypeCondtion,
+      preQualFormDisabled,
+    } = this.props.businessAppStore;
     const { fields } = BUSINESS_APP_FRM;
     return (
       <Grid container>
@@ -39,15 +39,16 @@ export default class PreQualification extends Component {
               subHeader={
                 <Aux>
                   Welcome to NextSeed! Run through this quick form to get pre-qualified.
-                  <Link target="_blank" to="/about/faq" className="link"> Need help or have questions?</Link>
+                  <Link target="_blank" to="/about/faq" className="link">Need help or have questions?</Link>
                 </Aux>
               }
             />
             <FormElementWrap
               header="What is your Business Model?"
-              subHeader="Only Business to Consumer models are accepted at this time"
+              subHeader="Only Business to Consumer models are accepted at this time."
             >
               <FormRadioGroup
+                disabled={preQualFormDisabled}
                 fielddata={fields.businessModel}
                 name="businessModel"
                 iconic
@@ -59,69 +60,58 @@ export default class PreQualification extends Component {
               <Grid>
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                   <div className="field-wrap">
-                    <FormInput
-                      name="businessName"
-                      value={fields.businessName.value}
-                      fielddata={fields.businessName}
-                      changed={businessAppEleChange}
+                    {
+                      ['businessName', 'website'].map(field => (
+                        <FormInput
+                          disabled={preQualFormDisabled}
+                          key={field}
+                          type="text"
+                          name={field}
+                          value={fields[field].value}
+                          fielddata={fields[field]}
+                          changed={businessAppEleChange}
+                        />
+                      ))
+                    }
+                    <MaskedInput2
+                      disabled={preQualFormDisabled}
+                      name="phoneNumber"
+                      fielddata={fields.phoneNumber}
+                      changed={businessAppEleMaskChange}
                     />
-                    <Header as="h5">Business Address</Header>
+                  </div>
+                </Grid.Column>
+                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+                  <div className="field-wrap">
+                    <Header as="h6">Business Address</Header>
                     <AutoComplete
+                      disabled={preQualFormDisabled}
                       name="street"
                       fielddata={fields.street}
                       onplaceselected={setAddressFields}
                       changed={businessAppEleChange}
                     />
                     <Form.Group widths="equal">
-                      <FormInput
-                        key="city"
-                        type="text"
-                        name="city"
-                        fielddata={fields.city}
-                        changed={businessAppEleChange}
-                      />
-                      <FormSelect
-                        key="state"
-                        name="state"
-                        fielddata={fields.state}
-                        options={US_STATES}
-                        changed={businessAppEleChange}
-                      />
-                      <MaskedInput2
-                        key="zipCode"
-                        name="zipCode"
-                        fielddata={fields.zipCode}
-                        changed={businessAppEleChange}
-                        zipCode
-                      />
+                      {
+                        ['city', 'state', 'zipCode'].map(field => (
+                          <FormInput
+                            disabled={preQualFormDisabled}
+                            key={field}
+                            type="text"
+                            name={field}
+                            fielddata={fields[field]}
+                            changed={businessAppEleChange}
+                          />
+                        ))
+                      }
                     </Form.Group>
-                  </div>
-                </Grid.Column>
-                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <div className="field-wrap">
-                    <FormInput
-                      name="website"
-                      value={fields.website.value}
-                      fielddata={fields.website}
-                      changed={businessAppEleChange}
-                    />
-                    <MaskedInput2
-                      name="phoneNumber"
-                      fielddata={fields.phoneNumber}
-                      changed={businessAppEleChange}
-                    />
-                    <FormInput
-                      name="email"
-                      value={fields.email.value}
-                      fielddata={fields.email}
-                      changed={businessAppEleChange}
-                    />
                   </div>
                 </Grid.Column>
               </Grid>
             </FormElementWrap>
             <FormElementWrap header="What industry are you in?" subHeader="Please select all that apply.">
               <FormCheckbox
+                disabled={preQualFormDisabled}
                 fielddata={fields.industryTypes}
                 name="industryTypes"
                 changed={businessAppEleChange}
@@ -130,6 +120,7 @@ export default class PreQualification extends Component {
             </FormElementWrap>
             <FormElementWrap header="What can NextSeed help you with?" subHeader="Select in which area NextSeed can help your business.">
               <FormRadioGroup
+                disabled={preQualFormDisabled}
                 fielddata={fields.businessGoal}
                 name="businessGoal"
                 changed={businessAppEleChange}
@@ -141,11 +132,11 @@ export default class PreQualification extends Component {
               <Grid>
                 <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
                   <div className="field-wrap">
-                    {fields.businessGoal.value &&
-                      fields.businessGoal.value === BUSINESS_GOAL.FRANCHISE &&
+                    {getFranchiseCondition &&
                       <Aux>
-                        <Header as="h5" content="Are you an existing or previous franchise holder?" />
+                        <Header as="h6" content="Are you an existing or previous franchise holder?" />
                         <FormRadioGroup
+                          disabled={preQualFormDisabled}
                           fielddata={fields.franchiseHolder}
                           name="franchiseHolder"
                           changed={businessAppEleChange}
@@ -154,20 +145,20 @@ export default class PreQualification extends Component {
                         <Divider section hidden />
                       </Aux>
                     }
-                    {fields.businessGoal.value &&
-                      fields.businessGoal.value !== BUSINESS_GOAL.FRANCHISE
-                      && fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW &&
+                    {getBusinessTypeCondtion &&
                       <Aux>
-                        <Header as="h5" content="How long has the existing business been operating?" />
+                        <Header as="h6" content="How long has the existing business been operating?" />
                         <Form.Group widths="equal">
                           {
                             ['businessAgeYears', 'businessAgeMonths'].map(field => (
-                              <FormInput
+                              <MaskedInput2
+                                disabled={preQualFormDisabled}
                                 key={field}
                                 name={field}
+                                number
                                 value={fields[field].value}
                                 fielddata={fields[field]}
-                                changed={businessAppEleChange}
+                                changed={businessAppEleMaskChange}
                               />
                             ))
                           }
@@ -177,18 +168,23 @@ export default class PreQualification extends Component {
                     }
                     {
                       ['industryExperience', 'estimatedCreditScore'].map(field => (
-                        <FormInput
+                        <MaskedInput2
+                          disabled={preQualFormDisabled}
                           key={field}
                           name={field}
+                          number
+                          tooltip={fields[field].tooltip}
                           value={fields[field].value}
                           fielddata={fields[field]}
-                          changed={businessAppEleChange}
+                          changed={businessAppEleMaskChange}
                         />
                       ))
                     }
                     {
                       ['totalProjectCost', 'amountNeeded'].map(field => (
                         <MaskedInput2
+                          hoverable
+                          disabled={preQualFormDisabled}
                           key={field}
                           prefix="$ "
                           name={field}
@@ -196,7 +192,7 @@ export default class PreQualification extends Component {
                           tooltip={fields[field].tooltip}
                           value={fields[field].value}
                           fielddata={fields[field]}
-                          changed={values => preQualifInfoChange(values, field)}
+                          changed={businessAppEleMaskChange}
                         />
                       ))
                     }
@@ -206,55 +202,62 @@ export default class PreQualification extends Component {
             </FormElementWrap>
             <FormElementWrap header="What will the funds be used for?" subHeader="Please select all that apply.">
               <FormCheckbox
+                disabled={preQualFormDisabled}
                 fielddata={fields.fundUsage}
                 name="fundUsage"
                 changed={businessAppEleChange}
                 containerclassname="iconic-checkbox"
               />
             </FormElementWrap>
-            <FormElementWrap
-              header="Next year projections"
-              subHeader="For your business, give us a quick snapshot of what the next year will look like."
-            >
+            <FormElementWrap>
               <Grid>
-                {fields.businessGoal.value &&
-                  fields.businessGoal.value !== BUSINESS_GOAL.FRANCHISE
-                    && fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW &&
-                    <Grid.Column
-                      widescreen={7}
-                      largeScreen={7}
-                      computer={8}
-                      tablet={16}
-                      mobile={16}
-                    >
-                      <div className="field-wrap">
-                        {
-                          ['previousYearGrossSales', 'previousYearCogSold', 'previousYearOperatingExpenses', 'previousYearNetIncome'].map(field => (
-                            <MaskedInput2
-                              key={field}
-                              name={field}
-                              currency
-                              value={fields[field].value}
-                              fielddata={fields[field]}
-                              changed={businessAppEleChange}
-                            />
-                          ))
-                        }
-                      </div>
-                    </Grid.Column>
+                {getBusinessTypeCondtion &&
+                  <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
+                    <Header as="h3">
+                      Previous year
+                      <Header.Subheader>
+                        For your business, give us a quick snapshot
+                        of what the prior year looked like.
+                      </Header.Subheader>
+                    </Header>
+                    <div className="field-wrap">
+                      {
+                        ['previousYearGrossSales', 'previousYearCogSold', 'previousYearOperatingExpenses', 'previousYearNetIncome'].map(field => (
+                          <MaskedInput2
+                            disabled={preQualFormDisabled}
+                            key={field}
+                            name={field}
+                            prefix="$ "
+                            currency
+                            value={fields[field].value}
+                            fielddata={fields[field]}
+                            changed={businessAppEleMaskChange}
+                          />
+                        ))
+                      }
+                    </div>
+                  </Grid.Column>
                 }
-                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+                <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
+                  <Header as="h3">
+                    Next year projections
+                    <Header.Subheader>
+                      For your business, give us a quick snapshot
+                      of what the next year will look like.
+                    </Header.Subheader>
+                  </Header>
                   <div className="field-wrap">
                     {
                       ['nextYearGrossSales', 'nextYearCogSold', 'nextYearOperatingExpenses', 'nextYearNetIncome'].map(field => (
                         <MaskedInput2
+                          disabled={preQualFormDisabled}
                           key={field}
                           name={field}
                           prefix="$ "
                           currency
                           value={fields[field].value}
                           fielddata={fields[field]}
-                          changed={values => preQualifInfoChange(values, field)}
+                          changed={businessAppEleMaskChange}
                         />
                       ))
                     }
@@ -264,8 +267,9 @@ export default class PreQualification extends Component {
             </FormElementWrap>
             <FormElementWrap header="What is your company’s entity structure?">
               <FormRadioGroup
-                fielddata={fields.entityStructure}
-                name="entityStructure"
+                disabled={preQualFormDisabled}
+                fielddata={fields.businessEntityStructure}
+                name="businessEntityStructure"
                 changed={businessAppEleChange}
                 iconic
                 containerclassname="iconic-radio"
@@ -275,9 +279,10 @@ export default class PreQualification extends Component {
               header="Legal Confirmation"
               subHeader="Please check all that apply.
                 Note some of these items are not disqualifying conditions, but a NextSeed
-                representative may follow up to verify any applicable details"
+                representative may follow up to verify any applicable details."
             >
               <FormCheckbox
+                disabled={preQualFormDisabled}
                 fielddata={fields.legalConfirmation}
                 name="legalConfirmation"
                 changed={businessAppEleChange}

@@ -2,12 +2,11 @@
              Icon
 *******************************/
 
-/*-------------------
-   Icon Variables
---------------------*/
+/*--------------
+   Font Files
+---------------*/
 
 @fontName: 'icons';
-@fallbackSRC: url("@{fontPath}/@{fontName}.eot");
 @src:
   url("@{fontPath}/@{fontName}.eot?#iefix") format('embedded-opentype'),
   url("@{fontPath}/@{fontName}.woff2") format('woff2'),
@@ -15,7 +14,41 @@
   url("@{fontPath}/@{fontName}.ttf") format('truetype'),
   url("@{fontPath}/@{fontName}.svg#icons") format('svg')
 ;
+@fallbackSRC: url("@{fontPath}/@{fontName}.eot");
 
+/*--------------
+ Optional Files
+---------------*/
+
+/* Outline Icons */
+@importOutlineIcons: true;
+@outlineFontName: 'outline-icons';
+@outlineSrc:
+  url("@{fontPath}/@{outlineFontName}.eot?#iefix") format('embedded-opentype'),
+  url("@{fontPath}/@{outlineFontName}.woff2") format('woff2'),
+  url("@{fontPath}/@{outlineFontName}.woff") format('woff'),
+  url("@{fontPath}/@{outlineFontName}.ttf") format('truetype'),
+  url("@{fontPath}/@{outlineFontName}.svg#icons") format('svg')
+;
+@outlineFallbackSRC: url("@{fontPath}/@{outlineFontName}.eot");
+
+/* Brand Icons */
+@importBrandIcons: true;
+@brandFontName: 'brand-icons';
+@brandSrc:
+  url("@{fontPath}/@{brandFontName}.eot?#iefix") format('embedded-opentype'),
+  url("@{fontPath}/@{brandFontName}.woff2") format('woff2'),
+  url("@{fontPath}/@{brandFontName}.woff") format('woff'),
+  url("@{fontPath}/@{brandFontName}.ttf") format('truetype'),
+  url("@{fontPath}/@{brandFontName}.svg#icons") format('svg')
+;
+@brandFallbackSRC: url("@{fontPath}/@{brandFontName}.eot");
+
+/*--------------
+   Definition
+---------------*/
+
+/* Icon Variables */
 @opacity: 1;
 @width: @iconWidth;
 @height: 1em;
@@ -23,18 +56,17 @@
 
 
 /* Variations */
-
 @linkOpacity: 0.8;
 @linkDuration: 0.3s;
 @loadingDuration: 2s;
 
 @circularSize: 2em;
-@circularPadding: 0.5em 0.5em;
+@circularPadding: 0.5em 0em;
 @circularShadow: 0em 0em 0em 0.1em rgba(0, 0, 0, 0.1) inset;
 
 @borderedSize: 2em;
 @borderedVerticalPadding: ((@borderedSize - @height) / 2);
-@borderedHorizontalPadding: ((@borderedSize - @width) / 2);
+@borderedHorizontalPadding: 0em;
 @borderedShadow: 0em 0em 0em 0.1em rgba(0, 0, 0, 0.1) inset;
 
 @cornerIconSize: 0.45em;
@@ -74,6 +106,8 @@
 
 //  NextSeed V2 custom Icon Variables
 @ns-activity-arrow: "\e900";
+@ns-arrow-double-left: "\e984";
+@ns-arrow-double-right: "\e985";
 @ns-arrow-down: "\e901";
 @ns-arrow-left: "\e902";
 @ns-arrow-right: "\e903";
@@ -113,6 +147,7 @@
 @ns-close-circle: "\e92d";
 @ns-close-light: "\e950";
 @ns-coments-info: "\e91d";
+@ns-coments-q-a: "\e97a";
 @ns-comments-edit: "\e93c";
 @ns-compas: "\e91e";
 @ns-contact-card: "\e971";
@@ -121,9 +156,11 @@
 @ns-dashboard: "\e920";
 @ns-dashboard-circle: "\e921";
 @ns-document: "\e977";
+@ns-document-search: "\e97b";
 @ns-doller-circle: "\e922";
 @ns-download: "\e923";
 @ns-dumbbells: "\e959";
+@ns-edu-center: "\e97c";
 @ns-ellipsis: "\e924";
 @ns-entity: "\e93d";
 @ns-entity-line: "\e94d";
@@ -135,17 +172,20 @@
 @ns-file: "\e93f";
 @ns-first-aid: "\e958";
 @ns-fitness: "\e952";
+@ns-flag-line: "\e97d";
 @ns-food: "\e940";
 @ns-food-light: "\e95a";
 @ns-franchise: "\e95b";
 @ns-help: "\e949";
 @ns-help-circle: "\e926";
+@ns-home-line: "\e97e";
 @ns-hospitality: "\e953";
 @ns-image: "\e927";
 @ns-individual: "\e941";
 @ns-individual-line: "\e94e";
 @ns-info-circle: "\e928";
 @ns-inventory: "\e95c";
+@ns-investment: "\e97f";
 @ns-investor: "\e929";
 @ns-ira: "\e942";
 @ns-ira-line: "\e94f";
@@ -153,6 +193,7 @@
 @ns-link: "\e943";
 @ns-lock: "\e92b";
 @ns-long-arrow-left: "\e92c";
+@ns-minus-square: "\e986";
 @ns-new-business: "\e95d";
 @ns-new-location: "\e95e";
 @ns-new-product: "\e95f";
@@ -167,16 +208,19 @@
 @ns-pencil-circle-line: "\e96e";
 @ns-phone-line: "\e973";
 @ns-proprietor: "\e963";
+@ns-plus-square: "\e987";
 @ns-real-estate: "\e964";
 @ns-reload-circle: "\e978";
 @ns-reload-circle-line: "\e979";
 @ns-renovations: "\e965";
 @ns-replay: "\e946";
 @ns-restructure-debt: "\e966";
+@ns-rewards: "\e980";
 @ns-rss-feed: "\e94a";
 @ns-search: "\e931";
 @ns-setting: "\e932";
 @ns-shield-check: "\e96c";
+@ns-star: "\e981";
 @ns-statement: "\e933";
 @ns-store: "\e967";
 @ns-tags: "\e934";
@@ -186,8 +230,10 @@
 @ns-times-box: "\e935";
 @ns-times-circle: "\e936";
 @ns-trash: "\e937";
+@ns-trending: "\e982";
 @ns-twitter: "\e947";
 @ns-unlock: "\e948";
+@ns-updates: "\e983";
 @ns-upload: "\e938";
 @ns-user: "\e94c";
 @ns-users: "\e939";
