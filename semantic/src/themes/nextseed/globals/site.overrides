@@ -5,6 +5,11 @@
 body{
 	color:@neutral-middark;
 }
+.clearfix::after {
+	content: "";
+	clear: both;
+	display: table;
+}
 section{
 	padding:@60px 0;
 	.caption{
@@ -53,6 +58,9 @@ h6{
 }
 .mb-80 {
 	margin-bottom: 80px !important;
+}
+.mt-20 {
+	margin-top: @20px !important;
 }
 .mt-30 {
 	margin-top: @30px !important;
