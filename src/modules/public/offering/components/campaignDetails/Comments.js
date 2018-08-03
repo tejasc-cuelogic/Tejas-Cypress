@@ -131,9 +131,7 @@ class Comments extends Component {
                 <Comment>
                   <Comment.Content>
                     <Comment.Author>Karla</Comment.Author>
-                    <Comment.Metadata>
-                      <div>JUL 12</div>
-                    </Comment.Metadata>
+                    <Comment.Metadata className="text-uppercase">JUL 12</Comment.Metadata>
                     {/* add after sign up - do not remove */}
                     <Comment.Actions>
                       <Comment.Action>Reply</Comment.Action>
