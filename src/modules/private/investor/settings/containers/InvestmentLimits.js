@@ -20,7 +20,7 @@ export default class InvestmentLimits extends Component {
   }
 
   closeModal = () => {
-    this.props.history.push('/app/profile-settings/investment-limits');
+    this.props.history.push(this.props.match.url);
   }
 
   render() {
