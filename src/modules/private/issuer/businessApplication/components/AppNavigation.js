@@ -18,21 +18,19 @@ export default class AppNavigation extends Component {
     this.setState({ step, navItems });
   }
   actualSubmit = (where) => {
+    const { checkFormisValid, currentApplicationId } = this.props.businessAppStore;
     if (where >= 0) {
-      const { checkFormisValid, currentApplicationId } = this.props.businessAppStore;
-      if (checkFormisValid(`${this.state.navItems[this.state.step].to}`)) {
+      if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
         this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
-        this.props.action();
         this.props.history.push(`/app/business-application/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
-      } else {
-        // this.props.history.push(`/app/business-application/${currentApplicationId}/confirm`);
       }
+    } else {
+      this.props.history.push(`/app/business-application/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
     }
   }
 
   submitSaveContinue = (stepUrl) => {
-    this.props.businessAppStore.businessAppParitalSubmit(stepUrl).then(() => {
-    });
+    this.props.businessAppStore.businessAppParitalSubmit(stepUrl);
   }
 
   submit = (e) => {
@@ -43,33 +41,37 @@ export default class AppNavigation extends Component {
     });
   }
   render() {
-    const { isFileUploading } = this.props.businessAppStore;
+    const { isFileUploading, canSubmitApp, formReadOnlyMode } = this.props.businessAppStore;
     const { inProgress } = this.props.uiStore;
     return (
       <div className="navigation-buttons">
-        {this.state.step > 0 &&
-          <div className="pull-left">
-            <Button circular icon className="multistep__btn prev" onClick={() => this.actualSubmit(-1)}>
-              <Icon className="ns-arrow-left" />
-            </Button>
-            {this.state.navItems[this.state.step - 1].title}
-          </div>
+        {!formReadOnlyMode &&
+          <Aux>
+            {this.state.step > 0 &&
+              <div className="pull-left">
+                <Button circular icon className="multistep__btn prev" onClick={() => this.actualSubmit(-1)}>
+                  <Icon className="ns-arrow-left" />
+                </Button>
+                {this.state.navItems[this.state.step - 1].title}
+              </div>
+            }
+            <div className="pull-right">
+              {this.state.step < (this.state.navItems.length - 1) ? (
+                <Aux>
+                  {this.state.navItems[this.state.step + 1].title}
+                  <Button circular icon primary className="multistep__btn next active" onClick={() => this.actualSubmit(1)}>
+                    <Icon className="ns-arrow-right" />
+                  </Button>
+                </Aux>
+              ) :
+                <Aux>
+                  <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : 'Save'} />
+                  <Button loading={inProgress} onClick={this.submit} disabled={!canSubmitApp} primary className="very relaxed" content="Submit" />
+                </Aux>
+              }
+            </div>
+          </Aux>
         }
-        <div className="pull-right">
-          {this.state.step < (this.state.navItems.length - 1) ? (
-            <Aux>
-              {this.state.navItems[this.state.step + 1].title}
-              <Button circular icon primary className="multistep__btn next active" onClick={() => this.actualSubmit(1)}>
-                <Icon className="ns-arrow-right" />
-              </Button>
-            </Aux>
-          ) :
-            <Aux>
-              <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : 'Save'} />
-              <Button loading={inProgress} onClick={this.submit} disabled={!this.props.canSubmitApp} primary className="very relaxed" content="Submit" />
-            </Aux>
-          }
-        </div>
       </div>
     );
   }

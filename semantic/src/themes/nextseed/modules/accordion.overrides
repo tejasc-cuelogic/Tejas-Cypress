@@ -37,7 +37,45 @@
 		margin:0;
 		position:relative;
 		padding-right:30px;
-		font-weight:700;
+		font-weight:@fontMedium;
+	}
+	&.faq-accordion {
+		box-shadow: none;
+		.title:not(.ui) {
+			color: @neutral;
+			font-weight: @fontMedium;
+			border-bottom: @border-light 1px solid;
+			padding: @14px 0;
+			font-size: @20px;
+			.ns-chevron-down.icon {
+				color:@neutral-middark;
+				font-size: @15px;
+			}
+			~.content:not(.ui) {
+				padding-bottom: 0;
+			}
+		}
+		.active.content {
+			background: @white !important;
+		}
+		.accordion {
+			border-bottom: @border-light 1px solid;
+			margin-top: 0;
+			.title:not(.ui) {
+				border-bottom: 0;
+				font-weight: @normal;
+				font-size: @15px;
+				&.active {
+					font-weight: @bold;
+				}
+				i.icon{
+					margin-right: @14px;
+				}
+				~.content:not(.ui) {
+					padding-bottom: @14px;
+				}
+			}
+		}
 	}
 }
 
@@ -48,7 +86,7 @@
 		.ns-chevron-down.icon {
 			margin:0;
 			height:@21px;
-			color:@theme-primary;
+			color:@primary-one;
 			line-height:@21px;
 			position:absolute;
 			right:0;
@@ -59,6 +97,13 @@
 			.ns-chevron-down.icon{
 				transform:rotate(180deg);
 			}
+		}
+		.ns-chevron-up.icon{
+			height:auto;
+			transform:rotate(180deg);
+		}
+		&.active .ns-chevron-up.icon{
+			transform:rotate(0deg);
 		}
 	}
 	//	FAQ UI
@@ -102,7 +147,7 @@
 					left:0;
 					top:0;
 					bottom:0;
-					background-color:@theme-primary;
+					background-color:@primary-one;
 				}
 			}
 		}
@@ -126,7 +171,7 @@
 		.title{
 			border:@borderColor 1px solid;
 			&.active{
-				background-color:#F8F8F8;
+				background-color:@neutral-offdark;
 			}
 			time{
 				font-size:@12px;
@@ -146,9 +191,8 @@
 			float:right;
 			z-index:99;
 			a, .ui.button, .ui.buttons .button{
-				font-family:@pageFont;
 				font-size:@13px;
-				font-weight:400;
+				font-weight:@fontMedium;
 				text-transform:none;
 				margin:0;
 				padding:0 @8px;
@@ -193,7 +237,7 @@
 	.title{
 		padding:@12px 0;
 		font-weight:400;
-		color:@quaternary-text;
+		color:@neutral-middark;
 		border-top:@border-light 1px solid;
 		&:first-of-type{
 			border:none;
@@ -204,6 +248,60 @@
 		}
 		&.active > span{
 			color:@link-color;
+		}
+	}
+}
+
+
+//education-center
+.edu-center {
+	.ui.accordion {
+		.active.content {
+			background: @neutral-offwhite;
+		}
+	}
+	.ui.accordion:not(.styled).splitted  {
+		.title {
+			box-shadow: none;
+			font-weight: normal;
+			color: @neutral-middark;
+			background: @neutral-offwhite;
+			font-size: @14px;
+			&.active {
+				border-radius: 0;
+				background: @secondary-color;
+				color: @white;
+				&::before{
+					display: none;
+				}
+				.ns-chevron-down.icon {
+					color: @white;
+				}
+			}
+			&:first-of-type {
+				border-radius: 0;
+			}
+			>.icon {
+				color: @neutral-middark;
+			}
+			~.content:not(.ui).active+.title {
+				box-shadow: none;
+				border-top: #e0e0e0 1px solid;
+				border-radius: 0;
+			}
+		}
+		a.title {
+			display: block;
+			text-decoration: none;
+		}
+		.list a.item {
+			border-top: 0;
+			color: @neutral-middark;
+			background: @neutral-offwhite;
+			&.active {
+				color: @primary-one;
+				font-weight: @bold;
+			}
 		}
 	}
 }

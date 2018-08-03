@@ -29,8 +29,8 @@ export default class PersonalInformation extends Component {
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">Complete personal info about entity</Header>
-        <Header as="h4" textAlign="center">Enter the Authorized Signatory Information</Header>
+        <Header as="h3" textAlign="center">Complete personal info about entity</Header>
+        <p className="center-align">Enter the Authorized Signatory Information</p>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -59,7 +59,7 @@ export default class PersonalInformation extends Component {
           <Grid verticalAlign="middle">
             <Grid.Row>
               <Grid.Column width={7}>
-                <Header as="h3">
+                <Header as="h5">
                   Upload a Photo ID
                   <Header.Subheader>Drivers License or Passport</Header.Subheader>
                 </Header>

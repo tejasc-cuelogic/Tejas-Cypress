@@ -4,7 +4,7 @@ import { Image } from 'semantic-ui-react';
 import Avatar from 'react-avatar';
 
 const userRoles = {
-  admin: 'admin', issuer: 'issuer', investor: 'investor',
+  admin: 'admin', issuer: 'issuer', bowner: 'issuer', investor: 'investor',
 };
 
 const UserAvatar = observer((props) => {

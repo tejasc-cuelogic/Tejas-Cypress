@@ -17,7 +17,7 @@ export default class VerifyAccreditation extends Component {
         <Route exact path={`${this.props.match.url}/net-worth`} component={Accreditation} />
         <Modal open closeIcon onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
-            <Header as="h2">How are you accredited?</Header>
+            <Header as="h3">How are you accredited?</Header>
             <Divider />
             <p>
               Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -29,7 +29,7 @@ export default class VerifyAccreditation extends Component {
               <Grid.Row columns={2}>
                 <Grid.Column>
                   <div className="user-type">
-                    <h3>Income</h3>
+                    <Header as="h4">Income</Header>
                     <p>
                       <b>Income of $200k, or $300k</b><br />
                       with spouse, in each of past 2 years and expecting same or more this year
@@ -38,7 +38,7 @@ export default class VerifyAccreditation extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <div className="user-type">
-                    <h3>Assets</h3>
+                    <Header as="h4">Assets</Header>
                     <p>
                       <b>Net worth of $1M</b><br />
                       individually or joint with spouse, excluding your primary residence
@@ -47,7 +47,7 @@ export default class VerifyAccreditation extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-            <Divider section hidden />
+            {/* <Divider section hidden /> */}
             <Button
               circular
               icon={{ className: 'ns-arrow-right' }}

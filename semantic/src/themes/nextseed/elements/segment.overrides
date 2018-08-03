@@ -1,6 +1,19 @@
 /*******************************
          Theme Overrides
 *******************************/
+//  Public page Starts
+.ui.padded.segment {
+    padding: 30px;
+}
+.press-news {
+	.ui.segment {
+		padding: 0;
+		border: 0;
+		box-shadow: none;
+    }
+}
+//  Public page Ends
+
 //  User Account details
 .ui.segment[class*="bottom attached"]{
     border-radius:0;
@@ -12,7 +25,7 @@
         padding-left:0;
         padding-right:0;
         border:none;
-        text-align:center;
+        // text-align:center;
     }
 }
 
@@ -26,4 +39,11 @@
         border:none;
         border-radius:0 0 @4px @4px;
     }
+}
+.ui.padded.segment {
+    padding: 30px;
+}
+.ui.attached.segment {
+    line-height: 24px;
+    font-size: 15px;
 }

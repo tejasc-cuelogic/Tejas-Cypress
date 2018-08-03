@@ -1,11 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { Card } from 'semantic-ui-react';
+import { Card, Header } from 'semantic-ui-react';
 import { Spinner } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
-/* eslint-disable arrow-body-style */
 const userVerifiedDetails = (props) => {
   if (!props.legalDetails) {
     return (
@@ -23,14 +22,14 @@ const userVerifiedDetails = (props) => {
   if (!props.isUserVerified(props.legalDetails.cipStatus)) {
     return (
       <Card fluid className="form-card">
-        <h3>Identity not verified</h3>
-        <Link to="/app/summary" onClick={() => props.handleNavToVerifyIdentity('InvestorPersonalDetails')} ><b>Verify Identity</b></Link>
+        <Header as="h5">Identity not verified</Header>
+        <Link to="/app/summary/identity-verification/0" ><b>Verify Identity</b></Link>
       </Card>
     );
   }
   return (
     <Card fluid className="form-card">
-      <h3>Identity verified</h3>
+      <Header as="h5">Identity verified</Header>
       <dl className="dl-horizontal">
         <dt>Legal First Name</dt>
         <dd>{legalName.firstLegalName}</dd>

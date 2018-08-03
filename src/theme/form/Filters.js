@@ -3,9 +3,9 @@ import React from 'react';
 import { toJS } from 'mobx';
 import { Grid, Input, Dropdown, Form, Label, Icon, List } from 'semantic-ui-react';
 import moment from 'moment';
-import DatePicker from 'react-datepicker';
 import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
+import DatePicker from './src/FormDatePicker';
 
 export const DropdownFilter = props => (
   <Form.Field className="dropdown-field">
@@ -29,9 +29,11 @@ export const ByKeyword = ({
   w, executeSearch, placeholder, fLabel,
 }) => (
   <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
-    <Form inverted>
-      {fLabel && <label className="invisible">{placeholder}</label>}
-      <Input fluid onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />
+    <Form>
+      <Form.Field inverted>
+        {fLabel && <label className="invisible">{placeholder}</label>}
+        <Input fluid onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />
+      </Form.Field>
     </Form>
   </Grid.Column>
 );
@@ -40,28 +42,18 @@ export const DateRangeFilter = props => (
   <Form.Field>
     <label>{props.label}</label>
     <Form.Group widths="equal">
-      <Form.Field>
-        <DatePicker
-          showMonthDropdown
-          showYearDropdown
-          dateFormat="MM/DD/YYYY"
-          selected={props.filters.startDate}
-          placeholderText="MM/DD/YYYY"
-          maxDate={moment()}
-          onChange={props.changeStart}
-        />
-      </Form.Field>
-      <Form.Field>
-        <DatePicker
-          showMonthDropdown
-          showYearDropdown
-          dateFormat="MM/DD/YYYY"
-          selected={props.filters.endDate}
-          placeholderText="MM/DD/YYYY"
-          maxDate={moment()}
-          onChange={props.changeEnd}
-        />
-      </Form.Field>
+      <DatePicker
+        selected={props.filters.startDate}
+        placeholder="MM/DD/YYYY"
+        maxdate={moment()}
+        onchange={props.changeStart}
+      />
+      <DatePicker
+        selected={props.filters.endDate}
+        placeholder="MM/DD/YYYY"
+        maxdate={moment()}
+        onchange={props.changeEnd}
+      />
     </Form.Group>
   </Form.Field>
 );

@@ -1,6 +1,23 @@
 /*******************************
          Theme Overrides
 *******************************/
+//  Public page Starts
+.ui.button{
+    &:hover{
+        box-shadow:@buttonHoverShadow;
+    }
+}
+.offer-details {
+	.offering-side-menu {
+        .ui.secondary.button {
+            margin: 24px auto 0;
+            display: block;
+		}
+    }
+}
+//  Public Page Ends
+
+
 //  Buttons style CSS
 .ui{
     &.button, &.buttons .button{
@@ -15,9 +32,9 @@
                 box-shadow:none !important;
             }
             &.green{
-                color:@theme-primary;
+                color:@primary-one;
                 &:hover, &:focus, &:active{
-                    color:@theme-primary;
+                    color:@primary-one;
                 }
             }
             &.red{
@@ -40,10 +57,10 @@
                 padding:0.5em 1em;
             }
             &.green{
-                color:@theme-primary;
+                color:@primary-one;
                 &:hover, &:focus, &:active{
                     color:@white;
-                    background-color:@theme-primary;
+                    background-color:@primary-one;
                 }
             }
             &.red{
@@ -88,7 +105,7 @@
 
 .ui.button.multistep__btn{
     background:@white;
-    color:@theme-primary;
+    color:@primary-one;
     letter-spacing:0;
     box-shadow:0 0 16px 2px fade(@fullBlack, 15%) !important;
     margin:0;
@@ -110,7 +127,7 @@
         right:0;
         transform:translate(50%, -50%);
         &.active{
-            background:@theme-primary;
+            background:@primary-one;
             color:@white;
         }
     }

@@ -10,12 +10,8 @@ export default class Employment extends Component {
     const { EMPLOYMENT_FORM, employmentChange } = this.props.investorProfileStore;
     return (
       <div>
-        <Header as="h1" textAlign="center">
-          What is your employment status?
-        </Header>
-        <Header as="h4" textAlign="center">
-          Please indicate your current employment status
-        </Header>
+        <Header as="h3" textAlign="center">What is your employment status?</Header>
+        <p className="center-align mb-50">Please indicate your current employment status</p>
         <Form error>
           <FormRadioGroup
             fielddata={EMPLOYMENT_FORM.fields.employmentStatus}
@@ -23,19 +19,19 @@ export default class Employment extends Component {
             changed={employmentChange}
             containerclassname="button-radio center-align"
           />
-          {EMPLOYMENT_FORM.fields.employmentStatus.value === 'employed' &&
-            <div className="field-wrap">
-              <Form.Group widths="equal">{
-                ['employer', 'currentPosition'].map(field => (
-                  <FormInput
-                    key={field}
-                    fielddata={EMPLOYMENT_FORM.fields[field]}
-                    name={field}
-                    changed={employmentChange}
-                  />
-                ))}
-              </Form.Group>
-            </div>
+          {EMPLOYMENT_FORM.fields.employmentStatus.value === 'EMPLOYED' &&
+          <div className="field-wrap">
+            <Form.Group widths="equal">{
+              ['employer', 'currentPosition'].map(field => (
+                <FormInput
+                  key={field}
+                  fielddata={EMPLOYMENT_FORM.fields[field]}
+                  name={field}
+                  changed={employmentChange}
+                />
+              ))}
+            </Form.Group>
+          </div>
           }
         </Form>
       </div>

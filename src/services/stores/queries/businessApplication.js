@@ -97,6 +97,7 @@ query _getBusinessApplicationById ($id: String!) {
     lendio {
       status
       failReasons
+      url
     }
     createdDate
     updatedDate
@@ -235,6 +236,27 @@ query _getBusinessApplicationById ($id: String!) {
       stepStatus
       submittedDate
     }
+  }
+}
+`;
+
+export const submitPartneredWithLendio = gql`
+mutation submitPartneredWithLendio(
+  $applicationId: String!,
+  $preQualificationQuestions: PreQualificationQuestionsInput!,
+  $customerInformation: CustomerInformationInput!,
+  $agreeConditions: Boolean,
+  $sendDataToLendio: Boolean
+) {
+  submitPartneredWithLendio(
+    applicationId: $applicationId,
+    preQualificationQuestions: $preQualificationQuestions,
+    customerInformation: $customerInformation,
+    agreeConditions: $agreeConditions,
+    sendDataToLendio: $sendDataToLendio
+  ) {
+    status
+    url
   }
 }
 `;

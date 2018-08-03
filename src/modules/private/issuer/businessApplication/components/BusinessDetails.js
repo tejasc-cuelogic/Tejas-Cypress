@@ -5,16 +5,15 @@ import { inject, observer } from 'mobx-react';
 import { FormInput, DropZone, MaskedInput2 } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
-// import Helper from '../../../../helper/utility';
 
 @inject('businessAppStore')
 @observer
 export default class BusinessDetails extends Component {
   state = {
-    showConfirmModal: false,
+    showPartialSaveModal: false,
     currentForm: '',
     currentIndex: 0,
-    showHandle: false,
+    legalNoteToggle: false,
   }
 
   componentWillMount() {
@@ -22,27 +21,23 @@ export default class BusinessDetails extends Component {
   }
 
   removeForm = (e) => {
-    this.setState({ showConfirmModal: !this.state.showConfirmModal });
+    this.setState({ showPartialSaveModal: !this.state.showPartialSaveModal });
     this.props.businessAppStore.removeForm(e, this.state.currentForm, this.state.currentIndex);
   }
 
   toggleHandel = () => {
-    this.setState({ showHandle: !this.state.toggleHandel });
+    this.setState({ legalNoteToggle: !this.state.legalNoteToggle });
   }
 
   toggleConfirm = (formName, index) => {
     this.setState({
       ...this.state,
-      showConfirmModal: !this.state.showConfirmModal,
+      showPartialSaveModal: !this.state.showPartialSaveModal,
       currentForm: formName,
       currentIndex: index,
     });
   }
 
-  submit = () => {
-    // e.preventDefault();
-    console.log(111);
-  }
   render() {
     const {
       BUSINESS_DETAILS_FRM,
@@ -51,6 +46,7 @@ export default class BusinessDetails extends Component {
       businessAppRemoveFiles,
       addMoreForms,
       businessDetailsMaskingChange,
+      formReadOnlyMode,
     } = this.props.businessAppStore;
     return (
       <Grid container>
@@ -71,6 +67,7 @@ export default class BusinessDetails extends Component {
               subHeader="Upload your business plan"
             >
               <DropZone
+                disabled={formReadOnlyMode}
                 multiple
                 name="businessPlan"
                 fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
@@ -88,10 +85,10 @@ export default class BusinessDetails extends Component {
               BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
                 <Grid>
                   <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                    <Header as="h3">
+                    <Header as="h5">
                       Existing Debt {index + 1}
                       {BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
-                        <Button icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
+                        <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
                       }
@@ -99,6 +96,8 @@ export default class BusinessDetails extends Component {
                     <div className="field-wrap">
                       <Form.Group widths="equal">
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
+                          prefix="$ "
                           currency
                           type="text"
                           name="amount"
@@ -106,6 +105,7 @@ export default class BusinessDetails extends Component {
                           changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                         />
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           percentage
                           type="text"
                           name="interestExpenses"
@@ -115,6 +115,8 @@ export default class BusinessDetails extends Component {
                       </Form.Group>
                       <Form.Group widths="equal">
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
+                          prefix="$ "
                           currency
                           type="text"
                           name="remainingPrincipal"
@@ -122,6 +124,7 @@ export default class BusinessDetails extends Component {
                           changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                         />
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           number
                           type="text"
                           name="term"
@@ -135,18 +138,18 @@ export default class BusinessDetails extends Component {
                 ))
               }
               <Divider hidden />
-              <Button size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
+              <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
             </FormElementWrap>
             <FormElementWrap
               header="Owners"
               subHeader="Please list all individuals with at least 20% ownership."
             >
               <Accordion>
-                <Accordion.Title onClick={this.toggleHandel} active={this.state.showHandle}>
+                <Accordion.Title onClick={this.toggleHandel} active={this.state.legalNoteToggle}>
                   <Icon className="ns-chevron-up" />
-                  Hide legal note
+                  {this.state.legalNoteToggle ? 'Hide' : 'Show'} legal note
                 </Accordion.Title>
-                <Accordion.Content active={this.state.showHandle}>
+                <Accordion.Content active={this.state.legalNoteToggle}>
                   <p>
                     You hereby authorize NextSeed Management LLC, its assignee, assigns or
                     potential assigns to review your personal credit and business profile
@@ -171,9 +174,9 @@ export default class BusinessDetails extends Component {
               BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => (
                 <Grid>
                   <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                    <Header as="h3">Owner {index + 1}
+                    <Header as="h5">Owner {index + 1}
                       {BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
-                        <Button icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
+                        <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
                       }
@@ -181,12 +184,14 @@ export default class BusinessDetails extends Component {
                     <div className="field-wrap">
                       <Form.Group widths="equal">
                         <FormInput
+                          disabled={formReadOnlyMode}
                           type="text"
                           name="fullLegalName"
                           fielddata={owner.fullLegalName}
                           changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
                         />
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           number
                           type="text"
                           name="yearsOfExp"
@@ -196,6 +201,7 @@ export default class BusinessDetails extends Component {
                       </Form.Group>
                       <Form.Group widths="equal">
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           ssn
                           type="text"
                           name="ssn"
@@ -203,6 +209,7 @@ export default class BusinessDetails extends Component {
                           changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                         />
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           percentage
                           type="text"
                           name="companyOwnerShip"
@@ -214,6 +221,7 @@ export default class BusinessDetails extends Component {
                         {
                           ['linkedInUrl', 'title'].map(field => (
                             <FormInput
+                              disabled={formReadOnlyMode}
                               key={field}
                               type="text"
                               name={field}
@@ -224,6 +232,7 @@ export default class BusinessDetails extends Component {
                         }
                       </Form.Group>
                       <DropZone
+                        disabled={formReadOnlyMode}
                         name="resume"
                         fielddata={owner.resume}
                         ondrop={(files, fieldName) =>
@@ -237,15 +246,15 @@ export default class BusinessDetails extends Component {
               }
               <Divider hidden />
               {BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
-                <Button size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
+                <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
               }
             </FormElementWrap>
-            <AppNavigation action={this.submit} />
+            <AppNavigation />
           </Form>
           <Confirm
             header="Confirm"
             content={`Are you sure you want to remove this ${this.state.currentForm}?`}
-            open={this.state.showConfirmModal}
+            open={this.state.showPartialSaveModal}
             onCancel={this.toggleConfirm}
             onConfirm={
               e => this.removeForm(e)}

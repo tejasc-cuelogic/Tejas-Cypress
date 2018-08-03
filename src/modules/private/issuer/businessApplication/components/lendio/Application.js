@@ -3,31 +3,54 @@ import { indexOf } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
-import Helper from '../../../../../../helper/utility';
 import { FormInput, FormDropDown, FormCheckbox, MaskedInput2 } from '../../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
+import NotFound from '../../../../../shared/NotFound';
 import { LENDING_PARTNER_LENDIO } from '../../../../../../constants/business';
+import { LENDIO } from '../../../../../../services/constants/businessApplication';
+import Helper from '../../../../../../helper/utility';
 
-@inject('businessAppStore', 'uiStore')
+@inject('businessAppLendioStore', 'uiStore')
 @observer
 export default class Application extends Component {
   submit = (e) => {
     e.preventDefault();
-    this.props.businessAppStore.businessLendioPreQual();
-    Helper.toast('Business pre-qualification request submitted!', 'success');
-    this.props.history.push('/business-application/success/lendio');
-  }
+    this.props.businessAppLendioStore.businessLendioPreQual(this.props.applicationId)
+      .then((data) => {
+        const {
+          submitPartneredWithLendio: {
+            status,
+            url,
+          },
+        } = data;
+        const redirectParam = (status === LENDIO.LENDIO_SUCCESS) ? 'yes' : 'no';
+
+        this.props.history.push(`/app/business-application/${this.props.applicationId}/lendio/${redirectParam}`);
+        this.props.businessAppLendioStore.setLendioUrl(url);
+      })
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      });
+  };
+
   render() {
     const {
       LENDIO_QUAL_FRM,
       lendioEleChange,
-    } = this.props.businessAppStore;
+      lendioObj,
+    } = this.props.businessAppLendioStore;
     const { fields } = LENDIO_QUAL_FRM;
     const checkIsPresent = indexOf(fields.applicationAgreeConditions.value, 'agreeConditions');
+    if (!fields.businessName.value && !this.props.uiStore.appLoader) {
+      return <NotFound />;
+    }
+    if (lendioObj && lendioObj.status === LENDIO.LENDIO_SUCCESS) {
+      window.location = lendioObj.url;
+    }
     return (
       <Grid container>
         <Grid.Column className="issuer-signup">
-          <Header as="h1">NextSeed has Partnered with Lendio</Header>
+          <Header as="h1">NextSeed has partnered with Lendio</Header>
           <p>
             Lendio is a leading small business loan marketplace where
             completing one free application will put you in front of 75+ lenders.<br />
@@ -48,11 +71,11 @@ export default class Application extends Component {
             </List.Item>
           </List>
           <Divider section />
-          <Form onSubmit={this.submit}>
+          <Form>
             <FormElementWrap>
               <Grid>
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <Header as="h2">Pre-Qualification Questions</Header>
+                  <Header as="h3">Pre-Qualification Questions</Header>
                   <div className="field-wrap">
                     {
                       ['yrsInBusiness', 'avgSales', 'personalCreditRating', 'industry', 'raiseAmount'].map(field => (
@@ -72,7 +95,7 @@ export default class Application extends Component {
                   </div>
                 </Grid.Column>
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <Header as="h2">Customer Information</Header>
+                  <Header as="h3">Customer Information</Header>
                   <div className="field-wrap">
                     {
                       ['businessName', 'businessOwnerName', 'emailAddress'].map(field => (
@@ -101,7 +124,7 @@ export default class Application extends Component {
                 </Grid.Column>
               </Grid>
             </FormElementWrap>
-            <Header as="h2">Submit your application to Lendio</Header>
+            <Header as="h3">Submit your application to Lendio</Header>
             <p>
               Do you give Lendio and their <Link to="/" className="link"><b>partners</b></Link> permission to
               contact you at the number and email you provided, including via email, phone, text
@@ -125,6 +148,7 @@ export default class Application extends Component {
             <Button
               loading={this.props.uiStore.inProgress}
               disabled={!LENDIO_QUAL_FRM.meta.isValid || checkIsPresent === -1}
+              onClick={this.submit}
               primary
               className="very relaxed"
             >

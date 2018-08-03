@@ -78,7 +78,7 @@ export class Utility {
     return result;
   }
 
-  CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
+  CurrencyFormat = (amount, f) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: typeof (f) === 'number' ? f : 2 }).format(amount)
 
   cryptedSSNNumber = (ssnNumber) => {
     const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
@@ -117,33 +117,9 @@ export class Utility {
       });
   });
 
-  putUploadedFileOnS3 = fileObj => new Promise((resolve, reject) => {
-    apiService.uploadOnS3(fileObj.preSignedUrl, fileObj.fileData).then(() => {
-      resolve();
-    })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-
   maskPhoneNumber = (phoneNumber) => {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
     return maskPhoneNumber;
-  }
-
-  eleToUpperCaseInArray = (givenArray) => {
-    const upperCaseEleArray = givenArray.map((item) => {
-      if (item === 'ira') {
-        return item.toUpperCase();
-      }
-      return _.upperFirst(item);
-    });
-    return upperCaseEleArray;
-  }
-
-  getCommaSeparatedArrStr = (array) => {
-    const formattedData = [array.slice(0, -1).join(', '), array.slice(-1)[0]].join(array.length < 2 ? '' : ' or ');
-    return formattedData;
   }
 }
 

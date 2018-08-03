@@ -18,10 +18,11 @@ const FormTextarea = observer((props) => {
         {label}
         {tooltip &&
           <Popup
-            trigger={<Icon name="help circle outline" />}
+            trigger={<Icon className="ns-help-circle" />}
             content={tooltip}
             position="top center"
             className="center-align"
+            wide
           />
         }
       </label>

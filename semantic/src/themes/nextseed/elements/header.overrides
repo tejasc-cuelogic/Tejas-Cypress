@@ -14,11 +14,11 @@
             font-size:1rem;
         }
         .menu .item{
-            color:@primary-text;
+            color:@neutral;
             padding:@13px @30px;
             &.active{
-                color:@inverse-text;
-                background-color:@theme-primary;
+                color:@white;
+                background-color:@primary-one;
             }
             &.notification{
                 position:relative;
@@ -32,7 +32,7 @@
                     padding:0 5px;
                     border-radius:10px;
                     font-size:@12px;
-                    color:@inverse-text;
+                    color:@white;
                     line-height:@18px;
                     display:block;
                     text-align:center;
@@ -58,6 +58,10 @@
 }
 
 .ui.header{
+    > .icon{
+        height:auto;
+        vertical-align:top;
+    }
     a.link{
         margin-left:@10px;
         >small{
@@ -67,17 +71,34 @@
 }
 
 .notification-panel{
-	h3.ui.header{
+	h4.ui.header{
 		margin:0;
         padding:@14px;
         position:relative;
         background-color:@darken-bg-color;
         .sub.header{
             font-size:@12px !important;
-            color:@quaternary-text;
+            color:@neutral-middark;
             position:absolute;
             right:0;
             top:0;
         }
 	}
+}
+
+.ui.header{
+    .sub.header{
+        font-weight:inherit;
+    }
+}
+h6.ui.header{
+    .sub.header{
+        font-size:@relative14px;
+        color:@neutral-middark;
+    }
+}
+.ui.top.attached.header {
+    padding-left: 0;
+    padding-right: 0;
+    border: 0;
 }

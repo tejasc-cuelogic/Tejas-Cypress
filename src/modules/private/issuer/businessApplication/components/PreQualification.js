@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-// import { replace } from 'lodash';
 import { Header, Grid, Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../helper/utility';
@@ -16,7 +15,7 @@ export default class PreQualification extends Component {
   submit = (e) => {
     e.preventDefault();
     this.props.businessAppStore.businessPreQualificationFormSumbit().then(() => {
-      const url = this.props.businessAppStore.getBusinessAppStepUrl;
+      const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
       Helper.toast('Business pre-qualification request submitted!', 'success');
       this.props.history.push(`/app/business-application/${url}`);
     });
@@ -40,7 +39,7 @@ export default class PreQualification extends Component {
               subHeader={
                 <Aux>
                   Welcome to NextSeed! Run through this quick form to get pre-qualified.
-                  <Link target="_blank" to="/about/faq" className="link"> Need help or have questions?</Link>
+                  <Link target="_blank" to="/about/faq" className="link">Need help or have questions?</Link>
                 </Aux>
               }
             />
@@ -84,7 +83,7 @@ export default class PreQualification extends Component {
                 </Grid.Column>
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                   <div className="field-wrap">
-                    <Header as="h5">Business Address</Header>
+                    <Header as="h6">Business Address</Header>
                     <AutoComplete
                       disabled={preQualFormDisabled}
                       name="street"
@@ -135,7 +134,7 @@ export default class PreQualification extends Component {
                   <div className="field-wrap">
                     {getFranchiseCondition &&
                       <Aux>
-                        <Header as="h5" content="Are you an existing or previous franchise holder?" />
+                        <Header as="h6" content="Are you an existing or previous franchise holder?" />
                         <FormRadioGroup
                           disabled={preQualFormDisabled}
                           fielddata={fields.franchiseHolder}
@@ -148,7 +147,7 @@ export default class PreQualification extends Component {
                     }
                     {getBusinessTypeCondtion &&
                       <Aux>
-                        <Header as="h5" content="How long has the existing business been operating?" />
+                        <Header as="h6" content="How long has the existing business been operating?" />
                         <Form.Group widths="equal">
                           {
                             ['businessAgeYears', 'businessAgeMonths'].map(field => (
@@ -184,8 +183,10 @@ export default class PreQualification extends Component {
                     {
                       ['totalProjectCost', 'amountNeeded'].map(field => (
                         <MaskedInput2
+                          hoverable
                           disabled={preQualFormDisabled}
                           key={field}
+                          prefix="$ "
                           name={field}
                           currency
                           tooltip={fields[field].tooltip}
@@ -212,7 +213,7 @@ export default class PreQualification extends Component {
               <Grid>
                 {getBusinessTypeCondtion &&
                   <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
-                    <Header as="h2">
+                    <Header as="h3">
                       Previous year
                       <Header.Subheader>
                         For your business, give us a quick snapshot
@@ -226,6 +227,7 @@ export default class PreQualification extends Component {
                             disabled={preQualFormDisabled}
                             key={field}
                             name={field}
+                            prefix="$ "
                             currency
                             value={fields[field].value}
                             fielddata={fields[field]}
@@ -237,7 +239,7 @@ export default class PreQualification extends Component {
                   </Grid.Column>
                 }
                 <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
-                  <Header as="h2">
+                  <Header as="h3">
                     Next year projections
                     <Header.Subheader>
                       For your business, give us a quick snapshot
@@ -251,6 +253,7 @@ export default class PreQualification extends Component {
                           disabled={preQualFormDisabled}
                           key={field}
                           name={field}
+                          prefix="$ "
                           currency
                           value={fields[field].value}
                           fielddata={fields[field]}

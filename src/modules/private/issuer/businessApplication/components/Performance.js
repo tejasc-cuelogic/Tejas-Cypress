@@ -11,15 +11,10 @@ export default class Performance extends Component {
   componentWillMount() {
     this.props.businessAppStore.setFieldvalue('applicationStep', 'performance');
   }
-  submit = () => {
-    // e.preventDefault();
-    console.log(111);
-    // this.props.history.push(`/app/business-application/${APP_STATUS}`);
-  }
 
   render() {
     const {
-      BUSINESS_PERF_FRM,
+      BUSINESS_PERF_FRM, formReadOnlyMode,
       businessPerfMaskingChange, getBusinessTypeCondtion,
       businessAppUploadFiles, businessAppRemoveFiles,
     } = this.props.businessAppStore;
@@ -43,6 +38,7 @@ export default class Performance extends Component {
                   statmentConst.map(field => (
                     <Grid.Column>
                       <DropZone
+                        disabled={formReadOnlyMode}
                         multiple
                         key={field}
                         name={field}
@@ -64,13 +60,15 @@ export default class Performance extends Component {
               <Grid>
                 {getBusinessTypeCondtion &&
                   <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                    <Header as="h3" content="Prior Year" />
+                    <Header as="h5" content="Prior Year" />
                     <div className="field-wrap">
                       {
                         ['pyGrossSales', 'pyOperatingExpenses', 'pyNetIncome', 'pyCogs'].map(field => (
                           <MaskedInput2
+                            disabled={formReadOnlyMode}
                             key={field}
                             name={field}
+                            prefix="$ "
                             currency
                             value={fields[field].value}
                             fielddata={fields[field]}
@@ -82,13 +80,15 @@ export default class Performance extends Component {
                   </Grid.Column>
                 }
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <Header as="h3" content="Future Year" />
+                  <Header as="h5" content="Future Year" />
                   <div className="field-wrap">
                     {
                       ['nyGrossSales', 'nyOperatingExpenses', 'nyNetIncome', 'nyCogs'].map(field => (
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           key={field}
                           name={field}
+                          prefix="$ "
                           currency
                           value={fields[field].value}
                           fielddata={fields[field]}
@@ -100,7 +100,7 @@ export default class Performance extends Component {
                 </Grid.Column>
               </Grid>
             </FormElementWrap>
-            <AppNavigation action={this.submit} />
+            <AppNavigation />
           </Form>
         </Grid.Column>
       </Grid>

@@ -21,7 +21,7 @@ const FormCheckbox = observer((props) => {
                 label={
                   <label>{c.label}
                     {c.tooltip &&
-                      <Popup trigger={<Icon name="help circle outline" />} content={c.tooltip} position="top center" />
+                      <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
                     }
                   </label>
                 }
@@ -37,10 +37,11 @@ const FormCheckbox = observer((props) => {
                   {c.label}
                   {tooltip &&
                     <Popup
-                      trigger={<Icon name="help circle outline" />}
+                      trigger={<Icon className="ns-help-circle" />}
                       content={tooltip}
                       position="top center"
                       className="center-align"
+                      wide
                     />
                   }
                 </label>

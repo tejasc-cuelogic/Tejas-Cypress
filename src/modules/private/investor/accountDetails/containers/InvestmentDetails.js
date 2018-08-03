@@ -29,6 +29,7 @@ const summaryDetails = {
 };
 
 const navItems = [
+  { title: 'Overview', to: 'overview', component: 'Overview' },
   { title: 'Transactions', to: 'transactions', component: 'Transactions' },
   { title: 'Updates', to: 'updates', component: 'Updates' },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards' },

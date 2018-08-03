@@ -1,6 +1,16 @@
+
 /*******************************
          Theme Overrides
 *******************************/
+input[type=number]{
+    -moz-appearance:textfield;
+    &::-webkit-inner-spin-button, 
+    &::-webkit-outer-spin-button { 
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+
 .ui.action.input{
     &:not([class*="left"])>input{
         padding-right:@14px;
@@ -13,11 +23,24 @@
         border-radius:0 !important;
     }
     >input:focus ~ .ui.button.link-button{
-        border-color:@theme-primary;
+        border-color:@primary-one;
     }
 }
 .field.error{
     .ui.action.input>input ~ .ui.button.link-button{
         border-color:@highlight-primary;
+    }
+}
+.public-form {
+    .ui.input>input {
+        padding: @9px !important;
+        background: @white !important;
+        border-radius: @4px !important;
+        border: 0 !important;
+    }
+}
+.edu-center {
+    .ui.input {
+        width: 100%;
     }
 }

@@ -96,6 +96,28 @@ query getUserDetails($id: ID!) {
       name
       url
     }
+    investorProfileData {
+      isPartialProfile
+      employmentStatusInfo {
+        employmentStatus
+        employer
+        currentPosition
+      }
+      investorProfileType
+      financialInfo {
+        netWorth
+        annualIncomeThirdLastYear
+        annualIncomeLastYear
+        annualIncomeCurrentYear
+        directorShareHolderOfCompany
+        employedOrAssoWithFINRAFirmName
+      }
+      investmentExperienceInfo {
+        investmentExperienceLevel
+        readyInvestingInLimitedLiquiditySecurities
+        readyForRisksInvolved
+      }
+    }
     accountStatus 
   }
 }
@@ -124,7 +146,7 @@ export const deleteUserMutation = gql`
 `;
 
 export const toggleUserAccount = gql`
-  mutation updateUserStatus($id: String!, $status: UserProfileStatusEnum!) {
+  mutation updateUserStatus($id: String!, $status: profileEnum!) {
     updateUserStatus(userId: $id, accountStatus:$status) {
       id
     }

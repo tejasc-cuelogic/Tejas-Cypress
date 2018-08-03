@@ -7,6 +7,7 @@ import { userStore, userDetailsStore, businesssStore } from '../../index';
 export class NavStore {
   @observable NAV_ITEMS = { ...PRIVATE_NAV };
   @observable params = { roles: [], currentNav: [], appStatus: null };
+  @observable navStatus = 'main';
   @observable navMeta = [];
 
   constructor() {
@@ -17,10 +18,11 @@ export class NavStore {
 
   @computed get myRoutes() {
     const permitted = [...this.params.roles, ...userDetailsStore.signupStatus.activeAccounts];
-    return _.filter(
+    const routes = _.filter(
       this.NAV_ITEMS,
       n => n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0,
     );
+    return routes;
   }
 
   @action
@@ -45,7 +47,7 @@ export class NavStore {
   }
 
   @computed get sidebarItems() {
-    const reject = ['profile-settings', 'business-application'];
+    const reject = ['profile-settings', 'business-application/:applicationId'];
     return this.allNavItems.filter(r => !reject.includes(r.to) && r.title !== 'Offering');
   }
 
@@ -65,6 +67,12 @@ export class NavStore {
       }
       this.navMeta = nav;
     }
+  }
+
+  @action
+  setNavStatus(calculations, forced) {
+    const { percentagePassed, topVisible } = calculations;
+    this.navStatus = forced || ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
   }
 }
 

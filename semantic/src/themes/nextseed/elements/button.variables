@@ -8,7 +8,7 @@
 
 /* Button */
 @verticalMargin: 0em;
-@horizontalMargin: 0.25em;
+@horizontalMargin: 0;
 @backgroundColor: #E0E1E2;
 @backgroundImage: none;
 @background: @backgroundColor @backgroundImage;
@@ -22,7 +22,7 @@
 @textTransform: none;
 @tapColor: transparent;
 @fontFamily: @pageFont;
-@fontWeight: 900;
+@fontWeight: @fontMedium;
 @textColor: rgba(0, 0, 0, 0.6);
 @textShadow: none;
 @invertedTextShadow: @textShadow;
@@ -38,10 +38,8 @@
 @borderBoxShadowColor: transparent;
 @borderBoxShadowWidth: 1px;
 @borderBoxShadow: 0px 0px 0px @borderBoxShadowWidth @borderBoxShadowColor inset;
-@boxShadow:
-  @borderBoxShadow,
-  @shadowBoxShadow
-;
+@boxShadow:0px 1px 1px 0px @thumbBackground;
+@buttonHoverShadow:0px 3px 4px 0px @thumbBackground;
 
 /* Icon */
 @iconHeight: @relativeTiny;
@@ -152,8 +150,8 @@
 
 @orBackgroundColor: @white;
 @orTextShadow: @invertedTextShadow;
-@orTextStyle: normal;
-@orTextWeight: bold;
+@orTextStyle: @normal;
+@orTextWeight: @bold;
 @orTextColor: @lightTextColor;
 
 
@@ -198,8 +196,8 @@
 @basicColoredBorderSize: 1px;
 
 @basicBackground: transparent none;
-@basicFontWeight: normal;
-@basicBorder: 2px solid @borderColor;
+@basicFontWeight: @normal;
+@basicBorder: 1px solid @borderColor;
 @basicBoxShadow: 0px 0px 0px @basicBorderSize @borderColor inset;
 @basicLoadingColor: @offWhite;
 @basicTextTransform: none;
@@ -256,7 +254,7 @@
 
 /* Colors */
 @coloredBackgroundImage: none;
-@coloredBoxShadow: @shadowBoxShadow;
+@coloredBoxShadow: @boxShadow;
 
 /* Colored */
 @brownTextColor: @invertedTextColor;
@@ -338,7 +336,7 @@
 
 /* Compact */
 @compactVerticalPadding: (@verticalPadding * 0.75);
-@compactHorizontalPadding: (@horizontalPadding * 0.75);
+@compactHorizontalPadding: (@horizontalPadding * 1.2);
 
 /* Attached */
 @attachedOffset: -1px;

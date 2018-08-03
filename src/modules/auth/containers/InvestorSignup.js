@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
@@ -17,24 +18,36 @@ class InvestorSignup extends Component {
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/auth/change-password');
         } else {
+          const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+          const userCredentials = { email: email.value, password: btoa(password.value) };
+          cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 300 });
           this.props.history.push('/auth/confirm-email');
         }
       })
       .catch(() => { });
   };
-
-  checkRouting = () => this.props.history.replace('/confirm');
-
   render() {
-    const { SIGNUP_FRM, signupChange } = this.props.authStore;
+    const {
+      SIGNUP_FRM, signupChange, togglePasswordType, pwdInputType, reset,
+    } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
 
     return (
-      <Modal size="mini" open onClose={() => this.props.history.push('/')}>
+      <Modal
+        size="mini"
+        open
+        closeOnRootNodeClick={false}
+        onClose={
+          () => {
+            reset('SIGNUP');
+            this.props.history.push('/');
+          }
+        }
+      >
         <Modal.Header className="center-align signup-header">
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
-          <Header as="h2">
-            Sign Up as&nbsp;
+          <Header as="h3">
+            Sign Up as {' '}
             {(SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
           </Header>
         </Modal.Header>
@@ -57,24 +70,36 @@ class InvestorSignup extends Component {
                   <FormInput
                     key={field}
                     type="text"
+                    autoFocus={field === 'givenName'}
                     name={field}
                     fielddata={SIGNUP_FRM.fields[field]}
                     changed={signupChange}
                   />
                 ))
               }
+
             </Form.Group>
-            {
-              ['email', 'password', 'verify'].map(field => (
-                <FormInput
-                  key={field}
-                  type={field !== 'email' ? 'password' : 'text'}
-                  name={field}
-                  fielddata={SIGNUP_FRM.fields[field]}
-                  changed={signupChange}
-                />
-              ))
-            }
+            <FormInput
+              type="email"
+              name="email"
+              fielddata={SIGNUP_FRM.fields.email}
+              changed={signupChange}
+            />
+            <FormInput
+              key="password"
+              name="password"
+              type={pwdInputType}
+              icon={togglePasswordType()}
+              fielddata={SIGNUP_FRM.fields.password}
+              changed={signupChange}
+            />
+            <FormInput
+              key="verify"
+              name="verify"
+              type="password"
+              fielddata={SIGNUP_FRM.fields.verify}
+              changed={signupChange}
+            />
             <div className="center-align">
               <Button primary size="large" className="very relaxed" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid}>Register</Button>
             </div>
