@@ -7,12 +7,12 @@ import { Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
-import { PublicSubNav } from '../../../../theme/shared/';
+import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 
@@ -32,7 +32,11 @@ class Business extends Component {
     return (
       <Aux>
         {location.pathname === '/business/how-it-works' && <Banner />}
-        <Visibility onUpdate={this.handleUpdate} continuous className="slide-down">
+        <Visibility
+          onUpdate={this.handleUpdate}
+          continuous
+          className={`slide-down ${location.pathname.split('/')[2]}`}
+        >
           <PublicSubNav
             navStatus={navStore.navStatus}
             location={location}

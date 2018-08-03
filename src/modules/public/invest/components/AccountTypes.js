@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Header, Button, Container, Grid } from 'semantic-ui-react';
 
 const AccountTypes = () => (
-  <section className="content-spacer account-banner">
+  <section className="content-spacer">
     <Container>
       <Grid relaxed padded="vertically">
         <Grid.Row>

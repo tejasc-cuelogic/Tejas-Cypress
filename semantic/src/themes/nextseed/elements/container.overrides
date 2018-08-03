@@ -30,31 +30,23 @@ section{
         &.invest-banner{
             background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat / cover;
         }
-        // +.slide-down {
-        //     margin-top: 0;
-        // }
     }
 }
 // business and invest pages
-.content-spacer {
-	// padding: 0;
-	&.process-banner {
-		background:url(../../assets/images/business/process.png) 0px center no-repeat;
+.slide-down{
+	&.process{
+		background:url(../../assets/images/business/process.png) 0% center no-repeat;
 	}
-	&.inclusive-banner {
-		background:url(../../assets/images/business/inclusive.png) right center no-repeat;
+	&.all-inclusive{
+		background:url(../../assets/images/business/inclusive.png) 100% center no-repeat;
     }
-    &.account-banner {
-        background:url(../../assets/images/investors/account_types.png) right top no-repeat;
+    &.account-types {
+        background:url(../../assets/images/investors/account_types.png) 100% center no-repeat;
     } 
-    &.security-banner {
-        background:url(../../assets/images/investors/security.png) 0px top no-repeat;
+    &.security{
+        background:url(../../assets/images/investors/security.png) 0% center no-repeat;
     } 
-    &.track-banner {
-        background:url(../../assets/images/investors/laptop.png) right top no-repeat;
+    &.track{
+        background:url(../../assets/images/investors/laptop.png) 100% center no-repeat;
     } 
 }
-// for PublicSubNav on business and invest inner pages
-// .slide-down {
-//     margin-top: 74px;
-// }

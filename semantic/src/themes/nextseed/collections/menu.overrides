@@ -86,8 +86,10 @@
 .ui.secondary.menu.menu-secondary-fixed {
     border:none;
     height:58px;
+    margin:0;
     border-radius:0;
     box-shadow:none;
+    background-color:@white;
     .item{
         padding:@3px @18px;
         &:hover {

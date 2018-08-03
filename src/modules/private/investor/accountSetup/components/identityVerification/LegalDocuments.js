@@ -44,7 +44,7 @@ const LegalDocuments = observer(({
             <Grid.Column width={7}>
               <Header as="h5">
                 Upload a Photo ID
-                <Header.Subheader>Driving Liscence or passport</Header.Subheader>
+                <Header.Subheader>Driving License or passport</Header.Subheader>
               </Header>
             </Grid.Column>
             <Grid.Column width={9}>
@@ -92,7 +92,7 @@ const LegalDocuments = observer(({
           <Button loading={submitVerificationsDocs && inProgress} primary size="large" className="very relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
         </div>
         <div className="center-align">
-          <Button type="button" className="cancel-link" onClick={() => close()}>I`ll finish this letter</Button>
+          <Button type="button" className="cancel-link" onClick={() => close()}>I`ll finish this later</Button>
         </div>
       </Form>
       <Confirm
