@@ -169,7 +169,7 @@
 /* Active Item */
 @activeItemBackground: @transparentBlack;
 @activeItemTextColor: @selectedTextColor;
-@activeItemFontWeight: @normal;
+@activeItemFontWeight: @fontMedium;
 @activeIconOpacity: 1;
 @activeItemBoxShadow: none;
 

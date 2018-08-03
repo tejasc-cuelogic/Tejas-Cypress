@@ -15,7 +15,7 @@ export default class ApplicationList extends Component {
               <Header as="h3"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
               <p>Want to start a new campaing? Start new application process to proceed</p>
               <Divider hidden />
-              <Button primary as={Link} to="business-application/new/pre-qualification">Start application</Button>
+              <Button primary as={Link} to="/app/business-application/new/pre-qualification">Start application</Button>
             </Card.Content>
           </Card>
           <ApplicationCards />

@@ -42,10 +42,11 @@ const FormRadioGroup = observer((props) => {
               {radio.label}
               {tooltip &&
                 <Popup
-                  trigger={<Icon name="help circle" />}
+                  trigger={<Icon className="ns-help-circle" />}
                   content={tooltip}
                   position="top center"
                   className="center-align"
+                  wide
                 />
               }
             </label>
