@@ -36,6 +36,7 @@ export class BusinessAppStore {
   @observable BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
   @observable BUSINESS_APP_STATUS = '';
   @observable preQualFormDisabled = false;
+  @observable formReadOnlyMode = false;
   @observable BUSINESS_APP_STEP_URL = 'new/pre-qualification';
   @observable BUSINESS_APPLICATION_DATA = null;
   @observable isPartialData = null;
@@ -94,6 +95,8 @@ export class BusinessAppStore {
 
   @action
   fetchApplicationDataById = applicationId => new Promise((resolve) => {
+    uiStore.setAppLoader(true);
+    uiStore.setLoaderMessage('Getting application data');
     this.businessApplicationsDataById = graphql({
       client,
       query: getBusinessApplicationsById,
@@ -103,10 +106,12 @@ export class BusinessAppStore {
       fetchPolicy: 'network-only',
       onFetch: () => {
         this.setBusinessApplicationData();
+        uiStore.setAppLoader(false);
         resolve();
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setAppLoader(false);
       },
     });
   });
@@ -117,6 +122,7 @@ export class BusinessAppStore {
     this.businessApplicationsList = graphql({
       client,
       query: getBusinessApplications,
+      fetchPolicy: 'network-only',
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
       },
@@ -124,7 +130,9 @@ export class BusinessAppStore {
   }
 
   @computed get stepToRender() {
-    return this.appStepsStatus.find(ele => ele.status === 'IN_PROGRESS');
+    const url = this.appStepsStatus.find(ele => ele.status === 'IN_PROGRESS');
+    /* eslint-disable no-unneeded-ternary */
+    return this.formReadOnlyMode ? { path: 'pre-qualification' } : url ? url : { path: 'documentation' };
   }
 
   @action
@@ -136,11 +144,16 @@ export class BusinessAppStore {
     this.setBusinessDetails(data.businessDetails);
     this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
     this.setDocumentationDetails(data.businessDocumentation);
-    // this.calculateStepToRender(data);
+    if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
+      this.formReadOnlyMode = true;
+    } else if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+      this.appStepsStatus[0].status = 'IN_PROGRESS';
+    }
     navStore.setAccessParams('appStatus', data.applicationStatus);
     if (data.lendio) {
       const lendioPartners = data.lendio.status;
-      if (lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
+      if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+        && lendioPartners === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
         businessAppLendioStore.setPartneredLendioData(data);
       }
     }
@@ -167,11 +180,18 @@ export class BusinessAppStore {
         this.BUSINESS_APP_FRM.fields[field[key]].value =
           data.performanceSnapshot.nextYearSnapshot[ele];
       });
-      ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
-        const field = ['previousYearCogSold', 'previousYearGrossSales', 'previousYearNetIncome', 'previousYearOperatingExpenses'];
-        this.BUSINESS_APP_FRM.fields[field[key]].value =
-          data.performanceSnapshot.pastYearSnapshot[ele];
-      });
+      if (this.getBusinessTypeCondtion) {
+        ['ageYears', 'ageMonths'].forEach((ele, key) => {
+          const field = ['businessAgeYears', 'businessAgeMonths'];
+          this.BUSINESS_APP_FRM.fields[field[key]].value =
+            data.existingBusinessInfo[ele];
+        });
+        ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
+          const field = ['previousYearCogSold', 'previousYearGrossSales', 'previousYearNetIncome', 'previousYearOperatingExpenses'];
+          this.BUSINESS_APP_FRM.fields[field[key]].value =
+            data.performanceSnapshot.pastYearSnapshot[ele];
+        });
+      }
       data.fundUsage.forEach((ele) => {
         this.BUSINESS_APP_FRM.fields.fundUsage.value = ele;
       });
@@ -317,6 +337,7 @@ export class BusinessAppStore {
         this.BUSINESS_DOC_FRM.fields[ele].rule = '';
       });
     }
+    this.checkValidationForTaxReturn();
     Validator.validateForm(this.BUSINESS_DOC_FRM);
   }
 
@@ -513,7 +534,7 @@ export class BusinessAppStore {
 
   @computed get getFormatedPreQualificationData() {
     const data = toJS(this.BUSINESS_APP_FRM.fields);
-    const preQualData = {
+    let preQualData = {
       businessModel: data.businessModel.value,
       businessGeneralInfo: {
         businessName: data.businessName.value,
@@ -533,10 +554,6 @@ export class BusinessAppStore {
       },
       industryTypes: data.industryTypes.value,
       businessGoal: data.businessGoal.value,
-      existingBusinessInfo: {
-        ageYears: this.getValidDataForInt(data.businessAgeYears),
-        ageMonths: this.getValidDataForInt(data.businessAgeMonths),
-      },
       businessExperience: {
         industryExperience: data.industryExperience.value,
         estimatedCreditScore: data.estimatedCreditScore.value,
@@ -545,12 +562,6 @@ export class BusinessAppStore {
       },
       fundUsage: data.fundUsage.value,
       performanceSnapshot: {
-        pastYearSnapshot: {
-          grossSales: this.getValidDataForInt(data.previousYearGrossSales),
-          cogSold: this.getValidDataForInt(data.previousYearCogSold),
-          operatingExpenses: this.getValidDataForInt(data.previousYearOperatingExpenses),
-          netIncome: this.getValidDataForInt(data.previousYearNetIncome),
-        },
         nextYearSnapshot: {
           grossSales: this.getValidDataForInt(data.nextYearGrossSales),
           cogSold: this.getValidDataForInt(data.nextYearCogSold),
@@ -597,9 +608,28 @@ export class BusinessAppStore {
         value: includes(data.legalConfirmation.value, 'IS_NOT_INVESTMENT_COMPANY'),
       }],
     };
-
-    return this.getFranchiseCondition ?
-      { ...preQualData, franchiseHolder: data.franchiseHolder.value } : preQualData;
+    if (this.getFranchiseCondition) {
+      preQualData = { ...preQualData, franchiseHolder: data.franchiseHolder.value };
+    }
+    if (this.getBusinessTypeCondtion) {
+      preQualData = {
+        ...preQualData,
+        existingBusinessInfo: {
+          ageYears: this.getValidDataForInt(data.businessAgeYears),
+          ageMonths: this.getValidDataForInt(data.businessAgeMonths),
+        },
+        performanceSnapshot: {
+          ...preQualData.performanceSnapshot,
+          pastYearSnapshot: {
+            grossSales: this.getValidDataForInt(data.previousYearGrossSales),
+            cogSold: this.getValidDataForInt(data.previousYearCogSold),
+            operatingExpenses: this.getValidDataForInt(data.previousYearOperatingExpenses),
+            netIncome: this.getValidDataForInt(data.previousYearNetIncome),
+          },
+        },
+      };
+    }
+    return preQualData;
   }
 
   @action
@@ -629,7 +659,7 @@ export class BusinessAppStore {
           if (!isEmpty(partnerStatus)) {
             lendioPartners = find(partnerStatus, { partnerId: AFFILIATED_PARTNERS.LENDIO });
           }
-
+          // setting applicationid
           const applicationId = result.data.createBusinessApplicationPrequalification.id;
           this.setFieldvalue('isFetchedData', null);
           if (this.BUSINESS_APP_STATUS ===
@@ -637,7 +667,7 @@ export class BusinessAppStore {
             this.setFieldvalue('BUSINESS_APP_STEP_URL', `${applicationId}/success`);
           } else if (this.BUSINESS_APP_STATUS ===
               BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
-            const url = (isEmpty(lendioPartners) || lendioPartners.status === LENDIO.PRE_QUALIFICATION_FAILED) ? `${applicationId}/failed` : `${applicationId}/failed/lendio`;
+            const url = (isEmpty(lendioPartners) || lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_FAILED) ? `${applicationId}/failed` : `${applicationId}/failed/lendio`;
             this.setFieldvalue('BUSINESS_APP_STEP_URL', url);
           } else {
             this.setFieldvalue('BUSINESS_APP_STEP_URL', `${applicationId}/failed`);
@@ -759,10 +789,10 @@ export class BusinessAppStore {
   @action
   setAddressFields = (place) => {
     const data = Helper.gAddressClean(place);
-    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'street', value: data.residentalStreet });
-    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'city', value: data.city });
-    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'state', value: data.state });
-    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'zipCode', value: data.zipCode });
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'street', value: data.residentalStreet ? data.residentalStreet : '' });
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'city', value: data.city ? data.city : '' });
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'state', value: data.state ? data.state : '' });
+    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, { name: 'zipCode', value: data.zipCode ? data.zipCode : '' });
   };
 
   @action
@@ -776,8 +806,29 @@ export class BusinessAppStore {
       this[formName].fields[fieldName].value.splice(index, 1);
       this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds[0]];
     }
+    if (fieldName === 'personalTaxReturn' || fieldName === 'businessTaxReturn') {
+      this.checkValidationForTaxReturn();
+    }
     this.checkFormisValid(this.applicationStep, false);
   };
+
+  @action
+  checkValidationForTaxReturn = () => {
+    const { fields } = this.BUSINESS_DOC_FRM;
+    if (fields.personalTaxReturn.value.length && fields.businessTaxReturn.value.length) {
+      fields.personalTaxReturn.rule = 'required';
+      fields.businessTaxReturn.rule = 'required';
+    } else if (fields.personalTaxReturn.value.length) {
+      fields.businessTaxReturn.rule = '';
+      fields.businessTaxReturn.error = undefined;
+    } else if (fields.businessTaxReturn.value.length) {
+      fields.personalTaxReturn.rule = '';
+      fields.personalTaxReturn.error = undefined;
+    } else {
+      fields.personalTaxReturn.rule = 'required';
+      fields.businessTaxReturn.rule = 'required';
+    }
+  }
 
   @action
   businessAppUploadFiles = (files, fieldName, formName, index = null) => {
@@ -795,6 +846,9 @@ export class BusinessAppStore {
             this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
             this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
             this.setFormFileArray(formName, fieldName, 'error', undefined, index);
+            if (fieldName === 'personalTaxReturn' || fieldName === 'businessTaxReturn') {
+              this.checkValidationForTaxReturn();
+            }
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
@@ -883,6 +937,7 @@ export class BusinessAppStore {
     this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
     this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
     this.appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
+    this.formReadOnlyMode = false;
   }
 
   @action

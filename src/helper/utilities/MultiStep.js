@@ -42,7 +42,11 @@ export default class MultiStep extends React.Component {
   }
 
   getClassName(className, i) {
-    return `${className}-${this.state.navState.styles[i]}`;
+    let currentStatus = this.state.navState.styles[i];
+    if (!this.state.navState.styles[i]) {
+      currentStatus = 'todo';
+    }
+    return `${className}-${currentStatus}`;
   }
 
   setNavState(next) {
@@ -102,7 +106,10 @@ export default class MultiStep extends React.Component {
   }
 
   next() {
-    if (!this.props.steps[this.state.compState].isDirty) {
+    if (this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience') {
+      this.props.createAccount(this.props.steps[this.state.compState]);
+      this.props.actionOnNextBtn();
+    } else if (!this.props.steps[this.state.compState].isDirty) {
       this.setNavState(this.state.compState + 1);
     } else {
       this.props.createAccount(this.props.steps[this.state.compState]);
@@ -115,6 +122,7 @@ export default class MultiStep extends React.Component {
   previous() {
     if (this.state.compState > 0) {
       this.setNavState(this.state.compState - 1);
+      this.props.setStepTobeRendered(this.state.compState - 1);
     }
   }
 
@@ -136,10 +144,22 @@ export default class MultiStep extends React.Component {
   }
 
   render() {
+    if (this.props.isEnterPressed) {
+      this.props.resetEnterPressed();
+      this.next();
+    }
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
-      <div onKeyDown={this.handleKeyDown}>
-        <Modal basic open closeIcon className="multistep-modal" closeOnRootNodeClick={false} onClose={() => this.props.handleMultiStepModalclose()}>
+      <div onKeyDown={this.handleKeyDown} >
+        <Modal
+          onKeyPress={event => this.props.setIsEnterPressed(event.charCode)}
+          basic
+          open
+          closeIcon
+          className="multistep-modal"
+          closeOnRootNodeClick={false}
+          onClose={() => this.props.handleMultiStepModalclose()}
+        >
           <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
           <ol className="progtrckr">
             {this.renderSteps()}
@@ -156,9 +176,10 @@ export default class MultiStep extends React.Component {
               onClick={this.previous}
             />
             <Button
+              type="submit"
               circular
               icon={{ className: 'ns-arrow-right' }}
-              className={(this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
+              className={(this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience' ? 'multistep__btn next active' : this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
               onClick={this.next}
             />
           </Modal.Content>

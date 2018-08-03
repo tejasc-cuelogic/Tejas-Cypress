@@ -31,15 +31,6 @@ export default class Public extends React.Component {
             />
           ))}
         </Switch>
-        {/* <Segment vertical className={uiStore.devBanner ? 'content foot-banner' : 'content'}>
-          <Grid columns={1}>
-            <Grid.Row>
-              <Grid.Column className="nsContent">
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment> */}
-        {}
         {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
           <Footer />
         }

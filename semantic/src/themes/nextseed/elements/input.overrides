@@ -1,6 +1,16 @@
+
 /*******************************
          Theme Overrides
 *******************************/
+input[type=number]{
+    -moz-appearance:textfield;
+    &::-webkit-inner-spin-button, 
+    &::-webkit-outer-spin-button { 
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+
 .ui.action.input{
     &:not([class*="left"])>input{
         padding-right:@14px;
@@ -19,5 +29,38 @@
 .field.error{
     .ui.action.input>input ~ .ui.button.link-button{
         border-color:@highlight-primary;
+    }
+}
+.ui.form.public-form {
+    &.inverted {
+        .ui.input>input {
+            border-bottom: 0;
+            color: @neutral;
+        }    
+    }
+    .ui.input>input {
+        padding: @13px;
+        background: @white;
+        border-radius: @4px;
+    }
+    textarea {
+        padding: @14px;
+        background: @white;
+        border: 1px solid @neutral-darkwhite;
+        margin: 0 0 @14px;
+        border-radius: @4px;
+        min-height: 120px;
+        max-height: 150px;
+        &:focus {
+            border-radius: @4px;
+        }
+    }
+    .reply.form {
+        padding: @30px 0;
+    }
+}
+.edu-center {
+    .ui.input {
+        width: 100%;
     }
 }

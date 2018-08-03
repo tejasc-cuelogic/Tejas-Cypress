@@ -15,7 +15,7 @@ export default class AccTypeTitle extends Component {
     const accountType = this.getAccType(this.props.match.url);
     return (
       <Aux>
-        <Icon color="teal" className={`ns-${accountType.toLowerCase()}-line`} />
+        <Icon color="green" className={`ns-${accountType.toLowerCase()}-line`} />
         {`${this.props.noText ? '' : accountType} ${this.props.moreText || ''}`}
       </Aux>
     );

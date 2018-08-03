@@ -1722,6 +1722,12 @@ i.icon[class*="ns-"]{
 .ns-activity-arrow:before{
     content:@ns-activity-arrow;
 }
+.ns-arrow-double-left:before{
+    content:@ns-arrow-double-left;
+}
+.ns-arrow-double-right:before{
+    content:@ns-arrow-double-right;
+}
 .ns-arrow-down:before{
     content:@ns-arrow-down;
 }
@@ -1977,6 +1983,9 @@ i.icon[class*="ns-"]{
 .ns-long-arrow-left:before{
     content:@ns-long-arrow-left;
 }
+.ns-minus-square:before{
+    content: @ns-minus-square;
+}
 .ns-new-business:before{
     content:@ns-new-business;
 }
@@ -2018,6 +2027,9 @@ i.icon[class*="ns-"]{
 }
 .ns-proprietor:before{
     content:@ns-proprietor;
+}
+.ns-plus-square:before{
+    content: @ns-plus-square;
 }
 .ns-real-estate:before{
     content:@ns-real-estate;

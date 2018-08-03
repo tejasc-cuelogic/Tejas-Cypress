@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
-import { Header } from 'semantic-ui-react';
+import { Header, Modal } from 'semantic-ui-react';
 
 class Disclosures extends Component {
   render() {
     return (
-      <div className="offering-content-spacer">
-        <Header as="h3">Disclosures</Header>
-        <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-        </p>
-      </div>
+      <Modal
+        open
+        onClose={this.props.history.goBack}
+        closeIcon
+        size="large"
+      >
+        <Header as="h3">
+        Disclosures
+        </Header>
+        <Modal.Content>
+          <div className="pdf-viewer">
+            <object width="100%" height="100%" data="https://s3.amazonaws.com/dev-cdn.nextseed.qa/welcome-packet/offeringpageignited.pdf" type="application/pdf">failed to load..</object>
+          </div>
+        </Modal.Content>
+      </Modal>
     );
   }
 }

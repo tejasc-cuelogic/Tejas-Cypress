@@ -3,14 +3,12 @@ import { Header, Modal, Grid, Image, Icon } from 'semantic-ui-react';
 import campainAboutImg from '../../../../assets/images/campaign_about.png';
 
 class MeetTeamModal extends Component {
-  state = { modalOpen: false }
-  handleOpen = () => this.setState({ modalOpen: true })
-  handleClose = () => this.setState({ modalOpen: false })
+  handleClose = () => this.props.history.goBack();
 
   render() {
     return (
       <Modal
-        open={this.state.modalOpen}
+        open
         onClose={this.handleClose}
         closeIcon
         size="large"
@@ -23,7 +21,7 @@ class MeetTeamModal extends Component {
             <Grid.Column>
               <Image src={campainAboutImg} />
             </Grid.Column>
-            <Grid.Column className="padded">
+            <Grid.Column className="padded team-details-container">
               <Header as="h3">
                 Rassul Zainfar
                 <Header.Subheader>co-founder & ceo</Header.Subheader>
@@ -39,7 +37,7 @@ class MeetTeamModal extends Component {
                 <Icon color="green" name="linkedin in" />
               </div>
             </Grid.Column>
-            <Grid.Column className="padded">
+            <Grid.Column className="padded team-details-container">
               <Header as="h3">
                 Alex Grigss
                 <Header.Subheader>co-founder & Director of projects</Header.Subheader>

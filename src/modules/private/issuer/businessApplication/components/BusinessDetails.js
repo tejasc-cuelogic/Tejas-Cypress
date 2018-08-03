@@ -46,6 +46,7 @@ export default class BusinessDetails extends Component {
       businessAppRemoveFiles,
       addMoreForms,
       businessDetailsMaskingChange,
+      formReadOnlyMode,
     } = this.props.businessAppStore;
     return (
       <Grid container>
@@ -66,6 +67,7 @@ export default class BusinessDetails extends Component {
               subHeader="Upload your business plan"
             >
               <DropZone
+                disabled={formReadOnlyMode}
                 multiple
                 name="businessPlan"
                 fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
@@ -86,7 +88,7 @@ export default class BusinessDetails extends Component {
                     <Header as="h5">
                       Existing Debt {index + 1}
                       {BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
-                        <Button icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
+                        <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
                       }
@@ -94,6 +96,8 @@ export default class BusinessDetails extends Component {
                     <div className="field-wrap">
                       <Form.Group widths="equal">
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
+                          prefix="$ "
                           currency
                           type="text"
                           name="amount"
@@ -101,6 +105,7 @@ export default class BusinessDetails extends Component {
                           changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                         />
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           percentage
                           type="text"
                           name="interestExpenses"
@@ -110,6 +115,8 @@ export default class BusinessDetails extends Component {
                       </Form.Group>
                       <Form.Group widths="equal">
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
+                          prefix="$ "
                           currency
                           type="text"
                           name="remainingPrincipal"
@@ -117,6 +124,7 @@ export default class BusinessDetails extends Component {
                           changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                         />
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           number
                           type="text"
                           name="term"
@@ -130,7 +138,7 @@ export default class BusinessDetails extends Component {
                 ))
               }
               <Divider hidden />
-              <Button size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
+              <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
             </FormElementWrap>
             <FormElementWrap
               header="Owners"
@@ -168,7 +176,7 @@ export default class BusinessDetails extends Component {
                   <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
                     <Header as="h5">Owner {index + 1}
                       {BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
-                        <Button icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
+                        <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
                       }
@@ -176,12 +184,14 @@ export default class BusinessDetails extends Component {
                     <div className="field-wrap">
                       <Form.Group widths="equal">
                         <FormInput
+                          disabled={formReadOnlyMode}
                           type="text"
                           name="fullLegalName"
                           fielddata={owner.fullLegalName}
                           changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
                         />
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           number
                           type="text"
                           name="yearsOfExp"
@@ -191,6 +201,7 @@ export default class BusinessDetails extends Component {
                       </Form.Group>
                       <Form.Group widths="equal">
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           ssn
                           type="text"
                           name="ssn"
@@ -198,6 +209,7 @@ export default class BusinessDetails extends Component {
                           changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                         />
                         <MaskedInput2
+                          disabled={formReadOnlyMode}
                           percentage
                           type="text"
                           name="companyOwnerShip"
@@ -209,6 +221,7 @@ export default class BusinessDetails extends Component {
                         {
                           ['linkedInUrl', 'title'].map(field => (
                             <FormInput
+                              disabled={formReadOnlyMode}
                               key={field}
                               type="text"
                               name={field}
@@ -219,6 +232,7 @@ export default class BusinessDetails extends Component {
                         }
                       </Form.Group>
                       <DropZone
+                        disabled={formReadOnlyMode}
                         name="resume"
                         fielddata={owner.resume}
                         ondrop={(files, fieldName) =>
@@ -232,7 +246,7 @@ export default class BusinessDetails extends Component {
               }
               <Divider hidden />
               {BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
-                <Button size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
+                <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
               }
             </FormElementWrap>
             <AppNavigation />

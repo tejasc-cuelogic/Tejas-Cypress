@@ -1,37 +1,38 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { FormInput, MaskedInput } from '../../../../../../theme/form';
+import { MaskedInput2 } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../theme/shared';
 
-@inject('profileStore', 'uiStore', 'userDetailsStore')
+@inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
   componentWillMount() {
-    if (this.props.profileStore.verifyIdentity01.fields.phoneNumber.value === '') {
+    if (this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       if (this.props.userDetailsStore.userDetails.contactDetails.phone) {
         const fieldValue =
         Helper.maskPhoneNumber(this.props.userDetailsStore.userDetails.contactDetails.phone.number);
-        this.props.profileStore.onFieldChange('verifyIdentity01', 'phoneNumber', fieldValue);
+        this.props.identityStore.phoneNumberChange(fieldValue);
       }
     }
   }
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
-    this.props.profileStore.setReSendVerificationCode(false);
+    this.props.identityStore.setReSendVerificationCode(false);
     if (this.props.refLink) {
-      this.props.profileStore.verifyAndUpdatePhoneNumber().then(() => {
+      this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
         Helper.toast('Phone number is confirmed.', 'success');
         this.props.history.replace('/app/profile-settings/profile-data');
         this.props.uiStore.clearErrors();
-        this.props.profileStore.resetFormData('verifyIdentity04');
+        this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
       })
         .catch(() => { });
     } else {
-      this.props.profileStore.confirmPhoneNumber().then(() => {
+      this.props.identityStore.confirmPhoneNumber().then(() => {
         Helper.toast('Phone number is confirmed.', 'success');
         this.props.setDashboardWizardStep('InvestmentChooseType');
       })
@@ -48,8 +49,8 @@ export default class ConfirmPhoneNumber extends Component {
   }
 
   startPhoneVerification = () => {
-    this.props.profileStore.setReSendVerificationCode(true);
-    this.props.profileStore.startPhoneVerification();
+    this.props.identityStore.setReSendVerificationCode(true);
+    this.props.identityStore.startPhoneVerification();
     if (!this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
@@ -61,16 +62,16 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.history.replace(this.props.refLink);
     }
     this.props.uiStore.clearErrors();
-    this.props.profileStore.resetFormData('verifyIdentity04');
+    this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
   }
 
   render() {
     const {
-      verifyIdentity01,
-      verifyIdentity04,
-      verifyIdentityEleChange,
-      verifyVerificationCodeChange,
-    } = this.props.profileStore;
+      ID_VERIFICATION_FRM,
+      ID_PHONE_VERIFICATION,
+      personalInfoMaskedChange,
+      phoneVerificationChange,
+    } = this.props.identityStore;
     const { errors, editMode } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false}>
@@ -85,16 +86,18 @@ export default class ConfirmPhoneNumber extends Component {
               <ListErrors errors={[errors]} />
             </Message>
           }
-          <MaskedInput
-            value={verifyIdentity01.fields.phoneNumber.value}
+          <MaskedInput2
+            value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
             type="tel"
             name="phoneNumber"
-            fielddata={verifyIdentity01.fields.phoneNumber}
-            mask="999-999-9999"
+            fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
+            format="###-###-####"
             readOnly={!editMode}
-            changed={verifyIdentityEleChange}
-            hidelabel
+            changed={personalInfoMaskedChange}
+            containerclassname="display-only"
             className="display-only"
+            phoneNumber
+            hidelabel
           />
           {editMode ?
             <p>
@@ -112,19 +115,19 @@ export default class ConfirmPhoneNumber extends Component {
             </p>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
-            <FormInput
-              name="code"
-              size="huge"
-              containerclassname="otp-field"
-              maxLength={6}
-              fielddata={verifyIdentity04.fields.code}
-              changed={verifyVerificationCodeChange}
+            <ReactCodeInput
+              fields={6}
+              type="number"
+              filterChars
+              className="otp-field"
+              fielddata={ID_PHONE_VERIFICATION.fields.code}
+              onChange={phoneVerificationChange}
             />
             <div className="center-align">
-              <Button loading={!this.props.profileStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!verifyIdentity04.meta.isValid}>Confirm</Button>
+              <Button loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!ID_PHONE_VERIFICATION.meta.isValid}>Confirm</Button>
             </div>
             <div className="center-align">
-              <Button loading={this.props.profileStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="cancel-link" onClick={() => this.startPhoneVerification()}>Resend the code to my phone</Button>
+              <Button loading={this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="cancel-link" onClick={() => this.startPhoneVerification()}>Resend the code to my phone</Button>
             </div>
           </Form>
         </Modal.Content>

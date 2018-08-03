@@ -19,7 +19,7 @@ const LegalDocuments = observer(({
   submitVerificationsDocs,
   onSubmit,
 }) => (
-  <Modal size="tiny" open closeIcon onClose={() => close()}>
+  <Modal size="tiny" open closeIcon onClose={close}>
     <Modal.Header className="center-align signup-header">
       <Header as="h3">We need to confirm your identity</Header>
       <Divider />
@@ -42,9 +42,9 @@ const LegalDocuments = observer(({
         <Grid divided="vertically">
           <Grid.Row>
             <Grid.Column width={7}>
-              <Header as="h4">
+              <Header as="h5">
                 Upload a Photo ID
-                <Header.Subheader>Driving Liscence or passport</Header.Subheader>
+                <Header.Subheader>Driving License or passport</Header.Subheader>
               </Header>
             </Grid.Column>
             <Grid.Column width={9}>
@@ -58,7 +58,7 @@ const LegalDocuments = observer(({
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={7}>
-              <Header as="h4">Proof of Residence
+              <Header as="h5">Proof of Residence
                 <Popup className="test" trigger={<Icon className="ns-help-circle" />} position="top center" flowing hoverable>
                   <Popup.Content>
                     <p><b>Acceptable documents:</b></p>
@@ -92,7 +92,7 @@ const LegalDocuments = observer(({
           <Button loading={submitVerificationsDocs && inProgress} primary size="large" className="very relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
         </div>
         <div className="center-align">
-          <Button type="button" className="cancel-link" onClick={() => close()}>I`ll finish this letter</Button>
+          <Button type="button" className="cancel-link" onClick={() => close()}>I`ll finish this later</Button>
         </div>
       </Form>
       <Confirm

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-// import { replace } from 'lodash';
 import { Header, Grid, Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../helper/utility';
@@ -184,8 +183,10 @@ export default class PreQualification extends Component {
                     {
                       ['totalProjectCost', 'amountNeeded'].map(field => (
                         <MaskedInput2
+                          hoverable
                           disabled={preQualFormDisabled}
                           key={field}
+                          prefix="$ "
                           name={field}
                           currency
                           tooltip={fields[field].tooltip}
@@ -226,6 +227,7 @@ export default class PreQualification extends Component {
                             disabled={preQualFormDisabled}
                             key={field}
                             name={field}
+                            prefix="$ "
                             currency
                             value={fields[field].value}
                             fielddata={fields[field]}
@@ -251,6 +253,7 @@ export default class PreQualification extends Component {
                           disabled={preQualFormDisabled}
                           key={field}
                           name={field}
+                          prefix="$ "
                           currency
                           value={fields[field].value}
                           fielddata={fields[field]}

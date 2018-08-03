@@ -1,9 +1,14 @@
-/*******************************
+ /*******************************
         Global Overrides
 *******************************/
 /* PUBLIC PAGES UI STYLES ==> START */
 body{
 	color:@neutral-middark;
+}
+.clearfix::after {
+	content: "";
+	clear: both;
+	display: table;
 }
 section{
 	padding:@60px 0;
@@ -15,8 +20,15 @@ section{
 	p{
 		margin-bottom:@40px;
 	}
+	a {
+		color: @fullBlack;
+		font-weight: @bold;
+	}
 }
 //	Helper Classes
+iframe{
+	border:none;
+}
 //	Heading font sizes
 h1, h1.ui.header{
 	font-weight:@normal;
@@ -50,8 +62,14 @@ h6{
 .mb-80 {
 	margin-bottom: 80px !important;
 }
+.mt-20 {
+	margin-top: @20px !important;
+}
 .mt-30 {
 	margin-top: @30px !important;
+}
+.mt-40 {
+	margin-top: @40px !important;
 }
 .mt-50 {
 	margin-top: @50px !important;
@@ -97,7 +115,6 @@ h6{
 }
 .text-uppercase {
 	text-transform: uppercase !important;
-	font-weight: bold;
 }
 
 .inverse-text{
@@ -121,6 +138,9 @@ a{
 	&:hover{
 		text-decoration:underline;
 	}
+	&.inverted{
+		color:@white;
+	}
 }
 a.text-link{
 	color:@tertiary-text;
@@ -131,6 +151,18 @@ a.text-link{
 
 .invisible{
 	opacity:0 !important;
+}
+.bg-offwhite {
+	background-color: @neutral-offwhite;
+}
+.green-block {
+	background-color: @primary-one;
+}
+.blue-block {
+	background-color: @secondary-color;
+}
+.primary-block {
+	background-color: @primary-two;
 }
 
 // Footer Styles
@@ -155,64 +187,6 @@ footer{
 	}
 }
 
-/** About Us **/
-.mission-statistic-section {
-	background-color: @neutral-offwhite;
-	.mission-block {
-		padding: @10px;
-		text-align: center;
-		color: @white;
-		&.green-block {
-			background-color: @primaryColor;
-		}
-		&.blue-block {
-			background-color: @secondary-color;
-		}
-		.statistic {
-			margin-bottom: 0;
-			.value, .label {
-				color: @white;
-				text-transform: none;
-			}
-			.value~.label {
-				margin-top: 10px;
-			}
-		}
-	}
-	.ui.grid.mission-base-block {
-		background-color: @white;
-		padding: @10px;
-		margin-top: @10px;
-		.statistic {
-			.value {
-				font-family: @fontName; 
-				font-size: @28px;
-				line-height: @33px;
-				&.primary-text {
-					color: @primaryColor !important;
-				}
-				&.secondary-text {
-					color: @secondary-color !important;
-				}
-			}
-			.label {
-				color: @neutral-middark !important;
-				font-size: @14px;
-				line-height: @16px;
-				text-transform: inherit;
-				font-weight: normal;
-			}
-		}
-	}
-	p.disclaimer-text {
-		font-size: @10px;
-		line-height: @14px;
-		color: @neutral-middark;
-		font-family: @fontName; 
-	}
-}
-
-
 /** campaign filter **/
 .campaign-list-wrapper {
 	position: relative;
@@ -236,7 +210,6 @@ footer{
 		h6.ui.header {
 			font-size: @13px;
 			font-weight: @bold;
-			line-height: @16px;
 			color:@neutral-middark;
 			padding-bottom: @6px;
 		}
@@ -251,6 +224,7 @@ footer{
 			font-size: @16px;
 			line-height: @16px;
 			color:@neutral-middark;
+			margin-top: @3px;
 		}
 		.checkbox-group {
 			.ui.label {
@@ -278,7 +252,7 @@ footer{
 .offer-details {
     display: flex;
     flex-direction: row;
-    min-height: 100vh;
+    min-height:~"calc(100vh - 58px)";
 	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
@@ -448,7 +422,6 @@ footer{
 				iframe {
 					width: 100%;
 					height: 100%;
-                    border: none;
                 }
             }
         }
@@ -588,9 +561,10 @@ p i.icon {
 }
 .content-spacer {
 	.column.side-section {
-		background-color: rgba(255, 255, 255, 0.81);
+		background-color:@invertedMutedTextColor;
 		padding-bottom: 4.28571429rem;
 		padding-top: 4.28571429rem;
+		min-height:~"calc(100vh - 424px)";
 		.ui.header{
 			margin-bottom:@4px;
 		}
@@ -700,6 +674,121 @@ p i.icon {
 				margin-top: 0;
 			}
 		}
+	}
+}
+//Team
+.team-column {
+	margin-top: 30vh;
+}
+.team-gallery {
+	&.ui.grid {
+		margin: 0;
+		>.column {
+			padding: 0 !important;
+		}
+	}
+	.team-overlay {
+		h4.ui.header {
+			.sub.header {
+				font-size: @13px;
+				line-height: 20px;
+				color: @neutral-middark;
+				font-weight: @normal;
+			}
+			.icon:only-child {
+				margin-right: @5px;
+			}
+		}
+	}
+}
+//press page
+.press-news {
+	.news {
+		position: relative;
+		overflow: hidden;
+		img.ui.image {
+			width: auto;
+			max-width: none;
+		}
+	}
+}
+address {
+	p {
+		margin: 0;
+		font-style: normal;	
+	}
+}
+.press-list {
+	padding: @20px @50px;
+	.header{
+		color: @black !important;
+		font-weight: @bold;
+	}
+	.divider {
+		margin: @11px 0 @7px !important;
+	}
+	a {
+		i {
+			color: @primary-two !important; 
+			margin-right: @10px !important;	
+		}
+		color: @primary-two !important; 
+	}
+}
+.image-caption {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding: 20px;    
+	p {
+		background: @neutral;
+		padding: 5px 10px;
+		color: @white;
+		display: table;
+		margin-bottom: 5px;
+		&.news-category {
+			font-size: 13px;
+			text-transform: uppercase;
+		}
+		&.news-title {
+			font-size: 28px;
+			line-height: 30px;
+		}
+	}
+}
+//impact page
+.featured-statistic {
+	h5.ui.header {
+		color: @white;
+		margin: auto;
+	}
+	h2.ui.header {
+		margin-bottom: 0px;
+	}
+}
+//Education center
+.edu-back-link {
+	a {
+		color: @neutral-middark;
+	}
+}
+.edu-center {
+	.ui.card {
+		border: 0;
+		.content.padded {
+			padding: 0;
+			border: 0;
+		}
+		&:hover {
+			box-shadow: none;
+		}
+	}
+}
+//Insight 
+.insight-image-wrapper {
+	position: relative;
+	img.ui.image {
+		width: 100%;
 	}
 }
 /* END <== PUBLIC PAGES UI STYLES */
@@ -1357,31 +1446,39 @@ ol.progtrckr{
 	}
 }
 
-// Rechart Styles
+// Rechart Styles Starts
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
-.recharts-wrapper{
-	.recharts-legend-wrapper{
-		z-index:-1;
-	}
-	.recharts-pie-sector .datavalue{
-		font-size:@20px;
-		font-weight:700;
-	}
-	tspan{
-		font-size:18px;
-		font-weight:700;
-	}
-	.chartLegends li{
-		font-size:22px;
-		span{
-			font-size:13px;
-			color:@fullBlack;
-			vertical-align:top;
+.portfolio-allocation{
+	.recharts-wrapper{
+		.recharts-legend-wrapper{
+			z-index:-1;
+		}
+		.recharts-pie-sector .datavalue{
+			font-size:@20px;
+			font-weight:@fontMedium;
+		}
+		tspan{
+			font-size:18px;
+			font-weight:@fontMedium;
+		}
+		.chartLegends li{
+			font-size:22px;
+			span{
+				font-size:13px;
+				color:@fullBlack;
+				vertical-align:top;
+			}
 		}
 	}
 }
+.payoff-chart{
+	.xAxis, .yAxis{
+		font-size:@13px;
+	}
+}
+// Rechart Styles Ends
 
 .knowledge-details{
 	position:relative;
@@ -1503,64 +1600,21 @@ svg:not(:root).recharts-surface{
 	}
 }
 
-.display-only{
+p.display-only{
 	min-width:280px;
 	display:inline-block;
 	padding:@14px @20px;
 	margin-bottom:@10px;
 	font-size:@20px;
-	font-weight:@bold;
+	font-weight:@fontMedium;
 	text-align:center;
 	border:none;
 	border-bottom:@border-light 1px solid;
 	background:@border-light;
 }
-
-.table-info-wrap{
-	display:flex;
-	>p{
-		flex-grow:1;
-		margin:0;
-		padding-right:15px;
-		&:last-child{
-			padding-right:0;
-		}
-	}
+p.check-extra-info{
+  padding-left:30px;
 }
-// .named-avatar {
-//     height: 58px;
-//     display: inline-block;
-//     width: 58px;
-//     border-radius: 50%;
-//     background: transparent;
-//     text-align: center;
-//     vertical-align: middle;
-//     line-height: 30px;
-//     border: 1px solid @lightGreyDown;
-//     padding-top: 10px;
-//     font-size: @20px;
-//     font-weight: @bold;
-//     text-transform: uppercase;	
-
-//     &.small{
-// 	    height: 40px;
-// 	    width: 40px;
-// 	    padding-top: 4px;
-// 	    font-size: @16px;
-//         margin: 0 10px 0 0;	
-//     }
-// }
-// .sidebar {
-// 	.named-avatar {
-// 		&.small {
-// 		height: 30px;
-// 	    width: 30px;
-// 	    padding-top: 0px;
-// 	    font-size: @10px;
-//         margin: 0 0;	
-// 		}
-// 	}
-// }
 .sb-avatar{
 	display:inline-block;
 	vertical-align:middle;
@@ -1580,5 +1634,34 @@ svg:not(:root).recharts-surface{
 	}
 	&.investor{
 		background-color:@highlight-tertiary;
+	}
+}
+
+.or-divider{
+	.file-uploader-wrap{
+		width:360px;
+		margin:0 @40px 0 0;
+		display:inline-block;
+		vertical-align:top;
+		position:relative;
+		+ .file-uploader-wrap{
+			margin-top:0;
+		}
+		&:after{
+			content:"or";
+			font-size:@14px;
+			font-weight:@fontMedium;
+			color:@neutral-offdark;
+			position:absolute;
+			right:-26px;
+			top:50px;
+			transform:translate(0%, -50%);
+		}
+		&:last-of-type{
+			margin-right:0;
+			&:after{
+				display:none;
+			}
+		}
 	}
 }

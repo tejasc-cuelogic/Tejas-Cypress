@@ -96,7 +96,30 @@ query getUserDetails($id: ID!) {
       name
       url
     }
-    accountStatus 
+    investorProfileData {
+      isPartialProfile
+      employmentStatusInfo {
+        employmentStatus
+        employer
+        currentPosition
+      }
+      investorProfileType
+      financialInfo {
+        netWorth
+        annualIncomeThirdLastYear
+        annualIncomeLastYear
+        annualIncomeCurrentYear
+        directorShareHolderOfCompany
+        employedOrAssoWithFINRAFirmName
+      }
+      investmentExperienceInfo {
+        investmentExperienceLevel
+        readyInvestingInLimitedLiquiditySecurities
+        readyForRisksInvolved
+      }
+    }
+    accountStatus
+    mfaMode 
   }
 }
 `;

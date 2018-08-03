@@ -17,14 +17,10 @@ export class NavItems extends Component {
   isActive = (to, location, app) => (to !== '' && this.state.active === to) || location.pathname.startsWith(`/${app}/${to}`);
   render() {
     const {
-      location, isApp, refLoc, roles, match,
+      location, isApp, roles, match,
     } = this.props;
     const app = (isApp) ? 'app' : '';
-    const myNavItems = [...this.props.navItems];
-    if (refLoc === 'public') {
-      const kickMe = this.props.currentUser ? 4 : 5;
-      myNavItems.splice(kickMe, 1);
-    }
+    const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
     return myNavItems.map(item => (
       <Aux>
         {(item.subPanel === 1 && item.subNavigations) ? (

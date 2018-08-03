@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
 import { FormInput, FormDropDown, FormCheckbox, MaskedInput2 } from '../../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
+import NotFound from '../../../../../shared/NotFound';
 import { LENDING_PARTNER_LENDIO } from '../../../../../../constants/business';
 import { LENDIO } from '../../../../../../services/constants/businessApplication';
 import Helper from '../../../../../../helper/utility';
@@ -36,9 +37,16 @@ export default class Application extends Component {
     const {
       LENDIO_QUAL_FRM,
       lendioEleChange,
+      lendioObj,
     } = this.props.businessAppLendioStore;
     const { fields } = LENDIO_QUAL_FRM;
     const checkIsPresent = indexOf(fields.applicationAgreeConditions.value, 'agreeConditions');
+    if (!fields.businessName.value && !this.props.uiStore.appLoader) {
+      return <NotFound />;
+    }
+    if (lendioObj && lendioObj.status === LENDIO.LENDIO_SUCCESS) {
+      window.location = lendioObj.url;
+    }
     return (
       <Grid container>
         <Grid.Column className="issuer-signup">
@@ -67,7 +75,7 @@ export default class Application extends Component {
             <FormElementWrap>
               <Grid>
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <Header as="h2">Pre-Qualification Questions</Header>
+                  <Header as="h3">Pre-Qualification Questions</Header>
                   <div className="field-wrap">
                     {
                       ['yrsInBusiness', 'avgSales', 'personalCreditRating', 'industry', 'raiseAmount'].map(field => (
@@ -87,7 +95,7 @@ export default class Application extends Component {
                   </div>
                 </Grid.Column>
                 <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  <Header as="h2">Customer Information</Header>
+                  <Header as="h3">Customer Information</Header>
                   <div className="field-wrap">
                     {
                       ['businessName', 'businessOwnerName', 'emailAddress'].map(field => (
@@ -116,7 +124,7 @@ export default class Application extends Component {
                 </Grid.Column>
               </Grid>
             </FormElementWrap>
-            <Header as="h2">Submit your application to Lendio</Header>
+            <Header as="h3">Submit your application to Lendio</Header>
             <p>
               Do you give Lendio and their <Link to="/" className="link"><b>partners</b></Link> permission to
               contact you at the number and email you provided, including via email, phone, text

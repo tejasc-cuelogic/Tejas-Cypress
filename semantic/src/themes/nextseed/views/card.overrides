@@ -85,6 +85,27 @@
             }
         }
     }
+    &.insights{
+        height: 100%;
+        &:hover{
+            text-decoration: none;
+        }
+        >.content{
+            padding:@14px;
+            .tags{
+                color:@primary-one;
+                text-transform:uppercase;
+                >span{
+                    color:@neutral-middark;
+                    text-transform:none;
+                }
+            }
+            .description{
+                height:auto;
+                margin-bottom: 0;
+            }
+        }
+    }
 }
 //  Public page Ends
 
@@ -193,6 +214,7 @@
             vertical-align:top;
             margin-left:@10px;
             color:@neutral-middark;
+            vertical-align:middle;
             >b{
                 color:@fullBlack;
             }
@@ -304,28 +326,35 @@
     }
 }
 
-.ui.cards.steps-card{
-    .description{
-        font-size:16px;
-        i.icon.numbar{
-            height:26px;
-            width:26px;
-            line-height:26px;
-            background:@primary-one;
-            padding:0;
-            margin:0 .75rem 0 0;
-            border-radius:50%;
-            &[data-icon]:before{
-                content:attr(data-icon) !important;
-                font-size:@16px;
-                color:@white;
+.ui.cards{
+    &.steps-card{
+        .description{
+            font-size:16px;
+            i.icon.numbar{
+                height:26px;
+                width:26px;
+                line-height:26px;
+                background:@primary-one;
+                padding:0;
+                margin:0 .75rem 0 0;
+                border-radius:50%;
+                &[data-icon]:before{
+                    content:attr(data-icon) !important;
+                    font-size:@16px;
+                    color:@white;
+                }
+            }
+            &.disabled{
+                color:@border-color;
+                i.icon.numbar{
+                    background:@neutral-offwhite;
+                }
             }
         }
-        &.disabled{
-            color:@border-color;
-            i.icon.numbar{
-                background:@neutral-offwhite;
-            }
+    }
+    &.application-cards{
+        >.card>.content{
+            flex-grow:0;
         }
     }
 }

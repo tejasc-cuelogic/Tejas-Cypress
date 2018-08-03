@@ -1,13 +1,15 @@
 import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import { Container, Menu, Icon, Image } from 'semantic-ui-react';
 import secure from '../../assets/images/secure.png';
+import { SOCIAL_URLS } from '../../constants/common';
 
 const footer = () => (
   <footer>
     <div className="footer-head">
       <Container>
         <Menu inverted borderless>
-          <Menu.Item href="#">Resources <Icon name="caret down" /></Menu.Item>
+          <Menu.Item as={Link} to="/resources/education-center">Resources <Icon name="caret down" /></Menu.Item>
           <Menu.Item>About Us <Icon name="caret down" /></Menu.Item>
           <Menu.Item>Contact</Menu.Item>
           <Menu.Item>Terms of Use</Menu.Item>
@@ -15,9 +17,9 @@ const footer = () => (
           <Menu.Item>Sign Up for Newsletter</Menu.Item>
           <Menu.Menu position="right">
             <Menu.Item>© 2018 NextSeed US LLC</Menu.Item>
-            <Menu.Item><Icon name="instagram" /></Menu.Item>
-            <Menu.Item><Icon name="twitter" /></Menu.Item>
-            <Menu.Item><Icon name="facebook" /></Menu.Item>
+            {Object.keys(SOCIAL_URLS).map(s => (
+              <Menu.Item target="_blank" href={SOCIAL_URLS[s]}><Icon name={s} /></Menu.Item>
+            ))}
           </Menu.Menu>
         </Menu>
       </Container>
@@ -25,18 +27,17 @@ const footer = () => (
     <section>
       <Container>
         <Menu text vertical>
-          <Menu.Item>Ed Center</Menu.Item>
+          <Menu.Item as={NavLink} to="/resources/education-center">Ed Center</Menu.Item>
           <Menu.Item>Case Studies</Menu.Item>
-          <Menu.Item>Insights</Menu.Item>
+          <Menu.Item as={NavLink} to="/resources/insights">Insights</Menu.Item>
           <Menu.Item>Community</Menu.Item>
-          <Menu.Item href="/about/faq">FAQs</Menu.Item>
         </Menu>
         <Menu text vertical>
-          <Menu.Item>Mission</Menu.Item>
-          <Menu.Item href="/about/team">Team & Culture</Menu.Item>
-          <Menu.Item>Careers</Menu.Item>
-          <Menu.Item>Ambassadors</Menu.Item>
-          <Menu.Item>Press</Menu.Item>
+          <Menu.Item as={NavLink} to="/about/mission">Mission</Menu.Item>
+          <Menu.Item as={NavLink} to="/about/team">Team & Culture</Menu.Item>
+          <Menu.Item as={NavLink} to="/about/careers">Careers</Menu.Item>
+          <Menu.Item as={NavLink} to="/about/ambassadors">Ambassadors</Menu.Item>
+          <Menu.Item as={NavLink} to="/about/press">Press</Menu.Item>
         </Menu>
         <div className="secure">
           <Image src={secure} />
