@@ -31,6 +31,9 @@
             &:hover, &:focus, &:active{
                 box-shadow:none !important;
             }
+            &.padded{
+                padding:@14px @21px;
+            }
             &.green{
                 color:@primary-one;
                 &:hover, &:focus, &:active{
@@ -77,6 +80,11 @@
                     background-color:transparent;
                 }
             }
+        }
+    }
+    &.vertical.buttons .button{
+        + .button{
+            margin:@7px 0 0 0;
         }
     }
 }
