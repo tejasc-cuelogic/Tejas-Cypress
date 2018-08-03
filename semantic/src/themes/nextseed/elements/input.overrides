@@ -39,3 +39,8 @@ input[type=number]{
         border: 0 !important;
     }
 }
+.edu-center {
+    .ui.input {
+        width: 100%;
+    }
+}

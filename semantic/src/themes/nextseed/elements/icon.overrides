@@ -1983,6 +1983,9 @@ i.icon[class*="ns-"]{
 .ns-long-arrow-left:before{
     content:@ns-long-arrow-left;
 }
+.ns-minus-square:before{
+    content: @ns-minus-square;
+}
 .ns-new-business:before{
     content:@ns-new-business;
 }
@@ -2024,6 +2027,9 @@ i.icon[class*="ns-"]{
 }
 .ns-proprietor:before{
     content:@ns-proprietor;
+}
+.ns-plus-square:before{
+    content: @ns-plus-square;
 }
 .ns-real-estate:before{
     content:@ns-real-estate;

@@ -10,7 +10,7 @@ class Offering extends Component {
       <Aux>
         <Banner />
         <CampaignList
-          locked={3}
+          locked="cjk9pj4250d0f0123n0lng1qr"
           filters
           heading={<Header as="h5" textAlign="center" caption>Active Campaigns</Header>}
         />

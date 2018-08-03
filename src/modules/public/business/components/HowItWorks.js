@@ -12,6 +12,10 @@ import videoPoster from '../../../../assets/images/636206632.webp';
 const nsvideos = {
   embed: '247714163',
 };
+const settings = {
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
 
 const HowItWorks = () => (
   <Aux>
@@ -82,7 +86,7 @@ const HowItWorks = () => (
     <Divider fitted as={Container} />
     <section className="testimonial-slider">
       <Container>
-        <NsCarousel>
+        <NsCarousel {...settings}>
           {
             [1, 2, 3].map(i => (
               <Grid stackable key={i}>

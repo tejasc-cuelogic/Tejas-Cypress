@@ -15,6 +15,10 @@ section{
 	p{
 		margin-bottom:@40px;
 	}
+	a {
+		color: @fullBlack;
+		font-weight: @bold;
+	}
 }
 //	Helper Classes
 //	Heading font sizes
@@ -120,6 +124,9 @@ a{
 	color:@link-color;
 	&:hover{
 		text-decoration:underline;
+	}
+	&.inverted{
+		color:@white;
 	}
 }
 a.text-link{
@@ -231,7 +238,7 @@ footer{
 .offer-details {
     display: flex;
     flex-direction: row;
-    min-height: 100vh;
+    min-height:~"calc(100vh - 58px)";
 	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
@@ -689,27 +696,6 @@ p i.icon {
 			width: auto;
 			max-width: none;
 		}
-		.image-caption {
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			padding: @20px;    
-			p {
-				background: @neutral;
-				padding: @5px @10px;
-				color: @white;
-				display: table;
-				margin-bottom: @5px;
-				&.news-category {
-					font-size: @13px;
-					text-transform: uppercase;
-				}
-				&.news-title {
-					font-size: @28px;
-					line-height: @30px;
-				}
-			}
-		}
 	}
 }
 address {
@@ -735,6 +721,27 @@ address {
 		color: @primary-two !important; 
 	}
 }
+.image-caption {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding: 20px;    
+	p {
+		background: @neutral;
+		padding: 5px 10px;
+		color: @white;
+		display: table;
+		margin-bottom: 5px;
+		&.news-category {
+			font-size: 13px;
+			text-transform: uppercase;
+		}
+		&.news-title {
+			font-size: 28px;
+			line-height: 30px;
+		}
+	}
+}
 //impact page
 .featured-statistic {
 	h5.ui.header {
@@ -743,6 +750,31 @@ address {
 	}
 	h2.ui.header {
 		margin-bottom: 0px;
+	}
+}
+//Education center
+.edu-back-link {
+	a {
+		color: @neutral-middark;
+	}
+}
+.edu-center {
+	.ui.card {
+		border: 0;
+		.content.padded {
+			padding: 0;
+			border: 0;
+		}
+		&:hover {
+			box-shadow: none;
+		}
+	}
+}
+//Insight 
+.insight-image-wrapper {
+	position: relative;
+	img.ui.image {
+		width: 100%;
 	}
 }
 /* END <== PUBLIC PAGES UI STYLES */
@@ -1400,31 +1432,39 @@ ol.progtrckr{
 	}
 }
 
-// Rechart Styles
+// Rechart Styles Starts
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
-.recharts-wrapper{
-	.recharts-legend-wrapper{
-		z-index:-1;
-	}
-	.recharts-pie-sector .datavalue{
-		font-size:@20px;
-		font-weight:700;
-	}
-	tspan{
-		font-size:18px;
-		font-weight:700;
-	}
-	.chartLegends li{
-		font-size:22px;
-		span{
-			font-size:13px;
-			color:@fullBlack;
-			vertical-align:top;
+.portfolio-allocation{
+	.recharts-wrapper{
+		.recharts-legend-wrapper{
+			z-index:-1;
+		}
+		.recharts-pie-sector .datavalue{
+			font-size:@20px;
+			font-weight:@fontMedium;
+		}
+		tspan{
+			font-size:18px;
+			font-weight:@fontMedium;
+		}
+		.chartLegends li{
+			font-size:22px;
+			span{
+				font-size:13px;
+				color:@fullBlack;
+				vertical-align:top;
+			}
 		}
 	}
 }
+.payoff-chart{
+	.xAxis, .yAxis{
+		font-size:@13px;
+	}
+}
+// Rechart Styles Ends
 
 .knowledge-details{
 	position:relative;
@@ -1586,10 +1626,13 @@ p.check-extra-info{
 .or-divider{
 	.file-uploader-wrap{
 		width:360px;
-		margin-right:@40px;
+		margin:0 @40px 0 0;
 		display:inline-block;
 		vertical-align:top;
 		position:relative;
+		+ .file-uploader-wrap{
+			margin-top:0;
+		}
 		&:after{
 			content:"or";
 			font-size:@14px;

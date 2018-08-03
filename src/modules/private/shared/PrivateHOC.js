@@ -33,7 +33,7 @@ class PrivateHOC extends Component {
                   <span className="unread-count">3</span>
                 </span>
                 ) : (
-                  <Grid.Column width={3} floated="right" textAlign="right">{this.props.P4}</Grid.Column>
+                  <Grid.Column width={this.props.buttonWidth ? this.props.buttonWidth : 3} floated="right" textAlign="right">{this.props.P4}</Grid.Column>
                 )
               }
             </Grid.Row>
@@ -41,7 +41,7 @@ class PrivateHOC extends Component {
         </div>
         {this.props.P5}
         {(pageMeta.subPanel === 1 || this.props.subNav) &&
-          <SecondaryMenu match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} />
+          <SecondaryMenu noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} />
         }
         <div className="content-spacer">
           {this.props.children}

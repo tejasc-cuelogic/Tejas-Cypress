@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import snakeCase from 'lodash/snakeCase';
 import Aux from 'react-aux';
 import { Card, Grid, Popup, Divider, Statistic, Icon, Header } from 'semantic-ui-react';
@@ -19,10 +19,10 @@ const showValue = props => ((props.type === 1) ?
 const SummaryTitle = props => ((props.details.businessName) ? (
   <Header as="h3">
     {props.details.businessName}
-    <span className="title-meta"><AccTypeTitle moreText="investment" /></span>
+    {/* <span className="title-meta"><AccTypeTitle moreText="investment" /></span>
     <span className="title-meta">
       <Link target="_blank" to={props.details.url}>View offering page</Link>
-    </span>
+    </span> */}
   </Header>
 ) : (
   <Aux>

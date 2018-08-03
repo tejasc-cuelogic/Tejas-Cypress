@@ -344,7 +344,6 @@
         position:relative;
         padding:@50px @70px;
         .field-wrap{
-            margin:@30px auto;
             h6{
                 font-weight:@fontMedium;
                 margin-bottom:@10px;
@@ -412,6 +411,7 @@
     }
 }
 .field-wrap{
+    margin:@30px auto;
     padding:@25px @60px;
     background:@neutral-offwhite;
     @media only screen and (max-width:@largestMobileScreen){
@@ -473,17 +473,15 @@
 .transaction-detials{
     .title-meta{
         margin-left:1.5rem;
-        font-size:0.5833334em;
+        font-size:@14px;
         font-weight:@fontMedium;
         color:@tertiary-text;
-        vertical-align:top;
+        vertical-align:middle;
         i.icon{
             font-size:1.428571em;
             line-height:1;
             color:@highlight-tertiary;
-        }
-        a{
-            vertical-align:top;
+            vertical-align:middle;
         }
     }
     .ui.card .update-list{
