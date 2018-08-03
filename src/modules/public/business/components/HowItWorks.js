@@ -167,7 +167,7 @@ const HowItWorks = () => (
               placeholder={videoPoster}
               source="vimeo"
             />
-            <p className="note">
+            <p className="note mt-10">
               <i>The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.</i>
             </p>
           </Grid.Column>

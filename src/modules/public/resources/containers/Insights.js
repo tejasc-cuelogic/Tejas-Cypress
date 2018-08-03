@@ -3,8 +3,8 @@ import { Container, Image, Menu, Card, Grid, Dropdown } from 'semantic-ui-react'
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { NsCarousel } from '../../../../theme/shared';
-import Insight from '../../../../assets/images/insights2.png';
-import InsightCard from '../../../../assets/images/insights-card.png';
+import Insight from '../../../../assets/images/insights2.jpg';
+import InsightCard from '../../../../assets/images/insights-card.jpg';
 
 export default class Insights extends Component {
   render() {

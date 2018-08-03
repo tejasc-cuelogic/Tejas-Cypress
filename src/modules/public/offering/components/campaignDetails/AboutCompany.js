@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
-import { Header, Icon, Grid, Image, Embed, List, Divider, Breadcrumb, Segment, Reveal } from 'semantic-ui-react';
+import { Header, Icon, Grid, Image, Embed, Container, List, Divider, Breadcrumb, Segment, Reveal } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
+import { NsCarousel } from '../../../../../theme/shared';
 import videoPoster from '../../../../../assets/images/636206632.webp';
-import campainAboutImg from '../../../../../assets/images/campaign_about.png';
+import campainAboutImg from '../../../../../assets/images/campaign_about.jpg';
 import teamMember1 from '../../../../../assets/images/james-wright.png';
 import teamMember2 from '../../../../../assets/images/owner-1.jpg';
 import teamMember3 from '../../../../../assets/images/owner-2.jpg';
-import businessModel from '../../../../../assets/images/business_model.png';
+import businessModel from '../../../../../assets/images/business_model.jpg';
 
 const getModule = component => Loadable({
   loader: () => import(`../${component}`),
@@ -15,6 +16,12 @@ const getModule = component => Loadable({
     return <div>Loading...</div>;
   },
 });
+
+const settings = {
+  dots: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
 
 const nsvideos = {
   embed: '218642510',
@@ -33,7 +40,13 @@ class AboutCompany extends Component {
           <Grid.Column width={12}>
             <div className="campaign-about-wrapper">
               <div className="carousel">
-                <Image src={videoPoster} />
+                <Container>
+                  <NsCarousel {...settings}>
+                    {[1, 2, 3].map(() => (
+                      <Image src={videoPoster} />
+                    ))}
+                  </NsCarousel>
+                </Container>
               </div>
               <Header as="h3">Buffbrew Taproom LLC</Header>
               <p>
@@ -81,7 +94,7 @@ class AboutCompany extends Component {
                 adipisci velit, sed quia non numquam eius modi tempora incidunt ut
                 labore et dolore magnam aliquam quaerat voluptatem.
               </p>
-              <Image src={campainAboutImg} centered />
+              <Image src={campainAboutImg} centered className="mt-30" />
               <p className="note">
                 Caption. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Vivamus dignissim vitae odio nec pellentesque.

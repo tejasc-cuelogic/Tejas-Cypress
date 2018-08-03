@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Modal, Grid, Image, Icon } from 'semantic-ui-react';
-import campainAboutImg from '../../../../assets/images/campaign_about.png';
+import campainAboutImg from '../../../../assets/images/campaign_about.jpg';
 
 class MeetTeamModal extends Component {
   handleClose = () => this.props.history.goBack();
