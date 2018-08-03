@@ -30,7 +30,7 @@ class Comments extends Component {
                 </section>
                 {/* After sign up view - do not remove */}
                 <Form reply className="public-form clearfix">
-                  <TextArea placeholder="Write a comment..." style={{ minHeight: 150 }} />
+                  <TextArea placeholder="Write a comment..." />
                   <Button primary floated="right">Post Comment</Button>
                 </Form>
                 {/* end */}
@@ -39,9 +39,7 @@ class Comments extends Component {
                 <Comment>
                   <Comment.Content>
                     <Comment.Author>Terence</Comment.Author>
-                    <Comment.Metadata>
-                      <div>2 Hours Ago</div>
-                    </Comment.Metadata>
+                    <Comment.Metadata className="text-uppercase">2 Hours Ago</Comment.Metadata>
                     {/* add after sign up - do not remove */}
                     <Comment.Actions>
                       <Comment.Action>Reply</Comment.Action>
@@ -59,9 +57,7 @@ class Comments extends Component {
                 <Comment>
                   <Comment.Content>
                     <Comment.Author>Alan</Comment.Author>
-                    <Comment.Metadata>
-                      <div>JUL 24, 2018</div>
-                    </Comment.Metadata>
+                    <Comment.Metadata className="text-uppercase">JUL 24, 2018</Comment.Metadata>
                     {/* add after sign up - do not remove */}
                     <Comment.Actions>
                       <Comment.Action>Reply</Comment.Action>
@@ -77,9 +73,7 @@ class Comments extends Component {
                 <Comment>
                   <Comment.Content>
                     <Comment.Author>Erick</Comment.Author>
-                    <Comment.Metadata>
-                      <div>JUL 30, 2018</div>
-                    </Comment.Metadata>
+                    <Comment.Metadata className="text-uppercase">JUL 30, 2018</Comment.Metadata>
                     {/* add after sign up - do not remove */}
                     <Comment.Actions>
                       <Comment.Action>Reply</Comment.Action>
@@ -96,10 +90,8 @@ class Comments extends Component {
                   <Comment.Group>
                     <Comment>
                       <Comment.Content>
-                        <Comment.Author>John <Label color="blue">ISSUER</Label></Comment.Author>
-                        <Comment.Metadata>
-                          <div>3 HOURS AGO</div>
-                        </Comment.Metadata>
+                        <Comment.Author>John <Label color="blue" mini>ISSUER</Label></Comment.Author>
+                        <Comment.Metadata className="text-uppercase">3 HOURS AGO</Comment.Metadata>
                         {/* add after sign up - do not remove */}
                         <Comment.Actions>
                           <Comment.Action>Reply</Comment.Action>
@@ -128,7 +120,7 @@ class Comments extends Component {
                         email <Link to="/">support@nextseed.com</Link>.
                       </p>
                       <Form className="public-form" reply>
-                        <TextArea placeholder="Write a comment..." style={{ minHeight: 150 }} />
+                        <TextArea placeholder="Write a comment..." />
                         <Button>Cancel</Button>
                         <Button primary floated="right">Post Comment</Button>
                       </Form>

@@ -112,7 +112,6 @@ h6{
 }
 .text-uppercase {
 	text-transform: uppercase !important;
-	font-weight: bold;
 }
 
 .inverse-text{
