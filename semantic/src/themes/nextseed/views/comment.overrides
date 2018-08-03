@@ -20,7 +20,7 @@
         top: 0;
         right: 0;
         a {
-            font-weight: @fontMediun;
+            font-weight: @fontMedium;
             line-height: 24px;
         }
     }
