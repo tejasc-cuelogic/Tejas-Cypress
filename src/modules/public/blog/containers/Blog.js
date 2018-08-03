@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, Divider } from 'semantic-ui-react';
-import { GridListing } from '../../../../theme/shared';
-import BlogPost from '../components/BlogPost';
 
 class Blog extends Component {
   caseStudies = [
@@ -25,20 +23,13 @@ class Blog extends Component {
   ];
 
   render() {
-    let pageContent = null;
-    if (this.props.match.params.postId) {
-      pageContent = <BlogPost postId={this.props.match.params.postId} />;
-    } else {
-      pageContent = <GridListing listItems={this.caseStudies} details="blog/details" />;
-    }
-
     return (
       <Aux>
         <Header as="h1">NextSeed Blog
           <Header.Subheader>Let your community invest in your success</Header.Subheader>
         </Header>
         <Divider inverted section />
-        {pageContent}
+        lll
       </Aux>
     );
   }

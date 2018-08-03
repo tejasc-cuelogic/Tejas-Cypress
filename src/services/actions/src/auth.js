@@ -146,32 +146,33 @@ export class Auth {
 
     return new Promise((res, rej) => {
       this.cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: result => res({ data: result }),
+        // onSuccess: result => res({ data: result }),
+        onSuccess: (result) => {
+          authStore.setUserLoggedIn(true);
+          if (result.action && result.action === 'newPassword') {
+            authStore.setEmail(result.data.email);
+            authStore.setCognitoUserSession(this.cognitoUser.Session);
+            authStore.setNewPasswordRequired(true);
+          } else {
+            // Extract JWT from token
+            commonStore.setToken(result.idToken.jwtToken);
+            userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
+            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
+              res();
+            });
+            AWS.config.region = AWS_REGION;
+            // Check if currentUser has admin role, if user has admin role set admin access to user
+            if (userStore.isCurrentUserWithRole('admin')) {
+              this.setAWSAdminAccess(result.idToken.jwtToken);
+            }
+          }
+        },
         newPasswordRequired: (result) => {
           res({ data: result, action: 'newPassword' });
         },
         onFailure: err => rej(err),
       });
     })
-      .then((result) => {
-        authStore.setUserLoggedIn(true);
-        if (result.action && result.action === 'newPassword') {
-          authStore.setEmail(result.data.email);
-          authStore.setCognitoUserSession(this.cognitoUser.Session);
-          authStore.setNewPasswordRequired(true);
-        } else {
-          const { data } = result;
-          // Extract JWT from token
-          commonStore.setToken(data.idToken.jwtToken);
-          userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-          userDetailsStore.getUser(userStore.currentUser.sub);
-          AWS.config.region = AWS_REGION;
-          // Check if currentUser has admin role, if user has admin role set admin access to user
-          if (userStore.isCurrentUserWithRole('admin')) {
-            this.setAWSAdminAccess(data.idToken.jwtToken);
-          }
-        }
-      })
       .catch((err) => {
         uiStore.setErrors(this.simpleErr(err));
         throw err;
@@ -500,7 +501,7 @@ export class Auth {
    */
   resendConfirmationCode = () => {
     uiStore.setProgress();
-    const { email } = authStore.values;
+    const { email } = authStore.CONFIRM_FRM.fields;
     this.cognitoUser = new AWSCognito.CognitoUser({
       Username: email.value,
       Pool: this.userPool,

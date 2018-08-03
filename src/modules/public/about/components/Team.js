@@ -1,21 +1,57 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Divider } from 'semantic-ui-react';
+import { Route } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import { Header, Grid } from 'semantic-ui-react';
+import TeamModal from '../components/TeamModal';
+import { InlineLoader } from '../../../../theme/shared';
+import TeamList from '../components/TeamList';
 
-const team = () => (
-  <Aux>
-    <Header as="h1">About Us
-      <Header.Subheader>
-        Our Mission is to Connect Businesses and Individuals to Build Vibrant Communities
-      </Header.Subheader>
-    </Header>
-    <Divider inverted section />
-    <p className="pageContent">
-      By using the latest crowdfunding laws and technology, NextSeed is creating new opportunities
-      for businesses and everyday investors to grow together. Through NextSeed, small businesses
-      have access to a source of debt financing that is all around them.
-    </p>
-  </Aux>
-);
+
+@inject('teamStore')
+@observer
+class team extends Component {
+  componentWillMount() {
+    this.props.teamStore.initRequest();
+  }
+  render() {
+    const { teamMembers, loading } = this.props.teamStore;
+    const teamInfo = (
+      <Grid stackable columns={2}>
+        <Grid.Column>
+          <Grid centered>
+            <Grid.Column width={8} className="team-column">
+              <Header as="h2">Meet our team.</Header>
+              <p>
+              We&apos;re a team of entrepreneurs with backgrounds in business, finance,
+              law, marketing and technology. We&apos;re here to empower business owners
+              and everyday people to invest in one another.
+              </p>
+            </Grid.Column>
+          </Grid>
+        </Grid.Column>
+        <TeamList
+          columns={3}
+          className="team-gallery"
+          match={this.props.match}
+          members={teamMembers}
+          joinColumn
+        />
+        <Route
+          path={`${this.props.match.url}/:id`}
+          render={
+            props => <TeamModal refLink={this.props.match.url} {...props} />
+          }
+        />
+      </Grid>);
+    return (
+      <Aux>
+        {loading ? (<InlineLoader />)
+        : teamMembers.length === 0 ? <h2>No Records to Display</h2>
+        : teamInfo}
+      </Aux>
+    );
+  }
+}
 
 export default team;

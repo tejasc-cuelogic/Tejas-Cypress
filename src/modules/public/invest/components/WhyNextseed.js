@@ -34,8 +34,8 @@ const WhyNextseed = () => (
                 <Item.Content>
                   <Item.Header>Impactful investments </Item.Header>
                   <Item.Meta>
-                  Local business owners, local jobs and local growth. Create real
-                  impact in local communities.
+                    Local business owners, local jobs and local growth. Create real
+                    impact in local communities.
                   </Item.Meta>
                 </Item.Content>
               </Item>
@@ -44,8 +44,8 @@ const WhyNextseed = () => (
                 <Item.Content>
                   <Item.Header>Pre-vetted opportunities </Item.Header>
                   <Item.Meta>
-                  Every business must meet our strict financial criteria, plus federal legal
-                  and regulatory guidelines.
+                    Every business must meet our strict financial criteria, plus federal legal
+                    and regulatory guidelines.
                   </Item.Meta>
                 </Item.Content>
               </Item>
@@ -54,7 +54,7 @@ const WhyNextseed = () => (
                 <Item.Content>
                   <Item.Header>Flexible investment amounts</Item.Header>
                   <Item.Meta>
-                  Never invest more than you can risk. Investments starting at $100
+                    Never invest more than you can risk. Investments starting at $100
                   </Item.Meta>
                 </Item.Content>
               </Item>
@@ -63,8 +63,8 @@ const WhyNextseed = () => (
                 <Item.Content>
                   <Item.Header>Exclusive investments</Item.Header>
                   <Item.Meta>
-                  Uncover opportunities that were once privately reserved for wealthy
-                  and well-connected investors.
+                    Uncover opportunities that were once privately reserved for wealthy
+                    and well-connected investors.
                   </Item.Meta>
                 </Item.Content>
               </Item>
@@ -73,8 +73,8 @@ const WhyNextseed = () => (
                 <Item.Content>
                   <Item.Header>Returns processed for you</Item.Header>
                   <Item.Meta>
-                  No need to chase payments from business owners. NextSeed verifies and processes
-                  payments from your investments automatically.
+                    No need to chase payments from business owners. NextSeed verifies and processes
+                    payments from your investments automatically.
                   </Item.Meta>
                 </Item.Content>
               </Item>

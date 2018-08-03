@@ -44,6 +44,7 @@ const PersonalSignature = observer(props => (
           <FormDatePicker
             name="signatureDate"
             id="signatureDate"
+            placeholder="Select date"
             maxDate={moment()}
             fielddata={personData.signatureDate}
             selected={personData.signatureDate.value}

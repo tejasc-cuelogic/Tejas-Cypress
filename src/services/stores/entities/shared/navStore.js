@@ -18,10 +18,11 @@ export class NavStore {
 
   @computed get myRoutes() {
     const permitted = [...this.params.roles, ...userDetailsStore.signupStatus.activeAccounts];
-    return _.filter(
+    const routes = _.filter(
       this.NAV_ITEMS,
       n => n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0,
     );
+    return routes;
   }
 
   @action
@@ -46,7 +47,7 @@ export class NavStore {
   }
 
   @computed get sidebarItems() {
-    const reject = ['profile-settings', 'business-application'];
+    const reject = ['profile-settings', 'business-application/:applicationId'];
     return this.allNavItems.filter(r => !reject.includes(r.to) && r.title !== 'Offering');
   }
 
@@ -71,8 +72,7 @@ export class NavStore {
   @action
   setNavStatus(calculations, forced) {
     const { percentagePassed, topVisible } = calculations;
-    /* eslint-disable no-unneeded-ternary */
-    this.navStatus = forced ? forced : ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
+    this.navStatus = forced || ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
   }
 }
 

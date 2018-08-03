@@ -1,6 +1,9 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Link } from 'react-router-dom';
+import { Form, Grid, Table } from 'semantic-ui-react';
 import { THeader } from '../../../../../../theme/table/NSTable';
+import { DropdownFilter } from '../../../../../../theme/form/Filters';
 import Helper from '../../../../../../helper/utility';
 
 const result = {
@@ -18,25 +21,39 @@ const result = {
 };
 
 const Transactions = () => (
-  <div className="table-wrapper">
-    <Table unstackable singleLine className="investment-details" textAlign="right">
-      <THeader columns={result.columns} />
-      <Table.Body>
-        {
-          result.rows.map(row => (
-            <Table.Row key={Helper.guid()}>
-              <Table.Cell collapsing textAlign="left">{row.payDate}</Table.Cell>
-              <Table.Cell className="positive-text">{Helper.CurrencyFormat(row.received)}</Table.Cell>
-              <Table.Cell>{Helper.CurrencyFormat(row.interest)}</Table.Cell>
-              <Table.Cell>{Helper.CurrencyFormat(row.principal)}</Table.Cell>
-              <Table.Cell>{Helper.CurrencyFormat(row.fees)}</Table.Cell>
-              <Table.Cell>{Helper.CurrencyFormat(row.netReceived)}</Table.Cell>
-            </Table.Row>
-          ))
-        }
-      </Table.Body>
-    </Table>
-  </div>
+  <Aux>
+    <Form className="inner-content-spacer">
+      <Grid>
+        <Grid.Row verticalAlign="middle">
+          <Grid.Column width={4}>
+            <DropdownFilter value="$5,000  (#593958201)" name="Select investment" options="$5,000  (#593958201)" />
+          </Grid.Column>
+          <Grid.Column floated="right" align="right" width={4}>
+            <Link to="/">View Loan Agreement</Link>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Form>
+    <div className="table-wrapper">
+      <Table unstackable singleLine className="investment-details" textAlign="right">
+        <THeader columns={result.columns} />
+        <Table.Body>
+          {
+            result.rows.map(row => (
+              <Table.Row key={Helper.guid()}>
+                <Table.Cell collapsing textAlign="left">{row.payDate}</Table.Cell>
+                <Table.Cell className="positive-text">{Helper.CurrencyFormat(row.received)}</Table.Cell>
+                <Table.Cell>{Helper.CurrencyFormat(row.interest)}</Table.Cell>
+                <Table.Cell>{Helper.CurrencyFormat(row.principal)}</Table.Cell>
+                <Table.Cell>{Helper.CurrencyFormat(row.fees)}</Table.Cell>
+                <Table.Cell>{Helper.CurrencyFormat(row.netReceived)}</Table.Cell>
+              </Table.Row>
+            ))
+          }
+        </Table.Body>
+      </Table>
+    </div>
+  </Aux>
 );
 
 export default Transactions;

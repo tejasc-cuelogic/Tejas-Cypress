@@ -15,7 +15,14 @@ const AccountTypes = ({
     </Modal.Header>
     <Modal.Content className="signup-content">
       <Header as="h6" textAlign="center">Choose an account type</Header>
-      <Grid textAlign="center">
+      <Grid
+        textAlign="center"
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') {
+            renderAccType();
+          }
+        }}
+      >
         <Form error className="account-type-tab">
           <FormRadioGroup
             fielddata={form.fields.accType}

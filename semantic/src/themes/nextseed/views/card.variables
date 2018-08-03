@@ -77,7 +77,7 @@
 /* Metadata */
 @metaFontSize: @relativeMedium;
 @metaSpacing: 0.3em;
-@metaColor: @lightTextColor;
+@metaColor: @neutral-middark;
 
 /* Icons */
 @actionOpacity: 0.75;
@@ -146,17 +146,14 @@
 --------------------*/
 
 /* Link */
-@linkHoverBackground: @white;
-@linkHoverBorder: @border;
+@linkHoverBackground: none;
+@linkHoverBorder: none;
 @linkHoverZIndex: 5;
-@linkHoverRaiseDistance: 3px;
+@linkHoverRaiseDistance: 0px;
 @linkHoverTransform: translateY(-@linkHoverRaiseDistance);
 
 @shadowHoverBoxShadow: 0px @shadowDistance @linkHoverRaiseDistance 0px @solidSelectedBorderColor;
-@linkHoverBoxShadow:
-  @shadowHoverBoxShadow,
-  @borderShadow
-;
+@linkHoverBoxShadow:@cardHoverShadow;
 
 
 /* Raised */

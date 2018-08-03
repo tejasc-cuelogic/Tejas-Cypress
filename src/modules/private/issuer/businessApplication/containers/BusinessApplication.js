@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
-import { Button } from 'semantic-ui-react';
-import { includes } from 'lodash';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
@@ -12,6 +10,8 @@ import Failure from '../components/Failure';
 import Success from '../components/Success';
 import Application from '../components/lendio/Application';
 import ConfirmModal from '../components/confirmModal';
+import LendioSuccess from '../components/lendio/LendioSuccess';
+import { HeaderButtons } from '../components/HeaderButtons';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -24,28 +24,26 @@ const getModule = component => Loadable({
 @observer
 export default class BusinessApplication extends Component {
   componentWillMount() {
-    const { params } = this.props.match;
+    const { match } = this.props;
     const { pathname } = this.props.location;
     const {
       isFetchedData, fetchApplicationDataById, setFieldvalue, formReset,
     } = this.props.businessAppStore;
-    setFieldvalue('currentApplicationId', params.applicationId);
-    if (params.applicationId !== 'new' && isFetchedData !== params.applicationId) {
-      setFieldvalue('isFetchedData', params.applicationId);
-      fetchApplicationDataById(params.applicationId).then(() => {
-        if (includes(pathname, 'pre-qualification') || includes(pathname, 'business-details') || includes(pathname, 'performance') || includes(pathname, 'documentation')) {
-          this.props.history.replace(`${this.props.match.url}/${this.props.businessAppStore.stepToRender}`);
+    setFieldvalue('currentApplicationId', match.params.applicationId);
+    if (match.params.applicationId !== 'new' && isFetchedData !== match.params.applicationId) {
+      setFieldvalue('isFetchedData', match.params.applicationId);
+      fetchApplicationDataById(match.params.applicationId).then(() => {
+        if (this.checkIncludes(['pre-qualification', 'business-details', 'performance', 'documentation'], pathname)) {
+          this.props.history.replace(`${match.url}/${this.props.businessAppStore.stepToRender.path}`);
         }
       });
-    } else if (params.applicationId === 'new') {
+    } else if (match.params.applicationId === 'new') {
       this.props.navStore.setAccessParams('appStatus', 'NEW');
       formReset();
     }
   }
 
-  saveContinue = () => {
-    this.props.history.push(`${this.props.match.url}/confirm`);
-  }
+  saveContinue = () => this.props.history.push(`${this.props.match.url}/confirm`);
 
   submitSaveContinue = (e) => {
     e.preventDefault();
@@ -62,20 +60,34 @@ export default class BusinessApplication extends Component {
     });
   }
 
+  preQualSubmit = (e) => {
+    e.preventDefault();
+    this.props.businessAppStore.businessPreQualificationFormSumbit().then(() => {
+      const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
+      Helper.toast('Business pre-qualification request submitted!', 'success');
+      this.props.history.push(`/app/business-application/${url}`);
+    });
+  }
+
+  checkIncludes = (paths, pathname) => paths.some(val => pathname.includes(val));
+
+  calculateShowSubNav = (paths, pathname, appStepsStatus) => (appStepsStatus === 'IN_PROGRESS' && pathname.includes('pre-qualification')) || this.checkIncludes(paths, pathname);
+
   render() {
     const { inProgress } = this.props.uiStore;
     const { match } = this.props;
     const { pathname } = this.props.location;
-    const { canSubmitApp, appStepsStatus, isFileUploading } = this.props.businessAppStore;
-    const showSubNav = (includes(pathname, 'pre-qualification') && appStepsStatus[0] === 'IN_PROGRESS')
-      || includes(pathname, 'failed') || includes(pathname, 'success') || includes(pathname, 'lendio');
-    const preQualPage = includes(pathname, 'pre-qualification');
+    const {
+      canSubmitApp, appStepsStatus, isFileUploading, BUSINESS_APP_FRM, formReadOnlyMode,
+    } = this.props.businessAppStore;
+    const showSubNav = this.calculateShowSubNav(['failed', 'success', 'lendio'], pathname, appStepsStatus[0].status, formReadOnlyMode);
+    const preQualPage = pathname.includes('pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
-    // LogoWhite LogoNsAndLendio
-    const logoUrl = includes(pathname, `${match.url}/lendio`) || includes(pathname, `${match.url}/success/lendio`) ? 'LogoNsAndLendio' : 'LogoWhite';
+    const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhite';
     return (
       <PrivateLayout
         subNav={!showSubNav}
+        appStepsStatus={appStepsStatus}
         {...this.props}
         P0={
           <Logo
@@ -87,32 +99,35 @@ export default class BusinessApplication extends Component {
             size={logoUrl === 'LogoWhite' ? 'small' : 'medium'}
           />
         }
-        P4={!showSubNav && !preQualPage &&
-          <Button.Group>
-            <Button inverted onClick={this.saveContinue} disabled={isFileUploading} color="green">{isFileUploading ? 'File operation in process' : 'Save and Continue later'}</Button>
-            <Button
-              loading={inProgress}
-              onClick={this.submit}
-              className={canSubmitApp ? 'primary' : 'grey'}
-              disabled={!canSubmitApp}
-            >
-              Submit
-            </Button>
-          </Button.Group>
+        buttonWidth={6}
+        P4={
+          <HeaderButtons
+            disabled={formReadOnlyMode}
+            saveContinue={this.saveContinue}
+            submitApp={this.submit}
+            showSubNav={showSubNav}
+            canSubmitApp={canSubmitApp}
+            preQualSubmit={this.preQualSubmit}
+            inProgress={inProgress}
+            isFileUploading={isFileUploading}
+            preQualPage={preQualPage}
+            isValid={BUSINESS_APP_FRM.meta.isValid}
+          />
         }
       >
         <Switch>
           <Route exact path={match.url} component={getModule(navItems[0].component)} />
-          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/failed/:reason?`} component={Failure} />
-          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/lendio`} component={Application} />
-          <Route exact path={`/app/business-application/${this.props.match.params.applicationId}/success`} render={props1 => <Success refLink={this.props.match.url} applicationId={this.props.match.params.applicationId} {...props1} />} />
+          <Route exact path={`${match.url}/failed/:reason?`} component={Failure} />
+          <Route exact path={`${match.url}/lendio`} render={props1 => <Application applicationId={match.params.applicationId} {...props1} />} />
+          <Route exact path={`${match.url}/lendio/:condition`} component={LendioSuccess} />
+          <Route exact path={`${match.url}/success`} render={props1 => <Success refLink={match.url} applicationId={match.params.applicationId} {...props1} />} />
           {
             navItems.map(item => (
               <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
             ))
           }
         </Switch>
-        <Route exact path={`${this.props.match.url}/confirm`} render={() => <ConfirmModal partialSave={this.submitSaveContinue} stepLink={this.props.location.pathname} refLink={this.props.match.url} />} />
+        <Route exact path={`${match.url}/confirm`} render={() => <ConfirmModal partialSave={this.submitSaveContinue} stepLink={pathname} refLink={match.url} />} />
       </PrivateLayout>
     );
   }

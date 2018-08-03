@@ -11,20 +11,15 @@ export default class Documentation extends Component {
   componentWillMount() {
     this.props.businessAppStore.setFieldvalue('applicationStep', 'documentation');
   }
-  submit = () => {
-    // e.preventDefault();
-    console.log(111);
-    // this.props.history.push(`/app/business-application/${APP_STATUS}`);
-  }
   render() {
     const {
       BUSINESS_DOC_FRM,
       businessDocChange,
       businessAppUploadFiles,
       businessAppRemoveFiles,
-      canSubmitApp,
       getBusinessTypeCondtion,
-      getPersonalGuaranteeCondtion,
+      getPersonalGuaranteeCondition,
+      formReadOnlyMode,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
     const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
@@ -48,10 +43,11 @@ export default class Documentation extends Component {
                   Also provide the lease for your location. If only an LOIwith the landlord
                   is currently available, please upload the LOI for review purposes.
                   <Popup
-                    trigger={<Icon name="help circle" />}
+                    trigger={<Icon className="ns-help-circle" />}
                     content="If your campaign is successfully funded, an executed lease will be required at closing in order for you to receive funds."
                     position="top center"
                     className="center-align"
+                    wide
                   />
                 </span>
               }
@@ -61,6 +57,7 @@ export default class Documentation extends Component {
                   statementFileList.map(field => (
                     <Grid.Column>
                       <DropZone
+                        disabled={formReadOnlyMode}
                         multiple
                         key={field}
                         name={field}
@@ -91,30 +88,30 @@ export default class Documentation extends Component {
                 </List.Item>
               </List>
               <Divider hidden />
-              <Grid stackable columns="equal">
+              <div className="or-divider">
                 {
                   taxFileList.map(field => (
-                    <Grid.Column>
-                      <DropZone
-                        multiple
-                        key={field}
-                        name={field}
-                        fielddata={fields[field]}
-                        ondrop={(files, fieldName) =>
-                          businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                        onremove={(e, fieldName, index) =>
-                          businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
-                      />
-                    </Grid.Column>
+                    <DropZone
+                      disabled={formReadOnlyMode}
+                      multiple
+                      key={field}
+                      name={field}
+                      fielddata={fields[field]}
+                      ondrop={(files, fieldName) =>
+                        businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                      onremove={(e, fieldName, index) =>
+                        businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                    />
                   ))
                 }
-              </Grid>
+              </div>
             </FormElementWrap>
             <FormElementWrap
               header="Will you accept a blanket lien on the business if your campaign is successfully funded?"
               subHeader="NextSeed will require it. (Note that if you have existing debt with liens attached, a second lien will be accepted.)"
             >
               <FormRadioGroup
+                disabled={formReadOnlyMode}
                 fielddata={fields.blanketLien}
                 name="blanketLien"
                 changed={businessDocChange}
@@ -126,18 +123,20 @@ export default class Documentation extends Component {
               subHeader="(This is not a requirement, but a personal guarantee can positively impact the terms provided.)"
             >
               <FormRadioGroup
+                disabled={formReadOnlyMode}
                 fielddata={fields.personalGuarantee}
                 name="personalGuarantee"
                 changed={businessDocChange}
                 containerclassname="button-radio"
               />
-              {getPersonalGuaranteeCondtion &&
+              {getPersonalGuaranteeCondition &&
                 <div>
                   <p>
                     Please <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>, fill out and upload the
                     Personal Guarantee Form along with any supporting documentation
                   </p>
                   <DropZone
+                    disabled={formReadOnlyMode}
                     multiple
                     name="personalGuaranteeForm"
                     fielddata={fields.personalGuaranteeForm}
@@ -149,7 +148,7 @@ export default class Documentation extends Component {
                 </div>
               }
             </FormElementWrap>
-            <AppNavigation canSubmitApp={canSubmitApp} action={this.submit} />
+            <AppNavigation />
           </Form>
         </Grid.Column>
       </Grid>

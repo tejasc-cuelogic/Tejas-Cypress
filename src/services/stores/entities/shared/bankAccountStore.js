@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
-import isEmpty from 'lodash/isEmpty';
-import { FormValidator as Validator } from '../../../../helper';
+import { omit, isEmpty } from 'lodash';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getPlaidAccountdata } from './../../queries/account';
 import { uiStore, userStore, accountStore } from '../../index';
@@ -14,6 +14,7 @@ export class BankAccountStore {
   @observable plaidBankDetails = {};
   @observable bankListing = undefined;
   @observable depositMoneyNow = true;
+  @observable showAddFunds = false;
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
   @observable formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
@@ -39,15 +40,16 @@ export class BankAccountStore {
   };
 
   @action
-  addFundChange = (e, result) => {
-    this.formAddFunds = Validator.onChange(this.formAddFunds, Validator.pullValues(e, result));
+  addFundChange = (values, field) => {
+    this.formAddFunds =
+    Validator.onChange(this.formAddFunds, { name: field, value: values.floatValue });
   };
 
   @action
-  linkBankManuallyChange = (e, result) => {
+  linkBankManuallyChange = (values, field) => {
     this.formLinkBankManually = Validator.onChange(
       this.formLinkBankManually,
-      Validator.pullValues(e, result),
+      { name: field, value: values.value },
     );
   };
 
@@ -71,6 +73,20 @@ export class BankAccountStore {
     this.plaidBankDetails = plaidBankDetails;
   }
 
+  @computed
+  get accountAttributes() {
+    let accountAttributes = {};
+    if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidBankDetails)) {
+      const plaidBankDetails = omit(this.plaidBankDetails, '__typename');
+      accountAttributes = { ...plaidBankDetails };
+    } else {
+      const { accountNumber, routingNumber } = this.formLinkBankManually.fields;
+      accountAttributes.accountNumber = accountNumber.value;
+      accountAttributes.routingNumber = routingNumber.value;
+    }
+    return accountAttributes;
+  }
+
   getPlaidAccountData = () => new Promise((resolve, reject) => {
     client
       .mutate({
@@ -80,7 +96,7 @@ export class BankAccountStore {
           plaidPublicToken: this.plaidAccDetails.public_token,
           plaidAccountId: this.plaidAccDetails.account_id,
           bankName: this.plaidAccDetails.institution.name,
-          accountType: accountStore.accountType.type,
+          accountType: accountStore.investmentAccType,
         },
       })
       .then((result) => {
@@ -88,32 +104,35 @@ export class BankAccountStore {
         resolve();
       })
       .catch(action((err) => {
-        uiStore.setErrors(this.simpleErr(err));
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
         reject();
       }));
   });
 
-  @action
-  setAccountError = (form, key, error) => {
-    this[form].fields[key].error = error;
-  }
-
   @computed
   get isValidLinkBank() {
-    return !isEmpty(this.plaidBankDetails);
+    return !isEmpty(this.plaidAccDetails) || !isEmpty(this.plaidBankDetails);
   }
 
-  @computed
-  get isValidAddFunds() {
-    const { error } = this.formAddFunds.fields.value;
-    return isEmpty(error);
+  @action
+  setShowAddFunds = () => {
+    this.showAddFunds = true;
   }
 
-  simpleErr = err => ({
-    statusCode: err.statusCode,
-    code: err.code,
-    message: err.message,
-  });
+  @action
+  resetShowAddFunds = () => {
+    this.showAddFunds = false;
+  }
+
+  @action
+  resetLinkBank = () => {
+    Validator.resetFormData(this.formLinkBankManually);
+    Validator.resetFormData(this.formAddFunds);
+    this.plaidAccDetails = {};
+    this.plaidBankDetails = {};
+    this.depositMoneyNow = true;
+    this.showAddFunds = false;
+  }
 }
 
 export default new BankAccountStore();

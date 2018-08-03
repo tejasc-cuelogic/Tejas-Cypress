@@ -31,14 +31,14 @@ export default class FundingOption extends Component {
     return (
       <Aux>
         <Container>
-          <section className="funding-option">
+          <section className="funding-option account-type-tab">
             <Header as="h2">Choose a funding option that fits your business.</Header>
             <p className="mb-50 center-align">
               Whether you need working capital for your existing business,
               expansion projects or a new venture, our financial products
               put you in control. Grow your business on your own terms.
             </p>
-            <Menu tabular>
+            <Menu tabular fluid widths={3}>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
             </Menu>
             <Segment attached="bottom" padded>

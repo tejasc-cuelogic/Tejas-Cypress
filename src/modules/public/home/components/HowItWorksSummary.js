@@ -8,11 +8,15 @@ const HowItWorksSummary = () => (
   <section>
     <Container text textAlign="center">
       <Header as="h2" className="mb-30">
-        A community-driven platform for fundraising and investing.
+      A new way to fundraise and invest.
+      Powered by technology. Rooted in community.
       </Header>
       <p className="mb-80">
-        Welcome to capital investing reinvented. NextSeed connects entrepreneurs with
-        everyday people to help businesses, investors and communities grow together.
+      Local entrepreneurs and investors are redefining the face of Main Street
+      and regional growth. NextSeed offers the opportunity to invest in commercial
+      developments, restaurants, fitness studios and craft breweries plus a variety
+      of growing concepts. Together, we’re building vibrant, connected and engaged
+      communities around the country.
       </p>
     </Container>
     <Container>

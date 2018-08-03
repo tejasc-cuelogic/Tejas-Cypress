@@ -1,21 +1,28 @@
+import { DataFormatter } from '../../../../../helper';
+
 class Helper {
   Progress = () => {
     const metaData = {
       'contact-card': {
         step: 0,
-        label: 'Verify identity',
+        label: 'Verify Identity',
         action: false,
-        successMsg: 'Identity verified',
+        successMsg: 'Complete',
+        route: '/identity-verification/0',
+        altRoute: '/identity-verification/3',
       },
       'cash-dollar': {
         step: 1,
         label: 'Establish Investor Profile',
         action: false,
+        successMsg: 'Complete',
+        route: '/establish-profile',
       },
       'bar-line-chart': {
         step: 2,
         label: 'Create Investment Account',
         action: false,
+        route: '/account-creation',
       },
     };
     return metaData;
@@ -26,11 +33,21 @@ class Helper {
       A: {
         group: 'Investor Account Creation',
         title: '',
-        label: 'You’re a few steps away from being able to invest!',
+        label: 'Check your inbox for a confirmation email from NextSeed, and click the link to verify your address.',
       },
     };
     return metaData.A;
   };
+
+  eleToUpperCaseInArray = (givenArray) => {
+    const upperCaseEleArray = givenArray.map((item) => {
+      if (item === 'ira') {
+        return item.toUpperCase();
+      }
+      return DataFormatter.upperCamelCase(item);
+    });
+    return upperCaseEleArray;
+  }
 }
 
 export default new Helper();

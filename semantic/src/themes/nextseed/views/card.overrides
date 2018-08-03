@@ -33,7 +33,7 @@
             padding:@21px @28px;
             .tags{
                 font-size:@13px;
-                font-weight:@bold;
+                font-weight:@fontMedium;
                 color:@neutral-middark;
                 text-transform:uppercase;
                 >span{
@@ -41,7 +41,7 @@
                 }
             }
             > .meta{
-                color:@neutral-middark;
+                text-transform:none;
             }
             .description{
                 height:80px;
@@ -82,6 +82,27 @@
                     line-height: 1em;
                     color: @darkTextColor;
                 }
+            }
+        }
+    }
+    &.insights{
+        height: 100%;
+        &:hover{
+            text-decoration: none;
+        }
+        >.content{
+            padding:@14px;
+            .tags{
+                color:@primary-one;
+                text-transform:uppercase;
+                >span{
+                    color:@neutral-middark;
+                    text-transform:none;
+                }
+            }
+            .description{
+                height:auto;
+                margin-bottom: 0;
             }
         }
     }
@@ -193,6 +214,7 @@
             vertical-align:top;
             margin-left:@10px;
             color:@neutral-middark;
+            vertical-align:middle;
             >b{
                 color:@fullBlack;
             }

@@ -625,3 +625,12 @@ footer{
 		margin: 0 10px;
 	}
 }
+//Investor Account Types
+.account-types-section {
+	a {
+		color: @primary-one;
+		&:hover {
+			text-decoration: underline;
+		}
+	}	
+}

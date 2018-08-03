@@ -1,20 +1,27 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import cookie from 'react-cookies';
 import { Link, withRouter } from 'react-router-dom';
+import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { authActions, validationActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
+import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 
-@inject('authStore', 'uiStore', 'userStore', 'profileStore')
+@inject('authStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
-    const { CONFIRM_FRM, SIGNUP_FRM } = this.props.authStore;
-    CONFIRM_FRM.fields.email.value = SIGNUP_FRM.fields.email.value;
-    CONFIRM_FRM.fields.password.value = SIGNUP_FRM.fields.password.value;
+    const { CONFIRM_FRM } = this.props.authStore;
+    const credentials = cookie.load('USER_CREDENTIALS');
+    CONFIRM_FRM.fields.email.value = credentials.email;
+    CONFIRM_FRM.fields.password.value = atob(credentials.password);
+  }
+  componentWillUnmount() {
+    cookie.remove('USER_CREDENTIALS', { maxAge: 300 });
   }
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
@@ -22,8 +29,8 @@ export default class ConfirmEmailAddress extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.authStore.setProgress('confirm');
-    if (this.props.userStore.currentUser) {
-      this.props.profileStore.verifyAndUpdateEmail().then(() => {
+    if (this.props.refLink) {
+      this.props.authStore.verifyAndUpdateEmail().then(() => {
         Helper.toast('Email has been verified and updated', 'success');
         this.props.history.push('/app/profile-settings/profile-data');
       })
@@ -34,7 +41,8 @@ export default class ConfirmEmailAddress extends Component {
           this.props.authStore.reset('CONFIRM');
           const { roles } = this.props.userStore.currentUser;
           const redirectUrl = !roles ? '/auth/login' :
-            (roles.includes('investor') ? '/app/summary' : '/app/business-application/new/pre-qualification');
+            SIGNUP_REDIRECT_ROLEWISE.find(user =>
+              roles.includes(user.role)).path;
           this.props.history.replace(redirectUrl);
         })
         .catch(() => { });
@@ -42,6 +50,7 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   handleCloseModal = () => {
+    this.props.authStore.reset('CONFIRM');
     this.props.history.push(this.props.refLink || '/');
     this.props.uiStore.clearErrors();
   }
@@ -49,7 +58,7 @@ export default class ConfirmEmailAddress extends Component {
   handleResendCode = () => {
     this.props.authStore.setProgress('resend');
     if (this.props.refLink) {
-      this.props.profileStore.requestEmailChange().then(() => {
+      this.props.authStore.requestEmailChange().then(() => {
         Helper.toast('Re-sent the verification code', 'success');
       })
         .catch(() => {});
@@ -64,7 +73,7 @@ export default class ConfirmEmailAddress extends Component {
     const { CONFIRM_FRM, ConfirmChange, confirmProgress } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()}>
+      <Modal size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
           <Divider />
@@ -72,6 +81,7 @@ export default class ConfirmEmailAddress extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput
+            ishidelabel
             type="email"
             size="huge"
             name="email"
@@ -87,13 +97,13 @@ export default class ConfirmEmailAddress extends Component {
             </Message>
           }
           <Form onSubmit={this.handleSubmitForm}>
-            <FormInput
-              size="huge"
-              name="code"
-              containerclassname="otp-field"
+            <ReactCodeInput
+              fields={6}
+              type="number"
+              filterChars
+              className="otp-field"
               fielddata={CONFIRM_FRM.fields.code}
-              changed={ConfirmChange}
-              maxLength={6}
+              onChange={ConfirmChange}
             />
             <div className="center-align">
               <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!CONFIRM_FRM.meta.isValid}>Confirm</Button>

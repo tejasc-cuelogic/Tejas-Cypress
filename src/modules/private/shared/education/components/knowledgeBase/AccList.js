@@ -7,7 +7,7 @@ import mapValues from 'lodash/mapValues';
 
 @inject('educationStore')
 @observer
-export default class Faq extends Component {
+export default class AccList extends Component {
   state = { activeIndex: 0 };
   toggleAction = (e, titleProps) => {
     const { index, refItem } = titleProps;
@@ -26,7 +26,9 @@ export default class Faq extends Component {
     return this.state.activeIndex === record.id || Object.values(ids).includes(currId);
   }
   render() {
-    const { match, data, module } = this.props;
+    const {
+      match, data, module, marketing,
+    } = this.props;
     const params = {
       subItems: `${module}Items`,
       item: module === 'faq' ? 'question' : 'title',
@@ -67,6 +69,16 @@ export default class Faq extends Component {
               </Accordion.Content>
             </Aux>
           ))
+        }
+        {marketing &&
+          <Accordion.Title
+            refItem="faq"
+            onClick={this.toggleAction}
+            as={NavLink}
+            to={`${match.url}/faq`}
+          >
+            FAQ
+          </Accordion.Title>
         }
       </Accordion>
     );

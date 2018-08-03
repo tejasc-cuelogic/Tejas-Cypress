@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Grid, Button, Container, List, Divider, Segment, Image } from 'semantic-ui-react';
+import { Header, Grid, Button, Container, List, Divider, Image, Item } from 'semantic-ui-react';
 import InvestorImg from '../../../../assets/images/investor-img.png';
 import InvestorImg1 from '../../../../assets/images/investor-img-1.png';
 
@@ -42,72 +42,82 @@ const HowItWorks = () => (
         <Header textAlign="center" as="h2">
         Choose how you want to invest.
         </Header>
-        <p className="center-align">Understand and choose the right opportunities with the right payment terms for you.</p>
-        <Segment attached="bottom" padded>
-          <Grid doubling columns={2} relaxed="very" className="flex-column">
-            <Grid.Column>
-              <div className="flex-content">
-                <Image src={InvestorImg} />
-                <Header as="h3">Term Notes</Header>
-                <div className="mb-10">
-                  <Header as="h5" attached="top">
+        <p className="center-align mb-30">Understand and choose the right opportunities with the right payment terms for you.</p>
+        <Grid doubling columns={2} relaxed="very" className="flex-column">
+          <Grid.Column>
+            <div className="flex-content">
+              <Image src={InvestorImg} />
+              <Header as="h3">Term Notes</Header>
+              <Item.Group relaxed="very">
+                <Item>
+                  <Item.Content>
+                    <Item.Header as="h5">
+                      What are the benefits?
+                    </Item.Header>
+                    <Item.Description attached>
+                    The business agrees to pay you a set amount of interest on your investment.
+                    Payments are fixed each month for a certain number of months.
+                    </Item.Description>
+                  </Item.Content>
+                </Item>
+                <Item>
+                  <Item.Content>
+                    <Item.Header as="h5">
+                      Who is this option best for?
+                    </Item.Header>
+                    <Item.Description attached>
+                    This is great for investors seeking consistent, predictable payments.
+                    </Item.Description>
+                  </Item.Content>
+                </Item>
+              </Item.Group>
+            </div>
+            <List horizontal className="learn-more-list mt-30">
+              <List.Item>
+                <List.Header>Learn more</List.Header>
+                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Content as="a">See an example of a Term Note investment</List.Content>
+              </List.Item>
+            </List>
+          </Grid.Column>
+          <Grid.Column>
+            <div className="flex-content">
+              <Image src={InvestorImg1} />
+              <Header as="h3">Revenue Sharing Notes</Header>
+              <Item.Group>
+                <Item>
+                  <Item.Content>
+                    <Item.Header as="h5">
                     What are the benefits?
-                  </Header>
-                  <Segment attached>
-                  The business agrees to pay you a set amount of interest on your investment.
-                  Payments are fixed each month for a certain number of months.
-                  </Segment>
-                </div>
-                <div className="mb-20">
-                  <Header as="h5" attached="top">
+                    </Item.Header>
+                    <Item.Description>
+                    With revenue sharing loans, a business agrees to pay you a set total amount
+                    on top of your investment. Monthly payments may be different every month.
+                    </Item.Description>
+                  </Item.Content>
+                </Item>
+                <Item>
+                  <Item.Content>
+                    <Item.Header as="h5">
                     Who is this option best for?
-                  </Header>
-                  <Segment attached>
-                  This is great for investors seeking consistent, predictable payments.
-                  </Segment>
-                </div>
-              </div>
-              <List horizontal className="learn-more-list">
-                <List.Item>
-                  <List.Header>Learn more</List.Header>
-                  <List.Icon className="ns-arrow-right" color="green" />
-                  <List.Content as="a">See an example of a Term Note investment</List.Content>
-                </List.Item>
-              </List>
-            </Grid.Column>
-            <Grid.Column>
-              <div className="flex-content">
-                <Image src={InvestorImg1} />
-                <Header as="h3">Revenue Sharing Notes</Header>
-                <div className="mb-10">
-                  <Header as="h5" attached="top">
-                    What are the benefits?
-                  </Header>
-                  <Segment attached>
-                  With revenue sharing loans, a business agrees to pay you a set total amount
-                  on top of your investment. Monthly payments may be different every month.
-                  </Segment>
-                </div>
-                <div className="mb-20">
-                  <Header as="h5" attached="top">
-                    Who is this option best for?
-                  </Header>
-                  <Segment attached>
-                  This is ideal for investors who are looking to grow with a new business concept,
-                  accepting payments that may fluctuate but have a higher potential upside.
-                  </Segment>
-                </div>
-              </div>
-              <List horizontal className="learn-more-list">
-                <List.Item>
-                  <List.Header>Learn more</List.Header>
-                  <List.Icon className="ns-arrow-right" color="green" />
-                  <List.Content as="a">See an example of a Revenue Sharing investment</List.Content>
-                </List.Item>
-              </List>
-            </Grid.Column>
-          </Grid>
-        </Segment>
+                    </Item.Header>
+                    <Item.Description>
+                    This is ideal for investors who are looking to grow with a new business concept,
+                    accepting payments that may fluctuate but have a higher potential upside.
+                    </Item.Description>
+                  </Item.Content>
+                </Item>
+              </Item.Group>
+            </div>
+            <List horizontal className="learn-more-list mt-30">
+              <List.Item>
+                <List.Header>Learn more</List.Header>
+                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Content as="a">See an example of a Revenue Sharing investment</List.Content>
+              </List.Item>
+            </List>
+          </Grid.Column>
+        </Grid>
       </Container>
     </section>
     <Divider fitted as={Container} />
@@ -142,17 +152,13 @@ const HowItWorks = () => (
       </Container>
     </section>
     <Divider fitted as={Container} />
-    <div className="mb-50">
-      <Container>
-        <div className="center-align mt-50 investor-bottom-buttons">
-          <Header textAlign="center" as="h2" className="mb-30">
-          Register for an account with just your email.
-          </Header>
-          <Button as={Link} to="/auth/register"secondary>Sign Up Free</Button>
-          <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
-        </div>
+    <section>
+      <Container className="center-align">
+        <Header as="h2" className="mb-30">Register for an account with just your email.</Header>
+        <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+        <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
       </Container>
-    </div>
+    </section>
   </Aux>
 );
 
