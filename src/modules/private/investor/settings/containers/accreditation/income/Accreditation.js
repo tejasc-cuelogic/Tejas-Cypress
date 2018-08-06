@@ -8,6 +8,9 @@ import Verification from '../shared/Verification';
 @inject('uiStore', 'accreditationStore')
 @observer
 export default class Accreditation extends React.Component {
+  componentWillMount() {
+    this.props.accreditationStore.setAccreditationMethod('income');
+  }
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/profile-settings/investment-limits');
     const { INCOME_EVIDENCE_FORM, VERIFICATION_REQUEST_FORM } = this.props.accreditationStore;

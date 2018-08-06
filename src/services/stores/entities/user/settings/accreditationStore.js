@@ -70,5 +70,11 @@ export class AccreditationStore {
     FormValidator.resetFormData(form);
     this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value = 'verificationrequest';
   }
+
+  @action
+  setAccreditationMethod = (value) => {
+    this.ACCREDITATION_FORM =
+        FormValidator.onChange(this.ACCREDITATION_FORM, { name: 'accreditationMethods', value });
+  }
 }
 export default new AccreditationStore();

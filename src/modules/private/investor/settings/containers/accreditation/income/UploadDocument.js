@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Button, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider, Button, Confirm, Grid } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { DropZone } from '../../../../../../../theme/form';
 
@@ -34,20 +34,21 @@ export default class UploadDocument extends Component {
         <p className="center-align">Upload your W2, 1040, or other IRS or foreign tax authority documents containing your salary for the past 2 years, or a letter from your lawyer, CPA, investment advisor or investment broker verifying your income.</p>
         <Divider hidden />
         <Form error>
-          <DropZone
-            name="incomeDocSecondLastYear"
-            fielddata={INCOME_UPLOAD_DOC_FORM.fields.incomeDocSecondLastYear}
-            ondrop={this.onFileDrop}
-            onremove={this.confirmRemoveDoc}
-            containerclassname="fluid"
-          />
-          <DropZone
-            name="incomeDocLastYear"
-            fielddata={INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear}
-            ondrop={this.onFileDrop}
-            onremove={this.confirmRemoveDoc}
-            containerclassname="fluid"
-          />
+          <Grid stackable columns="equal">
+            {
+              ['incomeDocSecondLastYear', 'incomeDocLastYear'].map(field => (
+                <Grid.Column>
+                  <DropZone
+                    name={field}
+                    fielddata={INCOME_UPLOAD_DOC_FORM.fields[field]}
+                    ondrop={this.onFileDrop}
+                    onremove={this.confirmRemoveDoc}
+                    containerclassname="fluid"
+                  />
+                </Grid.Column>
+              ))
+            }
+          </Grid>
           <Divider hidden />
           <div className="center-align">
             <Button onClick={this.showThanksNote} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Confirm</Button>

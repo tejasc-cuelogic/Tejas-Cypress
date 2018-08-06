@@ -30,11 +30,12 @@ export default class UploadDocument extends Component {
     const { confirmBox } = this.props.uiStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Upload documents</Header>
-        <p className="center-align">Upload your W2, 1040, or other IRS or foreign tax authority documents containing your salary for the past 2 years, or a letter from your lawyer, CPA, investment advisor or investment broker verifying your income.</p>
+        <Header as="h3" textAlign="center">Assets</Header>
+        <p className="center-align">To verify your accreditation, you can upload a statement from a financial institution, asset appraisals, or a letter from your lawyer, accountant, investment advisor or investment broker indicating net assets.</p>
         <Divider hidden />
         <Form error>
           <DropZone
+            multiple
             name="statementDoc"
             fielddata={ASSETS_UPLOAD_DOC_FORM.fields.statementDoc}
             ondrop={this.onFileDrop}

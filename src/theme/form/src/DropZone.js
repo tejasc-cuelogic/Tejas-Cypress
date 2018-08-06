@@ -37,7 +37,7 @@ const DropZone = observer((props) => {
             <Loader />
           </Dimmer>
           <Dropzone {...props} onDrop={files => props.ondrop(files, props.name)} className="test" style={{}}>
-            <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
+            <Icon className="ns-upload" /> {props.uploadtitle ? <span>{props.uploadtitle}</span> : <span>Upload document{props.multiple ? 's' : ''}</span>}
           </Dropzone>
         </div> : null
       }
