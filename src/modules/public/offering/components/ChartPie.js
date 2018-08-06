@@ -25,7 +25,7 @@ export default class ChartPie extends Component {
             dataKey="value"
             data={data}
             innerRadius="90%"
-            outerRadius="140%"
+            outerRadius="135%"
             startAngle={-270}
             endAngle={90}
             type="circle"
