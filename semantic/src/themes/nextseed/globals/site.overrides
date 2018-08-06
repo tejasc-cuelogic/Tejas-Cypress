@@ -596,6 +596,10 @@ p i.icon {
 				}
 			}
 		}
+		&.track-left-section {
+			display: flex !important;
+			justify-content: center;
+		}
 	}
 }
 .compare-section {
@@ -603,7 +607,7 @@ p i.icon {
 		text-align: center;
 		display: block;
 		display: block;
-		width: 50%;
+		width: 70%;
 		line-height: 20px;
 		margin-left: auto;
 		margin-right: auto;
@@ -628,6 +632,18 @@ p i.icon {
 	}
 	.slick-prev {
 		left: -50px;
+	}
+	.slick-dots li{
+		&.slick-active button:before {
+			background: @white;
+		}
+		button:before {
+			width: 10px;
+			height: 10px;
+			content: '';
+			border: 1px solid @white;
+			border-radius: 50%;
+		}
 	}
 }
 //Investor homepage
@@ -803,6 +819,7 @@ address {
 		}
 	}
 }
+
 /* END <== PUBLIC PAGES UI STYLES */
 
 .content-wrapper{
