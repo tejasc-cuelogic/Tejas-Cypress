@@ -4,6 +4,7 @@ import Aux from 'react-aux';
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Button, Icon } from 'semantic-ui-react';
+import { InlineLoader } from '../../../../../theme/shared/index';
 import { BUSINESS_APP_USER_STATUS, BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 @inject('businessAppStore')
 @observer
@@ -14,7 +15,12 @@ export default class ApplicationCards extends Component {
     this.props.businessAppStore.setFieldvalue('isFetchedData', null);
   }
   render() {
-    const { fetchBusinessApplication } = this.props.businessAppStore;
+    const { fetchBusinessApplication, businessApplicationsList } = this.props.businessAppStore;
+
+    if (businessApplicationsList.loading) {
+      return <InlineLoader />;
+    }
+
     return (
       <Aux>
         {fetchBusinessApplication.length ?
@@ -50,14 +56,17 @@ export default class ApplicationCards extends Component {
                 BUSINESS_APPLICATION_STATUS.LENDIO_PRE_QUALIFICATION_SUCCESSFUL &&
                   <Aux>
                     <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/pre-qualification`}>View application</Button>
-                    <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/lendio`}>View Lendio</Button>
+                    <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/lendio`}>View Lendio Application</Button>
                   </Aux>
                 }
                 {application.applicationStatus ===
                 BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
                 && application.lendio && application.lendio.status ===
                 BUSINESS_APPLICATION_STATUS.LENDIO_SUCCESS &&
-                  <Button inverted color="green" onClick={() => window.open(`${application.lendio.url}`, '_blank')} target="_blank">View Lendio</Button>
+                <Aux>
+                  <Button inverted color="green" as={Link} to={`business-application/${application.applicationId}/pre-qualification`}>View application</Button>
+                  <Button inverted color="green" onClick={() => window.open(`${application.lendio.url}`, '_blank')} target="_blank">View Lendio Application</Button>
+                </Aux>
                 }
               </Card.Content>
             </Card>
