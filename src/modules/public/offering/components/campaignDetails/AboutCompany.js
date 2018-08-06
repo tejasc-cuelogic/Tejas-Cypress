@@ -189,7 +189,7 @@ class AboutCompany extends Component {
                     <Reveal animated="small fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>

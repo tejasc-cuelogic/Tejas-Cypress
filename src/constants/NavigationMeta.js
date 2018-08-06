@@ -349,9 +349,6 @@ export const PUBLIC_NAV = [
       {
         icon: 'ns-coments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
       },
-      {
-        icon: 'share alternate', title: 'Share', to: 'share', component: 'Share',
-      },
     ],
   },
   {

@@ -173,12 +173,16 @@ footer{
 	section{
 		padding:@30px @60px;
 		.secure{
-			float:right;
-			margin-left:@50px;
+			margin-top: @14px;
+			padding-top: @14px;
+			border-top: 1px solid @neutral-darkwhite;
+		}
+		.footer-left {
+			display: inline-block;
 		}
 		.copyright-info{
 			float:right;
-			max-width:650px;
+			max-width:850px;
 			font-size:12px;
 			line-height:22px;
 		}
@@ -405,6 +409,14 @@ footer{
 						margin-bottom: @30px;
     					padding-bottom: 0;
 					}
+				}
+			}
+			.pdf-viewer {
+				display: flex;
+				flex-direction: column;
+				min-height:~"calc(100vh - 180px)";
+				> object {
+					flex: 1;
 				}
 			}
 		}
