@@ -21,14 +21,8 @@ export class InvestmentLimitStore {
   @computed get getActiveAccountList() {
     let isIndividualAccount = false;
     const accList = filter(this.activeAccounts, (account) => {
-      let status;
-      if (account.accountType === 'individual') {
-        isIndividualAccount = true;
-        status = !find(this.activeAccounts, acc => acc.accountType === 'ira');
-      } else {
-        status = true;
-      }
-      return status;
+      isIndividualAccount = account.accountType === 'individual' ? true : isIndividualAccount;
+      return account.accountType === 'individual' ? !find(this.activeAccounts, acc => acc.accountType === 'ira') : true;
     });
     return toJS({ accountList: accList, isIndAccExist: isIndividualAccount });
   }
@@ -36,14 +30,15 @@ export class InvestmentLimitStore {
   // Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
   getInvestmentLimit = (data) => {
     let limit = 0;
-    const refAmount = 107000;
-    const referThis = data.annualIncome > data.netWorth ? data.netWorth : data.annualIncome;
-    if ((data.annualIncome >= refAmount) && (data.netWorth >= refAmount)) {
-      const referThis2 = (referThis * 10) / 100;
-      limit = (refAmount > referThis2) ? referThis2 : refAmount;
-    } else if ((data.annualIncome < refAmount) || (data.netWorth < refAmount)) {
-      const referThis2 = (referThis * 5) / 100;
-      limit = (referThis2 < 2200) ? 2200 : referThis2;
+    const maxLimit = 107000;
+    const annualIncomeOrNetWorth = data.annualIncome > data.netWorth ?
+      data.netWorth : data.annualIncome;
+    if ((data.annualIncome >= maxLimit) && (data.netWorth >= maxLimit)) {
+      const calculatedLimit = (annualIncomeOrNetWorth * 10) / 100;
+      limit = (maxLimit > calculatedLimit) ? calculatedLimit : maxLimit;
+    } else if ((data.annualIncome < maxLimit) || (data.netWorth < maxLimit)) {
+      const calculatedLimit = (annualIncomeOrNetWorth * 5) / 100;
+      limit = (calculatedLimit < 2200) ? 2200 : calculatedLimit;
     }
     return limit;
   }
@@ -52,10 +47,7 @@ export class InvestmentLimitStore {
   investmentCalculate = () => {
     const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
     this.currentLimit = this.getInvestmentLimit(data);
-    let limitField = 'currentLimitIndividualOrIra';
-    if (this.currentAccountType === 'entity') {
-      limitField = 'currentLimitEntity';
-    }
+    const limitField = (this.currentAccountType === 'entity') ? 'currentLimitEntity' : 'currentLimitIndividualOrIra';
     this.INVESTEMENT_LIMIT_META = Validator.onChange(
       this.INVESTEMENT_LIMIT_META,
       { name: limitField, value: this.currentLimit },
@@ -68,29 +60,17 @@ export class InvestmentLimitStore {
     this.currentAccountType = accountType;
     const { accountList } = this.getActiveAccountList;
     const accountData = find(accountList, account => account.accountType === accountType);
-    let aIncome; let nWorth; let limitField;
-    const otherInvestments = 0;
-    if (accountType === 'entity') {
-      limitField = 'currentLimitEntity';
-      aIncome = accountData.accountDetails.cfInvestment.amount;
-      nWorth = accountData.accountDetails.netAssets;
-    } else {
-      limitField = 'currentLimitIndividualOrIra';
-      aIncome = accountData.accountDetails.annualIncome;
-      nWorth = accountData.accountDetails.netWorth;
-    }
-    this.INVESTEMENT_LIMIT_META = Validator.onChange(
-      this.INVESTEMENT_LIMIT_META,
-      { name: 'annualIncome', value: aIncome },
-    );
-    this.INVESTEMENT_LIMIT_META = Validator.onChange(
-      this.INVESTEMENT_LIMIT_META,
-      { name: 'netWorth', value: nWorth },
-    );
-    this.INVESTEMENT_LIMIT_META = Validator.onChange(
-      this.INVESTEMENT_LIMIT_META,
-      { name: 'otherInvestments', value: otherInvestments },
-    );
+    const limitField = (accountType === 'entity') ? 'currentLimitEntity' : 'currentLimitIndividualOrIra';
+    const fieldVal = {};
+    fieldVal.otherInvestments = 0;
+    fieldVal.annualIncome = (accountType === 'entity') ? accountData.accountDetails.cfInvestment.amount : accountData.accountDetails.annualIncome;
+    fieldVal.netWorth = (accountType === 'entity') ? accountData.accountDetails.netAssets : accountData.accountDetails.netWorth;
+    ['annualIncome', 'netWorth', 'otherInvestments'].forEach((field) => {
+      this.INVESTEMENT_LIMIT_META = Validator.onChange(
+        this.INVESTEMENT_LIMIT_META,
+        { name: field, value: fieldVal[field] },
+      );
+    });
     const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
     this.currentLimit = this.getInvestmentLimit(data);
     this.INVESTEMENT_LIMIT_META = Validator.onChange(
