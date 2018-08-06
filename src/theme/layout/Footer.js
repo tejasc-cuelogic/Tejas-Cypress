@@ -14,7 +14,7 @@ const footer = () => (
           <Menu.Item>Contact</Menu.Item>
           <Menu.Item as={Link} to="/agreements/terms-of-use">Terms of Use</Menu.Item>
           <Menu.Item as={Link} to="/agreements/privacy-policy">Privacy Policy</Menu.Item>
-          <Menu.Item>Sign Up for Newsletter</Menu.Item>
+          <Menu.Item as={Link} to="/subscribe/newsletter">Sign Up for Newsletter</Menu.Item>
           <Menu.Menu position="right">
             <Menu.Item>© 2018 NextSeed US LLC</Menu.Item>
             {Object.keys(SOCIAL_URLS).map(s => (
