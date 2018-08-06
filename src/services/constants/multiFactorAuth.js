@@ -1,32 +1,32 @@
 export const MFA_MODE_TYPES = {
   mfaModeTypes: {
-    value: 0,
+    value: '',
     values: [
       {
         label: 'Phone number',
-        value: 0,
+        value: 'PHONE',
       },
       {
         label: 'E-mail address',
-        value: 1,
+        value: 'EMAIL',
       },
     ],
     error: undefined,
     rule: 'required',
   },
   mfaPhoneModeTypes: {
-    value: 0,
+    value: '',
     values: [
       {
         label: 'Text',
-        value: 0,
+        value: 'TEXT',
       },
       {
         label: 'Call',
-        value: 1,
+        value: 'CALL',
       },
     ],
     error: undefined,
-    rule: 'required',
+    rule: 'required_if:mfaModeTypes,PHONE',
   },
 };
