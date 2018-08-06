@@ -67,78 +67,44 @@ const PrivacyPolicy = () => (
       <p>All financial companies need to share customers’ personal information to run their everyday business. In the section below, we list the reasons financial companies can share their customers’ personal information; the reasons NextSeed chooses to share; and whether you can limit this sharing. When you are no longer our customer, we continue to share your information as described in this notice.</p>
       <Table basic="very">
         <Table.Row>
-          <Table.Cell width="585">
-            <Header as="h3">Reasons we can share your personal information</Header>
-          </Table.Cell>
-          <Table.Cell width="171">
-            <Header as="h3">Does NextSeed share?</Header>
-          </Table.Cell>
-          <Table.Cell width="180">
-            <Header as="h3">Can you limit this sharing?</Header>
-          </Table.Cell>
+          <Table.HeaderCell>Reasons we can share your personal information</Table.HeaderCell>
+          <Table.HeaderCell>Does NextSeed share?</Table.HeaderCell>
+          <Table.HeaderCell>Can you limit this sharing?</Table.HeaderCell>
         </Table.Row>
         <Table.Row>
-          <Table.Cell width="585"><strong>For our everyday business purposes</strong>&nbsp;– such as to process your transactions, maintain your account(s), respond to court orders and legal investigations, or report to credit bureaus</Table.Cell>
-          <Table.Cell width="171">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
-          <Table.Cell width="180">
-            <Header as="h3">No</Header>
-          </Table.Cell>
+          <Table.Cell><strong>For our everyday business purposes</strong>&nbsp;– such as to process your transactions, maintain your account(s), respond to court orders and legal investigations, or report to credit bureaus</Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
+          <Table.Cell>No</Table.Cell>
         </Table.Row>
         <Table.Row>
-          <Table.Cell width="585"><strong>For our marketing purposes</strong>&nbsp;– to offer our products and services to you</Table.Cell>
-          <Table.Cell width="171">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
-          <Table.Cell width="180">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
+          <Table.Cell><strong>For our marketing purposes</strong>&nbsp;– to offer our products and services to you</Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
         </Table.Row>
         <Table.Row>
-          <Table.Cell width="585"><strong>For joint marketing with other financial companies</strong></Table.Cell>
-          <Table.Cell width="171">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
-          <Table.Cell width="180">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
+          <Table.Cell><strong>For joint marketing with other financial companies</strong></Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
         </Table.Row>
         <Table.Row>
-          <Table.Cell width="585"><strong>For our affiliates’ everyday business purposes</strong>&nbsp;– information about your transactions and experiences</Table.Cell>
-          <Table.Cell width="171">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
-          <Table.Cell width="180">
-            <Header as="h3">No</Header>
-          </Table.Cell>
+          <Table.Cell><strong>For our affiliates’ everyday business purposes</strong>&nbsp;– information about your transactions and experiences</Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
+          <Table.Cell>No</Table.Cell>
         </Table.Row>
         <Table.Row>
-          <Table.Cell width="585"><strong>For our affiliates’ everyday business purposes</strong>&nbsp;– information about your creditworthiness</Table.Cell>
-          <Table.Cell width="171">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
-          <Table.Cell width="180">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
+          <Table.Cell><strong>For our affiliates’ everyday business purposes</strong>&nbsp;– information about your creditworthiness</Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
         </Table.Row>
         <Table.Row>
-          <Table.Cell width="585"><strong>For our affiliates to market to you</strong></Table.Cell>
-          <Table.Cell width="171">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
-          <Table.Cell width="180">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
+          <Table.Cell><strong>For our affiliates to market to you</strong></Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
         </Table.Row>
         <Table.Row>
-          <Table.Cell width="585"><strong>For non-affiliates to market to you</strong></Table.Cell>
-          <Table.Cell width="171">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
-          <Table.Cell width="180">
-            <Header as="h3">Yes</Header>
-          </Table.Cell>
+          <Table.Cell><strong>For non-affiliates to market to you</strong></Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
+          <Table.Cell>Yes</Table.Cell>
         </Table.Row>
       </Table>
       <p>Call (866) 282-3345 or visit us online: www.nextseed.com or contact us at&nbsp;privacy@nextseed.com</p>
