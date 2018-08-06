@@ -21,10 +21,12 @@ const LegalDocuments = observer(({
 }) => (
   <Modal size="tiny" open closeIcon onClose={close}>
     <Modal.Header className="center-align signup-header">
-      <Header as="h3">We need to confirm your identity</Header>
+      <Header as="h3">Verify your identity</Header>
       <Divider />
       <p>
-        Please upload two valid identity documents
+      Unfortunately, we were still unable to verify your identity based on the information entered.
+      To complete identity verification,
+      we`ll need a copy of a valid photo ID and proof of residence.
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
