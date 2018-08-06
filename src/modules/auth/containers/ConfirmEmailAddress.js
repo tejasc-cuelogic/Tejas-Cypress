@@ -15,10 +15,8 @@ import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 @observer
 export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
-    const { CONFIRM_FRM } = this.props.authStore;
     const credentials = cookie.load('USER_CREDENTIALS');
-    CONFIRM_FRM.fields.email.value = credentials.email;
-    CONFIRM_FRM.fields.password.value = atob(credentials.password);
+    this.props.authStore.setCredentials(credentials);
   }
   componentWillUnmount() {
     cookie.remove('USER_CREDENTIALS', { maxAge: 300 });

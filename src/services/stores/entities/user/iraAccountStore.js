@@ -214,7 +214,7 @@ class IraAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.createInvestorAccount || formStatus === 'submit') {
+          if (result.data.createInvestorAccount || formStatus === 'submit' || currentStep.name === 'Funding') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
           if (currentStep.name === 'Identity') {
@@ -339,6 +339,7 @@ class IraAccountStore {
 
   @action
   setFileUploadData = (field, files) => {
+    uiStore.setProgress();
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     fileUpload.setFileUploadData('', fileData, 'ACCOUNT_IRA_CREATION_CIP', 'INVESTOR').then(action((result) => {

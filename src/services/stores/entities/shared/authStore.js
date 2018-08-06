@@ -116,6 +116,18 @@ export class AuthStore {
     this.confirmProgress = entity;
   }
 
+  @action
+  setCredentials(credentials) {
+    this.CONFIRM_FRM = Validator.onChange(
+      this.CONFIRM_FRM,
+      { name: 'email', value: credentials.email },
+    );
+    this.CONFIRM_FRM = Validator.onChange(
+      this.CONFIRM_FRM,
+      { name: 'password', value: atob(credentials.password) },
+    );
+  }
+
   @computed get devPasswdProtection() {
     return this.devAuth.required && !this.devAuth.authStatus;
   }

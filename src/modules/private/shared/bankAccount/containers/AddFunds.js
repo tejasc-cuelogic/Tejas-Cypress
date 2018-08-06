@@ -11,6 +11,9 @@ export default class AddFunds extends Component {
   componentDidMount() {
     this.props.individualAccountStore.setStepToBeRendered(1);
   }
+  componentWillUnmount() {
+    this.props.bankAccountStore.resetShowAddFunds();
+  }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);
     if (!this.props.bankAccountStore.formAddFunds.fields.value.error) {

@@ -80,7 +80,7 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your phone number</Header>
           <Divider />
-          <p>We are about to text a verification code to:</p>
+          <p> Please confirm the 6-digit verification code sent by text to your phone number: </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           {errors &&
@@ -100,7 +100,6 @@ export default class ConfirmPhoneNumber extends Component {
               containerclassname="display-only"
               className="display-only"
               phoneNumber
-              hidelabel
             />
           </Form>
           {editMode ?
