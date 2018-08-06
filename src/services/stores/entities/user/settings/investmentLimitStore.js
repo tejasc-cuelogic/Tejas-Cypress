@@ -14,10 +14,6 @@ export class InvestmentLimitStore {
   @observable activeAccounts = null;
   @observable currentAccountType = null;
 
-  @computed get fLoading() {
-    return this.getActiveAccountList.loading;
-  }
-
   @computed get getActiveAccountList() {
     let isIndividualAccount = false;
     const accList = filter(this.activeAccounts, (account) => {

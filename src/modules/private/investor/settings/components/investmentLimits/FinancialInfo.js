@@ -5,10 +5,10 @@ import { inject, observer } from 'mobx-react';
 import { startCase } from 'lodash';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
-import { EmptyDataSet } from '../../../../../../theme/shared';
+import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
 
 
-@inject('investmentLimitStore', 'uiStore')
+@inject('investmentLimitStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class FinancialInfo extends Component {
@@ -26,11 +26,12 @@ export default class FinancialInfo extends Component {
   }
   render() {
     const {
-      INVESTEMENT_LIMIT_META, fLoading, getActiveAccountList,
+      INVESTEMENT_LIMIT_META, getActiveAccountList,
     } = this.props.investmentLimitStore;
+    const { currentUser } = this.props.userDetailsStore;
     const { fields } = INVESTEMENT_LIMIT_META;
-    if (fLoading) {
-      return <div>loading...</div>;
+    if (currentUser.loading) {
+      return <InlineLoader />;
     }
     return (
       <Aux>
