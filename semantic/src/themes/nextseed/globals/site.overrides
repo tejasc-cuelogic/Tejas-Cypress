@@ -311,11 +311,11 @@ footer{
 		}
 		p {
 			color: @neutral;
-			font-size: @15px;
-			line-height: @20px;
-			&.detail-section {
-				line-height: @20px;
-			}
+			// font-size: @15px;
+			// line-height: @20px;
+			// &.detail-section {
+			// 	line-height: @20px;
+			// }
 			&.note {
 				color:@neutral-middark;
 				font-size: @12px;
@@ -325,27 +325,27 @@ footer{
 			&.early-bird-title {
 				font-weight: bold;
 				line-height: @20px;
-				font-size: @15px;
+				// font-size: @15px;
 				text-align: center;
 			}
 			&.early-bird-desc {
 				line-height: @27px;
-				font-size: @15px;
+				// font-size: @15px;
 				text-align: center;
 			}
 		}
-		ul {
-			line-height: @26px;
-			font-size: @15px;
-			color:@neutral-middark;
-			padding-left: @20px;
+		// ul {
+		// 	line-height: @26px;
+		// 	font-size: @15px;
+		// 	color:@neutral-middark;
+		// 	padding-left: @20px;
  
-			li {
-				span {
-					font-weight: @bold;
-				}
-			}
-		}
+		// 	li {
+		// 		span {
+		// 			font-weight: @bold;
+		// 		}
+		// 	}
+		// }
 		.ui.grid.investment-grid {
 			>.column:last-child {
 				background-color: @primary-one;
@@ -632,6 +632,7 @@ p i.icon {
 		margin-right: auto;
 	}
 }
+// Slick Slider Styles override
 .slick-slider {
 	.slick-slide {
 		.ui.grid {
@@ -655,15 +656,21 @@ p i.icon {
 	.slick-dots{
 		bottom: 0;
 		li{
+			margin:0 @7px @14px;
 			&.slick-active button:before {
 				background: @white;
 			}
-			button:before {
-				width: 10px;
-				height: 10px;
-				content: '';
-				border: 1px solid @white;
-				border-radius: 50%;
+			button{
+				width:15px;
+				height:15px;
+				padding:0;
+				&:before {
+					width: 15px;
+					height: 15px;
+					content: '';
+					border: 1px solid @white;
+					border-radius: 50%;
+				}
 			}
 		}
 	} 
@@ -1541,7 +1548,7 @@ svg:not(:root).recharts-surface{
 
 .welcome-packet{
 	.pdf-viewer{
-		height:~"calc(100vh - 184px)";
+		height:~"calc(100vh - 188px)";
 		width:100%;
 		max-width:1000px;
 		margin:0 auto;

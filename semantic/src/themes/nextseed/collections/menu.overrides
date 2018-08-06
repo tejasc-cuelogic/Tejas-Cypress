@@ -325,10 +325,10 @@ footer{
         border:none;
     }
     &.secondary-menu{
+        margin:0;
         background-color:@neutral-darkwhite;
         a.item{
             padding:@16px @20px;
-            // font-weight:@fontMedium;
             &:before{
                 background-color:@neutral-darkwhite;
             }
