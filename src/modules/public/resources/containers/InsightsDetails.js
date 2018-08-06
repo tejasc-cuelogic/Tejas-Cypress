@@ -11,8 +11,8 @@ export default class InsightsDetails extends Component {
           <section>
             <Breadcrumb className="mb-30">
               <Breadcrumb.Section link>Insights</Breadcrumb.Section>
-              <Breadcrumb.Divider icon="right angle" />
-              <Breadcrumb.Section link>Short Blog Title Here</Breadcrumb.Section>
+              <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
+              <Breadcrumb.Section active>Short Blog Title Here</Breadcrumb.Section>
             </Breadcrumb>
             <Grid>
               <Grid.Column width={12}>

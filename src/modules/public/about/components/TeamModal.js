@@ -38,7 +38,7 @@ class TeamModal extends Component {
                   </p>
                   <div>
                     {member.social.map(stype => (
-                      <Link to={stype.url === null ? '/' : stype.url}>
+                      <Link to={stype.url === null ? '/' : stype.url} className="icon-link">
                         <Icon
                           color="green"
                           name={types[stype.type] || stype.type.toLowerCase()}
