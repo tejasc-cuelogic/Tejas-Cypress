@@ -54,7 +54,7 @@ export default class ChartPie extends Component {
   renderLegend = (props) => {
     const { payload } = props;
     return (
-      <ul className="chartLegends">
+      <ul className="chartLegends" >
         {
           payload.map(entry => (
             <li style={{ color: entry.color }} key={`item-${entry.value}`}><span>{entry.icon} {entry.value}</span></li>
@@ -67,18 +67,18 @@ export default class ChartPie extends Component {
   render() {
     const { data, title, colors } = this.props;
     return (
-      <ResponsiveContainer height={150}>
-        <PieChart>
+      <ResponsiveContainer height={180}>
+        <PieChart style={{ zIndex: 100 }} >
           <Legend layout="vertical" verticalAlign="middle" align="right" content={this.renderLegend} />
           <Pie
             dataKey="value"
             activeIndex={this.state.activeIndex}
             activeShape={renderActiveShape}
             data={data}
-            innerRadius="85%"
-            outerRadius="100%"
-            startAngle={0}
-            endAngle={360}
+            innerRadius="100%"
+            outerRadius="130%"
+            startAngle={-270}
+            endAngle={90}
             type="circle"
             fill="#8884d8"
             paddingAngle={0}
