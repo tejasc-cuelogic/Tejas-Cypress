@@ -4,9 +4,9 @@ import { Header, Divider } from 'semantic-ui-react';
 
 const ambassadors = () => (
   <Aux>
-    <Header as="h1">Terms of Use</Header>
+    <Header as="h2">Terms of Use</Header>
     <Divider inverted section />
-    <p className="pageContent">
+    <p>
       NextSeed US LLC (together with its affiliates, “NextSeed”) offers its website and services
       on the terms stated in these Terms of Use (the “Terms”). The NextSeed Privacy Policy
       includes additional information about NextSeed’s use of information you submit using the

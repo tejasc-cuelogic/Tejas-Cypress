@@ -12,8 +12,8 @@ const footer = () => (
           <Menu.Item as={Link} to="/resources/education-center">Resources <Icon name="caret down" /></Menu.Item>
           <Menu.Item>About Us <Icon name="caret down" /></Menu.Item>
           <Menu.Item>Contact</Menu.Item>
-          <Menu.Item>Terms of Use</Menu.Item>
-          <Menu.Item>Privacy Policy</Menu.Item>
+          <Menu.Item as={Link} to="/agreements/terms-of-use">Terms of Use</Menu.Item>
+          <Menu.Item as={Link} to="/agreements/privacy-policy">Privacy Policy</Menu.Item>
           <Menu.Item>Sign Up for Newsletter</Menu.Item>
           <Menu.Menu position="right">
             <Menu.Item>© 2018 NextSeed US LLC</Menu.Item>
@@ -28,15 +28,12 @@ const footer = () => (
       <Container>
         <Menu text vertical>
           <Menu.Item as={NavLink} to="/resources/education-center">Ed Center</Menu.Item>
-          <Menu.Item as={NavLink} to="/resources/case-studies">Case Studies</Menu.Item>
           <Menu.Item as={NavLink} to="/resources/insights">Insights</Menu.Item>
-          <Menu.Item as={NavLink} to="/resources/community">Community</Menu.Item>
         </Menu>
         <Menu text vertical>
           <Menu.Item as={NavLink} to="/about/mission">Mission</Menu.Item>
           <Menu.Item as={NavLink} to="/about/team">Team & Culture</Menu.Item>
           <Menu.Item as={NavLink} to="/about/careers">Careers</Menu.Item>
-          <Menu.Item as={NavLink} to="/about/ambassadors">Ambassadors</Menu.Item>
           <Menu.Item as={NavLink} to="/about/press">Press</Menu.Item>
         </Menu>
         <div className="secure">

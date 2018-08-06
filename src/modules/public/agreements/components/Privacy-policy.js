@@ -2,13 +2,13 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Header, Divider } from 'semantic-ui-react';
 
-const team = () => (
+const PrivacyPolicy = () => (
   <Aux>
-    <Header as="h1">NextSeed Privacy Policy
+    <Header as="h2">NextSeed Privacy Policy
       <Header.Subheader>Last updated January 2018</Header.Subheader>
     </Header>
     <Divider inverted section />
-    <p className="pageContent">
+    <p>
       NextSeed US LLC (together with its affiliates, “NextSeed”) offers its website and services
       on the terms stated in these Terms of Use (the “Terms”). The NextSeed Privacy Policy
       includes additional information about NextSeed’s use of information you submit using the
@@ -19,7 +19,7 @@ const team = () => (
       website or services on behalf of any entity, you represent and warrant that you are
       authorized to accept these Terms and the Privacy Policy on that entity’s behalf.
     </p>
-    <p className="pageContent">
+    <p>
       Certain words used in these Terms have specific meanings as stated in the section where they
       are first used or in the section below captioned Definitions. For example, the words
       “NextSeed Content” and “User Content” have specific definitions that you must read
@@ -28,4 +28,4 @@ const team = () => (
   </Aux>
 );
 
-export default team;
+export default PrivacyPolicy;

@@ -324,7 +324,6 @@ export const PUBLIC_NAV = [
       { title: 'Team', to: 'team' },
       { title: 'Careers', to: 'careers' },
       { title: 'Impact', to: 'impact' },
-      { title: 'Ambassadors', to: 'ambassadors' },
       { title: 'Press', to: 'press' },
     ],
   },
