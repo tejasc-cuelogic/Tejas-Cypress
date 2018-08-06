@@ -9,7 +9,7 @@ const Track = () => (
       <Container>
         <Grid padded="vertically">
           <Grid.Row>
-            <Grid.Column floated="left" width={8} verticalAlign="middle" className="side-section security-right-section">
+            <Grid.Column width={8} verticalAlign="middle" className="side-section security-right-section">
               <Header as="h2">Track your investments.</Header>
               <p className="mb-30">
               See how you’re doing and reinvest any earnings effortlessly

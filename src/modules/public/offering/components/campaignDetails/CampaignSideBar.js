@@ -46,6 +46,9 @@ export default class CampaignSideBar extends Component {
           <Menu.Item as={Link} to="/" className="watch-deal-menu">
             <Icon name="heart outline" /> Watch Deal
           </Menu.Item>
+          <Menu.Item as={Link} to="/" className="watch-deal-menu">
+            <Icon name="share alternate" /> Share
+          </Menu.Item>
         </Menu>
       </div>
     );
