@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Modal, Grid, Image, Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import campainAboutImg from '../../../../assets/images/campaign_about.jpg';
 
 class MeetTeamModal extends Component {
@@ -33,8 +34,12 @@ class MeetTeamModal extends Component {
               nisi ut aliquip ex ea commodo consequat.
               </p>
               <div>
-                <Icon color="green" name="twitter" />
-                <Icon color="green" name="linkedin in" />
+                <Link to="/" className="icon-link">
+                  <Icon color="green" name="twitter" />
+                </Link>
+                <Link to="/" className="icon-link">
+                  <Icon color="green" name="linkedin in" />
+                </Link>
               </div>
             </Grid.Column>
             <Grid.Column className="padded team-details-container">
@@ -49,8 +54,12 @@ class MeetTeamModal extends Component {
               nisi ut aliquip ex ea commodo consequat.
               </p>
               <div>
-                <Icon color="green" name="twitter" />
-                <Icon color="green" name="linkedin in" />
+                <Link to="/" className="icon-link">
+                  <Icon color="green" name="twitter" />
+                </Link>
+                <Link to="/" className="icon-link">
+                  <Icon color="green" name="linkedin in" />
+                </Link>
               </div>
             </Grid.Column>
             <Grid.Column>

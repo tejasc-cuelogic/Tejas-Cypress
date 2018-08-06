@@ -158,7 +158,7 @@ class BonusRewards extends Component {
               </section>
             </div>
           </Grid.Column>
-          <Grid.Column />
+          <Grid.Column width={4} />
         </Grid.Row>
       </Grid>
     );

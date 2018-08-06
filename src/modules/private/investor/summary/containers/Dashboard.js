@@ -7,7 +7,6 @@ import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHead
 
 const summaryDetails = {
   accountType: 'individual',
-  className: 'investment-summary',
   title: false,
   summary: [
     {

@@ -93,14 +93,6 @@
                 min-width: 400px;
             }
         }
-        .pdf-viewer {
-            min-height: 70vh;
-            display: flex;
-            flex-direction: column;
-            > object {
-                flex: 1;
-            }
-        }
     }
 }
 //  Public pages Ends
