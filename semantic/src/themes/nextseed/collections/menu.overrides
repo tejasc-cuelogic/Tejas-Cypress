@@ -161,6 +161,7 @@
             background-color:transparent;
             .right.menu .item{
                 padding:@13px @7px;
+                font-weight:@normal;
             }
         }
         .item > .icon{
@@ -169,6 +170,7 @@
         >.item, a.item{
             min-width:120px;
             padding:@13px 0;
+            font-weight:@normal;
             &:hover{
                 background-color:transparent;
             }
