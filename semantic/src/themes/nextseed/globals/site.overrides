@@ -1535,7 +1535,7 @@ svg:not(:root).recharts-surface{
 
 .welcome-packet{
 	.pdf-viewer{
-		height:~"calc(100vh - 184px)";
+		height:~"calc(100vh - 188px)";
 		width:100%;
 		max-width:1000px;
 		margin:0 auto;
