@@ -116,7 +116,7 @@
                 border-color:@primary-one !important;
                 background-color:transparent !important;
             }
-            .header{
+            &.header{
                 border-color:transparent !important;
             }
         }
