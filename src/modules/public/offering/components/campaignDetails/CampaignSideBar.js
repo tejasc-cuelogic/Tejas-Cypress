@@ -14,7 +14,7 @@ export default class CampaignSideBar extends Component {
       <div className="offering-side-menu">
         <div className="offering-intro">
           <Header as="h4" inverted textAlign="center">
-            <Link to="/offerings">
+            <Link to="/offerings" className="icon-link">
               <Icon name="arrow left" />
             </Link>
             {title}
