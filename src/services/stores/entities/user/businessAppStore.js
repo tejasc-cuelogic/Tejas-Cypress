@@ -852,13 +852,13 @@ export class BusinessAppStore {
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
-          }).finally(() => {
-            this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
-            this.setFieldvalue('isFileUploading', false);
           });
         }).catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
+        }).finally(() => {
+          this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
+          this.setFieldvalue('isFileUploading', false);
         });
       });
     }

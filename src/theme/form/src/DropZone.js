@@ -31,7 +31,7 @@ const DropZone = observer((props) => {
           }
         </label>
       }
-      { !value || props.multiple ?
+      { !props.disabled && (!value || props.multiple) ?
         <div className="file-uploader">
           <Dimmer active={showLoader}>
             <Loader />
