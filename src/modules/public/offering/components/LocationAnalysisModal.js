@@ -16,8 +16,8 @@ const CUSTOMER_DEMO_AGE = [
   { name: '55+', value: 15 },
 ];
 
-const GENDER_COLORS = ['#20C86D', '#189652'];
-const AGE_COLORS = ['#1C2E4B', '#31333D', '#263E64', '#5C6E8B', '#676A73'];
+const GENDER_COLORS = ['#20C86D', '#4DD38A'];
+const AGE_COLORS = ['#263E64', '#516583', '#7D8BA2', '#A8B2C1', '#D4D8E0'];
 
 class LocationAnalysisModal extends Component {
   handleClose = () => this.props.history.goBack();
