@@ -45,7 +45,7 @@ class Overview extends Component {
                     <Grid.Column width={6}>
                       <Breadcrumb>
                         <Breadcrumb.Section>About the Company</Breadcrumb.Section>
-                        <Breadcrumb.Divider icon="right chevron" />
+                        <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                       </Breadcrumb>
                       <Header as="h3">Top things to know</Header>
                       <p><b>Industry: </b>{campaign.industry}<br />
@@ -88,7 +88,7 @@ class Overview extends Component {
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section>Investment Details</Breadcrumb.Section>
-                  <Breadcrumb.Divider icon="right chevron" />
+                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                 </Breadcrumb>
                 <Header as="h3" className="mb-30">Investment Return Calculator</Header>
                 <Grid columns={4} divided doubling className="investment-grid" padded="horizontally">
@@ -142,7 +142,7 @@ class Overview extends Component {
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section>Bonus Rewards</Breadcrumb.Section>
-                  <Breadcrumb.Divider icon="right chevron" />
+                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                 </Breadcrumb>
                 <Header as="h3">Investor Rewards</Header>
                 <Image src={noEarlyBird} className="no-early-bird" />
@@ -155,7 +155,7 @@ class Overview extends Component {
               {/* <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section>Bonus Rewards</Breadcrumb.Section>
-                  <Breadcrumb.Divider icon="right chevron" />
+                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                 </Breadcrumb>
                 <Header as="h3">Early Bird Rewards</Header>
               </Segment> */}
