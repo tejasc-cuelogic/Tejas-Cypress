@@ -9,7 +9,7 @@ const Process = () => (
         <Grid.Row>
           <Grid.Column floated="right" width={10} verticalAlign="middle" className="side-section process-right-section">
             <Header as="h2">From approved to funded</Header>
-            <p className="mb-30">
+            <p className="mb-50">
             Once your application is approved, we make connecting with investors easy,
             so you can find funding and get back to your business.
             </p>

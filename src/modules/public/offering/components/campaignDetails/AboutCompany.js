@@ -5,9 +5,11 @@ import Loadable from 'react-loadable';
 import { NsCarousel } from '../../../../../theme/shared';
 import videoPoster from '../../../../../assets/images/636206632.webp';
 import campainAboutImg from '../../../../../assets/images/campaign_about.jpg';
-import teamMember1 from '../../../../../assets/images/james-wright.png';
+import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
 import teamMember2 from '../../../../../assets/images/owner-1.jpg';
-import teamMember3 from '../../../../../assets/images/owner-2.jpg';
+import teamMember3 from '../../../../../assets/images/avatar-3.jpg';
+import teamMember4 from '../../../../../assets/images/avatar-4.jpg';
+import teamMember5 from '../../../../../assets/images/avatar-5.jpg';
 import businessModel from '../../../../../assets/images/business_model.jpg';
 
 const getModule = component => Loadable({
@@ -21,6 +23,7 @@ const settings = {
   dots: true,
   slidesToShow: 1,
   slidesToScroll: 1,
+  arrows: false,
 };
 
 const nsvideos = {
@@ -201,7 +204,7 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
@@ -213,7 +216,7 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
@@ -225,11 +228,11 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
-                        <Image src={teamMember1} circular />
+                        <Image src={teamMember4} circular />
                       </Reveal.Content>
                     </Reveal>
                   </Grid.Column>
@@ -237,11 +240,11 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
-                        <Image src={teamMember2} circular />
+                        <Image src={teamMember5} circular />
                       </Reveal.Content>
                     </Reveal>
                   </Grid.Column>

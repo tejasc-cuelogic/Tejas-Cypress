@@ -7,6 +7,10 @@ export const {
   REACT_APP_DEPLOY_ENV, REACT_APP_DEPLOY_TIME, REACT_APP_DEPLOY_BRANCH, REACT_APP_PROTECTION_API,
 } = process.env;
 
+export const {
+  REACT_APP_PUBLIC_API, REACT_APP_PUBLIC_API_KEY,
+} = process.env;
+
 export const SOCIAL_URLS = {
   instagram: 'https://instagram.com/thenextseed/',
   twitter: 'https://twitter.com/thenextseed',
