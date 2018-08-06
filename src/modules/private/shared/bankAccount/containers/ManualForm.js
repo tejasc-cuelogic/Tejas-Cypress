@@ -38,8 +38,8 @@ export default class ManualForm extends Component {
     }
     return (
       <div>
-        <Header as="h3" textAlign="center">Link Bank Account</Header>
-        <p className="center-align">We need this information to lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <Header as="h3" textAlign="center">Link bank manually</Header>
+        <p className="center-align">Enter your bank`s routing number and your checking account number.</p>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
