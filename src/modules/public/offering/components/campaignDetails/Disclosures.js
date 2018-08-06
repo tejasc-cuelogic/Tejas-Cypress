@@ -6,7 +6,7 @@ class Disclosures extends Component {
     return (
       <Grid>
         <Grid.Row>
-          <Grid.Column width={16}>
+          <Grid.Column width={12}>
             <div className="campaign-about-wrapper">
               <Header as="h3">
               Disclosures
@@ -16,6 +16,7 @@ class Disclosures extends Component {
               </div>
             </div>
           </Grid.Column>
+          <Grid.Column width={4} />
         </Grid.Row>
       </Grid>
     );
