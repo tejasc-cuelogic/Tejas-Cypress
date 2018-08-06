@@ -9,7 +9,7 @@ import { FormInput } from '../../../../../../../theme/form';
 @observer
 export default class VerificationForm extends Component {
   showThanksNote = () => {
-    this.props.history.push(`${this.props.match.url}/thanksnote`);
+    this.props.history.push(`${this.props.match.url}/success`);
   }
 
   render() {

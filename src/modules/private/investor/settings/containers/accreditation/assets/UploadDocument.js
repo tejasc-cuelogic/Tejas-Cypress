@@ -22,7 +22,7 @@ export default class UploadDocument extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   showThanksNote = () => {
-    this.props.history.push(`${this.props.match.url}/thanksnote`);
+    this.props.history.push(`${this.props.match.url}/success`);
   }
 
   render() {
