@@ -42,7 +42,11 @@ export default class MultiStep extends React.Component {
   }
 
   getClassName(className, i) {
-    return `${className}-${this.state.navState.styles[i]}`;
+    let currentStatus = this.state.navState.styles[i];
+    if (!this.state.navState.styles[i]) {
+      currentStatus = 'todo';
+    }
+    return `${className}-${currentStatus}`;
   }
 
   setNavState(next) {

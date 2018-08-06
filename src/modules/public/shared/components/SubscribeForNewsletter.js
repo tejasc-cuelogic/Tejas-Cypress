@@ -9,9 +9,9 @@ const SubscribeForNewsletter = () => (
         Leave us your contact information and we’ll keep you posted
         with the latest news and updates.
       </p>
-      <Form className="public-form">
+      <Form inverted className="public-form">
         <Form.Group>
-          <Form.Input inverted placeholder="Name" name="name" width={4} />
+          <Form.Input placeholder="Name" name="name" width={4} />
           <Form.Input
             placeholder="Email"
             name="email"

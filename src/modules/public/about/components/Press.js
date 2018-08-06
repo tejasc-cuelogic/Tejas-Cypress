@@ -1,9 +1,10 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { Header, Container, Grid, Image, Divider, List, Icon, Segment } from 'semantic-ui-react';
-import press from '../../../../assets/images/press.png';
-import press1 from '../../../../assets/images/press1.png';
-import press2 from '../../../../assets/images/press2.png';
+import { Header, Container, Grid, Image, Divider, Segment } from 'semantic-ui-react';
+import MediaResources from './press/MediaResources';
+import press from '../../../../assets/images/press.jpg';
+import press1 from '../../../../assets/images/press1.jpg';
+import press2 from '../../../../assets/images/press2.jpg';
 import press3 from '../../../../assets/images/press3.jpg';
 
 const Press = () => (
@@ -18,12 +19,8 @@ const Press = () => (
                 <div className="news">
                   <Image src={press} />
                   <div className="image-caption">
-                    <p className="news-category">
-                      News
-                    </p>
-                    <p className="news-title">
-                      Making a splash in D.C.
-                    </p>
+                    <p className="news-category">News</p>
+                    <p className="news-title">Making a splash in D.C.</p>
                   </div>
                 </div>
               </Segment>
@@ -33,12 +30,8 @@ const Press = () => (
                 <div className="news">
                   <Image src={press1} />
                   <div className="image-caption">
-                    <p className="news-category">
-                      News
-                    </p>
-                    <p className="news-title">
-                      Press title here.
-                    </p>
+                    <p className="news-category">News</p>
+                    <p className="news-title">Press title here.</p>
                   </div>
                 </div>
               </Segment>
@@ -46,12 +39,8 @@ const Press = () => (
                 <div className="news">
                   <Image src={press2} />
                   <div className="image-caption">
-                    <p className="news-category">
-                      News
-                    </p>
-                    <p className="news-title">
-                      Press title here.
-                    </p>
+                    <p className="news-category">News</p>
+                    <p className="news-title">Press title here.</p>
                   </div>
                 </div>
               </Segment>
@@ -100,20 +89,14 @@ Quisque interdum elit sapien,
           </Grid.Column>
           <Grid.Column width={6} className="bg-offwhite">
             <div className="press-list">
-              <List link relaxed="very">
-                <List.Header>Documentation</List.Header>
-                <Divider />
-                <List.Item as="a"><Icon className="ns-download" />History</List.Item>
-                <List.Item as="a"><Icon className="ns-download" />Press Releases</List.Item>
-                <List.Item as="a"><Icon className="ns-download" />White Papers</List.Item>
-              </List>
-              <List link relaxed="very">
-                <List.Header>Brand Assets</List.Header>
-                <Divider />
-                <List.Item as="a"><Icon className="ns-download" />Brand Guide</List.Item>
-                <List.Item as="a"><Icon className="ns-download" />Logos</List.Item>
-                <List.Item as="a"><Icon className="ns-download" />Photography</List.Item>
-              </List>
+              <MediaResources
+                title="Documentation"
+                resources={['History', 'Press Releases', 'White Papers']}
+              />
+              <MediaResources
+                title="Brand Assets"
+                resources={['Brand Guide', 'Logos', 'Photography']}
+              />
             </div>
           </Grid.Column>
         </Grid>

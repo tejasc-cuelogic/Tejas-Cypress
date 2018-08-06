@@ -25,9 +25,8 @@
 			text-align: center;
 			>.label{
 				color:@neutral-middark;
-				line-height: @44px;
-				font-size: @12px;
-				font-weight: @fontMedium;
+				font-size: @13px;
+				font-weight: @bold;
 			}
 			>.value {
 				font-size: @28px !important;

@@ -57,10 +57,13 @@
     }
 }
 .account-type-tab{
+<<<<<<< HEAD
     margin:@36px 0;
     &:last-child{
         margin-bottom:0;
     }
+=======
+>>>>>>> develop
     > .ui.item.menu.secondary{
         margin: 0 -1rem 2rem !important;
         width: auto !important;

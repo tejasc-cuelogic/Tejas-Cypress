@@ -7,7 +7,7 @@ const Impact = () => (
     <Container>
       <section>
         <Grid centered>
-          <Grid.Column width={12}>
+          <Grid.Column width={8}>
             <Header as="h2" textAlign="center">
             Be a part of something.
             </Header>
@@ -193,7 +193,7 @@ const Impact = () => (
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <p className="note mb-50 center-align">
+        <p className="note mt-30 mb-50 center-align">
         7,8,9,10,11,12,13 Data reflects figures from both TX and REG CF Platforms
         as of November 2017.
         </p>
