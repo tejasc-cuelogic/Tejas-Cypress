@@ -9,7 +9,7 @@ import { FormRadioGroup } from '../../../../../../../theme/form';
 export default class Funding extends Component {
   getOptionDetails = () => {
     const { value, values } = this.props.iraAccountStore.FUNDING_FRM.fields.fundingType;
-    return find(values, v => v.value === value).description;
+    return find(values, v => v.value === value) ? find(values, v => v.value === value).description : '';
   };
   render() {
     const { FUNDING_FRM, fundingChange } = this.props.iraAccountStore;

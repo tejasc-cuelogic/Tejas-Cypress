@@ -2,7 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Container, Grid, Button, Image } from 'semantic-ui-react';
-import collage from '../../../../assets/images/collage.png';
+import collage from '../../../../assets/images/collage.jpg';
 
 const Careers = () => (
   <Aux>

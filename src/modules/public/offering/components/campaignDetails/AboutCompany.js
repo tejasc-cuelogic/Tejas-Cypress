@@ -4,11 +4,11 @@ import { Header, Icon, Grid, Image, Embed, Container, List, Divider, Breadcrumb,
 import Loadable from 'react-loadable';
 import { NsCarousel } from '../../../../../theme/shared';
 import videoPoster from '../../../../../assets/images/636206632.webp';
-import campainAboutImg from '../../../../../assets/images/campaign_about.png';
+import campainAboutImg from '../../../../../assets/images/campaign_about.jpg';
 import teamMember1 from '../../../../../assets/images/james-wright.png';
 import teamMember2 from '../../../../../assets/images/owner-1.jpg';
 import teamMember3 from '../../../../../assets/images/owner-2.jpg';
-import businessModel from '../../../../../assets/images/business_model.png';
+import businessModel from '../../../../../assets/images/business_model.jpg';
 
 const getModule = component => Loadable({
   loader: () => import(`../${component}`),
@@ -94,7 +94,7 @@ class AboutCompany extends Component {
                 adipisci velit, sed quia non numquam eius modi tempora incidunt ut
                 labore et dolore magnam aliquam quaerat voluptatem.
               </p>
-              <Image src={campainAboutImg} centered />
+              <Image src={campainAboutImg} centered className="mt-30" />
               <p className="note">
                 Caption. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Vivamus dignissim vitae odio nec pellentesque.
@@ -189,7 +189,7 @@ class AboutCompany extends Component {
                     <Reveal animated="small fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>

@@ -2,9 +2,9 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Header, Container, Grid, Image, Divider, Segment } from 'semantic-ui-react';
 import MediaResources from './press/MediaResources';
-import press from '../../../../assets/images/press.png';
-import press1 from '../../../../assets/images/press1.png';
-import press2 from '../../../../assets/images/press2.png';
+import press from '../../../../assets/images/press.jpg';
+import press1 from '../../../../assets/images/press1.jpg';
+import press2 from '../../../../assets/images/press2.jpg';
 import press3 from '../../../../assets/images/press3.jpg';
 
 const Press = () => (

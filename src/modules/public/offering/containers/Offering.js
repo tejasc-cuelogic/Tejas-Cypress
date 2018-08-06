@@ -17,7 +17,7 @@ class Offering extends Component {
         <section className="learn-more">
           <Container textAlign="center">
             <Header as="h2">Get notified lorem ipsum</Header>
-            <Form className="public-form mt-40">
+            <Form className="public-form mt-40" inverted>
               <Form.Group>
                 <Form.Input
                   placeholder="Email"
