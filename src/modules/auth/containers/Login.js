@@ -41,7 +41,6 @@ class Login extends Component {
     const { errors, inProgress } = this.props.uiStore;
     return (
       <Modal
-        closeOnRootNodeClick={false}
         size="mini"
         open
         onClose={() => {

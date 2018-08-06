@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Container, Card, Image, Button, Label, Icon, List } from 'semantic-ui-react';
+import { Container, Card, Image, Label, Icon, List } from 'semantic-ui-react';
 import Filters from './Filters';
 import { Spinner } from '../../../../../theme/shared';
 import lockIcon from '../../../../../assets/images/icon_lock.png';
@@ -38,7 +38,7 @@ export default class CampaignList extends Component {
                   <Label color="green">{campaign.flagged}</Label>
                   <Icon name="heart" />
                   <Card.Content>
-                    <div className="tags">
+                    <div className="tags mb-10">
                       {campaign.label}
                       <span className="pull-right">1.45x/48mos</span>
                     </div>
@@ -57,7 +57,7 @@ export default class CampaignList extends Component {
                         <Image src={lockIcon} />
                       </div>
                       <div className="details">
-                        <div className="tags">
+                        <div className="tags mb-10">
                           hidden
                         </div>
                         <Card.Header>For NextSeed members only.</Card.Header>
@@ -69,12 +69,6 @@ export default class CampaignList extends Component {
                 </Card>
               ))}
             </Card.Group>
-            {this.props.explore && (
-              <div className="explore-campaign-button">
-                <Button secondary as={Link} to="/offerings/">Explore Campaigns</Button>
-              </div>
-            )
-            }
           </Container>
           {this.state.filters && <div className="overlay" />}
         </section>

@@ -47,6 +47,19 @@ export class UserDetailsStore {
   }
 
   @action
+  setUserMfaMode(mfaMode) {
+    if (this.currentUser) {
+      this.currentUser.data.user.mfaMode = mfaMode;
+    }
+  }
+
+  @computed get getUserMfaMode() {
+    const mfaMode = (this.currentUser.data && this.currentUser.data.user &&
+      toJS(this.currentUser.data.user.mfaMode)) || null;
+    return mfaMode;
+  }
+
+  @action
   setEditCard = (cardIndex) => {
     this.editCard = cardIndex || 0;
   }

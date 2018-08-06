@@ -118,7 +118,8 @@ query getUserDetails($id: ID!) {
         readyForRisksInvolved
       }
     }
-    accountStatus 
+    accountStatus
+    mfaMode 
   }
 }
 `;

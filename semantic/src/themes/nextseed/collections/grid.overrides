@@ -17,11 +17,27 @@
             padding-bottom:@28px;
         }
     }
+    &.investment-terms {
+        margin: 10px 0 20px;
+        box-shadow: 0 1px 0 @border-light;
+        padding: 0px 0 20px;
+        p {
+            margin-bottom: 0;
+        }
+        .ui.header {
+            margin-top: @10px;
+        }
+        .dropdown {
+            color: @neutral;
+            margin-top: @10px;
+        }
+    }
 }
 .featured-statistic {
 	counter-reset: section;
 	.ui.celled.grid {
-		position: relative;
+        position: relative;
+        box-shadow: 0 0 0 1px @neutral-darkwhite;
 		&:before {
 			counter-increment: section;
 			content: "0"counter(section);  

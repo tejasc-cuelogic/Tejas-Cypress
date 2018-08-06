@@ -86,8 +86,10 @@
 .ui.secondary.menu.menu-secondary-fixed {
     border:none;
     height:58px;
+    margin:0;
     border-radius:0;
     box-shadow:none;
+    background-color:@white;
     .item{
         padding:@3px @18px;
         &:hover {
@@ -194,8 +196,8 @@ footer{
     }
 }
 .filter-menu {
-    border-top: 1px solid @neutral-middark;
-    border-bottom: 1px solid @neutral-middark;
+    border-top: 1px solid @neutral-darkwhite;
+    border-bottom: 1px solid @neutral-darkwhite;
     height: @60px;
     position: relative;
     .ui.text.menu {
