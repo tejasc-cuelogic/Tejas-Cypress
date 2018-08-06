@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { Route } from 'react-router-dom';
 import { Container, Divider, Header } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import HowItWorksSummary from '../components/HowItWorksSummary';
@@ -7,6 +8,7 @@ import HowItWorks from '../components/HowItWorks';
 import FeaturedOn from '../../shared/components/FeaturedOn';
 import CampaignList from '../../offering/components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
+import NewsLetter from '../components/NewsLetter';
 
 class Home extends Component {
   render() {
@@ -30,7 +32,17 @@ class Home extends Component {
           }
         />
         <FeaturedOn />
-        <SubscribeForNewsletter />
+        <section className="learn-more">
+          <Container textAlign="center">
+            <Header as="h2">Want to learn more about NextSeed?</Header>
+            <p className="mb-30">
+              Leave us your contact information and we’ll keep you posted
+              with the latest news and updates.
+            </p>
+            <SubscribeForNewsletter className="public-form" />
+          </Container>
+        </section>
+        <Route path="/subscribe/newsletter" component={NewsLetter} />
       </Aux>
     );
   }
