@@ -12,6 +12,7 @@ body{
 }
 section{
 	padding:@60px 0;
+	background-color:@white;
 	.caption{
 		margin-bottom:@50px !important;
 	}
@@ -169,10 +170,16 @@ footer{
 	background-color:@neutral-offwhite;
 	.footer-head{
 		padding:0 @60px;
+		margin-bottom:240px;
 		background-color:@neutral;
 	}
 	section{
 		padding:@30px @60px;
+		position:fixed;
+		bottom:0;
+		left:0;
+		right:0;
+		z-index:-1;
 		.secure{
 			margin-top: @14px;
 			padding-top: @14px;
