@@ -9,13 +9,15 @@ const Track = () => (
       <Container>
         <Grid padded="vertically">
           <Grid.Row>
-            <Grid.Column width={8} verticalAlign="middle" className="side-section security-right-section">
-              <Header as="h2">Track your investments.</Header>
-              <p className="mb-30">
-              See how you’re doing and reinvest any earnings effortlessly
-              with our easy-to-use dashboard.
-              </p>
-              <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+            <Grid.Column width={8} verticalAlign="middle" className="side-section track-left-section">
+              <div>
+                <Header as="h2">Track your investments.</Header>
+                <p className="mb-30">
+                See how you’re doing and reinvest any earnings effortlessly
+                with our easy-to-use dashboard.
+                </p>
+                <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+              </div>
             </Grid.Column>
           </Grid.Row>
         </Grid>

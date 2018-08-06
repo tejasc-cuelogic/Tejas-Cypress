@@ -28,7 +28,7 @@ const Security = () => (
                 </p>
               </Grid.Column>
             </Grid>
-            <p className="note mt-30 mb-50">
+            <p className="note mt-50 mb-50">
               1 NextSeed accounts are provided and held at our partner bank, Happy State Bank
               DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC insurance
               for uninvested cash in NextSeed accounts.
