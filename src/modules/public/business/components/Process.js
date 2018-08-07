@@ -58,7 +58,7 @@ const Process = () => (
               <List.Item>
                 <List.Header>Learn more</List.Header>
                 <List.Icon className="ns-arrow-right" color="green" />
-                <List.Content as="a">Why fundraise on NextSeed?</List.Content>
+                <List.Content as="a">How to start a raise on NextSeed </List.Content>
               </List.Item>
             </List>
             <div className="center-align">

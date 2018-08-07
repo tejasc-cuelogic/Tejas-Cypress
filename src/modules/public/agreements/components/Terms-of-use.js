@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React from 'react';
 import Aux from 'react-aux';
-import { Header, Divider } from 'semantic-ui-react';
+import { Header, Divider, List } from 'semantic-ui-react';
 
 const ambassadors = () => (
   <Aux>
@@ -38,25 +38,25 @@ const ambassadors = () => (
       <p>If you provide any feedback, comments, or suggestions for the improvement of the Platform (“Suggestions”), you hereby license the Suggestions and all related intellectual property to NextSeed on a non-exclusive, worldwide, fully paid, perpetual, irrevocable basis for NextSeed to use, disclose, modify, reproduce, license, distribute, commercialize and otherwise freely exploit without restriction of any kind.</p>
       <p><strong>USER REPRESENTATIONS, WARRANTIES, COVENANTS</strong></p>
       <p>All Users make the following representations, warranties and covenants:</p>
-      <ul>
-        <li>You own or have all necessary rights to post your User Content on the Platform, and your posting of your User Content does not infringe or violate the intellectual property rights or privacy rights of any person and does not and will not result in a breach of contract between you and a third party. You agree to pay for all royalties, fees, and any other monies owing any person by reason of your posting your User Content on or through the NextSeed Platform;</li>
-        <li>You will use the Platform, User Content, and NextSeed Content in compliance with applicable law, including State and federal laws governing securities transactions;</li>
-        <li>You will use the Platform in compliance with these Terms;</li>
-        <li>You will update your User Content as necessary to maintain its accuracy and completeness;</li>
-        <li>If you are an Investor User, you also represent and warranty that you at least eighteen years old.</li>
-      </ul>
+      <List as="ul">
+        <List.Item as="li">You own or have all necessary rights to post your User Content on the Platform, and your posting of your User Content does not infringe or violate the intellectual property rights or privacy rights of any person and does not and will not result in a breach of contract between you and a third party. You agree to pay for all royalties, fees, and any other monies owing any person by reason of your posting your User Content on or through the NextSeed Platform;</List.Item>
+        <List.Item as="li">You will use the Platform, User Content, and NextSeed Content in compliance with applicable law, including State and federal laws governing securities transactions;</List.Item>
+        <List.Item as="li">You will use the Platform in compliance with these Terms;</List.Item>
+        <List.Item as="li">You will update your User Content as necessary to maintain its accuracy and completeness;</List.Item>
+        <List.Item as="li">If you are an Investor User, you also represent and warranty that you at least eighteen years old.</List.Item>
+      </List>
       <p><strong>NEXTSEED NOT RESPONSIBLE FOR USER CONTENT</strong></p>
       <p>The NextSeed Platform is an intermediary platform and does not include any verification, advice or consulting services as to User Content. NextSeed has no obligation to investigate User Content for accuracy or completeness. Although NextSeed may monitor or mediate User Content from time to time, it does not undertake any obligation or liability to any User regarding the User Content.</p>
       <p><strong>You are responsible for investigating the accuracy and completeness of any User Content that you rely on. You agree that, between you and NextSeed, your use of any User Content is at your sole risk.</strong></p>
       <p><strong>You are responsible for the accuracy and completeness of your User Content</strong></p>
       <p>Specifically, but without limitation, NextSeed is not responsible for investigating any of the following:</p>
-      <ul>
-        <li>whether any statement is true or includes all facts necessary to make the statement not misleading</li>
-        <li>whether any User’s reported annual income or net worth is accurate</li>
-        <li>whether any proposed transaction complies with applicable law or regulation</li>
-        <li>whether any links to or content on any third party sites that are referenced in the User Content is secure or complies with law</li>
-        <li>whether any information offered for download from the Platform is free of Malware;</li>
-      </ul>
+      <List as="ul">
+        <List.Item as="li">whether any statement is true or includes all facts necessary to make the statement not misleading</List.Item>
+        <List.Item as="li">whether any User’s reported annual income or net worth is accurate</List.Item>
+        <List.Item as="li">whether any proposed transaction complies with applicable law or regulation</List.Item>
+        <List.Item as="li">whether any links to or content on any third party sites that are referenced in the User Content is secure or complies with law</List.Item>
+        <List.Item as="li">whether any information offered for download from the Platform is free of Malware;</List.Item>
+      </List>
       <p>NextSeed does not endorse any User or User Content.</p>
       <p>NextSeed does not undertake any obligation to you to monitor or restrict who has access to the Platform.</p>
       <p><strong>INVESTMENT RISKS</strong></p>
@@ -83,40 +83,40 @@ const ambassadors = () => (
       <p><strong>ACCEPTABLE USE POLICY</strong></p>
       <p>You may not post User Content, or use the Platform in a way that might violate or threaten the rights, safety or privacy of others. NextSeed may refuse or remove from the Platform any User Content at any time in its commercially reasonable discretion. Specifically, but without limitation, NextSeed may refuse or remove any User Content that it reasonably believes violates these Terms or applicable law, or that might violate the rights or threaten the safety of Users or third parties, or that it otherwise finds abusive or offensive.</p>
       <p>For example, you may not:</p>
-      <ul>
-        <li>Post information on behalf of another person or entity without their consent;</li>
-        <li>Post incomplete, false, or misleading information in a user profile, impersonate another person, or misrepresent your affiliation with a person or entity, particularly in any attempt to learn sensitive information;</li>
-        <li>Harass, incite others to harass, advocate harassment, or post any unlawful, harmful, defamatory, threatening, vulgar, sexually explicit, hateful, or otherwise objectionable material;</li>
-        <li>Disclose personal information about another person;</li>
-        <li>Post content that is otherwise fraudulent, unlawful, threatening, disingenuous, libelous, defamatory, obscene, scandalous, inflammatory, pornographic or profane, or any material that could constitute or encourage conduct that would be considered a criminal offense, give rise to civil liability, or otherwise violate any law</li>
-      </ul>
+      <List as="ul">
+        <List.Item as="li">Post information on behalf of another person or entity without their consent;</List.Item>
+        <List.Item as="li">Post incomplete, false, or misleading information in a user profile, impersonate another person, or misrepresent your affiliation with a person or entity, particularly in any attempt to learn sensitive information;</List.Item>
+        <List.Item as="li">Harass, incite others to harass, advocate harassment, or post any unlawful, harmful, defamatory, threatening, vulgar, sexually explicit, hateful, or otherwise objectionable material;</List.Item>
+        <List.Item as="li">Disclose personal information about another person;</List.Item>
+        <List.Item as="li">Post content that is otherwise fraudulent, unlawful, threatening, disingenuous, libelous, defamatory, obscene, scandalous, inflammatory, pornographic or profane, or any material that could constitute or encourage conduct that would be considered a criminal offense, give rise to civil liability, or otherwise violate any law</List.Item>
+      </List>
       <p>You may not use the NextSeed Platform in any way that does not further the Purpose, or in a way that modifies, damages, disrupts, disables, overburdens, impairs, alters or interferes with the use, features, functions, operation, security or maintenance of the Platform, or the rights or use and enjoyment of the Platform by any other person or entity in any manner. For example, you may not:</p>
-      <ul>
-        <li>Aggregate, copy, or duplicate any NextSeed Content</li>
-        <li>Sell, promote, or advertise products or services other that in furtherance of the Purpose</li>
-        <li>Post links, advertisements, or other content from competitors’ websites</li>
-        <li>Use data mining, robots, or other data gathering devices on the NextSeed Platform</li>
-        <li>Remove, disable, damage, circumvent, or otherwise interfere with the security of the NextSeed Platform</li>
-        <li>Interfere or attempt to interfere with the proper workings of the NextSeed Platform</li>
-        <li>Gain unauthorized access to the NextSeed Platform or computers linked to the NextSeed Platform</li>
-        <li>Attempt to reverse engineer, or reverse engineer the NextSeed Platform</li>
-        <li>Frame or link to the NextSeed Platform without permission</li>
-        <li>Attempt to or submit Malware to the NextSeed Platform</li>
-        <li>Take any action imposing an unreasonable or disproportionately large load on NextSeed’s infrastructure</li>
-        <li>Attempt to or obtain unauthorized access to Users’ Accounts</li>
-        <li>Sell, transfer, or assign any of your rights to use the NextSeed Platform to a third party without the express written consent of NextSeed</li>
-        <li>Use the NextSeed Platform in a manner that results in or may result in complaints, disputes, claims, fines, penalties, and other liability to NextSeed or others</li>
-        <li>Use the NextSeed Platform to send marketing, advertising, or other repetitious emails, text messages, telephone calls, or other communications</li>
-        <li>Use the NextSeed Platform for transactions involving illegal objects (such as, narcotics or stolen goods), illegal activities (such as, gambling), marketing and advertising</li>
-        <li>Use the NextSeed Platform in an illegal way or to commit an illegal act</li>
-        <li>Post any franchise, pyramid scheme, or similar information</li>
-        <li>Access the NextSeed Platform from a jurisdiction where it is illegal, unauthorized, or penalized</li>
-        <li>Use the NextSeed Platform on behalf of a business entity without the legal authority to do so</li>
-        <li>Create multiple Accounts, whether fraudulently, falsely, unlawfully, legitimate, or lawfully, without NextSeed’s prior consent</li>
-        <li>Control an account if another account controlled by you has performed these activities or otherwise breached these Terms</li>
-        <li>Use data gathered from NextSeed Platform for other any other purpose (such as solicitation or personal gain) outside of the NextSeed Platform</li>
-        <li>Attempt to contact or communicate with Users by any means other than the means of communications enabled on the Platform</li>
-      </ul>
+      <List as="ul">
+        <List.Item as="li">Aggregate, copy, or duplicate any NextSeed Content</List.Item>
+        <List.Item as="li">Sell, promote, or advertise products or services other that in furtherance of the Purpose</List.Item>
+        <List.Item as="li">Post links, advertisements, or other content from competitors’ websites</List.Item>
+        <List.Item as="li">Use data mining, robots, or other data gathering devices on the NextSeed Platform</List.Item>
+        <List.Item as="li">Remove, disable, damage, circumvent, or otherwise interfere with the security of the NextSeed Platform</List.Item>
+        <List.Item as="li">Interfere or attempt to interfere with the proper workings of the NextSeed Platform</List.Item>
+        <List.Item as="li">Gain unauthorized access to the NextSeed Platform or computers linked to the NextSeed Platform</List.Item>
+        <List.Item as="li">Attempt to reverse engineer, or reverse engineer the NextSeed Platform</List.Item>
+        <List.Item as="li">Frame or link to the NextSeed Platform without permission</List.Item>
+        <List.Item as="li">Attempt to or submit Malware to the NextSeed Platform</List.Item>
+        <List.Item as="li">Take any action imposing an unreasonable or disproportionately large load on NextSeed’s infrastructure</List.Item>
+        <List.Item as="li">Attempt to or obtain unauthorized access to Users’ Accounts</List.Item>
+        <List.Item as="li">Sell, transfer, or assign any of your rights to use the NextSeed Platform to a third party without the express written consent of NextSeed</List.Item>
+        <List.Item as="li">Use the NextSeed Platform in a manner that results in or may result in complaints, disputes, claims, fines, penalties, and other liability to NextSeed or others</List.Item>
+        <List.Item as="li">Use the NextSeed Platform to send marketing, advertising, or other repetitious emails, text messages, telephone calls, or other communications</List.Item>
+        <List.Item as="li">Use the NextSeed Platform for transactions involving illegal objects (such as, narcotics or stolen goods), illegal activities (such as, gambling), marketing and advertising</List.Item>
+        <List.Item as="li">Use the NextSeed Platform in an illegal way or to commit an illegal act</List.Item>
+        <List.Item as="li">Post any franchise, pyramid scheme, or similar information</List.Item>
+        <List.Item as="li">Access the NextSeed Platform from a jurisdiction where it is illegal, unauthorized, or penalized</List.Item>
+        <List.Item as="li">Use the NextSeed Platform on behalf of a business entity without the legal authority to do so</List.Item>
+        <List.Item as="li">Create multiple Accounts, whether fraudulently, falsely, unlawfully, legitimate, or lawfully, without NextSeed’s prior consent</List.Item>
+        <List.Item as="li">Control an account if another account controlled by you has performed these activities or otherwise breached these Terms</List.Item>
+        <List.Item as="li">Use data gathered from NextSeed Platform for other any other purpose (such as solicitation or personal gain) outside of the NextSeed Platform</List.Item>
+        <List.Item as="li">Attempt to contact or communicate with Users by any means other than the means of communications enabled on the Platform</List.Item>
+      </List>
       <p><strong>MODIFICATIONS</strong></p>
       <p>NextSeed may modify or remove the information on the Platform, and may modify or discontinue any part of the Platform, or create usage limits, at any time in its sole discretion without notice to you.</p>
       <p>NextSeed may amend these Terms or the Privacy Policy from time to time by posting a revision on its website. The amended Terms or Privacy Policy are applicable to your use of the Platform on the first day you use the Platform after NextSeed posts the amended Terms or Privacy Policy.</p>
@@ -187,15 +187,15 @@ const ambassadors = () => (
       <p>These Terms are the entire agreement between you and NextSeed with respect to your use of the Platform and supersedes all prior or contemporaneous communications and proposals (whether oral, written or electronic), except for the member agreement that you sign by means of the Platform. If there is a conflict between these Terms and the member agreement, the member agreement will control.</p>
       <p><strong>COPYRIGHT INFRINGEMENT/DIGITAL MILLENIUM COPYRIGHT ACT (“DMCA”)</strong></p>
       <p>NextSeed respects the intellectual property of others. If you believe your copyrighted work has been copied and is accessible on this Site in a way that constitutes copyright infringement, you may notify us by providing our copyright agent with sufficient information to allow us to locate the material, including the following information:</p>
-      <ol>
-        <li>The electronic or physical signature of the owner of the copyright or person authorized to act on the owner’s behalf.</li>
-        <li>A description of the copyrighted work you claim has been infringed and a description of the infringing activity.</li>
-        <li>Identification of the location where the original or an authorized copy of the copyrighted work exists; for example, the URL of the website where it is posted.</li>
-        <li>Identification of the URL or other specific location on this website where the material that you claim is infringing is located.</li>
-        <li>Your name, address, telephone number and email address.</li>
-        <li>A statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent or the law.</li>
-        <li>A statement by you that the above information you provide us is accurate and that you are the copyright owner or are authorized to act on behalf of the copyright owner.</li>
-      </ol>
+      <List ordered>
+        <List.Item as="li">The electronic or physical signature of the owner of the copyright or person authorized to act on the owner’s behalf.</List.Item>
+        <List.Item as="li">A description of the copyrighted work you claim has been infringed and a description of the infringing activity.</List.Item>
+        <List.Item as="li">Identification of the location where the original or an authorized copy of the copyrighted work exists; for example, the URL of the website where it is posted.</List.Item>
+        <List.Item as="li">Identification of the URL or other specific location on this website where the material that you claim is infringing is located.</List.Item>
+        <List.Item as="li">Your name, address, telephone number and email address.</List.Item>
+        <List.Item as="li">A statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent or the law.</List.Item>
+        <List.Item as="li">A statement by you that the above information you provide us is accurate and that you are the copyright owner or are authorized to act on behalf of the copyright owner.</List.Item>
+      </List>
       <p>Our agent for notice of claims of copyright infringement on this Site can be reached as follows:</p>
       <p>By Mail:
         <br /> NextSeed US LLC
