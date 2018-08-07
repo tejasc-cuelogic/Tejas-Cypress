@@ -41,7 +41,7 @@ class Business extends Component {
             navStatus={navStore.navStatus}
             location={location}
             navItems={navItems}
-            title="Investing"
+            title="Fundraising"
           />
           <Switch>
             <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />

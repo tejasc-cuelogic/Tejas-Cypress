@@ -11,5 +11,6 @@ export { default as AutoComplete } from './src/AutoComplete';
 export { default as FormTextarea } from './src/FormTextarea';
 export { default as FormCheckbox } from './src/FormCheckbox';
 export { default as DropZone } from './src/DropZone';
+export { default as DropZoneConfirm } from './src/DropZoneConfirm';
 export { default as DropZoneLarge } from './src/DropZoneLarge';
 export { default as ImageCropper } from './src/ImageCropper';

@@ -116,7 +116,7 @@
                 border-color:@primary-one !important;
                 background-color:transparent !important;
             }
-            .header{
+            &.header{
                 border-color:transparent !important;
             }
         }
@@ -161,6 +161,7 @@
             background-color:transparent;
             .right.menu .item{
                 padding:@13px @7px;
+                font-weight:@normal;
             }
         }
         .item > .icon{
@@ -169,6 +170,7 @@
         >.item, a.item{
             min-width:120px;
             padding:@13px 0;
+            font-weight:@normal;
             &:hover{
                 background-color:transparent;
             }
@@ -325,10 +327,10 @@ footer{
         border:none;
     }
     &.secondary-menu{
+        margin:0;
         background-color:@neutral-darkwhite;
         a.item{
             padding:@16px @20px;
-            // font-weight:@fontMedium;
             &:before{
                 background-color:@neutral-darkwhite;
             }

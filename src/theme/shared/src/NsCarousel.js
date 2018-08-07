@@ -10,6 +10,8 @@ export default class NsCarousel extends React.Component {
       speed: 500,
       slidesToShow: this.props.slidesToShow,
       slidesToScroll: this.props.slidesToScroll,
+      arrows: this.props.arrows,
+      dots: this.props.dots,
     };
     return (
       <Slider {...settings}>
