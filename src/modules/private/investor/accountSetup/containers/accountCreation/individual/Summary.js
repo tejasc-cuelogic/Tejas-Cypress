@@ -81,7 +81,7 @@ export default class Summary extends React.Component {
           and the <Link to={this.props.match.url} className="link">NextSeed Membership Agreement</Link>.
         </p>
         <div className="center-align">
-          <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank}>Create the account</Button>
+          <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank}>Create your account</Button>
         </div>
       </div>
     );
