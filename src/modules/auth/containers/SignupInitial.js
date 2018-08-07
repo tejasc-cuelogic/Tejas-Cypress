@@ -6,8 +6,8 @@ import { USER_TYPES_META } from './../../../constants/user';
 
 const GetBtn = ({ type }) => {
   const BtnMeta = {
-    investor: { label: 'Start', to: '/auth/register-investor' },
-    issuer: { label: 'Start', to: '/auth/register-investor' },
+    investor: { label: 'Open account', to: '/auth/register-investor' },
+    issuer: { label: 'Open account', to: '/auth/register-investor' },
   };
   return <Button as={Link} to={BtnMeta[type].to} primary size="large" className="relaxed" content={BtnMeta[type].label} />;
 };
@@ -22,8 +22,7 @@ class signupInitial extends Component {
     return (
       <Modal size="tiny" open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">How can NextSeed Help you?</Header>
-          <p>Do you want to invest or apply for funding?</p>
+          <Header as="h3">Join the NextSeed community</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Grid stackable textAlign="center">

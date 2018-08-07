@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import Aux from 'react-aux';
 import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
 
 const getNavStates = (indx, length) => {
@@ -160,10 +161,14 @@ export default class MultiStep extends React.Component {
           closeOnRootNodeClick={false}
           onClose={() => this.props.handleMultiStepModalclose()}
         >
-          <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
-          <ol className="progtrckr">
-            {this.renderSteps()}
-          </ol>
+          {!this.props.hideHeader &&
+          <Aux>
+            <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
+            <ol className="progtrckr">
+              {this.renderSteps()}
+            </ol>
+          </Aux>
+          }
           <Modal.Content className="multistep">
             <Dimmer active={this.props.inProgress}>
               <Loader active={this.props.inProgress} />

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
@@ -15,13 +16,11 @@ import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 @observer
 export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
-    const { CONFIRM_FRM } = this.props.authStore;
     const credentials = cookie.load('USER_CREDENTIALS');
-    CONFIRM_FRM.fields.email.value = credentials.email;
-    CONFIRM_FRM.fields.password.value = atob(credentials.password);
+    this.props.authStore.setCredentials(credentials);
   }
   componentWillUnmount() {
-    cookie.remove('USER_CREDENTIALS', { maxAge: 300 });
+    cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
   }
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
@@ -70,14 +69,19 @@ export default class ConfirmEmailAddress extends Component {
   render() {
     const changeEmailAddressLink = this.props.refLink ?
       this.props.refLink : '/auth/register-investor';
-    const { CONFIRM_FRM, ConfirmChange, confirmProgress } = this.props.authStore;
+    const {
+      CONFIRM_FRM,
+      ConfirmChange,
+      confirmProgress,
+      canSubmitConfirmEmail,
+    } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
           <Divider />
-          <p>Please check the verification code in the email we sent to:</p>
+          <p>Please confirm the 6-digit verification<br /> code sent to your email</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput
@@ -97,20 +101,21 @@ export default class ConfirmEmailAddress extends Component {
             </Message>
           }
           <Form onSubmit={this.handleSubmitForm}>
-            <ReactCodeInput
-              fields={6}
-              type="number"
-              filterChars
-              className="otp-field"
-              fielddata={CONFIRM_FRM.fields.code}
-              onChange={ConfirmChange}
-            />
-            <div className="center-align">
-              <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!CONFIRM_FRM.meta.isValid}>Confirm</Button>
-            </div>
-            <div className="center-align">
-              <Button type="button" className="cancel-link" loading={confirmProgress === 'resend' && inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
-            </div>
+            <Form.Field className="otp-wrap">
+              <label>Enter verification code here:</label>
+              <ReactCodeInput
+                fields={6}
+                type="number"
+                filterChars
+                className="otp-field"
+                fielddata={CONFIRM_FRM.fields.code}
+                onChange={ConfirmChange}
+              />
+            </Form.Field>
+            <Button.Group vertical>
+              <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))}>Confirm</Button>
+              <Button type="button" className="link-button cancel-link" loading={confirmProgress === 'resend' && inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
+            </Button.Group>
           </Form>
         </Modal.Content>
       </Modal>
