@@ -5,7 +5,7 @@ import secure from '../../assets/images/secure-horizontal-1.png';
 import { SOCIAL_URLS } from '../../constants/common';
 
 class Footer extends Component {
-  state = { fShowHide: false };
+  state = { fShowHide: true };
 
   toggleShowHide = () => {
     this.setState({ fShowHide: !this.state.fShowHide });
@@ -27,9 +27,6 @@ class Footer extends Component {
                 About Us
                 <Icon name="caret down" onClick={this.toggleShowHide} />
               </Menu.Item>
-              {/* <Menu.Item onClick={this.toggleShowHide}>
-              <Icon name="caret down" /></Menu.Item> */}
-              <Menu.Item>Contact</Menu.Item>
               <Menu.Item>
                 <Link to="/agreements/terms-of-use">Terms of Use</Link>
               </Menu.Item>
