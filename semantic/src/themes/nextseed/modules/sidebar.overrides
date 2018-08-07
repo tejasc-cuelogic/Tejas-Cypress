@@ -204,7 +204,7 @@
 			margin-right:-@13px;
 		}
 		~.pusher .icon.hamburger{
-			font-size:20px;
+			font-size:@20px;
 			color:@neutral-middark;
 			position:absolute;
 			top:20px;
@@ -232,13 +232,13 @@
 			border:1px solid @trackBackground;
 		}
 		h2{
-			font-size:16px;
+			font-size:@16px;
 			font-weight:900;
 			margin:0 0 @5px;
 		}
 		h3{
 			margin:@5px 0 0;
-			font-size:14px;
+			font-size:@14px;
 			font-weight:@fontMedium;
 			color:@border-color;
 		}

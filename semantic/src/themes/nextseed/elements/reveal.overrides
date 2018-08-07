@@ -47,7 +47,7 @@
             line-height: 24px;
             text-transform: uppercase; 
             b {
-                font-size: 18px;
+                font-size: @18px;
                 text-transform: none; 
             }
         }
