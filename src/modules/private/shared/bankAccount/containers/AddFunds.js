@@ -62,7 +62,7 @@ export default class AddFunds extends Component {
             <Button primary size="large" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button type="button" className="cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I don`t want to deposit any money now</Button>
+            <Button type="button" className="cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I will do this later</Button>
           </div>
         </Form>
       </div>

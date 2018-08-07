@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
@@ -19,7 +20,7 @@ export default class ConfirmEmailAddress extends Component {
     this.props.authStore.setCredentials(credentials);
   }
   componentWillUnmount() {
-    cookie.remove('USER_CREDENTIALS', { maxAge: 300 });
+    cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
   }
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
@@ -80,7 +81,7 @@ export default class ConfirmEmailAddress extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
           <Divider />
-          <p>Please check the verification code in the email we sent to:</p>
+          <p>Please confirm the 6-digit verification<br /> code sent to your email</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput
@@ -100,6 +101,7 @@ export default class ConfirmEmailAddress extends Component {
             </Message>
           }
           <Form onSubmit={this.handleSubmitForm}>
+            <label>Enter verification code here:</label>
             <ReactCodeInput
               fields={6}
               type="number"

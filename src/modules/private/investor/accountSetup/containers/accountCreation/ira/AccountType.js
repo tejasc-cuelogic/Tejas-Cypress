@@ -15,7 +15,7 @@ export default class AccountType extends Component {
     const { ACC_TYPES_FRM, accTypesChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">What type of IRA account you want to create?</Header>
+        <Header as="h3" textAlign="center">What type of IRA account do you want to create?</Header>
         <p className="center-align">Choose an account type</p>
         <Form error className="account-type-tab">
           <FormRadioGroup

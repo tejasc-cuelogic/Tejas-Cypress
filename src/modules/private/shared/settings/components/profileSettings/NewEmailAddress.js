@@ -18,7 +18,7 @@ export default class NewEmailAddress extends Component {
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
       const userCredentials = { email: email.value, password: btoa(password.value) };
-      cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 300 });
+      cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
       this.props.history.push(`${this.props.match.url}/confirm`);
     })
       .catch(() => {});
