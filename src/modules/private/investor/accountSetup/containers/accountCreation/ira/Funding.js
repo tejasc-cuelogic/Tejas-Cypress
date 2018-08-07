@@ -31,7 +31,7 @@ export default class Funding extends Component {
                   Set up a new self-directed IRA with
                   an initial deposit from an external checking account.
                   Annual contribution limits apply.
-                  <a rel="noopener noreferrer" target="_blank" href="https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits">Check the IRS website for the latest rules</a>
+                  <a target="_blank" rel="noopener noreferrer" href="https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits">Check the IRS website for the latest rules</a>
                 </p>
                 :
                 FUNDING_FRM.fields.fundingType.value === 1 ?
