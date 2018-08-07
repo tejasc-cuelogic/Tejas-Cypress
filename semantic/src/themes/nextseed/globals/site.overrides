@@ -581,6 +581,7 @@ p i.icon {
 			.ui.card {
 				border: 0;
 				background-color: transparent;
+				box-shadow: none;
 				&:hover {
 					box-shadow: none;
 				}
@@ -668,7 +669,7 @@ p i.icon {
 	.ui.grid {
 		>.column {
 			text-align: left;
-			padding-left: 240px !important;
+			padding-left: @40px !important;
 			position: relative;
 			&:before {
 				counter-increment: section;

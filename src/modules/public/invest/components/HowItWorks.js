@@ -84,7 +84,7 @@ const HowItWorks = () => (
             <div className="flex-content">
               <Image src={InvestorImg} />
               <Header as="h3">Revenue Sharing Notes</Header>
-              <Item.Group>
+              <Item.Group relaxed="very">
                 <Item>
                   <Item.Content>
                     <Item.Header as="h5">
