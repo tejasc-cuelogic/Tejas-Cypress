@@ -4,6 +4,7 @@
 
 ### Bug Fixes
 
+* **Banking[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - removed omit]:** removed omit as it was failing build ([3e03343](https://chaos.ns.team/nsv2/ns-client/commits/3e03343))
 * **Business Application[Issue [305](https://chaos.ns.team/nsv2/ns-ops/issues/305) - business-application-validation-issue-on-documentation-step]:** added or validation on doucmentation step for tax return section ([b9212ae](https://chaos.ns.team/nsv2/ns-client/commits/b9212ae))
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** business application finding fixes ([10c2ce1](https://chaos.ns.team/nsv2/ns-client/commits/10c2ce1))
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** file uploader added confirm modal on remove file operation ([a99c1e4](https://chaos.ns.team/nsv2/ns-client/commits/a99c1e4))
@@ -31,12 +32,15 @@
 * **Investor[Issue [235](https://chaos.ns.team/nsv2/ns-ops/issues/235) - manage-beneficiaries-feedback-changes]:** investor beneficiary feedback changes ([9718a27](https://chaos.ns.team/nsv2/ns-client/commits/9718a27))
 * **Investor[Issue [297](https://chaos.ns.team/nsv2/ns-ops/issues/297) - investor signup integrate SSN collision check api]:** investor signup integrate SSN collision check api ([77e458e](https://chaos.ns.team/nsv2/ns-client/commits/77e458e))
 * **Investor[Issue [304](https://chaos.ns.team/nsv2/ns-ops/issues/304) - investor-signup-flow-ira-link-bank-api-integration-newly-added-step]:** API Integration for IRA Link-Bank ([d7be878](https://chaos.ns.team/nsv2/ns-client/commits/d7be878))
+* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([d41995a](https://chaos.ns.team/nsv2/ns-client/commits/d41995a))
+* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([cb7431f](https://chaos.ns.team/nsv2/ns-client/commits/cb7431f))
 * **Issuer Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** lendio stauts corrected in constant file ([bee3759](https://chaos.ns.team/nsv2/ns-client/commits/bee3759))
 * **Issuer-Dashboard[Issue [296](https://chaos.ns.team/nsv2/ns-ops/issues/296) - issuer-manage-business-application-list-on-dashboard]:** issuer application lists on dashboard showing buttons as per app status ([6dbf80b](https://chaos.ns.team/nsv2/ns-client/commits/6dbf80b))
 * **Issuer[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** feedback changes done ([4b5017d](https://chaos.ns.team/nsv2/ns-client/commits/4b5017d))
 * **marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - marketing pages - feedback]:** marketing pages - feedback ([1416d48](https://chaos.ns.team/nsv2/ns-client/commits/1416d48))
 * **Marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - Marketing pages - feedback]:** Marketing pages - feedback ([e4b44f7](https://chaos.ns.team/nsv2/ns-client/commits/e4b44f7))
 * **Marketing Pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - hello world structure for public pages]:** hello world structure for public pages ([f7c04e7](https://chaos.ns.team/nsv2/ns-client/commits/f7c04e7))
+* **marketing pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - marketing pages - feedback]:** marketing pages - feedback changes ([ab57cff](https://chaos.ns.team/nsv2/ns-client/commits/ab57cff))
 * **marketing pages[Issue [268](https://chaos.ns.team/nsv2/ns-ops/issues/268) - marketing pages investor account types and security]:** account types, security and track sections ([b11d369](https://chaos.ns.team/nsv2/ns-client/commits/b11d369))
 * **marketing pages[Issue [273](https://chaos.ns.team/nsv2/ns-ops/issues/273) - marketing pages- about mission and careers]:** mission and careers section. ([16bcf4f](https://chaos.ns.team/nsv2/ns-client/commits/16bcf4f))
 * **marketing pages[Issue [291](https://chaos.ns.team/nsv2/ns-ops/issues/291) -  public about press and values]:** press and impact pages ([9f1c8d6](https://chaos.ns.team/nsv2/ns-client/commits/9f1c8d6))
