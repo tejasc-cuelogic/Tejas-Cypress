@@ -172,7 +172,16 @@ footer{
 		background-color:@neutral;
 	}
 	section{
-		padding:@30px @60px;
+		overflow:hidden;
+		transition:all .5s ease-in-out;
+		&.inactive{
+			height:0;
+			padding:0;
+		}
+		&.active{
+			height:240px;
+			padding:@30px @60px;
+		}
 		.secure{
 			margin-top: @14px;
 			padding-top: @14px;
@@ -590,17 +599,6 @@ p i.icon {
 			display: flex !important;
 			justify-content: center;
 		}
-	}
-}
-.compare-section {
-	.note {
-		text-align: center;
-		display: block;
-		display: block;
-		width: 70%;
-		line-height: 20px;
-		margin-left: auto;
-		margin-right: auto;
 	}
 }
 // Slick Slider Styles override
@@ -1477,7 +1475,7 @@ ol.progtrckr{
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
-.portfolio-allocation{
+.donut-chart, .portfolio-allocation{
 	.recharts-wrapper{
 		.recharts-legend-wrapper{
 			z-index:-1;
