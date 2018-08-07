@@ -16,7 +16,7 @@ export default class General extends Component {
     } = this.props.entityAccountStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">General Information</Header>
+        <Header as="h3" textAlign="center">General information</Header>
         <Form error>
           <div className="field-wrap">
             <FormInput
@@ -31,7 +31,7 @@ export default class General extends Component {
               format="##-#######"
               taxId
             />
-            <h6>Entity Address</h6>
+            <h6>Registered Address</h6>
             <AutoComplete
               name="street"
               fielddata={GEN_INFO_FRM.fields.street}
