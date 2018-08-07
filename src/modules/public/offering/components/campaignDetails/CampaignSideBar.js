@@ -12,7 +12,7 @@ export default class CampaignSideBar extends Component {
     } = this.props.details;
     return (
       <div className="offering-side-menu">
-        <div className="offering-intro">
+        <div className="offering-intro center-align">
           <Header as="h4" inverted textAlign="center">
             <Link to="/offerings" className="icon-link">
               <Icon name="arrow left" />
@@ -38,7 +38,7 @@ export default class CampaignSideBar extends Component {
               <Statistic.Label>Early Birds</Statistic.Label>
             </Statistic>
           </Statistic.Group>
-          <Button secondary>Invest Now</Button>
+          <Button as={Link} to="invest-now" secondary>Invest Now</Button>
         </div>
         <Menu vertical fluid>
           <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} />
