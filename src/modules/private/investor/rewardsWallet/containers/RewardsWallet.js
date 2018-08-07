@@ -20,7 +20,7 @@ export default class RewardsWallet extends Component {
       <PrivateLayout {...this.props}>
         <Checkbox defaultChecked={option} onClick={this.activeOnly} className="pull-right" label="Show active rewards only" />
         {loading ? <InlineLoader /> :
-          <RewardList match={this.props.match} rewards={rewards} error={error} />
+        <RewardList match={this.props.match} rewards={rewards} error={error} />
         }
       </PrivateLayout>
     );
