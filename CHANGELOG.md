@@ -55,6 +55,7 @@
 * **public campaign[Issue [310](https://chaos.ns.team/nsv2/ns-ops/issues/310) - public campaign investment and rewards]:** completed investment details and rewards section ui as well as solved ui issues and replaced all .png files with .jpg files. ([e9043b1](https://chaos.ns.team/nsv2/ns-client/commits/e9043b1))
 * **public investment workflow[Issue [319](https://chaos.ns.team/nsv2/ns-ops/issues/319) - public investment workflow]:** designed investment workflow ([e9b1736](https://chaos.ns.team/nsv2/ns-client/commits/e9b1736))
 * **public investors[Issue [257](https://chaos.ns.team/nsv2/ns-ops/issues/257) - public investors homepage]:** - completed design of why nextseed and how it works ([52edaeb](https://chaos.ns.team/nsv2/ns-client/commits/52edaeb))
+* **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
 * **UserAvatar[Issue [213](https://chaos.ns.team/nsv2/ns-ops/issues/213) - User Avatar Fallback]:** Integrate react-avatar for user avatar fallback solution ([422be01](https://chaos.ns.team/nsv2/ns-client/commits/422be01))
 
 
