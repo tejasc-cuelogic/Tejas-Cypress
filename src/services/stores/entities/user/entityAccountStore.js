@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, omit, find } from 'lodash';
+import { isEmpty, find } from 'lodash';
 import {
   ENTITY_FIN_INFO,
   ENTITY_GEN_INFO,
@@ -220,7 +220,13 @@ class EntityAccountStore {
       },
     };
     if (!isEmpty(bankAccountStore.plaidBankDetails)) {
-      const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+      const plaidBankDetails = {};
+      plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
+      plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
+      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
+      plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
+      plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
+      plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
       payload.bankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -279,7 +285,13 @@ class EntityAccountStore {
       if (isValidCurrentStep) {
         uiStore.setProgress();
         if (!isEmpty(bankAccountStore.plaidBankDetails)) {
-          const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+          const plaidBankDetails = {};
+          plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
+          plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
+          plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
+          plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
+          plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
+          plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
           accountAttributes.bankDetails = plaidBankDetails;
         } else {
           const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
