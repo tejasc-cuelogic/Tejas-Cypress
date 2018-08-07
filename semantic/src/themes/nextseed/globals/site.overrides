@@ -172,7 +172,16 @@ footer{
 		background-color:@neutral;
 	}
 	section{
-		padding:@30px @60px;
+		overflow:hidden;
+		transition:all .5s ease-in-out;
+		&.inactive{
+			height:0;
+			padding:0;
+		}
+		&.active{
+			height:240px;
+			padding:@30px @60px;
+		}
 		.secure{
 			margin-top: @14px;
 			padding-top: @14px;

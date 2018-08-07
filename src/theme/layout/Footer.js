@@ -17,14 +17,28 @@ class Footer extends Component {
         <div className="footer-head">
           <Container>
             <Menu inverted borderless>
-              <Menu.Item as={Link} to="/resources/education-center">Resources</Menu.Item>
-              <Menu.Item onClick={this.toggleShowHide}><Icon name="caret down" /></Menu.Item>
-              <Menu.Item>About Us</Menu.Item>
-              <Menu.Item onClick={this.toggleShowHide}><Icon name="caret down" /></Menu.Item>
+              <Menu.Item>
+                <Link to="/resources/education-center">Resources</Link>
+                <Icon name="caret down" onClick={this.toggleShowHide} />
+              </Menu.Item>
+              {/* <Menu.Item onClick={this.toggleShowHide}>
+              <Icon name="caret down" /></Menu.Item> */}
+              <Menu.Item>
+                About Us
+                <Icon name="caret down" onClick={this.toggleShowHide} />
+              </Menu.Item>
+              {/* <Menu.Item onClick={this.toggleShowHide}>
+              <Icon name="caret down" /></Menu.Item> */}
               <Menu.Item>Contact</Menu.Item>
-              <Menu.Item as={Link} to="/agreements/terms-of-use">Terms of Use</Menu.Item>
-              <Menu.Item as={Link} to="/agreements/privacy-policy">Privacy Policy</Menu.Item>
-              <Menu.Item as={Link} to="/subscribe/newsletter">Sign Up for Newsletter</Menu.Item>
+              <Menu.Item>
+                <Link to="/agreements/terms-of-use">Terms of Use</Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to="/agreements/privacy-policy">Privacy Policy</Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to="/subscribe/newsletter">Sign Up for Newsletter</Link>
+              </Menu.Item>
               <Menu.Menu position="right">
                 <Menu.Item>© 2018 NextSeed US LLC</Menu.Item>
                 {Object.keys(SOCIAL_URLS).map(s => (
