@@ -167,29 +167,12 @@ a.text-link{
 // Footer Styles
 footer{
 	background-color:@neutral-offwhite;
-	position:relative;
-	&:before{
-		content:"";
-		height:100vh;
-		background-color:@white;
-		position:absolute;
-		left:0;
-		right:0;
-		bottom:0;
-		z-index:-1;
-	}
 	.footer-head{
 		padding:0 @60px;
-		margin-bottom:240px;
 		background-color:@neutral;
 	}
 	section{
 		padding:@30px @60px;
-		position:fixed;
-		bottom:0;
-		left:0;
-		right:0;
-		z-index:-2;
 		.secure{
 			margin-top: @14px;
 			padding-top: @14px;
