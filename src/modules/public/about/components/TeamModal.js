@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject } from 'mobx-react';
-import { Header, Modal, Item, Image, Icon } from 'semantic-ui-react';
+import { Header, Modal, Item, Image, Icon, Divider } from 'semantic-ui-react';
 
 @inject('teamStore')
 class TeamModal extends Component {
@@ -36,6 +36,7 @@ class TeamModal extends Component {
                   <p>
                     {member.story}
                   </p>
+                  <Divider hidden />
                   <div>
                     {member.social.map(stype => (
                       <Link to={stype.url === null ? '/' : stype.url} className="icon-link">

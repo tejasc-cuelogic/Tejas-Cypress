@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject } from 'mobx-react';
-import { Button, Form } from 'semantic-ui-react';
+import { Button, Form, Divider } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form';
 
 const SubscribeFields = ({
@@ -22,6 +22,7 @@ const SubscribeFields = ({
         />
       ))
     }
+    <Divider hidden />
     <Form.Field className={modal ? 'center-align' : ''}>
       <Button primary className={modal ? 'very relaxed' : 'fluid'} loading={inProgress}>
         Submit
