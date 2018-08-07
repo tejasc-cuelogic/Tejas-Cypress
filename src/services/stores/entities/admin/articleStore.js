@@ -1,55 +1,48 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../api/gqlApi';
-import { allInsightArticles, getArticlesByCatId } from '../../queries/insightArticle';
+import map from 'lodash/map';
+import mapKeys from 'lodash/mapKeys';
+import { GqlClient as client } from '../../../../api/publicApi';
+import { allInsightArticles, getArticleDetails } from '../../queries/insightArticle';
 import { getCategoryList } from '../../queries/categoryArticle';
 
 export class ArticleStore {
     @observable data = [];
     @observable Categories = [];
+    @observable article = null;
+
     @action
     requestAllArticles = () => {
-      const query = allInsightArticles;
-      this.data = graphql({
-        client,
-        query,
-      });
+      this.data = graphql({ client, query: allInsightArticles });
+    }
+
+    @action
+    getArticle = (id) => {
+      this.article = graphql({ client, query: getArticleDetails, variables: { id } });
     }
 
     @computed get InsightArticles() {
       return (this.data.data && toJS(this.data.data.insightsArticles)) || [];
     }
 
+    @computed get ArticlesDetails() {
+      return (this.article.data && toJS(this.article.data.insightsArticle)) || null;
+    }
+
+    @computed get articleLoading() {
+      return this.article.loading;
+    }
+
     @action
     getCategoryList = () => {
-      const query = getCategoryList;
-      this.Categories = graphql({
-        client,
-        query,
-      });
+      this.Categories = graphql({ client, query: getCategoryList });
     }
 
     @computed get InsightCategories() {
-      return (this.Categories.data && toJS(this.Categories.data.categories)) || [];
-    }
-
-    @action
-    getArticlesById = (Category) => { // work remaining
-      if (Category === 'all') {
-        this.requestAllArticles();
-      } else {
-        const query = getArticlesByCatId;
-        this.data = graphql({
-          client,
-          query,
-        });
-      }
-    }
-
-    @action
-    getcategoryNamebyId = (id) => {
-      const catName = this.Categories.data.categories.find(obj => obj.id === id).categoryName;
-      return catName;
+      const iMap = { categoryName: 'title', id: 'to' };
+      const categories = (this.Categories.data && toJS(this.Categories.data.categories)) || [];
+      const categoryRoutes = map(categories, i => mapKeys(i, (v, k) => iMap[k] || k));
+      return categoryRoutes;
     }
 
     @computed get loading() {
