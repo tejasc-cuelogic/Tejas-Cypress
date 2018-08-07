@@ -11,14 +11,14 @@ class InsightArticlesList extends Component {
       <Grid>
         {InsightArticles.map(article => (
           <Grid.Column mobile={16} tablet={8} computer={4} fluid>
-            <Card className="campaign insights" as={Link} to="/">
+            <Card className="campaign insights" as={Link} to={`/resources/insights/${article.id}`}>
               <Image
                 src={article.featureImage}
               />
               <Card.Content>
                 <div className="tags">
                   {article.category}
-                  <span className="pull-right">{article.minuteRead}</span>
+                  <span className="pull-right">{`${article.minuteRead} Min read`}</span>
                 </div>
                 <Card.Description>
                   {article.title}
