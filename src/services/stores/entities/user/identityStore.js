@@ -166,6 +166,7 @@ export class IdentityStore {
 
   @action
   setFileUploadData = (field, files) => {
+    uiStore.setProgress();
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     fileUpload.setFileUploadData('', fileData, 'PROFILE_CIP', 'INVESTOR').then(action((result) => {

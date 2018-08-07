@@ -17,7 +17,7 @@ import Helper from '../../../../helper/utility';
 class IraAccountStore {
   @observable FIN_INFO_FRM = FormValidator.prepareFormObject(IRA_FIN_INFO);
   @observable IDENTITY_FRM = FormValidator.prepareFormObject(IRA_IDENTITY);
-  @observable ACC_TYPES_FRM = FormValidator.prepareFormObject(IRA_ACC_TYPES, true, true);
+  @observable ACC_TYPES_FRM = FormValidator.prepareFormObject(IRA_ACC_TYPES);
   @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING);
 
   @observable stepToBeRendered = 0;
@@ -214,7 +214,7 @@ class IraAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.createInvestorAccount || formStatus === 'submit') {
+          if (result.data.createInvestorAccount || formStatus === 'submit' || currentStep.name === 'Funding') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
           if (currentStep.name === 'Identity') {
@@ -278,7 +278,7 @@ class IraAccountStore {
         const getIraStep = AccCreationHelper.iraSteps();
         if (!this.FIN_INFO_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
-        } else if (!this.ACC_TYPES_FRM.meta.isValid || this.accountNotSet) {
+        } else if (!this.ACC_TYPES_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
         } else if (!this.FUNDING_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
@@ -303,7 +303,6 @@ class IraAccountStore {
 
   @action
   setFormData = (form, accountDetails) => {
-    let isDirty = false;
     Object.keys(this[form].fields).map((f) => {
       if (form === 'FIN_INFO_FRM') {
         this[form].fields[f].value = accountDetails[f];
@@ -321,24 +320,18 @@ class IraAccountStore {
         }
         if (value !== '') {
           this[form].fields[f].value = value;
-          if (form === 'ACC_TYPES_FRM') {
-            this.setAccountNotSet(false);
-          }
-        } else if (form === 'FUNDING_FRM') {
-          this[form].fields[f].value = '';
         } else {
-          this[form].fields[f].value = 0;
-          this.setAccountNotSet(true);
-          isDirty = true;
+          this[form].fields[f].value = '';
         }
       }
       return this[form].fields[f];
     });
-    FormValidator.onChange(this[form], '', '', isDirty);
+    FormValidator.onChange(this[form], '', '', false);
   }
 
   @action
   setFileUploadData = (field, files) => {
+    uiStore.setProgress();
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     fileUpload.setFileUploadData('', fileData, 'ACCOUNT_IRA_CREATION_CIP', 'INVESTOR').then(action((result) => {
