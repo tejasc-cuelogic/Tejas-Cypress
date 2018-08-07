@@ -5,7 +5,6 @@ import secure from '../../assets/images/secure-horizontal-1.png';
 import { SOCIAL_URLS } from '../../constants/common';
 
 class Footer extends Component {
-<<<<<<< HEAD
   state = { fShowHide: false };
   componentWillMount() {
     if (this.props.path === '/') {
@@ -21,13 +20,10 @@ class Footer extends Component {
       this.setState({ fShowHide: false });
     }
   }
-=======
-  state = { fShowHide: true };
-
->>>>>>> 695e16bc5741300f6f3e98d8dc93a2b2516face8
   toggleShowHide = () => {
     this.setState({ fShowHide: !this.state.fShowHide });
   }
+
   render() {
     return (
       <footer>
