@@ -101,7 +101,7 @@ const Compare = () => (
             <List.Content as="a">Does my business qualify for NextSeed?</List.Content>
           </List.Item>
         </List>
-        <p className="note">
+        <p className="center-align">
           ¹ For illustrative purposes only based on general market terms.
           Specific rates offered and fees required by specific lenders or investors
           may vary drastically based on facts and circumstances.
