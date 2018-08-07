@@ -23,13 +23,13 @@ class BonusRewards extends Component {
               <section>
                 <List as="ul" className="rewards">
                   <List.Item as="li">
-                    <Header as="h4">
-                      Early Bird Reward
-                      <Header.Subheader>
-                        <Label color="green">49 remaining</Label>
-                      </Header.Subheader>
-                    </Header>
                     <div className="box">
+                      <Header as="h4">
+                        Early Bird Reward
+                        <Header.Subheader>
+                          <Label size="small" color="green">49 remaining</Label>
+                        </Header.Subheader>
+                      </Header>
                       <List as="ul">
                         <p><b>First 100 investors who invest $1,000 or more will recieve:</b></p>
                         <List.Item as="li">
@@ -43,10 +43,10 @@ class BonusRewards extends Component {
                     </div>
                   </List.Item>
                   <List.Item as="li">
-                    <Header as="h4">
-                      Invest $100+
-                    </Header>
                     <div className="box">
+                      <Header as="h4">
+                        Invest $100+
+                      </Header>
                       <List as="ul">
                         <List.Item as="li">
                         Dollar Beers on Your Birthday
@@ -64,10 +64,10 @@ class BonusRewards extends Component {
                     </div>
                   </List.Item>
                   <List.Item as="li">
-                    <Header as="h4">
-                      Invest $500+
-                    </Header>
                     <div className="box">
+                      <Header as="h4">
+                        Invest $500+
+                      </Header>
                       <List as="ul">
                         <List.Item as="li">
                         Custom Commemorative Buffbrew Tankard
@@ -76,10 +76,10 @@ class BonusRewards extends Component {
                     </div>
                   </List.Item>
                   <List.Item as="li">
-                    <Header as="h4">
-                      Invest $1,000+
-                    </Header>
                     <div className="box">
+                      <Header as="h4">
+                        Invest $1,000+
+                      </Header>
                       <List as="ul">
                         <List.Item as="li">
                         Free Beer for Life: Yes. Life.<br />(1 beer per day in perpetuity)
@@ -91,10 +91,10 @@ class BonusRewards extends Component {
                     </div>
                   </List.Item>
                   <List.Item as="li">
-                    <Header as="h4">
-                    Invest $2,500+
-                    </Header>
                     <div className="box">
+                      <Header as="h4">
+                      Invest $2,500+
+                      </Header>
                       <List as="ul">
                         <List.Item as="li">
                         1 Year Membership to the Buffbrew Virtual Bomber Locker Club:
@@ -110,10 +110,10 @@ class BonusRewards extends Component {
                     </div>
                   </List.Item>
                   <List.Item as="li">
-                    <Header as="h4">
-                    Invest $5,000+
-                    </Header>
                     <div className="box">
+                      <Header as="h4">
+                      Invest $5,000+
+                      </Header>
                       <List as="ul">
                         <List.Item as="li">
                         Invitation to Buffbrew Beer Dinner #1
@@ -125,10 +125,10 @@ class BonusRewards extends Component {
                     </div>
                   </List.Item>
                   <List.Item as="li">
-                    <Header as="h4">
-                    Invest $10,000+
-                    </Header>
                     <div className="box">
+                      <Header as="h4">
+                      Invest $10,000+
+                      </Header>
                       <List as="ul">
                         <List.Item as="li">
                         Brewmaster for a Day Package
@@ -140,10 +140,10 @@ class BonusRewards extends Component {
                     </div>
                   </List.Item>
                   <List.Item as="li">
-                    <Header as="h4">
-                      Invest $25,000+
-                    </Header>
                     <div className="box">
+                      <Header as="h4">
+                        Invest $25,000+
+                      </Header>
                       <List as="ul">
                         <List.Item as="li">
                         Brew Your Own Beer
