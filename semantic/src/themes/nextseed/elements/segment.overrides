@@ -41,7 +41,7 @@
 .ui.padded.segment {
     padding: 30px;
 }
-.ui.attached.segment {
-    line-height: 24px;
-    font-size: @15px;
-}
+// .ui.attached.segment {
+//     line-height: 24px;
+//     font-size: @15px;
+// }
