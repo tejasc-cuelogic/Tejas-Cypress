@@ -11,7 +11,6 @@ const footer = () => (
         <Menu inverted borderless>
           <Menu.Item as={Link} to="/resources/education-center">Resources <Icon name="caret down" /></Menu.Item>
           <Menu.Item>About Us <Icon name="caret down" /></Menu.Item>
-          <Menu.Item>Contact</Menu.Item>
           <Menu.Item as={Link} to="/agreements/terms-of-use">Terms of Use</Menu.Item>
           <Menu.Item as={Link} to="/agreements/privacy-policy">Privacy Policy</Menu.Item>
           <Menu.Item as={Link} to="/subscribe/newsletter">Sign Up for Newsletter</Menu.Item>
