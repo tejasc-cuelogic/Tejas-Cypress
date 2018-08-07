@@ -3,12 +3,13 @@ import graphql from 'mobx-apollo';
 import flatMap from 'lodash/flatMap';
 import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { userStore } from '../../index';
 import { clientSearch } from '../../../../helper';
 import { allKbsQuery, allFaqQuery } from '../../queries/knowledgeBase';
 
 export class EducationStore {
-  @observable data = [];
+  @observable data = { KnowledgeBase: [], Faq: [] };
   @observable searchParam = '';
   @observable selected = { id: '', title: '', body: '' };
   @observable faqsList = [
@@ -31,16 +32,19 @@ export class EducationStore {
   ];
 
   @action
-  initRequest = (module) => {
+  initRequest = (module, props) => {
     const query = (module === 'KnowledgeBase') ? allKbsQuery : allFaqQuery;
-    if (userStore.currentUser) {
-      const scopeType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
-      this.data = graphql({
-        client,
-        query,
-        variables: { scopeType },
-      });
+    let scopeType = 'INVESTOR';
+    if (props && props.isMkt && props.params) {
+      scopeType = props.params.for === 'investor' ? 'INVESTOR' : 'ISSUER';
+    } else if (userStore.currentUser) {
+      scopeType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
     }
+    this.data[module] = graphql({
+      client: props && props.isMkt ? clientPublic : client,
+      query,
+      variables: { scopeType },
+    });
   }
 
   @action
@@ -64,17 +68,17 @@ export class EducationStore {
   }
 
   @computed get kbs() {
-    return (this.allData.data && this.allData.data.knowledgeBase
+    return (this.allData.KnowledgeBase.data && this.allData.KnowledgeBase.data.knowledgeBase
       && clientSearch.search(
-        toJS(this.allData.data.knowledgeBase),
+        toJS(this.allData.KnowledgeBase.data.knowledgeBase),
         this.searchParam,
         'knowledgeBase',
       )) || [];
   }
 
   @computed get faqs() {
-    return (this.allData.data && this.allData.data.faqs
-      && clientSearch.search(toJS(this.allData.data.faqs), this.searchParam, 'faq')) || [];
+    return (this.allData.Faq.data && this.allData.Faq.data.faqs
+      && clientSearch.search(toJS(this.allData.Faq.data.faqs), this.searchParam, 'faq')) || [];
   }
 
   @computed get error() {

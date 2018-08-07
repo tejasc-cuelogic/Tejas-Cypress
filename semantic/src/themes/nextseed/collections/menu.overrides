@@ -208,8 +208,6 @@ footer{
         position: relative;
         .item {
             font-weight: @fontMedium;
-            font-size: @14px;
-            line-height: @20px;
             .ui.image.filterIcon {
                 margin-right: @10px;
             }
@@ -254,15 +252,13 @@ footer{
     }
     .offering-content-spacer {
         .ui.secondary.menu .item {
-            font-weight: bold;
-            line-height: @20px;
-            font-size: @15px;
+            font-weight: @bold;
             color: @neutral;
             >i.icon {
                 font-size: @20px;
             }
             &.span {
-                font-weight: bold;
+                font-weight: @bold;
                 line-height: @24px;
                 font-size: @13px;
                 color: @neutral-middark;

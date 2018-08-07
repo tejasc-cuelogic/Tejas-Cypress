@@ -30,7 +30,6 @@
             }
         }
         >.content{
-            line-height:@24px;
             padding:@21px @28px;
             .tags{
                 font-size:@13px;
@@ -45,11 +44,10 @@
                 text-transform:none;
             }
             .description{
-                height:80px;
+                height:88px;
                 margin:@14px 0;
                 overflow:hidden;
                 font-size:@13px;
-                line-height:@20px;
             }
         }
         >.content.card-hidden {
@@ -119,11 +117,10 @@
     background-color:@white;
     box-shadow:@boxShadow;
     h3{
-        font-size:18px;
+        font-size:@18px;
         margin-bottom:@22px;
     }
     h5{
-        // font-size:14px;
         color:@neutral-middark;
         .checkbox label{
             font-weight:normal;
@@ -333,7 +330,7 @@
 .ui.cards{
     &.steps-card{
         .description{
-            font-size:16px;
+            font-size:@16px;
             i.icon.numbar{
                 height:26px;
                 width:26px;

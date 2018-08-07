@@ -1,13 +1,35 @@
 import React, { Component } from 'react';
-import { Container, Image, Menu, Card, Grid, Dropdown } from 'semantic-ui-react';
+import { Container, Image, Menu, Dropdown } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import { NsCarousel } from '../../../../theme/shared';
+import { inject, observer } from 'mobx-react';
+import { NsCarousel, InlineLoader } from '../../../../theme/shared';
 import Insight from '../../../../assets/images/insights2.jpg';
-import InsightCard from '../../../../assets/images/insights-card.jpg';
+import InsightArticlesList from '../components/insightArticlesList';
 
+@inject('articleStore')
+@observer
 export default class Insights extends Component {
+  componentWillMount() {
+    if (this.props.match.params && this.props.match.params.id) {
+      this.props.articleStore.requestArticlesByCategoryId(this.props.match.params.id);
+    } else {
+      this.props.articleStore.requestAllArticles();
+    }
+    this.props.articleStore.getCategoryList();
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.match.params && nextProps.match.params.id) {
+      this.props.articleStore.requestArticlesByCategoryId(nextProps.match.params.id);
+    } else {
+      this.props.articleStore.requestAllArticles();
+    }
+  }
   render() {
+    const {
+      InsightCategories,
+      loading,
+    } = this.props.articleStore;
     const settings = {
       slidesToShow: 3,
       slidesToScroll: 3,
@@ -34,13 +56,11 @@ export default class Insights extends Component {
         <Menu secondary className="menu-secondary-fixed insight-menu">
           <Container>
             <Menu.Menu secondary className="menu-secondary">
-              <Menu.Item as={Link} to="/">All</Menu.Item>
-              <Menu.Item as={Link} to="/">Business</Menu.Item>
-              <Menu.Item as={Link} to="/">Investors</Menu.Item>
-              <Menu.Item as={Link} to="/">Community</Menu.Item>
-              <Menu.Item as={Link} to="/">Nextseed Stories</Menu.Item>
-              <Menu.Item as={Link} to="/">Nextseed TX</Menu.Item>
-              <Menu.Item as={Link} to="/">Updates</Menu.Item>
+              <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
+              {InsightCategories &&
+              InsightCategories.map(item => (
+                <Menu.Item as={Link} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
+              ))}
             </Menu.Menu>
             <Menu.Item position="right">
               SORT BY
@@ -56,72 +76,7 @@ export default class Insights extends Component {
         </Menu>
         <section>
           <Container>
-            <Grid>
-              <Grid.Column mobile={16} tablet={8} computer={4} fluid>
-                <Card className="campaign insights" as={Link} to="/">
-                  <Image
-                    src={InsightCard}
-                  />
-                  <Card.Content>
-                    <div className="tags">
-                      business
-                      <span className="pull-right">2 Min read</span>
-                    </div>
-                    <Card.Description>
-                      Seven Cool Neighborhoods to Consider for Your Next Business
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={8} computer={4} fluid>
-                <Card className="campaign insights" as={Link} to="/">
-                  <Image
-                    src={InsightCard}
-                  />
-                  <Card.Content>
-                    <div className="tags">
-                      business
-                      <span className="pull-right">2 Min read</span>
-                    </div>
-                    <Card.Description>
-                      Seven Cool Neighborhoods to Consider for Your Next Business
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={8} computer={4} fluid>
-                <Card className="campaign insights" as={Link} to="/">
-                  <Image
-                    src={InsightCard}
-                  />
-                  <Card.Content>
-                    <div className="tags">
-                      business
-                      <span className="pull-right">2 Min read</span>
-                    </div>
-                    <Card.Description>
-                      Seven Cool Neighborhoods to Consider for Your Next Business
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={8} computer={4} fluid>
-                <Card className="campaign insights" as={Link} to="/">
-                  <Image
-                    src={InsightCard}
-                  />
-                  <Card.Content>
-                    <div className="tags">
-                      business
-                      <span className="pull-right">2 Min read</span>
-                    </div>
-                    <Card.Description>
-                      Seven Cool Neighborhoods to Consider for Your Next Business
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
-            </Grid>
+            {loading ? <InlineLoader /> : <InsightArticlesList /> }
           </Container>
         </section>
       </Aux>

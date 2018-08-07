@@ -12,7 +12,6 @@ body{
 }
 section{
 	padding:@60px 0;
-	background-color:@white;
 	.caption{
 		margin-bottom:@50px !important;
 	}
@@ -170,16 +169,19 @@ footer{
 	background-color:@neutral-offwhite;
 	.footer-head{
 		padding:0 @60px;
-		margin-bottom:240px;
 		background-color:@neutral;
 	}
 	section{
-		padding:@30px @60px;
-		position:fixed;
-		bottom:0;
-		left:0;
-		right:0;
-		z-index:-1;
+		overflow:hidden;
+		transition:all .5s ease-in-out;
+		&.inactive{
+			height:0;
+			padding:0;
+		}
+		&.active{
+			height:240px;
+			padding:@30px @60px;
+		}
 		.secure{
 			margin-top: @14px;
 			padding-top: @14px;
@@ -191,7 +193,7 @@ footer{
 		.copyright-info{
 			float:right;
 			max-width:850px;
-			font-size:12px;
+			font-size:@12px;
 			line-height:22px;
 		}
 	}
@@ -225,8 +227,6 @@ footer{
 		}
 		.ui.checkbox {
 			label {
-				font-size: @15px;
-				line-height: @19px;
 				color:@neutral-middark;
 			}
 		} 
@@ -239,8 +239,6 @@ footer{
 		.checkbox-group {
 			.ui.label {
 				background-color: transparent;
-				font-size: @15px;
-				line-height: @19px;
 				color: @neutral-middark;
 				padding: 0;
 				padding-left: @3px;
@@ -311,11 +309,6 @@ footer{
 		}
 		p {
 			color: @neutral;
-			// font-size: @15px;
-			// line-height: @20px;
-			// &.detail-section {
-			// 	line-height: @20px;
-			// }
 			&.note {
 				color:@neutral-middark;
 				font-size: @12px;
@@ -325,27 +318,13 @@ footer{
 			&.early-bird-title {
 				font-weight: bold;
 				line-height: @20px;
-				// font-size: @15px;
 				text-align: center;
 			}
 			&.early-bird-desc {
 				line-height: @27px;
-				// font-size: @15px;
 				text-align: center;
 			}
 		}
-		// ul {
-		// 	line-height: @26px;
-		// 	font-size: @15px;
-		// 	color:@neutral-middark;
-		// 	padding-left: @20px;
- 
-		// 	li {
-		// 		span {
-		// 			font-weight: @bold;
-		// 		}
-		// 	}
-		// }
 		.ui.grid.investment-grid {
 			>.column:last-child {
 				background-color: @primary-one;
@@ -553,14 +532,14 @@ p i.icon {
 		&:before {
 			content: "\e916";
 			font-family: 'nextseed';
-			font-size: 18px !important;
+			font-size: @18px !important;
 		}
 	}
 	.slick-next {
 		&:before {
 			content: "\e918";
 			font-family: 'nextseed';
-			font-size: 18px !important;
+			font-size: @18px !important;
 		}
 	}
 }
@@ -594,6 +573,7 @@ p i.icon {
 			.ui.card {
 				border: 0;
 				background-color: transparent;
+				box-shadow: none;
 				&:hover {
 					box-shadow: none;
 				}
@@ -609,7 +589,7 @@ p i.icon {
 						top: 5px;
 						font-weight: 500;
 						line-height: 24px;
-						font-size: 40px;
+						font-size: @40px;
 						color: @primary-one;
 					}
 				}
@@ -619,17 +599,6 @@ p i.icon {
 			display: flex !important;
 			justify-content: center;
 		}
-	}
-}
-.compare-section {
-	.note {
-		text-align: center;
-		display: block;
-		display: block;
-		width: 70%;
-		line-height: 20px;
-		margin-left: auto;
-		margin-right: auto;
 	}
 }
 // Slick Slider Styles override
@@ -643,7 +612,7 @@ p i.icon {
 		width: 50px;
 		height: 50px;
 		&:before {
-			font-size: 30px;
+			font-size: @30px;
 			color: @neutral-middark;
 		}
 	}
@@ -681,17 +650,17 @@ p i.icon {
 	.ui.grid {
 		>.column {
 			text-align: left;
-			padding-left: 40px !important;
+			padding-left: @40px !important;
 			position: relative;
 			&:before {
 				counter-increment: section;
 				content: counter(section);  
 				position: absolute;
 				left: 0;
-				top: 15px;
+				top: @15px;
 				font-weight: 500;
 				line-height: 24px;
-				font-size: 40px;
+				font-size: @40px;
 				color: @primary-one;
 			}
 		}
@@ -790,11 +759,11 @@ address {
 		display: table;
 		margin-bottom: 5px;
 		&.news-category {
-			font-size: 13px;
+			font-size: @13px;
 			text-transform: uppercase;
 		}
 		&.news-title {
-			font-size: 28px;
+			font-size: @28px;
 			line-height: 30px;
 		}
 	}
@@ -1506,7 +1475,7 @@ ol.progtrckr{
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
-.portfolio-allocation{
+.donut-chart, .portfolio-allocation{
 	.recharts-wrapper{
 		.recharts-legend-wrapper{
 			z-index:-1;
@@ -1516,13 +1485,13 @@ svg:not(:root).recharts-surface{
 			font-weight:@fontMedium;
 		}
 		tspan{
-			font-size:18px;
+			font-size:@18px;
 			font-weight:@fontMedium;
 		}
 		.chartLegends li{
-			font-size:22px;
+			font-size:@22px;
 			span{
-				font-size:13px;
+				font-size:@13px;
 				color:@fullBlack;
 				vertical-align:top;
 			}
