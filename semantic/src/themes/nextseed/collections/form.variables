@@ -101,7 +101,7 @@
 
 /* Errored Input */
 @formErrorColor: @negativeTextColor;
-@formErrorBorder: @negativeTextColor;
+@formErrorBorder: @negativeTextColor !important;
 @formErrorBackground: transparent;
 
 /* AutoFill */

@@ -9,8 +9,13 @@
         }
     }
 }
-
 .ui.grid{
+    &.divided:not([class*="vertically divided"])>{
+        .column:not(:last-child),
+        .row>.column:not(:last-child){
+            box-shadow:@dividedBorder inset;
+        }
+    }
     >.column{
         &.update-list, &.update-details{
             padding-top:@28px;

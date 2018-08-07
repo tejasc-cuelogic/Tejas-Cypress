@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import startCase from 'lodash/startCase';
 import moment from 'moment';
 import { Card, Grid, Button, Header, Icon, Item, Divider } from 'semantic-ui-react';
-import { DateTimeFormat } from '../../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader, EmptyDataSet } from '../../../../../../theme/shared';
 import { BENEFICIARY_STATUS } from '../../../../../../constants/user';
 import AddBeneficiary from './AddBeneficiary';
 
@@ -14,6 +14,9 @@ const BeneficiaryList = (props) => {
   const statusImg = (BENEFICIARY_STATUS.PENDING === props.beneficiaries.requestStatus ? 'orange reload' : 'green check').split(' ');
   const showButton = (props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary` && props.curLocation.pathname !== `${props.match.url}/add-${title.toLowerCase()}-beneficiary/confirm`);
   const headerMsg = '';
+  if (props.loading) {
+    return <InlineLoader />;
+  }
   return (
     <Grid.Row>
       <Grid.Column widescreen={8} largeScreen={10} computer={13} tablet={16} mobile={16}>
@@ -74,8 +77,7 @@ const BeneficiaryList = (props) => {
                           </Grid.Row>
                         </Grid>
                       </Item>
-                    )) :
-                    <div>loading...</div>
+                    )) : <EmptyDataSet title="No data available for beneficiaries." />
                   }
                 </Item.Group>
                 <Button as={Link} to={`${props.match.url}/add-${title.toLowerCase()}-beneficiary`} color="green">Manage beneficiaries</Button>

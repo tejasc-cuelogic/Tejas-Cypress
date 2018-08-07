@@ -51,7 +51,7 @@ const WhyNextseed = () => (
   <Aux>
     <section className="why-nextseed-section">
       <Container>
-        <Header as="h2" className="mb-80" textAlign="center">
+        <Header as="h2" className="mb-30" textAlign="center">
           Local investing, made easy.
         </Header>
         <Grid relaxed="very" stackable>

@@ -44,7 +44,7 @@ export class BankAccount {
         bankAccountStore.setPlaidAccDetails(metadata);
         bankAccountStore.getPlaidAccountData().then(() => {
         }).catch(() => { });
-        Helper.toast(`Bank ${metadata.institution.name} with account id ${Helper.encryptNumber(metadata.account_id)} successfully linked.`, 'success');
+        Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
         individualAccountStore.setStepToBeRendered(1);
         bankAccountStore.setShowAddFunds();
       },
