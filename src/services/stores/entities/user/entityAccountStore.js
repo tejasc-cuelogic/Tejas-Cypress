@@ -480,6 +480,7 @@ class EntityAccountStore {
 
   @action
   setFileUploadData = (form, field, files) => {
+    uiStore.setProgress();
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     fileUpload.setFileUploadData('', fileData, 'ACCOUNT_ENTITY_CREATION', 'INVESTOR').then(action((result) => {

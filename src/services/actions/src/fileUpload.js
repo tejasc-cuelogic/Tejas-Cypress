@@ -29,7 +29,6 @@ export class FileUpload {
         });
     })
 
-
   removeUploadedData = (removeFileId) => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {

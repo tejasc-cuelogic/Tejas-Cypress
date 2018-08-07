@@ -32,7 +32,6 @@ export default class FormationDocumemts extends Component {
     return (
       <div>
         <Header as="h3" textAlign="center">Upload required documentation</Header>
-        <p className="center-align">Lorem psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
         <Divider hidden />
         {errors &&
           <Message error>

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
@@ -80,7 +81,9 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your phone number</Header>
           <Divider />
-          <p>We are about to text a verification code to:</p>
+          <p> Please confirm the 6-digit verification code <br />
+              sent by text to your phone number:
+          </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           {errors &&
@@ -90,6 +93,7 @@ export default class ConfirmPhoneNumber extends Component {
           }
           <Form>
             <MaskedInput2
+              hidelabel
               value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
               type="tel"
               name="phoneNumber"
@@ -100,7 +104,6 @@ export default class ConfirmPhoneNumber extends Component {
               containerclassname="display-only"
               className="display-only"
               phoneNumber
-              hidelabel
             />
           </Form>
           {editMode ?
@@ -119,6 +122,7 @@ export default class ConfirmPhoneNumber extends Component {
             </p>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
+            <label>Enter verification code here:</label>
             <ReactCodeInput
               name="code"
               fields={6}

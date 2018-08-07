@@ -4,7 +4,7 @@
 .ui.popup{
     .content{
         font-size:13px;
-        color:@white;
+        line-height:20px;
     }
 }
 .ui.popup.reward-info{

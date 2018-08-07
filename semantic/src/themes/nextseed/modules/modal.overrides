@@ -93,6 +93,9 @@
                 min-width: 400px;
             }
         }
+        .pdf-viewer {
+            height: 70vh;
+        }
     }
 }
 //  Public pages Ends

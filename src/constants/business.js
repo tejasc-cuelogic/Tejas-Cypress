@@ -533,12 +533,12 @@ export const OFFERING_INFORMATION = {
   maximumOfferingAmount: {
     value: '',
     placeHolder: '0.00',
-    label: 'Deadline to reach the Target Offering Amount',
+    label: 'Maximum Offering Amount (if different from Target Offering Amount)',
     key: 'maximumOfferingAmount',
     error: undefined,
     rule: 'required_if:overSubscriptionAccepted,Y|numeric|max:9999999|regex:/[\\+\\-]?\\d{0,7}\\.\\d\\d/',
     customErrors: {
-      required_if: 'The Deadline to reach the Target Offering Amount field is required when Over subscriptions Accepted is Yes.',
+      required_if: 'The Maximum Offering Amount (if different from Target Offering Amount) field is required when Over subscriptions Accepted is Yes.',
       numeric: 'Please provide numeric values.',
     },
   },
