@@ -7,7 +7,7 @@
         .ui.statistics {
 			.statistic {
 				>.value, >.label {
-					font-size: 13px !important;
+					font-size: @13px !important;
 					color: @white;
 					font-weight: normal;
 					text-transform: none;

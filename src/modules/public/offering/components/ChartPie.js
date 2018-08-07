@@ -1,56 +1,7 @@
 import React, { Component } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Label, Legend, Sector } from 'recharts';
-// import Helper from '../../../../../helper/utility';
-
-/*
-  Reference:
-  http://recharts.org/en-US/examples/CustomActiveShapePieChart
-*/
-const renderActiveShape = (props) => {
-  const {
-    cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, percent,
-  } = props;
-
-  return (
-    <g>
-      <text x={cx} y={cy + 20} dy={13} textAnchor="middle" className="datavalue">{(percent * 100).toFixed(2)}%</text>
-      <Sector
-        cx={cx}
-        cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        fill={fill}
-      />
-      <Sector
-        cx={cx}
-        cy={cy}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        innerRadius={outerRadius - 1}
-        outerRadius={outerRadius + 7}
-        fill={fill}
-      />
-    </g>
-  );
-};
+import { PieChart, Pie, Cell, ResponsiveContainer, Label, Legend } from 'recharts';
 
 export default class ChartPie extends Component {
-  state = {
-    activeIndex: -1,
-    title: '',
-  }
-
-  onPieLeave = () => this.setState({ activeIndex: -1, title: '' });
-
-  onPieEnter = (data, index) => {
-    this.setState({
-      activeIndex: index,
-      title: data.name,
-    });
-  }
-
   renderLegend = (props) => {
     const { payload } = props;
     return (
@@ -72,18 +23,14 @@ export default class ChartPie extends Component {
           <Legend layout="vertical" verticalAlign="middle" align="right" content={this.renderLegend} />
           <Pie
             dataKey="value"
-            activeIndex={this.state.activeIndex}
-            activeShape={renderActiveShape}
             data={data}
-            innerRadius="100%"
-            outerRadius="130%"
+            innerRadius="90%"
+            outerRadius="135%"
             startAngle={-270}
             endAngle={90}
             type="circle"
             fill="#8884d8"
             paddingAngle={0}
-            onMouseEnter={this.onPieEnter}
-            onMouseLeave={this.onPieLeave}
             icon={this.props.icon}
           >
             {
@@ -91,7 +38,7 @@ export default class ChartPie extends Component {
                 <Cell key={colors[index % colors.length]} fill={colors[index % colors.length]} />
               ))
             }
-            <Label value={this.state.title || title} offset={0} position="center" />
+            <Label value={title} offset={0} position="center" />
           </Pie>
         </PieChart>
       </ResponsiveContainer>

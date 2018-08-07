@@ -34,7 +34,7 @@ const TeamList = ({
           <div className="team-overlay">
             <Header as="h4" textAlign="center">
                Join our team
-              <Header.Subheader as={Link} to="/">
+              <Header.Subheader as={Link} to="https://nextseed.workable.com/" target="_blank">
                 <Icon color="green" className="ns-arrow-right" />
               See open positions
               </Header.Subheader>

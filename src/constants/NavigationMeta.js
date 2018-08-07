@@ -70,7 +70,7 @@ export const PRIVATE_NAV = [
     icon: 'ns-dashboard',
     title: 'Summary',
     to: 'summary',
-    path: 'investor/accountSetup/containers/AccountSetup',
+    path: 'investor/summary',
     accessibleTo: ['investor'],
     subPanel: 0,
   },

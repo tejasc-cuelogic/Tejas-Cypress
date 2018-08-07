@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Segment, List, Grid } from 'semantic-ui-react';
+import { Header, List, Grid } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
 const RevenueSharing = () => (
@@ -7,31 +7,24 @@ const RevenueSharing = () => (
     <Grid.Column>
       <Header as="h4">Revenue Sharing Notes</Header>
       <Header as="h3" color="blue">Raise $100,000—$1 Million</Header>
-      <div className="mb-10">
-        <Header as="h5" attached="top">
-          What are the benefits?
-        </Header>
-        <Segment attached>
-          Term notes offer fixed monthly payments at a set interest rate.
-          Each month, your payments are steady and predictable. Plus,
-          with no prepayment penalty, you can pay off the entire balance
-          early without incurring a fee.
-        </Segment>
-      </div>
-      <div className="mb-20">
-        <Header as="h5" attached="top">
-          Who is this option best for?
-        </Header>
-        <Segment attached>
-        This is great for businesses with steady cash flow and the ability
-        to start making payments immediately.
-        </Segment>
-      </div>
-      <List horizontal relaxed className="learn-more-list">
+      <List className="funding-options">
+        <List.Item>
+          <List.Header as="h5">What are the benefits?</List.Header>
+          With revenue sharing notes, you{"'"}re sharing a percentage of gross monthly revenues
+          until you fulfill a total payment back to investors. The structure gives you the
+          flexibility you need to succeed.
+        </List.Item>
+        <List.Item>
+          <List.Header as="h5">Who is this option best for?</List.Header>
+          This is ideal for new businesses that have a ramp up time
+          (e.g., construction) or are driven by seasonality.
+        </List.Item>
+      </List>
+      <List horizontal relaxed className="learn-more-list mt-20">
         <List.Item>
           <List.Header>Learn more</List.Header>
           <List.Icon className="ns-arrow-right" color="green" />
-          <List.Content as="a">Why fundraise on NextSeed?</List.Content>
+          <List.Content as="a">See how a Revenue Sharing Notes Works</List.Content>
         </List.Item>
       </List>
     </Grid.Column>

@@ -9,6 +9,26 @@ const FormRadioGroup = observer((props) => {
   } = props.fielddata;
 
   if (!props.iconic) {
+    if (props.vertical) {
+      return (
+        <div className={props.containerclassname || false}>
+          {
+            values.map(radio => (
+              <Form.Radio
+                key={radio.label}
+                {...props}
+                error={error}
+                label={radio.label}
+                value={radio.value}
+                className={`${props.value} ${radio.value}`}
+                checked={value === radio.value}
+                onChange={props.changed}
+              />
+            ))
+          }
+        </div>
+      );
+    }
     return (
       <Form.Group inline className={props.containerclassname || false}>
         {

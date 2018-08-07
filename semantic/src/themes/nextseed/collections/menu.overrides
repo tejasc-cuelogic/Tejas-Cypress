@@ -116,7 +116,7 @@
                 border-color:@primary-one !important;
                 background-color:transparent !important;
             }
-            .header{
+            &.header{
                 border-color:transparent !important;
             }
         }
@@ -161,6 +161,7 @@
             background-color:transparent;
             .right.menu .item{
                 padding:@13px @7px;
+                font-weight:@normal;
             }
         }
         .item > .icon{
@@ -169,6 +170,7 @@
         >.item, a.item{
             min-width:120px;
             padding:@13px 0;
+            font-weight:@normal;
             &:hover{
                 background-color:transparent;
             }
@@ -206,8 +208,6 @@ footer{
         position: relative;
         .item {
             font-weight: @fontMedium;
-            font-size: @14px;
-            line-height: @20px;
             .ui.image.filterIcon {
                 margin-right: @10px;
             }
@@ -252,15 +252,13 @@ footer{
     }
     .offering-content-spacer {
         .ui.secondary.menu .item {
-            font-weight: bold;
-            line-height: @20px;
-            font-size: @15px;
+            font-weight: @bold;
             color: @neutral;
             >i.icon {
                 font-size: @20px;
             }
             &.span {
-                font-weight: bold;
+                font-weight: @bold;
                 line-height: @24px;
                 font-size: @13px;
                 color: @neutral-middark;
@@ -325,10 +323,10 @@ footer{
         border:none;
     }
     &.secondary-menu{
+        margin:0;
         background-color:@neutral-darkwhite;
         a.item{
             padding:@16px @20px;
-            // font-weight:@fontMedium;
             &:before{
                 background-color:@neutral-darkwhite;
             }
