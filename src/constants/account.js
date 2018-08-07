@@ -163,7 +163,7 @@ export const IND_BANK_LIST = [
 
 export const IRA_ACC_TYPES = {
   iraAccountType: {
-    value: 0,
+    value: '',
     values: [
       {
         label: 'Traditional',

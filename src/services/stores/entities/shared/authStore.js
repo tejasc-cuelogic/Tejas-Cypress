@@ -154,6 +154,11 @@ export class AuthStore {
     }
   }
 
+  @computed
+  get canSubmitConfirmEmail() {
+    return !!this.CONFIRM_FRM.fields.email.error && !!this.CONFIRM_FRM.fields.code.error;
+  }
+
   verifyAndUpdateEmail = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
