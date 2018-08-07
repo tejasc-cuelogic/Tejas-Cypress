@@ -21,7 +21,9 @@ const Careers = () => (
             the place for you.
             </p>
             <div className="center-align mt-30 mb-50">
-              <Button as={Link} to="/" primary>See Job Listings</Button>
+              <Link as={Button} to="https://nextseed.workable.com/" target="_blank" className="ui button primary">
+              See Job Listings
+              </Link>
             </div>
             <Image src={collage} />
           </Grid.Column>
