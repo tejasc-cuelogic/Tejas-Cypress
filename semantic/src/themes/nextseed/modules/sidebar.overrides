@@ -122,8 +122,8 @@
 	&.push:not(.visible){
 		width:64px;
 		transform:translate3D(0,0,0);
-		box-shadow:@boxShadow !important;
-		overflow-y:visible !important;
+		// box-shadow:@boxShadow !important;
+		// overflow-y:visible !important;
 		.user-picture{
 			margin:@24px 0 @7px;
 			> img{
@@ -329,7 +329,7 @@
 		background-color:@neutral;
 	}
 	~ .ui.button.collapseIcon{
-		background-color:transparent;
+		background-color:@neutral;
 		color:@neutral-middark;
 	}
 	&.issuer{
