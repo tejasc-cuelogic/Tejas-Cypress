@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { omit, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getPlaidAccountdata } from './../../queries/account';
@@ -76,8 +76,14 @@ export class BankAccountStore {
   @computed
   get accountAttributes() {
     let accountAttributes = {};
+    const plaidBankDetails = {};
     if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidBankDetails)) {
-      const plaidBankDetails = omit(this.plaidBankDetails, '__typename');
+      plaidBankDetails.accountNumber = this.plaidBankDetails.accountNumber;
+      plaidBankDetails.bankName = this.plaidBankDetails.bankName;
+      plaidBankDetails.plaidPublicToken = this.plaidBankDetails.plaidAccessToken;
+      plaidBankDetails.plaidAccountId = this.plaidBankDetails.plaidAccountId;
+      plaidBankDetails.plaidItemId = this.plaidBankDetails.plaidItemId;
+      plaidBankDetails.routingNumber = this.plaidBankDetails.routingNumber;
       accountAttributes = { ...plaidBankDetails };
     } else {
       const { accountNumber, routingNumber } = this.formLinkBankManually.fields;
