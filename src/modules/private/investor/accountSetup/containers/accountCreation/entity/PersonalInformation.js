@@ -29,7 +29,7 @@ export default class PersonalInformation extends Component {
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Complete personal info about entity</Header>
+        <Header as="h3" textAlign="center">Complete personal info about Entity</Header>
         <p className="center-align">Enter the Authorized Signatory Information</p>
         {errors &&
           <Message error>

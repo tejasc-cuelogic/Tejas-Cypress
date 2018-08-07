@@ -421,7 +421,7 @@ export const LENDIO_PRE_QUAL = {
         label: 'I agree to the conditions above.', value: 'agreeConditions',
       },
       {
-        label: 'I agree to send data to Lendio, our partner.', value: 'sendDataToLendio',
+        label: (<span>I agree to send data to <a href="https://www.lendio.com/" rel="noopener noreferrer" target="_blank" className="link"><b>Lendio</b></a>, our partner.</span>), value: 'sendDataToLendio',
       },
     ],
     error: undefined,

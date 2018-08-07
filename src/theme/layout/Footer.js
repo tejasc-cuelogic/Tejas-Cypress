@@ -5,6 +5,7 @@ import secure from '../../assets/images/secure-horizontal-1.png';
 import { SOCIAL_URLS } from '../../constants/common';
 
 class Footer extends Component {
+<<<<<<< HEAD
   state = { fShowHide: false };
   componentWillMount() {
     if (this.props.path === '/') {
@@ -20,6 +21,10 @@ class Footer extends Component {
       this.setState({ fShowHide: false });
     }
   }
+=======
+  state = { fShowHide: true };
+
+>>>>>>> 695e16bc5741300f6f3e98d8dc93a2b2516face8
   toggleShowHide = () => {
     this.setState({ fShowHide: !this.state.fShowHide });
   }
@@ -29,11 +34,31 @@ class Footer extends Component {
         <div className="footer-head">
           <Container>
             <Menu inverted borderless>
+<<<<<<< HEAD
               <Menu.Item onClick={this.toggleShowHide}>Resources <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} /></Menu.Item>
               <Menu.Item onClick={this.toggleShowHide}>About Us <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} /></Menu.Item>
               <Menu.Item as={Link} to="/agreements/terms-of-use">Terms of Use</Menu.Item>
               <Menu.Item as={Link} to="/agreements/privacy-policy">Privacy Policy</Menu.Item>
               <Menu.Item as={Link} to="/subscribe/newsletter">Sign Up for Newsletter</Menu.Item>
+=======
+              <Menu.Item>
+                <Link to="/resources/education-center">Resources</Link>
+                <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} onClick={this.toggleShowHide} />
+              </Menu.Item>
+              <Menu.Item>
+                About Us
+                <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} onClick={this.toggleShowHide} />
+              </Menu.Item>
+              <Menu.Item>
+                <Link to="/agreements/terms-of-use">Terms of Use</Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to="/agreements/privacy-policy">Privacy Policy</Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to="/subscribe/newsletter">Sign Up for Newsletter</Link>
+              </Menu.Item>
+>>>>>>> 695e16bc5741300f6f3e98d8dc93a2b2516face8
               <Menu.Menu position="right">
                 <Menu.Item>© 2018 NextSeed US LLC</Menu.Item>
                 {Object.keys(SOCIAL_URLS).map(s => (
