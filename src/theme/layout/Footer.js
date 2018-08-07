@@ -20,9 +20,7 @@ class Footer extends Component {
       this.setState({ fShowHide: false });
     }
   }
-  toggleShowHide = () => {
-    this.setState({ fShowHide: !this.state.fShowHide });
-  }
+  toggleShowHide = () => this.setState({ fShowHide: !this.state.fShowHide });
 
   render() {
     return (
