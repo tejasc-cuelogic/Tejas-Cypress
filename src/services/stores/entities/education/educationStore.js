@@ -3,6 +3,7 @@ import graphql from 'mobx-apollo';
 import flatMap from 'lodash/flatMap';
 import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { userStore } from '../../index';
 import { clientSearch } from '../../../../helper';
 import { allKbsQuery, allFaqQuery } from '../../queries/knowledgeBase';
@@ -31,16 +32,19 @@ export class EducationStore {
   ];
 
   @action
-  initRequest = (module) => {
+  initRequest = (module, props) => {
     const query = (module === 'KnowledgeBase') ? allKbsQuery : allFaqQuery;
+    let scopeType = 'INVESTOR';
     if (userStore.currentUser) {
-      const scopeType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
-      this.data = graphql({
-        client,
-        query,
-        variables: { scopeType },
-      });
+      scopeType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
+    } else {
+      scopeType = props.isMkt && props.params.for === 'investor' ? 'INVESTOR' : 'ISSUER';
     }
+    this.data = graphql({
+      client: props.isMkt ? clientPublic : client,
+      query,
+      variables: { scopeType },
+    });
   }
 
   @action
