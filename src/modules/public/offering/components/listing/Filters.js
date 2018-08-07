@@ -33,7 +33,7 @@ export default class Filters extends Component {
                 <Container>
                   <Grid stackable>
                     <Grid.Row>
-                      <Grid.Column width={8}>
+                      <Grid.Column width={8} className="donut-chart">
                         <Header as="h6" dividing>
                           Business Type
                         </Header>

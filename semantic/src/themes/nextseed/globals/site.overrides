@@ -1466,7 +1466,7 @@ ol.progtrckr{
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
-.portfolio-allocation{
+.donut-chart, .portfolio-allocation{
 	.recharts-wrapper{
 		.recharts-legend-wrapper{
 			z-index:-1;
