@@ -31,10 +31,16 @@ const TeamList = ({
       { joinColumn &&
       <Grid.Column>
         <Reveal animated="fade">
-          <div className="team-overlay">
+          <div
+            className="team-overlay"
+            role="button"
+            tabIndex="0"
+            onClick={() => window.open('https://nextseed.workable.com/', '_blank')}
+            onKeyPress={() => window.open('https://nextseed.workable.com/', '_blank')}
+          >
             <Header as="h4" textAlign="center">
                Join our team
-              <Header.Subheader as={Link} to="https://nextseed.workable.com/" target="_blank">
+              <Header.Subheader>
                 <Icon color="green" className="ns-arrow-right" />
               See open positions
               </Header.Subheader>

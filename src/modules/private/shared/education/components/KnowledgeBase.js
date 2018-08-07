@@ -76,7 +76,8 @@ export default class KnowledgeBase extends Component {
               />
               <Route
                 path={`${match.url}/faq`}
-                render={props => <FaqsCombined marketing={marketing} {...props} />}
+                render={props =>
+                  <FaqsCombined marketing={marketing} params={match.params} {...props} />}
               />
               <Route
                 path={`${match.url}/:id`}
