@@ -3,7 +3,7 @@ import { Container, Image, Menu, Dropdown } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { NsCarousel, InlineLoader, PublicSubNav } from '../../../../theme/shared';
+import { NsCarousel, InlineLoader } from '../../../../theme/shared';
 import Insight from '../../../../assets/images/insights2.jpg';
 import InsightArticlesList from '../components/insightArticlesList';
 
@@ -11,8 +11,19 @@ import InsightArticlesList from '../components/insightArticlesList';
 @observer
 export default class Insights extends Component {
   componentWillMount() {
-    this.props.articleStore.requestAllArticles();
+    if (this.props.match.params && this.props.match.params.id) {
+      this.props.articleStore.requestArticlesByCategoryId(this.props.match.params.id);
+    } else {
+      this.props.articleStore.requestAllArticles();
+    }
     this.props.articleStore.getCategoryList();
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.match.params && nextProps.match.params.id) {
+      this.props.articleStore.requestArticlesByCategoryId(nextProps.match.params.id);
+    } else {
+      this.props.articleStore.requestAllArticles();
+    }
   }
   render() {
     const {
@@ -42,12 +53,15 @@ export default class Insights extends Component {
             ))
           }
         </NsCarousel>
-        <PublicSubNav
-          location={this.props.location}
-          navItems={InsightCategories}
-          moreProps={{ class: 'insight-menu', onlyNav: true }}
-          title="ALL"
-          right={
+        <Menu secondary className="menu-secondary-fixed insight-menu">
+          <Container>
+            <Menu.Menu secondary className="menu-secondary">
+              <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
+              {InsightCategories &&
+              InsightCategories.map(item => (
+                <Menu.Item as={Link} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
+              ))}
+            </Menu.Menu>
             <Menu.Item position="right">
               SORT BY
               <Dropdown item text="NEWEST">
@@ -58,8 +72,8 @@ export default class Insights extends Component {
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
-          }
-        />
+          </Container>
+        </Menu>
         <section>
           <Container>
             {loading ? <InlineLoader /> : <InsightArticlesList /> }

@@ -19,13 +19,11 @@ class Footer extends Component {
             <Menu inverted borderless>
               <Menu.Item>
                 <Link to="/resources/education-center">Resources</Link>
-                <Icon name="caret down" onClick={this.toggleShowHide} />
+                <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} onClick={this.toggleShowHide} />
               </Menu.Item>
-              {/* <Menu.Item onClick={this.toggleShowHide}>
-              <Icon name="caret down" /></Menu.Item> */}
               <Menu.Item>
                 About Us
-                <Icon name="caret down" onClick={this.toggleShowHide} />
+                <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} onClick={this.toggleShowHide} />
               </Menu.Item>
               <Menu.Item>
                 <Link to="/agreements/terms-of-use">Terms of Use</Link>
@@ -40,7 +38,7 @@ class Footer extends Component {
                 <Menu.Item>© 2018 NextSeed US LLC</Menu.Item>
                 {Object.keys(SOCIAL_URLS).map(s => (
                   <Menu.Item target="_blank" href={SOCIAL_URLS[s]}><Icon name={s} /></Menu.Item>
-            ))}
+                ))}
               </Menu.Menu>
             </Menu>
           </Container>

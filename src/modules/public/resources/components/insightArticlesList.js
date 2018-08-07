@@ -2,14 +2,22 @@ import React, { Component } from 'react';
 import { Grid, Image, Card } from 'semantic-ui-react';
 import { inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
+import { InlineLoader } from '../../../../theme/shared';
 
 @inject('articleStore')
 class InsightArticlesList extends Component {
   render() {
-    const { InsightArticles } = this.props.articleStore;
+    const { InsightArticles, data } = this.props.articleStore;
+    if (data.loading) {
+      return <InlineLoader />;
+    }
+    if (InsightArticles && InsightArticles.length === 0) {
+      return <InlineLoader text="No record to display." />;
+    }
     return (
       <Grid>
-        {InsightArticles.map(article => (
+        {InsightArticles && InsightArticles.length &&
+        InsightArticles.map(article => (
           <Grid.Column mobile={16} tablet={8} computer={4} fluid>
             <Card className="campaign insights" as={Link} to={`/resources/insights/${article.id}`}>
               <Image
@@ -26,7 +34,8 @@ class InsightArticlesList extends Component {
               </Card.Content>
             </Card>
           </Grid.Column>
-        ))}
+        ))
+      }
       </Grid>);
   }
 }
