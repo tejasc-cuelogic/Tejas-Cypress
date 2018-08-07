@@ -31,6 +31,7 @@
         }
         >.content{
             padding:@21px @28px;
+            line-height:@24px;
             .tags{
                 font-size:@13px;
                 font-weight:@fontMedium;
@@ -44,10 +45,11 @@
                 text-transform:none;
             }
             .description{
-                height:88px;
+                height:80px;
                 margin:@14px 0;
                 overflow:hidden;
                 font-size:@13px;
+                line-height:@20px;
             }
         }
         >.content.card-hidden {

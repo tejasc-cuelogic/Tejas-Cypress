@@ -150,6 +150,7 @@
             margin-right:auto;
         }
         p{
+            font-size:@14px;
             font-weight:@normal;
             color:@neutral-middark;
         }
@@ -342,7 +343,7 @@
     >.close{
         height:30px;
         width:30px;
-        font-size:@14px;
+        font-size:1em;
         line-height:30px;
         padding:0;
         margin:0;
