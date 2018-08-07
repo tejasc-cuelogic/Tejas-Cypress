@@ -3,7 +3,7 @@ import { Container, Image, Menu, Dropdown } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { NsCarousel, InlineLoader } from '../../../../theme/shared';
+import { NsCarousel, InlineLoader, PublicSubNav } from '../../../../theme/shared';
 import Insight from '../../../../assets/images/insights2.jpg';
 import InsightArticlesList from '../components/insightArticlesList';
 
@@ -17,7 +17,6 @@ export default class Insights extends Component {
   render() {
     const {
       InsightCategories,
-      getArticlesById,
       loading,
     } = this.props.articleStore;
     const settings = {
@@ -43,19 +42,12 @@ export default class Insights extends Component {
             ))
           }
         </NsCarousel>
-        <Menu secondary className="menu-secondary-fixed insight-menu">
-          <Container>
-            {loading ? <InlineLoader /> :
-            <Menu.Menu secondary className="menu-secondary">
-              <Menu.Item onClick={() => getArticlesById('all')}>All</Menu.Item>
-              {InsightCategories.map(category => (
-                <Menu.Item onClick={() => getArticlesById(category.id)}>
-                  {category.categoryName}
-                </Menu.Item>
-                ))}
-            </Menu.Menu>
-          }
-
+        <PublicSubNav
+          location={this.props.location}
+          navItems={InsightCategories}
+          moreProps={{ class: 'insight-menu', onlyNav: true }}
+          title="ALL"
+          right={
             <Menu.Item position="right">
               SORT BY
               <Dropdown item text="NEWEST">
@@ -66,8 +58,8 @@ export default class Insights extends Component {
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
-          </Container>
-        </Menu>
+          }
+        />
         <section>
           <Container>
             {loading ? <InlineLoader /> : <InsightArticlesList /> }

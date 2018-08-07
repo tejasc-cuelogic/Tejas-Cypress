@@ -37,3 +37,18 @@ query _getArticleByCategoryId($id:ID! ) {
   }
 }
 `;
+
+export const getArticleDetails = gql`
+query insight($id:ID! ) {
+  insightsArticle(id: $id){
+    id
+    title
+    featureImage
+    content
+    approvedBy{
+      uid
+      comment
+    }
+  }
+}
+`;
