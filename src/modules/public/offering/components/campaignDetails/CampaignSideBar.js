@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter, Route } from 'react-router-dom';
 import { Header, Icon, Statistic, Button, Menu, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import CampaignProgress from './CampaignProgress';
-
+import share from '../campaignDetails/Share';
 @withRouter
 export default class CampaignSideBar extends Component {
   render() {
@@ -46,10 +46,11 @@ export default class CampaignSideBar extends Component {
           <Menu.Item as={Link} to="/" className="watch-deal-menu">
             <Icon name="heart outline" /> Watch Deal
           </Menu.Item>
-          <Menu.Item as={Link} to="/" className="watch-deal-menu">
+          <Menu.Item as={Link} to={`${this.props.match.url}/share`} className="watch-deal-menu">
             <Icon name="share alternate" /> Share
           </Menu.Item>
         </Menu>
+        <Route path={`${this.props.match.url}/share`} component={share} />
       </div>
     );
   }
