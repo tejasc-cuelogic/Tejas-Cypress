@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Image, Icon, Embed, Statistic, Grid, Menu, Label, Divider, Segment, Breadcrumb, Popup, Modal } from 'semantic-ui-react';
+import { Header, Image, Icon, Embed, Statistic, Grid, Menu, Label, Divider, Segment, Breadcrumb, Popup, Modal, List } from 'semantic-ui-react';
 import videoPoster from '../../../../../assets/images/636206632.webp';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
 
@@ -45,7 +45,7 @@ class Overview extends Component {
                     <Grid.Column width={6}>
                       <Breadcrumb>
                         <Breadcrumb.Section>About the Company</Breadcrumb.Section>
-                        <Breadcrumb.Divider icon="right chevron" />
+                        <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                       </Breadcrumb>
                       <Header as="h3">Top things to know</Header>
                       <p><b>Industry: </b>{campaign.industry}<br />
@@ -54,22 +54,22 @@ class Overview extends Component {
                       </p>
                       <p className="detail-section">{campaign.description}</p>
                       <Divider section />
-                      <ul>
-                        <li>
-                          <span>Full-service kitchen, over 40 beers</span>
+                      <List bulleted relaxed>
+                        <List.Item>
+                          <strong>Full-service kitchen, over 40 beers</strong>
                           on tap, open 7 days a week
-                        </li>
-                        <li>
-                          <span>Joining the Sawyer Yards Creative Campus </span>
+                        </List.Item>
+                        <List.Item>
+                          <strong>Joining the Sawyer Yards Creative Campus</strong>
                           of 40 acres, 10 buildings,  400+ Studios, 500+ Artists
-                        </li>
-                        <li>
-                          <span>Get “Free Beer for Life”</span> with any investment over $1,000
-                        </li>
-                        <li>
+                        </List.Item>
+                        <List.Item>
+                          <strong>Get “Free Beer for Life”</strong> with any investment over $1,000
+                        </List.Item>
+                        <List.Item>
                           Investment secured by a blanket lien on all assets of the business
-                        </li>
-                      </ul>
+                        </List.Item>
+                      </List>
                     </Grid.Column>
                     <Grid.Column width={10}>
                       <Embed
@@ -88,7 +88,7 @@ class Overview extends Component {
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section>Investment Details</Breadcrumb.Section>
-                  <Breadcrumb.Divider icon="right chevron" />
+                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                 </Breadcrumb>
                 <Header as="h3" className="mb-30">Investment Return Calculator</Header>
                 <Grid columns={4} divided doubling className="investment-grid" padded="horizontally">
@@ -142,7 +142,7 @@ class Overview extends Component {
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section>Bonus Rewards</Breadcrumb.Section>
-                  <Breadcrumb.Divider icon="right chevron" />
+                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                 </Breadcrumb>
                 <Header as="h3">Investor Rewards</Header>
                 <Image src={noEarlyBird} className="no-early-bird" />
@@ -155,7 +155,7 @@ class Overview extends Component {
               {/* <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section>Bonus Rewards</Breadcrumb.Section>
-                  <Breadcrumb.Divider icon="right chevron" />
+                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                 </Breadcrumb>
                 <Header as="h3">Early Bird Rewards</Header>
               </Segment> */}

@@ -39,8 +39,8 @@
      Divided
 ---------------*/
 
-@dividedBorder: -1px 0px 0px 0px @borderColor;
-@verticallyDividedBorder: 0px -1px 0px 0px @borderColor;
+@dividedBorder: -1px 0px 0px 0px @neutral-darkwhite;
+@verticallyDividedBorder: 0px -1px 0px 0px @neutral-darkwhite;
 
 @dividedInvertedBorder: -1px 0px 0px 0px @whiteBorderColor;
 @verticallyDividedInvertedBorder: 0px -1px 0px 0px @whiteBorderColor;

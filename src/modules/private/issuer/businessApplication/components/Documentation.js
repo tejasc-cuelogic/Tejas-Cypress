@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Form, Popup, Icon, List, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormRadioGroup, DropZone } from '../../../../../theme/form';
+import { FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 

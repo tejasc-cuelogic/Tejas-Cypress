@@ -1,8 +1,3 @@
 /*******************************
          Theme Overrides
 *******************************/
-.ui.breadcrumb {
-    a.section {
-        color: @neutral-middark;
-    }
-}

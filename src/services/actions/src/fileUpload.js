@@ -5,29 +5,29 @@ import { uiStore } from '../../stores';
 import apiService from '../../../api/restApi';
 
 export class FileUpload {
-  setFileUploadData =
-  (applicationId, fileData, stepName, userRole) => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: createUploadEntry,
-        variables: {
-          applicationId,
-          stepName,
-          userRole,
-          fileData,
-        },
-      })
-      .then((result) => {
-        resolve(result);
-      })
-      .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        reject(err);
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  })
+  setFileUploadData = (applicationId, fileData, stepName, userRole) =>
+    new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createUploadEntry,
+          variables: {
+            applicationId,
+            stepName,
+            userRole,
+            fileData,
+          },
+        })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    })
 
   removeUploadedData = (removeFileId) => {
     uiStore.setProgress();

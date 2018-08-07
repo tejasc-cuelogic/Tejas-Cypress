@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Grid, Header } from 'semantic-ui-react';
 import NoBeneficiary from '../components/beneficiaries/NoBeneficiary';
 import BeneficiaryList from '../components/beneficiaries/BeneficiaryList';
+import { InlineLoader, EmptyDataSet } from '../../../../../theme/shared';
 
 @inject('beneficiaryStore')
 @observer
@@ -38,13 +39,12 @@ export default class Beneficiaries extends Component {
             key={beneficiary.accountId}
             curLocation={this.props.location}
           /> : null)
-    )) :
-          <div>loading</div>;
+    )) : <EmptyDataSet title="No data available for beneficiaries." />;
     return (
       <div>
         <Header as="h4">Beneficiaries</Header>
         {/* <p className="intro-text">Pellentesque facilisis</p> */}
-        {bLoading ? <div>loading...</div> : (
+        {bLoading ? <InlineLoader /> : (
           <Grid columns={1} stackable>
             { beneficiaryList }
           </Grid>

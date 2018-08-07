@@ -7,6 +7,11 @@ import { Grid, Icon, Header, Button, Divider } from 'semantic-ui-react';
 @inject('businessAppLendioStore')
 @observer
 export default class LendioSuccess extends Component {
+  proceedHandler = (lendioUrl) => {
+    window.open(`${lendioUrl}`, '_blank');
+    this.props.history.push('/app/dashboard');
+  }
+
   render() {
     const {
       match: {
@@ -32,7 +37,7 @@ export default class LendioSuccess extends Component {
                 <Button
                   color="green"
                   className="relaxed"
-                  onClick={() => window.open(`${lendioUrl}`, '_blank')}
+                  onClick={() => this.proceedHandler(lendioUrl)}
                 >
                   Proceed to Lendio
                 </Button>

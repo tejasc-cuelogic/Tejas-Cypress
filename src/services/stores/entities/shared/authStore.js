@@ -3,7 +3,7 @@ import cookie from 'react-cookies';
 import { isEmpty } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import {
-  LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS,
+  LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail } from '../../queries/profile';
@@ -25,6 +25,7 @@ export class AuthStore {
   @observable CHANGE_PASS_FRM = Validator.prepareFormObject(CHANGE_PASS);
   @observable FORGOT_PASS_FRM = Validator.prepareFormObject(FORGOT_PASS);
   @observable RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
+  @observable NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
   @observable confirmProgress = false;
   @observable pwdInputType = 'password';
 
@@ -67,6 +68,11 @@ export class AuthStore {
   @action
   confirmFormChange = (e, result) => {
     this.CONFIRM_FRM = Validator.onChange(this.CONFIRM_FRM, Validator.pullValues(e, result));
+  };
+
+  @action
+  newsLetterChange = (e, result) => {
+    this.NEWSLETTER_FRM = Validator.onChange(this.NEWSLETTER_FRM, Validator.pullValues(e, result));
   };
 
   @action

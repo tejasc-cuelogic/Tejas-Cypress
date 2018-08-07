@@ -19,10 +19,6 @@ const showValue = props => ((props.type === 1) ?
 const SummaryTitle = props => ((props.details.businessName) ? (
   <Header as="h3">
     {props.details.businessName}
-    {/* <span className="title-meta"><AccTypeTitle moreText="investment" /></span>
-    <span className="title-meta">
-      <Link target="_blank" to={props.details.url}>View offering page</Link>
-    </span> */}
   </Header>
 ) : (
   <Aux>
@@ -35,11 +31,11 @@ const SummaryTitle = props => ((props.details.businessName) ? (
 
 const SummaryHeader = props => (
   <Aux>
-    {props.details.businessName &&
+    {props.details.title !== false && props.details.businessName &&
       <SummaryTitle {...props} />
     }
     <Card fluid className={props.details.className || ''}>
-      {!props.details.businessName &&
+      {props.details.title !== false && !props.details.businessName &&
         <SummaryTitle {...props} />
       }
       <Grid celled="internally" columns={props.details.summary.length} doubling>
