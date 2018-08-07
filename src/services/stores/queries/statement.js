@@ -13,7 +13,6 @@ export const allMonthlyStatements = gql`
     }
   }
 `;
-
 export const allTaxForms = gql`
   query _getAccountTaxForm($accountId: String!) {
     investorAccountTaxForms(accountId: $accountId){
@@ -24,6 +23,15 @@ export const allTaxForms = gql`
         fileId
         fileName
       }
+    }
+  }
+`;
+export const downloadFile = gql`
+  mutation downloadFile($fileId: String!) {
+    downloadFile (
+      fileId: $fileId
+    ) {
+      preSignedUrl
     }
   }
 `;
