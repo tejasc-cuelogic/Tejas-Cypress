@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Container, Grid, Menu, Image, Header, Checkbox, Form, Icon, Popup } from 'semantic-ui-react';
+import BusinessType from './BusinessType';
 import filterIcon from '../../../../../assets/images/icons/icon_filter.png';
 import closeIcon from '../../../../../assets/images/icons/icon_close.png';
 
@@ -36,6 +37,7 @@ export default class Filters extends Component {
                         <Header as="h6" dividing>
                           Business Type
                         </Header>
+                        <BusinessType />
                       </Grid.Column>
                       <Grid.Column width={4}>
                         <Header as="h6" dividing>
