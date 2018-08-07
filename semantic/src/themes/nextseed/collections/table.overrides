@@ -121,6 +121,11 @@
             color:@neutral-middark;
         }
     }
+    &.confirm-transfer-table {
+        tr td {
+            border-top: 0;
+        }
+    }
 }
 
 .compare-table {
