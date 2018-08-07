@@ -12,7 +12,7 @@ const PrivacyPolicy = () => (
     <Divider section />
     <div>
       <p>The Next Seed, Inc. (NextSeed) operates a public website at www.nextseed.com, and also offer an online intermediary platform through its subsidiary NextSeed US LLC for investment crowdfunding in accordance with Regulation Crowdfunding. You may browse the public content on the website without establishing a user account, but you must establish a user account to view and use non-public content on the site and to use the platform. NextSeed is committed to maintaining the confidentiality, integrity, and security of your personal information. This Privacy Policy covers NextSeed’s privacy policies for both its public site visitors and its platform users, and describes:</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item><strong>Data Collected</strong>: the personal data that NextSeed collects from you;</List.Item>
         <List.Item><strong>Use of Data</strong>: the ways that NextSeed uses that personal data, including the ways that it may combine data it collects from you with data it acquires about you from other sources; and</List.Item>
         <List.Item><strong>Disclosure of Data to Others</strong>: the circumstances under which NextSeed might share your personal data with others.</List.Item>
@@ -23,7 +23,7 @@ const PrivacyPolicy = () => (
       <p><strong>Platform Users</strong>: You must provide personal data to establish an account, such as name, physical address, phone number, email address, and other contact information. It is your decision to provide any information; however, without establishing a full account, you may not be able to use certain features on NextSeed. As part of setting up your account, you are required to create a password, password hints, and provide answers to security questions. You are also required to provide financial information for the purpose of making investments and paying our fees, such as your bank account information. You may be required or permitted to publish personal and financial data about yourself as part of the content you post to the public and non-public parts of the site, including the comment sections of the offering pages, by means of the platform, or to qualify you as an appropriate issuer or investor under applicable laws and regulations. We may also collect additional information based on your account usage such as your investment experience. You may also be required or permitted to publish demographic data or information about your interests and background. You may be permitted to publish a photograph of yourself. The nature of these publication features necessarily identifies you to your published content. You may be permitted to share with NextSeed the personal data of your contacts via your local address book or via a third party service such as Facebook or LinkedIn. If you contact us for support (whether by phone, chat, email or other means), we may record and save the contents of the communication.</p>
       <Header as="h5">Use of Data</Header>
       <p>Generally NextSeed uses the personal and other data it collects to provide its platform services, to operate its website and platform efficiently, and to provide a good quality experience for site visitors and platform users. It may also use the information to show you advertisements and other content that may be of particular interest to you while you are on the site or platform. NextSeed may use the information to send you email or other communications about NextSeed’s or third parties’ content, product or services. If you provide NextSeed with information about your contacts, NextSeed will use that information to invite them to view your content, or for other purposes disclosed on the site from time to time. The providers of our analytics tools may use information they collect about your site visit to show you advertisements or other content that may be of particular interest to you. If you establish a platform account, we may tie the information we collect as part of your pre-login site visit to your post login activity on the site and platform. If NextSeed acquires information about you from third parties, such as marketing or advertising firms, security services, or content providers, it may tie this third party provided information to the information it collects from or about you as part of your visit to the site or use of the platform. Here are some specific examples of the ways we use data we have about you:</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>Account Transactions: We use your account data to communicate with you about account transactions or respond to your requests for support (such as fee payments, support requests, platform interactions with your issuers or other investors);</List.Item>
         <List.Item>Fraud, Abuse, Security: We use account and other data to screen for and reduce fraud, spam, abuse, and security problems. We may remove content or block access to the site or platform in our discretion to reduce the risk of fraud, abuse and security problems;</List.Item>
         <List.Item>Business Improvements: We use the data we collect to improve our site and platform, such as changes to the content or organization of the content, developing new platform features, identification of target audiences for our external advertising and publicity efforts;</List.Item>
@@ -31,7 +31,7 @@ const PrivacyPolicy = () => (
         <List.Item>Newsletters and Other Promotional Content. We may use your data to send you communications of interest to you, including promotional communications from us or our issuers. We may use Web beacons to track whether you actually view our messages or content.</List.Item>
       </List>
       <p><strong>Disclosure of Data to Others</strong> We will not disclose your personal data to third parties except as follows:</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>When we believe release is appropriate to comply with the law, to enforce our terms of use and other rights, or to protect the rights and safety of others. This may include exchanging information with government regulatory or law enforcement agencies, or with other companies and organizations for fraud protection and legal compliance.</List.Item>
         <List.Item>To persons who help us provide our products and services to you. We may provide personal and other information to third parties who work for us, such as companies that manage and monitor investment accounts, verify credit card information, process credit card payments, manage e-signing, analyze data, manage contact information and communications, remove repetitive information from customer lists, and provide marketing services. We may also provide certain contact information such as email and contact information to issuers for the purposes of providing services to you under the applicable investment agreements. These providers are not authorized to further disclose your data or to use your data for any other purpose other than providing such services.</List.Item>
         <List.Item>Our site and platform are hosted by third parties and we use third party infrastructure monitoring services. These third parties may have inadvertent or incidental access to your data. These providers are not authorized to further disclose your data or to use your data for any purpose other than providing services to us.</List.Item>
@@ -52,7 +52,7 @@ const PrivacyPolicy = () => (
       <p>Financial companies choose how they share your personal information. Federal law gives consumers the right to limit some but not all sharing. Federal law also requires us to tell you how we collect, share, and protect your personal information. <strong>Please read this notice carefully to understand what we do.</strong></p>
       <Header as="h5">What?</Header>
       <p>The types of personal information we collect and share depend on the product or service you have with us. This information can include:</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>Name and your business name</List.Item>
         <List.Item>Contact information, including mailing and business address, phone and email details</List.Item>
         <List.Item>Bank account information</List.Item>
@@ -65,7 +65,7 @@ const PrivacyPolicy = () => (
       </List>
       <Header as="h5">How?</Header>
       <p>All financial companies need to share customers’ personal information to run their everyday business. In the section below, we list the reasons financial companies can share their customers’ personal information; the reasons NextSeed chooses to share; and whether you can limit this sharing. When you are no longer our customer, we continue to share your information as described in this notice.</p>
-      <Table basic="very">
+      <Table basic>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell><b>Reasons we can share your personal information</b></Table.HeaderCell>
@@ -123,7 +123,7 @@ const PrivacyPolicy = () => (
       <p>To protect your personal information from unauthorized access and use, we use security measures that comply with federal law. These measures include computer safeguards and secured files and buildings.</p>
       <Header as="h5">How does NextSeed collect my personal information?</Header>
       <p>We collect your personal information, for example, when you:</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>Open an account or deposit money</List.Item>
         <List.Item>Apply for a loan</List.Item>
         <List.Item>Provide account information or give us your contact information</List.Item>
@@ -132,12 +132,12 @@ const PrivacyPolicy = () => (
       <p>We may also collect your personal information from others, such as credit bureaus, affiliates, or other companies.</p>
       <Header as="h5">Why can’t I limit&nbsp;all sharing?</Header>
       <p>Federal law gives you the right to limit only:</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>Sharing for affiliates’ everyday business purposes-information about your creditworthiness</List.Item>
         <List.Item>Affiliates from using your information to market to you</List.Item>
         <List.Item>Sharing for non-affiliates companies to market to you</List.Item>
       </List>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>Open an account or deposit money</List.Item>
         <List.Item>Apply for a loan</List.Item>
         <List.Item>Provide account information or give us your contact information</List.Item>
@@ -150,30 +150,30 @@ const PrivacyPolicy = () => (
       <Header as="h4">Definitions</Header>
       <Header as="h5">Affiliates</Header>
       <p>Companies related by common ownership or control. They can be financial and nonfinancial companies.</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>Our affiliates include The Next Seed Inc. and NextSeed TX LLC.</List.Item>
       </List>
       <Header as="h5">Non-affiliates</Header>
       <p>Companies not related by common ownership or control. They can be financial and nonfinancial companies.</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>Non-affiliates we share with can include other financial services companies, lenders, insurance companies, retailers, membership clubs, or other consumer service providers.</List.Item>
       </List>
       <Header as="h5">Joint Marketing</Header>
       <p>A formal agreement between nonaffiliated financial companies that together market financial products or services to you.</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>Our joint marketing partners include other financial services companies,lenders, insurance companies or other consumer service providers.</List.Item>
       </List>
       <Divider section />
       <p>
         <div id="iub-pp-container">
           <div className="iubenda_legal_document">
-            <Header as="h2">Privacy Policy of <strong>www.nextseed.com</strong></Header>
+            <Header as="h3">Privacy Policy of <strong>www.nextseed.com</strong></Header>
             <p>This Website collects some Personal Data from its Users.</p>
-            <Header as="h3" id="owner_of_the_data">Owner and Data Controller</Header>
+            <Header as="h4" id="owner_of_the_data">Owner and Data Controller</Header>
             <p>NextSeed US LLC, 800 Town and Country Blvd, STE 220, Houston, TX 77024</p>
             <p><b>Owner contact email:</b> privacy@nextseed.com</p>
             <Divider hidden />
-            <Header as="h3" id="types_of_data">Types of Data collected</Header>
+            <Header as="h4" id="types_of_data">Types of Data collected</Header>
             <p> Among the types of Personal Data that this Website collects, by itself or through third parties, there are: Cookies, Usage Data, first name, last name, phone number, email address, gender, date of birth, address, password, company name, Tax ID, profession, fax number, country, state, ZIP/Postal code, Social Security number (SSN), city, picture, username, various types of Data, website, data relating to the point of sale, profile picture and unique device identifiers for advertising (Google Advertiser ID or IDFA, for example). </p>
             <p>Complete details on each type of Personal Data collected are provided in the dedicated sections of this privacy policy or by specific explanation texts displayed prior to the Data collection.
               <br />Personal Data may be freely provided by the User, or, in case of Usage Data, collected automatically when using this Website.
@@ -183,14 +183,14 @@ const PrivacyPolicy = () => (
             </p>
             <p>Users are responsible for any third-party Personal Data obtained, published or shared through this Website and confirm that they have the third party&apos;s consent to provide the Data to the Owner.</p>
             <Divider hidden />
-            <Header as="h3" id="place_of_processing">Mode and place of processing the Data</Header>
-            <Header as="h4">Methods of processing</Header>
+            <Header as="h4" id="place_of_processing">Mode and place of processing the Data</Header>
+            <Header as="h5">Methods of processing</Header>
             <p>The Owner takes appropriate security measures to prevent unauthorized access, disclosure, modification, or unauthorized destruction of the Data.
               <br />The Data processing is carried out using computers and/or IT enabled tools, following organizational procedures and modes strictly related to the purposes indicated. In addition to the Owner, in some cases, the Data may be accessible to certain types of persons in charge, involved with the operation of this Website (administration, sales, marketing, legal, system administration) or external parties (such as third-party technical service providers, mail carriers, hosting providers, IT companies, communications agencies) appointed, if necessary, as Data Processors by the Owner. The updated list of these parties may be requested from the Owner at any time.
             </p>
-            <Header as="h4">Legal basis of processing</Header>
+            <Header as="h5">Legal basis of processing</Header>
             <p>The Owner may process Personal Data relating to Users if one of the following applies:</p>
-            <List relaxed="very" bulleted>
+            <List relaxed bulleted>
               <List.Item>Users have given their consent for one or more specific purposes. Note: Under some legislations the Owner may be allowed to process Personal Data until the User objects to such processing (“opt-out”), without having to rely on consent or any other of the following legal bases. This, however, does not apply, whenever the processing of Personal Data is subject to European data protection law;</List.Item>
               <List.Item>provision of Data is necessary for the performance of an agreement with the User and/or for any pre-contractual obligations thereof;</List.Item>
               <List.Item>processing is necessary for compliance with a legal obligation to which the Owner is subject;</List.Item>
@@ -198,32 +198,32 @@ const PrivacyPolicy = () => (
               <List.Item>processing is necessary for the purposes of the legitimate interests pursued by the Owner or by a third party.</List.Item>
             </List>
             <p>In any case, the Owner will gladly help to clarify the specific legal basis that applies to the processing, and in particular whether the provision of Personal Data is a statutory or contractual requirement, or a requirement necessary to enter into a contract. </p>
-            <Header as="h4">Place</Header>
+            <Header as="h5">Place</Header>
             <p>The Data is processed at the Owner&apos;s operating offices and in any other places where the parties involved in the processing are located.</p>
             <p>Depending on the User&apos;s location, data transfers may involve transferring the User&apos;s Data to a country other than their own. To find out more about the place of processing of such transferred Data, Users can check the section containing details about the processing of Personal Data.</p>
             <p>Users are also entitled to learn about the legal basis of Data transfers to a country outside the European Union or to any international organization governed by public international law or set up by two or more countries, such as the UN, and about the security measures taken by the Owner to safeguard their Data.</p>
             <p>If any such transfer takes place, Users can find out more by checking the relevant sections of this document or inquire with the Owner using the information provided in the contact section.</p>
-            <Header as="h4">Retention time</Header>
+            <Header as="h5">Retention time</Header>
             <p>Personal Data shall be processed and stored for as long as required by the purpose they have been collected for.</p>
             <p>Therefore:</p>
-            <List relaxed="very" bulleted>
+            <List relaxed bulleted>
               <List.Item>Personal Data collected for purposes related to the performance of a contract between the Owner and the User shall be retained until such contract has been fully performed.</List.Item>
               <List.Item>Personal Data collected for the purposes of the Owner’s legitimate interests shall be retained as long as needed to fulfill such purposes. Users may find specific information regarding the legitimate interests pursued by the Owner within the relevant sections of this document or by contacting the Owner.</List.Item>
             </List>
             <p>The Owner may be allowed to retain Personal Data for a longer period whenever the User has given consent to such processing, as long as such consent is not withdrawn. Furthermore, the Owner may be obliged to retain Personal Data for a longer period whenever required to do so for the performance of a legal obligation or upon order of an authority.</p>
             <p>Once the retention period expires, Personal Data shall be deleted. Therefore, the right to access, the right to erasure, the right to rectification and the right to data portability cannot be enforced after expiration of the retention period.</p>
-            <Header as="h4" id="use_collected_data">The purposes of processing</Header>
+            <Header as="h5" id="use_collected_data">The purposes of processing</Header>
             <p> The Data concerning the User is collected to allow the Owner to provide its Services, as well as for the following purposes: Analytics, Contacting the User, Infrastructure monitoring, Content performance and features testing (A/B testing), Displaying content from external platforms, Registration and authentication, Content commenting, Social features, Hosting and backend infrastructure, Managing contacts and sending messages, SPAM protection, Interaction with external social networks and platforms, Remarketing and behavioral targeting, Traffic optimization and distribution, Access to third party services&apos; accounts, Advertising, User database management and Managing landing and invitation pages. </p>
             <p>Users can find further detailed information about such purposes of processing and about the specific Personal Data used for each purpose in the respective sections of this document.</p>
-            <Header as="h4" id="facebook_permissions">Facebook permissions asked by this Website</Header>
+            <Header as="h5" id="facebook_permissions">Facebook permissions asked by this Website</Header>
             <p>This Website may ask for some Facebook permissions allowing it to perform actions with the User&apos;s Facebook account and to retrieve information, including Personal Data, from it. This service allows this Website to connect with the User&apos;s account on the Facebook social network, provided by Facebook Inc.</p>
             <p>For more information about the following permissions, refer to the <a href="https://developers.facebook.com/docs/authentication/permissions/" target="_blank">Facebook permissions documentation</a> and to the <a href="https://www.facebook.com/about/privacy/" target="_blank">Facebook privacy policy</a>.</p>
             <p>The permissions asked are the following:</p>
-            <Header as="h4">Basic information</Header>
+            <Header as="h5">Basic information</Header>
             <p>By default, this includes certain User’s Data such as id, name, picture, gender, and their locale. Certain connections of the User, such as the Friends, are also available. If the User has made more of their Data public, more information will be available.</p>
-            <Header as="h4">About Me</Header>
+            <Header as="h5">About Me</Header>
             <p>Provides access to the &apos;About Me&apos; section of the profile.</p>
-            <Header as="h4">Email</Header>
+            <Header as="h5">Email</Header>
             <p>Provides access to the User&apos;s primary email address.</p>
             <Divider hidden />
             <Header as="h3" id="data_processing_detailed_info">Detailed information on the processing of Personal Data</Header>
@@ -481,28 +481,28 @@ const PrivacyPolicy = () => (
             <p> Personal Data collected: various types of Data as specified in the privacy policy of the service. </p>
             <p> Place of processing: US – <a href="https://www.salesforce.com/company/privacy/full_privacy.jsp" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. </p>
             <Divider hidden />
-            <Header as="h3" id="further_data">Further information about Personal Data</Header>
-            <Header as="h4">Electronic Signature Transaction Management</Header>
+            <Header as="h4" id="further_data">Further information about Personal Data</Header>
+            <Header as="h5">Electronic Signature Transaction Management</Header>
             <p> The Personal Data collected for electronic signature transaction management, including (but not limited to) name, email and IP address are shared with DocuSign Inc. in order to complete agreements on the NextSeed Service. Please consult DocuSign&apos;s privacy policy for more information: https://trust.docusign.com/privacy-policy </p>
-            <Header as="h4">Information provided to persons who help us provide our products and services to you</Header>
+            <Header as="h5">Information provided to persons who help us provide our products and services to you</Header>
             <p> We may provide personal and other information to third parties who work for us, such as companies and financial institutions that help manage and monitor investment accounts, fulfill orders, provide customer service, analyze customer data, remove repetitive information from customer lists, and provide marketing services. We do not permit these persons to use this information for any other purpose. </p>
-            <Header as="h4">Information as part of a sale of our assets or a merger of our company</Header>
+            <Header as="h5">Information as part of a sale of our assets or a merger of our company</Header>
             <p> We may in the future sell all or part of our assets or be involved in a merger. It is customary for user information to be included with the transferred assets in these types of transactions. </p>
-            <Header as="h4">Children&apos;s Online Privacy Protection</Header>
+            <Header as="h5">Children&apos;s Online Privacy Protection</Header>
             <p> Neither our Web sites nor our products are designed for or directed to children under the age of 13, and we will not intentionally maintain information about anyone under the age of 13. </p>
-            <Header as="h4">FullStory</Header>
+            <Header as="h5">FullStory</Header>
             <p> Personal Data collected: Name, Email, System Assigned User ID, Cookie and Usage data. </p>
-            <Header as="h4">Selling goods and services online</Header>
+            <Header as="h5">Selling goods and services online</Header>
             <p>The Personal Data collected are used to provide the User with services or to sell goods, including payment and possible delivery.
               <br /> The Personal Data collected to complete the payment may include the credit card, the bank account used for the transfer, or any other means of payment envisaged. The kind of Data collected by this Website depends on the payment system used.
             </p>
-            <Header as="h4">Unique device identification</Header>
+            <Header as="h5">Unique device identification</Header>
             <p>This Website may track Users by storing a unique identifier of their device, for analytics purposes or for storing Users&apos; preferences.</p>
             <Divider hidden />
             <Header as="h3">The rights of Users</Header>
             <p>Users may exercise certain rights regarding their Data processed by the Owner.</p>
             <p>In particular, Users have the right to do the following:</p>
-            <List relaxed="very" bulleted>
+            <List relaxed bulleted>
               <List.Item><b>Withdraw their consent at any time.</b> Users have the right to withdraw consent where they have previously given their consent to the processing of their Personal Data.</List.Item>
               <List.Item><b>Object to processing of their Data.</b> Users have the right to object to the processing of their Data if the processing is carried out on a legal basis other than consent. Further details are provided in the dedicated section below.</List.Item>
               <List.Item><b>Access their Data.</b> Users have the right to learn if Data is being processed by the Owner, obtain disclosure regarding certain aspects of the processing and obtain a copy of the Data undergoing processing.</List.Item>

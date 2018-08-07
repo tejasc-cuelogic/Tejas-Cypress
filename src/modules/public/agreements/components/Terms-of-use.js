@@ -38,7 +38,7 @@ const ambassadors = () => (
       <p>If you provide any feedback, comments, or suggestions for the improvement of the Platform (“Suggestions”), you hereby license the Suggestions and all related intellectual property to NextSeed on a non-exclusive, worldwide, fully paid, perpetual, irrevocable basis for NextSeed to use, disclose, modify, reproduce, license, distribute, commercialize and otherwise freely exploit without restriction of any kind.</p>
       <Header as="h5">USER REPRESENTATIONS, WARRANTIES, COVENANTS</Header>
       <p>All Users make the following representations, warranties and covenants:</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>You own or have all necessary rights to post your User Content on the Platform, and your posting of your User Content does not infringe or violate the intellectual property rights or privacy rights of any person and does not and will not result in a breach of contract between you and a third party. You agree to pay for all royalties, fees, and any other monies owing any person by reason of your posting your User Content on or through the NextSeed Platform;</List.Item>
         <List.Item>You will use the Platform, User Content, and NextSeed Content in compliance with applicable law, including State and federal laws governing securities transactions;</List.Item>
         <List.Item>You will use the Platform in compliance with these Terms;</List.Item>
@@ -50,7 +50,7 @@ const ambassadors = () => (
       <p><strong>You are responsible for investigating the accuracy and completeness of any User Content that you rely on. You agree that, between you and NextSeed, your use of any User Content is at your sole risk.</strong></p>
       <p><strong>You are responsible for the accuracy and completeness of your User Content</strong></p>
       <p>Specifically, but without limitation, NextSeed is not responsible for investigating any of the following:</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>whether any statement is true or includes all facts necessary to make the statement not misleading</List.Item>
         <List.Item>whether any User’s reported annual income or net worth is accurate</List.Item>
         <List.Item>whether any proposed transaction complies with applicable law or regulation</List.Item>
@@ -83,7 +83,7 @@ const ambassadors = () => (
       <Header as="h5">ACCEPTABLE USE POLICY</Header>
       <p>You may not post User Content, or use the Platform in a way that might violate or threaten the rights, safety or privacy of others. NextSeed may refuse or remove from the Platform any User Content at any time in its commercially reasonable discretion. Specifically, but without limitation, NextSeed may refuse or remove any User Content that it reasonably believes violates these Terms or applicable law, or that might violate the rights or threaten the safety of Users or third parties, or that it otherwise finds abusive or offensive.</p>
       <p>For example, you may not:</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>Post information on behalf of another person or entity without their consent;</List.Item>
         <List.Item>Post incomplete, false, or misleading information in a user profile, impersonate another person, or misrepresent your affiliation with a person or entity, particularly in any attempt to learn sensitive information;</List.Item>
         <List.Item>Harass, incite others to harass, advocate harassment, or post any unlawful, harmful, defamatory, threatening, vulgar, sexually explicit, hateful, or otherwise objectionable material;</List.Item>
@@ -91,7 +91,7 @@ const ambassadors = () => (
         <List.Item>Post content that is otherwise fraudulent, unlawful, threatening, disingenuous, libelous, defamatory, obscene, scandalous, inflammatory, pornographic or profane, or any material that could constitute or encourage conduct that would be considered a criminal offense, give rise to civil liability, or otherwise violate any law</List.Item>
       </List>
       <p>You may not use the NextSeed Platform in any way that does not further the Purpose, or in a way that modifies, damages, disrupts, disables, overburdens, impairs, alters or interferes with the use, features, functions, operation, security or maintenance of the Platform, or the rights or use and enjoyment of the Platform by any other person or entity in any manner. For example, you may not:</p>
-      <List relaxed="very" bulleted>
+      <List relaxed bulleted>
         <List.Item>Aggregate, copy, or duplicate any NextSeed Content</List.Item>
         <List.Item>Sell, promote, or advertise products or services other that in furtherance of the Purpose</List.Item>
         <List.Item>Post links, advertisements, or other content from competitors’ websites</List.Item>
