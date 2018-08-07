@@ -9,7 +9,7 @@ import { FormRadioGroup } from '../../../../../../../theme/form';
 export default class AccountType extends Component {
   getOptionDetails = () => {
     const { value, values } = this.props.iraAccountStore.ACC_TYPES_FRM.fields.iraAccountType;
-    return find(values, v => v.value === value).description;
+    return find(values, v => v.value === value) ? find(values, v => v.value === value).description : '';
   };
   render() {
     const { ACC_TYPES_FRM, accTypesChange } = this.props.iraAccountStore;

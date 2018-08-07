@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import cookie from 'react-cookies';
+import { isEmpty } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS,
@@ -156,7 +157,8 @@ export class AuthStore {
 
   @computed
   get canSubmitConfirmEmail() {
-    return !!this.CONFIRM_FRM.fields.email.error && !!this.CONFIRM_FRM.fields.code.error;
+    return !isEmpty(this.CONFIRM_FRM.fields.email.value) && !this.CONFIRM_FRM.fields.email.error &&
+    !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
   }
 
   verifyAndUpdateEmail = () => {

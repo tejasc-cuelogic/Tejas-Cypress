@@ -48,7 +48,7 @@ export default class Summary extends Component {
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell><b>Account type</b></Table.Cell>
-                    <Table.Cell>{accountType.label}</Table.Cell>
+                    <Table.Cell>{accountType ? accountType.label : ''}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
                     <Table.Cell><b>Funding option</b></Table.Cell>

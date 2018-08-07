@@ -68,7 +68,12 @@ export default class ConfirmEmailAddress extends Component {
   render() {
     const changeEmailAddressLink = this.props.refLink ?
       this.props.refLink : '/auth/register-investor';
-    const { CONFIRM_FRM, ConfirmChange, confirmProgress, canSubmitConfirmEmail } = this.props.authStore;
+    const {
+      CONFIRM_FRM,
+      ConfirmChange,
+      confirmProgress,
+      canSubmitConfirmEmail,
+    } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
@@ -104,7 +109,7 @@ export default class ConfirmEmailAddress extends Component {
               onChange={ConfirmChange}
             />
             <div className="center-align">
-              <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!CONFIRM_FRM.meta.isValid || (this.props.refLink && canSubmitConfirmEmail)}>Confirm</Button>
+              <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))}>Confirm</Button>
             </div>
             <div className="center-align">
               <Button type="button" className="cancel-link" loading={confirmProgress === 'resend' && inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
