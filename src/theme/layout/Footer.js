@@ -19,16 +19,13 @@ class Footer extends Component {
             <Menu inverted borderless>
               <Menu.Item>
                 <Link to="/resources/education-center">Resources</Link>
-                <Icon name="caret down" onClick={this.toggleShowHide} />
+                <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} onClick={this.toggleShowHide} />
+                {/* <Icon name="caret down" onClick={this.toggleShowHide} /> */}
               </Menu.Item>
-              {/* <Menu.Item onClick={this.toggleShowHide}>
-              <Icon name="caret down" /></Menu.Item> */}
               <Menu.Item>
                 About Us
-                <Icon name="caret down" onClick={this.toggleShowHide} />
+                <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} onClick={this.toggleShowHide} />
               </Menu.Item>
-              {/* <Menu.Item onClick={this.toggleShowHide}>
-              <Icon name="caret down" /></Menu.Item> */}
               <Menu.Item>Contact</Menu.Item>
               <Menu.Item>
                 <Link to="/agreements/terms-of-use">Terms of Use</Link>
