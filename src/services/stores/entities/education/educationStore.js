@@ -38,10 +38,10 @@ export class EducationStore {
     if (userStore.currentUser) {
       scopeType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
     } else {
-      scopeType = props.isMkt && props.params.for === 'investor' ? 'INVESTOR' : 'ISSUER';
+      scopeType = props && props.isMkt && props.params.for === 'investor' ? 'INVESTOR' : 'ISSUER';
     }
     this.data = graphql({
-      client: props.isMkt ? clientPublic : client,
+      client: props && props.isMkt ? clientPublic : client,
       query,
       variables: { scopeType },
     });
