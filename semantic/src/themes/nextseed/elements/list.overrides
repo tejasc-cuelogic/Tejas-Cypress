@@ -40,30 +40,33 @@
                 top: @31px;
                 z-index: 2;
             }
-            &:first-child:after {
-                content: "";
-                height: 35px;
-                width: 1px;
-                position: absolute;
-                left: -1px;
-                top: 0;
-                visibility: visible;
-                z-index: 1;
-                background: @white;
+            &:first-child{
+                .box:after {
+                    content: "";
+                    height: 35px;
+                    width: 1px;
+                    position: absolute;
+                    left: -32px;
+                    top: 0;
+                    z-index: 1;
+                    background: @white;
+                }
             }
-            &:last-child:after {
-                content: "";
-                height: 100%;
-                width: 1px;
-                position: absolute;
-                left: -1px;
-                top: 35px;
-                z-index: 1;
-                background: @white;
+            &:last-child{
+                .box:after {
+                    content: "";
+                    height: 100%;
+                    width: 1px;
+                    position: absolute;
+                    left: -32px;
+                    top: 35px;
+                    z-index: 1;
+                    background: @white;
+                }
             }
             h4.ui.header {
                 position: absolute;
-                left: -230px;
+                left: -265px;
                 top: @24px;
                 text-align: right;
                 width: 210px;
