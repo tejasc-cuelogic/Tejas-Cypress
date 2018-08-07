@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Image, Menu, Dropdown } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { NsCarousel, InlineLoader } from '../../../../theme/shared';
 import Insight from '../../../../assets/images/insights2.jpg';
@@ -59,7 +59,7 @@ export default class Insights extends Component {
               <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
               {InsightCategories &&
               InsightCategories.map(item => (
-                <Menu.Item as={Link} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
+                <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
               ))}
             </Menu.Menu>
             <Menu.Item position="right">
