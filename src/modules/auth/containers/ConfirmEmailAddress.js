@@ -101,21 +101,21 @@ export default class ConfirmEmailAddress extends Component {
             </Message>
           }
           <Form onSubmit={this.handleSubmitForm}>
-            <label>Enter verification code here:</label>
-            <ReactCodeInput
-              fields={6}
-              type="number"
-              filterChars
-              className="otp-field"
-              fielddata={CONFIRM_FRM.fields.code}
-              onChange={ConfirmChange}
-            />
-            <div className="center-align">
+            <Form.Field className="otp-wrap">
+              <label>Enter verification code here:</label>
+              <ReactCodeInput
+                fields={6}
+                type="number"
+                filterChars
+                className="otp-field"
+                fielddata={CONFIRM_FRM.fields.code}
+                onChange={ConfirmChange}
+              />
+            </Form.Field>
+            <Button.Group vertical>
               <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))}>Confirm</Button>
-            </div>
-            <div className="center-align">
-              <Button type="button" className="cancel-link" loading={confirmProgress === 'resend' && inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
-            </div>
+              <Button type="button" className="link-button cancel-link" loading={confirmProgress === 'resend' && inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
+            </Button.Group>
           </Form>
         </Modal.Content>
       </Modal>
