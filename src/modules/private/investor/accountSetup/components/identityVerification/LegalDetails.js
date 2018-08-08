@@ -106,12 +106,10 @@ const LegalDetails = observer(({
           ssn
           changed={maskChange}
         />
-        <div className="center-align">
+        <Button.Group vertical>
           <Button loading={inProgress} size="large" color="green" className="very relaxed" >Verify my identity</Button>
-        </div>
-        <div className="center-align">
           <Button type="button" className="cancel-link" onClick={close}>I’ll finish this later</Button>
-        </div>
+        </Button.Group>
       </Form>
     </Modal.Content>
   </Modal>
