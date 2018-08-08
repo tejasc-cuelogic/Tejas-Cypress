@@ -19,8 +19,7 @@ Validator.register(
 export const securitySections = [
   {
     title: 'Password',
-    description: `Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.
-    Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.`,
+    description: 'Change your NextSeed Password.',
     action: ['change-password', 'Change Password'],
   },
   {
@@ -32,8 +31,7 @@ export const securitySections = [
   {
     title: 'Multi-factor Authentication',
     description: 'You can choose your Active MFA Factor.',
-    descriptionNotAvailable: `Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.
-    Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.`,
+    descriptionNotAvailable: '',
     action: ['mfa', 'Manage multi-factor autentication'],
   },
 ];

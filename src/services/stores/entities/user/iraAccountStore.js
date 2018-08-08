@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, omit } from 'lodash';
+import { isEmpty, find } from 'lodash';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import {
   IRA_ACC_TYPES,
@@ -92,7 +92,13 @@ class IraAccountStore {
     payload.iraAccountType = this.accountType.rawValue;
     payload.fundingType = this.fundingOption.rawValue;
     if (this.fundingOption.rawValue === 'check' && !isEmpty(bankAccountStore.plaidBankDetails)) {
-      const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+      const plaidBankDetails = {};
+      plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
+      plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
+      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
+      plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
+      plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
+      plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
       payload.iraBankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -148,7 +154,13 @@ class IraAccountStore {
         if (isValidCurrentStep) {
           uiStore.setProgress();
           if (!isEmpty(bankAccountStore.plaidBankDetails)) {
-            const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+            const plaidBankDetails = {};
+            plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
+            plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
+            plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
+            plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
+            plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
+            plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
             accountAttributes.iraBankDetails = plaidBankDetails;
           } else {
             const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;

@@ -7,13 +7,13 @@
 --------------------*/
 
 @zIndex: 1900;
-@background: @green;
+@background: @white;
 
 @maxWidth: 250px;
-@borderColor: transparent;
+@borderColor: @solidBorderColor;
 @borderWidth: 1px;
-@boxShadow: none;
-@color: @white;
+@boxShadow: @floatingShadow;
+@color: @textColor;
 
 @verticalPadding: 0.833em;
 @horizontalPadding: 1em;
@@ -41,7 +41,7 @@
 @headerLineHeight: 1.2;
 
 /* Content Border */
-@border: @borderWidth solid @green;
+@border: @borderWidth solid @borderColor;
 
 /* Arrow */
 @arrowBackground: @background;
@@ -67,7 +67,7 @@
 --------------------*/
 
 /* Tooltip */
-@tooltipBackground: @green;
+@tooltipBackground: @background;
 @tooltipBorderRadius: @borderRadius;
 @tooltipPadding: @verticalPadding @horizontalPadding;
 @tooltipFontWeight: @fontWeight;

@@ -262,7 +262,7 @@
         margin-top:30px;
     }
     label{
-        font-size:13px;
+        font-size:@13px;
         font-weight:@fontMedium;
         margin-bottom:@4px;
         display:inline-block;

@@ -1,9 +1,9 @@
 import React from 'react';
 
-const emptyDataSet = props => (
+const EmptyDataSet = props => (
   <div>
     {props.title ? props.title : 'No data available'}
   </div>
 );
 
-export default emptyDataSet;
+export default EmptyDataSet;

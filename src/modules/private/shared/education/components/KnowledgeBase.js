@@ -11,7 +11,8 @@ import FaqsCombined from './FaqsCombined';
 @observer
 export default class KnowledgeBase extends Component {
   componentWillMount() {
-    this.props.educationStore.initRequest('KnowledgeBase');
+    const props = { isMkt: this.props.marketing, params: this.props.match.params };
+    this.props.educationStore.initRequest('KnowledgeBase', props);
   }
   search = (e) => {
     this.props.educationStore.setSrchParam(e.target.value);
@@ -75,7 +76,8 @@ export default class KnowledgeBase extends Component {
               />
               <Route
                 path={`${match.url}/faq`}
-                render={props => <FaqsCombined marketing={marketing} {...props} />}
+                render={props =>
+                  <FaqsCombined marketing={marketing} params={match.params} {...props} />}
               />
               <Route
                 path={`${match.url}/:id`}

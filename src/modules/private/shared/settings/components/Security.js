@@ -19,8 +19,9 @@ export default class Security extends Component {
         <Route exact path={`${match.url}/mfa`} component={ManageMultiFactorAuth} />
         <Header as="h4">Security</Header>
         <p className="intro-text">
-          Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris<br />
-          nec malesuada fames ac turpisPellentesque facilisis. Nulla imperdiet sit amet magna.
+          Manage your security settings and contact information.<br />
+          Its important to update your password regularly and utilize the security features
+          that apply to you.
         </p>
         <Grid>
           {
