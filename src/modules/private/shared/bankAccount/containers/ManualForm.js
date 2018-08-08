@@ -61,10 +61,10 @@ export default class ManualForm extends Component {
             />
           </div>
           <div className="center-align">
-            <Button primary size="large" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
-          </div>
-          <div className="center-align">
-            <Button type="button" className="cancel-link" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
+            <Button.Group vertical>
+              <Button primary size="large" className="relaxed" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
+              <Button type="button" className="link-button cancel-link" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
+            </Button.Group>
           </div>
         </Form>
       </div>

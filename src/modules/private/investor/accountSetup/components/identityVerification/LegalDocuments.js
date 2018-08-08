@@ -92,7 +92,7 @@ const LegalDocuments = observer(({
         <Divider section hidden />
         <div className="center-align">
           <Button.Group vertical>
-            <Button loading={submitVerificationsDocs && inProgress} primary size="large" className="very relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
+            <Button loading={submitVerificationsDocs && inProgress} primary size="large" className="relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
             <Button type="button" className="link-button cancel-link" onClick={() => close()}>I`ll finish this later</Button>
           </Button.Group>
         </div>
