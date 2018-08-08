@@ -81,7 +81,7 @@ export default class ConfirmEmailAddress extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
           <Divider />
-          <p>Please confirm the 6-digit verification<br /> code sent to your email</p>
+          <p>Please confirm the 6-digit verification code sent to your email</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput

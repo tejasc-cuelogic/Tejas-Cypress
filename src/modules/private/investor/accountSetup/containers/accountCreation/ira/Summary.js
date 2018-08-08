@@ -11,8 +11,9 @@ import { ListErrors } from '../../../../../../../theme/shared';
 @observer
 export default class Summary extends Component {
   handleCreateAccount = () => {
-    this.props.iraAccountStore.createAccount('Summary', 'submit');
-    this.props.history.push('/app/summary');
+    this.props.iraAccountStore.createAccount('Summary', 'submit').then(() => {
+      this.props.history.push('/app/summary');
+    });
   }
   render() {
     const {
@@ -35,7 +36,7 @@ export default class Summary extends Component {
       plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>
-        <Header as="h3" textAlign="center">Verify your information and <br /> create an IRA account</Header>
+        <Header as="h3" textAlign="center">Verify your information and create an IRA account</Header>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />

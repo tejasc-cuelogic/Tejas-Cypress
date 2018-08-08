@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput2 } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
-// import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
 
 @inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore')
@@ -14,13 +13,9 @@ export default class ManualForm extends Component {
     if (this.props.accountStore.investmentAccType === 'individual') {
       this.props.individualAccountStore.createAccount().then(() => {
         this.props.individualAccountStore.setStepToBeRendered(1);
-      });
+      })
+        .catch(() => { });
     } else {
-      // const currentStep = {
-      //   name: 'Link bank',
-      //   validate: validationActions.validateLinkBankForm,
-      // };
-      // this.props.entityAccountStore.createAccount(currentStep);
       this.props.bankAccountStore.setShowAddFunds();
     }
   }

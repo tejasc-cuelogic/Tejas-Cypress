@@ -67,7 +67,7 @@ const LegalDocuments = observer(({
                     <List bulleted>
                       <List.Item>Utility bill in your name for that address</List.Item>
                       <List.Item>
-                        Signed lease (if an apartment) that shows the<br />
+                        Signed lease (if an apartment) that shows the
                         address (just the signature page)
                       </List.Item>
                       <List.Item>Voided check with your name  and address on it</List.Item>

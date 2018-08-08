@@ -10,8 +10,10 @@ import Helper from '../../../../../../../helper/utility';
 @observer
 export default class Summary extends React.Component {
   handleCreateAccount = () => {
-    this.props.individualAccountStore.createAccount('Summary', 'submit');
-    this.props.history.push('summary');
+    this.props.individualAccountStore.createAccount('Summary', 'submit').then(() => {
+      this.props.history.push('summary');
+    })
+      .catch(() => {});
   }
   render() {
     const { errors } = this.props.uiStore;
