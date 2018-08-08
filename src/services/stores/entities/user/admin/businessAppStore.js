@@ -107,7 +107,7 @@ export class BusinessAppStore {
           updatedDate: '07/07/2018',
           failedReasons: 'Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000',
           applicationStatus: 'PRE_QUALIFICATION_FAILED',
-          status: 'NEW',
+          status: '',
           ratings: 0,
         },
         {
@@ -127,7 +127,7 @@ export class BusinessAppStore {
           updatedDate: '07/07/2018',
           failedReasons: 'Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000',
           applicationStatus: 'PRE_QUALIFICATION_FAILED',
-          status: 'NEW',
+          status: '',
           ratings: 0,
         }],
       };
@@ -178,7 +178,7 @@ export class BusinessAppStore {
           updatedDate: '07/08/2018',
           failedReasons: '',
           applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
-          status: 'REMOVED',
+          status: 'STASH',
           ratings: 0,
           businessDetails: {
             stepStatus: 'COMPLETE',
@@ -207,7 +207,7 @@ export class BusinessAppStore {
           updatedDate: '07/08/2018',
           failedReasons: '',
           applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
-          status: 'REMOVED',
+          status: '',
           ratings: 0,
           businessDetails: {
             stepStatus: 'COMPLETE',
@@ -240,7 +240,7 @@ export class BusinessAppStore {
           updatedDate: '07/07/2018',
           failedReasons: '',
           applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'DELETED',
+          status: 'NEW',
           ratings: 0,
           businessDetails: {
             stepStatus: 'COMPLETE',
@@ -269,7 +269,7 @@ export class BusinessAppStore {
           updatedDate: '07/08/2018',
           failedReasons: '',
           applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'REMOVED',
+          status: 'ACCEPTED',
           ratings: 0,
           businessDetails: {
             stepStatus: 'COMPLETE',
@@ -298,7 +298,7 @@ export class BusinessAppStore {
           updatedDate: '07/08/2018',
           failedReasons: '',
           applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'REMOVED',
+          status: 'OFFERED',
           ratings: 0,
           businessDetails: {
             stepStatus: 'COMPLETE',
@@ -327,7 +327,7 @@ export class BusinessAppStore {
           updatedDate: '07/08/2018',
           failedReasons: '',
           applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'REMOVED',
+          status: 'DELETED',
           ratings: 0,
           businessDetails: {
             stepStatus: 'COMPLETE',

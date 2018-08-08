@@ -1,38 +1,46 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Table, Button } from 'semantic-ui-react';
 import { includes } from 'lodash';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
-export const ApplicationListButtons = props => (
-  <Table.Cell width={1} textAlign="center">
-    <Button.Group vertical compact size="mini">
-      {!includes(['DELETED', 'REMOVED'], props.status) &&
-      props.appStatus ===
-      BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
-      <Button color="green">Promote</Button>
-      }
-      {props.appStatus ===
-      BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
-      <Aux>
-        {!includes(['DELETED', 'REMOVED', 'STASH'], props.status) &&
-        <Button color="green">Stash</Button>
-        }
-        {includes(['STASH'], props.status) &&
-        <Button color="green" inverted className="relaxed">UnStash</Button>
-        }
-      </Aux>
-      }
-      {includes(['DELETED'], props.status) &&
-      <Aux>
-        <Button color="blue">Restore</Button>
-        <Button color="red">Remove</Button>
-      </Aux>
-      }
-      {!includes(['DELETED', 'REMOVED'], props.status) &&
-      <Button color="red">Delete</Button>
-      }
-      <Button color="blue" inverted className="relaxed">View</Button>
-    </Button.Group>
-  </Table.Cell>
-);
+export default class ApplicationListButtons extends Component {
+  onDeleteHandler = (applicationId) => {
+    console.log(applicationId);
+  }
+  render() {
+    return (
+      <Table.Cell width={1} textAlign="center">
+        <Button.Group vertical compact size="mini">
+          {!includes(['DELETED', 'REMOVED'], this.props.status) &&
+          this.props.appStatus ===
+          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
+          <Button color="green">Promote</Button>
+          }
+          {this.props.appStatus ===
+          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
+          <Aux>
+            {!includes(['DELETED', 'REMOVED', 'STASH'], this.props.status) &&
+            <Button color="green">Stash</Button>
+            }
+            {includes(['STASH'], this.props.status) &&
+            <Button color="green" inverted className="relaxed">Unstash</Button>
+            }
+          </Aux>
+          }
+          {includes(['DELETED'], this.props.status) &&
+          <Aux>
+            <Button color="blue">Restore</Button>
+            <Button color="red">Remove</Button>
+          </Aux>
+          }
+          {!includes(['DELETED', 'REMOVED'], this.props.status) &&
+          <Button as={Link} to={`${this.props.refLink}/confirm`} color="red">Delete</Button>
+          }
+          <Button color="blue" inverted className="relaxed">View</Button>
+        </Button.Group>
+      </Table.Cell>
+    );
+  }
+}

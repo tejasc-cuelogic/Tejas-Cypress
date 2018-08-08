@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
-
+import DeleteAppModal from '../components/DeleteAppModal';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -32,12 +32,12 @@ export default class ManageApplications extends Component {
         {...this.props}
       >
         <Switch>
-          {/* <Route exact path={match.url} component={getModule(navItems[0].component)} /> */}
           {
             navItems.map(item => (
               <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
             ))
           }
+          <Route exact path={`${match.url}/:id/confirm`} component={DeleteAppModal} />
         </Switch>
       </PrivateLayout>
     );

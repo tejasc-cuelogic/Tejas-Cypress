@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-// import { includes } from 'lodash';
 import { Form, Grid, Input, Button, Menu, Icon, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
 import { FormCheckbox } from '../../../../../theme/form';
 import { ApplicationListStepColumn } from './ApplicationListStepColumn';
-import { ApplicationListButtons } from './ApplicationListButtons';
+import ApplicationListButtons from './ApplicationListButtons';
 import { AppStatusLabel } from './AppStatusLabel';
 
 @inject('businessAppAdminStore')
@@ -33,6 +32,7 @@ export default class ApplicationsList extends Component {
   }
 
   render() {
+    const { match } = this.props;
     const {
       getBusinessApplication,
       requestState,
@@ -108,7 +108,6 @@ export default class ApplicationsList extends Component {
                         <Header as="h6">
                           {application.info.businessName}
                           <AppStatusLabel status={application.status} />
-                          {/* <Label color="red" size="small" horizontal>Declined</Label> */}
                         </Header>
                         <div className="table-info-wrap">
                           <p>{application.info.name}<br />
@@ -139,6 +138,8 @@ export default class ApplicationsList extends Component {
                         application={application}
                       />
                       <ApplicationListButtons
+                        refLink={match.url}
+                        applicationId={application.applicationId}
                         appStatus={application.applicationStatus}
                         status={application.status}
                       />
