@@ -9,6 +9,7 @@ import { FormCheckbox } from '../../../../../theme/form';
 import { ApplicationListStepColumn } from './ApplicationListStepColumn';
 import ApplicationListButtons from './ApplicationListButtons';
 import { AppStatusLabel } from './AppStatusLabel';
+import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('businessAppAdminStore')
 @observer
@@ -144,7 +145,7 @@ export default class ApplicationsList extends Component {
                         status={application.status}
                       />
                     </Table.Row>
-                  )) : null
+                  )) : <InlineLoader text="No data available." />
                 }
               </Table.Body>
             </Table>

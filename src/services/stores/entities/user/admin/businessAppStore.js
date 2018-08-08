@@ -1,14 +1,10 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { includes, isArray } from 'lodash';
-// import graphql from 'mobx-apollo';
-// import { FormValidator as Validator } from '../../../../../helper';
-// import { GqlClient as client } from '../../../../../api/gqlApi';
-// import Helper from '../../../../../helper/utility';
-// import { uiStore, navStore, userStore } from '../../../index';
+import { includes, isArray, filter, forEach } from 'lodash';
 import { FILTER_META } from '../../../../../constants/user';
 
 export class BusinessAppStore {
   @observable businessApplicationsList = [];
+  @observable backup = [];
   @observable columnTitle = '';
   @observable requestState = {
     lek: null,
@@ -32,7 +28,7 @@ export class BusinessAppStore {
   initiateSearch = (srchParams) => {
     this.requestState.lek = null;
     this.requestState.search = srchParams;
-    // this.initRequest();
+    this.initRequest();
   }
 
   @action
@@ -72,11 +68,11 @@ export class BusinessAppStore {
         break;
       case 'in-progress':
         this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, 'in-progress'));
-        this.filterApplicationStatus.value = ['Unstashed'];
+        this.filterApplicationStatus.value = ['UNSTASH'];
         break;
       case 'completed':
         this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, 'completed'));
-        this.filterApplicationStatus.value = ['New', 'Reviewing'];
+        this.filterApplicationStatus.value = ['NEW', 'REVIEWING'];
         break;
       default: break;
     }
@@ -107,7 +103,7 @@ export class BusinessAppStore {
           updatedDate: '07/07/2018',
           failedReasons: 'Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000',
           applicationStatus: 'PRE_QUALIFICATION_FAILED',
-          status: '',
+          status: 'NEW',
           ratings: 0,
         },
         {
@@ -127,7 +123,7 @@ export class BusinessAppStore {
           updatedDate: '07/07/2018',
           failedReasons: 'Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000',
           applicationStatus: 'PRE_QUALIFICATION_FAILED',
-          status: '',
+          status: 'NEW',
           ratings: 0,
         }],
       };
@@ -207,7 +203,7 @@ export class BusinessAppStore {
           updatedDate: '07/08/2018',
           failedReasons: '',
           applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
-          status: '',
+          status: 'NEW',
           ratings: 0,
           businessDetails: {
             stepStatus: 'COMPLETE',
@@ -341,7 +337,14 @@ export class BusinessAppStore {
         }],
       };
     }
-
+    this.backup = this.businessApplicationsList.data;
+    const { values } = this.filterApplicationStatus;
+    const { data } = this.businessApplicationsList;
+    forEach(values, (v, k) => {
+      const count = filter(data, app => app.status === v.value).length;
+      values[k].label = `${values[k].label} (${count})`;
+    });
+    this.initRequest();
     // this.businessApplicationsList = graphql({
     //   client,
     //   query: getBusinessApplications,
@@ -350,15 +353,15 @@ export class BusinessAppStore {
 
   @action
   initRequest = () => {
-    this.data = [{ id: 1, title: 'this is a title', createdAt: '03/03/2018' }];
-  }
-
-  @computed get allRecords() {
-    return this.data;
-  }
-
-  @computed get currentRecord() {
-    return this.details;
+    const { applicationStatus, keyword } = this.requestState.search;
+    if (applicationStatus.length || (keyword && keyword !== '')) {
+      this.businessApplicationsList.data = filter(this.backup, app =>
+        includes(toJS(applicationStatus), app.status) || includes(app.comment.content, keyword)
+          || includes(app.info.businessName, keyword) || includes(app.info.name, keyword) ||
+          includes(app.info.email, keyword));
+    } else {
+      this.businessApplicationsList.data = this.backup;
+    }
   }
 }
 

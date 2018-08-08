@@ -59,14 +59,14 @@ export const FILTER_META = {
   applicationStatus: {
     value: [],
     values: [
-      { label: 'New', value: 'New', applicable: ['completed'] },
-      { label: 'Accepted', value: 'Accepted', applicable: ['completed'] },
-      { label: 'Declined', value: 'Declined', applicable: ['completed'] },
-      { label: 'Reviewing', value: 'Reviewing', applicable: ['completed'] },
-      { label: 'Offered', value: 'Offered', applicable: ['completed'] },
-      { label: 'Unstashed', value: 'Unstashed', applicable: ['in-progress'] },
-      { label: 'Stashed', value: 'Stashed', applicable: ['in-progress'] },
-      { label: 'Deleted', value: 'Deleted', applicable: ['prequal-failed', 'in-progress', 'completed'] },
+      { label: 'New', value: 'NEW', applicable: ['completed'] },
+      { label: 'Accepted', value: 'ACCEPTED', applicable: ['completed'] },
+      { label: 'Declined', value: 'DECLINED', applicable: ['completed'] },
+      { label: 'Reviewing', value: 'REVIEWING', applicable: ['completed'] },
+      { label: 'Offered', value: 'OFFERED', applicable: ['completed'] },
+      { label: 'Unstashed', value: 'UNSTASH', applicable: ['in-progress'] },
+      { label: 'Stashed', value: 'STASH', applicable: ['in-progress'] },
+      { label: 'Deleted', value: 'DELETED', applicable: ['prequal-failed', 'in-progress', 'completed'] },
     ],
   },
 };
