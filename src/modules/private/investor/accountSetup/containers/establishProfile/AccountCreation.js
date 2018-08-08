@@ -7,7 +7,7 @@ import InvestorProfile from './InvestorProfile';
 import Finances from './Finances';
 import Experience from './Experience';
 
-@inject('uiStore')
+@inject('uiStore', 'investorProfileStore')
 @withRouter
 @observer
 export default class AccountCreation extends React.Component {
@@ -18,7 +18,10 @@ export default class AccountCreation extends React.Component {
     this.props.investorProfileStore.setStepToBeRendered(step);
   }
   navigateToAccCreation = () => {
-    this.props.history.push('/app/summary/account-creation');
+    const { INVESTMENT_EXP_FORM } = this.props.investorProfileStore;
+    if (INVESTMENT_EXP_FORM.meta.isValid) {
+      this.props.history.push('/app/summary/account-creation');
+    }
   }
   render() {
     const {
