@@ -20,13 +20,6 @@ class InvestorProfileStore {
   @observable INVESTMENT_EXP_FORM = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
   @observable chkboxTicked = null;
   @observable stepToBeRendered = 0;
-  @observable investorProfileNotSet = '';
-
-  @action
-  setInvestorProfileNotSet(status) {
-    this.investorProfileNotSet = status;
-  }
-
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
@@ -219,14 +212,8 @@ class InvestorProfileStore {
 
   @action
   setFormData = (form, investorProfileData) => {
-    let isDirty = false;
     Object.keys(this[form].fields).map((f) => {
       if (form === 'EMPLOYMENT_FORM') {
-        if (f === 'employmentStatus') {
-          if (isNull(investorProfileData.employmentStatusInfo[f])) {
-            isDirty = true;
-          }
-        }
         this.EMPLOYMENT_FORM.fields[f].value = investorProfileData.employmentStatusInfo[f];
       } else if (form === 'FINANCES_FORM') {
         this.FINANCES_FORM.fields[f].value = investorProfileData.financialInfo[f];
@@ -244,19 +231,12 @@ class InvestorProfileStore {
         if (!isNull(investorProfileData.investorProfileType)) {
           this.INVESTOR_PROFILE_FORM.fields[f].value =
           investorProfileData.investorProfileType;
-          this.setInvestorProfileNotSet(false);
-        } else {
-          this.setInvestorProfileNotSet(true);
-          isDirty = true;
         }
       } else if (form === 'INVESTMENT_EXP_FORM') {
         if (f !== 'readyInvestingInLimitedLiquiditySecurities' && f !== 'readyForRisksInvolved') {
           if (!isNull(investorProfileData.investmentExperienceInfo[f])) {
             this.INVESTMENT_EXP_FORM.fields[f].value =
             investorProfileData.investmentExperienceInfo[f];
-          } else {
-            this.INVESTMENT_EXP_FORM.fields[f].value = 'NO_EXPERIENCE';
-            isDirty = true;
           }
         } else if (f === 'readyInvestingInLimitedLiquiditySecurities' &&
         investorProfileData.investmentExperienceInfo[f]) {
@@ -268,7 +248,7 @@ class InvestorProfileStore {
       }
       return this[form].fields[f];
     });
-    FormValidator.onChange(this[form], '', '', isDirty);
+    FormValidator.onChange(this[form], '', '');
   }
 }
 
