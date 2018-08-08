@@ -5,12 +5,6 @@ import { includes, isArray } from 'lodash';
 // import { GqlClient as client } from '../../../../../api/gqlApi';
 // import Helper from '../../../../../helper/utility';
 // import { uiStore, navStore, userStore } from '../../../index';
-// import {
-//     LENDIO,
-//   } from '../../../../constants/businessApplication';
-// import {
-//     submitApplication,
-//   } from '../../../queries/businessApplication';
 import { FILTER_META } from '../../../../../constants/user';
 
 export class BusinessAppStore {
@@ -88,25 +82,6 @@ export class BusinessAppStore {
     }
     this.requestState.search.applicationStatus = this.filterApplicationStatus.value;
   }
-
-  // @action
-  // fetchApplicationDataById = (applicationId) => {
-  //   console.log(applicationId);
-  //   return new Promise((resolve) => {
-  //     this.businessApplicationsDataById = graphql({
-  //       client,
-  //       query: getBusinessApplicationsById,
-  //       variables: {
-  //         id: applicationId,
-  //       },
-  //       fetchPolicy: 'network-only',
-  //       onFetch: () => {
-  //         this.setBusinessApplicationData();
-  //         resolve();
-  //       },
-  //     });
-  //   });
-  // }
 
   @action
   fetchBusinessApplicationsByStatus = (url) => {
@@ -214,6 +189,35 @@ export class BusinessAppStore {
           businessDocumentation: {
             stepStatus: 'COMPLETE',
           },
+        },
+        {
+          applicationId: 'sdf3',
+          info: {
+            businessName: 'In Progres 3',
+            name: 'Jone',
+            email: 'jhon.cuelogic@nextseed.com',
+            phone: 21313213213,
+          },
+          comment: {
+            content: 'Testing comment',
+            date: '07/08/2018',
+            user: 'Alex',
+          },
+          createdDate: '07/08/2018',
+          updatedDate: '07/08/2018',
+          failedReasons: '',
+          applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
+          status: 'REMOVED',
+          ratings: 0,
+          businessDetails: {
+            stepStatus: 'COMPLETE',
+          },
+          businessPerformance: {
+            stepStatus: 'IN-PROGRESS',
+          },
+          businessDocumentation: {
+            stepStatus: 'COMPLETE',
+          },
         }],
       };
     } else if (appType === 'completed') {
@@ -251,7 +255,65 @@ export class BusinessAppStore {
         {
           applicationId: 'sdf3',
           info: {
-            businessName: 'Completed 1',
+            businessName: 'Fitness Guru',
+            name: 'Jone',
+            email: 'jhon.cuelogic@nextseed.com',
+            phone: 21313213213,
+          },
+          comment: {
+            content: 'Testing comment',
+            date: '07/08/2018',
+            user: 'Alex',
+          },
+          createdDate: '07/08/2018',
+          updatedDate: '07/08/2018',
+          failedReasons: '',
+          applicationStatus: 'APPLICATION_SUBMITTED',
+          status: 'REMOVED',
+          ratings: 0,
+          businessDetails: {
+            stepStatus: 'COMPLETE',
+          },
+          businessPerformance: {
+            stepStatus: 'COMPLETE',
+          },
+          businessDocumentation: {
+            stepStatus: 'COMPLETE',
+          },
+        },
+        {
+          applicationId: 'sdf3',
+          info: {
+            businessName: 'Circuss Guru',
+            name: 'Jone',
+            email: 'jhon.cuelogic@nextseed.com',
+            phone: 21313213213,
+          },
+          comment: {
+            content: 'Testing comment',
+            date: '07/08/2018',
+            user: 'Alex',
+          },
+          createdDate: '07/08/2018',
+          updatedDate: '07/08/2018',
+          failedReasons: '',
+          applicationStatus: 'APPLICATION_SUBMITTED',
+          status: 'REMOVED',
+          ratings: 0,
+          businessDetails: {
+            stepStatus: 'COMPLETE',
+          },
+          businessPerformance: {
+            stepStatus: 'COMPLETE',
+          },
+          businessDocumentation: {
+            stepStatus: 'COMPLETE',
+          },
+        },
+        {
+          applicationId: 'sdf3',
+          info: {
+            businessName: 'Go Ride',
             name: 'Jone',
             email: 'jhon.cuelogic@nextseed.com',
             phone: 21313213213,

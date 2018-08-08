@@ -33,7 +33,6 @@ export default class ApplicationsList extends Component {
   }
 
   render() {
-    // const { match, helloWorldStore } = this.props;
     const {
       getBusinessApplication,
       requestState,
