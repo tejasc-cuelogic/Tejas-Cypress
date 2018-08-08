@@ -20,7 +20,7 @@ class InvestorSignup extends Component {
         } else {
           const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
           const userCredentials = { email: email.value, password: btoa(password.value) };
-          cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 300 });
+          cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
           this.props.history.push('/auth/confirm-email');
         }
       })
@@ -47,7 +47,7 @@ class InvestorSignup extends Component {
         <Modal.Header className="center-align signup-header">
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
           <Header as="h3">
-            Sign Up as {' '}
+            Sign up as {' '}
             {(SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
           </Header>
         </Modal.Header>

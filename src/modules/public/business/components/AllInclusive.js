@@ -15,7 +15,7 @@ const AllInclusive = () => (
     <Container>
       <Grid relaxed padded="vertically">
         <Grid.Row>
-          <Grid.Column floated="left" width={10} verticalAlign="middle" className="side-section inclusive-left-section">
+          <Grid.Column width={10} verticalAlign="middle" className="side-section inclusive-left-section">
             <Header as="h2">Reach your goals with full-service support included.</Header>
             <p className="mb-30">
             Our one-time fee comes with everything you need to launch, promote and service

@@ -21,6 +21,100 @@
             }
         }
     }
+    &.rewards {
+        margin-left: 230px;
+        border-left: 1px solid @neutral-darkwhite;
+        max-width: 500px;
+        >li {
+            padding-left: @30px;
+            margin: @14px 0;
+            position: relative;
+            &:before {
+                content: "";
+                height: 8px;
+                width: 8px;
+                border-radius: 50%;
+                background: @primary-one;
+                position: absolute;
+                left: @13px;
+                top: @31px;
+                z-index: 2;
+            }
+            &:first-child{
+                .box:after {
+                    content: "";
+                    height: 35px;
+                    width: 1px;
+                    position: absolute;
+                    left: -32px;
+                    top: 0;
+                    z-index: 1;
+                    background: @white;
+                }
+            }
+            &:last-child{
+                .box:after {
+                    content: "";
+                    height: 100%;
+                    width: 1px;
+                    position: absolute;
+                    left: -32px;
+                    top: 35px;
+                    z-index: 1;
+                    background: @white;
+                }
+            }
+            h4.ui.header {
+                position: absolute;
+                left: -265px;
+                top: @24px;
+                text-align: right;
+                width: 210px;
+                .sub.header{
+                    margin-top: @10px;
+                }
+            }
+            .box {
+                border: 1px solid @neutral-darkwhite;
+                padding: @20px @30px;
+                border-radius: 4px;
+                position: relative;
+                &:before {
+                    content: "";
+                    position: absolute;
+                    top: @26px;
+                    left: -@7px;
+                    border-width: 1px 0 0 1px;
+                    border-style: solid;
+                    border-color: @neutral-darkwhite;
+                    display: block;
+                    width: 12px;
+                    height: 12px;
+                    transform: rotate(-45deg);
+                    background: @white;
+                }
+            }
+            ul.list {
+                padding: 0 0 0 @17px;
+                p {
+                  color: @fullBlack;
+                  margin-bottom: 0;  
+                }
+                li {
+                    color: @neutral-middark;
+                }
+            }
+        }
+    }
+    &.funding-options {
+        >.item {
+            margin-bottom: @20px;
+            line-height: 24px;
+            .header {
+                margin-bottom: @10px;
+            }
+        }
+    }
 }
 //  Public page Ends
 

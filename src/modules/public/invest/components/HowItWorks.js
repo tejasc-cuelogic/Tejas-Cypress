@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Header, Grid, Button, Container, List, Divider, Image, Item } from 'semantic-ui-react';
-import InvestorImg from '../../../../assets/images/investor-img.png';
-import InvestorImg1 from '../../../../assets/images/investor-img-1.png';
+import InvestorImg from '../../../../assets/images/investor-img.jpg';
+import InvestorImg1 from '../../../../assets/images/investor-img-1.jpg';
 
 const HowItWorks = () => (
   <Aux>
@@ -46,7 +46,7 @@ const HowItWorks = () => (
         <Grid doubling columns={2} relaxed="very" className="flex-column">
           <Grid.Column>
             <div className="flex-content">
-              <Image src={InvestorImg} />
+              <Image src={InvestorImg1} />
               <Header as="h3">Term Notes</Header>
               <Item.Group relaxed="very">
                 <Item>
@@ -82,9 +82,9 @@ const HowItWorks = () => (
           </Grid.Column>
           <Grid.Column>
             <div className="flex-content">
-              <Image src={InvestorImg1} />
+              <Image src={InvestorImg} />
               <Header as="h3">Revenue Sharing Notes</Header>
-              <Item.Group>
+              <Item.Group relaxed="very">
                 <Item>
                   <Item.Content>
                     <Item.Header as="h5">

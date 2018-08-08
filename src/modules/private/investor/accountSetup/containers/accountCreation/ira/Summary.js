@@ -35,7 +35,7 @@ export default class Summary extends Component {
       plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>
-        <Header as="h3" textAlign="center">Verify the information and create IRA account</Header>
+        <Header as="h3" textAlign="center">Verify your information and <br /> create an IRA account</Header>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -47,34 +47,34 @@ export default class Summary extends Component {
               <Table unstackable compact basic>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell><b>Account type</b></Table.Cell>
-                    <Table.Cell>{accountType.label}</Table.Cell>
+                    <Table.Cell><b>Type</b></Table.Cell>
+                    <Table.Cell>{accountType ? accountType.label : ''}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell><b>Funding option</b></Table.Cell>
-                    <Table.Cell>{fundingOption.label}</Table.Cell>
+                    <Table.Cell><b>Funding Option</b></Table.Cell>
+                    <Table.Cell>{fundingOption ? fundingOption.label : ''}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell><b>Your networth</b></Table.Cell>
+                    <Table.Cell><b>Net Worth</b></Table.Cell>
                     <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value ?
                       FIN_INFO_FRM.fields.netWorth.value : 0)}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell><b>Your annual income</b></Table.Cell>
+                    <Table.Cell><b>Annual Income</b></Table.Cell>
                     <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value ?
                       FIN_INFO_FRM.fields.annualIncome.value : 0)}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell><b>Drivers licence</b></Table.Cell>
+                    <Table.Cell><b>Identification</b></Table.Cell>
                     <Table.Cell>
                       {IDENTITY_FRM.fields.identityDoc.value ?
                         <span className="positive-text"><b>Uploaded</b></span> :
                         <span className="negative-text"><b>Not Uploaded</b></span>}
                     </Table.Cell>
                   </Table.Row>
-                  {fundingOption.value === 0 &&
+                  {fundingOption && fundingOption.value === 0 &&
                     <Table.Row>
                       <Table.Cell><b>Bank account</b></Table.Cell>
                       <Table.Cell>{Helper.encryptNumber(bankAccountNumber)}</Table.Cell>

@@ -122,8 +122,8 @@
 	&.push:not(.visible){
 		width:64px;
 		transform:translate3D(0,0,0);
-		box-shadow:@boxShadow !important;
-		overflow-y:visible !important;
+		// box-shadow:@boxShadow !important;
+		// overflow-y:visible !important;
 		.user-picture{
 			margin:@24px 0 @7px;
 			> img{
@@ -204,7 +204,7 @@
 			margin-right:-@13px;
 		}
 		~.pusher .icon.hamburger{
-			font-size:20px;
+			font-size:@20px;
 			color:@neutral-middark;
 			position:absolute;
 			top:20px;
@@ -232,13 +232,13 @@
 			border:1px solid @trackBackground;
 		}
 		h2{
-			font-size:16px;
+			font-size:@16px;
 			font-weight:900;
 			margin:0 0 @5px;
 		}
 		h3{
 			margin:@5px 0 0;
-			font-size:14px;
+			font-size:@14px;
 			font-weight:@fontMedium;
 			color:@border-color;
 		}
@@ -329,7 +329,7 @@
 		background-color:@neutral;
 	}
 	~ .ui.button.collapseIcon{
-		background-color:transparent;
+		background-color:@neutral;
 		color:@neutral-middark;
 	}
 	&.issuer{

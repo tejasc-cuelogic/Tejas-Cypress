@@ -19,15 +19,16 @@ export default class Summary extends React.Component {
     const {
       formAddFunds,
       plaidAccDetails,
+      plaidBankDetails,
       isValidLinkBank,
       formLinkBankManually,
       depositMoneyNow,
     } = this.props.bankAccountStore;
+    const bankAccountNumber = !isEmpty(plaidBankDetails) ?
+      plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>
         <Header as="h3" textAlign="center">Confirm Account</Header>
-        {/* <p className="center-align">Lorem psum dolor sit amet, consectetur adipiscing elit,
-        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p> */}
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -50,11 +51,7 @@ export default class Summary extends React.Component {
                   }
                   <Table.Row>
                     <Table.Cell><b>Bank Account</b></Table.Cell>
-                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.account_id ?
-                      plaidAccDetails.plaidAccountId ? Helper.encryptNumber(plaidAccDetails.plaidAccountId) : '' :
-                      Helper.encryptNumber(plaidAccDetails.account_id)}
-                      {formLinkBankManually.fields.accountNumber.value ? formLinkBankManually.fields.accountNumber.value : ''}
-                    </Table.Cell>
+                    <Table.Cell>{Helper.encryptNumber(bankAccountNumber)}</Table.Cell>
                   </Table.Row>
                   {formLinkBankManually.fields.routingNumber.value &&
                   <Table.Row>
@@ -80,11 +77,11 @@ export default class Summary extends React.Component {
         </div>
         <p className="center-align mb-30">
           By continuing, I acknowledge that I have read and agree to the
-          terms of the <Link to="/app/summary/account-creation/individual" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/" className="link">Substitute IRS Form W-9 Certification</Link>,
-          and the <Link to="/app/summary/account-creation/individual" className="link">NextSeed Membership Agreement</Link>.
+          terms of the <Link to={this.props.match.url} className="link">CrowdPay Custodial Account Agreement</Link>, <Link to={this.props.match.url} className="link">Substitute IRS Form W-9 Certification</Link>,
+          and the <Link to={this.props.match.url} className="link">NextSeed Membership Agreement</Link>.
         </p>
         <div className="center-align">
-          <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank}>Create the account</Button>
+          <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank}>Create your account</Button>
         </div>
       </div>
     );

@@ -1,28 +1,55 @@
 import React, { Component } from 'react';
-import { Header, Icon, Grid, Image, Embed, List, Divider, Breadcrumb, Segment, Reveal, Modal } from 'semantic-ui-react';
+import { Route, Link, Switch } from 'react-router-dom';
+import { Header, Icon, Grid, Image, Embed, Container, List, Divider, Breadcrumb, Segment, Reveal } from 'semantic-ui-react';
+import Loadable from 'react-loadable';
+import { NsCarousel } from '../../../../../theme/shared';
 import videoPoster from '../../../../../assets/images/636206632.webp';
-import campainAboutImg from '../../../../../assets/images/campaign_about.png';
-import teamMember1 from '../../../../../assets/images/james-wright.png';
+import campainAboutImg from '../../../../../assets/images/campaign_about.jpg';
+import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
 import teamMember2 from '../../../../../assets/images/owner-1.jpg';
-import teamMember3 from '../../../../../assets/images/owner-2.jpg';
-import businessModel from '../../../../../assets/images/business_model.png';
+import teamMember3 from '../../../../../assets/images/avatar-3.jpg';
+import teamMember4 from '../../../../../assets/images/avatar-4.jpg';
+import teamMember5 from '../../../../../assets/images/avatar-5.jpg';
+import businessModel from '../../../../../assets/images/business_model.jpg';
+
+const getModule = component => Loadable({
+  loader: () => import(`../${component}`),
+  loading() {
+    return <div>Loading...</div>;
+  },
+});
+
+const settings = {
+  dots: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false,
+};
 
 const nsvideos = {
   embed: '218642510',
 };
 
 class AboutCompany extends Component {
-  state = { modalOpen: false }
-  handleOpen = () => this.setState({ modalOpen: true })
-  handleClose = () => this.setState({ modalOpen: false })
   render() {
+    const navItems = [
+      { to: 'business', component: 'BusinessModal' },
+      { to: 'locationanalysis', component: 'LocationAnalysisModal' },
+      { to: 'meetourteam', component: 'MeetTeamModal' },
+    ];
     return (
       <Grid>
         <Grid.Row>
           <Grid.Column width={12}>
             <div className="campaign-about-wrapper">
               <div className="carousel">
-                <Image src={videoPoster} />
+                <Container>
+                  <NsCarousel {...settings}>
+                    {[1, 2, 3].map(() => (
+                      <Image src={videoPoster} />
+                    ))}
+                  </NsCarousel>
+                </Container>
               </div>
               <Header as="h3">Buffbrew Taproom LLC</Header>
               <p>
@@ -70,7 +97,7 @@ class AboutCompany extends Component {
                 adipisci velit, sed quia non numquam eius modi tempora incidunt ut
                 labore et dolore magnam aliquam quaerat voluptatem.
               </p>
-              <Image src={campainAboutImg} centered />
+              <Image src={campainAboutImg} centered className="mt-30" />
               <p className="note">
                 Caption. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Vivamus dignissim vitae odio nec pellentesque.
@@ -154,18 +181,18 @@ class AboutCompany extends Component {
           <Grid.Column width={4}>
             <div className="campaign-right-sidebar">
               <Segment padded>
-                <Breadcrumb>
-                  <Breadcrumb.Section onClick={this.handleOpen}>
+                <Breadcrumb className="mb-20">
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/meetourteam`}>
                   Meet our team
                   </Breadcrumb.Section>
-                  <Breadcrumb.Divider icon="right chevron" />
+                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                 </Breadcrumb>
                 <Grid doubling columns={3}>
                   <Grid.Column>
                     <Reveal animated="small fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
@@ -177,7 +204,7 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
@@ -189,7 +216,7 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
@@ -201,11 +228,11 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
-                        <Image src={teamMember1} circular />
+                        <Image src={teamMember4} circular />
                       </Reveal.Content>
                     </Reveal>
                   </Grid.Column>
@@ -213,29 +240,29 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Lorem Ipsum</p>
+                          <p>Alex Griggs</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
-                        <Image src={teamMember2} circular />
+                        <Image src={teamMember5} circular />
                       </Reveal.Content>
                     </Reveal>
                   </Grid.Column>
                 </Grid>
               </Segment>
               <Segment padded>
-                <Breadcrumb>
-                  <Breadcrumb.Section>Business Model</Breadcrumb.Section>
-                  <Breadcrumb.Divider icon="right chevron" />
+                <Breadcrumb className="mb-20">
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/business`}>Business Model</Breadcrumb.Section>
+                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                 </Breadcrumb>
                 <Image src={businessModel} />
               </Segment>
               <Segment padded>
-                <Breadcrumb>
-                  <Breadcrumb.Section onClick={this.handleOpen}>
+                <Breadcrumb className="mb-20">
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/locationanalysis`}>
                     Location Analysis
                   </Breadcrumb.Section>
-                  <Breadcrumb.Divider icon="right chevron" />
+                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
                 </Breadcrumb>
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.8980695673813!2d73.87562555088532!3d18.53350778733976!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c0f824992459%3A0x4f126e7b4c0ac0f6!2sCuelogic+Technologies!5e0!3m2!1sen!2sin!4v1530687811942"
@@ -245,59 +272,13 @@ class AboutCompany extends Component {
             </div>
           </Grid.Column>
         </Grid.Row>
-
-        <Modal
-          open={this.state.modalOpen}
-          onClose={this.handleClose}
-          closeIcon
-          size="large"
-        >
-          <Header as="h3">
-          Meet the Team
-          </Header>
-          <Modal.Content scrolling>
-            <Grid doubling columns={2} className="compact" verticalAlign="middle">
-              <Grid.Column>
-                <Image src={campainAboutImg} />
-              </Grid.Column>
-              <Grid.Column className="padded team-details-container">
-                <Header as="h3">
-                  Rassul Zainfar
-                  <Header.Subheader>co-founder & ceo</Header.Subheader>
-                </Header>
-                <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-                </p>
-                <div>
-                  <Icon color="green" name="twitter" />
-                  <Icon color="green" name="linkedin in" />
-                </div>
-              </Grid.Column>
-              <Grid.Column className="padded team-details-container">
-                <Header as="h3">
-                  Alex Grigss
-                  <Header.Subheader>co-founder & Director of projects</Header.Subheader>
-                </Header>
-                <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-                </p>
-                <div>
-                  <Icon color="green" name="twitter" />
-                  <Icon color="green" name="linkedin in" />
-                </div>
-              </Grid.Column>
-              <Grid.Column>
-                <Image src={campainAboutImg} />
-              </Grid.Column>
-            </Grid>
-          </Modal.Content>
-        </Modal>
+        <Switch>
+          {
+            navItems.map(item => (
+              <Route key={item.to} path={`${this.props.match.url}/${item.to}`} component={getModule(item.component)} />
+            ))
+          }
+        </Switch>
       </Grid>
     );
   }

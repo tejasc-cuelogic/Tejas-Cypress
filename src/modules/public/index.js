@@ -2,10 +2,9 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Route, Switch, matchPath } from 'react-router-dom';
-// import { Segment, Grid } from 'semantic-ui-react';
 import { publicRoutes } from './../../modules/routes';
-// import { uiStore } from '../../services/stores';
 import Footer from './../../theme/layout/Footer';
+import NotFound from '../shared/NotFound';
 
 @inject('uiStore', 'navStore')
 @observer
@@ -16,7 +15,7 @@ export default class Public extends React.Component {
   render() {
     const { location } = this.props;
     const NoFooter = [
-      '/offerings/:id/:section', '/business-application', '/auth/:section',
+      '/offerings/:id/:section?', '/business-application', '/auth/:section',
     ];
     return (
       <Aux>
@@ -30,10 +29,10 @@ export default class Public extends React.Component {
               key={route.path}
             />
           ))}
+          <Route component={NotFound} />
         </Switch>
         {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
-          <Footer />
-        }
+          <Footer path={location.pathname} />}
       </Aux>
     );
   }

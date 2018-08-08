@@ -1,27 +1,61 @@
-import React from 'react';
-import { Header, Container, Form } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import Aux from 'react-aux';
+import { inject } from 'mobx-react';
+import { Button, Form, Divider } from 'semantic-ui-react';
+import { FormInput } from '../../../../theme/form';
 
-const SubscribeForNewsletter = () => (
-  <section className="learn-more">
-    <Container textAlign="center">
-      <Header as="h2">Want to learn more about NextSeed?</Header>
-      <p className="mb-30">
-        Leave us your contact information and we’ll keep you posted
-        with the latest news and updates.
-      </p>
-      <Form className="public-form">
-        <Form.Group>
-          <Form.Input inverted placeholder="Name" name="name" width={4} />
-          <Form.Input
-            placeholder="Email"
-            name="email"
-            width={4}
-          />
-          <Form.Button primary fluid content="Submit" compact width={2} />
-        </Form.Group>
-      </Form>
-    </Container>
-  </section>
+const SubscribeFields = ({
+  NEWSLETTER_FRM, newsLetterChange, modal, inProgress,
+}) => (
+  <Aux>
+    {
+      Object.keys(NEWSLETTER_FRM.fields).map(field => (
+        <FormInput
+          key={field}
+          type="text"
+          name={field}
+          autoFocus={field === 'name'}
+          fielddata={NEWSLETTER_FRM.fields[field]}
+          changed={newsLetterChange}
+          containerwidth={!modal ? 4 : false}
+          ishidelabel={!modal}
+        />
+      ))
+    }
+    <Divider hidden />
+    <Form.Field className={modal ? 'center-align' : ''}>
+      <Button primary className={modal ? 'very relaxed' : 'fluid'} loading={inProgress}>
+        Submit
+      </Button>
+    </Form.Field>
+  </Aux>
 );
 
-export default SubscribeForNewsletter;
+@inject('authStore', 'uiStore')
+export default class SubscribeForNewsletter extends Component {
+  render() {
+    const { NEWSLETTER_FRM, newsLetterChange } = this.props.authStore;
+    const { inProgress } = this.props.uiStore;
+    return (
+      <Form className={this.props.className}>
+        {this.props.modal ? (
+          <SubscribeFields
+            NEWSLETTER_FRM={NEWSLETTER_FRM}
+            newsLetterChange={newsLetterChange}
+            modal={this.props.modal}
+            inProgress={inProgress}
+          />
+        ) : (
+          <Form.Group>
+            <SubscribeFields
+              NEWSLETTER_FRM={NEWSLETTER_FRM}
+              newsLetterChange={newsLetterChange}
+              modal={this.props.modal}
+              inProgress={inProgress}
+            />
+          </Form.Group>
+        )}
+      </Form>
+    );
+  }
+}

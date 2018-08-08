@@ -19,22 +19,20 @@ Validator.register(
 export const securitySections = [
   {
     title: 'Password',
-    description: `Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.
-    Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.`,
+    description: 'Change your NextSeed Password.',
     action: ['change-password', 'Change Password'],
-  },
-  {
-    title: 'Multi-factor autentitaction',
-    description: 'You can choose your Active MFA Factor.',
-    descriptionNotAvailable: `Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.
-    Etiam ullamcorper. Suspendisse a pellente sque dui, non felis.`,
-    action: ['mfa', 'Manage multi-factor autentication'],
   },
   {
     title: 'Social Connect',
     description: `Your NextSeed account is not connected to any social media.
     If you wish to connect it now, click one of the button below.`,
     action: ['social-connect'],
+  },
+  {
+    title: 'Multi-factor Authentication',
+    description: 'You can choose your Active MFA Factor.',
+    descriptionNotAvailable: '',
+    action: ['mfa', 'Manage multi-factor autentication'],
   },
 ];
 
@@ -159,6 +157,7 @@ export const USER_TITLE = [
 
 export const IDENTITY_DOCUMENTS = {
   photoId: {
+    label: '',
     key: 'photoId',
     value: '',
     error: undefined,
@@ -168,6 +167,7 @@ export const IDENTITY_DOCUMENTS = {
     fileData: '',
   },
   proofOfResidence: {
+    label: '',
     key: 'proofOfResidence',
     value: '',
     error: undefined,

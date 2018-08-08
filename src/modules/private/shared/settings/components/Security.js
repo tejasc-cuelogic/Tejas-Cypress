@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, withRouter } from 'react-router-dom';
 import { Card, Grid, Header, Button, Divider, Label } from 'semantic-ui-react';
 import ChangePassword from '../../../../auth/containers/ChangePassword';
 import { securitySections } from './../../../../../services/constants/user';
 import ManageMultiFactorAuth from '../components/profileSettings/ManageMultiFactorAuth';
 
 @inject('userDetailsStore')
+@withRouter
 @observer
 export default class Security extends Component {
   render() {
-    const { userDetails } = this.props.userDetailsStore;
+    const { userDetails, getUserMfaMode } = this.props.userDetailsStore;
     const { match } = this.props;
-    const activeMfa = 0;
-    const isMfaAvailalbe = 1;
     return (
       <div>
-        <Route exact path={`${this.props.match.url}/change-password`} component={ChangePassword} />
-        <Route exact path={`${this.props.match.url}/mfa`} component={ManageMultiFactorAuth} />
+        <Route exact path={`${match.url}/change-password`} component={ChangePassword} />
+        <Route exact path={`${match.url}/mfa`} component={ManageMultiFactorAuth} />
         <Header as="h4">Security</Header>
         <p className="intro-text">
-          Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris<br />
-          nec malesuada fames ac turpisPellentesque facilisis. Nulla imperdiet sit amet magna.
+          Manage your security settings and contact information.<br />
+          Its important to update your password regularly and utilize the security features
+          that apply to you.
         </p>
         <Grid>
           {
@@ -37,14 +37,14 @@ export default class Security extends Component {
                 <Card fluid>
                   <Card.Content>
                     <Header as="h4">{section.title}</Header>
-                    <p>{section.action[0] === 'mfa' ? (isMfaAvailalbe ? section.description : section.descriptionNotAvailable) : section.description}</p>
+                    <p>{section.action[0] === 'mfa' ? (getUserMfaMode ? section.description : section.descriptionNotAvailable) : section.description}</p>
                     <Divider hidden />
                     <Card.Description>
-                      {(section.action[0] === 'mfa' && isMfaAvailalbe) ? (
+                      {(section.action[0] === 'mfa' && getUserMfaMode) ? (
                         <dl className="dl-horizontal">
-                          <dt>E-mail {activeMfa === 1 && <Label color="green" size="mini">Active MFA</Label> }</dt>
+                          <dt>E-mail {getUserMfaMode && getUserMfaMode === 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</dt>
                           <dd>{userDetails.email} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-email-address">Update Email</Link></dd>
-                          <dt>Phone {activeMfa === 0 && <Label color="green" size="mini">Active MFA</Label> }</dt>
+                          <dt>Phone {getUserMfaMode && getUserMfaMode !== 'EMAIL' && <Label color="green" size="mini">Active MFA</Label> }</dt>
                           <dd>{userDetails.contactDetails && userDetails.contactDetails.phone ? userDetails.contactDetails.phone.number : '--'} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-phone-number">Update Phone</Link></dd>
                         </dl>
                       ) : null}
@@ -54,7 +54,7 @@ export default class Security extends Component {
                           <Button color="google plus" icon="google plus" content="Connect with Google" />
                         </Button.Group>
                       ) : (
-                        <Button disabled={(section.action[0] === 'mfa' && !isMfaAvailalbe)} as={Link} to={`${match.url}/${section.action[0]}`} inverted color="green" content={section.action[1]} />
+                        <Button disabled={(section.action[0] === 'mfa' && !getUserMfaMode)} as={Link} to={`${match.url}/${section.action[0]}`} inverted color="green" content={section.action[1]} />
                       )
                       }
                     </Card.Description>

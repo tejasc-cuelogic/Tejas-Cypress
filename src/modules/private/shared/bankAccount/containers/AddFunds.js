@@ -11,6 +11,9 @@ export default class AddFunds extends Component {
   componentDidMount() {
     this.props.individualAccountStore.setStepToBeRendered(1);
   }
+  componentWillUnmount() {
+    this.props.bankAccountStore.resetShowAddFunds();
+  }
   doNotDepositMoneyNow = () => {
     this.props.bankAccountStore.setDepositMoneyNow(false);
     if (!this.props.bankAccountStore.formAddFunds.fields.value.error) {
@@ -59,7 +62,7 @@ export default class AddFunds extends Component {
             <Button primary size="large" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
           </div>
           <div className="center-align">
-            <Button type="button" className="cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I don`t want to deposit any money now</Button>
+            <Button type="button" className="cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I will do this later</Button>
           </div>
         </Form>
       </div>

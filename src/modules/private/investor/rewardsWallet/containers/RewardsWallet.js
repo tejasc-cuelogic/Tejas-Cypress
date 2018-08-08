@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Checkbox } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import RewardList from '../components/RewardList';
+import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('rewardStore', 'userDetailsStore')
 @observer
@@ -18,7 +19,9 @@ export default class RewardsWallet extends Component {
     return (
       <PrivateLayout {...this.props}>
         <Checkbox defaultChecked={option} onClick={this.activeOnly} className="pull-right" label="Show active rewards only" />
-        {loading ? 'loading..' : <RewardList match={this.props.match} rewards={rewards} error={error} />}
+        {loading ? <InlineLoader /> :
+        <RewardList match={this.props.match} rewards={rewards} error={error} />
+        }
       </PrivateLayout>
     );
   }

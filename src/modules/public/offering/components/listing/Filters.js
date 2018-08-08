@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Container, Grid, Menu, Image, Header, Checkbox, Form, Icon, Popup, Label } from 'semantic-ui-react';
+import { Container, Grid, Menu, Image, Header, Checkbox, Form, Icon, Popup } from 'semantic-ui-react';
+import BusinessType from './BusinessType';
 import filterIcon from '../../../../../assets/images/icons/icon_filter.png';
 import closeIcon from '../../../../../assets/images/icons/icon_close.png';
 
@@ -32,15 +33,11 @@ export default class Filters extends Component {
                 <Container>
                   <Grid stackable>
                     <Grid.Row>
-                      <Grid.Column width={6}>
+                      <Grid.Column width={8} className="donut-chart">
                         <Header as="h6" dividing>
                           Business Type
                         </Header>
-                      </Grid.Column>
-                      <Grid.Column width={6}>
-                        <Header as="h6" dividing>
-                          Region
-                        </Header>
+                        <BusinessType />
                       </Grid.Column>
                       <Grid.Column width={4}>
                         <Header as="h6" dividing>
@@ -66,6 +63,11 @@ export default class Filters extends Component {
                               />
                               <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                             </Form.Field>
+                            <Form.Field>
+                              <Checkbox
+                                label="Convertible Note"
+                              />
+                            </Form.Field>
                           </Form>
                         </div>
                         <Header as="h6" dividing>
@@ -75,36 +77,37 @@ export default class Filters extends Component {
                           <Form>
                             <Form.Field>
                               <Checkbox
-                                label="Reg A"
+                                label="Regulation Crowdfunding"
                               />
                               <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                             </Form.Field>
                             <Form.Field>
                               <Checkbox
-                                label="Reg D"
+                                label="Regulation A+"
                               />
                               <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                             </Form.Field>
                             <Form.Field>
                               <Checkbox
-                                label="Reg CF"
-                              />
-                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
-                            </Form.Field>
-                            <Form.Field>
-                              <Checkbox
-                                label="Reg F"
+                                label="Regulation D"
                               />
                               <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
                             </Form.Field>
                           </Form>
                         </div>
+                      </Grid.Column>
+                      <Grid.Column width={4}>
                         <Header as="h6" dividing>
                           More Options
                         </Header>
                         <div className="checkbox-group">
-                          <Icon name="eye" />
-                          <Label> Funded Campaigns </Label>
+                          <Form>
+                            <Form.Field>
+                              <Checkbox
+                                label="Show Funded Deals"
+                              />
+                            </Form.Field>
+                          </Form>
                         </div>
                       </Grid.Column>
                     </Grid.Row>

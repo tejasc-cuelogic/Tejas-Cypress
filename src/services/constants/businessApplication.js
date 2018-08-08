@@ -173,7 +173,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
       { label: 'Fitness & Wellness', icon: 'ns-dumbbells', value: 'FITNESS_AND_WELLNESS' },
       { label: 'Hospitality', icon: 'ns-first-aid', value: 'HOSPITALITY' },
       { label: 'Technology', icon: 'ns-technology', value: 'TECHNOLOGY' },
-      { label: 'Other Industry Type', value: 'OTHER' },
+      { label: 'Other', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -338,7 +338,7 @@ export const BUSINESS_PERF = {
     value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   pyCogs: {
-    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
+    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   nyGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. $1,250,000', customErrors: { required: 'required' },
@@ -350,7 +350,7 @@ export const BUSINESS_PERF = {
     value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   nyCogs: {
-    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
+    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
 };
 
@@ -426,13 +426,13 @@ export const LENDIO_PRE_QUAL = {
     value: '', error: undefined, rule: 'required', label: 'How much money you are looking for today? (Optional)',
   },
   applicationAgreeConditions: {
-    value: ['agreeConditions'],
+    value: [],
     values: [
       {
         label: 'I agree to the conditions above.', value: 'agreeConditions',
       },
       {
-        label: 'I agree to send data to Lendio, our partner.', value: 'sendDataToLendio',
+        label: (<span>I agree to send data to <a href="https://www.lendio.com/" rel="noopener noreferrer" target="_blank" className="link"><b>Lendio</b></a>, our partner.</span>), value: 'sendDataToLendio',
       },
     ],
     error: undefined,

@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, omit } from 'lodash';
+import { isEmpty, find } from 'lodash';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import {
   IRA_ACC_TYPES,
@@ -17,11 +17,10 @@ import Helper from '../../../../helper/utility';
 class IraAccountStore {
   @observable FIN_INFO_FRM = FormValidator.prepareFormObject(IRA_FIN_INFO);
   @observable IDENTITY_FRM = FormValidator.prepareFormObject(IRA_IDENTITY);
-  @observable ACC_TYPES_FRM = FormValidator.prepareFormObject(IRA_ACC_TYPES, true, true);
-  @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING, true, true);
+  @observable ACC_TYPES_FRM = FormValidator.prepareFormObject(IRA_ACC_TYPES);
+  @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING);
 
   @observable stepToBeRendered = 0;
-  @observable fundingNotSet = '';
   @observable accountNotSet = '';
 
   @action
@@ -32,11 +31,6 @@ class IraAccountStore {
   @action
   setAccountNotSet(step) {
     this.accountNotSet = step;
-  }
-
-  @action
-  setFundingNotSet(step) {
-    this.fundingNotSet = step;
   }
 
   @action
@@ -98,7 +92,13 @@ class IraAccountStore {
     payload.iraAccountType = this.accountType.rawValue;
     payload.fundingType = this.fundingOption.rawValue;
     if (this.fundingOption.rawValue === 'check' && !isEmpty(bankAccountStore.plaidBankDetails)) {
-      const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+      const plaidBankDetails = {};
+      plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
+      plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
+      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
+      plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
+      plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
+      plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
       payload.iraBankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -154,7 +154,13 @@ class IraAccountStore {
         if (isValidCurrentStep) {
           uiStore.setProgress();
           if (!isEmpty(bankAccountStore.plaidBankDetails)) {
-            const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+            const plaidBankDetails = {};
+            plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
+            plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
+            plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
+            plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
+            plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
+            plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
             accountAttributes.iraBankDetails = plaidBankDetails;
           } else {
             const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -220,7 +226,7 @@ class IraAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.createInvestorAccount || formStatus === 'submit') {
+          if (result.data.createInvestorAccount || formStatus === 'submit' || currentStep.name === 'Funding') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
           if (currentStep.name === 'Identity') {
@@ -284,9 +290,9 @@ class IraAccountStore {
         const getIraStep = AccCreationHelper.iraSteps();
         if (!this.FIN_INFO_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FIN_INFO_FRM);
-        } else if (!this.ACC_TYPES_FRM.meta.isValid || this.accountNotSet) {
+        } else if (!this.ACC_TYPES_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
-        } else if (!this.FUNDING_FRM.meta.isValid || this.fundingNotSet) {
+        } else if (!this.FUNDING_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
         } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
           !bankAccountStore.formLinkBankManually.meta.isValid &&
@@ -309,7 +315,6 @@ class IraAccountStore {
 
   @action
   setFormData = (form, accountDetails) => {
-    let isDirty = false;
     Object.keys(this[form].fields).map((f) => {
       if (form === 'FIN_INFO_FRM') {
         this[form].fields[f].value = accountDetails[f];
@@ -327,28 +332,18 @@ class IraAccountStore {
         }
         if (value !== '') {
           this[form].fields[f].value = value;
-          if (form === 'FUNDING_FRM') {
-            this.setFundingNotSet(false);
-          } else {
-            this.setAccountNotSet(false);
-          }
         } else {
-          if (form === 'FUNDING_FRM') {
-            this.setFundingNotSet(true);
-          } else {
-            this.setAccountNotSet(true);
-          }
-          this[form].fields[f].value = 0;
-          isDirty = true;
+          this[form].fields[f].value = '';
         }
       }
       return this[form].fields[f];
     });
-    FormValidator.onChange(this[form], '', '', isDirty);
+    FormValidator.onChange(this[form], '', '', false);
   }
 
   @action
   setFileUploadData = (field, files) => {
+    uiStore.setProgress();
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     fileUpload.setFileUploadData('', fileData, 'ACCOUNT_IRA_CREATION_CIP', 'INVESTOR').then(action((result) => {

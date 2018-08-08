@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormInput, DropZone, MaskedInput2 } from '../../../../../theme/form';
+import { FormInput, DropZoneConfirm as DropZone, MaskedInput2 } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
@@ -65,7 +65,6 @@ export default class BusinessDetails extends Component {
                   <Link to="/" className="link"><small>Learn More</small></Link>
                 </Aux>
               }
-              subHeader="Upload your business plan"
             >
               <DropZone
                 disabled={formReadOnlyMode}

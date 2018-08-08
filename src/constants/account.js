@@ -163,7 +163,7 @@ export const IND_BANK_LIST = [
 
 export const IRA_ACC_TYPES = {
   iraAccountType: {
-    value: 0,
+    value: '',
     values: [
       {
         label: 'Traditional',
@@ -185,7 +185,7 @@ export const IRA_ACC_TYPES = {
 
 export const IRA_FUNDING = {
   fundingType: {
-    value: 0,
+    value: '',
     values: [
       {
         label: 'Check',

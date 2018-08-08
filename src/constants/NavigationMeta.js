@@ -70,7 +70,7 @@ export const PRIVATE_NAV = [
     icon: 'ns-dashboard',
     title: 'Summary',
     to: 'summary',
-    path: 'investor/accountSetup/containers/AccountSetup',
+    path: 'investor/summary',
     accessibleTo: ['investor'],
     subPanel: 0,
   },
@@ -330,7 +330,6 @@ export const PUBLIC_NAV = [
       { title: 'Team', to: 'team' },
       { title: 'Careers', to: 'careers' },
       { title: 'Impact', to: 'impact' },
-      { title: 'Ambassadors', to: 'ambassadors' },
       { title: 'Press', to: 'press' },
     ],
   },
@@ -355,9 +354,6 @@ export const PUBLIC_NAV = [
       },
       {
         icon: 'ns-coments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
-      },
-      {
-        icon: 'share alternate', title: 'Share', to: 'share', component: 'Share',
       },
     ],
   },

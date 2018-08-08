@@ -103,3 +103,14 @@ export const RESET_PASS = {
   verify: { ...COMMON.verify },
   code: { ...COMMON.code },
 };
+
+export const NEWSLETTER = {
+  name: {
+    value: '',
+    error: undefined,
+    rule: 'required',
+    label: 'Name',
+    placeHolder: 'Name',
+  },
+  email: { ...COMMON.email },
+};

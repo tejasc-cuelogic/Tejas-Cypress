@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as client } from '../../../../api/publicApi';
 import { allTeamMembers } from '../../queries/Team';
 
 export class TeamStore {

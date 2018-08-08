@@ -2,12 +2,9 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
-import filter from 'lodash/filter';
-import { isEmpty, difference, find, findKey } from 'lodash';
+import { isEmpty, difference, find, findKey, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { GqlClient as client2 } from '../../../../api/gcoolApi';
 import {
-  uiStore,
   identityStore,
   accountStore,
   bankAccountStore,
@@ -16,22 +13,17 @@ import {
   entityAccountStore,
   investorProfileStore,
 } from '../../index';
-import { FIN_INFO } from '../../../../constants/user';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
-import { finLimit, updateFinLimit } from '../../queries/financialLimits';
 import {
   INVESTMENT_ACCOUNT_TYPES,
 } from '../../../../constants/account';
-import { FormValidator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
   @observable detailsOfUser = {};
-  @observable financialLimit = {};
   @observable editCard = 0;
   @observable deleting = 0;
-  @observable FIN_INFO = { fields: { ...FIN_INFO }, meta: { isValid: false, error: '' } };
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
 
   @computed get userDetails() {
@@ -39,11 +31,32 @@ export class UserDetailsStore {
     return details;
   }
 
+  @computed get getActiveAccounts() {
+    let accDetails;
+    if (this.userDetails) {
+      accDetails = filter(this.userDetails.accounts, account => account.status === 'FULL');
+    }
+    return accDetails;
+  }
+
   @action
   setProfilePhoto(url) {
     if (this.currentUser) {
       this.currentUser.data.user.avatar.url = url;
     }
+  }
+
+  @action
+  setUserMfaMode(mfaMode) {
+    if (this.currentUser) {
+      this.currentUser.data.user.mfaMode = mfaMode;
+    }
+  }
+
+  @computed get getUserMfaMode() {
+    const mfaMode = (this.currentUser.data && this.currentUser.data.user &&
+      toJS(this.currentUser.data.user.mfaMode)) || null;
+    return mfaMode;
   }
 
   @action
@@ -111,10 +124,6 @@ export class UserDetailsStore {
       })
       .then(() => this.updateUserStatus(params.status))
       .catch(() => Helper.toast('Error while updating user', 'warn'));
-  }
-
-  @computed get fLoading() {
-    return this.financialLimit.loading;
   }
 
   @computed get signupStatus() {
@@ -190,44 +199,6 @@ export class UserDetailsStore {
   @action
   setDelStatus = (status) => {
     this.deleting = status;
-  }
-
-  /*
-  Financial Limits
-  */
-  @action
-  getFinancialLimit = () => {
-    this.financialLimit = graphql({
-      client: client2,
-      query: finLimit,
-      onFetch: (data) => {
-        Object.keys(this.FIN_INFO.fields).map((f) => {
-          this.FIN_INFO.fields[f].value = data.FinancialLimits[f];
-          return this.FIN_INFO.fields[f];
-        });
-        FormValidator.onChange(this.FIN_INFO);
-      },
-    });
-  }
-
-  @action
-  updateFinInfo = () => {
-    const data = mapValues(this.FIN_INFO.fields, f => parseInt(f.value, 10));
-    const currentLimit = Helper.getInvestmentLimit(data);
-    uiStore.setProgress();
-    client2
-      .mutate({
-        mutation: updateFinLimit,
-        variables: {
-          annualIncome: data.annualIncome,
-          netWorth: data.netWorth,
-          otherInvestments: data.otherInvestments,
-          currentLimit,
-        },
-      })
-      .then(() => Helper.toast('Updated Financial Info!', 'success'))
-      .catch(error => Helper.toast(`Error while updating Financial Info- ${error}`, 'warn'))
-      .finally(() => uiStore.setProgress(false));
   }
 
   @computed

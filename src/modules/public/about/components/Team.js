@@ -47,7 +47,7 @@ class team extends Component {
     return (
       <Aux>
         {loading ? (<InlineLoader />)
-        : teamMembers.length === 0 ? <h2>No Records to Display</h2>
+        : teamMembers.length === 0 ? <section className="center-align"><h3 style={{ color: '#31333d7d' }}>No Records to Display</h3></section>
         : teamInfo}
       </Aux>
     );

@@ -1,7 +1,8 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allMonthlyStatements, allTaxForms } from '../../queries/statement';
+import { allMonthlyStatements, allTaxForms, downloadFile } from '../../queries/statement';
+import { uiStore } from '../../index';
 
 export class StatementStore {
   @observable data = [];
@@ -13,6 +14,33 @@ export class StatementStore {
       client,
       query,
       variables: { accountId: '435e6230-6243-11e8-9398-89de698b9675' },
+    });
+  }
+
+  @action
+  handlePdfDownload = (fileId) => {
+    console.log(fileId);
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: downloadFile,
+          variables: {
+            fileId: '77e03730-9a34-11e8-9eb6-529269fb1459',
+            // fileId,
+          },
+        })
+        .then((result) => {
+          if (result.data) {
+            const { preSignedUrl } = result.data.downloadFile;
+            resolve(preSignedUrl);
+          } else {
+            reject();
+          }
+        })
+        .catch((error) => {
+          uiStore.setErrors(error.message);
+          reject(error);
+        });
     });
   }
 

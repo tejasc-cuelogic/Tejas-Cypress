@@ -1,49 +1,62 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
 import { Input, Form, Accordion, Icon } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
 
+@inject('educationStore')
+@observer
 export default class FaqsCombined extends Component {
-  state = { activeIndex: 0 }
-
-  handleClick = (e, titleProps) => {
-    const { index } = titleProps;
-    const { activeIndex } = this.state;
-    const newIndex = activeIndex === index ? -1 : index;
-    this.setState({ activeIndex: newIndex });
+  state = { activeIndex: 0, innerActiveIndex: 0 }
+  componentWillMount() {
+    const props = { isMkt: this.props.marketing, params: this.props.params };
+    this.props.educationStore.initRequest('Faq', props);
   }
-
+  toggleAccordion = (index, field) => {
+    const newIndex = this.state[field] === index ? -1 : index;
+    const stateChange = field === 'activeIndex' ? { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
+    this.setState(stateChange);
+  }
   render() {
-    const { activeIndex } = this.state;
+    const { faqs } = this.props.educationStore;
+    const { activeIndex, innerActiveIndex } = this.state;
     return (
       <Aux>
         <Form>
           <Input icon="search" placeholder="Search" fluid />
         </Form>
         <div className="mt-30">
-          <Accordion className="faq-accordion" >
-            <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
-              Investor Qualification
-              <Icon className="ns-chevron-down" />
-            </Accordion.Title>
-            <Accordion.Content active={activeIndex === 0}>
-              <Accordion>
-                <Accordion.Title active>
-                  <Icon className="ns-minus-square" color="green" />
-                  Who can invest on NextSeed?
-                </Accordion.Title>
-                <Accordion.Content active>
-                Anyone over the age of 18 with a U.S. social security number or tax identification
-                number and U.S. residential address can make investments on NextSeed. This is
-                because you’ll need to open an investment account at our partner U.S. bank to make
-                investments and receive any payments from businesses.  
-                </Accordion.Content>
-              </Accordion>
-            </Accordion.Content>
-          </Accordion>
+          {faqs &&
+          faqs.map((faq, key) => (
+            <Accordion key={faq.id} className="faq-accordion" >
+              <Accordion.Title active={activeIndex === key} index={key} onClick={() => this.toggleAccordion(key, 'activeIndex')}>
+                {faq.question}
+                <Icon className="ns-chevron-down" />
+              </Accordion.Title>
+              <Accordion.Content active={activeIndex === key}>
+                {faq.faqItems && faq.faqItems.length &&
+                faq.faqItems.map((faqItem, index) => (
+                  <Accordion key={faqItem.id}>
+                    <Accordion.Title
+                      active={innerActiveIndex === index}
+                      index={index}
+                      onClick={() => this.toggleAccordion(index, 'innerActiveIndex')}
+                    >
+                      <Icon className="ns-minus-square" color="green" />
+                      {faqItem.question}
+                    </Accordion.Title>
+                    <Accordion.Content active={innerActiveIndex === index}>
+                      {faqItem.answer} 
+                    </Accordion.Content>
+                  </Accordion>
+                ))
+                }
+              </Accordion.Content>
+            </Accordion>
+          ))
+          }
           <p className="note mt-30">
           If you still have questions, please don’t hesitate to contact us
-          at <Link to="/">info@nextseed.com</Link>
+          at <a href="mailto:apply@nextseed.com" className="link">info@nextseed.com</a>
           </p>
         </div>
       </Aux>

@@ -39,7 +39,7 @@
             .user-image:after{
                 content:"\F023";
                 font-family:"Icons";
-                font-size:20px;
+                font-size:@20px;
                 color:@highlight-primary;
                 text-shadow:-2px 2px 0px @white, 2px 2px 0px @white, 2px -2px 0px @white, -2px -2px 0px @white, 0px -2px 0px @white;
                 position:absolute;
@@ -111,7 +111,7 @@
             }
         }
         i.ns-individual-line, i.ns-ira-line, i.ns-entity-line{
-            font-size:20px;
+            font-size:@20px;
             color:@highlight-tertiary;
             vertical-align:middle;
         }
@@ -135,6 +135,11 @@
             .icon{
                 font-family:'Nextseed';
             }
+        }
+    }
+    &.confirm-transfer-table {
+        tr td {
+            border-top: 0;
         }
     }
 }
@@ -183,9 +188,9 @@
 		border-left: 4px solid @white;
 		border-top: 0;
 		text-align: center;
-		font-size: 13px;
+		font-size: @13px;
 		color: @neutral;
-		padding: 15px 20px;
+		padding: @15px @20px;
 		&:nth-child(2) {
 			border-left: 0;
 		}

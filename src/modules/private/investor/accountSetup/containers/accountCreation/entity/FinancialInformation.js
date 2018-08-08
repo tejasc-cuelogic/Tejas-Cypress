@@ -11,10 +11,9 @@ export default class FinancialInformation extends Component {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Calculating your Entity`s <br /> investment limit</Header>
+        <Header as="h3" textAlign="center">Calculating your Entity{"'"}s investment limit</Header>
         <p className="center-align">
-          Your entity`s net assets and annual income are used to determine its <br />
-          12-month investment limit. <Link to="/app/summary/account-creation/entity" className="link">How is this calculated?</Link>
+          Your entity{"'"}s net assets and annual income are used to determine its 12-month investment limit. <Link to="/app/summary/account-creation/entity" className="link">How is this calculated?</Link>
         </p>
         <Form error>
           <div className="field-wrap">
@@ -28,7 +27,7 @@ export default class FinancialInformation extends Component {
                   maxLength={FIN_INFO_FRM.fields[field].maxLength}
                   changed={values => maskedFinInfoChange(values, field)}
                   currency
-                  prefix="$ "
+                  prefix="$"
                 />
               ))
             }

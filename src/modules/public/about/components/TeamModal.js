@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject } from 'mobx-react';
-import { Header, Modal, Item, Image, Icon } from 'semantic-ui-react';
+import { Header, Modal, Item, Image, Icon, Divider } from 'semantic-ui-react';
 
 @inject('teamStore')
 class TeamModal extends Component {
@@ -14,10 +14,7 @@ class TeamModal extends Component {
     const { teamMembers } = this.props.teamStore;
     const { match } = this.props;
     const member = teamMembers.find(obj => obj.id === match.params.id);
-    const types = {
-      FACEBOOK: 'facebook f',
-      LINKEDIN: 'linkedin in',
-    };
+    const types = { FACEBOOK: 'facebook f', LINKEDIN: 'linkedin in' };
     return (
       <Modal
         open={this.state.modalOpen}
@@ -39,9 +36,10 @@ class TeamModal extends Component {
                   <p>
                     {member.story}
                   </p>
+                  <Divider hidden />
                   <div>
                     {member.social.map(stype => (
-                      <Link to={stype.url === null ? '/' : stype.url}>
+                      <Link to={stype.url === null ? '/' : stype.url} className="icon-link">
                         <Icon
                           color="green"
                           name={types[stype.type] || stype.type.toLowerCase()}

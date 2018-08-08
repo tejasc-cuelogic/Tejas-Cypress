@@ -87,6 +87,16 @@
             padding-left:@14px;
         }
     }
+    .content{
+        &.scrolling {
+            .ui.image.large {
+                min-width: 400px;
+            }
+        }
+        .pdf-viewer {
+            height: 70vh;
+        }
+    }
 }
 //  Public pages Ends
 
@@ -131,9 +141,9 @@
             top:@12px;
             left:@12px;
         }
-        .ui.header{
-            margin:0 0 @7px;
-        }
+        // .ui.header{
+        //     margin:0 0 @7px;
+        // }
         .ui.divider{
             max-width:140px;
             margin-left:auto;
@@ -165,10 +175,12 @@
                     font-weight:@normal;
                 }
             }
+            .user-type{
+                min-height:165px;
+            }
         }
         .user-type{
             height:100%;
-            min-height:165px;
             padding:@14px;
             border-radius:@defaultBorderRadius * 1.5;
             border:darken(@neutral-offwhite, 9%) 1px solid;
@@ -245,6 +257,14 @@
             padding:@14px 0;
             line-height:@22px;
             text-align:center;
+        }
+    }
+    i.icons{
+        color:@border-color;
+        .corner.icon{
+            font-size:0.5em;
+            right:-5px;
+            bottom:-5px;
         }
     }
     .actions{

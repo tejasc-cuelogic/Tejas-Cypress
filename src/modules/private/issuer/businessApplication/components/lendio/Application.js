@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { indexOf } from 'lodash';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
 import { FormInput, FormDropDown, FormCheckbox, MaskedInput2 } from '../../../../../../theme/form';
@@ -126,7 +125,7 @@ export default class Application extends Component {
             </FormElementWrap>
             <Header as="h3">Submit your application to Lendio</Header>
             <p>
-              Do you give Lendio and their <Link to="/" className="link"><b>partners</b></Link> permission to
+              Do you give Lendio and their <a href="https://www.lendio.com/agreements/partner-list/" rel="noopener noreferrer" target="_blank" className="link"><b>partners</b></a> permission to
               contact you at the number and email you provided, including via email, phone, text
               message and cell phone, including the use of automated dialing equipment or
               pre-recorded calls and messages? Your consent is not a condition of
