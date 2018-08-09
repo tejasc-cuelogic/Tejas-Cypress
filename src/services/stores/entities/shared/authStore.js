@@ -27,27 +27,31 @@ export class AuthStore {
   @observable RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
   @observable NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
   @observable confirmProgress = false;
-  @observable pwdInputType = 'password';
+  @observable pwdInputType = {
+    password: 'password',
+    oldPasswd: 'password',
+    newPasswd: 'password',
+  }
 
 
   @action
-  setPwdVisibilityStatus = () => {
-    if (this.pwdInputType === 'password') {
-      this.pwdInputType = 'text';
+  setPwdVisibilityStatus = (type) => {
+    if (this.pwdInputType[type] === 'password') {
+      this.pwdInputType[type] = 'text';
     } else {
-      this.pwdInputType = 'password';
+      this.pwdInputType[type] = 'password';
     }
   }
 
   @action
-  togglePasswordType = () => {
+  togglePasswordType = (type) => {
     let iconData = {
       link: true,
-      onClick: this.setPwdVisibilityStatus,
+      onClick: () => this.setPwdVisibilityStatus(type),
     };
-    if (this.pwdInputType === 'password') {
+    if (this.pwdInputType[type] === 'password') {
       iconData.className = 'ns-view';
-    } else if (this.pwdInputType === 'text') {
+    } else if (this.pwdInputType[type] === 'text') {
       iconData.className = 'ns-view active';
     } else {
       iconData = null;
