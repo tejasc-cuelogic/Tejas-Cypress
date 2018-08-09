@@ -117,7 +117,7 @@ class Comments extends Component {
                   email <Link to="/">support@nextseed.com</Link>.
                 </p>
                 <Form className="public-form" reply>
-                  <TextArea placeholder="Write a comment..." />
+                  <TextArea placeholder="Write a reply..." />
                   <Button>Cancel</Button>
                   <Button primary floated="right">Post Comment</Button>
                 </Form>
@@ -128,7 +128,7 @@ class Comments extends Component {
           <Comment>
             <Comment.Content>
               <Comment.Author>Karla</Comment.Author>
-              <Comment.Metadata className="text-uppercase">JUL 12</Comment.Metadata>
+              <Comment.Metadata className="text-uppercase">JUN 12,2018</Comment.Metadata>
               {/* add after sign up - do not remove */}
               <Comment.Actions>
                 <Comment.Action>Reply</Comment.Action>

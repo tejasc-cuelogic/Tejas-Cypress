@@ -135,8 +135,8 @@ const HowItWorks = () => (
             but those that succeed can make a lasting impact in your city.
             </p>
           </Grid.Column>
-          <Grid.Column>
-            <List relaxed className="mb-50 learn-more-list">
+          <Grid.Column verticalAlign="middle">
+            <List relaxed className="learn-more-list">
               <List.Item>
                 <List.Header>Learn more</List.Header>
                 <List.Icon className="ns-arrow-right" color="green" />
