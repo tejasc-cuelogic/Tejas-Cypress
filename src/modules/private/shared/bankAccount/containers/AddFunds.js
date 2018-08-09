@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button } from 'semantic-ui-react';
 
-import { MaskedInput2 } from '../../../../../theme/form';
+import { MaskedInput } from '../../../../../theme/form';
 import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
 
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore')
@@ -47,7 +47,7 @@ export default class AddFunds extends Component {
         <p className="center-align">How much would you like to deposit into your account today?</p>
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
-            <MaskedInput2
+            <MaskedInput
               name="value"
               type="tel"
               currency

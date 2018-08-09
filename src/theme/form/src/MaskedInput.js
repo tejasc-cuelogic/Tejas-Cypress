@@ -6,7 +6,7 @@ import NumberFormat from 'react-number-format';
 import InputMask from 'react-input-mask';
 import { FieldError } from '../../shared';
 
-const MaskedInput2 = observer((props) => {
+const MaskedInput = observer((props) => {
   const {
     label,
     error,
@@ -81,4 +81,4 @@ const MaskedInput2 = observer((props) => {
   );
 });
 
-export default MaskedInput2;
+export default MaskedInput;

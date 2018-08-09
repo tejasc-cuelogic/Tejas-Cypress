@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { MaskedInput2 } from '../../../../../../theme/form';
+import { MaskedInput } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../theme/shared';
 
@@ -87,7 +87,7 @@ export default class ConfirmPhoneNumber extends Component {
               <ListErrors errors={[errors]} />
             </Message>
           }
-          <MaskedInput2
+          <MaskedInput
             value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
             type="tel"
             name="phoneNumber"

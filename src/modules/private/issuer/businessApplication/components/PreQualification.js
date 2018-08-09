@@ -5,7 +5,7 @@ import { Header, Grid, Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../helper/utility';
 import {
-  FormRadioGroup, FormCheckbox, FormInput, MaskedInput2, AutoComplete,
+  FormRadioGroup, FormCheckbox, FormInput, MaskedInput, AutoComplete,
 } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 
@@ -73,7 +73,7 @@ export default class PreQualification extends Component {
                         />
                       ))
                     }
-                    <MaskedInput2
+                    <MaskedInput
                       disabled={preQualFormDisabled}
                       name="phoneNumber"
                       fielddata={fields.phoneNumber}
@@ -151,7 +151,7 @@ export default class PreQualification extends Component {
                         <Form.Group widths="equal">
                           {
                             ['businessAgeYears', 'businessAgeMonths'].map(field => (
-                              <MaskedInput2
+                              <MaskedInput
                                 disabled={preQualFormDisabled}
                                 key={field}
                                 name={field}
@@ -168,7 +168,7 @@ export default class PreQualification extends Component {
                     }
                     {
                       ['industryExperience', 'estimatedCreditScore'].map(field => (
-                        <MaskedInput2
+                        <MaskedInput
                           disabled={preQualFormDisabled}
                           key={field}
                           name={field}
@@ -182,7 +182,7 @@ export default class PreQualification extends Component {
                     }
                     {
                       ['totalProjectCost', 'amountNeeded'].map(field => (
-                        <MaskedInput2
+                        <MaskedInput
                           hoverable
                           disabled={preQualFormDisabled}
                           key={field}
@@ -223,7 +223,7 @@ export default class PreQualification extends Component {
                     <div className="field-wrap">
                       {
                         ['previousYearGrossSales', 'previousYearCogSold', 'previousYearOperatingExpenses', 'previousYearNetIncome'].map(field => (
-                          <MaskedInput2
+                          <MaskedInput
                             disabled={preQualFormDisabled}
                             key={field}
                             name={field}
@@ -249,7 +249,7 @@ export default class PreQualification extends Component {
                   <div className="field-wrap">
                     {
                       ['nextYearGrossSales', 'nextYearCogSold', 'nextYearOperatingExpenses', 'nextYearNetIncome'].map(field => (
-                        <MaskedInput2
+                        <MaskedInput
                           disabled={preQualFormDisabled}
                           key={field}
                           name={field}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
-import { MaskedInput2 } from '../../../../../../../theme/form';
+import { MaskedInput } from '../../../../../../../theme/form';
 
 @inject('iraAccountStore')
 @observer
@@ -17,7 +17,7 @@ export default class FinancialInformation extends React.Component {
           <div className="field-wrap">
             {
               ['netWorth', 'annualIncome'].map(field => (
-                <MaskedInput2
+                <MaskedInput
                   key={field}
                   type="tel"
                   fielddata={FIN_INFO_FRM.fields[field]}
