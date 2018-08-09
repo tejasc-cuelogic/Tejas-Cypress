@@ -13,11 +13,17 @@ export class BusinessAppStore {
       by: 'lastLoginDate',
       direction: 'desc',
     },
-    search: {
-    },
+    search: {},
+    page: 1,
+    perPage: 2,
+    skip: 0,
   };
 
   @observable filterApplicationStatus = FILTER_META.applicationStatus;
+
+  @computed get totalRecords() {
+    return this.backup && this.backup.length;
+  }
 
   @action
   setFieldvalue = (field, value) => {
@@ -309,7 +315,94 @@ export class BusinessAppStore {
         {
           applicationId: 'sdf3',
           info: {
-            businessName: 'Go Ride',
+            businessName: 'Go Ride 1',
+            name: 'Jone',
+            email: 'jhon.cuelogic@nextseed.com',
+            phone: 21313213213,
+          },
+          comment: {
+            content: 'Testing comment',
+            date: '07/08/2018',
+            user: 'Alex',
+          },
+          createdDate: '07/08/2018',
+          updatedDate: '07/08/2018',
+          failedReasons: '',
+          applicationStatus: 'APPLICATION_SUBMITTED',
+          status: 'DELETED',
+          ratings: 0,
+          businessDetails: {
+            stepStatus: 'COMPLETE',
+          },
+          businessPerformance: {
+            stepStatus: 'COMPLETE',
+          },
+          businessDocumentation: {
+            stepStatus: 'COMPLETE',
+          },
+        },
+        {
+          applicationId: 'sdf3',
+          info: {
+            businessName: 'Go Ride 2',
+            name: 'Jone',
+            email: 'jhon.cuelogic@nextseed.com',
+            phone: 21313213213,
+          },
+          comment: {
+            content: 'Testing comment',
+            date: '07/08/2018',
+            user: 'Alex',
+          },
+          createdDate: '07/08/2018',
+          updatedDate: '07/08/2018',
+          failedReasons: '',
+          applicationStatus: 'APPLICATION_SUBMITTED',
+          status: 'DELETED',
+          ratings: 0,
+          businessDetails: {
+            stepStatus: 'COMPLETE',
+          },
+          businessPerformance: {
+            stepStatus: 'COMPLETE',
+          },
+          businessDocumentation: {
+            stepStatus: 'COMPLETE',
+          },
+        },
+        {
+          applicationId: 'sdf3',
+          info: {
+            businessName: 'Go Ride 3',
+            name: 'Jone',
+            email: 'jhon.cuelogic@nextseed.com',
+            phone: 21313213213,
+          },
+          comment: {
+            content: 'Testing comment',
+            date: '07/08/2018',
+            user: 'Alex',
+          },
+          createdDate: '07/08/2018',
+          updatedDate: '07/08/2018',
+          failedReasons: '',
+          applicationStatus: 'APPLICATION_SUBMITTED',
+          status: 'DELETED',
+          ratings: 0,
+          businessDetails: {
+            stepStatus: 'COMPLETE',
+          },
+          businessPerformance: {
+            stepStatus: 'COMPLETE',
+          },
+          businessDocumentation: {
+            stepStatus: 'COMPLETE',
+          },
+        },
+        {
+          applicationId: 'sdf3',
+          info: {
+            businessName: 'Go Ride 4',
             name: 'Jone',
             email: 'jhon.cuelogic@nextseed.com',
             phone: 21313213213,
@@ -345,23 +438,37 @@ export class BusinessAppStore {
       values[k].label = `${values[k].label} (${count})`;
     });
     this.initRequest();
-    // this.businessApplicationsList = graphql({
-    //   client,
-    //   query: getBusinessApplications,
-    // });
+    this.requestState.page = 1;
+    this.requestState.perPage = 2;
+    this.requestState.skip = 0;
   }
 
   @action
-  initRequest = () => {
+  initRequest = (props) => {
+    const { first, skip, page } = props ||
+      {
+        first: this.requestState.perPage,
+        skip: this.requestState.skip,
+        page: this.requestState.page,
+      };
+    this.requestState.page = page || this.requestState.page;
+    this.requestState.perPage = first || this.requestState.perPage;
+    this.requestState.skip = skip || this.requestState.skip;
+
     const { applicationStatus, keyword } = this.requestState.search;
+    console.log(first, skip, page);
     if (applicationStatus.length || (keyword && keyword !== '')) {
       this.businessApplicationsList.data = filter(this.backup, app =>
         includes(toJS(applicationStatus), app.status) || includes(app.comment.content, keyword)
           || includes(app.info.businessName, keyword) || includes(app.info.name, keyword) ||
-          includes(app.info.email, keyword));
+          includes(app.info.email, keyword)).slice(skip, skip + first);
     } else {
-      this.businessApplicationsList.data = this.backup;
+      this.businessApplicationsList.data = this.backup.slice(skip, skip + first);
     }
+    // this.businessApplicationsList = graphql({
+    //   client,
+    //   query: getBusinessApplications,
+    // });
   }
 }
 
