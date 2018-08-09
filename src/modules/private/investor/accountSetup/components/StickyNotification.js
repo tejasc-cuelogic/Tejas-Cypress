@@ -13,7 +13,9 @@ const stepinfo = {
 const checkStatus = (signupStatus) => {
   const accCreation = signupStatus.partialAccounts.concat(signupStatus.inActiveAccounts);
   const accName = AccCreationHelper.eleToUpperCaseInArray(accCreation);
-  if (signupStatus.idVerification !== 'PASS' && signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING' && signupStatus.phoneVerification !== 'DONE') {
+  if (signupStatus.idVerification !== 'PASS' && signupStatus.idVerification !== 'MANUAL_VERIFICATION_PENDING') {
+    stepinfo.title = 'Please verify your identity in order to proceed';
+  } else if (signupStatus.phoneVerification !== 'DONE') {
     stepinfo.title = 'Please verify your identity in order to proceed';
   } else if (!signupStatus.investorProfileCompleted) {
     stepinfo.title = 'Please establish your investor profile in order to proceed';
