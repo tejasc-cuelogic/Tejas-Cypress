@@ -41,7 +41,7 @@ export default class FaqsCombined extends Component {
                       index={index}
                       onClick={() => this.toggleAccordion(index, 'innerActiveIndex')}
                     >
-                      <Icon className="ns-minus-square" color="green" />
+                      <Icon className={innerActiveIndex === index ? 'ns-minus-square' : 'ns-plus-square'} color="green" />
                       {faqItem.question}
                     </Accordion.Title>
                     <Accordion.Content active={innerActiveIndex === index}>

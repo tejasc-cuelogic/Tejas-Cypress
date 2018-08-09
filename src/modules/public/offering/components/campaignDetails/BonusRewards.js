@@ -24,7 +24,7 @@ class BonusRewards extends Component {
                 <Header as="h4">
                   Early Bird Reward
                   <Header.Subheader>
-                    <Label size="small" color="green">49 remaining</Label>
+                    <Label size="small" color="green" className="text-uppercase">49 remaining</Label>
                   </Header.Subheader>
                 </Header>
                 <List as="ul">

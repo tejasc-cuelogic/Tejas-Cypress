@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-08-07)
+# 0.0.0 (2018-08-09)
 
 
 ### Bug Fixes
@@ -9,6 +9,7 @@
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** business application finding fixes ([10c2ce1](https://chaos.ns.team/nsv2/ns-client/commits/10c2ce1))
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** file uploader added confirm modal on remove file operation ([a99c1e4](https://chaos.ns.team/nsv2/ns-client/commits/a99c1e4))
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** lendio link added in lendio application form ([64ca8dc](https://chaos.ns.team/nsv2/ns-client/commits/64ca8dc))
+* **setup hello world structure for public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - setup hello world structure for public pages]:** updating UI and styles ([40fba86](https://chaos.ns.team/nsv2/ns-client/commits/40fba86))
 * **UserManagement[Issue [263](https://chaos.ns.team/nsv2/ns-ops/issues/263) - user management ui fixes from review]:** user management ui fixes from review ([b47f55e](https://chaos.ns.team/nsv2/ns-client/commits/b47f55e))
 
 
