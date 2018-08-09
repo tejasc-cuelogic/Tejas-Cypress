@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
-import { MaskedInput2 } from '../../../../../../../theme/form';
+import { MaskedInput } from '../../../../../../../theme/form';
 
 @inject('entityAccountStore')
 @observer
@@ -19,7 +19,7 @@ export default class FinancialInformation extends Component {
           <div className="field-wrap">
             {
               ['netAssets', 'cfInvestment'].map(field => (
-                <MaskedInput2
+                <MaskedInput
                   key={field}
                   name={field}
                   placeHolder={field === 'netAssets' ? '$ 1,000,000' : '$ 5,000'}

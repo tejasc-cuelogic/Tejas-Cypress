@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Modal, Header, Divider, Button, Message, Form, Statistic } from 'semantic-ui-react';
-import { MaskedInput2 } from '../../../../../../theme/form';
+import { MaskedInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 
@@ -57,7 +57,7 @@ export default class UpdateInvestmentLimits extends Component {
             <Form error onSubmit={this.submit}>
               {fields &&
                 ['annualIncome', 'netWorth', 'otherInvestments'].map(field => (
-                  <MaskedInput2
+                  <MaskedInput
                     key={field}
                     name={field}
                     currency

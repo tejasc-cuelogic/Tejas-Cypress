@@ -67,7 +67,7 @@ const LegalDocuments = observer(({
                     <List bulleted>
                       <List.Item>Utility bill in your name for that address</List.Item>
                       <List.Item>
-                        Signed lease (if an apartment) that shows the<br />
+                        Signed lease (if an apartment) that shows the
                         address (just the signature page)
                       </List.Item>
                       <List.Item>Voided check with your name  and address on it</List.Item>
@@ -91,10 +91,10 @@ const LegalDocuments = observer(({
         </Grid>
         <Divider section hidden />
         <div className="center-align">
-          <Button loading={submitVerificationsDocs && inProgress} primary size="large" className="very relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
-        </div>
-        <div className="center-align">
-          <Button type="button" className="cancel-link" onClick={() => close()}>I`ll finish this later</Button>
+          <Button.Group vertical>
+            <Button loading={submitVerificationsDocs && inProgress} primary size="large" className="relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
+            <Button type="button" className="link-button cancel-link" onClick={() => close()}>I`ll finish this later</Button>
+          </Button.Group>
         </div>
       </Form>
       <Confirm

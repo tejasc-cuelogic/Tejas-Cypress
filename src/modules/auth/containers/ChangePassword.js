@@ -41,8 +41,8 @@ export default class ChangePassword extends Component {
                 ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
                   <FormInput
                     key={field}
-                    type={field === 'newPasswd' ? pwdInputType : 'password'}
-                    icon={field === 'newPasswd' ? togglePasswordType() : null}
+                    type={(field === 'newPasswd') || (field === 'oldPasswd') ? pwdInputType[field] : 'password'}
+                    icon={(field === 'newPasswd') || (field === 'oldPasswd') ? togglePasswordType(field) : null}
                     name={field}
                     fielddata={CHANGE_PASS_FRM.fields[field]}
                     changed={changePassChange}

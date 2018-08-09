@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { FormInput } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../theme/shared';
 
@@ -39,7 +40,7 @@ export default class ConfirmVerificationCode extends Component {
     this.props.beneficiaryStore.setShareModalData(false);
     this.props.beneficiaryStore.requestOtpForManageBeneficiary().then(() => {
       this.props.beneficiaryStore.setReSendVerificationCode(false);
-      Helper.toast('The OTP is send to your number!', 'success');
+      Helper.toast('The OTP is sent to your number!', 'success');
     });
   }
 
@@ -80,20 +81,21 @@ export default class ConfirmVerificationCode extends Component {
             </Link>
           </p>
           <Form error onSubmit={this.submit}>
-            <FormInput
-              name="code"
-              size="huge"
-              containerclassname="otp-field"
-              maxLength={6}
-              fielddata={OTP_VERIFY_META.fields.code}
-              changed={verifyVerificationCodeChange}
-            />
-            <div className="center-align">
+            <Form.Field className="otp-wrap">
+              <label>Enter verification code here:</label>
+              <ReactCodeInput
+                name="code"
+                fields={6}
+                type="number"
+                className="otp-field"
+                fielddata={OTP_VERIFY_META.fields.code}
+                onChange={verifyVerificationCodeChange}
+              />
+            </Form.Field>
+            <Button.Group vertical>
               <Button loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!OTP_VERIFY_META.meta.isValid} >Submit to approval</Button>
-            </div>
-            <div className="center-align">
-              <Button loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="cancel-link" onClick={e => this.resendVerification(e)}>Resend the code to my phone</Button>
-            </div>
+              <Button loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="link-button cancel-link" onClick={e => this.resendVerification(e)}>Resend the code to my phone</Button>
+            </Button.Group>
           </Form>
         </Modal.Content>
       </Modal>
