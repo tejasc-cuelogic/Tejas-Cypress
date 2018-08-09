@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Grid, Input, Button, Menu, Icon, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
+import { Form, Grid, Input, Button, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
 import { FormCheckbox } from '../../../../../theme/form';
 import { ApplicationListStepColumn } from './ApplicationListStepColumn';
 import ApplicationListButtons from './ApplicationListButtons';
 import { AppStatusLabel } from './AppStatusLabel';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, NsPagination } from '../../../../../theme/shared';
 
 @inject('businessAppAdminStore')
 @observer
@@ -32,6 +32,8 @@ export default class ApplicationsList extends Component {
     }
   }
 
+  paginate = params => this.props.businessAppAdminStore.initRequest(params);
+
   render() {
     const { match } = this.props;
     const {
@@ -39,6 +41,7 @@ export default class ApplicationsList extends Component {
       requestState,
       filterApplicationStatus,
       columnTitle,
+      totalRecords,
     } = this.props.businessAppAdminStore;
     return (
       <Aux>
@@ -66,26 +69,9 @@ export default class ApplicationsList extends Component {
                 />
               </Grid.Column>
               <Grid.Column width={6} textAlign="right">
-                {/* <Pagination defaultActivePage={1} totalPages={20} /> */}
-                <Menu pagination text>
-                  <Menu.Item icon as={Link} to="/">
-                    <Icon className="ns-arrow-double-left" color="green" />
-                  </Menu.Item>
-                  <Menu.Item icon as={Link} to="/">
-                    <Icon className="ns-chevron-left" color="green" />
-                  </Menu.Item>
-                  <Menu.Item>
-                    <Input placeholder="1" />
-                  </Menu.Item>
-                  <Menu.Item>of</Menu.Item>
-                  <Menu.Item>20</Menu.Item>
-                  <Menu.Item icon as={Link} to="/">
-                    <Icon className="ns-chevron-right" color="green" />
-                  </Menu.Item>
-                  <Menu.Item icon as={Link} to="/">
-                    <Icon className="ns-arrow-double-right" color="green" />
-                  </Menu.Item>
-                </Menu>
+                {totalRecords > 0 &&
+                <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+                }
               </Grid.Column>
             </Grid.Row>
           </Grid>
