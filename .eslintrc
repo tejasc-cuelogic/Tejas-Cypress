@@ -13,6 +13,7 @@
     "no-bitwise": "off",
     "react/prop-types": "off",
     "react/prefer-stateless-function": "off",
+    "linebreak-style": ["error", "windows"],
     "jsx-a11y/anchor-is-valid": [
       "off",
       {
