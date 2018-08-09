@@ -25,7 +25,7 @@ export default class ApplicationListButtons extends Component {
             <Button color="green">Stash</Button>
             }
             {includes(['STASH'], this.props.status) &&
-            <Button color="green" inverted className="relaxed">Unstash</Button>
+            <Button color="green" inverted>Unstash</Button>
             }
           </Aux>
           }

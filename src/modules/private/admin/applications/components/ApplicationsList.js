@@ -66,7 +66,6 @@ export default class ApplicationsList extends Component {
                 />
               </Grid.Column>
               <Grid.Column width={6} textAlign="right">
-                {/* <Pagination defaultActivePage={1} totalPages={20} /> */}
                 <Menu pagination text>
                   <Menu.Item icon as={Link} to="/">
                     <Icon className="ns-arrow-double-left" color="green" />
@@ -145,7 +144,12 @@ export default class ApplicationsList extends Component {
                         status={application.status}
                       />
                     </Table.Row>
-                  )) : <InlineLoader text="No data available." />
+                  )) :
+                  <Table.Row>
+                    <Table.Cell colSpan="6">
+                      <InlineLoader text="No data available." />
+                    </Table.Cell>
+                  </Table.Row>
                 }
               </Table.Body>
             </Table>
