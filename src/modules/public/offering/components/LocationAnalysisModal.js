@@ -70,7 +70,7 @@ class LocationAnalysisModal extends Component {
                     <Grid.Column>
                       <ChartPie title="Age" data={CUSTOMER_DEMO_AGE} colors={AGE_COLORS} />
                     </Grid.Column>
-                    <Grid.Column verticalAlign="middle">
+                    <Grid.Column verticalAlign="middle" textAlign="center">
                       <Statistic size="tiny" className="basic">
                         <Statistic.Value>$82,000/yr</Statistic.Value>
                         <Statistic.Label>Average Income</Statistic.Label>

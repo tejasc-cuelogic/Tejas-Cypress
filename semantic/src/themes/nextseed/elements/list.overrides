@@ -6,9 +6,14 @@
     .ui.horizontal.list>.item{
         font-size:@12px;
         font-weight:@fontMedium;
+        text-transform: capitalize;
     }
 }
 .ui.list {
+    >.item>i.icon.ns-flag-line {
+        font-size: @20px;
+        line-height: 28px;
+    }
     &.learn-more-list >.item {
         .header {
             margin-bottom: @10px;
