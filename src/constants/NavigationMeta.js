@@ -252,7 +252,7 @@ export const PRIVATE_NAV = [
     subNavigations: [
       { title: 'Pre-qual failed (2)', to: 'prequal-failed', component: 'ApplicationsList' },
       { title: 'In-Progress (3)', to: 'in-progress', component: 'ApplicationsList' },
-      { title: 'Completed (4)', to: 'completed', component: 'ApplicationsList' },
+      { title: 'Completed (7)', to: 'completed', component: 'ApplicationsList' },
     ],
   },
   {
