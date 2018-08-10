@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { Header, Image, Icon, Embed, Statistic, Grid, Menu, Label, Divider, Segment, Breadcrumb, Popup, Modal, List } from 'semantic-ui-react';
 import videoPoster from '../../../../../assets/images/636206632.webp';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
@@ -50,18 +51,18 @@ class Overview extends Component {
                       <Header as="h3">Top things to know</Header>
                       <p><b>Industry: </b>{campaign.industry}<br />
                         <b>Investment Type: </b>{campaign.investmentType}
-                        <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+                        <Popup hoverable position="bottom center" trigger={<Icon name="help circle" color="green" />} content={(<span>For every $100 you invest, you are paid a portion of this company&apos;s gross revenue every month until you are paid $190 within 78 months. A 1.0% service fee is deducted from each payment. <Link target="_blank" to="https://www.nextseed.com/offerings/buffbrew-taproom/#returnsGraphAnchor]">See some examples</Link>.</span>)} />
                       </p>
                       <p className="detail-section">{campaign.description}</p>
                       <Divider section />
                       <List bulleted relaxed>
                         <List.Item>
                           <strong>Full-service kitchen, over 40 beers</strong>
-                          on tap, open 7 days a week
+                           on tap, open 7 days a week
                         </List.Item>
                         <List.Item>
                           <strong>Joining the Sawyer Yards Creative Campus</strong>
-                          of 40 acres, 10 buildings,  400+ Studios, 500+ Artists
+                           of 40 acres, 10 buildings,  400+ Studios, 500+ Artists
                         </List.Item>
                         <List.Item>
                           <strong>Get “Free Beer for Life”</strong> with any investment over $1,000

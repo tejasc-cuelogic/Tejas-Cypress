@@ -12,7 +12,6 @@ body{
 }
 section{
 	padding:@60px 0;
-	background-color:@white;
 	.caption{
 		margin-bottom:@50px !important;
 	}
@@ -131,7 +130,17 @@ h6{
 }
 .intro-text, .note{
 	color:@neutral-middark;
-	// margin-bottom:@28px;
+}
+.caption-note{
+	font-size:@13px;
+	font-style:italic;
+	margin:@7px 0;
+	&:first-child{
+		margin-top:0px;
+	}
+	&:last-child{
+		margin-bottom:0px;
+	}
 }
 a{
 	color:@link-color;
@@ -376,10 +385,6 @@ footer{
 			p {
 				line-height: @20px;
 				color:@neutral-middark;
-				&.note {
-					font-style: italic;
-					margin-bottom: @35px;
-				}
 			}
 			img {
 				width: 100%;
@@ -658,9 +663,8 @@ p i.icon {
 				content: counter(section);  
 				position: absolute;
 				left: 0;
-				top: @15px;
-				font-weight: 500;
-				line-height: 24px;
+				top: 15px;
+				font-weight: @fontMedium;
 				font-size: @40px;
 				color: @primary-one;
 			}
@@ -808,13 +812,18 @@ address {
 		b {
 			color: @fullBlack;
 		}
-		&.note {
-			font-style: normal !important;
-		}
 	}
 }
 a.icon-link:hover {
 	text-decoration: none;
+}
+.animation-container {
+	position: absolute;
+	top: 0; 
+	left: 0; 
+	width: 100%; 
+	height: 100%; 
+	z-index: 9999;
 }
 
 /* END <== PUBLIC PAGES UI STYLES */

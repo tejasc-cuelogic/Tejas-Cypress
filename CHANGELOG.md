@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-08-07)
+# 0.0.0 (2018-08-09)
 
 
 ### Bug Fixes
@@ -9,6 +9,7 @@
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** business application finding fixes ([10c2ce1](https://chaos.ns.team/nsv2/ns-client/commits/10c2ce1))
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** file uploader added confirm modal on remove file operation ([a99c1e4](https://chaos.ns.team/nsv2/ns-client/commits/a99c1e4))
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** lendio link added in lendio application form ([64ca8dc](https://chaos.ns.team/nsv2/ns-client/commits/64ca8dc))
+* **setup hello world structure for public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - setup hello world structure for public pages]:** updating UI and styles ([40fba86](https://chaos.ns.team/nsv2/ns-client/commits/40fba86))
 * **UserManagement[Issue [263](https://chaos.ns.team/nsv2/ns-ops/issues/263) - user management ui fixes from review]:** user management ui fixes from review ([b47f55e](https://chaos.ns.team/nsv2/ns-client/commits/b47f55e))
 
 
@@ -28,6 +29,7 @@
 * **Investor summary dashboard[Issue [320](https://chaos.ns.team/nsv2/ns-ops/issues/320) - investor summary after account setup]:** investor summary after account setup ([a5a426c](https://chaos.ns.team/nsv2/ns-client/commits/a5a426c))
 * **investor-account-details-overview-ui[Issue [301](https://chaos.ns.team/nsv2/ns-ops/issues/301) - 301 investor account details overview ui]:** Added overview page UI on investor account details page ([6acae58](https://chaos.ns.team/nsv2/ns-client/commits/6acae58))
 * **Investor[Issue [221](https://chaos.ns.team/nsv2/ns-ops/issues/221) - investor signup flow ui ux updates 2]:** Review Feedback points - spelling correction and IRA - funding default set to null ([28904b1](https://chaos.ns.team/nsv2/ns-client/commits/28904b1))
+* **Investor[Issue [221](https://chaos.ns.team/nsv2/ns-ops/issues/221) - investor-signup-flow-ui-ux-updates-2]:** Done feedback point, reset radio button value on default, done few design related and otp field changes ([8264cf0](https://chaos.ns.team/nsv2/ns-client/commits/8264cf0))
 * **Investor[Issue [221](https://chaos.ns.team/nsv2/ns-ops/issues/221) - investor-signup-flow-ui-ux-updates-2]:** Done the feedback changes and data/design changes as per Figma. ([e60b5ee](https://chaos.ns.team/nsv2/ns-client/commits/e60b5ee))
 * **Investor[Issue [235](https://chaos.ns.team/nsv2/ns-ops/issues/235) - manage-beneficiaries-feedback-changes]:** investor beneficiary feedback changes ([9718a27](https://chaos.ns.team/nsv2/ns-client/commits/9718a27))
 * **Investor[Issue [297](https://chaos.ns.team/nsv2/ns-ops/issues/297) - investor signup integrate SSN collision check api]:** investor signup integrate SSN collision check api ([77e458e](https://chaos.ns.team/nsv2/ns-client/commits/77e458e))

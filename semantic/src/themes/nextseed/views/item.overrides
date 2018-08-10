@@ -8,55 +8,60 @@
         }
     }
 }
-.ui.items.messages{
-    .item{
-        margin:@35px 0;
-        &.date-stamp{
-            margin:@14px 0;
-            justify-content:center;
-            + .item{
-                margin-top:@21px;
-            }
-        }
-        > .content{
-            > .description{
-                margin:0;
-                padding:@12px @20px;
-                font-size:@16px;
-                line-height:@24px;
-                border-radius:@6px;
-                background-color:@neutral-offwhite;
-                white-space: pre-line;
-            }
-            p{
-                margin:0 0 @21px;
-                &:last-child{
-                    margin:0;
+.ui.items{
+    >.item>.content>.description {
+        color: @neutral-middark;
+    }
+    &.messages{
+        .item{
+            margin:@35px 0;
+            &.date-stamp{
+                margin:@14px 0;
+                justify-content:center;
+                + .item{
+                    margin-top:@21px;
                 }
             }
-        }
-        > .extra{
-            min-width:100px;
-            margin:0 0 0 @14px;
-            flex:0 1;
-            > *{
-                margin:0;
-            }
-            .time-stamp{
-                display:block;
-                color:@border-color;
-            }
-        }
-        &.sent{
-            .extra{
-                text-align:right;
-                margin:0 @14px 0 0;
-            }
-            .content{
-                padding:0 @21px 0 0;
+            > .content{
                 > .description{
-                    background-color:transparent;
-                    border:@borderColor 1px solid;
+                    margin:0;
+                    padding:@12px @20px;
+                    font-size:@16px;
+                    line-height:@24px;
+                    border-radius:@6px;
+                    background-color:@neutral-offwhite;
+                    white-space: pre-line;
+                }
+                p{
+                    margin:0 0 @21px;
+                    &:last-child{
+                        margin:0;
+                    }
+                }
+            }
+            > .extra{
+                min-width:100px;
+                margin:0 0 0 @14px;
+                flex:0 1;
+                > *{
+                    margin:0;
+                }
+                .time-stamp{
+                    display:block;
+                    color:@border-color;
+                }
+            }
+            &.sent{
+                .extra{
+                    text-align:right;
+                    margin:0 @14px 0 0;
+                }
+                .content{
+                    padding:0 @21px 0 0;
+                    > .description{
+                        background-color:transparent;
+                        border:@borderColor 1px solid;
+                    }
                 }
             }
         }
@@ -71,13 +76,13 @@
 		>.item {
 			width: 50%;
 			margin-top: 0;
-			margin-bottom: 20px;
+			margin-bottom: @30px;
 			padding-left: @14px;
 			padding-right: @14px;
 			.ui.mini.image {
 				width: 45px;
 				+.content {
-					padding-left: 10px;
+					padding-left: @10px;
 				}
 			}
 			.meta {
