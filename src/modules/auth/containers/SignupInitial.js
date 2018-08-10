@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Grid, Header, Icon } from 'semantic-ui-react';
+import { Modal, Button, Grid, Header, Icon, Transition } from 'semantic-ui-react';
 import { USER_TYPES_META } from './../../../constants/user';
 
 const GetBtn = ({ type }) => {
@@ -9,7 +9,7 @@ const GetBtn = ({ type }) => {
     investor: { label: 'Open account', to: '/auth/register-investor' },
     issuer: { label: 'Open account', to: '/auth/register-investor' },
   };
-  return <Button as={Link} to={BtnMeta[type].to} primary size="large" className="relaxed" content={BtnMeta[type].label} />;
+  return <Button disabled={!type} as={Link} to={type ? BtnMeta[type].to : '/auth/register'} primary size="large" className="relaxed" content={type ? BtnMeta[type].label : 'Open account'} />;
 };
 
 @inject('authStore')
@@ -37,13 +37,15 @@ class signupInitial extends Component {
                 <div className={`user-type ${(selectedType.value === type.value ? 'active' : '')}`}>
                   <Icon className={type.icon} size="huge" />
                   <h4>{type.text}</h4>
-                  <p>{selectedType.value === type.value ? type.desc : ''}</p>
+                  <Transition visible={selectedType.value === type.value} animation="scale" duration={500}>
+                    <p>{type.desc}</p>
+                  </Transition>
                 </div>
               </Grid.Column>
             ))}
             <Grid.Row>
               <Grid.Column>
-                {selectedType.value ? <GetBtn type={selectedType.value} /> : ''}
+                <GetBtn type={selectedType.value} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
