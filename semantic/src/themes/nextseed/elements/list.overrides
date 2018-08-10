@@ -335,6 +335,7 @@ ol.ui.list.step-list{
 }
 
 .ui.list.horizontal{
+    min-width:600px;
     .item.ui.checkbox{
         min-width:33%;
         margin:0;

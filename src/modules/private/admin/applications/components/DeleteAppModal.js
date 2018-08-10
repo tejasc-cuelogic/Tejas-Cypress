@@ -35,15 +35,14 @@ export default class DeleteAppModal extends Component {
             </Message>
           }
           <Form error onSubmit={this.props.submit}>
-            <div className="field-wrap">
-              <Form.Group widths="equal">
-                <FormTextarea
-                  type="text"
-                  name="comments"
-                  fielddata={fields.comments}
-                />
-              </Form.Group>
-            </div>
+            <Form.Group widths="equal">
+              <FormTextarea
+                type="text"
+                name="comments"
+                fielddata={fields.comments}
+                containerclassname="secondary"
+              />
+            </Form.Group>
             <div className="center-align">
               <Button.Group>
                 <Button className="very relaxed" onClick={this.handleCloseModal} loading={inProgress} color="green">Promote</Button>
