@@ -6,6 +6,7 @@ import LegalDetails from '../../components/identityVerification/LegalDetails';
 import LegalDocuments from '../../components/identityVerification/LegalDocuments';
 import LegalIdentityQuestions from '../../components/identityVerification/LegalIdentityQuestions';
 import ConfirmPhoneNumber from '../../../../../auth/containers/ConfirmPhoneNumber';
+import { DataFormatter } from '../../../../../../helper';
 import { NS_SITE_EMAIL_SUPPORT } from '../../../../../../constants/common';
 
 @inject('uiStore', 'identityStore', 'userStore', 'userDetailsStore')
@@ -79,7 +80,9 @@ export default class IdentityVerification extends Component {
               this.props.identityStore.startPhoneVerification().then(() => {
                 this.props.history.push('/app/summary/identity-verification/3');
               })
-                .catch((err) => { this.props.uiStore.setErrors(JSON.stringify(err.message)); });
+                .catch((err) => {
+                  this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+                });
             }
           } else {
             Helper.toast(alertMsg, msgType);
@@ -105,7 +108,7 @@ export default class IdentityVerification extends Component {
           this.props.history.push('/app/summary/identity-verification/3');
         })
           .catch((err) => {
-            this.props.uiStore.setErrors(JSON.stringify(err.message));
+            this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
           });
       }
     })
@@ -126,7 +129,7 @@ export default class IdentityVerification extends Component {
             this.props.history.push('/app/summary/identity-verification/3');
           })
             .catch((err) => {
-              this.props.uiStore.setErrors(JSON.stringify(err.message));
+              this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
             });
         }
       } else {
