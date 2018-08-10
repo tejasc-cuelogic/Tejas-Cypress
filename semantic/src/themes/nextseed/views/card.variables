@@ -60,7 +60,7 @@
 @contentDivider: @borderWidth solid @internalBorderColor;
 @contentMargin: 0em;
 @contentBackground: none;
-@contentPadding: 1.5em 1.5em;
+@contentPadding: 1em 1.5em;
 @contentFontSize: 1em;
 @contentBorderRadius: 0em;
 @contentBoxShadow: none;

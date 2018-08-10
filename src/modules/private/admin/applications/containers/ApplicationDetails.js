@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { Modal, Card, Header, Label, Rating } from 'semantic-ui-react';
+import { Link, Route, Switch } from 'react-router-dom';
+import { Modal, Card, Header, Label, Rating, Button, Grid } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -29,12 +29,43 @@ export default class ApplicationDetails extends Component {
         <Modal.Content className="transaction-detials">
           <Header as="h3">
             California 88 Application
-            <span className="title-meta">Status: Completed</span>
-            <Label color="green">Reviewed</Label>
-            <span className="title-meta">
-              Rating <Rating size="large" disabled defaultRating={3} maxRating={5} />
-            </span>
+            <span className="title-meta">Status: <b>Completed</b></span>
+            <Label size="small" color="green">Reviewed</Label>
+            <span className="title-meta">Rating</span>
+            <Rating size="huge" disabled defaultRating={3} maxRating={5} />
+            <Button secondary compact floated="right" content="Promote" />
           </Header>
+          <Grid columns="equal">
+            <Grid.Row>
+              <Grid.Column>
+                <Card fluid>
+                  <Card.Content>
+                    <Header as="h6">
+                      Information
+                      <Link to="/" className="pull-right small">Edit</Link>
+                    </Header>
+                  </Card.Content>
+                  <Card.Content>asdfasdfasdfadf</Card.Content>
+                </Card>
+              </Grid.Column>
+              <Grid.Column>
+                <Card fluid>
+                  <Card.Content>
+                    <Header as="h6">Primary POC</Header>
+                  </Card.Content>
+                  <Card.Content>asdfasdfasdfadf</Card.Content>
+                </Card>
+              </Grid.Column>
+              <Grid.Column>
+                <Card fluid>
+                  <Card.Content>
+                    <Header as="h6">Failed Reason</Header>
+                  </Card.Content>
+                  <Card.Content>asdfasdfasdfadf</Card.Content>
+                </Card>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
             <Switch>
