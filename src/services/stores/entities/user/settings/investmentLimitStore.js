@@ -23,7 +23,7 @@ export class InvestmentLimitStore {
     return toJS({ accountList: accList, isIndAccExist: isIndividualAccount });
   }
 
-  // Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
+  //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
   getInvestmentLimit = (data) => {
     let limit = 0;
     const maxLimit = 107000;
