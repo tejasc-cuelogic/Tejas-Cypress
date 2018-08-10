@@ -84,7 +84,7 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Content className="signup-content center-align">
           {errors &&
             <Message error>
-              <ListErrors errors={[errors]} />
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
             </Message>
           }
           <MaskedInput
