@@ -5,6 +5,7 @@ import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../../api/gcoolApi';
 import { FILTER_META } from '../../../../../constants/user';
 import { allBusinessApplicationses } from '../../../queries/businessApplication';
+import Helper from '../../../../../helper/utility';
 
 export class BusinessAppStore {
   @observable businessApplicationsList = [];
@@ -26,7 +27,7 @@ export class BusinessAppStore {
   @observable filterApplicationStatus = FILTER_META.applicationStatus;
 
   @computed get totalRecords() {
-    return (this.businessApplicationsList &&
+    return (this.businessApplicationsList && this.businessApplicationsList.data &&
       this.businessApplicationsList.data._allBusinessApplicationsesMeta &&
       this.businessApplicationsList.data._allBusinessApplicationsesMeta.count) || 0;
   }
@@ -74,20 +75,8 @@ export class BusinessAppStore {
     this.requestState.search = {};
     this.filterApplicationStatus = FILTER_META.applicationStatus;
     const { values } = this.filterApplicationStatus;
-    switch (section) {
-      case 'prequal-failed':
-        this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, 'prequal-failed'));
-        break;
-      case 'in-progress':
-        this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, 'in-progress'));
-        this.filterApplicationStatus.value = ['UNSTASH'];
-        break;
-      case 'completed':
-        this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, 'completed'));
-        this.filterApplicationStatus.value = ['NEW', 'REVIEWING'];
-        break;
-      default: break;
-    }
+    this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, section));
+    this.filterApplicationStatus.value = section === 'in-progress' ? ['UNSTASH'] : section === 'completed' ? ['NEW', 'REVIEWING'] : [];
     this.requestState.search.applicationStatus = this.filterApplicationStatus.value;
   }
 
@@ -108,6 +97,9 @@ export class BusinessAppStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         this.initAction(data.allBusinessApplicationses);
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
   }

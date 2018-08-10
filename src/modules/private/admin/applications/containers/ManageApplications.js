@@ -4,11 +4,12 @@ import Loadable from 'react-loadable';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import DeleteAppModal from '../components/DeleteAppModal';
+import { InlineLoader } from '../../../../../theme/shared';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 

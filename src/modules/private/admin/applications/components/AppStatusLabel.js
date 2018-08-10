@@ -1,43 +1,12 @@
 import React from 'react';
 import { Label } from 'semantic-ui-react';
-import { BUSINESS_APP_STATUS2 } from '../../../../../services/constants/businessApplication';
+import { find } from 'lodash';
+import { BUSINESS_APP_ADMIN_STATUS } from '../../../../../services/constants/businessApplication';
 
 export const AppStatusLabel = (props) => {
-  let color = '';
-  let title = '';
-  switch (props.status) {
-    case BUSINESS_APP_STATUS2.REMOVED:
-      color = 'red';
-      title = 'Removed';
-      break;
-    case BUSINESS_APP_STATUS2.DECLIENED:
-      color = 'red';
-      title = 'Decliened';
-      break;
-    case BUSINESS_APP_STATUS2.DELETED:
-      color = 'red';
-      title = 'Deleted';
-      break;
-    case BUSINESS_APP_STATUS2.NEW:
-      color = 'gray';
-      title = 'New';
-      break;
-    case BUSINESS_APP_STATUS2.ACCEPTED:
-      color = 'green';
-      title = 'Accepted';
-      break;
-    case BUSINESS_APP_STATUS2.OFFERED:
-      color = 'green';
-      title = 'Offered';
-      break;
-    case BUSINESS_APP_STATUS2.STASH:
-      color = 'green';
-      title = 'Stashed';
-      break;
-    default:
-      break;
-  }
+  let appStatusLabel = { color: null, title: null };
+  appStatusLabel = find(BUSINESS_APP_ADMIN_STATUS, status => status.status === props.status);
   return (
-    title && color && <Label color={color} size="small" horizontal>{title}</Label>
+    appStatusLabel.title && appStatusLabel.color && <Label color={appStatusLabel.color} size="small" horizontal>{appStatusLabel.title}</Label>
   );
 };
