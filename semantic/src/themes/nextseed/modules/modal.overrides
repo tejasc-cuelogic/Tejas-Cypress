@@ -175,7 +175,13 @@
                 }
             }
             .user-type{
-                min-height:165px;
+                min-height:195px;
+                display:flex;
+                flex-direction:column;
+                justify-content:center;
+                > i.icon{
+                    margin:0 auto;
+                }
             }
         }
         .user-type{

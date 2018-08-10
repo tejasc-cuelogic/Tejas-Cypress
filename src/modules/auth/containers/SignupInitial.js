@@ -37,7 +37,7 @@ class signupInitial extends Component {
                 <div className={`user-type ${(selectedType.value === type.value ? 'active' : '')}`}>
                   <Icon className={type.icon} size="huge" />
                   <h4>{type.text}</h4>
-                  <Transition visible={selectedType.value === type.value} animation="scale" duration={500}>
+                  <Transition visible={selectedType.value === type.value} animation="slide up" duration={500}>
                     <p>{type.desc}</p>
                   </Transition>
                 </div>
