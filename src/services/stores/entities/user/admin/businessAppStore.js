@@ -1,6 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { includes, isArray, filter, forEach } from 'lodash';
+import { includes, isArray, filter } from 'lodash';
+import graphql from 'mobx-apollo';
+import { GqlClient as client } from '../../../../../api/gcoolApi';
 import { FILTER_META } from '../../../../../constants/user';
+import { allBusinessApplicationses } from '../../../queries/businessApplication';
 
 export class BusinessAppStore {
   @observable businessApplicationsList = [];
@@ -22,7 +26,9 @@ export class BusinessAppStore {
   @observable filterApplicationStatus = FILTER_META.applicationStatus;
 
   @computed get totalRecords() {
-    return this.backup && this.backup.length;
+    return (this.businessApplicationsList &&
+      this.businessApplicationsList.data._allBusinessApplicationsesMeta &&
+      this.businessApplicationsList.data._allBusinessApplicationsesMeta.count) || 0;
   }
 
   @action
@@ -59,7 +65,7 @@ export class BusinessAppStore {
 
   @computed get getBusinessApplication() {
     return (this.businessApplicationsList && this.businessApplicationsList.data
-      && toJS(this.businessApplicationsList.data)
+      && toJS(this.businessApplicationsList.data.allBusinessApplicationses)
     ) || [];
   }
 
@@ -89,354 +95,31 @@ export class BusinessAppStore {
   fetchBusinessApplicationsByStatus = (url) => {
     const appType = includes(url, 'prequal-failed') ? 'prequal-failed' : includes(url, 'in-progress') ? 'in-progress' : 'completed';
     this.reInitiateApplicationStatusFilterValues(appType);
-    if (appType === 'prequal-failed') {
-      this.columnTitle = 'Failed reasons';
-      this.businessApplicationsList = {
-        data: [{
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'PreQaul 1',
-            name: 'Chetan',
-            email: 'chetan.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/07/2018',
-            user: 'Jhone',
-          },
-          createdDate: '07/07/2018',
-          updatedDate: '07/07/2018',
-          failedReasons: 'Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000',
-          applicationStatus: 'PRE_QUALIFICATION_FAILED',
-          status: 'DELETED',
-          ratings: 0,
-        },
-        {
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'PreQual 2',
-            name: 'Chetan',
-            email: 'chetan.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/07/2018',
-            user: 'Mack',
-          },
-          createdDate: '07/07/2018',
-          updatedDate: '07/07/2018',
-          failedReasons: 'Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000',
-          applicationStatus: 'PRE_QUALIFICATION_FAILED',
-          status: 'NEW',
-          ratings: 0,
-        }],
-      };
-    } else if (appType === 'in-progress') {
-      this.columnTitle = 'Steps completed';
-      this.businessApplicationsList = {
-        data: [{
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'In Progres 1',
-            name: 'Jhon',
-            email: 'jhon.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/07/2018',
-            user: 'Jhone',
-          },
-          createdDate: '07/07/2018',
-          updatedDate: '07/07/2018',
-          failedReasons: '',
-          applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
-          status: 'DELETED',
-          ratings: 0,
-          businessDetails: {
-            stepStatus: 'COMPLETE',
-          },
-          businessPerformance: {
-            stepStatus: 'IN-PROGRESS',
-          },
-          businessDocumentation: null,
-        },
-        {
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'In Progres 2',
-            name: 'Jone',
-            email: 'jhon.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/08/2018',
-            user: 'Alex',
-          },
-          createdDate: '07/08/2018',
-          updatedDate: '07/08/2018',
-          failedReasons: '',
-          applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
-          status: 'STASH',
-          ratings: 0,
-          businessDetails: {
-            stepStatus: 'COMPLETE',
-          },
-          businessPerformance: {
-            stepStatus: 'IN-PROGRESS',
-          },
-          businessDocumentation: {
-            stepStatus: 'COMPLETE',
-          },
-        },
-        {
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'In Progres 3',
-            name: 'Jone',
-            email: 'jhon.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/08/2018',
-            user: 'Alex',
-          },
-          createdDate: '07/08/2018',
-          updatedDate: '07/08/2018',
-          failedReasons: '',
-          applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
-          status: 'NEW',
-          ratings: 0,
-          businessDetails: {
-            stepStatus: 'COMPLETE',
-          },
-          businessPerformance: {
-            stepStatus: 'IN-PROGRESS',
-          },
-          businessDocumentation: {
-            stepStatus: 'COMPLETE',
-          },
-        }],
-      };
-    } else if (appType === 'completed') {
-      this.columnTitle = '';
-      this.businessApplicationsList = {
-        data: [{
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'Completed 1',
-            name: 'Jhon',
-            email: 'jhon.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/07/2018',
-            user: 'Jhone',
-          },
-          createdDate: '07/07/2018',
-          updatedDate: '07/07/2018',
-          failedReasons: '',
-          applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'NEW',
-          ratings: 0,
-          businessDetails: {
-            stepStatus: 'COMPLETE',
-          },
-          businessPerformance: {
-            stepStatus: 'COMPLETE',
-          },
-          businessDocumentation: {
-            stepStatus: 'COMPLETE',
-          },
-        },
-        {
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'Fitness Guru',
-            name: 'Jone',
-            email: 'jhon.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/08/2018',
-            user: 'Alex',
-          },
-          createdDate: '07/08/2018',
-          updatedDate: '07/08/2018',
-          failedReasons: '',
-          applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'ACCEPTED',
-          ratings: 0,
-          businessDetails: {
-            stepStatus: 'COMPLETE',
-          },
-          businessPerformance: {
-            stepStatus: 'COMPLETE',
-          },
-          businessDocumentation: {
-            stepStatus: 'COMPLETE',
-          },
-        },
-        {
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'Circuss Guru',
-            name: 'Jone',
-            email: 'jhon.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/08/2018',
-            user: 'Alex',
-          },
-          createdDate: '07/08/2018',
-          updatedDate: '07/08/2018',
-          failedReasons: '',
-          applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'OFFERED',
-          ratings: 0,
-          businessDetails: {
-            stepStatus: 'COMPLETE',
-          },
-          businessPerformance: {
-            stepStatus: 'COMPLETE',
-          },
-          businessDocumentation: {
-            stepStatus: 'COMPLETE',
-          },
-        },
-        {
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'Go Ride 1',
-            name: 'Jone',
-            email: 'jhon.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/08/2018',
-            user: 'Alex',
-          },
-          createdDate: '07/08/2018',
-          updatedDate: '07/08/2018',
-          failedReasons: '',
-          applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'DELETED',
-          ratings: 0,
-          businessDetails: {
-            stepStatus: 'COMPLETE',
-          },
-          businessPerformance: {
-            stepStatus: 'COMPLETE',
-          },
-          businessDocumentation: {
-            stepStatus: 'COMPLETE',
-          },
-        },
-        {
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'Go Ride 2',
-            name: 'Jone',
-            email: 'jhon.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/08/2018',
-            user: 'Alex',
-          },
-          createdDate: '07/08/2018',
-          updatedDate: '07/08/2018',
-          failedReasons: '',
-          applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'DELETED',
-          ratings: 0,
-          businessDetails: {
-            stepStatus: 'COMPLETE',
-          },
-          businessPerformance: {
-            stepStatus: 'COMPLETE',
-          },
-          businessDocumentation: {
-            stepStatus: 'COMPLETE',
-          },
-        },
-        {
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'Go Ride 3',
-            name: 'Jone',
-            email: 'jhon.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/08/2018',
-            user: 'Alex',
-          },
-          createdDate: '07/08/2018',
-          updatedDate: '07/08/2018',
-          failedReasons: '',
-          applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'DELETED',
-          ratings: 0,
-          businessDetails: {
-            stepStatus: 'COMPLETE',
-          },
-          businessPerformance: {
-            stepStatus: 'COMPLETE',
-          },
-          businessDocumentation: {
-            stepStatus: 'COMPLETE',
-          },
-        },
-        {
-          applicationId: 'sdf3',
-          info: {
-            businessName: 'Go Ride 4',
-            name: 'Jone',
-            email: 'jhon.cuelogic@nextseed.com',
-            phone: 21313213213,
-          },
-          comment: {
-            content: 'Testing comment',
-            date: '07/08/2018',
-            user: 'Alex',
-          },
-          createdDate: '07/08/2018',
-          updatedDate: '07/08/2018',
-          failedReasons: '',
-          applicationStatus: 'APPLICATION_SUBMITTED',
-          status: 'DELETED',
-          ratings: 0,
-          businessDetails: {
-            stepStatus: 'COMPLETE',
-          },
-          businessPerformance: {
-            stepStatus: 'COMPLETE',
-          },
-          businessDocumentation: {
-            stepStatus: 'COMPLETE',
-          },
-        }],
-      };
-    }
-    this.backup = this.businessApplicationsList.data;
-    const { values } = this.filterApplicationStatus;
-    const { data } = this.businessApplicationsList;
-    forEach(values, (v, k) => {
-      const count = filter(data, app => app.status === v.value).length;
-      values[k].label = `${values[k].label} (${count})`;
+    this.columnTitle = appType === 'prequal-failed' ? 'Failed reasons' : appType === 'in-progress' ? 'Steps completed' : '';
+    const filterParam = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'PRE_QUALIFICATION_SUBMITTED' : 'APPLICATION_SUBMITTED';
+    this.businessApplicationsList = graphql({
+      client,
+      query: allBusinessApplicationses,
+      variables: {
+        filters: { applicationStatus: filterParam },
+        first: 100,
+        skip: 0,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        this.initAction(data.allBusinessApplicationses);
+      },
     });
+  }
+
+  @action
+  initAction = (data) => {
+    this.backup = data;
+    // const { values } = this.filterApplicationStatus;
+    // forEach(values, (v, k) => {
+    //   const count = filter(data, app => app.status === v.value).length;
+    //   values[k].label = `${values[k].label} (${count})`;
+    // });
     this.initRequest();
     this.requestState.page = 1;
     this.requestState.perPage = 2;
@@ -456,19 +139,15 @@ export class BusinessAppStore {
     this.requestState.skip = skip || this.requestState.skip;
 
     const { applicationStatus, keyword } = this.requestState.search;
-    console.log(first, skip, page);
     if (applicationStatus.length || (keyword && keyword !== '')) {
-      this.businessApplicationsList.data = filter(this.backup, app =>
-        includes(toJS(applicationStatus), app.status) || includes(app.comment.content, keyword)
-          || includes(app.info.businessName, keyword) || includes(app.info.name, keyword) ||
-          includes(app.info.email, keyword)).slice(skip, skip + first);
-    } else {
-      this.businessApplicationsList.data = this.backup.slice(skip, skip + first);
+      this.businessApplicationsList.data.allBusinessApplicationses = filter(this.backup, app =>
+        includes(toJS(applicationStatus), app.status) || includes(app.commentContent, keyword)
+          || includes(app.businessName, keyword) || includes(app.name, keyword) ||
+          includes(app.email, keyword)).slice(skip, skip + first);
+    } else if (this.backup) {
+      this.businessApplicationsList.data.allBusinessApplicationses =
+      this.backup.slice(skip, skip + first);
     }
-    // this.businessApplicationsList = graphql({
-    //   client,
-    //   query: getBusinessApplications,
-    // });
   }
 }
 

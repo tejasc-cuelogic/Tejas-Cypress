@@ -93,13 +93,13 @@ export default class ApplicationsList extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell>
                         <Header as="h6">
-                          {application.info.businessName}
+                          {application.businessName}
                           <AppStatusLabel status={application.status} />
                         </Header>
                         <div className="table-info-wrap">
-                          <p>{application.info.name}<br />
-                            {application.info.email}<br />
-                            {application.info.phone}
+                          <p>{application.name}<br />
+                            {application.email}<br />
+                            {application.phone}
                           </p>
                           <p>Sign-up Code <b>-</b><br />
                             Started <b>{application.createdDate}</b><br />
@@ -112,11 +112,11 @@ export default class ApplicationsList extends Component {
                           <Item.Header><Rating size="large" disabled defaultRating={3} maxRating={5} /></Item.Header>
                           <Item.Content>
                             <Item.Description>
-                              {application.comment.content}
+                              {application.commentContent}
                             </Item.Description>
                             <Item.Extra>
                               <b>5/5/2018 | 1:33PM</b>
-                              <b> by {application.comment.user}</b>
+                              <b> by {application.commentUser}</b>
                             </Item.Extra>
                           </Item.Content>
                         </Item>
@@ -126,7 +126,7 @@ export default class ApplicationsList extends Component {
                       />
                       <ApplicationListButtons
                         refLink={match.url}
-                        applicationId={application.applicationId}
+                        applicationId={application.id}
                         appStatus={application.applicationStatus}
                         status={application.status}
                       />
