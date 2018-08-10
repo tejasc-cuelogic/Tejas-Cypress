@@ -1,8 +1,9 @@
 import { observable, action, computed } from 'mobx';
 import cookie from 'react-cookies';
+import { isEmpty } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import {
-  LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS,
+  LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail } from '../../queries/profile';
@@ -24,28 +25,33 @@ export class AuthStore {
   @observable CHANGE_PASS_FRM = Validator.prepareFormObject(CHANGE_PASS);
   @observable FORGOT_PASS_FRM = Validator.prepareFormObject(FORGOT_PASS);
   @observable RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
+  @observable NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
   @observable confirmProgress = false;
-  @observable pwdInputType = 'password';
+  @observable pwdInputType = {
+    password: 'password',
+    oldPasswd: 'password',
+    newPasswd: 'password',
+  }
 
 
   @action
-  setPwdVisibilityStatus = () => {
-    if (this.pwdInputType === 'password') {
-      this.pwdInputType = 'text';
+  setPwdVisibilityStatus = (type) => {
+    if (this.pwdInputType[type] === 'password') {
+      this.pwdInputType[type] = 'text';
     } else {
-      this.pwdInputType = 'password';
+      this.pwdInputType[type] = 'password';
     }
   }
 
   @action
-  togglePasswordType = () => {
+  togglePasswordType = (type) => {
     let iconData = {
       link: true,
-      onClick: this.setPwdVisibilityStatus,
+      onClick: () => this.setPwdVisibilityStatus(type),
     };
-    if (this.pwdInputType === 'password') {
+    if (this.pwdInputType[type] === 'password') {
       iconData.className = 'ns-view';
-    } else if (this.pwdInputType === 'text') {
+    } else if (this.pwdInputType[type] === 'text') {
       iconData.className = 'ns-view active';
     } else {
       iconData = null;
@@ -66,6 +72,11 @@ export class AuthStore {
   @action
   confirmFormChange = (e, result) => {
     this.CONFIRM_FRM = Validator.onChange(this.CONFIRM_FRM, Validator.pullValues(e, result));
+  };
+
+  @action
+  newsLetterChange = (e, result) => {
+    this.NEWSLETTER_FRM = Validator.onChange(this.NEWSLETTER_FRM, Validator.pullValues(e, result));
   };
 
   @action
@@ -116,6 +127,18 @@ export class AuthStore {
     this.confirmProgress = entity;
   }
 
+  @action
+  setCredentials(credentials) {
+    this.CONFIRM_FRM = Validator.onChange(
+      this.CONFIRM_FRM,
+      { name: 'email', value: credentials.email },
+    );
+    this.CONFIRM_FRM = Validator.onChange(
+      this.CONFIRM_FRM,
+      { name: 'password', value: atob(credentials.password) },
+    );
+  }
+
   @computed get devPasswdProtection() {
     return this.devAuth.required && !this.devAuth.authStatus;
   }
@@ -140,6 +163,12 @@ export class AuthStore {
         break;
       default: this.LOGIN_FRM = Validator.prepareFormObject(LOGIN);
     }
+  }
+
+  @computed
+  get canSubmitConfirmEmail() {
+    return !isEmpty(this.CONFIRM_FRM.fields.email.value) && !this.CONFIRM_FRM.fields.email.error &&
+    !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
   }
 
   verifyAndUpdateEmail = () => {

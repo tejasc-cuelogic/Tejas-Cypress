@@ -28,11 +28,11 @@
             }
             &:after {
                 content: "";
-                height: 6px;
+                height: 2px;
                 background: @neutral-offdark;
                 width: 145px;
                 position: absolute;
-                bottom: -20px;
+                bottom: -16px;
             }
         }
         &.content {
@@ -42,7 +42,6 @@
                 padding: @20px;
             }
             h4.ui.header:after {
-                height: 2px;
                 bottom: -13px;
             }
         }
@@ -94,12 +93,7 @@
             }
         }
         .pdf-viewer {
-            min-height: 70vh;
-            display: flex;
-            flex-direction: column;
-            > object {
-                flex: 1;
-            }
+            height: 70vh;
         }
     }
 }
@@ -146,9 +140,9 @@
             top:@12px;
             left:@12px;
         }
-        .ui.header{
-            margin:0 0 @7px;
-        }
+        // .ui.header{
+        //     margin:0 0 @7px;
+        // }
         .ui.divider{
             max-width:140px;
             margin-left:auto;
@@ -180,10 +174,12 @@
                     font-weight:@normal;
                 }
             }
+            .user-type{
+                min-height:165px;
+            }
         }
         .user-type{
             height:100%;
-            min-height:165px;
             padding:@14px;
             border-radius:@defaultBorderRadius * 1.5;
             border:darken(@neutral-offwhite, 9%) 1px solid;
@@ -262,6 +258,14 @@
             text-align:center;
         }
     }
+    i.icons{
+        color:@border-color;
+        .corner.icon{
+            font-size:0.5em;
+            right:-5px;
+            bottom:-5px;
+        }
+    }
     .actions{
         font-size:@14px;
         &.signup-actions{
@@ -338,7 +342,7 @@
     >.close{
         height:30px;
         width:30px;
-        font-size:1em;
+        font-size:.85em;
         line-height:30px;
         padding:0;
         margin:0;

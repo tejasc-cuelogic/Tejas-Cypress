@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import isEmpty from 'lodash/isEmpty';
 import { Route, withRouter } from 'react-router-dom';
 import { Header, Modal, Form, Button, Message } from 'semantic-ui-react';
-import { MaskedInput2 } from '../../../../../../theme/form';
+import { MaskedInput } from '../../../../../../theme/form';
 import ConfirmPhoneNumber from './ConfirmPhoneNumber';
 import { ListErrors } from '../../../../../../theme/shared';
 
@@ -48,7 +48,7 @@ export default class NewPhoneNumber extends Component {
             </Message>
           }
           <Form error onSubmit={this.handleChangePhoneNumber}>
-            <MaskedInput2
+            <MaskedInput
               name="phoneNumber"
               type="tel"
               fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}

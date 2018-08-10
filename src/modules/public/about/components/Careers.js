@@ -1,8 +1,7 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
 import { Header, Container, Grid, Button, Image } from 'semantic-ui-react';
-import collage from '../../../../assets/images/collage.png';
+import collage from '../../../../assets/images/collage.jpg';
 
 const Careers = () => (
   <Aux>
@@ -21,7 +20,12 @@ const Careers = () => (
             the place for you.
             </p>
             <div className="center-align mt-30 mb-50">
-              <Button as={Link} to="/" primary>See Job Listings</Button>
+              <Button
+                onClick={() => window.open('https://nextseed.workable.com/', '_blank')}
+                primary
+              >
+              See Job Listings
+              </Button>
             </div>
             <Image src={collage} />
           </Grid.Column>

@@ -1,9 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { MaskedInput2 } from '../../../../../../theme/form';
+import { MaskedInput } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../theme/shared';
 
@@ -86,7 +87,7 @@ export default class ConfirmPhoneNumber extends Component {
               <ListErrors errors={[errors]} />
             </Message>
           }
-          <MaskedInput2
+          <MaskedInput
             value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
             type="tel"
             name="phoneNumber"
@@ -115,20 +116,21 @@ export default class ConfirmPhoneNumber extends Component {
             </p>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
-            <ReactCodeInput
-              fields={6}
-              type="number"
-              filterChars
-              className="otp-field"
-              fielddata={ID_PHONE_VERIFICATION.fields.code}
-              onChange={phoneVerificationChange}
-            />
-            <div className="center-align">
+            <Form.Field className="otp-wrap">
+              <label>Enter verification code here:</label>
+              <ReactCodeInput
+                fields={6}
+                type="number"
+                filterChars
+                className="otp-field"
+                fielddata={ID_PHONE_VERIFICATION.fields.code}
+                onChange={phoneVerificationChange}
+              />
+            </Form.Field>
+            <Button.Group vertical>
               <Button loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!ID_PHONE_VERIFICATION.meta.isValid}>Confirm</Button>
-            </div>
-            <div className="center-align">
-              <Button loading={this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="cancel-link" onClick={() => this.startPhoneVerification()}>Resend the code to my phone</Button>
-            </div>
+              <Button loading={this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="link-button cancel-link" onClick={() => this.startPhoneVerification()}>Resend the code to my phone</Button>
+            </Button.Group>
           </Form>
         </Modal.Content>
       </Modal>

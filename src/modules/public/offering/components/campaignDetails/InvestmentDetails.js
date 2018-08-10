@@ -1,15 +1,28 @@
 import React, { Component } from 'react';
-import { Header } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { inject } from 'mobx-react';
+// import { Grid } from 'semantic-ui-react';
+import TermNote from './investmentDetails/TermNote';
+import RevenueShare from './investmentDetails/RevenueShare';
 
+@inject('campaignStore')
 class InvestmentDetails extends Component {
   render() {
+    const { campaign } = this.props.campaignStore;
+    console.log(campaign, 'campaign');
     return (
-      <div className="offering-content-spacer">
-        <Header as="h3">Investment Details</Header>
-        <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-        </p>
-      </div>
+      <Aux>
+        {campaign.investmentType === 'Revenue Sharing' ?
+          <RevenueShare /> : <TermNote />
+        }
+      </Aux>
+      // <Grid>
+      //   <Grid.Row>
+      //     <Grid.Column width={12}>
+      //     </Grid.Column>
+      //     <Grid.Column width={4} />
+      //   </Grid.Row>
+      // </Grid>
     );
   }
 }

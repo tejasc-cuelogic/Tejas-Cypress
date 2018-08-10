@@ -3,10 +3,10 @@
 export const USER_ROLES = ['admin', 'issuer', 'investor'];
 export const USER_TYPES_META = [
   {
-    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Invest in existing businesses and get revenue',
+    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Open a NextSeed Investment Account to start investing in local businesses',
   },
   {
-    key: 'o', icon: 'ns-business', text: 'Business Owner', value: 'issuer', desc: 'Apply for funding with your business',
+    key: 'o', icon: 'ns-business', text: 'Business Owner', value: 'issuer', desc: 'Start the funding application to get pre-qualified for your NextSeed campaign',
   },
 ];
 
@@ -54,35 +54,13 @@ export const FILTER_META = {
   ],
 };
 
-export const FIN_INFO = {
-  annualIncome: {
-    value: '',
-    label: 'Annual Income',
-    error: undefined,
-    rule: 'required|numeric',
-    tooltip: 'Mention your Annual Income here',
-  },
-  netWorth: {
-    value: '',
-    label: 'Net Worth',
-    error: undefined,
-    rule: 'required|numeric',
-    tooltip: 'Mention your Net Worth here',
-  },
-  otherInvestments: {
-    value: '',
-    label: 'Other Regulation Crowdfunding investments made in prior 12 months',
-    error: undefined,
-    rule: 'required|numeric',
-    tooltip: 'Other Crowdfunding investments',
-  },
-  currentLimit: {
-    value: '',
-    label: 'Your current investment limit',
-    error: undefined,
-    rule: 'numeric',
-  },
-};
+export const TRANSACTION_TYPES = [
+  { text: 'Deposit', value: 'Deposit' },
+  { text: 'Withdrawal', value: 'Withdrawal' },
+  { text: 'Repayment', value: 'Repayment' },
+  { text: 'Interest Accured', value: 'InterestAccured' },
+  { text: 'Referral Credits', value: 'ReferralCredits' },
+];
 
 export const ROLES = [
   { key: 'admin', value: 'admin', text: 'Admin' },

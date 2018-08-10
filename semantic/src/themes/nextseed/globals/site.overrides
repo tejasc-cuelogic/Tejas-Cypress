@@ -17,12 +17,11 @@ section{
 	}
 }
 .info-card{
-	p{
-		margin-bottom:@40px;
-	}
 	a {
 		color: @fullBlack;
 		font-weight: @bold;
+		margin-top: @40px;
+		display: block;
 	}
 }
 //	Helper Classes
@@ -131,7 +130,17 @@ h6{
 }
 .intro-text, .note{
 	color:@neutral-middark;
-	// margin-bottom:@28px;
+}
+.caption-note{
+	font-size:@13px;
+	font-style:italic;
+	margin:@7px 0;
+	&:first-child{
+		margin-top:0px;
+	}
+	&:last-child{
+		margin-bottom:0px;
+	}
 }
 a{
 	color:@link-color;
@@ -173,15 +182,28 @@ footer{
 		background-color:@neutral;
 	}
 	section{
-		padding:@30px @60px;
+		overflow:hidden;
+		transition:all .5s ease-in-out;
+		&.inactive{
+			height:0;
+			padding:0;
+		}
+		&.active{
+			height:240px;
+			padding:@30px @60px;
+		}
 		.secure{
-			float:right;
-			margin-left:@50px;
+			margin-top: @14px;
+			padding-top: @14px;
+			border-top: 1px solid @neutral-darkwhite;
+		}
+		.footer-left {
+			display: inline-block;
 		}
 		.copyright-info{
 			float:right;
-			max-width:650px;
-			font-size:12px;
+			max-width:850px;
+			font-size:@12px;
 			line-height:22px;
 		}
 	}
@@ -215,8 +237,6 @@ footer{
 		}
 		.ui.checkbox {
 			label {
-				font-size: @15px;
-				line-height: @19px;
 				color:@neutral-middark;
 			}
 		} 
@@ -229,8 +249,6 @@ footer{
 		.checkbox-group {
 			.ui.label {
 				background-color: transparent;
-				font-size: @15px;
-				line-height: @19px;
 				color: @neutral-middark;
 				padding: 0;
 				padding-left: @3px;
@@ -301,11 +319,6 @@ footer{
 		}
 		p {
 			color: @neutral;
-			font-size: @15px;
-			line-height: @20px;
-			&.detail-section {
-				line-height: @20px;
-			}
 			&.note {
 				color:@neutral-middark;
 				font-size: @12px;
@@ -315,25 +328,11 @@ footer{
 			&.early-bird-title {
 				font-weight: bold;
 				line-height: @20px;
-				font-size: @15px;
 				text-align: center;
 			}
 			&.early-bird-desc {
 				line-height: @27px;
-				font-size: @15px;
 				text-align: center;
-			}
-		}
-		ul {
-			line-height: @26px;
-			font-size: @15px;
-			color:@neutral-middark;
-			padding-left: @20px;
- 
-			li {
-				span {
-					font-weight: @bold;
-				}
 			}
 		}
 		.ui.grid.investment-grid {
@@ -386,14 +385,9 @@ footer{
 			p {
 				line-height: @20px;
 				color:@neutral-middark;
-				&.note {
-					font-style: italic;
-					margin-bottom: @35px;
-				}
 			}
 			img {
 				width: 100%;
-				margin-top: @35px;
 			}
 			.embed {
 				img {
@@ -409,6 +403,14 @@ footer{
 					}
 				}
 			}
+			.pdf-viewer {
+				display: flex;
+				flex-direction: column;
+				min-height:~"calc(100vh - 180px)";
+				> object {
+					flex: 1;
+				}
+			}
 		}
 		.campaign-right-sidebar {
 			padding: @30px @30px @30px 0;
@@ -416,9 +418,9 @@ footer{
 			.ui.padded.segment {
 				padding: @15px @30px @25px;
 				margin-bottom: @20px;
-				.ui.breadcrumb {
-					margin-bottom: @20px;
-				}
+				// .ui.breadcrumb {
+				// 	margin-bottom: @20px;
+				// }
 				iframe {
 					width: 100%;
 					height: 100%;
@@ -536,14 +538,14 @@ p i.icon {
 		&:before {
 			content: "\e916";
 			font-family: 'nextseed';
-			font-size: 18px !important;
+			font-size: @18px !important;
 		}
 	}
 	.slick-next {
 		&:before {
 			content: "\e918";
 			font-family: 'nextseed';
-			font-size: 18px !important;
+			font-size: @18px !important;
 		}
 	}
 }
@@ -577,6 +579,7 @@ p i.icon {
 			.ui.card {
 				border: 0;
 				background-color: transparent;
+				box-shadow: none;
 				&:hover {
 					box-shadow: none;
 				}
@@ -592,25 +595,19 @@ p i.icon {
 						top: 5px;
 						font-weight: 500;
 						line-height: 24px;
-						font-size: 40px;
+						font-size: @40px;
 						color: @primary-one;
 					}
 				}
 			}
 		}
+		&.track-left-section {
+			display: flex !important;
+			justify-content: center;
+		}
 	}
 }
-.compare-section {
-	.note {
-		text-align: center;
-		display: block;
-		display: block;
-		width: 50%;
-		line-height: 20px;
-		margin-left: auto;
-		margin-right: auto;
-	}
-}
+// Slick Slider Styles override
 .slick-slider {
 	.slick-slide {
 		.ui.grid {
@@ -621,7 +618,7 @@ p i.icon {
 		width: 50px;
 		height: 50px;
 		&:before {
-			font-size: 30px;
+			font-size: @30px;
 			color: @neutral-middark;
 		}
 	}
@@ -631,6 +628,27 @@ p i.icon {
 	.slick-prev {
 		left: -50px;
 	}
+	.slick-dots{
+		bottom: 0;
+		li{
+			margin:0 @7px @14px;
+			&.slick-active button:before {
+				background: @white;
+			}
+			button{
+				width:15px;
+				height:15px;
+				padding:0;
+				&:before {
+					width: 15px;
+					height: 15px;
+					content: '';
+					border: 1px solid @white;
+					border-radius: 50%;
+				}
+			}
+		}
+	} 
 }
 //Investor homepage
 .how-it-works-steps {
@@ -638,7 +656,7 @@ p i.icon {
 	.ui.grid {
 		>.column {
 			text-align: left;
-			padding-left: 40px !important;
+			padding-left: @40px !important;
 			position: relative;
 			&:before {
 				counter-increment: section;
@@ -646,9 +664,8 @@ p i.icon {
 				position: absolute;
 				left: 0;
 				top: 15px;
-				font-weight: 500;
-				line-height: 24px;
-				font-size: 40px;
+				font-weight: @fontMedium;
+				font-size: @40px;
 				color: @primary-one;
 			}
 		}
@@ -747,11 +764,11 @@ address {
 		display: table;
 		margin-bottom: 5px;
 		&.news-category {
-			font-size: 13px;
+			font-size: @13px;
 			text-transform: uppercase;
 		}
 		&.news-title {
-			font-size: 28px;
+			font-size: @28px;
 			line-height: 30px;
 		}
 	}
@@ -765,13 +782,8 @@ address {
 	h2.ui.header {
 		margin-bottom: 0px;
 	}
-}
+}	 
 //Education center
-.edu-back-link {
-	a {
-		color: @neutral-middark;
-	}
-}
 .edu-center {
 	.ui.card {
 		border: 0;
@@ -791,6 +803,29 @@ address {
 		width: 100%;
 	}
 }
+//investment details
+.investment-wrapper {
+	i.icon {
+		margin-left: 5px;
+	}
+	p{
+		b {
+			color: @fullBlack;
+		}
+	}
+}
+a.icon-link:hover {
+	text-decoration: none;
+}
+.animation-container {
+	position: absolute;
+	top: 0; 
+	left: 0; 
+	width: 100%; 
+	height: 100%; 
+	z-index: 9999;
+}
+
 /* END <== PUBLIC PAGES UI STYLES */
 
 .content-wrapper{
@@ -1450,7 +1485,7 @@ ol.progtrckr{
 svg:not(:root).recharts-surface{
 	overflow:visible;
 }
-.portfolio-allocation{
+.donut-chart, .portfolio-allocation{
 	.recharts-wrapper{
 		.recharts-legend-wrapper{
 			z-index:-1;
@@ -1460,13 +1495,13 @@ svg:not(:root).recharts-surface{
 			font-weight:@fontMedium;
 		}
 		tspan{
-			font-size:18px;
+			font-size:@18px;
 			font-weight:@fontMedium;
 		}
 		.chartLegends li{
-			font-size:22px;
+			font-size:@22px;
 			span{
-				font-size:13px;
+				font-size:@13px;
 				color:@fullBlack;
 				vertical-align:top;
 			}
@@ -1492,7 +1527,7 @@ svg:not(:root).recharts-surface{
 
 .welcome-packet{
 	.pdf-viewer{
-		height:~"calc(100vh - 184px)";
+		height:~"calc(100vh - 188px)";
 		width:100%;
 		max-width:1000px;
 		margin:0 auto;

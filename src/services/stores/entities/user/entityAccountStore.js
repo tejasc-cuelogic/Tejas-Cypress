@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, omit, find } from 'lodash';
+import { isEmpty, find } from 'lodash';
 import {
   ENTITY_FIN_INFO,
   ENTITY_GEN_INFO,
@@ -95,12 +95,16 @@ class EntityAccountStore {
   }
 
   @action
-  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false, field = null) => {
+  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false, field = null) => new Promise((resolve) => {
     if (formStatus === 'submit') {
-      this.submitForm(currentStep, formStatus, this.accountAttributes);
+      this.submitForm(currentStep, formStatus, this.accountAttributes).then(() => {
+        resolve();
+      });
+    } else {
+      this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field);
+      resolve();
     }
-    this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field);
-  }
+  })
 
   @action
   setEntityAttributes = (step, removeUploadedData, field) => {
@@ -220,7 +224,13 @@ class EntityAccountStore {
       },
     };
     if (!isEmpty(bankAccountStore.plaidBankDetails)) {
-      const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+      const plaidBankDetails = {};
+      plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
+      plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
+      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
+      plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
+      plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
+      plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
       payload.bankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -279,7 +289,13 @@ class EntityAccountStore {
       if (isValidCurrentStep) {
         uiStore.setProgress();
         if (!isEmpty(bankAccountStore.plaidBankDetails)) {
-          const plaidBankDetails = omit(bankAccountStore.plaidBankDetails, '__typename');
+          const plaidBankDetails = {};
+          plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
+          plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
+          plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
+          plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
+          plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
+          plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
           accountAttributes.bankDetails = plaidBankDetails;
         } else {
           const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -480,6 +496,7 @@ class EntityAccountStore {
 
   @action
   setFileUploadData = (form, field, files) => {
+    uiStore.setProgress();
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     fileUpload.setFileUploadData('', fileData, 'ACCOUNT_ENTITY_CREATION', 'INVESTOR').then(action((result) => {

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Header, Modal, Grid, Image, Icon } from 'semantic-ui-react';
-import campainAboutImg from '../../../../assets/images/campaign_about.png';
+import { Link } from 'react-router-dom';
+import team1 from '../../../../assets/images/team1.jpg';
+import team2 from '../../../../assets/images/team2.jpg';
 
 class MeetTeamModal extends Component {
   handleClose = () => this.props.history.goBack();
@@ -19,7 +21,7 @@ class MeetTeamModal extends Component {
         <Modal.Content scrolling>
           <Grid doubling columns={2} className="compact" verticalAlign="middle">
             <Grid.Column>
-              <Image src={campainAboutImg} />
+              <Image src={team1} />
             </Grid.Column>
             <Grid.Column className="padded team-details-container">
               <Header as="h3">
@@ -33,8 +35,12 @@ class MeetTeamModal extends Component {
               nisi ut aliquip ex ea commodo consequat.
               </p>
               <div>
-                <Icon color="green" name="twitter" />
-                <Icon color="green" name="linkedin in" />
+                <Link to="/" className="icon-link">
+                  <Icon color="green" name="twitter" />
+                </Link>
+                <Link to="/" className="icon-link">
+                  <Icon color="green" name="linkedin in" />
+                </Link>
               </div>
             </Grid.Column>
             <Grid.Column className="padded team-details-container">
@@ -49,12 +55,16 @@ class MeetTeamModal extends Component {
               nisi ut aliquip ex ea commodo consequat.
               </p>
               <div>
-                <Icon color="green" name="twitter" />
-                <Icon color="green" name="linkedin in" />
+                <Link to="/" className="icon-link">
+                  <Icon color="green" name="twitter" />
+                </Link>
+                <Link to="/" className="icon-link">
+                  <Icon color="green" name="linkedin in" />
+                </Link>
               </div>
             </Grid.Column>
             <Grid.Column>
-              <Image src={campainAboutImg} />
+              <Image src={team2} />
             </Grid.Column>
           </Grid>
         </Modal.Content>

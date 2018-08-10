@@ -31,9 +31,9 @@ export default class ConfirmModal extends Component {
             </Message>
           }
           <Form error onSubmit={this.props.partialSave}>
-            <div className="center-align mt-30">
-              <Button.Group>
-                <Button loading={inProgress} color="green">Yes, save it</Button>
+            <div className="center-align">
+              <Button.Group vertical>
+                <Button className="very relaxed" loading={inProgress} color="green">Yes, save it</Button>
                 <Button inverted onClick={this.handleCloseModal} color="green" >No, thank you</Button>
               </Button.Group>
             </div>

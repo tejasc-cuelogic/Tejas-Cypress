@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
-import { FormSelect, FormInput, MaskedInput2, AutoComplete } from '../../../../../theme/form';
+import { FormSelect, FormInput, MaskedInput, AutoComplete } from '../../../../../theme/form';
 import { US_STATES } from '../../../../../constants/account';
 
 import UserVerifiedDetails from '../../../investor/settings/components/UserVerifiedDetails';
@@ -78,7 +78,7 @@ export default class ProfileData extends Component {
                   />
                 ))}
               </Form.Group>
-              <MaskedInput2
+              <MaskedInput
                 action
                 actionlabel="Change"
                 actionclass="link-button"

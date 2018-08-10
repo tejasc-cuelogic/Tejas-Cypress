@@ -11,7 +11,6 @@
 	.offering-side-menu {
         .ui.secondary.button {
             margin: 24px auto 0;
-            display: block;
 		}
     }
 }
@@ -30,6 +29,9 @@
             box-shadow:none !important;
             &:hover, &:focus, &:active{
                 box-shadow:none !important;
+            }
+            &.padded{
+                padding:@14px @21px;
             }
             &.green{
                 color:@primary-one;

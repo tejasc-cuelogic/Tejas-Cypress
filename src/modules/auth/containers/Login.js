@@ -41,7 +41,6 @@ class Login extends Component {
     const { errors, inProgress } = this.props.uiStore;
     return (
       <Modal
-        closeOnRootNodeClick={false}
         size="mini"
         open
         onClose={() => {
@@ -70,8 +69,8 @@ class Login extends Component {
               Object.keys(LOGIN_FRM.fields).map(field => (
                 <FormInput
                   key={field}
-                  type={field === 'password' ? pwdInputType : 'email'}
-                  icon={field === 'password' ? togglePasswordType() : null}
+                  type={field === 'password' ? pwdInputType[field] : 'email'}
+                  icon={field === 'password' ? togglePasswordType(field) : null}
                   name={field}
                   autoFocus={field === 'email'}
                   fielddata={LOGIN_FRM.fields[field]}

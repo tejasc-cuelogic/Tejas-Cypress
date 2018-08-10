@@ -163,7 +163,7 @@ export const IND_BANK_LIST = [
 
 export const IRA_ACC_TYPES = {
   iraAccountType: {
-    value: 0,
+    value: '',
     values: [
       {
         label: 'Traditional',
@@ -365,7 +365,7 @@ export const ACC_TYPE = {
 export const EMPLOYMENT = {
   employmentStatus: {
     key: 'employmentStatus',
-    value: 'EMPLOYED',
+    value: '',
     values:
       [
         { label: 'Employed', value: 'EMPLOYED' },
@@ -397,7 +397,7 @@ export const EMPLOYMENT = {
 
 export const INVESTOR_PROFILE = {
   investorProfileType: {
-    value: 'INDIVIDUAL',
+    value: '',
     values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint(Married)', value: 'JOINT' }],
     error: undefined,
     rule: 'required',
@@ -471,7 +471,7 @@ export const FINANCES = {
 
 export const INVESTMENT_EXPERIENCE = {
   investmentExperienceLevel: {
-    value: 'NO_EXPERIENCE',
+    value: '',
     values: [{ label: 'No experience', value: 'NO_EXPERIENCE' }, { label: 'I know what I’m doing', value: 'KNOW_AWARE' }, { label: 'I have some experience', value: 'SOME_EXPERIENCE' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Header, Container, Menu, Segment, Button } from 'semantic-ui-react';
+import { Header, Container, Menu, Segment, Button, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../helper';
@@ -32,12 +32,18 @@ export default class FundingOption extends Component {
       <Aux>
         <Container>
           <section className="funding-option account-type-tab">
-            <Header as="h2">Choose a funding option that fits your business.</Header>
-            <p className="mb-50 center-align">
-              Whether you need working capital for your existing business,
-              expansion projects or a new venture, our financial products
-              put you in control. Grow your business on your own terms.
-            </p>
+            <Grid centered>
+              <Grid.Column width={13}>
+                <Header as="h2" textAlign="center">
+                Choose a funding option that fits your business.
+                </Header>
+                <p className="center-align mb-50">
+                Whether you need working capital for your existing business,
+                expansion projects or a new venture, our financial products
+                put you in control. Grow your business on your own terms.
+                </p>
+              </Grid.Column>
+            </Grid>
             <Menu tabular fluid widths={3}>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
             </Menu>

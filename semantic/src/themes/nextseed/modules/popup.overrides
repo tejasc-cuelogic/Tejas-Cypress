@@ -4,22 +4,14 @@
 .ui.popup{
     .content{
         font-size:13px;
-        color:@white;
+        line-height:20px;
     }
-}
-.ui.popup.reward-info{
-    .content{
-        padding:@7px;
-    }
-    .ui.header{
-        color:@white;
-        margin-bottom:@14px;
-    }
-    .ui.bulleted.list{
-        font-size:@14px;
-        color:@white;
-        .item:before{
-            color:@white;
+    &.reward-info{
+        .content{
+            padding:@7px;
+        }
+        .ui.header{
+            margin-bottom:@14px;
         }
     }
 }

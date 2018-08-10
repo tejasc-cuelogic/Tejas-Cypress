@@ -47,7 +47,7 @@
             line-height: 24px;
             text-transform: uppercase; 
             b {
-                font-size: 18px;
+                font-size: @18px;
                 text-transform: none; 
             }
         }
@@ -65,6 +65,11 @@
             p {
                 font-weight: @bold;
                 text-transform: none;
+                white-space: normal;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 70px;
+                line-height: 18px;
             }
         }        
     }

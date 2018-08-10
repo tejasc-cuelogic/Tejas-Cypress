@@ -9,7 +9,7 @@ const Process = () => (
         <Grid.Row>
           <Grid.Column floated="right" width={10} verticalAlign="middle" className="side-section process-right-section">
             <Header as="h2">From approved to funded</Header>
-            <p className="mb-30">
+            <p className="mb-50">
             Once your application is approved, we make connecting with investors easy,
             so you can find funding and get back to your business.
             </p>
@@ -58,7 +58,7 @@ const Process = () => (
               <List.Item>
                 <List.Header>Learn more</List.Header>
                 <List.Icon className="ns-arrow-right" color="green" />
-                <List.Content as="a">Why fundraise on NextSeed?</List.Content>
+                <List.Content as="a">How to start a raise on NextSeed </List.Content>
               </List.Item>
             </List>
             <div className="center-align">

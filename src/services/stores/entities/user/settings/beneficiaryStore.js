@@ -181,9 +181,11 @@ export class BeneficiaryStore {
   };
 
   @action
-  verifyVerificationCodeChange = (e, result) => {
-    this.OTP_VERIFY_META = Validator
-      .onChange(this.OTP_VERIFY_META, Validator.pullValues(e, result));
+  verifyVerificationCodeChange = (value) => {
+    this.OTP_VERIFY_META = Validator.onChange(
+      this.OTP_VERIFY_META,
+      { name: 'code', value },
+    );
   };
 
   @action

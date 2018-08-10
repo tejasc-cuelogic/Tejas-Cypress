@@ -38,7 +38,7 @@ export default class CampaignList extends Component {
                   <Label color="green">{campaign.flagged}</Label>
                   <Icon name="heart" />
                   <Card.Content>
-                    <div className="tags">
+                    <div className="tags mb-10">
                       {campaign.label}
                       <span className="pull-right">1.45x/48mos</span>
                     </div>
@@ -57,7 +57,7 @@ export default class CampaignList extends Component {
                         <Image src={lockIcon} />
                       </div>
                       <div className="details">
-                        <div className="tags">
+                        <div className="tags mb-10">
                           hidden
                         </div>
                         <Card.Header>For NextSeed members only.</Card.Header>

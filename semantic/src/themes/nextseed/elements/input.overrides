@@ -34,14 +34,20 @@ input[type=number]{
 .ui.form.public-form {
     &.inverted {
         .ui.input>input {
-            border-bottom: 0;
+            border: 1px solid @white;
             color: @neutral;
-        }    
+        }
     }
+    .field.error input[type=text],.field.error input[type=text]:focus {
+        border-color: @highlight-primary;
+        background: @white;
+        border-radius: @4px;
+    }    
     .ui.input>input {
         padding: @13px;
         background: @white;
         border-radius: @4px;
+        border: 1px solid @neutral-darkwhite;
     }
     textarea {
         padding: @14px;

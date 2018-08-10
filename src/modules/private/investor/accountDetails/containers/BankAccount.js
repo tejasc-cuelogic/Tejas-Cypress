@@ -25,7 +25,7 @@ export default class BankAccount extends Component {
           <Route exact path={`${this.props.match.url}/link-bank-account`} component={LinkBankAccount} />
         </Switch>
         <Header as="h4">Bank Account</Header>
-        <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris<br />
+        <p className="intro-text">Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris
           nec malesuada fames ac turpis
         </p>
         <Grid>

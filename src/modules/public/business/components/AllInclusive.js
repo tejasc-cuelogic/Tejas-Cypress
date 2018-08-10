@@ -15,7 +15,7 @@ const AllInclusive = () => (
     <Container>
       <Grid relaxed padded="vertically">
         <Grid.Row>
-          <Grid.Column floated="left" width={10} verticalAlign="middle" className="side-section inclusive-left-section">
+          <Grid.Column width={10} verticalAlign="middle" className="side-section inclusive-left-section">
             <Header as="h2">Reach your goals with full-service support included.</Header>
             <p className="mb-30">
             Our one-time fee comes with everything you need to launch, promote and service
@@ -25,56 +25,56 @@ const AllInclusive = () => (
               <Item>
                 <Item.Image size="mini" src={MarketingIcon} />
                 <Item.Content>
-                  <Item.Header>Marketing</Item.Header>
+                  <Item.Header as="h5">Marketing</Item.Header>
                   <Item.Meta>Expert advertising, marketing and PR resources.</Item.Meta>
                 </Item.Content>
               </Item>
               <Item>
                 <Item.Image size="mini" src={EscrowIcon} />
                 <Item.Content>
-                  <Item.Header>Escrow</Item.Header>
+                  <Item.Header as="h5">Escrow</Item.Header>
                   <Item.Meta>Handling all banking, escrow and processing fees.</Item.Meta>
                 </Item.Content>
               </Item>
               <Item>
                 <Item.Image size="mini" src={CampaignIcon} />
                 <Item.Content>
-                  <Item.Header>Campaign Development</Item.Header>
+                  <Item.Header as="h5">Campaign Development</Item.Header>
                   <Item.Meta>Design and content creation services.</Item.Meta>
                 </Item.Content>
               </Item>
               <Item>
                 <Item.Image size="mini" src={PaymentIcon} />
                 <Item.Content>
-                  <Item.Header>Payment Processing</Item.Header>
+                  <Item.Header as="h5">Payment Processing</Item.Header>
                   <Item.Meta>Collecting commitments and distributing funds.</Item.Meta>
                 </Item.Content>
               </Item>
               <Item>
                 <Item.Image size="mini" src={QuestionIcon} />
                 <Item.Content>
-                  <Item.Header>Q&A</Item.Header>
+                  <Item.Header as="h5">Q&A</Item.Header>
                   <Item.Meta>Facilitating investor questions during the offering.</Item.Meta>
                 </Item.Content>
               </Item>
               <Item>
                 <Item.Image size="mini" src={PreparationIcon} />
                 <Item.Content>
-                  <Item.Header>Disclosure Preparation</Item.Header>
+                  <Item.Header as="h5">Disclosure Preparation</Item.Header>
                   <Item.Meta>Legal templates and SEC documents.</Item.Meta>
                 </Item.Content>
               </Item>
               <Item>
                 <Item.Image size="mini" src={ServicesIcon} />
                 <Item.Content>
-                  <Item.Header>Investor Services</Item.Header>
+                  <Item.Header as="h5">Investor Services</Item.Header>
                   <Item.Meta>Servicing note payments to underlying investors.</Item.Meta>
                 </Item.Content>
               </Item>
               <Item>
                 <Item.Image size="mini" src={TaxIcon} />
                 <Item.Content>
-                  <Item.Header>Tax Form Preparation</Item.Header>
+                  <Item.Header as="h5">Tax Form Preparation</Item.Header>
                   <Item.Meta>Distributing year-end documents to investors.</Item.Meta>
                 </Item.Content>
               </Item>

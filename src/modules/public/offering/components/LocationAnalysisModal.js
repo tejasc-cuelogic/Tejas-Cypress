@@ -1,5 +1,23 @@
 import React, { Component } from 'react';
 import { Header, Modal, Grid, Statistic } from 'semantic-ui-react';
+import ChartPie from './ChartPie';
+
+
+const CUSTOMER_DEMO_GENDER = [
+  { name: 'Male', value: 45 },
+  { name: 'Female', value: 55 },
+];
+
+const CUSTOMER_DEMO_AGE = [
+  { name: '21-24', value: 20 },
+  { name: '25-34', value: 30 },
+  { name: '35-44', value: 20 },
+  { name: '45-54', value: 15 },
+  { name: '55+', value: 15 },
+];
+
+const GENDER_COLORS = ['#20C86D', '#4DD38A'];
+const AGE_COLORS = ['#263E64', '#516583', '#7D8BA2', '#A8B2C1', '#D4D8E0'];
 
 class LocationAnalysisModal extends Component {
   handleClose = () => this.props.history.goBack();
@@ -44,11 +62,15 @@ class LocationAnalysisModal extends Component {
                 <Header as="h5">
                     Customer Demographics
                 </Header>
-                <Grid columns={3} divided className="demographics">
+                <Grid columns={3} celled="internally" divided className="demographics">
                   <Grid.Row>
-                    <Grid.Column />
-                    <Grid.Column />
-                    <Grid.Column textAlign="center">
+                    <Grid.Column>
+                      <ChartPie title="Gender" data={CUSTOMER_DEMO_GENDER} colors={GENDER_COLORS} />
+                    </Grid.Column>
+                    <Grid.Column>
+                      <ChartPie title="Age" data={CUSTOMER_DEMO_AGE} colors={AGE_COLORS} />
+                    </Grid.Column>
+                    <Grid.Column verticalAlign="middle" textAlign="center">
                       <Statistic size="tiny" className="basic">
                         <Statistic.Value>$82,000/yr</Statistic.Value>
                         <Statistic.Label>Average Income</Statistic.Label>

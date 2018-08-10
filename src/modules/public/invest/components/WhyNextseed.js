@@ -9,75 +9,65 @@ import Investments from '../../../../assets/images/icons/investments.svg';
 import Ventures from '../../../../assets/images/icons/ventures.svg';
 import Returns from '../../../../assets/images/icons/returns.svg';
 
+const highlights = [
+  {
+    title: 'Businesses you understand',
+    icon: Businesses,
+    meta: `Investments in Main Street businesses and local properties 
+      generating real cash flow.`,
+  },
+  {
+    title: 'Impactful investments',
+    icon: Entrepreneurs,
+    meta: `Local business owners, local jobs and local growth. Create real
+      impact in local communities.`,
+  },
+  {
+    title: 'Pre-vetted opportunities',
+    icon: Prevetted,
+    meta: `Every business must meet our strict financial criteria, plus federal legal
+      and regulatory guidelines.`,
+  },
+  {
+    title: 'Flexible investment amounts',
+    icon: Investments,
+    meta: 'Never invest more than you can risk. Investments starting at $100.',
+  },
+  {
+    title: 'Exclusive investments',
+    icon: Ventures,
+    meta: `Uncover opportunities that were once privately reserved for wealthy
+      and well-connected investors.`,
+  },
+  {
+    title: 'Returns processed for you',
+    icon: Returns,
+    meta: `No need to chase payments from business owners. NextSeed verifies and processes
+      payments from your investments automatically.`,
+  },
+];
+
 const WhyNextseed = () => (
   <Aux>
     <section className="why-nextseed-section">
       <Container>
-        <Header as="h2" className="mb-80" textAlign="center">
+        <Header as="h2" className="mb-30" textAlign="center">
           Local investing, made easy.
         </Header>
         <Grid relaxed="very" stackable>
           <Grid.Column width={10}>
             <Item.Group className="horizontal-items">
-              <Item>
-                <Item.Image size="mini" src={Businesses} />
-                <Item.Content>
-                  <Item.Header>Businesses you understand</Item.Header>
-                  <Item.Meta>
-                    Investments in Main Street businesses and local properties
-                    generating real cash flow.
-                  </Item.Meta>
-                </Item.Content>
-              </Item>
-              <Item>
-                <Item.Image size="mini" src={Entrepreneurs} />
-                <Item.Content>
-                  <Item.Header>Impactful investments </Item.Header>
-                  <Item.Meta>
-                    Local business owners, local jobs and local growth. Create real
-                    impact in local communities.
-                  </Item.Meta>
-                </Item.Content>
-              </Item>
-              <Item>
-                <Item.Image size="mini" src={Prevetted} />
-                <Item.Content>
-                  <Item.Header>Pre-vetted opportunities </Item.Header>
-                  <Item.Meta>
-                    Every business must meet our strict financial criteria, plus federal legal
-                    and regulatory guidelines.
-                  </Item.Meta>
-                </Item.Content>
-              </Item>
-              <Item>
-                <Item.Image size="mini" src={Investments} />
-                <Item.Content>
-                  <Item.Header>Flexible investment amounts</Item.Header>
-                  <Item.Meta>
-                    Never invest more than you can risk. Investments starting at $100
-                  </Item.Meta>
-                </Item.Content>
-              </Item>
-              <Item>
-                <Item.Image size="mini" src={Ventures} />
-                <Item.Content>
-                  <Item.Header>Exclusive investments</Item.Header>
-                  <Item.Meta>
-                    Uncover opportunities that were once privately reserved for wealthy
-                    and well-connected investors.
-                  </Item.Meta>
-                </Item.Content>
-              </Item>
-              <Item>
-                <Item.Image size="mini" src={Returns} />
-                <Item.Content>
-                  <Item.Header>Returns processed for you</Item.Header>
-                  <Item.Meta>
-                    No need to chase payments from business owners. NextSeed verifies and processes
-                    payments from your investments automatically.
-                  </Item.Meta>
-                </Item.Content>
-              </Item>
+              {
+                highlights.map(h => (
+                  <Item>
+                    <Item.Image size="mini" src={h.icon} />
+                    <Item.Content>
+                      <Item.Header as="h5">{h.title}</Item.Header>
+                      <Item.Meta>{h.meta}</Item.Meta>
+                    </Item.Content>
+                  </Item>
+                ))
+              }
             </Item.Group>
           </Grid.Column>
           <Grid.Column width={6}>
