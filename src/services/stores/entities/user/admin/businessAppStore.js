@@ -103,7 +103,7 @@ export class BusinessAppStore {
           updatedDate: '07/07/2018',
           failedReasons: 'Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000. Net income ($100) is lower than required $15,000',
           applicationStatus: 'PRE_QUALIFICATION_FAILED',
-          status: 'NEW',
+          status: 'DELETED',
           ratings: 0,
         },
         {
