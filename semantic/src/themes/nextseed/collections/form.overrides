@@ -278,7 +278,7 @@
     position:relative;
     color:@link-color;
     line-height:@28px;
-    font-weight:700;
+    font-weight:@fontMedium;
     text-align:center;
     cursor:pointer;
     .icon{

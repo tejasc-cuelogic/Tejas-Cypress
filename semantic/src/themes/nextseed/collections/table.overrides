@@ -121,6 +121,22 @@
             color:@neutral-middark;
         }
     }
+    &.application-list{
+        thead th{
+            color:@neutral;
+        }
+        h6.ui.header{
+            margin:0 0 @7px;
+        }
+        .item .extra{
+            font-size:@12px;
+        }
+        .ui.rating{
+            .icon{
+                font-family:'Nextseed';
+            }
+        }
+    }
     &.confirm-transfer-table {
         tr td {
             border-top: 0;

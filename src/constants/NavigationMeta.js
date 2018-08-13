@@ -246,8 +246,14 @@ export const PRIVATE_NAV = [
     icon: 'wpforms',
     title: 'Applications',
     to: 'applications',
-    path: 'admin/applications',
+    path: 'admin/applications/containers/ManageApplications',
     accessibleTo: ['admin'],
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Pre-qual failed (2)', to: 'prequal-failed', component: 'ApplicationsList' },
+      { title: 'In-Progress (3)', to: 'in-progress', component: 'ApplicationsList' },
+      { title: 'Completed (7)', to: 'completed', component: 'ApplicationsList' },
+    ],
   },
   {
     icon: 'ns-envelope',
