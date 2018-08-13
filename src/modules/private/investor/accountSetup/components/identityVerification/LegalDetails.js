@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Button, Modal, Divider, Header, Form, Message } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
 import {
-  FormInput, FormSelect, AutoComplete, MaskedInput2,
+  FormInput, FormSelect, AutoComplete, MaskedInput,
 } from '../../../../../../theme/form';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
 import { US_STATES } from '../../../../../../constants/account';
@@ -75,7 +75,7 @@ const LegalDetails = observer(({
             options={US_STATES}
             changed={change}
           />
-          <MaskedInput2
+          <MaskedInput
             key="zipCode"
             name="zipCode"
             fielddata={form.fields.zipCode}
@@ -84,7 +84,7 @@ const LegalDetails = observer(({
           />
         </Form.Group>
         <Form.Group widths="equal">
-          <MaskedInput2
+          <MaskedInput
             name="phoneNumber"
             type="tel"
             fielddata={form.fields.phoneNumber}
@@ -92,7 +92,7 @@ const LegalDetails = observer(({
             changed={maskChange}
             phoneNumber
           />
-          <MaskedInput2
+          <MaskedInput
             name="dateOfBirth"
             fielddata={form.fields.dateOfBirth}
             format="##/##/####"
@@ -100,17 +100,17 @@ const LegalDetails = observer(({
             dateOfBirth
           />
         </Form.Group>
-        <MaskedInput2
+        <MaskedInput
           name="ssn"
           fielddata={form.fields.ssn}
           ssn
           changed={maskChange}
         />
         <div className="center-align">
-          <Button loading={inProgress} size="large" color="green" className="very relaxed" >Verify my identity</Button>
-        </div>
-        <div className="center-align">
-          <Button type="button" className="cancel-link" onClick={close}>I’ll finish this later</Button>
+          <Button.Group vertical>
+            <Button loading={inProgress} size="large" color="green" className="relaxed" >Verify my identity</Button>
+            <Button type="button" className="link-button cancel-link" onClick={close}>I’ll finish this later</Button>
+          </Button.Group>
         </div>
       </Form>
     </Modal.Content>

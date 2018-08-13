@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Modal, Header, Button, Grid, Form, Popup, Icon, List, Divider } from 'semantic-ui-react';
-import { MaskedInput2, FormCheckbox } from '../../../../../../../theme/form';
+import { MaskedInput, FormCheckbox } from '../../../../../../../theme/form';
 
 export default class Agreement extends React.Component {
   handleCloseModal = () => {
@@ -99,7 +99,7 @@ export default class Agreement extends React.Component {
           <Form error size="huge">
             <Grid divided doubling columns={4} className="agreement-details">
               <Grid.Column>
-                <MaskedInput2
+                <MaskedInput
                   hoverable
                   currency
                   prefix="$ "
@@ -109,7 +109,7 @@ export default class Agreement extends React.Component {
                 />
               </Grid.Column>
               <Grid.Column>
-                <MaskedInput2
+                <MaskedInput
                   currency
                   prefix="$ "
                   fielddata={{
@@ -118,7 +118,7 @@ export default class Agreement extends React.Component {
                 />
               </Grid.Column>
               <Grid.Column>
-                <MaskedInput2
+                <MaskedInput
                   hoverable
                   currency
                   prefix="$ "

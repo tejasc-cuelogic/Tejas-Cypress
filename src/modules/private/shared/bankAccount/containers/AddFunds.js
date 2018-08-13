@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Button } from 'semantic-ui-react';
 
-import { MaskedInput2 } from '../../../../../theme/form';
+import { MaskedInput } from '../../../../../theme/form';
 import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
 
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore')
@@ -47,7 +47,7 @@ export default class AddFunds extends Component {
         <p className="center-align">How much would you like to deposit into your account today?</p>
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
-            <MaskedInput2
+            <MaskedInput
               name="value"
               type="tel"
               currency
@@ -59,10 +59,10 @@ export default class AddFunds extends Component {
             />
           </div>
           <div className="center-align">
-            <Button primary size="large" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
-          </div>
-          <div className="center-align">
-            <Button type="button" className="cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I will do this later</Button>
+            <Button.Group vertical>
+              <Button primary size="large" className="relaxed" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
+              <Button type="button" className="link-button cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I will do this later</Button>
+            </Button.Group>
           </div>
         </Form>
       </div>

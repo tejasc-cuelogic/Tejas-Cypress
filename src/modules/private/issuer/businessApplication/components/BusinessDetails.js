@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormInput, DropZoneConfirm as DropZone, MaskedInput2 } from '../../../../../theme/form';
+import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
@@ -94,7 +94,7 @@ export default class BusinessDetails extends Component {
                     </Header>
                     <div className="field-wrap">
                       <Form.Group widths="equal">
-                        <MaskedInput2
+                        <MaskedInput
                           disabled={formReadOnlyMode}
                           prefix="$ "
                           currency
@@ -103,7 +103,7 @@ export default class BusinessDetails extends Component {
                           fielddata={debt.amount}
                           changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                         />
-                        <MaskedInput2
+                        <MaskedInput
                           disabled={formReadOnlyMode}
                           percentage
                           type="text"
@@ -113,7 +113,7 @@ export default class BusinessDetails extends Component {
                         />
                       </Form.Group>
                       <Form.Group widths="equal">
-                        <MaskedInput2
+                        <MaskedInput
                           disabled={formReadOnlyMode}
                           prefix="$ "
                           currency
@@ -122,7 +122,7 @@ export default class BusinessDetails extends Component {
                           fielddata={debt.remainingPrincipal}
                           changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                         />
-                        <MaskedInput2
+                        <MaskedInput
                           disabled={formReadOnlyMode}
                           number
                           type="text"
@@ -189,7 +189,7 @@ export default class BusinessDetails extends Component {
                           fielddata={owner.fullLegalName}
                           changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
                         />
-                        <MaskedInput2
+                        <MaskedInput
                           disabled={formReadOnlyMode}
                           number
                           type="text"
@@ -199,7 +199,7 @@ export default class BusinessDetails extends Component {
                         />
                       </Form.Group>
                       <Form.Group widths="equal">
-                        <MaskedInput2
+                        <MaskedInput
                           disabled={formReadOnlyMode}
                           ssn
                           type="text"
@@ -207,7 +207,7 @@ export default class BusinessDetails extends Component {
                           fielddata={owner.ssn}
                           changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                         />
-                        <MaskedInput2
+                        <MaskedInput
                           disabled={formReadOnlyMode}
                           percentage
                           type="text"

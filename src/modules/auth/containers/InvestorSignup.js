@@ -88,8 +88,8 @@ class InvestorSignup extends Component {
             <FormInput
               key="password"
               name="password"
-              type={pwdInputType}
-              icon={togglePasswordType()}
+              type={pwdInputType.password}
+              icon={togglePasswordType('password')}
               fielddata={SIGNUP_FRM.fields.password}
               changed={signupChange}
             />

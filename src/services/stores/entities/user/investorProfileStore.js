@@ -20,13 +20,6 @@ class InvestorProfileStore {
   @observable INVESTMENT_EXP_FORM = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
   @observable chkboxTicked = null;
   @observable stepToBeRendered = 0;
-  @observable investorProfileNotSet = '';
-
-  @action
-  setInvestorProfileNotSet(status) {
-    this.investorProfileNotSet = status;
-  }
-
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
@@ -204,7 +197,7 @@ class InvestorProfileStore {
         const getProfileStep = AccCreationHelper.establishProfileSteps();
         if (!this.EMPLOYMENT_FORM.meta.isValid) {
           this.setStepToBeRendered(getProfileStep.EMPLOYMENT_FORM);
-        } else if (!this.INVESTOR_PROFILE_FORM.meta.isValid || this.investorProfileNotSet) {
+        } else if (!this.INVESTOR_PROFILE_FORM.meta.isValid) {
           this.setStepToBeRendered(getProfileStep.INVESTOR_PROFILE_FORM);
         } else if (!this.FINANCES_FORM.meta.isValid) {
           this.setStepToBeRendered(getProfileStep.FINANCES_FORM);
@@ -219,56 +212,50 @@ class InvestorProfileStore {
 
   @action
   setFormData = (form, investorProfileData) => {
-    let isDirty = false;
     Object.keys(this[form].fields).map((f) => {
-      if (form === 'EMPLOYMENT_FORM') {
-        if (f === 'employmentStatus') {
-          if (isNull(investorProfileData.employmentStatusInfo[f])) {
-            isDirty = true;
-          }
-        }
-        this.EMPLOYMENT_FORM.fields[f].value = investorProfileData.employmentStatusInfo[f];
-      } else if (form === 'FINANCES_FORM') {
-        this.FINANCES_FORM.fields[f].value = investorProfileData.financialInfo[f];
-        if (investorProfileData.financialInfo.directorShareHolderOfCompany !== null) {
-          this.FINANCES_FORM.fields.checkbox1.value = 'iamadirector';
-        } else {
-          this.FINANCES_FORM.fields.checkbox1.value = [];
-        }
-        if (investorProfileData.financialInfo.employedOrAssoWithFINRAFirmName !== null) {
-          this.FINANCES_FORM.fields.checkbox2.value = 'iamamember';
-        } else {
-          this.FINANCES_FORM.fields.checkbox2.value = [];
-        }
-      } else if (form === 'INVESTOR_PROFILE_FORM') {
-        if (!isNull(investorProfileData.investorProfileType)) {
-          this.INVESTOR_PROFILE_FORM.fields[f].value =
-          investorProfileData.investorProfileType;
-          this.setInvestorProfileNotSet(false);
-        } else {
-          this.setInvestorProfileNotSet(true);
-          isDirty = true;
-        }
-      } else if (form === 'INVESTMENT_EXP_FORM') {
-        if (f !== 'readyInvestingInLimitedLiquiditySecurities' && f !== 'readyForRisksInvolved') {
-          if (!isNull(investorProfileData.investmentExperienceInfo[f])) {
-            this.INVESTMENT_EXP_FORM.fields[f].value =
-            investorProfileData.investmentExperienceInfo[f];
+      switch (form) {
+        case 'EMPLOYMENT_FORM':
+          this.EMPLOYMENT_FORM.fields[f].value = investorProfileData.employmentStatusInfo[f];
+          break;
+        case 'FINANCES_FORM':
+          this.FINANCES_FORM.fields[f].value = investorProfileData.financialInfo[f];
+          if (investorProfileData.financialInfo.directorShareHolderOfCompany !== null) {
+            this.FINANCES_FORM.fields.checkbox1.value = 'iamadirector';
           } else {
-            this.INVESTMENT_EXP_FORM.fields[f].value = 'NO_EXPERIENCE';
-            isDirty = true;
+            this.FINANCES_FORM.fields.checkbox1.value = [];
           }
-        } else if (f === 'readyInvestingInLimitedLiquiditySecurities' &&
-        investorProfileData.investmentExperienceInfo[f]) {
-          this.INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities.value = 'checked';
-        } else if (f === 'readyForRisksInvolved' &&
-        investorProfileData.investmentExperienceInfo[f]) {
-          this.INVESTMENT_EXP_FORM.fields.readyForRisksInvolved.value = 'checked';
-        }
+          if (investorProfileData.financialInfo.employedOrAssoWithFINRAFirmName !== null) {
+            this.FINANCES_FORM.fields.checkbox2.value = 'iamamember';
+          } else {
+            this.FINANCES_FORM.fields.checkbox2.value = [];
+          }
+          break;
+        case 'INVESTOR_PROFILE_FORM':
+          if (!isNull(investorProfileData.investorProfileType)) {
+            this.INVESTOR_PROFILE_FORM.fields[f].value =
+            investorProfileData.investorProfileType;
+          }
+          break;
+        case 'INVESTMENT_EXP_FORM':
+          if (f !== 'readyInvestingInLimitedLiquiditySecurities' && f !== 'readyForRisksInvolved') {
+            if (!isNull(investorProfileData.investmentExperienceInfo[f])) {
+              this.INVESTMENT_EXP_FORM.fields[f].value =
+              investorProfileData.investmentExperienceInfo[f];
+            }
+          } else if (f === 'readyInvestingInLimitedLiquiditySecurities' &&
+          investorProfileData.investmentExperienceInfo[f]) {
+            this.INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities.value = 'checked';
+          } else if (f === 'readyForRisksInvolved' &&
+          investorProfileData.investmentExperienceInfo[f]) {
+            this.INVESTMENT_EXP_FORM.fields.readyForRisksInvolved.value = 'checked';
+          }
+          break;
+        default:
+          break;
       }
       return this[form].fields[f];
     });
-    FormValidator.onChange(this[form], '', '', isDirty);
+    FormValidator.onChange(this[form], '', '');
   }
 }
 

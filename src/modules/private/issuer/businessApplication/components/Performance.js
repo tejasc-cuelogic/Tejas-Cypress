@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { MaskedInput2, DropZoneConfirm as DropZone } from '../../../../../theme/form';
+import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
@@ -64,7 +64,7 @@ export default class Performance extends Component {
                     <div className="field-wrap">
                       {
                         ['pyGrossSales', 'pyCogs', 'pyOperatingExpenses', 'pyNetIncome'].map(field => (
-                          <MaskedInput2
+                          <MaskedInput
                             disabled={formReadOnlyMode}
                             key={field}
                             name={field}
@@ -84,7 +84,7 @@ export default class Performance extends Component {
                   <div className="field-wrap">
                     {
                       ['nyGrossSales', 'nyCogs', 'nyOperatingExpenses', 'nyNetIncome'].map(field => (
-                        <MaskedInput2
+                        <MaskedInput
                           disabled={formReadOnlyMode}
                           key={field}
                           name={field}

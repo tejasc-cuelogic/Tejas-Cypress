@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 // import Aux from 'react-aux';
 import { Modal, Button, Header, Form, Divider, Message, Table } from 'semantic-ui-react';
-import { MaskedInput2 } from '../../../../../../theme/form';
+import { MaskedInput } from '../../../../../../theme/form';
 import { ListErrors, FieldError } from '../../../../../../theme/shared';
 
 @inject('beneficiaryStore', 'uiStore')
@@ -70,7 +70,7 @@ export default class BeneficiaryShareModal extends Component {
                     <Table.Row>
                       <Table.Cell>{`${beneficiary.firstName.value} ${beneficiary.lastName.value}`}</Table.Cell>
                       <Table.Cell>
-                        <MaskedInput2
+                        <MaskedInput
                           percentage
                           showErrorOnField
                           tooltip={beneficiary.share.tooltip}

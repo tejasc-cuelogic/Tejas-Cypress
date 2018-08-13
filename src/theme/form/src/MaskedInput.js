@@ -6,7 +6,7 @@ import NumberFormat from 'react-number-format';
 import InputMask from 'react-input-mask';
 import { FieldError } from '../../shared';
 
-const MaskedInput2 = observer((props) => {
+const MaskedInput = observer((props) => {
   const {
     label,
     error,
@@ -61,31 +61,17 @@ const MaskedInput2 = observer((props) => {
       ) : props.phoneNumber ? (
         <NumberFormat type="tel" format={props.format} {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.zipCode ? (
-        <NumberFormat format="#####" {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
+        <NumberFormat type="tel" format="#####" {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.ssn ? (
         <NumberFormat type="tel" format="###-##-####" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.dateOfBirth ? (
         <NumberFormat type="text" format="##/##/####" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.taxId ? (
-        <NumberFormat type="text" format="##-#######" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
+        <NumberFormat type="tel" format="##-#######" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.accountNumber ? (
-        <NumberFormat
-          isAllowed={(values) => {
-              const accountNumber = values.value;
-              if (accountNumber.toString().length <= 17) {
-                return true;
-              }
-              return false;
-            }
-          }
-          type="text"
-          placeholder={placeHolder}
-          {...props}
-          value={value}
-          onValueChange={values => props.changed(values, props.name)}
-        />
+        <NumberFormat type="tel" format="#################" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
       ) : props.routingNumber ? (
-        <NumberFormat format="#########" type="text" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
+        <NumberFormat type="tel" format="#########" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
       ) : <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       }
       {error && !props.showErrorOnField &&
@@ -95,4 +81,4 @@ const MaskedInput2 = observer((props) => {
   );
 });
 
-export default MaskedInput2;
+export default MaskedInput;

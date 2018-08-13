@@ -11,8 +11,9 @@ import Helper from '../../../../../../../helper/utility';
 @observer
 export default class Summary extends Component {
   handleCreateAccount = () => {
-    this.props.entityAccountStore.createAccount('Summary', 'submit');
-    this.props.history.push('summary');
+    this.props.entityAccountStore.createAccount('Summary', 'submit').then(() => {
+      this.props.history.push('summary');
+    });
   }
   render() {
     const {
@@ -52,7 +53,7 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Entity`s name</b></Table.Cell>
-                  <Table.Cell>{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
+                  <Table.Cell>{GEN_INFO_FRM.fields.name.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Tax ID</b></Table.Cell>

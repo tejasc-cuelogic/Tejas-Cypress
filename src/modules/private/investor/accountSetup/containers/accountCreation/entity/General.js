@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { US_STATES } from '../../../../../../../constants/account';
-import { FormInput, MaskedInput2, FormSelect, AutoComplete } from '../../../../../../../theme/form';
+import { FormInput, MaskedInput, FormSelect, AutoComplete } from '../../../../../../../theme/form';
 
 @inject('entityAccountStore')
 @observer
@@ -24,7 +24,7 @@ export default class General extends Component {
               fielddata={GEN_INFO_FRM.fields.name}
               changed={genInfoChange}
             />
-            <MaskedInput2
+            <MaskedInput
               name="taxId"
               fielddata={GEN_INFO_FRM.fields.taxId}
               changed={maskedGenInfoChange}
@@ -50,7 +50,7 @@ export default class General extends Component {
                 options={US_STATES}
                 changed={genInfoChange}
               />
-              <MaskedInput2
+              <MaskedInput
                 name="zipCode"
                 fielddata={GEN_INFO_FRM.fields.zipCode}
                 changed={maskedGenInfoChange}

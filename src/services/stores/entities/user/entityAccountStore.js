@@ -95,12 +95,16 @@ class EntityAccountStore {
   }
 
   @action
-  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false, field = null) => {
+  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false, field = null) => new Promise((resolve) => {
     if (formStatus === 'submit') {
-      this.submitForm(currentStep, formStatus, this.accountAttributes);
+      this.submitForm(currentStep, formStatus, this.accountAttributes).then(() => {
+        resolve();
+      });
+    } else {
+      this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field);
+      resolve();
     }
-    this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field);
-  }
+  })
 
   @action
   setEntityAttributes = (step, removeUploadedData, field) => {
