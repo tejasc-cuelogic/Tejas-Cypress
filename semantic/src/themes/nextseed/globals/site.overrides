@@ -859,6 +859,9 @@ a.icon-link:hover {
 }
 .inner-content-spacer{
 	padding:@20px;
+	+ .inner-content-spacer{
+		border-top:@neutral-midwhite 1px solid;
+	}
 }
 .secondary-section{
 	background-color:@neutral-offwhite;

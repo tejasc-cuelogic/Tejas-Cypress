@@ -13,6 +13,29 @@
             display:inline-block;
             line-height:@18px;
         }
+        &.display-only{
+            >label{
+                font-weight:@normal;
+                color:@neutral-middark;
+            }
+            input:not([type]),
+            input[type=date],
+            input[type=datetime-local],
+            input[type=email],
+            input[type=file],
+            input[type=number],
+            input[type=password],
+            input[type=search],
+            input[type=tel],
+            input[type=text],
+            input[type=time],
+            input[type=url]{
+                padding:0;
+                border:none;
+                font-weight:@fontMedium;
+                text-overflow:ellipsis;
+            }
+        }
     }
     .otp-wrap{
         margin:3rem 0;
