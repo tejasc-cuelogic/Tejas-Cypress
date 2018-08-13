@@ -6,6 +6,8 @@ import { Grid, Form, Input, Breadcrumb } from 'semantic-ui-react';
 import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
 import FaqsCombined from './FaqsCombined';
+import { InlineLoader } from '../../../../../theme/shared';
+
 
 @inject('educationStore')
 @observer
@@ -15,7 +17,7 @@ export default class KnowledgeBase extends Component {
     this.props.educationStore.initRequest('KnowledgeBase', props);
   }
   search = (e) => {
-    this.props.educationStore.setSrchParam(e.target.value);
+    this.props.educationStore.setSrchParam('KnowledgeBase', e.target.value);
     if (this.props.location.pathname !== '/app/resources/knowledge-base') {
       this.props.history.replace('/app/resources/knowledge-base');
     }
@@ -26,8 +28,8 @@ export default class KnowledgeBase extends Component {
       kbs, loading, error, searchParam,
     } = this.props.educationStore;
     const modul = 'knowledgeBase';
-    if (loading) {
-      return 'loading...';
+    if (loading('KnowledgeBase')) {
+      return <InlineLoader />;
     }
     return (
       <Aux>
@@ -47,7 +49,7 @@ export default class KnowledgeBase extends Component {
                   <Input
                     fluid
                     onChange={this.search}
-                    value={searchParam}
+                    value={searchParam.KnowledgeBase}
                     inverted
                     icon={{ className: 'ns-search' }}
                     iconPosition="left"

@@ -14,7 +14,6 @@ const SubscribeFields = ({
           key={field}
           type="text"
           name={field}
-          autoFocus={field === 'name'}
           fielddata={NEWSLETTER_FRM.fields[field]}
           changed={newsLetterChange}
           containerwidth={!modal ? 4 : false}
