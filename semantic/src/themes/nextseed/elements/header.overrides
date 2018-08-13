@@ -92,7 +92,9 @@
 }
 h6.ui.header{
     .sub.header{
-        font-size:@relative14px;
+        font-size:@relative12px;
+        font-weight:@normal;
+        line-height:@22px;
         color:@neutral-middark;
     }
 }

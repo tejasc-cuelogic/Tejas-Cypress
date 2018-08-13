@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
-import { Modal, Card, Header, Label, Rating, Button, Grid } from 'semantic-ui-react';
+import { Modal, Card, Header, Label, Rating, Button, Grid, List } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -25,7 +25,7 @@ export default class ApplicationDetails extends Component {
   render() {
     const { match } = this.props;
     return (
-      <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal}>
+      <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
           <Header as="h3">
             California 88 Application
@@ -39,13 +39,26 @@ export default class ApplicationDetails extends Component {
             <Grid.Row>
               <Grid.Column>
                 <Card fluid>
+                  <Card.Header>
+                    Information
+                    <small className="pull-right"><Link to="/">Edit</Link></small>
+                  </Card.Header>
                   <Card.Content>
-                    <Header as="h6">
-                      Information
-                      <Link to="/" className="pull-right small">Edit</Link>
-                    </Header>
+                    <Grid columns={2}>
+                      <Grid.Column>
+                        <Header as="h6">
+                          <Header.Subheader>Business Name</Header.Subheader>
+                          California 88
+                        </Header>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Header as="h6">
+                          <Header.Subheader>Sign-up Code</Header.Subheader>
+                          joedoe
+                        </Header>
+                      </Grid.Column>
+                    </Grid>
                   </Card.Content>
-                  <Card.Content>asdfasdfasdfadf</Card.Content>
                 </Card>
               </Grid.Column>
               <Grid.Column>
@@ -53,7 +66,28 @@ export default class ApplicationDetails extends Component {
                   <Card.Content>
                     <Header as="h6">Primary POC</Header>
                   </Card.Content>
-                  <Card.Content>asdfasdfasdfadf</Card.Content>
+                  <Card.Content>
+                    <Grid columns={2}>
+                      <Grid.Column>
+                        <Header as="h6">
+                          <Header.Subheader>Name</Header.Subheader>
+                          John Doe
+                        </Header>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Header as="h6">
+                          <Header.Subheader>Email</Header.Subheader>
+                          jdoe234@gmail.com
+                        </Header>
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Header as="h6">
+                          <Header.Subheader>Phone</Header.Subheader>
+                          235-343-6453
+                        </Header>
+                      </Grid.Column>
+                    </Grid>
+                  </Card.Content>
                 </Card>
               </Grid.Column>
               <Grid.Column>
@@ -61,7 +95,13 @@ export default class ApplicationDetails extends Component {
                   <Card.Content>
                     <Header as="h6">Failed Reason</Header>
                   </Card.Content>
-                  <Card.Content>asdfasdfasdfadf</Card.Content>
+                  <Card.Content>
+                    <List bulleted relaxed>
+                      <List.Item>Net income ($100) is lower than $15,000.</List.Item>
+                      <List.Item>Net income ($100) is lower than $15,000.</List.Item>
+                      <List.Item>Net income ($100) is lower than $15,000.</List.Item>
+                    </List>
+                  </Card.Content>
                 </Card>
               </Grid.Column>
             </Grid.Row>
