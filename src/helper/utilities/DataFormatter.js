@@ -21,6 +21,8 @@ class DataFormatter {
   upperCamelCase = str => upperFirst(camelCase(str));
 
   getCommaSeparatedArrStr = array => [array.slice(0, -1).join(', '), array.slice(-1)[0]].join(array.length < 2 ? '' : ' or ');
+
+  getJsonFormattedError = err => JSON.parse(err.message.substring(err.message.indexOf('{')));
 }
 
 export default new DataFormatter();

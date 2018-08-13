@@ -229,9 +229,7 @@ class IraAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.createInvestorAccount || formStatus === 'submit' || currentStep.name === 'Funding') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
-          }
+          userDetailsStore.getUser(userStore.currentUser.sub);
           if (currentStep.name === 'Identity') {
             if (removeUploadedData) {
               validationActions.validateIRAIdentityInfo();

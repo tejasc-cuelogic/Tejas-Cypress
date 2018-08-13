@@ -44,7 +44,7 @@ export default class NewPhoneNumber extends Component {
         <Modal.Content>
           {errors &&
             <Message error >
-              <ListErrors errors={[errors]} />
+              <ListErrors errors={[errors.message]} />
             </Message>
           }
           <Form error onSubmit={this.handleChangePhoneNumber}>

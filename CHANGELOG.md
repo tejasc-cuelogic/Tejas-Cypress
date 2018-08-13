@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-08-09)
+# 0.0.0 (2018-08-10)
 
 
 ### Bug Fixes
@@ -23,12 +23,14 @@
 * **EDGAR[Issue [325](https://chaos.ns.team/nsv2/ns-ops/issues/325) -  updated edgar offering page under text]:** updated edgar offering page under text ([560e6ce](https://chaos.ns.team/nsv2/ns-client/commits/560e6ce))
 * **Hello World structure [Issue [204](https://chaos.ns.team/nsv2/ns-ops/issues/204) - Setup Hello World structure for Issuer/Admin]:** Hello World structure for Issuer/Admin ([76810e0](https://chaos.ns.team/nsv2/ns-client/commits/76810e0))
 * **home page ui[Issue [228](https://chaos.ns.team/nsv2/ns-ops/issues/228) - public pages home page 2]:** created ui of home page ([e0e48e7](https://chaos.ns.team/nsv2/ns-client/commits/e0e48e7))
+* **investment workflow[Issue [319](https://chaos.ns.team/nsv2/ns-ops/issues/319) - Fireworks animation]:** fireworks animation on congratulations screen. ([91d028f](https://chaos.ns.team/nsv2/ns-client/commits/91d028f))
 * **Investor Account Details[Issue [289](https://chaos.ns.team/nsv2/ns-ops/issues/289) - view transactions and settings for investor account details]:** view transactions and settings for investor account details ([f2a77e7](https://chaos.ns.team/nsv2/ns-client/commits/f2a77e7))
 * **Investor accounts[Issue [326](https://chaos.ns.team/nsv2/ns-ops/issues/326) - investor-settings-statements-provide-the-download-link-for-pdf]:** added pdf url for investor accounts statements and taxform section ([ac943e4](https://chaos.ns.team/nsv2/ns-client/commits/ac943e4))
 * **Investor CF Limits and accreditation[Issue [200](https://chaos.ns.team/nsv2/ns-ops/issues/200) - Investor CF Limits and accreditation]:** Investor CF Limits and accreditation ([c099d7c](https://chaos.ns.team/nsv2/ns-client/commits/c099d7c))
 * **Investor summary dashboard[Issue [320](https://chaos.ns.team/nsv2/ns-ops/issues/320) - investor summary after account setup]:** investor summary after account setup ([a5a426c](https://chaos.ns.team/nsv2/ns-client/commits/a5a426c))
 * **investor-account-details-overview-ui[Issue [301](https://chaos.ns.team/nsv2/ns-ops/issues/301) - 301 investor account details overview ui]:** Added overview page UI on investor account details page ([6acae58](https://chaos.ns.team/nsv2/ns-client/commits/6acae58))
 * **Investor[Issue [221](https://chaos.ns.team/nsv2/ns-ops/issues/221) - investor signup flow ui ux updates 2]:** Review Feedback points - spelling correction and IRA - funding default set to null ([28904b1](https://chaos.ns.team/nsv2/ns-client/commits/28904b1))
+* **Investor[Issue [221](https://chaos.ns.team/nsv2/ns-ops/issues/221) - investor-signup-flow-ui-ux-updates-2]:** Done changes for Signup - user selection design and entity-summary page, feedback changes ([e60b72b](https://chaos.ns.team/nsv2/ns-client/commits/e60b72b))
 * **Investor[Issue [221](https://chaos.ns.team/nsv2/ns-ops/issues/221) - investor-signup-flow-ui-ux-updates-2]:** Done feedback point, reset radio button value on default, done few design related and otp field changes ([8264cf0](https://chaos.ns.team/nsv2/ns-client/commits/8264cf0))
 * **Investor[Issue [221](https://chaos.ns.team/nsv2/ns-ops/issues/221) - investor-signup-flow-ui-ux-updates-2]:** Done the feedback changes and data/design changes as per Figma. ([e60b5ee](https://chaos.ns.team/nsv2/ns-client/commits/e60b5ee))
 * **Investor[Issue [235](https://chaos.ns.team/nsv2/ns-ops/issues/235) - manage-beneficiaries-feedback-changes]:** investor beneficiary feedback changes ([9718a27](https://chaos.ns.team/nsv2/ns-client/commits/9718a27))
