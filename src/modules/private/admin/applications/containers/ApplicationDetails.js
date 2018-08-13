@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
-import { Modal, Card, Header, Label, Rating, Button, Grid, List } from 'semantic-ui-react';
+import { Modal, Card, Header, Label, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -38,10 +38,10 @@ export default class ApplicationDetails extends Component {
           <Grid columns="equal">
             <Grid.Row>
               <Grid.Column>
-                <Card fluid>
+                <Card fluid className="ba-info-card">
                   <Card.Header>
                     Information
-                    <small className="pull-right"><Link to="/">Edit</Link></small>
+                    <small className="pull-right"><Link to="/"><Icon className="ns-pencil" />Edit</Link></small>
                   </Card.Header>
                   <Card.Content>
                     <Grid columns={2}>
@@ -62,10 +62,8 @@ export default class ApplicationDetails extends Component {
                 </Card>
               </Grid.Column>
               <Grid.Column>
-                <Card fluid>
-                  <Card.Content>
-                    <Header as="h6">Primary POC</Header>
-                  </Card.Content>
+                <Card fluid className="ba-info-card">
+                  <Card.Header>Primary POC</Card.Header>
                   <Card.Content>
                     <Grid columns={2}>
                       <Grid.Column>
@@ -91,10 +89,8 @@ export default class ApplicationDetails extends Component {
                 </Card>
               </Grid.Column>
               <Grid.Column>
-                <Card fluid>
-                  <Card.Content>
-                    <Header as="h6">Failed Reason</Header>
-                  </Card.Content>
+                <Card fluid className="ba-info-card">
+                  <Card.Header>Failed Reason</Card.Header>
                   <Card.Content>
                     <List bulleted relaxed>
                       <List.Item>Net income ($100) is lower than $15,000.</List.Item>
