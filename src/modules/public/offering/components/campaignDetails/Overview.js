@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
 import { Header, Image, Icon, Embed, Statistic, Grid, Menu, Label, Divider, Segment, Breadcrumb, Popup, Modal, List } from 'semantic-ui-react';
 import videoPoster from '../../../../../assets/images/636206632.webp';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
@@ -51,7 +50,7 @@ class Overview extends Component {
                       <Header as="h3">Top things to know</Header>
                       <p><b>Industry: </b>{campaign.industry}<br />
                         <b>Investment Type: </b>{campaign.investmentType}
-                        <Popup hoverable position="bottom center" trigger={<Icon name="help circle" color="green" />} content={(<span>For every $100 you invest, you are paid a portion of this company&apos;s gross revenue every month until you are paid $190 within 78 months. A 1.0% service fee is deducted from each payment. <Link target="_blank" to="https://www.nextseed.com/offerings/buffbrew-taproom/#returnsGraphAnchor]">See some examples</Link>.</span>)} />
+                        <Popup hoverable position="bottom center" trigger={<Icon name="help circle" color="green" />} content={(<span>For every $100 you invest, you are paid a portion of this company&apos;s gross revenue every month until you are paid $190 within 78 months. A 1.0% service fee is deducted from each payment. <a target="blank" href="https://www.nextseed.com/offerings/buffbrew-taproom/#returnsGraphAnchor">See some examples</a>.</span>)} />
                       </p>
                       <p className="detail-section">{campaign.description}</p>
                       <Divider section />
