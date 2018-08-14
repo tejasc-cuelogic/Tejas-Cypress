@@ -38,7 +38,7 @@ export default class ApplicationListButtons extends Component {
           {!includes(['DELETED', 'REMOVED'], this.props.status) &&
           <Button as={Link} to={`${this.props.refLink}/confirm`} color="red">Delete</Button>
           }
-          <Button color="blue" inverted className="relaxed">View</Button>
+          <Button as={Link} to={`${this.props.refLink}/view/1`} color="blue" inverted className="relaxed">View</Button>
         </Button.Group>
       </Table.Cell>
     );
