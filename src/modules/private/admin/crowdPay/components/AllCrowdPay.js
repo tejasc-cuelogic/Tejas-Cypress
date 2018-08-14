@@ -15,7 +15,7 @@ export default class AllCrowdPay extends Component {
     return (
       <Card fluid>
         <div className="table-wrapper">
-          <Table unstackable striped sortable singleLine className="user-list">
+          <Table unstackable className="application-list">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Title</Table.HeaderCell>
