@@ -112,18 +112,15 @@ export default class PreQualification extends Component {
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">Legal Confirmation</Header>
-          <Form.Group>
-            <FormCheckbox
-              disabled={preQualFormDisabled}
-              fielddata={fields.legalConfirmation}
-              name="legalConfirmation"
-              changed={businessAppEleChange}
-              defaults
-              containerclassname="display-only"
-              readOnly
-              // containerclassname="ui relaxed list"
-            />
-          </Form.Group>
+          <FormCheckbox
+            disabled={preQualFormDisabled}
+            fielddata={fields.legalConfirmation}
+            name="legalConfirmation"
+            changed={businessAppEleChange}
+            defaults
+            readOnly
+            containerclassname="ui relaxed list"
+          />
         </div>
       </Form>
     );
