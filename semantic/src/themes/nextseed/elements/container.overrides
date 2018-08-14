@@ -12,6 +12,12 @@ section{
             .banner-caption{
                 display:table-cell;
                 vertical-align:middle;
+                h1.ui.header {
+                    span {
+                        margin-top: @14px;
+                        display: inline-block;
+                    }
+                }
             }
         }
         &.home-banner{
