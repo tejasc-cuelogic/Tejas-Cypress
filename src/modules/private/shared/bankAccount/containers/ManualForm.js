@@ -11,24 +11,18 @@ import AddFunds from './AddFunds';
 export default class ManualForm extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
-    if (this.props.accountStore.investmentAccType === 'individual') {
-      this.props.individualAccountStore.createAccount().then(() => {
-        this.props.individualAccountStore.setStepToBeRendered(1);
-      })
-        .catch(() => { });
-    } else if (this.props.accountStore.investmentAccType === 'entity') {
-      const currentStep = { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 };
-      this.props.entityAccountStore.createAccount(currentStep, 'draft').then(() => {
+    const { investmentAccType } = this.props.accountStore;
+    const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : undefined;
+
+    this.props[accTypeStore].createAccount(currentStep, 'draft').then(() => {
+      if (investmentAccType === 'individual') {
+        this.props[accTypeStore].setStepToBeRendered(1);
+      } else {
         this.props.bankAccountStore.setShowAddFunds();
-      })
-        .catch(() => { });
-    } else if (this.props.accountStore.investmentAccType === 'ira') {
-      const currentStep = { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 };
-      this.props.iraAccountStore.createAccount(currentStep, 'draft').then(() => {
-        this.props.bankAccountStore.setShowAddFunds();
-      })
-        .catch(() => { });
-    }
+      }
+    })
+      .catch(() => { });
   }
 
   render() {
