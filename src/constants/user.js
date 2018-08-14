@@ -52,6 +52,23 @@ export const FILTER_META = {
     { text: 'Delaware', value: 'delaware' },
     { text: 'West Virginia', value: 'west virginia' },
   ],
+  businessAppSortOption: [
+    { text: 'Started date (ascending)', value: 'asc' },
+    { text: 'Started date (descending)', value: 'desc' },
+  ],
+  applicationStatus: {
+    value: [],
+    values: [
+      { label: 'New', value: 'NEW', applicable: ['completed'] },
+      { label: 'Accepted', value: 'ACCEPTED', applicable: ['completed'] },
+      { label: 'Declined', value: 'DECLINED', applicable: ['completed'] },
+      { label: 'Reviewing', value: 'REVIEWING', applicable: ['completed'] },
+      { label: 'Offered', value: 'OFFERED', applicable: ['completed'] },
+      { label: 'Unstashed', value: 'UNSTASH', applicable: ['in-progress'] },
+      { label: 'Stashed', value: 'STASH', applicable: ['in-progress'] },
+      { label: 'Deleted', value: 'DELETED', applicable: ['prequal-failed', 'in-progress', 'completed'] },
+    ],
+  },
 };
 
 export const TRANSACTION_TYPES = [

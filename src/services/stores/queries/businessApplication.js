@@ -1,5 +1,32 @@
 import gql from 'graphql-tag';
 
+export const allBusinessApplicationses = gql`
+query allBusinessApplicationses($filters: BusinessApplicationsFilter){
+  allBusinessApplicationses(filter: $filters){
+    id
+    applicationStatus
+    businessDetailsStatus
+    businessDocumentationStatus
+    businessName
+    businessPerformanceStatus
+    commentContent
+    commentDate
+    commentUser
+    createdDate
+    email
+    name
+    phone
+    ratings
+    updatedDate
+    failedReasons
+    status
+  }
+  _allBusinessApplicationsesMeta(filter: $filters){
+    count
+  }
+}
+`;
+
 export const createBusinessApplicationPrequalificaiton = gql`
 mutation _submitBusinessApplicationPreQualStepSuccessScenario($preQualificationData: PrequalDetailsInput!) {
   createBusinessApplicationPrequalification(prequalificationDetails: $preQualificationData) {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -59,10 +60,10 @@ export default class BusinessDetails extends Component {
             />
             <FormElementWrap
               header={
-                <span>
+                <Aux>
                   Business Plan
                   <Link to="/" className="link"><small>Learn More</small></Link>
-                </span>
+                </Aux>
               }
             >
               <DropZone
