@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
+import { Route } from 'react-router-dom';
 import AllCrowdPay from '../components/AllCrowdPay';
 
 export default class ManageCrowdPay extends Component {
   render() {
     const { match } = this.props;
     return (
-      <Aux>
-        <AllCrowdPay match={match} />
-      </Aux>
+      <Route exact path={`${match.url}/:type`} component={AllCrowdPay} />
     );
   }
 }

@@ -4,7 +4,6 @@ import { Grid, Form } from 'semantic-ui-react';
 import PrivateLayout from '../../shared/PrivateLayout';
 import ManageCrowdPay from './containers/ManageCrowdPay';
 import { ByKeyword, DropdownFilter, DateRangeFilter } from '../../../../theme/form/Filters';
-import CrowdPayDetails from './containers/CrowdPayDetails';
 
 export default class CrowdPay extends Component {
   state = {
@@ -58,8 +57,7 @@ export default class CrowdPay extends Component {
         }
       >
         <Switch>
-          <Route exact path={`${match.url}`} component={ManageCrowdPay} />
-          <Route exact path={`${match.url}/:id`} component={CrowdPayDetails} />
+          <Route path={`${match.url}`} component={ManageCrowdPay} />
         </Switch>
       </PrivateLayout>
     );

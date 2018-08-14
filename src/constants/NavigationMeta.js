@@ -283,6 +283,13 @@ export const PRIVATE_NAV = [
     heading: 'Manage Crowdpay Accounts',
     path: 'admin/crowdPay',
     accessibleTo: ['admin'],
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Review', to: 'review', component: 'ApplicationsList' },
+      { title: 'CIP', to: 'cip', component: 'ApplicationsList' },
+      { title: 'IRA', to: 'ira', component: 'ApplicationsList' },
+      { title: 'Entity', to: 'entity', component: 'ApplicationsList' },
+    ],
   },
   {
     icon: 'credit card',
