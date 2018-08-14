@@ -208,6 +208,22 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin'],
   },
   {
+    icon: 'ns-users',
+    title: 'offerings',
+    heading: 'Offerings',
+    to: 'offerings',
+    path: 'admin/offerings',
+    accessibleTo: ['admin'],
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Overview', to: 'overview' },
+      { title: 'Creation', to: 'creation' },
+      { title: 'Live', to: 'live' },
+      { title: 'Engagement', to: 'engagement' },
+      { title: 'Completed', to: 'completed' },
+    ],
+  },
+  {
     icon: 'lightbulb outline',
     title: 'Insights',
     to: 'insights',
