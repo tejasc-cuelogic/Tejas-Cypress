@@ -3,9 +3,10 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
+import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
 
-@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore')
+@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore')
 @observer
 export default class ManualForm extends Component {
   handleSubmitForm = (e) => {
@@ -15,8 +16,18 @@ export default class ManualForm extends Component {
         this.props.individualAccountStore.setStepToBeRendered(1);
       })
         .catch(() => { });
-    } else {
-      this.props.bankAccountStore.setShowAddFunds();
+    } else if (this.props.accountStore.investmentAccType === 'entity') {
+      const currentStep = { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 };
+      this.props.entityAccountStore.createAccount(currentStep, 'draft').then(() => {
+        this.props.bankAccountStore.setShowAddFunds();
+      })
+        .catch(() => { });
+    } else if (this.props.accountStore.investmentAccType === 'ira') {
+      const currentStep = { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 };
+      this.props.iraAccountStore.createAccount(currentStep, 'draft').then(() => {
+        this.props.bankAccountStore.setShowAddFunds();
+      })
+        .catch(() => { });
     }
   }
 
