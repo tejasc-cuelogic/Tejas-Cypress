@@ -50,6 +50,7 @@ class IndividualAccountStore {
           } else {
             Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
           }
+          uiStore.setErrors(null);
           resolve(result);
         })
         .catch(action((err) => {

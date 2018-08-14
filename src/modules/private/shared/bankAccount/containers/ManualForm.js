@@ -3,21 +3,26 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
+import { validationActions } from '../../../../../services/actions';
 import AddFunds from './AddFunds';
 
-@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore')
+@inject('individualAccountStore', 'bankAccountStore', 'accountStore', 'uiStore', 'entityAccountStore', 'iraAccountStore')
 @observer
 export default class ManualForm extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
-    if (this.props.accountStore.investmentAccType === 'individual') {
-      this.props.individualAccountStore.createAccount().then(() => {
-        this.props.individualAccountStore.setStepToBeRendered(1);
-      })
-        .catch(() => { });
-    } else {
-      this.props.bankAccountStore.setShowAddFunds();
-    }
+    const { investmentAccType } = this.props.accountStore;
+    const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : undefined;
+
+    this.props[accTypeStore].createAccount(currentStep, 'draft').then(() => {
+      if (investmentAccType === 'individual') {
+        this.props[accTypeStore].setStepToBeRendered(1);
+      } else {
+        this.props.bankAccountStore.setShowAddFunds();
+      }
+    })
+      .catch(() => { });
   }
 
   render() {
