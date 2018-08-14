@@ -123,13 +123,18 @@
     }
     &.application-list{
         thead th{
-            color:@neutral-middark;
+            color:@neutral;
         }
         h6.ui.header{
             margin:0 0 @7px;
         }
         .item .extra{
             font-size:@12px;
+        }
+    }
+    &.confirm-transfer-table {
+        tr td {
+            border-top: 0;
         }
     }
     &.confirm-transfer-table {

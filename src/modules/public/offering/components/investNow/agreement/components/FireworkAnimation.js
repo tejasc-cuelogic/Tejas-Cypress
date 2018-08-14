@@ -2,10 +2,10 @@ import React from 'react';
 import sizeMe from 'react-sizeme';
 import Confetti from 'react-confetti';
 
-const DimensionedExample = sizeMe({
+const Firework = sizeMe({
   monitorHeight: true,
   monitorWidth: true,
-})(class DimensionedExample extends React.PureComponent {
+})(class Firework extends React.PureComponent {
   render() {
     return (
       <div className="animation-container">
@@ -15,5 +15,5 @@ const DimensionedExample = sizeMe({
   }
 });
 
-export default DimensionedExample;
+export default Firework;
 

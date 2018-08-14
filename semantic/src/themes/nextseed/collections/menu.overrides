@@ -322,6 +322,9 @@ footer{
     &.attached:not(.tabular){
         border:none;
     }
+    &[class*="bottom attached"]{
+        margin-bottom:0;
+    }
     &.secondary-menu{
         margin:0;
         background-color:@neutral-darkwhite;

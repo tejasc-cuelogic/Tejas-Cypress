@@ -13,7 +13,7 @@ export const DropdownFilter = props => (
     <Dropdown
       name={props.keyName || camelCase(props.name)}
       onChange={props.change}
-      className="inverted"
+      className={props.className}
       value={toJS(props.value) || ((props.isMultiple) ? [] : '')}
       placeholder="Select Filter"
       fluid
