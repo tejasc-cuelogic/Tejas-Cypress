@@ -39,7 +39,7 @@ export default class ManageApplications extends Component {
               <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
             ))
           }
-          <Route exact path={`${match.url}/:id/view/:appId`} render={props => <ApplicationDetails refLink={match.url} {...props} />} />
+          <Route path={`${match.url}/:id/view/:appId`} render={props => <ApplicationDetails refLink={match.url} {...props} />} />
           <Route exact path={`${match.url}/:id/confirm`} component={DeleteAppModal} />
         </Switch>
       </PrivateLayout>

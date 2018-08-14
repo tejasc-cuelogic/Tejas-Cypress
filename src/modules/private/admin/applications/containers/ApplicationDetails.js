@@ -8,6 +8,10 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 const navItems = [
   { title: 'Activity History', to: 'activity-history' },
   { title: 'Pre-qualification', to: 'pre-qualification' },
+  { title: 'Business Details', to: 'business-details' },
+  { title: 'Performance', to: 'performance' },
+  { title: 'Documentation', to: 'documentation' },
+  { title: 'Review', to: 'review' },
 ];
 
 const getModule = component => Loadable({
