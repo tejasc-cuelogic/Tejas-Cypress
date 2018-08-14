@@ -9,56 +9,84 @@ import { FormInput } from '../../../../../../theme/form';
 export default class BusinessDetails extends Component {
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange, preQualFormDisabled,
+      BUSINESS_DETAILS_FRM, businessAppEleChange, preQualFormDisabled,
     } = this.props.businessAppStore;
-    const { fields } = BUSINESS_APP_FRM;
     return (
       <Form>
-        <div className="inner-content-spacer">
-          <Header as="h4">What is your Business Model?</Header>
-          <p>Business to Consumer</p>
-        </div>
-        <div className="inner-content-spacer">
-          <Header as="h4">General Information</Header>
-          <Form.Group widths={4}>
-            {
-              ['street', 'city', 'state', 'zipCode'].map(field => (
-                <FormInput
-                  disabled={preQualFormDisabled}
-                  key={field}
-                  type="text"
-                  name={field}
-                  value="Value"
-                  fielddata={fields[field]}
-                  changed={businessAppEleChange}
-                  containerclassname="display-only"
-                  readOnly
-                />
-              ))
-            }
-          </Form.Group>
-          <Form.Group widths={4}>
-            {
-              ['website', 'phoneNumber'].map(field => (
-                <FormInput
-                  disabled={preQualFormDisabled}
-                  key={field}
-                  type="text"
-                  name={field}
-                  value="Value"
-                  fielddata={fields[field]}
-                  changed={businessAppEleChange}
-                  containerclassname="display-only"
-                  readOnly
-                />
-              ))
-            }
-          </Form.Group>
-        </div>
         <div className="inner-content-spacer">
           <Header as="h4">Business Plan</Header>
           <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
         </div>
+        <div className="inner-content-spacer">
+          <Header as="h4">Exising Debt</Header>
+          {
+          BUSINESS_DETAILS_FRM.fields.debts.length &&
+          BUSINESS_DETAILS_FRM.fields.debts.map(debt => (
+            <Form.Group widths={4}>
+              {
+              ['amount', 'interestExpenses', 'remainingPrincipal', 'term'].map(field => (
+                <FormInput
+                  disabled={preQualFormDisabled}
+                  key={field}
+                  type="text"
+                  name={field}
+                  value="Value"
+                  fielddata={debt[field]}
+                  changed={businessAppEleChange}
+                  containerclassname="display-only"
+                  readOnly
+                />
+              ))
+              }
+            </Form.Group>
+          ))
+          }
+        </div>
+        {
+        BUSINESS_DETAILS_FRM.fields.owners.length &&
+        BUSINESS_DETAILS_FRM.fields.owners.map(owner => (
+          <div className="inner-content-spacer">
+            <Header as="h4">Owners</Header>
+            <Form.Group widths={4}>
+              {
+              ['fullLegalName', 'yearsOfExp', 'ssn', 'companyOwnerShip'].map(field => (
+                <FormInput
+                  disabled={preQualFormDisabled}
+                  key={field}
+                  type="text"
+                  name={field}
+                  value="Value"
+                  fielddata={owner[field]}
+                  changed={businessAppEleChange}
+                  containerclassname="display-only"
+                  readOnly
+                />
+              ))
+              }
+            </Form.Group>
+            <Form.Group widths={4}>
+              {
+              ['linkedInUrl', 'title'].map(field => (
+                <FormInput
+                  disabled={preQualFormDisabled}
+                  key={field}
+                  type="text"
+                  name={field}
+                  value="Value"
+                  fielddata={owner[field]}
+                  changed={businessAppEleChange}
+                  containerclassname="display-only"
+                  readOnly
+                />
+              ))
+              }
+            </Form.Group>
+            <Form.Group widths={4}>
+              <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
+            </Form.Group>
+          </div>
+      ))
+      }
       </Form>
     );
   }

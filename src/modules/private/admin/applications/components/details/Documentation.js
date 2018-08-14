@@ -1,62 +1,53 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Form, Icon } from 'semantic-ui-react';
+import { Header, Form, Icon, Label } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormInput } from '../../../../../../theme/form';
 
 @inject('businessAppStore', 'uiStore')
 @observer
 export default class Documentation extends Component {
   render() {
-    const {
-      BUSINESS_APP_FRM, businessAppEleChange, preQualFormDisabled,
-    } = this.props.businessAppStore;
-    const { fields } = BUSINESS_APP_FRM;
+    const { BUSINESS_DOC_FRM } = this.props.businessAppStore;
+    const { fields } = BUSINESS_DOC_FRM;
     return (
       <Form>
         <div className="inner-content-spacer">
-          <Header as="h4">What is your Business Model?</Header>
-          <p>Business to Consumer</p>
-        </div>
-        <div className="inner-content-spacer">
-          <Header as="h4">General Information</Header>
-          <Form.Group widths={4}>
+          <Header as="h4">Financial Statements</Header>
+          <Form.Group widths={2}>
             {
-              ['street', 'city', 'state', 'zipCode'].map(field => (
-                <FormInput
-                  disabled={preQualFormDisabled}
-                  key={field}
-                  type="text"
-                  name={field}
-                  value="Value"
-                  fielddata={fields[field]}
-                  changed={businessAppEleChange}
-                  containerclassname="display-only"
-                  readOnly
-                />
-              ))
-            }
-          </Form.Group>
-          <Form.Group widths={4}>
-            {
-              ['website', 'phoneNumber'].map(field => (
-                <FormInput
-                  disabled={preQualFormDisabled}
-                  key={field}
-                  type="text"
-                  name={field}
-                  value="Value"
-                  fielddata={fields[field]}
-                  changed={businessAppEleChange}
-                  containerclassname="display-only"
-                  readOnly
-                />
+              ['bankStatements', 'leaseAgreementsOrLOIs'].map(field => (
+                <div className="field display-only">
+                  <Label>{fields[field].label}</Label>
+                  <div className="display-only">
+                    <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
+                  </div>
+                </div>
               ))
             }
           </Form.Group>
         </div>
         <div className="inner-content-spacer">
-          <Header as="h4">Business Plan</Header>
+          <Header as="h4">Financial Statements</Header>
+          <Form.Group widths={2}>
+            {
+              ['personalTaxReturn', 'businessTaxReturn'].map(field => (
+                <div className="field display-only">
+                  <Label>{fields[field].label}</Label>
+                  <div className="display-only">
+                    <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
+                  </div>
+                </div>
+              ))
+            }
+          </Form.Group>
+        </div>
+        <div className="inner-content-spacer">
+          <Header as="h4">Do you accept Blanket Lien on the Business if your campain is successfully funded?</Header>
+          <p>Yes</p>
+        </div>
+        <div className="inner-content-spacer">
+          <Header as="h4">Are you willing to provide a personal quarantee?</Header>
+          <p>Yes</p>
           <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
         </div>
       </Form>
