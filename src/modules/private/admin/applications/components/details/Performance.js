@@ -19,7 +19,7 @@ export default class Performance extends Component {
           <Form.Group widths={3}>
             {
             ['priorToThreeYear', 'ytd', 'fiveYearProjection'].map(field => (
-              <div className="field display-only">
+              <div className="field display-only" key={field}>
                 <Label>{fields[field].label}</Label>
                 <div className="display-only">
                   <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>

@@ -16,7 +16,7 @@ export default class Documentation extends Component {
           <Form.Group widths={2}>
             {
               ['bankStatements', 'leaseAgreementsOrLOIs'].map(field => (
-                <div className="field display-only">
+                <div className="field display-only" key={field}>
                   <Label>{fields[field].label}</Label>
                   <div className="display-only">
                     <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
@@ -31,7 +31,7 @@ export default class Documentation extends Component {
           <Form.Group widths={2}>
             {
               ['personalTaxReturn', 'businessTaxReturn'].map(field => (
-                <div className="field display-only">
+                <div className="field display-only" key={field}>
                   <Label>{fields[field].label}</Label>
                   <div className="display-only">
                     <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
