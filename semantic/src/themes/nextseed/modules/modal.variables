@@ -14,10 +14,10 @@
 
 /* Close Icon */
 @closeOpacity: 0.8;
-@closeSize: 1.25em;
+@closeSize: 1em;
 @closeColor: @white;
 
-@closeHitbox: 2.25rem;
+@closeHitbox: 1.25rem;
 @closeDistance: 0.25rem;
 @closeHitBoxOffset: (@closeHitbox - 1rem) / 2;
 @closePadding: @closeHitBoxOffset 0rem 0rem 0rem;

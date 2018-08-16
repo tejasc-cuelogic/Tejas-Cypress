@@ -252,7 +252,7 @@
 @lightOlive       : #D9E778;
 @lightGreen       : @primary-one;
 @lightTeal        : #6DFFFF;
-@lightBlue        : #54C8FF;
+@lightBlue        : @highlight-quaternary;
 @lightViolet      : #A291FB;
 @lightPurple      : #DC73FF;
 @lightPink        : #FF8EDF;

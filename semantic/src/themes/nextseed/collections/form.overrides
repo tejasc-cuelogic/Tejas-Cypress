@@ -178,6 +178,7 @@
             .ui.label{
                 font-size:@13px;
                 font-weight:400;
+                line-height:@20px;
                 color:@neutral-middark;
                 padding:0.5em 0;
                 background-color:transparent;
@@ -277,7 +278,7 @@
     position:relative;
     color:@link-color;
     line-height:@28px;
-    font-weight:700;
+    font-weight:@fontMedium;
     text-align:center;
     cursor:pointer;
     .icon{

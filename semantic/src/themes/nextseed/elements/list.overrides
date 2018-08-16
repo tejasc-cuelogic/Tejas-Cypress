@@ -6,9 +6,14 @@
     .ui.horizontal.list>.item{
         font-size:@12px;
         font-weight:@fontMedium;
+        text-transform: capitalize;
     }
 }
 .ui.list {
+    >.item>i.icon.ns-flag-line {
+        font-size: @20px;
+        line-height: 28px;
+    }
     &.learn-more-list >.item {
         .header {
             margin-bottom: @10px;
@@ -299,5 +304,46 @@
                 margin-top:@5px;
             }
         }
+    }
+}
+
+//  Used for Admin application list table
+ol.ui.list.step-list{
+    margin-left:@28px;
+    li{
+        color:@border-color;
+        &:before{
+            margin-left:-@28px;
+            width:18px;
+            font-size:@12px;
+            font-weight:@bold;
+            color:@border-color;
+            text-align:center;
+            border-radius:50%;
+            border:@border-color 1px solid;
+        }
+        &.current{
+            color:@blue;
+            &:before{
+                color:@blue;
+                border-color:@blue;
+            }
+        }
+        &.done{
+            color:@green;
+            &:before{
+                color:@green;
+                border-color:@green;
+            }
+        }
+    }
+}
+
+.ui.list.horizontal{
+    min-width:600px;
+    .item.ui.checkbox{
+        min-width:33%;
+        margin:0;
+        padding-right:@14px;
     }
 }

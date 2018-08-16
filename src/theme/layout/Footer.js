@@ -5,11 +5,22 @@ import secure from '../../assets/images/secure-horizontal-1.png';
 import { SOCIAL_URLS } from '../../constants/common';
 
 class Footer extends Component {
-  state = { fShowHide: true };
-
-  toggleShowHide = () => {
-    this.setState({ fShowHide: !this.state.fShowHide });
+  state = { fShowHide: false };
+  componentWillMount() {
+    if (this.props.path === '/') {
+      this.setState({ fShowHide: true });
+    } else {
+      this.setState({ fShowHide: false });
+    }
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.path === '/') {
+      this.setState({ fShowHide: true });
+    } else {
+      this.setState({ fShowHide: false });
+    }
+  }
+  toggleShowHide = () => this.setState({ fShowHide: !this.state.fShowHide });
 
   render() {
     return (
@@ -17,23 +28,10 @@ class Footer extends Component {
         <div className="footer-head">
           <Container>
             <Menu inverted borderless>
-              <Menu.Item>
-                <Link to="/resources/education-center">Resources</Link>
-                <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} onClick={this.toggleShowHide} />
-              </Menu.Item>
-              <Menu.Item>
-                About Us
-                <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} onClick={this.toggleShowHide} />
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/agreements/terms-of-use">Terms of Use</Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/agreements/privacy-policy">Privacy Policy</Link>
-              </Menu.Item>
-              <Menu.Item>
-                <Link to="/subscribe/newsletter">Sign Up for Newsletter</Link>
-              </Menu.Item>
+              <Menu.Item onClick={this.toggleShowHide}>Resources <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} /></Menu.Item>
+              <Menu.Item onClick={this.toggleShowHide}>About Us <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} /></Menu.Item>
+              <Menu.Item as={Link} to="/agreements/terms-of-use">Terms of Use</Menu.Item>
+              <Menu.Item as={Link} to="/agreements/privacy-policy">Privacy Policy</Menu.Item>
               <Menu.Menu position="right">
                 <Menu.Item>© 2018 NextSeed US LLC</Menu.Item>
                 {Object.keys(SOCIAL_URLS).map(s => (
@@ -43,7 +41,7 @@ class Footer extends Component {
             </Menu>
           </Container>
         </div>
-        <section className={this.state.fShowHide ? 'active' : 'inactive'} >
+        <section className={this.state.fShowHide ? 'active' : 'inactive'}>
           <Container className="clearfix">
             <div className="footer-left">
               <Menu text vertical>

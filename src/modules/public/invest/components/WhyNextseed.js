@@ -62,7 +62,7 @@ const WhyNextseed = () => (
                   <Item>
                     <Item.Image size="mini" src={h.icon} />
                     <Item.Content>
-                      <Item.Header>{h.header}</Item.Header>
+                      <Item.Header as="h5">{h.title}</Item.Header>
                       <Item.Meta>{h.meta}</Item.Meta>
                     </Item.Content>
                   </Item>

@@ -32,8 +32,7 @@ export default class Public extends React.Component {
           <Route component={NotFound} />
         </Switch>
         {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
-          <Footer />
-        }
+          <Footer path={location.pathname} />}
       </Aux>
     );
   }

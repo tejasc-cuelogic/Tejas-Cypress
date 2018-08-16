@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { indexOf } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Icon, Header, List, Form, Grid, Divider, Button } from 'semantic-ui-react';
-import { FormInput, FormDropDown, FormCheckbox, MaskedInput2 } from '../../../../../../theme/form';
+import { FormInput, FormDropDown, FormCheckbox, MaskedInput } from '../../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 import NotFound from '../../../../../shared/NotFound';
 import { LENDING_PARTNER_LENDIO } from '../../../../../../constants/business';
@@ -107,7 +107,7 @@ export default class Application extends Component {
                         />
                       ))
                     }
-                    <MaskedInput2
+                    <MaskedInput
                       name="phoneNumber"
                       fielddata={fields.phoneNumber}
                       changed={lendioEleChange}

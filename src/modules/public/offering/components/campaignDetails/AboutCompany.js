@@ -53,28 +53,30 @@ class AboutCompany extends Component {
               </div>
               <Header as="h3">Buffbrew Taproom LLC</Header>
               <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                quae ab illo inventore veritatis et quasi architecto beatae vitae
-                dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas
-                sit aspernatur aut odit aut fugit, sed quia consequuntur magni
-                dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
-                quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                adipisci velit, sed quia non numquam eius modi tempora incidunt ut
-                labore et dolore magnam aliquam quaerat voluptatem. Sed ut perspiciatis
-                unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
-                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-                architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem
-                quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
-                magni dolores eos qui ratione voluptatem sequi nesciunt.
+              In the six years since its founding, Buffalo Bayou Brewing Company (“Buffbrew”) has
+              grown and cultivated a craft brewery that is not only substantial in size, but even
+              more importantly, substantive in quality. Their independent and relentless,
+              boundary-pushing approach to craft brewing has resulted in an unmatched 70
+              innovative beer varieties and a business that is now Houston’s largest
+              self-distributing brewery. Buffbrew has outgrown its brewing space, and it has heard
+              the resounding demand for a dedicated taproom and event space. The team recently
+              announced its new location at Sawyer Yards (see Chron, Eater, HBJ), which will
+              encompass both an expanded brewing facility as well as an opportunity for the
+              community to invest in the new <b>Buffbrew Taproom LLC ({'"'}Taproom{'"'})</b>. Buffbrew
+              Taproom will be a new business that operates two bars on-site, a full-service
+              kitchen, as well as a VIP room and event space for group reservations and larger
+              gatherings at the new location.
               </p>
               <Divider section />
               <Grid columns={2} stackable>
                 <Grid.Column verticalAlign="middle" textAlign="center">
                   <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                  quis nostrud exercitation ullamco laboris nisi.
+                  Over the years, Buffbrew has developed a lineup of products that has drawn an
+                  adventurous community. Its brewing methods have applied cutting-edge technology,
+                  technique and unique flavor profiles to achieve a unique and superior taste that
+                  the team is extremely proud of. As important, its self-distributing model gives
+                  the business a degree of independence and control over its product that no other
+                  Houston brewery has matched.
                   </p>
                 </Grid.Column>
                 <Grid.Column>
@@ -87,31 +89,28 @@ class AboutCompany extends Component {
               </Grid>
               <Divider section />
               <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                quae ab illo inventore veritatis et quasi architecto beatae vitae
-                dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas
-                sit aspernatur aut odit aut fugit, sed quia consequuntur magni
-                dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
-                quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                adipisci velit, sed quia non numquam eius modi tempora incidunt ut
-                labore et dolore magnam aliquam quaerat voluptatem.
+              The new Sawyer Yards location will allow Buffbrew the space to make beer and host
+              guests in a beautifully and thoughtfully designed home. Standing three stories
+              tall with over 28,000 square feet, the brewery will welcome a steady flow of beer
+              enthusiasts, 7 days a week. The cornerstone of this experience will be the
+              state-of-the-art Buffbrew Taproom, with over 40 beers on tap and a full-service
+              kitchen serving up an elevated bar food menu.
               </p>
-              <Image src={campainAboutImg} centered className="mt-30" />
-              <p className="note">
-                Caption. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Vivamus dignissim vitae odio nec pellentesque.
+              <Image src={campainAboutImg} centered className="mt-30 mb-30" />
+              <p>
+              The team’s partnership with Method Architecture has been a process in staying true
+              to the beloved elements of Buffbrew’s current home on Nolda Street – an immersive,
+              picnic-tables-on-concrete feel – while creating a new, unparalleled scenic view.
               </p>
               <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                quae ab illo inventore veritatis et quasi architecto beatae vitae
-                dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas
-                sit aspernatur aut odit aut fugit, sed quia consequuntur magni
-                dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
-                quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                adipisci velit, sed quia non numquam eius modi tempora incidunt ut
-                labore et dolore magnam aliquam quaerat voluptatem.
+              The main taproom will reside on the second floor. On one side, customers will be
+              met with 30 feet of large, plate glass windows that directly overlook the tanks
+              and brewers at work – a true tank-to-table, or tank-to-tap, experience. In line
+              with its “Urban Brewery” designation, taproom patrons will also face magnificent
+              Houston views with over 50 feet of downtown-facing windows. With no taller
+              buildings standing between the brewery and downtown, the city’s skyline will make
+              for a beautiful backdrop for private events, holidays, and any other reason to
+              spend an evening on the rooftop patio or party room.
               </p>
               <Header as="h5">
                 Breaking ground this winter, the Buffbrew Taproom is expected to open at Sawyer
@@ -122,7 +121,7 @@ class AboutCompany extends Component {
                 <Header as="h3">History</Header>
                 <List>
                   <List.Item>
-                    <Icon name="flag outline" color="green" />
+                    <Icon className="ns-flag-line" color="green" />
                     <List.Content>
                       <List.Header>January 2012</List.Header>
                       <List.Description>
@@ -131,7 +130,7 @@ class AboutCompany extends Component {
                     </List.Content>
                   </List.Item>
                   <List.Item>
-                    <Icon name="flag outline" color="green" />
+                    <Icon className="ns-flag-line" color="green" />
                     <List.Content>
                       <List.Header>December 2012</List.Header>
                       <List.Description>
@@ -140,7 +139,7 @@ class AboutCompany extends Component {
                     </List.Content>
                   </List.Item>
                   <List.Item>
-                    <Icon name="flag outline" color="green" />
+                    <Icon className="ns-flag-line" color="green" />
                     <List.Content>
                       <List.Header>December 2012</List.Header>
                       <List.Description>
@@ -149,7 +148,7 @@ class AboutCompany extends Component {
                     </List.Content>
                   </List.Item>
                   <List.Item>
-                    <Icon name="flag outline" color="green" />
+                    <Icon className="ns-flag-line" color="green" />
                     <List.Content>
                       <List.Header>December 2012</List.Header>
                       <List.Description>
@@ -158,7 +157,7 @@ class AboutCompany extends Component {
                     </List.Content>
                   </List.Item>
                   <List.Item>
-                    <Icon name="flag outline" color="green" />
+                    <Icon className="ns-flag-line" color="green" />
                     <List.Content>
                       <List.Header>December 2012</List.Header>
                       <List.Description>
@@ -167,7 +166,7 @@ class AboutCompany extends Component {
                     </List.Content>
                   </List.Item>
                   <List.Item>
-                    <Icon name="flag checkered" color="green" />
+                    <Icon className="ns-flag-line" color="green" />
                     <List.Content>
                       <List.Header>
                         Winter 2018 Anticipated opening of Buffbrew Taproom at Sawyer Yard
@@ -192,7 +191,7 @@ class AboutCompany extends Component {
                     <Reveal animated="small fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Alex Griggs</p>
+                          <p>Rassul Zarinfar</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
@@ -216,7 +215,7 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Alex Griggs</p>
+                          <p>Ryan Robertson</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
@@ -228,7 +227,7 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Alex Griggs</p>
+                          <p>Troy Witherspoon</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>
@@ -240,7 +239,7 @@ class AboutCompany extends Component {
                     <Reveal animated="fade">
                       <Reveal.Content hidden>
                         <div className="team-overlay">
-                          <p>Alex Griggs</p>
+                          <p>Tre O{"'"}Brien</p>
                         </div>
                       </Reveal.Content>
                       <Reveal.Content visible>

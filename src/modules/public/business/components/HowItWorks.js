@@ -152,6 +152,7 @@ const HowItWorks = () => (
                 </Grid.Column>
               </Grid.Row>
             </Grid>
+            <Divider hidden />
             <p className="mt-30">
               The above figures include data from both the Texas and Reg CF NextSeed platforms.
               The total amount raised from debt crowdfunding as of Nov 2017 figure includes
@@ -169,8 +170,8 @@ const HowItWorks = () => (
               placeholder={videoPoster}
               source="vimeo"
             />
-            <p className="note mt-10">
-              <i>The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.</i>
+            <p className="caption-note mt-10">
+              The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.
             </p>
           </Grid.Column>
         </Grid>

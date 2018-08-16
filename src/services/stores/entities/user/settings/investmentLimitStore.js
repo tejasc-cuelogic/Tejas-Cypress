@@ -23,18 +23,20 @@ export class InvestmentLimitStore {
     return toJS({ accountList: accList, isIndAccExist: isIndividualAccount });
   }
 
-  // Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
+  //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
   getInvestmentLimit = (data) => {
     let limit = 0;
     const maxLimit = 107000;
     const annualIncomeOrNetWorth = data.annualIncome > data.netWorth ?
       data.netWorth : data.annualIncome;
-    if ((data.annualIncome >= maxLimit) && (data.netWorth >= maxLimit)) {
-      const calculatedLimit = (annualIncomeOrNetWorth * 10) / 100;
-      limit = (maxLimit > calculatedLimit) ? calculatedLimit : maxLimit;
-    } else if ((data.annualIncome < maxLimit) || (data.netWorth < maxLimit)) {
-      const calculatedLimit = (annualIncomeOrNetWorth * 5) / 100;
-      limit = (calculatedLimit < 2200) ? 2200 : calculatedLimit;
+    if (data.annualIncome >= 30000 && data.netWorth >= 80000) {
+      if ((data.annualIncome >= maxLimit) && (data.netWorth >= maxLimit)) {
+        const calculatedLimit = (annualIncomeOrNetWorth * 10) / 100;
+        limit = (maxLimit > calculatedLimit) ? calculatedLimit : maxLimit;
+      } else if ((data.annualIncome < maxLimit) || (data.netWorth < maxLimit)) {
+        const calculatedLimit = (annualIncomeOrNetWorth * 5) / 100;
+        limit = (calculatedLimit < 2200) ? 2200 : calculatedLimit;
+      }
     }
     return limit;
   }
@@ -64,7 +66,7 @@ export class InvestmentLimitStore {
     ['annualIncome', 'netWorth', 'otherInvestments'].forEach((field) => {
       this.INVESTEMENT_LIMIT_META = Validator.onChange(
         this.INVESTEMENT_LIMIT_META,
-        { name: field, value: fieldVal[field] },
+        { name: field, value: fieldVal[field] ? fieldVal[field] : 0 },
       );
     });
     const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));

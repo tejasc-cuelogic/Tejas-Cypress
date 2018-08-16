@@ -114,13 +114,16 @@ class IraAccountStore {
   }
 
   @action
-  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false) => {
+  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false) => new Promise((resolve) => {
     if (formStatus === 'submit') {
-      this.submitForm(currentStep, formStatus, this.accountAttributes);
+      this.submitForm(currentStep, formStatus, this.accountAttributes).then(() => {
+        resolve();
+      });
     } else {
       this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData);
+      resolve();
     }
-  }
+  })
 
   @action
   validateAndSubmitStep = (currentStep, formStatus, removeUploadedData) => {
@@ -226,9 +229,7 @@ class IraAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.createInvestorAccount || formStatus === 'submit' || currentStep.name === 'Funding') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
-          }
+          userDetailsStore.getUser(userStore.currentUser.sub);
           if (currentStep.name === 'Identity') {
             if (removeUploadedData) {
               validationActions.validateIRAIdentityInfo();

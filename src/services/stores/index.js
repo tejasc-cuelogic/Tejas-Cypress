@@ -11,7 +11,6 @@ export { default as entityAccountStore } from './entities/user/entityAccountStor
 export { default as iraAccountStore } from './entities/user/iraAccountStore';
 export { default as individualAccountStore } from './entities/user/individualAccountStore';
 export { default as statementStore } from './entities/account/statementStore';
-
 export { default as teamStore } from './entities/admin/teamStore';
 export { default as transactionStore } from './entities/account/transactionStore';
 export { default as settingStore } from './entities/account/settingStore';
@@ -27,10 +26,9 @@ export { default as multiFactorAuthStore } from './entities/user/settings/multiF
 export { default as bankAccountStore } from './entities/shared/bankAccountStore';
 export { default as identityStore } from './entities/user/identityStore';
 export { default as investorProfileStore } from './entities/user/investorProfileStore';
-
 export { default as helloWorldStore } from './entities/helloWorldStore';
-
 export { default as businesssStore } from './entities/issuer/businessStore';
+export { default as businessAppAdminStore } from './entities/user/admin/businessAppStore';
 export { default as businessAppLendioStore } from './entities/user/businessAppLendioStore';
 export { default as investmentLimitStore } from './entities/user/settings/investmentLimitStore';
 export { default as campaignStore } from './entities/public/campaignStore';
