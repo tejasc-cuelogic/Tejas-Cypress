@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Image, Icon, Embed, Statistic, Grid, Menu, Label, Divider, Segment, Breadcrumb, Popup, Modal, List } from 'semantic-ui-react';
+import { Route, Link } from 'react-router-dom';
+import { Header, Image, Icon, Embed, Statistic, Grid, Menu, Label, Divider, Segment, Breadcrumb, Popup, List } from 'semantic-ui-react';
 import videoPoster from '../../../../../assets/images/636206632.webp';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
+import UpdatesModal from './UpdatesModal';
 
 const nsvideos = {
   embed: '218642510',
 };
 
-@inject('campaignStore')
+@inject('campaignStore', 'updatesStore')
 @observer
 class Overview extends Component {
-  state = { modalOpen: false }
-  handleOpen = () => this.setState({ modalOpen: true })
-  handleClose = () => this.setState({ modalOpen: false })
   render() {
     const { campaign } = this.props.campaignStore;
+    const { allData } = this.props.updatesStore;
     return (
       <div className="offering-content-spacer">
         <div className="quick-bar">
           <Menu secondary>
-            <Menu.Item name="home" onClick={this.handleOpen}>
+            <Menu.Item name="home" as={Link} to={`${this.props.match.url}/updates`}>
               <Icon name="list alternate outline" />
               Updates
-              <Label circular color="blue" key="blue">7</Label>
+              <Label circular color="blue" key="blue">{allData.length}</Label>
             </Menu.Item>
             <Menu.Menu position="right">
               <Menu.Item name="home">
@@ -162,17 +162,7 @@ class Overview extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Modal
-          open={this.state.modalOpen}
-          onClose={this.handleClose}
-          closeIcon
-        >
-          <Header as="h3">
-            Updates
-            <Label circular color="blue" key="blue">7</Label>
-          </Header>
-          <Modal.Content />
-        </Modal>
+        <Route path={`${this.props.match.url}/updates`} component={UpdatesModal} />
       </div>
     );
   }
