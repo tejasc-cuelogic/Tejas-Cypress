@@ -209,7 +209,7 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'ns-users',
-    title: 'offerings',
+    title: 'Offerings',
     heading: 'Offerings',
     to: 'offerings',
     path: 'admin/offerings',
