@@ -17,7 +17,7 @@ export default class ApplicationsList extends Component {
   componentWillMount() {
     const { match } = this.props;
     const { fetchBusinessApplicationsByStatus } = this.props.businessAppAdminStore;
-    fetchBusinessApplicationsByStatus(match.url);
+    fetchBusinessApplicationsByStatus(match.params.applicationType);
   }
   setSearchParam = (e, { name, value }) =>
     this.props.businessAppAdminStore.setInitiateSrch(name, value);

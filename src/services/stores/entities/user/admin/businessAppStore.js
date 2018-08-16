@@ -81,8 +81,7 @@ export class BusinessAppStore {
   }
 
   @action
-  fetchBusinessApplicationsByStatus = (url) => {
-    const appType = includes(url, 'prequal-failed') ? 'prequal-failed' : includes(url, 'in-progress') ? 'in-progress' : 'completed';
+  fetchBusinessApplicationsByStatus = (appType) => {
     this.reInitiateApplicationStatusFilterValues(appType);
     this.columnTitle = appType === 'prequal-failed' ? 'Failed reasons' : appType === 'in-progress' ? 'Steps completed' : '';
     const filterParam = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'PRE_QUALIFICATION_SUBMITTED' : 'APPLICATION_SUBMITTED';
