@@ -25,23 +25,23 @@ export const P3 = () => (
 export const P5 = props => (
   <Aux>
     <div className={`search-filters ${props.filters ? '' : 'collapsed'}`}>
-      <Form inverted>
+      <Form>
         <Grid stackable>
           <Grid.Row>
             <Grid.Column width={3}>
-              <DropdownFilter className="inverted" value={props.requestState.search.accountType} name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} isMultiple />
+              <DropdownFilter value={props.requestState.search.accountType} name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} isMultiple />
             </Grid.Column>
             <Grid.Column width={3}>
-              <DropdownFilter className="inverted" value={props.requestState.search.accountStatus} name="Status" keyName="accountStatus" change={props.setSearchParam} options={FILTER_META.accountStatus} />
+              <DropdownFilter value={props.requestState.search.accountStatus} name="Status" keyName="accountStatus" change={props.setSearchParam} options={FILTER_META.accountStatus} />
             </Grid.Column>
             <Grid.Column width={3}>
-              <DropdownFilter className="inverted" value={props.requestState.search.accreditation} name="Accreditation" change={props.setSearchParam} options={FILTER_META.accreditation} />
+              <DropdownFilter value={props.requestState.search.accreditation} name="Accreditation" change={props.setSearchParam} options={FILTER_META.accreditation} />
             </Grid.Column>
             <Grid.Column width={4}>
               <DateRangeFilter filters={props.requestState.search} label="Creation date" name="createdAt" changeStart={props.dateFilterStart} changeEnd={props.dateFilterEnd} />
             </Grid.Column>
             <Grid.Column width={3}>
-              <DropdownFilter className="inverted" isMultiple value={props.requestState.search.city} name="City" change={props.setSearchParam} options={FILTER_META.city} />
+              <DropdownFilter isMultiple value={props.requestState.search.city} name="City" change={props.setSearchParam} options={FILTER_META.city} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
