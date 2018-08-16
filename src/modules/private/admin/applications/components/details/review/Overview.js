@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
 import { Form, Header, Button } from 'semantic-ui-react';
 import { FormInput } from '../../../../../../../theme/form';
 
@@ -16,22 +18,31 @@ export default class Overview extends Component {
       <div className="inner-content-spacer">
         <Header as="h5">
           Overview
-          <Button color="violet" className="ghost-button pull-right" onClick={addMoreCriticalPoint}>+ Add Critical Point</Button>
+          <Header.Subheader>
+            <Button color="violet" className="ghost-button" onClick={addMoreCriticalPoint}>+Add Critical Point</Button>
+          </Header.Subheader>
         </Header>
-        {
-            OVERVIEW_FRM.fields.overview.length ?
-            OVERVIEW_FRM.fields.overview.map((overview, index) => (
-              <Form>
-                <FormInput
-                  type="text"
-                  name="criticalPoint"
-                  fielddata={overview.criticalPoint}
-                  changed={(e, result) => overviewEleChange(e, result, index)}
-                />
-              </Form>
-            )) :
-            <p>Loading...</p>
-        }
+        <Form onSubmit={this.submit}>
+          {
+              OVERVIEW_FRM.fields.overview.length ?
+              OVERVIEW_FRM.fields.overview.map((overview, index) => (
+                <Form>
+                  <label>{`Critical Point ${index}`}</label>
+                  <FormInput
+                    type="text"
+                    name="criticalPoint"
+                    fielddata={overview.criticalPoint}
+                    changed={(e, result) => overviewEleChange(e, result, index)}
+                    ishidelabel
+                  />
+                </Form>
+              )) : <p>...Loading</p>
+          }
+          <Button.Group className="pull-right">
+            <Button disabled={!OVERVIEW_FRM.meta.isValid} primary size="large" className="very relaxed" >Save</Button>
+            <Button disabled={!OVERVIEW_FRM.meta.isValid} type="button">Submit for Approval</Button>
+          </Button.Group>
+        </Form>
       </div>
     );
   }
