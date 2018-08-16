@@ -101,8 +101,9 @@ class EntityAccountStore {
         resolve();
       });
     } else {
-      this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field);
-      resolve();
+      this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field).then(() => {
+        resolve();
+      });
     }
   })
 
@@ -243,7 +244,8 @@ class EntityAccountStore {
   }
 
   @action
-  validateAndSubmitStep = (currentStep, formStatus, removeUploadedData, field) => {
+  validateAndSubmitStep =
+  (currentStep, formStatus, removeUploadedData, field) => new Promise((res, rej) => {
     let isValidCurrentStep = true;
     const accountAttributes = {};
     const array1 = ['Financial info', 'General', 'Entity info'];
@@ -261,19 +263,38 @@ class EntityAccountStore {
         } else if (currentStep.name === 'General' || currentStep.name === 'Entity info') {
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
         }
-        this.submitForm(currentStep, formStatus, accountAttributes);
+        this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
+          res();
+        })
+          .catch(() => {
+            rej();
+          });
+      } else {
+        rej();
       }
     } else if (array2.includes(currentStep.name)) {
       if (removeUploadedData) {
         accountAttributes.entity =
         this.setEntityAttributes(currentStep.name, removeUploadedData, field);
-        this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData);
+        this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData).then(() => {
+          res();
+        })
+          .catch(() => {
+            rej();
+          });
       } else {
         currentStep.validate();
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
-          this.submitForm(currentStep, formStatus, accountAttributes);
+          this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
+            res();
+          })
+            .catch(() => {
+              rej();
+            });
+        } else {
+          rej();
         }
       }
     } else if (currentStep.name === 'Link bank') {
@@ -299,11 +320,18 @@ class EntityAccountStore {
             accountAttributes.bankDetails = plaidBankDetails;
           }
         }
-        this.submitForm(currentStep, formStatus, accountAttributes);
+        this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
+          res();
+        })
+          .catch(() => {
+            rej();
+          });
+      } else {
+        rej();
       }
     }
     return true;
-  }
+  })
 
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
@@ -358,6 +386,7 @@ class EntityAccountStore {
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           }
+          uiStore.setErrors(null);
           resolve(result);
         }))
         .catch((err) => {

@@ -116,13 +116,15 @@ class IraAccountStore {
         resolve();
       });
     } else {
-      this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData);
-      resolve();
+      this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData).then(() => {
+        resolve();
+      });
     }
   })
 
   @action
-  validateAndSubmitStep = (currentStep, formStatus, removeUploadedData) => {
+  validateAndSubmitStep =
+  (currentStep, formStatus, removeUploadedData) => new Promise((res, rej) => {
     let isValidCurrentStep = true;
     let accountAttributes = {};
     switch (currentStep.name) {
@@ -131,18 +133,35 @@ class IraAccountStore {
         isValidCurrentStep = this.FIN_INFO_FRM.meta.isValid;
         if (isValidCurrentStep) {
           accountAttributes = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
-          this.submitForm(currentStep, formStatus, accountAttributes);
+          this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
+            res();
+          })
+            .catch(() => {
+              rej();
+            });
+        } else {
+          rej();
         }
         break;
       case 'Account type':
         isValidCurrentStep = true;
         accountAttributes.iraAccountType = this.accountType ? this.accountType.rawValue : '';
-        this.submitForm(currentStep, formStatus, accountAttributes);
+        this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
+          res();
+        })
+          .catch(() => {
+            rej();
+          });
         break;
       case 'Funding':
         isValidCurrentStep = true;
         accountAttributes.fundingType = this.fundingOption ? this.fundingOption.rawValue : '';
-        this.submitForm(currentStep, formStatus, accountAttributes);
+        this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
+          res();
+        })
+          .catch(() => {
+            rej();
+          });
         break;
       case 'Link bank':
         if (bankAccountStore.bankLinkInterface === 'list') {
@@ -167,7 +186,14 @@ class IraAccountStore {
               accountAttributes.iraBankDetails = plaidBankDetails;
             }
           }
-          this.submitForm(currentStep, formStatus, accountAttributes);
+          this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
+            res();
+          })
+            .catch(() => {
+              rej();
+            });
+        } else {
+          rej();
         }
         break;
       case 'Identity':
@@ -176,7 +202,13 @@ class IraAccountStore {
             fileId: '',
             fileName: '',
           };
-          this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData);
+          this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData)
+            .then(() => {
+              res();
+            })
+            .catch(() => {
+              rej();
+            });
         } else {
           currentStep.validate();
           isValidCurrentStep = this.IDENTITY_FRM.meta.isValid;
@@ -185,7 +217,14 @@ class IraAccountStore {
             accountAttributes.identityDoc = {};
             accountAttributes.identityDoc.fileId = this.IDENTITY_FRM.fields.identityDoc.fileId;
             accountAttributes.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
-            this.submitForm(currentStep, formStatus, accountAttributes);
+            this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
+              res();
+            })
+              .catch(() => {
+                rej();
+              });
+          } else {
+            rej();
           }
         }
         break;
@@ -193,7 +232,7 @@ class IraAccountStore {
         break;
     }
     return true;
-  }
+  })
 
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
@@ -221,7 +260,9 @@ class IraAccountStore {
           variables,
         })
         .then(action((result) => {
-          userDetailsStore.getUser(userStore.currentUser.sub);
+          if (result.data.createInvestorAccount || formStatus === 'submit') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
+          }
           if (currentStep.name === 'Identity') {
             if (removeUploadedData) {
               validationActions.validateIRAIdentityInfo();
@@ -240,6 +281,7 @@ class IraAccountStore {
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           }
+          uiStore.setErrors(null);
           resolve(result);
         }))
         .catch((err) => {
