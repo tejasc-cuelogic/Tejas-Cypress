@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Modal, Card, Header, Label, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
@@ -20,7 +21,13 @@ const getModule = component => Loadable({
     return <div>Loading...</div>;
   },
 });
+
+@inject('businessAppStore')
+@observer
 export default class ApplicationDetails extends Component {
+  componentWillMount() {
+    // this.props.businessAppStore.fetchApplicationDataById('1084b090-94ab-11e8-b190-a9f10e25fd26');
+  }
   module = name => DataFormatter.upperCamelCase(name);
   handleCloseModal = (e) => {
     e.stopPropagation();
