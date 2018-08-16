@@ -19,6 +19,7 @@ export default class BusinessDetails extends Component {
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">Exising Debt</Header>
+          <p><b>Debt 1</b></p>
           {
           BUSINESS_DETAILS_FRM.fields.debts.length &&
           BUSINESS_DETAILS_FRM.fields.debts.map(debt => (
@@ -47,6 +48,7 @@ export default class BusinessDetails extends Component {
         BUSINESS_DETAILS_FRM.fields.owners.map(owner => (
           <div className="inner-content-spacer">
             <Header as="h4">Owners</Header>
+            <p><b>Owner 1</b></p>
             <Form.Group widths={4}>
               {
               ['fullLegalName', 'yearsOfExp', 'ssn', 'companyOwnerShip'].map(field => (

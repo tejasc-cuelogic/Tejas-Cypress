@@ -864,6 +864,14 @@ a.icon-link:hover {
 	+ .inner-content-spacer{
 		border-top:@neutral-midwhite 1px solid;
 	}
+	.field .ui.label{
+		background: transparent;
+		padding: 0px 0 14px;
+		color: @neutral;
+	}
+	p b {
+		color: @neutral;
+	}
 }
 .secondary-section{
 	background-color:@neutral-offwhite;

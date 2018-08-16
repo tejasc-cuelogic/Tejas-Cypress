@@ -30,7 +30,8 @@ export default class Performance extends Component {
           </Form.Group>
         </div>
         <div className="inner-content-spacer">
-          <Header as="h4">Prior Year</Header>
+          <Header as="h4">Performance</Header>
+          <p><b>Prior Year</b></p>
           <Form.Group widths={4}>
             {
               ['pyGrossSales', 'pyCogs', 'pyOperatingExpenses', 'pyNetIncome'].map(field => (
@@ -50,7 +51,7 @@ export default class Performance extends Component {
           </Form.Group>
         </div>
         <div className="inner-content-spacer">
-          <Header as="h4">Future Year</Header>
+          <p><b>Future Year</b></p>
           <Form.Group widths={4}>
             {
               ['nyGrossSales', 'nyCogs', 'nyOperatingExpenses', 'nyNetIncome'].map(field => (
