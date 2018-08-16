@@ -91,14 +91,10 @@ class IraAccountStore {
     payload.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
     payload.iraAccountType = this.accountType.rawValue;
     payload.fundingType = this.fundingOption.rawValue;
-    if (this.fundingOption.rawValue === 'check' && !isEmpty(bankAccountStore.plaidBankDetails)) {
+    if (this.fundingOption.rawValue === 'check' && !isEmpty(bankAccountStore.plaidAccDetails)) {
       const plaidBankDetails = {};
-      plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
-      plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
-      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
-      plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
-      plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
-      plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
+      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
+      plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
       payload.iraBankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -156,14 +152,10 @@ class IraAccountStore {
           bankAccountStore.isValidLinkBank;
         if (isValidCurrentStep) {
           uiStore.setProgress();
-          if (!isEmpty(bankAccountStore.plaidBankDetails)) {
+          if (!isEmpty(bankAccountStore.plaidAccDetails)) {
             const plaidBankDetails = {};
-            plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
-            plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
-            plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
-            plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
-            plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
-            plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
+            plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
+            plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
             accountAttributes.iraBankDetails = plaidBankDetails;
           } else {
             const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -270,8 +262,8 @@ class IraAccountStore {
         this.setFormData('ACC_TYPES_FRM', account.accountDetails);
         this.setFormData('IDENTITY_FRM', account.accountDetails);
         if (account.accountDetails.iraBankDetails &&
-          account.accountDetails.iraBankDetails.plaidItemId) {
-          bankAccountStore.setPlaidBankDetails(account.accountDetails.iraBankDetails);
+          account.accountDetails.iraBankDetails.plaidPublicToken) {
+          bankAccountStore.setPlaidAccDetails(account.accountDetails.iraBankDetails);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { accountDetails } = account;
@@ -297,7 +289,7 @@ class IraAccountStore {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
         } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
           !bankAccountStore.formLinkBankManually.meta.isValid &&
-          isEmpty(bankAccountStore.plaidBankDetails)) {
+          isEmpty(bankAccountStore.plaidAccDetails)) {
           this.setStepToBeRendered(getIraStep.LINK_BANK);
         } else if (!this.IDENTITY_FRM.meta.isValid) {
           if (this.FUNDING_FRM.fields.fundingType.value === 0) {

@@ -77,13 +77,9 @@ export class BankAccountStore {
   get accountAttributes() {
     let accountAttributes = {};
     const plaidBankDetails = {};
-    if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidBankDetails)) {
-      plaidBankDetails.accountNumber = this.plaidBankDetails.accountNumber;
-      plaidBankDetails.bankName = this.plaidBankDetails.bankName;
-      plaidBankDetails.plaidPublicToken = this.plaidBankDetails.plaidAccessToken;
-      plaidBankDetails.plaidAccountId = this.plaidBankDetails.plaidAccountId;
-      plaidBankDetails.plaidItemId = this.plaidBankDetails.plaidItemId;
-      plaidBankDetails.routingNumber = this.plaidBankDetails.routingNumber;
+    if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidAccDetails)) {
+      plaidBankDetails.plaidPublicToken = this.plaidAccDetails.public_token;
+      plaidBankDetails.plaidAccountId = this.plaidAccDetails.account_id;
       accountAttributes = { ...plaidBankDetails };
     } else {
       const { accountNumber, routingNumber } = this.formLinkBankManually.fields;
@@ -117,7 +113,7 @@ export class BankAccountStore {
 
   @computed
   get isValidLinkBank() {
-    return !isEmpty(this.plaidAccDetails) || !isEmpty(this.plaidBankDetails);
+    return !isEmpty(this.plaidAccDetails);
   }
 
   @action

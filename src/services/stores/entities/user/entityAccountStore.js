@@ -223,14 +223,10 @@ class EntityAccountStore {
         },
       },
     };
-    if (!isEmpty(bankAccountStore.plaidBankDetails)) {
+    if (!isEmpty(bankAccountStore.plaidAccDetails)) {
       const plaidBankDetails = {};
-      plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
-      plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
-      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
-      plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
-      plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
-      plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
+      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
+      plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
       payload.bankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -288,14 +284,10 @@ class EntityAccountStore {
         bankAccountStore.isValidLinkBank;
       if (isValidCurrentStep) {
         uiStore.setProgress();
-        if (!isEmpty(bankAccountStore.plaidBankDetails)) {
+        if (!isEmpty(bankAccountStore.plaidAccDetails)) {
           const plaidBankDetails = {};
-          plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
-          plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
-          plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
-          plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
-          plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
-          plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
+          plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
+          plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
           accountAttributes.bankDetails = plaidBankDetails;
         } else {
           const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -453,8 +445,9 @@ class EntityAccountStore {
         if (account.accountDetails.entity && account.accountDetails.entity.legalDocs) {
           this.setEntityAttributes('Formation doc');
         }
-        if (account.accountDetails.bankDetails && account.accountDetails.bankDetails.plaidItemId) {
-          bankAccountStore.setPlaidBankDetails(account.accountDetails.bankDetails);
+        if (account.accountDetails.bankDetails &&
+          account.accountDetails.bankDetails.plaidPublicToken) {
+          bankAccountStore.setPlaidAccDetails(account.accountDetails.bankDetails);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { accountDetails } = account;
@@ -487,7 +480,7 @@ class EntityAccountStore {
     } else if (!this.FORM_DOCS_FRM.meta.isValid) {
       this.setStepToBeRendered(getEntityStep.FORM_DOCS_FRM);
     } else if (!bankAccountStore.formLinkBankManually.meta.isValid &&
-      isEmpty(bankAccountStore.plaidBankDetails)) {
+      isEmpty(bankAccountStore.plaidAccDetails)) {
       this.setStepToBeRendered(getEntityStep.formLinkBankManually);
     } else {
       this.setStepToBeRendered(getEntityStep.summary);

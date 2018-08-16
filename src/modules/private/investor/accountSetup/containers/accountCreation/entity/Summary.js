@@ -24,9 +24,9 @@ export default class Summary extends Component {
     }
       = this.props.entityAccountStore;
     const { errors } = this.props.uiStore;
-    const { plaidBankDetails, formLinkBankManually } = this.props.bankAccountStore;
-    const bankAccountNumber = !isEmpty(plaidBankDetails) ?
-      plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
+    const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const bankAccountNumber = !isEmpty(plaidAccDetails) ?
+      plaidAccDetails.account_id : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>
         <Header as="h3" textAlign="center">Verify the info and create Entity account</Header>
@@ -84,7 +84,7 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell><b>Bank account</b></Table.Cell>
-                  <Table.Cell>{Helper.encryptNumber(bankAccountNumber)}</Table.Cell>
+                  <Table.Cell>{bankAccountNumber ? Helper.encryptNumber(bankAccountNumber) : ''}</Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>
