@@ -4,6 +4,7 @@ import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import {
+  BUSINESS_PRE_QUALIFICATION_BASIC,
   BUSINESS_PRE_QUALIFICATION,
   BUSINESS_SIGNUP,
   BUSINESS_DETAILS,
@@ -29,6 +30,8 @@ import { uiStore, navStore, businessAppLendioStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class BusinessAppStore {
+  @observable BUSINESS_APP_FRM_BASIC =
+  Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
   @observable BUSINESS_ACCOUNT =Validator.prepareFormObject(BUSINESS_SIGNUP);
   @observable BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
@@ -49,6 +52,7 @@ export class BusinessAppStore {
   @observable removeFileIdsList = [];
   @observable appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
   @observable isFileUploading = false;
+  @observable isPrequalQulify = false;
 
   @action
   setFieldvalue = (field, value) => {
@@ -390,8 +394,8 @@ export class BusinessAppStore {
   };
 
   @action
-  businessAppEleChange = (e, res) => {
-    this.BUSINESS_APP_FRM = Validator.onChange(this.BUSINESS_APP_FRM, Validator.pullValues(e, res));
+  businessAppEleChange = (e, res, formName = 'BUSINESS_APP_FRM') => {
+    this[formName] = Validator.onChange(this[formName], Validator.pullValues(e, res));
   };
 
   @action
@@ -633,7 +637,8 @@ export class BusinessAppStore {
   }
 
   @action
-  businessPreQualificationFormSumbit = () => {
+  businessPreQualificationFormSumbit = (isPublic) => {
+    console.log(isPublic);
     const data = this.getFormatedPreQualificationData;
     uiStore.setProgress();
     return new Promise((resolve, reject) => {

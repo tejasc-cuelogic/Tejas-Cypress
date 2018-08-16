@@ -103,18 +103,26 @@ export const NavigationItems = props => (
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
       </Menu.Menu>
-      {!props.currentUser ? (
-        <Menu.Item as={Link} to="/auth/login">
-          <Button secondary compact>Sign Up/Log In</Button>
+      {props.location.pathname.includes('/business-application') ?
+        <Menu.Item as={Link} to="/">
+          <Button inverted color="red">Cancle</Button>
         </Menu.Item>
-      ) : (
-        <Menu.Item
-          as={Link}
-          to={`/app/${props.currentUser.roles && props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-        >
-          <Button secondary compact>Dashboard</Button>
-        </Menu.Item>
-      )}
+      :
+        (
+          !props.currentUser ? (
+            <Menu.Item as={Link} to="/auth/login">
+              <Button secondary compact>Sign Up/Log In</Button>
+            </Menu.Item>
+          ) : (
+            <Menu.Item
+              as={Link}
+              to={`/app/${props.currentUser.roles && props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+            >
+              <Button secondary compact>Dashboard</Button>
+            </Menu.Item>
+          )
+        )
+      }
     </Container>
   </Menu>
 );

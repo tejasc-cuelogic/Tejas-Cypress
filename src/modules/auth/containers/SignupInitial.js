@@ -7,7 +7,8 @@ import { USER_TYPES_META } from './../../../constants/user';
 const GetBtn = ({ type }) => {
   const BtnMeta = {
     investor: { label: 'Open account', to: '/auth/register-investor' },
-    issuer: { label: 'Open account', to: '/auth/register-investor' },
+    // issuer: { label: 'Open account', to: '/auth/register-investor' },
+    issuer: { label: 'Start application process', to: '/business-application' },
   };
   return <Button disabled={!type} as={Link} to={type ? BtnMeta[type].to : '/auth/register'} primary size="large" className="relaxed" content={type ? BtnMeta[type].label : 'Open account'} />;
 };

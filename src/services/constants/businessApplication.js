@@ -66,6 +66,18 @@ export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
   personalGuaranteeForm: 'PERSONAL_GUARANTEE',
 };
 
+export const BUSINESS_PRE_QUALIFICATION_BASIC = {
+  firstName: {
+    value: '', label: 'First Name', error: undefined, rule: 'required', placeHolder: 'e.g.  Jhon', customErrors: { required: 'required' },
+  },
+  lastName: {
+    value: '', label: 'Last Name', error: undefined, rule: 'required', placeHolder: 'e.g.  Smith', customErrors: { required: 'required' },
+  },
+  email: {
+    value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g abc@xyz.com', customErrors: { required: 'required' },
+  },
+};
+
 export const BUSINESS_PRE_QUALIFICATION = {
   businessModel: {
     value: '',

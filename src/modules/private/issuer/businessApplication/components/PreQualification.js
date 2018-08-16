@@ -14,16 +14,20 @@ import FormElementWrap from './FormElementWrap';
 export default class PreQualification extends Component {
   submit = (e) => {
     e.preventDefault();
-    this.props.businessAppStore.businessPreQualificationFormSumbit().then(() => {
+    this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic).then(() => {
       const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
       Helper.toast('Business pre-qualification request submitted!', 'success');
       this.props.history.push(`/app/business-application/${url}`);
     });
   }
+  prequalBasicSubmit = (e) => {
+    e.preventDefault();
+    this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
+  }
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
-      businessAppEleMaskChange, getFranchiseCondition,
+      BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC, businessAppEleChange, setAddressFields,
+      businessAppEleMaskChange, getFranchiseCondition, isPrequalQulify,
       getBusinessTypeCondtion,
       preQualFormDisabled,
     } = this.props.businessAppStore;
@@ -31,7 +35,7 @@ export default class PreQualification extends Component {
     return (
       <Grid container>
         <Grid.Column>
-          <Form onSubmit={this.submit} className="issuer-signup">
+          <Form onSubmit={this.prequalBasicSubmit} className="issuer-signup">
             <Icon className="ns-paper-plane" size="massive" color="green" />
             <FormElementWrap
               as="h1"
@@ -43,6 +47,38 @@ export default class PreQualification extends Component {
                 </Aux>
               }
             />
+            <FormElementWrap header="First, please tell us a little about yourself!">
+              <div className="field-wrap">
+                <Form.Group widths="equal">
+                  {
+                    ['firstName', 'lastName', 'email'].map(field => (
+                      <FormInput
+                        disabled={isPrequalQulify}
+                        key={field}
+                        type="text"
+                        name={field}
+                        fielddata={BUSINESS_APP_FRM_BASIC.fields[field]}
+                        changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_FRM_BASIC')}
+                      />
+                    ))
+                  }
+                </Form.Group>
+              </div>
+              {!isPrequalQulify &&
+              <Button
+                loading={this.props.uiStore.inProgress}
+                disabled={!BUSINESS_APP_FRM_BASIC.meta.isValid}
+                size="large"
+                color="green"
+                className="very relaxed"
+              >
+                Continue
+              </Button>
+              }
+            </FormElementWrap>
+          </Form>
+          {isPrequalQulify &&
+          <Form onSubmit={this.submit} className="issuer-signup">
             <FormElementWrap
               header="What is your Business Model?"
               subHeader="Only Business to Consumer models are accepted at this time."
@@ -301,6 +337,7 @@ export default class PreQualification extends Component {
               Submit
             </Button>
           </Form>
+          }
         </Grid.Column>
       </Grid>
     );

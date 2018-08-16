@@ -12,7 +12,7 @@ class Signup extends Component {
       <Segment vertical className="content">
         <Grid container>
           <Switch>
-            <Route exact path="/business-application" component={PreQualification} />
+            <Route exact path="/business-application" render={props => <PreQualification isPublic {...props} />} />
             <Route path="/business-application/lendio" component={Application} />
             <Route path="/business-application/success" component={Success} />
             <Route path="/business-application/failed/:reason?" component={Failure} />
