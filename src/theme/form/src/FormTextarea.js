@@ -14,18 +14,20 @@ const FormTextarea = observer((props) => {
   } = props.fielddata;
   return (
     <Form.Field className={props.containerclassname || ''} error={!!error}>
+      {!props.hidelabel && label !== '' &&
       <label>
-        {label}
-        {tooltip &&
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content={tooltip}
-            position="top center"
-            className="center-align"
-            wide
-          />
-        }
+          {label}
+          {tooltip &&
+            <Popup
+              trigger={<Icon className="ns-help-circle" />}
+              content={tooltip}
+              position="top center"
+              className="center-align"
+              wide
+            />
+          }
       </label>
+      }
       <TextArea
         {...props}
         value={value}

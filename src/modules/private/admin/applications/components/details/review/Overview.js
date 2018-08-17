@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import { inject, observer } from 'mobx-react';
 import { Form, Header, Button } from 'semantic-ui-react';
 import { FormInput } from '../../../../../../../theme/form';
 
@@ -18,15 +18,13 @@ export default class Overview extends Component {
       <div className="inner-content-spacer">
         <Header as="h5">
           Overview
-          <Header.Subheader>
-            <Button color="violet" className="ghost-button" onClick={addMoreCriticalPoint}>+Add Critical Point</Button>
-          </Header.Subheader>
+          <Button className="ghost-button" onClick={addMoreCriticalPoint}>+Add Critical Point</Button>
         </Header>
-        <Form onSubmit={this.submit}>
+        <Form>
           {
               OVERVIEW_FRM.fields.overview.length ?
               OVERVIEW_FRM.fields.overview.map((overview, index) => (
-                <Form>
+                <Aux>
                   <label>{`Critical Point ${index}`}</label>
                   <FormInput
                     type="text"
@@ -35,7 +33,7 @@ export default class Overview extends Component {
                     changed={(e, result) => overviewEleChange(e, result, index)}
                     ishidelabel
                   />
-                </Form>
+                </Aux>
               )) : <p>...Loading</p>
           }
           <Button.Group className="pull-right">
