@@ -844,8 +844,16 @@ a.icon-link:hover {
 			box-shadow: 0 0 0 2px @white;
 			background-color: @neutral-darkwhite;
 		}
-		.vertical-timeline-element.hide-date .vertical-timeline-element-date {
-			display: none;
+		.vertical-timeline-element {
+			&.hide-date .vertical-timeline-element-date {
+				display: none;
+			}
+			&:nth-child(even):not(.vertical-timeline-element--left) {
+				.vertical-timeline-element-content .vertical-timeline-element-date {
+					right: 74%;
+					text-align: center;
+				}
+			}
 		}
 	}
 	.vertical-timeline-element-content {
