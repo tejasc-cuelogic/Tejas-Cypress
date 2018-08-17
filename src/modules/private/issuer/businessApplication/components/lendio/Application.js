@@ -23,8 +23,8 @@ export default class Application extends Component {
           },
         } = data;
         const redirectParam = (status === LENDIO.LENDIO_SUCCESS) ? 'yes' : 'no';
-
-        this.props.history.push(`/app/business-application/${this.props.applicationId}/lendio/${redirectParam}`);
+        const redirectUrl = this.props.isPublic ? `/business-application/${this.props.applicationId}/lendio/${redirectParam}` : `/app/business-application/${this.props.applicationId}/lendio/${redirectParam}`;
+        this.props.history.push(redirectUrl);
         this.props.businessAppLendioStore.setLendioUrl(url);
       })
       .catch(() => {

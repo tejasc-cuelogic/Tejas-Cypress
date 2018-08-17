@@ -16,8 +16,8 @@ const Initialise = props => (
     </p>
     <Divider section hidden />
     <Button.Group>
-      <Button as={Link} to={`/app/business-application/${props.applicationId}/lendio`} color="green" className="relaxed">I’m interested in Lendio</Button>
-      <Button as={Link} to="/app/dashboard" inverted color="green" className="relaxed">Return to Home Page</Button>
+      <Button as={Link} to={props.isPublic ? `/business-application/${props.applicationId}/lendio` : `/app/business-application/${props.applicationId}/lendio`} color="green" className="relaxed">I’m interested in Lendio</Button>
+      <Button as={Link} to={props.isPublic ? '/' : '/app/dashboard'} inverted color="green" className="relaxed">Return to Home Page</Button>
     </Button.Group>
   </Aux>
 );

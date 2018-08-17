@@ -27,7 +27,7 @@ export default class BusinessApplication extends Component {
     const { match } = this.props;
     const { pathname } = this.props.location;
     const {
-      isFetchedData, fetchApplicationDataById, setFieldvalue, formReset,
+      isFetchedData, fetchApplicationDataById, setFieldvalue, formReset, setPrequalBasicDetails,
     } = this.props.businessAppStore;
     setFieldvalue('currentApplicationId', match.params.applicationId);
     if (match.params.applicationId !== 'new' && isFetchedData !== match.params.applicationId) {
@@ -41,6 +41,7 @@ export default class BusinessApplication extends Component {
       this.props.navStore.setAccessParams('appStatus', 'NEW');
       formReset();
     }
+    setPrequalBasicDetails();
   }
 
   saveContinue = () => this.props.history.push(`${this.props.match.url}/confirm`);

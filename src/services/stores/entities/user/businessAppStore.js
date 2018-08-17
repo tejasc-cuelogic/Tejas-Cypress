@@ -26,7 +26,7 @@ import {
   upsertBusinessApplicationInformationDocumentation,
   submitApplication,
 } from '../../queries/businessApplication';
-import { uiStore, navStore, businessAppLendioStore } from '../../index';
+import { uiStore, navStore, userDetailsStore, businessAppLendioStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class BusinessAppStore {
@@ -162,6 +162,15 @@ export class BusinessAppStore {
       }
     }
   };
+
+  @action
+  setPrequalBasicDetails = () => {
+    this.isPrequalQulify = true;
+    const { userDetails } = userDetailsStore;
+    this.BUSINESS_APP_FRM_BASIC.fields.firstName.value = userDetails.firstName;
+    this.BUSINESS_APP_FRM_BASIC.fields.lastName.value = userDetails.lastName;
+    this.BUSINESS_APP_FRM_BASIC.fields.email.value = userDetails.email;
+  }
 
   @action
   setPrequalDetails = (data) => {
@@ -936,6 +945,7 @@ export class BusinessAppStore {
 
   @action
   formReset = () => {
+    this.BUSINESS_APP_FRM_BASIC = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
     this.BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
     this.preQualFormDisabled = false;
     this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
@@ -943,6 +953,7 @@ export class BusinessAppStore {
     this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
     this.appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
     this.formReadOnlyMode = false;
+    this.isPrequalQulify = false;
   }
 
   @action

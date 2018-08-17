@@ -12,13 +12,23 @@ import FormElementWrap from './FormElementWrap';
 @inject('businessAppStore', 'uiStore')
 @observer
 export default class PreQualification extends Component {
+  componentWillMount() {
+    if (this.props.isPublic) {
+      this.props.businessAppStore.formReset();
+    }
+  }
   submit = (e) => {
     e.preventDefault();
-    this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic).then(() => {
-      const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
-      Helper.toast('Business pre-qualification request submitted!', 'success');
-      this.props.history.push(`/app/business-application/${url}`);
-    });
+    if (this.props.isPublic) {
+      this.props.history.push('/business-application/12345678/success');
+    } else {
+      this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic)
+        .then(() => {
+          const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
+          Helper.toast('Business pre-qualification request submitted!', 'success');
+          this.props.history.push(`/app/business-application/${url}`);
+        });
+    }
   }
   prequalBasicSubmit = (e) => {
     e.preventDefault();
