@@ -153,8 +153,14 @@
             background: @white;
             padding: @10px;
         }
-        i.grey.icon {
+        a {
             font-size: @18px;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+        .ui.button.ghost-button {
+            padding: 0;
         }
     }
 }
