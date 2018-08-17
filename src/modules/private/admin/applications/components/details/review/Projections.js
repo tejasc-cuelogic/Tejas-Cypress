@@ -48,6 +48,7 @@ export default class Projections extends Component {
             ondrop={this.onRevenueCheckDrop}
             onremove={this.confirmRemoveDoc}
             uploadtitle="Upload Revenue Check"
+            containerclassname="fluid"
           />
           <Divider section />
           {
@@ -67,6 +68,7 @@ export default class Projections extends Component {
             ondrop={this.onBenchmarkDrop}
             onremove={this.confirmRemoveDoc}
             uploadtitle="Upload Benchmark"
+            containerclassname="fluid"
           />
           <Divider section />
           <FormTextarea
