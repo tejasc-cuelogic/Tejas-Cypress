@@ -167,3 +167,41 @@ export const PROJECTIONS = {
     placeHolder: 'Enter here...',
   },
 };
+
+export const BUSINESS_PLAN = {
+  locationFeasibility: {
+    value: '',
+    label: 'Location feasibility',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here...',
+  },
+  timingOfOperations: {
+    value: '',
+    label: 'Timing of Operations',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here...',
+  },
+  writeupTieToProjections: {
+    value: '',
+    label: 'Does the Financial Write-up Tie to Projections?',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here...',
+  },
+  isPlanAdequate: {
+    value: '',
+    label: 'Is the Operations/Marketing Plan Adequate?',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here...',
+  },
+  dateOfIncorporation: {
+    value: '',
+    label: 'Date of Incorporation',
+    placeHolder: 'mm-dd-yyyy',
+    error: undefined,
+    rule: 'required|date',
+  },
+};

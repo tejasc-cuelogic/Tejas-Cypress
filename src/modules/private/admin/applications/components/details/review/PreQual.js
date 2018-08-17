@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
+import Aux from 'react-aux';
 import { Divider, Form, Header, Button, Icon, Confirm } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 
@@ -43,7 +44,7 @@ export default class PreQual extends Component {
           {
               JUSTIFICATIONS_FRM.fields.justifications.length ?
               JUSTIFICATIONS_FRM.fields.justifications.map((justification, index) => (
-                <Form>
+                <Aux>
                   <label>{`Justification ${index + 1}`}</label>
                   <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirm(e, index)}>
                     <Icon className="ns-close-circle" color="grey" />
@@ -55,7 +56,7 @@ export default class PreQual extends Component {
                     containerclassname="secondary"
                     hidelabel
                   />
-                </Form>
+                </Aux>
               )) : <p>...Loading</p>
           }
           <Button disabled={!(MANAGERS_FRM.meta.isValid && JUSTIFICATIONS_FRM.meta.isValid)} primary size="large" className="very relaxed pull-right" >APPROVED</Button>

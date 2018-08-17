@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS } from '../../../../constants/admin/businessApplication';
+import { OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -9,6 +9,7 @@ export class BusinessAppReviewStore {
   @observable JUSTIFICATIONS_FRM = Validator.prepareFormObject(JUSTIFICATIONS);
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
   @observable PROJECTIONS_FRM = Validator.prepareFormObject(PROJECTIONS);
+  @observable BUSINESS_PLAN_FRM = Validator.prepareFormObject(BUSINESS_PLAN);
   @observable justificationConfirmModal = false;
   @observable removeJustificationIndex = null;
 
@@ -90,6 +91,12 @@ export class BusinessAppReviewStore {
     this.PROJECTIONS_FRM =
       Validator.onChange(this.PROJECTIONS_FRM, Validator.pullValues(e, result));
   };
+
+  @action
+  businessPlanEleChange = (e, result) => {
+    this.BUSINESS_PLAN_FRM =
+      Validator.onChange(this.BUSINESS_PLAN_FRM, Validator.pullValues(e, result));
+  }
 
   @action
   setFileUploadData = (form, field, files) => {

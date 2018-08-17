@@ -25,7 +25,7 @@ export default class Overview extends Component {
               OVERVIEW_FRM.fields.overview.length ?
               OVERVIEW_FRM.fields.overview.map((overview, index) => (
                 <Aux>
-                  <label>{`Critical Point ${index}`}</label>
+                  <label>{`Critical Point ${index + 1}`}</label>
                   <FormInput
                     type="text"
                     name="criticalPoint"
