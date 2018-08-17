@@ -30,7 +30,7 @@ class Success extends Component {
               this.props.history.push('/auth/confirm-email');
             }
           })
-          .catch(() => { });
+          .catch(() => {});
       } else {
         authActions.login()
           .then(() => {
