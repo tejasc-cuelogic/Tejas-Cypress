@@ -92,3 +92,32 @@
 		}
 	}
 }
+.inner-content-spacer .featured-section {
+    padding: @14px @20px;
+    .ui.items>.item {
+        display: flex;
+        flex-direction: column;
+        margin: 0 0 @28px;
+        .content {
+            .header {
+                margin-right: @30px;
+                color: @neutral;
+                font-size: @14px;
+                font-weight: @normal;
+                &:last-child {
+                    margin-right: 0;
+                }
+                .icon-link {
+                    font-size: @18px;
+                }
+            }
+            a.header {
+                color: @primary-two;
+                font-weight: @bold;
+            }
+            .description {
+                color: @neutral;
+            }
+        }
+    }
+}

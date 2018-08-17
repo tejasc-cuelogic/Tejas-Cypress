@@ -142,6 +142,27 @@
             border-top: 0;
         }
     }
+    &.inverted.grey-table {
+        background: @neutral-offwhite;
+        th {
+            background: @neutral-offwhite;
+            color: @neutral-middark !important;
+            border-color: @neutral-midwhite !important;
+        }
+        .ui.input>input {
+            background: @white;
+            padding: @10px;
+        }
+        a {
+            font-size: @18px;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+        .ui.button.ghost-button {
+            padding: 0;
+        }
+    }
 }
 
 .compare-table {

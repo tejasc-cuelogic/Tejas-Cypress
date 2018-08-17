@@ -15,6 +15,7 @@ export { default as teamStore } from './entities/admin/teamStore';
 export { default as transactionStore } from './entities/account/transactionStore';
 export { default as settingStore } from './entities/account/settingStore';
 export { default as articleStore } from './entities/admin/articleStore';
+export { default as crowdpayStore } from './entities/admin/crowdpayStore';
 
 export { default as educationStore } from './entities/education/educationStore';
 export { default as rewardStore } from './entities/rewardWallet/rewardStore';
