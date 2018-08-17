@@ -1,9 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import { isEmpty } from 'lodash';
-import { FormValidator as Validator, DataFormatter } from '../../../../helper';
-import { GqlClient as client } from '../../../../api/gqlApi';
-import { getPlaidAccountdata } from './../../queries/account';
-import { uiStore, userStore, accountStore } from '../../index';
+import { FormValidator as Validator } from '../../../../helper';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND,
 } from '../../../../constants/account';
@@ -11,7 +8,6 @@ import {
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
   @observable plaidAccDetails = {};
-  @observable plaidBankDetails = {};
   @observable bankListing = undefined;
   @observable depositMoneyNow = true;
   @observable showAddFunds = false;
@@ -68,11 +64,6 @@ export class BankAccountStore {
     this.plaidAccDetails = plaidAccDetails;
   }
 
-  @action
-  setPlaidBankDetails = (plaidBankDetails) => {
-    this.plaidBankDetails = plaidBankDetails;
-  }
-
   @computed
   get accountAttributes() {
     let accountAttributes = {};
@@ -88,28 +79,6 @@ export class BankAccountStore {
     }
     return accountAttributes;
   }
-
-  getPlaidAccountData = () => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: getPlaidAccountdata,
-        variables: {
-          userId: userStore.currentUser.sub,
-          plaidPublicToken: this.plaidAccDetails.public_token,
-          plaidAccountId: this.plaidAccDetails.account_id,
-          bankName: this.plaidAccDetails.institution.name,
-          accountType: accountStore.investmentAccType,
-        },
-      })
-      .then((result) => {
-        this.setPlaidBankDetails(result.data.plaidGetValidatedAccountData);
-        resolve();
-      })
-      .catch(action((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        reject();
-      }));
-  });
 
   @computed
   get isValidLinkBank() {
@@ -131,7 +100,6 @@ export class BankAccountStore {
     Validator.resetFormData(this.formLinkBankManually);
     Validator.resetFormData(this.formAddFunds);
     this.plaidAccDetails = {};
-    this.plaidBankDetails = {};
     this.depositMoneyNow = true;
     this.showAddFunds = false;
   }
