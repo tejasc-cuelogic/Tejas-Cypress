@@ -21,7 +21,6 @@ export default class PreQualification extends Component {
     e.preventDefault();
     if (this.props.isPublic) {
       const { fields } = this.props.businessAppStore.BUSINESS_APP_FRM;
-      console.log(fields);
       if (fields.businessName.value === 'success') {
         this.props.history.push('/business-application/12345678/success');
       } else if (fields.businessName.value === 'failed') {
