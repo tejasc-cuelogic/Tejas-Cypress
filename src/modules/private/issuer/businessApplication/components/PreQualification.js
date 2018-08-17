@@ -20,7 +20,17 @@ export default class PreQualification extends Component {
   submit = (e) => {
     e.preventDefault();
     if (this.props.isPublic) {
-      this.props.history.push('/business-application/12345678/success');
+      const { fields } = this.props.businessAppStore.BUSINESS_APP_FRM;
+      console.log(fields);
+      if (fields.businessName.value === 'success') {
+        this.props.history.push('/business-application/12345678/success');
+      } else if (fields.businessName.value === 'failed') {
+        this.props.history.push('/business-application/12345678/failed');
+      } else if (fields.businessName.value === 'lendio') {
+        this.props.history.push('/business-application/12345678/lendio');
+      } else {
+        this.props.history.push('/business-application/12345678/success');
+      }
     } else {
       this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic)
         .then(() => {

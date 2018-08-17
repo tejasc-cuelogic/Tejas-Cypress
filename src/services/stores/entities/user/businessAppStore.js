@@ -144,21 +144,23 @@ export class BusinessAppStore {
     this.formReset();
     this.step = 'performace';
     const data = this.fetchBusinessApplicationsDataById;
-    this.setPrequalDetails(data.prequalDetails);
-    this.setBusinessDetails(data.businessDetails);
-    this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
-    this.setDocumentationDetails(data.businessDocumentation);
-    if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
-      this.formReadOnlyMode = true;
-    } else if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
-      this.appStepsStatus[0].status = 'IN_PROGRESS';
-    }
-    navStore.setAccessParams('appStatus', data.applicationStatus);
-    if (data.lendio) {
-      const lendioPartners = data.lendio.status;
-      if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
-        && lendioPartners === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
-        businessAppLendioStore.setPartneredLendioData(data);
+    if (data) {
+      this.setPrequalDetails(data.prequalDetails);
+      this.setBusinessDetails(data.businessDetails);
+      this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
+      this.setDocumentationDetails(data.businessDocumentation);
+      if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
+        this.formReadOnlyMode = true;
+      } else if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+        this.appStepsStatus[0].status = 'IN_PROGRESS';
+      }
+      navStore.setAccessParams('appStatus', data.applicationStatus);
+      if (data.lendio) {
+        const lendioPartners = data.lendio.status;
+        if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+          && lendioPartners === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
+          businessAppLendioStore.setPartneredLendioData(data);
+        }
       }
     }
   };
