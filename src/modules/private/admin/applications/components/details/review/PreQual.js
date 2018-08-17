@@ -36,18 +36,18 @@ export default class PreQual extends Component {
           <Divider section />
           <Header as="h5">
             Justifications
-            <Header.Subheader>
-              <Button color="violet" className="ghost-button" onClick={addJustification}>+Add Justification</Button>
-            </Header.Subheader>
+            <Button className="ghost-button" onClick={addJustification}>+Add Justification</Button>
           </Header>
           {
               JUSTIFICATIONS_FRM.fields.justifications.length ?
               JUSTIFICATIONS_FRM.fields.justifications.map((justification, index) => (
                 <Form>
-                  <label>{`Justification ${index + 1}`}</label>
-                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirm(e, index)}>
-                    <Icon className="ns-close-circle" color="grey" />
-                  </Link>
+                  <div className="mb-10">
+                    <label>{`Justification ${index + 1}`}</label>
+                    <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirm(e, index)}>
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
+                  </div>
                   <FormTextarea
                     name="justification"
                     fielddata={justification.justification}

@@ -929,6 +929,16 @@ a.icon-link:hover {
 	p b {
 		color: @neutral;
 	}
+	.ui.header {
+		.ui.button.ghost-button {
+			font-size: @12px;
+			color: @primary-two;
+			:hover {
+			  background-color: transparent;
+			  color: @primary-two;
+			}
+		}
+	}
 }
 .secondary-section{
 	background-color:@neutral-offwhite;
