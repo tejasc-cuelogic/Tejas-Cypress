@@ -163,6 +163,7 @@ export class BusinessAppStore {
         }
       }
     }
+    this.setPrequalBasicDetails();
   };
 
   @action

@@ -33,7 +33,6 @@ export default class BusinessApplication extends Component {
     if (match.params.applicationId !== 'new' && isFetchedData !== match.params.applicationId) {
       setFieldvalue('isFetchedData', match.params.applicationId);
       fetchApplicationDataById(match.params.applicationId).then(() => {
-        setPrequalBasicDetails();
         if (this.checkIncludes(['pre-qualification', 'business-details', 'performance', 'documentation'], pathname)) {
           this.props.history.replace(`${match.url}/${this.props.businessAppStore.stepToRender.path}`);
         }
