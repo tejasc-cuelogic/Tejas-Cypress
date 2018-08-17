@@ -11,7 +11,7 @@ const Banner = () => (
         investment opportunities<br />
         you believe in
         </Header>
-        <Button as={Link} to="/offerings" secondary className="mt-50">Explore Campaigns</Button>
+        <Button as={Link} to="/offerings" secondary className="mt-30">Explore Campaigns</Button>
       </div>
     </Container>
   </section>
