@@ -33,7 +33,7 @@ export default class Summary extends Component {
     );
     const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
-      plaidAccDetails.account_id : formLinkBankManually.fields.accountNumber.value;
+      plaidAccDetails.plaidAccountNumber : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>
         <Header as="h3" textAlign="center">Verify your information and create an IRA account</Header>
