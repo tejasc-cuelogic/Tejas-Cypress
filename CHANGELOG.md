@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-08-13)
+# 0.0.0 (2018-08-14)
 
 
 ### Bug Fixes
@@ -9,6 +9,7 @@
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** business application finding fixes ([10c2ce1](https://chaos.ns.team/nsv2/ns-client/commits/10c2ce1))
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** file uploader added confirm modal on remove file operation ([a99c1e4](https://chaos.ns.team/nsv2/ns-client/commits/a99c1e4))
 * **Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** lendio link added in lendio application form ([64ca8dc](https://chaos.ns.team/nsv2/ns-client/commits/64ca8dc))
+* **Investor[Issue [345](https://chaos.ns.team/nsv2/ns-ops/issues/345) - investor-signup-giact-impact-on-client-side]:** done changes for link- bank account using GIACT changes on front end. ([fa36578](https://chaos.ns.team/nsv2/ns-client/commits/fa36578))
 * **setup hello world structure for public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - setup hello world structure for public pages]:** updating UI and styles ([40fba86](https://chaos.ns.team/nsv2/ns-client/commits/40fba86))
 * **UserManagement[Issue [263](https://chaos.ns.team/nsv2/ns-ops/issues/263) - user management ui fixes from review]:** user management ui fixes from review ([b47f55e](https://chaos.ns.team/nsv2/ns-client/commits/b47f55e))
 
@@ -44,8 +45,10 @@
 * **Issuer[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** feedback changes done ([4b5017d](https://chaos.ns.team/nsv2/ns-client/commits/4b5017d))
 * **marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - marketing pages - feedback]:** marketing pages - feedback ([1416d48](https://chaos.ns.team/nsv2/ns-client/commits/1416d48))
 * **Marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - Marketing pages - feedback]:** Marketing pages - feedback ([e4b44f7](https://chaos.ns.team/nsv2/ns-client/commits/e4b44f7))
+* **Marketing pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - general fixes]:** general fixes ([21c7dc4](https://chaos.ns.team/nsv2/ns-client/commits/21c7dc4))
 * **Marketing Pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - hello world structure for public pages]:** hello world structure for public pages ([f7c04e7](https://chaos.ns.team/nsv2/ns-client/commits/f7c04e7))
 * **marketing pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - marketing pages - feedback]:** marketing pages - feedback changes ([ab57cff](https://chaos.ns.team/nsv2/ns-client/commits/ab57cff))
+* **marketing pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - vertical timeline of updates for an offering]:** vertical timeline for an offering ([fc366f6](https://chaos.ns.team/nsv2/ns-client/commits/fc366f6))
 * **marketing pages[Issue [268](https://chaos.ns.team/nsv2/ns-ops/issues/268) - marketing pages investor account types and security]:** account types, security and track sections ([b11d369](https://chaos.ns.team/nsv2/ns-client/commits/b11d369))
 * **marketing pages[Issue [273](https://chaos.ns.team/nsv2/ns-ops/issues/273) - marketing pages- about mission and careers]:** mission and careers section. ([16bcf4f](https://chaos.ns.team/nsv2/ns-client/commits/16bcf4f))
 * **marketing pages[Issue [291](https://chaos.ns.team/nsv2/ns-ops/issues/291) -  public about press and values]:** press and impact pages ([9f1c8d6](https://chaos.ns.team/nsv2/ns-client/commits/9f1c8d6))

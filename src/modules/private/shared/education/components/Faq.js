@@ -12,7 +12,7 @@ export default class KnowledgeBase extends Component {
     this.props.educationStore.initRequest('Faq');
   }
   search = (e) => {
-    this.props.educationStore.setSrchParam(e.target.value);
+    this.props.educationStore.setSrchParam('Faq', e.target.value);
     if (this.props.location.pathname !== '/app/resources/faq') {
       this.props.history.replace('/app/resources/faq');
     }
@@ -23,7 +23,7 @@ export default class KnowledgeBase extends Component {
       faqs, loading, error, searchParam,
     } = this.props.educationStore;
     const modul = 'faq';
-    if (loading) {
+    if (loading('Faq')) {
       return 'loading...';
     }
     return (
@@ -35,7 +35,7 @@ export default class KnowledgeBase extends Component {
                 <Input
                   fluid
                   onChange={this.search}
-                  value={searchParam}
+                  value={searchParam.Faq}
                   inverted
                   icon={{ className: 'ns-search' }}
                   iconPosition="left"
