@@ -68,8 +68,8 @@ export default class Documentation extends Component {
             hidelabel
           />
           <Button.Group className="pull-right">
-            <Button disabled={!DOCUMENTATION_FRM.meta.isValid} primary size="large" className="very relaxed" >Save</Button>
-            <Button disabled={!DOCUMENTATION_FRM.meta.isValid} type="button">Submit for Approval</Button>
+            <Button disabled={!DOCUMENTATION_FRM.meta.isValid} secondary>Save</Button>
+            <Button disabled={!DOCUMENTATION_FRM.meta.isValid} primary size="large" className="very relaxed" type="button">Submit for Approval</Button>
           </Button.Group>
         </Form>
       </div>

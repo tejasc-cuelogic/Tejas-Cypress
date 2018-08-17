@@ -51,8 +51,8 @@ export default class BusinessPlan extends Component {
             dateOfBirth
           />
           <Button.Group className="pull-right">
-            <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} primary size="large" className="very relaxed" >Save</Button>
-            <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} type="button">Approve Review</Button>
+            <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} secondary>Save</Button>
+            <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} primary size="large" className="very relaxed" type="button">Approve Review</Button>
           </Button.Group>
         </Form>
       </div>

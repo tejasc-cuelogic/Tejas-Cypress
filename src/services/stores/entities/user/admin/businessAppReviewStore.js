@@ -99,6 +99,14 @@ export class BusinessAppReviewStore {
   }
 
   @action
+  businessPlanMaskChange = (values, field) => {
+    this.BUSINESS_PLAN_FRM = Validator.onChange(
+      this.BUSINESS_PLAN_FRM,
+      { name: field, value: values.formattedValue },
+    );
+  }
+
+  @action
   setFileUploadData = (form, field, files) => {
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);

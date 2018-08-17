@@ -37,8 +37,8 @@ export default class Overview extends Component {
               )) : <p>...Loading</p>
           }
           <Button.Group className="pull-right">
-            <Button disabled={!OVERVIEW_FRM.meta.isValid} primary size="large" className="very relaxed" >Save</Button>
-            <Button disabled={!OVERVIEW_FRM.meta.isValid} type="button">Submit for Approval</Button>
+            <Button disabled={!OVERVIEW_FRM.meta.isValid} secondary>Save</Button>
+            <Button disabled={!OVERVIEW_FRM.meta.isValid} primary size="large" className="very relaxed" type="button">Submit for Approval</Button>
           </Button.Group>
         </Form>
       </div>
