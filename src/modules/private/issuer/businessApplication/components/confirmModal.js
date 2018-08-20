@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-// import Aux from 'react-aux';
 import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { ListErrors } from '../../../../../theme/shared';
-// import { Helper } from '../../../../../helper/utility';
 
-@inject('businessAppStore', 'uiStore')
+@inject('uiStore')
 @withRouter
 @observer
 export default class ConfirmModal extends Component {

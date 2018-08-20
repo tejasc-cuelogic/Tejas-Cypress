@@ -11,6 +11,7 @@ import Failure from '../components/Failure';
 import Success from '../components/Success';
 import Application from '../components/lendio/Application';
 import ConfirmModal from '../components/confirmModal';
+import NeedHelpModal from '../components/NeedHelpModal';
 import LendioSuccess from '../components/lendio/LendioSuccess';
 import { HeaderButtons } from '../components/HeaderButtons';
 
@@ -90,7 +91,7 @@ export default class BusinessApplication extends Component {
     const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhiteGreen';
     return (
       <PrivateLayout
-        subNavComponent={<Menu.Item position="right"><Link to="/app/dashboard">Need Help / Have Questions?</Link></Menu.Item>}
+        subNavComponent={<Menu.Item position="right"><Link to={`${match.url}/need-help`}>Need Help / Have Questions?</Link></Menu.Item>}
         subNav={!showSubNav}
         appStepsStatus={appStepsStatus}
         {...this.props}
@@ -134,6 +135,7 @@ export default class BusinessApplication extends Component {
           }
         </Switch>
         <Route exact path={`${match.url}/confirm`} render={() => <ConfirmModal partialSave={this.submitSaveContinue} stepLink={pathname} refLink={match.url} />} />
+        <Route exact path={`${match.url}/need-help`} render={() => <NeedHelpModal />} />
       </PrivateLayout>
     );
   }

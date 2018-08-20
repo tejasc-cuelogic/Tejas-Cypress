@@ -15,6 +15,7 @@ import {
   BUSINESS_APP_FILE_UPLOAD_ENUMS,
   AFFILIATED_PARTNERS,
   LENDIO,
+  NEED_HELP,
 } from '../../../constants/businessApplication';
 import Helper from '../../../../helper/utility';
 import {
@@ -25,6 +26,7 @@ import {
   upsertBusinessApplicationInformationBusinessDetails,
   upsertBusinessApplicationInformationDocumentation,
   submitApplication,
+  needHelpFormSubmit,
 } from '../../queries/businessApplication';
 import { uiStore, navStore, userDetailsStore, businessAppLendioStore } from '../../index';
 import { fileUpload } from '../../../actions';
@@ -33,6 +35,7 @@ export class BusinessAppStore {
   @observable BUSINESS_APP_FRM_BASIC =
   Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
+  @observable NEED_HELP_FRM = Validator.prepareFormObject(NEED_HELP);
   @observable BUSINESS_ACCOUNT =Validator.prepareFormObject(BUSINESS_SIGNUP);
   @observable BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
   @observable BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
@@ -411,9 +414,9 @@ export class BusinessAppStore {
   };
 
   @action
-  businessAppEleMaskChange = (values, field) => {
-    this.BUSINESS_APP_FRM = Validator.onChange(
-      this.BUSINESS_APP_FRM,
+  businessAppEleMaskChange = (values, field, formName = 'BUSINESS_APP_FRM') => {
+    this[formName] = Validator.onChange(
+      this[formName],
       { name: field, value: values.floatValue },
     );
   };
@@ -690,6 +693,31 @@ export class BusinessAppStore {
             this.setFieldvalue('BUSINESS_APP_STEP_URL', `${applicationId}/failed`);
           }
           resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  needHelpFormSubmit = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: needHelpFormSubmit,
+          variables: {
+            applicationId: this.currentApplicationId,
+          },
+        })
+        .then((result) => {
+          resolve(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
