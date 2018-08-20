@@ -34,6 +34,7 @@ class SecondaryMenu extends Component {
             attached={attached}
           >
             <NavItems navItems={navItems} match={match} stepsStatus={stepsStatus} />
+            {this.props.subNavComponent}
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767} as={Aux}>

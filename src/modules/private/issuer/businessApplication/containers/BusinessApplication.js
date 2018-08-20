@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
+import { Menu } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
@@ -89,6 +90,7 @@ export default class BusinessApplication extends Component {
     const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhiteGreen';
     return (
       <PrivateLayout
+        subNavComponent={<Menu.Item position="right"><Link to="/app/dashboard">Need Help / Have Questions?</Link></Menu.Item>}
         subNav={!showSubNav}
         appStepsStatus={appStepsStatus}
         {...this.props}
