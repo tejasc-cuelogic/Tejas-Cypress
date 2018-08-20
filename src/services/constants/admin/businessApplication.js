@@ -205,3 +205,95 @@ export const BUSINESS_PLAN = {
     rule: 'required|date',
   },
 };
+
+export const CONTROL_PERSONS = {
+  controlPerson: [{
+    name: {
+      value: '',
+      label: 'Name',
+      error: undefined,
+      rule: 'required|string',
+      placeHolder: 'John Doe',
+    },
+    ownership: {
+      value: '',
+      label: 'Ownership %',
+      error: undefined,
+      rule: 'required',
+      placeHolder: '10.0%',
+    },
+    derogatoryMarks: {
+      value: '',
+      label: 'Derogatory Marks',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'Enter here',
+    },
+    experience: {
+      value: '',
+      label: 'Experience',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'Experience Comment',
+    },
+    creditScore: {
+      value: '',
+      label: 'Credit Score',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'Credit Score Comment',
+    },
+    experienceFile: {
+      label: '',
+      value: '',
+      error: undefined,
+      rule: 'required',
+      preSignedUrl: '',
+      fileId: '',
+      fileData: '',
+    },
+    creditScoreFile: {
+      label: '',
+      value: '',
+      error: undefined,
+      rule: 'required',
+      preSignedUrl: '',
+      fileId: '',
+      fileData: '',
+    },
+  }],
+};
+
+export const SOURCES = {
+  sources: [{
+    name: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'string',
+    },
+    amount: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'numeric',
+    },
+  }],
+};
+
+export const USES = {
+  uses: [{
+    name: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'string',
+    },
+    amount: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'numeric',
+    },
+  }],
+};

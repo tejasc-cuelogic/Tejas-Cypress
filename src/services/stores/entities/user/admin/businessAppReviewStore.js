@@ -1,5 +1,5 @@
-import { observable, action } from 'mobx';
-import { OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
+import { observable, action, computed } from 'mobx';
+import { OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -10,8 +10,17 @@ export class BusinessAppReviewStore {
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
   @observable PROJECTIONS_FRM = Validator.prepareFormObject(PROJECTIONS);
   @observable BUSINESS_PLAN_FRM = Validator.prepareFormObject(BUSINESS_PLAN);
+  @observable CONTROL_PERSONS_FRM = Validator.prepareFormObject(CONTROL_PERSONS);
+  @observable SOURCES_FRM = Validator.prepareFormObject(SOURCES);
+  @observable USES_FRM = Validator.prepareFormObject(USES);
   @observable justificationConfirmModal = false;
   @observable removeJustificationIndex = null;
+  @observable controlPersonConfirmModal = false;
+  @observable removeControlPersonIndex = null;
+  @observable sourcesConfirmModal = false;
+  @observable removeSourcesIndex = null;
+  @observable usesConfirmModal = false;
+  @observable removeUsesIndex = null;
 
   @action
   toggleJustificationConfirmModal(index) {
@@ -99,10 +108,55 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  businessPlanMaskChange = (values, field) => {
+  businessPlanDateChange = (date) => {
     this.BUSINESS_PLAN_FRM = Validator.onChange(
       this.BUSINESS_PLAN_FRM,
-      { name: field, value: values.formattedValue },
+      { name: 'dateOfIncorporation', value: date },
+    );
+  }
+
+  @action
+  toggleControlPersonConfirmModal(index) {
+    this.controlPersonConfirmModal = !this.controlPersonConfirmModal;
+    this.removeControlPersonIndex = this.controlPersonConfirmModal ? index : null;
+  }
+
+  @action
+  addMoreControlPerson = () => {
+    this.CONTROL_PERSONS_FRM = {
+      ...this.CONTROL_PERSONS_FRM,
+      fields: {
+        ...this.CONTROL_PERSONS_FRM.fields,
+        controlPerson: [
+          ...this.CONTROL_PERSONS_FRM.fields.controlPerson,
+          CONTROL_PERSONS.controlPerson[0],
+        ],
+      },
+      meta: {
+        ...this.CONTROL_PERSONS_FRM.meta,
+        isValid: false,
+      },
+    };
+  }
+
+  @action
+  removeControlPerson() {
+    this.CONTROL_PERSONS_FRM.fields.controlPerson.splice(this.removeControlPersonIndex, 1);
+    this.controlPersonConfirmModal = !this.controlPersonConfirmModal;
+    this.removeControlPersonIndex = null;
+  }
+
+  @action
+  controlPersonEleChange = (e, result, index) => {
+    this.CONTROL_PERSONS_FRM = Validator
+      .onArrayFieldChange(this.CONTROL_PERSONS_FRM, Validator.pullValues(e, result), 'controlPerson', index);
+  }
+
+  @action
+  controlPersonMaskChange = (values, index) => {
+    this.CONTROL_PERSONS_FRM = Validator.onArrayFieldChange(
+      this.CONTROL_PERSONS_FRM,
+      { name: 'ownership', value: values.formattedValue }, 'controlPerson', index,
     );
   }
 
@@ -117,11 +171,131 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  removeUploadedData = (form, field) => {
-    this[form] = Validator.onChange(
+  setFileUploadDataWithIndex = (form, field, files, index) => {
+    const file = files[0];
+    const fileData = Helper.getFormattedFileData(file);
+    this[form] = Validator.onArrayFieldChange(
       this[form],
-      { name: field, value: '' },
+      { name: field, value: fileData.fileName }, 'controlPerson', index,
     );
+  }
+
+  @action
+  removeUploadedDataWithIndex = (form, field, index) => {
+    this[form] = Validator.onArrayFieldChange(
+      this[form],
+      { name: field, value: '' }, 'controlPerson', index,
+    );
+  }
+
+  @action
+  toggleSourcesConfirmModal(index) {
+    this.sourcesConfirmModal = !this.sourcesConfirmModal;
+    this.removeSourcesIndex = this.sourcesConfirmModal ? index : null;
+  }
+
+  @action
+  addMoreSource = () => {
+    this.SOURCES_FRM = {
+      ...this.SOURCES_FRM,
+      fields: {
+        ...this.SOURCES_FRM.fields,
+        sources: [
+          ...this.SOURCES_FRM.fields.sources,
+          SOURCES.sources[0],
+        ],
+      },
+      meta: {
+        ...this.SOURCES_FRM.meta,
+        isValid: false,
+      },
+    };
+  }
+
+  @action
+  removeSource = () => {
+    this.SOURCES_FRM.fields.sources.splice(this.removeSourcesIndex, 1);
+    this.sourcesConfirmModal = !this.sourcesConfirmModal;
+    this.removeSourcesIndex = null;
+  }
+
+  @action
+  sourceEleChange = (e, result, index) => {
+    this.SOURCES_FRM = Validator
+      .onArrayFieldChange(this.SOURCES_FRM, Validator.pullValues(e, result), 'sources', index);
+  }
+
+  @action
+  sourceMaskChange = (values, index) => {
+    this.SOURCES_FRM = Validator.onArrayFieldChange(
+      this.SOURCES_FRM,
+      { name: 'amount', value: values.floatValue }, 'sources', index,
+    );
+  }
+
+  @computed
+  get totalSourcesAmount() {
+    let totalAmount = 0;
+    this.SOURCES_FRM.fields.sources.map((source) => {
+      totalAmount += source.amount.value;
+      return totalAmount;
+    });
+    return totalAmount;
+  }
+
+  @action
+  toggleUsesConfirmModal(index) {
+    this.usesConfirmModal = !this.usesConfirmModal;
+    this.removeUsesIndex = this.usesConfirmModal ? index : null;
+  }
+
+  @action
+  addMoreUse = () => {
+    this.USES_FRM = {
+      ...this.USES_FRM,
+      fields: {
+        ...this.USES_FRM.fields,
+        uses: [
+          ...this.USES_FRM.fields.uses,
+          USES.uses[0],
+        ],
+      },
+      meta: {
+        ...this.USES_FRM.meta,
+        isValid: false,
+      },
+    };
+  }
+
+  @action
+  removeUse = () => {
+    this.USES_FRM.fields.uses.splice(this.removeUsesIndex, 1);
+    this.usesConfirmModal = !this.usesConfirmModal;
+    this.removeUsesIndex = null;
+  }
+
+  @action
+  useEleChange = (e, result, index) => {
+    this.USES_FRM = Validator
+      .onArrayFieldChange(this.USES_FRM, Validator.pullValues(e, result), 'uses', index);
+  }
+
+  @action
+  useMaskChange = (values, index) => {
+    this.USES_FRM = Validator.onArrayFieldChange(
+      this.USES_FRM,
+      { name: 'amount', value: values.floatValue }, 'uses', index,
+    );
+  }
+
+  @computed
+  get totalUsesAmount() {
+    let totalAmount = 0;
+    this.USES_FRM.fields.uses.map((use) => {
+      totalAmount += use.amount.value;
+      return totalAmount;
+    });
+    return totalAmount;
   }
 }
 export default new BusinessAppReviewStore();

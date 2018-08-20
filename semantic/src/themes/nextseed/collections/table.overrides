@@ -144,6 +144,7 @@
     }
     &.inverted.grey-table {
         background: @neutral-offwhite;
+        color: @neutral;
         th {
             background: @neutral-offwhite;
             color: @neutral-middark !important;
