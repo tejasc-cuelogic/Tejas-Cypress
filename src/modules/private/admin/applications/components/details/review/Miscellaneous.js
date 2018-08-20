@@ -26,9 +26,9 @@ export default class Miscellaneous extends Component {
                 <Input size="small" placeholder="Enter here..." fluid value="www.facebook.com/fbbusiness_name1" />
               </Table.Cell>
               <Table.Cell collapsing>
-                <Link to="/">
+                <Button icon className="link-button">
                   <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                </Button>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -39,9 +39,9 @@ export default class Miscellaneous extends Component {
                 <Input size="small" fluid placeholder="Enter here..." />
               </Table.Cell>
               <Table.Cell>
-                <Link to="/">
+                <Button icon className="link-button">
                   <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                </Button>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -52,9 +52,9 @@ export default class Miscellaneous extends Component {
                 <Input size="small" fluid placeholder="Enter here..." />
               </Table.Cell>
               <Table.Cell>
-                <Link to="/">
+                <Button icon className="link-button">
                   <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                </Button>
               </Table.Cell>
             </Table.Row>
           </Table.Body>
@@ -78,9 +78,9 @@ export default class Miscellaneous extends Component {
               </Table.Cell>
               <Table.Cell />
               <Table.Cell collapsing>
-                <Link to="/">
+                <Button icon className="link-button">
                   <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                </Button>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -89,13 +89,13 @@ export default class Miscellaneous extends Component {
               </Table.Cell>
               <Table.Cell />
               <Table.Cell>
-                <Link to="/">
+                <Button icon className="link-button">
                   <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                </Button>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
-              <Table.Cell>
+              <Table.Cell colSpan="3">
                 <Button color="blue" className="ghost-button">+ Add new document</Button>
               </Table.Cell>
             </Table.Row>
@@ -114,9 +114,9 @@ export default class Miscellaneous extends Component {
                     <Icon className="ns-file" color="blue" />Business_Plan.pdf
                   </Link>
                   <span>Attached: 7/10/2018 by Brandon Black</span>
-                  <Link to="/" className="icon-link">
+                  <Button icon className="link-button">
                     <Icon className="ns-close-circle" color="grey" />
-                  </Link>
+                  </Button>
                 </Item.Header>
                 <Item.Description className="caption">
                   <i>
@@ -133,9 +133,9 @@ export default class Miscellaneous extends Component {
                     <Icon className="ns-file" color="blue" />Business_Plan_2.pdf
                   </Link>
                   <span>Attached: 7/12/2018 by Barbara Birsands</span>
-                  <Link to="/" className="icon-link">
+                  <Button icon className="link-button">
                     <Icon className="ns-close-circle" color="grey" />
-                  </Link>
+                  </Button>
                 </Item.Header>
                 <Item.Description className="caption">
                   <i>
