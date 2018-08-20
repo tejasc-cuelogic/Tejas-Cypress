@@ -10,7 +10,7 @@ const Banner = () => (
         growth with the<br />
         power of the crowd
         </Header>
-        <Button secondary className="mt-50">Apply Now</Button>
+        <Button secondary className="mt-30">Apply Now</Button>
       </div>
     </Container>
   </section>

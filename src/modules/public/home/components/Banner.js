@@ -6,8 +6,8 @@ const Banner = () => (
     <Container>
       <div className="banner-caption">
         <Header as="h1">
-          Raise capital.<br />
-          Invest local.<br />
+          Raise capital<br />
+          Invest local<br />
           <span className="highlight-text">Grow together</span>
         </Header>
       </div>

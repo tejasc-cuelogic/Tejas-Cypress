@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-08-14)
+# 0.0.0 (2018-08-17)
 
 
 ### Bug Fixes
@@ -61,6 +61,7 @@
 * **public business pages[Issue [254](https://chaos.ns.team/nsv2/ns-ops/issues/254) - public business inclusive and compare]:** completed design of business inclusive and compare section ([81cce10](https://chaos.ns.team/nsv2/ns-client/commits/81cce10))
 * **public campaign details[Issue [308](https://chaos.ns.team/nsv2/ns-ops/issues/308) - public campaign details and comments]:** completed design of disclosure modal, business modal, comments section. ([1b03678](https://chaos.ns.team/nsv2/ns-client/commits/1b03678))
 * **public campaign[Issue [310](https://chaos.ns.team/nsv2/ns-ops/issues/310) - public campaign investment and rewards]:** completed investment details and rewards section ui as well as solved ui issues and replaced all .png files with .jpg files. ([e9043b1](https://chaos.ns.team/nsv2/ns-client/commits/e9043b1))
+* **Public demo feedback[Issue [331](https://chaos.ns.team/nsv2/ns-ops/issues/331) - Public demo feedback]:** solved logo, banner and banner title issues ([e71dbce](https://chaos.ns.team/nsv2/ns-client/commits/e71dbce))
 * **public investment workflow[Issue [319](https://chaos.ns.team/nsv2/ns-ops/issues/319) - public investment workflow]:** designed investment workflow ([e9b1736](https://chaos.ns.team/nsv2/ns-client/commits/e9b1736))
 * **public investors[Issue [257](https://chaos.ns.team/nsv2/ns-ops/issues/257) - public investors homepage]:** - completed design of why nextseed and how it works ([52edaeb](https://chaos.ns.team/nsv2/ns-client/commits/52edaeb))
 * **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
