@@ -74,10 +74,7 @@ export class NavItems extends Component {
   }
 }
 
-const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  // (path.includes('business-application') || path.includes('offerings') ? '' : 'LogoColor')
-  (path.includes('business-application') ? 'LogoWhite' : 'LogoColor')
-));
+const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoWhiteGreen');
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
@@ -103,11 +100,11 @@ export const NavigationItems = props => (
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
       </Menu.Menu>
-      {props.location.pathname.includes('/business-application') ?
+      {props.location.pathname.includes('/business-application') && !props.location.pathname.includes('business-application/') ?
         <Menu.Item as={Link} to="/">
           <Button inverted color="red">Cancle</Button>
         </Menu.Item>
-      :
+      : !props.location.pathname.includes('/business-application') &&
         (
           !props.currentUser ? (
             <Menu.Item as={Link} to="/auth/login">

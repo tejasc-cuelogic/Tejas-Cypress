@@ -21,28 +21,20 @@ class Success extends Component {
       if (fields.email.value !== 'chetan.bura@cuelogic.com') {
         authActions.register()
           .then(() => {
-            if (this.props.authStore.newPasswordRequired) {
-              this.props.history.push('/auth/change-password');
-            } else {
-              const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
-              const userCredentials = { email: email.value, password: btoa(password.value) };
-              cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
-              this.props.history.push('/auth/confirm-email');
-            }
+            const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+            const userCredentials = { email: email.value, password: btoa(password.value) };
+            cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+            this.props.history.push('/auth/confirm-email');
           })
           .catch(() => {});
       } else {
         authActions.login()
           .then(() => {
             const { roles } = this.props.userStore.currentUser;
-            if (this.props.authStore.newPasswordRequired) {
-              this.props.history.push('/auth/change-password');
-            } else {
-              this.props.authStore.reset();
-              if (roles && !roles.includes('investor')) {
-                const redirectUrl = '/app/business-application/58a5bc40-a1fb-11e8-b93e-9b2c4fb7f46e/business-details';
-                this.props.history.push(redirectUrl);
-              }
+            this.props.authStore.reset();
+            if (roles && roles.includes('issuer')) {
+              const redirectUrl = '/app/business-application/58a5bc40-a1fb-11e8-b93e-9b2c4fb7f46e/business-details';
+              this.props.history.push(redirectUrl);
             }
           });
       }

@@ -44,6 +44,8 @@ export default class BusinessApplication extends Component {
     }
   }
 
+  getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
+
   saveContinue = () => this.props.history.push(`${this.props.match.url}/confirm`);
 
   submitSaveContinue = (e) => {
@@ -84,21 +86,22 @@ export default class BusinessApplication extends Component {
     const showSubNav = this.calculateShowSubNav(['failed', 'success', 'lendio'], pathname, appStepsStatus[0].status, formReadOnlyMode);
     const preQualPage = pathname.includes('pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
-    const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhite';
+    const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhiteGreen';
     return (
       <PrivateLayout
         subNav={!showSubNav}
         appStepsStatus={appStepsStatus}
         {...this.props}
         P0={
-          <Logo
-            className="logo"
-            verticalAlign="middle"
-            dataSrc={logoUrl}
-            as={Link}
-            to="/app/dashboard"
-            size={logoUrl === 'LogoWhite' ? 'small' : 'medium'}
-          />
+          <Link to="/app/dashboard">
+            <Logo
+              size="small"
+              alt="NextSeed.com"
+              dataSrc={logoUrl}
+              style={this.getLogoStyle(this.props.location.pathname)}
+              verticalAlign="middle"
+            />
+          </Link>
         }
         buttonWidth={6}
         P4={
