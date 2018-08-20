@@ -79,6 +79,13 @@
                     background-color:transparent;
                 }
             }
+            &.blue{
+                color:@blue;
+                &:hover, &:focus, &:active{
+                    color:darken(@blue, 10%);
+                    background-color:transparent;
+                }
+            }
         }
     }
     &.vertical.buttons .button{

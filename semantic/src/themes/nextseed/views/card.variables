@@ -147,7 +147,7 @@
 
 /* Link */
 @linkHoverBackground: none;
-@linkHoverBorder: none;
+@linkHoverBorder: 1px solid @neutral-darkwhite;
 @linkHoverZIndex: 5;
 @linkHoverRaiseDistance: 0px;
 @linkHoverTransform: translateY(-@linkHoverRaiseDistance);
