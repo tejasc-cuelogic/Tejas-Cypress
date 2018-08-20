@@ -36,7 +36,7 @@ export default class Performance extends Component {
               <Grid stackable columns="equal">
                 {
                   statmentConst.map(field => (
-                    <Grid.Column>
+                    <Grid.Column key={field}>
                       <DropZone
                         disabled={formReadOnlyMode}
                         multiple

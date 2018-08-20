@@ -10,6 +10,12 @@ import { ListErrors } from '../../../../../theme/shared';
 @withRouter
 @observer
 export default class NeedHelpModal extends Component {
+  componentWillMount() {
+    const { match } = this.props;
+    if (match.isExact) {
+      this.props.businessAppStore.needHelpFormReset();
+    }
+  }
   handleCloseModal = (e) => {
     e.preventDefault();
     this.props.uiStore.setErrors(null);

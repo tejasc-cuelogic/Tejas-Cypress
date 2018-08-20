@@ -978,13 +978,18 @@ export class BusinessAppStore {
   formReset = () => {
     this.BUSINESS_APP_FRM_BASIC = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
     this.BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
-    this.preQualFormDisabled = false;
     this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
     this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
     this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
+    this.preQualFormDisabled = false;
     this.appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
     this.formReadOnlyMode = false;
     this.isPrequalQulify = false;
+  }
+
+  @action
+  needHelpFormReset = () => {
+    this.NEED_HELP_FRM = Validator.prepareFormObject(NEED_HELP);
   }
 
   @action
