@@ -649,7 +649,7 @@ export class BusinessAppStore {
   }
 
   @action
-  businessPreQualificationFormSumbit = (isPublic) => {
+  businessPreQualificationFormSumbit = (isPublic = false) => {
     console.log(isPublic);
     const data = this.getFormatedPreQualificationData;
     uiStore.setProgress();

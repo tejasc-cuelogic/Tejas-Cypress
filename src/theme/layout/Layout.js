@@ -11,8 +11,9 @@ import ConfirmEmailAddress from '../../modules/auth/containers/ConfirmEmailAddre
 import ChangePassword from '../../modules/auth/containers/ChangePassword';
 import ForgotPassword from '../../modules/auth/containers/ForgotPassword';
 import ResetPassword from '../../modules/auth/containers/ResetPassword';
+import Helper from '../../helper/utility';
 
-@inject('userStore', 'uiStore', 'navStore')
+@inject('userStore', 'uiStore', 'navStore', 'businessAppStore')
 @withRouter
 @observer
 class Layout extends Component {
@@ -22,9 +23,20 @@ class Layout extends Component {
         this.props.history.push('/');
       });
   }
+  preQualSubmit = (e) => {
+    e.preventDefault();
+    this.props.businessAppStore.businessPreQualificationFormSumbit(true).then(() => {
+      const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
+      Helper.toast('Business pre-qualification request submitted!', 'success');
+      this.props.history.push(`/business-application/${url}`);
+    });
+  }
 
   render() {
     const { location } = this.props;
+    const { BUSINESS_APP_FRM, isPrequalQulify } = this.props.businessAppStore;
+    const { isValid } = BUSINESS_APP_FRM.meta;
+    const { inProgress } = this.props.uiStore;
     return (
       <Aux>
         {(!this.props.userStore.currentUser || !location.pathname.startsWith('/app')) &&
@@ -33,6 +45,10 @@ class Layout extends Component {
             navStatus={this.props.navStore.navStatus}
             currentUser={this.props.userStore.currentUser}
             handleLogOut={this.handleLogOut}
+            canSubmitApp={isValid}
+            isPrequalQulify={isPrequalQulify}
+            preQualSubmit={this.preQualSubmit}
+            loading={inProgress}
           />
         }
         {this.props.children}

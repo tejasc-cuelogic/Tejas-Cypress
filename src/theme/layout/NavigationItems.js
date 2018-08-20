@@ -4,6 +4,7 @@ import Aux from 'react-aux';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
+import { SubmitButton } from '../../modules/private/issuer/businessApplication/components/HeaderButtons';
 
 @withRouter
 export class NavItems extends Component {
@@ -101,8 +102,16 @@ export const NavigationItems = props => (
         }
       </Menu.Menu>
       {props.location.pathname.includes('/business-application') && !props.location.pathname.includes('business-application/') ?
-        <Menu.Item as={Link} to="/">
-          <Button inverted color="red">Cancle</Button>
+        <Menu.Item>
+          <Button.Group>
+            <Button as={Link} to="/" inverted color="red">Cancle</Button>
+            {props.isPrequalQulify &&
+            <SubmitButton
+              canSubmitApp={props.canSubmitApp}
+              click={props.preQualSubmit}
+              loading={props.loading}
+            />}
+          </Button.Group>
         </Menu.Item>
       : !props.location.pathname.includes('/business-application') &&
         (
