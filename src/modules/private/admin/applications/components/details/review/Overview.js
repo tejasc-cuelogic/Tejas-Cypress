@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button } from 'semantic-ui-react';
 import { FormInput } from '../../../../../../../theme/form';
@@ -16,6 +17,7 @@ export default class Overview extends Component {
       <div className="inner-content-spacer">
         <Header as="h5">
           Overview
+          {/* <Link onClick={addMoreCriticalPoint}>+ Add Critical Point</Link> */}
           <Button color="violet" className="ghost-button pull-right" onClick={addMoreCriticalPoint}>+ Add Critical Point</Button>
         </Header>
         {

@@ -148,10 +148,13 @@ h6{
 a{
 	color:@link-color;
 	&:hover{
-		text-decoration:underline;
+		text-decoration:underline !important;
 	}
 	&.inverted{
 		color:@white;
+	}
+	&.secondary-link{
+		color:@primary-two !important;
 	}
 }
 a.text-link{

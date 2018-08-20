@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Table, Icon, Input, Button, Item } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 export default class Miscellaneous extends Component {
   render() {
     return (
-      <div className="inner-content-spacer">
-        <Header as="h5">
-        Social Media
-        </Header>
+      <Aux>
+        <Header as="h5">Social Media</Header>
         <Table basic compact inverted className="grey-table">
           <Table.Header>
             <Table.Row>
@@ -60,9 +59,11 @@ export default class Miscellaneous extends Component {
           </Table.Body>
         </Table>
         <Header as="h5">
-        Other Documentation Uploads
+          Other Documentation Uploads
+          <Header.Subheader>
+            (e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)
+          </Header.Subheader>
         </Header>
-        <p>(e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)</p>
         <Table basic compact inverted className="grey-table">
           <Table.Header>
             <Table.Row>
@@ -96,15 +97,15 @@ export default class Miscellaneous extends Component {
             </Table.Row>
             <Table.Row>
               <Table.Cell colSpan="3">
-                <Button color="blue" className="ghost-button">+ Add new document</Button>
+                <Link to="/" className="secondary-link"><b>+ Add new document</b></Link>
               </Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
         <Header as="h5">
-        NS Admin Uploaded Documents
+          NS Admin Uploaded Documents
+          <Header.Subheader>Uploaded via the Activity History</Header.Subheader>
         </Header>
-        <p>Uploaded via the Activity History</p>
         <div className="featured-section">
           <Item.Group relaxed="very">
             <Item>
@@ -146,7 +147,7 @@ export default class Miscellaneous extends Component {
             </Item>
           </Item.Group>
         </div>
-      </div>
+      </Aux>
     );
   }
 }
