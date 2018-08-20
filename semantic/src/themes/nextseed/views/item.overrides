@@ -107,16 +107,13 @@
             color: @neutral;
             font-size: @14px;
             font-weight: @normal;
-            .icon-link {
-                font-size: @18px;
-                vertical-align: middle;
-            }
             a {
                 color: @primary-two;
                 font-weight: @bold;
             }
             span {
                 margin: 0 @30px;
+                font-size: @13px;
             }
         }
         .description {

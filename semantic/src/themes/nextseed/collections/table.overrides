@@ -144,6 +144,7 @@
     }
     &.inverted.grey-table {
         background: @neutral-offwhite;
+        padding-bottom: @7px;
         th {
             color: @neutral-middark !important;
             border-color: @neutral-midwhite !important;
@@ -152,11 +153,8 @@
             background: @white;
             padding: @5px;
         }
-        a {
-            font-size: @18px;
-            &:hover {
-                text-decoration: none;
-            }
+        a:hover {
+            text-decoration: none;
         }
         .ui.button.ghost-button {
             padding: 0;
