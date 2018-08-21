@@ -25,7 +25,12 @@ export default class NeedHelpModal extends Component {
     e.preventDefault();
     this.props.businessAppStore.needHelpFormSubmit().then(() => {
       Helper.toast('Business application saved!', 'success');
-      this.props.history.push('/app/dashboard');
+      this.props.history.goBack();
+      // if (this.props.isPublic) {
+      //   this.props.history.push('/');
+      // } else {
+      //   this.props.history.push('/app/dashboard');
+      // }
     });
   }
 
