@@ -372,6 +372,15 @@ export class BusinessAppStore {
   }
 
   @action
+  businessDetailsDateChange = (field, date, index = -1) => {
+    this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(
+      this.BUSINESS_DETAILS_FRM,
+      { name: field, value: date },
+      'owner',
+      index,
+    );
+  }
+  @action
   businessDetailsMaskingChange = (field, values, subFormName = '', index = -1) => {
     if (subFormName) {
       this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../../../theme/form';
+import { FormInput, DropZoneConfirm as DropZone, MaskedInput, FormDatePicker } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
@@ -48,6 +49,7 @@ export default class BusinessDetails extends Component {
       addMoreForms,
       businessDetailsMaskingChange,
       formReadOnlyMode,
+      businessDetailsDateChange,
     } = this.props.businessAppStore;
     return (
       <Grid container>
@@ -183,29 +185,26 @@ export default class BusinessDetails extends Component {
                     </Header>
                     <div className="field-wrap">
                       <Form.Group widths="equal">
-                        <FormInput
-                          disabled={formReadOnlyMode}
-                          type="text"
-                          name="fullLegalName"
-                          fielddata={owner.fullLegalName}
-                          changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
-                        />
+                        {
+                          ['fullLegalName', 'title'].map(field => (
+                            <FormInput
+                              disabled={formReadOnlyMode}
+                              key={field}
+                              type="text"
+                              name={field}
+                              fielddata={owner[field]}
+                              changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
+                            />
+                          ))
+                        }
+                      </Form.Group>
+                      <Form.Group widths="equal">
                         <MaskedInput
                           disabled={formReadOnlyMode}
                           number
                           type="text"
                           name="yearsOfExp"
                           fielddata={owner.yearsOfExp}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
-                        />
-                      </Form.Group>
-                      <Form.Group widths="equal">
-                        <MaskedInput
-                          disabled={formReadOnlyMode}
-                          ssn
-                          type="text"
-                          name="ssn"
-                          fielddata={owner.ssn}
                           changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                         />
                         <MaskedInput
@@ -218,27 +217,44 @@ export default class BusinessDetails extends Component {
                         />
                       </Form.Group>
                       <Form.Group widths="equal">
-                        {
-                          ['linkedInUrl', 'title'].map(field => (
-                            <FormInput
-                              disabled={formReadOnlyMode}
-                              key={field}
-                              type="text"
-                              name={field}
-                              fielddata={owner[field]}
-                              changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
-                            />
-                          ))
-                        }
+                        <FormDatePicker
+                          type="text"
+                          name="dob"
+                          maxDate={moment()}
+                          placeholderText={owner.dateOfService.placeHolder}
+                          fielddata={owner.dateOfService}
+                          selected={owner.dateOfService.value ?
+                            moment(owner.dateOfService.value) : null}
+                          changed={date => businessDetailsDateChange('dateOfService', date, index)}
+                        />
+                        <MaskedInput
+                          disabled={formReadOnlyMode}
+                          ssn
+                          type="text"
+                          name="ssn"
+                          fielddata={owner.ssn}
+                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
+                        />
                       </Form.Group>
-                      <DropZone
-                        disabled={formReadOnlyMode}
-                        name="resume"
-                        fielddata={owner.resume}
-                        ondrop={(files, fieldName) =>
-                          businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
-                        onremove={(e, fieldName) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
-                      />
+                      <Form.Group widths="equal">
+                        <FormInput
+                          disabled={formReadOnlyMode}
+                          type="text"
+                          name="linkedInUrl"
+                          fielddata={owner.linkedInUrl}
+                          changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
+                        />
+                        <Form.Field>
+                          <DropZone
+                            disabled={formReadOnlyMode}
+                            name="resume"
+                            fielddata={owner.resume}
+                            ondrop={(files, fieldName) =>
+                              businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                            onremove={(e, fieldName) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                          />
+                        </Form.Field>
+                      </Form.Group>
                     </div>
                   </Grid.Column>
                 </Grid>

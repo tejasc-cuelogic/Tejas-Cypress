@@ -318,6 +318,9 @@ export const BUSINESS_DETAILS = {
     companyOwnerShip: {
       value: '', label: 'Ownership of Company', error: undefined, rule: 'required|ownerPercentage:companyOwnerShip', placeHolder: '40.0%', customErrors: { required: 'required' },
     },
+    dateOfService: {
+      value: null, label: 'Date of Service', error: undefined, rule: 'required', placeHolder: 'Select date', customErrors: { required: 'required' },
+    },
     linkedInUrl: {
       value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional|url', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },
     },
