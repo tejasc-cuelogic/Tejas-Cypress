@@ -388,3 +388,35 @@ export const CLOSE = {
     },
   }],
 };
+
+export const SOCIAL_MEDIA = {
+  data: [{
+    label: {
+      value: '',
+      label: '',
+      placeHolder: 'e.g. Facebook',
+      error: undefined,
+      rule: 'string',
+      customErrors: {
+        required: '* required.',
+      },
+    },
+    url: {
+      value: '',
+      label: '',
+      placeHolder: 'Enter here...',
+      error: undefined,
+      rule: 'url',
+      customErrors: {
+        required: '* required.',
+      },
+    },
+  }],
+};
+
+export const SOCIAL_MEDIA_LABELS = [
+  { key: 'Facebook', value: 'facebook', text: 'Facebook' },
+  { key: 'Twitter', value: 'twitter', text: 'Twitter' },
+  { key: 'Instagram', value: 'instagram', text: 'Instagram' },
+  { key: 'Linkedin', value: 'linkedin', text: 'linkedin' },
+];

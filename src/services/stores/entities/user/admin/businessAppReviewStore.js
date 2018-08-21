@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
+import { SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -15,6 +15,7 @@ export class BusinessAppReviewStore {
   @observable USES_FRM = Validator.prepareFormObject(USES);
   @observable LAUNCH_FRM = Validator.prepareFormObject(LAUNCH);
   @observable CLOSE_FRM = Validator.prepareFormObject(CLOSE);
+  @observable SOCIAL_MEDIA_FRM = Validator.prepareFormObject(SOCIAL_MEDIA);
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
@@ -221,5 +222,11 @@ export class BusinessAppReviewStore {
   contingenciesEleChange = (e, formName, result, index) => {
     this.formChangeWithIndex(e, result, formName, index);
   };
+
+  @action
+  socialMediaChange = (e, result, index) => {
+    console.log(result);
+    this.formChangeWithIndex(e, result, 'SOCIAL_MEDIA_FRM', index);
+  }
 }
 export default new BusinessAppReviewStore();
