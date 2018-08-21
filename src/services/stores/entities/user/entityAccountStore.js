@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import { isEmpty, find } from 'lodash';
 import graphql from 'mobx-apollo';
+import React from 'react';
 import {
   ENTITY_FIN_INFO,
   ENTITY_GEN_INFO,
@@ -14,6 +15,7 @@ import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
 import Helper from '../../../../helper/utility';
+import { NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 
 class EntityAccountStore {
@@ -260,7 +262,14 @@ class EntityAccountStore {
         fetchPolicy: 'network-only',
         onFetch: (fData) => {
           if (fData && fData.checkEntityTaxIdCollision.alreadyExists) {
-            this.GEN_INFO_FRM.fields.taxId.error = 'Tax ID is already existed in our system.';
+            const setErrorMessage = (
+              <span>
+                There was an issue with the information you submitted.
+                Please double-check and try again.
+                If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href={`mailto:${NS_SITE_EMAIL_SUPPORT}`}>{ NS_SITE_EMAIL_SUPPORT }</a>
+              </span>
+            );
+            uiStore.setErrors(setErrorMessage);
           }
         },
         onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
