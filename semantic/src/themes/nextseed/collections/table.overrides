@@ -142,25 +142,18 @@
             border-top: 0;
         }
     }
-    &.inverted.grey-table {
+    &.basic.grey-table {
         background: @neutral-offwhite;
         color: @neutral;
         th {
-            color: @neutral-middark !important;
-            border-color: @neutral-midwhite !important;
+            border-color: @neutral-midwhite;
+        }
+        tr td{
+            border:none;
         }
         .ui.input>input {
             background: @white;
             padding: @5px;
-        }
-        a {
-            font-size: @18px;
-            &:hover {
-                text-decoration: none;
-            }
-        }
-        .ui.button.ghost-button {
-            padding: 0;
         }
     }
 }

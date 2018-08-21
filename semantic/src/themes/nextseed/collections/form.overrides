@@ -86,6 +86,26 @@
     textarea{
         border-bottom:@border-color 1px solid;
     }
+    .ui.table{
+        input:not([type]),
+        input[type=date],
+        input[type=datetime-local],
+        input[type=email],
+        input[type=file],
+        input[type=number],
+        input[type=password],
+        input[type=search],
+        input[type=tel],
+        input[type=text],
+        input[type=time],
+        input[type=url],
+        textarea{
+            padding:@5px;
+            background-color:@white;
+            border-radius:@4px;
+            border:@border-color 1px solid;
+        }
+    }
     /*  Inverted Form  */
     &.inverted{
         input:not([type]),

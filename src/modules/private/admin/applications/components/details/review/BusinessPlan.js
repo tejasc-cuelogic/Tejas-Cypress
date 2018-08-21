@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'semantic-ui-react';
 import { FormTextarea, MaskedInput, FormInput, DropZone, FormDatePicker } from '../../../../../../../theme/form';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('businessAppReviewStore', 'uiStore')
 @observer
@@ -51,11 +52,9 @@ export default class BusinessPlan extends Component {
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
-      <div className="inner-content-spacer">
+      <Aux>
         <Form>
-          <Header as="h5">
-            Location feasibility
-          </Header>
+          <Header as="h4">Location feasibility</Header>
           <FormTextarea
             name="locationFeasibility"
             fielddata={BUSINESS_PLAN_FRM.fields.locationFeasibility}
@@ -64,21 +63,22 @@ export default class BusinessPlan extends Component {
             hidelabel
           />
           <Divider section />
-          <Header as="h5">
+          <Header as="h4">
             Control Persons
-            <Button color="blue" className="ghost-button" onClick={() => addMore('CONTROL_PERSONS_FRM')} >+ Add Control Person</Button>
+            <Link to={this.props.match.url} className="link" onClick={() => addMore('CONTROL_PERSONS_FRM')}><small>+ Add Control Person</small></Link>
           </Header>
           {
-              CONTROL_PERSONS_FRM.fields.data.length ?
-              CONTROL_PERSONS_FRM.fields.data.map((controlPerson, index) => (
-                <Aux>
-                  <div className="mb-10">
-                    <label>{`Control Person ${index + 1}`}</label>
-                    <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'CONTROL_PERSONS_FRM')}>
-                      <Icon className="ns-close-circle" color="grey" />
-                    </Link>
-                  </div>
-                  <Form.Group widths="equal">
+            CONTROL_PERSONS_FRM.fields.data.length ?
+            CONTROL_PERSONS_FRM.fields.data.map((controlPerson, index) => (
+              <Aux>
+                <Header as="h6">
+                  {`Control Person ${index + 1}`}
+                  <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'CONTROL_PERSONS_FRM')}>
+                    <Icon className="ns-close-circle" color="grey" />
+                  </Link>
+                </Header>
+                <div className="featured-section">
+                  <Form.Group widths={3}>
                     <FormInput
                       name="name"
                       fielddata={controlPerson.name}
@@ -129,8 +129,9 @@ export default class BusinessPlan extends Component {
                       />
                     </Form.Field>
                   </Form.Group>
-                </Aux>
-              )) : <p>...Loading</p>
+                </div>
+              </Aux>
+            )) : <InlineLoader />
           }
           <Divider section />
           {
@@ -147,15 +148,11 @@ export default class BusinessPlan extends Component {
               </Aux>
             ))
           }
-          <Header as="h5">
-            Sources and Uses Chart
-          </Header>
+          <Header as="h4">Sources and Uses Chart</Header>
           <Grid columns={2}>
             <Grid.Column>
-              <Header as="h6">
-                Sources
-              </Header>
-              <Table inverted className="grey-table">
+              <Header as="h6">Sources</Header>
+              <Table basic compact className="grey-table">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -165,56 +162,51 @@ export default class BusinessPlan extends Component {
                 </Table.Header>
                 <Table.Body>
                   {
-                  SOURCES_FRM.fields.data.length ?
-                  SOURCES_FRM.fields.data.map((source, index) => (
-                    <Table.Row key={source}>
-                      <Table.Cell collapsing>
-                        <FormInput
-                          name="name"
-                          fielddata={source.name}
-                          changed={(e, result) => sourceEleChange(e, result, index)}
-                        />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <MaskedInput
-                          prefix="$"
-                          currency
-                          name="amount"
-                          fielddata={source.amount}
-                          changed={values => sourceMaskChange(values, index)}
-                        />
-                      </Table.Cell>
-                      <Table.Cell collapsing>
-                        <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'SOURCES_FRM')} >
-                          <Icon className="ns-close-circle" color="grey" />
-                        </Link>
-                      </Table.Cell>
-                    </Table.Row>
-                  )) : ''
+                    SOURCES_FRM.fields.data.length ?
+                    SOURCES_FRM.fields.data.map((source, index) => (
+                      <Table.Row key={source}>
+                        <Table.Cell>
+                          <FormInput
+                            name="name"
+                            fielddata={source.name}
+                            changed={(e, result) => sourceEleChange(e, result, index)}
+                          />
+                        </Table.Cell>
+                        <Table.Cell>
+                          <MaskedInput
+                            prefix="$"
+                            currency
+                            name="amount"
+                            fielddata={source.amount}
+                            changed={values => sourceMaskChange(values, index)}
+                            ishidelabel
+                          />
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                          <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'SOURCES_FRM')} >
+                            <Icon className="ns-close-circle" color="grey" />
+                          </Link>
+                        </Table.Cell>
+                      </Table.Row>
+                    )) : ''
                   }
                   <Table.Row>
-                    <Table.Cell collapsing>
-                      <Button color="blue" className="ghost-button" onClick={() => addMore('SOURCES_FRM')} >+ Add Source</Button>
+                    <Table.Cell colSpan="3">
+                      <Button color="blue" className="link-button" onClick={() => addMore('SOURCES_FRM')} >+ Add Source</Button>
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
                 <Table.Footer>
                   <Table.Row>
-                    <Table.Cell>
-                      Total
-                    </Table.Cell>
-                    <Table.Cell>
-                      {totalSourcesAmount}
-                    </Table.Cell>
+                    <Table.HeaderCell>Total</Table.HeaderCell>
+                    <Table.HeaderCell colSpan="2">{totalSourcesAmount}</Table.HeaderCell>
                   </Table.Row>
                 </Table.Footer>
               </Table>
             </Grid.Column>
             <Grid.Column>
-              <Header as="h6">
-              Uses
-              </Header>
-              <Table inverted className="grey-table">
+              <Header as="h6">Uses</Header>
+              <Table basic compact className="grey-table">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -227,7 +219,7 @@ export default class BusinessPlan extends Component {
                   USES_FRM.fields.data.length ?
                   USES_FRM.fields.data.map((use, index) => (
                     <Table.Row key={use[index]}>
-                      <Table.Cell collapsing>
+                      <Table.Cell>
                         <FormInput
                           name="name"
                           fielddata={use.name}
@@ -241,10 +233,11 @@ export default class BusinessPlan extends Component {
                           name="amount"
                           fielddata={use.amount}
                           changed={values => useMaskChange(values, index)}
+                          ishidelabel
                         />
                       </Table.Cell>
                       <Table.Cell collapsing>
-                        <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'USES_FRM')} >
+                        <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'USES_FRM')} >
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
                       </Table.Cell>
@@ -252,19 +245,15 @@ export default class BusinessPlan extends Component {
                   )) : ''
                   }
                   <Table.Row>
-                    <Table.Cell collapsing>
-                      <Button color="blue" className="ghost-button" onClick={() => addMore('USES_FRM')} >+ Add Use</Button>
+                    <Table.Cell colSpan="3">
+                      <Button color="blue" className="link-button" onClick={() => addMore('USES_FRM')} >+ Add Use</Button>
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
                 <Table.Footer>
                   <Table.Row>
-                    <Table.Cell>
-                      Total
-                    </Table.Cell>
-                    <Table.Cell>
-                      {totalUsesAmount}
-                    </Table.Cell>
+                    <Table.HeaderCell>Total</Table.HeaderCell>
+                    <Table.HeaderCell colSpan="2">{totalUsesAmount}</Table.HeaderCell>
                   </Table.Row>
                 </Table.Footer>
               </Table>
@@ -303,7 +292,7 @@ export default class BusinessPlan extends Component {
           size="mini"
           className="deletion"
         />
-      </div>
+      </Aux>
     );
   }
 }
