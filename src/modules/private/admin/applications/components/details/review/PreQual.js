@@ -20,10 +20,8 @@ export default class PreQual extends Component {
       managerEleChange, justificationEleChange, removeData,
     } = this.props.businessAppReviewStore;
     return (
-      <div className="inner-content-spacer">
-        <Header as="h5">
-          Manager
-        </Header>
+      <Aux>
+        <Header as="h4">Manager</Header>
         <Form>
           <FormTextarea
             name="managerOverview"
@@ -32,29 +30,29 @@ export default class PreQual extends Component {
             containerclassname="secondary"
           />
           <Divider section />
-          <Header as="h5">
+          <Header as="h4">
             Justifications
-            <Button color="blue" className="ghost-button" onClick={() => addMore('JUSTIFICATIONS_FRM')}>+Add Justification</Button>
+            <Link to={this.props.match.url} className="link" onClick={() => addMore('JUSTIFICATIONS_FRM')}><small>+Add Justification</small></Link>
           </Header>
           {
-              JUSTIFICATIONS_FRM.fields.data.length ?
-              JUSTIFICATIONS_FRM.fields.data.map((justification, index) => (
-                <Aux>
-                  <div className="mb-10">
-                    <label>{`Justification ${index + 1}`}</label>
-                    <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM')}>
-                      <Icon className="ns-close-circle" color="grey" />
-                    </Link>
-                  </div>
-                  <FormTextarea
-                    name="justification"
-                    fielddata={justification.justification}
-                    changed={(e, result) => justificationEleChange(e, result, index)}
-                    containerclassname="secondary"
-                    hidelabel
-                  />
-                </Aux>
-              )) : null
+            JUSTIFICATIONS_FRM.fields.data.length ?
+            JUSTIFICATIONS_FRM.fields.data.map((justification, index) => (
+              <Aux>
+                <div className="mb-10">
+                  <label>{`Justification ${index + 1}`}</label>
+                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM')}>
+                    <Icon className="ns-close-circle" color="grey" />
+                  </Link>
+                </div>
+                <FormTextarea
+                  name="justification"
+                  fielddata={justification.justification}
+                  changed={(e, result) => justificationEleChange(e, result, index)}
+                  containerclassname="secondary"
+                  hidelabel
+                />
+              </Aux>
+            )) : null
           }
           <Button disabled={!(MANAGERS_FRM.meta.isValid && JUSTIFICATIONS_FRM.meta.isValid)} primary className="relaxed pull-right" >APPROVED</Button>
         </Form>
@@ -67,7 +65,7 @@ export default class PreQual extends Component {
           size="mini"
           className="deletion"
         />
-      </div>
+      </Aux>
     );
   }
 }
