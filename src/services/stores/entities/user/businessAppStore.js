@@ -3,7 +3,7 @@ import { forEach, includes, find, isEmpty } from 'lodash';
 import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { GqlClient as publicClient } from '../../../../api/publicApi';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import {
   BUSINESS_PRE_QUALIFICATION_BASIC,
   BUSINESS_PRE_QUALIFICATION,
@@ -711,7 +711,7 @@ export class BusinessAppStore {
     const payload = Validator.ExtractValues(this.NEED_HELP_FRM.fields);
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
-      publicClient
+      clientPublic
         .mutate({
           mutation: helpAndQuestion,
           variables: {
