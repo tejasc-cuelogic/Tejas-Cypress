@@ -50,12 +50,9 @@ mutation submitApplication($applicationId: String!) {
 }
 `;
 
-export const needHelpFormSubmit = gql`
-mutation needHelpFormSubmit($applicationId: String!) {
-  needHelpFormSubmit(applicationId: $applicationId) {
-    status
-    id
-  }
+export const helpAndQuestion = gql`
+mutation helpAndQuestion($question: helpAndQuestionInput!) {
+  helpAndQuestion(question: $question)
 }
 `;
 

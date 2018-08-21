@@ -60,8 +60,8 @@ export default class NeedHelpModal extends Component {
               ))
             }
             <MaskedInput
-              name="phoneNumber"
-              fielddata={fields.phoneNumber}
+              name="phone"
+              fielddata={fields.phone}
               changed={(values, field) => businessAppEleMaskChange(values, field, 'NEED_HELP_FRM')}
             />
             <FormTextarea

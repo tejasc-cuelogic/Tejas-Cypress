@@ -3,6 +3,7 @@ import { forEach, includes, find, isEmpty } from 'lodash';
 import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as publicClient } from '../../../../api/publicApi';
 import {
   BUSINESS_PRE_QUALIFICATION_BASIC,
   BUSINESS_PRE_QUALIFICATION,
@@ -26,7 +27,7 @@ import {
   upsertBusinessApplicationInformationBusinessDetails,
   upsertBusinessApplicationInformationDocumentation,
   submitApplication,
-  needHelpFormSubmit,
+  helpAndQuestion,
 } from '../../queries/businessApplication';
 import { uiStore, navStore, userDetailsStore, businessAppLendioStore } from '../../index';
 import { fileUpload } from '../../../actions';
@@ -707,13 +708,14 @@ export class BusinessAppStore {
 
   @action
   needHelpFormSubmit = () => {
+    const payload = Validator.ExtractValues(this.NEED_HELP_FRM.fields);
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
-      client
+      publicClient
         .mutate({
-          mutation: needHelpFormSubmit,
+          mutation: helpAndQuestion,
           variables: {
-            applicationId: this.currentApplicationId,
+            question: payload,
           },
         })
         .then((result) => {

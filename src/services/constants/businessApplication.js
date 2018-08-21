@@ -73,7 +73,7 @@ export const NEED_HELP = {
   email: {
     value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g abc@xyz.com', customErrors: { required: 'required' },
   },
-  phoneNumber: {
+  phone: {
     value: '', label: 'Phone', error: undefined, rule: 'required|maskedField:10', placeHolder: '(123)-456-7890', customErrors: { required: 'required', maskedField: 'required' },
   },
   question: {
