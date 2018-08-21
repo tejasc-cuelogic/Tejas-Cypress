@@ -8,17 +8,20 @@ import { FormInput } from '../../../../../../../theme/form';
 @inject('businessAppReviewStore')
 @observer
 export default class Overview extends Component {
+  addMore = (e) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.addMore('OVERVIEW_FRM');
+  }
   render() {
     const {
       OVERVIEW_FRM,
-      addMore,
       overviewEleChange,
     } = this.props.businessAppReviewStore;
     return (
       <div className="inner-content-spacer">
         <Header as="h4">
           Overview
-          <Link to={this.props.match.url} className="link" onClick={() => addMore('OVERVIEW_FRM')}><small>+ Add Critical Point</small></Link>
+          <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'OVERVIEW_FRM')}><small>+ Add Critical Point</small></Link>
         </Header>
         <Form>
           {
