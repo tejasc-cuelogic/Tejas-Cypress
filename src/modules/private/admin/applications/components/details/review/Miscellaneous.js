@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Table, Icon, Input, Button, Item } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 export default class Miscellaneous extends Component {
   render() {
     return (
-      <div className="inner-content-spacer">
-        <Header as="h5">
-        Social Media
-        </Header>
+      <Aux>
+        <Header as="h5">Social Media</Header>
         <Table basic compact inverted className="grey-table">
           <Table.Header>
             <Table.Row>
@@ -26,9 +25,9 @@ export default class Miscellaneous extends Component {
                 <Input size="small" placeholder="Enter here..." fluid value="www.facebook.com/fbbusiness_name1" />
               </Table.Cell>
               <Table.Cell collapsing>
-                <Link to="/">
+                <Button icon className="link-button">
                   <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                </Button>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -39,9 +38,9 @@ export default class Miscellaneous extends Component {
                 <Input size="small" fluid placeholder="Enter here..." />
               </Table.Cell>
               <Table.Cell>
-                <Link to="/">
+                <Button icon className="link-button">
                   <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                </Button>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -52,17 +51,19 @@ export default class Miscellaneous extends Component {
                 <Input size="small" fluid placeholder="Enter here..." />
               </Table.Cell>
               <Table.Cell>
-                <Link to="/">
+                <Button icon className="link-button">
                   <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                </Button>
               </Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
         <Header as="h5">
-        Other Documentation Uploads
+          Other Documentation Uploads
+          <Header.Subheader>
+            (e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)
+          </Header.Subheader>
         </Header>
-        <p>(e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)</p>
         <Table basic compact inverted className="grey-table">
           <Table.Header>
             <Table.Row>
@@ -78,9 +79,9 @@ export default class Miscellaneous extends Component {
               </Table.Cell>
               <Table.Cell />
               <Table.Cell collapsing>
-                <Link to="/">
+                <Button icon className="link-button">
                   <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                </Button>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -89,22 +90,22 @@ export default class Miscellaneous extends Component {
               </Table.Cell>
               <Table.Cell />
               <Table.Cell>
-                <Link to="/">
+                <Button icon className="link-button">
                   <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                </Button>
               </Table.Cell>
             </Table.Row>
             <Table.Row>
-              <Table.Cell>
-                <Button color="blue" className="ghost-button">+ Add new document</Button>
+              <Table.Cell colSpan="3">
+                <Link to="/" className="secondary-link"><b>+ Add new document</b></Link>
               </Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
         <Header as="h5">
-        NS Admin Uploaded Documents
+          NS Admin Uploaded Documents
+          <Header.Subheader>Uploaded via the Activity History</Header.Subheader>
         </Header>
-        <p>Uploaded via the Activity History</p>
         <div className="featured-section">
           <Item.Group relaxed="very">
             <Item>
@@ -114,9 +115,9 @@ export default class Miscellaneous extends Component {
                     <Icon className="ns-file" color="blue" />Business_Plan.pdf
                   </Link>
                   <span>Attached: 7/10/2018 by Brandon Black</span>
-                  <Link to="/" className="icon-link">
+                  <Button icon className="link-button">
                     <Icon className="ns-close-circle" color="grey" />
-                  </Link>
+                  </Button>
                 </Item.Header>
                 <Item.Description className="caption">
                   <i>
@@ -133,9 +134,9 @@ export default class Miscellaneous extends Component {
                     <Icon className="ns-file" color="blue" />Business_Plan_2.pdf
                   </Link>
                   <span>Attached: 7/12/2018 by Barbara Birsands</span>
-                  <Link to="/" className="icon-link">
+                  <Button icon className="link-button">
                     <Icon className="ns-close-circle" color="grey" />
-                  </Link>
+                  </Button>
                 </Item.Header>
                 <Item.Description className="caption">
                   <i>
@@ -146,7 +147,7 @@ export default class Miscellaneous extends Component {
             </Item>
           </Item.Group>
         </div>
-      </div>
+      </Aux>
     );
   }
 }

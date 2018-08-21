@@ -9,8 +9,16 @@
     }
 }
 .ui.items{
-    >.item>.content>.description {
-        color: @neutral-middark;
+    >.item {
+        &:first-child {
+            margin-top: 0 !important;
+        }
+        &:last-child {
+            margin-bottom: 0 !important;
+        }
+        >.content>.description {
+            color: @neutral-middark;
+        }
     }
     &.messages{
         .item{
@@ -94,28 +102,22 @@
 }
 .inner-content-spacer .featured-section {
     padding: @14px @20px;
-    .ui.items>.item {
-        margin: 0 0 @28px;
-        .content {
-            .header {
-                color: @neutral;
-                font-size: @14px;
-                font-weight: @normal;
-                .icon-link {
-                    font-size: @18px;
-                    vertical-align: middle;
-                }
-                a {
-                    color: @primary-two;
-                    font-weight: @bold;
-                }
-                span {
-                    margin: 0 @30px;
-                }
+    .ui.items>.item .content {
+        .header {
+            color: @neutral;
+            font-size: @14px;
+            font-weight: @normal;
+            a {
+                color: @primary-two;
+                font-weight: @bold;
             }
-            .description {
-                color: @neutral;
+            span {
+                margin: 0 @30px;
+                font-size: @13px;
             }
+        }
+        .description {
+            color: @neutral;
         }
     }
 }

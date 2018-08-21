@@ -85,11 +85,11 @@
 	}
 }
 
-.ui.header{
-    .sub.header{
-        font-weight:inherit;
-    }
-}
+// .ui.header{
+//     .sub.header{
+//         font-weight:inherit;
+//     }
+// }
 h6.ui.header{
     .sub.header{
         font-size:@relative12px;
