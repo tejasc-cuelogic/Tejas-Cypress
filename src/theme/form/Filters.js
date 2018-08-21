@@ -1,7 +1,8 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
+import Aux from 'react-aux';
 import { toJS } from 'mobx';
-import { Grid, Input, Dropdown, Form, Label, Icon, List } from 'semantic-ui-react';
+import { Grid, Input, Dropdown, Form, Label, Icon, List, Button } from 'semantic-ui-react';
 import moment from 'moment';
 import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
@@ -26,16 +27,27 @@ export const DropdownFilter = props => (
 );
 
 export const ByKeyword = ({
-  w, executeSearch, placeholder, fLabel,
+  w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon,
 }) => (
-  <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
-    <Form>
-      <Form.Field inverted>
-        {fLabel && <label className="invisible">{placeholder}</label>}
-        <Input fluid onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />
-      </Form.Field>
-    </Form>
-  </Grid.Column>
+  <Aux>
+    <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
+      <Form>
+        <Form.Field inverted>
+          {fLabel && <label className="invisible">{placeholder}</label>}
+          <Input fluid onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />
+        </Form.Field>
+      </Form>
+    </Grid.Column>
+    <Grid.Column width={3} textAlign="center">
+      <span className="filter-count">{requestState && requestState.search ? Object.keys(requestState.search).length : 0}</span>
+      <Button icon color="blue" onClick={toggleSearch} className="link-button">
+        {filters ? <Aux>Hide Filters <Icon className="ns-caret-up" /></Aux> :
+        <Aux>Show Filters <Icon className="ns-caret-down" /></Aux>
+        }
+      </Button>
+    </Grid.Column>
+    {addon}
+  </Aux>
 );
 
 export const DateRangeFilter = props => (

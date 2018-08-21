@@ -6,13 +6,13 @@ import { List, Button } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import Helper from '../../../../../helper/utility';
 import PrivateLayout from '../../../shared/PrivateHOC';
-import { Spinner } from '../../../../../theme/shared';
+import { Spinner, InlineLoader } from '../../../../../theme/shared';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/manage/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 
