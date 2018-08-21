@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { Header, Container, Menu, Segment, Button, Grid } from 'semantic-ui-react';
-import Aux from 'react-aux';
+import { InlineLoader } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../helper';
 
 const getModule = component => Loadable({
   loader: () => import(`./fundingOptions/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 

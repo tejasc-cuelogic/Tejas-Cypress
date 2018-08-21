@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Grid, Form, Input } from 'semantic-ui-react';
 import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
+import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('educationStore')
 @observer
@@ -24,7 +25,7 @@ export default class KnowledgeBase extends Component {
     } = this.props.educationStore;
     const modul = 'faq';
     if (loading('Faq')) {
-      return 'loading...';
+      return <InlineLoader />;
     }
     return (
       <div>

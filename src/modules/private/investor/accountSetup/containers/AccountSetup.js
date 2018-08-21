@@ -9,6 +9,7 @@ import ProgressCard from '../components/ProgressCard';
 import IdentityVerification from './identityVerification';
 import EstablishProfile from './establishProfile';
 import AccountCreation from './accountCreation';
+import { InlineLoader } from '../../../../../theme/shared';
 import {
   INVESTMENT_ACCOUNT_TYPES,
 } from '../../../../../constants/account';
@@ -42,7 +43,7 @@ export default class AccountSetup extends Component {
       <PrivateLayout
         {...this.props}
         P5={!signupStatus.finalStatus ? !currentUser.loading ?
-          <StickyNotification signupStatus={signupStatus} /> : 'Loading...' : ''}
+          <StickyNotification signupStatus={signupStatus} /> : <InlineLoader /> : ''}
       >
         <Header as="h4">{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!currentUser.loading ?
@@ -51,7 +52,8 @@ export default class AccountSetup extends Component {
             signupStatus={signupStatus}
             getStepStatus={getStepStatus}
             navToAccTypes={this.navToAccTypes}
-          /> : 'Loading...'
+          /> : <InlineLoader />
+
         }
         <Switch>
           <Route exact path={`${match.url}/identity-verification/:step`} component={IdentityVerification} />
