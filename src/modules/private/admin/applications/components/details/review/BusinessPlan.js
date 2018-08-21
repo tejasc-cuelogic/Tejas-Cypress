@@ -53,11 +53,15 @@ export default class BusinessPlan extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
+          <Header as="h5">
+            Location feasibility
+          </Header>
           <FormTextarea
             name="locationFeasibility"
             fielddata={BUSINESS_PLAN_FRM.fields.locationFeasibility}
             changed={businessPlanEleChange}
             containerclassname="secondary"
+            hidelabel
           />
           <Divider section />
           <Header as="h5">

@@ -4,8 +4,11 @@ export const OVERVIEW = {
       value: '',
       label: 'Critical Point',
       error: undefined,
-      rule: 'required',
+      rule: 'string',
       placeHolder: 'Enter here...',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
     },
   }],
 };
@@ -28,6 +31,9 @@ export const JUSTIFICATIONS = {
       error: undefined,
       rule: 'required',
       placeHolder: 'Enter here...',
+      customErrors: {
+        required: '* required.',
+      },
     },
   }],
 };
@@ -214,6 +220,10 @@ export const CONTROL_PERSONS = {
       error: undefined,
       rule: 'required|string',
       placeHolder: 'John Doe',
+      customErrors: {
+        required: '* required.',
+        string: 'Allowed string only.',
+      },
     },
     ownership: {
       value: '',
@@ -221,6 +231,9 @@ export const CONTROL_PERSONS = {
       error: undefined,
       rule: 'required',
       placeHolder: '10.0%',
+      customErrors: {
+        required: '* required.',
+      },
     },
     derogatoryMarks: {
       value: '',
@@ -228,6 +241,9 @@ export const CONTROL_PERSONS = {
       error: undefined,
       rule: 'required',
       placeHolder: 'Enter here',
+      customErrors: {
+        required: '* required.',
+      },
     },
     experience: {
       value: '',
@@ -235,6 +251,9 @@ export const CONTROL_PERSONS = {
       error: undefined,
       rule: 'required',
       placeHolder: 'Experience Comment',
+      customErrors: {
+        required: '* required.',
+      },
     },
     creditScore: {
       value: '',
@@ -242,6 +261,9 @@ export const CONTROL_PERSONS = {
       error: undefined,
       rule: 'required',
       placeHolder: 'Credit Score Comment',
+      customErrors: {
+        required: '* required.',
+      },
     },
     experienceFile: {
       label: '',
@@ -251,6 +273,9 @@ export const CONTROL_PERSONS = {
       preSignedUrl: '',
       fileId: '',
       fileData: '',
+      customErrors: {
+        required: '* required.',
+      },
     },
     creditScoreFile: {
       label: '',
@@ -260,6 +285,9 @@ export const CONTROL_PERSONS = {
       preSignedUrl: '',
       fileId: '',
       fileData: '',
+      customErrors: {
+        required: '* required.',
+      },
     },
   }],
 };
@@ -271,12 +299,19 @@ export const SOURCES = {
       label: '',
       error: undefined,
       rule: 'string',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
     },
+
     amount: {
       value: '',
       label: '',
       error: undefined,
       rule: 'numeric',
+      customErrors: {
+        numeric: 'Allowed numbers only.',
+      },
     },
   }],
 };
@@ -288,12 +323,18 @@ export const USES = {
       label: '',
       error: undefined,
       rule: 'string',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
     },
     amount: {
       value: '',
       label: '',
       error: undefined,
       rule: 'numeric',
+      customErrors: {
+        numeric: 'Allowed numbers only.',
+      },
     },
   }],
 };
@@ -306,6 +347,9 @@ export const LAUNCH = {
       error: undefined,
       rule: 'string',
       placeHolder: 'Enter contingency here...',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
     },
     acceptanceCriteria: {
       value: '',
@@ -313,6 +357,9 @@ export const LAUNCH = {
       error: undefined,
       rule: 'string',
       placeHolder: 'Enter acceptance criteria here...',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
     },
   }],
 };
@@ -325,6 +372,9 @@ export const CLOSE = {
       error: undefined,
       rule: 'string',
       placeHolder: 'Enter contingency here...',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
     },
     acceptanceCriteria: {
       value: '',
@@ -332,6 +382,9 @@ export const CLOSE = {
       error: undefined,
       rule: 'string',
       placeHolder: 'Enter acceptance criteria here...',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
     },
   }],
 };

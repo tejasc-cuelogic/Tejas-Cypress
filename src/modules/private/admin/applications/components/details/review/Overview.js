@@ -18,7 +18,7 @@ export default class Overview extends Component {
       <div className="inner-content-spacer">
         <Header as="h5">
           Overview
-          <Button color="blue" className="ghost-button" onClick={() => addMore('OVERVIEW_FRM')}>+Add Critical Point</Button>
+          <Button color="blue" className="ghost-button" onClick={() => addMore('OVERVIEW_FRM')}>+ Add Critical Point</Button>
         </Header>
         <Form>
           {
