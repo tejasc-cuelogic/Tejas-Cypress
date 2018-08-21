@@ -9,18 +9,15 @@ import { FormTextarea } from '../../../../../../../theme/form';
 @inject('businessAppReviewStore')
 @observer
 export default class PreQual extends Component {
-  toggleConfirm = (e, index) => {
+  toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.toggleJustificationConfirmModal(index);
-  }
-  removeJustification = () => {
-    this.props.businessAppReviewStore.removeJustification();
+    this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
   }
   render() {
     const {
       MANAGERS_FRM, JUSTIFICATIONS_FRM,
-      addJustification, justificationConfirmModal,
-      managerEleChange, justificationEleChange,
+      addMore, toggleConfirmModal, confirmModal, confirmModalName,
+      managerEleChange, justificationEleChange, removeData,
     } = this.props.businessAppReviewStore;
     return (
       <div className="inner-content-spacer">
@@ -37,15 +34,15 @@ export default class PreQual extends Component {
           <Divider section />
           <Header as="h5">
             Justifications
-            <Button className="ghost-button" onClick={addJustification}>+Add Justification</Button>
+            <Button color="blue" className="ghost-button" onClick={() => addMore('JUSTIFICATIONS_FRM')}>+Add Justification</Button>
           </Header>
           {
-              JUSTIFICATIONS_FRM.fields.justifications.length ?
-              JUSTIFICATIONS_FRM.fields.justifications.map((justification, index) => (
+              JUSTIFICATIONS_FRM.fields.data.length ?
+              JUSTIFICATIONS_FRM.fields.data.map((justification, index) => (
                 <Aux>
                   <div className="mb-10">
                     <label>{`Justification ${index + 1}`}</label>
-                    <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirm(e, index)}>
+                    <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM')}>
                       <Icon className="ns-close-circle" color="grey" />
                     </Link>
                   </div>
@@ -57,16 +54,16 @@ export default class PreQual extends Component {
                     hidelabel
                   />
                 </Aux>
-              )) : <p>...Loading</p>
+              )) : null
           }
-          <Button disabled={!(MANAGERS_FRM.meta.isValid && JUSTIFICATIONS_FRM.meta.isValid)} primary size="large" className="very relaxed pull-right" >APPROVED</Button>
+          <Button disabled={!(MANAGERS_FRM.meta.isValid && JUSTIFICATIONS_FRM.meta.isValid)} primary className="relaxed pull-right" >APPROVED</Button>
         </Form>
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this justification?"
-          open={justificationConfirmModal}
-          onCancel={this.toggleConfirm}
-          onConfirm={this.removeJustification}
+          open={confirmModal}
+          onCancel={toggleConfirmModal}
+          onConfirm={() => removeData(confirmModalName)}
           size="mini"
           className="deletion"
         />

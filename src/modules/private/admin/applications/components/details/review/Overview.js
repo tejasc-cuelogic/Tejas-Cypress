@@ -11,19 +11,19 @@ export default class Overview extends Component {
   render() {
     const {
       OVERVIEW_FRM,
-      addMoreCriticalPoint,
+      addMore,
       overviewEleChange,
     } = this.props.businessAppReviewStore;
     return (
       <div className="inner-content-spacer">
         <Header as="h5">
           Overview
-          <Button className="ghost-button" onClick={addMoreCriticalPoint}>+Add Critical Point</Button>
+          <Button color="blue" className="ghost-button" onClick={() => addMore('OVERVIEW_FRM')}>+Add Critical Point</Button>
         </Header>
         <Form>
           {
-              OVERVIEW_FRM.fields.overview.length ?
-              OVERVIEW_FRM.fields.overview.map((overview, index) => (
+              OVERVIEW_FRM.fields.data.length ?
+              OVERVIEW_FRM.fields.data.map((overview, index) => (
                 <Aux>
                   <label>{`Critical Point ${index + 1}`}</label>
                   <FormInput
@@ -34,11 +34,11 @@ export default class Overview extends Component {
                     ishidelabel
                   />
                 </Aux>
-              )) : <p>...Loading</p>
+              )) : null
           }
           <Button.Group className="pull-right">
             <Button disabled={!OVERVIEW_FRM.meta.isValid} secondary>Save</Button>
-            <Button disabled={!OVERVIEW_FRM.meta.isValid} primary size="large" className="very relaxed" type="button">Submit for Approval</Button>
+            <Button disabled={!OVERVIEW_FRM.meta.isValid} primary className="relaxed" type="button">Submit for Approval</Button>
           </Button.Group>
         </Form>
       </div>

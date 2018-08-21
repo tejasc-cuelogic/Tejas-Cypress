@@ -1,5 +1,5 @@
 export const OVERVIEW = {
-  overview: [{
+  data: [{
     criticalPoint: {
       value: '',
       label: 'Critical Point',
@@ -21,7 +21,7 @@ export const MANAGERS = {
 };
 
 export const JUSTIFICATIONS = {
-  justifications: [{
+  data: [{
     justification: {
       value: '',
       label: 'Justification',
@@ -207,7 +207,7 @@ export const BUSINESS_PLAN = {
 };
 
 export const CONTROL_PERSONS = {
-  controlPerson: [{
+  data: [{
     name: {
       value: '',
       label: 'Name',
@@ -265,7 +265,7 @@ export const CONTROL_PERSONS = {
 };
 
 export const SOURCES = {
-  sources: [{
+  data: [{
     name: {
       value: '',
       label: '',
@@ -282,7 +282,7 @@ export const SOURCES = {
 };
 
 export const USES = {
-  uses: [{
+  data: [{
     name: {
       value: '',
       label: '',
@@ -294,6 +294,44 @@ export const USES = {
       label: '',
       error: undefined,
       rule: 'numeric',
+    },
+  }],
+};
+
+export const LAUNCH = {
+  data: [{
+    contingency: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'string',
+      placeHolder: 'Enter contingency here...',
+    },
+    acceptanceCriteria: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'string',
+      placeHolder: 'Enter acceptance criteria here...',
+    },
+  }],
+};
+
+export const CLOSE = {
+  data: [{
+    contingency: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'string',
+      placeHolder: 'Enter contingency here...',
+    },
+    acceptanceCriteria: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'string',
+      placeHolder: 'Enter acceptance criteria here...',
     },
   }],
 };

@@ -27,19 +27,9 @@ export default class BusinessPlan extends Component {
     this.props.businessAppReviewStore.removeUploadedData('CONTROL_PERSONS_FRM', field);
     this.props.uiStore.setConfirmBox('');
   }
-  toggleConfirm = (e, index) => {
+  toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.toggleControlPersonConfirmModal(index);
-  }
-  toggleSourcesConfirm = (e, index) => {
-    e.preventDefault();
-    this.props.businessAppReviewStore.toggleSourcesConfirmModal(index);
-  }
-  toggleUsesConfirm = (e, index) => {
-    this.props.businessAppReviewStore.toggleUsesConfirmModal(index);
-  }
-  removeControlPerson = () => {
-    this.props.businessAppReviewStore.removeControlPerson();
+    this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
   }
   render() {
     const {
@@ -47,24 +37,20 @@ export default class BusinessPlan extends Component {
       USES_FRM,
       BUSINESS_PLAN_FRM,
       CONTROL_PERSONS_FRM,
-      controlPersonConfirmModal,
-      addMoreControlPerson,
       businessPlanEleChange,
       businessPlanDateChange,
       controlPersonEleChange,
       controlPersonMaskChange,
       sourceEleChange,
       sourceMaskChange,
-      addMoreSource,
-      removeSource,
-      sourcesConfirmModal,
       totalSourcesAmount,
       useEleChange,
       useMaskChange,
-      addMoreUse,
-      removeUse,
-      usesConfirmModal,
       totalUsesAmount,
+      addMore,
+      confirmModal,
+      confirmModalName,
+      removeData,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
@@ -79,15 +65,15 @@ export default class BusinessPlan extends Component {
           <Divider section />
           <Header as="h5">
             Control Persons
-            <Button color="blue" className="ghost-button" onClick={addMoreControlPerson} >+ Add Control Person</Button>
+            <Button color="blue" className="ghost-button" onClick={() => addMore('CONTROL_PERSONS_FRM')} >+ Add Control Person</Button>
           </Header>
           {
-              CONTROL_PERSONS_FRM.fields.controlPerson.length ?
-              CONTROL_PERSONS_FRM.fields.controlPerson.map((controlPerson, index) => (
+              CONTROL_PERSONS_FRM.fields.data.length ?
+              CONTROL_PERSONS_FRM.fields.data.map((controlPerson, index) => (
                 <Aux>
                   <div className="mb-10">
                     <label>{`Control Person ${index + 1}`}</label>
-                    <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirm(e, index)}>
+                    <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'CONTROL_PERSONS_FRM')}>
                       <Icon className="ns-close-circle" color="grey" />
                     </Link>
                   </div>
@@ -185,8 +171,8 @@ export default class BusinessPlan extends Component {
                 </Table.Header>
                 <Table.Body>
                   {
-                  SOURCES_FRM.fields.sources.length ?
-                  SOURCES_FRM.fields.sources.map((source, index) => (
+                  SOURCES_FRM.fields.data.length ?
+                  SOURCES_FRM.fields.data.map((source, index) => (
                     <Table.Row key={source}>
                       <Table.Cell collapsing>
                         <FormInput
@@ -205,7 +191,7 @@ export default class BusinessPlan extends Component {
                         />
                       </Table.Cell>
                       <Table.Cell collapsing>
-                        <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleSourcesConfirm(e, index)} >
+                        <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'SOURCES_FRM')} >
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
                       </Table.Cell>
@@ -214,7 +200,7 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell collapsing>
-                      <Button color="blue" className="ghost-button" onClick={addMoreSource} >+ Add Source</Button>
+                      <Button color="blue" className="ghost-button" onClick={() => addMore('SOURCES_FRM')} >+ Add Source</Button>
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -244,8 +230,8 @@ export default class BusinessPlan extends Component {
                 </Table.Header>
                 <Table.Body>
                   {
-                  USES_FRM.fields.uses.length ?
-                  USES_FRM.fields.uses.map((use, index) => (
+                  USES_FRM.fields.data.length ?
+                  USES_FRM.fields.data.map((use, index) => (
                     <Table.Row key={use[index]}>
                       <Table.Cell collapsing>
                         <FormInput
@@ -264,7 +250,7 @@ export default class BusinessPlan extends Component {
                         />
                       </Table.Cell>
                       <Table.Cell collapsing>
-                        <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleUsesConfirm(e, index)} >
+                        <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'USES_FRM')} >
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
                       </Table.Cell>
@@ -273,7 +259,7 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell collapsing>
-                      <Button color="blue" className="ghost-button" onClick={addMoreUse} >+ Add Use</Button>
+                      <Button color="blue" className="ghost-button" onClick={() => addMore('USES_FRM')} >+ Add Use</Button>
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -315,28 +301,11 @@ export default class BusinessPlan extends Component {
         />
         <Confirm
           header="Confirm"
-          content="Are you sure you want to remove this control person?"
-          open={controlPersonConfirmModal}
-          onCancel={this.toggleConfirm}
-          onConfirm={this.removeControlPerson}
-          size="mini"
-          className="deletion"
-        />
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this source?"
-          open={sourcesConfirmModal}
-          onCancel={this.toggleSourcesConfirm}
-          onConfirm={removeSource}
-          size="mini"
-          className="deletion"
-        />
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this use?"
-          open={usesConfirmModal}
-          onCancel={this.toggleUsesConfirm}
-          onConfirm={removeUse}
+          content={`Are you sure you want to remove this ${confirmModalName === 'USES_FRM' ? 'use' :
+          confirmModalName === 'SOURCES_FRM' ? 'source' : 'control person'}?`}
+          open={confirmModal}
+          onCancel={this.toggleConfirmModal}
+          onConfirm={() => removeData(confirmModalName)}
           size="mini"
           className="deletion"
         />
