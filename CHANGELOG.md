@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-08-17)
+# 0.0.0 (2018-08-21)
 
 
 ### Bug Fixes
@@ -17,6 +17,7 @@
 ### Features
 
 * **Admin Business Applications[Issue [270](https://chaos.ns.team/nsv2/ns-ops/issues/270) - business-application-admin-screen-business-application-lists-skeleton]:** created skeleton for admin business application list using graph cool stub api with filters ([c45b5f0](https://chaos.ns.team/nsv2/ns-client/commits/c45b5f0))
+* **Admin Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - admin crowdpay accounts manage crowdpay accounts]:** basic implementation with gcool api ([fbf2351](https://chaos.ns.team/nsv2/ns-client/commits/fbf2351))
 * **Agreements for Investor[Issue [293](https://chaos.ns.team/nsv2/ns-ops/issues/293) - Agreements for Investor]:** Agreements for Investor ([d873f6c](https://chaos.ns.team/nsv2/ns-client/commits/d873f6c))
 * **Business Application[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/<ISSUE_NUMBER>) - Lendio prequalification from email url]:** Lendio prequalification from email url ([189f4c0](https://chaos.ns.team/nsv2/ns-client/commits/189f4c0))
 * **Business Application[Issue [229](https://chaos.ns.team/nsv2/ns-ops/issues/229) - Business Application form]:** Business Application form ([ea453a9](https://chaos.ns.team/nsv2/ns-client/commits/ea453a9))
@@ -38,8 +39,8 @@
 * **Investor[Issue [235](https://chaos.ns.team/nsv2/ns-ops/issues/235) - manage-beneficiaries-feedback-changes]:** investor beneficiary feedback changes ([9718a27](https://chaos.ns.team/nsv2/ns-client/commits/9718a27))
 * **Investor[Issue [297](https://chaos.ns.team/nsv2/ns-ops/issues/297) - investor signup integrate SSN collision check api]:** investor signup integrate SSN collision check api ([77e458e](https://chaos.ns.team/nsv2/ns-client/commits/77e458e))
 * **Investor[Issue [304](https://chaos.ns.team/nsv2/ns-ops/issues/304) - investor-signup-flow-ira-link-bank-api-integration-newly-added-step]:** API Integration for IRA Link-Bank ([d7be878](https://chaos.ns.team/nsv2/ns-client/commits/d7be878))
-* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([d41995a](https://chaos.ns.team/nsv2/ns-client/commits/d41995a))
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([cb7431f](https://chaos.ns.team/nsv2/ns-client/commits/cb7431f))
+* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([d41995a](https://chaos.ns.team/nsv2/ns-client/commits/d41995a))
 * **Issuer Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** lendio stauts corrected in constant file ([bee3759](https://chaos.ns.team/nsv2/ns-client/commits/bee3759))
 * **Issuer-Dashboard[Issue [296](https://chaos.ns.team/nsv2/ns-ops/issues/296) - issuer-manage-business-application-list-on-dashboard]:** issuer application lists on dashboard showing buttons as per app status ([6dbf80b](https://chaos.ns.team/nsv2/ns-client/commits/6dbf80b))
 * **Issuer[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** feedback changes done ([4b5017d](https://chaos.ns.team/nsv2/ns-client/commits/4b5017d))
