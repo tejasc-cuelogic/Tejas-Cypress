@@ -66,39 +66,52 @@ export class BusinessAppReviewStore {
   }
 
   @action
+  formChange = (e, result, form) => {
+    this[form] = Validator.onChange(
+      this[form],
+      Validator.pullValues(e, result),
+    );
+  }
+
+  @action
+  formChangeWithIndex = (e, result, form, index) => {
+    this[form] = Validator.onArrayFieldChange(
+      this[form],
+      Validator.pullValues(e, result), 'data', index,
+    );
+  }
+
+  @action
   overviewEleChange = (e, result, index) => {
-    this.OVERVIEW_FRM = Validator
-      .onArrayFieldChange(this.OVERVIEW_FRM, Validator.pullValues(e, result), 'data', index);
+    this.formChangeWithIndex(e, result, 'OVERVIEW_FRM', index);
+    if (result.fielddata.value === '' && index !== 0) {
+      this.OVERVIEW_FRM.fields.data.splice(index, 1);
+    }
   };
 
   @action
   managerEleChange = (e, result) => {
-    this.MANAGERS_FRM =
-      Validator.onChange(this.MANAGERS_FRM, Validator.pullValues(e, result));
+    this.formChange(e, result, 'MANAGERS_FRM');
   };
 
   @action
   justificationEleChange = (e, result, index) => {
-    this.JUSTIFICATIONS_FRM = Validator
-      .onArrayFieldChange(this.JUSTIFICATIONS_FRM, Validator.pullValues(e, result), 'data', index);
+    this.formChangeWithIndex(e, result, 'JUSTIFICATIONS_FRM', index);
   }
 
   @action
   documentationEleChange = (e, result) => {
-    this.DOCUMENTATION_FRM =
-      Validator.onChange(this.DOCUMENTATION_FRM, Validator.pullValues(e, result));
+    this.formChange(e, result, 'DOCUMENTATION_FRM');
   };
 
   @action
   projectionsEleChange = (e, result) => {
-    this.PROJECTIONS_FRM =
-      Validator.onChange(this.PROJECTIONS_FRM, Validator.pullValues(e, result));
+    this.formChange(e, result, 'PROJECTIONS_FRM');
   };
 
   @action
   businessPlanEleChange = (e, result) => {
-    this.BUSINESS_PLAN_FRM =
-      Validator.onChange(this.BUSINESS_PLAN_FRM, Validator.pullValues(e, result));
+    this.formChange(e, result, 'BUSINESS_PLAN_FRM');
   }
 
   @action
@@ -111,8 +124,7 @@ export class BusinessAppReviewStore {
 
   @action
   controlPersonEleChange = (e, result, index) => {
-    this.CONTROL_PERSONS_FRM = Validator
-      .onArrayFieldChange(this.CONTROL_PERSONS_FRM, Validator.pullValues(e, result), 'data', index);
+    this.formChangeWithIndex(e, result, 'CONTROL_PERSONS_FRM', index);
   }
 
   @action
@@ -145,7 +157,7 @@ export class BusinessAppReviewStore {
 
   @action
   removeUploadedData = (form, field) => {
-    this[form] = Validator.onArrayFieldChange(
+    this[form] = Validator.onChange(
       this[form],
       { name: field, value: '' },
     );
@@ -161,8 +173,7 @@ export class BusinessAppReviewStore {
 
   @action
   sourceEleChange = (e, result, index) => {
-    this.SOURCES_FRM = Validator
-      .onArrayFieldChange(this.SOURCES_FRM, Validator.pullValues(e, result), 'data', index);
+    this.formChangeWithIndex(e, result, 'SOURCES_FRM', index);
   }
 
   @action
@@ -185,8 +196,7 @@ export class BusinessAppReviewStore {
 
   @action
   useEleChange = (e, result, index) => {
-    this.USES_FRM = Validator
-      .onArrayFieldChange(this.USES_FRM, Validator.pullValues(e, result), 'data', index);
+    this.formChangeWithIndex(e, result, 'USES_FRM', index);
   }
 
   @action
@@ -209,8 +219,7 @@ export class BusinessAppReviewStore {
 
   @action
   contingenciesEleChange = (e, formName, result, index) => {
-    this[formName] = Validator
-      .onArrayFieldChange(this[formName], Validator.pullValues(e, result), 'data', index);
+    this.formChangeWithIndex(e, result, formName, index);
   };
 }
 export default new BusinessAppReviewStore();

@@ -46,7 +46,7 @@ export default class Documentation extends Component {
             Prior Six Months Back Statements (Existing)
           </Header>
           {
-            ['anyCushionForIncidentals', 'c'].map(field => (
+            ['anyCushionForIncidentals', 'anyUnusualMovements'].map(field => (
               <FormTextarea
                 key={field}
                 name={field}
@@ -68,8 +68,8 @@ export default class Documentation extends Component {
             hidelabel
           />
           <Button.Group className="pull-right">
-            <Button disabled={!DOCUMENTATION_FRM.meta.isValid} secondary>Save</Button>
-            <Button disabled={!DOCUMENTATION_FRM.meta.isValid} primary size="large" className="very relaxed" type="button">Submit for Approval</Button>
+            <Button disabled={!DOCUMENTATION_FRM.meta.isValid} secondary className="relaxed">Save</Button>
+            <Button disabled={!DOCUMENTATION_FRM.meta.isValid} primary className="relaxed" type="button">Submit for Approval</Button>
           </Button.Group>
         </Form>
       </div>

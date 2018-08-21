@@ -5,7 +5,7 @@ export const OVERVIEW = {
       label: 'Critical Point',
       error: undefined,
       rule: 'required',
-      placeHolder: 'Choose from list',
+      placeHolder: 'Enter here...',
     },
   }],
 };
@@ -82,9 +82,9 @@ export const DOCUMENTATION = {
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  c: {
+  anyUnusualMovements: {
     value: '',
-    label: 'c?',
+    label: 'Are there any unusual movements or one-off large deposits/withdrawals that warrant an explanation?',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here...',

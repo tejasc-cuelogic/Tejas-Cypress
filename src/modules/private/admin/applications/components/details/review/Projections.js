@@ -78,8 +78,8 @@ export default class Projections extends Component {
             containerclassname="secondary"
           />
           <Button.Group className="pull-right">
-            <Button disabled={!PROJECTIONS_FRM.meta.isValid} secondary >Save</Button>
-            <Button disabled={!PROJECTIONS_FRM.meta.isValid} primary size="large" className="very relaxed" type="button">Submit for Approval</Button>
+            <Button disabled={!PROJECTIONS_FRM.meta.isValid} secondary className="relaxed">Save</Button>
+            <Button disabled={!PROJECTIONS_FRM.meta.isValid} primary className="relaxed" type="button">Submit for Approval</Button>
           </Button.Group>
         </Form>
         <Confirm

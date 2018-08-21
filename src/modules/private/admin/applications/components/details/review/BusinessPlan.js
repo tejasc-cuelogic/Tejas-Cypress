@@ -10,10 +10,7 @@ import { FormTextarea, MaskedInput, FormInput, DropZone, FormDatePicker } from '
 @inject('businessAppReviewStore', 'uiStore')
 @observer
 export default class BusinessPlan extends Component {
-  onExperieneFileDrop = (files, name, index) => {
-    this.props.businessAppReviewStore.setFileUploadDataWithIndex('CONTROL_PERSONS_FRM', name, files, index);
-  }
-  onCreditScoreFileDrop = (files, name, index) => {
+  onFileDrop = (files, name, index) => {
     this.props.businessAppReviewStore.setFileUploadDataWithIndex('CONTROL_PERSONS_FRM', name, files, index);
   }
   confirmRemoveDoc = (e, name) => {
@@ -113,7 +110,7 @@ export default class BusinessPlan extends Component {
                       <DropZone
                         name="experienceFile"
                         fielddata={controlPerson.experienceFile}
-                        ondrop={(files, name) => this.onExperieneFileDrop(files, name, index)}
+                        ondrop={(files, name) => this.onFileDrop(files, name, index)}
                         onremove={this.confirmRemoveDoc}
                         uploadtitle="Upload Experience File"
                       />
@@ -122,7 +119,7 @@ export default class BusinessPlan extends Component {
                       <DropZone
                         name="creditScoreFile"
                         fielddata={controlPerson.creditScoreFile}
-                        ondrop={(files, name) => this.onCreditScoreFileDrop(files, name, index)}
+                        ondrop={(files, name) => this.onFileDrop(files, name, index)}
                         onremove={this.confirmRemoveDoc}
                         uploadtitle="Upload Credit Score File"
                       />
@@ -132,27 +129,20 @@ export default class BusinessPlan extends Component {
               )) : <p>...Loading</p>
           }
           <Divider section />
-          <FormTextarea
-            name="timingOfOperations"
-            fielddata={BUSINESS_PLAN_FRM.fields.timingOfOperations}
-            changed={businessPlanEleChange}
-            containerclassname="secondary"
-          />
-          <Divider section />
-          <FormTextarea
-            name="writeupTieToProjections"
-            fielddata={BUSINESS_PLAN_FRM.fields.writeupTieToProjections}
-            changed={businessPlanEleChange}
-            containerclassname="secondary"
-          />
-          <Divider section />
-          <FormTextarea
-            name="isPlanAdequate"
-            fielddata={BUSINESS_PLAN_FRM.fields.isPlanAdequate}
-            changed={businessPlanEleChange}
-            containerclassname="secondary"
-          />
-          <Divider section />
+          {
+            ['timingOfOperations', 'writeupTieToProjections', 'isPlanAdequate'].map(field => (
+              <Aux>
+                <FormTextarea
+                  key={field}
+                  name={field}
+                  fielddata={BUSINESS_PLAN_FRM.fields[field]}
+                  changed={businessPlanEleChange}
+                  containerclassname="secondary"
+                />
+                <Divider section />
+              </Aux>
+            ))
+          }
           <Header as="h5">
             Sources and Uses Chart
           </Header>
