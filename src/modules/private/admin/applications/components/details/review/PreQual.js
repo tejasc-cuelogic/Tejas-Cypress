@@ -1,14 +1,17 @@
-/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Divider, Form, Header, Button, Icon, Confirm } from 'semantic-ui-react';
+import { Divider, Form, Header, Button, Confirm } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 
 @inject('businessAppReviewStore')
 @observer
 export default class PreQual extends Component {
+  addJustification = (e) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.addMore('JUSTIFICATIONS_FRM');
+  }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
@@ -16,7 +19,7 @@ export default class PreQual extends Component {
   render() {
     const {
       MANAGERS_FRM, JUSTIFICATIONS_FRM,
-      addMore, toggleConfirmModal, confirmModal, confirmModalName,
+      toggleConfirmModal, confirmModal, confirmModalName,
       managerEleChange, justificationEleChange, removeData,
     } = this.props.businessAppReviewStore;
     return (
@@ -32,24 +35,20 @@ export default class PreQual extends Component {
           <Divider section />
           <Header as="h4">
             Justifications
-            <Link to={this.props.match.url} className="link" onClick={() => addMore('JUSTIFICATIONS_FRM')}><small>+Add Justification</small></Link>
+            <Link to={this.props.match.url} className="link" onClick={e => this.addJustification(e)}><small>+Add Justification</small></Link>
           </Header>
           {
             JUSTIFICATIONS_FRM.fields.data.length ?
             JUSTIFICATIONS_FRM.fields.data.map((justification, index) => (
               <Aux>
-                <div className="mb-10">
-                  <label>{`Justification ${index + 1}`}</label>
-                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM')}>
-                    <Icon className="ns-close-circle" color="grey" />
-                  </Link>
-                </div>
                 <FormTextarea
                   name="justification"
+                  label={`Justification ${index + 1}`}
                   fielddata={justification.justification}
                   changed={(e, result) => justificationEleChange(e, result, index)}
+                  removed={e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM')}
+                  linkto={this.props.match.url}
                   containerclassname="secondary"
-                  hidelabel
                 />
               </Aux>
             )) : null
