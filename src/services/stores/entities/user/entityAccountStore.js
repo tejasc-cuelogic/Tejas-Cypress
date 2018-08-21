@@ -251,38 +251,35 @@ class EntityAccountStore {
   }
 
   @action
-  checkTaxIdCollision = async () => {
-    try {
-      const data = await graphql({
-        client,
-        query: checkEntityTaxIdCollision,
-        variables: {
-          taxId: this.GEN_INFO_FRM.fields.taxId.value,
-        },
-        fetchPolicy: 'network-only',
-        onFetch: (fData) => {
-          if (fData && fData.checkEntityTaxIdCollision.alreadyExists) {
+  checkTaxIdCollision = () => new Promise(async (resolve) => {
+    graphql({
+      client,
+      query: checkEntityTaxIdCollision,
+      variables: {
+        taxId: this.GEN_INFO_FRM.fields.taxId.value,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: (fData) => {
+        if (fData) {
+          if (fData.checkEntityTaxIdCollision.alreadyExists) {
             const setErrorMessage = (
               <span>
                 There was an issue with the information you submitted.
-                Please double-check and try again.
-                If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href={`mailto:${NS_SITE_EMAIL_SUPPORT}`}>{ NS_SITE_EMAIL_SUPPORT }</a>
+                Please double-check and try again. If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href={`mailto:${NS_SITE_EMAIL_SUPPORT}`}>{ NS_SITE_EMAIL_SUPPORT }</a>
               </span>
             );
             uiStore.setErrors(setErrorMessage);
           }
-        },
-        onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
-      });
-      return data && data.data.checkEntityTaxIdCollision.alreadyExists;
-    } catch (err) {
-      return false;
-    }
-  };
+          resolve(fData.checkEntityTaxIdCollision.alreadyExists);
+        }
+      },
+      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+    });
+  });
 
   @action
   validateAndSubmitStep =
-  (currentStep, formStatus, removeUploadedData, field) => new Promise(async (res, rej) => {
+  (currentStep, formStatus, removeUploadedData, field) => new Promise((res, rej) => {
     let isValidCurrentStep = true;
     const accountAttributes = {};
     const array1 = ['Financial info', 'General', 'Entity info'];
@@ -300,12 +297,19 @@ class EntityAccountStore {
         } else if (currentStep.name === 'General' || currentStep.name === 'Entity info') {
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
         }
-        const isTaxCollision = currentStep.name === 'General' ? await this.checkTaxIdCollision() : false;
-        if (!isTaxCollision) {
+        if (currentStep.name === 'General') {
+          this.checkTaxIdCollision().then((alreadyExists) => {
+            if (alreadyExists) {
+              rej();
+            } else {
+              uiStore.setErrors(null);
+              this.submitForm(currentStep, formStatus, accountAttributes)
+                .then(() => res()).catch(() => rej());
+            }
+          });
+        } else {
           this.submitForm(currentStep, formStatus, accountAttributes)
             .then(() => res()).catch(() => rej());
-        } else {
-          rej();
         }
       } else {
         rej();
