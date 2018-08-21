@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import { isEmpty, find } from 'lodash';
+import graphql from 'mobx-apollo';
 import {
   ENTITY_FIN_INFO,
   ENTITY_GEN_INFO,
@@ -8,7 +9,7 @@ import {
   ENTITY_FORMATION_DOCS,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore } from '../../index';
-import { createAccount, updateAccount } from '../../queries/account';
+import { createAccount, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
@@ -248,8 +249,31 @@ class EntityAccountStore {
   }
 
   @action
+  checkTaxIdCollision = async () => {
+    try {
+      const data = await graphql({
+        client,
+        query: checkEntityTaxIdCollision,
+        variables: {
+          taxId: this.GEN_INFO_FRM.fields.taxId.value,
+        },
+        fetchPolicy: 'network-only',
+        onFetch: (fData) => {
+          if (fData && fData.checkEntityTaxIdCollision.alreadyExists) {
+            this.GEN_INFO_FRM.fields.taxId.error = 'Tax ID is already existed in our system.';
+          }
+        },
+        onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+      });
+      return data && data.data.checkEntityTaxIdCollision.alreadyExists;
+    } catch (err) {
+      return false;
+    }
+  };
+
+  @action
   validateAndSubmitStep =
-  (currentStep, formStatus, removeUploadedData, field) => new Promise((res, rej) => {
+  (currentStep, formStatus, removeUploadedData, field) => new Promise(async (res, rej) => {
     let isValidCurrentStep = true;
     const accountAttributes = {};
     const array1 = ['Financial info', 'General', 'Entity info'];
@@ -267,12 +291,13 @@ class EntityAccountStore {
         } else if (currentStep.name === 'General' || currentStep.name === 'Entity info') {
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
         }
-        this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
-          res();
-        })
-          .catch(() => {
-            rej();
-          });
+        const isTaxCollision = currentStep.name === 'General' ? await this.checkTaxIdCollision() : false;
+        if (!isTaxCollision) {
+          this.submitForm(currentStep, formStatus, accountAttributes)
+            .then(() => res()).catch(() => rej());
+        } else {
+          rej();
+        }
       } else {
         rej();
       }
@@ -280,23 +305,15 @@ class EntityAccountStore {
       if (removeUploadedData) {
         accountAttributes.entity =
         this.setEntityAttributes(currentStep.name, removeUploadedData, field);
-        this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData).then(() => {
-          res();
-        })
-          .catch(() => {
-            rej();
-          });
+        this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData)
+          .then(() => res()).catch(() => rej());
       } else {
         currentStep.validate();
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
-          this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
-            res();
-          })
-            .catch(() => {
-              rej();
-            });
+          this.submitForm(currentStep, formStatus, accountAttributes)
+            .then(() => res()).catch(() => rej());
         } else {
           rej();
         }
@@ -328,12 +345,8 @@ class EntityAccountStore {
             accountAttributes.bankDetails = plaidBankDetails;
           }
         }
-        this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
-          res();
-        })
-          .catch(() => {
-            rej();
-          });
+        this.submitForm(currentStep, formStatus, accountAttributes)
+          .then(() => res()).catch(() => rej());
       } else {
         rej();
       }
