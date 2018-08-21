@@ -1,65 +1,58 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Header, Form, Icon } from 'semantic-ui-react';
-import { inject, observer } from 'mobx-react';
-import { FormInput } from '../../../../../../theme/form';
+import { Route, Switch } from 'react-router-dom';
+import { Grid } from 'semantic-ui-react';
+import Loadable from 'react-loadable';
+import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
+import { DataFormatter } from '../../../../../../helper';
 
-@inject('businessAppStore', 'uiStore')
-@observer
+const getModule = component => Loadable({
+  loader: () => import(`./review/${component}`),
+  loading() {
+    return <div>Loading...</div>;
+  },
+});
+
+const navItems = [
+  { title: 'Overview', to: 'overview' },
+  { title: 'PreQual', to: 'prequal' },
+  { title: 'Business Plan', to: 'business-plan' },
+  { title: 'Projections', to: 'projections' },
+  { title: 'Documentation', to: 'documentation' },
+  { title: 'Miscellaneous', to: 'miscellaneous' },
+  { title: 'Contingencies', to: 'contingencies' },
+  { title: 'Model', to: 'model' },
+  { title: 'Offer', to: 'offer' },
+];
+
 export default class Review extends Component {
+  componentWillMount() {
+    if (this.props.match.isExact) {
+      this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
+    }
+  }
+
+  module = name => DataFormatter.upperCamelCase(name);
+
   render() {
-    const {
-      BUSINESS_APP_FRM, businessAppEleChange, preQualFormDisabled,
-    } = this.props.businessAppStore;
-    const { fields } = BUSINESS_APP_FRM;
+    const { match } = this.props;
     return (
-      <Form>
-        <div className="inner-content-spacer">
-          <Header as="h4">What is your Business Model?</Header>
-          <p>Business to Consumer</p>
-        </div>
-        <div className="inner-content-spacer">
-          <Header as="h4">General Information</Header>
-          <Form.Group widths={4}>
-            {
-              ['street', 'city', 'state', 'zipCode'].map(field => (
-                <FormInput
-                  disabled={preQualFormDisabled}
-                  key={field}
-                  type="text"
-                  name={field}
-                  value="Value"
-                  fielddata={fields[field]}
-                  changed={businessAppEleChange}
-                  containerclassname="display-only"
-                  readOnly
-                />
-              ))
-            }
-          </Form.Group>
-          <Form.Group widths={4}>
-            {
-              ['website', 'phoneNumber'].map(field => (
-                <FormInput
-                  disabled={preQualFormDisabled}
-                  key={field}
-                  type="text"
-                  name={field}
-                  value="Value"
-                  fielddata={fields[field]}
-                  changed={businessAppEleChange}
-                  containerclassname="display-only"
-                  readOnly
-                />
-              ))
-            }
-          </Form.Group>
-        </div>
-        <div className="inner-content-spacer">
-          <Header as="h4">Business Plan</Header>
-          <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
-        </div>
-      </Form>
+      <div className="inner-content-spacer">
+        <Grid>
+          <Grid.Column widescreen={3} largeScreen={4} computer={4} tablet={4} mobile={16}>
+            <SecondaryMenu secondary vertical match={match} navItems={navItems} />
+          </Grid.Column>
+          <Grid.Column floated="right" widescreen={12} largeScreen={11} computer={12} tablet={12} mobile={16}>
+            <Switch>
+              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+              {
+                navItems.map(item => (
+                  <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                ))
+              }
+            </Switch>
+          </Grid.Column>
+        </Grid>
+      </div>
     );
   }
 }

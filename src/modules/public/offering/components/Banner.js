@@ -6,7 +6,7 @@ const Banner = () => (
     <Container>
       <div className="banner-caption">
         <Header as="h1">
-          Discover opportunities <br />to invest in growing <br />local businesses.
+        Invest in growing local<br /> businesses
         </Header>
       </div>
     </Container>

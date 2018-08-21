@@ -6,9 +6,9 @@ import UserTwo from '../../../../assets/images/owner-2.jpg';
 
 const HowItWorksSummary = () => (
   <section>
-    <Container text textAlign="center">
+    <Container textAlign="center">
       <Header as="h2" className="mb-30">
-      A new way to fundraise and invest.
+      A new way to fundraise and invest.<br />
       Powered by technology. Rooted in community.
       </Header>
       <p className="mb-80">
