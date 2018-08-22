@@ -32,7 +32,7 @@ export default class BusinessPlan extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleDelDoc = (field, index) => {
-    this.props.businessAppReviewStore.removeUploadedData('CONTROL_PERSONS_FRM', field, index);
+    this.props.businessAppReviewStore.removeUploadedDataWithIndex('CONTROL_PERSONS_FRM', field, index);
     this.props.uiStore.setConfirmBox('');
   }
   toggleConfirmModal = (e, index, formName) => {
