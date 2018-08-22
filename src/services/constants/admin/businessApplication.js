@@ -398,7 +398,7 @@ export const SOCIAL_MEDIA = {
       error: undefined,
       rule: 'string',
       customErrors: {
-        required: '* required.',
+        string: 'Allowed string only.',
       },
     },
     url: {
@@ -408,7 +408,7 @@ export const SOCIAL_MEDIA = {
       error: undefined,
       rule: 'url',
       customErrors: {
-        required: '* required.',
+        url: 'Url format is invalid.',
       },
     },
   }],
@@ -430,20 +430,32 @@ export const OTHER_DOCUMENTATION_UPLOADS = {
       error: undefined,
       rule: 'string',
       customErrors: {
-        required: '* required.',
+        string: 'Allowed string only.',
       },
     },
     comment: {
       label: '',
       value: '',
       error: undefined,
-      rule: 'required',
+      rule: 'string',
       preSignedUrl: '',
       fileId: '',
       fileData: '',
       customErrors: {
-        required: '* required.',
+        string: 'Allowed string only.',
       },
+    },
+  }],
+};
+
+export const UPLOADED_DOCUMENTS = {
+  data: [{
+    document: {
+      fileName: 'Business_Plan.pdf',
+      attachedDate: '7/10/2018',
+      byUser: 'Brandon Black',
+      description: `This was the original business plan given to me by the owner.He will be sending
+      an updated one to me next week.  Figured we could use this as reference for now.`,
     },
   }],
 };

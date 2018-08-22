@@ -8,11 +8,21 @@ import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'seman
 import { FormTextarea, MaskedInput, FormInput, DropZone, FormDatePicker } from '../../../../../../../theme/form';
 import { InlineLoader } from '../../../../../../../theme/shared';
 
+const AddMore = ({
+  addMore, formName, title,
+}) => (
+  <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName)} >+ {title}</Button>
+);
+
 @inject('businessAppReviewStore', 'uiStore')
 @observer
 export default class BusinessPlan extends Component {
   onFileDrop = (files, name, index) => {
     this.props.businessAppReviewStore.setFileUploadDataWithIndex('CONTROL_PERSONS_FRM', name, files, index);
+  }
+  addMore = (e, formName) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.addMore(formName);
   }
   confirmRemoveDoc = (e, name) => {
     e.preventDefault();
@@ -45,7 +55,6 @@ export default class BusinessPlan extends Component {
       useEleChange,
       useMaskChange,
       totalUsesAmount,
-      addMore,
       confirmModal,
       confirmModalName,
       removeData,
@@ -67,7 +76,7 @@ export default class BusinessPlan extends Component {
           <Divider section />
           <Header as="h4">
             Control Persons
-            <Link to={this.props.match.url} className="link" onClick={() => addMore('CONTROL_PERSONS_FRM')}><small>+ Add Control Person</small></Link>
+            <Link to={this.props.match.url} className="link" addMore={this.addMore} formName="CONTROL_PERSONS_FRM"><small>+ Add Control Person</small></Link>
           </Header>
           {
             CONTROL_PERSONS_FRM.fields.data.length ?
@@ -75,9 +84,11 @@ export default class BusinessPlan extends Component {
               <Aux>
                 <Header as="h6">
                   {`Control Person ${index + 1}`}
+                  {index !== 0 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'CONTROL_PERSONS_FRM')}>
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  }
                 </Header>
                 <div className="featured-section">
                   <Form.Group widths={3}>
@@ -186,17 +197,19 @@ export default class BusinessPlan extends Component {
                             size="small"
                           />
                         </Table.Cell>
+                        {index !== 0 &&
                         <Table.Cell collapsing>
                           <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'SOURCES_FRM')} >
                             <Icon className="ns-close-circle" color="grey" />
                           </Link>
                         </Table.Cell>
+                        }
                       </Table.Row>
                     )) : ''
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      <Button size="small" color="blue" className="link-button" onClick={() => addMore('SOURCES_FRM')} >+ Add Source</Button>
+                      <AddMore addMore={this.addMore} formName="SOURCES_FRM" title="Add Source" />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -242,17 +255,19 @@ export default class BusinessPlan extends Component {
                           size="small"
                         />
                       </Table.Cell>
+                      {index !== 0 &&
                       <Table.Cell collapsing>
                         <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'USES_FRM')} >
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
                       </Table.Cell>
+                      }
                     </Table.Row>
                   )) : ''
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      <Button size="small" color="blue" className="link-button" onClick={() => addMore('USES_FRM')} >+ Add Use</Button>
+                      <AddMore addMore={this.addMore} formName="USES_FRM" title="Add Use" />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
