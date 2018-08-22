@@ -237,5 +237,10 @@ export class BusinessAppReviewStore {
   otherDocumentationChange = (e, result, index) => {
     this.formChangeWithIndex(e, result, 'OTHER_DOCUMENTATION_FRM', index);
   }
+
+  @action
+  offersChange = (e, result, index) => {
+    this.formChangeWithIndex(e, result, 'OFFERS_FRM', index);
+  }
 }
 export default new BusinessAppReviewStore();

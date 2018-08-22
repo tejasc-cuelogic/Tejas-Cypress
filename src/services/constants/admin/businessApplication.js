@@ -564,3 +564,8 @@ export const OFFERS = {
     },
   }],
 };
+
+export const STRUCTURE_TYPES = [
+  { key: 'termnote', value: 'facebook', text: 'Term Note' },
+  { key: 'revenueshareingnote', value: 'revenueshareingnote', text: 'Revenue Shareing Note' },
+];
