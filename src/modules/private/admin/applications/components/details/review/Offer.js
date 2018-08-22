@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { Header, Form, Table, Dropdown } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormDatePicker } from '../../../../../../../theme/form';
 import { STRUCTURE_TYPES } from '../../../../../../../services/constants/admin/businessApplication';
 @inject('businessAppReviewStore')
 @observer
 export default class Offer extends Component {
+  addNewOffer = (e) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.addMore('OFFERS_FRM');
+  }
   render() {
     const { OFFERS_FRM, offersChange } = this.props.businessAppReviewStore;
     return (
@@ -14,12 +19,14 @@ export default class Offer extends Component {
         <Header as="h4">
           Offers
         </Header>
+        {OFFERS_FRM.fields.data.length < 4 &&
+        <Link color="blue" to={this.props.match.url} className="link" onClick={e => this.addNewOffer(e)}><small>+ Add new offer</small></Link>
+        }
         <Form>
           <Table basic compact className="form-table">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>&nbsp;</Table.HeaderCell>
-                <Table.HeaderCell>Offer A</Table.HeaderCell>
                 <Table.HeaderCell />
               </Table.Row>
             </Table.Header>
@@ -29,7 +36,6 @@ export default class Offer extends Component {
                   <Table.Body>
                     <Table.Row>
                       <Table.Cell>
-                        {alert(64565)}
                         {offer[key].label}
                         jghjgjhghj
                       </Table.Cell>
@@ -39,17 +45,17 @@ export default class Offer extends Component {
               ))
             }
           </Table>
-          <Table basic compact className="form-table">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Offer</Table.HeaderCell>
-                <Table.HeaderCell />
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {
-              OFFERS_FRM.fields.data.length ?
-              OFFERS_FRM.fields.data.map((offer, index) => (
+          {
+          OFFERS_FRM.fields.data.length ?
+          OFFERS_FRM.fields.data.map((offer, index) => (
+            <Table basic compact className="form-table">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Offer {String.fromCharCode('A'.charCodeAt() + index)}</Table.HeaderCell>
+                  <Table.HeaderCell />
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
                 <Table.Row>
                   <Table.Cell>
                     <Dropdown
@@ -109,10 +115,10 @@ export default class Offer extends Component {
                     }
                   </Table.Cell>
                 </Table.Row>
-              )) : ''
-              }
-            </Table.Body>
-          </Table>
+              </Table.Body>
+            </Table>
+          )) : ''
+          }
         </Form>
       </div>
     );

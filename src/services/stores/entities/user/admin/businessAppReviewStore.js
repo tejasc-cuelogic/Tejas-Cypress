@@ -49,6 +49,7 @@ export class BusinessAppReviewStore {
       USES_FRM: USES,
       SOCIAL_MEDIA_FRM: SOCIAL_MEDIA,
       OTHER_DOCUMENTATION_FRM: OTHER_DOCUMENTATION_UPLOADS,
+      OFFERS_FRM: OFFERS,
     };
     return metaDataMapping[metaData];
   }
