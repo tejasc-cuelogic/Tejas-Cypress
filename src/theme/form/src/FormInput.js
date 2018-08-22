@@ -2,6 +2,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon, Input } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
 
 const FormInput = observer((props) => {
@@ -33,6 +34,11 @@ const FormInput = observer((props) => {
       }
       {props.type === 'password' &&
         <input style={{ opacity: 0, position: 'absolute' }} tabIndex={-1} value="something" />
+      }
+      {props.removed &&
+        <Link to={props.linkto} className="icon-link" onClick={e => props.removed(e)}>
+          <Icon className="ns-close-circle" color="grey" />
+        </Link>
       }
       <Input
         fluid
