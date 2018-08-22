@@ -223,8 +223,8 @@ export default class Miscellaneous extends Component {
           />
           <div className="right-align">
             <Button.Group>
-              <Button disabled className="relaxed" secondary>Deny</Button>
-              <Button disabled primary className="relaxed" type="button">Approve</Button>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
             </Button.Group>
           </div>
         </Form>
