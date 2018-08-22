@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Header, Table, Icon, Item, Form, Confirm } from 'semantic-ui-react';
+import { Header, Table, Icon, Item, Form, Confirm, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormSelect, FormInput, DropZone } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
@@ -209,6 +209,10 @@ export default class Miscellaneous extends Component {
           size="mini"
           className="deletion"
         />
+        <Button.Group className="pull-right">
+          <Button disabled secondary className="relaxed">Save</Button>
+          <Button disabled primary className="relaxed" type="button">Submit for Approval</Button>
+        </Button.Group>
       </div>
     );
   }
