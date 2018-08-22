@@ -76,7 +76,7 @@ export default class BusinessPlan extends Component {
           <Divider section />
           <Header as="h4">
             Control Persons
-            <Link to={this.props.match.url} className="link" addMore={this.addMore} formName="CONTROL_PERSONS_FRM"><small>+ Add Control Person</small></Link>
+            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'CONTROL_PERSONS_FRM')}><small>+ Add Control Person</small></Link>
           </Header>
           {
             CONTROL_PERSONS_FRM.fields.data.length ?
