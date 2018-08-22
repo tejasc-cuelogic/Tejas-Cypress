@@ -295,6 +295,7 @@ footer{
     }
     &.secondary.vertical{
         width:auto;
+        background-color: @neutral-offwhite;
         .item{
             padding:@13px @16px;
         }

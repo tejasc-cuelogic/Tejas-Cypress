@@ -7,11 +7,15 @@ import { FormTextarea } from '../../../../../../../theme/form';
 @observer
 export default class Documentation extends Component {
   render() {
-    const { DOCUMENTATION_FRM, documentationEleChange } = this.props.businessAppReviewStore;
+    const {
+      DOCUMENTATION_FRM,
+      documentationEleChange,
+      MANAGERS_FRM,
+      managerEleChange,
+    } = this.props.businessAppReviewStore;
     return (
       <div>
         <Form>
-          <Divider section />
           <Header as="h5">
             Prior Two Years Tax Returns for Control Owners or Three Years for Existing Business
           </Header>
@@ -67,10 +71,26 @@ export default class Documentation extends Component {
             containerclassname="secondary"
             hidelabel
           />
-          <Button.Group className="pull-right">
-            <Button disabled={!DOCUMENTATION_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-            <Button disabled={!DOCUMENTATION_FRM.meta.isValid} primary className="relaxed" type="button">Submit for Approval</Button>
-          </Button.Group>
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled={!DOCUMENTATION_FRM.meta.isValid} secondary className="relaxed">Save</Button>
+              <Button disabled={!DOCUMENTATION_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
+            </Button.Group>
+          </div>
+          <Divider section />
+          <Header as="h4">Manager</Header>
+          <FormTextarea
+            name="managerOverview"
+            fielddata={MANAGERS_FRM.fields.managerOverview}
+            changed={managerEleChange}
+            containerclassname="secondary"
+          />
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled className="relaxed" secondary>Deny</Button>
+              <Button disabled primary className="relaxed" type="button">Approve</Button>
+            </Button.Group>
+          </div>
         </Form>
       </div>
     );

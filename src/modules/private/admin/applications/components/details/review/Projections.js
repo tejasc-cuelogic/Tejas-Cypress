@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Button, Divider, Confirm } from 'semantic-ui-react';
+import { Form, Button, Divider, Confirm, Header } from 'semantic-ui-react';
 import { FormTextarea, DropZone } from '../../../../../../../theme/form';
 
 @inject('businessAppReviewStore', 'uiStore')
@@ -25,12 +25,16 @@ export default class Projections extends Component {
   }
 
   render() {
-    const { PROJECTIONS_FRM, projectionsEleChange } = this.props.businessAppReviewStore;
+    const {
+      PROJECTIONS_FRM,
+      projectionsEleChange,
+      MANAGERS_FRM,
+      managerEleChange,
+    } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
       <div>
         <Form>
-          <Divider section />
           {
             ['compareHistoricalForReasonabless', 'areTheProjectionsComplete', 'revenueCheck'].map(field => (
               <FormTextarea
@@ -77,10 +81,26 @@ export default class Projections extends Component {
             changed={projectionsEleChange}
             containerclassname="secondary"
           />
-          <Button.Group className="pull-right">
-            <Button disabled={!PROJECTIONS_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-            <Button disabled={!PROJECTIONS_FRM.meta.isValid} primary className="relaxed" type="button">Submit for Approval</Button>
-          </Button.Group>
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled={!PROJECTIONS_FRM.meta.isValid} secondary className="relaxed">Save</Button>
+              <Button disabled={!PROJECTIONS_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
+            </Button.Group>
+          </div>
+          <Divider section />
+          <Header as="h4">Manager</Header>
+          <FormTextarea
+            name="managerOverview"
+            fielddata={MANAGERS_FRM.fields.managerOverview}
+            changed={managerEleChange}
+            containerclassname="secondary"
+          />
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled className="relaxed" secondary>Deny</Button>
+              <Button disabled primary className="relaxed" type="button">Approve</Button>
+            </Button.Group>
+          </div>
         </Form>
         <Confirm
           header="Confirm"

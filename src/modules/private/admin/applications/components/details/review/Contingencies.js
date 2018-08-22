@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Header, Table, Icon, Button, Form, Confirm } from 'semantic-ui-react';
+import { Header, Table, Icon, Button, Form, Confirm, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { FormInput } from '../../../../../../../theme/form';
+import { FormInput, FormTextarea } from '../../../../../../../theme/form';
 
 const TableHeader = () => (
   <Table.Header>
@@ -22,11 +23,12 @@ const TableBody = ({
     form.fields.data.length ?
     form.fields.data.map((formData, index) => (
       <Table.Row>
-        <Table.Cell collapsing>
+        <Table.Cell width={5}>
           <FormInput
             name="contingency"
             fielddata={formData.contingency}
             changed={(e, result) => onchange(e, formName, result, index)}
+            size="small"
           />
         </Table.Cell>
         <Table.Cell>
@@ -34,6 +36,7 @@ const TableBody = ({
             name="acceptanceCriteria"
             fielddata={formData.acceptanceCriteria}
             changed={(e, result) => onchange(e, formName, result, index)}
+            size="small"
           />
         </Table.Cell>
         <Table.Cell collapsing>
@@ -45,8 +48,8 @@ const TableBody = ({
     )) : ''
     }
     <Table.Row>
-      <Table.Cell collapsing>
-        <Button type="button" color="blue" className="ghost-button" onClick={() => addMore(formName)} >+ Add Contingency</Button>
+      <Table.Cell>
+        <Button size="small" color="blue" className="link-button" onClick={() => addMore(formName)}>+ Add Contingency</Button>
       </Table.Cell>
     </Table.Row>
   </Table.Body>
@@ -69,30 +72,48 @@ export default class Contingencies extends Component {
       contingenciesEleChange,
       toggleConfirmModal,
       removeData,
+      MANAGERS_FRM,
+      managerEleChange,
     } = this.props.businessAppReviewStore;
     return (
-      <div className="inner-content-spacer">
+      <Aux>
         <Form>
           <Header as="h5">
             Launch
           </Header>
-          <Table basic compact inverted className="grey-table">
+          <Table basic compact className="form-table">
             <TableHeader />
             <TableBody match={this.props.match} form={LAUNCH_FRM} formName="LAUNCH_FRM" onchange={contingenciesEleChange} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
           <Header as="h5">
             Close
           </Header>
-          <Table basic compact inverted className="grey-table">
+          <Table basic compact className="form-table">
             <TableHeader />
             <TableBody match={this.props.match} form={CLOSE_FRM} formName="CLOSE_FRM" onchange={contingenciesEleChange} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
-          <Button.Group className="pull-right">
-            <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} secondary>
-              Save
-            </Button>
-            <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} primary className="relaxed" type="button">Submit for Approval</Button>
-          </Button.Group>
+          <div className="right-align">
+            <Button.Group className="mt-20">
+              <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} secondary>
+                Save
+              </Button>
+              <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} primary type="button">Submit for Approval</Button>
+            </Button.Group>
+          </div>
+          <Divider section />
+          <Header as="h4">Manager</Header>
+          <FormTextarea
+            name="managerOverview"
+            fielddata={MANAGERS_FRM.fields.managerOverview}
+            changed={managerEleChange}
+            containerclassname="secondary"
+          />
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled className="relaxed" secondary>Deny</Button>
+              <Button disabled primary className="relaxed" type="button">Approve</Button>
+            </Button.Group>
+          </div>
         </Form>
         <Confirm
           header="Confirm"
@@ -103,7 +124,7 @@ export default class Contingencies extends Component {
           size="mini"
           className="deletion"
         />
-      </div>
+      </Aux>
     );
   }
 }

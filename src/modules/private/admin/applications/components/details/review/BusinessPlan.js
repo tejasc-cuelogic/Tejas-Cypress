@@ -49,6 +49,8 @@ export default class BusinessPlan extends Component {
       confirmModal,
       confirmModalName,
       removeData,
+      MANAGERS_FRM,
+      managerEleChange,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
@@ -152,7 +154,7 @@ export default class BusinessPlan extends Component {
           <Grid columns={2}>
             <Grid.Column>
               <Header as="h6">Sources</Header>
-              <Table basic compact className="grey-table">
+              <Table basic compact className="form-table">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -165,14 +167,15 @@ export default class BusinessPlan extends Component {
                     SOURCES_FRM.fields.data.length ?
                     SOURCES_FRM.fields.data.map((source, index) => (
                       <Table.Row key={source}>
-                        <Table.Cell>
+                        <Table.Cell width={8}>
                           <FormInput
                             name="name"
                             fielddata={source.name}
                             changed={(e, result) => sourceEleChange(e, result, index)}
+                            size="small"
                           />
                         </Table.Cell>
-                        <Table.Cell>
+                        <Table.Cell width={8}>
                           <MaskedInput
                             prefix="$"
                             currency
@@ -180,6 +183,7 @@ export default class BusinessPlan extends Component {
                             fielddata={source.amount}
                             changed={values => sourceMaskChange(values, index)}
                             ishidelabel
+                            size="small"
                           />
                         </Table.Cell>
                         <Table.Cell collapsing>
@@ -192,7 +196,7 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      <Button color="blue" className="link-button" onClick={() => addMore('SOURCES_FRM')} >+ Add Source</Button>
+                      <Button size="small" color="blue" className="link-button" onClick={() => addMore('SOURCES_FRM')} >+ Add Source</Button>
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -206,7 +210,7 @@ export default class BusinessPlan extends Component {
             </Grid.Column>
             <Grid.Column>
               <Header as="h6">Uses</Header>
-              <Table basic compact className="grey-table">
+              <Table basic compact className="form-table">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -219,14 +223,15 @@ export default class BusinessPlan extends Component {
                   USES_FRM.fields.data.length ?
                   USES_FRM.fields.data.map((use, index) => (
                     <Table.Row key={use[index]}>
-                      <Table.Cell>
+                      <Table.Cell width={8}>
                         <FormInput
                           name="name"
                           fielddata={use.name}
                           changed={(e, result) => useEleChange(e, result, index)}
+                          size="small"
                         />
                       </Table.Cell>
-                      <Table.Cell>
+                      <Table.Cell width={8}>
                         <MaskedInput
                           prefix="$"
                           currency
@@ -234,6 +239,7 @@ export default class BusinessPlan extends Component {
                           fielddata={use.amount}
                           changed={values => useMaskChange(values, index)}
                           ishidelabel
+                          size="small"
                         />
                       </Table.Cell>
                       <Table.Cell collapsing>
@@ -246,7 +252,7 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      <Button color="blue" className="link-button" onClick={() => addMore('USES_FRM')} >+ Add Use</Button>
+                      <Button size="small" color="blue" className="link-button" onClick={() => addMore('USES_FRM')} >+ Add Use</Button>
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -267,11 +273,28 @@ export default class BusinessPlan extends Component {
               moment(BUSINESS_PLAN_FRM.fields.dateOfIncorporation.value) : null}
             changed={date => businessPlanDateChange(date)}
             fielddata={BUSINESS_PLAN_FRM.fields.dateOfIncorporation}
+            containerwidth={5}
           />
-          <Button.Group className="pull-right">
-            <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-            <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} primary className="relaxed" type="button">Approve Review</Button>
-          </Button.Group>
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} secondary className="relaxed">Save</Button>
+              <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} primary type="button">Approve Review</Button>
+            </Button.Group>
+          </div>
+          <Divider section />
+          <Header as="h4">Manager</Header>
+          <FormTextarea
+            name="managerOverview"
+            fielddata={MANAGERS_FRM.fields.managerOverview}
+            changed={managerEleChange}
+            containerclassname="secondary"
+          />
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled className="relaxed" secondary>Deny</Button>
+              <Button disabled primary className="relaxed" type="button">Approve</Button>
+            </Button.Group>
+          </div>
         </Form>
         <Confirm
           header="Confirm"

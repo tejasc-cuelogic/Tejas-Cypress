@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
-import { Header, Table, Icon, Item, Form, Confirm, Button } from 'semantic-ui-react';
+import { Header, Table, Icon, Item, Form, Confirm, Button, Dropdown, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { FormSelect, FormInput, DropZone } from '../../../../../../../theme/form';
+import { FormInput, DropZone, FormTextarea } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
 
 @inject('businessAppReviewStore', 'uiStore')
@@ -40,15 +41,17 @@ export default class Miscellaneous extends Component {
       confirmModal,
       confirmModalName,
       removeData,
+      MANAGERS_FRM,
+      managerEleChange,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
-      <div className="inner-content-spacer">
-        <Form>
+      <Aux>
+        <Form size="small">
           <Header as="h4">
           Social Media
           </Header>
-          <Table basic compact inverted className="grey-table">
+          <Table basic compact className="form-table">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Label</Table.HeaderCell>
@@ -60,14 +63,15 @@ export default class Miscellaneous extends Component {
               {
                 SOCIAL_MEDIA_FRM.fields.data.length ?
                 SOCIAL_MEDIA_FRM.fields.data.map((socialMedia, index) => (
-                  <Table.Row>
+                  <Table.Row verticalAlign="top">
                     <Table.Cell collapsing>
-                      <FormSelect
+                      {/* <FormSelect
                         name="label"
                         fielddata={socialMedia.label}
                         options={SOCIAL_MEDIA_LABELS}
                         changed={(e, result) => socialMediaChange(e, result, index)}
-                      />
+                      /> */}
+                      <Dropdown placeholder="eg. Facebook" fluid selection options={SOCIAL_MEDIA_LABELS} />
                     </Table.Cell>
                     <Table.Cell>
                       <FormInput
@@ -89,7 +93,7 @@ export default class Miscellaneous extends Component {
               }
               <Table.Row>
                 <Table.Cell collapsing>
-                  <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'SOCIAL_MEDIA_FRM')}><small>+ Add social media</small></Link>
+                  <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, 'SOCIAL_MEDIA_FRM')}>+ Add social media</Button>
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
@@ -98,11 +102,11 @@ export default class Miscellaneous extends Component {
           Other Documentation Uploads
           </Header>
           <p>(e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)</p>
-          <Table basic compact inverted className="grey-table">
+          <Table basic compact className="form-table">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Label</Table.HeaderCell>
-                <Table.HeaderCell>Comment</Table.HeaderCell>
+                <Table.HeaderCell>Documents</Table.HeaderCell>
                 <Table.HeaderCell />
               </Table.Row>
             </Table.Header>
@@ -110,8 +114,8 @@ export default class Miscellaneous extends Component {
               {
               OTHER_DOCUMENTATION_FRM.fields.data.length ?
               OTHER_DOCUMENTATION_FRM.fields.data.map((document, index) => (
-                <Table.Row>
-                  <Table.Cell collapsing>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell>
                     <FormInput
                       name="label"
                       fielddata={document.label}
@@ -138,8 +142,8 @@ export default class Miscellaneous extends Component {
               )) : ''
               }
               <Table.Row>
-                <Table.Cell collapsing>
-                  <Link to={this.props.match.url} color="blue" className="link" onClick={e => this.addMore(e, 'OTHER_DOCUMENTATION_FRM')}><small>+ Add new document</small></Link>
+                <Table.Cell>
+                  <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, 'OTHER_DOCUMENTATION_FRM')}>+ Add new document</Button>
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
@@ -148,7 +152,7 @@ export default class Miscellaneous extends Component {
           NS Admin Uploaded Documents
           </Header>
           <p>Uploaded via the Activity History</p>
-          <div className="featured-section">
+          <div className="featured-section mb-20">
             <Item.Group relaxed="very">
               <Item>
                 <Item.Content>
@@ -189,6 +193,26 @@ export default class Miscellaneous extends Component {
               </Item>
             </Item.Group>
           </div>
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled secondary className="relaxed">Save</Button>
+              <Button disabled primary type="button">Submit for Approval</Button>
+            </Button.Group>
+          </div>
+          <Divider section />
+          <Header as="h4">Manager</Header>
+          <FormTextarea
+            name="managerOverview"
+            fielddata={MANAGERS_FRM.fields.managerOverview}
+            changed={managerEleChange}
+            containerclassname="secondary"
+          />
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled className="relaxed" secondary>Deny</Button>
+              <Button disabled primary className="relaxed" type="button">Approve</Button>
+            </Button.Group>
+          </div>
         </Form>
         <Confirm
           header="Confirm"
@@ -209,11 +233,7 @@ export default class Miscellaneous extends Component {
           size="mini"
           className="deletion"
         />
-        <Button.Group className="pull-right">
-          <Button disabled secondary className="relaxed">Save</Button>
-          <Button disabled primary className="relaxed" type="button">Submit for Approval</Button>
-        </Button.Group>
-      </div>
+      </Aux>
     );
   }
 }

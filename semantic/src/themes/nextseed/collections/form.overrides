@@ -66,10 +66,11 @@
         color:@negativeTextColor;
     }
     label{
-        i.icon{
+        i.ns-help-circle, a{
             margin:0 0 0 @5px;
             font-size:@14px;
             color:@neutral-middark;
+            vertical-align: middle;
         }
     }
     input:not([type]),
