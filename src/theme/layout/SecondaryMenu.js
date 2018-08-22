@@ -6,19 +6,23 @@ import map from 'lodash/map';
 import mapKeys from 'lodash/mapKeys';
 
 const iMap = { to: 'key', title: 'text' };
-const NavItems = ({ navItems, match, stepsStatus }) => navItems.map((item, key) => (
+const NavItems = ({
+  navItems, match, stepsStatus, addon,
+}) => navItems.map((item, key) => (
   <Menu.Item key={item.to} as={NavLink} to={`${match.url}/${item.to}`}>
     {item.showIcon &&
       <Icon color={stepsStatus[key].status === 'COMPLETE' ? 'green' : ''} name={stepsStatus[key].status === 'COMPLETE' ? item.icon : 'circle'} />
     }
+    {addon && addon.pos === 'left' && addon.data[item.to]}
     {item.title}
+    {addon && addon.pos !== 'left' && addon.data[item.to]}
   </Menu.Item>
 ));
 
 class SecondaryMenu extends Component {
   render() {
     const {
-      navItems, match, vertical, noinvert, attached, className, stepsStatus,
+      navItems, match, vertical, noinvert, attached, className, stepsStatus, addon,
     } = this.props;
     const mobnavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
@@ -33,8 +37,7 @@ class SecondaryMenu extends Component {
             vertical={vertical}
             attached={attached}
           >
-            <NavItems navItems={navItems} match={match} stepsStatus={stepsStatus} />
-            {this.props.subNavComponent}
+            <NavItems addon={addon} navItems={navItems} match={match} stepsStatus={stepsStatus} />
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767} as={Aux}>

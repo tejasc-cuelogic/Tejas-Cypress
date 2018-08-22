@@ -5,6 +5,7 @@ import Loadable from 'react-loadable';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { authActions } from '../../services/actions';
 import { privateRoutes } from '../../modules/routes';
+import { InlineLoader } from '../../theme/shared';
 import SidebarLeftOverlay from './../../theme/layout/SidebarLeftOverlay';
 import NotFound from '../shared/NotFound';
 
@@ -28,8 +29,10 @@ export default class Private extends React.Component {
             path={`/app/${item.to}`}
             component={Loadable({
               loader: () => import(`./${typeof item.path === 'object' && roles ? item.path[roles[0]] :
-    item.path}`),
-              loading: 'loading...',
+              item.path}`),
+              loading() {
+                return <InlineLoader />;
+              },
             })}
             key={item.path}
           />
