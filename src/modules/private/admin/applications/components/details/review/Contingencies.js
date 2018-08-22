@@ -90,10 +90,10 @@ export default class Contingencies extends Component {
             <TableBody match={this.props.match} form={CLOSE_FRM} formName="CLOSE_FRM" onchange={contingenciesEleChange} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
           <Button.Group className="pull-right">
-            <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} secondary>
+            <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} secondary className="relaxed">
               Save
             </Button>
-            <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} primary className="relaxed" type="button">Submit for Approval</Button>
+            <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} primary type="button">Submit for Approval</Button>
           </Button.Group>
         </Form>
         <Confirm

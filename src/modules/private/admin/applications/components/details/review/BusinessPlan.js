@@ -8,11 +8,21 @@ import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'seman
 import { FormTextarea, MaskedInput, FormInput, DropZone, FormDatePicker } from '../../../../../../../theme/form';
 import { InlineLoader } from '../../../../../../../theme/shared';
 
+const AddMore = ({
+  match, addMore, formName, title,
+}) => (
+  <Link color="blue" to={match.url} className="link" onClick={e => addMore(e, formName)}><small>+ {title}</small></Link>
+);
+
 @inject('businessAppReviewStore', 'uiStore')
 @observer
 export default class BusinessPlan extends Component {
   onFileDrop = (files, name, index) => {
     this.props.businessAppReviewStore.setFileUploadDataWithIndex('CONTROL_PERSONS_FRM', name, files, index);
+  }
+  addMore = (e, formName) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.addMore(formName);
   }
   confirmRemoveDoc = (e, name) => {
     e.preventDefault();
@@ -45,7 +55,6 @@ export default class BusinessPlan extends Component {
       useEleChange,
       useMaskChange,
       totalUsesAmount,
-      addMore,
       confirmModal,
       confirmModalName,
       removeData,
@@ -65,7 +74,7 @@ export default class BusinessPlan extends Component {
           <Divider section />
           <Header as="h4">
             Control Persons
-            <Link to={this.props.match.url} className="link" onClick={() => addMore('CONTROL_PERSONS_FRM')}><small>+ Add Control Person</small></Link>
+            <AddMore match={this.props.match} addMore={this.addMore} formName="CONTROL_PERSONS_FRM" title="Add Control Person" />
           </Header>
           {
             CONTROL_PERSONS_FRM.fields.data.length ?
@@ -196,7 +205,7 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      <Button color="blue" className="link-button" onClick={() => addMore('SOURCES_FRM')} >+ Add Source</Button>
+                      <AddMore match={this.props.match} addMore={this.addMore} formName="SOURCES_FRM" title="Add Source" />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -252,7 +261,7 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      <Button color="blue" className="link-button" onClick={() => addMore('USES_FRM')} >+ Add Use</Button>
+                      <AddMore match={this.props.match} addMore={this.addMore} formName="USES_FRM" title="Add Use" />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -276,7 +285,7 @@ export default class BusinessPlan extends Component {
           />
           <Button.Group className="pull-right">
             <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-            <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} primary className="relaxed" type="button">Approve Review</Button>
+            <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} primary type="button">Approve Review</Button>
           </Button.Group>
         </Form>
         <Confirm

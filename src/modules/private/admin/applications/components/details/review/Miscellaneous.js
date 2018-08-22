@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import Aux from 'react-aux';
-import { Header, Table, Icon, Item, Form, Confirm } from 'semantic-ui-react';
+import { Header, Table, Icon, Item, Form, Confirm, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormSelect, FormInput, DropZone } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
@@ -69,7 +69,7 @@ const AddMore = ({
 }) => (
   <Table.Row>
     <Table.Cell collapsing>
-      <Link to={match.url} className="link" onClick={e => addMore(e, formName)}><small>+ {title}</small></Link>
+      <Link color="blue" to={match.url} className="link" onClick={e => addMore(e, formName)}><small>+ {title}</small></Link>
     </Table.Cell>
   </Table.Row>
 );
@@ -196,6 +196,16 @@ export default class Miscellaneous extends Component {
               }
             </Item.Group>
           </div>
+          <Button.Group className="pull-right">
+            <Button
+              disabled={!(OTHER_DOCUMENTATION_FRM.meta.isValid && SOCIAL_MEDIA_FRM.meta.isValid)}
+              className="relaxed"
+              secondary
+            >
+              Save
+            </Button>
+            <Button disabled={!(OTHER_DOCUMENTATION_FRM.meta.isValid && SOCIAL_MEDIA_FRM.meta.isValid)} primary type="button">Submit for Approval</Button>
+          </Button.Group>
         </Form>
         <Confirm
           header="Confirm"
