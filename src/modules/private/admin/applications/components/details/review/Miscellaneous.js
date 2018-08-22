@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
-import { Header, Table, Icon, Item, Form, Confirm, Button, Dropdown, Divider } from 'semantic-ui-react';
+import { Header, Table, Icon, Item, Form, Confirm, Button, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { FormInput, DropZone, FormTextarea } from '../../../../../../../theme/form';
+import { FormInput, DropZone, FormTextarea, FormDropDown } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
 
 const SectionHeader = ({ header, subheader }) => (
@@ -126,13 +126,15 @@ export default class Miscellaneous extends Component {
                 SOCIAL_MEDIA_FRM.fields.data.map((socialMedia, index) => (
                   <Table.Row verticalAlign="top">
                     <Table.Cell collapsing>
-                      {/* <FormSelect
+                      <FormDropDown
                         name="label"
                         fielddata={socialMedia.label}
+                        placeholder="eg. Facebook"
+                        fluid
+                        selection
                         options={SOCIAL_MEDIA_LABELS}
-                        changed={(e, result) => socialMediaChange(e, result, index)}
-                      /> */}
-                      <Dropdown placeholder="eg. Facebook" fluid selection options={SOCIAL_MEDIA_LABELS} />
+                        onChange={(e, result) => socialMediaChange(e, result, index)}
+                      />
                     </Table.Cell>
                     <Table.Cell>
                       <FormInput
