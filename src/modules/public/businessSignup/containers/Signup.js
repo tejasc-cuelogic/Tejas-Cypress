@@ -6,6 +6,7 @@ import Success from '../../../private/issuer/businessApplication/components/Succ
 import Failure from '../../../private/issuer/businessApplication/components/Failure';
 import Application from '../../../private/issuer/businessApplication/components/lendio/Application';
 import LendioSuccess from '../../../private/issuer/businessApplication/components/lendio/LendioSuccess';
+import NeedHelpModal from '../../../private/issuer/businessApplication/components/NeedHelpModal';
 
 class Signup extends Component {
   render() {
@@ -14,6 +15,7 @@ class Signup extends Component {
         <Grid container>
           <Switch>
             <Route exact path="/business-application" render={props => <PreQualification isPublic {...props} />} />
+            <Route exact path="/business-application/need-help" render={props => <NeedHelpModal isPublic {...props} />} />
             <Route path="/business-application/:id/lendio/:condition" render={props => <LendioSuccess isPublic {...props} />} />
             <Route path="/business-application/:id/lendio" render={props => <Application isPublic {...props} />} />
             <Route path="/business-application/:id/success" render={props => <Success isPublic {...props} />} />

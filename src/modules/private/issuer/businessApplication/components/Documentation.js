@@ -55,7 +55,7 @@ export default class Documentation extends Component {
               <Grid stackable columns="equal">
                 {
                   statementFileList.map(field => (
-                    <Grid.Column>
+                    <Grid.Column key={field}>
                       <DropZone
                         disabled={formReadOnlyMode}
                         multiple

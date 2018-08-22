@@ -50,6 +50,12 @@ mutation submitApplication($applicationId: String!) {
 }
 `;
 
+export const helpAndQuestion = gql`
+mutation helpAndQuestion($question: helpAndQuestionInput!) {
+  helpAndQuestion(question: $question)
+}
+`;
+
 export const upsertBusinessApplicationInformationBusinessDetails = gql`
 mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID!,
   $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!,

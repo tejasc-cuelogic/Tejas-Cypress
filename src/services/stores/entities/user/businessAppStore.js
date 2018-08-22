@@ -3,6 +3,7 @@ import { forEach, includes, find, isEmpty } from 'lodash';
 import graphql from 'mobx-apollo';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import {
   BUSINESS_PRE_QUALIFICATION_BASIC,
   BUSINESS_PRE_QUALIFICATION,
@@ -15,6 +16,7 @@ import {
   BUSINESS_APP_FILE_UPLOAD_ENUMS,
   AFFILIATED_PARTNERS,
   LENDIO,
+  NEED_HELP,
 } from '../../../constants/businessApplication';
 import Helper from '../../../../helper/utility';
 import {
@@ -25,6 +27,7 @@ import {
   upsertBusinessApplicationInformationBusinessDetails,
   upsertBusinessApplicationInformationDocumentation,
   submitApplication,
+  helpAndQuestion,
 } from '../../queries/businessApplication';
 import { uiStore, navStore, userDetailsStore, businessAppLendioStore } from '../../index';
 import { fileUpload } from '../../../actions';
@@ -33,6 +36,7 @@ export class BusinessAppStore {
   @observable BUSINESS_APP_FRM_BASIC =
   Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
+  @observable NEED_HELP_FRM = Validator.prepareFormObject(NEED_HELP);
   @observable BUSINESS_ACCOUNT =Validator.prepareFormObject(BUSINESS_SIGNUP);
   @observable BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
   @observable BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
@@ -420,9 +424,9 @@ export class BusinessAppStore {
   };
 
   @action
-  businessAppEleMaskChange = (values, field) => {
-    this.BUSINESS_APP_FRM = Validator.onChange(
-      this.BUSINESS_APP_FRM,
+  businessAppEleMaskChange = (values, field, formName = 'BUSINESS_APP_FRM') => {
+    this[formName] = Validator.onChange(
+      this[formName],
       { name: field, value: values.floatValue },
     );
   };
@@ -712,6 +716,32 @@ export class BusinessAppStore {
   }
 
   @action
+  needHelpFormSubmit = () => {
+    const payload = Validator.ExtractValues(this.NEED_HELP_FRM.fields);
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      clientPublic
+        .mutate({
+          mutation: helpAndQuestion,
+          variables: {
+            question: payload,
+          },
+        })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
   businessApplicationSubmitAction = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -959,13 +989,18 @@ export class BusinessAppStore {
   formReset = () => {
     this.BUSINESS_APP_FRM_BASIC = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
     this.BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
-    this.preQualFormDisabled = false;
     this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
     this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
     this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
+    this.preQualFormDisabled = false;
     this.appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
     this.formReadOnlyMode = false;
     this.isPrequalQulify = false;
+  }
+
+  @action
+  needHelpFormReset = () => {
+    this.NEED_HELP_FRM = Validator.prepareFormObject(NEED_HELP);
   }
 
   @action
