@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { MaskedInput2, FormCheckbox } from '../../../../../../theme/form';
+import { MaskedInput, FormCheckbox } from '../../../../../../theme/form';
 import FieldsForm from '../../components/establishProfile/FieldsForm';
 @inject('investorProfileStore', 'uiStore')
 @withRouter
@@ -53,7 +53,7 @@ export default class Finances extends Component {
           we can determine which investments we are allowed to show you
         </p>
         <Form error>
-          <MaskedInput2
+          <MaskedInput
             name="netWorth"
             currency
             fielddata={FINANCES_FORM.fields.netWorth}
@@ -62,7 +62,7 @@ export default class Finances extends Component {
           />
           <Form.Group widths="equal">
             {['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
-              <MaskedInput2
+              <MaskedInput
                 type="tel"
                 key={field}
                 name={field}

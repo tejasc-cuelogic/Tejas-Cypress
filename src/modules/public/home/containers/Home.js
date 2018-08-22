@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Route } from 'react-router-dom';
-import { Container, Divider, Header } from 'semantic-ui-react';
+import { Route, Link } from 'react-router-dom';
+import { Container, Divider, Header, Button } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import HowItWorksSummary from '../components/HowItWorksSummary';
 import HowItWorks from '../components/HowItWorks';
@@ -31,6 +31,9 @@ class Home extends Component {
             </Aux>
           }
         />
+        <div className="center-align mb-50">
+          <Button secondary content="Explore Campaigns" as={Link} to="/offerings" />
+        </div>
         <FeaturedOn />
         <section className="learn-more">
           <Container textAlign="center">

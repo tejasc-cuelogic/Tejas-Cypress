@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Input, Form, Accordion, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('educationStore')
 @observer
@@ -16,13 +17,30 @@ export default class FaqsCombined extends Component {
     const stateChange = field === 'activeIndex' ? { activeIndex: newIndex, innerActiveIndex: 0 } : { innerActiveIndex: newIndex };
     this.setState(stateChange);
   }
+  search = (e) => {
+    this.props.educationStore.setSrchParam('Faq', e.target.value);
+    if (this.props.location.pathname !== '/resources/education-center/investor/faq') {
+      this.props.history.replace('/resources/education-center/investor/faq');
+    }
+  }
   render() {
-    const { faqs } = this.props.educationStore;
+    const { faqs, loading, searchParam } = this.props.educationStore;
     const { activeIndex, innerActiveIndex } = this.state;
+    if (loading('Faq')) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form>
-          <Input icon="search" placeholder="Search" fluid />
+          <Input
+            fluid
+            onChange={this.search}
+            value={searchParam.Faq}
+            inverted
+            icon={{ className: 'ns-search' }}
+            iconPosition="left"
+            placeholder="Search by keyword or phrase"
+          />
         </Form>
         <div className="mt-30">
           {faqs &&
@@ -41,7 +59,7 @@ export default class FaqsCombined extends Component {
                       index={index}
                       onClick={() => this.toggleAccordion(index, 'innerActiveIndex')}
                     >
-                      <Icon className="ns-minus-square" color="green" />
+                      <Icon className={innerActiveIndex === index ? 'ns-minus-square' : 'ns-plus-square'} color="green" />
                       {faqItem.question}
                     </Accordion.Title>
                     <Accordion.Content active={innerActiveIndex === index}>

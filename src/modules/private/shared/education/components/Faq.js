@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Grid, Form, Input } from 'semantic-ui-react';
 import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
+import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('educationStore')
 @observer
@@ -12,7 +13,7 @@ export default class KnowledgeBase extends Component {
     this.props.educationStore.initRequest('Faq');
   }
   search = (e) => {
-    this.props.educationStore.setSrchParam(e.target.value);
+    this.props.educationStore.setSrchParam('Faq', e.target.value);
     if (this.props.location.pathname !== '/app/resources/faq') {
       this.props.history.replace('/app/resources/faq');
     }
@@ -23,8 +24,8 @@ export default class KnowledgeBase extends Component {
       faqs, loading, error, searchParam,
     } = this.props.educationStore;
     const modul = 'faq';
-    if (loading) {
-      return 'loading...';
+    if (loading('Faq')) {
+      return <InlineLoader />;
     }
     return (
       <div>
@@ -35,7 +36,7 @@ export default class KnowledgeBase extends Component {
                 <Input
                   fluid
                   onChange={this.search}
-                  value={searchParam}
+                  value={searchParam.Faq}
                   inverted
                   icon={{ className: 'ns-search' }}
                   iconPosition="left"

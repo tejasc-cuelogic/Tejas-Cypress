@@ -1,12 +1,12 @@
 import React from 'react';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
-import { MaskedInput2 } from '../../../../../theme/form';
+import { MaskedInput } from '../../../../../theme/form';
 
 const FinancialInfo = () => (
   <div>
     <Header as="h3" textAlign="center">How much would you like to invest?</Header>
     <Form error size="huge">
-      <MaskedInput2
+      <MaskedInput
         currency
         prefix="$ "
         fielddata={{ placeHolder: '$ 0', value: '500' }}

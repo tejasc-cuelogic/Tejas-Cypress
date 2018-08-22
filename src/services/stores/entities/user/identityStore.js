@@ -252,7 +252,7 @@ export class IdentityStore {
           resolve();
         })
         .catch((err) => {
-          uiStore.setErrors(JSON.stringify(err.message));
+          uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
           reject(err);
         })
         .finally(() => {
@@ -354,7 +354,7 @@ export class IdentityStore {
           resolve();
         })
         .catch(action((err) => {
-          uiStore.setErrors(JSON.stringify(err.message));
+          uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
           reject(err);
         }))
         .finally(() => {

@@ -25,7 +25,7 @@ export default class Identity extends Component {
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Confirm your identity and upload your <br /> Driver’s License, state-issued ID, or U.S. <br /> passport</Header>
+        <Header as="h3" textAlign="center">Confirm your identity and upload your Driver’s License, state-issued ID, or U.S. <br /> passport</Header>
         <Divider section hidden />
         {errors &&
           <Message error>

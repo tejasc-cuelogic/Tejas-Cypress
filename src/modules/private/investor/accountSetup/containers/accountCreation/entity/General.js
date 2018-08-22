@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import { Header, Form } from 'semantic-ui-react';
+import { Header, Form, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { US_STATES } from '../../../../../../../constants/account';
-import { FormInput, MaskedInput2, FormSelect, AutoComplete } from '../../../../../../../theme/form';
+import { ListErrors } from '../../../../../../../theme/shared';
+import { FormInput, MaskedInput, FormSelect, AutoComplete } from '../../../../../../../theme/form';
 
-@inject('entityAccountStore')
+@inject('entityAccountStore', 'uiStore')
 @observer
 export default class General extends Component {
+  componentWillMount() {
+    this.props.uiStore.setErrors(null);
+  }
   render() {
     const {
       GEN_INFO_FRM,
@@ -14,9 +18,15 @@ export default class General extends Component {
       setAddressFields,
       maskedGenInfoChange,
     } = this.props.entityAccountStore;
+    const { errors } = this.props.uiStore;
     return (
       <div>
         <Header as="h3" textAlign="center">General information</Header>
+        {errors &&
+          <Message error textAlign="left">
+            <ListErrors errors={[errors]} />
+          </Message>
+        }
         <Form error>
           <div className="field-wrap">
             <FormInput
@@ -24,7 +34,7 @@ export default class General extends Component {
               fielddata={GEN_INFO_FRM.fields.name}
               changed={genInfoChange}
             />
-            <MaskedInput2
+            <MaskedInput
               name="taxId"
               fielddata={GEN_INFO_FRM.fields.taxId}
               changed={maskedGenInfoChange}
@@ -50,7 +60,7 @@ export default class General extends Component {
                 options={US_STATES}
                 changed={genInfoChange}
               />
-              <MaskedInput2
+              <MaskedInput
                 name="zipCode"
                 fielddata={GEN_INFO_FRM.fields.zipCode}
                 changed={maskedGenInfoChange}

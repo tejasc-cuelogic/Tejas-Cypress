@@ -1,5 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import { isEmpty, find } from 'lodash';
+import graphql from 'mobx-apollo';
+import React from 'react';
 import {
   ENTITY_FIN_INFO,
   ENTITY_GEN_INFO,
@@ -8,11 +10,12 @@ import {
   ENTITY_FORMATION_DOCS,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore } from '../../index';
-import { createAccount, updateAccount } from '../../queries/account';
+import { createAccount, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
 import Helper from '../../../../helper/utility';
+import { NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 
 class EntityAccountStore {
@@ -95,12 +98,17 @@ class EntityAccountStore {
   }
 
   @action
-  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false, field = null) => {
+  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false, field = null) => new Promise((resolve) => {
     if (formStatus === 'submit') {
-      this.submitForm(currentStep, formStatus, this.accountAttributes);
+      this.submitForm(currentStep, formStatus, this.accountAttributes).then(() => {
+        resolve();
+      });
+    } else {
+      this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field).then(() => {
+        resolve();
+      });
     }
-    this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field);
-  }
+  })
 
   @action
   setEntityAttributes = (step, removeUploadedData, field) => {
@@ -243,7 +251,35 @@ class EntityAccountStore {
   }
 
   @action
-  validateAndSubmitStep = (currentStep, formStatus, removeUploadedData, field) => {
+  checkTaxIdCollision = () => new Promise(async (resolve) => {
+    graphql({
+      client,
+      query: checkEntityTaxIdCollision,
+      variables: {
+        taxId: this.GEN_INFO_FRM.fields.taxId.value,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: (fData) => {
+        if (fData) {
+          if (fData.checkEntityTaxIdCollision.alreadyExists) {
+            const setErrorMessage = (
+              <span>
+                There was an issue with the information you submitted.
+                Please double-check and try again. If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href={`mailto:${NS_SITE_EMAIL_SUPPORT}`}>{ NS_SITE_EMAIL_SUPPORT }</a>
+              </span>
+            );
+            uiStore.setErrors(setErrorMessage);
+          }
+          resolve(fData.checkEntityTaxIdCollision.alreadyExists);
+        }
+      },
+      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+    });
+  });
+
+  @action
+  validateAndSubmitStep =
+  (currentStep, formStatus, removeUploadedData, field) => new Promise((res, rej) => {
     let isValidCurrentStep = true;
     const accountAttributes = {};
     const array1 = ['Financial info', 'General', 'Entity info'];
@@ -261,19 +297,38 @@ class EntityAccountStore {
         } else if (currentStep.name === 'General' || currentStep.name === 'Entity info') {
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
         }
-        this.submitForm(currentStep, formStatus, accountAttributes);
+        if (currentStep.name === 'General') {
+          this.checkTaxIdCollision().then((alreadyExists) => {
+            if (alreadyExists) {
+              rej();
+            } else {
+              uiStore.setErrors(null);
+              this.submitForm(currentStep, formStatus, accountAttributes)
+                .then(() => res()).catch(() => rej());
+            }
+          });
+        } else {
+          this.submitForm(currentStep, formStatus, accountAttributes)
+            .then(() => res()).catch(() => rej());
+        }
+      } else {
+        rej();
       }
     } else if (array2.includes(currentStep.name)) {
       if (removeUploadedData) {
         accountAttributes.entity =
         this.setEntityAttributes(currentStep.name, removeUploadedData, field);
-        this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData);
+        this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData)
+          .then(() => res()).catch(() => rej());
       } else {
         currentStep.validate();
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
-          this.submitForm(currentStep, formStatus, accountAttributes);
+          this.submitForm(currentStep, formStatus, accountAttributes)
+            .then(() => res()).catch(() => rej());
+        } else {
+          rej();
         }
       }
     } else if (currentStep.name === 'Link bank') {
@@ -303,11 +358,14 @@ class EntityAccountStore {
             accountAttributes.bankDetails = plaidBankDetails;
           }
         }
-        this.submitForm(currentStep, formStatus, accountAttributes);
+        this.submitForm(currentStep, formStatus, accountAttributes)
+          .then(() => res()).catch(() => rej());
+      } else {
+        rej();
       }
     }
     return true;
-  }
+  })
 
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
@@ -362,6 +420,7 @@ class EntityAccountStore {
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           }
+          uiStore.setErrors(null);
           resolve(result);
         }))
         .catch((err) => {

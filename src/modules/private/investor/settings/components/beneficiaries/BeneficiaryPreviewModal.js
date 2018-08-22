@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import moment from 'moment';
 import { Modal, Button, Header, Divider, Message, Grid, Card } from 'semantic-ui-react';
-import { ListErrors, DateTimeFormat } from '../../../../../../theme/shared';
+import { ListErrors, DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
 @inject('beneficiaryStore', 'uiStore')
 @withRouter
@@ -44,10 +44,10 @@ export default class BeneficiaryPreviewModal extends Component {
               <ListErrors errors={[errors]} />
             </Message>
           }
-          <Grid stackable celled="internally" padded="horizontally">
-            {
-              BENEFICIARY_META.fields.beneficiary.length ?
-              BENEFICIARY_META.fields.beneficiary.map(beneficiary => (
+          {
+            BENEFICIARY_META.fields.beneficiary.length ?
+            BENEFICIARY_META.fields.beneficiary.map(beneficiary => (
+              <Grid stackable celled="internally" padded="horizontally">
                 <Grid.Row>
                   <Grid.Column width={16}>
                     <Card.Content>
@@ -73,10 +73,10 @@ export default class BeneficiaryPreviewModal extends Component {
                     </Card.Content>
                   </Grid.Column>
                 </Grid.Row>
-              )) :
-              <div>loading...</div>
-            }
-          </Grid>
+              </Grid>
+            )) :
+            <InlineLoader />
+          }
           <div className="center-align mt-30">
             <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
             <Button loading={inProgress} onClick={this.submit} disabled={!BENEFICIARY_META.meta.isValid} color="green" >Submit</Button>

@@ -91,3 +91,10 @@ export const updateInvestorProfileData = gql`
       }
     }
   }`;
+
+export const checkEntityTaxIdCollision = gql`
+query checkEntityTaxIdCollision($taxId: String!) {
+  checkEntityTaxIdCollision(taxId: $taxId) {
+    alreadyExists
+  }
+}`;

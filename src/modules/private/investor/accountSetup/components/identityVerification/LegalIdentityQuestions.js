@@ -18,9 +18,9 @@ const LegalIdentityQuestions = observer(({
       <Header as="h3">We need to confirm your identity</Header>
       <Divider />
       <p>
-        We were unable to match your information with the<br />
+        We were unable to match your information with the
         address you provided. (
-        <i>Note: This may happen if you<br />
+        <i>Note: This may happen if you
         recently relocated or you entered your address incorrectly
         </i>)
       </p>

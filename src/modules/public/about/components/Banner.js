@@ -6,7 +6,7 @@ const Banner = () => (
     <Container>
       <div className="banner-caption">
         <Header as="h1">
-        Everyone thrives when <br />we invest in each other.
+        Everyone thrives when we<br /> invest in each other.
         </Header>
       </div>
     </Container>

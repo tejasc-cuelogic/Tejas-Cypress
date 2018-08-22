@@ -28,11 +28,11 @@
             }
             &:after {
                 content: "";
-                height: 6px;
+                height: 2px;
                 background: @neutral-offdark;
                 width: 145px;
                 position: absolute;
-                bottom: -20px;
+                bottom: -16px;
             }
         }
         &.content {
@@ -42,7 +42,6 @@
                 padding: @20px;
             }
             h4.ui.header:after {
-                height: 2px;
                 bottom: -13px;
             }
         }
@@ -176,7 +175,13 @@
                 }
             }
             .user-type{
-                min-height:165px;
+                min-height:195px;
+                display:flex;
+                flex-direction:column;
+                justify-content:center;
+                > i.icon{
+                    margin:0 auto;
+                }
             }
         }
         .user-type{
@@ -350,7 +355,7 @@
     >.close{
         height:30px;
         width:30px;
-        font-size:1em;
+        font-size:.85em;
         line-height:30px;
         padding:0;
         margin:0;

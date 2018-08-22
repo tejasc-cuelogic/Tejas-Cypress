@@ -10,7 +10,7 @@ import { allKbsQuery, allFaqQuery } from '../../queries/knowledgeBase';
 
 export class EducationStore {
   @observable data = { KnowledgeBase: [], Faq: [] };
-  @observable searchParam = '';
+  @observable searchParam = { Faq: '', KnowledgeBase: '' };
   @observable selected = { id: '', title: '', body: '' };
   @observable faqsList = [
     {
@@ -59,8 +59,8 @@ export class EducationStore {
   }
 
   @action
-  setSrchParam = (value) => {
-    this.searchParam = value || '';
+  setSrchParam = (module, value) => {
+    this.searchParam[module] = value || '';
   }
 
   @computed get allData() {
@@ -71,23 +71,22 @@ export class EducationStore {
     return (this.allData.KnowledgeBase.data && this.allData.KnowledgeBase.data.knowledgeBase
       && clientSearch.search(
         toJS(this.allData.KnowledgeBase.data.knowledgeBase),
-        this.searchParam,
+        this.searchParam.KnowledgeBase,
         'knowledgeBase',
       )) || [];
   }
 
   @computed get faqs() {
     return (this.allData.Faq.data && this.allData.Faq.data.faqs
-      && clientSearch.search(toJS(this.allData.Faq.data.faqs), this.searchParam, 'faq')) || [];
+      && clientSearch.search(toJS(this.allData.Faq.data.faqs), this.searchParam.Faq, 'faq')) || [];
   }
 
   @computed get error() {
     return (this.allData.error && this.allData.error.message) || null;
   }
 
-  @computed get loading() {
-    return this.allData.loading;
-  }
+  @action
+  loading = module => this.allData[module].loading;
 
   @computed get faqsOfModule() {
     return toJS(this.faqsList);

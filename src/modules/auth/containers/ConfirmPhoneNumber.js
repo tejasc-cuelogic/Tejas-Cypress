@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { MaskedInput2 } from '../../../theme/form';
+import { MaskedInput } from '../../../theme/form';
 import Helper from '../../../helper/utility';
 import { ListErrors } from '../../../theme/shared';
 
@@ -81,18 +81,18 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your phone number</Header>
           <Divider />
-          <p> Please confirm the 6-digit verification code <br />
+          <p> Please confirm the 6-digit verification code
               sent by text to your phone number:
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           {errors &&
             <Message error>
-              <ListErrors errors={[errors]} />
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
             </Message>
           }
           <Form>
-            <MaskedInput2
+            <MaskedInput
               hidelabel
               value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
               type="tel"
