@@ -459,3 +459,108 @@ export const UPLOADED_DOCUMENTS = {
     },
   }],
 };
+
+export const OFFERS = {
+  data: [{
+    structure: {
+      value: '',
+      label: '',
+      placeHolder: 'Choose',
+      error: undefined,
+      rule: 'string',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
+    },
+    offeringAmount: {
+      value: '',
+      label: 'Offering Amount ($)',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'string',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
+    },
+    maturity: {
+      value: '',
+      label: 'Maturity (# of Months)',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'numeric',
+      customErrors: {
+        numeric: 'Allowed numbers only.',
+      },
+    },
+    interestRate: {
+      value: '',
+      label: 'Annualized Interest Rate',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'numeric',
+      customErrors: {
+        numeric: 'Allowed numbers only.',
+      },
+    },
+    amortizationAmount: {
+      value: '',
+      label: 'Monthly Amortization Amount',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'numeric',
+      customErrors: {
+        numeric: 'Allowed numbers only.',
+      },
+    },
+    personalGuarantee: {
+      value: '',
+      label: 'Personal Guarantee',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'string',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
+    },
+    businessBlanket: {
+      value: '',
+      label: 'Business Blanket',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'string',
+      customErrors: {
+        string: 'Allowed string only.',
+      },
+    },
+    expirationDate: {
+      value: '',
+      label: 'Expiration Date',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'date',
+      customErrors: {
+        date: 'Date format is invalid.',
+      },
+    },
+    multipleOnPrincipalToPay: {
+      value: '',
+      label: 'Multiple on Principal to Pay',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'numeric',
+      customErrors: {
+        numeric: 'Allowed numbers only.',
+      },
+    },
+    totalCapitalReturned: {
+      value: '',
+      label: 'Total Capital Returned',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'numeric',
+      customErrors: {
+        numeric: 'Allowed numbers only.',
+      },
+    },
+  }],
+};

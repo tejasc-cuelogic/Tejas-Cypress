@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
+import { OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -18,6 +18,7 @@ export class BusinessAppReviewStore {
   @observable SOCIAL_MEDIA_FRM = Validator.prepareFormObject(SOCIAL_MEDIA);
   @observable OTHER_DOCUMENTATION_FRM = Validator.prepareFormObject(OTHER_DOCUMENTATION_UPLOADS);
   @observable UPLOADED_DOCUMENTS_FRM = Validator.prepareFormObject(UPLOADED_DOCUMENTS);
+  @observable OFFERS_FRM = Validator.prepareFormObject(OFFERS);
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
