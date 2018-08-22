@@ -4,6 +4,7 @@ import { Route, withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import moment from 'moment';
 import { Form, Header, Button, Confirm, Icon } from 'semantic-ui-react';
+import { InlineLoader } from '../../../../../../theme/shared';
 import { FormInput, AutoComplete, FormDatePicker } from '../../../../../../theme/form';
 import ConfirmVerificationCode from './ConfirmVerificationCode';
 import BeneficiaryShareModal from './BeneficiaryShareModal';
@@ -133,7 +134,7 @@ export default class AddBeneficiary extends Component {
                   </div>
                 </Aux>
               )) :
-              <p>loading...</p>
+              <InlineLoader />
           }
           {BENEFICIARY_META.fields.beneficiary.length !== MAX_BENEFICIARY_LIMIT &&
             <Button color="violet" className="ghost-button pull-right" onClick={this.addMoreBeneficiary}>+ Add new beneficiary</Button>

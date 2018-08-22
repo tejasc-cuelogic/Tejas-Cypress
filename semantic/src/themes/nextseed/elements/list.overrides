@@ -318,6 +318,7 @@ ol.ui.list.step-list{
             font-size:@12px;
             font-weight:@bold;
             color:@border-color;
+            line-height:16px;
             text-align:center;
             border-radius:50%;
             border:@border-color 1px solid;
@@ -342,7 +343,7 @@ ol.ui.list.step-list{
 .ui.list.horizontal{
     min-width:600px;
     .item.ui.checkbox{
-        min-width:33%;
+        min-width:25%;
         margin:0;
         padding-right:@14px;
     }
