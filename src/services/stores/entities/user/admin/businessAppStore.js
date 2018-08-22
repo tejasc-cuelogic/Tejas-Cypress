@@ -1,16 +1,19 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { includes, isArray, filter } from 'lodash';
+import { includes, isArray, filter, forEach } from 'lodash';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../../api/gcoolApi';
+import { GqlClient as client } from '../../../../../api/gqlApi';
+// import { GqlClient as client2 } from '../../../../../api/gcoolApi';
 import { FILTER_META } from '../../../../../constants/user';
-import { allBusinessApplicationses } from '../../../queries/businessApplication';
+import { getBusinessApplicationAdmin, getBusinessApplicationSummary } from '../../../queries/businessApplication';
 import Helper from '../../../../../helper/utility';
 
 export class BusinessAppStore {
   @observable businessApplicationsList = [];
+  @observable summary = { 'prequal-failed': 0, 'in-progress': 0, completed: 0 };
   @observable backup = [];
   @observable columnTitle = '';
+  @observable totalRecords = 0;
   @observable requestState = {
     lek: null,
     filters: false,
@@ -20,17 +23,11 @@ export class BusinessAppStore {
     },
     search: {},
     page: 1,
-    perPage: 2,
+    perPage: 10,
     skip: 0,
   };
 
   @observable filterApplicationStatus = FILTER_META.applicationStatus;
-
-  @computed get totalRecords() {
-    return (this.businessApplicationsList && this.businessApplicationsList.data &&
-      this.businessApplicationsList.data._allBusinessApplicationsesMeta &&
-      this.businessApplicationsList.data._allBusinessApplicationsesMeta.count) || 0;
-  }
 
   @action
   setFieldvalue = (field, value) => {
@@ -65,8 +62,9 @@ export class BusinessAppStore {
   }
 
   @computed get getBusinessApplication() {
-    return (this.businessApplicationsList && this.businessApplicationsList.data
-      && toJS(this.businessApplicationsList.data.allBusinessApplicationses)
+    return (this.businessApplicationsList && this.businessApplicationsList.data &&
+      this.businessApplicationsList.data.businessApplicationsAdmin &&
+      toJS(this.businessApplicationsList.data.businessApplicationsAdmin.businessApplications)
     ) || [];
   }
 
@@ -81,21 +79,44 @@ export class BusinessAppStore {
   }
 
   @action
+  getBusinessApplicationSummary = () => {
+    graphql({
+      client,
+      query: getBusinessApplicationSummary,
+      onFetch: (data) => {
+        if (data) {
+          const { prequalFaild, inProgress, completed } = data.businessApplicationsSummary;
+          this.summary = { 'prequal-failed': prequalFaild, 'in-progress': inProgress, completed };
+        }
+      },
+    });
+  }
+
+  @action
   fetchBusinessApplicationsByStatus = (appType) => {
-    this.reInitiateApplicationStatusFilterValues(appType);
     this.columnTitle = appType === 'prequal-failed' ? 'Failed reasons' : appType === 'in-progress' ? 'Steps completed' : '';
-    const filterParam = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'PRE_QUALIFICATION_SUBMITTED' : 'APPLICATION_SUBMITTED';
+    const appTypeFilter = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'PRE_QUALIFICATION_SUBMITTED' : 'APPLICATION_SUBMITTED';
+    let filterParams = {
+      applicationType: appTypeFilter,
+      // orderBy: { field: this.requestState.sort.by, sort: this.requestState.sort.direction },
+      limit: this.requestState.perPage,
+      search: this.requestState.search.keyword,
+    };
+    filterParams = this.requestState.lek ?
+      { ...filterParams, lek: this.requestState.lek } : { ...filterParams };
     this.businessApplicationsList = graphql({
       client,
-      query: allBusinessApplicationses,
-      variables: {
-        filters: { applicationStatus: filterParam },
-        first: 100,
-        skip: 0,
-      },
+      query: getBusinessApplicationAdmin,
+      variables: filterParams,
+      refetchQueries: { query: getBusinessApplicationSummary },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        this.initAction(data.allBusinessApplicationses);
+        if (data) {
+          this.requestState.lek = data.businessApplicationsAdmin.businessApplications.lek;
+          this.reInitiateApplicationStatusFilterValues(appType);
+          this.initAction(data.businessApplicationsAdmin.businessApplications);
+          this.totalRecords = this.summary[appType];
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -105,15 +126,16 @@ export class BusinessAppStore {
 
   @action
   initAction = (data) => {
+    const { values } = this.filterApplicationStatus;
+    forEach(values, (v, k) => {
+      const count = filter(data, app =>
+        app.status === v.value).length;
+      values[k].label = `${values[k].label} (${count})`;
+    });
     this.backup = data;
-    // const { values } = this.filterApplicationStatus;
-    // forEach(values, (v, k) => {
-    //   const count = filter(data, app => app.status === v.value).length;
-    //   values[k].label = `${values[k].label} (${count})`;
-    // });
     this.initRequest();
     this.requestState.page = 1;
-    this.requestState.perPage = 2;
+    this.requestState.perPage = 10;
     this.requestState.skip = 0;
   }
 
@@ -130,13 +152,12 @@ export class BusinessAppStore {
     this.requestState.skip = skip || this.requestState.skip;
 
     const { applicationStatus, keyword } = this.requestState.search;
-    if (applicationStatus.length || (keyword && keyword !== '')) {
-      this.businessApplicationsList.data.allBusinessApplicationses = filter(this.backup, app =>
-        includes(toJS(applicationStatus), app.status) || includes(app.commentContent, keyword)
-          || includes(app.businessName, keyword) || includes(app.name, keyword) ||
-          includes(app.email, keyword)).slice(skip, skip + first);
-    } else if (this.backup) {
-      this.businessApplicationsList.data.allBusinessApplicationses =
+    if ((applicationStatus.length || (keyword && keyword !== '')) && this.businessApplicationsList.data.businessApplicationsAdmin) {
+      this.businessApplicationsList.data.businessApplicationsAdmin.businessApplications =
+      filter(this.backup, app =>
+        includes(toJS(applicationStatus), app.status)).slice(skip, skip + first);
+    } else if (this.backup && this.businessApplicationsList.data.businessApplicationsAdmin) {
+      this.businessApplicationsList.data.businessApplicationsAdmin.businessApplications =
       this.backup.slice(skip, skip + first);
     }
   }

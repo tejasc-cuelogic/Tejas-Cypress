@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
+import moment from 'moment';
 import { Form, Grid, Input, Button, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
@@ -17,7 +18,9 @@ export default class ApplicationsList extends Component {
   componentWillMount() {
     const { match } = this.props;
     const { fetchBusinessApplicationsByStatus } = this.props.businessAppAdminStore;
-    fetchBusinessApplicationsByStatus(match.params.applicationType);
+    if (match.isExact) {
+      fetchBusinessApplicationsByStatus(match.params.applicationType);
+    }
   }
   setSearchParam = (e, { name, value }) =>
     this.props.businessAppAdminStore.setInitiateSrch(name, value);
@@ -93,17 +96,21 @@ export default class ApplicationsList extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell>
                         <Header as="h6">
-                          {application.businessName}
-                          <AppStatusLabel status={application.status} />
+                          {application.prequalDetails.businessGeneralInfo.businessName}
+                          <AppStatusLabel />
+                          {/* <AppStatusLabel status={application.status} /> */}
                         </Header>
                         <div className="table-info-wrap">
-                          <p>{application.name}<br />
-                            {application.email}<br />
-                            {application.phone}
+                          <p>
+                            {application.userDetails.firstName} {application.userDetails.lastName}
+                            <br />
+                            {application.userDetails.contactDetails.email.email}<br />
+                            {application.userDetails.contactDetails.phone &&
+                              application.userDetails.contactDetails.phone}
                           </p>
                           <p>Sign-up Code <b>-</b><br />
-                            Started <b>{application.createdDate}</b><br />
-                            Updated <b>{application.updatedDate}</b>
+                            Started <b>{moment(application.createdDate).format('MM/DD/YYYY')}</b><br />
+                            Updated <b>{moment(application.updatedDate).format('MM/DD/YYYY')}</b>
                           </p>
                         </div>
                       </Table.Cell>
@@ -116,7 +123,7 @@ export default class ApplicationsList extends Component {
                             </Item.Description>
                             <Item.Extra>
                               <b>5/5/2018 | 1:33PM</b>
-                              <b> by {application.commentUser}</b>
+                              <b> by Jhon</b>
                             </Item.Extra>
                           </Item.Content>
                         </Item>
@@ -126,9 +133,9 @@ export default class ApplicationsList extends Component {
                       />
                       <ApplicationListButtons
                         refLink={match.url}
-                        applicationId={application.id}
+                        applicationId={application.applicationId}
                         appStatus={application.applicationStatus}
-                        status={application.status}
+                        // status={application.status}
                       />
                     </Table.Row>
                   )) :

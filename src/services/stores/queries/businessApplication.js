@@ -27,6 +27,69 @@ query allBusinessApplicationses($filters: BusinessApplicationsFilter){
 }
 `;
 
+export const getBusinessApplicationAdmin = gql`
+query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationadminOrderBy, $limit:String, $search: String, $lek: DecryptedString){
+  businessApplicationsAdmin(
+    applicationType: $applicationType
+    orderBy: $orderBy
+    limit: $limit
+    search: $search
+    lek: $lek
+    
+  ) {
+    lek
+    resultCount
+    totalCount
+    businessApplications {
+      userId
+      applicationId
+      prequalDetails {
+        businessGeneralInfo {
+          businessName
+        }
+        failReasons
+      }
+      businessDetails {
+        stepStatus
+      }
+      businessPerformance {
+        stepStatus
+      }
+      businessDocumentation {
+        stepStatus
+      }
+      userDetails {
+        firstName
+        lastName
+        contactDetails {
+          phone {
+            number
+          }
+          email {
+            email
+          }
+        }
+      }
+      createdDate
+      updatedDate
+      applicationStatus
+      applicationSubmittedDate
+    }
+  }  
+}
+`;
+
+export const getBusinessApplicationSummary = gql`
+query getBusinessApplicationSummary{
+  businessApplicationsSummary {
+    prequalFaild
+    inProgress
+    completed
+  }
+}
+`;
+
+
 export const createBusinessApplicationPrequalificaiton = gql`
 mutation _submitBusinessApplicationPreQualStepSuccessScenario($preQualificationData: PrequalDetailsInput!) {
   createBusinessApplicationPrequalification(prequalificationDetails: $preQualificationData) {

@@ -248,11 +248,11 @@ export const PRIVATE_NAV = [
     to: 'applications',
     path: 'admin/applications/containers/ManageApplications',
     accessibleTo: ['admin'],
-    subPanel: 1,
+    subPanel: 0,
     subNavigations: [
-      { title: 'Pre-qual failed (2)', to: 'prequal-failed', component: 'ApplicationsList' },
-      { title: 'In-Progress (3)', to: 'in-progress', component: 'ApplicationsList' },
-      { title: 'Completed (7)', to: 'completed', component: 'ApplicationsList' },
+      { title: 'Pre-qual failed', to: 'prequal-failed', component: 'ApplicationsList' },
+      { title: 'In-Progress', to: 'in-progress', component: 'ApplicationsList' },
+      { title: 'Completed', to: 'completed', component: 'ApplicationsList' },
     ],
   },
   {

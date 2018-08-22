@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
-import PrivateLayout from '../../../shared/PrivateHOC';
+import { mapValues } from 'lodash';
+import PrivateLayout from '../../../shared/PrivateLayout';
 import DeleteAppModal from '../components/DeleteAppModal';
 import { InlineLoader } from '../../../../../theme/shared';
 
@@ -12,12 +14,17 @@ const getModule = component => Loadable({
   },
 });
 
+@inject('businessAppAdminStore')
+@observer
 export default class ManageApplications extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/prequal-failed`);
+      this.props.businessAppAdminStore.getBusinessApplicationSummary();
     }
   }
+
+  representAddon = summary => mapValues(summary, s => ` (${s})`);
 
   search = (e) => {
     if (e.charCode === 13 && false) {
@@ -25,10 +32,13 @@ export default class ManageApplications extends Component {
     }
   }
   render() {
-    const { match } = this.props;
+    const { match, businessAppAdminStore } = this.props;
+    const { summary } = businessAppAdminStore;
     return (
       <PrivateLayout
         {...this.props}
+        subNav
+        subNavAddon={{ data: this.representAddon(summary) }}
       >
         <Switch>
           <Route exact path={`${match.url}/:applicationType`} component={getModule('ApplicationsList')} />
