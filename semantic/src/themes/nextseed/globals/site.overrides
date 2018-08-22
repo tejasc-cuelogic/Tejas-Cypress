@@ -145,7 +145,7 @@ h6{
 		margin-bottom:0px;
 	}
 }
-a{
+a:not(.item), a:not(.ui.button){
 	color:@link-color;
 	&:hover{
 		text-decoration:underline !important;
@@ -156,11 +156,11 @@ a{
 	&.secondary-link{
 		color:@primary-two !important;
 	}
-}
-a.text-link{
-	color:@tertiary-text;
-	&:hover, &:active, &.active{
-		color:@neutral;
+	&.text-link{
+		color:@tertiary-text;
+		&:hover, &:active, &.active{
+			color:@neutral;
+		}
 	}
 }
 .invisible{
