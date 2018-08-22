@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Header, Table, Icon, Button, Item, Form, Confirm } from 'semantic-ui-react';
+import { Header, Table, Icon, Item, Form, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormSelect, FormInput, DropZone } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
@@ -10,6 +10,10 @@ import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/adm
 export default class Miscellaneous extends Component {
   onFileDrop = (files, name, index) => {
     this.props.businessAppReviewStore.setFileUploadDataWithIndex('OTHER_DOCUMENTATION_FRM', name, files, index);
+  }
+  addMore = (e, formName) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.addMore(formName);
   }
   confirmRemoveDoc = (e, name, index) => {
     e.preventDefault();
@@ -35,14 +39,13 @@ export default class Miscellaneous extends Component {
       otherDocumentationChange,
       confirmModal,
       confirmModalName,
-      addMore,
       removeData,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
       <div className="inner-content-spacer">
         <Form>
-          <Header as="h5">
+          <Header as="h4">
           Social Media
           </Header>
           <Table basic compact inverted className="grey-table">
@@ -86,12 +89,12 @@ export default class Miscellaneous extends Component {
               }
               <Table.Row>
                 <Table.Cell collapsing>
-                  <Button color="blue" className="ghost-button" onClick={() => addMore('SOCIAL_MEDIA_FRM')} >+ Add social media</Button>
+                  <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'SOCIAL_MEDIA_FRM')}><small>+ Add social media</small></Link>
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
           </Table>
-          <Header as="h5">
+          <Header as="h4">
           Other Documentation Uploads
           </Header>
           <p>(e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)</p>
@@ -136,7 +139,7 @@ export default class Miscellaneous extends Component {
               }
               <Table.Row>
                 <Table.Cell collapsing>
-                  <Button color="blue" className="ghost-button" onClick={() => addMore('OTHER_DOCUMENTATION_FRM')} >+ Add new document</Button>
+                  <Link to={this.props.match.url} color="blue" className="link" onClick={e => this.addMore(e, 'OTHER_DOCUMENTATION_FRM')}><small>+ Add new document</small></Link>
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
