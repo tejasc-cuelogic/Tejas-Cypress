@@ -1,46 +1,60 @@
 import React, { Component } from 'react';
-import { Header, Form } from 'semantic-ui-react';
+import { Header, Form, Icon } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { FormRadioGroup } from '../../../../../theme/form';
 
+@inject('investmentStore', 'userDetailsStore')
+@observer
 class AccountType extends Component {
-  state = {
-    investAccountType: {
-      value: 0,
-      values: [
-        {
-          label: 'Individual',
-          value: 0,
-          rawValue: 'individual',
-        },
-        {
-          label: 'IRA',
-          value: 1,
-          rawValue: 'ira',
-        },
-        {
-          label: 'Entity',
-          value: 2,
-          rawValue: 'entity ',
-        },
-      ],
-      error: undefined,
-      rule: 'required',
-    },
-  };
+  componentWillMount() {
+    const { setStepToBeRendered } = this.props.investmentStore;
+    const { UserAccounts } = this.props;
+    if (UserAccounts && UserAccounts.length === 1) {
+      setStepToBeRendered(2);
+    }
+  }
+  componentDidMount() {
+    const {
+      investAccTypes,
+      setStepToBeRendered,
+      setDisableNextbtn,
+    } = this.props.investmentStore;
+    if (investAccTypes.values.length === 0) {
+      setDisableNextbtn();
+      setStepToBeRendered(1);
+    }
+  }
   radioChnaged = (e, res) => {
     this.setState({ investAccountType: { ...this.state.investAccountType, value: res.value } });
   }
   render() {
+    const { UserAccounts } = this.props;
+    const {
+      accTypeChanged,
+      investAccTypes,
+      prepareAccountTypes,
+    } = this.props.investmentStore;
+    prepareAccountTypes(UserAccounts);
     return (
       <div>
         <Header as="h3" textAlign="center">Which Investment Account would you like to invest from?</Header>
-        <p className="center-align">Choose an account type</p>
+        {investAccTypes.values[0] ?
+          <p className="center-align">Choose an account type</p> :
+          <div className="center-align">
+            <p>Investment Accounts are not yet Created!</p>
+            <Link to="/app/summary" className="text-link">
+              <Icon className="ns-arrow-right" color="green" />
+              Go to My Accounts
+            </Link>
+          </div>
+        }
         <Form error className="account-type-tab">
           <FormRadioGroup
             name="investAccountType"
             containerclassname="button-radio center-align"
-            fielddata={this.state.investAccountType}
-            changed={this.radioChnaged}
+            fielddata={investAccTypes}
+            changed={accTypeChanged}
           />
         </Form>
       </div>
