@@ -57,7 +57,7 @@ const RemoveIcon = ({
   match, index, toggleConfirmModal, formName,
 }) => (
   index !== 0 &&
-    <Table.Cell collapsing>
+    <Table.Cell collapsing verticalAlign="middle">
       <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName)} >
         <Icon className="ns-close-circle" color="grey" />
       </Link>
