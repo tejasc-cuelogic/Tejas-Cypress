@@ -420,3 +420,30 @@ export const SOCIAL_MEDIA_LABELS = [
   { key: 'Instagram', value: 'instagram', text: 'Instagram' },
   { key: 'Linkedin', value: 'linkedin', text: 'linkedin' },
 ];
+
+export const OTHER_DOCUMENTATION_UPLOADS = {
+  data: [{
+    label: {
+      value: '',
+      label: '',
+      placeHolder: 'Enter label here',
+      error: undefined,
+      rule: 'string',
+      customErrors: {
+        required: '* required.',
+      },
+    },
+    comment: {
+      label: '',
+      value: '',
+      error: undefined,
+      rule: 'required',
+      preSignedUrl: '',
+      fileId: '',
+      fileData: '',
+      customErrors: {
+        required: '* required.',
+      },
+    },
+  }],
+};
