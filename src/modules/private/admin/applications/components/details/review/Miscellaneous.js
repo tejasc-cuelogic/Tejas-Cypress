@@ -1,9 +1,78 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import Aux from 'react-aux';
 import { Header, Table, Icon, Item, Form, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormSelect, FormInput, DropZone } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
+
+const SectionHeader = ({ header, subheader }) => (
+  <Aux>
+    <Header as="h4">
+      {header}
+    </Header>
+    {subheader && <p>{subheader}</p> }
+  </Aux>
+);
+
+const UploadedDocument = ({
+  match, index, toggleConfirmModal, document,
+}) => (
+  <Item>
+    <Item.Content>
+      <Item.Header>
+        <Link to="/">
+          <Icon className="ns-file" color="blue" />{document.fileName}
+        </Link>
+        <span>Attached: {document.attachedDate} by {document.byUser}</span>
+        <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, 'UPLOADED_DOCUMENTS_FRM')} >
+          <Icon className="ns-close-circle" color="grey" />
+        </Link>
+      </Item.Header>
+      <Item.Description className="caption">
+        <i>
+          {document.description}
+        </i>
+      </Item.Description>
+    </Item.Content>
+  </Item>
+);
+
+const TableHeader = ({ labels }) => (
+  <Table.Header>
+    <Table.Row>
+      {
+        labels.map(data => (
+          <Aux>
+            <Table.HeaderCell>{data}</Table.HeaderCell>
+          </Aux>
+        ))
+      }
+      <Table.HeaderCell />
+    </Table.Row>
+  </Table.Header>
+);
+
+const RemoveIcon = ({
+  match, index, toggleConfirmModal, formName,
+}) => (
+  index !== 0 &&
+    <Table.Cell collapsing>
+      <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName)} >
+        <Icon className="ns-close-circle" color="grey" />
+      </Link>
+    </Table.Cell>
+);
+
+const AddMore = ({
+  match, addMore, formName, title,
+}) => (
+  <Table.Row>
+    <Table.Cell collapsing>
+      <Link to={match.url} className="link" onClick={e => addMore(e, formName)}><small>+ {title}</small></Link>
+    </Table.Cell>
+  </Table.Row>
+);
 
 @inject('businessAppReviewStore', 'uiStore')
 @observer
@@ -33,6 +102,7 @@ export default class Miscellaneous extends Component {
 
   render() {
     const {
+      UPLOADED_DOCUMENTS_FRM,
       OTHER_DOCUMENTATION_FRM,
       SOCIAL_MEDIA_FRM,
       socialMediaChange,
@@ -45,17 +115,9 @@ export default class Miscellaneous extends Component {
     return (
       <div className="inner-content-spacer">
         <Form>
-          <Header as="h4">
-          Social Media
-          </Header>
+          <SectionHeader header="Social Media" />
           <Table basic compact inverted className="grey-table">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Label</Table.HeaderCell>
-                <Table.HeaderCell>URL</Table.HeaderCell>
-                <Table.HeaderCell />
-              </Table.Row>
-            </Table.Header>
+            <TableHeader labels={['Label', 'URL']} />
             <Table.Body>
               {
                 SOCIAL_MEDIA_FRM.fields.data.length ?
@@ -77,40 +139,21 @@ export default class Miscellaneous extends Component {
                         changed={(e, result) => socialMediaChange(e, result, index)}
                       />
                     </Table.Cell>
-                    {index !== 0 &&
-                      <Table.Cell collapsing>
-                        <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'SOCIAL_MEDIA_FRM')} >
-                          <Icon className="ns-close-circle" color="grey" />
-                        </Link>
-                      </Table.Cell>
-                    }
+                    <RemoveIcon match={this.props.match} index={index} formName="SOCIAL_MEDIA_FRM" toggleConfirmModal={this.toggleConfirmModal} />
                   </Table.Row>
                 )) : ''
               }
-              <Table.Row>
-                <Table.Cell collapsing>
-                  <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'SOCIAL_MEDIA_FRM')}><small>+ Add social media</small></Link>
-                </Table.Cell>
-              </Table.Row>
+              <AddMore match={this.props.match} addMore={this.addMore} formName="SOCIAL_MEDIA_FRM" title="Add social media" />
             </Table.Body>
           </Table>
-          <Header as="h4">
-          Other Documentation Uploads
-          </Header>
-          <p>(e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)</p>
+          <SectionHeader header="Other Documentation Uploads" subheader="(e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)" />
           <Table basic compact inverted className="grey-table">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Label</Table.HeaderCell>
-                <Table.HeaderCell>Comment</Table.HeaderCell>
-                <Table.HeaderCell />
-              </Table.Row>
-            </Table.Header>
+            <TableHeader labels={['Label', 'Comment']} />
             <Table.Body>
               {
               OTHER_DOCUMENTATION_FRM.fields.data.length ?
               OTHER_DOCUMENTATION_FRM.fields.data.map((document, index) => (
-                <Table.Row>
+                <Table.Row >
                   <Table.Cell collapsing>
                     <FormInput
                       name="label"
@@ -127,66 +170,30 @@ export default class Miscellaneous extends Component {
                       uploadtitle="Choose document to upload"
                     />
                   </Table.Cell>
-                  {index !== 0 &&
-                    <Table.Cell collapsing>
-                      <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'OTHER_DOCUMENTATION_FRM')} >
-                        <Icon className="ns-close-circle" color="grey" />
-                      </Link>
-                    </Table.Cell>
-                  }
+                  <RemoveIcon match={this.props.match} index={index} formName="OTHER_DOCUMENTATION_FRM" toggleConfirmModal={this.toggleConfirmModal} />
                 </Table.Row>
               )) : ''
               }
-              <Table.Row>
-                <Table.Cell collapsing>
-                  <Link to={this.props.match.url} color="blue" className="link" onClick={e => this.addMore(e, 'OTHER_DOCUMENTATION_FRM')}><small>+ Add new document</small></Link>
-                </Table.Cell>
-              </Table.Row>
+              <AddMore match={this.props.match} addMore={this.addMore} formName="OTHER_DOCUMENTATION_FRM" title="Add new document" />
             </Table.Body>
           </Table>
-          <Header as="h5">
-          NS Admin Uploaded Documents
-          </Header>
-          <p>Uploaded via the Activity History</p>
+          <SectionHeader header="NS Admin Uploaded Documents" subheader="Uploaded via the Activity History" />
           <div className="featured-section">
             <Item.Group relaxed="very">
-              <Item>
-                <Item.Content>
-                  <Item.Header>
-                    <Link to="/">
-                      <Icon className="ns-file" color="blue" />Business_Plan.pdf
-                    </Link>
-                    <span>Attached: 7/10/2018 by Brandon Black</span>
-                    <Link to="/" className="icon-link">
-                      <Icon className="ns-close-circle" color="grey" />
-                    </Link>
-                  </Item.Header>
-                  <Item.Description className="caption">
-                    <i>
-                    This was the original business plan given to me by the owner.He will be sending
-                    an updated one to me next week.  Figured we could use this as reference for now.
-                    </i>
-                  </Item.Description>
-                </Item.Content>
-              </Item>
-              <Item>
-                <Item.Content>
-                  <Item.Header>
-                    <Link to="/">
-                      <Icon className="ns-file" color="blue" />Business_Plan_2.pdf
-                    </Link>
-                    <span>Attached: 7/12/2018 by Barbara Birsands</span>
-                    <Link to="/" className="icon-link">
-                      <Icon className="ns-close-circle" color="grey" />
-                    </Link>
-                  </Item.Header>
-                  <Item.Description className="caption">
-                    <i>
-                    Here’s the new business plan as expected!
-                    </i>
-                  </Item.Description>
-                </Item.Content>
-              </Item>
+              {
+              UPLOADED_DOCUMENTS_FRM.fields.data.length ?
+              UPLOADED_DOCUMENTS_FRM.fields.data.map((document, index) => (
+                <Aux>
+                  <UploadedDocument
+                    match={this.props.match}
+                    index={index}
+                    toggleConfirmModal={this.toggleConfirmModal}
+                    document={document.document}
+                  />
+                </Aux>
+              )) :
+              <p>No documents to show</p>
+              }
             </Item.Group>
           </div>
         </Form>

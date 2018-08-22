@@ -447,3 +447,15 @@ export const OTHER_DOCUMENTATION_UPLOADS = {
     },
   }],
 };
+
+export const UPLOADED_DOCUMENTS = {
+  data: [{
+    document: {
+      fileName: 'Business_Plan.pdf',
+      attachedDate: '7/10/2018',
+      byUser: 'Brandon Black',
+      description: `This was the original business plan given to me by the owner.He will be sending
+      an updated one to me next week.  Figured we could use this as reference for now.`,
+    },
+  }],
+};

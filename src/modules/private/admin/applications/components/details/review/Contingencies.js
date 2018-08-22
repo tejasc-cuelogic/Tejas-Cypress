@@ -36,11 +36,13 @@ const TableBody = ({
             changed={(e, result) => onchange(e, formName, result, index)}
           />
         </Table.Cell>
+        {index !== 0 &&
         <Table.Cell collapsing>
           <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName)} >
             <Icon className="ns-close-circle" color="grey" />
           </Link>
         </Table.Cell>
+        }
       </Table.Row>
     )) : ''
     }
