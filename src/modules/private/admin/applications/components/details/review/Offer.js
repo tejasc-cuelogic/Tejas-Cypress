@@ -32,18 +32,21 @@ export default class Offer extends Component {
         <Header as="h4">
           Offers
           {OFFERS_FRM.fields.data.length < 4 &&
-          <Link to={this.props.match.url} className="link" onClick={e => this.addNewOffer(e)}><small>+ Add new offer</small></Link>
+          <Link to={this.props.match.url} className="link pull-right" onClick={e => this.addNewOffer(e)}><small>+ Add new offer</small></Link>
           }
         </Header>
         <Form>
-          <Table basic compact className="form-table">
+          <Table basic compact singleLine className="form-table">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell />
                 {
                   OFFERS_FRM.fields.data.map((offer, index) => (
                     <Table.HeaderCell>Offer {String.fromCharCode('A'.charCodeAt() + index)}
-                      <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index)} >
+                      <Link
+                        to={this.props.match.url}
+                        onClick={e => this.toggleConfirmModal(e, index)}
+                      >
                         <Icon className="ns-close-circle" color="grey" />
                       </Link>
                     </Table.HeaderCell>
@@ -221,12 +224,12 @@ export default class Offer extends Component {
               <Table.Row>
                 <Table.Cell>Portal agreement upload</Table.Cell>
                 <Table.Cell colSpan="4">
-                  <Link className="link" to={this.props.match.url}><small>+ Add portal agreement</small></Link>
+                  <Button type="button" size="small" color="blue" className="link-button" >+ Add portal agreement</Button>
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
           </Table>
-          <div className="right-align">
+          <div className="right-align mt-20">
             <Button.Group>
               <Button
                 disabled={!OFFERS_FRM.meta.isValid}
