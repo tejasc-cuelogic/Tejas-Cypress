@@ -36,13 +36,8 @@ export default class ApplicationsList extends Component {
   render() {
     const { match } = this.props;
     const {
-      getBusinessApplication,
-      requestState,
-      filterApplicationStatus,
-      columnTitle,
-      totalRecords,
-      businessApplicationsList,
-      setKeyword,
+      getBusinessApplication, requestState, filterApplicationStatus, columnTitle,
+      totalRecords, businessApplicationsList, setKeyword,
     } = this.props.businessAppAdminStore;
 
     if (businessApplicationsList.loading) {

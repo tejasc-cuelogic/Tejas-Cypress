@@ -38,6 +38,7 @@ export class BusinessAppStore {
   @action
   initiateSearch = (srchParams, sortParams) => {
     this.requestState.lek = { 'page-1': null };
+    this.requestState.page = 1;
     this.requestState.search = srchParams;
     this.requestState.sort = sortParams;
     this.initRequest();
