@@ -65,7 +65,7 @@ const MaskedInput = observer((props) => {
       ) : props.ssn ? (
         <NumberFormat type="tel" format="###-##-####" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.dateOfBirth ? (
-        <NumberFormat type="text" format="##/##/####" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
+        <NumberFormat type="text" format={props.format ? props.format : '##/##/####'} placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.taxId ? (
         <NumberFormat type="tel" format="##-#######" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.accountNumber ? (

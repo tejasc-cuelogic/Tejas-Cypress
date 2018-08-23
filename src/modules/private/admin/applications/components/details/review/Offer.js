@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Header, Form, Table, Dropdown, Icon, Confirm } from 'semantic-ui-react';
-import { FormInput, MaskedInput } from '../../../../../../../theme/form';
-import { STRUCTURE_TYPES } from '../../../../../../../services/constants/admin/businessApplication';
+import { Header, Form, Table, Dropdown, Icon, Confirm, Button, Divider } from 'semantic-ui-react';
+import { FormInput, MaskedInput, FormTextarea } from '../../../../../../../theme/form';
+import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../../services/constants/admin/businessApplication';
 @inject('businessAppReviewStore')
 @observer
 export default class Offer extends Component {
@@ -18,9 +18,12 @@ export default class Offer extends Component {
   render() {
     const {
       OFFERS_FRM,
+      MANAGERS_FRM,
       offersChange,
+      offersMaskChange,
       confirmModal,
       confirmModalName,
+      managerEleChange,
       removeData,
     } = this.props.businessAppReviewStore;
     const offerFields = OFFERS_FRM.fields.data[0];
@@ -28,10 +31,10 @@ export default class Offer extends Component {
       <div className="inner-content-spacer">
         <Header as="h4">
           Offers
+          {OFFERS_FRM.fields.data.length < 4 &&
+          <Link to={this.props.match.url} className="link" onClick={e => this.addNewOffer(e)}><small>+ Add new offer</small></Link>
+          }
         </Header>
-        {OFFERS_FRM.fields.data.length < 4 &&
-        <Link color="blue" to={this.props.match.url} className="link" onClick={e => this.addNewOffer(e)}><small>+ Add new offer</small></Link>
-        }
         <Form>
           <Table basic compact className="form-table">
             <Table.Header>
@@ -56,9 +59,12 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <Dropdown
                       name="structure"
+                      placeholder="Choose"
+                      fluid
+                      selection
                       options={STRUCTURE_TYPES}
                       fielddata={offer.structure}
-                      changed={(e, result) => offersChange(e, result, index)}
+                      onChange={(e, result) => offersChange(e, result, index)}
                     />
                   </Table.Cell>
                 ))
@@ -69,13 +75,11 @@ export default class Offer extends Component {
                 {
                 OFFERS_FRM.fields.data.map((offer, index) => (
                   <Table.Cell>
-                    <MaskedInput
-                      prefix="$"
-                      currency
+                    <FormInput
                       name="offeringAmount"
                       fielddata={offer.offeringAmount}
-                      changed={values => offersChange(values, index)}
-                      hidelabel
+                      changed={(e, result) => offersChange(e, result, index)}
+                      ishidelabel
                     />
                   </Table.Cell>
                 ))
@@ -89,8 +93,9 @@ export default class Offer extends Component {
                     <MaskedInput
                       name="maturity"
                       fielddata={offer.maturity}
-                      changed={values => offersChange(values, index)}
+                      changed={(values, field) => offersMaskChange(values, field, index)}
                       hidelabel
+                      number
                     />
                   </Table.Cell>
                 ))
@@ -104,8 +109,9 @@ export default class Offer extends Component {
                     <MaskedInput
                       name="interestRate"
                       fielddata={offer.interestRate}
-                      changed={values => offersChange(values, index)}
+                      changed={(values, field) => offersMaskChange(values, field, index)}
                       hidelabel
+                      percentage
                     />
                   </Table.Cell>
                 ))
@@ -117,9 +123,11 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.data.map((offer, index) => (
                   <Table.Cell>
                     <MaskedInput
+                      prefix="$"
+                      currency
                       name="amortizationAmount"
                       fielddata={offer.amortizationAmount}
-                      changed={values => offersChange(values, index)}
+                      changed={(values, field) => offersMaskChange(values, field, index)}
                       hidelabel
                     />
                   </Table.Cell>
@@ -131,11 +139,14 @@ export default class Offer extends Component {
                 {
                 OFFERS_FRM.fields.data.map((offer, index) => (
                   <Table.Cell>
-                    <FormInput
+                    <Dropdown
                       name="personalGuarantee"
+                      placeholder="Type number"
+                      fluid
+                      selection
+                      options={PERSONAL_GUARANTEE_TYPES}
                       fielddata={offer.personalGuarantee}
-                      changed={(e, result) => offersChange(e, result, index)}
-                      ishidelabel
+                      onChange={(e, result) => offersChange(e, result, index)}
                     />
                   </Table.Cell>
                 ))
@@ -163,9 +174,11 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <MaskedInput
                       name="expirationDate"
-                      changed={values => offersChange(values, index)}
+                      changed={(values, field) => offersMaskChange(values, field, index)}
                       fielddata={offer.expirationDate}
+                      format="##-##-####"
                       hidelabel
+                      dateOfBirth
                     />
                   </Table.Cell>
                 ))
@@ -176,11 +189,12 @@ export default class Offer extends Component {
                 {
                 OFFERS_FRM.fields.data.map((offer, index) => (
                   <Table.Cell>
-                    <MaskedInput
+                    <FormInput
                       name="multipleOnPrincipalToPay"
                       fielddata={offer.multipleOnPrincipalToPay}
-                      changed={values => offersChange(values, index)}
-                      hidelabel
+                      changed={(e, result) => offersChange(e, result, index)}
+                      disabled={offer.structure.value === 'termnote'}
+                      ishidelabel
                     />
                   </Table.Cell>
                 ))
@@ -192,9 +206,12 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.data.map((offer, index) => (
                   <Table.Cell>
                     <MaskedInput
+                      prefix="$"
+                      currency
                       name="totalCapitalReturned"
                       fielddata={offer.totalCapitalReturned}
-                      changed={values => offersChange(values, index)}
+                      changed={(values, field) => offersMaskChange(values, field, index)}
+                      disabled={offer.structure.value === 'termnote'}
                       hidelabel
                     />
                   </Table.Cell>
@@ -203,10 +220,38 @@ export default class Offer extends Component {
               </Table.Row>
               <Table.Row>
                 <Table.Cell>Portal agreement upload</Table.Cell>
-                <Table.Cell colSpan="4">Link to add agreement</Table.Cell>
+                <Table.Cell colSpan="4">
+                  <Link className="link" to={this.props.match.url}><small>+ Add portal agreement</small></Link>
+                </Table.Cell>
               </Table.Row>
             </Table.Body>
           </Table>
+          <div className="right-align">
+            <Button.Group>
+              <Button
+                disabled={!OFFERS_FRM.meta.isValid}
+                className="relaxed"
+                secondary
+              >
+                Save
+              </Button>
+              <Button disabled={!OFFERS_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
+            </Button.Group>
+          </div>
+          <Divider section />
+          <Header as="h4">Manager</Header>
+          <FormTextarea
+            name="managerOverview"
+            fielddata={MANAGERS_FRM.fields.managerOverview}
+            changed={managerEleChange}
+            containerclassname="secondary"
+          />
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
+            </Button.Group>
+          </div>
         </Form>
         <Confirm
           header="Confirm"

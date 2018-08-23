@@ -240,5 +240,13 @@ export class BusinessAppReviewStore {
   offersChange = (e, result, index) => {
     this.formChangeWithIndex(e, result, 'OFFERS_FRM', index);
   }
+
+  @action
+  offersMaskChange = (result, field, index) => {
+    this.OFFERS_FRM = Validator.onArrayFieldChange(
+      this.OFFERS_FRM,
+      { name: field, value: result.floatValue }, 'data', index,
+    );
+  }
 }
 export default new BusinessAppReviewStore();

@@ -480,9 +480,10 @@ export const OFFERS = {
       label: 'Structure',
       placeHolder: 'Choose',
       error: undefined,
-      rule: 'string',
+      rule: 'string|required',
       customErrors: {
         string: 'Allowed string only.',
+        required: '* required.',
       },
     },
     offeringAmount: {
@@ -490,9 +491,10 @@ export const OFFERS = {
       label: 'Offering Amount ($)',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'string',
+      rule: 'string|required',
       customErrors: {
         string: 'Allowed string only.',
+        required: '* required.',
       },
     },
     maturity: {
@@ -500,9 +502,10 @@ export const OFFERS = {
       label: 'Maturity (# of Months)',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'numeric',
+      rule: 'numeric|required',
       customErrors: {
         numeric: 'Allowed numbers only.',
+        required: '* required.',
       },
     },
     interestRate: {
@@ -510,9 +513,10 @@ export const OFFERS = {
       label: 'Annualized Interest Rate',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'numeric',
+      rule: 'numeric|required',
       customErrors: {
         numeric: 'Allowed numbers only.',
+        required: '* required.',
       },
     },
     amortizationAmount: {
@@ -520,9 +524,10 @@ export const OFFERS = {
       label: 'Monthly Amortization Amount',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'numeric',
+      rule: 'numeric|required',
       customErrors: {
         numeric: 'Allowed numbers only.',
+        required: '* required.',
       },
     },
     personalGuarantee: {
@@ -530,9 +535,10 @@ export const OFFERS = {
       label: 'Personal Guarantee',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'string',
+      rule: 'string|required',
       customErrors: {
         string: 'Allowed string only.',
+        required: '* required.',
       },
     },
     businessBlanket: {
@@ -540,9 +546,10 @@ export const OFFERS = {
       label: 'Business Blanket',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'string',
+      rule: 'string|required',
       customErrors: {
         string: 'Allowed string only.',
+        required: '* required.',
       },
     },
     expirationDate: {
@@ -550,9 +557,10 @@ export const OFFERS = {
       label: 'Expiration Date',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'date',
+      rule: 'date|required',
       customErrors: {
         date: 'Date format is invalid.',
+        required: '* required.',
       },
     },
     multipleOnPrincipalToPay: {
@@ -560,9 +568,10 @@ export const OFFERS = {
       label: 'Multiple on Principal to Pay',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'numeric',
+      rule: 'string|required_if:data.*.structure,revenueshareingnote',
       customErrors: {
-        numeric: 'Allowed numbers only.',
+        string: 'Allowed string only.',
+        required_if: '* required.',
       },
     },
     totalCapitalReturned: {
@@ -570,15 +579,21 @@ export const OFFERS = {
       label: 'Total Capital Returned',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'numeric',
+      rule: 'numeric|required_if:data.*.structure,revenueshareingnote',
       customErrors: {
         numeric: 'Allowed numbers only.',
+        required_if: '* required.',
       },
     },
   }],
 };
 
 export const STRUCTURE_TYPES = [
-  { key: 'termnote', value: 'facebook', text: 'Term Loan' },
+  { key: 'termnote', value: 'termnote', text: 'Term Loan' },
   { key: 'revenueshareingnote', value: 'revenueshareingnote', text: 'Revenue Share' },
+];
+
+export const PERSONAL_GUARANTEE_TYPES = [
+  { key: 'yes', value: 'yes', text: 'Yes' },
+  { key: 'no', value: 'no', text: 'No' },
 ];

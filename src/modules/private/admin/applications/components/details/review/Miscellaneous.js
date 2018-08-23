@@ -128,7 +128,6 @@ export default class Miscellaneous extends Component {
                     <Table.Cell collapsing>
                       <Dropdown
                         name="label"
-                        fielddata={socialMedia.label}
                         placeholder="eg. Facebook"
                         fluid
                         selection
