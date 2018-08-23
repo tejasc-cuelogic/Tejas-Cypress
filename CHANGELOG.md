@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-08-22)
+# 0.0.0 (2018-08-23)
 
 
 ### Bug Fixes
@@ -27,6 +27,7 @@
 * **EDGAR[Issue [325](https://chaos.ns.team/nsv2/ns-ops/issues/325) -  updated edgar offering page under text]:** updated edgar offering page under text ([560e6ce](https://chaos.ns.team/nsv2/ns-client/commits/560e6ce))
 * **Hello World structure [Issue [204](https://chaos.ns.team/nsv2/ns-ops/issues/204) - Setup Hello World structure for Issuer/Admin]:** Hello World structure for Issuer/Admin ([76810e0](https://chaos.ns.team/nsv2/ns-client/commits/76810e0))
 * **home page ui[Issue [228](https://chaos.ns.team/nsv2/ns-ops/issues/228) - public pages home page 2]:** created ui of home page ([e0e48e7](https://chaos.ns.team/nsv2/ns-client/commits/e0e48e7))
+* **Investment Flow[Issue [344](https://chaos.ns.team/nsv2/ns-ops/issues/344) - Investment Flow refinements]:** Investment Flow refinements ([f02bb12](https://chaos.ns.team/nsv2/ns-client/commits/f02bb12))
 * **investment workflow[Issue [319](https://chaos.ns.team/nsv2/ns-ops/issues/319) - Fireworks animation]:** fireworks animation on congratulations screen. ([91d028f](https://chaos.ns.team/nsv2/ns-client/commits/91d028f))
 * **Investor Account Details[Issue [289](https://chaos.ns.team/nsv2/ns-ops/issues/289) - view transactions and settings for investor account details]:** view transactions and settings for investor account details ([f2a77e7](https://chaos.ns.team/nsv2/ns-client/commits/f2a77e7))
 * **Investor accounts[Issue [326](https://chaos.ns.team/nsv2/ns-ops/issues/326) - investor-settings-statements-provide-the-download-link-for-pdf]:** added pdf url for investor accounts statements and taxform section ([ac943e4](https://chaos.ns.team/nsv2/ns-client/commits/ac943e4))
@@ -41,8 +42,8 @@
 * **Investor[Issue [235](https://chaos.ns.team/nsv2/ns-ops/issues/235) - manage-beneficiaries-feedback-changes]:** investor beneficiary feedback changes ([9718a27](https://chaos.ns.team/nsv2/ns-client/commits/9718a27))
 * **Investor[Issue [297](https://chaos.ns.team/nsv2/ns-ops/issues/297) - investor signup integrate SSN collision check api]:** investor signup integrate SSN collision check api ([77e458e](https://chaos.ns.team/nsv2/ns-client/commits/77e458e))
 * **Investor[Issue [304](https://chaos.ns.team/nsv2/ns-ops/issues/304) - investor-signup-flow-ira-link-bank-api-integration-newly-added-step]:** API Integration for IRA Link-Bank ([d7be878](https://chaos.ns.team/nsv2/ns-client/commits/d7be878))
-* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([cb7431f](https://chaos.ns.team/nsv2/ns-client/commits/cb7431f))
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([d41995a](https://chaos.ns.team/nsv2/ns-client/commits/d41995a))
+* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([cb7431f](https://chaos.ns.team/nsv2/ns-client/commits/cb7431f))
 * **Issuer Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** lendio stauts corrected in constant file ([bee3759](https://chaos.ns.team/nsv2/ns-client/commits/bee3759))
 * **Issuer-Dashboard[Issue [296](https://chaos.ns.team/nsv2/ns-ops/issues/296) - issuer-manage-business-application-list-on-dashboard]:** issuer application lists on dashboard showing buttons as per app status ([6dbf80b](https://chaos.ns.team/nsv2/ns-client/commits/6dbf80b))
 * **Issuer[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** feedback changes done ([4b5017d](https://chaos.ns.team/nsv2/ns-client/commits/4b5017d))
