@@ -1,9 +1,7 @@
-/* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
 import { includes, isArray, filter, forEach } from 'lodash';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-// import { GqlClient as client2 } from '../../../../../api/gcoolApi';
 import { FILTER_META } from '../../../../../constants/user';
 import { getBusinessApplicationAdmin, getBusinessApplicationSummary } from '../../../queries/businessApplication';
 import Helper from '../../../../../helper/utility';
@@ -116,7 +114,7 @@ export class BusinessAppStore {
   }
 
   @action
-  initAction = (data) => {
+  updateApplicationStatusCount = (data) => {
     const { values } = this.filterApplicationStatus;
     forEach(values, (v, k) => {
       const count = filter(data, app =>
@@ -178,7 +176,7 @@ export class BusinessAppStore {
             },
           };
           this.reInitiateApplicationStatusFilterValues(appType);
-          this.initAction(data.businessApplicationsAdmin.businessApplications);
+          this.updateApplicationStatusCount(data.businessApplicationsAdmin.businessApplications);
           this.totalRecords = this.summary[appType];
           this.backup = data.businessApplicationsAdmin.businessApplications;
         }
