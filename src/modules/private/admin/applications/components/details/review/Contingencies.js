@@ -22,7 +22,7 @@ const TableBody = ({
     {
     form.fields.data.length ?
     form.fields.data.map((formData, index) => (
-      <Table.Row>
+      <Table.Row verticalAlign="top">
         <Table.Cell width={5}>
           <FormInput
             name="contingency"
@@ -50,7 +50,7 @@ const TableBody = ({
     )) : ''
     }
     <Table.Row>
-      <Table.Cell>
+      <Table.Cell colSpan="3">
         <Button size="small" color="blue" className="link-button" onClick={() => addMore(formName)}>+ Add Contingency</Button>
       </Table.Cell>
     </Table.Row>

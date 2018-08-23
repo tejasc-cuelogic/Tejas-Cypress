@@ -177,7 +177,7 @@ export default class BusinessPlan extends Component {
                   {
                     SOURCES_FRM.fields.data.length ?
                     SOURCES_FRM.fields.data.map((source, index) => (
-                      <Table.Row key={source}>
+                      <Table.Row key={source} verticalAlign="top">
                         <Table.Cell width={8}>
                           <FormInput
                             name="name"
@@ -235,7 +235,7 @@ export default class BusinessPlan extends Component {
                   {
                   USES_FRM.fields.data.length ?
                   USES_FRM.fields.data.map((use, index) => (
-                    <Table.Row key={use[index]}>
+                    <Table.Row key={use[index]} verticalAlign="top">
                       <Table.Cell width={8}>
                         <FormInput
                           name="name"

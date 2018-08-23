@@ -57,18 +57,16 @@ const RemoveIcon = ({
   match, index, toggleConfirmModal, formName,
 }) => (
   index !== 0 &&
-    <Table.Cell collapsing verticalAlign="middle">
-      <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName)} >
-        <Icon className="ns-close-circle" color="grey" />
-      </Link>
-    </Table.Cell>
+    <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName)} >
+      <Icon className="ns-close-circle" color="grey" />
+    </Link>
 );
 
 const AddMore = ({
   addMore, formName, title,
 }) => (
   <Table.Row>
-    <Table.Cell collapsing>
+    <Table.Cell colSpan="3">
       <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName)}>+ {title}</Button>
     </Table.Cell>
   </Table.Row>
@@ -125,7 +123,7 @@ export default class Miscellaneous extends Component {
                 SOCIAL_MEDIA_FRM.fields.data.length ?
                 SOCIAL_MEDIA_FRM.fields.data.map((socialMedia, index) => (
                   <Table.Row verticalAlign="top">
-                    <Table.Cell collapsing>
+                    <Table.Cell width={3}>
                       <Dropdown
                         name="label"
                         placeholder="eg. Facebook"
@@ -143,7 +141,9 @@ export default class Miscellaneous extends Component {
                         changed={(e, result) => socialMediaChange(e, result, index)}
                       />
                     </Table.Cell>
-                    <RemoveIcon match={this.props.match} index={index} formName="SOCIAL_MEDIA_FRM" toggleConfirmModal={this.toggleConfirmModal} />
+                    <Table.Cell collapsing>
+                      <RemoveIcon match={this.props.match} index={index} formName="SOCIAL_MEDIA_FRM" toggleConfirmModal={this.toggleConfirmModal} />
+                    </Table.Cell>
                   </Table.Row>
                 )) : ''
               }
@@ -174,7 +174,9 @@ export default class Miscellaneous extends Component {
                       uploadtitle="Choose document to upload"
                     />
                   </Table.Cell>
-                  <RemoveIcon match={this.props.match} index={index} formName="OTHER_DOCUMENTATION_FRM" toggleConfirmModal={this.toggleConfirmModal} />
+                  <Table.Cell collapsing>
+                    <RemoveIcon match={this.props.match} index={index} formName="OTHER_DOCUMENTATION_FRM" toggleConfirmModal={this.toggleConfirmModal} />
+                  </Table.Cell>
                 </Table.Row>
               )) : ''
               }
