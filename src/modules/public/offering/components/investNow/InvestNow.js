@@ -30,6 +30,7 @@ export default class InvestNow extends React.Component {
   }
   handleCancel = () => {
     this.props.investmentStore.setStepToBeRendered(0);
+    this.props.investmentStore.ResetDisableNextbtn();
     this.props.history.push('invest-now');
   }
 
