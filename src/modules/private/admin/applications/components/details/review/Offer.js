@@ -1,19 +1,29 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { Header, Form, Table, Dropdown } from 'semantic-ui-react';
-import { FormInput, MaskedInput, FormDatePicker } from '../../../../../../../theme/form';
+import { Header, Form, Table, Dropdown, Icon, Confirm } from 'semantic-ui-react';
+import { FormInput, MaskedInput } from '../../../../../../../theme/form';
 import { STRUCTURE_TYPES } from '../../../../../../../services/constants/admin/businessApplication';
 @inject('businessAppReviewStore')
 @observer
 export default class Offer extends Component {
+  toggleConfirmModal = (e, index) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.toggleConfirmModal(index, 'OFFERS_FRM');
+  }
   addNewOffer = (e) => {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore('OFFERS_FRM');
   }
   render() {
-    const { OFFERS_FRM, offersChange } = this.props.businessAppReviewStore;
+    const {
+      OFFERS_FRM,
+      offersChange,
+      confirmModal,
+      confirmModalName,
+      removeData,
+    } = this.props.businessAppReviewStore;
+    const offerFields = OFFERS_FRM.fields.data[0];
     return (
       <div className="inner-content-spacer">
         <Header as="h4">
@@ -26,37 +36,23 @@ export default class Offer extends Component {
           <Table basic compact className="form-table">
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>&nbsp;</Table.HeaderCell>
                 <Table.HeaderCell />
+                {
+                  OFFERS_FRM.fields.data.map((offer, index) => (
+                    <Table.HeaderCell>Offer {String.fromCharCode('A'.charCodeAt() + index)}
+                      <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index)} >
+                        <Icon className="ns-close-circle" color="grey" />
+                      </Link>
+                    </Table.HeaderCell>
+                  ))
+                }
               </Table.Row>
             </Table.Header>
-            {
-              OFFERS_FRM.fields.data.map(offer => (
-                Object.keys(offer).forEach(key => (
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>
-                        {offer[key].label}
-                        jghjgjhghj
-                      </Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                ))
-              ))
-            }
-          </Table>
-          {
-          OFFERS_FRM.fields.data.length ?
-          OFFERS_FRM.fields.data.map((offer, index) => (
-            <Table basic compact className="form-table">
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Offer {String.fromCharCode('A'.charCodeAt() + index)}</Table.HeaderCell>
-                  <Table.HeaderCell />
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                <Table.Row>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell>{offerFields.structure.label}</Table.Cell>
+                {
+                OFFERS_FRM.fields.data.map((offer, index) => (
                   <Table.Cell>
                     <Dropdown
                       name="structure"
@@ -64,6 +60,15 @@ export default class Offer extends Component {
                       fielddata={offer.structure}
                       changed={(e, result) => offersChange(e, result, index)}
                     />
+                  </Table.Cell>
+                ))
+                }
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>{offerFields.offeringAmount.label}</Table.Cell>
+                {
+                OFFERS_FRM.fields.data.map((offer, index) => (
+                  <Table.Cell>
                     <MaskedInput
                       prefix="$"
                       currency
@@ -72,54 +77,146 @@ export default class Offer extends Component {
                       changed={values => offersChange(values, index)}
                       hidelabel
                     />
-                    {
-                      ['maturity', 'interestRate', 'amortizationAmount'].map(field => (
-                        <MaskedInput
-                          key={field}
-                          name={field}
-                          fielddata={offer[field]}
-                          changed={values => offersChange(values, index)}
-                          hidelabel
-                        />
-                      ))
-                    }
-                    {
-                      ['personalGuarantee', 'businessBlanket'].map(field => (
-                        <FormInput
-                          key={field}
-                          name={field}
-                          fielddata={offer[field]}
-                          changed={(e, result) => offersChange(e, result, index)}
-                          ishidelabel
-                        />
-                      ))
-                    }
-                    <FormDatePicker
-                      name="expirationDate"
-                      placeholder="Enter here"
-                      selected={offer.expirationDate.value ?
-                        moment(offer.expirationDate.value) : null}
-                      changed={date => offersChange(date)}
-                      fielddata={offer.expirationDate}
-                    />
-                    {
-                      ['multipleOnPrincipalToPay', 'totalCapitalReturned'].map(field => (
-                        <MaskedInput
-                          key={field}
-                          name={field}
-                          fielddata={offer[field]}
-                          changed={values => offersChange(values, index)}
-                          hidelabel
-                        />
-                      ))
-                    }
                   </Table.Cell>
-                </Table.Row>
-              </Table.Body>
-            </Table>
-          )) : ''
-          }
+                ))
+                }
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>{offerFields.maturity.label}</Table.Cell>
+                {
+                OFFERS_FRM.fields.data.map((offer, index) => (
+                  <Table.Cell>
+                    <MaskedInput
+                      name="maturity"
+                      fielddata={offer.maturity}
+                      changed={values => offersChange(values, index)}
+                      hidelabel
+                    />
+                  </Table.Cell>
+                ))
+                }
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>{offerFields.interestRate.label}</Table.Cell>
+                {
+                OFFERS_FRM.fields.data.map((offer, index) => (
+                  <Table.Cell>
+                    <MaskedInput
+                      name="interestRate"
+                      fielddata={offer.interestRate}
+                      changed={values => offersChange(values, index)}
+                      hidelabel
+                    />
+                  </Table.Cell>
+                ))
+                }
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>{offerFields.amortizationAmount.label}</Table.Cell>
+                {
+                OFFERS_FRM.fields.data.map((offer, index) => (
+                  <Table.Cell>
+                    <MaskedInput
+                      name="amortizationAmount"
+                      fielddata={offer.amortizationAmount}
+                      changed={values => offersChange(values, index)}
+                      hidelabel
+                    />
+                  </Table.Cell>
+                ))
+               }
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>{offerFields.personalGuarantee.label}</Table.Cell>
+                {
+                OFFERS_FRM.fields.data.map((offer, index) => (
+                  <Table.Cell>
+                    <FormInput
+                      name="personalGuarantee"
+                      fielddata={offer.personalGuarantee}
+                      changed={(e, result) => offersChange(e, result, index)}
+                      ishidelabel
+                    />
+                  </Table.Cell>
+                ))
+                }
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>{offerFields.businessBlanket.label}</Table.Cell>
+                {
+                OFFERS_FRM.fields.data.map((offer, index) => (
+                  <Table.Cell>
+                    <FormInput
+                      name="businessBlanket"
+                      fielddata={offer.businessBlanket}
+                      changed={(e, result) => offersChange(e, result, index)}
+                      ishidelabel
+                    />
+                  </Table.Cell>
+                ))
+                }
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>{offerFields.expirationDate.label}</Table.Cell>
+                {
+                OFFERS_FRM.fields.data.map((offer, index) => (
+                  <Table.Cell>
+                    <MaskedInput
+                      name="expirationDate"
+                      changed={values => offersChange(values, index)}
+                      fielddata={offer.expirationDate}
+                      hidelabel
+                    />
+                  </Table.Cell>
+                ))
+                }
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>{offerFields.multipleOnPrincipalToPay.label}</Table.Cell>
+                {
+                OFFERS_FRM.fields.data.map((offer, index) => (
+                  <Table.Cell>
+                    <MaskedInput
+                      name="multipleOnPrincipalToPay"
+                      fielddata={offer.multipleOnPrincipalToPay}
+                      changed={values => offersChange(values, index)}
+                      hidelabel
+                    />
+                  </Table.Cell>
+                ))
+                }
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>{offerFields.totalCapitalReturned.label}</Table.Cell>
+                {
+                OFFERS_FRM.fields.data.map((offer, index) => (
+                  <Table.Cell>
+                    <MaskedInput
+                      name="totalCapitalReturned"
+                      fielddata={offer.totalCapitalReturned}
+                      changed={values => offersChange(values, index)}
+                      hidelabel
+                    />
+                  </Table.Cell>
+                ))
+                }
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>Portal agreement upload</Table.Cell>
+                <Table.Cell colSpan="4">Link to add agreement</Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
         </Form>
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to remove this offer?"
+          open={confirmModal}
+          onCancel={this.toggleConfirmModal}
+          onConfirm={() => removeData(confirmModalName)}
+          size="mini"
+          className="deletion"
+        />
       </div>
     );
   }

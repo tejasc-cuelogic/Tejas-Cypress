@@ -477,7 +477,7 @@ export const OFFERS = {
   data: [{
     structure: {
       value: '',
-      label: '',
+      label: 'Structure',
       placeHolder: 'Choose',
       error: undefined,
       rule: 'string',
@@ -579,6 +579,6 @@ export const OFFERS = {
 };
 
 export const STRUCTURE_TYPES = [
-  { key: 'termnote', value: 'facebook', text: 'Term Note' },
-  { key: 'revenueshareingnote', value: 'revenueshareingnote', text: 'Revenue Shareing Note' },
+  { key: 'termnote', value: 'facebook', text: 'Term Loan' },
+  { key: 'revenueshareingnote', value: 'revenueshareingnote', text: 'Revenue Share' },
 ];
