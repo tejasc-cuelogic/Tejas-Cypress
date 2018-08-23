@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Button, Divider, Confirm, Header } from 'semantic-ui-react';
 import { FormTextarea, DropZone } from '../../../../../../../theme/form';
@@ -36,14 +37,19 @@ export default class Projections extends Component {
       <div>
         <Form>
           {
-            ['compareHistoricalForReasonabless', 'areTheProjectionsComplete', 'revenueCheck'].map(field => (
-              <FormTextarea
-                key={field}
-                name={field}
-                fielddata={PROJECTIONS_FRM.fields[field]}
-                changed={projectionsEleChange}
-                containerclassname="secondary"
-              />
+            ['compareHistoricalForReasonabless', 'areTheProjectionsComplete', 'revenueCheck'].map((field, index) => (
+              <Aux>
+                <FormTextarea
+                  key={field}
+                  name={field}
+                  fielddata={PROJECTIONS_FRM.fields[field]}
+                  changed={projectionsEleChange}
+                  containerclassname="secondary"
+                />
+                {index !== 2 &&
+                  <Divider section />
+                }
+              </Aux>
             ))
           }
           <DropZone
@@ -56,14 +62,19 @@ export default class Projections extends Component {
           />
           <Divider section />
           {
-            ['majorLineItems', 'tiesToLeaseAgreement', 'benchmarkAndPrintComps'].map(field => (
-              <FormTextarea
-                key={field}
-                name={field}
-                fielddata={PROJECTIONS_FRM.fields[field]}
-                changed={projectionsEleChange}
-                containerclassname="secondary"
-              />
+            ['majorLineItems', 'tiesToLeaseAgreement', 'benchmarkAndPrintComps'].map((field, index) => (
+              <Aux>
+                <FormTextarea
+                  key={field}
+                  name={field}
+                  fielddata={PROJECTIONS_FRM.fields[field]}
+                  changed={projectionsEleChange}
+                  containerclassname="secondary"
+                />
+                {index !== 2 &&
+                <Divider section />
+                }
+              </Aux>
             ))
           }
           <DropZone
