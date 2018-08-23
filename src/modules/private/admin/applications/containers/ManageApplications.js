@@ -20,8 +20,8 @@ export default class ManageApplications extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/prequal-failed`);
-      this.props.businessAppAdminStore.getBusinessApplicationSummary();
     }
+    this.props.businessAppAdminStore.getBusinessApplicationSummary();
   }
 
   representAddon = summary => mapValues(summary, s => ` (${s})`);

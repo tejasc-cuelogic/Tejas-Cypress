@@ -13,14 +13,12 @@ export class BusinessAppStore {
   @observable summary = { 'prequal-failed': 0, 'in-progress': 0, completed: 0 };
   @observable backup = [];
   @observable columnTitle = '';
+  @observable applicationType = 'prequal-failed';
   @observable totalRecords = 0;
   @observable requestState = {
-    lek: null,
+    lek: { 'page-1': null },
     filters: false,
-    sort: {
-      by: 'lastLoginDate',
-      direction: 'desc',
-    },
+    sort: { by: 'createdDate|desc' },
     search: {},
     page: 1,
     perPage: 10,
@@ -35,15 +33,22 @@ export class BusinessAppStore {
   }
 
   @action
-  initiateSearch = (srchParams) => {
-    this.requestState.lek = null;
+  setKeyword = (e) => {
+    this.requestState.search = { ...this.requestState.search, keyword: e.target.value };
+  }
+
+  @action
+  initiateSearch = (srchParams, sortParams) => {
+    this.requestState.lek = { 'page-1': null };
     this.requestState.search = srchParams;
+    this.requestState.sort = sortParams;
     this.initRequest();
   }
 
   @action
   setInitiateSrch = (name, value) => {
     const srchParams = { ...this.requestState.search };
+    const sortParams = { ...this.requestState.sort };
     if (name === 'applicationStatus') {
       const index = this.filterApplicationStatus
         .value.indexOf(value);
@@ -54,11 +59,19 @@ export class BusinessAppStore {
       }
       srchParams[name] = this.filterApplicationStatus.value;
     } else if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-      srchParams[name] = value;
+      if (name === 'by') {
+        sortParams[name] = value;
+      } else {
+        srchParams[name] = value;
+      }
     } else {
       delete srchParams[name];
     }
-    this.initiateSearch(srchParams);
+    if (name === 'applicationStatus') {
+      this.filterByAppStatus();
+    } else {
+      this.initiateSearch(srchParams, sortParams);
+    }
   }
 
   @computed get getBusinessApplication() {
@@ -70,12 +83,13 @@ export class BusinessAppStore {
 
   @action
   reInitiateApplicationStatusFilterValues(section) {
-    this.requestState.search = {};
     this.filterApplicationStatus = FILTER_META.applicationStatus;
     const { values } = this.filterApplicationStatus;
     this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, section));
     this.filterApplicationStatus.value = section === 'in-progress' ? ['UNSTASH'] : section === 'completed' ? ['NEW', 'REVIEWING'] : [];
-    this.requestState.search.applicationStatus = this.filterApplicationStatus.value;
+    this.requestState.search =
+    { ...this.requestState.search, applicationStatus: this.filterApplicationStatus.value };
+    this.filterByAppStatus();
   }
 
   @action
@@ -95,33 +109,8 @@ export class BusinessAppStore {
   @action
   fetchBusinessApplicationsByStatus = (appType) => {
     this.columnTitle = appType === 'prequal-failed' ? 'Failed reasons' : appType === 'in-progress' ? 'Steps completed' : '';
-    const appTypeFilter = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'PRE_QUALIFICATION_SUBMITTED' : 'APPLICATION_SUBMITTED';
-    let filterParams = {
-      applicationType: appTypeFilter,
-      // orderBy: { field: this.requestState.sort.by, sort: this.requestState.sort.direction },
-      limit: this.requestState.perPage,
-      search: this.requestState.search.keyword,
-    };
-    filterParams = this.requestState.lek ?
-      { ...filterParams, lek: this.requestState.lek } : { ...filterParams };
-    this.businessApplicationsList = graphql({
-      client,
-      query: getBusinessApplicationAdmin,
-      variables: filterParams,
-      refetchQueries: { query: getBusinessApplicationSummary },
-      fetchPolicy: 'network-only',
-      onFetch: (data) => {
-        if (data) {
-          this.requestState.lek = data.businessApplicationsAdmin.businessApplications.lek;
-          this.reInitiateApplicationStatusFilterValues(appType);
-          this.initAction(data.businessApplicationsAdmin.businessApplications);
-          this.totalRecords = this.summary[appType];
-        }
-      },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-      },
-    });
+    this.applicationType = appType;
+    this.initRequest();
   }
 
   @action
@@ -132,11 +121,18 @@ export class BusinessAppStore {
         app.status === v.value).length;
       values[k].label = `${values[k].label} (${count})`;
     });
-    this.backup = data;
-    this.initRequest();
-    this.requestState.page = 1;
-    this.requestState.perPage = 10;
-    this.requestState.skip = 0;
+  }
+
+  @action
+  filterByAppStatus = () => {
+    const { applicationStatus } = this.requestState.search;
+    const { businessApplicationsAdmin } = this.businessApplicationsList.data;
+    if (applicationStatus && applicationStatus.length && businessApplicationsAdmin) {
+      businessApplicationsAdmin.businessApplications = filter(this.backup, app =>
+        includes(toJS(applicationStatus), app.status));
+    } else if (businessApplicationsAdmin) {
+      businessApplicationsAdmin.businessApplications = this.backup;
+    }
   }
 
   @action
@@ -151,15 +147,44 @@ export class BusinessAppStore {
     this.requestState.perPage = first || this.requestState.perPage;
     this.requestState.skip = skip || this.requestState.skip;
 
-    const { applicationStatus, keyword } = this.requestState.search;
-    if ((applicationStatus.length || (keyword && keyword !== '')) && this.businessApplicationsList.data.businessApplicationsAdmin) {
-      this.businessApplicationsList.data.businessApplicationsAdmin.businessApplications =
-      filter(this.backup, app =>
-        includes(toJS(applicationStatus), app.status)).slice(skip, skip + first);
-    } else if (this.backup && this.businessApplicationsList.data.businessApplicationsAdmin) {
-      this.businessApplicationsList.data.businessApplicationsAdmin.businessApplications =
-      this.backup.slice(skip, skip + first);
-    }
+    const { keyword } = this.requestState.search;
+    const { by } = this.requestState.sort;
+    const [field, direction] = by.split('|');
+    const appType = this.applicationType;
+    const applicationTypeFilter = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'PRE_QUALIFICATION_SUBMITTED' : 'APPLICATION_SUBMITTED';
+    let filterParams = {
+      applicationType: applicationTypeFilter,
+      orderBy: { field, sort: direction || 'desc' },
+      limit: this.requestState.perPage,
+      search: keyword,
+    };
+    filterParams = this.requestState.lek[`page-${this.requestState.page}`] ?
+      { ...filterParams, lek: this.requestState.lek[`page-${this.requestState.page}`] } : { ...filterParams };
+    this.businessApplicationsList = graphql({
+      client,
+      query: getBusinessApplicationAdmin,
+      variables: filterParams,
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          const { lek } = data.businessApplicationsAdmin;
+          this.requestState = {
+            ...this.requestState,
+            lek: {
+              ...this.requestState.lek,
+              [`page-${this.requestState.page + 1}`]: lek,
+            },
+          };
+          this.reInitiateApplicationStatusFilterValues(appType);
+          this.initAction(data.businessApplicationsAdmin.businessApplications);
+          this.totalRecords = this.summary[appType];
+          this.backup = data.businessApplicationsAdmin.businessApplications;
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
+    });
   }
 }
 

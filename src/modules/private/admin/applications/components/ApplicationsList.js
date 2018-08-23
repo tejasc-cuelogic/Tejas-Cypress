@@ -25,10 +25,6 @@ export default class ApplicationsList extends Component {
   setSearchParam = (e, { name, value }) =>
     this.props.businessAppAdminStore.setInitiateSrch(name, value);
 
-  checkClicked = () => {
-    console.log('clicked');
-  }
-
   executeSearch = (e) => {
     if (e.charCode === 13) {
       this.props.businessAppAdminStore.setInitiateSrch('keyword', e.target.value);
@@ -45,17 +41,23 @@ export default class ApplicationsList extends Component {
       filterApplicationStatus,
       columnTitle,
       totalRecords,
+      businessApplicationsList,
+      setKeyword,
     } = this.props.businessAppAdminStore;
+
+    if (businessApplicationsList.loading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form>
           <Grid>
             <Grid.Row verticalAlign="bottom">
               <Grid.Column width={8}>
-                <Input fluid onKeyPress={this.executeSearch} icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Search by keyword or phrase" />
+                <Input fluid onKeyPress={this.executeSearch} onChange={setKeyword} value={requestState.search.keyword} icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Search by keyword or phrase" />
               </Grid.Column>
               <Grid.Column width={3}>
-                <DropdownFilter name="Sort By" keyName="businessAppSortOption" change={this.setSearchParam} value={requestState.search.businessAppSortOption} options={FILTER_META.businessAppSortOption} />
+                <DropdownFilter name="Sort By Field" keyName="by" change={this.setSearchParam} value={requestState.sort.by} options={FILTER_META.businessAppSortField} />
               </Grid.Column>
               <Grid.Column width={3} floated="right" textAlign="right">
                 <Button primary className="relaxed" content="Export" />
@@ -102,11 +104,19 @@ export default class ApplicationsList extends Component {
                         </Header>
                         <div className="table-info-wrap">
                           <p>
-                            {application.userDetails.firstName} {application.userDetails.lastName}
+                            {application.userDetails &&
+                            `${application.userDetails.firstName} ${application.userDetails.lastName}`
+                            }
                             <br />
-                            {application.userDetails.contactDetails.email.email}<br />
-                            {application.userDetails.contactDetails.phone &&
-                              application.userDetails.contactDetails.phone}
+                            {application.userDetails.contactDetails &&
+                            application.userDetails.contactDetails.email &&
+                              `${application.userDetails.contactDetails.email.email}`
+                            }
+                            <br />
+                            {application.userDetails.contactDetails
+                            && application.userDetails.contactDetails.phone &&
+                              `${application.userDetails.contactDetails.phone}`
+                            }
                           </p>
                           <p>Sign-up Code <b>-</b><br />
                             Started <b>{moment(application.createdDate).format('MM/DD/YYYY')}</b><br />
