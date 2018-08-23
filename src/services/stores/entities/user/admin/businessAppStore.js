@@ -110,6 +110,8 @@ export class BusinessAppStore {
   fetchBusinessApplicationsByStatus = (appType) => {
     this.columnTitle = appType === 'prequal-failed' ? 'Failed reasons' : appType === 'in-progress' ? 'Steps completed' : '';
     this.applicationType = appType;
+    this.requestState.lek = { 'page-1': null };
+    this.requestState.page = 1;
     this.initRequest();
   }
 

@@ -10,7 +10,7 @@ import { FormCheckbox } from '../../../../../theme/form';
 import { ApplicationListStepColumn } from './ApplicationListStepColumn';
 import ApplicationListButtons from './ApplicationListButtons';
 import { AppStatusLabel } from './AppStatusLabel';
-import { InlineLoader, NsPagination } from '../../../../../theme/shared';
+import { InlineLoader, NsPaginationType2 } from '../../../../../theme/shared';
 
 @inject('businessAppAdminStore')
 @observer
@@ -75,7 +75,7 @@ export default class ApplicationsList extends Component {
               </Grid.Column>
               <Grid.Column width={6} textAlign="right">
                 {totalRecords > 0 &&
-                <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+                <NsPaginationType2 floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
                 }
               </Grid.Column>
             </Grid.Row>
