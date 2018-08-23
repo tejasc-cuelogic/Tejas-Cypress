@@ -17,7 +17,7 @@ export const ApplicationListStepColumn = (props) => {
       {applicationStatus ===
       BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ?
         (prequalDetails.failReasons.length ?
-          <ul>{prequalDetails.failReasons.map(reason => <li>{reason}</li>)}</ul>
+          <List as="ol">{prequalDetails.failReasons.map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
         : <p>-</p>
         )
         : applicationStatus ===

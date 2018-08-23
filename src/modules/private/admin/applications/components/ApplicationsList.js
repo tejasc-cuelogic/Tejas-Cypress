@@ -91,7 +91,7 @@ export default class ApplicationsList extends Component {
                 {getBusinessApplication.length ?
                   getBusinessApplication.map(application => (
                     <Table.Row verticalAlign="top">
-                      <Table.Cell>
+                      <Table.Cell singleLine>
                         <Header as="h6">
                           {application.prequalDetails.businessGeneralInfo.businessName}
                           <AppStatusLabel />
@@ -120,7 +120,7 @@ export default class ApplicationsList extends Component {
                           </p>
                         </div>
                       </Table.Cell>
-                      <Table.Cell>
+                      <Table.Cell singleLine>
                         <Item>
                           <Item.Header><Rating size="large" disabled defaultRating={3} maxRating={5} /></Item.Header>
                           <Item.Content>
