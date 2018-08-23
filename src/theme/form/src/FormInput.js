@@ -30,15 +30,15 @@ const FormInput = observer((props) => {
               wide
             />
           }
+          {props.removed &&
+            <Link to={props.linkto} onClick={e => props.removed(e)}>
+              <Icon className="ns-close-circle" color="grey" />
+            </Link>
+          }
         </label>
       }
       {props.type === 'password' &&
         <input style={{ opacity: 0, position: 'absolute' }} tabIndex={-1} value="something" />
-      }
-      {props.removed &&
-        <Link to={props.linkto} className="icon-link" onClick={e => props.removed(e)}>
-          <Icon className="ns-close-circle" color="grey" />
-        </Link>
       }
       <Input
         fluid

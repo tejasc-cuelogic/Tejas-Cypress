@@ -24,15 +24,7 @@ export default class PreQual extends Component {
     } = this.props.businessAppReviewStore;
     return (
       <Aux>
-        <Header as="h4">Manager</Header>
         <Form>
-          <FormTextarea
-            name="managerOverview"
-            fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={managerEleChange}
-            containerclassname="secondary"
-          />
-          <Divider section />
           <Header as="h4">
             Justifications
             <Link to={this.props.match.url} className="link" onClick={e => this.addJustification(e)}><small>+Add Justification</small></Link>
@@ -53,7 +45,23 @@ export default class PreQual extends Component {
               </Aux>
             )) : null
           }
-          <Button disabled={!(MANAGERS_FRM.meta.isValid && JUSTIFICATIONS_FRM.meta.isValid)} primary className="relaxed pull-right" >APPROVED</Button>
+          <div className="right-align">
+            <Button disabled={!(MANAGERS_FRM.meta.isValid && JUSTIFICATIONS_FRM.meta.isValid)} primary className="relaxed" >Approved</Button>
+          </div>
+          <Divider section />
+          <Header as="h4">Manager</Header>
+          <FormTextarea
+            name="managerOverview"
+            fielddata={MANAGERS_FRM.fields.managerOverview}
+            changed={managerEleChange}
+            containerclassname="secondary"
+          />
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
+            </Button.Group>
+          </div>
         </Form>
         <Confirm
           header="Confirm"

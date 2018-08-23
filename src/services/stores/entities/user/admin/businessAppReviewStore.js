@@ -91,9 +91,6 @@ export class BusinessAppReviewStore {
   @action
   overviewEleChange = (e, result, index) => {
     this.formChangeWithIndex(e, result, 'OVERVIEW_FRM', index);
-    if (result.fielddata.value === '' && index !== 0) {
-      this.OVERVIEW_FRM.fields.data.splice(index, 1);
-    }
   };
 
   @action

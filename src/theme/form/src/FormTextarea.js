@@ -27,12 +27,12 @@ const FormTextarea = observer((props) => {
               wide
             />
           }
+          {props.removed &&
+            <Link to={props.linkto} onClick={e => props.removed(e)}>
+              <Icon className="ns-close-circle" color="grey" />
+            </Link>
+          }
       </label>
-      }
-      {props.removed &&
-        <Link to={props.linkto} className="icon-link" onClick={e => props.removed(e)}>
-          <Icon className="ns-close-circle" color="grey" />
-        </Link>
       }
       <TextArea
         {...props}

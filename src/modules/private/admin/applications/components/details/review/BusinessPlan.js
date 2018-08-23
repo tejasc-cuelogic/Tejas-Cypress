@@ -9,9 +9,9 @@ import { FormTextarea, MaskedInput, FormInput, DropZone, FormDatePicker } from '
 import { InlineLoader } from '../../../../../../../theme/shared';
 
 const AddMore = ({
-  match, addMore, formName, title,
+  addMore, formName, title,
 }) => (
-  <Link color="blue" to={match.url} className="link" onClick={e => addMore(e, formName)}><small>+ {title}</small></Link>
+  <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName)} >+ {title}</Button>
 );
 
 @inject('businessAppReviewStore', 'uiStore')
@@ -24,15 +24,15 @@ export default class BusinessPlan extends Component {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore(formName);
   }
-  confirmRemoveDoc = (e, name) => {
+  confirmRemoveDoc = (e, name, index) => {
     e.preventDefault();
-    this.props.uiStore.setConfirmBox(name);
+    this.props.uiStore.setConfirmBox(name, index);
   }
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
-  handleDelDoc = (field) => {
-    this.props.businessAppReviewStore.removeUploadedData('CONTROL_PERSONS_FRM', field);
+  handleDelDoc = (field, index) => {
+    this.props.businessAppReviewStore.removeUploadedDataWithIndex('CONTROL_PERSONS_FRM', field, index);
     this.props.uiStore.setConfirmBox('');
   }
   toggleConfirmModal = (e, index, formName) => {
@@ -58,6 +58,8 @@ export default class BusinessPlan extends Component {
       confirmModal,
       confirmModalName,
       removeData,
+      MANAGERS_FRM,
+      managerEleChange,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
@@ -74,7 +76,7 @@ export default class BusinessPlan extends Component {
           <Divider section />
           <Header as="h4">
             Control Persons
-            <AddMore match={this.props.match} addMore={this.addMore} formName="CONTROL_PERSONS_FRM" title="Add Control Person" />
+            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'CONTROL_PERSONS_FRM')}><small>+ Add Control Person</small></Link>
           </Header>
           {
             CONTROL_PERSONS_FRM.fields.data.length ?
@@ -126,7 +128,7 @@ export default class BusinessPlan extends Component {
                         name="experienceFile"
                         fielddata={controlPerson.experienceFile}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                        onremove={this.confirmRemoveDoc}
+                        onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
                         uploadtitle="Upload Experience File"
                       />
                     </Form.Field>
@@ -135,7 +137,7 @@ export default class BusinessPlan extends Component {
                         name="creditScoreFile"
                         fielddata={controlPerson.creditScoreFile}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                        onremove={this.confirmRemoveDoc}
+                        onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
                         uploadtitle="Upload Credit Score File"
                       />
                     </Form.Field>
@@ -163,7 +165,7 @@ export default class BusinessPlan extends Component {
           <Grid columns={2}>
             <Grid.Column>
               <Header as="h6">Sources</Header>
-              <Table basic compact className="grey-table">
+              <Table basic compact className="form-table">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -176,14 +178,15 @@ export default class BusinessPlan extends Component {
                     SOURCES_FRM.fields.data.length ?
                     SOURCES_FRM.fields.data.map((source, index) => (
                       <Table.Row key={source}>
-                        <Table.Cell>
+                        <Table.Cell width={8}>
                           <FormInput
                             name="name"
                             fielddata={source.name}
                             changed={(e, result) => sourceEleChange(e, result, index)}
+                            size="small"
                           />
                         </Table.Cell>
-                        <Table.Cell>
+                        <Table.Cell width={8}>
                           <MaskedInput
                             prefix="$"
                             currency
@@ -191,6 +194,7 @@ export default class BusinessPlan extends Component {
                             fielddata={source.amount}
                             changed={values => sourceMaskChange(values, index)}
                             ishidelabel
+                            size="small"
                           />
                         </Table.Cell>
                         {index !== 0 &&
@@ -205,7 +209,7 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      <AddMore match={this.props.match} addMore={this.addMore} formName="SOURCES_FRM" title="Add Source" />
+                      <AddMore addMore={this.addMore} formName="SOURCES_FRM" title="Add Source" />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -219,7 +223,7 @@ export default class BusinessPlan extends Component {
             </Grid.Column>
             <Grid.Column>
               <Header as="h6">Uses</Header>
-              <Table basic compact className="grey-table">
+              <Table basic compact className="form-table">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>Name</Table.HeaderCell>
@@ -232,14 +236,15 @@ export default class BusinessPlan extends Component {
                   USES_FRM.fields.data.length ?
                   USES_FRM.fields.data.map((use, index) => (
                     <Table.Row key={use[index]}>
-                      <Table.Cell>
+                      <Table.Cell width={8}>
                         <FormInput
                           name="name"
                           fielddata={use.name}
                           changed={(e, result) => useEleChange(e, result, index)}
+                          size="small"
                         />
                       </Table.Cell>
-                      <Table.Cell>
+                      <Table.Cell width={8}>
                         <MaskedInput
                           prefix="$"
                           currency
@@ -247,6 +252,7 @@ export default class BusinessPlan extends Component {
                           fielddata={use.amount}
                           changed={values => useMaskChange(values, index)}
                           ishidelabel
+                          size="small"
                         />
                       </Table.Cell>
                       {index !== 0 &&
@@ -261,7 +267,7 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      <AddMore match={this.props.match} addMore={this.addMore} formName="USES_FRM" title="Add Use" />
+                      <AddMore addMore={this.addMore} formName="USES_FRM" title="Add Use" />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -282,18 +288,35 @@ export default class BusinessPlan extends Component {
               moment(BUSINESS_PLAN_FRM.fields.dateOfIncorporation.value) : null}
             changed={date => businessPlanDateChange(date)}
             fielddata={BUSINESS_PLAN_FRM.fields.dateOfIncorporation}
+            containerwidth={5}
           />
-          <Button.Group className="pull-right">
-            <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-            <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} primary type="button">Approve Review</Button>
-          </Button.Group>
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} secondary className="relaxed">Save</Button>
+              <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} primary type="button">Approve Review</Button>
+            </Button.Group>
+          </div>
+          <Divider section />
+          <Header as="h4">Manager</Header>
+          <FormTextarea
+            name="managerOverview"
+            fielddata={MANAGERS_FRM.fields.managerOverview}
+            changed={managerEleChange}
+            containerclassname="secondary"
+          />
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
+            </Button.Group>
+          </div>
         </Form>
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this file?"
           open={confirmBox.entity === 'experienceFile' || confirmBox.entity === 'creditScoreFile'}
           onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity)}
+          onConfirm={() => this.handleDelDoc(confirmBox.entity, confirmBox.refId)}
           size="mini"
           className="deletion"
         />

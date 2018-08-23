@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
 import Aux from 'react-aux';
-import { Header, Table, Icon, Item, Form, Confirm, Button } from 'semantic-ui-react';
+import { observer, inject } from 'mobx-react';
+import { Header, Table, Icon, Item, Form, Confirm, Button, Divider, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { FormSelect, FormInput, DropZone } from '../../../../../../../theme/form';
+import { FormInput, DropZone, FormTextarea } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
 
 const SectionHeader = ({ header, subheader }) => (
@@ -57,7 +57,7 @@ const RemoveIcon = ({
   match, index, toggleConfirmModal, formName,
 }) => (
   index !== 0 &&
-    <Table.Cell collapsing>
+    <Table.Cell collapsing verticalAlign="middle">
       <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName)} >
         <Icon className="ns-close-circle" color="grey" />
       </Link>
@@ -65,11 +65,11 @@ const RemoveIcon = ({
 );
 
 const AddMore = ({
-  match, addMore, formName, title,
+  addMore, formName, title,
 }) => (
   <Table.Row>
     <Table.Cell collapsing>
-      <Link color="blue" to={match.url} className="link" onClick={e => addMore(e, formName)}><small>+ {title}</small></Link>
+      <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName)}>+ {title}</Button>
     </Table.Cell>
   </Table.Row>
 );
@@ -110,25 +110,30 @@ export default class Miscellaneous extends Component {
       confirmModal,
       confirmModalName,
       removeData,
+      MANAGERS_FRM,
+      managerEleChange,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
-      <div className="inner-content-spacer">
-        <Form>
+      <Aux>
+        <Form size="small">
           <SectionHeader header="Social Media" />
-          <Table basic compact inverted className="grey-table">
+          <Table basic compact className="form-table">
             <TableHeader labels={['Label', 'URL']} />
             <Table.Body>
               {
                 SOCIAL_MEDIA_FRM.fields.data.length ?
                 SOCIAL_MEDIA_FRM.fields.data.map((socialMedia, index) => (
-                  <Table.Row>
+                  <Table.Row verticalAlign="top">
                     <Table.Cell collapsing>
-                      <FormSelect
+                      <Dropdown
                         name="label"
                         fielddata={socialMedia.label}
+                        placeholder="eg. Facebook"
+                        fluid
+                        selection
                         options={SOCIAL_MEDIA_LABELS}
-                        changed={(e, result) => socialMediaChange(e, result, index)}
+                        onChange={(e, result) => socialMediaChange(e, result, index)}
                       />
                     </Table.Cell>
                     <Table.Cell>
@@ -143,18 +148,18 @@ export default class Miscellaneous extends Component {
                   </Table.Row>
                 )) : ''
               }
-              <AddMore match={this.props.match} addMore={this.addMore} formName="SOCIAL_MEDIA_FRM" title="Add social media" />
+              <AddMore addMore={this.addMore} formName="SOCIAL_MEDIA_FRM" title="Add social media" />
             </Table.Body>
           </Table>
           <SectionHeader header="Other Documentation Uploads" subheader="(e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)" />
-          <Table basic compact inverted className="grey-table">
+          <Table basic compact className="form-table">
             <TableHeader labels={['Label', 'Comment']} />
             <Table.Body>
               {
               OTHER_DOCUMENTATION_FRM.fields.data.length ?
               OTHER_DOCUMENTATION_FRM.fields.data.map((document, index) => (
-                <Table.Row >
-                  <Table.Cell collapsing>
+                <Table.Row verticalAlign="top">
+                  <Table.Cell width={5}>
                     <FormInput
                       name="label"
                       fielddata={document.label}
@@ -174,11 +179,11 @@ export default class Miscellaneous extends Component {
                 </Table.Row>
               )) : ''
               }
-              <AddMore match={this.props.match} addMore={this.addMore} formName="OTHER_DOCUMENTATION_FRM" title="Add new document" />
+              <AddMore addMore={this.addMore} formName="OTHER_DOCUMENTATION_FRM" title="Add new document" />
             </Table.Body>
           </Table>
           <SectionHeader header="NS Admin Uploaded Documents" subheader="Uploaded via the Activity History" />
-          <div className="featured-section">
+          <div className="featured-section mb-20">
             <Item.Group relaxed="very">
               {
               UPLOADED_DOCUMENTS_FRM.fields.data.length ?
@@ -196,16 +201,32 @@ export default class Miscellaneous extends Component {
               }
             </Item.Group>
           </div>
-          <Button.Group className="pull-right">
-            <Button
-              disabled={!(OTHER_DOCUMENTATION_FRM.meta.isValid && SOCIAL_MEDIA_FRM.meta.isValid)}
-              className="relaxed"
-              secondary
-            >
-              Save
-            </Button>
-            <Button disabled={!(OTHER_DOCUMENTATION_FRM.meta.isValid && SOCIAL_MEDIA_FRM.meta.isValid)} primary type="button">Submit for Approval</Button>
-          </Button.Group>
+          <div className="right-align">
+            <Button.Group>
+              <Button
+                disabled={!(OTHER_DOCUMENTATION_FRM.meta.isValid && SOCIAL_MEDIA_FRM.meta.isValid)}
+                className="relaxed"
+                secondary
+              >
+                Save
+              </Button>
+              <Button disabled={!(OTHER_DOCUMENTATION_FRM.meta.isValid && SOCIAL_MEDIA_FRM.meta.isValid)} primary type="button">Submit for Approval</Button>
+            </Button.Group>
+          </div>
+          <Divider section />
+          <Header as="h4">Manager</Header>
+          <FormTextarea
+            name="managerOverview"
+            fielddata={MANAGERS_FRM.fields.managerOverview}
+            changed={managerEleChange}
+            containerclassname="secondary"
+          />
+          <div className="right-align">
+            <Button.Group>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
+            </Button.Group>
+          </div>
         </Form>
         <Confirm
           header="Confirm"
@@ -226,7 +247,7 @@ export default class Miscellaneous extends Component {
           size="mini"
           className="deletion"
         />
-      </div>
+      </Aux>
     );
   }
 }
