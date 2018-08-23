@@ -24,15 +24,15 @@ export default class BusinessPlan extends Component {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore(formName);
   }
-  confirmRemoveDoc = (e, name) => {
+  confirmRemoveDoc = (e, name, index) => {
     e.preventDefault();
-    this.props.uiStore.setConfirmBox(name);
+    this.props.uiStore.setConfirmBox(name, index);
   }
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
-  handleDelDoc = (field) => {
-    this.props.businessAppReviewStore.removeUploadedData('CONTROL_PERSONS_FRM', field);
+  handleDelDoc = (field, index) => {
+    this.props.businessAppReviewStore.removeUploadedDataWithIndex('CONTROL_PERSONS_FRM', field, index);
     this.props.uiStore.setConfirmBox('');
   }
   toggleConfirmModal = (e, index, formName) => {
@@ -128,7 +128,7 @@ export default class BusinessPlan extends Component {
                         name="experienceFile"
                         fielddata={controlPerson.experienceFile}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                        onremove={this.confirmRemoveDoc}
+                        onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
                         uploadtitle="Upload Experience File"
                       />
                     </Form.Field>
@@ -137,7 +137,7 @@ export default class BusinessPlan extends Component {
                         name="creditScoreFile"
                         fielddata={controlPerson.creditScoreFile}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                        onremove={this.confirmRemoveDoc}
+                        onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
                         uploadtitle="Upload Credit Score File"
                       />
                     </Form.Field>
@@ -306,8 +306,8 @@ export default class BusinessPlan extends Component {
           />
           <div className="right-align">
             <Button.Group>
-              <Button disabled className="relaxed" secondary>Deny</Button>
-              <Button disabled primary className="relaxed" type="button">Approve</Button>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
+              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
             </Button.Group>
           </div>
         </Form>
@@ -316,7 +316,7 @@ export default class BusinessPlan extends Component {
           content="Are you sure you want to remove this file?"
           open={confirmBox.entity === 'experienceFile' || confirmBox.entity === 'creditScoreFile'}
           onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity)}
+          onConfirm={() => this.handleDelDoc(confirmBox.entity, confirmBox.refId)}
           size="mini"
           className="deletion"
         />
