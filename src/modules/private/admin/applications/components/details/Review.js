@@ -38,10 +38,10 @@ export default class Review extends Component {
     return (
       <div className="inner-content-spacer">
         <Grid>
-          <Grid.Column widescreen={4} largeScreen={4} computer={4} tablet={4} mobile={16}>
+          <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu secondary vertical match={match} navItems={navItems} />
           </Grid.Column>
-          <Grid.Column widescreen={12} largeScreen={12} computer={12} tablet={12} mobile={16}>
+          <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <Switch>
               <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
               {
