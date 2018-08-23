@@ -113,7 +113,8 @@ export default class ApplicationsList extends Component {
                               `${application.userDetails.contactDetails.phone}`
                             }
                           </p>
-                          <p>Sign-up Code <b>-</b><br />
+                          <p>
+                            {/* <p>Sign-up Code <b>-</b><br /> */}
                             Started <b>{moment(application.createdDate).format('MM/DD/YYYY')}</b><br />
                             Updated <b>{moment(application.updatedDate).format('MM/DD/YYYY')}</b>
                           </p>
