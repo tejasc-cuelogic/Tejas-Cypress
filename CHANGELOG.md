@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-08-21)
+# 0.0.0 (2018-08-22)
 
 
 ### Bug Fixes
@@ -16,6 +16,7 @@
 
 ### Features
 
+* ** investment flow[Issue [344](https://chaos.ns.team/nsv2/ns-ops/issues/344) - investment flow refinements]:** investment flow refinements ([ea3a07c](https://chaos.ns.team/nsv2/ns-client/commits/ea3a07c))
 * **Admin Business Applications[Issue [270](https://chaos.ns.team/nsv2/ns-ops/issues/270) - business-application-admin-screen-business-application-lists-skeleton]:** created skeleton for admin business application list using graph cool stub api with filters ([c45b5f0](https://chaos.ns.team/nsv2/ns-client/commits/c45b5f0))
 * **Admin Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - admin crowdpay accounts manage crowdpay accounts]:** basic implementation with gcool api ([fbf2351](https://chaos.ns.team/nsv2/ns-client/commits/fbf2351))
 * **Agreements for Investor[Issue [293](https://chaos.ns.team/nsv2/ns-ops/issues/293) - Agreements for Investor]:** Agreements for Investor ([d873f6c](https://chaos.ns.team/nsv2/ns-client/commits/d873f6c))
