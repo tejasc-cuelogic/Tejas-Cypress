@@ -49,7 +49,7 @@ export default class NsPaginationType2 extends Component {
         <Menu.Item
           icon
           onClick={() => this.goToPage(currentPageNo + 1)}
-          className={lek[`page-${currentPageNo + 1}`] === 'eb99447ce07f43676bf123226f1eaa70' && 'disabled'}
+          className={(lek[`page-${currentPageNo + 1}`] === 'eb99447ce07f43676bf123226f1eaa70' || !lek[`page-${currentPageNo + 1}`]) && 'disabled'}
         >
           <Icon className="ns-chevron-right" color="green" />
         </Menu.Item>

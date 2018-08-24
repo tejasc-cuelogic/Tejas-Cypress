@@ -171,7 +171,7 @@ export class BusinessAppStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data) {
-          const { lek } = data.businessApplicationsAdmin;
+          const { lek, businessApplications } = data.businessApplicationsAdmin;
           this.requestState = {
             ...this.requestState,
             lek: {
@@ -179,13 +179,13 @@ export class BusinessAppStore {
               [`page-${this.requestState.page + 1}`]: lek,
             },
           };
+          this.backup = businessApplications;
           this.reInitiateApplicationStatusFilterValues(appType, noFilter);
           this.updateApplicationStatusCount(
-            data.businessApplicationsAdmin.businessApplications,
+            businessApplications,
             noFilter,
           );
           this.totalRecords = this.summary[appType];
-          this.backup = data.businessApplicationsAdmin.businessApplications;
         }
       },
       onError: () => {
