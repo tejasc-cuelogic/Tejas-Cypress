@@ -28,7 +28,7 @@ query allBusinessApplicationses($filters: BusinessApplicationsFilter){
 `;
 
 export const getBusinessApplicationAdmin = gql`
-query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationadminOrderBy, $limit:String, $search: String, $lek: DecryptedString){
+query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: DecryptedString){
   businessApplicationsAdmin(
     applicationType: $applicationType
     orderBy: $orderBy
