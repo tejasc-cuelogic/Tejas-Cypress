@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { mapValues } from 'lodash';
-import PrivateLayout from '../../../shared/PrivateLayout';
+import PrivateLayout from '../../../shared/PrivateHOC';
 import DeleteAppModal from '../components/DeleteAppModal';
 import { InlineLoader } from '../../../../../theme/shared';
 
