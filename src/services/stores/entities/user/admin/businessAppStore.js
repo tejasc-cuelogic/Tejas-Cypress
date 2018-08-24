@@ -20,7 +20,6 @@ export class BusinessAppStore {
     search: {},
     page: 1,
     perPage: 10,
-    skip: 0,
   };
 
   @observable filterApplicationStatus = FILTER_META.applicationStatus;
@@ -115,7 +114,10 @@ export class BusinessAppStore {
   }
 
   @action
-  updateApplicationStatusCount = (data) => {
+  updateApplicationStatusCount = (data, noFilter) => {
+    if (noFilter) {
+      this.filterApplicationStatus = FILTER_META.applicationStatus;
+    }
     const { values } = this.filterApplicationStatus;
     forEach(values, (v, k) => {
       const count = filter(data, app =>
@@ -138,15 +140,14 @@ export class BusinessAppStore {
 
   @action
   initRequest = (props) => {
-    const { first, skip, page } = props ||
+    const { first, page, noFilter } = props ||
       {
         first: this.requestState.perPage,
-        skip: this.requestState.skip,
         page: this.requestState.page,
+        noFilter: false,
       };
     this.requestState.page = page || this.requestState.page;
     this.requestState.perPage = first || this.requestState.perPage;
-    this.requestState.skip = skip || this.requestState.skip;
 
     const { keyword } = this.requestState.search;
     const { by } = this.requestState.sort;
@@ -176,8 +177,13 @@ export class BusinessAppStore {
               [`page-${this.requestState.page + 1}`]: lek,
             },
           };
-          this.reInitiateApplicationStatusFilterValues(appType);
-          this.updateApplicationStatusCount(data.businessApplicationsAdmin.businessApplications);
+          if (!noFilter) {
+            this.reInitiateApplicationStatusFilterValues(appType);
+          }
+          this.updateApplicationStatusCount(
+            data.businessApplicationsAdmin.businessApplications,
+            noFilter,
+          );
           this.totalRecords = this.summary[appType];
           this.backup = data.businessApplicationsAdmin.businessApplications;
         }

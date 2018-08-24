@@ -5,10 +5,9 @@ import { Menu, Icon, Select } from 'semantic-ui-react';
 @observer
 export default class NsPaginationType2 extends Component {
   state = {
-    skip: this.props.meta.requestState.skip || 0,
+    lek: this.props.meta.requestState.lek,
     first: this.props.meta.requestState.perPage || 10,
     currentPageNo: this.props.meta.requestState.page || 1,
-    totalPages: Math.ceil(this.props.meta.totalRecords / this.props.meta.requestState.perPage),
     stateOptions: [5, 10, 15].map(n => ({ key: n, value: n, text: n })),
   };
   pageChangeHandler = (e) => {
@@ -16,21 +15,17 @@ export default class NsPaginationType2 extends Component {
   }
   changeRecordsPerPage = (e, result) => {
     const first = result.value;
-    const totalPages = Math.ceil(this.props.totalRecords / first);
-    const currentPageNo = (2 * this.state.currentPageNo) - 1;// this will only work for first=5
-    this.setState({ first, totalPages, currentPageNo });
-    this.props.initRequest({ first, skip: this.state.skip, page: currentPageNo });
+    const currentPageNo = 1;
+    this.setState({ first, currentPageNo });
+    this.props.initRequest({ first, page: currentPageNo });
   }
   goToPage = (currentPageNo) => {
-    const skip = (currentPageNo === this.state.totalPages) ?
-      this.props.meta.totalRecords - (this.props.meta.totalRecords % this.state.first) :
-      (currentPageNo * this.state.first) - this.state.first;
-    this.setState({ skip, currentPageNo });
-    this.props.initRequest({ first: this.state.first, skip, page: currentPageNo });
+    this.setState({ currentPageNo });
+    this.props.initRequest({ page: currentPageNo, first: this.state.first });
   }
   render() {
     const {
-      first, currentPageNo, totalPages, stateOptions, recPerPage,
+      first, currentPageNo, stateOptions, recPerPage, lek,
     } = this.state;
     return (
       <Menu pagination text {...this.props}>
@@ -54,7 +49,7 @@ export default class NsPaginationType2 extends Component {
         <Menu.Item
           icon
           onClick={() => this.goToPage(currentPageNo + 1)}
-          className={currentPageNo === totalPages && 'disabled'}
+          className={lek[`page-${currentPageNo + 1}`] === 'eb99447ce07f43676bf123226f1eaa70' && 'disabled'}
         >
           <Icon className="ns-chevron-right" color="green" />
         </Menu.Item>

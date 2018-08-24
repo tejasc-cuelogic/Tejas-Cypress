@@ -70,7 +70,7 @@ export default class ApplicationsList extends Component {
               </Grid.Column>
               <Grid.Column width={6} textAlign="right">
                 {totalRecords > 0 &&
-                <NsPaginationType2 floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+                <NsPaginationType2 floated="right" initRequest={({ first, page }) => this.paginate({ first, page, noFilter: true })} meta={{ totalRecords, requestState }} />
                 }
               </Grid.Column>
             </Grid.Row>
