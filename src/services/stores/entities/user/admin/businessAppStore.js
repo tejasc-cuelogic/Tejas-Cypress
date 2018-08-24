@@ -131,12 +131,12 @@ export class BusinessAppStore {
   @action
   filterByAppStatus = () => {
     const { applicationStatus } = this.requestState.search;
-    const { businessApplicationsAdmin } = this.businessApplicationsList.data;
-    if (applicationStatus && applicationStatus.length && businessApplicationsAdmin) {
-      businessApplicationsAdmin.businessApplications = filter(this.backup, app =>
+    const { data } = this.businessApplicationsList;
+    if (applicationStatus && applicationStatus.length && data && data.businessApplicationsAdmin) {
+      data.businessApplicationsAdmin.businessApplications = filter(this.backup, app =>
         includes(toJS(applicationStatus), app.status));
-    } else if (businessApplicationsAdmin) {
-      businessApplicationsAdmin.businessApplications = this.backup;
+    } else if (data && data.businessApplicationsAdmin) {
+      data.businessApplicationsAdmin.businessApplications = this.backup;
     }
   }
 
