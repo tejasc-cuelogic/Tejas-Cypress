@@ -51,7 +51,7 @@ export default class ApplicationsList extends Component {
               <Grid.Column width={8}>
                 <Input fluid onKeyPress={this.executeSearch} onChange={setKeyword} value={requestState.search.keyword} icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Search by keyword or phrase" />
               </Grid.Column>
-              <Grid.Column width={3}>
+              <Grid.Column width={4}>
                 <DropdownFilter name="Sort By Field" keyName="by" change={this.setSearchParam} value={requestState.sort.by} options={FILTER_META.businessAppSortField} />
               </Grid.Column>
               <Grid.Column width={3} floated="right" textAlign="right">
@@ -120,7 +120,7 @@ export default class ApplicationsList extends Component {
                           </p>
                         </div>
                       </Table.Cell>
-                      <Table.Cell singleLine>
+                      <Table.Cell>
                         <Item>
                           <Item.Header><Rating size="large" disabled defaultRating={3} maxRating={5} /></Item.Header>
                           <Item.Content>
