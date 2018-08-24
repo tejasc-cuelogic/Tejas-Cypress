@@ -20,7 +20,7 @@ export default class PreQual extends Component {
     const {
       MANAGERS_FRM, JUSTIFICATIONS_FRM,
       toggleConfirmModal, confirmModal, confirmModalName,
-      managerEleChange, justificationEleChange, removeData,
+      formChange, formChangeWithIndex, removeData,
     } = this.props.businessAppReviewStore;
     return (
       <Aux>
@@ -30,30 +30,29 @@ export default class PreQual extends Component {
             <Link to={this.props.match.url} className="link" onClick={e => this.addJustification(e)}><small>+Add Justification</small></Link>
           </Header>
           {
-            JUSTIFICATIONS_FRM.fields.data.length ?
             JUSTIFICATIONS_FRM.fields.data.map((justification, index) => (
               <Aux>
                 <FormTextarea
                   name="justification"
                   label={`Justification ${index + 1}`}
                   fielddata={justification.justification}
-                  changed={(e, result) => justificationEleChange(e, result, index)}
+                  changed={(e, result) => formChangeWithIndex(e, result, 'JUSTIFICATIONS_FRM', index)}
                   removed={index === 0 ? false : e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM')}
                   linkto={this.props.match.url}
                   containerclassname="secondary"
                 />
               </Aux>
-            )) : null
+            ))
           }
           <div className="right-align">
-            <Button disabled={!(MANAGERS_FRM.meta.isValid && JUSTIFICATIONS_FRM.meta.isValid)} primary className="relaxed" >Approved</Button>
+            <Button disabled={!JUSTIFICATIONS_FRM.meta.isValid} primary className="relaxed" >Approved</Button>
           </div>
           <Divider section />
           <Header as="h4">Manager</Header>
           <FormTextarea
             name="managerOverview"
             fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={managerEleChange}
+            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
             containerclassname="secondary"
           />
           <div className="right-align">

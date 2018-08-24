@@ -76,7 +76,7 @@ const AddMore = ({
 @observer
 export default class Miscellaneous extends Component {
   onFileDrop = (files, name, index) => {
-    this.props.businessAppReviewStore.setFileUploadDataWithIndex('OTHER_DOCUMENTATION_FRM', name, files, index);
+    this.props.businessAppReviewStore.setFileUploadData('OTHER_DOCUMENTATION_FRM', name, files, index);
   }
   addMore = (e, formName) => {
     e.preventDefault();
@@ -90,7 +90,7 @@ export default class Miscellaneous extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleDelDoc = (field, index) => {
-    this.props.businessAppReviewStore.removeUploadedDataWithIndex('OTHER_DOCUMENTATION_FRM', field, index);
+    this.props.businessAppReviewStore.removeUploadedData('OTHER_DOCUMENTATION_FRM', field, index);
     this.props.uiStore.setConfirmBox('');
   }
   toggleConfirmModal = (e, index, formName) => {
@@ -103,13 +103,12 @@ export default class Miscellaneous extends Component {
       UPLOADED_DOCUMENTS_FRM,
       OTHER_DOCUMENTATION_FRM,
       SOCIAL_MEDIA_FRM,
-      socialMediaChange,
-      otherDocumentationChange,
+      formChangeWithIndex,
       confirmModal,
       confirmModalName,
       removeData,
       MANAGERS_FRM,
-      managerEleChange,
+      formChange,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
@@ -130,7 +129,7 @@ export default class Miscellaneous extends Component {
                         fluid
                         selection
                         options={SOCIAL_MEDIA_LABELS}
-                        onChange={(e, result) => socialMediaChange(e, result, index)}
+                        onChange={(e, result) => formChangeWithIndex(e, result, 'SOCIAL_MEDIA_FRM', index)}
                       />
                     </Table.Cell>
                     <Table.Cell>
@@ -138,7 +137,7 @@ export default class Miscellaneous extends Component {
                         type="text"
                         name="url"
                         fielddata={socialMedia.url}
-                        changed={(e, result) => socialMediaChange(e, result, index)}
+                        changed={(e, result) => formChangeWithIndex(e, result, 'SOCIAL_MEDIA_FRM', index)}
                       />
                     </Table.Cell>
                     <Table.Cell collapsing>
@@ -162,7 +161,7 @@ export default class Miscellaneous extends Component {
                     <FormInput
                       name="label"
                       fielddata={document.label}
-                      changed={(e, result) => otherDocumentationChange(e, result, index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'OTHER_DOCUMENTATION_FRM', index)}
                     />
                   </Table.Cell>
                   <Table.Cell>
@@ -219,7 +218,7 @@ export default class Miscellaneous extends Component {
           <FormTextarea
             name="managerOverview"
             fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={managerEleChange}
+            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
             containerclassname="secondary"
           />
           <div className="right-align">

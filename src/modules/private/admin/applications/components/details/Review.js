@@ -4,11 +4,12 @@ import { Grid } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../../helper';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 const getModule = component => Loadable({
   loader: () => import(`./review/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 

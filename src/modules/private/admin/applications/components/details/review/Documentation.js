@@ -9,9 +9,8 @@ export default class Documentation extends Component {
   render() {
     const {
       DOCUMENTATION_FRM,
-      documentationEleChange,
+      formChange,
       MANAGERS_FRM,
-      managerEleChange,
     } = this.props.businessAppReviewStore;
     return (
       <div>
@@ -25,7 +24,7 @@ export default class Documentation extends Component {
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
-                changed={documentationEleChange}
+                changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
                 containerclassname="secondary"
               />
             ))
@@ -40,7 +39,7 @@ export default class Documentation extends Component {
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
-                changed={documentationEleChange}
+                changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
                 containerclassname="secondary"
               />
             ))
@@ -55,7 +54,7 @@ export default class Documentation extends Component {
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
-                changed={documentationEleChange}
+                changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
                 containerclassname="secondary"
               />
             ))
@@ -67,7 +66,7 @@ export default class Documentation extends Component {
           <FormTextarea
             name="leaseOrMortgage"
             fielddata={DOCUMENTATION_FRM.fields.leaseOrMortgage}
-            changed={documentationEleChange}
+            changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
             containerclassname="secondary"
             hidelabel
           />
@@ -82,7 +81,7 @@ export default class Documentation extends Component {
           <FormTextarea
             name="managerOverview"
             fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={managerEleChange}
+            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
             containerclassname="secondary"
           />
           <div className="right-align">

@@ -89,46 +89,11 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  overviewEleChange = (e, result, index) => {
-    this.formChangeWithIndex(e, result, 'OVERVIEW_FRM', index);
-  };
-
-  @action
-  managerEleChange = (e, result) => {
-    this.formChange(e, result, 'MANAGERS_FRM');
-  };
-
-  @action
-  justificationEleChange = (e, result, index) => {
-    this.formChangeWithIndex(e, result, 'JUSTIFICATIONS_FRM', index);
-  }
-
-  @action
-  documentationEleChange = (e, result) => {
-    this.formChange(e, result, 'DOCUMENTATION_FRM');
-  };
-
-  @action
-  projectionsEleChange = (e, result) => {
-    this.formChange(e, result, 'PROJECTIONS_FRM');
-  };
-
-  @action
-  businessPlanEleChange = (e, result) => {
-    this.formChange(e, result, 'BUSINESS_PLAN_FRM');
-  }
-
-  @action
   businessPlanDateChange = (date) => {
     this.BUSINESS_PLAN_FRM = Validator.onChange(
       this.BUSINESS_PLAN_FRM,
       { name: 'dateOfIncorporation', value: date },
     );
-  }
-
-  @action
-  controlPersonEleChange = (e, result, index) => {
-    this.formChangeWithIndex(e, result, 'CONTROL_PERSONS_FRM', index);
   }
 
   @action
@@ -140,51 +105,42 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  setFileUploadData = (form, field, files) => {
+  setFileUploadData = (form, field, files, index = null) => {
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
-    this[form] = Validator.onChange(
-      this[form],
-      { name: field, value: fileData.fileName },
-    );
+    if (index !== null) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: fileData.fileName }, 'data', index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: fileData.fileName },
+      );
+    }
   }
 
   @action
-  setFileUploadDataWithIndex = (form, field, files, index) => {
-    const file = files[0];
-    const fileData = Helper.getFormattedFileData(file);
+  removeUploadedData = (form, field, index = null) => {
+    if (index !== null) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: '' }, 'data', index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: '' },
+      );
+    }
+  }
+
+  @action
+  maskChangeWithIndex = (values, form, field, index) => {
     this[form] = Validator.onArrayFieldChange(
       this[form],
-      { name: field, value: fileData.fileName }, 'data', index,
-    );
-  }
-
-  @action
-  removeUploadedData = (form, field) => {
-    this[form] = Validator.onChange(
-      this[form],
-      { name: field, value: '' },
-    );
-  }
-
-  @action
-  removeUploadedDataWithIndex = (form, field, index) => {
-    this[form] = Validator.onArrayFieldChange(
-      this[form],
-      { name: field, value: '' }, 'data', index,
-    );
-  }
-
-  @action
-  sourceEleChange = (e, result, index) => {
-    this.formChangeWithIndex(e, result, 'SOURCES_FRM', index);
-  }
-
-  @action
-  sourceMaskChange = (values, index) => {
-    this.SOURCES_FRM = Validator.onArrayFieldChange(
-      this.SOURCES_FRM,
-      { name: 'amount', value: values.floatValue }, 'data', index,
+      { name: field, value: values.floatValue }, 'data', index,
     );
   }
 
@@ -198,19 +154,6 @@ export class BusinessAppReviewStore {
     return totalAmount;
   }
 
-  @action
-  useEleChange = (e, result, index) => {
-    this.formChangeWithIndex(e, result, 'USES_FRM', index);
-  }
-
-  @action
-  useMaskChange = (values, index) => {
-    this.USES_FRM = Validator.onArrayFieldChange(
-      this.USES_FRM,
-      { name: 'amount', value: values.floatValue }, 'data', index,
-    );
-  }
-
   @computed
   get totalUsesAmount() {
     let totalAmount = 0;
@@ -219,34 +162,6 @@ export class BusinessAppReviewStore {
       return totalAmount;
     });
     return totalAmount;
-  }
-
-  @action
-  contingenciesEleChange = (e, formName, result, index) => {
-    this.formChangeWithIndex(e, result, formName, index);
-  };
-
-  @action
-  socialMediaChange = (e, result, index) => {
-    this.formChangeWithIndex(e, result, 'SOCIAL_MEDIA_FRM', index);
-  }
-
-  @action
-  otherDocumentationChange = (e, result, index) => {
-    this.formChangeWithIndex(e, result, 'OTHER_DOCUMENTATION_FRM', index);
-  }
-
-  @action
-  offersChange = (e, result, index) => {
-    this.formChangeWithIndex(e, result, 'OFFERS_FRM', index);
-  }
-
-  @action
-  offersMaskChange = (result, field, index) => {
-    this.OFFERS_FRM = Validator.onArrayFieldChange(
-      this.OFFERS_FRM,
-      { name: field, value: result.floatValue }, 'data', index,
-    );
   }
 }
 export default new BusinessAppReviewStore();

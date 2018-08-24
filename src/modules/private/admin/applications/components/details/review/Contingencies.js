@@ -27,7 +27,7 @@ const TableBody = ({
           <FormInput
             name="contingency"
             fielddata={formData.contingency}
-            changed={(e, result) => onchange(e, formName, result, index)}
+            changed={(e, result) => onchange(e, result, formName, index)}
             size="small"
           />
         </Table.Cell>
@@ -35,7 +35,7 @@ const TableBody = ({
           <FormInput
             name="acceptanceCriteria"
             fielddata={formData.acceptanceCriteria}
-            changed={(e, result) => onchange(e, formName, result, index)}
+            changed={(e, result) => onchange(e, result, formName, index)}
             size="small"
           />
         </Table.Cell>
@@ -71,11 +71,11 @@ export default class Contingencies extends Component {
       confirmModal,
       confirmModalName,
       addMore,
-      contingenciesEleChange,
+      formChangeWithIndex,
       toggleConfirmModal,
       removeData,
       MANAGERS_FRM,
-      managerEleChange,
+      formChange,
     } = this.props.businessAppReviewStore;
     return (
       <Aux>
@@ -85,14 +85,14 @@ export default class Contingencies extends Component {
           </Header>
           <Table basic compact className="form-table">
             <TableHeader />
-            <TableBody match={this.props.match} form={LAUNCH_FRM} formName="LAUNCH_FRM" onchange={contingenciesEleChange} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
+            <TableBody match={this.props.match} form={LAUNCH_FRM} formName="LAUNCH_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
           <Header as="h5">
             Close
           </Header>
           <Table basic compact className="form-table">
             <TableHeader />
-            <TableBody match={this.props.match} form={CLOSE_FRM} formName="CLOSE_FRM" onchange={contingenciesEleChange} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
+            <TableBody match={this.props.match} form={CLOSE_FRM} formName="CLOSE_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
           <div className="right-align">
             <Button.Group className="mt-20">
@@ -107,7 +107,7 @@ export default class Contingencies extends Component {
           <FormTextarea
             name="managerOverview"
             fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={managerEleChange}
+            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
             containerclassname="secondary"
           />
           <div className="right-align">

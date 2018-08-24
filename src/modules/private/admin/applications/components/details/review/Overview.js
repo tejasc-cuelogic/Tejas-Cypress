@@ -20,13 +20,13 @@ export default class Overview extends Component {
   render() {
     const {
       OVERVIEW_FRM,
-      overviewEleChange,
+      formChangeWithIndex,
       confirmModal,
       toggleConfirmModal,
       removeData,
       confirmModalName,
       MANAGERS_FRM,
-      managerEleChange,
+      formChange,
     } = this.props.businessAppReviewStore;
     return (
       <Aux>
@@ -36,18 +36,17 @@ export default class Overview extends Component {
         </Header>
         <Form>
           {
-            OVERVIEW_FRM.fields.data.length ?
             OVERVIEW_FRM.fields.data.map((overview, index) => (
               <FormInput
                 type="text"
                 name="criticalPoint"
                 label={`Critical Point ${index + 1}`}
                 fielddata={overview.criticalPoint}
-                changed={(e, result) => overviewEleChange(e, result, index)}
+                changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', index)}
                 removed={index === 0 ? false : e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM')}
                 linkto={this.props.match.url}
               />
-            )) : null
+            ))
           }
           <div className="right-align">
             <Button.Group>
@@ -60,7 +59,7 @@ export default class Overview extends Component {
           <FormTextarea
             name="managerOverview"
             fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={managerEleChange}
+            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
             containerclassname="secondary"
           />
           <div className="right-align">

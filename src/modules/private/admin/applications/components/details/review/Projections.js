@@ -28,9 +28,8 @@ export default class Projections extends Component {
   render() {
     const {
       PROJECTIONS_FRM,
-      projectionsEleChange,
+      formChange,
       MANAGERS_FRM,
-      managerEleChange,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
@@ -43,7 +42,7 @@ export default class Projections extends Component {
                   key={field}
                   name={field}
                   fielddata={PROJECTIONS_FRM.fields[field]}
-                  changed={projectionsEleChange}
+                  changed={(e, result) => formChange(e, result, 'PROJECTIONS_FRM')}
                   containerclassname="secondary"
                 />
                 {index !== 2 &&
@@ -68,7 +67,7 @@ export default class Projections extends Component {
                   key={field}
                   name={field}
                   fielddata={PROJECTIONS_FRM.fields[field]}
-                  changed={projectionsEleChange}
+                  changed={(e, result) => formChange(e, result, 'PROJECTIONS_FRM')}
                   containerclassname="secondary"
                 />
                 {index !== 2 &&
@@ -89,7 +88,7 @@ export default class Projections extends Component {
           <FormTextarea
             name="requirements"
             fielddata={PROJECTIONS_FRM.fields.requirements}
-            changed={projectionsEleChange}
+            changed={(e, result) => formChange(e, result, 'PROJECTIONS_FRM')}
             containerclassname="secondary"
           />
           <div className="right-align">
@@ -103,7 +102,7 @@ export default class Projections extends Component {
           <FormTextarea
             name="managerOverview"
             fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={managerEleChange}
+            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
             containerclassname="secondary"
           />
           <div className="right-align">

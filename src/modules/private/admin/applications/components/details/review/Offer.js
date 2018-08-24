@@ -19,11 +19,11 @@ export default class Offer extends Component {
     const {
       OFFERS_FRM,
       MANAGERS_FRM,
-      offersChange,
-      offersMaskChange,
+      formChangeWithIndex,
+      maskChangeWithIndex,
       confirmModal,
       confirmModalName,
-      managerEleChange,
+      formChange,
       removeData,
     } = this.props.businessAppReviewStore;
     const offerFields = OFFERS_FRM.fields.data[0];
@@ -43,12 +43,14 @@ export default class Offer extends Component {
                 {
                   OFFERS_FRM.fields.data.map((offer, index) => (
                     <Table.HeaderCell>Offer {String.fromCharCode('A'.charCodeAt() + index)}
+                      {index !== 0 &&
                       <Link
                         to={this.props.match.url}
                         onClick={e => this.toggleConfirmModal(e, index)}
                       >
                         <Icon className="ns-close-circle" color="grey" />
                       </Link>
+                      }
                     </Table.HeaderCell>
                   ))
                 }
@@ -67,7 +69,7 @@ export default class Offer extends Component {
                       selection
                       options={STRUCTURE_TYPES}
                       fielddata={offer.structure}
-                      onChange={(e, result) => offersChange(e, result, index)}
+                      onChange={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', index)}
                     />
                   </Table.Cell>
                 ))
@@ -81,7 +83,7 @@ export default class Offer extends Component {
                     <FormInput
                       name="offeringAmount"
                       fielddata={offer.offeringAmount}
-                      changed={(e, result) => offersChange(e, result, index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', index)}
                       ishidelabel
                     />
                   </Table.Cell>
@@ -96,7 +98,7 @@ export default class Offer extends Component {
                     <MaskedInput
                       name="maturity"
                       fielddata={offer.maturity}
-                      changed={(values, field) => offersMaskChange(values, field, index)}
+                      changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', field, index)}
                       hidelabel
                       number
                     />
@@ -112,7 +114,7 @@ export default class Offer extends Component {
                     <MaskedInput
                       name="interestRate"
                       fielddata={offer.interestRate}
-                      changed={(values, field) => offersMaskChange(values, field, index)}
+                      changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', field, index)}
                       hidelabel
                       percentage
                     />
@@ -130,7 +132,7 @@ export default class Offer extends Component {
                       currency
                       name="amortizationAmount"
                       fielddata={offer.amortizationAmount}
-                      changed={(values, field) => offersMaskChange(values, field, index)}
+                      changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', field, index)}
                       hidelabel
                     />
                   </Table.Cell>
@@ -149,7 +151,7 @@ export default class Offer extends Component {
                       selection
                       options={PERSONAL_GUARANTEE_TYPES}
                       fielddata={offer.personalGuarantee}
-                      onChange={(e, result) => offersChange(e, result, index)}
+                      onChange={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', index)}
                     />
                   </Table.Cell>
                 ))
@@ -163,7 +165,7 @@ export default class Offer extends Component {
                     <FormInput
                       name="businessBlanket"
                       fielddata={offer.businessBlanket}
-                      changed={(e, result) => offersChange(e, result, index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', index)}
                       ishidelabel
                     />
                   </Table.Cell>
@@ -177,7 +179,7 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <MaskedInput
                       name="expirationDate"
-                      changed={(values, field) => offersMaskChange(values, field, index)}
+                      changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', field, index)}
                       fielddata={offer.expirationDate}
                       format="##-##-####"
                       hidelabel
@@ -195,7 +197,7 @@ export default class Offer extends Component {
                     <FormInput
                       name="multipleOnPrincipalToPay"
                       fielddata={offer.multipleOnPrincipalToPay}
-                      changed={(e, result) => offersChange(e, result, index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', index)}
                       disabled={offer.structure.value === 'termnote'}
                       ishidelabel
                     />
@@ -213,7 +215,7 @@ export default class Offer extends Component {
                       currency
                       name="totalCapitalReturned"
                       fielddata={offer.totalCapitalReturned}
-                      changed={(values, field) => offersMaskChange(values, field, index)}
+                      changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', field, index)}
                       disabled={offer.structure.value === 'termnote'}
                       hidelabel
                     />
@@ -246,7 +248,7 @@ export default class Offer extends Component {
           <FormTextarea
             name="managerOverview"
             fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={managerEleChange}
+            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
             containerclassname="secondary"
           />
           <div className="right-align">

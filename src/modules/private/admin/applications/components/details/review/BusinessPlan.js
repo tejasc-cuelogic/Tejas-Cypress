@@ -18,7 +18,7 @@ const AddMore = ({
 @observer
 export default class BusinessPlan extends Component {
   onFileDrop = (files, name, index) => {
-    this.props.businessAppReviewStore.setFileUploadDataWithIndex('CONTROL_PERSONS_FRM', name, files, index);
+    this.props.businessAppReviewStore.setFileUploadData('CONTROL_PERSONS_FRM', name, files, index);
   }
   addMore = (e, formName) => {
     e.preventDefault();
@@ -32,7 +32,7 @@ export default class BusinessPlan extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleDelDoc = (field, index) => {
-    this.props.businessAppReviewStore.removeUploadedDataWithIndex('CONTROL_PERSONS_FRM', field, index);
+    this.props.businessAppReviewStore.removeUploadedData('CONTROL_PERSONS_FRM', field, index);
     this.props.uiStore.setConfirmBox('');
   }
   toggleConfirmModal = (e, index, formName) => {
@@ -45,21 +45,17 @@ export default class BusinessPlan extends Component {
       USES_FRM,
       BUSINESS_PLAN_FRM,
       CONTROL_PERSONS_FRM,
-      businessPlanEleChange,
+      formChange,
+      formChangeWithIndex,
       businessPlanDateChange,
-      controlPersonEleChange,
       controlPersonMaskChange,
-      sourceEleChange,
-      sourceMaskChange,
       totalSourcesAmount,
-      useEleChange,
-      useMaskChange,
+      maskChangeWithIndex,
       totalUsesAmount,
       confirmModal,
       confirmModalName,
       removeData,
       MANAGERS_FRM,
-      managerEleChange,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
@@ -69,7 +65,7 @@ export default class BusinessPlan extends Component {
           <FormTextarea
             name="locationFeasibility"
             fielddata={BUSINESS_PLAN_FRM.fields.locationFeasibility}
-            changed={businessPlanEleChange}
+            changed={(e, result) => formChange(e, result, 'BUSINESS_PLAN_FRM')}
             containerclassname="secondary"
             hidelabel
           />
@@ -95,7 +91,7 @@ export default class BusinessPlan extends Component {
                     <FormInput
                       name="name"
                       fielddata={controlPerson.name}
-                      changed={(e, result) => controlPersonEleChange(e, result, index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'CONTROL_PERSONS_FRM', index)}
                     />
                     <MaskedInput
                       percentage
@@ -107,19 +103,19 @@ export default class BusinessPlan extends Component {
                     <FormInput
                       name="derogatoryMarks"
                       fielddata={controlPerson.derogatoryMarks}
-                      changed={(e, result) => controlPersonEleChange(e, result, index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'CONTROL_PERSONS_FRM', index)}
                     />
                   </Form.Group>
                   <Form.Group widths={3}>
                     <FormInput
                       name="experience"
                       fielddata={controlPerson.experience}
-                      changed={(e, result) => controlPersonEleChange(e, result, index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'CONTROL_PERSONS_FRM', index)}
                     />
                     <FormInput
                       name="creditScore"
                       fielddata={controlPerson.creditScore}
-                      changed={(e, result) => controlPersonEleChange(e, result, index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'CONTROL_PERSONS_FRM', index)}
                     />
                   </Form.Group>
                   <Form.Group widths={3}>
@@ -154,7 +150,7 @@ export default class BusinessPlan extends Component {
                   key={field}
                   name={field}
                   fielddata={BUSINESS_PLAN_FRM.fields[field]}
-                  changed={businessPlanEleChange}
+                  changed={(e, result) => formChange(e, result, 'BUSINESS_PLAN_FRM')}
                   containerclassname="secondary"
                 />
                 <Divider section />
@@ -182,7 +178,7 @@ export default class BusinessPlan extends Component {
                           <FormInput
                             name="name"
                             fielddata={source.name}
-                            changed={(e, result) => sourceEleChange(e, result, index)}
+                            changed={(e, result) => formChangeWithIndex(e, result, 'SOURCES_FRM', index)}
                             size="small"
                           />
                         </Table.Cell>
@@ -192,7 +188,7 @@ export default class BusinessPlan extends Component {
                             currency
                             name="amount"
                             fielddata={source.amount}
-                            changed={values => sourceMaskChange(values, index)}
+                            changed={(values, field) => maskChangeWithIndex(values, 'SOURCES_FRM', field, index)}
                             ishidelabel
                             size="small"
                           />
@@ -240,7 +236,7 @@ export default class BusinessPlan extends Component {
                         <FormInput
                           name="name"
                           fielddata={use.name}
-                          changed={(e, result) => useEleChange(e, result, index)}
+                          changed={(e, result) => formChangeWithIndex(e, result, 'USES_FRM', index)}
                           size="small"
                         />
                       </Table.Cell>
@@ -250,7 +246,7 @@ export default class BusinessPlan extends Component {
                           currency
                           name="amount"
                           fielddata={use.amount}
-                          changed={values => useMaskChange(values, index)}
+                          changed={(values, field) => maskChangeWithIndex(values, 'USES_FRM', field, index)}
                           ishidelabel
                           size="small"
                         />
@@ -301,7 +297,7 @@ export default class BusinessPlan extends Component {
           <FormTextarea
             name="managerOverview"
             fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={managerEleChange}
+            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
             containerclassname="secondary"
           />
           <div className="right-align">
