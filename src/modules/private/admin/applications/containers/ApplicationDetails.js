@@ -3,11 +3,12 @@ import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { Modal, Card, Header, Label, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
+import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const navItems = [
-  { title: 'Activity History', to: 'activity-history' },
+  { title: 'Activity History', to: 'activity-history', component: ActivityHistory },
   { title: 'Pre-qualification', to: 'pre-qualification' },
   { title: 'Business Details', to: 'business-details' },
   { title: 'Performance', to: 'performance' },
@@ -116,13 +117,17 @@ export default class ApplicationDetails extends Component {
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
             <Switch>
-              <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+              <Route
+                exact
+                path={match.url}
+                component={navItems[0].component || getModule(this.module(navItems[0].title))}
+              />
               {
                 navItems.map(item => (
                   <Route
                     key={item.to}
                     path={`${match.url}/${item.to}`}
-                    component={getModule(this.module(item.title))}
+                    component={item.component || getModule(this.module(item.title))}
                   />
                 ))
               }
