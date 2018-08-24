@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Form, Table, Dropdown, Icon, Confirm, Button, Divider } from 'semantic-ui-react';
@@ -28,7 +29,7 @@ export default class Offer extends Component {
     } = this.props.businessAppReviewStore;
     const offerFields = OFFERS_FRM.fields.data[0];
     return (
-      <div className="inner-content-spacer">
+      <Aux>
         <Header as="h4">
           Offers
           {OFFERS_FRM.fields.data.length < 4 &&
@@ -267,7 +268,7 @@ export default class Offer extends Component {
           size="mini"
           className="deletion"
         />
-      </div>
+      </Aux>
     );
   }
 }
