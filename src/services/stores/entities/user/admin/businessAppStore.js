@@ -66,6 +66,7 @@ export class BusinessAppStore {
       delete srchParams[name];
     }
     if (name === 'applicationStatus') {
+      this.requestState.search = srchParams;
       this.filterByAppStatus();
     } else {
       this.initiateSearch(srchParams, sortParams);
@@ -80,13 +81,17 @@ export class BusinessAppStore {
   }
 
   @action
-  reInitiateApplicationStatusFilterValues(section) {
+  reInitiateApplicationStatusFilterValues(section, noFilter) {
     this.filterApplicationStatus = FILTER_META.applicationStatus;
     const { values } = this.filterApplicationStatus;
     this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, section));
-    this.filterApplicationStatus.value = section === 'in-progress' ? ['UNSTASH'] : section === 'completed' ? ['NEW', 'REVIEWING'] : [];
-    this.requestState.search =
-    { ...this.requestState.search, applicationStatus: this.filterApplicationStatus.value };
+    if (!noFilter) {
+      this.filterApplicationStatus.value = section === 'in-progress' ? ['UNSTASH'] : section === 'completed' ? ['NEW', 'REVIEWING'] : [];
+      this.requestState.search =
+      { ...this.requestState.search, applicationStatus: this.filterApplicationStatus.value };
+    } else {
+      this.filterApplicationStatus.value = this.requestState.search.applicationStatus;
+    }
     this.filterByAppStatus();
   }
 
@@ -114,10 +119,7 @@ export class BusinessAppStore {
   }
 
   @action
-  updateApplicationStatusCount = (data, noFilter) => {
-    if (noFilter) {
-      this.filterApplicationStatus = FILTER_META.applicationStatus;
-    }
+  updateApplicationStatusCount = (data) => {
     const { values } = this.filterApplicationStatus;
     forEach(values, (v, k) => {
       const count = filter(data, app =>
@@ -177,9 +179,7 @@ export class BusinessAppStore {
               [`page-${this.requestState.page + 1}`]: lek,
             },
           };
-          if (!noFilter) {
-            this.reInitiateApplicationStatusFilterValues(appType);
-          }
+          this.reInitiateApplicationStatusFilterValues(appType, noFilter);
           this.updateApplicationStatusCount(
             data.businessApplicationsAdmin.businessApplications,
             noFilter,
