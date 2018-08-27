@@ -597,3 +597,297 @@ export const PERSONAL_GUARANTEE_TYPES = [
   { key: 'yes', value: 'yes', text: 'Yes' },
   { key: 'no', value: 'no', text: 'No' },
 ];
+
+export const MODEL_INPUTS = {
+  totalFunding: {
+    value: '',
+    label: 'Total Funding Required for Project',
+    placeHolder: '$1,250,000',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  loanAmount: {
+    value: '',
+    label: 'Loan Amount Requested on NS',
+    placeHolder: '$652,000',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  debtServiceOutsideNs: {
+    value: '',
+    label: 'Debt Service Outside NS (annum)',
+    placeHolder: '$0',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  personalCreditScore: {
+    value: '',
+    label: 'Personal Credit Score',
+    placeHolder: '692',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  industryExperience: {
+    value: '',
+    label: 'Industry Experience (years)',
+    placeHolder: '15',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  personalGuarantee: {
+    value: '',
+    values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
+    label: 'Personal Guarantee',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  companyInceptionDate: {
+    value: '',
+    label: 'Company Inception Date',
+    placeHolder: '1/1/18',
+    error: undefined,
+    rule: 'required|date',
+    customErrors: {
+      date: 'Date is in invalid format.',
+      required: '* required.',
+    },
+  },
+  grossSales: {
+    value: '',
+    label: 'Gross Sales',
+    placeHolder: '$2,800,452',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  grossProfit: {
+    value: '',
+    label: 'Gross Profit',
+    placeHolder: '$1,968,677',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  totalOperExp: {
+    value: '',
+    label: 'Total Oper Exp',
+    placeHolder: '$1,641,783',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  dda: {
+    value: '',
+    label: 'DD&A',
+    placeHolder: '0',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  interest: {
+    value: '',
+    label: 'Interest',
+    placeHolder: '0',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  tax: {
+    value: '',
+    label: 'Tax',
+    placeHolder: '0',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  y1: {
+    value: '',
+    label: 'Y1',
+    placeHolder: '$1,250,000',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  y2: {
+    value: '',
+    label: 'Y2',
+    placeHolder: '$1,250,000',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  y3: {
+    value: '',
+    label: 'Y3',
+    placeHolder: '$1,250,000',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  y4: {
+    value: '',
+    label: 'Y4',
+    placeHolder: '$1,250,000',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+  y5: {
+    value: '',
+    label: 'Y5',
+    placeHolder: '$1,250,000',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+};
+
+export const MODEL_VARIABLES = {
+  min: {
+    value: '',
+    label: 'Min',
+    placeHolder: '10%',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  mid: {
+    value: '',
+    label: 'Mid',
+    placeHolder: '18%',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  max: {
+    value: '',
+    label: 'Max',
+    placeHolder: '14%',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  threeMonth: {
+    value: '',
+    label: '3-Month',
+    placeHolder: '1.91%',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  sixMonth: {
+    value: '',
+    label: '6-Month',
+    placeHolder: '2.10%',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  twoYear: {
+    value: '',
+    label: '2-Year',
+    placeHolder: '2.52%',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  fiveYear: {
+    value: '',
+    label: '5-Year',
+    placeHolder: '2.80%',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  tenYear: {
+    value: '',
+    label: '10-Year',
+    placeHolder: '2.94%',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  thirtyYear: {
+    value: '',
+    label: '30-Year',
+    placeHolder: '3.08%',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+};

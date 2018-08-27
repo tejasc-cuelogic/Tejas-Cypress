@@ -21,7 +21,17 @@ const navItems = [
   { title: 'Documentation', to: 'documentation' },
   { title: 'Miscellaneous', to: 'miscellaneous' },
   { title: 'Contingencies', to: 'contingencies' },
-  { title: 'Model', to: 'model' },
+  {
+    title: 'Model',
+    to: 'model',
+    subNavigations: [
+      { title: 'Inputs', to: 'input', component: 'Inputs' },
+      {
+        title: 'Variables', to: 'variables', component: 'Variables',
+      },
+      { title: 'Results', to: 'results', component: 'Results' },
+    ],
+  },
   { title: 'Offer', to: 'offer' },
 ];
 
@@ -36,6 +46,14 @@ export default class Review extends Component {
 
   render() {
     const { match } = this.props;
+    const subNavItems = [
+      { title: 'Inputs', to: 'inputs', component: 'Inputs' },
+      {
+        title: 'Variables', to: 'variables', component: 'Variables',
+      },
+      { title: 'Results', to: 'results', component: 'Results' },
+    ];
+
     return (
       <div className="inner-content-spacer">
         <Grid>
@@ -48,6 +66,13 @@ export default class Review extends Component {
               {
                 navItems.map(item => (
                   <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                ))
+              }
+            </Switch>
+            <Switch>
+              { subNavItems.length > 0 &&
+                subNavItems.map(item => (
+                  <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
                 ))
               }
             </Switch>

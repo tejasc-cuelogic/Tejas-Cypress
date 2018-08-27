@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
+import { MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -19,6 +19,8 @@ export class BusinessAppReviewStore {
   @observable OTHER_DOCUMENTATION_FRM = Validator.prepareFormObject(OTHER_DOCUMENTATION_UPLOADS);
   @observable UPLOADED_DOCUMENTS_FRM = Validator.prepareFormObject(UPLOADED_DOCUMENTS);
   @observable OFFERS_FRM = Validator.prepareFormObject(OFFERS);
+  @observable MODEL_INPUTS_FRM = Validator.prepareFormObject(MODEL_INPUTS);
+  @observable MODEL_VARIABLES_FRM = Validator.prepareFormObject(MODEL_VARIABLES);
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
@@ -97,6 +99,14 @@ export class BusinessAppReviewStore {
   }
 
   @action
+  onDateChange = (form, field, date) => {
+    this[form] = Validator.onChange(
+      this[form],
+      { name: field, value: date },
+    );
+  }
+
+  @action
   controlPersonMaskChange = (values, index) => {
     this.CONTROL_PERSONS_FRM = Validator.onArrayFieldChange(
       this.CONTROL_PERSONS_FRM,
@@ -134,6 +144,14 @@ export class BusinessAppReviewStore {
         { name: field, value: '' },
       );
     }
+  }
+
+  @action
+  maskChange = (values, form, field) => {
+    this[form] = Validator.onArrayFieldChange(
+      this[form],
+      { name: field, value: values.floatValue },
+    );
   }
 
   @action
