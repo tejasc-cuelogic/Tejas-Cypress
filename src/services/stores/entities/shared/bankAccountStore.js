@@ -8,6 +8,7 @@ import {
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
   @observable plaidAccDetails = {};
+  @observable plaidBankDetails = {};
   @observable bankListing = undefined;
   @observable depositMoneyNow = true;
   @observable showAddFunds = false;
@@ -62,6 +63,11 @@ export class BankAccountStore {
   @action
   setPlaidAccDetails = (plaidAccDetails) => {
     this.plaidAccDetails = plaidAccDetails;
+  }
+
+  @action
+  setPlaidBankDetails = (plaidBankDetails) => {
+    this.plaidBankDetails = plaidBankDetails;
   }
 
   @computed
