@@ -928,7 +928,7 @@ a.icon-link:hover {
 	padding:@50px 0px;
 }
 .inner-content-spacer{
-	padding:@20px;
+	padding:@20px !important;
 	+ .inner-content-spacer{
 		border-top:@neutral-midwhite 1px solid;
 	}

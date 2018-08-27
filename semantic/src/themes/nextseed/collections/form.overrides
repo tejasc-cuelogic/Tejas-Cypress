@@ -173,6 +173,40 @@
             display:none;
         }
     }
+    &.comment-input {
+        padding: @10px 0 0;
+        .ui.action.input>input {
+            padding: @14px @20px;
+        }
+        .attachment {
+            position: relative;
+            width: 45px;
+            text-align: center;
+            border-bottom: @border-color 1px solid;
+            i.icon {
+                position: absolute;
+                width: 45px;
+                height: 45px;
+                line-height: 45px;
+            }
+            input[type=file] {
+                height: 45px;
+                width: 45px;
+                overflow: hidden;
+                line-height: 45px;
+                opacity: 0;
+            }
+        }
+        .ui.action.input>.button {
+            border-bottom: @border-color 1px solid;
+            box-shadow: none;
+            border-radius: 0;
+            padding: @10px;
+            &:active {
+                background: transparent !important;
+            }
+        }
+    }
 }
 .card{
     &.editable{
