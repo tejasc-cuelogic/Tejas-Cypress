@@ -57,7 +57,7 @@ const MaskedInput = observer((props) => {
       ) : props.number ? (
         <NumberFormat placeholder={placeHolder} maxLength={18} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : props.percentage ? (
-        <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="%" suffix="%" />
+        <NumberFormat placeholder={placeHolder} maxLength={props.maxlength || 4} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="%" suffix="%" />
       ) : props.phoneNumber ? (
         <NumberFormat type="tel" format={props.format} {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.zipCode ? (

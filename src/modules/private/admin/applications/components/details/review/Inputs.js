@@ -114,7 +114,7 @@ export default class Inputs extends Component {
               ))
             }
           </Form.Group>
-          <Form.Group widths={6}>
+          <Form.Group widths={3}>
             {
               ['y4', 'y5'].map(field => (
                 <MaskedInput

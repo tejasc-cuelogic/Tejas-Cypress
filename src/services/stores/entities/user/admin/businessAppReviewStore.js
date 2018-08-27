@@ -148,7 +148,7 @@ export class BusinessAppReviewStore {
 
   @action
   maskChange = (values, form, field) => {
-    this[form] = Validator.onArrayFieldChange(
+    this[form] = Validator.onChange(
       this[form],
       { name: field, value: values.floatValue },
     );
