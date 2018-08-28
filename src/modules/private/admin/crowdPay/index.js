@@ -1,11 +1,4 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
-import { Route, Switch } from 'react-router-dom';
-import { Grid, Form } from 'semantic-ui-react';
-import PrivateLayout from '../../shared/PrivateLayout';
-import ManageCrowdPay from './containers/ManageCrowdPay';
-import { ByKeyword, DropdownFilter, DateRangeFilter } from '../../../../theme/form/Filters';
-=======
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import { mapValues } from 'lodash';
@@ -14,7 +7,6 @@ import PrivateLayout from '../../shared/PrivateLayout';
 import AllCrowdPay from './components/AllCrowdPay';
 import { ByKeyword } from '../../../../theme/form/Filters';
 import Filters from './components/Filters';
->>>>>>> develop
 
 @inject('crowdpayStore')
 @observer
