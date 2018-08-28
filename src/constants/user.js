@@ -52,9 +52,11 @@ export const FILTER_META = {
     { text: 'Delaware', value: 'delaware' },
     { text: 'West Virginia', value: 'west virginia' },
   ],
-  businessAppSortOption: [
-    { text: 'Started date (ascending)', value: 'asc' },
-    { text: 'Started date (descending)', value: 'desc' },
+  businessAppSortField: [
+    { text: 'Created date (ascending)', value: 'createdDate|asc' },
+    { text: 'Created date (descending)', value: 'createdDate|desc' },
+    { text: 'Updated date (ascending)', value: 'updatedDate|asc' },
+    { text: 'Updated date (descending)', value: 'updatedDate|desc' },
   ],
   applicationStatus: {
     value: [],

@@ -5,6 +5,8 @@ import { Modal, Card, Header, Label, Rating, Button, Grid, List, Icon } from 'se
 import Loadable from 'react-loadable';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
+import { InlineLoader, EmptyDataSet } from '../../../../../theme/shared';
+import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
 const navItems = [
   { title: 'Activity History', to: 'activity-history' },
@@ -18,7 +20,7 @@ const navItems = [
 const getModule = component => Loadable({
   loader: () => import(`../components/details/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 
@@ -26,7 +28,14 @@ const getModule = component => Loadable({
 @observer
 export default class ApplicationDetails extends Component {
   componentWillMount() {
-    // this.props.businessAppStore.fetchApplicationDataById('1084b090-94ab-11e8-b190-a9f10e25fd26');
+    const { match } = this.props;
+    if (match.isExact) {
+      const { params } = match;
+      this.props.businessAppStore.fetchApplicationById(params.appId, params.id, params.userId)
+        .then(() => {
+          this.props.history.push(`${match.url}/activity-history`);
+        });
+    }
   }
   module = name => DataFormatter.upperCamelCase(name);
   handleCloseModal = (e) => {
@@ -34,13 +43,24 @@ export default class ApplicationDetails extends Component {
     this.props.history.replace(this.props.refLink);
   };
   render() {
-    const { match } = this.props;
+    const { match, businessAppStore } = this.props;
+    const {
+      businessApplicationDetailsAdmin, businessApplicationsDataById,
+    } = businessAppStore;
+    if (businessApplicationsDataById && businessApplicationsDataById.loading) {
+      return <InlineLoader />;
+    }
+    if (!businessApplicationDetailsAdmin) {
+      return <EmptyDataSet />;
+    }
+    const { applicationStatus, prequalDetails, userDetails } = businessApplicationDetailsAdmin;
+    const appStepStatus = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
           <Header as="h3">
-            California 88 Application
-            <span className="title-meta">Status: <b>Completed</b></span>
+            {prequalDetails.businessGeneralInfo.businessName}
+            <span className="title-meta">Status: <b>{appStepStatus}</b></span>
             <Label size="small" color="green">Reviewed</Label>
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={3} maxRating={5} />
@@ -59,7 +79,7 @@ export default class ApplicationDetails extends Component {
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Business Name</Header.Subheader>
-                          California 88
+                          {prequalDetails.businessGeneralInfo.businessName}
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
@@ -80,37 +100,38 @@ export default class ApplicationDetails extends Component {
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Name</Header.Subheader>
-                          John Doe
+                          {userDetails.firstName} {userDetails.lastName}
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Email</Header.Subheader>
-                          jdoe234@gmail.com
+                          {userDetails.email}
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Phone</Header.Subheader>
-                          235-343-6453
+                          {userDetails.contactDetails.phone ? userDetails.contactDetails.phone.number : '-'}
                         </Header>
                       </Grid.Column>
                     </Grid>
                   </Card.Content>
                 </Card>
               </Grid.Column>
-              <Grid.Column>
-                <Card fluid className="ba-info-card">
-                  <Card.Header>Failed Reason</Card.Header>
-                  <Card.Content>
-                    <List bulleted relaxed>
-                      <List.Item>Net income ($100) is lower than $15,000.</List.Item>
-                      <List.Item>Net income ($100) is lower than $15,000.</List.Item>
-                      <List.Item>Net income ($100) is lower than $15,000.</List.Item>
-                    </List>
-                  </Card.Content>
-                </Card>
-              </Grid.Column>
+              {applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
+                <Grid.Column>
+                  <Card fluid className="ba-info-card">
+                    <Card.Header>Failed Reason</Card.Header>
+                    <Card.Content>
+                      {prequalDetails.failReasons.length ?
+                        <List as="ol">{prequalDetails.failReasons.map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
+                        : <p>-</p>
+                      }
+                    </Card.Content>
+                  </Card>
+                </Grid.Column>
+              }
             </Grid.Row>
           </Grid>
           <Card fluid>

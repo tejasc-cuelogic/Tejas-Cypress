@@ -27,6 +27,69 @@ query allBusinessApplicationses($filters: BusinessApplicationsFilter){
 }
 `;
 
+export const getBusinessApplicationAdmin = gql`
+query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: DecryptedString){
+  businessApplicationsAdmin(
+    applicationType: $applicationType
+    orderBy: $orderBy
+    limit: $limit
+    search: $search
+    lek: $lek
+    
+  ) {
+    lek
+    resultCount
+    totalCount
+    businessApplications {
+      userId
+      applicationId
+      prequalDetails {
+        businessGeneralInfo {
+          businessName
+        }
+        failReasons
+      }
+      businessDetails {
+        stepStatus
+      }
+      businessPerformance {
+        stepStatus
+      }
+      businessDocumentation {
+        stepStatus
+      }
+      userDetails {
+        firstName
+        lastName
+        contactDetails {
+          phone {
+            number
+          }
+          email {
+            email
+          }
+        }
+      }
+      createdDate
+      updatedDate
+      applicationStatus
+      applicationSubmittedDate
+    }
+  }  
+}
+`;
+
+export const getBusinessApplicationSummary = gql`
+query getBusinessApplicationSummary{
+  businessApplicationsSummary {
+    prequalFaild
+    inProgress
+    completed
+  }
+}
+`;
+
+
 export const createBusinessApplicationPrequalificaiton = gql`
 mutation _submitBusinessApplicationPreQualStepSuccessScenario($preQualificationData: PrequalDetailsInput!) {
   createBusinessApplicationPrequalification(prequalificationDetails: $preQualificationData) {
@@ -179,6 +242,170 @@ query _getBusinessApplicationById ($id: String!) {
           netIncome
         }
       }
+    }
+    businessDetails {
+      planDocs {
+        fileId
+        fileName
+      }
+      debts {
+        amount
+        interestExpenses
+        remainingPrincipal
+        term
+      }
+      owners {
+        fullLegalName
+        yearsOfExp
+        ssn
+        companyOwnerShip
+        linkedInUrl
+        title
+        resume {
+          fileId
+          fileName
+        }
+      }
+      stepStatus
+    }
+    businessPerformance {
+      financialStatements {
+        priorToThreeYear {
+          fileId
+          fileName
+        }
+        ytd {
+          fileId
+          fileName
+        }
+        fiveYearProjection{
+          fileId
+          fileName
+        }
+      }
+      performance {
+        nextYearSnapshot {
+          grossSales
+          cogSold
+          operatingExpenses
+          netIncome
+        }
+        pastYearSnapshot {
+          grossSales
+          cogSold
+          operatingExpenses
+          netIncome
+        }
+      }
+      submittedDate
+      stepStatus
+    }
+    businessDocumentation {
+      bankStatements {
+        fileId
+        fileName
+      }
+      leaseAgreementsOrLOIs {
+        fileId
+        fileName
+      }
+      personalTaxReturns {
+        fileId
+        fileName
+      }
+      businessTaxReturns {
+        fileId
+        fileName
+      }
+      blanketLien
+      providePersonalGurantee
+      personalGuarantee {
+        fileId
+        fileName
+      }
+      stepStatus
+      submittedDate
+    }
+  }
+}
+`;
+
+export const getBusinessApplicationsDetailsAdmin = gql`
+query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: String, $applicationType: ViewBusinessApplicationTypeEnum!) {
+  businessApplicationsDetailsAdmin(
+    applicationId: $applicationId
+    applicationType: $applicationType
+    userId: $userId
+  ){
+    applicationId
+    applicationStatus
+    lendio {
+      status
+      failReasons
+      url
+    }
+    userDetails {
+      firstName
+      lastName
+      email
+      contactDetails {
+        phone { number }
+      }
+    }
+    createdDate
+    updatedDate
+    prequalDetails {
+      businessModel
+      businessGoal
+      businessGeneralInfo {
+        businessName
+        address {
+          street
+          city
+          state
+          zipCode
+        }
+        website
+        contactDetails {
+          phone {
+            number
+            countryCode
+          }
+        }
+      }
+      industryTypes
+      existingBusinessInfo {
+        ageYears
+        ageMonths
+      }
+      businessEntityStructure
+      legalConfirmations {
+        label
+        value
+      }
+      franchiseHolder
+      businessExperience{
+        industryExperience
+        estimatedCreditScore
+        totalProjectCost
+        amountNeeded
+      }
+      fundUsage
+      performanceSnapshot {
+        nextYearSnapshot {
+          grossSales
+          cogSold
+          operatingExpenses
+          netIncome
+        }
+        pastYearSnapshot {
+          grossSales
+          cogSold
+          operatingExpenses
+          netIncome
+        }
+      }
+      failReasons
     }
     businessDetails {
       planDocs {

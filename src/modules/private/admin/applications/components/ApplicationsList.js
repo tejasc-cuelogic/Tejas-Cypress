@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
+import moment from 'moment';
 import { Form, Grid, Input, Button, Card, Table, Header, Item, Rating } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { FILTER_META } from '../../../../../constants/user';
@@ -9,7 +10,7 @@ import { FormCheckbox } from '../../../../../theme/form';
 import { ApplicationListStepColumn } from './ApplicationListStepColumn';
 import ApplicationListButtons from './ApplicationListButtons';
 import { AppStatusLabel } from './AppStatusLabel';
-import { InlineLoader, NsPagination } from '../../../../../theme/shared';
+import { InlineLoader, NsPaginationType2 } from '../../../../../theme/shared';
 
 @inject('businessAppAdminStore')
 @observer
@@ -17,14 +18,12 @@ export default class ApplicationsList extends Component {
   componentWillMount() {
     const { match } = this.props;
     const { fetchBusinessApplicationsByStatus } = this.props.businessAppAdminStore;
-    fetchBusinessApplicationsByStatus(match.url);
+    if (match.isExact) {
+      fetchBusinessApplicationsByStatus(match.params.applicationType);
+    }
   }
   setSearchParam = (e, { name, value }) =>
     this.props.businessAppAdminStore.setInitiateSrch(name, value);
-
-  checkClicked = () => {
-    console.log('clicked');
-  }
 
   executeSearch = (e) => {
     if (e.charCode === 13) {
@@ -37,22 +36,23 @@ export default class ApplicationsList extends Component {
   render() {
     const { match } = this.props;
     const {
-      getBusinessApplication,
-      requestState,
-      filterApplicationStatus,
-      columnTitle,
-      totalRecords,
+      getBusinessApplication, requestState, filterApplicationStatus, columnTitle,
+      totalRecords, businessApplicationsList, setKeyword,
     } = this.props.businessAppAdminStore;
+
+    if (businessApplicationsList.loading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form>
           <Grid>
             <Grid.Row verticalAlign="bottom">
               <Grid.Column width={8}>
-                <Input fluid onKeyPress={this.executeSearch} icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Search by keyword or phrase" />
+                <Input fluid onKeyPress={this.executeSearch} onChange={setKeyword} value={requestState.search.keyword} icon={{ className: 'ns-search' }} iconPosition="left" placeholder="Search by keyword or phrase" />
               </Grid.Column>
-              <Grid.Column width={3}>
-                <DropdownFilter name="Sort By" keyName="businessAppSortOption" change={this.setSearchParam} value={requestState.search.businessAppSortOption} options={FILTER_META.businessAppSortOption} />
+              <Grid.Column width={4}>
+                <DropdownFilter name="Sort By Field" keyName="by" change={this.setSearchParam} value={requestState.sort.by} options={FILTER_META.businessAppSortField} />
               </Grid.Column>
               <Grid.Column width={3} floated="right" textAlign="right">
                 <Button primary className="relaxed" content="Export" />
@@ -70,7 +70,7 @@ export default class ApplicationsList extends Component {
               </Grid.Column>
               <Grid.Column width={6} textAlign="right">
                 {totalRecords > 0 &&
-                <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+                <NsPaginationType2 floated="right" initRequest={({ first, page }) => this.paginate({ first, page, noFilter: true })} meta={{ totalRecords, requestState }} />
                 }
               </Grid.Column>
             </Grid.Row>
@@ -91,19 +91,32 @@ export default class ApplicationsList extends Component {
                 {getBusinessApplication.length ?
                   getBusinessApplication.map(application => (
                     <Table.Row verticalAlign="top">
-                      <Table.Cell>
+                      <Table.Cell singleLine>
                         <Header as="h6">
-                          {application.businessName}
-                          <AppStatusLabel status={application.status} />
+                          {application.prequalDetails.businessGeneralInfo.businessName}
+                          <AppStatusLabel />
+                          {/* <AppStatusLabel status={application.status} /> */}
                         </Header>
                         <div className="table-info-wrap">
-                          <p>{application.name}<br />
-                            {application.email}<br />
-                            {application.phone}
+                          <p>
+                            {application.userDetails &&
+                            `${application.userDetails.firstName} ${application.userDetails.lastName}`
+                            }
+                            <br />
+                            {application.userDetails.contactDetails &&
+                            application.userDetails.contactDetails.email &&
+                              `${application.userDetails.contactDetails.email.email}`
+                            }
+                            <br />
+                            {application.userDetails.contactDetails
+                            && application.userDetails.contactDetails.phone &&
+                              `${application.userDetails.contactDetails.phone}`
+                            }
                           </p>
-                          <p>Sign-up Code <b>-</b><br />
-                            Started <b>{application.createdDate}</b><br />
-                            Updated <b>{application.updatedDate}</b>
+                          <p>
+                            {/* <p>Sign-up Code <b>-</b><br /> */}
+                            Started <b>{moment(application.createdDate).format('MM/DD/YYYY')}</b><br />
+                            Updated <b>{moment(application.updatedDate).format('MM/DD/YYYY')}</b>
                           </p>
                         </div>
                       </Table.Cell>
@@ -116,7 +129,7 @@ export default class ApplicationsList extends Component {
                             </Item.Description>
                             <Item.Extra>
                               <b>5/5/2018 | 1:33PM</b>
-                              <b> by {application.commentUser}</b>
+                              <b> by Jhon</b>
                             </Item.Extra>
                           </Item.Content>
                         </Item>
@@ -126,9 +139,10 @@ export default class ApplicationsList extends Component {
                       />
                       <ApplicationListButtons
                         refLink={match.url}
-                        applicationId={application.id}
+                        applicationId={application.applicationId}
+                        userId={application.userId}
                         appStatus={application.applicationStatus}
-                        status={application.status}
+                        // status={application.status}
                       />
                     </Table.Row>
                   )) :

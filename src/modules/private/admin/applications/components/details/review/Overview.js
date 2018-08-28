@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button } from 'semantic-ui-react';
 import { FormInput } from '../../../../../../../theme/form';
+import { EmptyDataSet } from '../../../../../../../theme/shared';
 
 @inject('businessAppReviewStore')
 @observer
@@ -32,7 +33,7 @@ export default class Overview extends Component {
                 />
               </Form>
             )) :
-            <p>Loading...</p>
+            <EmptyDataSet />
         }
       </div>
     );

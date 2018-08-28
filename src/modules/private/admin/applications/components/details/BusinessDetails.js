@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Form, Icon } from 'semantic-ui-react';
+import { Header, Form, Icon, List } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { FormInput } from '../../../../../../theme/form';
@@ -16,7 +16,14 @@ export default class BusinessDetails extends Component {
       <Form>
         <div className="inner-content-spacer">
           <Header as="h4">Business Plan</Header>
-          <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
+          <List>
+            <List.Item as={Link} to="/">
+              <Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b>
+            </List.Item>
+            <List.Item as={Link} to="/">
+              <Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b>
+            </List.Item>
+          </List>
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">Exising Debt</Header>

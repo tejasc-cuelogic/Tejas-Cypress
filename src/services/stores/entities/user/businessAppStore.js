@@ -18,6 +18,7 @@ import {
 import Helper from '../../../../helper/utility';
 import {
   getBusinessApplicationsById,
+  getBusinessApplicationsDetailsAdmin,
   getBusinessApplications,
   createBusinessApplicationPrequalificaiton,
   upsertBusinessApplicationInformationPerformance,
@@ -104,8 +105,37 @@ export class BusinessAppStore {
         id: applicationId,
       },
       fetchPolicy: 'network-only',
-      onFetch: () => {
-        this.setBusinessApplicationData();
+      onFetch: (data) => {
+        this.setBusinessApplicationData(data.businessApplication);
+        uiStore.setAppLoader(false);
+        resolve();
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setAppLoader(false);
+      },
+    });
+  });
+
+  @action
+  fetchApplicationById = (appId, appType, userId) => new Promise((resolve) => {
+    const applicationType = appType === 'prequal-failed' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+    let payLoad = {
+      applicationId: appId,
+      applicationType,
+    };
+    if (applicationType === 'APPLICATION_COMPLETED') {
+      payLoad = { ...payLoad, userId };
+    }
+    uiStore.setAppLoader(true);
+    uiStore.setLoaderMessage('Getting application data');
+    this.businessApplicationsDataById = graphql({
+      client,
+      query: getBusinessApplicationsDetailsAdmin,
+      variables: payLoad,
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        this.setBusinessApplicationData(data.businessApplicationsDetailsAdmin);
         uiStore.setAppLoader(false);
         resolve();
       },
@@ -136,25 +166,26 @@ export class BusinessAppStore {
   }
 
   @action
-  setBusinessApplicationData = () => {
+  setBusinessApplicationData = (data) => {
     this.formReset();
     this.step = 'performace';
-    const data = this.fetchBusinessApplicationsDataById;
-    this.setPrequalDetails(data.prequalDetails);
-    this.setBusinessDetails(data.businessDetails);
-    this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
-    this.setDocumentationDetails(data.businessDocumentation);
-    if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
-      this.formReadOnlyMode = true;
-    } else if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
-      this.appStepsStatus[0].status = 'IN_PROGRESS';
-    }
-    navStore.setAccessParams('appStatus', data.applicationStatus);
-    if (data.lendio) {
-      const lendioPartners = data.lendio.status;
-      if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
-        && lendioPartners === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
-        businessAppLendioStore.setPartneredLendioData(data);
+    if (data) {
+      this.setPrequalDetails(data.prequalDetails);
+      this.setBusinessDetails(data.businessDetails);
+      this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
+      this.setDocumentationDetails(data.businessDocumentation);
+      if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
+        this.formReadOnlyMode = true;
+      } else if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+        this.appStepsStatus[0].status = 'IN_PROGRESS';
+      }
+      navStore.setAccessParams('appStatus', data.applicationStatus);
+      if (data.lendio) {
+        const lendioPartners = data.lendio.status;
+        if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+          && lendioPartners === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
+          businessAppLendioStore.setPartneredLendioData(data);
+        }
       }
     }
   };
@@ -345,6 +376,13 @@ export class BusinessAppStore {
     return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
       && this.businessApplicationsDataById.data.businessApplication
       && toJS(this.businessApplicationsDataById.data.businessApplication)
+    ) || null;
+  }
+
+  @computed get businessApplicationDetailsAdmin() {
+    return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
+      && this.businessApplicationsDataById.data.businessApplicationsDetailsAdmin
+      && toJS(this.businessApplicationsDataById.data.businessApplicationsDetailsAdmin)
     ) || null;
   }
 

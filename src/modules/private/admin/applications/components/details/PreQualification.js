@@ -15,7 +15,7 @@ export default class PreQualification extends Component {
       <Form>
         <div className="inner-content-spacer">
           <Header as="h4">What is your Business Model?</Header>
-          <p>Business to Consumer</p>
+          <p>{fields.businessModel.value === 'B2C' ? 'Business to Consumer' : 'Business to Business'}</p>
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">General Information</Header>
@@ -56,11 +56,13 @@ export default class PreQualification extends Component {
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">What industry are you in?</Header>
-          <p>Fashion & Merchandising, Beauty & Spa</p>
+          <p>
+            {fields.industryTypes.values.find(e => e.value === fields.industryTypes.value).label}
+          </p>
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">What can NextSeed help you with?</Header>
-          <p>Launch New Business</p>
+          <p>{fields.businessGoal.values.find(e => e.value === fields.businessGoal.value).label}</p>
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">Experience</Header>
@@ -84,7 +86,7 @@ export default class PreQualification extends Component {
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">What will the funds be used for?</Header>
-          <p>Renovations</p>
+          <p>{fields.fundUsage.values.find(e => e.value === fields.fundUsage.value).label}</p>
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">Next year projections</Header>
@@ -108,7 +110,10 @@ export default class PreQualification extends Component {
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">What is your company’s entity structure?</Header>
-          <p>Limited Partnership</p>
+          <p>
+            {fields.businessEntityStructure.values.find(e =>
+              e.value === fields.businessEntityStructure.value).label}
+          </p>
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">Legal Confirmation</Header>
