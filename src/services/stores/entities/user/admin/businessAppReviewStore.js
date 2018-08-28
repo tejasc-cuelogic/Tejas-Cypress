@@ -36,6 +36,7 @@ export class BusinessAppReviewStore {
   @action
   removeData = (formName) => {
     this[formName].fields.data.splice(this.removeIndex, 1);
+    Validator.validateForm(this[formName], true, true, false);
     this.confirmModal = !this.confirmModal;
     this.confirmModalName = null;
     this.removeIndex = null;

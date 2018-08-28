@@ -43,7 +43,7 @@ export default class Overview extends Component {
                 label={`Critical Point ${index + 1}`}
                 fielddata={overview.criticalPoint}
                 changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', index)}
-                removed={index === 0 ? false : e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM')}
+                removed={e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM')}
                 linkto={this.props.match.url}
               />
             ))

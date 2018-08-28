@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { GetNavMeta } from '../../../../../../../theme/layout/SidebarNav';
 import { InlineLoader } from '../../../../../../../theme/shared';
 
 const getModule = component => Loadable({
@@ -11,14 +10,22 @@ const getModule = component => Loadable({
   },
 });
 
+@withRouter
 export default class Model extends Component {
   render() {
     const { match } = this.props;
-    const navItems = GetNavMeta(match.url).subNavigations;
+    console.log(match.url);
+    const navItems = [
+      { title: 'Inputs', to: 'inputs', component: 'Inputs' },
+      {
+        title: 'Variables', to: 'variables', component: 'Variables',
+      },
+      { title: 'Results', to: 'results', component: 'Results' },
+    ];
     return (
       <div>
-        Model - page!!!!
         <Switch>
+          <Route exact path={match.url} component={getModule(navItems[0].component)} />
           {
             navItems.map(item => (
               <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />

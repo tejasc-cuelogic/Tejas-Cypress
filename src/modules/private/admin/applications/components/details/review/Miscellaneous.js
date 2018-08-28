@@ -56,10 +56,9 @@ const TableHeader = ({ labels }) => (
 const RemoveIcon = ({
   match, index, toggleConfirmModal, formName,
 }) => (
-  index !== 0 &&
-    <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName)} >
-      <Icon className="ns-close-circle" color="grey" />
-    </Link>
+  <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName)} >
+    <Icon className="ns-close-circle" color="grey" />
+  </Link>
 );
 
 const AddMore = ({

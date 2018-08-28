@@ -44,14 +44,12 @@ export default class Offer extends Component {
                 {
                   OFFERS_FRM.fields.data.map((offer, index) => (
                     <Table.HeaderCell>Offer {String.fromCharCode('A'.charCodeAt() + index)}
-                      {index !== 0 &&
                       <Link
                         to={this.props.match.url}
                         onClick={e => this.toggleConfirmModal(e, index)}
                       >
                         <Icon className="ns-close-circle" color="grey" />
                       </Link>
-                      }
                     </Table.HeaderCell>
                   ))
                 }

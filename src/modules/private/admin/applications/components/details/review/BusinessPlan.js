@@ -80,11 +80,9 @@ export default class BusinessPlan extends Component {
               <Aux>
                 <Header as="h6">
                   {`Control Person ${index + 1}`}
-                  {index !== 0 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'CONTROL_PERSONS_FRM')}>
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
-                  }
                 </Header>
                 <div className="featured-section">
                   <Form.Group widths={3}>
@@ -193,13 +191,11 @@ export default class BusinessPlan extends Component {
                             size="small"
                           />
                         </Table.Cell>
-                        {index !== 0 &&
                         <Table.Cell collapsing>
                           <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'SOURCES_FRM')} >
                             <Icon className="ns-close-circle" color="grey" />
                           </Link>
                         </Table.Cell>
-                        }
                       </Table.Row>
                     )) : ''
                   }
@@ -251,13 +247,11 @@ export default class BusinessPlan extends Component {
                           size="small"
                         />
                       </Table.Cell>
-                      {index !== 0 &&
                       <Table.Cell collapsing>
                         <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'USES_FRM')} >
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
                       </Table.Cell>
-                      }
                     </Table.Row>
                   )) : ''
                   }

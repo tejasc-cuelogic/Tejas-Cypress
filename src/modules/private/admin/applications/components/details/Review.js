@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
@@ -25,20 +25,21 @@ const navItems = [
     title: 'Model',
     to: 'model',
     subNavigations: [
-      { title: 'Inputs', to: 'input', component: 'Inputs' },
+      { title: 'Inputs', to: 'inputs', component: 'Inputs' },
       {
-        title: 'Variables', to: 'variables', component: 'Variables',
+        title: 'Variables', to: 'model/variables', component: 'Variables',
       },
-      { title: 'Results', to: 'results', component: 'Results' },
+      { title: 'Results', to: 'model/results', component: 'Results' },
     ],
   },
   { title: 'Offer', to: 'offer' },
 ];
 
+@withRouter
 export default class Review extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
+      this.props.history.push(`${this.props.match.url}/${navItems[0].to}`);
     }
   }
 
@@ -46,14 +47,6 @@ export default class Review extends Component {
 
   render() {
     const { match } = this.props;
-    const subNavItems = [
-      { title: 'Inputs', to: 'inputs', component: 'Inputs' },
-      {
-        title: 'Variables', to: 'variables', component: 'Variables',
-      },
-      { title: 'Results', to: 'results', component: 'Results' },
-    ];
-
     return (
       <div className="inner-content-spacer">
         <Grid>
@@ -65,14 +58,7 @@ export default class Review extends Component {
               <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
               {
                 navItems.map(item => (
-                  <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                ))
-              }
-            </Switch>
-            <Switch>
-              { subNavItems.length > 0 &&
-                subNavItems.map(item => (
-                  <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
                 ))
               }
             </Switch>
