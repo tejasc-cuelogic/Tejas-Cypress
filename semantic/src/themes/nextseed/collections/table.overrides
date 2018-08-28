@@ -193,6 +193,18 @@
             }
         }
     }
+    &.bg-offwhite {
+        background-color: @neutral-offwhite;
+        thead th {
+            background-color: @neutral-offwhite;
+            &.dark-cell {
+                background-color: @neutral-midwhite;        
+            }
+        }
+    }
+    .dark-cell {
+        background-color: @neutral-midwhite;
+    }
 }
 
 .compare-table {

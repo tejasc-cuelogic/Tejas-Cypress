@@ -13,20 +13,20 @@ export default class Results extends Component {
         <Header as="h4">
           Results
         </Header>
-        <Table basic compact singleLine className="form-table">
+        <Table className="bg-offwhite">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell />
-              <Table.HeaderCell colSpan="4" textAlign="center"><b>Term Loan</b></Table.HeaderCell>
+              <Table.HeaderCell colSpan="4" textAlign="center" className="dark-cell"><b>Term Loan</b></Table.HeaderCell>
               <Table.HeaderCell colSpan="4" textAlign="center"><b>Rev Share</b></Table.HeaderCell>
             </Table.Row>
             <Table.Row>
               <Table.HeaderCell>Term</Table.HeaderCell>
-              <Table.HeaderCell>Rate</Table.HeaderCell>
-              <Table.HeaderCell>DSCR</Table.HeaderCell>
-              <Table.HeaderCell>Feasible</Table.HeaderCell>
-              <Table.HeaderCell>Expected Pmt Amount</Table.HeaderCell>
-              <Table.HeaderCell>RSL Multiple</Table.HeaderCell>
+              <Table.HeaderCell className="dark-cell" textAlign="right">Rate</Table.HeaderCell>
+              <Table.HeaderCell className="dark-cell">DSCR</Table.HeaderCell>
+              <Table.HeaderCell className="dark-cell">Feasible</Table.HeaderCell>
+              <Table.HeaderCell className="dark-cell" textAlign="right">Expected<br />Pmt Amount</Table.HeaderCell>
+              <Table.HeaderCell textAlign="right">RSL<br />Multiple</Table.HeaderCell>
               <Table.HeaderCell>RSP</Table.HeaderCell>
               <Table.HeaderCell>DSCR</Table.HeaderCell>
               <Table.HeaderCell>Feasible</Table.HeaderCell>
@@ -39,20 +39,20 @@ export default class Results extends Component {
                   <Table.Cell>
                     {result.term.value}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="dark-cell" textAlign="right">
                     {result.rate.value}%
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="dark-cell">
                     {result.termLoanDscr.value}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="dark-cell">
                     {result.termLoanFeasible.value}
                   </Table.Cell>
-                  <Table.Cell>
-                    {result.expectedAmount.value}
+                  <Table.Cell className="dark-cell" textAlign="right">
+                    ${result.expectedAmount.value}
                   </Table.Cell>
-                  <Table.Cell>
-                    {result.rslMultiple.value}
+                  <Table.Cell textAlign="right">
+                    ${result.rslMultiple.value}
                   </Table.Cell>
                   <Table.Cell>
                     {result.rsp.value}%
