@@ -37,7 +37,7 @@ class PrivateLayout extends Component {
           </Grid>
         </div>
         {(pageMeta.subPanel === 1 || this.props.subNav) &&
-          <SecondaryMenu noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} />
+          <SecondaryMenu addon={this.props.subNavAddon} noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} />
         }
         <div className="search-filters">
           <Form>
@@ -48,10 +48,8 @@ class PrivateLayout extends Component {
             </Grid>
           </Form>
         </div>
-        <div className="search-filters more">
-          {this.props.P2}
-          {this.props.P3}
-        </div>
+        {this.props.P2}
+        {this.props.P3}
         {this.props.P5}
         <div className="content-spacer">
           {this.props.children}

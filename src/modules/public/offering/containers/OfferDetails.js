@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import { Spinner } from '../../../../theme/shared';
+import { Spinner, InlineLoader } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import InvestNow from '../components/investNow/InvestNow';
 import Agreement from '../components/investNow/agreement/components/Agreement';
@@ -13,7 +13,7 @@ import Congratulation from '../components/investNow/agreement/components/Congrat
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 

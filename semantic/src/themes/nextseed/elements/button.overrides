@@ -39,6 +39,12 @@
                     color:@primary-one;
                 }
             }
+            &.blue{
+                color:@primary-two;
+                &:hover, &:focus, &:active{
+                    color:@primary-two;
+                }
+            }
             &.red{
                 color:@highlight-primary;
                 &:hover, &:focus, &:active{

@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
+import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/statements/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 
