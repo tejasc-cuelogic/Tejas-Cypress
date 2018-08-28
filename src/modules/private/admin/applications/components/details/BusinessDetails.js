@@ -17,11 +17,8 @@ export default class BusinessDetails extends Component {
         <div className="inner-content-spacer">
           <Header as="h4">Business Plan</Header>
           <List>
-            <List.Item as={Link} to="/">
-              <Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b>
-            </List.Item>
-            <List.Item as={Link} to="/">
-              <Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b>
+            <List.Item>
+              <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
             </List.Item>
           </List>
         </div>
@@ -93,9 +90,7 @@ export default class BusinessDetails extends Component {
               ))
               }
             </Form.Group>
-            <Form.Group widths={4}>
-              <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
-            </Form.Group>
+            <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
           </div>
       ))
       }

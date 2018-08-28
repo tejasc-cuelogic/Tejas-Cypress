@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Form, Icon, Label } from 'semantic-ui-react';
+import { Header, Form, Icon, Label, List } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormInput } from '../../../../../../theme/form';
 
@@ -22,7 +22,11 @@ export default class Performance extends Component {
               <div className="field display-only" key={field}>
                 <Label>{fields[field].label}</Label>
                 <div className="display-only">
-                  <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
+                  <List>
+                    <List.Item>
+                      <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
+                    </List.Item>
+                  </List>
                 </div>
               </div>
             ))
