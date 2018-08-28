@@ -42,6 +42,8 @@ class IndividualAccountStore {
         .then((result) => {
           if (result.data.createInvestorAccount || formStatus === 'submit') {
             userDetailsStore.getUser(userStore.currentUser.sub);
+          }
+          if (result.data.createInvestorAccount) {
             bankAccountStore.setPlaidBankDetails(result.data.createInvestorAccount.accountDetails);
           } else {
             bankAccountStore.setPlaidBankDetails(result.data.updateInvestorAccount.accountDetails);
