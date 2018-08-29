@@ -39,15 +39,17 @@ class PrivateLayout extends Component {
         {(pageMeta.subPanel === 1 || this.props.subNav) &&
           <SecondaryMenu addon={this.props.subNavAddon} noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} />
         }
-        <div className="search-filters">
-          <Form>
-            <Grid stackable>
-              <Grid.Row>
-                {this.props.P1}
-              </Grid.Row>
-            </Grid>
-          </Form>
-        </div>
+        {this.props.P1 &&
+          <div className="search-filters">
+            <Form>
+              <Grid stackable>
+                <Grid.Row>
+                  {this.props.P1}
+                </Grid.Row>
+              </Grid>
+            </Form>
+          </div>
+        }
         {this.props.P2}
         {this.props.P3}
         {this.props.P5}
