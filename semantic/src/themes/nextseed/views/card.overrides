@@ -31,6 +31,9 @@
         }
         >.content{
             padding:@21px @28px;
+            @media only screen and (max-width : @largestMobileScreen){
+                padding:@20px @22px;
+            }
             line-height:@24px;
             .tags{
                 font-size:@13px;

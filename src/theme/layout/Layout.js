@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Route, withRouter, Switch } from 'react-router-dom';
-import Header from './Header';
-import { authActions } from '../../services/actions';
 import Login from '../../modules/auth/containers/Login';
 import SignupInitial from '../../modules/auth/containers/SignupInitial';
 import InvestorSignup from '../../modules/auth/containers/InvestorSignup';
@@ -16,25 +14,10 @@ import ResetPassword from '../../modules/auth/containers/ResetPassword';
 @withRouter
 @observer
 class Layout extends Component {
-  handleLogOut = () => {
-    authActions.logout()
-      .then(() => {
-        this.props.history.push('/');
-      });
-  }
-
   render() {
     const { location } = this.props;
     return (
       <Aux>
-        {(!this.props.userStore.currentUser || !location.pathname.startsWith('/app')) &&
-          <Header
-            location={location}
-            navStatus={this.props.navStore.navStatus}
-            currentUser={this.props.userStore.currentUser}
-            handleLogOut={this.handleLogOut}
-          />
-        }
         {this.props.children}
         {location.pathname.startsWith('/auth') &&
           <Switch>

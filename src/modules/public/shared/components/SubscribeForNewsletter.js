@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject } from 'mobx-react';
-import { Button, Form, Divider } from 'semantic-ui-react';
+import { Button, Form } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form';
 
 const SubscribeFields = ({
@@ -16,14 +16,13 @@ const SubscribeFields = ({
           name={field}
           fielddata={NEWSLETTER_FRM.fields[field]}
           changed={newsLetterChange}
-          containerwidth={!modal ? 4 : false}
+          containerwidth={4}
           ishidelabel={!modal}
         />
       ))
     }
-    <Divider hidden />
-    <Form.Field className={modal ? 'center-align' : ''}>
-      <Button primary className={modal ? 'very relaxed' : 'fluid'} loading={inProgress}>
+    <Form.Field>
+      <Button primary compact loading={inProgress}>
         Submit
       </Button>
     </Form.Field>

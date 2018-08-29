@@ -4,6 +4,9 @@
 section{
     &.banner {
         height:710px;
+        @media only screen and (max-width : @largestMobileScreen){
+            height:380px;
+        }
         padding-top:118px;
         margin-top:-58px;
         >.ui.container{

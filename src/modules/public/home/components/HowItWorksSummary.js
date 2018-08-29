@@ -4,9 +4,9 @@ import { Header, Container, Button, Grid, Image } from 'semantic-ui-react';
 import UserOne from '../../../../assets/images/owner-1.jpg';
 import UserTwo from '../../../../assets/images/owner-2.jpg';
 
-const HowItWorksSummary = () => (
+const HowItWorksSummary = props => (
   <section>
-    <Container textAlign="center">
+    <Container textAlign={props.isMobile ? 'left' : 'center'}>
       <Header as="h2" className="mb-30">
       A new way to fundraise and invest.<br />
       Powered by technology. Rooted in community.

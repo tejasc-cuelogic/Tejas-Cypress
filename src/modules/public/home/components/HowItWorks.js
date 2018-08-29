@@ -9,7 +9,7 @@ const HowItWorks = () => (
     <Container>
       <Header as="h2" textAlign="center">How does NextSeed work?</Header>
       <Grid centered>
-        <Grid.Column width={12}>
+        <Grid.Column tablet={12} computer={12} mobile={16}>
           <Embed
             className="centered-video"
             id={nsvideos.embed}

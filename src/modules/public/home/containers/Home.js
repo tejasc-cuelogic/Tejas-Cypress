@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Route, Link } from 'react-router-dom';
-import { Container, Divider, Header, Button } from 'semantic-ui-react';
+import { Container, Divider, Header, Button, Responsive } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import HowItWorksSummary from '../components/HowItWorksSummary';
 import HowItWorks from '../components/HowItWorks';
@@ -12,10 +12,21 @@ import NewsLetter from '../components/NewsLetter';
 
 class Home extends Component {
   render() {
+    const isMobile = document.documentElement.clientWidth < 768;
     return (
       <Aux>
         <Banner />
-        <HowItWorksSummary />
+        <Responsive maxWidth={767} as={Aux}>
+          <Container>
+            <section>
+              <Header as="h3">Accelerate your growth with the power of the crowd.</Header>
+            </section>
+            <Divider fitted />
+          </Container>
+        </Responsive>
+        <Responsive as={Aux} fireOnMount onUpdate={this.handleOnUpdate}>
+          <HowItWorksSummary isMobile={isMobile} />
+        </Responsive>
         <Divider fitted as={Container} />
         <HowItWorks />
         <Divider fitted as={Container} />

@@ -11,7 +11,7 @@ const FeaturedOn = () => (
   <section className="featured-section">
     <Container>
       <Header as="h2" textAlign="center" className="mb-50">As seen on…</Header>
-      <Grid columns="equal" doubling>
+      <Grid columns="equal" doubling stackable>
         {featuredOn.map(row => (
           <Grid.Row>
             {row.map(f => (
