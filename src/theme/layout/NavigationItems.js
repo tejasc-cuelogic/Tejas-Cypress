@@ -101,10 +101,10 @@ export const NavigationItems = props => (
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
       </Menu.Menu>
-      {props.location.pathname.includes('/business-application') && !props.location.pathname.includes('business-application/') ?
+      {props.location.pathname.includes('/business-application') && !props.location.pathname.includes('business/') && !props.location.pathname.includes('business-real-estate/') ?
         <Menu.Item>
           <Button.Group>
-            <Button as={Link} to="/" inverted color="red">Cancle</Button>
+            <Button as={Link} to="/" inverted color="red">Cancel</Button>
             {props.isPrequalQulify &&
             <SubmitButton
               canSubmitApp={props.canSubmitApp}

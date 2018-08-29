@@ -3,10 +3,13 @@
 export const USER_ROLES = ['admin', 'issuer', 'investor'];
 export const USER_TYPES_META = [
   {
-    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Open a NextSeed Investment Account to start investing in local businesses',
+    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Invest in existing businesses and get revenue',
   },
   {
-    key: 'o', icon: 'ns-business', text: 'Business Owner', value: 'issuer', desc: 'Start the funding application to get pre-qualified for your NextSeed campaign',
+    key: 'o', icon: 'ns-business', text: 'Business', value: 'issuer-type1', desc: 'Apply for funding for your business',
+  },
+  {
+    key: 'bo', icon: 'ns-business', text: 'Commercial Real Estate', value: 'issuer-type2', desc: 'Apply for real estate funding',
   },
 ];
 

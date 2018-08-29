@@ -14,12 +14,12 @@ class Signup extends Component {
       <Segment vertical className="content">
         <Grid container>
           <Switch>
-            <Route exact path="/business-application" render={props => <PreQualification isPublic {...props} />} />
-            <Route exact path="/business-application/need-help" render={props => <NeedHelpModal isPublic {...props} />} />
-            <Route path="/business-application/:id/lendio/:condition" render={props => <LendioSuccess isPublic {...props} />} />
-            <Route path="/business-application/:id/lendio" render={props => <Application isPublic {...props} />} />
-            <Route path="/business-application/:id/success" render={props => <Success isPublic {...props} />} />
-            <Route path="/business-application/:id/failed/:reason?" render={props => <Failure isPublic {...props} />} />
+            <Route exact path="/business-application/:applicationType" render={props => <PreQualification isPublic {...props} />} />
+            <Route exact path="/business-application/:applicationType/need-help" render={props => <NeedHelpModal isPublic {...props} />} />
+            <Route path="/business-application/:applicationType/:id/lendio/:condition" render={props => <LendioSuccess isPublic {...props} />} />
+            <Route path="/business-application/:applicationType/:id/lendio" render={props => <Application isPublic {...props} />} />
+            <Route path="/business-application/:applicationType/:id/success" render={props => <Success isPublic {...props} />} />
+            <Route path="/business-application/:applicationType/:id/failed/:reason?" render={props => <Failure isPublic {...props} />} />
           </Switch>
         </Grid>
       </Segment>
