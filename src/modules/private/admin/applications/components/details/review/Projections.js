@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Button, Divider, Confirm, Header } from 'semantic-ui-react';
+import { Form, Button, Divider, Confirm } from 'semantic-ui-react';
 import { FormTextarea, DropZone } from '../../../../../../../theme/form';
+import ManagerOverview from './ManagerOverview';
 
 @inject('businessAppReviewStore', 'uiStore')
 @observer
@@ -29,7 +30,7 @@ export default class Projections extends Component {
     const {
       PROJECTIONS_FRM,
       formChange,
-      MANAGERS_FRM,
+      PROJECTIONS_MANAGER_FRM,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
@@ -98,19 +99,7 @@ export default class Projections extends Component {
             </Button.Group>
           </div>
           <Divider section />
-          <Header as="h4">Manager</Header>
-          <FormTextarea
-            name="managerOverview"
-            fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
-            containerclassname="secondary"
-          />
-          <div className="right-align">
-            <Button.Group>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
-            </Button.Group>
-          </div>
+          <ManagerOverview form={PROJECTIONS_MANAGER_FRM} formName="PROJECTIONS_MANAGER_FRM" />
         </Form>
         <Confirm
           header="Confirm"

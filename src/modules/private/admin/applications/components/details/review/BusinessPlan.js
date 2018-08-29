@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'semantic-ui-react';
 import { FormTextarea, MaskedInput, FormInput, DropZone, FormDatePicker } from '../../../../../../../theme/form';
-import { InlineLoader } from '../../../../../../../theme/shared';
+import ManagerOverview from './ManagerOverview';
 
 const AddMore = ({
   addMore, formName, title,
@@ -55,7 +55,7 @@ export default class BusinessPlan extends Component {
       confirmModal,
       confirmModalName,
       removeData,
-      MANAGERS_FRM,
+      BUSINESS_PLAN_MANAGER_FRM,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
@@ -75,7 +75,6 @@ export default class BusinessPlan extends Component {
             <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'CONTROL_PERSONS_FRM')}><small>+ Add Control Person</small></Link>
           </Header>
           {
-            CONTROL_PERSONS_FRM.fields.data.length ?
             CONTROL_PERSONS_FRM.fields.data.map((controlPerson, index) => (
               <Aux>
                 <Header as="h6">
@@ -138,7 +137,7 @@ export default class BusinessPlan extends Component {
                   </Form.Group>
                 </div>
               </Aux>
-            )) : <InlineLoader />
+            ))
           }
           <Divider section />
           {
@@ -287,19 +286,7 @@ export default class BusinessPlan extends Component {
             </Button.Group>
           </div>
           <Divider section />
-          <Header as="h4">Manager</Header>
-          <FormTextarea
-            name="managerOverview"
-            fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
-            containerclassname="secondary"
-          />
-          <div className="right-align">
-            <Button.Group>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
-            </Button.Group>
-          </div>
+          <ManagerOverview form={BUSINESS_PLAN_MANAGER_FRM} formName="BUSINESS_PLAN_MANAGER_FRM" />
         </Form>
         <Confirm
           header="Confirm"

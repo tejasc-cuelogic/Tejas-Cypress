@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
+import ManagerOverview from './ManagerOverview';
 
 @inject('businessAppReviewStore')
 @observer
@@ -9,8 +10,8 @@ export default class Documentation extends Component {
   render() {
     const {
       DOCUMENTATION_FRM,
+      DOCUMENTATION_MANAGER_FRM,
       formChange,
-      MANAGERS_FRM,
     } = this.props.businessAppReviewStore;
     return (
       <div>
@@ -77,19 +78,7 @@ export default class Documentation extends Component {
             </Button.Group>
           </div>
           <Divider section />
-          <Header as="h4">Manager</Header>
-          <FormTextarea
-            name="managerOverview"
-            fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
-            containerclassname="secondary"
-          />
-          <div className="right-align">
-            <Button.Group>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
-            </Button.Group>
-          </div>
+          <ManagerOverview form={DOCUMENTATION_MANAGER_FRM} formName="DOCUMENTATION_MANAGER_FRM" />
         </Form>
       </div>
     );

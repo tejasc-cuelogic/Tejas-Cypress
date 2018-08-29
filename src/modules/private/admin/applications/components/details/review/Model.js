@@ -14,7 +14,6 @@ const getModule = component => Loadable({
 export default class Model extends Component {
   render() {
     const { match } = this.props;
-    console.log(match.url);
     const navItems = [
       { title: 'Inputs', to: 'inputs', component: 'Inputs' },
       {

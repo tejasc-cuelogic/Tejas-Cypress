@@ -3,7 +3,8 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Icon, Button, Form, Confirm, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { FormInput, FormTextarea } from '../../../../../../../theme/form';
+import { FormInput } from '../../../../../../../theme/form';
+import ManagerOverview from './ManagerOverview';
 
 const TableHeader = () => (
   <Table.Header>
@@ -72,8 +73,7 @@ export default class Contingencies extends Component {
       formChangeWithIndex,
       toggleConfirmModal,
       removeData,
-      MANAGERS_FRM,
-      formChange,
+      CONTINGENCY_MANAGER_FRM,
     } = this.props.businessAppReviewStore;
     return (
       <Aux>
@@ -101,19 +101,7 @@ export default class Contingencies extends Component {
             </Button.Group>
           </div>
           <Divider section />
-          <Header as="h4">Manager</Header>
-          <FormTextarea
-            name="managerOverview"
-            fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
-            containerclassname="secondary"
-          />
-          <div className="right-align">
-            <Button.Group>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
-            </Button.Group>
-          </div>
+          <ManagerOverview form={CONTINGENCY_MANAGER_FRM} formName="CONTINGENCY_MANAGER_FRM" />
         </Form>
         <Confirm
           header="Confirm"

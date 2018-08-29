@@ -1,15 +1,24 @@
 import { observable, action, computed } from 'mobx';
-import { MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
+import { MODEL_MANAGER, OFFER_MANAGER, MISCELLANEOUS_MANAGER, CONTINGENCY_MANAGER, BUSINESS_PLAN_MANAGER, PROJECTIONS_MANAGER, DOCUMENTATION_MANAGER, JUSTIFICATIONS_MANAGER, OVERVIEW_MANAGER, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
 export class BusinessAppReviewStore {
   @observable OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
+  @observable OVERVIEW_MANAGER_FRM = Validator.prepareFormObject(OVERVIEW_MANAGER);
   @observable MANAGERS_FRM = Validator.prepareFormObject(MANAGERS);
   @observable JUSTIFICATIONS_FRM = Validator.prepareFormObject(JUSTIFICATIONS);
+  @observable JUSTIFICATIONS_MANAGER_FRM = Validator.prepareFormObject(JUSTIFICATIONS_MANAGER);
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
+  @observable DOCUMENTATION_MANAGER_FRM = Validator.prepareFormObject(DOCUMENTATION_MANAGER);
   @observable PROJECTIONS_FRM = Validator.prepareFormObject(PROJECTIONS);
+  @observable PROJECTIONS_MANAGER_FRM = Validator.prepareFormObject(PROJECTIONS_MANAGER);
   @observable BUSINESS_PLAN_FRM = Validator.prepareFormObject(BUSINESS_PLAN);
+  @observable BUSINESS_PLAN_MANAGER_FRM = Validator.prepareFormObject(BUSINESS_PLAN_MANAGER);
+  @observable CONTINGENCY_MANAGER_FRM = Validator.prepareFormObject(CONTINGENCY_MANAGER);
+  @observable MISCELLANEOUS_MANAGER_FRM = Validator.prepareFormObject(MISCELLANEOUS_MANAGER);
+  @observable OFFER_MANAGER_FRM = Validator.prepareFormObject(OFFER_MANAGER);
+  @observable MODEL_MANAGER_FRM = Validator.prepareFormObject(MODEL_MANAGER);
   @observable CONTROL_PERSONS_FRM = Validator.prepareFormObject(CONTROL_PERSONS);
   @observable SOURCES_FRM = Validator.prepareFormObject(SOURCES);
   @observable USES_FRM = Validator.prepareFormObject(USES);
@@ -36,7 +45,7 @@ export class BusinessAppReviewStore {
   @action
   removeData = (formName) => {
     this[formName].fields.data.splice(this.removeIndex, 1);
-    Validator.validateForm(this[formName], true, true, false);
+    Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
     this.confirmModalName = null;
     this.removeIndex = null;

@@ -1,3 +1,13 @@
+export const MANAGERS = {
+  managerOverview: {
+    value: '',
+    label: 'Manager Overview',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here...',
+  },
+};
+
 export const OVERVIEW = {
   data: [{
     criticalPoint: {
@@ -14,14 +24,8 @@ export const OVERVIEW = {
   }],
 };
 
-export const MANAGERS = {
-  managerOverview: {
-    value: '',
-    label: 'Manager Overview',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Enter here...',
-  },
+export const OVERVIEW_MANAGER = {
+  managerOverview: { ...MANAGERS.managerOverview },
 };
 
 export const JUSTIFICATIONS = {
@@ -37,6 +41,10 @@ export const JUSTIFICATIONS = {
       },
     },
   }],
+};
+
+export const JUSTIFICATIONS_MANAGER = {
+  managerOverview: { ...MANAGERS.managerOverview },
 };
 
 export const DOCUMENTATION = {
@@ -103,6 +111,10 @@ export const DOCUMENTATION = {
     rule: 'required',
     placeHolder: 'Enter here...',
   },
+};
+
+export const DOCUMENTATION_MANAGER = {
+  managerOverview: { ...MANAGERS.managerOverview },
 };
 
 export const PROJECTIONS = {
@@ -175,6 +187,10 @@ export const PROJECTIONS = {
   },
 };
 
+export const PROJECTIONS_MANAGER = {
+  managerOverview: { ...MANAGERS.managerOverview },
+};
+
 export const BUSINESS_PLAN = {
   locationFeasibility: {
     value: '',
@@ -211,6 +227,26 @@ export const BUSINESS_PLAN = {
     error: undefined,
     rule: 'required|date',
   },
+};
+
+export const BUSINESS_PLAN_MANAGER = {
+  managerOverview: { ...MANAGERS.managerOverview },
+};
+
+export const CONTINGENCY_MANAGER = {
+  managerOverview: { ...MANAGERS.managerOverview },
+};
+
+export const MISCELLANEOUS_MANAGER = {
+  managerOverview: { ...MANAGERS.managerOverview },
+};
+
+export const OFFER_MANAGER = {
+  managerOverview: { ...MANAGERS.managerOverview },
+};
+
+export const MODEL_MANAGER = {
+  managerOverview: { ...MANAGERS.managerOverview },
 };
 
 export const CONTROL_PERSONS = {

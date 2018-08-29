@@ -3,8 +3,9 @@ import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Header, Table, Icon, Item, Form, Confirm, Button, Divider, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { FormInput, DropZone, FormTextarea } from '../../../../../../../theme/form';
+import { FormInput, DropZone } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
+import ManagerOverview from './ManagerOverview';
 
 const SectionHeader = ({ header, subheader }) => (
   <Aux>
@@ -106,8 +107,7 @@ export default class Miscellaneous extends Component {
       confirmModal,
       confirmModalName,
       removeData,
-      MANAGERS_FRM,
-      formChange,
+      MISCELLANEOUS_MANAGER_FRM,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     return (
@@ -213,19 +213,7 @@ export default class Miscellaneous extends Component {
             </Button.Group>
           </div>
           <Divider section />
-          <Header as="h4">Manager</Header>
-          <FormTextarea
-            name="managerOverview"
-            fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
-            containerclassname="secondary"
-          />
-          <div className="right-align">
-            <Button.Group>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
-            </Button.Group>
-          </div>
+          <ManagerOverview form={MISCELLANEOUS_MANAGER_FRM} formName="MISCELLANEOUS_MANAGER_FRM" />
         </Form>
         <Confirm
           header="Confirm"

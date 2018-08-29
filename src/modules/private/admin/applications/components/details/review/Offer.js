@@ -3,8 +3,10 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Header, Form, Table, Dropdown, Icon, Confirm, Button, Divider } from 'semantic-ui-react';
-import { FormInput, MaskedInput, FormTextarea } from '../../../../../../../theme/form';
+import { FormInput, MaskedInput } from '../../../../../../../theme/form';
 import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../../services/constants/admin/businessApplication';
+import ManagerOverview from './ManagerOverview';
+
 @inject('businessAppReviewStore')
 @observer
 export default class Offer extends Component {
@@ -19,12 +21,11 @@ export default class Offer extends Component {
   render() {
     const {
       OFFERS_FRM,
-      MANAGERS_FRM,
+      OFFER_MANAGER_FRM,
       formChangeWithIndex,
       maskChangeWithIndex,
       confirmModal,
       confirmModalName,
-      formChange,
       removeData,
     } = this.props.businessAppReviewStore;
     const offerFields = OFFERS_FRM.fields.data[0];
@@ -37,6 +38,7 @@ export default class Offer extends Component {
           }
         </Header>
         <Form>
+          {offerFields &&
           <Table basic compact singleLine className="form-table">
             <Table.Header>
               <Table.Row>
@@ -230,6 +232,7 @@ export default class Offer extends Component {
               </Table.Row>
             </Table.Body>
           </Table>
+          }
           <div className="right-align mt-20">
             <Button.Group>
               <Button
@@ -243,19 +246,7 @@ export default class Offer extends Component {
             </Button.Group>
           </div>
           <Divider section />
-          <Header as="h4">Manager</Header>
-          <FormTextarea
-            name="managerOverview"
-            fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
-            containerclassname="secondary"
-          />
-          <div className="right-align">
-            <Button.Group>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
-            </Button.Group>
-          </div>
+          <ManagerOverview form={OFFER_MANAGER_FRM} formName="OFFER_MANAGER_FRM" />
         </Form>
         <Confirm
           header="Confirm"

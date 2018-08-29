@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Divider, Form, Header, Button, Confirm } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
+import ManagerOverview from './ManagerOverview';
 
 @inject('businessAppReviewStore')
 @observer
@@ -18,9 +19,9 @@ export default class PreQual extends Component {
   }
   render() {
     const {
-      MANAGERS_FRM, JUSTIFICATIONS_FRM,
+      JUSTIFICATIONS_FRM, JUSTIFICATIONS_MANAGER_FRM,
       toggleConfirmModal, confirmModal, confirmModalName,
-      formChange, formChangeWithIndex, removeData,
+      formChangeWithIndex, removeData,
     } = this.props.businessAppReviewStore;
     return (
       <Aux>
@@ -48,19 +49,7 @@ export default class PreQual extends Component {
             <Button disabled={!JUSTIFICATIONS_FRM.meta.isValid} primary className="relaxed" >Approved</Button>
           </div>
           <Divider section />
-          <Header as="h4">Manager</Header>
-          <FormTextarea
-            name="managerOverview"
-            fielddata={MANAGERS_FRM.fields.managerOverview}
-            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
-            containerclassname="secondary"
-          />
-          <div className="right-align">
-            <Button.Group>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" secondary>Deny</Button>
-              <Button disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button">Approve</Button>
-            </Button.Group>
-          </div>
+          <ManagerOverview form={JUSTIFICATIONS_MANAGER_FRM} formName="JUSTIFICATIONS_MANAGER_FRM" />
         </Form>
         <Confirm
           header="Confirm"
