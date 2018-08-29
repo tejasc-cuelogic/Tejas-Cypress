@@ -17,6 +17,7 @@ import {
   AFFILIATED_PARTNERS,
   LENDIO,
   NEED_HELP,
+  BUSINESS_PRE_QUALIFICATION_REAL_ESTATE,
 } from '../../../constants/businessApplication';
 import Helper from '../../../../helper/utility';
 import {
@@ -37,7 +38,7 @@ export class BusinessAppStore {
   Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
   @observable BUSINESS_APP_REAL_ESTATE_FRM =
-    Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
+    Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_REAL_ESTATE);
   @observable NEED_HELP_FRM = Validator.prepareFormObject(NEED_HELP);
   @observable BUSINESS_ACCOUNT =Validator.prepareFormObject(BUSINESS_SIGNUP);
   @observable BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);

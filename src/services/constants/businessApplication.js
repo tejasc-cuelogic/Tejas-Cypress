@@ -300,7 +300,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
 export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
   ...BUSINESS_PREQUAL_COMMON,
   investmentType: {
-    value: [],
+    value: '',
     values: [
       { label: 'Core', icon: 'ns-renovations', value: 'CORE' },
       { label: 'Core Plus', icon: 'ns-equipment-purchase', value: 'CORE_PLUS' },

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Grid, Form, Divider } from 'semantic-ui-react';
+import { Header, Grid, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import {
   FormRadioGroup, FormCheckbox, FormInput, MaskedInput, AutoComplete,
@@ -12,12 +12,10 @@ import FormElementWrap from '../FormElementWrap';
 export default class PreQualRealEstate extends Component {
   render() {
     const {
-      BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
-      businessAppEleMaskChange, getFranchiseCondition,
-      getBusinessTypeCondtion,
-      preQualFormDisabled,
+      BUSINESS_APP_REAL_ESTATE_FRM, businessAppEleChange, setAddressFields,
+      businessAppEleMaskChange, preQualFormDisabled,
     } = this.props.businessAppStore;
-    const { fields } = BUSINESS_APP_FRM;
+    const { fields } = BUSINESS_APP_REAL_ESTATE_FRM;
     return (
       <Aux>
         <FormElementWrap header="General Information">
@@ -31,9 +29,10 @@ export default class PreQualRealEstate extends Component {
                       key={field}
                       type="text"
                       name={field}
+                      label={field === 'businessName' ? 'Entity Name' : ''}
                       value={fields[field].value}
                       fielddata={fields[field]}
-                      changed={businessAppEleChange}
+                      changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
                     />
                   ))
                 }
@@ -41,19 +40,19 @@ export default class PreQualRealEstate extends Component {
                   disabled={preQualFormDisabled}
                   name="phoneNumber"
                   fielddata={fields.phoneNumber}
-                  changed={businessAppEleMaskChange}
+                  changed={(values, field) => businessAppEleMaskChange(values, field, 'BUSINESS_APP_REAL_ESTATE_FRM')}
                 />
               </div>
             </Grid.Column>
             <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
               <div className="field-wrap">
-                <Header as="h6">Business Address</Header>
+                <Header as="h6">Entity Address</Header>
                 <AutoComplete
                   disabled={preQualFormDisabled}
                   name="street"
                   fielddata={fields.street}
                   onplaceselected={setAddressFields}
-                  changed={businessAppEleChange}
+                  changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
                 />
                 <Form.Group widths="equal">
                   {
@@ -64,7 +63,7 @@ export default class PreQualRealEstate extends Component {
                         type="text"
                         name={field}
                         fielddata={fields[field]}
-                        changed={businessAppEleChange}
+                        changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
                       />
                     ))
                   }
@@ -73,21 +72,12 @@ export default class PreQualRealEstate extends Component {
             </Grid.Column>
           </Grid>
         </FormElementWrap>
-        <FormElementWrap header="What industry are you in?" subHeader="Please select all that apply.">
-          <FormCheckbox
-            disabled={preQualFormDisabled}
-            fielddata={fields.industryTypes}
-            name="industryTypes"
-            changed={businessAppEleChange}
-            containerclassname="iconic-checkbox"
-          />
-        </FormElementWrap>
-        <FormElementWrap header="What can NextSeed help you with?" subHeader="Select in which area NextSeed can help your business.">
+        <FormElementWrap header="Select Investment Type" subHeader="Select your Investment Type.">
           <FormRadioGroup
             disabled={preQualFormDisabled}
-            fielddata={fields.businessGoal}
-            name="businessGoal"
-            changed={businessAppEleChange}
+            fielddata={fields.investmentType}
+            name="investmentType"
+            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
             iconic
             containerclassname="iconic-radio"
           />
@@ -96,40 +86,6 @@ export default class PreQualRealEstate extends Component {
           <Grid>
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
               <div className="field-wrap">
-                {getFranchiseCondition &&
-                  <Aux>
-                    <Header as="h6" content="Are you an existing or previous franchise holder?" />
-                    <FormRadioGroup
-                      disabled={preQualFormDisabled}
-                      fielddata={fields.franchiseHolder}
-                      name="franchiseHolder"
-                      changed={businessAppEleChange}
-                      containerclassname="button-radio"
-                    />
-                    <Divider section hidden />
-                  </Aux>
-                }
-                {getBusinessTypeCondtion &&
-                  <Aux>
-                    <Header as="h6" content="How long has the existing business been operating?" />
-                    <Form.Group widths="equal">
-                      {
-                        ['businessAgeYears', 'businessAgeMonths'].map(field => (
-                          <MaskedInput
-                            disabled={preQualFormDisabled}
-                            key={field}
-                            name={field}
-                            number
-                            value={fields[field].value}
-                            fielddata={fields[field]}
-                            changed={businessAppEleMaskChange}
-                          />
-                        ))
-                      }
-                    </Form.Group>
-                    <Divider section hidden />
-                  </Aux>
-                }
                 {
                   ['industryExperience', 'estimatedCreditScore'].map(field => (
                     <MaskedInput
@@ -140,7 +96,7 @@ export default class PreQualRealEstate extends Component {
                       tooltip={fields[field].tooltip}
                       value={fields[field].value}
                       fielddata={fields[field]}
-                      changed={businessAppEleMaskChange}
+                      changed={(values, field1) => businessAppEleMaskChange(values, field1, 'BUSINESS_APP_REAL_ESTATE_FRM')}
                     />
                   ))
                 }
@@ -156,7 +112,7 @@ export default class PreQualRealEstate extends Component {
                       tooltip={fields[field].tooltip}
                       value={fields[field].value}
                       fielddata={fields[field]}
-                      changed={businessAppEleMaskChange}
+                      changed={(values, field1) => businessAppEleMaskChange(values, field1, 'BUSINESS_APP_REAL_ESTATE_FRM')}
                     />
                   ))
                 }
@@ -169,62 +125,48 @@ export default class PreQualRealEstate extends Component {
             disabled={preQualFormDisabled}
             fielddata={fields.fundUsage}
             name="fundUsage"
-            changed={businessAppEleChange}
+            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
             containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
-        <FormElementWrap>
+        <FormElementWrap
+          header="Do you currently own or operate this property?"
+        >
+          <FormRadioGroup
+            disabled={preQualFormDisabled}
+            fielddata={fields.ownProperty}
+            name="ownProperty"
+            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+            containerclassname="button-radio"
+          />
+        </FormElementWrap>
+        <FormElementWrap header="Target">
           <Grid>
-            {getBusinessTypeCondtion &&
-              <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
-                <Header as="h3">
-                  Previous year
-                  <Header.Subheader>
-                    For your business, give us a quick snapshot
-                    of what the prior year looked like.
-                  </Header.Subheader>
-                </Header>
-                <div className="field-wrap">
-                  {
-                    ['previousYearGrossSales', 'previousYearCogSold', 'previousYearOperatingExpenses', 'previousYearNetIncome'].map(field => (
-                      <MaskedInput
-                        disabled={preQualFormDisabled}
-                        key={field}
-                        name={field}
-                        prefix="$ "
-                        currency
-                        value={fields[field].value}
-                        fielddata={fields[field]}
-                        changed={businessAppEleMaskChange}
-                      />
-                    ))
-                  }
-                </div>
-              </Grid.Column>
-            }
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
-              <Header as="h3">
-                Next year projections
-                <Header.Subheader>
-                  For your business, give us a quick snapshot
-                  of what the next year will look like.
-                </Header.Subheader>
-              </Header>
               <div className="field-wrap">
                 {
-                  ['nextYearGrossSales', 'nextYearCogSold', 'nextYearOperatingExpenses', 'nextYearNetIncome'].map(field => (
+                  ['targetedInvestorIrr', 'targetedAnnualInvestor'].map(field => (
                     <MaskedInput
                       disabled={preQualFormDisabled}
                       key={field}
                       name={field}
-                      prefix="$ "
-                      currency
+                      percentage
+                      tooltip={fields[field].tooltip}
                       value={fields[field].value}
                       fielddata={fields[field]}
-                      changed={businessAppEleMaskChange}
+                      changed={(values, field1) => businessAppEleMaskChange(values, field1, 'BUSINESS_APP_REAL_ESTATE_FRM')}
                     />
                   ))
                 }
+                <MaskedInput
+                  hoverable
+                  disabled={preQualFormDisabled}
+                  name="targetedHoldTime"
+                  number
+                  value={fields.targetedHoldTime.value}
+                  fielddata={fields.targetedHoldTime}
+                  changed={(values, field) => businessAppEleMaskChange(values, field, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+                />
               </div>
             </Grid.Column>
           </Grid>
@@ -234,7 +176,7 @@ export default class PreQualRealEstate extends Component {
             disabled={preQualFormDisabled}
             fielddata={fields.businessEntityStructure}
             name="businessEntityStructure"
-            changed={businessAppEleChange}
+            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
             iconic
             containerclassname="iconic-radio"
           />
@@ -249,7 +191,7 @@ export default class PreQualRealEstate extends Component {
             disabled={preQualFormDisabled}
             fielddata={fields.legalConfirmation}
             name="legalConfirmation"
-            changed={businessAppEleChange}
+            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
             defaults
             containerclassname="ui relaxed list"
           />
