@@ -36,6 +36,8 @@ export class BusinessAppStore {
   @observable BUSINESS_APP_FRM_BASIC =
   Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
+  @observable BUSINESS_APP_REAL_ESTATE_FRM =
+    Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
   @observable NEED_HELP_FRM = Validator.prepareFormObject(NEED_HELP);
   @observable BUSINESS_ACCOUNT =Validator.prepareFormObject(BUSINESS_SIGNUP);
   @observable BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);

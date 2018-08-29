@@ -93,22 +93,12 @@ export const BUSINESS_PRE_QUALIFICATION_BASIC = {
   },
 };
 
-export const BUSINESS_PRE_QUALIFICATION = {
-  businessModel: {
-    value: '',
-    values: [
-      { label: 'Business to Consumer', value: 'B2C' },
-      { label: 'Business to Business', value: 'B2B' },
-    ],
-    error: undefined,
-    rule: 'required',
-    customErrors: { required: 'required' },
-  },
+const BUSINESS_PREQUAL_COMMON = {
   businessName: {
     value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g.  NextBrewery', customErrors: { required: 'required' },
   },
   website: {
-    value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  http://nextbrewery.com', customErrors: { required: 'required' },
+    value: '', label: 'Website', error: undefined, rule: 'required', placeHolder: 'e.g.  http://nextbrewery.com', customErrors: { required: 'required' },
   },
   phoneNumber: {
     value: '', label: 'Phone Number', error: undefined, rule: 'required|maskedField:10', placeHolder: '(123)-456-7890', customErrors: { required: 'required', maskedField: 'required' },
@@ -134,22 +124,6 @@ export const BUSINESS_PRE_QUALIFICATION = {
     placeHolder: 'e.g. 5',
     customErrors: { required: 'required' },
   },
-  businessAgeYears: {
-    value: '', maxLength: 4, label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required_if: 'required' },
-  },
-  businessAgeMonths: {
-    value: '', maxLength: 2, label: 'Months', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required_if: 'required' },
-  },
-  franchiseHolder: {
-    value: '',
-    values: [
-      { label: 'Yes', value: true },
-      { label: 'No', value: false },
-    ],
-    error: undefined,
-    rule: 'required_if:businessGoal,FRANCHISE',
-    customErrors: { required_if: 'required' },
-  },
   estimatedCreditScore: {
     value: '', maxLength: 8, label: 'What is your estimated credit score?', error: undefined, rule: 'required|numeric', placeHolder: 'e.g. 700', customErrors: { required: 'required' },
   },
@@ -165,6 +139,93 @@ export const BUSINESS_PRE_QUALIFICATION = {
     customErrors: { required: 'required' },
     placeHolder: 'e.g. $50,000',
     tooltip: (<span>Minimum amount of funding is $50,000. For requirements on different levels of funding, <a className="inverted" href="/business" target="_blank">click here.</a></span>),
+  },
+  businessEntityStructure: {
+    value: '',
+    values: [
+      { label: 'Corporation', icon: 'ns-corporation', value: 'CORPORATION' },
+      { label: 'LLC', icon: 'ns-business', value: 'LLC' },
+      { label: 'Limited Partnership', icon: 'ns-partnership', value: 'LIMITED_PARTNERSHIP' },
+      { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'SOLE_PROPRIETOR' },
+      { label: 'Other', value: 'OTHER' },
+    ],
+    error: undefined,
+    rule: 'required',
+    customErrors: { required: 'required' },
+  },
+  legalConfirmation: {
+    value: [],
+    values: [
+      {
+        label: 'The company has not raised securities under Regulation Crowdfunding in the last 12 months.',
+        value: 'HAS_NOT_RAISED_SECURITIES',
+      },
+      {
+        label: 'The company is not concurrently conducting an offering on another platform.',
+        value: 'IS_NOT_CONDUCTING_OFFERING',
+      },
+      {
+        label: 'The company is not a broker-dealer.',
+        value: 'IS_NOT_BROKER_DEALER',
+      },
+      {
+        label: 'The company is organized in the United States.',
+        value: 'IS_ORGANIZED_IN_USA',
+      },
+      {
+        label: 'The company is not an investment company.',
+        value: 'IS_NOT_INVESTMENT_COMPANY',
+      },
+      {
+        label: 'The company has not sold securities registered under the Securities Exchange Act of 1934.',
+        value: 'HAS_NOT_SOLD_SECURITIES',
+      },
+      {
+        label: 'I have never filed for bankruptcy.',
+        value: 'HAS_NEVER_FILED_BANKRUPTCY',
+        tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy.',
+      },
+      {
+        label: 'I am not currently charged with or have ever been convicted of fraud.',
+        value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
+      },
+      {
+        label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
+        value: 'HAS_NEVER_BEEN_CONVICTED_OF_CRIMINAL_OFFENCE',
+      },
+    ],
+    error: undefined,
+    rule: 'array',
+  },
+};
+
+export const BUSINESS_PRE_QUALIFICATION = {
+  businessModel: {
+    value: '',
+    values: [
+      { label: 'Business to Consumer', value: 'B2C' },
+      { label: 'Business to Business', value: 'B2B' },
+    ],
+    error: undefined,
+    rule: 'required',
+    customErrors: { required: 'required' },
+  },
+  ...BUSINESS_PREQUAL_COMMON,
+  businessAgeYears: {
+    value: '', maxLength: 4, label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required_if: 'required' },
+  },
+  businessAgeMonths: {
+    value: '', maxLength: 2, label: 'Months', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required_if: 'required' },
+  },
+  franchiseHolder: {
+    value: '',
+    values: [
+      { label: 'Yes', value: true },
+      { label: 'No', value: false },
+    ],
+    error: undefined,
+    rule: 'required_if:businessGoal,FRANCHISE',
+    customErrors: { required_if: 'required' },
   },
   previousYearGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $750,000', customErrors: { required_if: 'required' },
@@ -234,62 +295,53 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: 'required',
     customErrors: { required: 'required' },
   },
-  businessEntityStructure: {
-    value: '',
+};
+
+export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
+  ...BUSINESS_PREQUAL_COMMON,
+  investmentType: {
+    value: [],
     values: [
-      { label: 'Corporation', icon: 'ns-corporation', value: 'CORPORATION' },
-      { label: 'LLC', icon: 'ns-business', value: 'LLC' },
-      { label: 'Limited Partnership', icon: 'ns-partnership', value: 'LIMITED_PARTNERSHIP' },
-      { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'SOLE_PROPRIETOR' },
-      { label: 'Other', value: 'OTHER' },
+      { label: 'Core', icon: 'ns-renovations', value: 'CORE' },
+      { label: 'Core Plus', icon: 'ns-equipment-purchase', value: 'CORE_PLUS' },
+      { label: 'Value Add', icon: 'ns-working-capital', value: 'VALUE_ADD' },
+      { label: 'Opportunistic', icon: 'ns-inventory', value: 'OPPORTUNISTIC' },
     ],
     error: undefined,
     rule: 'required',
     customErrors: { required: 'required' },
   },
-  legalConfirmation: {
+  fundUsage: {
     value: [],
     values: [
-      {
-        label: 'The company has not raised securities under Regulation Crowdfunding in the last 12 months.',
-        value: 'HAS_NOT_RAISED_SECURITIES',
-      },
-      {
-        label: 'The company is not concurrently conducting an offering on another platform.',
-        value: 'IS_NOT_CONDUCTING_OFFERING',
-      },
-      {
-        label: 'The company is not a broker-dealer.',
-        value: 'IS_NOT_BROKER_DEALER',
-      },
-      {
-        label: 'The company is organized in the United States.',
-        value: 'IS_ORGANIZED_IN_USA',
-      },
-      {
-        label: 'The company is not an investment company.',
-        value: 'IS_NOT_INVESTMENT_COMPANY',
-      },
-      {
-        label: 'The company has not sold securities registered under the Securities Exchange Act of 1934.',
-        value: 'HAS_NOT_SOLD_SECURITIES',
-      },
-      {
-        label: 'I have never filed for bankruptcy.',
-        value: 'HAS_NEVER_FILED_BANKRUPTCY',
-        tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy.',
-      },
-      {
-        label: 'I am not currently charged with or have ever been convicted of fraud.',
-        value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
-      },
-      {
-        label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
-        value: 'HAS_NEVER_BEEN_CONVICTED_OF_CRIMINAL_OFFENCE',
-      },
+      { label: 'Acquire', icon: 'ns-renovations', value: 'ACQUIRE' },
+      { label: 'Build', icon: 'ns-equipment-purchase', value: 'BUILD' },
+      { label: 'Redevelop', icon: 'ns-working-capital', value: 'REDEVELOP' },
+      { label: 'Manage', icon: 'ns-inventory', value: 'MANAGE' },
+      { label: 'Restructure Financing', icon: 'ns-new-product', value: 'RESTRUCTURE_FINANCING' },
+      { label: 'Other', icon: 'ns-new-location', value: 'OTHER' },
     ],
     error: undefined,
-    rule: 'array',
+    rule: 'required',
+    customErrors: { required: 'required' },
+  },
+  ownProperty: {
+    value: '',
+    values: [
+      { label: 'Yes', value: true },
+      { label: 'No', value: false },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+  targetedInvestorIrr: {
+    value: '', maxLength: 16, label: 'Targeted Investor IRR (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
+  },
+  targetedAnnualInvestor: {
+    value: '', maxLength: 16, label: 'Targeted Annual Investor ROI Upon Stabilization (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
+  },
+  targetedHoldTime: {
+    value: '', maxLength: 16, label: 'Targeted Hold Time (years)', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
   },
 };
 
