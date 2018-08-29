@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Card, Table, Header } from 'semantic-ui-react';
-import { DateTimeFormat } from './../../../../../theme/shared';
+import { kebabCase } from 'lodash';
+import { Card, Table, Icon } from 'semantic-ui-react';
+import { DateTimeFormat, InlineLoader } from './../../../../../theme/shared';
 import Actions from './Actions';
 
 @inject('crowdpayStore')
@@ -12,7 +13,11 @@ export default class AllCrowdPay extends Component {
   }
   render() {
     const { crowdpayStore } = this.props;
-    const { accounts } = crowdpayStore;
+    const { accounts, loading } = crowdpayStore;
+
+    if (loading) {
+      return <InlineLoader />;
+    }
     return (
       <Card fluid>
         <div className="table-wrapper">
@@ -24,7 +29,7 @@ export default class AllCrowdPay extends Component {
                 <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Fail Reason</Table.HeaderCell>
                 <Table.HeaderCell>Documents</Table.HeaderCell>
-                <Table.HeaderCell textAlign="right">Action</Table.HeaderCell>
+                <Table.HeaderCell textAlign="center" />
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -32,21 +37,19 @@ export default class AllCrowdPay extends Component {
                 accounts.map(account => (
                   <Table.Row key={account.id}>
                     <Table.Cell>
-                      <Header as="h6">{account.name}</Header>
-                      <div className="table-info-wrap">
-                        <p>
-                          {account.email}<br />
-                          {account.phoneNumber}
-                        </p>
-                      </div>
+                      <p>
+                        <b>{account.name}</b><br />
+                        {account.email}<br />
+                        {account.phoneNumber}
+                      </p>
                     </Table.Cell>
                     <Table.Cell><DateTimeFormat fromNow datetime={account.createdAt} /></Table.Cell>
-                    <Table.Cell>{account.status}</Table.Cell>
+                    <Table.Cell className={`status ${kebabCase(account.status)}`}>
+                      <Icon className="ns-warning-circle" />{account.status}
+                    </Table.Cell>
                     <Table.Cell>{account.failReason}</Table.Cell>
                     <Table.Cell>{account.documents}</Table.Cell>
-                    <Table.Cell textAlign="right">
-                      <Actions />
-                    </Table.Cell>
+                    <Actions />
                   </Table.Row>
                 ))
               }

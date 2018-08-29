@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { Modal, Card } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
+import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const summaryDetails = {
@@ -38,7 +39,7 @@ const navItems = [
 const getModule = component => Loadable({
   loader: () => import(`../components/portfolio/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 

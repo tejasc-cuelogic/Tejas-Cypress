@@ -27,7 +27,7 @@ export const DropdownFilter = props => (
 );
 
 export const ByKeyword = ({
-  w, executeSearch, placeholder, fLabel, requestState, toggleSearch,
+  w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon,
 }) => (
   <Aux>
     <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
@@ -40,10 +40,13 @@ export const ByKeyword = ({
     </Grid.Column>
     <Grid.Column width={3} textAlign="center">
       <span className="filter-count">{requestState && requestState.search ? Object.keys(requestState.search).length : 0}</span>
-      <Button icon color="green" onClick={toggleSearch} className="link-button">
-        Filters <Icon className="ns-caret-down" />
+      <Button icon color="blue" onClick={toggleSearch} className="link-button">
+        {filters ? <Aux>Hide Filters <Icon className="ns-caret-up" /></Aux> :
+        <Aux>Show Filters <Icon className="ns-caret-down" /></Aux>
+        }
       </Button>
     </Grid.Column>
+    {addon}
   </Aux>
 );
 

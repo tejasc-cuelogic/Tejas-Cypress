@@ -5,7 +5,7 @@ import Loadable from 'react-loadable';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
-import { Logo } from '../../../../../theme/shared';
+import { Logo, InlineLoader } from '../../../../../theme/shared';
 import Failure from '../components/Failure';
 import Success from '../components/Success';
 import Application from '../components/lendio/Application';
@@ -16,7 +16,7 @@ import { HeaderButtons } from '../components/HeaderButtons';
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 

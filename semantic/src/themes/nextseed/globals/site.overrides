@@ -833,28 +833,44 @@ a.icon-link:hover {
 // Vertical Timeline
 .updates-modal {
 	.vertical-timeline {
-		margin: 0 auto 45px;
+		margin: 0 auto;
 		&::before {
 			width: 2px;
 			background: @neutral-middark;
 			top: 45px;
+			height: ~"calc(100% - 45px)";
 		}
 		.vertical-timeline-element-icon {
 			width: 25px;
 			height: 25px;
 			left: 50%;
-			margin-left: -14.5px;
+			margin-left: -14px;
 			box-shadow: 0 0 0 2px @white;
 			background-color: @neutral-darkwhite;
+			@media only screen and (max-width : @largestSmallMonitor){
+				left: 21px;
+			}
 		}
 		.vertical-timeline-element {
 			&.hide-date .vertical-timeline-element-date {
 				display: none;
 			}
+			@media only screen and (max-width : @largestSmallMonitor){
+				&:not(.hide-date) {
+					margin-top: @60px;
+					.vertical-timeline-element-date {
+						left: 0;
+						top: -20%;
+					}
+				}
+			}
 			&:nth-child(even):not(.vertical-timeline-element--left) {
 				.vertical-timeline-element-content .vertical-timeline-element-date {
 					right: 74%;
 					text-align: center;
+					@media only screen and (max-width : @largestSmallMonitor){
+						right: auto;
+					}
 				}
 			}
 		}
@@ -893,6 +909,7 @@ a.icon-link:hover {
 			font-size: @13px;
 			color: @neutral-middark;
 			text-transform: uppercase;
+			padding: @5px 0;
 		}
 	}
 }
@@ -1086,6 +1103,9 @@ div.login-form {
 }
 .search-filters{
 	padding:@14px @40px;
+	max-height:200px;
+	overflow:hidden;
+	transition:all 0.5s ease-in-out;
 	@media only screen and (max-width : @largestSmallMonitor){
 		padding:@7px @20px @14px;
 	}
@@ -1093,7 +1113,31 @@ div.login-form {
 		padding:@7px @10px @14px;
 	}
 	&.collapsed {
-		display:none;
+		max-height:0;
+		padding-top:0;
+		padding-bottom:0;
+	}
+	&.more{
+		background-color:@neutral-midwhite;
+	}
+}
+.page-header-section, .search-filters{
+	span.filter-count{
+		height:19px;
+		min-width:19px;
+		padding:0 @4px;
+		margin-right:@14px;
+		background:@primary-two;
+		display:inline-block;
+		font-size:@11px;
+		line-height:@19px;
+		font-weight:@fontMedium;
+		color:@white;
+		text-align:center;
+		border-radius:@3px;
+	}
+	.ui.button.link-button{
+		padding:@11px 0;
 	}
 	&.more{
 		background-color:@neutral-midwhite;

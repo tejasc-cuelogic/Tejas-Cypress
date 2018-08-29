@@ -1,5 +1,6 @@
 import { observable, computed } from 'mobx';
 import teammember from '../../../../assets/images/owner-2.jpg';
+import img from '../../../../assets/images/img.jpg';
 
 export class UpdatesStore {
     generalData = {
@@ -16,6 +17,10 @@ export class UpdatesStore {
       {
         ...this.generalData,
         date: '2018-03-19T12:59-0500',
+        postImage: img,
+        externalArticleLink: 'https://www.google.co.in/',
+        extArticalImage: teammember,
+        extArticalTitle: 'Search Anything Here',
       },
       {
         ...this.generalData,
@@ -28,6 +33,10 @@ export class UpdatesStore {
       {
         ...this.generalData,
         date: '2018-01-19T12:59-0500',
+        postImage: img,
+        externalArticleLink: 'https://www.google.co.in/',
+        extArticalImage: teammember,
+        extArticalTitle: 'Search Anything Here',
       },
       {
         ...this.generalData,

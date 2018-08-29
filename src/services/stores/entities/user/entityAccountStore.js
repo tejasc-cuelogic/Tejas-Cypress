@@ -1,5 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import { isEmpty, find } from 'lodash';
+import graphql from 'mobx-apollo';
+import React from 'react';
 import {
   ENTITY_FIN_INFO,
   ENTITY_GEN_INFO,
@@ -8,11 +10,12 @@ import {
   ENTITY_FORMATION_DOCS,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore } from '../../index';
-import { createAccount, updateAccount } from '../../queries/account';
+import { createAccount, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
 import Helper from '../../../../helper/utility';
+import { NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 
 class EntityAccountStore {
@@ -248,6 +251,33 @@ class EntityAccountStore {
   }
 
   @action
+  checkTaxIdCollision = () => new Promise(async (resolve) => {
+    graphql({
+      client,
+      query: checkEntityTaxIdCollision,
+      variables: {
+        taxId: this.GEN_INFO_FRM.fields.taxId.value,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: (fData) => {
+        if (fData) {
+          if (fData.checkEntityTaxIdCollision.alreadyExists) {
+            const setErrorMessage = (
+              <span>
+                There was an issue with the information you submitted.
+                Please double-check and try again. If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href={`mailto:${NS_SITE_EMAIL_SUPPORT}`}>{ NS_SITE_EMAIL_SUPPORT }</a>
+              </span>
+            );
+            uiStore.setErrors(setErrorMessage);
+          }
+          resolve(fData.checkEntityTaxIdCollision.alreadyExists);
+        }
+      },
+      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+    });
+  });
+
+  @action
   validateAndSubmitStep =
   (currentStep, formStatus, removeUploadedData, field) => new Promise((res, rej) => {
     let isValidCurrentStep = true;
@@ -267,12 +297,20 @@ class EntityAccountStore {
         } else if (currentStep.name === 'General' || currentStep.name === 'Entity info') {
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
         }
-        this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
-          res();
-        })
-          .catch(() => {
-            rej();
+        if (currentStep.name === 'General') {
+          this.checkTaxIdCollision().then((alreadyExists) => {
+            if (alreadyExists) {
+              rej();
+            } else {
+              uiStore.setErrors(null);
+              this.submitForm(currentStep, formStatus, accountAttributes)
+                .then(() => res()).catch(() => rej());
+            }
           });
+        } else {
+          this.submitForm(currentStep, formStatus, accountAttributes)
+            .then(() => res()).catch(() => rej());
+        }
       } else {
         rej();
       }
@@ -280,23 +318,15 @@ class EntityAccountStore {
       if (removeUploadedData) {
         accountAttributes.entity =
         this.setEntityAttributes(currentStep.name, removeUploadedData, field);
-        this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData).then(() => {
-          res();
-        })
-          .catch(() => {
-            rej();
-          });
+        this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData)
+          .then(() => res()).catch(() => rej());
       } else {
         currentStep.validate();
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
           accountAttributes.entity = this.setEntityAttributes(currentStep.name);
-          this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
-            res();
-          })
-            .catch(() => {
-              rej();
-            });
+          this.submitForm(currentStep, formStatus, accountAttributes)
+            .then(() => res()).catch(() => rej());
         } else {
           rej();
         }
@@ -328,12 +358,8 @@ class EntityAccountStore {
             accountAttributes.bankDetails = plaidBankDetails;
           }
         }
-        this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
-          res();
-        })
-          .catch(() => {
-            rej();
-          });
+        this.submitForm(currentStep, formStatus, accountAttributes)
+          .then(() => res()).catch(() => rej());
       } else {
         rej();
       }

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { USER_LIST_META } from '../../../../../constants/user';
-import PrivateLayout from '../../../shared/PrivateHOC';
-import { P1, P2, P3, P5 } from './../components/UserListingSubheader';
+import PrivateLayout from '../../../shared/PrivateLayout';
+import { P1, P3, P5 } from './../components/UserListingSubheader';
 import UserListing from '../components/manage/UserListing';
 
 @inject('userListingStore')
@@ -49,10 +49,14 @@ class Users extends Component {
     return (
       <PrivateLayout
         {...this.props}
-        P1={<P1 executeSearch={this.executeSearch} />}
-        P2={<P2 requestState={requestState} toggleSearch={this.toggleSearch} />}
-        P3={<P3 />}
-        P5={<P5
+        P1={<P1
+          executeSearch={this.executeSearch}
+          toggleSearch={this.toggleSearch}
+          requestState={requestState}
+          filters={filters}
+          addon={<P3 />}
+        />}
+        P2={<P5
           requestState={requestState}
           setSearchParam={this.setSearchParam}
           dateFilterStart={this.dateFilterStart}

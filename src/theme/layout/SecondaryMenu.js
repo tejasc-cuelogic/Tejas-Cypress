@@ -7,7 +7,7 @@ import mapKeys from 'lodash/mapKeys';
 
 const iMap = { to: 'key', title: 'text' };
 const NavItems = ({
-  isActive, location, navItems, navClick, match, stepsStatus,
+  isActive, location, navItems, navClick, match, stepsStatus, addon,
 }) => navItems.map((item, key) => (
   <Aux>
     {(item.subNavigations) ?
@@ -43,7 +43,9 @@ const NavItems = ({
       {item.showIcon &&
         <Icon color={stepsStatus[key].status === 'COMPLETE' ? 'green' : ''} name={stepsStatus[key].status === 'COMPLETE' ? item.icon : 'circle'} />
       }
+      {addon && addon.pos === 'left' && addon.data[item.to]}
       {item.title}
+      {addon && addon.pos !== 'left' && addon.data[item.to]}
     </Menu.Item>
   )}
   </Aux>
@@ -57,7 +59,7 @@ class SecondaryMenu extends Component {
   isActive = (to, location) => (location.pathname.startsWith(`${this.props.match.url}/${to}`));
   render() {
     const {
-      navItems, match, vertical, noinvert, attached, className, stepsStatus,
+      navItems, match, vertical, noinvert, attached, className, stepsStatus, addon,
     } = this.props;
     const mobnavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
@@ -73,6 +75,7 @@ class SecondaryMenu extends Component {
             attached={attached}
           >
             <NavItems
+              addon={addon}
               isActive={this.isActive}
               location={this.props.location}
               navItems={navItems}
