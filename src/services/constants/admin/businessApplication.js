@@ -927,7 +927,7 @@ export const MODEL_VARIABLES = {
     },
   },
   ficoB1: {
-    value: '',
+    value: '640',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -938,7 +938,7 @@ export const MODEL_VARIABLES = {
     },
   },
   ficoB2: {
-    value: '',
+    value: '669',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -949,7 +949,7 @@ export const MODEL_VARIABLES = {
     },
   },
   ficoB3: {
-    value: '',
+    value: '739',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -960,7 +960,7 @@ export const MODEL_VARIABLES = {
     },
   },
   ficoB4: {
-    value: '',
+    value: '800',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -971,7 +971,7 @@ export const MODEL_VARIABLES = {
     },
   },
   companyAgeB1: {
-    value: '',
+    value: '1',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -982,7 +982,7 @@ export const MODEL_VARIABLES = {
     },
   },
   companyAgeB2: {
-    value: '',
+    value: '3',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -993,7 +993,7 @@ export const MODEL_VARIABLES = {
     },
   },
   companyAgeB3: {
-    value: '',
+    value: '5',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1004,7 +1004,7 @@ export const MODEL_VARIABLES = {
     },
   },
   companyAgeB4: {
-    value: '',
+    value: '10',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1015,7 +1015,7 @@ export const MODEL_VARIABLES = {
     },
   },
   dscrB1: {
-    value: '',
+    value: '1.0',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1026,7 +1026,7 @@ export const MODEL_VARIABLES = {
     },
   },
   dscrB2: {
-    value: '',
+    value: '1.1',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1037,7 +1037,7 @@ export const MODEL_VARIABLES = {
     },
   },
   dscrB3: {
-    value: '',
+    value: '1.2',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1048,7 +1048,7 @@ export const MODEL_VARIABLES = {
     },
   },
   dscrB4: {
-    value: '',
+    value: '2.0',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1059,7 +1059,7 @@ export const MODEL_VARIABLES = {
     },
   },
   niMarginB1: {
-    value: '',
+    value: '0.05',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1070,7 +1070,7 @@ export const MODEL_VARIABLES = {
     },
   },
   niMarginB2: {
-    value: '',
+    value: '0.08',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1081,7 +1081,7 @@ export const MODEL_VARIABLES = {
     },
   },
   niMarginB3: {
-    value: '',
+    value: '0.12',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1092,7 +1092,7 @@ export const MODEL_VARIABLES = {
     },
   },
   niMarginB4: {
-    value: '',
+    value: '0.14',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1103,7 +1103,7 @@ export const MODEL_VARIABLES = {
     },
   },
   ltvB1: {
-    value: '',
+    value: '0.80',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1114,7 +1114,7 @@ export const MODEL_VARIABLES = {
     },
   },
   ltvB2: {
-    value: '',
+    value: '0.75',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1125,7 +1125,7 @@ export const MODEL_VARIABLES = {
     },
   },
   ltvB3: {
-    value: '',
+    value: '0.70',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1136,7 +1136,7 @@ export const MODEL_VARIABLES = {
     },
   },
   ltvB4: {
-    value: '',
+    value: '0.65',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1147,7 +1147,7 @@ export const MODEL_VARIABLES = {
     },
   },
   industryExperienceB1: {
-    value: '',
+    value: '3',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1158,7 +1158,7 @@ export const MODEL_VARIABLES = {
     },
   },
   industryExperienceB2: {
-    value: '',
+    value: '5',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1169,7 +1169,7 @@ export const MODEL_VARIABLES = {
     },
   },
   industryExperienceB3: {
-    value: '',
+    value: '10',
     label: '',
     placeHolder: '',
     error: undefined,
@@ -1180,7 +1180,7 @@ export const MODEL_VARIABLES = {
     },
   },
   industryExperienceB4: {
-    value: '',
+    value: '15',
     label: '',
     placeHolder: '',
     error: undefined,
