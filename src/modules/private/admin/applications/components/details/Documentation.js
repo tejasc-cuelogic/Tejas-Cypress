@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Header, Form, Icon, Label, List } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { FILE_UPLOAD_HANDLE_URL } from '../../../../../../constants/common';
+import { EmptyDataSet } from '../../../../../../theme/shared';
 
 @inject('businessAppStore', 'uiStore')
 @observer
@@ -20,9 +21,12 @@ export default class Documentation extends Component {
                   <Label>{fields[field].label}</Label>
                   <div className="display-only">
                     <List>
-                      <List.Item>
-                        <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
-                      </List.Item>
+                      {fields[field].value.length ?
+                      fields[field].value.map((item, index) => (
+                        <List.Item>
+                          <a target="_blank" rel="noopener noreferrer" href={`${FILE_UPLOAD_HANDLE_URL}${fields[field].fileId[index]}`}><Icon className="ns-file" /><b>{item}</b></a>
+                        </List.Item>
+                      )) : <EmptyDataSet title="No files uploaded yes." />}
                     </List>
                   </div>
                 </div>
@@ -39,9 +43,12 @@ export default class Documentation extends Component {
                   <Label>{fields[field].label}</Label>
                   <div className="display-only">
                     <List>
-                      <List.Item>
-                        <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
-                      </List.Item>
+                      {fields[field].value.length ?
+                      fields[field].value.map((item, index) => (
+                        <List.Item>
+                          <a target="_blank" rel="noopener noreferrer" href={`${FILE_UPLOAD_HANDLE_URL}${fields[field].fileId[index]}`}><Icon className="ns-file" /><b>{item}</b></a>
+                        </List.Item>
+                      )) : <EmptyDataSet title="No files uploaded yes." />}
                     </List>
                   </div>
                 </div>
@@ -51,12 +58,19 @@ export default class Documentation extends Component {
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">Do you accept Blanket Lien on the Business if your campain is successfully funded?</Header>
-          <p>Yes</p>
+          <p>{fields.blanketLien ? 'Yes' : 'No'}</p>
         </div>
         <div className="inner-content-spacer">
           <Header as="h4">Are you willing to provide a personal quarantee?</Header>
-          <p>Yes</p>
-          <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
+          <p>{fields.personalGuarantee.value === 'true' ? 'Yes' : 'No'}</p>
+          <List>
+            {fields.personalGuaranteeForm.value.length ?
+            fields.personalGuaranteeForm.value.map((item, index) => (
+              <List.Item>
+                <a target="_blank" rel="noopener noreferrer" href={`${FILE_UPLOAD_HANDLE_URL}${fields.personalGuaranteeForm.fileId[index]}`}><Icon className="ns-file" /><b>{item}</b></a>
+              </List.Item>
+            )) : fields.personalGuarantee.value === 'true' ? <EmptyDataSet title="No files uploaded yes." /> : null}
+          </List>
         </div>
       </Form>
     );

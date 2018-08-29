@@ -18,3 +18,5 @@ export const SOCIAL_URLS = {
 
 export const MAX_BENEFICIARY_LIMIT = 5;
 export const NS_SITE_EMAIL_SUPPORT = 'support@nextseed.com';
+
+export const FILE_UPLOAD_HANDLE_URL = 'https://nextseed.app.box.com/file/';

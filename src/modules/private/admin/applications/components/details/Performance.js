@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Header, Form, Icon, Label, List } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormInput } from '../../../../../../theme/form';
+import { FILE_UPLOAD_HANDLE_URL } from '../../../../../../constants/common';
+import { EmptyDataSet } from '../../../../../../theme/shared';
 
 @inject('businessAppStore', 'uiStore')
 @observer
@@ -23,9 +24,12 @@ export default class Performance extends Component {
                 <Label>{fields[field].label}</Label>
                 <div className="display-only">
                   <List>
-                    <List.Item>
-                      <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
-                    </List.Item>
+                    {fields[field].value.length ?
+                    fields[field].value.map((item, index) => (
+                      <List.Item>
+                        <a target="_blank" rel="noopener noreferrer" href={`${FILE_UPLOAD_HANDLE_URL}${fields[field].fileId[index]}`}><Icon className="ns-file" /><b>{item}</b></a>
+                      </List.Item>
+                    )) : <EmptyDataSet title="No files uploaded yes." />}
                   </List>
                 </div>
               </div>

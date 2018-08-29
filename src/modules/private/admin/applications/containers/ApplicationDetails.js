@@ -29,13 +29,13 @@ const getModule = component => Loadable({
 export default class ApplicationDetails extends Component {
   componentWillMount() {
     const { match } = this.props;
-    if (match.isExact) {
-      const { params } = match;
-      this.props.businessAppStore.fetchApplicationById(params.appId, params.id, params.userId)
-        .then(() => {
+    const { params } = match;
+    this.props.businessAppStore.fetchApplicationById(params.appId, params.id, params.userId)
+      .then(() => {
+        if (match.isExact) {
           this.props.history.push(`${match.url}/activity-history`);
-        });
-    }
+        }
+      });
   }
   module = name => DataFormatter.upperCamelCase(name);
   handleCloseModal = (e) => {
