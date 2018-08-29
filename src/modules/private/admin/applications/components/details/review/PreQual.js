@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Divider, Form, Header, Button, Confirm } from 'semantic-ui-react';
+import { Form, Header, Button, Confirm } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 
@@ -48,7 +48,6 @@ export default class PreQual extends Component {
           <div className="right-align">
             <Button disabled={!JUSTIFICATIONS_FRM.meta.isValid} primary className="relaxed" >Approved</Button>
           </div>
-          <Divider section />
           <ManagerOverview form={JUSTIFICATIONS_MANAGER_FRM} formName="JUSTIFICATIONS_MANAGER_FRM" />
         </Form>
         <Confirm

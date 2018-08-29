@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
-import { Header, Table, Icon, Item, Form, Confirm, Button, Divider, Dropdown } from 'semantic-ui-react';
+import { Header, Table, Icon, Item, Form, Confirm, Button, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormInput, DropZone } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
@@ -212,7 +212,6 @@ export default class Miscellaneous extends Component {
               <Button disabled={!(OTHER_DOCUMENTATION_FRM.meta.isValid && SOCIAL_MEDIA_FRM.meta.isValid)} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
-          <Divider section />
           <ManagerOverview form={MISCELLANEOUS_MANAGER_FRM} formName="MISCELLANEOUS_MANAGER_FRM" />
         </Form>
         <Confirm

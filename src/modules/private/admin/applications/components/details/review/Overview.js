@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Button, Confirm, Divider } from 'semantic-ui-react';
+import { Form, Header, Button, Confirm } from 'semantic-ui-react';
 import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 
@@ -54,7 +54,6 @@ export default class Overview extends Component {
               <Button disabled={!OVERVIEW_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
-          <Divider section />
           <ManagerOverview form={OVERVIEW_MANAGER_FRM} formName="OVERVIEW_MANAGER_FRM" />
         </Form>
         <Confirm

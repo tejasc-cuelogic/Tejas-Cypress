@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Header, Table, Form, Divider } from 'semantic-ui-react';
+import { Header, Table, Form } from 'semantic-ui-react';
 import ManagerOverview from './ManagerOverview';
 
 @inject('businessAppReviewStore')
@@ -70,7 +70,6 @@ export default class Results extends Component {
           </Table.Body>
         </Table>
         <Form>
-          <Divider section />
           <ManagerOverview form={MODEL_MANAGER_FRM} formName="MODEL_MANAGER_FRM" />
         </Form>
       </Aux>

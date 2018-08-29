@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Header, Form, Table, Dropdown, Icon, Confirm, Button, Divider } from 'semantic-ui-react';
+import { Header, Form, Table, Dropdown, Icon, Confirm, Button } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../../theme/form';
 import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../../services/constants/admin/businessApplication';
 import ManagerOverview from './ManagerOverview';
@@ -245,7 +245,6 @@ export default class Offer extends Component {
               <Button disabled={!OFFERS_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
-          <Divider section />
           <ManagerOverview form={OFFER_MANAGER_FRM} formName="OFFER_MANAGER_FRM" />
         </Form>
         <Confirm

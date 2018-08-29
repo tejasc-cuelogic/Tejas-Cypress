@@ -285,7 +285,6 @@ export default class BusinessPlan extends Component {
               <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} primary type="button">Approve Review</Button>
             </Button.Group>
           </div>
-          <Divider section />
           <ManagerOverview form={BUSINESS_PLAN_MANAGER_FRM} formName="BUSINESS_PLAN_MANAGER_FRM" />
         </Form>
         <Confirm

@@ -98,7 +98,6 @@ export default class Projections extends Component {
               <Button disabled={!PROJECTIONS_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
-          <Divider section />
           <ManagerOverview form={PROJECTIONS_MANAGER_FRM} formName="PROJECTIONS_MANAGER_FRM" />
         </Form>
         <Confirm

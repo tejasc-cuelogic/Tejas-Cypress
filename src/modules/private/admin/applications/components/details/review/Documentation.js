@@ -60,7 +60,6 @@ export default class Documentation extends Component {
               />
             ))
           }
-          <Divider section />
           <Header as="h5">
             LOI/Lease or Mortgage
           </Header>
@@ -77,7 +76,6 @@ export default class Documentation extends Component {
               <Button disabled={!DOCUMENTATION_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
-          <Divider section />
           <ManagerOverview form={DOCUMENTATION_MANAGER_FRM} formName="DOCUMENTATION_MANAGER_FRM" />
         </Form>
       </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Header, Table, Icon, Button, Form, Confirm, Divider } from 'semantic-ui-react';
+import { Header, Table, Icon, Button, Form, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
@@ -100,7 +100,6 @@ export default class Contingencies extends Component {
               <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
-          <Divider section />
           <ManagerOverview form={CONTINGENCY_MANAGER_FRM} formName="CONTINGENCY_MANAGER_FRM" />
         </Form>
         <Confirm

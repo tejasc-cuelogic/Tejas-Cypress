@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Header, Button } from 'semantic-ui-react';
+import { Header, Button, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'userStore')
 @observer
 export default class ManagerOverview extends Component {
   render() {
     const { formChange } = this.props.businessAppReviewStore;
     const { form, formName } = this.props;
+    const { roles } = this.props.userStore.currentUser;
+    if (roles && !roles.includes('manager')) {
+      return null;
+    }
     return (
       <Aux>
+        <Divider section />
         <Header as="h4">Manager</Header>
         <FormTextarea
           name="managerOverview"
