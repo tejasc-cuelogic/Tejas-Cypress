@@ -181,6 +181,7 @@ class EntityAccountStore {
 
   @computed
   get accountAttributes() {
+    /* eslint-disable camelcase */
     let payload = {};
     payload = {
       netAssets: this.FIN_INFO_FRM.fields.netAssets.value,
@@ -226,8 +227,14 @@ class EntityAccountStore {
     };
     if (!isEmpty(bankAccountStore.plaidAccDetails)) {
       const plaidBankDetails = {};
-      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
-      plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
+      const {
+        account_id,
+        public_token,
+        plaidAccountId,
+        plaidPublicToken,
+      } = bankAccountStore.plaidAccDetails;
+      plaidBankDetails.plaidPublicToken = public_token || plaidPublicToken;
+      plaidBankDetails.plaidAccountId = account_id || plaidAccountId;
       payload.bankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
