@@ -21,13 +21,12 @@ export default class Summary extends React.Component {
     const {
       formAddFunds,
       plaidAccDetails,
-      plaidBankDetails,
       isValidLinkBank,
       formLinkBankManually,
       depositMoneyNow,
     } = this.props.bankAccountStore;
-    const bankAccountNumber = !isEmpty(plaidBankDetails) ?
-      plaidBankDetails.accountNumber : formLinkBankManually.fields.accountNumber.value;
+    const bankAccountNumber = !isEmpty(plaidAccDetails) ?
+      plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>
         <Header as="h3" textAlign="center">Confirm Account</Header>

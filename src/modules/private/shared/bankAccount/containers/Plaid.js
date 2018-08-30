@@ -21,6 +21,7 @@ export default class Plaid extends Component {
       showAddFunds,
     } = this.props.bankAccountStore;
     const { inProgress } = this.props.uiStore;
+
     if (showAddFunds) {
       return <AddFunds />;
     }

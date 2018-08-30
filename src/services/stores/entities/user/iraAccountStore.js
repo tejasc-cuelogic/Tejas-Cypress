@@ -84,6 +84,7 @@ class IraAccountStore {
 
   @computed
   get accountAttributes() {
+    /* eslint-disable camelcase */
     let payload = {};
     payload = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
     payload.identityDoc = {};
@@ -93,8 +94,14 @@ class IraAccountStore {
     payload.fundingType = this.fundingOption.rawValue;
     if (this.fundingOption.rawValue === 'check' && !isEmpty(bankAccountStore.plaidAccDetails)) {
       const plaidBankDetails = {};
-      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
-      plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
+      const {
+        account_id,
+        public_token,
+        plaidAccountId,
+        plaidPublicToken,
+      } = bankAccountStore.plaidAccDetails;
+      plaidBankDetails.plaidPublicToken = public_token || plaidPublicToken;
+      plaidBankDetails.plaidAccountId = account_id || plaidAccountId;
       payload.iraBankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -260,13 +267,13 @@ class IraAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.createInvestorAccount || formStatus === 'submit') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
-          }
+          // if (result.data.createInvestorAccount || formStatus === 'submit') {
+          userDetailsStore.getUser(userStore.currentUser.sub);
+          // }
           if (result.data.createInvestorAccount) {
-            bankAccountStore.setPlaidBankDetails(result.data.createInvestorAccount.accountDetails);
+            bankAccountStore.setPlaidAccDetails(result.data.createInvestorAccount.accountDetails);
           } else {
-            bankAccountStore.setPlaidBankDetails(result.data.updateInvestorAccount.accountDetails);
+            bankAccountStore.setPlaidAccDetails(result.data.updateInvestorAccount.accountDetails);
           }
           if (currentStep.name === 'Identity') {
             if (removeUploadedData) {

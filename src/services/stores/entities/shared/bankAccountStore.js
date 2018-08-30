@@ -70,13 +70,20 @@ export class BankAccountStore {
     this.plaidBankDetails = plaidBankDetails;
   }
 
+  /* eslint-disable camelcase */
   @computed
   get accountAttributes() {
     let accountAttributes = {};
     const plaidBankDetails = {};
     if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidAccDetails)) {
-      plaidBankDetails.plaidPublicToken = this.plaidAccDetails.public_token;
-      plaidBankDetails.plaidAccountId = this.plaidAccDetails.account_id;
+      const {
+        account_id,
+        public_token,
+        plaidAccountId,
+        plaidPublicToken,
+      } = this.plaidAccDetails;
+      plaidBankDetails.plaidPublicToken = public_token || plaidPublicToken;
+      plaidBankDetails.plaidAccountId = account_id || plaidAccountId;
       accountAttributes = { ...plaidBankDetails };
     } else {
       const { accountNumber, routingNumber } = this.formLinkBankManually.fields;

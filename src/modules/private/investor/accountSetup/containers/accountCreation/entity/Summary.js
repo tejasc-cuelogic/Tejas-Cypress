@@ -26,7 +26,7 @@ export default class Summary extends Component {
     const { errors } = this.props.uiStore;
     const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
-      plaidAccDetails.plaidAccountNumber : formLinkBankManually.fields.accountNumber.value;
+      plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     return (
       <div>
         <Header as="h3" textAlign="center">Verify the info and create Entity account</Header>
