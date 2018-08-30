@@ -9,7 +9,7 @@ export const USER_TYPES_META = [
     key: 'o', icon: 'ns-business', text: 'Business', value: 'issuer-type1', desc: 'Apply for funding for your business',
   },
   {
-    key: 'bo', icon: 'ns-business', text: 'Commercial Real Estate', value: 'issuer-type2', desc: 'Apply for real estate funding',
+    key: 'bo', icon: 'ns-appartment', text: 'Commercial Real Estate', value: 'issuer-type2', desc: 'Apply for real estate funding',
   },
 ];
 
