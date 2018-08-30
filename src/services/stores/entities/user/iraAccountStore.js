@@ -267,9 +267,7 @@ class IraAccountStore {
           variables,
         })
         .then(action((result) => {
-          // if (result.data.createInvestorAccount || formStatus === 'submit') {
           userDetailsStore.getUser(userStore.currentUser.sub);
-          // }
           if (result.data.createInvestorAccount) {
             bankAccountStore.setPlaidAccDetails(result.data.createInvestorAccount.accountDetails);
           } else {
@@ -297,6 +295,9 @@ class IraAccountStore {
           resolve(result);
         }))
         .catch((err) => {
+          if (currentStep.name === 'Link bank') {
+            bankAccountStore.resetShowAddFunds();
+          }
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         })

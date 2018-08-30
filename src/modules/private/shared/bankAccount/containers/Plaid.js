@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { Header, Button, Image, Grid, Form, Loader, Input, Dimmer } from 'semantic-ui-react';
+import { Header, Button, Image, Grid, Form, Loader, Input, Dimmer, Message } from 'semantic-ui-react';
 import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
 import defaultBankLogo from '../../../../../assets/images/banks/default.png';
 import { IND_BANK_LIST } from '../../../../../constants/account';
+import { ListErrors } from '../../../../../theme/shared';
 import AddFunds from './AddFunds';
 
 @inject('bankAccountStore', 'uiStore')
@@ -20,7 +21,7 @@ export default class Plaid extends Component {
       bankListing,
       showAddFunds,
     } = this.props.bankAccountStore;
-    const { inProgress } = this.props.uiStore;
+    const { inProgress, errors } = this.props.uiStore;
 
     if (showAddFunds) {
       return <AddFunds />;
@@ -32,6 +33,11 @@ export default class Plaid extends Component {
       <div>
         <Header as="h3" textAlign="center">Link Bank Account</Header>
         <Header as="h6" textAlign="center">Select your bank from the list</Header>
+        {errors &&
+          <Message error>
+            <ListErrors errors={[errors.message]} />
+          </Message>
+        }
         <Form>
           <Input
             fluid

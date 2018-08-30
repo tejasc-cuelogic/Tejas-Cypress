@@ -395,6 +395,9 @@ class EntityAccountStore {
           resolve(result);
         }))
         .catch((err) => {
+          if (currentStep.name === 'Link bank') {
+            bankAccountStore.resetShowAddFunds();
+          }
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         })
