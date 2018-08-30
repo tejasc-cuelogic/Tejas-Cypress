@@ -9,6 +9,21 @@ class CustomValidations extends Component {
     /* Optional field validation register */
     Validator.register('optional', () => true);
 
+    /* Investment Type Check for target investor irr field validation register */
+    Validator.register('investmentTypeCheck', (value) => {
+      let valReturn;
+      if (currentForm.fields.investmentType.value === 'CORE') {
+        valReturn = value >= 5;
+      } else if (currentForm.fields.investmentType.value === 'CORE_PLUS') {
+        valReturn = value >= 7;
+      } else if (currentForm.fields.investmentType.value === 'VALUE_ADD') {
+        valReturn = value >= 11;
+      } else if (currentForm.fields.investmentType.value === 'OPPORTUNISTIC') {
+        valReturn = value >= 15;
+      }
+      return valReturn;
+    }, ':attribute percentages must be greater than entered value.');
+
     /* Beneficiary share percentage validation register */
     Validator.register('sharePercentage', (value, requirement) => {
       const total = sumBy(currentForm.fields.beneficiary, currentValue =>

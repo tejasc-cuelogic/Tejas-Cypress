@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { Menu } from 'semantic-ui-react';
@@ -23,6 +23,7 @@ const getModule = component => Loadable({
 });
 
 @inject('businessAppStore', 'uiStore', 'navStore')
+@withRouter
 @observer
 export default class BusinessApplication extends Component {
   componentWillMount() {
@@ -32,6 +33,7 @@ export default class BusinessApplication extends Component {
       isFetchedData, fetchApplicationDataById, setFieldvalue, formReset, setPrequalBasicDetails,
     } = this.props.businessAppStore;
     setFieldvalue('currentApplicationId', match.params.applicationId);
+    setFieldvalue('currentApplicationType', match.params.applicationType);
     if (match.params.applicationId !== 'new' && isFetchedData !== match.params.applicationId) {
       setFieldvalue('isFetchedData', match.params.applicationId);
       fetchApplicationDataById(match.params.applicationId).then(() => {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Grid, Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../helper/utility';
@@ -8,8 +8,10 @@ import { FormInput } from '../../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import PreQualBusiness from './prequlification/PreQualBusiness';
 import PreQualRealEstate from './prequlification/PreQualRealEstate';
+import NotFound from '../../../../shared/NotFound';
 
 @inject('businessAppStore', 'uiStore')
+@withRouter
 @observer
 export default class PreQualification extends Component {
   componentWillMount() {
@@ -46,9 +48,12 @@ export default class PreQualification extends Component {
   render() {
     const {
       BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC, BUSINESS_APP_REAL_ESTATE_FRM,
-      businessAppEleChange, isPrequalQulify,
+      businessAppEleChange, isPrequalQulify, currentApplicationType,
     } = this.props.businessAppStore;
     const { params } = this.props.match;
+    if (params.applicationType !== 'business-real-estate' && currentApplicationType !== 'business-real-estate' && params.applicationType !== 'business' && currentApplicationType !== 'business') {
+      return <NotFound />;
+    }
     return (
       <Grid container>
         <Grid.Column>
@@ -64,12 +69,14 @@ export default class PreQualification extends Component {
                 </Aux>
               }
             />
+            {this.props.isPublic &&
             <FormElementWrap header="First, please tell us a little about yourself!">
               <div className="field-wrap">
                 <Form.Group widths="equal">
                   {
                     ['firstName', 'lastName', 'email'].map(field => (
                       <FormInput
+                        autoFocus={field === 'firstName'}
                         disabled={isPrequalQulify}
                         key={field}
                         type="text"
@@ -93,17 +100,18 @@ export default class PreQualification extends Component {
               </Button>
               }
             </FormElementWrap>
+            }
           </Form>
           {isPrequalQulify &&
           <Form onSubmit={this.submit} className="issuer-signup">
-            {params.applicationType === 'business-real-estate' ?
+            {params.applicationType === 'business-real-estate' || currentApplicationType === 'business-real-estate' ?
               <PreQualRealEstate /> :
               <PreQualBusiness />
             }
             <Divider hidden />
             <Button
               loading={this.props.uiStore.inProgress}
-              disabled={params.applicationType === 'business' ? !BUSINESS_APP_FRM.meta.isValid : !BUSINESS_APP_REAL_ESTATE_FRM.meta.isValid}
+              disabled={params.applicationType === 'business' || currentApplicationType === 'business' ? !BUSINESS_APP_FRM.meta.isValid : !BUSINESS_APP_REAL_ESTATE_FRM.meta.isValid}
               size="large"
               color="green"
               className="very relaxed"

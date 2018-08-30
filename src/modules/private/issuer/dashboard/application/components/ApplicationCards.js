@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared/index';
 import { BUSINESS_APP_USER_STATUS, BUSINESS_APPLICATION_STATUS } from '../../../../../../services/constants/businessApplication';
+import ApplicationTypeModal from './ApplicationTypeModal';
 @inject('businessAppStore')
+@withRouter
 @observer
 export default class ApplicationCards extends Component {
   componentWillMount() {
     // getting all application list of user
-    this.props.businessAppStore.getBusinessApplications();
-    this.props.businessAppStore.setFieldvalue('isFetchedData', null);
+    if (this.props.match.isExact) {
+      this.props.businessAppStore.getBusinessApplications();
+      this.props.businessAppStore.setFieldvalue('isFetchedData', null);
+    }
   }
   render() {
     const { fetchBusinessApplication, businessApplicationsList } = this.props.businessAppStore;
@@ -30,7 +34,7 @@ export default class ApplicationCards extends Component {
               <Header as="h3"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
               <p>Want to start a new campaing? Start new application process to proceed</p>
               <Divider hidden />
-              <Button primary as={Link} to="/app/business-application/new/pre-qualification">Start application</Button>
+              <Button primary as={Link} to="/app/dashboard/select-application-type">Start application</Button>
             </Card.Content>
           </Card>
           {fetchBusinessApplication.length ?
@@ -83,6 +87,7 @@ export default class ApplicationCards extends Component {
             )) : null
           }
         </Card.Group>
+        <Route exact path="/app/dashboard/select-application-type" component={ApplicationTypeModal} />
       </Aux>
     );
   }

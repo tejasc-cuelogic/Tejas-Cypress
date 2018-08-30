@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Grid, Form } from 'semantic-ui-react';
+import { Header, Grid, Form, Popup, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import {
   FormRadioGroup, FormCheckbox, FormInput, MaskedInput, AutoComplete,
@@ -46,7 +46,17 @@ export default class PreQualRealEstate extends Component {
             </Grid.Column>
             <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
               <div className="field-wrap">
-                <Header as="h6">Entity Address</Header>
+                <Header as="h6">
+                  {'Entity Address '}
+                  <Popup
+                    trigger={<Icon className="ns-help-circle" />}
+                    content="Enter address of investment location,
+                    not of owner or entity."
+                    position="top center"
+                    className="center-align"
+                    wide
+                  />
+                </Header>
                 <AutoComplete
                   disabled={preQualFormDisabled}
                   name="street"

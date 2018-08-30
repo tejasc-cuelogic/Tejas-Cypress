@@ -51,6 +51,7 @@ export class BusinessAppStore {
   @observable BUSINESS_APPLICATION_DATA = null;
   @observable isPartialData = null;
   @observable applicationId = null;
+  @observable currentApplicationType = null;
   @observable applicationStep = null;
   @observable businessApplicationsList = null;
   @observable currentApplicationId = null;
