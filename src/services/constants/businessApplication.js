@@ -470,7 +470,7 @@ export const BUSINESS_DETAILS = {
   }],
 };
 
-export const BUSINESS_PERF = {
+export const BUSINESS_PERF_COMMON = {
   priorToThreeYear: {
     value: [], label: 'Prior 3 Year Statements', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
@@ -480,6 +480,10 @@ export const BUSINESS_PERF = {
   fiveYearProjection: {
     value: [], label: '5 Year Projections', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
+};
+
+export const BUSINESS_PERF = {
+  ...BUSINESS_PERF_COMMON,
   pyGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. $1,250,000', customErrors: { required: 'required' },
   },

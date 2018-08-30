@@ -10,6 +10,7 @@ import {
   BUSINESS_SIGNUP,
   BUSINESS_DETAILS,
   BUSINESS_PERF,
+  BUSINESS_PERF_COMMON,
   BUSINESS_DOC,
   BUSINESS_APPLICATION_STATUS,
   BUSINESS_GOAL,
@@ -37,8 +38,6 @@ export class BusinessAppStore {
   @observable BUSINESS_APP_FRM_BASIC =
   Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
   @observable BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
-  @observable BUSINESS_APP_REAL_ESTATE_FRM =
-    Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_REAL_ESTATE);
   @observable NEED_HELP_FRM = Validator.prepareFormObject(NEED_HELP);
   @observable BUSINESS_ACCOUNT =Validator.prepareFormObject(BUSINESS_SIGNUP);
   @observable BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
@@ -51,7 +50,7 @@ export class BusinessAppStore {
   @observable BUSINESS_APPLICATION_DATA = null;
   @observable isPartialData = null;
   @observable applicationId = null;
-  @observable currentApplicationType = null;
+  @observable currentApplicationType = 'business';
   @observable applicationStep = null;
   @observable businessApplicationsList = null;
   @observable currentApplicationId = null;
@@ -64,9 +63,6 @@ export class BusinessAppStore {
 
   @action
   setFieldvalue = (field, value) => {
-    if (field === 'currentApplicationType') {
-      this.BUSINESS_DETAILS_FRM.fields.businessPlan.label = value === 'business' ? 'Upload your business plan' : 'Upload your Investment Summary or Business Plan';
-    }
     this[field] = value;
   }
 
@@ -81,7 +77,7 @@ export class BusinessAppStore {
   };
 
   @computed get getInvestmentTypeTooltip() {
-    const { fields } = this.BUSINESS_APP_REAL_ESTATE_FRM;
+    const { fields } = this.BUSINESS_APP_FRM;
     const field = fields.investmentType.values.find(investmentType =>
       investmentType.value === fields.investmentType.value);
     return field ? field.tooltip : null;
@@ -446,13 +442,13 @@ export class BusinessAppStore {
   };
 
   @computed get getBusinessTypeCondtion() {
-    return (this.BUSINESS_APP_FRM.fields.businessGoal.value &&
+    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value &&
       this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.FRANCHISE
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW);
   }
 
   @computed get getFranchiseCondition() {
-    return (this.BUSINESS_APP_FRM.fields.businessGoal.value &&
+    return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value &&
       this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.FRANCHISE);
   }
 
@@ -1000,11 +996,16 @@ export class BusinessAppStore {
   }
 
   @action
-  formReset = () => {
+  formReset = (applicationType = null) => {
+    const applicationTypeCheck = applicationType || this.currentApplicationType;
+    this.BUSINESS_APP_FRM = Validator.prepareFormObject(applicationTypeCheck === 'business' ? BUSINESS_PRE_QUALIFICATION : BUSINESS_PRE_QUALIFICATION_REAL_ESTATE);
+    this.BUSINESS_PERF_FRM = Validator.prepareFormObject(applicationTypeCheck === 'business' ? BUSINESS_PERF : BUSINESS_PERF_COMMON);
+    this.BUSINESS_DETAILS_FRM.fields.businessPlan.label = applicationTypeCheck === 'business' ? 'Upload your business plan' : 'Upload your Investment Summary or Business Plan';
+    this.BUSINESS_PERF_FRM.fields.fiveYearProjection.label = applicationTypeCheck === 'business' ? '5 Year Projections' : '5-10 Year Projections';
     this.BUSINESS_APP_FRM_BASIC = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
-    this.BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
+    // this.BUSINESS_APP_FRM = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION);
     this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
-    this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
+    // this.BUSINESS_PERF_FRM = Validator.prepareFormObject(BUSINESS_PERF);
     this.BUSINESS_DOC_FRM = Validator.prepareFormObject(BUSINESS_DOC);
     this.preQualFormDisabled = false;
     this.appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
