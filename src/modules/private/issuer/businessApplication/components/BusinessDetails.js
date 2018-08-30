@@ -42,14 +42,9 @@ export default class BusinessDetails extends Component {
 
   render() {
     const {
-      BUSINESS_DETAILS_FRM,
-      businessDetailsChange,
-      businessAppUploadFiles,
-      businessAppRemoveFiles,
-      addMoreForms,
-      businessDetailsMaskingChange,
-      formReadOnlyMode,
-      businessDetailsDateChange,
+      BUSINESS_DETAILS_FRM, businessDetailsChange, businessAppUploadFiles,
+      businessAppRemoveFiles, addMoreForms, businessDetailsMaskingChange,
+      formReadOnlyMode, businessDetailsDateChange, currentApplicationType,
     } = this.props.businessAppStore;
     return (
       <Grid container>
@@ -57,18 +52,21 @@ export default class BusinessDetails extends Component {
           <Form className="issuer-signup">
             <FormElementWrap
               as="h1"
-              header="Business Details"
+              header={`${currentApplicationType === 'business' ? 'Business' : 'Real Estate'} Details`}
               subHeader="Quickly, safely and accurately submit your business information."
             />
             <FormElementWrap
               header={
                 <Aux>
                   Business Plan
+                  {currentApplicationType === 'business' &&
                   <Link to="/" className="link"><small>Learn More</small></Link>
+                  }
                 </Aux>
               }
             >
               <DropZone
+                tooltip={currentApplicationType === 'business-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
                 disabled={formReadOnlyMode}
                 multiple
                 name="businessPlan"

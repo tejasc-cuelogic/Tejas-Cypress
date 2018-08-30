@@ -14,7 +14,7 @@ export default class Performance extends Component {
 
   render() {
     const {
-      BUSINESS_PERF_FRM, formReadOnlyMode,
+      BUSINESS_PERF_FRM, formReadOnlyMode, currentApplicationType,
       businessPerfMaskingChange, getBusinessTypeCondtion,
       businessAppUploadFiles, businessAppRemoveFiles,
     } = this.props.businessAppStore;
@@ -30,8 +30,8 @@ export default class Performance extends Component {
               subHeader="Quickly, safely and accurately submit your business information."
             />
             <FormElementWrap
-              header="Financial Statements"
-              subHeader="How has the business been performing, and what are your projections? Upload your financial statements in each section."
+              header={`${currentApplicationType === 'business' ? 'Financial Statements' : 'Upload your Financial Model'}`}
+              subHeader={`${currentApplicationType === 'business' ? 'How has the business been performing, and what are your projections? Upload your financial statements in each section.' : 'Working model including all assumptions, project cashflows and distributions (5-10yr projections). Include stress testing'}`}
             >
               <Grid stackable columns="equal">
                 {
@@ -53,6 +53,7 @@ export default class Performance extends Component {
                 }
               </Grid>
             </FormElementWrap>
+            {currentApplicationType === 'business' &&
             <FormElementWrap
               header="Performance"
               subHeader="This information was captured from the Pre-Qualification form. You can update any numbers below if needed."
@@ -100,6 +101,7 @@ export default class Performance extends Component {
                 </Grid.Column>
               </Grid>
             </FormElementWrap>
+            }
             <AppNavigation />
           </Form>
         </Grid.Column>

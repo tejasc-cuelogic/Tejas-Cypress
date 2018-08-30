@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Grid, Form, Popup, Icon } from 'semantic-ui-react';
+import { Header, Grid, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import {
   FormRadioGroup, FormCheckbox, FormInput, MaskedInput, AutoComplete,
@@ -12,10 +12,10 @@ import FormElementWrap from '../FormElementWrap';
 export default class PreQualRealEstate extends Component {
   render() {
     const {
-      BUSINESS_APP_REAL_ESTATE_FRM, businessAppEleChange, setAddressFields,
-      businessAppEleMaskChange, preQualFormDisabled,
+      BUSINESS_APP_FRM, businessAppEleChange, setAddressFields,
+      businessAppEleMaskChange, preQualFormDisabled, getInvestmentTypeTooltip,
     } = this.props.businessAppStore;
-    const { fields } = BUSINESS_APP_REAL_ESTATE_FRM;
+    const { fields } = BUSINESS_APP_FRM;
     return (
       <Aux>
         <FormElementWrap header="General Information">
@@ -32,7 +32,7 @@ export default class PreQualRealEstate extends Component {
                       label={field === 'businessName' ? 'Entity Name' : ''}
                       value={fields[field].value}
                       fielddata={fields[field]}
-                      changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+                      changed={businessAppEleChange}
                     />
                   ))
                 }
@@ -40,7 +40,7 @@ export default class PreQualRealEstate extends Component {
                   disabled={preQualFormDisabled}
                   name="phoneNumber"
                   fielddata={fields.phoneNumber}
-                  changed={(values, field) => businessAppEleMaskChange(values, field, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+                  changed={businessAppEleMaskChange}
                 />
               </div>
             </Grid.Column>
@@ -62,7 +62,7 @@ export default class PreQualRealEstate extends Component {
                   name="street"
                   fielddata={fields.street}
                   onplaceselected={setAddressFields}
-                  changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+                  changed={businessAppEleChange}
                 />
                 <Form.Group widths="equal">
                   {
@@ -73,7 +73,7 @@ export default class PreQualRealEstate extends Component {
                         type="text"
                         name={field}
                         fielddata={fields[field]}
-                        changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+                        changed={businessAppEleChange}
                       />
                     ))
                   }
@@ -82,22 +82,36 @@ export default class PreQualRealEstate extends Component {
             </Grid.Column>
           </Grid>
         </FormElementWrap>
+        <FormElementWrap header="Industries">
+          <FormCheckbox
+            disabled={preQualFormDisabled}
+            fielddata={fields.industryTypes}
+            name="industryTypes"
+            changed={businessAppEleChange}
+            containerclassname="iconic-checkbox"
+          />
+        </FormElementWrap>
         <FormElementWrap header="Select Investment Type" subHeader="Select your Investment Type.">
           <FormRadioGroup
-            vertical
+            containerclassname="button-radio"
             disabled={preQualFormDisabled}
             fielddata={fields.investmentType}
             name="investmentType"
-            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+            changed={businessAppEleChange}
           />
+          <Divider hidden />
+          {getInvestmentTypeTooltip &&
+          <p>
+            {getInvestmentTypeTooltip}
+          </p>}
         </FormElementWrap>
         <FormElementWrap header="Select Real Estate Type" subHeader="Please select all that apply.">
-          <FormCheckbox
+          <FormRadioGroup
+            containerclassname="button-radio"
             disabled={preQualFormDisabled}
             fielddata={fields.realEstateType}
             name="realEstateType"
-            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
-            containerclassname="iconic-checkbox"
+            changed={businessAppEleChange}
           />
         </FormElementWrap>
         <FormElementWrap header="Experience">
@@ -114,7 +128,7 @@ export default class PreQualRealEstate extends Component {
                       tooltip={fields[field].tooltip}
                       value={fields[field].value}
                       fielddata={fields[field]}
-                      changed={(values, field1) => businessAppEleMaskChange(values, field1, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+                      changed={businessAppEleMaskChange}
                     />
                   ))
                 }
@@ -130,7 +144,7 @@ export default class PreQualRealEstate extends Component {
                       tooltip={fields[field].tooltip}
                       value={fields[field].value}
                       fielddata={fields[field]}
-                      changed={(values, field1) => businessAppEleMaskChange(values, field1, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+                      changed={businessAppEleMaskChange}
                     />
                   ))
                 }
@@ -140,12 +154,11 @@ export default class PreQualRealEstate extends Component {
         </FormElementWrap>
         <FormElementWrap header="What will the funds be used for?" subHeader="Please select all that apply.">
           <FormCheckbox
+            containerclassname="iconic-checkbox"
             disabled={preQualFormDisabled}
             fielddata={fields.fundUsage}
             name="fundUsage"
-            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
-            defaults
-            containerclassname="ui relaxed list"
+            changed={businessAppEleChange}
           />
         </FormElementWrap>
         <FormElementWrap
@@ -155,7 +168,7 @@ export default class PreQualRealEstate extends Component {
             disabled={preQualFormDisabled}
             fielddata={fields.ownProperty}
             name="ownProperty"
-            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+            changed={businessAppEleChange}
             containerclassname="button-radio"
           />
         </FormElementWrap>
@@ -173,7 +186,7 @@ export default class PreQualRealEstate extends Component {
                       tooltip={fields[field].tooltip}
                       value={fields[field].value}
                       fielddata={fields[field]}
-                      changed={(values, field1) => businessAppEleMaskChange(values, field1, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+                      changed={businessAppEleMaskChange}
                     />
                   ))
                 }
@@ -184,7 +197,7 @@ export default class PreQualRealEstate extends Component {
                   number
                   value={fields.targetedHoldTime.value}
                   fielddata={fields.targetedHoldTime}
-                  changed={(values, field) => businessAppEleMaskChange(values, field, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+                  changed={businessAppEleMaskChange}
                 />
               </div>
             </Grid.Column>
@@ -195,7 +208,7 @@ export default class PreQualRealEstate extends Component {
             disabled={preQualFormDisabled}
             fielddata={fields.businessEntityStructure}
             name="businessEntityStructure"
-            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+            changed={businessAppEleChange}
             iconic
             containerclassname="iconic-radio"
           />
@@ -210,7 +223,7 @@ export default class PreQualRealEstate extends Component {
             disabled={preQualFormDisabled}
             fielddata={fields.legalConfirmation}
             name="legalConfirmation"
-            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+            changed={businessAppEleChange}
             defaults
             containerclassname="ui relaxed list"
           />

@@ -38,7 +38,7 @@ class ApplicationTypeModal extends Component {
             ))}
             <Grid.Row>
               <Grid.Column>
-                <Button disabled={!currentApplicationType} as={Link} to={`/app/business-application/${currentApplicationType}/new/pre-qualification`} primary size="large" className="relaxed" content="Continue" />;
+                <Button disabled={!currentApplicationType} as={Link} to={`/app/business-application/${currentApplicationType}/new/pre-qualification`} primary size="large" className="relaxed" content="Continue" />
               </Grid.Column>
             </Grid.Row>
           </Grid>

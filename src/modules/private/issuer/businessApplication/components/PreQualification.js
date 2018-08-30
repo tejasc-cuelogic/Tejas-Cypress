@@ -16,7 +16,8 @@ import NotFound from '../../../../shared/NotFound';
 export default class PreQualification extends Component {
   componentWillMount() {
     if (this.props.isPublic) {
-      this.props.businessAppStore.formReset();
+      const { params } = this.props.match;
+      this.props.businessAppStore.formReset(params.applicationType);
     }
   }
   submit = (e) => {
@@ -47,7 +48,7 @@ export default class PreQualification extends Component {
   }
   render() {
     const {
-      BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC, BUSINESS_APP_REAL_ESTATE_FRM,
+      BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC,
       businessAppEleChange, isPrequalQulify, currentApplicationType,
     } = this.props.businessAppStore;
     const { params } = this.props.match;
@@ -111,7 +112,7 @@ export default class PreQualification extends Component {
             <Divider hidden />
             <Button
               loading={this.props.uiStore.inProgress}
-              disabled={params.applicationType === 'business' || currentApplicationType === 'business' ? !BUSINESS_APP_FRM.meta.isValid : !BUSINESS_APP_REAL_ESTATE_FRM.meta.isValid}
+              disabled={!BUSINESS_APP_FRM.meta.isValid}
               size="large"
               color="green"
               className="very relaxed"
