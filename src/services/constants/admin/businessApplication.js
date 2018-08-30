@@ -452,9 +452,8 @@ export const SOCIAL_MEDIA = {
       label: '',
       placeHolder: 'Enter here...',
       error: undefined,
-      rule: 'url|required',
+      rule: 'required',
       customErrors: {
-        url: 'Url format is invalid.',
         required: '* required.',
       },
     },
