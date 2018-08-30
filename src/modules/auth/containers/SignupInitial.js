@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Grid, Header, Icon, Transition } from 'semantic-ui-react';
+import { Modal, Button, Grid, Header, Icon } from 'semantic-ui-react';
 import { USER_TYPES_META } from './../../../constants/user';
 
 const GetBtn = ({ type }) => {
@@ -21,7 +21,7 @@ class signupInitial extends Component {
     const { SIGNUP_FRM, signupChange } = this.props.authStore;
     const selectedType = SIGNUP_FRM.fields.role;
     return (
-      <Modal size="tiny" open onClose={() => this.props.history.push('/')}>
+      <Modal open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Join the NextSeed community</Header>
         </Modal.Header>
@@ -34,10 +34,8 @@ class signupInitial extends Component {
               >
                 <div className={`user-type ${(`${selectedType.value}-${type.subVal}` === `${type.value}-${type.subVal}` ? 'active' : '')}`}>
                   <Icon className={type.icon} size="huge" />
-                  <h4>{type.text}</h4>
-                  <Transition visible={`${selectedType.value}-${type.subVal}` === `${type.value}-${type.subVal}`} animation="slide up" duration={500}>
-                    <p>{type.desc}</p>
-                  </Transition>
+                  <Header as="h4">{type.text}</Header>
+                  <p>{type.desc}</p>
                 </div>
               </Grid.Column>
             ))}

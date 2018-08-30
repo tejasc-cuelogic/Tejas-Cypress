@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Grid, Header, Icon, Transition } from 'semantic-ui-react';
+import { Modal, Button, Grid, Header, Icon } from 'semantic-ui-react';
 
 const APPLICATION_TYPES_META = [
   {
@@ -31,10 +31,8 @@ class ApplicationTypeModal extends Component {
               >
                 <div className={`user-type ${currentApplicationType === type.value ? 'active' : ''}`}>
                   <Icon className={type.icon} size="huge" />
-                  <h4>{type.text}</h4>
-                  <Transition visible={currentApplicationType === type.value} animation="slide up" duration={500}>
-                    <p>{type.desc}</p>
-                  </Transition>
+                  <Header as="h4">{type.text}</Header>
+                  <p>{type.desc}</p>
                 </div>
               </Grid.Column>
             ))}
