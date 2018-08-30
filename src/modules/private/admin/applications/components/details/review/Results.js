@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Form } from 'semantic-ui-react';
 import ManagerOverview from './ManagerOverview';
+import Helper from '../../../../../../../helper/utility';
 
 @inject('businessAppReviewStore')
 @observer
@@ -50,10 +51,10 @@ export default class Results extends Component {
                     {result.termLoanFeasible.value}
                   </Table.Cell>
                   <Table.Cell className="dark-cell" textAlign="right">
-                    ${result.expectedAmount.value}
+                    {Helper.CurrencyFormat(result.expectedAmount.value)}
                   </Table.Cell>
                   <Table.Cell textAlign="right">
-                    ${result.rslMultiple.value}
+                    {Helper.CurrencyFormat(result.rslMultiple.value)}
                   </Table.Cell>
                   <Table.Cell>
                     {result.rsp.value}%

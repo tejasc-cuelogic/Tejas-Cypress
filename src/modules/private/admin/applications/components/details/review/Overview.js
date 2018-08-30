@@ -50,8 +50,8 @@ export default class Overview extends Component {
           }
           <div className="right-align">
             <Button.Group>
-              <Button disabled={!OVERVIEW_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-              <Button disabled={!OVERVIEW_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
+              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.data.length)} secondary className="relaxed">Save</Button>
+              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.data.length)} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
           <ManagerOverview form={OVERVIEW_MANAGER_FRM} formName="OVERVIEW_MANAGER_FRM" />

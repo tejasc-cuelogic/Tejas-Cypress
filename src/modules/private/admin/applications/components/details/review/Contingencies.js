@@ -94,10 +94,10 @@ export default class Contingencies extends Component {
           </Table>
           <div className="right-align">
             <Button.Group className="mt-20">
-              <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} secondary>
+              <Button className="" disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid && LAUNCH_FRM.fields.data.length && CLOSE_FRM.fields.data.length)} secondary>
                 Save
               </Button>
-              <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid)} primary type="button">Submit for Approval</Button>
+              <Button disabled={!(LAUNCH_FRM.meta.isValid && CLOSE_FRM.meta.isValid && LAUNCH_FRM.fields.data.length && CLOSE_FRM.fields.data.length)} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
           <ManagerOverview form={CONTINGENCY_MANAGER_FRM} formName="CONTINGENCY_MANAGER_FRM" />

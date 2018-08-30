@@ -236,13 +236,13 @@ export default class Offer extends Component {
           <div className="right-align mt-20">
             <Button.Group>
               <Button
-                disabled={!OFFERS_FRM.meta.isValid}
+                disabled={!(OFFERS_FRM.meta.isValid && OFFERS_FRM.fields.data.length)}
                 className="relaxed"
                 secondary
               >
                 Save
               </Button>
-              <Button disabled={!OFFERS_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
+              <Button disabled={!(OFFERS_FRM.meta.isValid && OFFERS_FRM.fields.data.length)} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
           <ManagerOverview form={OFFER_MANAGER_FRM} formName="OFFER_MANAGER_FRM" />

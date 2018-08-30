@@ -46,7 +46,7 @@ export default class PreQual extends Component {
             ))
           }
           <div className="right-align">
-            <Button disabled={!JUSTIFICATIONS_FRM.meta.isValid} primary className="relaxed" >Approved</Button>
+            <Button disabled={!(JUSTIFICATIONS_FRM.meta.isValid && JUSTIFICATIONS_FRM.fields.data.length)} primary className="relaxed" >Approved</Button>
           </div>
           <ManagerOverview form={JUSTIFICATIONS_MANAGER_FRM} formName="JUSTIFICATIONS_MANAGER_FRM" />
         </Form>
