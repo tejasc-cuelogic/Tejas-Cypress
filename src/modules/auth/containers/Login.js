@@ -24,12 +24,8 @@ class Login extends Component {
           this.props.history.push('/auth/change-password');
         } else {
           this.props.authStore.reset();
-          if (roles && roles.includes('investor')) {
-            this.props.history.push(`/app/${this.props.userDetailsStore.pendingStep}`);
-          } else {
-            const redirectUrl = redirectURL ? redirectURL.pathname : '/app/dashboard';
-            this.props.history.push(redirectUrl);
-          }
+          this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
+            `/app/${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
         }
       });
   };

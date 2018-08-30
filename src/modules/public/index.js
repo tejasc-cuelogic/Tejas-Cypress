@@ -9,6 +9,9 @@ import NotFound from '../shared/NotFound';
 @inject('uiStore', 'navStore')
 @observer
 export default class Public extends React.Component {
+  componentWillMount() {
+    this.props.navStore.setNavStatus({}, 'main');
+  }
   componentWillUpdate() {
     this.props.navStore.setNavStatus({}, 'main');
   }

@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-08-14)
+# 0.0.0 (2018-08-29)
 
 
 ### Bug Fixes
@@ -16,7 +16,9 @@
 
 ### Features
 
+* ** investment flow[Issue [344](https://chaos.ns.team/nsv2/ns-ops/issues/344) - investment flow refinements]:** investment flow refinements ([ea3a07c](https://chaos.ns.team/nsv2/ns-client/commits/ea3a07c))
 * **Admin Business Applications[Issue [270](https://chaos.ns.team/nsv2/ns-ops/issues/270) - business-application-admin-screen-business-application-lists-skeleton]:** created skeleton for admin business application list using graph cool stub api with filters ([c45b5f0](https://chaos.ns.team/nsv2/ns-client/commits/c45b5f0))
+* **Admin Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - admin crowdpay accounts manage crowdpay accounts]:** basic implementation with gcool api ([fbf2351](https://chaos.ns.team/nsv2/ns-client/commits/fbf2351))
 * **Agreements for Investor[Issue [293](https://chaos.ns.team/nsv2/ns-ops/issues/293) - Agreements for Investor]:** Agreements for Investor ([d873f6c](https://chaos.ns.team/nsv2/ns-client/commits/d873f6c))
 * **Business Application[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/<ISSUE_NUMBER>) - Lendio prequalification from email url]:** Lendio prequalification from email url ([189f4c0](https://chaos.ns.team/nsv2/ns-client/commits/189f4c0))
 * **Business Application[Issue [229](https://chaos.ns.team/nsv2/ns-ops/issues/229) - Business Application form]:** Business Application form ([ea453a9](https://chaos.ns.team/nsv2/ns-client/commits/ea453a9))
@@ -25,11 +27,13 @@
 * **EDGAR[Issue [325](https://chaos.ns.team/nsv2/ns-ops/issues/325) -  updated edgar offering page under text]:** updated edgar offering page under text ([560e6ce](https://chaos.ns.team/nsv2/ns-client/commits/560e6ce))
 * **Hello World structure [Issue [204](https://chaos.ns.team/nsv2/ns-ops/issues/204) - Setup Hello World structure for Issuer/Admin]:** Hello World structure for Issuer/Admin ([76810e0](https://chaos.ns.team/nsv2/ns-client/commits/76810e0))
 * **home page ui[Issue [228](https://chaos.ns.team/nsv2/ns-ops/issues/228) - public pages home page 2]:** created ui of home page ([e0e48e7](https://chaos.ns.team/nsv2/ns-client/commits/e0e48e7))
+* **Investment Flow[Issue [344](https://chaos.ns.team/nsv2/ns-ops/issues/344) - Investment Flow refinements]:** Investment Flow refinements ([f02bb12](https://chaos.ns.team/nsv2/ns-client/commits/f02bb12))
 * **investment workflow[Issue [319](https://chaos.ns.team/nsv2/ns-ops/issues/319) - Fireworks animation]:** fireworks animation on congratulations screen. ([91d028f](https://chaos.ns.team/nsv2/ns-client/commits/91d028f))
 * **Investor Account Details[Issue [289](https://chaos.ns.team/nsv2/ns-ops/issues/289) - view transactions and settings for investor account details]:** view transactions and settings for investor account details ([f2a77e7](https://chaos.ns.team/nsv2/ns-client/commits/f2a77e7))
 * **Investor accounts[Issue [326](https://chaos.ns.team/nsv2/ns-ops/issues/326) - investor-settings-statements-provide-the-download-link-for-pdf]:** added pdf url for investor accounts statements and taxform section ([ac943e4](https://chaos.ns.team/nsv2/ns-client/commits/ac943e4))
 * **Investor CF Limits and accreditation[Issue [200](https://chaos.ns.team/nsv2/ns-ops/issues/200) - Investor CF Limits and accreditation]:** Investor CF Limits and accreditation ([c099d7c](https://chaos.ns.team/nsv2/ns-client/commits/c099d7c))
 * **Investor summary dashboard[Issue [320](https://chaos.ns.team/nsv2/ns-ops/issues/320) - investor summary after account setup]:** investor summary after account setup ([a5a426c](https://chaos.ns.team/nsv2/ns-client/commits/a5a426c))
+* **Investor TaxId collision[Issue [313](https://chaos.ns.team/nsv2/ns-ops/issues/313) - investor-signup-entity-account-creation-taxid-collision into develop]:** investor entity account tax id collision check api integration ([48fe192](https://chaos.ns.team/nsv2/ns-client/commits/48fe192))
 * **investor-account-details-overview-ui[Issue [301](https://chaos.ns.team/nsv2/ns-ops/issues/301) - 301 investor account details overview ui]:** Added overview page UI on investor account details page ([6acae58](https://chaos.ns.team/nsv2/ns-client/commits/6acae58))
 * **Investor[Issue [221](https://chaos.ns.team/nsv2/ns-ops/issues/221) - investor signup flow ui ux updates 2]:** Review Feedback points - spelling correction and IRA - funding default set to null ([28904b1](https://chaos.ns.team/nsv2/ns-client/commits/28904b1))
 * **Investor[Issue [221](https://chaos.ns.team/nsv2/ns-ops/issues/221) - investor-signup-flow-ui-ux-updates-2]:** Done changes for Signup - user selection design and entity-summary page, feedback changes ([e60b72b](https://chaos.ns.team/nsv2/ns-client/commits/e60b72b))
@@ -61,6 +65,7 @@
 * **public business pages[Issue [254](https://chaos.ns.team/nsv2/ns-ops/issues/254) - public business inclusive and compare]:** completed design of business inclusive and compare section ([81cce10](https://chaos.ns.team/nsv2/ns-client/commits/81cce10))
 * **public campaign details[Issue [308](https://chaos.ns.team/nsv2/ns-ops/issues/308) - public campaign details and comments]:** completed design of disclosure modal, business modal, comments section. ([1b03678](https://chaos.ns.team/nsv2/ns-client/commits/1b03678))
 * **public campaign[Issue [310](https://chaos.ns.team/nsv2/ns-ops/issues/310) - public campaign investment and rewards]:** completed investment details and rewards section ui as well as solved ui issues and replaced all .png files with .jpg files. ([e9043b1](https://chaos.ns.team/nsv2/ns-client/commits/e9043b1))
+* **Public demo feedback[Issue [331](https://chaos.ns.team/nsv2/ns-ops/issues/331) - Public demo feedback]:** solved logo, banner and banner title issues ([e71dbce](https://chaos.ns.team/nsv2/ns-client/commits/e71dbce))
 * **public investment workflow[Issue [319](https://chaos.ns.team/nsv2/ns-ops/issues/319) - public investment workflow]:** designed investment workflow ([e9b1736](https://chaos.ns.team/nsv2/ns-client/commits/e9b1736))
 * **public investors[Issue [257](https://chaos.ns.team/nsv2/ns-ops/issues/257) - public investors homepage]:** - completed design of why nextseed and how it works ([52edaeb](https://chaos.ns.team/nsv2/ns-client/commits/52edaeb))
 * **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
