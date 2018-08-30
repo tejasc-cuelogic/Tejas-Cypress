@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
-import { PUBLIC_NAV } from '../../constants/NavigationMeta';
+import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
 
 @withRouter
@@ -100,21 +100,28 @@ export const NavigationItems = props => (
       </Menu.Item>
       <Menu.Menu position="right">
         {!props.location.pathname.includes('/business-application') &&
-          <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
+          <NavItems
+            refLoc="public"
+            currentUser={props.currentUser}
+            location={props.location}
+            navItems={props.footer ? FOOTER_NAV : PUBLIC_NAV}
+          />
         }
       </Menu.Menu>
-      {!props.currentUser ? (
-        <Menu.Item as={Link} to="/auth/login">
-          <Button secondary compact>Sign Up/Log In</Button>
-        </Menu.Item>
-      ) : (
-        <Menu.Item
-          as={Link}
-          to={`/app/${props.currentUser.roles && props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-        >
-          <Button secondary compact>Dashboard</Button>
-        </Menu.Item>
-      )}
+      {!props.isMobile && (
+        !props.currentUser ? (
+          <Menu.Item as={Link} to="/auth/login">
+            <Button secondary compact>Sign Up/Log In</Button>
+          </Menu.Item>
+          ) : (
+            <Menu.Item
+              as={Link}
+              to={`/app/${props.currentUser && props.currentUser.roles &&
+                props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+            >
+              <Button secondary compact>Dashboard</Button>
+            </Menu.Item>
+          ))}
     </Container>
   </Menu>
 );

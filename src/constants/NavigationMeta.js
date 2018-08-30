@@ -403,3 +403,29 @@ export const PUBLIC_NAV = [
     ],
   },
 ];
+
+
+export const FOOTER_NAV = [
+  {
+    title: 'Resources',
+    to: 'resources',
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Ed Center', to: 'education-center' },
+      { title: 'Insights', to: 'insights' },
+    ],
+  },
+  {
+    title: 'About Us',
+    to: 'about',
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Mission', to: 'mission' },
+      { title: 'Team & Culture', to: 'team' },
+      { title: 'Careers', to: 'careers' },
+      { title: 'Press', to: 'press' },
+    ],
+  },
+  { title: 'Terms of Use', to: 'terms-of-use' },
+  { title: 'Privacy Policy', to: 'privacy-policy' },
+];
