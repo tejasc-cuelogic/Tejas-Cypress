@@ -500,6 +500,11 @@ p i.icon {
 }
 .featured-section {
 	background-color: @neutral-offwhite;
+	.ui.stackable.grid>.column:not(.row) {
+		@media only screen and (max-width : @largestMobileScreen){
+			width: 50% !important;
+		}
+	}
 }
 .learn-more {
 	background-color: @secondary-color;
@@ -1828,7 +1833,7 @@ p.check-extra-info{
     align-items: center;
 	justify-content: center;
 	box-shadow:0px 0px 5px fade(@fullBlack, 8%);
-	z-index: 1;
+	z-index: 3;
 	
 	.sign-in {
 		font-size: @20px;

@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Icon, Menu, Sidebar, Responsive } from 'semantic-ui-react';
 import { Link, Route, Switch, matchPath } from 'react-router-dom';
+// import { Link, Route, Switch } from 'react-router-dom';
 import { publicRoutes } from './../../modules/routes';
 import Header from './../../theme/layout/Header';
 import Footer from './../../theme/layout/Footer';

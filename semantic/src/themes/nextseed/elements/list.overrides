@@ -3,10 +3,13 @@
 *******************************/
 //  Public page Starts
 .campaign{
-    .ui.horizontal.list>.item{
-        font-size:@12px;
-        font-weight:@fontMedium;
-        text-transform: capitalize;
+    .ui.horizontal.list{
+        min-width: auto;
+        >.item{
+            font-size:@12px;
+            font-weight:@fontMedium;
+            text-transform: capitalize;
+        }
     }
 }
 .ui.list {

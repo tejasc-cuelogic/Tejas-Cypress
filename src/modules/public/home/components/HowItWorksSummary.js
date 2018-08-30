@@ -20,8 +20,8 @@ const HowItWorksSummary = props => (
       </p>
     </Container>
     <Container>
-      <Grid centered relaxed="very" stackable>
-        <Grid.Column textAlign="center" width={6} className="info-card">
+      <Grid centered relaxed stackable>
+        <Grid.Column textAlign="center" computer={6} tablet={8} mobile={8} className="info-card">
           <Image src={UserOne} size="small" circular centered />
           <Header as="h4">Raise funds without giving up ownership.</Header>
           <p>
@@ -31,7 +31,7 @@ const HowItWorksSummary = props => (
           </p>
           <Button as={Link} to="/business/how-it-works" primary content="How Fundraising Works" />
         </Grid.Column>
-        <Grid.Column textAlign="center" width={6} className="info-card">
+        <Grid.Column textAlign="center" computer={6} tablet={8} mobile={8} className="info-card">
           <Image src={UserTwo} size="small" circular centered />
           <Header as="h4">Invest in businesses you believe in.</Header>
           <p>
