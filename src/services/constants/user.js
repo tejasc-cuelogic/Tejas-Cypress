@@ -260,7 +260,7 @@ export const PROFILE_PHOTO_EXTENSIONS = ['jpeg', 'jpg', 'png'];
 export const PROFILE_PHOTO_BYTES = 5242880;
 
 export const COUNTRY_CODES = {
-  US: '91',
+  US: '1',
 };
 
 export const TRANSACTION_TYPES = [
