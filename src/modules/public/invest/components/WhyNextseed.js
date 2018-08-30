@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Grid, Button, Container, List, Item } from 'semantic-ui-react';
+import { Header, Grid, Button, Container, List, Item, Responsive, Divider } from 'semantic-ui-react';
 import Businesses from '../../../../assets/images/icons/businesses.svg';
 import Entrepreneurs from '../../../../assets/images/icons/entrepreneurs.svg';
 import Prevetted from '../../../../assets/images/icons/prevetted.svg';
@@ -46,16 +46,28 @@ const highlights = [
       payments from your investments automatically.`,
   },
 ];
+const isMobile = document.documentElement.clientWidth < 768;
 
 const WhyNextseed = () => (
   <Aux>
     <section className="why-nextseed-section">
       <Container>
-        <Header as="h2" className="mb-30" textAlign="center">
+        <Responsive maxWidth={767} as={Aux}>
+          <section>
+            <Header as="h3">
+            Exclusive access to<br />
+            investment opportunities<br />
+            you believe in
+            </Header>
+            <Button as={Link} to="/offerings" secondary>Explore Campaigns</Button>
+          </section>
+          <Divider fitted />
+        </Responsive>
+        <Header as="h2" className="mb-30" textAlign={isMobile ? 'left' : 'center'}>
           Local investing, made easy.
         </Header>
         <Grid relaxed="very" stackable>
-          <Grid.Column width={10}>
+          <Grid.Column computer={10} tablet={16} mobile={16}>
             <Item.Group className="horizontal-items">
               {
                 highlights.map(h => (
@@ -70,7 +82,7 @@ const WhyNextseed = () => (
               }
             </Item.Group>
           </Grid.Column>
-          <Grid.Column width={6}>
+          <Grid.Column computer={6} tablet={16} mobile={16}>
             <List relaxed className="mb-50 learn-more-list">
               <List.Item>
                 <List.Header>Learn more</List.Header>
@@ -84,9 +96,19 @@ const WhyNextseed = () => (
             </List>
           </Grid.Column>
         </Grid>
-        <div className="center-align mt-50">
-          <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
-          <Button as={Link} to="/invest/how-it-works" primary>See How it Works</Button>
+        <div className="center-align">
+          <Responsive minWidth={768} as={Aux}>
+            <Button.Group className="mt-50">
+              <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+              <Button as={Link} to="/invest/how-it-works" primary>See How it Works</Button>
+            </Button.Group>
+          </Responsive>
+          <Responsive maxWidth={767} as={Aux}>
+            <Button.Group vertical>
+              <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+              <Button as={Link} to="/invest/how-it-works" primary>See How it Works</Button>
+            </Button.Group>
+          </Responsive>
         </div>
       </Container>
     </section>

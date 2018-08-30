@@ -40,7 +40,7 @@ const NavBarMobile = ({
     <Sidebar.Pusher
       dimmed={visible}
       onClick={onPusherClick}
-      style={{ minHeight: '100vh' }}
+      className="public-pusher"
     >
       <div className="public-header-section">
         <Icon name="sidebar" onClick={onToggle} className="hamburger" />

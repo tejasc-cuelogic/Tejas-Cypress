@@ -74,6 +74,9 @@ h6{
 }
 .mb-80 {
 	margin-bottom: 80px !important;
+	@media only screen and (max-width : @largestMobileScreen){
+		margin-bottom: 50px !important;
+	}
 }
 .mt-20 {
 	margin-top: @20px !important;
@@ -685,6 +688,11 @@ p i.icon {
 				font-weight: @fontMedium;
 				font-size: @40px;
 				color: @primary-one;
+			}
+		}
+		&.stackable>.column:not(.row) {
+			@media only screen and (max-width : @largestMobileScreen){
+				padding-left: 30px !important;
 			}
 		}
 	}
@@ -1827,7 +1835,8 @@ p.check-extra-info{
 	background-color: fade(@neutral, 90%);
     position: fixed;
     left: 0;
-    right: 0;
+	right: 0;
+	top: 0;
     height: 58px;
     display: flex;
     align-items: center;

@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Grid, Button, Container, List, Divider, Image, Item } from 'semantic-ui-react';
+import { Header, Grid, Button, Container, List, Divider, Image, Item, Responsive } from 'semantic-ui-react';
 import InvestorImg from '../../../../assets/images/investor-img.jpg';
 import InvestorImg1 from '../../../../assets/images/investor-img-1.jpg';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const HowItWorks = () => (
   <Aux>
     <section>
       <Container>
-        <Header as="h2" className="mb-80" textAlign="center">
+        <Header as="h2" className="mb-80" textAlign={isMobile ? 'left' : 'center'}>
         Investing, simplified.
         </Header>
         <div className="how-it-works-steps">
@@ -27,7 +28,7 @@ const HowItWorks = () => (
               </p>
             </Grid.Column>
             <Grid.Column>
-              <Header as="h5">Invest</Header>
+              <Header as="h5">Receive</Header>
               <p>
               NextSeed collects and processes payments directly into your investment account.
               </p>
@@ -38,12 +39,12 @@ const HowItWorks = () => (
     </section>
     <Divider fitted as={Container} />
     <section>
-      <Container>
-        <Header textAlign="center" as="h2">
+      <Container textAlign={isMobile ? 'left' : 'center'}>
+        <Header>
         Choose how you want to invest.
         </Header>
-        <p className="center-align mb-30">Understand and choose the right opportunities with the right payment terms for you.</p>
-        <Grid doubling columns={2} relaxed="very" className="flex-column">
+        <p className="mb-30">Understand and choose the right opportunities with the right payment terms for you.</p>
+        <Grid doubling columns={2} relaxed="very" className="flex-column" textAlign="left">
           <Grid.Column>
             <div className="flex-content">
               <Image src={InvestorImg1} />
@@ -51,9 +52,9 @@ const HowItWorks = () => (
               <Item.Group relaxed="very">
                 <Item>
                   <Item.Content>
-                    <Item.Header as="h5">
+                    <Header as="h5">
                       What are the benefits?
-                    </Item.Header>
+                    </Header>
                     <Item.Description attached>
                     The business agrees to pay you a set amount of interest on your investment.
                     Payments are fixed each month for a certain number of months.
@@ -62,9 +63,9 @@ const HowItWorks = () => (
                 </Item>
                 <Item>
                   <Item.Content>
-                    <Item.Header as="h5">
+                    <Header as="h5">
                       Who is this option best for?
-                    </Item.Header>
+                    </Header>
                     <Item.Description attached>
                     This is great for investors seeking consistent, predictable payments.
                     </Item.Description>
@@ -75,7 +76,7 @@ const HowItWorks = () => (
             <List horizontal className="learn-more-list mt-30">
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" />
                 <List.Content as="a">See an example of a Term Note investment</List.Content>
               </List.Item>
             </List>
@@ -87,9 +88,9 @@ const HowItWorks = () => (
               <Item.Group relaxed="very">
                 <Item>
                   <Item.Content>
-                    <Item.Header as="h5">
+                    <Header as="h5">
                     What are the benefits?
-                    </Item.Header>
+                    </Header>
                     <Item.Description>
                     With revenue sharing loans, a business agrees to pay you a set total amount
                     on top of your investment. Monthly payments may be different every month.
@@ -98,9 +99,9 @@ const HowItWorks = () => (
                 </Item>
                 <Item>
                   <Item.Content>
-                    <Item.Header as="h5">
+                    <Header as="h5">
                     Who is this option best for?
-                    </Item.Header>
+                    </Header>
                     <Item.Description>
                     This is ideal for investors who are looking to grow with a new business concept,
                     accepting payments that may fluctuate but have a higher potential upside.
@@ -112,7 +113,7 @@ const HowItWorks = () => (
             <List horizontal className="learn-more-list mt-30">
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" />
                 <List.Content as="a">See an example of a Revenue Sharing investment</List.Content>
               </List.Item>
             </List>
@@ -139,11 +140,11 @@ const HowItWorks = () => (
             <List relaxed className="learn-more-list">
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" />
                 <List.Content as="a">Is investing on NextSeed risky?</List.Content>
               </List.Item>
               <List.Item>
-                <List.Icon className="ns-arrow-right" color="green" />
+                <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" />
                 <List.Content as="a">Are bonus rewards covered by my investment agreements?</List.Content>
               </List.Item>
             </List>
@@ -155,8 +156,18 @@ const HowItWorks = () => (
     <section>
       <Container className="center-align">
         <Header as="h2" className="mb-30">Register for an account with just your email.</Header>
-        <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
-        <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
+        <Responsive minWidth={768} as={Aux}>
+          <Button.Group>
+            <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+            <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
+          </Button.Group>
+        </Responsive>
+        <Responsive maxWidth={767} as={Aux}>
+          <Button.Group vertical>
+            <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+            <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
+          </Button.Group>
+        </Responsive>
       </Container>
     </section>
   </Aux>

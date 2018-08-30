@@ -19,6 +19,10 @@
 		&.banner{
 			height:~"calc(100vh - 34px)";
 		}
+		&.public-pusher {
+			margin-top: 58px;
+			height:~"calc(100vh - 58px)";
+		}
 	}
 }
 // .pusher.white-bg{
