@@ -1,4 +1,6 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
+import { Icon, Popup } from 'semantic-ui-react';
 
 export const BUSINESS_GOAL = {
   UPGRADE: 'UPGRADE',
@@ -153,50 +155,6 @@ const BUSINESS_PREQUAL_COMMON = {
     rule: 'required',
     customErrors: { required: 'required' },
   },
-  legalConfirmation: {
-    value: [],
-    values: [
-      {
-        label: 'The company has not raised securities under Regulation Crowdfunding in the last 12 months.',
-        value: 'HAS_NOT_RAISED_SECURITIES',
-      },
-      {
-        label: 'The company is not concurrently conducting an offering on another platform.',
-        value: 'IS_NOT_CONDUCTING_OFFERING',
-      },
-      {
-        label: 'The company is not a broker-dealer.',
-        value: 'IS_NOT_BROKER_DEALER',
-      },
-      {
-        label: 'The company is organized in the United States.',
-        value: 'IS_ORGANIZED_IN_USA',
-      },
-      {
-        label: 'The company is not an investment company.',
-        value: 'IS_NOT_INVESTMENT_COMPANY',
-      },
-      {
-        label: 'The company has not sold securities registered under the Securities Exchange Act of 1934.',
-        value: 'HAS_NOT_SOLD_SECURITIES',
-      },
-      {
-        label: 'I have never filed for bankruptcy.',
-        value: 'HAS_NEVER_FILED_BANKRUPTCY',
-        tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy.',
-      },
-      {
-        label: 'I am not currently charged with or have ever been convicted of fraud.',
-        value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
-      },
-      {
-        label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
-        value: 'HAS_NEVER_BEEN_CONVICTED_OF_CRIMINAL_OFFENCE',
-      },
-    ],
-    error: undefined,
-    rule: 'array',
-  },
 };
 
 export const BUSINESS_PRE_QUALIFICATION = {
@@ -295,6 +253,50 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: 'required',
     customErrors: { required: 'required' },
   },
+  legalConfirmation: {
+    value: [],
+    values: [
+      {
+        label: 'The company has not raised securities under Regulation Crowdfunding in the last 12 months.',
+        value: 'HAS_NOT_RAISED_SECURITIES',
+      },
+      {
+        label: 'The company is not concurrently conducting an offering on another platform.',
+        value: 'IS_NOT_CONDUCTING_OFFERING',
+      },
+      {
+        label: 'The company is not a broker-dealer.',
+        value: 'IS_NOT_BROKER_DEALER',
+      },
+      {
+        label: 'The company is organized in the United States.',
+        value: 'IS_ORGANIZED_IN_USA',
+      },
+      {
+        label: 'The company is not an investment company.',
+        value: 'IS_NOT_INVESTMENT_COMPANY',
+      },
+      {
+        label: 'The company has not sold securities registered under the Securities Exchange Act of 1934.',
+        value: 'HAS_NOT_SOLD_SECURITIES',
+      },
+      {
+        label: 'I have never filed for bankruptcy.',
+        value: 'HAS_NEVER_FILED_BANKRUPTCY',
+        tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy.',
+      },
+      {
+        label: 'I am not currently charged with or have ever been convicted of fraud.',
+        value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
+      },
+      {
+        label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
+        value: 'HAS_NEVER_BEEN_CONVICTED_OF_CRIMINAL_OFFENCE',
+      },
+    ],
+    error: undefined,
+    rule: 'array',
+  },
 };
 
 export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
@@ -302,10 +304,26 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
   investmentType: {
     value: '',
     values: [
-      { label: 'Core', icon: 'ns-renovations', value: 'CORE' },
-      { label: 'Core Plus', icon: 'ns-equipment-purchase', value: 'CORE_PLUS' },
-      { label: 'Value Add', icon: 'ns-working-capital', value: 'VALUE_ADD' },
-      { label: 'Opportunistic', icon: 'ns-inventory', value: 'OPPORTUNISTIC' },
+      { value: 'CORE', label: (<label>Core <Popup trigger={<Icon className="ns-help-circle" />} content="The least risky properties, core investments utilize lower leverage and tend to generate predictable cash flows. The properties are typically in strong markets and its sponsors can easily obtain financing. They consist primarily of Class A buildings occupied by high credit tenants with long term leases. Core properties are the bonds of the commercial real estate market; they do not provide significant appreciation, but rather provide predictable cash flow and are marketed to investors as providing a steady, if not spectacular, financial returns (i.e., single digit annualized returns)." position="top center" className="center-align" wide /></label>) },
+      { value: 'CORE_PLUS', label: (<label>Core Plus <Popup trigger={<Icon className="ns-help-circle" />} content="These properties are also located in areas with a strong tenant base and generally have few issues obtaining financing. They differ from “core” properties in that, for one reason or another, they have slightly more risk associated with them (and generally the potential for an increased net operating income). For example, they may have a pending lease rollover, or there may be a small value-add opportunity." position="top center" className="center-align" wide /></label>) },
+      { value: 'VALUE_ADD', label: (<label>Value Add <Popup trigger={<Icon className="ns-help-circle" />} content="A value add investment typically involves a property that has good cash flow, but where an opportunity exists to increase that cash flow by enhancing the property (making improvements or repositioning) and/or improving its operational efficiency. Common tactics include (i) making physical improvements to the property to justify higher rents, (ii) increasing efforts to lease vacant space to quality tenants and (iii) improving the management of the property to increase tenant satisfaction and lower operating expenses. Value add investments usually employ more leverage than would be found in a core or core plus opportunity." position="top center" className="center-align" wide /></label>) },
+      { value: 'OPPORTUNISTIC', label: (<label>Opportunistic <Popup trigger={<Icon className="ns-help-circle" />} content="These properties are essentially value add properties taken to the extreme. They typically need significant renovation; often, they are vacant at the time of acquisition, or the investment could involve the purchase of raw land. Sponsors utilize a high degree of leverage, and the debt comes with the worst terms of any of these categories. The risk associated with opportunistic investments is high, but they offer the highest level of return." position="top center" className="center-align" wide /></label>) },
+    ],
+    error: undefined,
+    rule: 'required',
+    customErrors: { required: 'required' },
+  },
+  realEstateType: {
+    value: [],
+    values: [
+      { label: 'Residential', icon: 'ns-corporation', value: 'RESIDENTIAL' },
+      { label: 'Office', icon: 'ns-corporation', value: 'OFFICE' },
+      { label: 'Retail', icon: 'ns-corporation', value: 'RETAIL' },
+      { label: 'Medical', icon: 'ns-corporation', value: 'MEDICAL' },
+      { label: 'Industrial', icon: 'ns-corporation', value: 'INDUSTRIAL' },
+      { label: 'Hospitality', icon: 'ns-corporation', value: 'HOSPITALITY' },
+      { label: 'Land', icon: 'ns-corporation', value: 'LAND' },
+      { label: 'Other', icon: 'ns-corporation', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -314,12 +332,12 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
   fundUsage: {
     value: [],
     values: [
-      { label: 'Acquire', icon: 'ns-renovations', value: 'ACQUIRE' },
-      { label: 'Build', icon: 'ns-equipment-purchase', value: 'BUILD' },
-      { label: 'Redevelop', icon: 'ns-working-capital', value: 'REDEVELOP' },
-      { label: 'Manage', icon: 'ns-inventory', value: 'MANAGE' },
-      { label: 'Restructure Financing', icon: 'ns-new-product', value: 'RESTRUCTURE_FINANCING' },
-      { label: 'Other', icon: 'ns-new-location', value: 'OTHER' },
+      { label: 'Acquire', value: 'ACQUIRE' },
+      { label: 'Build', value: 'BUILD' },
+      { label: 'Redevelop', value: 'REDEVELOP' },
+      { label: 'Manage', value: 'MANAGE' },
+      { label: 'Restructure Financing', value: 'RESTRUCTURE_FINANCING' },
+      { label: 'Other', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -342,6 +360,46 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
   },
   targetedHoldTime: {
     value: '', maxLength: 16, label: 'Targeted Hold Time (years)', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
+  },
+  legalConfirmation: {
+    value: [],
+    values: [
+      {
+        label: 'The company is not concurrently conducting an offering on another platform.',
+        value: 'IS_NOT_CONDUCTING_OFFERING',
+      },
+      {
+        label: 'The company is not a broker-dealer.',
+        value: 'IS_NOT_BROKER_DEALER',
+      },
+      {
+        label: 'The company is organized in the United States.',
+        value: 'IS_ORGANIZED_IN_USA',
+      },
+      {
+        label: 'The company is not an investment company.',
+        value: 'IS_NOT_INVESTMENT_COMPANY',
+      },
+      {
+        label: 'The company has not sold securities registered under the Securities Exchange Act of 1934.',
+        value: 'HAS_NOT_SOLD_SECURITIES',
+      },
+      {
+        label: 'I have never filed for bankruptcy.',
+        value: 'HAS_NEVER_FILED_BANKRUPTCY',
+        tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy.',
+      },
+      {
+        label: 'I am not currently charged with or have ever been convicted of fraud.',
+        value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
+      },
+      {
+        label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
+        value: 'HAS_NEVER_BEEN_CONVICTED_OF_CRIMINAL_OFFENCE',
+      },
+    ],
+    error: undefined,
+    rule: 'array',
   },
 };
 

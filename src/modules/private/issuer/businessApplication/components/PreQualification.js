@@ -45,7 +45,8 @@ export default class PreQualification extends Component {
   }
   render() {
     const {
-      BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC, businessAppEleChange, isPrequalQulify,
+      BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC, BUSINESS_APP_REAL_ESTATE_FRM,
+      businessAppEleChange, isPrequalQulify,
     } = this.props.businessAppStore;
     const { params } = this.props.match;
     return (
@@ -102,7 +103,7 @@ export default class PreQualification extends Component {
             <Divider hidden />
             <Button
               loading={this.props.uiStore.inProgress}
-              disabled={!BUSINESS_APP_FRM.meta.isValid}
+              disabled={params.applicationType === 'business' ? !BUSINESS_APP_FRM.meta.isValid : !BUSINESS_APP_REAL_ESTATE_FRM.meta.isValid}
               size="large"
               color="green"
               className="very relaxed"

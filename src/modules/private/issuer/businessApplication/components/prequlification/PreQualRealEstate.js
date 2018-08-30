@@ -74,12 +74,20 @@ export default class PreQualRealEstate extends Component {
         </FormElementWrap>
         <FormElementWrap header="Select Investment Type" subHeader="Select your Investment Type.">
           <FormRadioGroup
+            vertical
             disabled={preQualFormDisabled}
             fielddata={fields.investmentType}
             name="investmentType"
             changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
-            iconic
-            containerclassname="iconic-radio"
+          />
+        </FormElementWrap>
+        <FormElementWrap header="Select Real Estate Type" subHeader="Please select all that apply.">
+          <FormCheckbox
+            disabled={preQualFormDisabled}
+            fielddata={fields.realEstateType}
+            name="realEstateType"
+            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+            containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
         <FormElementWrap header="Experience">
@@ -126,7 +134,8 @@ export default class PreQualRealEstate extends Component {
             fielddata={fields.fundUsage}
             name="fundUsage"
             changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
-            containerclassname="iconic-checkbox"
+            defaults
+            containerclassname="ui relaxed list"
           />
         </FormElementWrap>
         <FormElementWrap
