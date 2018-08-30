@@ -3,9 +3,8 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'semantic-ui-react';
-import { FormTextarea, MaskedInput, FormInput, DropZone, FormDatePicker } from '../../../../../../../theme/form';
+import { FormTextarea, MaskedInput, FormInput, DropZone } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 
 const AddMore = ({
@@ -47,9 +46,9 @@ export default class BusinessPlan extends Component {
       CONTROL_PERSONS_FRM,
       formChange,
       formChangeWithIndex,
-      businessPlanDateChange,
       controlPersonMaskChange,
       totalSourcesAmount,
+      maskChange,
       maskChangeWithIndex,
       totalUsesAmount,
       confirmModal,
@@ -270,14 +269,12 @@ export default class BusinessPlan extends Component {
             </Grid.Column>
           </Grid>
           <Divider section />
-          <FormDatePicker
+          <MaskedInput
             name="dateOfIncorporation"
-            placeholder="12-02-1989"
-            selected={BUSINESS_PLAN_FRM.fields.dateOfIncorporation.value ?
-              moment(BUSINESS_PLAN_FRM.fields.dateOfIncorporation.value) : null}
-            changed={date => businessPlanDateChange(date)}
             fielddata={BUSINESS_PLAN_FRM.fields.dateOfIncorporation}
-            containerwidth={5}
+            format="##-##-####"
+            changed={(values, field) => maskChange(values, 'BUSINESS_PLAN_FRM', field)}
+            dateOfBirth
           />
           <div className="right-align">
             <Button.Group>

@@ -102,14 +102,6 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  businessPlanDateChange = (date) => {
-    this.BUSINESS_PLAN_FRM = Validator.onChange(
-      this.BUSINESS_PLAN_FRM,
-      { name: 'dateOfIncorporation', value: date },
-    );
-  }
-
-  @action
   onDateChange = (form, field, date) => {
     this[form] = Validator.onChange(
       this[form],
@@ -159,9 +151,10 @@ export class BusinessAppReviewStore {
 
   @action
   maskChange = (values, form, field) => {
+    const fieldValue = field === 'dateOfIncorporation' ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
-      { name: field, value: values.floatValue },
+      { name: field, value: fieldValue },
     );
   }
 

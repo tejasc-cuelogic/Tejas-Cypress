@@ -223,7 +223,7 @@ export const BUSINESS_PLAN = {
   dateOfIncorporation: {
     value: '',
     label: 'Date of Incorporation',
-    placeHolder: 'mm-dd-yyyy',
+    placeHolder: '12-02-1989',
     error: undefined,
     rule: 'required|date',
   },
