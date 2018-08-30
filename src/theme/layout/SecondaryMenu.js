@@ -18,17 +18,12 @@ const NavItems = ({
         name={item.to}
         className={isActive(item.to, location) ? 'active' : ''}
         onClick={navClick}
-        text={
-          <Aux>
-            <span>
-              {item.title}
-            </span>
-          </Aux>
-        }
+        text={<span>{item.title}</span>}
       >
         <Dropdown.Menu className={isActive(item.to, location) ? 'visible' : ''}>
           {item.subNavigations.map(sn => (
             <Dropdown.Item
+              name="byPass"
               key={sn.to}
               as={NavLink}
               to={`${(match.url)}/${sn.to}`}
@@ -54,14 +49,16 @@ const NavItems = ({
 @withRouter
 class SecondaryMenu extends Component {
   navClick = (e, { name }) => {
-    this.props.history.replace(`${this.props.match.url}/${name}`);
+    if (e.target && e.target.name !== 'byPass') {
+      this.props.history.replace(`${this.props.match.url}/${name}`);
+    }
   };
   isActive = (to, location) => (location.pathname.startsWith(`${this.props.match.url}/${to}`));
   render() {
     const {
       navItems, match, vertical, noinvert, attached, className, stepsStatus, addon,
     } = this.props;
-    const mobnavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
+    const mobNavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
       <Aux>
         <Responsive minWidth={768} as={Aux}>
@@ -86,7 +83,7 @@ class SecondaryMenu extends Component {
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767} as={Aux}>
-          <Dropdown fluid selection options={mobnavItems} />
+          <Dropdown fluid selection options={mobNavItems} />
         </Responsive>
       </Aux>
     );

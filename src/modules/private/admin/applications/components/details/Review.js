@@ -25,10 +25,8 @@ const navItems = [
     title: 'Model',
     to: 'model',
     subNavigations: [
-      { title: 'Inputs', to: 'inputs', component: 'Inputs' },
-      {
-        title: 'Variables', to: 'model/variables', component: 'Variables',
-      },
+      { title: 'Inputs', to: 'model/inputs', component: 'Inputs' },
+      { title: 'Variables', to: 'model/variables', component: 'Variables' },
       { title: 'Results', to: 'model/results', component: 'Results' },
     ],
   },

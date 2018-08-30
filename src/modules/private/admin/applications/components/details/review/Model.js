@@ -16,9 +16,7 @@ export default class Model extends Component {
     const { match } = this.props;
     const navItems = [
       { title: 'Inputs', to: 'inputs', component: 'Inputs' },
-      {
-        title: 'Variables', to: 'variables', component: 'Variables',
-      },
+      { title: 'Variables', to: 'variables', component: 'Variables' },
       { title: 'Results', to: 'results', component: 'Results' },
     ];
     return (
