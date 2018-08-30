@@ -1131,6 +1131,7 @@ div.login-form {
 	background-color:@neutral;
 	padding:@14px @40px;
 }
+//	used for dropdown secondary menu on mobile
 .secondary-menu{
 	padding:0 @40px;
 	@media only screen and (max-width : @largestLargeMonitor){
