@@ -1,6 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
-import { Icon, Popup } from 'semantic-ui-react';
 
 export const BUSINESS_GOAL = {
   UPGRADE: 'UPGRADE',
@@ -301,29 +299,43 @@ export const BUSINESS_PRE_QUALIFICATION = {
 
 export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
   ...BUSINESS_PREQUAL_COMMON,
+  industryTypes: {
+    value: [],
+    values: [
+      { label: 'CRE', icon: 'ns-real-estate', value: 'CRE' },
+      { label: 'Restaurant & Bar', icon: 'ns-food-light', value: 'RESTAURANT_BAR' },
+      { label: 'Fitness', icon: 'ns-dumbbells', value: 'FITNESS' },
+      { label: 'Health & Wellness', icon: 'ns-beauty-spa', value: 'HEALTH_WELLNESS' },
+      { label: 'Hospitality', icon: 'ns-first-aid', value: 'HOSPITALITY' },
+      { label: 'Other', value: 'OTHER' },
+    ],
+    error: undefined,
+    rule: 'required',
+    customErrors: { required: 'required' },
+  },
   investmentType: {
     value: '',
     values: [
-      { value: 'CORE', label: (<label>Core <Popup trigger={<Icon className="ns-help-circle" />} content="The least risky properties, core investments utilize lower leverage and tend to generate predictable cash flows. The properties are typically in strong markets and its sponsors can easily obtain financing. They consist primarily of Class A buildings occupied by high credit tenants with long term leases. Core properties are the bonds of the commercial real estate market; they do not provide significant appreciation, but rather provide predictable cash flow and are marketed to investors as providing a steady, if not spectacular, financial returns (i.e., single digit annualized returns)." position="top center" className="center-align" wide /></label>) },
-      { value: 'CORE_PLUS', label: (<label>Core Plus <Popup trigger={<Icon className="ns-help-circle" />} content="These properties are also located in areas with a strong tenant base and generally have few issues obtaining financing. They differ from “core” properties in that, for one reason or another, they have slightly more risk associated with them (and generally the potential for an increased net operating income). For example, they may have a pending lease rollover, or there may be a small value-add opportunity." position="top center" className="center-align" wide /></label>) },
-      { value: 'VALUE_ADD', label: (<label>Value Add <Popup trigger={<Icon className="ns-help-circle" />} content="A value add investment typically involves a property that has good cash flow, but where an opportunity exists to increase that cash flow by enhancing the property (making improvements or repositioning) and/or improving its operational efficiency. Common tactics include (i) making physical improvements to the property to justify higher rents, (ii) increasing efforts to lease vacant space to quality tenants and (iii) improving the management of the property to increase tenant satisfaction and lower operating expenses. Value add investments usually employ more leverage than would be found in a core or core plus opportunity." position="top center" className="center-align" wide /></label>) },
-      { value: 'OPPORTUNISTIC', label: (<label>Opportunistic <Popup trigger={<Icon className="ns-help-circle" />} content="These properties are essentially value add properties taken to the extreme. They typically need significant renovation; often, they are vacant at the time of acquisition, or the investment could involve the purchase of raw land. Sponsors utilize a high degree of leverage, and the debt comes with the worst terms of any of these categories. The risk associated with opportunistic investments is high, but they offer the highest level of return." position="top center" className="center-align" wide /></label>) },
+      { value: 'CORE', label: 'Core', tooltip: 'The least risky properties, core investments utilize lower leverage and tend to generate predictable cash flows. The properties are typically in strong markets and its sponsors can easily obtain financing. They consist primarily of Class A buildings occupied by high credit tenants with long term leases. Core properties are the bonds of the commercial real estate market; they do not provide significant appreciation, but rather provide predictable cash flow and are marketed to investors as providing a steady, if not spectacular, financial returns (i.e., single digit annualized returns).' },
+      { value: 'CORE_PLUS', label: 'Core Plus', tooltip: 'These properties are also located in areas with a strong tenant base and generally have few issues obtaining financing. They differ from “core” properties in that, for one reason or another, they have slightly more risk associated with them (and generally the potential for an increased net operating income). For example, they may have a pending lease rollover, or there may be a small value-add opportunity.' },
+      { value: 'VALUE_ADD', label: 'Value Add', tooltip: 'A value add investment typically involves a property that has good cash flow, but where an opportunity exists to increase that cash flow by enhancing the property (making improvements or repositioning) and/or improving its operational efficiency. Common tactics include (i) making physical improvements to the property to justify higher rents, (ii) increasing efforts to lease vacant space to quality tenants and (iii) improving the management of the property to increase tenant satisfaction and lower operating expenses. Value add investments usually employ more leverage than would be found in a core or core plus opportunity.' },
+      { value: 'OPPORTUNISTIC', label: 'Opportunistic', tooltip: 'These properties are essentially value add properties taken to the extreme. They typically need significant renovation; often, they are vacant at the time of acquisition, or the investment could involve the purchase of raw land. Sponsors utilize a high degree of leverage, and the debt comes with the worst terms of any of these categories. The risk associated with opportunistic investments is high, but they offer the highest level of return.' },
     ],
     error: undefined,
     rule: 'required',
     customErrors: { required: 'required' },
   },
   realEstateType: {
-    value: [],
+    value: '',
     values: [
-      { label: 'Residential', icon: 'ns-corporation', value: 'RESIDENTIAL' },
-      { label: 'Office', icon: 'ns-corporation', value: 'OFFICE' },
-      { label: 'Retail', icon: 'ns-corporation', value: 'RETAIL' },
-      { label: 'Medical', icon: 'ns-corporation', value: 'MEDICAL' },
-      { label: 'Industrial', icon: 'ns-corporation', value: 'INDUSTRIAL' },
-      { label: 'Hospitality', icon: 'ns-corporation', value: 'HOSPITALITY' },
-      { label: 'Land', icon: 'ns-corporation', value: 'LAND' },
-      { label: 'Other', icon: 'ns-corporation', value: 'OTHER' },
+      { label: 'Residential', value: 'RESIDENTIAL' },
+      { label: 'Office', value: 'OFFICE' },
+      { label: 'Retail', value: 'RETAIL' },
+      { label: 'Medical', value: 'MEDICAL' },
+      { label: 'Industrial', value: 'INDUSTRIAL' },
+      { label: 'Hospitality', value: 'HOSPITALITY' },
+      { label: 'Land', value: 'LAND' },
+      { label: 'Other', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',

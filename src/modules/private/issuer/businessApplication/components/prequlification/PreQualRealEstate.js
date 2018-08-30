@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Grid, Form, Popup, Icon } from 'semantic-ui-react';
+import { Header, Grid, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import {
   FormRadioGroup, FormCheckbox, FormInput, MaskedInput, AutoComplete,
@@ -13,7 +13,7 @@ export default class PreQualRealEstate extends Component {
   render() {
     const {
       BUSINESS_APP_REAL_ESTATE_FRM, businessAppEleChange, setAddressFields,
-      businessAppEleMaskChange, preQualFormDisabled,
+      businessAppEleMaskChange, preQualFormDisabled, getInvestmentTypeTooltip,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_APP_REAL_ESTATE_FRM;
     return (
@@ -82,22 +82,36 @@ export default class PreQualRealEstate extends Component {
             </Grid.Column>
           </Grid>
         </FormElementWrap>
+        <FormElementWrap header="Industries">
+          <FormCheckbox
+            disabled={preQualFormDisabled}
+            fielddata={fields.industryTypes}
+            name="industryTypes"
+            changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
+            containerclassname="iconic-checkbox"
+          />
+        </FormElementWrap>
         <FormElementWrap header="Select Investment Type" subHeader="Select your Investment Type.">
           <FormRadioGroup
-            vertical
+            containerclassname="button-radio"
             disabled={preQualFormDisabled}
             fielddata={fields.investmentType}
             name="investmentType"
             changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
           />
+          <Divider hidden />
+          {getInvestmentTypeTooltip &&
+          <p>
+            {getInvestmentTypeTooltip}
+          </p>}
         </FormElementWrap>
         <FormElementWrap header="Select Real Estate Type" subHeader="Please select all that apply.">
-          <FormCheckbox
+          <FormRadioGroup
+            containerclassname="button-radio"
             disabled={preQualFormDisabled}
             fielddata={fields.realEstateType}
             name="realEstateType"
             changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
-            containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
         <FormElementWrap header="Experience">
@@ -140,12 +154,11 @@ export default class PreQualRealEstate extends Component {
         </FormElementWrap>
         <FormElementWrap header="What will the funds be used for?" subHeader="Please select all that apply.">
           <FormCheckbox
+            containerclassname="iconic-checkbox"
             disabled={preQualFormDisabled}
             fielddata={fields.fundUsage}
             name="fundUsage"
             changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_REAL_ESTATE_FRM')}
-            defaults
-            containerclassname="ui relaxed list"
           />
         </FormElementWrap>
         <FormElementWrap

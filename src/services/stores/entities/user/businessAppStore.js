@@ -64,6 +64,9 @@ export class BusinessAppStore {
 
   @action
   setFieldvalue = (field, value) => {
+    if (field === 'currentApplicationType') {
+      this.BUSINESS_DETAILS_FRM.fields.businessPlan.label = value === 'business' ? 'Upload your business plan' : 'Upload your Investment Summary or Business Plan';
+    }
     this[field] = value;
   }
 
@@ -76,6 +79,13 @@ export class BusinessAppStore {
   businessDocChange = (e, res) => {
     this.BUSINESS_DOC_FRM = Validator.onChange(this.BUSINESS_DOC_FRM, Validator.pullValues(e, res));
   };
+
+  @computed get getInvestmentTypeTooltip() {
+    const { fields } = this.BUSINESS_APP_REAL_ESTATE_FRM;
+    const field = fields.investmentType.values.find(investmentType =>
+      investmentType.value === fields.investmentType.value);
+    return field ? field.tooltip : null;
+  }
 
   @action
   checkFormisValid = (step, showErrors = false) => {
