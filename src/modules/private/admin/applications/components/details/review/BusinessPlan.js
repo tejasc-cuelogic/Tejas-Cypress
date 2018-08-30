@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'semantic-ui-react';
 import { FormTextarea, MaskedInput, FormInput, DropZone } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
+import Helper from '../../../../../../../helper/utility';
 
 const AddMore = ({
   addMore, formName, title,
@@ -206,7 +207,7 @@ export default class BusinessPlan extends Component {
                 <Table.Footer>
                   <Table.Row>
                     <Table.HeaderCell>Total</Table.HeaderCell>
-                    <Table.HeaderCell colSpan="2">{totalSourcesAmount}</Table.HeaderCell>
+                    <Table.HeaderCell colSpan="2">{Helper.CurrencyFormat(totalSourcesAmount)}</Table.HeaderCell>
                   </Table.Row>
                 </Table.Footer>
               </Table>
@@ -262,7 +263,7 @@ export default class BusinessPlan extends Component {
                 <Table.Footer>
                   <Table.Row>
                     <Table.HeaderCell>Total</Table.HeaderCell>
-                    <Table.HeaderCell colSpan="2">{totalUsesAmount}</Table.HeaderCell>
+                    <Table.HeaderCell colSpan="2">{Helper.CurrencyFormat(totalUsesAmount)}</Table.HeaderCell>
                   </Table.Row>
                 </Table.Footer>
               </Table>
