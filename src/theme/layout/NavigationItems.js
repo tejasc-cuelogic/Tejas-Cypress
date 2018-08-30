@@ -86,18 +86,20 @@ export const NavigationItems = props => (
     stackable
     borderless
     inverted={!props.location.pathname.includes('/offerings')}
-    fixed="top"
+    fixed={!props.isMobile ? 'top' : ''}
     className={props.navStatus === 'sub' ? 'slide-up' : ''}
   >
     <Container fluid>
-      <Menu.Item as={Link} to="/" header>
-        <Logo
-          size="small"
-          alt="NextSeed.com"
-          dataSrc={getLogo(props.location.pathname)}
-          style={getLogoStyle(props.location.pathname)}
-        />
-      </Menu.Item>
+      {!props.isMobile &&
+        <Menu.Item as={Link} to="/" header>
+          <Logo
+            size="small"
+            alt="NextSeed.com"
+            dataSrc={getLogo(props.location.pathname)}
+            style={getLogoStyle(props.location.pathname)}
+          />
+        </Menu.Item>
+      }
       <Menu.Menu position="right">
         {!props.location.pathname.includes('/business-application') &&
           <NavItems

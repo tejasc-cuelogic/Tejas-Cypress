@@ -398,8 +398,8 @@ export const PUBLIC_NAV = [
     to: '',
     subPanel: 1,
     subNavigations: [
-      { title: 'For Investors', to: 'invest' },
-      { title: 'For Businesses', to: 'business' },
+      { title: 'Fundraising', to: 'business' },
+      { title: 'Investing', to: 'invest' },
     ],
   },
 ];

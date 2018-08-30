@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Divider, Sidebar, Menu, Icon } from 'semantic-ui-react';
 import { Logo } from '../shared';
-import { NavigationItems } from './NavigationItems';
+import { NavItems } from './NavigationItems';
+import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 
 @inject('uiStore')
 @observer
@@ -20,24 +21,28 @@ export default class NavBarMobile extends Component {
           inverted
           vertical
           visible={visible}
+          className="public-sidebar"
         >
           <Icon onClick={onToggle} className="ns-close-light" />
           <div className="public-header-nav">
-            <NavigationItems
+            <NavItems
+              refLoc="public"
+              currentUser={currentUser}
               location={location}
               isMobile={isMobile}
               navStatus={navStatus}
-              currentUser={currentUser}
+              navItems={PUBLIC_NAV}
             />
           </div>
           <Divider />
           <div className="public-footer-nav">
-            <NavigationItems
+            <NavItems
+              refLoc="public"
+              currentUser={currentUser}
               location={location}
               isMobile={isMobile}
               navStatus={navStatus}
-              currentUser={currentUser}
-              footer
+              navItems={FOOTER_NAV}
             />
           </div>
           <div className="social-media" />
@@ -45,7 +50,7 @@ export default class NavBarMobile extends Component {
         <Sidebar.Pusher
           dimmed={visible}
           onClick={onPusherClick}
-          style={{ minHeight: '100vh' }}
+          className="public-pusher"
         >
           <div className="public-header-section">
             <Icon name="sidebar" onClick={onToggle} className="hamburger" />
