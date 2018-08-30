@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Icon, Menu, Sidebar, Responsive } from 'semantic-ui-react';
+import { Icon, Menu, Sidebar, Responsive, Divider } from 'semantic-ui-react';
 import { Link, Route, Switch, matchPath } from 'react-router-dom';
 // import { Link, Route, Switch } from 'react-router-dom';
 import { publicRoutes } from './../../modules/routes';
@@ -28,7 +28,14 @@ const NavBarMobile = ({
       visible={visible}
     >
       <Icon onClick={onToggle} className="ns-close-light" />
-      <Link to="/">defdesfsdf</Link>
+      <div className="public-header-nav">
+        <Link to="/">Explore Campaigns</Link>
+      </div>
+      <Divider />
+      <div className="public-footer-nav">
+        <Link to="/">Resources</Link>
+      </div>
+      <div className="social-media" />
     </Sidebar>
     <Sidebar.Pusher
       dimmed={visible}
