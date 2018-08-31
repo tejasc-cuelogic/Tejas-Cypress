@@ -358,7 +358,6 @@ footer{
 //Public Responsive Menu
 .ui.sidebar.left.menu.vertical.visible.public-sidebar {
     padding: @58px 0 0 0;
-    width: 100%;
     overflow: hidden;
     .item {
         padding: @5px @14px;
