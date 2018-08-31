@@ -16,9 +16,9 @@ class Success extends Component {
   }
   onProceed = (e) => {
     e.preventDefault();
+    const { userExists, currentApplicationType, applicationId } = this.props.businessAppStore;
     if (this.props.isPublic) {
-      const { fields } = this.props.businessAppStore.BUSINESS_APP_FRM_BASIC;
-      if (fields.email.value !== 'chetan.bura@cuelogic.com') {
+      if (!userExists) {
         authActions.register()
           .then(() => {
             const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
@@ -33,7 +33,7 @@ class Success extends Component {
             const { roles } = this.props.userStore.currentUser;
             this.props.authStore.reset();
             if (roles && roles.includes('issuer')) {
-              const redirectUrl = '/app/business-application/58a5bc40-a1fb-11e8-b93e-9b2c4fb7f46e/business-details';
+              const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
               this.props.history.push(redirectUrl);
             }
           });
@@ -46,8 +46,8 @@ class Success extends Component {
     const {
       signupChange, SIGNUP_FRM, LoginChange, LOGIN_FRM, togglePasswordType, pwdInputType,
     } = this.props.authStore;
+    const { userExists } = this.props.businessAppStore;
     const { fields } = SIGNUP_FRM;
-    const isNewUser = fields.email.value !== 'chetan.bura@cuelogic.com';
     return (
       <Grid container>
         <Grid.Column className="issuer-signup">
@@ -65,7 +65,7 @@ class Success extends Component {
           <Form>
             <Grid>
               <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                {isNewUser ?
+                {!userExists ?
                   ['password', 'verify'].map(field => (
                     <FormInput
                       key={field}
@@ -93,7 +93,7 @@ class Success extends Component {
           </Form>
           }
           <Divider section hidden />
-          <Button onClick={this.onProceed} disabled={(this.props.isPublic && !SIGNUP_FRM.meta.isValid && isNewUser)} size="large" color="green" className="very relaxed">Proceed</Button>
+          <Button onClick={this.onProceed} disabled={(this.props.isPublic && !SIGNUP_FRM.meta.isValid && !userExists)} size="large" color="green" className="very relaxed">Proceed</Button>
         </Grid.Column>
       </Grid>
     );

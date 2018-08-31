@@ -101,7 +101,7 @@ export const NavigationItems = props => (
           <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
         }
       </Menu.Menu>
-      {props.location.pathname.includes('/business-application') && !props.location.pathname.includes('business/') && !props.location.pathname.includes('business-real-estate/') ?
+      {props.location.pathname.includes('/business-application') && !props.location.pathname.includes('business/') && !props.location.pathname.includes('commercial-real-estate/') ?
         <Menu.Item>
           <Button.Group>
             <Button as={Link} to="/" inverted color="red">Cancel</Button>

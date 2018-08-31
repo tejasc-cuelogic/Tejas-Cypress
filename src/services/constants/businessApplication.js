@@ -210,8 +210,8 @@ export const BUSINESS_PRE_QUALIFICATION = {
   industryTypes: {
     value: [],
     values: [
-      { label: 'Fashion & Merchandising', icon: 'ns-store', value: 'FASHION_AND_APPAREL' },
-      { label: 'Beauty & Spa', icon: 'ns-beauty-spa', value: 'BEAUTY_SALON' },
+      { label: 'Fashion & Merchandising', icon: 'ns-store', value: 'FASHION_AND_MERCHANDISING' },
+      { label: 'Beauty & Spa', icon: 'ns-beauty-spa', value: 'BEAUTY_AND_SPA' },
       { label: 'Food & Beverage', icon: 'ns-food-light', value: 'FOOD_AND_BEVERAGE' },
       { label: 'Real Estate', icon: 'ns-real-estate', value: 'REAL_ESTATE' },
       { label: 'Fitness & Wellness', icon: 'ns-dumbbells', value: 'FITNESS_AND_WELLNESS' },
@@ -543,6 +543,15 @@ export const BUSINESS_DOC = {
   },
   personalGuaranteeForm: {
     value: [], label: 'Personal Guarantee Form', error: undefined, rule: 'required_if:personalGuarantee,true', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required_if: 'required' },
+  },
+};
+
+export const BUSINESS_DOC_REAL_ESTATE = {
+  dilligenceDocuments: {
+    value: [], label: '', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+  },
+  legalDocuments: {
+    value: [], label: '', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
 };
 

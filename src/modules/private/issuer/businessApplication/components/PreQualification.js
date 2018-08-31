@@ -22,29 +22,25 @@ export default class PreQualification extends Component {
   }
   submit = (e) => {
     e.preventDefault();
-    if (this.props.isPublic) {
-      const { fields } = this.props.businessAppStore.BUSINESS_APP_FRM;
-      if (fields.businessName.value === 'success') {
-        this.props.history.push('/business-application/12345678/success');
-      } else if (fields.businessName.value === 'failed') {
-        this.props.history.push('/business-application/12345678/failed');
-      } else if (fields.businessName.value === 'lendio') {
-        this.props.history.push('/business-application/12345678/lendio');
-      } else {
-        this.props.history.push('/business-application/12345678/success');
-      }
-    } else {
-      this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic)
-        .then(() => {
-          const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
-          Helper.toast('Business pre-qualification request submitted!', 'success');
+    this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic)
+      .then(() => {
+        const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
+        Helper.toast('Business pre-qualification request submitted!', 'success');
+        if (this.props.isPublic) {
+          this.props.history.push(`/business-application/${url}`);
+        } else {
           this.props.history.push(`/app/business-application/${url}`);
-        });
-    }
+        }
+      });
   }
   prequalBasicSubmit = (e) => {
     e.preventDefault();
-    this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
+    if (this.props.isPublic) {
+      this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
+        .then(() => {
+          this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
+        });
+    }
   }
   render() {
     const {
@@ -52,7 +48,7 @@ export default class PreQualification extends Component {
       businessAppEleChange, isPrequalQulify, currentApplicationType,
     } = this.props.businessAppStore;
     const { params } = this.props.match;
-    if (params.applicationType !== 'business-real-estate' && currentApplicationType !== 'business-real-estate' && params.applicationType !== 'business' && currentApplicationType !== 'business') {
+    if (params.applicationType !== 'commercial-real-estate' && currentApplicationType !== 'commercial-real-estate' && params.applicationType !== 'business' && currentApplicationType !== 'business') {
       return <NotFound />;
     }
     return (
@@ -66,7 +62,7 @@ export default class PreQualification extends Component {
               subHeader={
                 <Aux>
                   Welcome to NextSeed! Run through this quick form to get pre-qualified.
-                  <Link to={this.props.isPublic ? 'business-application/need-help' : 'need-help'} className="link">Need help or have questions?</Link>
+                  <Link to={this.props.isPublic ? '/business-application/questions/need-help' : 'need-help'} className="link">Need help or have questions?</Link>
                 </Aux>
               }
             />
@@ -105,9 +101,9 @@ export default class PreQualification extends Component {
           </Form>
           {isPrequalQulify &&
           <Form onSubmit={this.submit} className="issuer-signup">
-            {params.applicationType === 'business-real-estate' || currentApplicationType === 'business-real-estate' ?
-              <PreQualRealEstate /> :
-              <PreQualBusiness />
+            {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate' ?
+              <PreQualRealEstate applicationType={params.applicationType} /> :
+              <PreQualBusiness applicationType={params.applicationType} />
             }
             <Divider hidden />
             <Button

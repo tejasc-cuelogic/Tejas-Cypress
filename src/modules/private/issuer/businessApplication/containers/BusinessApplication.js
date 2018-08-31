@@ -35,6 +35,7 @@ export default class BusinessApplication extends Component {
     setFieldvalue('currentApplicationId', match.params.applicationId);
     setFieldvalue('currentApplicationType', match.params.applicationType);
     if (match.params.applicationId !== 'new' && isFetchedData !== match.params.applicationId) {
+      formReset();
       setFieldvalue('isFetchedData', match.params.applicationId);
       fetchApplicationDataById(match.params.applicationId).then(() => {
         if (this.checkIncludes(['pre-qualification', 'business-details', 'performance', 'documentation'], pathname)) {

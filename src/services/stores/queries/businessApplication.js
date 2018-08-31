@@ -28,15 +28,24 @@ query allBusinessApplicationses($filters: BusinessApplicationsFilter){
 `;
 
 export const createBusinessApplicationPrequalificaiton = gql`
-mutation _submitBusinessApplicationPreQualStepSuccessScenario($preQualificationData: PrequalDetailsInput!) {
-  createBusinessApplicationPrequalification(prequalificationDetails: $preQualificationData) {
+mutation updatePreQualInfo($preQualificationData: PreQualDetailsInput!) {
+  updatePrequalification(prequalificationDetails: $preQualificationData) {
     status
     id
+    userExists
     partnerStatus {
       partnerId
       status
       failReasons
     }
+  }
+}
+`;
+
+export const createBusinessApplicationBasicInfo = gql`
+mutation createBasicInfo($basicInfo: BasicInfoInput!) {
+  upsertPreQualBasicInfo(basicInfo: $basicInfo) {
+    id
   }
 }
 `;

@@ -8,7 +8,7 @@ const APPLICATION_TYPES_META = [
     key: 'o', icon: 'ns-business', text: 'Business', value: 'business', desc: 'Apply for funding for your business', to: '/business-application/business',
   },
   {
-    key: 'bo', icon: 'ns-appartment', text: 'Commercial Real Estate', value: 'business-real-estate', desc: 'Apply for real estate funding', to: '/business-application/business-real-estate',
+    key: 'bo', icon: 'ns-appartment', text: 'Commercial Real Estate', value: 'commercial-real-estate', desc: 'Apply for real estate funding', to: '/business-application/commercial-real-estate',
   },
 ];
 

@@ -8,7 +8,7 @@ const GetBtn = ({ type }) => {
   const BtnMeta = {
     investor: { label: 'Open account', to: '/auth/register-investor' },
     'issuer-type1': { label: 'Start application process', to: '/business-application/business' },
-    'issuer-type2': { label: 'Start application process', to: '/business-application/business-real-estate' },
+    'issuer-type2': { label: 'Start application process', to: '/business-application/commercial-real-estate' },
   };
   return <Button disabled={!type} as={Link} to={type ? BtnMeta[type].to : '/auth/register'} primary size="large" className="relaxed" content={type ? BtnMeta[type].label : 'Open account'} />;
 };
