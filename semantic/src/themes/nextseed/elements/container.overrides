@@ -61,8 +61,14 @@ section{
     } 
     &.security{
         background:url(../../assets/images/investors/security.png) 0% center no-repeat;
+        @media only screen and (max-width : @largestMobileScreen){
+            background:none;
+        }
     } 
     &.track{
         background:url(../../assets/images/investors/laptop.png) 100% center no-repeat;
+        @media only screen and (max-width : @largestMobileScreen){
+            background:none;
+        }
     } 
 }
