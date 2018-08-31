@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { Route, Switch } from 'react-router-dom';
 import { InlineLoader } from '../../../../theme/shared';
-import PrivateLayout from '../../shared/PrivateHOC';
+import PrivateLayout from '../../shared/PrivateLayout';
 import { DataFormatter } from '../../../../helper';
 
 const getModule = component => Loadable({
