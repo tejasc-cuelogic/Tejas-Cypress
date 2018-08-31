@@ -62,7 +62,7 @@ export default class PreQualification extends Component {
             <Icon className="ns-paper-plane" size="massive" color="green" />
             <FormElementWrap
               as="h1"
-              header="Pre-Qualification Application Processssss"
+              header="Pre-Qualification Application Process"
               subHeader={
                 <Aux>
                   Welcome to NextSeed! Run through this quick form to get pre-qualified.
