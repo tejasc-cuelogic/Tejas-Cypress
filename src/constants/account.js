@@ -398,7 +398,7 @@ export const EMPLOYMENT = {
 export const INVESTOR_PROFILE = {
   investorProfileType: {
     value: '',
-    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint(Married)', value: 'JOINT' }],
+    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
     error: undefined,
     rule: 'required',
   },
@@ -407,7 +407,7 @@ export const INVESTOR_PROFILE = {
 export const FINANCES = {
   netWorth: {
     value: '',
-    label: 'Net Worth(Excluding Primary Residence)',
+    label: 'Net Worth (Excluding Primary Residence)',
     error: undefined,
     rule: 'required',
     placeHolder: 'Net Worth',
@@ -448,7 +448,7 @@ export const FINANCES = {
     value: [],
     values: [
       {
-        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm od a stock exchange orFINRA.',
+        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm, a stock exchange or FINRA.',
         value: 'iamamember',
       },
     ],

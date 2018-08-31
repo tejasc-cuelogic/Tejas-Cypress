@@ -15,6 +15,8 @@ export { default as teamStore } from './entities/admin/teamStore';
 export { default as transactionStore } from './entities/account/transactionStore';
 export { default as settingStore } from './entities/account/settingStore';
 export { default as articleStore } from './entities/admin/articleStore';
+export { default as crowdpayStore } from './entities/admin/crowdpayStore';
+export { default as repaymentStore } from './entities/admin/repaymentStore';
 
 export { default as educationStore } from './entities/education/educationStore';
 export { default as rewardStore } from './entities/rewardWallet/rewardStore';
@@ -33,5 +35,6 @@ export { default as businessAppLendioStore } from './entities/user/businessAppLe
 export { default as investmentLimitStore } from './entities/user/settings/investmentLimitStore';
 export { default as campaignStore } from './entities/public/campaignStore';
 export { default as updatesStore } from './entities/public/updatesStore';
+export { default as investmentStore } from './entities/public/investmentStore';
 export { default as agreementsStore } from './entities/user/settings/agreementsStore';
 export { default as accreditationStore } from './entities/user/settings/accreditationStore';

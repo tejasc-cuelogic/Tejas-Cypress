@@ -11,7 +11,7 @@ export default class ApplicationListButtons extends Component {
   }
   render() {
     return (
-      <Table.Cell width={1} textAlign="center">
+      <Table.Cell collapsing textAlign="center">
         <Button.Group vertical compact size="mini">
           {!includes(['DELETED', 'REMOVED'], this.props.status) &&
           this.props.appStatus ===

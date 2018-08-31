@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import { Container } from 'semantic-ui-react';
 import upperFirst from 'lodash/upperFirst';
+import { InlineLoader } from '../../../../theme/shared';
 
 export default class Agreements extends Component {
   render() {
@@ -9,7 +10,7 @@ export default class Agreements extends Component {
     const Module = Loadable({
       loader: () => import(`../components/${loadSection}`),
       loading() {
-        return <div>Loading...</div>;
+        return <InlineLoader />;
       },
     });
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
 import { Header, Icon, Grid, Image, Embed, Container, List, Divider, Breadcrumb, Segment, Reveal } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
-import { NsCarousel } from '../../../../../theme/shared';
+import { NsCarousel, InlineLoader } from '../../../../../theme/shared';
 import videoPoster from '../../../../../assets/images/636206632.webp';
 import campainAboutImg from '../../../../../assets/images/campaign_about.jpg';
 import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
@@ -15,7 +15,7 @@ import businessModel from '../../../../../assets/images/business_model.jpg';
 const getModule = component => Loadable({
   loader: () => import(`../${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 
