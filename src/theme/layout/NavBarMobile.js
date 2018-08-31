@@ -6,6 +6,10 @@ import { Logo, SocialLinks } from '../shared';
 import { NavItems } from './NavigationItems';
 import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 
+const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
+  // (path.includes('business-application') || path.includes('offerings') ? '' : 'LogoColor')
+  (path.includes('business-application') || path.includes('offerings') ? 'LogoColor' : 'LogoWhite')
+));
 @inject('uiStore')
 @observer
 export default class NavBarMobile extends Component {
@@ -24,6 +28,11 @@ export default class NavBarMobile extends Component {
           className="public-sidebar"
         >
           <Icon onClick={onToggle} className="ns-close-light" />
+          <Logo
+            size="small"
+            alt="NextSeed.com"
+            dataSrc={getLogo(location.pathname)}
+          />
           <div className="public-header-nav">
             <NavItems
               refLoc="public"
@@ -45,9 +54,9 @@ export default class NavBarMobile extends Component {
               navItems={FOOTER_NAV}
             />
           </div>
-          <Menu className="social-media" inverted borderless>
+          <div className="social-media">
             <SocialLinks />
-          </Menu>
+          </div>
         </Sidebar>
         <Sidebar.Pusher
           dimmed={visible}
@@ -58,7 +67,7 @@ export default class NavBarMobile extends Component {
             <Icon name="sidebar" onClick={onToggle} className="hamburger" />
             <Logo dataSrc="LogoSmallWhite" className="logo" size="mini" />
             <Link to="/auth/login" className="sign-in">
-              <Icon name="sign in" />
+              Sign In
             </Link>
           </div>
           {publicContent}

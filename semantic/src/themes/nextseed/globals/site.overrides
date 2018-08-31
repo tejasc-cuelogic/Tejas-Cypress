@@ -196,6 +196,9 @@ footer{
 	.footer-head{
 		padding:0 @60px;
 		background-color:@neutral;
+		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+			padding:0;
+		}
 	}
 	section{
 		overflow:hidden;
@@ -206,21 +209,44 @@ footer{
 		}
 		&.active{
 			height:240px;
-			padding:@30px @60px;
+			padding:@30px 0px;
+			display: flex;
+			flex-direction: row;
+			@media only screen and (max-width: @monitorBreakpoint) {
+				padding:@30px @15px;
+			}
+			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+				padding:@30px 0;
+				height:auto;
+			}
+			@media only screen and (max-width : @largestMobileScreen){
+				padding:@30px @30px;
+				height: auto;
+				flex-direction: column;
+			}
 		}
 		.secure{
 			margin-top: @14px;
 			padding-top: @14px;
 			border-top: 1px solid @neutral-darkwhite;
+			@media only screen and (max-width : @largestMobileScreen){
+				border-top: 0;
+			}
 		}
 		.footer-left {
 			display: inline-block;
+			min-width: 240px;
 		}
 		.copyright-info{
-			float:right;
-			max-width:850px;
+			flex-grow: 1;
 			font-size:@12px;
 			line-height:22px;
+			@media only screen and (max-width : @largestMobileScreen){
+				float:none;
+			}
+			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+				max-width: 480px;
+			}
 		}
 	}
 }
@@ -1832,7 +1858,7 @@ p.check-extra-info{
 }
 
 
-//Public responsive
+//Public responsive start
 .public-header-section {
 	background-color: fade(@neutral, 90%);
     position: fixed;
@@ -1847,10 +1873,11 @@ p.check-extra-info{
 	z-index: 3;
 	
 	.sign-in {
-		font-size: @20px;
+		font-size: @14px;
 		color: @white;
 		position: absolute;
 		top: 20px;
 		right: 18px;
 	}
 }
+//Public responsive end

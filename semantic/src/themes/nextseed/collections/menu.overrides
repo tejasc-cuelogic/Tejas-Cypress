@@ -174,6 +174,9 @@
             &:hover{
                 background-color:transparent;
             }
+            @media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+				min-width: 110px;
+			}
         }
         .menu {
             a.item {
@@ -194,6 +197,9 @@ footer{
             .item{
                 margin:0;
             }
+            @media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+				width: 110px;
+			}
         }
     }
 }
@@ -355,10 +361,14 @@ footer{
 }
 
 
-//Public Responsive Menu
+//Public Responsive Menu Start
 .ui.sidebar.left.menu.vertical.visible.public-sidebar {
-    padding: @58px 0 0 0;
+    padding: @25px 0 0 0;
     overflow: hidden;
+    .ui.image.logo {
+        margin-left: @14px;
+        margin-bottom: @20px;
+    }
     .item {
         padding: @5px @14px;
         margin-bottom: @14px;
@@ -378,33 +388,51 @@ footer{
             color: @white;
         }
     }
-    .public-header-nav {
-        .item {
-            text-transform: uppercase;
-            &.dropdown {
-                &.active, :focus, :hover{
-                    background-color: @primary-one !important;
-                    color: @white!important;
-                }
-                .menu.transition .item.active {
-                    background-color: rgba(0,0,0,.03)!important;
-                    color: @white!important;
-                }
+    .public-header-nav .item {
+        text-transform: uppercase;
+        &.dropdown {
+            &.active, :focus, :hover{
+                background-color: @primary-one !important;
+                color: @white!important;
+            }
+            .menu.transition .item.active {
+                background-color: rgba(0,0,0,.03)!important;
+                color: @white!important;
             }
         }
     }
-    .public-footer-nav {
+    .public-footer-nav .item.dropdown {
         .item {
-            &.dropdown {
-                &.active, :focus, :hover{
-                    background-color: @neutral-middark !important;
-                    color: @white!important;
-                }
-                .menu.transition .item.active {
-                    background-color: @neutral-middark!important;
-                    color: @white!important;
-                }
+            margin-bottom: @5px;
+            padding-left: @28px !important;
+            &:first-of-type {
+                margin-bottom: @5px;
+            }
+        }
+        &.active, :focus, :hover{
+            background-color: @neutral-middark !important;
+            color: @white!important;
+        }
+        .menu.transition .item.active {
+            background-color: @neutral-middark!important;
+            color: @white!important;
+        }
+    }
+    .social-media {
+        position: absolute;
+        bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        left: 0;
+        right: 0;
+        .item {
+            margin-bottom: 0;
+            padding: 0 @10px;
+            &:first-of-type {
+                margin-bottom: 0;
             }
         }
     }
 }
+//Public Responsive Menu End

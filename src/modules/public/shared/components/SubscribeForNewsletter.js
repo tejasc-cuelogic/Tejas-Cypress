@@ -30,7 +30,7 @@ const SubscribeFields = ({
       <Grid.Row>
         {
           Object.keys(NEWSLETTER_FRM.fields).map(field => (
-            <Grid.Column computer={4} tablet={4} mobile={16}>
+            <Grid.Column computer={4} tablet={5} mobile={16}>
               <FormInput
                 key={field}
                 type="text"
@@ -42,7 +42,7 @@ const SubscribeFields = ({
             </Grid.Column>
           ))
         }
-        <Grid.Column computer={2} tablet={2} mobile={16}>
+        <Grid.Column computer={2} tablet={3} mobile={16}>
           <Button primary loading={inProgress} fluid>
             Submit
           </Button>

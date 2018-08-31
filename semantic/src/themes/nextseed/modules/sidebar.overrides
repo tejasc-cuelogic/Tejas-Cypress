@@ -23,6 +23,9 @@
 			margin-top: 58px;
 			height:~"calc(100vh - 58px)";
 		}
+		&.dimmed {
+			overflow: hidden;
+		}
 	}
 }
 // .pusher.white-bg{

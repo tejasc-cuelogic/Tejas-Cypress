@@ -39,6 +39,9 @@ section{
         &.invest-banner{
             background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat / cover;
         }
+        &.account-type-banner {
+            background:url(../../assets/images/investors/account_types_mobile.jpg) top center no-repeat / cover;
+        }
     }
 }
 // business and invest pages
@@ -52,6 +55,9 @@ section{
     }
     &.account-types {
         background:url(../../assets/images/investors/account_types.png) 100% center no-repeat;
+        @media only screen and (max-width : @largestMobileScreen){
+            background:none;
+        }
     } 
     &.security{
         background:url(../../assets/images/investors/security.png) 0% center no-repeat;
