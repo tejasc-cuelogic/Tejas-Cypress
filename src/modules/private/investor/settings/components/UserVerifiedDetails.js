@@ -2,16 +2,12 @@ import React from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Card, Header } from 'semantic-ui-react';
-import { Spinner } from '../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
 const userVerifiedDetails = (props) => {
   if (!props.legalDetails) {
-    return (
-      <div>
-        <Spinner loaderMessage="Loading..." />
-      </div>
-    );
+    return <InlineLoader />;
   }
   const {
     ssn,

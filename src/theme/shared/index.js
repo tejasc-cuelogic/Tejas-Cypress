@@ -18,3 +18,4 @@ export { default as PublicSubNav } from './src/PublicSubNav';
 export { default as NsPagination } from './src/NsPagination';
 export { default as EmptyDataSet } from './src/EmptyDataSet';
 export { default as InlineLoader } from './src/InlineLoader';
+export { default as SocialLinks } from './src/SocialLinks';
