@@ -97,11 +97,16 @@ class IraAccountStore {
       const {
         account_id,
         public_token,
-        plaidAccountId,
-        plaidPublicToken,
+        accountNumber,
+        routingNumber,
       } = bankAccountStore.plaidAccDetails;
-      plaidBankDetails.plaidPublicToken = public_token || plaidPublicToken;
-      plaidBankDetails.plaidAccountId = account_id || plaidAccountId;
+      if (account_id && public_token) {
+        plaidBankDetails.plaidPublicToken = public_token;
+        plaidBankDetails.plaidAccountId = account_id;
+      } else {
+        plaidBankDetails.accountNumber = accountNumber;
+        plaidBankDetails.routingNumber = routingNumber;
+      }
       payload.iraBankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -317,7 +322,7 @@ class IraAccountStore {
         this.setFormData('ACC_TYPES_FRM', account.accountDetails);
         this.setFormData('IDENTITY_FRM', account.accountDetails);
         if (account.accountDetails.iraBankDetails &&
-          account.accountDetails.iraBankDetails.plaidPublicToken) {
+          account.accountDetails.iraBankDetails.plaidItemId) {
           bankAccountStore.setPlaidAccDetails(account.accountDetails.iraBankDetails);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {

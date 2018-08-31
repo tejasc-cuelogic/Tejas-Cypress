@@ -230,11 +230,16 @@ class EntityAccountStore {
       const {
         account_id,
         public_token,
-        plaidAccountId,
-        plaidPublicToken,
+        accountNumber,
+        routingNumber,
       } = bankAccountStore.plaidAccDetails;
-      plaidBankDetails.plaidPublicToken = public_token || plaidPublicToken;
-      plaidBankDetails.plaidAccountId = account_id || plaidAccountId;
+      if (account_id && public_token) {
+        plaidBankDetails.plaidPublicToken = public_token;
+        plaidBankDetails.plaidAccountId = account_id;
+      } else {
+        plaidBankDetails.accountNumber = accountNumber;
+        plaidBankDetails.routingNumber = routingNumber;
+      }
       payload.bankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -370,9 +375,11 @@ class EntityAccountStore {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
           if (result.data.createInvestorAccount) {
-            bankAccountStore.setPlaidBankDetails(result.data.createInvestorAccount.accountDetails);
+            const { bankDetails } = result.data.createInvestorAccount.accountDetails;
+            bankAccountStore.setPlaidAccDetails(bankDetails);
           } else {
-            bankAccountStore.setPlaidBankDetails(result.data.updateInvestorAccount.accountDetails);
+            const { bankDetails } = result.data.updateInvestorAccount.accountDetails;
+            bankAccountStore.setPlaidAccDetails(bankDetails);
           }
           if (formStatus !== 'submit') {
             if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
@@ -490,7 +497,7 @@ class EntityAccountStore {
           this.setEntityAttributes('Formation doc');
         }
         if (account.accountDetails.bankDetails &&
-          account.accountDetails.bankDetails.plaidPublicToken) {
+          account.accountDetails.bankDetails.plaidItemId) {
           bankAccountStore.setPlaidAccDetails(account.accountDetails.bankDetails);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
