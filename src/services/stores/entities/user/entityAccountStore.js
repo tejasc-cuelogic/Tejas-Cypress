@@ -317,7 +317,7 @@ class EntityAccountStore {
         bankAccountStore.isValidLinkBank;
       if (isValidCurrentStep) {
         uiStore.setProgress();
-        if (!isEmpty(bankAccountStore.plaidAccDetails)) {
+        if (bankAccountStore.plaidAccDetails && !isEmpty(bankAccountStore.plaidAccDetails)) {
           const plaidBankDetails = {};
           plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
           plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
@@ -442,8 +442,10 @@ class EntityAccountStore {
           if (accountDetails.entity && accountDetails.entity[f]) {
             this.TRUST_INFO_FRM.fields[f].value = accountDetails.entity[f];
           } else {
-            this.TRUST_INFO_FRM.fields[f].value = true;
-            isDirty = true;
+            this.TRUST_INFO_FRM.fields[f].value = false;
+            if (!accountDetails.entity || (accountDetails.entity && typeof accountDetails.entity[f] === 'undefined')) {
+              isDirty = true;
+            }
           }
         } else if (f === 'trustDate' && accountDetails.entity && accountDetails.entity[f]) {
           this.TRUST_INFO_FRM.fields[f].value = accountDetails.entity[f];

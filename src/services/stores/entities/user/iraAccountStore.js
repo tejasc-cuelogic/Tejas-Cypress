@@ -274,9 +274,11 @@ class IraAccountStore {
         .then(action((result) => {
           userDetailsStore.getUser(userStore.currentUser.sub);
           if (result.data.createInvestorAccount) {
-            bankAccountStore.setPlaidAccDetails(result.data.createInvestorAccount.accountDetails);
+            const { iraBankDetails } = result.data.createInvestorAccount.accountDetails;
+            bankAccountStore.setPlaidAccDetails(iraBankDetails);
           } else {
-            bankAccountStore.setPlaidAccDetails(result.data.updateInvestorAccount.accountDetails);
+            const { iraBankDetails } = result.data.updateInvestorAccount.accountDetails;
+            bankAccountStore.setPlaidAccDetails(iraBankDetails);
           }
           if (currentStep.name === 'Identity') {
             if (removeUploadedData) {
