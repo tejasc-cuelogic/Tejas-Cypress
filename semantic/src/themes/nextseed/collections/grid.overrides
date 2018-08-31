@@ -70,6 +70,14 @@
             }
         }
     }
+    &.celled.custom-divided{
+        overflow:hidden;
+        box-shadow:none;
+        margin:0;
+        >.column:not(.row){
+            box-shadow:1px 0 0 0 @celledBorderColor, 0 1px 0 0 @celledBorderColor;
+        }
+    }
 }
 .featured-statistic {
 	counter-reset: section;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Container, Menu, Icon, Image } from 'semantic-ui-react';
 import secure from '../../assets/images/secure-horizontal-1.png';
-import { SOCIAL_URLS } from '../../constants/common';
+import { SocialLinks } from '../shared';
 
 class Footer extends Component {
   state = { fShowHide: false };
@@ -34,9 +34,7 @@ class Footer extends Component {
               <Menu.Item as={Link} to="/agreements/privacy-policy">Privacy Policy</Menu.Item>
               <Menu.Menu position="right">
                 <Menu.Item>© 2018 NextSeed US LLC</Menu.Item>
-                {Object.keys(SOCIAL_URLS).map(s => (
-                  <Menu.Item target="_blank" href={SOCIAL_URLS[s]}><Icon name={s} /></Menu.Item>
-                ))}
+                <SocialLinks />
               </Menu.Menu>
             </Menu>
           </Container>

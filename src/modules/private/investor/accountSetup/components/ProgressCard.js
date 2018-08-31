@@ -1,5 +1,5 @@
 import React from 'react';
-import { isEmpty, upperCase } from 'lodash';
+import { isEmpty, upperCase, startCase } from 'lodash';
 import { Card, Icon, Button } from 'semantic-ui-react';
 import Helper from '../helper';
 
@@ -86,7 +86,7 @@ const ProgressCard = props => (
             <Button.Group vertical>
               <Button
                 color={props.getStepStatus('accounts') === 'disable' ? 'gray' : 'green'}
-                content={`Continue ${upperCase(accountType)} Account Creation`}
+                content={`Continue ${accountType === 'ira' ? upperCase(accountType) : startCase(accountType)} Account Creation`}
                 disabled={props.getStepStatus('accounts') === 'disable'}
                 onClick={() => props.navToAccTypes(accountType)}
               />

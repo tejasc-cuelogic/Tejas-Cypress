@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Divider, Sidebar, Menu, Icon } from 'semantic-ui-react';
-import { Logo } from '../shared';
+import { Logo, SocialLinks } from '../shared';
 import { NavItems } from './NavigationItems';
 import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 
@@ -45,7 +45,9 @@ export default class NavBarMobile extends Component {
               navItems={FOOTER_NAV}
             />
           </div>
-          <div className="social-media" />
+          <Menu className="social-media" inverted borderless>
+            <SocialLinks />
+          </Menu>
         </Sidebar>
         <Sidebar.Pusher
           dimmed={visible}
