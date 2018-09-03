@@ -66,7 +66,7 @@ export default class AllRepayments extends Component {
               <Table.Body>
                 {updates.length === 0 ? (
                   <Table.Row>
-                    <Table.Cell textAlign='center' colSpan={5}>No update to display !</Table.Cell>
+                    <Table.Cell textAlign="center" colSpan={5}>No update to display !</Table.Cell>
                   </Table.Row>
                   ) :
                   updates.map(record => (
