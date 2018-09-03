@@ -15,3 +15,11 @@ export const allOfferings = gql`
     }
   }
 `;
+
+export const deleteOffering = gql`
+  mutation deleteOffering2($id: ID!) {
+    deleteOffering2(id: $id) {
+      id
+    }
+  }
+`;

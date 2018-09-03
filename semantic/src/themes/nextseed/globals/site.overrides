@@ -131,6 +131,9 @@ h6{
 .tertiary-text{
 	color:@tertiary-text !important;
 }
+.warning-text{
+  color:@highlight-secondary !important;
+}
 .intro-text, .note{
 	color:@neutral-middark;
 }
@@ -872,6 +875,7 @@ a.icon-link:hover {
 			}
 		}
 	}
+
 	.vertical-timeline-element-content {
 		box-shadow: none;
 		padding: 0;

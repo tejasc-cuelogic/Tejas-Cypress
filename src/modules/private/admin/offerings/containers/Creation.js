@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import moment from 'moment';
+import { startCase, lowerCase, kebabCase } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
 import { Card, Table, Grid, Form, Button } from 'semantic-ui-react';
 import { InlineLoader } from './../../../../../theme/shared';
 import { ByKeyword } from './../../../../../theme/form/Filters';
+import Actions from '../components/creation/Actions';
+import { DataFormatter } from '../../../../../helper';
+import Helper from '../../../../../helper/utility';
 
 @inject('offeringsStore')
 @observer
@@ -78,17 +82,20 @@ export default class Creation extends Component {
                       <Table.Cell>
                         <b>{offering.campaignName}</b>
                       </Table.Cell>
-                      <Table.Cell>{offering.status}</Table.Cell>
-                      <Table.Cell>{ moment(offering.createdAt).format('MM/DD/YYYY')}</Table.Cell>
-                      <Table.Cell>{offering.launchedDate}</Table.Cell>
+                      <Table.Cell className={`status ${kebabCase(startCase(lowerCase(offering.status)))}`} >{startCase(lowerCase(offering.status))}</Table.Cell>
+                      <Table.Cell>{moment(offering.createdAt).format('M/DD/YYYY')}</Table.Cell>
+                      <Table.Cell>
+                        {DataFormatter.datesDifferenceInDays(offering.launchedDate)} days
+                      </Table.Cell>
                       <Table.Cell>{offering.lead}</Table.Cell>
                       <Table.Cell>
                         <p>
                           <b>{offering.pocName}</b><br />
                           {offering.pocEmail}<br />
-                          {offering.pocPhone}
+                          {Helper.maskPhoneNumber(offering.pocPhone)}
                         </p>
                       </Table.Cell>
+                      <Actions />
                     </Table.Row>
                   ))
                 }

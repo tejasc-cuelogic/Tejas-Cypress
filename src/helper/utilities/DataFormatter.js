@@ -23,6 +23,18 @@ class DataFormatter {
   getCommaSeparatedArrStr = array => [array.slice(0, -1).join(', '), array.slice(-1)[0]].join(array.length < 2 ? '' : ' or ');
 
   getJsonFormattedError = err => JSON.parse(err.message.substring(err.message.indexOf('{')));
+
+  datesDifferenceInDays = (timeStamp2) => {
+    const date = new Date();
+    const timeStamp1 = date.getTime();
+    console.log(timeStamp1);
+    console.log(timeStamp2);
+    const difference = timeStamp1 - timeStamp2;
+    console.log(difference);
+    console.log(difference / 1000 / 60 / 60 / 24);
+    const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
+    return daysDifference;
+  }
 }
 
 export default new DataFormatter();
