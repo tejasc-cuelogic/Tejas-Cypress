@@ -38,3 +38,4 @@ export { default as updatesStore } from './entities/public/updatesStore';
 export { default as investmentStore } from './entities/public/investmentStore';
 export { default as agreementsStore } from './entities/user/settings/agreementsStore';
 export { default as accreditationStore } from './entities/user/settings/accreditationStore';
+export { default as offeringsStore } from './entities/admin/offerings/offeringsStore';
