@@ -6,6 +6,7 @@ section{
         height:710px;
         @media only screen and (max-width : @largestMobileScreen){
             height:380px;
+            margin-top:0px;
         }
         padding-top:118px;
         margin-top:-58px;
@@ -41,6 +42,13 @@ section{
         }
         &.account-type-banner {
             background:url(../../assets/images/investors/account_types_mobile.jpg) top center no-repeat / cover;
+        }
+        &.security-banner {
+            background:url(../../assets/images/investors/security_mobile.jpg) top center no-repeat / cover;
+        }
+        &.track-banner {
+            background:url(../../assets/images/investors/laptop_mobile.png) top center no-repeat / contain;
+            height: 160px;
         }
     }
 }

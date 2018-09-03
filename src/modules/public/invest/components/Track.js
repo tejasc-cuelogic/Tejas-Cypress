@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Button, Container, Grid } from 'semantic-ui-react';
+import { Header, Button, Container, Grid, Responsive } from 'semantic-ui-react';
 
 const Track = () => (
   <Aux>
-    <section className="content-spacer track-banner">
+    <Responsive as={Aux} maxWidth={767}>
+      <section className="banner track-banner" />
+    </Responsive>
+    <section className="content-spacer">
       <Container>
         <Grid padded="vertically">
           <Grid.Row>
@@ -16,7 +19,14 @@ const Track = () => (
                 See how you’re doing and reinvest any earnings effortlessly
                 with our easy-to-use dashboard.
                 </p>
-                <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+                <Responsive as={Aux} minWidth={768}>
+                  <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+                </Responsive>
+                <Responsive as={Aux} maxWidth={767}>
+                  <div className="center-align">
+                    <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+                  </div>
+                </Responsive>
               </div>
             </Grid.Column>
           </Grid.Row>

@@ -22,6 +22,7 @@
 		&.public-pusher {
 			margin-top: 58px;
 			height:~"calc(100vh - 58px)";
+			background-color: transparent;
 		}
 		&.dimmed {
 			overflow: hidden;

@@ -614,6 +614,9 @@ p i.icon {
 		padding-bottom: 4.28571429rem;
 		padding-top: 4.28571429rem;
 		min-height:~"calc(100vh - 424px)";
+		@media only screen and (max-width : @largestMobileScreen){
+			padding:0;
+		}
 		.ui.header{
 			margin-bottom:@4px;
 		}
@@ -651,6 +654,9 @@ p i.icon {
 		&.track-left-section {
 			display: flex !important;
 			justify-content: center;
+			@media only screen and (max-width : @largestMobileScreen){
+				justify-content: flex-start;
+			}
 		}
 	}
 }
