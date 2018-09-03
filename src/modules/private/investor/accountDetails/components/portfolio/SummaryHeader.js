@@ -38,32 +38,32 @@ const SummaryHeader = props => (
       {props.details.title !== false && !props.details.businessName &&
         <SummaryTitle {...props} />
       }
-      <Grid celled="internally" columns={props.details.summary.length} doubling>
-        <Grid.Row>
-          {
-            props.details.summary.map(row => (
-              <Grid.Column key={snakeCase(row.title)}>
-                <Card.Content>
-                  <Statistic size="mini">
-                    <Statistic.Label>
-                      {row.title}
+      <Grid doubling celled columns={props.cols || props.details.summary.length} className="custom-divided">
+        {
+          props.details.summary.map(row => (
+            <Grid.Column key={snakeCase(row.title)}>
+              <Card.Content>
+                <Statistic size="mini" className={row.status}>
+                  <Statistic.Label>
+                    {row.title}
+                    {row.info &&
                       <Popup
                         trigger={<Icon className="ns-help-circle" />}
                         content={row.info}
                         position="top center"
                         className="center-align"
                       />
-                    </Statistic.Label>
-                    <Statistic.Value>{showValue(row)}</Statistic.Value>
-                    {row.title === 'Total Balance' &&
-                      <Statistic.Label as="a">Deposit funds</Statistic.Label>
                     }
-                  </Statistic>
-                </Card.Content>
-              </Grid.Column>
-            ))
-          }
-        </Grid.Row>
+                  </Statistic.Label>
+                  <Statistic.Value>{showValue(row)}</Statistic.Value>
+                  {row.title === 'Total Balance' &&
+                    <Statistic.Label as="a">Deposit funds</Statistic.Label>
+                  }
+                </Statistic>
+              </Card.Content>
+            </Grid.Column>
+          ))
+        }
       </Grid>
     </Card>
   </Aux>

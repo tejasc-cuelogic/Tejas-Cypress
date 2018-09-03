@@ -12,7 +12,7 @@ import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
 import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
-import { Spinner, UserAvatar } from '../../../../../theme/shared';
+import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 
 @inject('userDetailsStore', 'userStore', 'identityStore', 'uiStore')
 @observer
@@ -49,11 +49,7 @@ export default class ProfileData extends Component {
       setAddressFieldsForProfile,
     } = this.props.identityStore;
     if (isEmpty(this.props.userDetailsStore.userDetails) || !info) {
-      return (
-        <div>
-          <Spinner loaderMessage="Loading..." />
-        </div>
-      );
+      return <InlineLoader />;
     }
     return (
       <Grid>
@@ -137,12 +133,14 @@ export default class ProfileData extends Component {
                 <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
               </div>
             </Card>
-            <UserVerifiedDetails
-              {...this.props}
-              email={email}
-              legalDetails={legalDetails}
-              isUserVerified={this.isVerified}
-            />
+            {userAvatar.roles.includes('investor') &&
+              <UserVerifiedDetails
+                {...this.props}
+                email={email}
+                legalDetails={legalDetails}
+                isUserVerified={this.isVerified}
+              />
+            }
           </Card.Group>
         </Grid.Column>
       </Grid>

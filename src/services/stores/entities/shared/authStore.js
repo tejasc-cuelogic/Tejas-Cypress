@@ -8,7 +8,7 @@ import {
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { uiStore } from '../../index';
+import { uiStore, navStore } from '../../index';
 
 export class AuthStore {
   @observable hasSession = false;
@@ -115,6 +115,10 @@ export class AuthStore {
   @action
   setUserLoggedIn(status) {
     this.isUserLoggedIn = status;
+    if (status) {
+      cookie.save('EVER_LOGS_IN', status, { maxAge: 31536000 });
+    }
+    navStore.setEverLogsIn();
   }
 
   @action
