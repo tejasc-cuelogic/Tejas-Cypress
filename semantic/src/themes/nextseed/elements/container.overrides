@@ -4,10 +4,16 @@
 section{
     &.banner {
         height:710px;
-        @media only screen and (max-width : @largestMobileScreen){
-            height:380px;
-            margin-top:0px;
+        @media only screen and (max-width : @computerBreakpoint) {
+            height:400px;
+            padding-top: 100px;
         }
+        @media only screen and (max-width : @largestMobileScreen){
+            height:280px;
+            margin-top:0px;
+            padding: 0;
+        }
+        background-position: top center;
         padding-top:118px;
         margin-top:-58px;
         >.ui.container{
@@ -17,6 +23,10 @@ section{
                 display:table-cell;
                 vertical-align:middle;
                 h1.ui.header {
+                    @media only screen and (max-width : @computerBreakpoint) {
+                        font-size: 38px;
+                        line-height: 46px;
+                    }
                     span {
                         margin-top: @14px;
                         display: inline-block;
@@ -26,6 +36,9 @@ section{
         }
         &.home-banner{
             background:url(../../assets/images/banners/home-banner.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @largestMobileScreen){
+                background-position-x: 88%;
+            }
         }
         &.mission-banner{
             background:url(../../assets/images/banners/mission-banner.jpg) top center no-repeat / cover;
@@ -39,6 +52,9 @@ section{
         }
         &.invest-banner{
             background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @largestMobileScreen){
+                background-position-x: 88%;
+            }
         }
         &.account-type-banner {
             background:url(../../assets/images/investors/account_types_mobile.jpg) top center no-repeat / cover;

@@ -21,15 +21,17 @@ const PublicSubNav = (props) => {
           className={`menu-secondary-fixed ${moreProps ? moreProps.class : ''} ${navStatus === 'sub' ? 'active' : ''}`}
         >
           <Container className={!(moreProps && moreProps.onlyNav) ? 'fluid' : ''}>
-            {!(moreProps && moreProps.onlyNav) && (
-              <Menu.Item as={Link} to="/" header>
-                <Logo
-                  size="small"
-                  alt="NextSeed.com"
-                  dataSrc="LogoColor"
-                />
-              </Menu.Item>
-            )}
+            <Responsive minWidth={1024} as={Aux}>
+              {!(moreProps && moreProps.onlyNav) && (
+                <Menu.Item as={Link} to="/" header>
+                  <Logo
+                    size="small"
+                    alt="NextSeed.com"
+                    dataSrc="LogoColor"
+                  />
+                </Menu.Item>
+              )}
+            </Responsive>
             <Menu.Menu
               secondary
               className={`menu-secondary ${(moreProps && moreProps.onlyNav) ? '' : 'center-align'}`}
@@ -37,9 +39,11 @@ const PublicSubNav = (props) => {
               <Menu.Item header>{title}</Menu.Item>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
             </Menu.Menu>
-            <Menu.Item as={Link} to={!props.currentUser ? '/auth/login' : `/app/${props.currentUser.roles && props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}>
-              <Button secondary compact>{!props.currentUser ? 'Sign Up/Log In' : 'Dashboard'}</Button>
-            </Menu.Item>
+            <Responsive minWidth={1024} as={Aux}>
+              <Menu.Item as={Link} to={!props.currentUser ? '/auth/login' : `/app/${props.currentUser.roles && props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}>
+                <Button secondary compact>{!props.currentUser ? 'Sign Up/Log In' : 'Dashboard'}</Button>
+              </Menu.Item>
+            </Responsive>
           </Container>
         </Menu>
       </Responsive>
