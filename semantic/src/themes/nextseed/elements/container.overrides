@@ -49,6 +49,9 @@ section{
         }
         &.business-banner{
             background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @largestMobileScreen){
+                background-position-x: 88%;
+            }
         }
         &.invest-banner{
             background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat / cover;

@@ -558,6 +558,10 @@ p i.icon {
 	div {
 		display: inline-block;
 		width: ~"calc(100% - 70px)";
+		@media only screen and (max-width : @largestMobileScreen){
+			width: 100%;
+			margin-top: @14px;
+		}
 	}
 }
 .testimonial-slider {
@@ -565,9 +569,20 @@ p i.icon {
 		display: flex !important;
 		flex-direction: column;
 		justify-content: center;
+		h2.ui.header {
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @20px !important;
+				line-height: 24px;
+			}
+		}
 		h3 {
 			line-height: 40px;
 			margin-top: 0;
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @15px;
+				font-weight: @normal;
+				line-height: 20px;
+			}
 		}
 		.testimonial-user-details {
 			p {
@@ -579,20 +594,6 @@ p i.icon {
 				color: @primary-one;
 				font-weight: @bold;
 			}
-		}
-	}
-	.slick-prev {
-		&:before {
-			content: "\e916";
-			font-family: 'nextseed';
-			font-size: @18px !important;
-		}
-	}
-	.slick-next {
-		&:before {
-			content: "\e918";
-			font-family: 'nextseed';
-			font-size: @18px !important;
 		}
 	}
 }
@@ -665,6 +666,12 @@ p i.icon {
 	.slick-slide {
 		.ui.grid {
 			display: flex !important;
+			.ui.image {
+				@media only screen and (max-width : @largestMobileScreen){
+					width: 90%;
+					margin: auto;
+				}		
+			}
 		}
 	}
 	.slick-prev, .slick-next {
@@ -674,12 +681,31 @@ p i.icon {
 			font-size: @30px;
 			color: @neutral-middark;
 		}
-	}
-	.slick-next {
-		right: -50px;
+		@media only screen and (max-width : @largestMobileScreen){
+			top: 25%;
+		}
 	}
 	.slick-prev {
 		left: -50px;
+		&:before {
+			content: "\e916";
+			font-family: 'nextseed';
+			font-size: @18px !important;
+		}
+		@media only screen and (max-width : @largestMobileScreen){
+			left: -20px;
+		}
+	}
+	.slick-next {
+		right: -50px;
+		&:before {
+			content: "\e918";
+			font-family: 'nextseed';
+			font-size: @18px !important;
+		}
+		@media only screen and (max-width : @largestMobileScreen){
+			right: -20px;
+		}
 	}
 	.slick-dots{
 		bottom: 0;
@@ -1884,6 +1910,11 @@ p.check-extra-info{
 		position: absolute;
 		top: 20px;
 		right: 18px;
+	}
+}
+.proven-result-section {
+	.ui.grid>* {
+		padding: 0;
 	}
 }
 //Public responsive end
