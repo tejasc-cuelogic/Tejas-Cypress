@@ -42,86 +42,85 @@ export const allUsersQuery = gql`
 `;
 
 export const userDetailsQuery = gql`
-query getUserDetails($id: ID!) {
-  user(id: $id) {
-    id
-    firstName
-    lastName
-    email
-    accountType
-    accountStatus
-    accreditation
-    createdDate
-    lastLoginDate
-    contactDetails {
-      phone {
-        number
-        verificationDate
+  query getUserDetails($userId: ID!) {
+    user(id: $userId) {
+      id
+      info {
+        firstName
+        lastName
+        mailingAddress {
+          street
+          city
+          state
+          zipCode
+        }
+        avatar {
+          name
+          url
+        }
       }
-    }
-    legalDetails {
-      legalName {
-        firstLegalName
-        lastLegalName
+      email {
+        address
       }
-      dateOfBirth
-      ssn
-      legalAddress {
-        street
-        city
-        state
-        zipCode
-      }
-      cipStatus {
+      roles {
+        name
+        scope
         status
       }
-    }
-    accounts {
-      userId
-      accountId
-      accountType
-      accountDetails
-      finishedDate
-      status
-    }
-    address {
-      mailing {
-        street
-        city
-        state
-        zipCode
+      locked {
+        lock
       }
-    }
-    avatar {
-      name
-      url
-    }
-    investorProfileData {
-      isPartialProfile
-      employmentStatusInfo {
-        employmentStatus
-        employer
-        currentPosition
+      accreditation {
+        status
       }
-      investorProfileType
-      financialInfo {
-        netWorth
-        annualIncomeThirdLastYear
-        annualIncomeLastYear
-        annualIncomeCurrentYear
-        directorShareHolderOfCompany
-        employedOrAssoWithFINRAFirmName
+      created {
+        date
       }
-      investmentExperienceInfo {
-        investmentExperienceLevel
-        readyInvestingInLimitedLiquiditySecurities
-        readyForRisksInvolved
+      lastLoginDate
+      phone {
+        number
+        verified
       }
+      legalDetails {
+        legalName {
+          firstLegalName
+          lastLegalName
+        }
+        dateOfBirth
+        ssn
+        legalAddress {
+          street
+          city
+          state
+          zipCode
+        }
+        status
+      }
+      investorProfileData {
+        isPartialProfile
+        employmentStatusInfo {
+          employmentStatus
+          employer
+          currentPosition
+        }
+        investorProfileType
+        financialInfo {
+          netWorth
+          annualIncomeThirdLastYear
+          annualIncomeLastYear
+          annualIncomeCurrentYear
+          directorShareHolderOfCompany
+          employedOrAssoWithFINRAFirmName
+        }
+        investmentExperienceInfo {
+          investmentExperienceLevel
+          readyInvestingInLimitedLiquiditySecurities
+          readyForRisksInvolved
+        }
+      }
+      mfaMode
     }
-    accountStatus
-    mfaMode 
   }
-}
 `;
 
 export const createUserMutation = gql`

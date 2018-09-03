@@ -116,40 +116,35 @@ export const updateUserCIPInfo = gql`
   }`;
 
 export const updateUserProfileData = gql`
-  mutation _updateUserProfileData($userId: String! $profileDetails: UserProfileInput!) {
+  mutation _updateUserProfileData($profileDetails: UserInfoInput!) {
   updateUserProfileData(
-  userId: $userId
   profileDetails: $profileDetails
   ) {
       id
-      firstName
-      lastName
-      address {
-        mailing {
-          street
-          city
-          state
-          zipCode
-        }
-        residence {
-          street
+      info {
+        salutation
+        firstName
+        lastName
+        mailingAddress {
+            street
+            city
+            state
+            zipCode
           }
-        }
       }
+    }
   }`;
 
 export const requestEmailChnage = gql`
-  mutation _requestEmailChange($userId: String! $newEmail: String!) {
+  mutation _requestEmailChange($newEmail: String!) {
     requestEmailChange(
-      userId: $userId
       newEmail: $newEmail
     )
   }`;
 
 export const verifyAndUpdateEmail = gql`
-  mutation _verifyAndUpdateEmail($userId: String! $confirmationCode: String!) {
+  mutation _verifyAndUpdateEmail($confirmationCode: String!) {
     verifyAndUpdateEmail(
-      userId: $userId
       confirmationCode: $confirmationCode
     ){
       id
@@ -158,20 +153,18 @@ export const verifyAndUpdateEmail = gql`
   }`;
 
 export const updateUserPhoneDetail = gql`
-  mutation _updateUserPhoneDetail($phoneDetails: phoneInput! $userId: String!){
+  mutation _updateUserPhoneDetail($phoneDetails: phoneInput!){
     updateUserPhoneDetails(
       phoneDetails: $phoneDetails,
-      userId: $userId
       ) {
-      id
-      email
-      contactDetails{
+        id
+        email {
+          address
+        }
         phone {
           number
-          countryCode
-          verificationDate
+          verified
         }
-      }
     }
   }`;
 

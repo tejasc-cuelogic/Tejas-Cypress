@@ -2,7 +2,7 @@ import graphql from 'mobx-apollo';
 import { observable, action, computed } from 'mobx';
 import { mapValues, keyBy, find, flatMap, map } from 'lodash';
 import Validator from 'validatorjs';
-import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO, COUNTRY_CODES } from '../../../constants/user';
+import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, userStore, userDetailsStore } from '../../index';
 import { isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, startUserPhoneVerification, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
@@ -97,7 +97,7 @@ export class IdentityStore {
   @computed
   get formattedUserInfo() {
     const { fields } = this.ID_VERIFICATION_FRM;
-    const { phone } = userDetailsStore.userDetails.contactDetails;
+    const { phone } = userDetailsStore.userDetails;
     const userInfo = {
       firstLegalName: fields.firstLegalName.value,
       lastLegalName: fields.lastLegalName.value,
@@ -110,8 +110,8 @@ export class IdentityStore {
         zipCode: fields.zipCode.value,
       },
     };
-    const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone.number;
-    const phoneDetails = { number, countryCode: COUNTRY_CODES.US };
+    const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
+    const phoneDetails = { number };
     return { userInfo, phoneDetails };
   }
 
@@ -392,10 +392,8 @@ export class IdentityStore {
       .mutate({
         mutation: updateUserPhoneDetail,
         variables: {
-          userId: userStore.currentUser.sub,
           phoneDetails: {
             number: this.ID_VERIFICATION_FRM.fields.phoneNumber.value,
-            countryCode: COUNTRY_CODES.US,
           },
         },
       })
@@ -442,7 +440,6 @@ export class IdentityStore {
         .mutate({
           mutation: updateUserProfileData,
           variables: {
-            userId: userStore.currentUser.sub,
             profileDetails: this.profileDetails,
           },
         })
@@ -462,23 +459,24 @@ export class IdentityStore {
   @computed
   get profileDetails() {
     const { fields } = this.ID_PROFILE_INFO;
+    const data = {};
     const profileDetails = {
+      salutation: fields.firstName.value,
       firstName: fields.firstName.value,
       lastName: fields.lastName.value,
-      address: {
-        mailing: {
-          street: fields.street.value,
-          city: fields.city.value,
-          state: fields.state.value,
-          zipCode: fields.zipCode.value,
-        },
+      mailingAddress: {
+        street: fields.street.value,
+        city: fields.city.value,
+        state: fields.state.value,
+        zipCode: fields.zipCode.value,
       },
       avatar: {
         name: fields.profilePhoto.value,
         url: fields.profilePhoto.responseUrl,
       },
     };
-    return profileDetails;
+    data.updateUserProfileData = profileDetails;
+    return data;
   }
 
   @action
@@ -519,22 +517,21 @@ export class IdentityStore {
       email,
       address,
       legalDetails,
-      contactDetails,
+      info,
+      phone,
     } = userDetails;
-    if (userDetails.firstName) {
-      this.setProfileInfoField('firstName', userDetails.firstName);
+    if (info) {
+      this.setProfileInfoField('firstName', info.firstName);
     }
-    if (userDetails.lastName) {
-      this.setProfileInfoField('lastName', userDetails.lastName);
-    } else if (legalDetails && legalDetails.legalName !== null) {
+    if (info) {
+      this.setProfileInfoField('lastName', info.lastName);
+    } else if (legalDetails !== null) {
       this.setProfileInfoField('firstName', legalDetails.legalName.firstLegalName);
       this.setProfileInfoField('firstName', legalDetails.legalName.lastLegalName);
     }
-    this.setProfileInfoField('email', email);
-    if (contactDetails && contactDetails.phone !== null &&
-      contactDetails.phone.verificationDate !== null
-    ) {
-      this.setProfileInfoField('phoneNumber', contactDetails.phone.number);
+    this.setProfileInfoField('email', email.address);
+    if (phone !== null && phone.verified) {
+      this.setProfileInfoField('phoneNumber', phone.number);
     }
     if (address === null) {
       const addressFields = ['street', 'city', 'state', 'zipCode'];

@@ -37,18 +37,18 @@ export default class ProfileData extends Component {
   }
   render() {
     const {
-      email, legalDetails, avatar, firstName, lastName,
+      email, legalDetails, info,
     } = this.props.userDetailsStore.userDetails;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
-      firstName, lastName, avatarUrl: avatar ? avatar.url : '', roles: toJS(User.roles),
+      firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles: toJS(User.roles),
     };
     const {
       ID_PROFILE_INFO,
       profileInfoChange,
       setAddressFieldsForProfile,
     } = this.props.identityStore;
-    if (isEmpty(this.props.userDetailsStore.userDetails)) {
+    if (isEmpty(this.props.userDetailsStore.userDetails) || !info) {
       return (
         <div>
           <Spinner loaderMessage="Loading..." />

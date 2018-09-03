@@ -86,12 +86,12 @@ export class UserDetailsStore {
   }
 
   @action
-  getUser = id => new Promise((res) => {
+  getUser = userId => new Promise((res) => {
     this.currentUser = graphql({
       client,
       query: userDetailsQuery,
       fetchPolicy: 'network-only',
-      variables: { id },
+      variables: { userId },
       onFetch: () => {
         identityStore.setProfileInfo(this.userDetails);
         res();
@@ -100,11 +100,11 @@ export class UserDetailsStore {
   })
 
   @action
-  getUserProfileDetails = (id) => {
+  getUserProfileDetails = (userId) => {
     this.detailsOfUser = graphql({
       client,
       query: userDetailsQuery,
-      variables: { id },
+      variables: { userId },
     });
   }
 

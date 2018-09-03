@@ -2,24 +2,11 @@ import React from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Card, Header } from 'semantic-ui-react';
-import { Spinner } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
-const userVerifiedDetails = (props) => {
-  if (!props.legalDetails) {
-    return (
-      <div>
-        <Spinner loaderMessage="Loading..." />
-      </div>
-    );
-  }
-  const {
-    ssn,
-    legalName,
-    legalAddress,
-    dateOfBirth,
-  } = props.legalDetails;
-  if (!props.isUserVerified(props.legalDetails.cipStatus)) {
+const userVerifiedDetails = ({ email, legalDetails, isUserVerified }) => {
+  if (legalDetails === null ||
+    (legalDetails !== null && !isUserVerified(legalDetails.status))) {
     return (
       <Card fluid className="form-card">
         <Header as="h5">Identity not verified</Header>
@@ -32,18 +19,18 @@ const userVerifiedDetails = (props) => {
       <Header as="h5">Identity verified</Header>
       <dl className="dl-horizontal">
         <dt>Legal First Name</dt>
-        <dd>{legalName.firstLegalName}</dd>
+        <dd>{legalDetails.legalName.firstLegalName}</dd>
         <dt>Legal Last Name</dt>
-        <dd>{legalName.lastLegalName}</dd>
+        <dd>{legalDetails.legalName.lastLegalName}</dd>
         <dt>SSN</dt>
-        <dd>{Helper.cryptedSSNNumber(ssn)}</dd>
+        <dd>{Helper.cryptedSSNNumber(legalDetails.ssn)}</dd>
         <dt>DOB</dt>
-        <dd>{moment(dateOfBirth).format('MM-DD-YYYY')}</dd>
+        <dd>{moment(legalDetails.dateOfBirth).format('MM-DD-YYYY')}</dd>
         <dt>Legal Address</dt>
-        <dd>{`${legalAddress.street}, ${legalAddress.city}, ${legalAddress.state}, ${legalAddress.zipCode}`}
+        <dd>{`${legalDetails.legalAddress.street}, ${legalDetails.legalAddress.city}, ${legalDetails.legalAddress.state}, ${legalDetails.legalAddress.zipCode}`}
         </dd>
         <dt>Email Address</dt>
-        <dd>{props.email}</dd>
+        <dd>{email.address}</dd>
       </dl>
       <p className="intro-text">
         If any of this information needs to be updated, please contact support through the{' '}
