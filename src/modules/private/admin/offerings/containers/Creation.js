@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import moment from 'moment';
 import { startCase, lowerCase, kebabCase } from 'lodash';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Card, Table, Grid, Form, Button } from 'semantic-ui-react';
+import { Card, Table } from 'semantic-ui-react';
 import { InlineLoader } from './../../../../../theme/shared';
-import { ByKeyword } from './../../../../../theme/form/Filters';
 import Actions from '../components/creation/Actions';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
@@ -18,49 +16,19 @@ export default class Creation extends Component {
     this.props.offeringsStore.initRequest();
   }
 
-  executeSearch = (e) => {
-    if (e.charCode === 13) {
-      this.props.offeringsStore.setInitiateSrch('keyword', e.target.value);
-    }
-  }
-
-  toggleSearch = () => this.props.offeringsStore.toggleSearch();
-
   render() {
     const { offeringsStore } = this.props;
     const {
       offerings,
       loading,
-      requestState,
-      filters,
     } = offeringsStore;
+
     if (loading) {
       return <InlineLoader />;
     }
+
     return (
       <Aux>
-        <Form>
-          <Grid stackable>
-            <Grid.Row>
-              <ByKeyword
-                executeSearch={this.executeSearch}
-                w={[11]}
-                placeholder="Search by keyword or phrase"
-                toggleSearch={this.toggleSearch}
-                requestState={requestState}
-                filters={filters}
-                more="no"
-                addon={
-                  <Grid.Column width={5} textAlign="right">
-                    <Button color="green" as={Link} floated="right" to={this.props.match.url}>
-                      Export
-                    </Button>
-                  </Grid.Column>
-                }
-              />
-            </Grid.Row>
-          </Grid>
-        </Form>
         <Card fluid>
           <div className="table-wrapper">
             <Table unstackable className="application-list">
@@ -95,7 +63,7 @@ export default class Creation extends Component {
                           {Helper.maskPhoneNumber(offering.pocPhone)}
                         </p>
                       </Table.Cell>
-                      <Actions />
+                      <Actions offeringId={offering.id} />
                     </Table.Row>
                   ))
                 }

@@ -27,11 +27,8 @@ class DataFormatter {
   datesDifferenceInDays = (timeStamp2) => {
     const date = new Date();
     const timeStamp1 = date.getTime();
-    console.log(timeStamp1);
-    console.log(timeStamp2);
-    const difference = timeStamp1 - timeStamp2;
-    console.log(difference);
-    console.log(difference / 1000 / 60 / 60 / 24);
+    const convertedtimeStamp2 = new Date(timeStamp2);
+    const difference = timeStamp1 - convertedtimeStamp2.getTime();
     const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
     return daysDifference;
   }

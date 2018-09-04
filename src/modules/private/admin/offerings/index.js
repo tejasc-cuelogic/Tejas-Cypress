@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import { mapValues } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
-import { Route, Switch } from 'react-router-dom';
-import { Label } from 'semantic-ui-react';
-import PrivateLayout from '../../shared/PrivateHOC';
+import { Route, Switch, Link } from 'react-router-dom';
+import { Grid, Button } from 'semantic-ui-react';
+import PrivateLayout from '../../shared/PrivateLayout';
+import { InlineLoader } from '../../../../theme/shared';
+import { ByKeyword } from '../../../../theme/form/Filters';
 import { DataFormatter } from '../../../../helper';
 
 const getModule = component => Loadable({
   loader: () => import(`./containers/${component}`),
   loading() {
-    return <div>Loading...</div>;
+    return <InlineLoader />;
   },
 });
 
@@ -23,22 +25,47 @@ export default class Offerings extends Component {
     }
   }
 
+  executeSearch = (e) => {
+    if (e.charCode === 13) {
+      this.props.offeringsStore.setInitiateSrch('keyword', e.target.value);
+    }
+  }
+
+  toggleSearch = () => this.props.offeringsStore.toggleSearch();
+
   module = name => DataFormatter.upperCamelCase(name);
 
   representAddon = subTabs => mapValues(subTabs, t => (
-    <Label circular color="red" size="mini">{t}</Label>
+    ` (${t})`
   ));
 
   render() {
     const { match } = this.props;
     const navItems = this.props.navStore.navMeta.subNavigations;
-    const { subTabs } = this.props.offeringsStore;
-    console.log(this.representAddon(subTabs));
+    const { subTabs, filters, requestState } = this.props.offeringsStore;
     return (
       <PrivateLayout
         {...this.props}
         subNav
         subNavAddon={{ data: this.representAddon(subTabs) }}
+        P1={
+          <ByKeyword
+            executeSearch={this.executeSearch}
+            w={[8]}
+            placeholder="Search by keyword or phrase"
+            toggleSearch={this.toggleSearch}
+            requestState={requestState}
+            filters={filters}
+            more="no"
+            addon={
+              <Grid.Column width={5} textAlign="right">
+                <Button color="green" as={Link} floated="right" to={this.props.match.url}>
+                  Export
+                </Button>
+              </Grid.Column>
+            }
+          />
+        }
       >
         <Switch>
           <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
