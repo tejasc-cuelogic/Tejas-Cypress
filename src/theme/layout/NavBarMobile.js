@@ -27,35 +27,37 @@ export default class NavBarMobile extends Component {
           visible={visible}
           className="public-sidebar"
         >
-          <Icon onClick={onToggle} className="ns-close-light" />
-          <Logo
-            size="small"
-            alt="NextSeed.com"
-            dataSrc={getLogo(location.pathname)}
-          />
-          <div className="public-header-nav">
-            <NavItems
-              refLoc="public"
-              currentUser={currentUser}
-              location={location}
-              isMobile={isMobile}
-              navStatus={navStatus}
-              navItems={PUBLIC_NAV}
+          <div className="public-mobile-nav">
+            <Icon onClick={onToggle} className="ns-close-light" />
+            <Logo
+              size="small"
+              alt="NextSeed.com"
+              dataSrc={getLogo(location.pathname)}
             />
-          </div>
-          <Divider />
-          <div className="public-footer-nav">
-            <NavItems
-              refLoc="public"
-              currentUser={currentUser}
-              location={location}
-              isMobile={isMobile}
-              navStatus={navStatus}
-              navItems={FOOTER_NAV}
-            />
-          </div>
-          <div className="social-media">
-            <SocialLinks />
+            <div className="public-header-nav">
+              <NavItems
+                refLoc="public"
+                currentUser={currentUser}
+                location={location}
+                isMobile={isMobile}
+                navStatus={navStatus}
+                navItems={PUBLIC_NAV}
+              />
+            </div>
+            <Divider />
+            <div className="public-footer-nav">
+              <NavItems
+                refLoc="public"
+                currentUser={currentUser}
+                location={location}
+                isMobile={isMobile}
+                navStatus={navStatus}
+                navItems={FOOTER_NAV}
+              />
+            </div>
+            <div className="social-media">
+              <SocialLinks />
+            </div>
           </div>
         </Sidebar>
         <Sidebar.Pusher

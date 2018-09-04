@@ -17,15 +17,17 @@
         font-size: @20px;
         line-height: 28px;
     }
-    &.learn-more-list >.item {
-        .header {
-            margin-bottom: @10px;
-        }
-        >.icon{
-            display:table-cell;
-            +.content {
+    &.learn-more-list{
+        >.item {
+            .header {
+                margin-bottom: @10px;
+            }
+            >.icon{
                 display:table-cell;
-                color: @neutral-middark;
+                +.content {
+                    display:table-cell;
+                    color: @neutral-middark;
+                }
             }
         }
     }

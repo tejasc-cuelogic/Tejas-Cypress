@@ -48,7 +48,7 @@ const PublicSubNav = (props) => {
         </Menu>
       </Responsive>
       <Responsive maxWidth={767} as={Container}>
-        <Dropdown placeholder="Investing" fluid selection options={mobnavItems} />
+        <Dropdown placeholder="Investing" fluid selection options={mobnavItems} className="mb-10" />
       </Responsive>
     </Aux>
   );

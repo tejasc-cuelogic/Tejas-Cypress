@@ -29,9 +29,6 @@
 		}
 	}
 }
-// .pusher.white-bg{
-// 	background-color:@white !important;
-// }
 .ui.sidebar.left.thin.menu{
 	@media only screen and (min-width : @largeMonitorBreakpoint){
 		&.visible{
@@ -75,9 +72,9 @@
 			border-radius:@4px !important;
 			margin-bottom:@3px;
 			font-weight:400;
-			&:first-of-type{
-				margin-bottom:@30px;
-			}
+			// &:first-of-type{
+			// 	margin-bottom:@30px;
+			// }
 			&:first-child:before, &:before{
 				display:none;
 				background:none;
@@ -150,8 +147,6 @@
 	&.push:not(.visible){
 		width:64px;
 		transform:translate3D(0,0,0);
-		// box-shadow:@boxShadow !important;
-		// overflow-y:visible !important;
 		.user-picture{
 			margin:@24px 0 @7px;
 			> img{
@@ -364,7 +359,6 @@
 		color:@neutral-middark;
 	}
 	&.issuer{
-		// background-color:@neutral-middark;
 		.item{
 			&:hover, &:focus, &.active, &.active:hover{
 				background-color:@neutral;
