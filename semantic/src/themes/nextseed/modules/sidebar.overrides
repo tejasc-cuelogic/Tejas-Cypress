@@ -222,10 +222,10 @@
 				margin-bottom:@5px;
 			}
 		}
-		.ui.divider{
-			margin-left:-@13px;
-			margin-right:-@13px;
-		}
+		// .ui.divider{
+		// 	margin-left:-@13px;
+		// 	margin-right:-@13px;
+		// }
 		~.pusher .icon.hamburger{
 			font-size:@20px;
 			color:@neutral-middark;

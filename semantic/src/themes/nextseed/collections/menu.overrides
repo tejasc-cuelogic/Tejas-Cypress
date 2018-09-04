@@ -364,18 +364,18 @@ footer{
 //Public Responsive Menu Start
 .public-mobile-nav {
     position: relative;
-    padding: @25px 0 @60px;
+    padding: @25px 0 @58px;
     height: 100vh;
     overflow: auto;
 }
 .ui.sidebar.menu.public-sidebar {
     overflow: hidden !important;
     .ui.divider {
-        margin-left: 0;
-        margin-right: 0;
+        margin-left: @24px;
+        margin-right: @24px;
     }
     &.overlay .ui.image.logo {
-        margin-left: @14px;
+        margin-left: @24px;
         margin-bottom: @20px;
     }
     .social-media {
@@ -385,22 +385,34 @@ footer{
         right: 0;
         bottom: 0;
         background: @neutral;
-        height: 40px;
-        padding: @9px 0;
+        height: 58px;
+        padding: @18px 0;
         .item {
             margin-bottom: 0;
-            padding: 0 @10px !important;
+            padding: 0 @8px !important;
             display: inline-block;
+            i.icon {
+                margin: 0;
+            }
         }
     }
     &.visible.vertical .item {
         border-radius: 0 !important;
+        padding: @8px @24px;
         span {
             margin-left: 0;
             max-width: 100%;
         }
-        &.dropdown .icon.dropdown {
-            color: @white;
+        &.dropdown {
+            .icon.dropdown {
+                color: @white;
+            }
+            .menu.transition {
+                margin: @8px 0 0; 
+                .item {
+                    padding: @8px @14px !important;
+                }
+            }
         }
     }
     &.left.inverted {

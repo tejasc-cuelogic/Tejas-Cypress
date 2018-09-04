@@ -216,7 +216,7 @@ footer{
 				height: auto;
 				flex-direction: column;
 			}
-			div {
+			>div {
 				padding: 0 @14px;
 			}
 		}
