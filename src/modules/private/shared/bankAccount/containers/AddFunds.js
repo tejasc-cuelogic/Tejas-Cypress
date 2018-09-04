@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Button } from 'semantic-ui-react';
+import { Header, Form, Button, Message } from 'semantic-ui-react';
 
 import { MaskedInput } from '../../../../../theme/form';
 import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
+import { ListErrors } from '../../../../../theme/shared';
 
-@inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore')
+@inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
 export default class AddFunds extends Component {
   componentDidMount() {
@@ -41,10 +42,17 @@ export default class AddFunds extends Component {
 
   render() {
     const { formAddFunds, addFundChange } = this.props.bankAccountStore;
+    const { errors } = this.props.uiStore;
+
     return (
       <div>
         <Header as="h3" textAlign="center">Add funds</Header>
         <p className="center-align">How much would you like to deposit into your account today?</p>
+        {errors &&
+          <Message error>
+            <ListErrors errors={[errors.message]} />
+          </Message>
+        }
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
             <MaskedInput
