@@ -137,7 +137,7 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: 'required',
     customErrors: { required: 'required' },
     placeHolder: 'e.g. $50,000',
-    tooltip: (<span>Minimum amount of funding is $50,000. For requirements on different levels of funding, <a className="inverted" href="/business" target="_blank">click here.</a></span>),
+    tooltip: (<span>Minimum amount of funding is $50,000. For requirements on different levels of funding, <a href="/business" target="_blank">click here.</a></span>),
   },
   previousYearGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: 'e.g. $750,000', customErrors: { required_if: 'required' },

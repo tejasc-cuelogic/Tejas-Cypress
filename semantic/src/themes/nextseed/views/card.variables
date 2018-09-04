@@ -60,7 +60,7 @@
 @contentDivider: @borderWidth solid @internalBorderColor;
 @contentMargin: 0em;
 @contentBackground: none;
-@contentPadding: 1.5em 1.5em;
+@contentPadding: 1em 1.5em;
 @contentFontSize: 1em;
 @contentBorderRadius: 0em;
 @contentBoxShadow: none;
@@ -147,7 +147,7 @@
 
 /* Link */
 @linkHoverBackground: none;
-@linkHoverBorder: none;
+@linkHoverBorder: 1px solid @neutral-darkwhite;
 @linkHoverZIndex: 5;
 @linkHoverRaiseDistance: 0px;
 @linkHoverTransform: translateY(-@linkHoverRaiseDistance);

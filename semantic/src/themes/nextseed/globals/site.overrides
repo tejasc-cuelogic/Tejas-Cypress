@@ -148,19 +148,22 @@ h6{
 		margin-bottom:0px;
 	}
 }
-a{
+a:not(.item), a:not(.ui.button){
 	color:@link-color;
 	&:hover{
-		text-decoration:underline;
+		text-decoration:underline !important;
 	}
 	&.inverted{
 		color:@white;
 	}
-}
-a.text-link{
-	color:@tertiary-text;
-	&:hover, &:active, &.active{
-		color:@neutral;
+	&.secondary-link{
+		color:@primary-two !important;
+	}
+	&.text-link{
+		color:@tertiary-text;
+		&:hover, &:active, &.active{
+			color:@neutral;
+		}
 	}
 }
 .invisible{
@@ -946,7 +949,18 @@ a.icon-link:hover {
 	padding:@50px 0px;
 }
 .inner-content-spacer{
-	padding:@20px;
+	padding:@20px !important;
+	+ .inner-content-spacer{
+		border-top:@neutral-midwhite 1px solid;
+	}
+	.field .ui.label{
+		background: transparent;
+		padding: 0px 0 14px;
+		color: @neutral;
+	}
+	p b {
+		color: @neutral;
+	}
 }
 .secondary-section{
 	background-color:@neutral-offwhite;

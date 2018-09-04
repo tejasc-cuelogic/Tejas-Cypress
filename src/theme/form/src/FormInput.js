@@ -2,6 +2,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon, Input } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
 
 const FormInput = observer((props) => {
@@ -28,6 +29,11 @@ const FormInput = observer((props) => {
               className="center-align"
               wide
             />
+          }
+          {props.removed &&
+            <Link to={props.linkto} onClick={e => props.removed(e)}>
+              <Icon className="ns-close-circle" color="grey" />
+            </Link>
           }
         </label>
       }
