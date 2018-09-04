@@ -5,7 +5,7 @@ import Loadable from 'react-loadable';
 import { Route, Switch, Link } from 'react-router-dom';
 import { Grid, Button } from 'semantic-ui-react';
 import PrivateLayout from '../../shared/PrivateLayout';
-import { InlineLoader } from '../../../../theme/shared';
+import { InlineLoader, NsPagination } from '../../../../theme/shared';
 import { ByKeyword } from '../../../../theme/form/Filters';
 import { DataFormatter } from '../../../../helper';
 
@@ -42,7 +42,12 @@ export default class Offerings extends Component {
   render() {
     const { match } = this.props;
     const navItems = this.props.navStore.navMeta.subNavigations;
-    const { subTabs, filters, requestState } = this.props.offeringsStore;
+    const {
+      subTabs,
+      filters,
+      requestState,
+      totalRecords,
+    } = this.props.offeringsStore;
     return (
       <PrivateLayout
         {...this.props}
@@ -58,11 +63,18 @@ export default class Offerings extends Component {
             filters={filters}
             more="no"
             addon={
-              <Grid.Column width={5} textAlign="right">
-                <Button color="green" as={Link} floated="right" to={this.props.match.url}>
-                  Export
-                </Button>
-              </Grid.Column>
+              <Grid.Row>
+                <Grid.Column width={6} textAlign="right">
+                  {totalRecords > 0 &&
+                  <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+                  }
+                </Grid.Column>
+                <Grid.Column width={5} textAlign="right">
+                  <Button color="green" as={Link} floated="right" to={this.props.match.url}>
+                    Export
+                  </Button>
+                </Grid.Column>
+              </Grid.Row>
             }
           />
         }
