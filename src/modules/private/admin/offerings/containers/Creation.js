@@ -4,10 +4,12 @@ import moment from 'moment';
 import { startCase, lowerCase, kebabCase } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Card, Table } from 'semantic-ui-react';
+import { Route } from 'react-router-dom';
 import { InlineLoader } from './../../../../../theme/shared';
 import Actions from '../components/creation/Actions';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
+import OfferingDetails from '../components/creation/OfferingDetails';
 
 @inject('offeringsStore')
 @observer
@@ -17,7 +19,7 @@ export default class Creation extends Component {
   }
 
   render() {
-    const { offeringsStore } = this.props;
+    const { offeringsStore, match } = this.props;
     const {
       offerings,
       loading,
@@ -63,7 +65,10 @@ export default class Creation extends Component {
                           {Helper.maskPhoneNumber(offering.pocPhone)}
                         </p>
                       </Table.Cell>
-                      <Actions offeringId={offering.id} />
+                      <Actions
+                        offeringId={offering.id}
+                        refLink={match.url}
+                      />
                     </Table.Row>
                   ))
                 }
@@ -71,6 +76,7 @@ export default class Creation extends Component {
             </Table>
           </div>
         </Card>
+        <Route path={`${match.url}/edit/:offeringid`} render={props => <OfferingDetails refLink={match.url} {...props} />} />
       </Aux>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Button, Table, Icon, Confirm } from 'semantic-ui-react';
 
@@ -9,11 +10,14 @@ const actions = {
 };
 
 @inject('offeringsStore', 'uiStore')
+@withRouter
 @observer
 export default class Actions extends Component {
   handleAction = (action) => {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action);
+    } else if (action === 'Edit') {
+      this.props.history.push(`${this.props.refLink}/edit/${this.props.offeringId}`);
     }
   }
 
