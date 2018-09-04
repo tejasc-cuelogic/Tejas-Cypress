@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import { Header, Grid, Button, Image, Container, Embed, List, Statistic, Divider, Responsive } from 'semantic-ui-react';
+import { Header, Grid, Button, Image, Container, Embed, List, Statistic, Divider, Responsive, Item } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import supportIcon from '../../../../assets/images/icons/support.svg';
 import sellingIcon from '../../../../assets/images/icons/selling.svg';
@@ -82,7 +82,7 @@ const HowItWorks = () => (
         </Responsive>
         <Responsive minWidth={768} as={Aux}>
           <Grid className="business-learn-more">
-            <Grid.Row centered columns={2}>
+            <Grid.Row>
               <Grid.Column className="center-align">
                 {/* <p><b>Learn more</b></p> */}
                 <List horizontal relaxed className="learn-more-list left-align">
@@ -104,35 +104,37 @@ const HowItWorks = () => (
       </Container>
     </section>
     <Divider fitted as={Container} />
-    <section className="testimonial-slider">
+    <section>
       <Container>
         <NsCarousel {...settings}>
           {
             [1, 2, 3].map(i => (
-              <Grid stackable key={i}>
-                <Grid.Column width={6}>
-                  <Image src={carouselImg} circular />
-                </Grid.Column>
-                <Grid.Column width={10} className="testimonial-details">
-                  <Header as="h2" className="mb-20">Real sucess stories {i}.</Header>
-                  <Responsive minWidth={768} as={Aux}>
-                    <h3 className="mb-50">
-                      “Loved the experience! Financing this way allowed me to focus
-                      on my passion and not on pitching investors.”
-                    </h3>
-                  </Responsive>
-                  <Responsive maxWidth={767} as={Aux}>
-                    <h3>
-                      “Loved the experience! Financing this way allowed me to focus
-                      on my passion and not on pitching investors.”
-                    </h3>
-                  </Responsive>
-                  <div className="testimonial-user-details">
-                    <p><b>Lian Nguyen,</b> Bravery Chef Hall</p>
-                    <span>$1,000,000 | 539 Investors</span>
-                  </div>
-                </Grid.Column>
-              </Grid>
+              <Item.Group key={i}>
+                <Item>
+                  <Item.Image size="medium" src={carouselImg} circular />
+                  <Item.Content verticalAlign="middle">
+                    <Item.Header as="h2">Real sucess stories {i}.</Item.Header>
+                    <Item.Description>
+                      <Responsive minWidth={768} as={Aux}>
+                        <h3 className="mb-50">
+                          “Loved the experience! Financing this way allowed me to focus
+                          on my passion and not on pitching investors.”
+                        </h3>
+                      </Responsive>
+                      <Responsive maxWidth={767} as={Aux}>
+                        <h3 className="mt-20 mb-20">
+                          “Loved the experience! Financing this way allowed me to focus
+                          on my passion and not on pitching investors.”
+                        </h3>
+                      </Responsive>
+                    </Item.Description>
+                    <Item.Extra className="testimonial-user-details">
+                      <p><b>Lian Nguyen,</b> Bravery Chef Hall</p>
+                      <span>$1,000,000 | 539 Investors</span>
+                    </Item.Extra>
+                  </Item.Content>
+                </Item>
+              </Item.Group>
             ))
           }
         </NsCarousel>

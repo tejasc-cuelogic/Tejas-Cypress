@@ -564,39 +564,6 @@ p i.icon {
 		}
 	}
 }
-.testimonial-slider {
-	.testimonial-details {
-		display: flex !important;
-		flex-direction: column;
-		justify-content: center;
-		h2.ui.header {
-			@media only screen and (max-width : @largestMobileScreen){
-				font-size: @20px !important;
-				line-height: 24px;
-			}
-		}
-		h3 {
-			line-height: 40px;
-			margin-top: 0;
-			@media only screen and (max-width : @largestMobileScreen){
-				font-size: @15px;
-				font-weight: @normal;
-				line-height: 20px;
-			}
-		}
-		.testimonial-user-details {
-			p {
-				color: @neutral;
-				margin-bottom: 0;
-			}
-			span {
-				line-height: @24px;
-				color: @primary-one;
-				font-weight: @bold;
-			}
-		}
-	}
-}
 .business-learn-more {
 	p {
 		text-align: left;
@@ -663,17 +630,6 @@ p i.icon {
 }
 // Slick Slider Styles override
 .slick-slider {
-	.slick-slide {
-		.ui.grid {
-			display: flex !important;
-			.ui.image {
-				@media only screen and (max-width : @largestMobileScreen){
-					width: 90%;
-					margin: auto;
-				}		
-			}
-		}
-	}
 	.slick-prev, .slick-next {
 		width: 50px;
 		height: 50px;
@@ -692,8 +648,11 @@ p i.icon {
 			font-family: 'nextseed';
 			font-size: @18px !important;
 		}
+		@media only screen and (max-width : @tabletBreakpoint){
+			left: -35px;
+		}
 		@media only screen and (max-width : @largestMobileScreen){
-			left: -20px;
+			left: -25px;
 		}
 	}
 	.slick-next {
@@ -703,8 +662,11 @@ p i.icon {
 			font-family: 'nextseed';
 			font-size: @18px !important;
 		}
+		@media only screen and (max-width : @tabletBreakpoint){
+			right: -35px;
+		}
 		@media only screen and (max-width : @largestMobileScreen){
-			right: -20px;
+			right: -25px;
 		}
 	}
 	.slick-dots{
