@@ -4,7 +4,7 @@ import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { kebabCase } from 'lodash';
 import { Card, Table, Button, Grid, Form } from 'semantic-ui-react';
-import NewUpdate from '../components/NewUpdate';
+import NewUpdate from '../components/updates/NewUpdate';
 import { InlineLoader, DateTimeFormat } from './../../../../../theme/shared';
 import { ByKeyword } from './../../../../../theme/form/Filters';
 
@@ -71,11 +71,11 @@ export default class AllRepayments extends Component {
                   ) :
                   updates.map(record => (
                     <Table.Row key={record.id}>
-                      <Table.Cell>{record.title}</Table.Cell>
+                      <Table.Cell><Link to={`${match.url}/${record.id}`}>{record.title}</Link></Table.Cell>
                       <Table.Cell>Public</Table.Cell>
                       <Table.Cell><DateTimeFormat datetime={record.updatedAt} /></Table.Cell>
                       <Table.Cell className={`status ${kebabCase(record.status)}`}>{record.status}</Table.Cell>
-                      <Table.Cell>{record.indexRS}</Table.Cell>
+                      <Table.Cell>{record.lastUpdate}</Table.Cell>
                     </Table.Row>
                   ))
                 }
@@ -83,7 +83,7 @@ export default class AllRepayments extends Component {
             </Table>
           </div>
         </Card>
-        <Route path={`${match.url}/new`} component={NewUpdate} />
+        <Route path={`${match.url}/:id`} render={props => <NewUpdate refLink={match.url} {...props} />} />
       </Aux>
     );
   }

@@ -25,3 +25,28 @@ export const newUpdate = gql`
     }
   }
 `;
+
+export const getUpdate = gql`
+  query oneUpdate($id: ID) {
+    Update(id: $id) {
+      id
+      createdAt
+      title
+      status
+      lastUpdate
+      description
+    }
+  }
+`;
+
+export const editUpdate = gql`
+  mutation UpdateUpdate($id: ID!, $title: String!, $lastUpdate: String!, $status: String!, $description: String!){
+    updateUpdate(id: $id, title: $title, lastUpdate: $lastUpdate, status: $status, description: $description) {
+      id
+      title
+      status
+      lastUpdate
+      description
+    }
+  }
+`;
