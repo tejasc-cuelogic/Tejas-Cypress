@@ -92,6 +92,11 @@
                 }
             }
         }
+        &.time-stamp{
+            background-color:transparent;
+            box-shadow:none !important;
+            color:@neutral;
+        }
     }
     &.vertical.buttons .button{
         + .button{
