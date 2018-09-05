@@ -1,14 +1,13 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Responsive } from 'semantic-ui-react';
 import { Route, Switch, matchPath } from 'react-router-dom';
-// import { Route, Switch } from 'react-router-dom';
+import { Responsive } from 'semantic-ui-react';
 import { publicRoutes } from './../../modules/routes';
-import Header from './../../theme/layout/Header';
-import Footer from './../../theme/layout/Footer';
 import NavBarMobile from './../../theme/layout/NavBarMobile';
 import { authActions } from '../../services/actions';
+import Header from './../../theme/layout/Header';
+import Footer from './../../theme/layout/Footer';
 import NotFound from '../shared/NotFound';
 
 @inject('uiStore', 'navStore', 'userStore')
@@ -37,7 +36,6 @@ export default class Public extends React.Component {
       <Route component={NotFound} />
     </Switch>
   );
-
   handleLogOut = () => {
     authActions.logout()
       .then(() => {
@@ -61,6 +59,7 @@ export default class Public extends React.Component {
           <Header
             location={location}
             navStatus={this.props.navStore.navStatus}
+            stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
             handleLogOut={this.handleLogOut}
           />

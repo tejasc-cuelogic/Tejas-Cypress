@@ -1,6 +1,5 @@
 /* eslint-disable react/no-multi-comp  */
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
@@ -83,42 +82,43 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
-@inject('navStore')
-@observer
+
 export class NavigationItems extends Component {
   render() {
-    const { props } = this;
-    const { stepInRoute } = props.navStore;
+    const {
+      stepInRoute, navStatus, location, currentUser,
+    } = this.props;
+    console.log(navStatus, 'navStatus in main...');
     return (
       <Menu
         stackable
         borderless
-        inverted={!props.location.pathname.includes('/offerings')}
+        inverted={!location.pathname.includes('/offerings')}
         fixed="top"
-        className={props.navStatus === 'sub' ? 'slide-up' : ''}
+        className={navStatus === 'sub' ? 'slide-up' : ''}
       >
         <Container fluid>
           <Menu.Item as={Link} to="/" header>
             <Logo
               size="small"
               alt="NextSeed.com"
-              dataSrc={getLogo(props.location.pathname)}
-              style={getLogoStyle(props.location.pathname)}
+              dataSrc={getLogo(location.pathname)}
+              style={getLogoStyle(location.pathname)}
             />
           </Menu.Item>
           <Menu.Menu position="right">
-            {!props.location.pathname.includes('/business-application') &&
-              <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
+            {!location.pathname.includes('/business-application') &&
+              <NavItems refLoc="public" currentUser={currentUser} location={location} navItems={PUBLIC_NAV} />
             }
           </Menu.Menu>
-          {!props.currentUser ? (
+          {!currentUser ? (
             <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
               <Button secondary compact>{stepInRoute.title}</Button>
             </Menu.Item>
           ) : (
             <Menu.Item
               as={Link}
-              to={`/app/${props.currentUser.roles && props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+              to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
             >
               <Button secondary compact>Dashboard</Button>
             </Menu.Item>

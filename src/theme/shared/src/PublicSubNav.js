@@ -10,7 +10,7 @@ import Logo from './Logo';
 const iMap = { to: 'key', title: 'text' };
 const PublicSubNav = (props) => {
   const {
-    moreProps, navStatus, title, location, navItems,
+    moreProps, navStatus, stepInRoute, title, location, navItems, currentUser,
   } = props;
   const mobnavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
   return (
@@ -37,9 +37,18 @@ const PublicSubNav = (props) => {
               <Menu.Item header>{title}</Menu.Item>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
             </Menu.Menu>
-            <Menu.Item as={Link} to={!props.currentUser ? '/auth/login' : `/app/${props.currentUser.roles && props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}>
-              <Button secondary compact>{!props.currentUser ? 'Sign Up/Log In' : 'Dashboard'}</Button>
-            </Menu.Item>
+            {!currentUser ? (
+              <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
+                <Button secondary compact>{stepInRoute.title}</Button>
+              </Menu.Item>
+            ) : (
+              <Menu.Item
+                as={Link}
+                to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+              >
+                <Button secondary compact>Dashboard</Button>
+              </Menu.Item>
+            )}
           </Container>
         </Menu>
       </Responsive>
