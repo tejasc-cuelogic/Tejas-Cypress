@@ -6,6 +6,10 @@ import { Logo, SocialLinks } from '../shared';
 import { NavItems } from './NavigationItems';
 import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 
+const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
+  // (path.includes('business-application') || path.includes('offerings') ? '' : 'LogoColor')
+  (path.includes('business-application') || path.includes('offerings') ? 'LogoColor' : 'LogoWhite')
+));
 @inject('uiStore')
 @observer
 export default class NavBarMobile extends Component {
@@ -23,31 +27,38 @@ export default class NavBarMobile extends Component {
           visible={visible}
           className="public-sidebar"
         >
-          <Icon onClick={onToggle} className="ns-close-light" />
-          <div className="public-header-nav">
-            <NavItems
-              refLoc="public"
-              currentUser={currentUser}
-              location={location}
-              isMobile={isMobile}
-              navStatus={navStatus}
-              navItems={PUBLIC_NAV}
+          <div className="public-mobile-nav">
+            <Icon onClick={onToggle} className="ns-close-light" />
+            <Logo
+              size="small"
+              alt="NextSeed.com"
+              dataSrc={getLogo(location.pathname)}
             />
+            <div className="public-header-nav">
+              <NavItems
+                refLoc="public"
+                currentUser={currentUser}
+                location={location}
+                isMobile={isMobile}
+                navStatus={navStatus}
+                navItems={PUBLIC_NAV}
+              />
+            </div>
+            <Divider />
+            <div className="public-footer-nav">
+              <NavItems
+                refLoc="public"
+                currentUser={currentUser}
+                location={location}
+                isMobile={isMobile}
+                navStatus={navStatus}
+                navItems={FOOTER_NAV}
+              />
+            </div>
+            <div className="social-media">
+              <SocialLinks />
+            </div>
           </div>
-          <Divider />
-          <div className="public-footer-nav">
-            <NavItems
-              refLoc="public"
-              currentUser={currentUser}
-              location={location}
-              isMobile={isMobile}
-              navStatus={navStatus}
-              navItems={FOOTER_NAV}
-            />
-          </div>
-          <Menu className="social-media" inverted borderless>
-            <SocialLinks />
-          </Menu>
         </Sidebar>
         <Sidebar.Pusher
           dimmed={visible}
@@ -58,7 +69,7 @@ export default class NavBarMobile extends Component {
             <Icon name="sidebar" onClick={onToggle} className="hamburger" />
             <Logo dataSrc="LogoSmallWhite" className="logo" size="mini" />
             <Link to="/auth/login" className="sign-in">
-              <Icon name="sign in" />
+              Sign In
             </Link>
           </div>
           {publicContent}

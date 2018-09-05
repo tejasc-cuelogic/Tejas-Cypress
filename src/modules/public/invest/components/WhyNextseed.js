@@ -53,19 +53,20 @@ const WhyNextseed = () => (
     <section className="why-nextseed-section">
       <Container>
         <Responsive maxWidth={767} as={Aux}>
-          <section>
-            <Header as="h3">
-            Exclusive access to<br />
-            investment opportunities<br />
-            you believe in
-            </Header>
-            <Button as={Link} to="/offerings" secondary>Explore Campaigns</Button>
-          </section>
-          <Divider fitted />
+          <Header as="h3">
+          Exclusive access to<br />
+          investment opportunities<br />
+          you believe in
+          </Header>
+          <Button as={Link} to="/offerings" secondary>Explore Campaigns</Button>
+          <Divider section />
         </Responsive>
         <Header as="h2" className="mb-30" textAlign={isMobile ? 'left' : 'center'}>
           Local investing, made easy.
         </Header>
+        <Responsive maxWidth={767} as={Aux}>
+          <Divider hidden />
+        </Responsive>
         <Grid relaxed="very" stackable>
           <Grid.Column computer={10} tablet={16} mobile={16}>
             <Item.Group className="horizontal-items">

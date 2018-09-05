@@ -21,15 +21,17 @@ const PublicSubNav = (props) => {
           className={`menu-secondary-fixed ${moreProps ? moreProps.class : ''} ${navStatus === 'sub' ? 'active' : ''}`}
         >
           <Container className={!(moreProps && moreProps.onlyNav) ? 'fluid' : ''}>
-            {!(moreProps && moreProps.onlyNav) && (
-              <Menu.Item as={Link} to="/" header>
-                <Logo
-                  size="small"
-                  alt="NextSeed.com"
-                  dataSrc="LogoColor"
-                />
-              </Menu.Item>
-            )}
+            <Responsive minWidth={1024} as={Aux}>
+              {!(moreProps && moreProps.onlyNav) && (
+                <Menu.Item as={Link} to="/" header>
+                  <Logo
+                    size="small"
+                    alt="NextSeed.com"
+                    dataSrc="LogoColor"
+                  />
+                </Menu.Item>
+              )}
+            </Responsive>
             <Menu.Menu
               secondary
               className={`menu-secondary ${(moreProps && moreProps.onlyNav) ? '' : 'center-align'}`}
@@ -37,23 +39,25 @@ const PublicSubNav = (props) => {
               <Menu.Item header>{title}</Menu.Item>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
             </Menu.Menu>
-            {!currentUser ? (
-              <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
-                <Button secondary compact>{stepInRoute.title}</Button>
-              </Menu.Item>
-            ) : (
-              <Menu.Item
-                as={Link}
-                to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-              >
-                <Button secondary compact>Dashboard</Button>
-              </Menu.Item>
-            )}
+            <Responsive minWidth={1024} as={Aux}>
+              {!currentUser ? (
+                <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
+                  <Button secondary compact>{stepInRoute.title}</Button>
+                </Menu.Item>
+              ) : (
+                <Menu.Item
+                  as={Link}
+                  to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                >
+                  <Button secondary compact>Dashboard</Button>
+                </Menu.Item>
+              )}
+            </Responsive>
           </Container>
         </Menu>
       </Responsive>
       <Responsive maxWidth={767} as={Container}>
-        <Dropdown placeholder="Investing" fluid selection options={mobnavItems} />
+        <Dropdown placeholder="Investing" fluid selection options={mobnavItems} className="mb-10" />
       </Responsive>
     </Aux>
   );
