@@ -226,7 +226,7 @@ export default class KeyTerms extends Component {
             onremove={this.confirmRemoveDoc}
             uploadtitle="Upload a file"
           />
-          <Button primary disabled={!KEY_TERMS_FRM.meta.isValid} className="pull-right very relaxed">Save</Button>
+          <Button color="green" primary disabled={!KEY_TERMS_FRM.meta.isValid} className="pull-right very relaxed">Save</Button>
         </Form>
         <Confirm
           header="Confirm"

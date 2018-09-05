@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Header } from 'semantic-ui-react';
+import { Form, Divider, Header, Button } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore')
 @observer
 export default class OfferingOverview extends Component {
+  addNewBullet = (e) => {
+    e.preventDefault();
+    this.props.offeringCreationStore.addMore('OFFERING_HIGHLIGHTS_FRM');
+  }
   render() {
-    const { OFFERING_OVERVIEW_FRM, formChange } = this.props.offeringCreationStore;
+    const {
+      OFFERING_OVERVIEW_FRM,
+      OFFERING_HIGHLIGHTS_FRM,
+      formChange,
+      formChangeWithIndex,
+    } = this.props.offeringCreationStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
     return (
       <Aux>
@@ -16,17 +26,36 @@ export default class OfferingOverview extends Component {
           {
             ['elevatorPitch', 'tombstoneDescription'].map(field => (
               <Aux>
+                <Header as="h4">
+                  {OFFERING_OVERVIEW_FRM.fields[field].label}
+                </Header>
                 <FormTextarea
                   key={field}
                   name={field}
                   fielddata={OFFERING_OVERVIEW_FRM.fields[field]}
                   changed={(e, result) => formChange(e, result, formName)}
                   containerclassname="secondary"
+                  hidelabel
                 />
                 <Divider section />
               </Aux>
             ))
           }
+          <Header as="h4">
+            Offering highlights (Top bullet points)
+          </Header>
+          {
+            OFFERING_HIGHLIGHTS_FRM.fields.data.map((highlights, index) => (
+              <FormInput
+                name="bullet"
+                label={`Bullet ${index + 1}`}
+                fielddata={highlights.bullet}
+                changed={(e, result) => formChangeWithIndex(e, result, 'OFFERING_HIGHLIGHTS_FRM', index)}
+              />
+            ))
+          }
+          <Link to={this.props.match.url} className="link" onClick={e => this.addNewBullet(e)}><small>+ Add new bullet</small></Link>
+          <Divider section />
           <Header as="h4">
             Social Media
             <Header.Subheader>
@@ -98,14 +127,18 @@ export default class OfferingOverview extends Component {
               Links to Issuer’s company website
             </Header.Subheader>
           </Header>
-          <FormTextarea
+          <FormInput
             name="issuerWebsite"
             fielddata={OFFERING_OVERVIEW_FRM.fields.issuerWebsite}
             changed={(e, result) => formChange(e, result, formName)}
-            containerclassname="secondary"
           />
+          <Button.Group vertical className="pull-right">
+            <Button primary className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM)} >Approve</Button>
+            <Button primary type="button" color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM)} >Save</Button>
+          </Button.Group>
         </Form>
       </Aux>
     );
   }
 }
+

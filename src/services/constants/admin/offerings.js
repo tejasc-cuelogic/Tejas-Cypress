@@ -353,8 +353,7 @@ export const OFFERING_COMPANY = {
     label: '',
     error: undefined,
     rule: 'required',
-    placeHolder: `Tell us about why you started the company/why you're expanding,
-    what your vision is and walk us through your space.`,
+    placeHolder: 'Tell us about why you started the company/why you`re expanding, what your vision is and walk us through your space.',
   },
   businessModel: {
     value: '',
@@ -373,20 +372,22 @@ export const OFFERING_COMPANY = {
 };
 
 export const COMPANY_HISTORY = {
-  date: {
-    value: '',
-    label: 'Date',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'January-YYYY',
-  },
-  description: {
-    value: '',
-    label: 'Description',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'e.g. Company was formed...',
-  },
+  data: [{
+    date: {
+      value: '',
+      label: 'Date',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'January-YYYY',
+    },
+    description: {
+      value: '',
+      label: 'Description',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'e.g. Company was formed...',
+    },
+  }],
 };
 
 export const COMPANY_LAUNCH = {
@@ -439,4 +440,50 @@ export const COMPANY_LAUNCH = {
     rule: 'required',
     placeHolder: 'Enter here',
   },
+};
+
+export const SIGNED_LEGAL_DOCS = {
+  data: [{
+    document: {
+      fileName: 'form35453.pdf',
+      attachedDate: '4/3/18 ',
+      label: 'Form C Certificate',
+    },
+  },
+  {
+    document: {
+      fileName: 'form35453.pdf',
+      attachedDate: '4/3/18 ',
+      label: 'Form C Certificate',
+    },
+  },
+  {
+    document: {
+      fileName: 'form35453.pdf',
+      attachedDate: '4/3/18 ',
+      label: 'Form C Certificate',
+    },
+  },
+  {
+    document: {
+      fileName: 'form35453.pdf',
+      attachedDate: '4/3/18 ',
+      label: 'Form C Certificate',
+    },
+  },
+  {
+    document: {
+      fileName: 'form35453.pdf',
+      attachedDate: '4/3/18 ',
+      label: 'Form C Certificate',
+    },
+  },
+  {
+    document: {
+      fileName: 'form35453.pdf',
+      attachedDate: '4/3/18 ',
+      label: 'Form C Certificate',
+    },
+  },
+  ],
 };
