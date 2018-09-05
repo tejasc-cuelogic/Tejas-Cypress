@@ -101,7 +101,6 @@
 	}
 }
 .inner-content-spacer .featured-section {
-    padding: @14px @20px;
     .ui.items>.item .content {
         .header {
             color: @neutral;

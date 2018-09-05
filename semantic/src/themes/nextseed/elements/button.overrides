@@ -96,6 +96,7 @@
             background-color:transparent;
             box-shadow:none !important;
             color:@neutral;
+            cursor:default;
         }
     }
     &.vertical.buttons .button{
