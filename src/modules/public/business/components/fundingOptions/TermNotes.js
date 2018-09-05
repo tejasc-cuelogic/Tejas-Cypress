@@ -3,7 +3,10 @@ import { Header, List, Grid } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
 const TermNotes = () => (
-  <Grid doubling columns={2}>
+  <Grid reversed="computer" doubling columns={2}>
+    <Grid.Column>
+      <RevenueChart />
+    </Grid.Column>
     <Grid.Column>
       <Header as="h4">Term Notes</Header>
       <Header as="h3" color="blue">Raise $50,000—$1 Million</Header>
@@ -28,9 +31,6 @@ const TermNotes = () => (
           <List.Content as="a">See how a Term Note Works</List.Content>
         </List.Item>
       </List>
-    </Grid.Column>
-    <Grid.Column>
-      <RevenueChart />
     </Grid.Column>
   </Grid>
 );

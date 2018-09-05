@@ -69,16 +69,28 @@ section{
             background:url(../../assets/images/investors/laptop_mobile.png) top center no-repeat / contain;
             height: 160px;
         }
+        &.process-banner {
+            background:url(../../assets/images/business/process_mobile.jpg) top center no-repeat / cover;
+        }
+        &.inclusive-banner {
+            background:url(../../assets/images/business/inclusive_mobile.jpg) top center no-repeat / cover;
+        }
     }
 }
 // business and invest pages
 .slide-down{
     min-height:~"calc(100vh - 98px)";
 	&.process{
-		background:url(../../assets/images/business/process.png) 0% center no-repeat;
+        background:url(../../assets/images/business/process.png) 0% center no-repeat;
+        @media only screen and (max-width : @largestMobileScreen){
+            background:none;
+        }
 	}
 	&.all-inclusive{
-		background:url(../../assets/images/business/inclusive.png) 100% center no-repeat;
+        background:url(../../assets/images/business/inclusive.png) 100% center no-repeat;
+        @media only screen and (max-width : @largestMobileScreen){
+            background:none;
+        }
     }
     &.account-types {
         background:url(../../assets/images/investors/account_types.png) 100% center no-repeat;

@@ -19,6 +19,7 @@ const navItems = [
   { title: 'Revenue Sharing', to: 'revenue-sharing' },
   { title: 'Equity Loans', to: 'equity-loans' },
 ];
+const isMobile = document.documentElement.clientWidth < 768;
 
 export default class FundingOption extends Component {
   componentWillMount() {
@@ -34,11 +35,11 @@ export default class FundingOption extends Component {
         <Container>
           <section className="funding-option account-type-tab">
             <Grid centered>
-              <Grid.Column width={13}>
-                <Header as="h2" textAlign="center">
+              <Grid.Column computer={13} tablet={16} mobile={16} textAlign={isMobile ? 'left' : 'center'}>
+                <Header as="h2">
                 Choose a funding option that fits your business.
                 </Header>
-                <p className="center-align mb-50">
+                <p className="mb-50">
                 Whether you need working capital for your existing business,
                 expansion projects or a new venture, our financial products
                 put you in control. Grow your business on your own terms.

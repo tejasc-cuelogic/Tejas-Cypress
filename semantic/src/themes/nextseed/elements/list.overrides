@@ -344,13 +344,20 @@ ol.ui.list.step-list{
 }
 
 .ui.list.horizontal{
-    min-width:600px;
-    @media only screen and (max-width : @largeMonitorBreakpoint){
-        min-width:auto;
-    }
+    // below code commented as conflicts on public pages
+    // min-width:600px;
+    // @media only screen and (max-width : @largeMonitorBreakpoint){
+    //     min-width:auto;
+    // }
     .item.ui.checkbox{
         min-width:25%;
         margin:0;
         padding-right:@14px;
+    }
+    .item:not(:first-child) {
+        @media only screen and (max-width : @largeMonitorBreakpoint){
+            padding-left: 0 !important;
+            margin-left: 0;
+        }
     }
 }

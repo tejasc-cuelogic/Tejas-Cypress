@@ -43,6 +43,12 @@ h2, h2.ui.header{
 		line-height: 38px;
 	}
 }
+h3, h3.ui.header{
+	@media only screen and (max-width : @largestMobileScreen){
+		font-size: @20px !important;
+		line-height: 24px;
+	}
+}
 h4, h4.ui.header{
 	line-height:24px;
 	@media only screen and (max-width : @largestMobileScreen){
@@ -572,6 +578,9 @@ p i.icon {
 }
 .funding-option {
 	padding-top: 74px;
+	@media only screen and (max-width : @largestMobileScreen){
+		padding-top:0;
+	}
 	.ui.compact.button {
 		margin: 0 10px; 
 	}
@@ -598,6 +607,9 @@ p i.icon {
 				border: 0;
 				background-color: transparent;
 				box-shadow: none;
+				@media only screen and (max-width : @largestMobileScreen){
+					padding:0 0 30px !important;
+				}
 				&:hover {
 					box-shadow: none;
 				}

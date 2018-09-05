@@ -3,7 +3,10 @@ import { Header, List, Grid } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
 const RevenueSharing = () => (
-  <Grid doubling columns={2}>
+  <Grid reversed="computer" doubling columns={2}>
+    <Grid.Column>
+      <RevenueChart />
+    </Grid.Column>
     <Grid.Column>
       <Header as="h4">Revenue Sharing Notes</Header>
       <Header as="h3" color="blue">Raise $100,000—$1 Million</Header>
@@ -27,9 +30,6 @@ const RevenueSharing = () => (
           <List.Content as="a">See how a Revenue Sharing Notes Works</List.Content>
         </List.Item>
       </List>
-    </Grid.Column>
-    <Grid.Column>
-      <RevenueChart />
     </Grid.Column>
   </Grid>
 );

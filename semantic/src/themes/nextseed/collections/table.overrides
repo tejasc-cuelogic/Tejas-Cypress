@@ -188,12 +188,6 @@
 	&.ui.definition.table tr td:first-child:not(.ignored) {
 		background: transparent;
 	}
-	&.ui.striped.table tbody tr:nth-child(n) {
-		background: @neutral-offwhite;
-	}
-	&.ui.striped.table tbody tr:nth-child(2n) {
-		background-color: rgba(62, 213, 149, 0.0001) !important;
-	}
 	&.ui.striped.table tbody tr:nth-child(n) td:nth-child(2) {
 		background: @primary-one-lighten;
 		color: @white;
