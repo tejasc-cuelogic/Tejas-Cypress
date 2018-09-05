@@ -296,6 +296,7 @@
             border-bottom:@borderColor 1px solid;
         }
         .field.secondary textarea{
+            background-color:@white;
             padding:@11px @14px;
             min-height:80px;
             max-height:80px;
