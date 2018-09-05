@@ -303,5 +303,28 @@
 				font-weight: @bold;
 			}
 		}
+		//Business compare section mobile start
+		&.compare-section {
+			.title {
+				font-weight: @bold;
+			}
+			.content {
+				padding: 0;
+				margin-bottom: @25px;
+			}
+			.title .ns-chevron-down.icon {
+				right: 20px;
+			}
+			.ui.table tr {
+				td {
+					font-size: @13px;
+					color: @neutral-middark;
+					&:first-child {
+						font-weight: bold;
+						color: @neutral;
+					}
+				}
+			}
+		}
 	}
 }
