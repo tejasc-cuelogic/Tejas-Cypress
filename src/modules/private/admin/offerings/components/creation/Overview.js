@@ -22,7 +22,7 @@ export default class Overview extends Component {
             Launch Contingencies
             <Link to="/" className="link"><small>+ Add Launch Contingency</small></Link>
           </Header>
-          <div className="featured-section">
+          <div className="featured-section collapsed-checkbox">
             <Checkbox
               label={
                 <label>
@@ -33,7 +33,36 @@ export default class Overview extends Component {
                 </label>
               }
             />
-            <div className="mt-20">
+            <div className="checkbox-description">
+              <p>
+                Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque
+                dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies.
+                Curabitur et ligula.
+              </p>
+              <FormTextarea
+                fielddata={formTextarea.values}
+                name="compensationAmount"
+                containerclassname="secondary"
+              />
+              <Button.Group compact size="small">
+                <Button inverted color="blue" content="Edit" />
+                <Button color="red" content="Delete" />
+                <Button as="span" className="time-stamp"><Icon className="ns-check-circle" color="green" /> Submited 2/16/18 by Aaron Adams</Button>
+              </Button.Group>
+            </div>
+          </div>
+          <div className="featured-section collapsed-checkbox">
+            <Checkbox
+              label={
+                <label>
+                  <Header as="h4">
+                    Secured Equity Financing
+                    <Header.Subheader>NextSeed to verify Equity Agreement</Header.Subheader>
+                  </Header>
+                </label>
+              }
+            />
+            <div className="checkbox-description">
               <p>
                 Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque
                 dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies.
