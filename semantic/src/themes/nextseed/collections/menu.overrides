@@ -311,16 +311,19 @@ footer{
         }
     }
     //Public Mobile View Start
-	&.mobile-dropdown-menu:not(.vertical)>.item {
-		width: 100%;
-		>i.dropdown.icon {
-			right: 16px;
-			position: absolute;
-			&:before {
-				content: '\e914';
-				font-family: 'nextseed';
-			}
-		}
+	&.mobile-dropdown-menu:not(.vertical){
+        margin:0;
+        >.item {
+            width: 100%;
+            >i.dropdown.icon {
+                right: 16px;
+                position: absolute;
+                &:before {
+                    content: '\e914';
+                    font-family: 'nextseed';
+                }
+            }
+        }
 	}
 	//Public Mobile View End
 }

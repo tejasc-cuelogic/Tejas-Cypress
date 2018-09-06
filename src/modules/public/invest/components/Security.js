@@ -4,11 +4,10 @@ import { Header, Button, Container, Grid, Image, Responsive } from 'semantic-ui-
 import Aux from 'react-aux';
 import Secure from '../../../../assets/images/secure-horizontal.png';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const Security = () => (
   <Aux>
-    <Responsive as={Aux} maxWidth={767}>
-      <section className="banner security-banner" />
-    </Responsive>
+    <Responsive as="section" maxWidth={767} className="banner security-banner" />
     <section className="content-spacer">
       <Container>
         <Grid padded="vertically">
@@ -21,9 +20,7 @@ const Security = () => (
                   <p>The uninvested cash in your account1 is FDIC-insured up to $250,000.</p>
                   <Header as="h5">Keep your information protected.</Header>
                   <p>We safeguard your information with bank-level security measures</p>
-                  <Responsive as={Aux} minWidth={768}>
-                    <Image src={Secure} />
-                  </Responsive>
+                  <Responsive as={Image} minWidth={768} src={Secure} />
                 </Grid.Column>
                 <Grid.Column>
                   <Header as="h5">First SEC-registered funding portal in the U.S.</Header>
@@ -35,22 +32,16 @@ const Security = () => (
                   </p>
                 </Grid.Column>
               </Grid>
-              <Responsive as={Aux} minWidth={768}>
-                <p className="note mt-50 mb-50">
-                  1 NextSeed accounts are provided and held at our partner bank, Happy State Bank
-                  DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC insurance
-                  for uninvested cash in NextSeed accounts.
-                </p>
-              </Responsive>
-              <div className="center-align">
+              <Responsive as="div" className="center-align" maxWidth={767}>
                 <Button as={Link} to="/invest/track" primary>See Track</Button>
-              </div>
-              <Responsive as={Aux} maxWidth={767}>
-                <p className="note mt-50">
-                  1 NextSeed accounts are provided and held at our partner bank, Happy State Bank
-                  DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC insurance
-                  for uninvested cash in NextSeed accounts.
-                </p>
+              </Responsive>
+              <p className={`note mt-50 ${isMobile ? '' : 'mb-50'}`}>
+                <sup>1</sup> NextSeed accounts are provided and held at our partner bank, Happy
+                State Bank DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC
+                insurance for uninvested cash in NextSeed accounts.
+              </p>
+              <Responsive as="div" className="center-align" minWidth={768}>
+                <Button as={Link} to="/invest/track" primary>See Track</Button>
               </Responsive>
             </Grid.Column>
           </Grid.Row>

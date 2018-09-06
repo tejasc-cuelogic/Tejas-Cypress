@@ -618,6 +618,10 @@ p i.icon {
 		p {
 			line-height: 24px;
 			margin-bottom:@24px;
+			&.note{
+				font-size:@12px;
+				line-height:@18px;
+			}
 		}
 		&.process-right-section {
 			counter-reset: section;

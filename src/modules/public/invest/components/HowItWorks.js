@@ -61,7 +61,7 @@ const HowItWorks = () => (
                 </Item>
               </Item.Group>
             </div>
-            <List horizontal className="learn-more-list mt-30">
+            <List horizontal className={`learn-more-list ${isMobile ? 'mb-30' : 'mt-30'}`}>
               <List.Item>
                 <List.Header>Learn more</List.Header>
                 <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" />
@@ -95,7 +95,7 @@ const HowItWorks = () => (
                 </Item>
               </Item.Group>
             </div>
-            <List horizontal className="learn-more-list mt-30">
+            <List horizontal className={`learn-more-list ${isMobile ? '' : 'mt-30'}`}>
               <List.Item>
                 <List.Header>Learn more</List.Header>
                 <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" />
