@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Header, Container, Menu, Segment, Button, Grid, Responsive, Dropdown } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../theme/shared';
+import { Header, Container, Menu, Segment, Button, Grid, Responsive } from 'semantic-ui-react';
+import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../helper';
 
@@ -49,13 +49,7 @@ export default class FundingOption extends Component {
             <Responsive minWidth={768} as={Menu} tabular fluid widths={3}>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
             </Responsive>
-            <Responsive maxWidth={767} as={Menu} className="mobile-dropdown-menu">
-              <Dropdown item text={navItems.title}>
-                <Dropdown.Menu>
-                  <NavItems sub refLoc="public" location={location} navItems={navItems} />
-                </Dropdown.Menu>
-              </Dropdown>
-            </Responsive>
+            <MobileDropDownNav navItems={navItems} location={location} />
             <Segment attached="bottom" padded>
               <Switch>
                 <Route
