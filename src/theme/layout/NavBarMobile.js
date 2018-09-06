@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { Link, matchPath } from 'react-router-dom';
 import { Divider, Sidebar, Menu, Icon } from 'semantic-ui-react';
 import { Logo, SocialLinks } from '../shared';
 import { NavItems } from './NavigationItems';
+import Footer from './../../theme/layout/Footer';
 import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 
+const hasFooter = ['/'];
 const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  // (path.includes('business-application') || path.includes('offerings') ? '' : 'LogoColor')
   (path.includes('business-application') || path.includes('offerings') ? 'LogoColor' : 'LogoWhite')
 ));
 @inject('uiStore')
@@ -33,6 +34,8 @@ export default class NavBarMobile extends Component {
               size="small"
               alt="NextSeed.com"
               dataSrc={getLogo(location.pathname)}
+              as={Link}
+              to="/"
             />
             <div className="public-header-nav">
               <NavItems
@@ -67,12 +70,14 @@ export default class NavBarMobile extends Component {
         >
           <div className="public-header-section">
             <Icon name="sidebar" onClick={onToggle} className="hamburger" />
-            <Logo dataSrc="LogoSmallWhite" className="logo" size="mini" />
+            <Logo as={Link} to="/" dataSrc="LogoSmallWhite" className="logo" size="mini" />
             <Link to="/auth/login" className="sign-in">
               Sign In
             </Link>
           </div>
           {publicContent}
+          {(hasFooter.find(item => matchPath(location.pathname, { path: item }))) &&
+          <Footer path={location.pathname} />}
         </Sidebar.Pusher>
       </Sidebar.Pushable>
     );

@@ -2,17 +2,13 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Container, Menu, Button, Responsive, Dropdown } from 'semantic-ui-react';
-import map from 'lodash/map';
-import mapKeys from 'lodash/mapKeys';
 import { NavItems } from '../../layout/NavigationItems';
 import Logo from './Logo';
 
-const iMap = { to: 'key', title: 'text' };
 const PublicSubNav = (props) => {
   const {
     moreProps, navStatus, stepInRoute, title, location, navItems, currentUser,
   } = props;
-  const mobnavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
   return (
     <Aux>
       <Responsive minWidth={768} as={Aux}>
@@ -56,8 +52,12 @@ const PublicSubNav = (props) => {
           </Container>
         </Menu>
       </Responsive>
-      <Responsive maxWidth={767} as={Container}>
-        <Dropdown placeholder="Investing" fluid selection options={mobnavItems} className="mb-10" />
+      <Responsive maxWidth={767} as={Menu} className="mobile-dropdown-menu">
+        <Dropdown item text={navItems.title}>
+          <Dropdown.Menu>
+            <NavItems sub refLoc="public" location={location} navItems={navItems} />
+          </Dropdown.Menu>
+        </Dropdown>
       </Responsive>
     </Aux>
   );
