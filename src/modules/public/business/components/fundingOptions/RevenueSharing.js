@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, List, Grid } from 'semantic-ui-react';
+import { Header, List, Grid, Item } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
 const RevenueSharing = () => (
@@ -11,19 +11,31 @@ const RevenueSharing = () => (
     <Grid.Column>
       <Header as="h4">Revenue Sharing Notes</Header>
       <Header as="h3" color="blue">Raise $100,000—$1 Million</Header>
-      <List className="funding-options">
-        <List.Item>
-          <List.Header as="h5">What are the benefits?</List.Header>
-          With revenue sharing notes, you{"'"}re sharing a percentage of gross monthly revenues
-          until you fulfill a total payment back to investors. The structure gives you the
-          flexibility you need to succeed.
-        </List.Item>
-        <List.Item>
-          <List.Header as="h5">Who is this option best for?</List.Header>
-          This is ideal for new businesses that have a ramp up time
-          (e.g., construction) or are driven by seasonality.
-        </List.Item>
-      </List>
+      <Item.Group relaxed="very" className="question-list">
+        <Item>
+          <Item.Content>
+            <Header as="h5">
+              What are the benefits?
+            </Header>
+            <Item.Description>
+              With revenue sharing notes, you{"'"}re sharing a percentage of gross monthly revenues
+              until you fulfill a total payment back to investors. The structure gives you the
+              flexibility you need to succeed.
+            </Item.Description>
+          </Item.Content>
+        </Item>
+        <Item>
+          <Item.Content>
+            <Header as="h5">
+              Who is this option best for?
+            </Header>
+            <Item.Description>
+              This is ideal for new businesses that have a ramp up time
+              (e.g., construction) or are driven by seasonality.
+            </Item.Description>
+          </Item.Content>
+        </Item>
+      </Item.Group>
       <List horizontal relaxed className="learn-more-list mt-20">
         <List.Item>
           <List.Header>Learn more</List.Header>

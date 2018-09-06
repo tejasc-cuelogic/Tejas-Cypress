@@ -66,6 +66,18 @@
             }
         }
     }
+    &.question-list{
+        .item {
+            >.content {
+                .header {
+                    margin-bottom: @10px;
+                }
+                >.description {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
 }
 .horizontal-items {
 	&.ui.items {

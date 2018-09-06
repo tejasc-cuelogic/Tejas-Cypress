@@ -728,25 +728,6 @@ p i.icon {
 		margin-bottom: 5px;
 	}
 }
-.ui.grid.flex-column {
-	.column {
-		display: flex !important;
-		flex-direction: column;
-		.flex-content {
-			flex-grow: 1;
-			img {
-				width: 100%;
-			}
-		}
-	}
-	.item {
-		>.content {
-			>.description {
-				margin-top: 0;
-			}
-		}
-	}
-}
 //Team
 .team-column {
 	margin-top: 30vh;

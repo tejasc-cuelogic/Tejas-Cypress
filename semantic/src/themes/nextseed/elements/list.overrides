@@ -114,15 +114,6 @@
             }
         }
     }
-    &.funding-options {
-        >.item {
-            margin-bottom: @20px;
-            line-height: 24px;
-            .header {
-                margin-bottom: @10px;
-            }
-        }
-    }
 }
 //  Public page Ends
 
