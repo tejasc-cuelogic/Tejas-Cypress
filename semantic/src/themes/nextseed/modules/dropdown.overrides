@@ -115,9 +115,3 @@
 		}
 	}
 }
-
-// Public secondary menu start
-.public-pusher .ui.selection.dropdown {
-	margin-bottom: 10px;
-}
-//

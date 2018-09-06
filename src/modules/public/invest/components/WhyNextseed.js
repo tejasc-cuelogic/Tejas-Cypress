@@ -54,9 +54,9 @@ const WhyNextseed = () => (
       <Container>
         <Responsive maxWidth={767} as={Aux}>
           <Header as="h3">
-          Exclusive access to<br />
-          investment opportunities<br />
-          you believe in
+            Exclusive access to<br />
+            investment opportunities<br />
+            you believe in
           </Header>
           <Button as={Link} to="/offerings" secondary>Explore Campaigns</Button>
           <Divider section />
@@ -64,11 +64,9 @@ const WhyNextseed = () => (
         <Header as="h2" className="mb-30" textAlign={isMobile ? 'left' : 'center'}>
           Local investing, made easy.
         </Header>
-        <Responsive maxWidth={767} as={Aux}>
-          <Divider hidden />
-        </Responsive>
+        <Responsive as={Divider} hidden maxWidth={767} />
         <Grid relaxed="very" stackable>
-          <Grid.Column computer={10} tablet={16} mobile={16}>
+          <Grid.Column computer={11} tablet={16} mobile={16}>
             <Item.Group className="horizontal-items">
               {
                 highlights.map(h => (
@@ -83,7 +81,7 @@ const WhyNextseed = () => (
               }
             </Item.Group>
           </Grid.Column>
-          <Grid.Column computer={6} tablet={16} mobile={16}>
+          <Grid.Column computer={5} tablet={16} mobile={16}>
             <List relaxed className="mb-50 learn-more-list">
               <List.Item>
                 <List.Header>Learn more</List.Header>
@@ -98,18 +96,10 @@ const WhyNextseed = () => (
           </Grid.Column>
         </Grid>
         <div className="center-align">
-          <Responsive minWidth={768} as={Aux}>
-            <Button.Group className="mt-50">
-              <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
-              <Button as={Link} to="/invest/how-it-works" primary>See How it Works</Button>
-            </Button.Group>
-          </Responsive>
-          <Responsive maxWidth={767} as={Aux}>
-            <Button.Group vertical>
-              <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
-              <Button as={Link} to="/invest/how-it-works" primary>See How it Works</Button>
-            </Button.Group>
-          </Responsive>
+          <Button.Group vertical={isMobile} className={!isMobile ? 'mt-50' : ''}>
+            <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+            <Button as={Link} to="/invest/how-it-works" primary>See How it Works</Button>
+          </Button.Group>
         </div>
       </Container>
     </section>

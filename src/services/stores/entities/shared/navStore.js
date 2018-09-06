@@ -84,7 +84,9 @@ export class NavStore {
   @action
   setNavStatus(calculations, forced) {
     const { percentagePassed, topVisible } = calculations;
-    this.navStatus = forced || ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
+    if (typeof percentagePassed === 'number') {
+      this.navStatus = forced || ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
+    }
   }
 }
 

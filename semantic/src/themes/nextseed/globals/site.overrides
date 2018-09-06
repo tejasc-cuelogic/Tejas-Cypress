@@ -196,11 +196,7 @@ a.text-link{
 footer{
 	background-color:@neutral-offwhite;
 	.footer-head{
-		padding:0 @60px;
 		background-color:@neutral;
-		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
-			padding:0;
-		}
 	}
 	section{
 		overflow:hidden;
@@ -214,17 +210,16 @@ footer{
 			padding:@30px 0px;
 			display: flex;
 			flex-direction: row;
-			@media only screen and (max-width: @monitorBreakpoint) {
-				padding:@30px @15px;
-			}
+			margin: 0 -@14px;
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
-				padding:@30px 0;
 				height:auto;
 			}
 			@media only screen and (max-width : @largestMobileScreen){
-				padding:@30px @30px;
 				height: auto;
 				flex-direction: column;
+			}
+			>div {
+				padding: 0 @14px;
 			}
 		}
 		.secure{
@@ -237,7 +232,7 @@ footer{
 		}
 		.footer-left {
 			display: inline-block;
-			min-width: 240px;
+			min-width: 275px;
 		}
 		.copyright-info{
 			flex-grow: 1;
@@ -584,8 +579,8 @@ p i.icon {
 .content-spacer {
 	.column.side-section {
 		background-color:@invertedMutedTextColor;
-		padding-bottom: 4.28571429rem;
-		padding-top: 4.28571429rem;
+		padding-bottom: @60px;
+		padding-top: @60px;
 		min-height:~"calc(100vh - 424px)";
 		@media only screen and (max-width : @largestMobileScreen){
 			padding:0;
@@ -596,6 +591,10 @@ p i.icon {
 		p {
 			line-height: 24px;
 			margin-bottom:@24px;
+			&.note{
+				font-size:@12px;
+				line-height:@18px;
+			}
 		}
 		&.process-right-section {
 			counter-reset: section;
@@ -703,24 +702,23 @@ p i.icon {
 .how-it-works-steps {
 	counter-reset: section;
 	.ui.grid {
-		>.column {
+		&.stackable>.column:not(.row) {
 			text-align: left;
-			padding-left: @40px !important;
+			padding-left: @40px;
 			position: relative;
 			&:before {
 				counter-increment: section;
 				content: counter(section);  
 				position: absolute;
 				left: 0;
-				top: 15px;
+				top: 10px;
 				font-weight: @fontMedium;
 				font-size: @40px;
 				color: @primary-one;
+				line-height: 1;
 			}
-		}
-		&.stackable>.column:not(.row) {
 			@media only screen and (max-width : @largestMobileScreen){
-				padding-left: 30px !important;
+				padding-left: @30px !important;
 			}
 		}
 	}
