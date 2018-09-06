@@ -54,11 +54,11 @@ export default class NewUpdate extends Component {
                     fielddata={PBUILDER_FRM.fields.title}
                     changed={UpdateChange}
                   />
-                  <Card fluid>
+                  <HtmlEditor />
+                  {/* <Card fluid>
                     <Card.Content>
-                      <HtmlEditor />
                     </Card.Content>
-                  </Card>
+                  </Card> */}
                 </Form>
               </Grid.Column>
               <Grid.Column width={4}>

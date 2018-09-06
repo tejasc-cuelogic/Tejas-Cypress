@@ -1806,3 +1806,35 @@ p.check-extra-info{
 		}
 	}
 }
+
+
+//	Froala Editor Styles override - STARTS
+.fr-box.html-editor{
+	box-shadow:0px 0px 10px 0px @trackBackground;
+	.fr-toolbar.fr-top{
+		padding:0;
+		background-color:@neutral-offwhite;
+		border:none;
+		border-bottom:@neutral-darkwhite 1px solid;
+		border-radius:@6px @6px 0 0;
+		box-shadow:none;
+	}
+	.fr-separator{
+		background-color:@neutral-darkwhite;
+	}
+	&.fr-basic{
+		&.fr-top .fr-wrapper{
+			border-radius:0 0 @6px @6px;
+			box-shadow:none;
+		}
+		.fr-element{
+			height:100%;
+		}
+	}
+	&.fr-code-view textarea.fr-code{
+		min-height:100%;
+		padding:@10px !important;
+		border:none !important;
+	}
+}
+//	Froala Editor Styles override - ENDS

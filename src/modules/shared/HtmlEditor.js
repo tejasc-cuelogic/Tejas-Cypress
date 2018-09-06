@@ -18,7 +18,11 @@ window.jQuery = $;
 const config = {
   placeholderText: 'Edit Your Content Here!',
   toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
-  charCounterCount: true,
+  charCounterCount: false,
+  height: '70vh',
+  editorClass: 'html-editor',
+  linkList: [],
+  imageManager: false,
 };
 
 export default class HtmlEditor extends React.Component {
