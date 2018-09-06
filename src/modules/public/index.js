@@ -64,6 +64,8 @@ export default class Public extends React.Component {
             handleLogOut={this.handleLogOut}
           />
           {this.getRoutes()}
+          {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
+          <Footer path={location.pathname} />}
         </Responsive>
         <Responsive maxWidth={767} as={Aux}>
           <NavBarMobile
@@ -77,8 +79,6 @@ export default class Public extends React.Component {
             publicContent={this.getRoutes()}
           />
         </Responsive>
-        {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
-          <Footer path={location.pathname} />}
       </Aux>
     );
   }
