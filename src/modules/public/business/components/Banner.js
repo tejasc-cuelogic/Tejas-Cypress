@@ -12,7 +12,12 @@ const Banner = () => (
           growth with the<br />
           power of the crowd
           </Header>
-          <Button secondary className="mt-30">Apply Now</Button>
+          <div className="mt-30">
+            <Button.Group>
+              <Button secondary content="Apply Business" />
+              <Button secondary content="Apply for CRE" />
+            </Button.Group>
+          </div>
         </div>
       </Container>
     </Responsive>

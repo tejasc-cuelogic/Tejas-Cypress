@@ -72,35 +72,27 @@ const HowItWorks = () => (
             </div>
           </Grid.Column>
         </Grid>
-        <Responsive minWidth={768} as={Aux}>
-          <div className="mt-80 mb-80 center-align">
-            <Button.Group>
-              <Button secondary content="Apply Business" />
-              <Button secondary content="Apply for CRE" />
-            </Button.Group>
-          </div>
-        </Responsive>
-        <Responsive minWidth={768} as={Aux}>
-          <Grid className="business-learn-more">
-            <Grid.Row>
-              <Grid.Column className="center-align">
-                {/* <p><b>Learn more</b></p> */}
-                <List horizontal relaxed className="learn-more-list left-align">
-                  <List.Item>
-                    <List.Header>Learn more</List.Header>
-                    <List.Icon className="ns-arrow-right" color="green" />
-                    <List.Content as="a">Why fundraise on NextSeed?</List.Content>
-                  </List.Item>
-                  <List.Item>
+        <Grid className="business-learn-more">
+          <Grid.Row>
+            <Grid.Column className="center-align">
+              {/* <p><b>Learn more</b></p> */}
+              <List horizontal relaxed className="learn-more-list left-align">
+                <List.Item>
+                  <List.Header>Learn more</List.Header>
+                  <List.Icon className="ns-arrow-right" color="green" />
+                  <List.Content as="a">Why fundraise on NextSeed?</List.Content>
+                </List.Item>
+                <List.Item>
+                  <Responsive minWidth={768} as={Aux}>
                     <List.Header>&nbsp;</List.Header>
-                    <List.Icon className="ns-arrow-right" color="green" />
-                    <List.Content as="a">Is fundraising on NextSeed risky?</List.Content>
-                  </List.Item>
-                </List>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Responsive>
+                  </Responsive>
+                  <List.Icon className="ns-arrow-right" color="green" />
+                  <List.Content as="a">Is fundraising on NextSeed risky?</List.Content>
+                </List.Item>
+              </List>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Container>
     </section>
     <Divider fitted as={Container} />
@@ -181,35 +173,6 @@ const HowItWorks = () => (
               </Grid.Row>
             </Grid>
             <Divider hidden />
-            <Responsive minWidth={768} as={Aux}>
-              <p className="mt-30">
-                The above figures include data from both the Texas and Reg CF NextSeed platforms.
-                The total amount raised from debt crowdfunding as of Nov 2017 figure includes
-                amounts invested in offerings completed through NextSeed US LLC
-                (&quot;NextSeed&quot;) or NextSeed TX LLC (&quot;NextSeed TX&quot;),
-                an affiliate of NextSeed. The aggregate amount invested through NextSeed is
-                $6,745,700 and the aggregate amount invested through NextSeed TX is $1,303,500.
-                Historical figures only. Past performance of one business is not a guarantee of
-                future results of another business.
-              </p>
-            </Responsive>
-          </Grid.Column>
-          <Grid.Column>
-            <Embed
-              id={nsvideos.embed}
-              placeholder={videoPoster}
-              source="vimeo"
-            />
-            <p className="caption-note mt-10">
-              The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.
-            </p>
-            <Responsive maxWidth={767} as={Aux}>
-              <div className="mt-30 mb-10 center-align">
-                <Button as={Link} to="/business/funding-options/term-notes" primary content="See Funding Options" />
-              </div>
-            </Responsive>
-          </Grid.Column>
-          <Responsive maxWidth={767} as={Aux}>
             <p>
               The above figures include data from both the Texas and Reg CF NextSeed platforms.
               The total amount raised from debt crowdfunding as of Nov 2017 figure includes
@@ -220,13 +183,21 @@ const HowItWorks = () => (
               Historical figures only. Past performance of one business is not a guarantee of
               future results of another business.
             </p>
-          </Responsive>
+          </Grid.Column>
+          <Grid.Column>
+            <Embed
+              id={nsvideos.embed}
+              placeholder={videoPoster}
+              source="vimeo"
+            />
+            <p className="caption-note mt-10">
+              The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.
+            </p>
+          </Grid.Column>
         </Grid>
-        <Responsive minWidth={768} as={Aux}>
-          <div className="mt-80 mb-50 center-align">
-            <Button as={Link} to="/business/funding-options/term-notes" primary content="See Funding Options" />
-          </div>
-        </Responsive>
+        <div className="mt-80 mb-50 center-align">
+          <Button as={Link} to="/business/funding-options/term-notes" primary content="See Funding Options" />
+        </div>
       </Container>
     </section>
   </Aux>
