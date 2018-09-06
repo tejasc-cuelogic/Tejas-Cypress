@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Header, Button, Item, Icon, Label } from 'semantic-ui-react';
+import { Form, Divider, Header, Button, Icon, Label } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore')
