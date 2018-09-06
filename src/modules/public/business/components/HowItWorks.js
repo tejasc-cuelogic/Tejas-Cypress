@@ -34,7 +34,7 @@ const HowItWorks = () => (
           </div>
           <Divider section />
         </Responsive>
-        <Header as="h2" className="mb-80 mb-mobile-50" textAlign={isMobile ? 'left' : 'center'}>
+        <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>
           Get flexible financing that doesn’t<br />cost you everything.
         </Header>
         <Grid relaxed="very" stackable columns={3} doubling>
@@ -75,7 +75,6 @@ const HowItWorks = () => (
         <Grid className="business-learn-more">
           <Grid.Row>
             <Grid.Column className="center-align">
-              {/* <p><b>Learn more</b></p> */}
               <List horizontal relaxed className="learn-more-list left-align">
                 <List.Item>
                   <List.Header>Learn more</List.Header>
@@ -83,9 +82,9 @@ const HowItWorks = () => (
                   <List.Content as="a">Why fundraise on NextSeed?</List.Content>
                 </List.Item>
                 <List.Item>
-                  <Responsive minWidth={768} as={Aux}>
+                  {!isMobile &&
                     <List.Header>&nbsp;</List.Header>
-                  </Responsive>
+                  }
                   <List.Icon className="ns-arrow-right" color="green" />
                   <List.Content as="a">Is fundraising on NextSeed risky?</List.Content>
                 </List.Item>
@@ -106,7 +105,7 @@ const HowItWorks = () => (
                   <Item.Image size="medium" src={carouselImg} circular />
                   <Item.Content verticalAlign="middle">
                     <Item.Header as="h2">Real sucess stories {i}.</Item.Header>
-                    <Item.Description className="mb-50 mt-20 mb-mobile-20">
+                    <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
                       “Loved the experience! Financing this way allowed me to focus
                       on my passion and not on pitching investors.”
                     </Item.Description>
@@ -132,7 +131,7 @@ const HowItWorks = () => (
               Every day, entrepreneurs like you are raising capital on
               NextSeed to bring their concepts to life.
             </p>
-            <Grid columns={2}>
+            <Grid columns={2} stackable>
               <Grid.Row>
                 <Grid.Column>
                   <Statistic color="green" size="mini" className="basic">

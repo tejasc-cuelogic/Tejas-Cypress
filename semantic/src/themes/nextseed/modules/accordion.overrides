@@ -307,6 +307,7 @@
 		&.compare-section {
 			.title {
 				font-weight: @bold;
+				border: 0 !important;
 			}
 			.content {
 				padding: 0;
@@ -316,6 +317,9 @@
 				right: 20px;
 			}
 			.ui.table tr {
+				th {
+					border:0;
+				}
 				td {
 					font-size: @13px;
 					color: @neutral-middark;

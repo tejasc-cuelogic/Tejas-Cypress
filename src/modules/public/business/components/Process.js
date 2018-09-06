@@ -20,7 +20,7 @@ const Process = () => (
               Once your application is approved, we make connecting with investors easy,
               so you can find funding and get back to your business.
               </p>
-              <Card.Group itemsPerRow={2} stackable className="mb-30">
+              <Card.Group itemsPerRow={2} stackable className={isMobile ? 'mb-10' : 'mb-30'}>
                 <Card>
                   <Card.Content>
                     <Header as="h5">Save time with our online application.</Header>

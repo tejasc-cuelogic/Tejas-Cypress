@@ -93,9 +93,9 @@ const AllInclusive = () => (
                   <List.Content as="a">Small businesses and NextSeed</List.Content>
                 </List.Item>
                 <List.Item>
-                  <Responsive as={Aux} minWidth={768}>
-                    <List.Header>Learn more</List.Header>
-                  </Responsive>
+                  {!isMobile &&
+                    <List.Header>&nbsp;</List.Header>
+                  }
                   <List.Icon className="ns-arrow-right" color="green" />
                   <List.Content as="a">Commercial real estate and NextSeed</List.Content>
                 </List.Item>

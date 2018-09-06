@@ -105,22 +105,6 @@ h6{
 .mt-half{
 	margin-top:@7px !important;
 }
-// Public Mobile View Start
-@media only screen and (max-width : @largestMobileScreen){
-	.mb-mobile-10 {
-		margin-bottom: @10px !important;
-	}
-	.mb-mobile-20 {
-		margin-bottom: @20px !important;
-	}
-	.mb-mobile-50 {
-		margin-bottom: @50px !important;
-	}
-	.mt-mobile-30 {
-		margin-top: @30px !important;
-	}
-}
-// Public Mobile View End
 .pull-left{
 	float:left !important;
 }
