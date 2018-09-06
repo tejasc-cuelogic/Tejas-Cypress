@@ -91,204 +91,202 @@ const Compare = () => (
           </Table.Body>
         </Responsive>
         <Responsive maxWidth={767} as={Accordion} className="splitted mb-50 compare-section">
-          <Accordion>
-            <Accordion.Title active>
-              Amount
-              <Icon className="ns-chevron-down" />
-            </Accordion.Title>
-            <Accordion.Content active>
-              <Table striped unstackable>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
-                    <Table.HeaderCell className="highlight-text"><b>$50k–$1MM</b></Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>Bank</Table.Cell>
-                    <Table.Cell>$250k+</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Merchant Cash</Table.Cell>
-                    <Table.Cell>$20k–$100k</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Equity Investors</Table.Cell>
-                    <Table.Cell>Variable</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-            </Accordion.Content>
-            <Accordion.Title active>
-              Total cost APR
-              <Icon className="ns-chevron-down" />
-            </Accordion.Title>
-            <Accordion.Content active>
-              <Table striped unstackable>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
-                    <Table.HeaderCell className="highlight-text"><b>Term Loans 10–18%<br />Revenue Sharing 15–25%</b></Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>Bank</Table.Cell>
-                    <Table.Cell>$250k+</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Merchant Cash</Table.Cell>
-                    <Table.Cell>$20k–$100k</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Equity Investors</Table.Cell>
-                    <Table.Cell>Variable</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-            </Accordion.Content>
-            <Accordion.Title active>
-              Funding Period
-              <Icon className="ns-chevron-down" />
-            </Accordion.Title>
-            <Accordion.Content active>
-              <Table striped unstackable>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
-                    <Table.HeaderCell className="highlight-text"><b>21+ days</b></Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>Bank</Table.Cell>
-                    <Table.Cell>2–9 months</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Merchant Cash</Table.Cell>
-                    <Table.Cell>14+ days</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Equity Investors</Table.Cell>
-                    <Table.Cell>3–9 months</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-            </Accordion.Content>
-            <Accordion.Title active>
-              Security
-              <Icon className="ns-chevron-down" />
-            </Accordion.Title>
-            <Accordion.Content active>
-              <Table striped unstackable>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
-                    <Table.HeaderCell className="highlight-text"><b>Flexible collateral terms</b></Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>Bank</Table.Cell>
-                    <Table.Cell>Personal guarantee & assets collateral</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Merchant Cash</Table.Cell>
-                    <Table.Cell>Daily cash withdrawl</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Equity Investors</Table.Cell>
-                    <Table.Cell>Variable</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-            </Accordion.Content>
-            <Accordion.Title active>
-              Capital Base
-              <Icon className="ns-chevron-down" />
-            </Accordion.Title>
-            <Accordion.Content active>
-              <Table striped unstackable>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
-                    <Table.HeaderCell className="highlight-text"><b>Community, fans and customers</b></Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>Bank</Table.Cell>
-                    <Table.Cell>Bank</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Merchant Cash</Table.Cell>
-                    <Table.Cell>Institutional lenders</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Equity Investors</Table.Cell>
-                    <Table.Cell>Typically accredited investors</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-            </Accordion.Content>
-            <Accordion.Title active>
-              Additional Fees
-              <Icon className="ns-chevron-down" />
-            </Accordion.Title>
-            <Accordion.Content active>
-              <Table striped unstackable className="mb-50">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
-                    <Table.HeaderCell className="highlight-text"><b>5–10%  sucess fee<br />(all inclusive)</b></Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>Bank</Table.Cell>
-                    <Table.Cell>3–8% origination fee</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Merchant Cash</Table.Cell>
-                    <Table.Cell>3–10% origination fee</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Equity Investors</Table.Cell>
-                    <Table.Cell>Expensive legal fees</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-            </Accordion.Content>
-            <Accordion.Title active>
-              Marketing Benefits
-              <Icon className="ns-chevron-down" />
-            </Accordion.Title>
-            <Accordion.Content active>
-              <Table striped unstackable className="mb-50">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
-                    <Table.HeaderCell className="highlight-text"><b>Smart army of advocates Community events Social media Targeted marketing</b></Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>Bank</Table.Cell>
-                    <Table.Cell>Bank</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Merchant Cash</Table.Cell>
-                    <Table.Cell>Institutional lenders</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Equity Investors</Table.Cell>
-                    <Table.Cell>Typically accredited investors</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table>
-            </Accordion.Content>
-          </Accordion>
+          <Accordion.Title active>
+            Amount
+            <Icon className="ns-chevron-down" />
+          </Accordion.Title>
+          <Accordion.Content active>
+            <Table striped unstackable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
+                  <Table.HeaderCell className="highlight-text"><b>$50k–$1MM</b></Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Bank</Table.Cell>
+                  <Table.Cell>$250k+</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Merchant Cash</Table.Cell>
+                  <Table.Cell>$20k–$100k</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Equity Investors</Table.Cell>
+                  <Table.Cell>Variable</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Accordion.Content>
+          <Accordion.Title active>
+            Total cost APR
+            <Icon className="ns-chevron-down" />
+          </Accordion.Title>
+          <Accordion.Content active>
+            <Table striped unstackable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
+                  <Table.HeaderCell className="highlight-text"><b>Term Loans 10–18%<br />Revenue Sharing 15–25%</b></Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Bank</Table.Cell>
+                  <Table.Cell>$250k+</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Merchant Cash</Table.Cell>
+                  <Table.Cell>$20k–$100k</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Equity Investors</Table.Cell>
+                  <Table.Cell>Variable</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Accordion.Content>
+          <Accordion.Title active>
+            Funding Period
+            <Icon className="ns-chevron-down" />
+          </Accordion.Title>
+          <Accordion.Content active>
+            <Table striped unstackable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
+                  <Table.HeaderCell className="highlight-text"><b>21+ days</b></Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Bank</Table.Cell>
+                  <Table.Cell>2–9 months</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Merchant Cash</Table.Cell>
+                  <Table.Cell>14+ days</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Equity Investors</Table.Cell>
+                  <Table.Cell>3–9 months</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Accordion.Content>
+          <Accordion.Title active>
+            Security
+            <Icon className="ns-chevron-down" />
+          </Accordion.Title>
+          <Accordion.Content active>
+            <Table striped unstackable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
+                  <Table.HeaderCell className="highlight-text"><b>Flexible collateral terms</b></Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Bank</Table.Cell>
+                  <Table.Cell>Personal guarantee & assets collateral</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Merchant Cash</Table.Cell>
+                  <Table.Cell>Daily cash withdrawl</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Equity Investors</Table.Cell>
+                  <Table.Cell>Variable</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Accordion.Content>
+          <Accordion.Title active>
+            Capital Base
+            <Icon className="ns-chevron-down" />
+          </Accordion.Title>
+          <Accordion.Content active>
+            <Table striped unstackable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
+                  <Table.HeaderCell className="highlight-text"><b>Community, fans and customers</b></Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Bank</Table.Cell>
+                  <Table.Cell>Bank</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Merchant Cash</Table.Cell>
+                  <Table.Cell>Institutional lenders</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Equity Investors</Table.Cell>
+                  <Table.Cell>Typically accredited investors</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Accordion.Content>
+          <Accordion.Title active>
+            Additional Fees
+            <Icon className="ns-chevron-down" />
+          </Accordion.Title>
+          <Accordion.Content active>
+            <Table striped unstackable className="mb-50">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
+                  <Table.HeaderCell className="highlight-text"><b>5–10%  sucess fee<br />(all inclusive)</b></Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Bank</Table.Cell>
+                  <Table.Cell>3–8% origination fee</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Merchant Cash</Table.Cell>
+                  <Table.Cell>3–10% origination fee</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Equity Investors</Table.Cell>
+                  <Table.Cell>Expensive legal fees</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Accordion.Content>
+          <Accordion.Title active>
+            Marketing Benefits
+            <Icon className="ns-chevron-down" />
+          </Accordion.Title>
+          <Accordion.Content active>
+            <Table striped unstackable className="mb-50">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell className="highlight-text"><b>NextSeed</b></Table.HeaderCell>
+                  <Table.HeaderCell className="highlight-text"><b>Smart army of advocates Community events Social media Targeted marketing</b></Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Bank</Table.Cell>
+                  <Table.Cell>Bank</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Merchant Cash</Table.Cell>
+                  <Table.Cell>Institutional lenders</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Equity Investors</Table.Cell>
+                  <Table.Cell>Typically accredited investors</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Accordion.Content>
         </Responsive>
         <List horizontal={!isMobile} relaxed className="learn-more-list mb-50">
           <List.Item>

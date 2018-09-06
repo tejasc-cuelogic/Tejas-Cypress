@@ -7,9 +7,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 
 const Process = () => (
   <Aux>
-    <Responsive as={Aux} maxWidth={767}>
-      <section className="banner process-banner" />
-    </Responsive>
+    <Responsive as="section" maxWidth={767} className="banner process-banner" />
     <section className="content-spacer">
       <Container>
         <Grid padded="vertically">

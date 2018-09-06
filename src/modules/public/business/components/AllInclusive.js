@@ -15,9 +15,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 
 const AllInclusive = () => (
   <Aux>
-    <Responsive as={Aux} maxWidth={767}>
-      <section className="banner inclusive-banner" />
-    </Responsive>
+    <Responsive as="section" maxWidth={767} className="banner inclusive-banner" />
     <section className="content-spacer">
       <Container>
         <Grid relaxed padded="vertically">
