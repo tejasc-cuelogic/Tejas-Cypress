@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Divider, Label, Grid, Card, Form, List, Icon } from 'semantic-ui-react';
-import { FormInput, FormTextarea } from '../../../../../../theme/form';
+import { Modal, Header, Divider, Grid, Card, Form, List, Icon } from 'semantic-ui-react';
+import { FormInput } from '../../../../../../theme/form';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 import Actions from './Actions';
 import Status from './Status';
 
@@ -55,14 +56,7 @@ export default class NewUpdate extends Component {
                   />
                   <Card fluid>
                     <Card.Content>
-                      <FormTextarea
-                        ishidelabel
-                        type="text"
-                        name="description"
-                        fielddata={PBUILDER_FRM.fields.description}
-                        containerclassname="secondary"
-                        changed={UpdateChange}
-                      />
+                      <HtmlEditor />
                     </Card.Content>
                   </Card>
                 </Form>
