@@ -184,7 +184,7 @@ const HowItWorks = () => (
             </p>
           </Grid.Column>
         </Grid>
-        <div className="mt-80 mb-50 mt-mobile-30 center-align">
+        <div className={`${isMobile ? 'mt-30' : 'mt-80'} mb-50 center-align`}>
           <Button as={Link} to="/business/funding-options/term-notes" primary content="See Funding Options" />
         </div>
       </Container>
