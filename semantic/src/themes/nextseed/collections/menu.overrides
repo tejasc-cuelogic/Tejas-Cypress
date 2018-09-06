@@ -310,6 +310,19 @@ footer{
             background-color:transparent;
         }
     }
+	//Public Mobile View Start
+	&.mobile-dropdown-menu:not(.vertical)>.item {
+		width: 100%;
+		>i.dropdown.icon {
+			right: 16px;
+			position: absolute;
+			&:before {
+				content: '\e914';
+				font-family: 'nextseed';
+			}
+		}
+	}
+	//Public Mobile View End
 }
 .transaction-detials{
     .ui.inverted.menu .item{

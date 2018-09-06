@@ -596,19 +596,6 @@ p i.icon {
 	.ui.compact.button {
 		margin: 0 10px; 
 	}
-	//Public Mobile View Start
-	.ui.menu:not(.vertical)>.item {
-		width: 100%;
-		>i.dropdown.icon {
-			right: 16px;
-			position: absolute;
-			&:before {
-				content: '\e914';
-				font-family: 'nextseed';
-			}
-		}
-	}
-	//Public Mobile View End
 }
 .content-spacer {
 	.column.side-section {

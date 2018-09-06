@@ -49,7 +49,7 @@ export default class FundingOption extends Component {
             <Responsive minWidth={768} as={Menu} tabular fluid widths={3}>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
             </Responsive>
-            <Responsive maxWidth={767} as={Menu}>
+            <Responsive maxWidth={767} as={Menu} className="mobile-dropdown-menu">
               <Dropdown item text={navItems.title}>
                 <Dropdown.Menu>
                   <NavItems sub refLoc="public" location={location} navItems={navItems} />
