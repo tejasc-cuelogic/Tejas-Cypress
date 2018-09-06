@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Grid, Button, Container, List, Divider, Image, Item, Responsive } from 'semantic-ui-react';
+import { Header, Grid, Button, Container, List, Divider, Image, Item } from 'semantic-ui-react';
 import InvestorImg from '../../../../assets/images/investor-img.jpg';
 import InvestorImg1 from '../../../../assets/images/investor-img-1.jpg';
 
@@ -10,28 +10,22 @@ const HowItWorks = () => (
   <Aux>
     <section>
       <Container>
-        <Header as="h2" className="mb-80" textAlign={isMobile ? 'left' : 'center'}>
-        Investing, simplified.
-        </Header>
+        <Header as="h2" className="mb-80" textAlign={isMobile ? 'left' : 'center'}>Investing, simplified.</Header>
         <div className="how-it-works-steps">
           <Grid stackable centered columns={3}>
             <Grid.Column>
               <Header as="h5">Explore</Header>
-              <p>
-              Browse approved businesses that have passed our strict screening process.
-              </p>
+              <p>Browse approved businesses that have passed our strict screening process.</p>
             </Grid.Column>
             <Grid.Column>
               <Header as="h5">Invest</Header>
               <p>
-              Set up an investment account for free on NextSeed and invest in businesses directly.
+                Set up an investment account for free on NextSeed and invest in businesses directly.
               </p>
             </Grid.Column>
             <Grid.Column>
               <Header as="h5">Receive</Header>
-              <p>
-              NextSeed collects and processes payments directly into your investment account.
-              </p>
+              <p>NextSeed collects and processes payments directly into your investment account.</p>
             </Grid.Column>
           </Grid>
         </div>
@@ -40,9 +34,7 @@ const HowItWorks = () => (
     <Divider fitted as={Container} />
     <section>
       <Container textAlign={isMobile ? 'left' : 'center'}>
-        <Header>
-        Choose how you want to invest.
-        </Header>
+        <Header>Choose how you want to invest.</Header>
         <p className="mb-30">Understand and choose the right opportunities with the right payment terms for you.</p>
         <Grid doubling columns={2} relaxed="very" className="flex-column" textAlign="left">
           <Grid.Column>
@@ -52,22 +44,18 @@ const HowItWorks = () => (
               <Item.Group relaxed="very">
                 <Item>
                   <Item.Content>
-                    <Header as="h5">
-                      What are the benefits?
-                    </Header>
+                    <Header as="h5">What are the benefits?</Header>
                     <Item.Description attached>
-                    The business agrees to pay you a set amount of interest on your investment.
-                    Payments are fixed each month for a certain number of months.
+                      The business agrees to pay you a set amount of interest on your investment.
+                      Payments are fixed each month for a certain number of months.
                     </Item.Description>
                   </Item.Content>
                 </Item>
                 <Item>
                   <Item.Content>
-                    <Header as="h5">
-                      Who is this option best for?
-                    </Header>
+                    <Header as="h5">Who is this option best for?</Header>
                     <Item.Description attached>
-                    This is great for investors seeking consistent, predictable payments.
+                      This is great for investors seeking consistent, predictable payments.
                     </Item.Description>
                   </Item.Content>
                 </Item>
@@ -88,23 +76,20 @@ const HowItWorks = () => (
               <Item.Group relaxed="very">
                 <Item>
                   <Item.Content>
-                    <Header as="h5">
-                    What are the benefits?
-                    </Header>
+                    <Header as="h5">What are the benefits?</Header>
                     <Item.Description>
-                    With revenue sharing loans, a business agrees to pay you a set total amount
-                    on top of your investment. Monthly payments may be different every month.
+                      With revenue sharing loans, a business agrees to pay you a set total amount
+                      on top of your investment. Monthly payments may be different every month.
                     </Item.Description>
                   </Item.Content>
                 </Item>
                 <Item>
                   <Item.Content>
-                    <Header as="h5">
-                    Who is this option best for?
-                    </Header>
+                    <Header as="h5">Who is this option best for?</Header>
                     <Item.Description>
-                    This is ideal for investors who are looking to grow with a new business concept,
-                    accepting payments that may fluctuate but have a higher potential upside.
+                      This is ideal for investors who are looking to grow with a new business
+                      concept, accepting payments that may fluctuate but have a higher
+                      potential upside.
                     </Item.Description>
                   </Item.Content>
                 </Item>
@@ -126,14 +111,12 @@ const HowItWorks = () => (
       <Container>
         <Grid relaxed="very" stackable columns={2}>
           <Grid.Column>
-            <Header as="h2">
-            Every investment comes with risk and opportunity.
-            </Header>
+            <Header as="h2">Every investment comes with risk and opportunity.</Header>
             <p>
-            Remember, returns and bonus rewards are not guaranteed. Investments can be lost
-            entirely. Be sure to do your own due diligence, review all offering documents
-            carefully, and never invest more than you can afford to lose. Businesses may fail,
-            but those that succeed can make a lasting impact in your city.
+              Remember, returns and bonus rewards are not guaranteed. Investments can be lost
+              entirely. Be sure to do your own due diligence, review all offering documents
+              carefully, and never invest more than you can afford to lose. Businesses may fail,
+              but those that succeed can make a lasting impact in your city.
             </p>
           </Grid.Column>
           <Grid.Column verticalAlign="middle">
@@ -156,18 +139,10 @@ const HowItWorks = () => (
     <section>
       <Container className="center-align">
         <Header as="h2" className="mb-30">Register for an account with just your email.</Header>
-        <Responsive minWidth={768} as={Aux}>
-          <Button.Group>
-            <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
-            <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
-          </Button.Group>
-        </Responsive>
-        <Responsive maxWidth={767} as={Aux}>
-          <Button.Group vertical>
-            <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
-            <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
-          </Button.Group>
-        </Responsive>
+        <Button.Group vertical={isMobile}>
+          <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
+          <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
+        </Button.Group>
       </Container>
     </section>
   </Aux>
