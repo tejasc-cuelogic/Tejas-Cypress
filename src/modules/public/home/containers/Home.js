@@ -19,7 +19,7 @@ class Home extends Component {
         <Responsive maxWidth={767} as={Aux}>
           <Container>
             <section>
-              <Header as="h3">Accelerate your growth with the power of the crowd.</Header>
+              <Header as="h3">Raise capital<br />Invest local<br />Grow together</Header>
             </section>
             <Divider fitted />
           </Container>
