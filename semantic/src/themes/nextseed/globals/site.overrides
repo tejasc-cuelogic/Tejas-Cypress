@@ -35,6 +35,10 @@ iframe{
 h1, h1.ui.header{
 	font-weight:@normal;
 	line-height:66px;
+	@media only screen and (max-width : @largestMobileScreen){
+		font-size: @28px !important;
+		line-height: 38px;
+	} 
 }
 h2, h2.ui.header{
 	// line-height:34px;
@@ -51,10 +55,6 @@ h3, h3.ui.header{
 }
 h4, h4.ui.header{
 	line-height:24px;
-	@media only screen and (max-width : @largestMobileScreen){
-		font-size: @16px !important;
-		line-height: 22px;
-	}
 }
 h5, h5.ui.header{
 	font-weight:@bold;
@@ -80,9 +80,6 @@ h6{
 }
 .mb-80 {
 	margin-bottom: 80px !important;
-	@media only screen and (max-width : @largestMobileScreen){
-		margin-bottom: 50px !important;
-	}
 }
 .mt-20 {
 	margin-top: @20px !important;
@@ -102,13 +99,28 @@ h6{
 .mt-80 {
 	margin-top: 80px !important;
 }
-
 .mb-half{
 	margin-bottom:@7px !important;
 }
 .mt-half{
 	margin-top:@7px !important;
 }
+// Public Mobile View Start
+@media only screen and (max-width : @largestMobileScreen){
+	.mb-mobile-10 {
+		margin-bottom: @10px !important;
+	}
+	.mb-mobile-20 {
+		margin-bottom: @20px !important;
+	}
+	.mb-mobile-50 {
+		margin-bottom: @50px !important;
+	}
+	.mt-mobile-30 {
+		margin-top: @30px !important;
+	}
+}
+// Public Mobile View End
 .pull-left{
 	float:left !important;
 }
@@ -584,6 +596,19 @@ p i.icon {
 	.ui.compact.button {
 		margin: 0 10px; 
 	}
+	//Public Mobile View Start
+	.ui.menu:not(.vertical)>.item {
+		width: 100%;
+		>i.dropdown.icon {
+			right: 16px;
+			position: absolute;
+			&:before {
+				content: '\e914';
+				font-family: 'nextseed';
+			}
+		}
+	}
+	//Public Mobile View End
 }
 .content-spacer {
 	.column.side-section {

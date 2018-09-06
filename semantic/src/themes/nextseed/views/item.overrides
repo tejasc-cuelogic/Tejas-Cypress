@@ -117,15 +117,11 @@
             }
         }
         .description{
-            margin: 0;
-            h3 {
-                line-height: 40px;
-                margin-top: 0;
-                @media only screen and (max-width : @largestMobileScreen){
-                    font-size: @15px;
-                    font-weight: @normal;
-                    line-height: 20px;
-                }
+            font-size: @28px;
+            line-height: 38px;
+            @media only screen and (max-width : @largestMobileScreen){
+                font-size: @15px;
+                line-height: 24px;
             }
         }
         .extra {

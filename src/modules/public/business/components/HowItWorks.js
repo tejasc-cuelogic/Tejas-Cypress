@@ -25,7 +25,7 @@ const HowItWorks = () => (
     <section>
       <Container>
         <Responsive maxWidth={767} as={Aux}>
-          <Header as="h3">Accelerate your growth with the power of the crowd.</Header>
+          <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
           <div className="center-align">
             <Button.Group>
               <Button secondary content="Apply Business" />
@@ -34,7 +34,7 @@ const HowItWorks = () => (
           </div>
           <Divider section />
         </Responsive>
-        <Header as="h2" className="mb-80" textAlign={isMobile ? 'left' : 'center'}>
+        <Header as="h2" className="mb-80 mb-mobile-50" textAlign={isMobile ? 'left' : 'center'}>
           Get flexible financing that doesn’t<br />cost you everything.
         </Header>
         <Grid relaxed="very" stackable columns={3} doubling>
@@ -106,19 +106,9 @@ const HowItWorks = () => (
                   <Item.Image size="medium" src={carouselImg} circular />
                   <Item.Content verticalAlign="middle">
                     <Item.Header as="h2">Real sucess stories {i}.</Item.Header>
-                    <Item.Description>
-                      <Responsive minWidth={768} as={Aux}>
-                        <h3 className="mb-50">
-                          “Loved the experience! Financing this way allowed me to focus
-                          on my passion and not on pitching investors.”
-                        </h3>
-                      </Responsive>
-                      <Responsive maxWidth={767} as={Aux}>
-                        <h3 className="mt-20 mb-20">
-                          “Loved the experience! Financing this way allowed me to focus
-                          on my passion and not on pitching investors.”
-                        </h3>
-                      </Responsive>
+                    <Item.Description className="mb-50 mt-20 mb-mobile-20">
+                      “Loved the experience! Financing this way allowed me to focus
+                      on my passion and not on pitching investors.”
                     </Item.Description>
                     <Item.Extra className="testimonial-user-details">
                       <p><b>Lian Nguyen,</b> Bravery Chef Hall</p>
@@ -195,7 +185,7 @@ const HowItWorks = () => (
             </p>
           </Grid.Column>
         </Grid>
-        <div className="mt-80 mb-50 center-align">
+        <div className="mt-80 mb-50 mt-mobile-30 center-align">
           <Button as={Link} to="/business/funding-options/term-notes" primary content="See Funding Options" />
         </div>
       </Container>
