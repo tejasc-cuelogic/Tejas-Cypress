@@ -133,7 +133,7 @@ export default class OfferingOverview extends Component {
           />
           <Button.Group className="pull-right">
             <Button inverted color="red" content="Decline" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} />
-            <Button secondary className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} >Approve</Button>
+            <Button color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} >Approve</Button>
           </Button.Group>
           <Button primary type="button" color="green" className="relaxed pull-right" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} >Save</Button>
         </Form>

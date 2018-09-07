@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Button, Header } from 'semantic-ui-react';
 import { FormTextarea, MaskedInput } from '../../../../../../theme/form';
@@ -17,6 +16,7 @@ export default class OfferingCompany extends Component {
       OFFERING_COMPANY_FRM,
       COMPANY_HISTORY_FRM,
       formChange,
+      formChangeWithIndex,
       maskChangeWithIndex,
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_COMPANY_FRM';
@@ -51,13 +51,13 @@ export default class OfferingCompany extends Component {
                 <FormTextarea
                   name="description"
                   fielddata={history.description}
-                  changed={(e, result) => formChange(e, result, 'COMPANY_HISTORY_FRM')}
+                  changed={(e, result) => formChangeWithIndex(e, result, 'COMPANY_HISTORY_FRM', index)}
                   containerclassname="secondary"
                 />
               </Aux>
             ))
           }
-          <Link to={this.props.match.url} className="link" onClick={e => this.addNewMileStone(e)}><small>+ Add another milestone</small></Link>
+          <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewMileStone(e)}>+ Add another milestone</Button>
           {
             ['businessModel', 'locationAnalysis'].map(field => (
               <Aux>
@@ -73,7 +73,7 @@ export default class OfferingCompany extends Component {
           }
           <Button.Group className="pull-right">
             <Button inverted color="red" content="Decline" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} />
-            <Button secondary className="relaxed" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} >Approve</Button>
+            <Button color="green" className="relaxed" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} >Approve</Button>
           </Button.Group>
           <Button primary type="button" className="relaxed pull-right" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} >Save</Button>
         </Form>
