@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
+import Creation from './Creation';
 
 export default class Overview extends Component {
   render() {
     return (
-      <div style={{ fontSize: '24px', color: '#666', marginTop: '28px' }}>
-        This is just a landing page from Offering - Overview
-      </div>
+      <Creation {...this.props} />
     );
   }
 }
