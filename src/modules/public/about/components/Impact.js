@@ -2,23 +2,24 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Header, Container, Grid, Divider, Statistic } from 'semantic-ui-react';
 
+const isMobile = document.documentElement.clientWidth < 768;
 const Impact = () => (
   <Aux>
     <Container>
       <section>
         <Grid centered>
-          <Grid.Column width={8}>
-            <Header as="h2" textAlign="center">
+          <Grid.Column computer={8} tablet={8} mobile={16}>
+            <Header as="h2" textAlign={isMobile ? 'left' : 'center'}>
             Be a part of something.
             </Header>
-            <p className="center-align mt-30">
+            <p className={isMobile ? '' : 'center-align mt-30'}>
             We’re working hard to create something impactful for the people around us.
             It’s what gets us up in the morning. It’s why we’re here.
             </p>
           </Grid.Column>
         </Grid>
       </section>
-      <Divider fitted as={Container} />
+      <Divider fitted />
       <section className="statistic-section">
         <Grid centered>
           <Grid.Row>
@@ -93,9 +94,9 @@ const Impact = () => (
           to NextSeed deals completed.
         </p>
       </section>
-      <Divider fitted as={Container} />
+      <Divider fitted />
       <section className="statistic-section featured-statistic">
-        <Grid celled columns={2} className="mb-30">
+        <Grid celled stackable columns={2} className="mb-30">
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Trust</Header>
@@ -116,7 +117,7 @@ const Impact = () => (
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Grid celled columns={2} className="mb-30">
+        <Grid celled stackable columns={2} className="mb-30">
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Innovation</Header>
@@ -139,7 +140,7 @@ const Impact = () => (
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Grid celled columns={2} className="mt-50">
+        <Grid celled stackable columns={2} className="mt-50">
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Community</Header>
@@ -149,7 +150,7 @@ const Impact = () => (
               </p>
             </Grid.Column>
             <Grid.Column className="green-block center-align">
-              <Grid>
+              <Grid stackable>
                 <Grid.Row columns={2}>
                   <Grid.Column>
                     <Statistic size="small" className="basic">
@@ -168,7 +169,9 @@ const Impact = () => (
                     </Statistic>
                   </Grid.Column>
                 </Grid.Row>
-                <Header as="h5" className="center-align">Issuers include:</Header>
+                <Grid.Row>
+                  <Header as="h5" className="center-align">Issuers include:</Header>
+                </Grid.Row>
                 <Grid.Row columns={3}>
                   <Grid.Column>
                     <Statistic size="small" className="basic">

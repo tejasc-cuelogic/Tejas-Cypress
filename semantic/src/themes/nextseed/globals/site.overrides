@@ -814,6 +814,9 @@ address {
 	h5.ui.header {
 		color: @white;
 		margin: auto;
+		@media only screen and (max-width : @largestMobileScreen){
+			font-size: @13px !important;
+		}
 	}
 	h2.ui.header {
 		margin-bottom: 0px;

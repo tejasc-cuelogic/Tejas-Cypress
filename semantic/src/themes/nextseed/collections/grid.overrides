@@ -106,6 +106,9 @@
 			color: @neutral-darkwhite;
             height: 200px;
             line-height: 200px;
+            @media only screen and (max-width : @largestMobileScreen){
+                display: none;
+            }
         }
         >.row>.column {
             padding: 60px;
