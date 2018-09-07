@@ -35,6 +35,10 @@ iframe{
 h1, h1.ui.header{
 	font-weight:@normal;
 	line-height:66px;
+	@media only screen and (max-width : @largestMobileScreen){
+		font-size: @28px !important;
+		line-height: 38px;
+	} 
 }
 h2, h2.ui.header{
 	// line-height:34px;
@@ -43,12 +47,14 @@ h2, h2.ui.header{
 		line-height: 38px;
 	}
 }
+h3, h3.ui.header{
+	@media only screen and (max-width : @largestMobileScreen){
+		font-size: @20px !important;
+		line-height: 24px;
+	}
+}
 h4, h4.ui.header{
 	line-height:24px;
-	@media only screen and (max-width : @largestMobileScreen){
-		font-size: @16px !important;
-		line-height: 22px;
-	}
 }
 h5, h5.ui.header{
 	font-weight:@bold;
@@ -74,9 +80,6 @@ h6{
 }
 .mb-80 {
 	margin-bottom: 80px !important;
-	@media only screen and (max-width : @largestMobileScreen){
-		margin-bottom: 50px !important;
-	}
 }
 .mt-20 {
 	margin-top: @20px !important;
@@ -96,7 +99,6 @@ h6{
 .mt-80 {
 	margin-top: 80px !important;
 }
-
 .mb-half{
 	margin-bottom:@7px !important;
 }
@@ -121,7 +123,7 @@ h6{
 }
 
 .highlight-text{
-	color:@primary-one;
+	color:@primary-one !important;
 }
 .primary-text {
 	color: @primaryColor;
@@ -553,41 +555,9 @@ p i.icon {
 	div {
 		display: inline-block;
 		width: ~"calc(100% - 70px)";
-	}
-}
-.testimonial-slider {
-	.testimonial-details {
-		display: flex !important;
-		flex-direction: column;
-		justify-content: center;
-		h3 {
-			line-height: 40px;
-			margin-top: 0;
-		}
-		.testimonial-user-details {
-			p {
-				color: @neutral;
-				margin-bottom: 0;
-			}
-			span {
-				line-height: @24px;
-				color: @primary-one;
-				font-weight: @bold;
-			}
-		}
-	}
-	.slick-prev {
-		&:before {
-			content: "\e916";
-			font-family: 'nextseed';
-			font-size: @18px !important;
-		}
-	}
-	.slick-next {
-		&:before {
-			content: "\e918";
-			font-family: 'nextseed';
-			font-size: @18px !important;
+		@media only screen and (max-width : @largestMobileScreen){
+			width: 100%;
+			margin-top: @14px;
 		}
 	}
 }
@@ -599,6 +569,9 @@ p i.icon {
 }
 .funding-option {
 	padding-top: 74px;
+	@media only screen and (max-width : @largestMobileScreen){
+		padding-top:0;
+	}
 	.ui.compact.button {
 		margin: 0 10px; 
 	}
@@ -629,6 +602,9 @@ p i.icon {
 				border: 0;
 				background-color: transparent;
 				box-shadow: none;
+				@media only screen and (max-width : @largestMobileScreen){
+					padding:0 0 30px !important;
+				}
 				&:hover {
 					box-shadow: none;
 				}
@@ -661,11 +637,6 @@ p i.icon {
 }
 // Slick Slider Styles override
 .slick-slider {
-	.slick-slide {
-		.ui.grid {
-			display: flex !important;
-		}
-	}
 	.slick-prev, .slick-next {
 		width: 50px;
 		height: 50px;
@@ -673,12 +644,37 @@ p i.icon {
 			font-size: @30px;
 			color: @neutral-middark;
 		}
-	}
-	.slick-next {
-		right: -50px;
+		@media only screen and (max-width : @largestMobileScreen){
+			top: 25%;
+		}
 	}
 	.slick-prev {
 		left: -50px;
+		&:before {
+			content: "\e916";
+			font-family: 'nextseed';
+			font-size: @18px !important;
+		}
+		@media only screen and (max-width : @tabletBreakpoint){
+			left: -35px;
+		}
+		@media only screen and (max-width : @largestMobileScreen){
+			left: -25px;
+		}
+	}
+	.slick-next {
+		right: -50px;
+		&:before {
+			content: "\e918";
+			font-family: 'nextseed';
+			font-size: @18px !important;
+		}
+		@media only screen and (max-width : @tabletBreakpoint){
+			right: -35px;
+		}
+		@media only screen and (max-width : @largestMobileScreen){
+			right: -25px;
+		}
 	}
 	.slick-dots{
 		bottom: 0;
@@ -728,25 +724,6 @@ p i.icon {
 	}
 	h5.ui.header {
 		margin-bottom: 5px;
-	}
-}
-.ui.grid.flex-column {
-	.column {
-		display: flex !important;
-		flex-direction: column;
-		.flex-content {
-			flex-grow: 1;
-			img {
-				width: 100%;
-			}
-		}
-	}
-	.item {
-		>.content {
-			>.description {
-				margin-top: 0;
-			}
-		}
 	}
 }
 //Team
@@ -1882,6 +1859,11 @@ p.check-extra-info{
 		position: absolute;
 		top: 20px;
 		right: 18px;
+	}
+}
+.proven-result-section {
+	.ui.grid>* {
+		padding: 0;
 	}
 }
 //Public responsive end

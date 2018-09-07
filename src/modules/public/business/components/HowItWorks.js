@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import { Header, Grid, Button, Image, Container, Embed, List, Statistic, Divider } from 'semantic-ui-react';
+import { Header, Grid, Button, Image, Container, Embed, List, Statistic, Divider, Responsive, Item } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import supportIcon from '../../../../assets/images/icons/support.svg';
 import sellingIcon from '../../../../assets/images/icons/selling.svg';
@@ -18,15 +18,26 @@ const settings = {
   arrows: true,
   dots: false,
 };
+const isMobile = document.documentElement.clientWidth < 768;
 
 const HowItWorks = () => (
   <Aux>
     <section>
       <Container>
-        <Header as="h2" className="mb-80" textAlign="center">
+        <Responsive maxWidth={767} as={Aux}>
+          <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
+          <div className="center-align">
+            <Button.Group>
+              <Button secondary content="Apply Business" />
+              <Button secondary content="Apply for CRE" />
+            </Button.Group>
+          </div>
+          <Divider section />
+        </Responsive>
+        <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>
           Get flexible financing that doesn’t<br />cost you everything.
         </Header>
-        <Grid relaxed="very" stackable columns={3}>
+        <Grid relaxed="very" stackable columns={3} doubling>
           <Grid.Column className="info-grid">
             <Image src={sellingIcon} verticalAlign="top" />
             <div>
@@ -61,13 +72,9 @@ const HowItWorks = () => (
             </div>
           </Grid.Column>
         </Grid>
-        <div className="mt-80 mb-80 center-align">
-          <Button secondary content="Apply now" />
-        </div>
         <Grid className="business-learn-more">
-          <Grid.Row centered columns={2}>
+          <Grid.Row>
             <Grid.Column className="center-align">
-              {/* <p><b>Learn more</b></p> */}
               <List horizontal relaxed className="learn-more-list left-align">
                 <List.Item>
                   <List.Header>Learn more</List.Header>
@@ -75,7 +82,9 @@ const HowItWorks = () => (
                   <List.Content as="a">Why fundraise on NextSeed?</List.Content>
                 </List.Item>
                 <List.Item>
-                  <List.Header>&nbsp;</List.Header>
+                  {!isMobile &&
+                    <List.Header>&nbsp;</List.Header>
+                  }
                   <List.Icon className="ns-arrow-right" color="green" />
                   <List.Content as="a">Is fundraising on NextSeed risky?</List.Content>
                 </List.Item>
@@ -86,27 +95,27 @@ const HowItWorks = () => (
       </Container>
     </section>
     <Divider fitted as={Container} />
-    <section className="testimonial-slider">
+    <section>
       <Container>
         <NsCarousel {...settings}>
           {
             [1, 2, 3].map(i => (
-              <Grid stackable key={i}>
-                <Grid.Column width={6}>
-                  <Image src={carouselImg} circular />
-                </Grid.Column>
-                <Grid.Column width={10} className="testimonial-details">
-                  <Header as="h2" className="mb-20">Real sucess stories {i}.</Header>
-                  <h3 className="mb-50">
-                    “Loved the experience! Financing this way allowed me to focus
-                    on my passion and not on pitching investors.”
-                  </h3>
-                  <div className="testimonial-user-details">
-                    <p><b>Lian Nguyen,</b> Bravery Chef Hall</p>
-                    <span>$1,000,000 | 539 Investors</span>
-                  </div>
-                </Grid.Column>
-              </Grid>
+              <Item.Group key={i}>
+                <Item>
+                  <Item.Image size="medium" src={carouselImg} circular />
+                  <Item.Content verticalAlign="middle">
+                    <Item.Header as="h2">Real sucess stories {i}.</Item.Header>
+                    <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
+                      “Loved the experience! Financing this way allowed me to focus
+                      on my passion and not on pitching investors.”
+                    </Item.Description>
+                    <Item.Extra className="testimonial-user-details">
+                      <p><b>Lian Nguyen,</b> Bravery Chef Hall</p>
+                      <span>$1,000,000 | 539 Investors</span>
+                    </Item.Extra>
+                  </Item.Content>
+                </Item>
+              </Item.Group>
             ))
           }
         </NsCarousel>
@@ -122,7 +131,7 @@ const HowItWorks = () => (
               Every day, entrepreneurs like you are raising capital on
               NextSeed to bring their concepts to life.
             </p>
-            <Grid columns={2}>
+            <Grid columns={2} stackable>
               <Grid.Row>
                 <Grid.Column>
                   <Statistic color="green" size="mini" className="basic">
@@ -153,7 +162,7 @@ const HowItWorks = () => (
               </Grid.Row>
             </Grid>
             <Divider hidden />
-            <p className="mt-30">
+            <p>
               The above figures include data from both the Texas and Reg CF NextSeed platforms.
               The total amount raised from debt crowdfunding as of Nov 2017 figure includes
               amounts invested in offerings completed through NextSeed US LLC
@@ -175,7 +184,7 @@ const HowItWorks = () => (
             </p>
           </Grid.Column>
         </Grid>
-        <div className="mt-80 mb-50 center-align">
+        <div className={`${isMobile ? 'mt-30' : 'mt-80'} mb-50 center-align`}>
           <Button as={Link} to="/business/funding-options/term-notes" primary content="See Funding Options" />
         </div>
       </Container>

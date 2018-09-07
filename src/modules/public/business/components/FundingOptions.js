@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Header, Container, Menu, Segment, Button, Grid } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../theme/shared';
+import { Header, Container, Menu, Segment, Button, Grid, Responsive } from 'semantic-ui-react';
+import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../helper';
 
@@ -19,6 +19,7 @@ const navItems = [
   { title: 'Revenue Sharing', to: 'revenue-sharing' },
   { title: 'Equity Loans', to: 'equity-loans' },
 ];
+const isMobile = document.documentElement.clientWidth < 768;
 
 export default class FundingOption extends Component {
   componentWillMount() {
@@ -34,20 +35,21 @@ export default class FundingOption extends Component {
         <Container>
           <section className="funding-option account-type-tab">
             <Grid centered>
-              <Grid.Column width={13}>
-                <Header as="h2" textAlign="center">
+              <Grid.Column computer={13} tablet={16} mobile={16} textAlign={isMobile ? 'left' : 'center'}>
+                <Header as="h2">
                 Choose a funding option that fits your business.
                 </Header>
-                <p className="center-align mb-50">
+                <p className={isMobile ? 'mb-10' : 'mb-50'}>
                 Whether you need working capital for your existing business,
                 expansion projects or a new venture, our financial products
                 put you in control. Grow your business on your own terms.
                 </p>
               </Grid.Column>
             </Grid>
-            <Menu tabular fluid widths={3}>
+            <Responsive minWidth={768} as={Menu} tabular fluid widths={3}>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
-            </Menu>
+            </Responsive>
+            <MobileDropDownNav navItems={navItems} location={location} />
             <Segment attached="bottom" padded>
               <Switch>
                 <Route

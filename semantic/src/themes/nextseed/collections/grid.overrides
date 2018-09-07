@@ -78,6 +78,18 @@
             box-shadow:1px 0 0 0 @celledBorderColor, 0 1px 0 0 @celledBorderColor;
         }
     }
+    &.flex-column {
+        .column {
+            display: flex !important;
+            flex-direction: column;
+            .flex-content {
+                flex-grow: 1;
+                img {
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
 .featured-statistic {
 	counter-reset: section;
