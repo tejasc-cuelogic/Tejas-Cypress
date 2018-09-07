@@ -50,15 +50,25 @@
         padding: 2.85714286rem 1.42857143rem;
     }
     &.team-member-modal {
+        border-radius: 0;
+        >.close{
+            @media only screen and (max-width:@largestMobileScreen){
+                top:10px !important;
+            }
+        }
+        .header {
+            font-size: @16px;
+        }
         .content {
-            padding: 0;
+            padding: 0 !important;
             border-radius: 0;
         }
         .item {
+            margin-top: 0;
             .image {
                 width: 50%;
                 +.team-details-container.content {
-                    padding: @40px @20px;
+                    padding: @40px @20px !important;
                 }
             }
         }

@@ -7,7 +7,7 @@ import TeamModal from '../components/TeamModal';
 import { InlineLoader } from '../../../../theme/shared';
 import TeamList from '../components/TeamList';
 
-
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('teamStore')
 @observer
 class team extends Component {
@@ -20,7 +20,7 @@ class team extends Component {
       <Grid stackable columns={2}>
         <Grid.Column>
           <Grid centered>
-            <Grid.Column width={8} className="team-column">
+            <Grid.Column computer={8} tablet={8} mobile={16} className={isMobile ? 'mt-30' : 'team-column'}>
               <Header as="h2">Meet our team.</Header>
               <p>
               We&apos;re a team of entrepreneurs with backgrounds in business, finance,

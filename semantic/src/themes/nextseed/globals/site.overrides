@@ -735,6 +735,9 @@ p i.icon {
 		margin: 0;
 		>.column {
 			padding: 0 !important;
+			&:last-child {
+				padding: @20px !important;
+			}
 		}
 	}
 	.team-overlay {

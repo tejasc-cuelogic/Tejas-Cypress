@@ -1,14 +1,19 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { Header, Container, Grid, Statistic } from 'semantic-ui-react';
+import { Header, Container, Grid, Statistic, Responsive, Divider } from 'semantic-ui-react';
 
-const Mission = props => (
+const isMobile = document.documentElement.clientWidth < 768;
+const Mission = () => (
   <Aux>
     <section>
       <Container>
+        <Responsive maxWidth={767} as={Aux}>
+          <Header as="h2">Everyone thrives when we invest in each other.</Header>
+          <Divider section />
+        </Responsive>
         <Grid centered stackable>
           <Grid.Row>
-            <Grid.Column textAlign={props.isMobile ? 'left' : 'center'}>
+            <Grid.Column textAlign={isMobile ? 'left' : 'center'}>
               <Header as="h2">
               Our mission is to connect businesses and<br />
               individuals to build vibrant communities.
