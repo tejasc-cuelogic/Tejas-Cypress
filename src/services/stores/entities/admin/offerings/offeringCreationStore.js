@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY } from '../../../../constants/admin/offerings';
+import { CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -11,6 +11,15 @@ export class OfferingCreationStore {
   @observable COMPANY_HISTORY_FRM = Validator.prepareFormObject(COMPANY_HISTORY);
   @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
+  @observable LAUNCH_CONTITNGENCIES_FRM = Validator.prepareFormObject(LAUNCH_CONTITNGENCIES);
+  @observable CLOSING_CONTITNGENCIES_FRM = Validator.prepareFormObject(CLOSING_CONTITNGENCIES);
+  @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
+  @observable contingencyFormSelected = undefined;
+
+  @action
+  setContingencyFormSelected = (formName) => {
+    this.contingencyFormSelected = formName;
+  }
 
   @action
   formChange = (e, result, form) => {
@@ -67,12 +76,14 @@ export class OfferingCreationStore {
     const metaDataMapping = {
       OFFERING_HIGHLIGHTS_FRM: OFFERING_HIGHLIGHTS,
       COMPANY_HISTORY_FRM: COMPANY_HISTORY,
+      LAUNCH_CONTITNGENCIES_FRM: CONTINGENCIES,
+      CLOSING_CONTITNGENCIES_FRM: CONTINGENCIES,
     };
     return metaDataMapping[metaData];
   }
 
   @action
-  addMore = (formName) => {
+  addMore = (formName, addFieldValues = false) => {
     this[formName] = {
       ...this[formName],
       fields: {
@@ -87,6 +98,14 @@ export class OfferingCreationStore {
         isValid: false,
       },
     };
+    if (addFieldValues) {
+      const dataLength = this[formName].fields.data.length;
+      this[formName].fields.data[dataLength - 1].name.value =
+      this.ADD_NEW_CONTINGENCY_FRM.fields.name.value;
+      this[formName].fields.data[dataLength - 1].acceptanceCriteria.value =
+      this.ADD_NEW_CONTINGENCY_FRM.fields.acceptanceCriteria.value;
+    }
+    Validator.resetFormData(this.ADD_NEW_CONTINGENCY_FRM);
   }
 }
 

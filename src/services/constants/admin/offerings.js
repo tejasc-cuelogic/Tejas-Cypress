@@ -487,3 +487,65 @@ export const SIGNED_LEGAL_DOCS = {
   },
   ],
 };
+
+export const LAUNCH_CONTITNGENCIES = {
+  data: [],
+};
+
+export const CLOSING_CONTITNGENCIES = {
+  data: [],
+};
+
+export const CONTINGENCIES = {
+  data: [{
+    isApplied: {
+      value: [],
+      values: [
+        {
+          label: '',
+          value: 'isApplied',
+        },
+      ],
+      error: undefined,
+      rule: 'alpha',
+    },
+    name: {
+      value: '',
+      label: 'Contingency Name',
+      error: undefined,
+      rule: 'string|required',
+      placeHolder: 'Enter here',
+    },
+    acceptanceCriteria: {
+      value: '',
+      label: 'Acceptance Criteria',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'Enter here',
+    },
+    comment: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'required_if:data.*.isApplied,isApplied',
+      placeHolder: 'Enter comment here...',
+    },
+  }],
+};
+
+export const ADD_NEW_CONTINGENCY = {
+  name: {
+    value: '',
+    label: 'Contingency Name',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'Enter here',
+  },
+  acceptanceCriteria: {
+    value: '',
+    label: 'Acceptance Criteria',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
+};
