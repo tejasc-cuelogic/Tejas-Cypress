@@ -73,7 +73,7 @@ const HowItWorks = () => (
             <div className="flex-content">
               <Image src={InvestorImg} />
               <Header as="h3">Revenue Sharing Notes</Header>
-              <Item.Group relaxed="very">
+              <Item.Group relaxed="very" className="question-list">
                 <Item>
                   <Item.Content>
                     <Header as="h5">What are the benefits?</Header>
