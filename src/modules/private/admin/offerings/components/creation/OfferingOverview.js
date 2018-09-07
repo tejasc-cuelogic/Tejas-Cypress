@@ -136,7 +136,7 @@ export default class OfferingOverview extends Component {
               <Icon className="ns-check-circle" color="green" />
               Submitted by ISSUER_NAME on 2/3/2018
             </Button>
-            <Button.Group className="pull-right">
+            <Button.Group floated="right">
               <Button inverted color="red" content="Decline" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} />
               <Button color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)}>Approve</Button>
             </Button.Group>
@@ -146,7 +146,7 @@ export default class OfferingOverview extends Component {
               <Icon className="ns-check-circle" color="green" />
               Approved by MANAGER_NAME on 2/3/2018
             </Button>
-            <Button.Group className="pull-right">
+            <Button.Group floated="right">
               <Button primary type="button" color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)}>Save</Button>
             </Button.Group>
           </div>
