@@ -2,14 +2,13 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Header, Container, Grid, Statistic } from 'semantic-ui-react';
 
-
-const Mission = () => (
+const Mission = props => (
   <Aux>
     <section>
       <Container>
         <Grid centered stackable>
           <Grid.Row>
-            <Grid.Column textAlign="center">
+            <Grid.Column textAlign={props.isMobile ? 'left' : 'center'}>
               <Header as="h2">
               Our mission is to connect businesses and<br />
               individuals to build vibrant communities.
