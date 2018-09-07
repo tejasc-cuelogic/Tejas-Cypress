@@ -5,6 +5,7 @@ import { observer, inject } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Header, Button, Checkbox, Confirm } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
+import Helper from '../../../../../../../helper/utility';
 
 @withRouter
 @inject('offeringCreationStore', 'userStore')
@@ -18,12 +19,15 @@ export default class Contingency extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
+  removeData = (confirmModalName) => {
+    this.props.offeringCreationStore.removeData(confirmModalName);
+    Helper.toast('Contingency deleted successfully.', 'success');
+  }
   render() {
     const { roles } = this.props.userStore.currentUser;
     const {
       confirmModal,
       confirmModalName,
-      removeData,
     } = this.props.offeringCreationStore;
     const {
       form,
@@ -94,7 +98,7 @@ export default class Contingency extends Component {
           content="Are you sure you want to remove this contingency?"
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName)}
+          onConfirm={() => this.removeData(confirmModalName)}
           size="mini"
           className="deletion"
         />

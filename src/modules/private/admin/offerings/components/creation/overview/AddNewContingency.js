@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Form, Button, Modal } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { FormInput } from '../../../../../../../theme/form';
-
+import Helper from '../../../../../../../helper/utility';
 @withRouter
 @inject('offeringCreationStore')
 @observer
@@ -15,6 +15,7 @@ export default class AddNewContingency extends React.Component {
     const { addMore, contingencyFormSelected } = this.props.offeringCreationStore;
     addMore(contingencyFormSelected, true);
     this.props.history.push(this.props.refLink);
+    Helper.toast('Contingency added successfully.', 'success');
   }
   render() {
     const {
