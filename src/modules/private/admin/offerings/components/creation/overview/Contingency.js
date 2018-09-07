@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
-import { Header, Button, Checkbox, Form, Confirm } from 'semantic-ui-react';
+import { Header, Button, Checkbox, Confirm } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 
 @withRouter
@@ -33,64 +33,62 @@ export default class Contingency extends Component {
     } = this.props;
     return (
       <Aux>
-        <Form>
-          <Header as="h4">
-            {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch Contingencies' : 'Closing Contingencies'}
-            {(roles && (roles.includes('manager') || roles.includes('admin'))) ?
-              <Link onClick={() => this.setContingencyForm()} to={`${match.url}/add-new-contingency`} className="link"><small>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</small></Link>
-            :
-            null}
-          </Header>
-          {
-          form.fields.data.length > 0 ?
-          form.fields.data.map((contingency, index) => (
-            <div className="featured-section collapsed-checkbox">
-              <Checkbox
-                label={
-                  <label>
-                    <Header as="h4">
-                      {contingency.name.value}
-                      <Header.Subheader>
-                        {contingency.acceptanceCriteria.value}
-                      </Header.Subheader>
-                    </Header>
-                  </label>
-                }
-                onChange={(e, result) => formChangeWithIndex(e, result, formName, index)}
-              />
-              <div className="checkbox-description">
-                {/* <p>
-                  {contingency.comment.value}
-                </p> */}
-                <FormTextarea
-                  fielddata={contingency.comment}
-                  name="comment"
-                  containerclassname="secondary"
-                  changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
-                />
-                <Button.Group compact size="small">
-                  {(roles && (roles.includes('manager') || roles.includes('admin'))) &&
-                    <Aux>
-                      <Button inverted color="blue" content="Edit" />
-                      <Button type="button" color="red" content="Delete" onClick={e => this.toggleConfirmModal(e, index, formName)} />
-                    </Aux>
-                  }
-                  {/* <Button as="span" className="time-stamp">
-                  <Icon className="ns-check-circle" color="green" />
-                  Submited 2/16/18 by Aaron Adams</Button>
-                  */}
-                  {(roles && (roles.includes('support') || roles.includes('admin'))) &&
-                    <Button primary content="Submit" />
-                  }
-                </Button.Group>
-              </div>
-            </div>
-          )) :
+        <Header as="h4">
+          {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch Contingencies' : 'Closing Contingencies'}
+          {(roles && (roles.includes('manager') || roles.includes('admin'))) ?
+            <Link onClick={() => this.setContingencyForm()} to={`${match.url}/add-new-contingency`} className="link"><small>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</small></Link>
+          :
+          null}
+        </Header>
+        {
+        form.fields.data.length > 0 ?
+        form.fields.data.map((contingency, index) => (
           <div className="featured-section collapsed-checkbox">
-            No data found
+            <Checkbox
+              label={
+                <label>
+                  <Header as="h4">
+                    {contingency.name.value}
+                    <Header.Subheader>
+                      {contingency.acceptanceCriteria.value}
+                    </Header.Subheader>
+                  </Header>
+                </label>
+              }
+              onChange={(e, result) => formChangeWithIndex(e, result, formName, index)}
+            />
+            <div className="checkbox-description">
+              {/* <p>
+                {contingency.comment.value}
+              </p> */}
+              <FormTextarea
+                fielddata={contingency.comment}
+                name="comment"
+                containerclassname="secondary"
+                changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+              />
+              <Button.Group compact size="small">
+                {(roles && (roles.includes('manager') || roles.includes('admin'))) &&
+                  <Aux>
+                    <Button inverted color="blue" content="Edit" />
+                    <Button type="button" color="red" content="Delete" onClick={e => this.toggleConfirmModal(e, index, formName)} />
+                  </Aux>
+                }
+                {/* <Button as="span" className="time-stamp">
+                <Icon className="ns-check-circle" color="green" />
+                Submited 2/16/18 by Aaron Adams</Button>
+                */}
+                {(roles && (roles.includes('support') || roles.includes('admin'))) &&
+                  <Button primary content="Submit" />
+                }
+              </Button.Group>
+            </div>
           </div>
-        }
-        </Form>
+        )) :
+        <div className="featured-section collapsed-checkbox">
+          No data found
+        </div>
+      }
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this contingency?"

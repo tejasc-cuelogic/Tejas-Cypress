@@ -176,6 +176,19 @@ export default class KeyTerms extends Component {
               changed={(e, result) => formChange(e, result, formName)}
             />
           </Form.Group>
+          <Form.Group widths={3}>
+            {
+              ['offeringExpenseTarget', 'offeringExpenseMax'].map(field => (
+                <MaskedInput
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(values, name) => maskChange(values, formName, name)}
+                  currency
+                  prefix="$"
+                />
+              ))
+            }
+          </Form.Group>
           {
             ['revenueSharingSummary', 'nsFeeCalculationDescription'].map(field => (
               <FormTextarea

@@ -32,6 +32,11 @@ const getModule = component => Loadable({
 });
 
 export default class OfferingDetails extends Component {
+  componentWillMount() {
+    if (this.props.match.isExact) {
+      this.props.history.push(`${this.props.match.url}/overview`);
+    }
+  }
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.refLink);

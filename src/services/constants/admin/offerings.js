@@ -167,6 +167,20 @@ export const KEY_TERMS = {
     rule: 'string|required',
     placeHolder: 'Enter here',
   },
+  offeringExpenseTarget: {
+    value: '',
+    label: 'Offering Expense Target',
+    error: undefined,
+    rule: 'numeric|required',
+    placeHolder: 'Enter here',
+  },
+  offeringExpenseMax: {
+    value: '',
+    label: 'Offering Expense Max',
+    error: undefined,
+    rule: 'numeric|required',
+    placeHolder: 'Enter here',
+  },
   revenueSharingSummary: {
     value: '',
     label: 'Revenue Sharing Summary',
