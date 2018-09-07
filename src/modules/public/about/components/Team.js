@@ -17,10 +17,10 @@ class team extends Component {
   render() {
     const { teamMembers, loading } = this.props.teamStore;
     const teamInfo = (
-      <Grid stackable columns={2}>
+      <Grid doubling columns={2}>
         <Grid.Column>
           <Grid centered>
-            <Grid.Column computer={8} tablet={8} mobile={16} className={isMobile ? 'mt-30' : 'team-column'}>
+            <Grid.Column computer={8} tablet={8} mobile={14} className={isMobile ? 'mt-30' : 'team-column'}>
               <Header as="h2">Meet our team.</Header>
               <p>
               We&apos;re a team of entrepreneurs with backgrounds in business, finance,

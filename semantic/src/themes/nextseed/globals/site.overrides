@@ -729,6 +729,9 @@ p i.icon {
 //Team
 .team-column {
 	margin-top: 30vh;
+	@media only screen and (max-width : @largestSmallMonitor){
+		margin-top: 5vh;
+	}
 }
 .team-gallery {
 	&.ui.grid {

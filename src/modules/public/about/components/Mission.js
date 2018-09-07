@@ -55,13 +55,13 @@ const Mission = () => (
               <Header as="h2" className="mb-10" textAlign="center">Our impact so far.</Header>
             </Grid.Column>
           </Grid.Row>
-          <Grid celled="internally" centered stackable>
+          <Grid celled="internally" centered stackable as={Container}>
             <Grid.Row>
               <Grid.Column width={8} textAlign="center">
                 <Grid.Row>
                   <Grid className="green-block">
                     <Grid.Column>
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value>$17,819,39</Statistic.Value>
                         <Statistic.Label>Economic impact of businesses funded1</Statistic.Label>
                       </Statistic>
@@ -71,15 +71,15 @@ const Mission = () => (
                 <Grid.Row>
                   <Grid divided className="secondary-statistic">
                     <Grid.Column width={8} textAlign="center">
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value className="primary-text">14</Statistic.Value>
                         <Statistic.Label>Cities with NextSeed Issuers</Statistic.Label>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column width={8} textAlign="center">
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value className="primary-text">290</Statistic.Value>
-                        <Statistic.Label>Jobs created2</Statistic.Label>
+                        <Statistic.Label>Jobs created</Statistic.Label>
                       </Statistic>
                     </Grid.Column>
                   </Grid>
@@ -89,7 +89,7 @@ const Mission = () => (
                 <Grid.Row>
                   <Grid className="blue-block">
                     <Grid.Column>
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value>$6.3M</Statistic.Value>
                         <Statistic.Label>Total amount raised via debt crowdfunding</Statistic.Label>
                       </Statistic>
@@ -99,13 +99,13 @@ const Mission = () => (
                 <Grid.Row>
                   <Grid divided className="secondary-statistic">
                     <Grid.Column width={8} textAlign="center">
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value className="secondary-text">$217,360</Statistic.Value>
                         <Statistic.Label>Average closed offering size</Statistic.Label>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column width={8} textAlign="center">
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value className="secondary-text">45 Days</Statistic.Value>
                         <Statistic.Label>Average time to complete offering</Statistic.Label>
                       </Statistic>

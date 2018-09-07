@@ -8,7 +8,7 @@ const Impact = () => (
     <Container>
       <section>
         <Grid centered>
-          <Grid.Column computer={8} tablet={8} mobile={16}>
+          <Grid.Column computer={8} tablet={16} mobile={16}>
             <Header as="h2" textAlign={isMobile ? 'left' : 'center'}>
             Be a part of something.
             </Header>
@@ -27,13 +27,13 @@ const Impact = () => (
               <Header as="h2" className="mb-10" textAlign="center">Our impact so far.</Header>
             </Grid.Column>
           </Grid.Row>
-          <Grid celled="internally" centered stackable>
+          <Grid celled="internally" centered stackable as={Container}>
             <Grid.Row>
               <Grid.Column width={8} textAlign="center">
                 <Grid.Row>
                   <Grid className="green-block">
                     <Grid.Column>
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value>290</Statistic.Value>
                         <Statistic.Label>Jobs created</Statistic.Label>
                       </Statistic>
@@ -43,13 +43,13 @@ const Impact = () => (
                 <Grid.Row>
                   <Grid divided className="secondary-statistic">
                     <Grid.Column width={8} textAlign="center">
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value className="primary-text">70%</Statistic.Value>
                         <Statistic.Label>Food & Beverage</Statistic.Label>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column width={8} textAlign="center">
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value className="primary-text">7%</Statistic.Value>
                         <Statistic.Label>Hospitality</Statistic.Label>
                       </Statistic>
@@ -61,7 +61,7 @@ const Impact = () => (
                 <Grid.Row>
                   <Grid className="blue-block">
                     <Grid.Column>
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value>$17,819,390</Statistic.Value>
                         <Statistic.Label>Economic impact of businesses funded</Statistic.Label>
                       </Statistic>
@@ -71,13 +71,13 @@ const Impact = () => (
                 <Grid.Row>
                   <Grid divided className="secondary-statistic">
                     <Grid.Column width={8} textAlign="center">
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value className="secondary-text">10%</Statistic.Value>
                         <Statistic.Label>Wellness & Fitness</Statistic.Label>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column width={8} textAlign="center">
-                      <Statistic size="tiny" className="basic">
+                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
                         <Statistic.Value className="secondary-text">13%</Statistic.Value>
                         <Statistic.Label>Other</Statistic.Label>
                       </Statistic>
@@ -106,7 +106,7 @@ const Impact = () => (
               </p>
             </Grid.Column>
             <Grid.Column className="blue-block center-align">
-              <Statistic size="large" className="basic">
+              <Statistic size={isMobile ? 'small' : 'large'} className="basic">
                 <Statistic.Value>$1.175M</Statistic.Value>
                 <Statistic.Label className="mb-50">Total amount paid to investors</Statistic.Label>
                 <Statistic.Value>40%</Statistic.Value>
@@ -127,7 +127,7 @@ const Impact = () => (
               </p>
             </Grid.Column>
             <Grid.Column className="primary-block center-align">
-              <Statistic size="large" className="basic">
+              <Statistic size={isMobile ? 'small' : 'large'} className="basic">
                 <Statistic.Value>May 2016</Statistic.Value>
                 <Statistic.Label className="mb-50">
                 NextSeed became the first Funding Portal registered by the SEC
