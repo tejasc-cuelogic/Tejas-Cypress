@@ -28,13 +28,16 @@ export default class NewUpdate extends Component {
     this.props.history.replace(this.props.refLink);
   };
 
-  save = status => this.props.updateStore.save(this.props.match.params.id, status);
+  save = status => {
+    this.props.updateStore.save(this.props.match.params.id, status);
+    this.props.history.push(this.props.refLink);
+  }
 
   render() {
-    const { PBUILDER_FRM, UpdateChange } = this.props.updateStore;
+    const { PBUILDER_FRM, UpdateChange, FChange } = this.props.updateStore;
     const isNew = this.props.match.params.id === 'new';
     return (
-      <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
+      <Modal closeIcon size="large" closeOnDimmerClick={false} dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
           <Header as="h3">
             {isNew ? 'New' : 'Edit'} update
@@ -54,11 +57,11 @@ export default class NewUpdate extends Component {
                     fielddata={PBUILDER_FRM.fields.title}
                     changed={UpdateChange}
                   />
-                  <HtmlEditor />
-                  {/* <Card fluid>
-                    <Card.Content>
-                    </Card.Content>
-                  </Card> */}
+                  <HtmlEditor
+                    changed={FChange}
+                    name="description"
+                    content={PBUILDER_FRM.fields.description.value}
+                  />
                 </Form>
               </Grid.Column>
               <Grid.Column width={4}>

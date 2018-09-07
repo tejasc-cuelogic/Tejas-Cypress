@@ -16,7 +16,7 @@ window.$ = $;
 window.jQuery = $;
 
 const config = {
-  placeholderText: 'Edit Your Content Here!',
+  placeholderText: 'Your content goes here!',
   toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
   charCounterCount: false,
   height: '70vh',
@@ -26,17 +26,14 @@ const config = {
 };
 
 export default class HtmlEditor extends React.Component {
-  state = {
-    content: 'content',
-  }
   handleModelChange = (content) => {
-    this.setState({ content });
+    this.props.changed(this.props.name, content);
   }
   render() {
     return (
       <FroalaEditor
         tag="textarea"
-        model={this.state.content}
+        model={this.props.content}
         config={config}
         onModelChange={this.handleModelChange}
       />

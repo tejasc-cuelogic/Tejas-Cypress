@@ -39,11 +39,16 @@ export class UpdateStore {
     };
 
     @action
+    FChange = (field, value) => {
+      this.PBUILDER_FRM.fields[field].value = value;
+      Validator.validateForm(this.PBUILDER_FRM);
+    }
+
+    @action
     save = (id, status) => {
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
-      console.log(data, status);
       client
         .mutate({
           mutation: id === 'new' ? newUpdate : editUpdate,
