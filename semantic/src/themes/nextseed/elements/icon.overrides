@@ -1722,6 +1722,9 @@ i.icon[class*="ns-"]{
 .ns-activity-arrow:before{
     content:@ns-activity-arrow;
 }
+.ns-appartment:before{
+    content:@ns-appartment;
+}
 .ns-arrow-double-left:before{
     content:@ns-arrow-double-left;
 }
@@ -1742,6 +1745,9 @@ i.icon[class*="ns-"]{
 }
 .ns-article:before{
     content:@ns-article;
+}
+.ns-attachment:before{
+    content:@ns-attachment;
 }
 .ns-author:before{
     content:@ns-author;
@@ -1803,6 +1809,15 @@ i.icon[class*="ns-"]{
 .ns-check-circle-line:before{
     content:@ns-check-circle-line;
 }
+.ns-checkbox-checked:before{
+    content:@ns-checkbox-checked;
+}
+.ns-checkbox-indeterminate:before{
+    content:@ns-checkbox-indeterminate;
+}
+.ns-checkbox-outline:before{
+    content:@ns-checkbox-outline;
+}
 .ns-chevron-down:before{
     content:@ns-chevron-down;
 }
@@ -1830,6 +1845,9 @@ i.icon[class*="ns-"]{
 .ns-circle-line:before{
     content:@ns-circle-line;
 }
+.ns-clear-formating:before{
+    content:@ns-clear-formating;
+}
 .ns-clipboard-check:before{
     content:@ns-clipboard-check;
 }
@@ -1842,14 +1860,17 @@ i.icon[class*="ns-"]{
 .ns-close-light:before{
     content:@ns-close-light;
 }
-.ns-coments-info:before{
-    content:@ns-coments-info;
-}
-.ns-coments-q-a:before{
-    content:@ns-coments-q-a;
+.ns-code:before{
+    content:@ns-code;
 }
 .ns-comments-edit:before{
     content:@ns-comments-edit;
+}
+.ns-comments-info:before{
+    content:@ns-comments-info;
+}
+.ns-comments-q-a:before{
+    content:@ns-comments-q-a;
 }
 .ns-compas:before{
     content:@ns-compas;
@@ -1905,6 +1926,9 @@ i.icon[class*="ns-"]{
 .ns-equipment-purchase:before{
     content:@ns-equipment-purchase;
 }
+.ns-exit-fullscreen:before{
+    content:@ns-exit-fullscreen;
+}
 .ns-expand-business:before{
     content:@ns-expand-business;
 }
@@ -1931,6 +1955,12 @@ i.icon[class*="ns-"]{
 }
 .ns-franchise:before{
     content:@ns-franchise;
+}
+.ns-freeze:before{
+    content:@ns-freeze;
+}
+.ns-fullscreen:before{
+    content:@ns-fullscreen;
 }
 .ns-help:before{
     content:@ns-help;
@@ -1984,7 +2014,7 @@ i.icon[class*="ns-"]{
     content:@ns-long-arrow-left;
 }
 .ns-minus-square:before{
-    content: @ns-minus-square;
+    content:@ns-minus-square;
 }
 .ns-new-business:before{
     content:@ns-new-business;
@@ -2025,11 +2055,14 @@ i.icon[class*="ns-"]{
 .ns-phone-line:before{
     content:@ns-phone-line;
 }
-.ns-proprietor:before{
-    content:@ns-proprietor;
+.ns-play:before{
+    content:@ns-play;
 }
 .ns-plus-square:before{
-    content: @ns-plus-square;
+    content:@ns-plus-square;
+}
+.ns-proprietor:before{
+    content:@ns-proprietor;
 }
 .ns-real-estate:before{
     content:@ns-real-estate;
@@ -2057,6 +2090,9 @@ i.icon[class*="ns-"]{
 }
 .ns-search:before{
     content:@ns-search;
+}
+.ns-send-right:before{
+    content:@ns-send-right;
 }
 .ns-setting:before{
     content:@ns-setting;

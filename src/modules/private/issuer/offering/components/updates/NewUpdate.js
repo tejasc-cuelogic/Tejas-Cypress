@@ -28,7 +28,7 @@ export default class NewUpdate extends Component {
     this.props.history.replace(this.props.refLink);
   };
 
-  save = status => {
+  save = (status) => {
     this.props.updateStore.save(this.props.match.params.id, status);
     this.props.history.push(this.props.refLink);
   }
