@@ -53,7 +53,7 @@ const WhyNextseed = () => (
     <section className="why-nextseed-section">
       <Container>
         <Responsive maxWidth={767} as={Aux}>
-          <Header as="h3">
+          <Header as="h2">
             Exclusive access to<br />
             investment opportunities<br />
             you believe in
