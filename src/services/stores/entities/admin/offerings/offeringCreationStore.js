@@ -16,10 +16,29 @@ export class OfferingCreationStore {
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
   @observable contingencyFormSelected = undefined;
+  @observable confirmModal = false;
+  @observable confirmModalName = null;
+  @observable removeIndex = null;
 
   @action
   setContingencyFormSelected = (formName) => {
     this.contingencyFormSelected = formName;
+  }
+
+  @action
+  toggleConfirmModal = (index, formName = null) => {
+    this.confirmModal = !this.confirmModal;
+    this.confirmModalName = formName;
+    this.removeIndex = this.confirmModal ? index : null;
+  }
+
+  @action
+  removeData = (formName) => {
+    this[formName].fields.data.splice(this.removeIndex, 1);
+    Validator.validateForm(this[formName], true, false, false);
+    this.confirmModal = !this.confirmModal;
+    this.confirmModalName = null;
+    this.removeIndex = null;
   }
 
   @action

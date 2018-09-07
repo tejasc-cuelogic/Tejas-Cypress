@@ -37,7 +37,9 @@ export default class AddNewContingency extends React.Component {
                   />
                 ))
               }
-              <Button className="relaxed center-align" primary disabled={!ADD_NEW_CONTINGENCY_FRM.meta.isValid} >Add Contingency</Button>
+              <div className="center-align">
+                <Button className="relaxed" primary disabled={!ADD_NEW_CONTINGENCY_FRM.meta.isValid} >Add Contingency</Button>
+              </div>
             </Form>
           </Modal.Content>
         </Modal>
