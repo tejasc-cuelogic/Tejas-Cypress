@@ -14,6 +14,11 @@ const getModule = component => Loadable({
 
 @withRouter
 export default class Offering extends Component {
+  componentWillMount() {
+    if (this.props.match.isExact) {
+      this.props.history.push(`${this.props.match.url}/overview`);
+    }
+  }
   render() {
     const navItems = [
       { title: 'Overview', to: 'overview', component: 'OfferingOverview' },

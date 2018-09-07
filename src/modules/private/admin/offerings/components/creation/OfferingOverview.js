@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Button } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
@@ -54,7 +53,7 @@ export default class OfferingOverview extends Component {
               />
             ))
           }
-          <Link to={this.props.match.url} className="link" onClick={e => this.addNewBullet(e)}><small>+ Add new bullet</small></Link>
+          <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
           <Divider section />
           <Header as="h4">
             Social Media
@@ -132,10 +131,11 @@ export default class OfferingOverview extends Component {
             fielddata={OFFERING_OVERVIEW_FRM.fields.issuerWebsite}
             changed={(e, result) => formChange(e, result, formName)}
           />
-          <Button.Group vertical className="pull-right">
-            <Button primary className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM)} >Approve</Button>
-            <Button primary type="button" color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM)} >Save</Button>
+          <Button.Group className="pull-right">
+            <Button inverted color="red" content="Decline" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} />
+            <Button primary className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} >Approve</Button>
           </Button.Group>
+          <Button primary type="button" color="green" className="relaxed pull-right" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} >Save</Button>
         </Form>
       </Aux>
     );

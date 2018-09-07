@@ -71,10 +71,11 @@ export default class OfferingCompany extends Component {
               </Aux>
             ))
           }
-          <Button.Group vertical className="pull-right">
-            <Button secondary className="relaxed" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM)} >Approve</Button>
-            <Button primary type="button" className="relaxed" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM)} >Save</Button>
+          <Button.Group className="pull-right">
+            <Button inverted color="red" content="Decline" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} />
+            <Button secondary className="relaxed" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} >Approve</Button>
           </Button.Group>
+          <Button primary type="button" className="relaxed pull-right" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} >Save</Button>
         </Form>
       </Aux>
     );
