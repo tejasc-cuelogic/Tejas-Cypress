@@ -7,6 +7,7 @@ import { NsCarousel, InlineLoader } from '../../../../theme/shared';
 import Insight from '../../../../assets/images/insights2.jpg';
 import InsightArticlesList from '../components/insightArticlesList';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('articleStore')
 @observer
 export default class Insights extends Component {
@@ -31,8 +32,8 @@ export default class Insights extends Component {
       loading,
     } = this.props.articleStore;
     const settings = {
-      slidesToShow: 3,
-      slidesToScroll: 3,
+      slidesToShow: isMobile ? '1' : 3,
+      slidesToScroll: isMobile ? '1' : 3,
     };
     return (
       <Aux>
