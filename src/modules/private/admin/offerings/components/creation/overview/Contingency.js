@@ -17,9 +17,6 @@ export default class Contingency extends Component {
   render() {
     const { roles } = this.props.userStore.currentUser;
     const { OFFERING_DETAILS_FRM } = this.props.offeringCreationStore;
-    if (roles && roles.includes('manager')) {
-      return null;
-    }
     const {
       form,
       formName,
@@ -52,8 +49,8 @@ export default class Contingency extends Component {
             {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch Contingencies' : 'Closing Contingencies'}
             {(roles && roles.includes('manager')) ?
               <Link onClick={() => this.setContingencyForm()} to={`${match.url}/add-new-contingency`} className="link"><small>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</small></Link>
-          :
-          null}
+            :
+            null}
           </Header>
           {
           form.fields.data.length > 0 ?
