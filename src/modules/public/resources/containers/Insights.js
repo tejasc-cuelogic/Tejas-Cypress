@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Image, Menu, Dropdown } from 'semantic-ui-react';
+import { Container, Image, Menu, Dropdown, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { Link, NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -54,7 +54,7 @@ export default class Insights extends Component {
             ))
           }
         </NsCarousel>
-        <Menu secondary className="menu-secondary-fixed insight-menu">
+        <Responsive secondary minWidth={768} as={Menu} className="menu-secondary-fixed insight-menu">
           <Container>
             <Menu.Menu secondary className="menu-secondary">
               <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
@@ -63,18 +63,31 @@ export default class Insights extends Component {
                 <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
               ))}
             </Menu.Menu>
-            <Menu.Item position="right">
-              SORT BY
-              <Dropdown item text="NEWEST">
-                <Dropdown.Menu>
-                  <Dropdown.Item as={Link} to="/">Newest</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/">Oldest</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Menu.Item>
+            <Responsive secondary minWidth={1024} as={Aux}>
+              <Menu.Item position="right">
+                SORT BY
+                <Dropdown item text="NEWEST">
+                  <Dropdown.Menu>
+                    <Dropdown.Item as={Link} to="/">Newest</Dropdown.Item>
+                    <Dropdown.Item as={Link} to="/">Oldest</Dropdown.Item>
+                    <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Menu.Item>
+            </Responsive>
           </Container>
-        </Menu>
+        </Responsive>
+        <Responsive maxWidth={767} as={Menu} className="mobile-dropdown-menu">
+          <Dropdown item>
+            <Dropdown.Menu>
+              <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
+              {InsightCategories &&
+              InsightCategories.map(item => (
+                <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Responsive>
         <section>
           <Container>
             {loading ? <InlineLoader /> : <InsightArticlesList /> }
