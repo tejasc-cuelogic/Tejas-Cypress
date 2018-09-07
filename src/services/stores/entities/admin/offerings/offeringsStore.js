@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../../api/gcoolApi';
@@ -15,11 +16,28 @@ export class OfferingsStore {
   };
   @observable requestState = {
     search: {},
+    page: 1,
+    perPage: 10,
+    skip: 0,
   };
 
   @action
-  initRequest = () => {
-    this.data = graphql({ client, query: allOfferings });
+  initRequest = (props) => {
+    const { first, skip, page } = props ||
+    {
+      first: this.requestState.perPage,
+      skip: this.requestState.skip,
+      page: this.requestState.page,
+    };
+    const params = {};
+    this.requestState.page = page || this.requestState.page;
+    this.requestState.perPage = first || this.requestState.perPage;
+    this.requestState.skip = skip || this.requestState.skip;
+    this.data = graphql({
+      client,
+      query: allOfferings,
+      variables: { filters: params, first: first || this.requestState.perPage, skip },
+    });
   }
 
   @action
@@ -45,6 +63,11 @@ export class OfferingsStore {
       })
       .then(() => Helper.toast('Offering deleted successfully.', 'success'))
       .catch(() => Helper.toast('Error while deleting offering', 'error'));
+  }
+
+  @computed get totalRecords() {
+    return (this.data && this.data.data._allOffering2sMeta &&
+      this.data.data._allOffering2sMeta.count) || 0;
   }
 
   @computed get offerings() {

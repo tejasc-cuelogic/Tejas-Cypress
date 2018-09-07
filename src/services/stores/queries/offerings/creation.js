@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const allOfferings = gql`
-  query allOffering2s{
-    allOffering2s {
+  query allOffering2s($filters: Offering2Filter,$first:Int,$skip:Int) {
+    allOffering2s( first:$first, skip:$skip, orderBy: createdAt_DESC, filter: $filters){
       id
       campaignName
       createdAt
@@ -12,6 +12,9 @@ export const allOfferings = gql`
       pocName
       pocPhone
       status
+    }
+    _allOffering2sMeta(filter: $filters){
+      count
     }
   }
 `;

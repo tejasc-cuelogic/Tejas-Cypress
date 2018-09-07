@@ -15,7 +15,7 @@ import OfferingDetails from '../components/creation/OfferingDetails';
 @observer
 export default class Creation extends Component {
   componentWillMount() {
-    this.props.offeringsStore.initRequest();
+    this.props.offeringsStore.initRequest(10, 0);
   }
 
   render() {

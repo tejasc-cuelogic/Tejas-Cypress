@@ -20,6 +20,7 @@ const getModule = component => Loadable({
 @observer
 export default class Offerings extends Component {
   componentWillMount() {
+    this.props.offeringsStore.initRequest(10, 0);
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/overview`);
     }
@@ -34,6 +35,8 @@ export default class Offerings extends Component {
   toggleSearch = () => this.props.offeringsStore.toggleSearch();
 
   module = name => DataFormatter.upperCamelCase(name);
+
+  paginate = params => this.props.offeringsStore.initRequest(params);
 
   representAddon = subTabs => mapValues(subTabs, t => (
     ` (${t})`
