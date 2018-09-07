@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Header, Button } from 'semantic-ui-react';
+import { Form, Divider, Header, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore')
@@ -131,11 +131,25 @@ export default class OfferingOverview extends Component {
             fielddata={OFFERING_OVERVIEW_FRM.fields.issuerWebsite}
             changed={(e, result) => formChange(e, result, formName)}
           />
-          <Button.Group className="pull-right">
-            <Button inverted color="red" content="Decline" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} />
-            <Button color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} >Approve</Button>
-          </Button.Group>
-          <Button primary type="button" color="green" className="relaxed pull-right" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} >Save</Button>
+          <div className="clearfix mb-20">
+            <Button as="span" className="time-stamp">
+              <Icon className="ns-check-circle" color="green" />
+              Submitted by ISSUER_NAME on 2/3/2018
+            </Button>
+            <Button.Group className="pull-right">
+              <Button inverted color="red" content="Decline" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} />
+              <Button color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)}>Approve</Button>
+            </Button.Group>
+          </div>
+          <div className="clearfix">
+            <Button as="span" className="time-stamp">
+              <Icon className="ns-check-circle" color="green" />
+              Approved by MANAGER_NAME on 2/3/2018
+            </Button>
+            <Button.Group className="pull-right">
+              <Button primary type="button" color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)}>Save</Button>
+            </Button.Group>
+          </div>
         </Form>
       </Aux>
     );
