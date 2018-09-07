@@ -14,3 +14,4 @@ export { default as DropZone } from './src/DropZone';
 export { default as DropZoneConfirm } from './src/DropZoneConfirm';
 export { default as DropZoneLarge } from './src/DropZoneLarge';
 export { default as ImageCropper } from './src/ImageCropper';
+export { default as HeaderCheckbox } from './src/HeaderCheckbox';

@@ -503,7 +503,7 @@ export const CONTINGENCIES = {
       values: [
         {
           label: '',
-          value: 'isApplied',
+          value: 'IS_APPLIED',
         },
       ],
       error: undefined,
@@ -544,6 +544,23 @@ export const ADD_NEW_CONTINGENCY = {
   acceptanceCriteria: {
     value: '',
     label: 'Acceptance Criteria',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
+};
+
+export const OFFERING_DETAILS = {
+  offeringUrl: {
+    value: '',
+    label: 'Offering Url',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
+  offeringReferralCode: {
+    value: '',
+    label: 'Offering Referral Code',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',

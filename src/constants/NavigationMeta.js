@@ -218,7 +218,7 @@ export const PRIVATE_NAV = [
     heading: 'Offerings',
     to: 'offerings',
     path: 'admin/offerings',
-    accessibleTo: ['admin'],
+    accessibleTo: ['admin', 'manager', 'support'],
     subPanel: 0,
     subNavigations: [
       { title: 'Overview', to: 'overview' },

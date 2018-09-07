@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import { Switch, Route } from 'react-router-dom';
-import { Modal, Card } from 'semantic-ui-react';
+import { Modal, Card, Header } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../../helper';
@@ -40,8 +40,11 @@ export default class OfferingDetails extends Component {
   render() {
     const { match } = this.props;
     return (
-      <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
+      <Modal closeOnRootNodeClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
+          <Header as="h3">
+            America Gardens
+          </Header>
           <Summary details={summaryDetails} />
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
