@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { mapValues } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
@@ -66,18 +67,18 @@ export default class Offerings extends Component {
             filters={filters}
             more="no"
             addon={
-              <Grid.Row>
-                <Grid.Column width={6} textAlign="right">
+              <Aux>
+                <Grid.Column width={4} textAlign="right">
                   {totalRecords > 0 &&
                   <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
                   }
                 </Grid.Column>
-                <Grid.Column width={5} textAlign="right">
+                <Grid.Column width={4} textAlign="right">
                   <Button color="green" as={Link} floated="right" to={this.props.match.url}>
                     Export
                   </Button>
                 </Grid.Column>
-              </Grid.Row>
+              </Aux>
             }
           />
         }
