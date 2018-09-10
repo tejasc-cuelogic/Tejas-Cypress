@@ -869,12 +869,17 @@ a.icon-link:hover {
 			}
 			&:nth-child(even):not(.vertical-timeline-element--left) {
 				.vertical-timeline-element-content .vertical-timeline-element-date {
-					right: 74%;
+					left: -155px;
+					right: auto;
 					text-align: center;
 					@media only screen and (max-width : @largestSmallMonitor){
-						right: auto;
+						left: 0;
+						text-align: left;
 					}
 				}
+			}
+			.ui.list .item {
+				border: 1px solid @neutral-darkwhite;
 			}
 		}
 	}
@@ -904,16 +909,18 @@ a.icon-link:hover {
 		}
 		.vertical-timeline-element-date {
 			position: absolute;
-			top: -18%;
+			top: -60px;
 			background: @white;
 			z-index: 9999;
 			opacity: 1;
-			left: 75%;
+			left: auto;
+			right: -155px;
 			text-align: center;
 			font-size: @13px;
 			color: @neutral-middark;
 			text-transform: uppercase;
 			padding: @5px 0;
+			width: 130px;
 		}
 	}
 }
