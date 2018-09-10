@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Header, Form, Button, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../../services/constants/admin/offerings';
-import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZone } from '../../../../../../theme/form';
+import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../services/constants/admin/offerings';
+import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZone } from '../../../../../theme/form';
 
 @inject('offeringCreationStore', 'uiStore')
 @observer

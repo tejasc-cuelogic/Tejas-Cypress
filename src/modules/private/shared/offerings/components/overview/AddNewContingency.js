@@ -2,8 +2,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Button, Modal } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { FormInput } from '../../../../../../../theme/form';
-import Helper from '../../../../../../../helper/utility';
+import { FormInput } from '../../../../../../theme/form';
+import Helper from '../../../../../../helper/utility';
 @withRouter
 @inject('offeringCreationStore')
 @observer

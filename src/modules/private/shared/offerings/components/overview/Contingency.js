@@ -4,8 +4,8 @@ import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Header, Button, Checkbox, Confirm } from 'semantic-ui-react';
-import { FormTextarea } from '../../../../../../../theme/form';
-import Helper from '../../../../../../../helper/utility';
+import { FormTextarea } from '../../../../../../theme/form';
+import Helper from '../../../../../../helper/utility';
 
 @withRouter
 @inject('offeringCreationStore', 'userStore')

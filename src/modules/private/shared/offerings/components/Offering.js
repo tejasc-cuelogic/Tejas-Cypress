@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import { Grid } from 'semantic-ui-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { InlineLoader } from '../../../../../../theme/shared';
-import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
+import { InlineLoader } from '../../../../../theme/shared';
+import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const getModule = component => Loadable({
   loader: () => import(`./${component}`),

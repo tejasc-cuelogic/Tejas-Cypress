@@ -6,7 +6,7 @@ import Aux from 'react-aux';
 import { Form, Header } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 import AddNewContingency from './overview/AddNewContingency';
-import { FormInput } from '../../../../../../theme/form';
+import { FormInput } from '../../../../../theme/form';
 
 @withRouter
 @inject('offeringCreationStore', 'userStore')
