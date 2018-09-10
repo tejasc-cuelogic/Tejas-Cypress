@@ -13,6 +13,7 @@ class Login extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
     this.props.authStore.reset('LOGIN');
+    this.props.authStore.setDefaultPwdType();
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
@@ -65,8 +66,8 @@ class Login extends Component {
               Object.keys(LOGIN_FRM.fields).map(field => (
                 <FormInput
                   key={field}
-                  type={field === 'password' ? pwdInputType[field] : 'email'}
-                  icon={field === 'password' ? togglePasswordType(field) : null}
+                  type={field === 'password' ? pwdInputType : 'email'}
+                  icon={field === 'password' ? togglePasswordType() : null}
                   name={field}
                   autoFocus={field === 'email'}
                   fielddata={LOGIN_FRM.fields[field]}
