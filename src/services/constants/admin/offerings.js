@@ -660,6 +660,7 @@ export const LEADERSHIP = {
       placeHolder: '10.0%',
       error: undefined,
       rule: 'required|numeric',
+      tooltip: 'List any person who owns, directly or indirectly, 20% or more of the Issuer’s equity, based on voting power',
     },
     companyPosition: {
       value: '',
@@ -674,6 +675,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'date|required',
       placeHolder: 'MM-DD-YYYY',
+      tooltip: 'If you had left the company previously and are returning, enter the start date of your current employment position.',
     },
     residentialStreet: {
       value: '',

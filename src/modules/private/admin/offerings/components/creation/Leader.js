@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Button, Divider, Confirm, Icon } from 'semantic-ui-react';
+import { Form, Header, Button, Divider, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { FormCheckbox, FormInput, MaskedInput, FormTextarea, DropZone } from '../../../../../../theme/form';
+import { FormCheckbox, FormInput, MaskedInput, FormTextarea, DropZone, AutoComplete } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore', 'uiStore')
 @withRouter
@@ -30,6 +30,7 @@ export default class Leader extends Component {
       LEADERSHIP_FRM,
       formChangeWithIndex,
       maskChangeWithIndex,
+      setAddressFields,
     } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
     return (
@@ -121,10 +122,12 @@ export default class Leader extends Component {
           <Header as="h4">
             Address
           </Header>
-          <FormInput
+          <AutoComplete
             name="residentialStreet"
             fielddata={LEADERSHIP_FRM.fields.data[index].residentialStreet}
+            onplaceselected={place => setAddressFields(place, index)}
             changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
+            placeHolder="Street Address, City, State, Zip"
           />
           <Form.Group widths="equal">
             {
@@ -146,6 +149,13 @@ export default class Leader extends Component {
           <Header as="h4">
             Bio
           </Header>
+          <Popup
+            trigger={<Icon className="ns-help-circle" />}
+            content="To be used on the public offering page"
+            position="top center"
+            className="center-align"
+            wide
+          />
           <FormTextarea
             name="bio"
             fielddata={LEADERSHIP_FRM.fields.data[index].bio}
@@ -157,6 +167,13 @@ export default class Leader extends Component {
           <Header as="h4">
             Website and Social Profiles
           </Header>
+          <Popup
+            trigger={<Icon className="ns-help-circle" />}
+            content="To be used on the public offering page"
+            position="top center"
+            className="center-align"
+            wide
+          />
           {
             ['website', 'facebook', 'linkedIn', 'twitter'].map(field => (
               <FormInput
@@ -179,6 +196,7 @@ export default class Leader extends Component {
                   ondrop={this.onFileDrop}
                   onremove={this.confirmRemoveDoc}
                   uploadtitle="Upload a file"
+                  tooltip={field !== 'driverLicense' ? 'To be used on the public offering page' : false}
                 />
               ))
             }

@@ -129,6 +129,11 @@ export class OfferingCreationStore {
     }
     Validator.resetFormData(this.ADD_NEW_CONTINGENCY_FRM);
   }
+
+  @action
+  setAddressFields = (place, index) => {
+    Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'data', index);
+  }
 }
 
 export default new OfferingCreationStore();
