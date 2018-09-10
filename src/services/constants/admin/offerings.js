@@ -1,3 +1,14 @@
+import Validator from 'validatorjs';
+
+/* eslint-disable no-unused-vars */
+/* eslint-disable arrow-body-style */
+Validator.register(
+  'maskedSSN', (value, attribute) => {
+    return value.toString().length === 9;
+  },
+  'The :attribute is not in the format XXX-XX-XXXX.',
+);
+
 export const KEY_TERMS = {
   legalBusinessName: {
     value: '',
@@ -580,3 +591,230 @@ export const OFFERING_DETAILS = {
     placeHolder: 'Enter here',
   },
 };
+
+export const LEADERSHIP = {
+  includeInOfferingPage: {
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'IS_APPLIED',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  firstName: {
+    value: '',
+    label: 'First Name',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. John',
+  },
+  lastName: {
+    value: '',
+    label: 'Last name',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. Doe',
+  },
+  emailAddress: {
+    value: '',
+    label: 'E-mail address',
+    error: undefined,
+    rule: 'email|required',
+    placeHolder: 'john.doe@contact.com',
+  },
+  phoneNumber: {
+    value: '',
+    label: 'Phone Number',
+    error: undefined,
+    rule: 'numeric|required',
+    placeHolder: '555-123-8888',
+  },
+  dob: {
+    value: '',
+    label: 'DOB',
+    error: undefined,
+    rule: 'date|required',
+    placeHolder: 'MM/DD/YYYY',
+  },
+  ssn: {
+    value: '',
+    label: 'SSN',
+    placeHolder: 'XXX-XXX-XXXX',
+    error: undefined,
+    rule: 'required|maskedSSN',
+  },
+  countryOfCitizanship: {
+    value: '',
+    label: 'Country of Citizenship',
+    placeHolder: 'United States',
+    error: undefined,
+    rule: 'required|string',
+  },
+  percentageOwned: {
+    value: '',
+    label: 'Percentage Owned',
+    placeHolder: '10.0%',
+    error: undefined,
+    rule: 'required|numeric',
+  },
+  companyPosition: {
+    value: '',
+    label: 'Company Position',
+    placeHolder: 'e.g. CEO',
+    error: undefined,
+    rule: 'required|string',
+  },
+  startDateOfService: {
+    value: '',
+    label: 'Start Date of Service',
+    error: undefined,
+    rule: 'date|required',
+    placeHolder: 'MM-DD-YYYY',
+  },
+  residentialStreet: {
+    value: '',
+    label: 'Residential Street',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. Baker Street 221B',
+  },
+  city: {
+    value: '',
+    label: 'City',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. New York',
+  },
+  state: {
+    value: '',
+    label: 'State',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. New York',
+  },
+  zipCode: {
+    value: '',
+    label: 'ZIP Code',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. 10001',
+  },
+  bio: {
+    value: '',
+    label: 'Bio',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here ...',
+  },
+  website: {
+    value: '',
+    label: 'Website',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'e.g. http://johndoe.com',
+  },
+  facebook: {
+    value: '',
+    label: 'Facebook',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'e.g. http://facebook.com/johndoe',
+  },
+  linkedIn: {
+    value: '',
+    label: 'LinkedIn',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'e.g. http://linkedin.com/johndoe',
+  },
+  twitter: {
+    value: '',
+    label: 'Twitter',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'e.g. http://twitter.com/johndoe',
+  },
+  headShot: {
+    label: 'Headshot',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+  },
+  heroImage: {
+    label: 'Hero Image',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+  },
+  driverLicense: {
+    label: 'Driver’s License',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+  },
+  namesOfOtherEntities: {
+    label: 'Names of other entities over which you have control',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
+  namesOfPromoters: {
+    label: 'Names of promoters that have been or will be paid in connection with promoting the Issuer`s securities during offering',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
+};
+
+export const BUSINESS = {
+  businessName: {
+    label: 'Business Name',
+    value: '',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. John Doe',
+  },
+  typeOfBusiness: {
+    label: 'Type of Business',
+    value: '',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. bakery',
+  },
+  dateOfService: {
+    label: 'Dates of Service',
+    value: '',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'MM-DD-YYYY',
+  },
+  title: {
+    label: 'Title',
+    value: '',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'Enter here',
+  },
+  description: {
+    label: 'Description',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
+};
+
