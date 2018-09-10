@@ -74,7 +74,7 @@ export default class Offerings extends Component {
                   }
                 </Grid.Column>
                 <Grid.Column width={4} textAlign="right">
-                  <Button color="green" as={Link} floated="right" to={this.props.match.url}>
+                  <Button className="relaxed" color="green" as={Link} floated="right" to={this.props.match.url}>
                     Export
                   </Button>
                 </Grid.Column>

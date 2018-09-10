@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Button, Header } from 'semantic-ui-react';
+import { Form, Divider, Button, Header, Icon } from 'semantic-ui-react';
 import { FormTextarea, MaskedInput } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore')
@@ -71,11 +71,25 @@ export default class OfferingCompany extends Component {
               </Aux>
             ))
           }
-          <Button.Group className="pull-right">
-            <Button inverted color="red" content="Decline" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} />
-            <Button color="green" className="relaxed" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} >Approve</Button>
-          </Button.Group>
-          <Button primary type="button" className="relaxed pull-right" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} >Save</Button>
+          <div className="clearfix mb-20">
+            <Button as="span" className="time-stamp">
+              <Icon className="ns-check-circle" color="green" />
+              Submitted by ISSUER_NAME on 2/3/2018
+            </Button>
+            <Button.Group floated="right">
+              <Button inverted color="red" content="Decline" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} />
+              <Button color="green" className="relaxed" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} >Approve</Button>
+            </Button.Group>
+          </div>
+          <div className="clearfix">
+            <Button as="span" className="time-stamp">
+              <Icon className="ns-check-circle" color="green" />
+              Approved by MANAGER_NAME on 2/3/2018
+            </Button>
+            <Button.Group floated="right">
+              <Button primary type="button" className="relaxed pull-right" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} >Save</Button>
+            </Button.Group>
+          </div>
         </Form>
       </Aux>
     );
