@@ -348,3 +348,12 @@ ol.ui.list.step-list{
         padding-right:@14px;
     }
 }
+
+.ui.bulleted.list .list>.item,
+.ui.bulleted.list>.item,
+ul.ui.list li{
+    &:before{
+        font-size:@20px;
+        color:@primary-one;
+    }
+}

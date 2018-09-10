@@ -1836,5 +1836,25 @@ p.check-extra-info{
 		padding:@10px !important;
 		border:none !important;
 	}
+	.fr-toolbar .fr-command.fr-btn i{
+		&.fa-code, &.fa-eraser, &.fa-expand, &.fa-compress{
+			font-family:'nextseed';
+		}
+		&.fa-code:before{
+			content:"\e990";
+		}
+		&.fa-eraser:before{
+			content:"\e98f";
+		}
+		&.fa-expand:before{
+			content:"\e991";
+		}
+		&.fa-compress:before{
+			content:"\e993";
+		}
+	}
+	.fr-toolbar .fr-command.fr-btn.fr-active{
+		color:@primary-two;
+	}
 }
 //	Froala Editor Styles override - ENDS
