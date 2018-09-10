@@ -84,7 +84,16 @@ export default class NewUpdate extends Component {
                 </Card>
                 <Card fluid>
                   <Card.Content>
-                    <h4>NextSeed Tips</h4>
+                    <Header as="h4">NextSeed Tips</Header>
+                    <List bulleted relaxed>
+                      <List.Item>How is construction / build-out on your project going?</List.Item>
+                      <List.Item>
+                        Any potential hurdles you want to share with your investors?
+                      </List.Item>
+                      <List.Item>When do you anticipate opening? (e.g. Fall 2019)</List.Item>
+                      <List.Item>What is the status on bonus rewards fulfillment?</List.Item>
+                    </List>
+                    <Link to="/"><b>Helpful Tips on Sending Updates</b></Link>
                   </Card.Content>
                 </Card>
               </Grid.Column>
