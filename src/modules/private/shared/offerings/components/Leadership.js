@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Grid, Button } from 'semantic-ui-react';
 import { Switch, Route } from 'react-router-dom';
-import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
-import Leader from './Leader';
+import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
+import Leader from './leadership/Leader';
 
 @inject('offeringCreationStore')
 @observer

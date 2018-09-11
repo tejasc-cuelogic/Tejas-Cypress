@@ -2,7 +2,7 @@ import React from 'react';
 import snakeCase from 'lodash/snakeCase';
 import Aux from 'react-aux';
 import { Card, Grid, Popup, Statistic, Icon } from 'semantic-ui-react';
-import Helper from '../../../../../../helper/utility';
+import Helper from '../../../../../helper/utility';
 /*
   type =>
   0 / undefined: display as it is

@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import Loadable from 'react-loadable';
 import { Switch, Route } from 'react-router-dom';
 import { Modal, Card, Header } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../../../theme/shared';
-import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
-import { DataFormatter } from '../../../../../../helper';
-import Summary from './Summary';
+import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
+import { DataFormatter } from '../../../../../helper';
+import Summary from '../components/Summary';
+import {
+  Overview, KeyTerms, Legal, Offering, Leadership, BonusRewards, Media,
+} from '../../../shared/offerings/components';
 
 const navItems = [
-  { title: 'Overview', to: 'overview' },
-  { title: 'Key Terms', to: 'key-terms' },
-  { title: 'Legal', to: 'legal' },
-  { title: 'Offering', to: 'offering' },
-  { title: 'Leadership', to: 'leadership' },
-  { title: 'Bonus Rewards', to: 'bonus-rewards' },
+  { title: 'Overview', to: 'overview', component: Overview },
+  { title: 'Key Terms', to: 'key-terms', component: KeyTerms },
+  { title: 'Legal', to: 'legal', component: Legal },
+  { title: 'Offering', to: 'offering', component: Offering },
+  { title: 'Media', to: 'media', component: Media },
+  { title: 'Leadership', to: 'leadership', component: Leadership },
+  { title: 'Bonus Rewards', to: 'bonus-rewards', component: BonusRewards },
 ];
 
 const summaryDetails = {
@@ -23,13 +25,6 @@ const summaryDetails = {
     { title: 'Days Till Launch', content: '34 days', type: 0 },
   ],
 };
-
-const getModule = component => Loadable({
-  loader: () => import(`./${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
 
 export default class OfferingDetails extends Component {
   componentWillMount() {
@@ -54,18 +49,10 @@ export default class OfferingDetails extends Component {
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
             <Switch>
-              <Route
-                exact
-                path={match.url}
-                component={navItems[0].component || getModule(this.module(navItems[0].title))}
-              />
+              <Route exact path={match.url} component={navItems[0].component} />
               {
                 navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={item.component || getModule(this.module(item.title))}
-                  />
+                  <Route key={item.to} path={`${match.url}/${item.to}`} component={item.component} />
                 ))
               }
             </Switch>

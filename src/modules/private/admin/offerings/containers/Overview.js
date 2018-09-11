@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import Creation from './Creation';
+import { Header } from 'semantic-ui-react';
 
 export default class Overview extends Component {
   render() {
     return (
-      <Creation {...this.props} />
+      <div>
+        <Header as="h1">Overview
+          <Header.Subheader>Offerings Overview ...</Header.Subheader>
+        </Header>
+      </div>
     );
   }
 }
