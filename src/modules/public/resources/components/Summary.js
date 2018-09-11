@@ -23,7 +23,7 @@ const Summary = props => (
       <Grid centered relaxed="very" stackable>
         <Grid.Column textAlign="center" width={6} className="info-card">
           <Image src={UserOne} size="small" circular centered className="mb-20" />
-          <p>
+          <p className="mb-40">
             Understand how to add local businesses to your investment portfolio, how NextSeed
             investments work, and the risks and opportunities offered by this new way of investing.
           </p>
@@ -34,7 +34,7 @@ const Summary = props => (
         </Grid.Column>
         <Grid.Column textAlign="center" width={6} className="info-card">
           <Image src={UserTwo} size="small" circular centered className="mb-20" />
-          <p>
+          <p className="mb-40">
             Learn about the business implications of different types of fundraising, how to add
             NextSeed to your capital stack and how to get started.
           </p>
