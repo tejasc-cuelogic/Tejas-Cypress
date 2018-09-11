@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { forEach, indexOf } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
-import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { LENDIO_PRE_QUAL, LENDIO } from '../../../constants/businessApplication';
 import { submitPartneredWithLendio, getBusinessApplications } from '../../queries/businessApplication';
 import { uiStore, userStore } from '../../index';
@@ -118,8 +118,8 @@ export class BusinessAppStore {
     const sendDataToLendioValue = indexOf(data.applicationAgreeConditions, 'sendDataToLendio') !== -1;
 
     const lendioData = {
-      applicationId: this.currentApplicationId,
-      preQualificationQuestions: {
+      id: this.currentApplicationId,
+      preQualInformation: {
         duration: data.yrsInBusiness,
         averageMonthlySales: data.avgSales,
         ratePersonalCredit: data.personalCreditRating,
@@ -143,13 +143,15 @@ export class BusinessAppStore {
   @action
   businessLendioPreQual = (applicationId) => {
     const formatedData = this.getFormatedofLendioData;
-    formatedData.applicationId = applicationId;
+    formatedData.id = applicationId;
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
-      client
+      clientPublic
         .mutate({
           mutation: submitPartneredWithLendio,
-          variables: formatedData,
+          variables: {
+            lendioApplication: formatedData,
+          },
           refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {

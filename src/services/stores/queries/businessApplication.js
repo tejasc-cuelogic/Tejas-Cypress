@@ -283,20 +283,8 @@ query _getBusinessApplicationById ($id: String!) {
 `;
 
 export const submitPartneredWithLendio = gql`
-mutation submitPartneredWithLendio(
-  $applicationId: String!,
-  $preQualificationQuestions: PreQualificationQuestionsInput!,
-  $customerInformation: CustomerInformationInput!,
-  $agreeConditions: Boolean,
-  $sendDataToLendio: Boolean
-) {
-  submitPartneredWithLendio(
-    applicationId: $applicationId,
-    preQualificationQuestions: $preQualificationQuestions,
-    customerInformation: $customerInformation,
-    agreeConditions: $agreeConditions,
-    sendDataToLendio: $sendDataToLendio
-  ) {
+mutation lendioDetails ($lendioApplication: ApplicationInfoInput!) {
+  submitPartneredWithLendio(applicationDetails:$lendioApplication) {
     status
     url
   }
