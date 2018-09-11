@@ -7,6 +7,9 @@
     display: -ms-flexbox !important;
     .ui.modal{
         margin:0 !important;
+        @media only screen and (max-width:@largestMobileScreen){
+            position: relative;
+        }
     }
 }
 //  Public pages Starts
