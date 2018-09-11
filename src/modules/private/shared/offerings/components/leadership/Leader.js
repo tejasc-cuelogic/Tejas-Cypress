@@ -148,14 +148,14 @@ export default class Leader extends Component {
           </Form.Group>
           <Header as="h4">
             Bio
+            <Popup
+              trigger={<Icon className="ns-help-circle" />}
+              content="To be used on the public offering page"
+              position="top center"
+              className="center-align"
+              wide
+            />
           </Header>
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content="To be used on the public offering page"
-            position="top center"
-            className="center-align"
-            wide
-          />
           <FormTextarea
             name="bio"
             fielddata={LEADERSHIP_FRM.fields.data[index].bio}
@@ -166,14 +166,14 @@ export default class Leader extends Component {
           <Divider section />
           <Header as="h4">
             Website and Social Profiles
+            <Popup
+              trigger={<Icon className="ns-help-circle" />}
+              content="To be used on the public offering page"
+              position="top center"
+              className="center-align"
+              wide
+            />
           </Header>
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content="To be used on the public offering page"
-            position="top center"
-            className="center-align"
-            wide
-          />
           {
             ['website', 'facebook', 'linkedIn', 'twitter'].map(field => (
               <FormInput
@@ -197,6 +197,7 @@ export default class Leader extends Component {
                   onremove={this.confirmRemoveDoc}
                   uploadtitle="Upload a file"
                   tooltip={field !== 'driverLicense' ? 'To be used on the public offering page' : false}
+                  containerclassname="field"
                 />
               ))
             }
