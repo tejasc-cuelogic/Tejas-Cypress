@@ -10,7 +10,7 @@ const HowItWorks = () => (
   <Aux>
     <section>
       <Container>
-        <Header as="h2" className="mb-80" textAlign={isMobile ? 'left' : 'center'}>Investing, simplified.</Header>
+        <Header as="h2" className={isMobile ? 'mb-30' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>Investing, simplified.</Header>
         <div className="how-it-works-steps">
           <Grid stackable centered columns={3}>
             <Grid.Column>
