@@ -22,16 +22,26 @@ export default class PreQualification extends Component {
   }
   submit = (e) => {
     e.preventDefault();
-    this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic)
-      .then(() => {
-        const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
-        Helper.toast('Business pre-qualification request submitted!', 'success');
-        if (this.props.isPublic) {
+    if (this.props.isPublic) {
+      this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic)
+        .then(() => {
+          this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
+          const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
+          Helper.toast('Business pre-qualification request submitted!', 'success');
           this.props.history.push(`/business-application/${url}`);
-        } else {
-          this.props.history.push(`/app/business-application/${url}`);
-        }
-      });
+        });
+    } else {
+      this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
+        .then(() => {
+          this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
+          this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic)
+            .then((isPublicUrl) => {
+              const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
+              Helper.toast('Business pre-qualification request submitted!', 'success');
+              this.props.history.push(`${isPublicUrl ? '' : '/app'}/business-application/${url}`);
+            });
+        });
+    }
   }
   prequalBasicSubmit = (e) => {
     e.preventDefault();

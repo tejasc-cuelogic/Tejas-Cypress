@@ -24,6 +24,7 @@ import {
 import Helper from '../../../../helper/utility';
 import {
   getBusinessApplicationsById,
+  getPrequalBusinessApplicationsById,
   getBusinessApplications,
   createBusinessApplicationPrequalificaiton,
   createBusinessApplicationBasicInfo,
@@ -115,18 +116,18 @@ export class BusinessAppStore {
   };
 
   @action
-  fetchApplicationDataById = applicationId => new Promise((resolve) => {
+  fetchApplicationDataById = (applicationId, isPartialApp = false) => new Promise((resolve) => {
     uiStore.setAppLoader(true);
     uiStore.setLoaderMessage('Getting application data');
     this.businessApplicationsDataById = graphql({
-      client,
-      query: getBusinessApplicationsById,
+      client: isPartialApp ? clientPublic : client,
+      query: isPartialApp ? getPrequalBusinessApplicationsById : getBusinessApplicationsById,
       variables: {
         id: applicationId,
       },
       fetchPolicy: 'network-only',
       onFetch: () => {
-        this.setBusinessApplicationData();
+        this.setBusinessApplicationData(isPartialApp);
         uiStore.setAppLoader(false);
         resolve();
       },
@@ -157,30 +158,34 @@ export class BusinessAppStore {
   }
 
   @action
-  setBusinessApplicationData = () => {
+  setBusinessApplicationData = (isPartialApp) => {
     this.formReset();
     this.step = 'performace';
-    const data = this.fetchBusinessApplicationsDataById;
+    const data = !isPartialApp ? this.fetchBusinessApplicationsDataById :
+      this.fetchPrequalBusinessApplicationsDataById;
     if (data) {
-      this.setPrequalDetails(data.prequalDetails);
-      this.setBusinessDetails(data.businessDetails);
-      this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
-      this.setDocumentationDetails(data.businessDocumentation);
-      if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
-        this.formReadOnlyMode = true;
-      } else if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
-        this.appStepsStatus[0].status = 'IN_PROGRESS';
+      if (!isPartialApp) {
+        this.setPrequalDetails(data.prequalDetails);
+        this.setBusinessDetails(data.businessDetails);
+        this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
+        this.setDocumentationDetails(data.businessDocumentation);
+        if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
+          this.formReadOnlyMode = true;
+        } else if (data.applicationStatus ===
+          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+          this.appStepsStatus[0].status = 'IN_PROGRESS';
+        }
+        navStore.setAccessParams('appStatus', data.applicationStatus);
+        this.setPrequalBasicDetails();
       }
-      navStore.setAccessParams('appStatus', data.applicationStatus);
       if (data.lendio) {
         const lendioPartners = data.lendio.status;
-        if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
+        if (data.prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
           && lendioPartners === LENDIO.LENDIO_PRE_QUALIFICATION_SUCCESSFUL) {
           businessAppLendioStore.setPartneredLendioData(data);
         }
       }
     }
-    this.setPrequalBasicDetails();
   };
 
   @action
@@ -383,6 +388,13 @@ export class BusinessAppStore {
     return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
       && this.businessApplicationsDataById.data.businessApplication
       && toJS(this.businessApplicationsDataById.data.businessApplication)
+    ) || null;
+  }
+
+  @computed get fetchPrequalBusinessApplicationsDataById() {
+    return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
+      && this.businessApplicationsDataById.data.getPreQualificationById
+      && toJS(this.businessApplicationsDataById.data.getPreQualificationById)
     ) || null;
   }
 
@@ -728,7 +740,7 @@ export class BusinessAppStore {
           variables: {
             preQualificationData: data,
           },
-          refetchQueries: [{ query: getBusinessApplications }],
+          // refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           console.log(result);
@@ -759,10 +771,11 @@ export class BusinessAppStore {
               BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
             const url = (isEmpty(lendioPartners) || lendioPartners.status === LENDIO.LENDIO_PRE_QUALIFICATION_FAILED) ? `${this.currentApplicationType}/${applicationId}/failed` : `${this.currentApplicationType}/${applicationId}/failed/lendio`;
             this.setFieldvalue('BUSINESS_APP_STEP_URL', url);
+            resolve(true);
           } else {
             this.setFieldvalue('BUSINESS_APP_STEP_URL', `${this.currentApplicationType}/${applicationId}/failed`);
           }
-          resolve();
+          resolve(false);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');

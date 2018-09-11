@@ -9,12 +9,26 @@ import { LENDING_PARTNER_LENDIO } from '../../../../../../constants/business';
 import { LENDIO } from '../../../../../../services/constants/businessApplication';
 import Helper from '../../../../../../helper/utility';
 
-@inject('businessAppLendioStore', 'uiStore')
+@inject('businessAppLendioStore', 'businessAppStore', 'uiStore')
 @observer
 export default class Application extends Component {
+  componentWillMount() {
+    const { match } = this.props;
+    if (match.isExact) {
+      const {
+        fetchApplicationDataById, setFieldvalue, formReset,
+      } = this.props.businessAppStore;
+      setFieldvalue('currentApplicationId', match.params.id);
+      setFieldvalue('currentApplicationType', match.params.applicationType);
+      formReset();
+      setFieldvalue('isFetchedData', match.params.id);
+      fetchApplicationDataById(match.params.id, true).then(() => {
+      });
+    }
+  }
   submit = (e) => {
     e.preventDefault();
-    this.props.businessAppLendioStore.businessLendioPreQual(this.props.applicationId)
+    this.props.businessAppLendioStore.businessLendioPreQual(this.props.match.params.id)
       .then((data) => {
         const {
           submitPartneredWithLendio: {
@@ -22,8 +36,9 @@ export default class Application extends Component {
             url,
           },
         } = data;
+        const { params } = this.props.match;
         const redirectParam = (status === LENDIO.LENDIO_SUCCESS) ? 'yes' : 'no';
-        const redirectUrl = this.props.isPublic ? `/business-application/${this.props.applicationId}/lendio/${redirectParam}` : `/app/business-application/${this.props.applicationId}/lendio/${redirectParam}`;
+        const redirectUrl = this.props.isPublic ? `/business-application/${params.applicationType}/${params.id}/lendio/${redirectParam}` : `/app/business-application/${params.applicationType}/${params.id}/lendio/${redirectParam}`;
         this.props.history.push(redirectUrl);
         this.props.businessAppLendioStore.setLendioUrl(url);
       })

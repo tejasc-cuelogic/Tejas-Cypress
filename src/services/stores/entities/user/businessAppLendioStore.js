@@ -3,8 +3,8 @@ import { forEach, indexOf } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { LENDIO_PRE_QUAL, LENDIO } from '../../../constants/businessApplication';
-import { submitPartneredWithLendio, getBusinessApplications } from '../../queries/businessApplication';
-import { uiStore, userStore } from '../../index';
+import { submitPartneredWithLendio } from '../../queries/businessApplication';
+import { uiStore } from '../../index';
 
 export class BusinessAppStore {
   @observable LENDIO_QUAL_FRM = Validator.prepareFormObject(LENDIO_PRE_QUAL);
@@ -13,42 +13,39 @@ export class BusinessAppStore {
 
   @action
   setPartneredLendioData = (preQualificationData) => {
+    this.LENDIO_QUAL_FRM = Validator.prepareFormObject(LENDIO_PRE_QUAL);
     const {
-      prequalDetails: {
-        businessGeneralInfo: {
-          businessName,
-          contactDetails: {
-            phone: {
-              number,
-            },
+      email,
+      firstName,
+      lastName,
+      businessGeneralInfo: {
+        businessName,
+        contactDetails: {
+          phone: {
+            number,
           },
         },
-        existingBusinessInfo: {
-          ageMonths,
-          ageYears,
+      },
+      existingBusinessInfo: {
+        ageMonths,
+        ageYears,
+      },
+      performanceSnapshot: {
+        pastYearSnapshot: {
+          grossSales,
         },
-        performanceSnapshot: {
-          pastYearSnapshot: {
-            grossSales,
-          },
-        },
-        businessExperience: {
-          estimatedCreditScore,
-          amountNeeded,
-        },
+      },
+      businessExperience: {
+        estimatedCreditScore,
+        amountNeeded,
       },
     } = preQualificationData;
 
-    const {
-      email,
-      givenName,
-      familyName,
-    } = userStore.currentUser;
     this.lendioObj = preQualificationData.lendio;
     this.LENDIO_QUAL_FRM.fields.businessName.value = businessName;
     this.LENDIO_QUAL_FRM.fields.phoneNumber.value = number;
     this.LENDIO_QUAL_FRM.fields.emailAddress.value = email;
-    this.LENDIO_QUAL_FRM.fields.businessOwnerName.value = `${givenName} ${familyName}`;
+    this.LENDIO_QUAL_FRM.fields.businessOwnerName.value = `${firstName} ${lastName}`;
 
     // Extract and map business age (months)
     const ageInMonths = (12 * ageYears) + ageMonths;
@@ -118,7 +115,6 @@ export class BusinessAppStore {
     const sendDataToLendioValue = indexOf(data.applicationAgreeConditions, 'sendDataToLendio') !== -1;
 
     const lendioData = {
-      id: this.currentApplicationId,
       preQualInformation: {
         duration: data.yrsInBusiness,
         averageMonthlySales: data.avgSales,
@@ -142,8 +138,8 @@ export class BusinessAppStore {
 
   @action
   businessLendioPreQual = (applicationId) => {
-    const formatedData = this.getFormatedofLendioData;
-    formatedData.id = applicationId;
+    let formatedData = this.getFormatedofLendioData;
+    formatedData = { id: applicationId, ...formatedData };
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       clientPublic
@@ -152,7 +148,6 @@ export class BusinessAppStore {
           variables: {
             lendioApplication: formatedData,
           },
-          refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           resolve(result.data);

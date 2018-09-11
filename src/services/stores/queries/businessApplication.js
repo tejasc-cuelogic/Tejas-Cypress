@@ -282,6 +282,52 @@ query _getBusinessApplicationById ($id: String!) {
 }
 `;
 
+export const getPrequalBusinessApplicationsById = gql`
+query getprequalInfo ($id: ID!) {
+  getPreQualificationById(preQualId: $id){
+    id
+    email
+    firstName
+    lastName
+    prequalStatus
+    lendio {
+      status
+      failReasons
+    }
+    businessGeneralInfo {
+      businessName
+      contactDetails {
+        phone {
+          number
+        }
+      }
+    }
+    existingBusinessInfo {
+      ageYears
+      ageMonths
+    }
+    performanceSnapshot {
+      nextYearSnapshot {
+        grossSales
+        cogSold
+        operatingExpenses
+        netIncome
+      }
+      pastYearSnapshot {
+        grossSales
+        cogSold
+        operatingExpenses
+        netIncome
+      }
+    }
+    businessExperience{
+      estimatedCreditScore
+      amountNeeded
+    }
+  }
+}
+`;
+
 export const submitPartneredWithLendio = gql`
 mutation lendioDetails ($lendioApplication: ApplicationInfoInput!) {
   submitPartneredWithLendio(applicationDetails:$lendioApplication) {

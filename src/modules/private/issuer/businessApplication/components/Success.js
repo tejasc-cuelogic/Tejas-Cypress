@@ -5,7 +5,7 @@ import cookie from 'react-cookies';
 import { FormInput } from '../../../../../theme/form';
 import { authActions } from '../../../../../services/actions';
 
-@inject('businessAppStore', 'authStore', 'userStore')
+@inject('businessAppStore', 'authStore', 'userStore', 'uiStore')
 @observer
 class Success extends Component {
   componentWillMount() {
@@ -69,7 +69,7 @@ class Success extends Component {
                   ['password', 'verify'].map(field => (
                     <FormInput
                       key={field}
-                      type={pwdInputType[field]}
+                      type={pwdInputType}
                       icon={togglePasswordType(field)}
                       name={field}
                       fielddata={fields[field]}
@@ -80,7 +80,7 @@ class Success extends Component {
                     <FormInput
                       key={field}
                       icon={field === 'password' ? togglePasswordType(field) : null}
-                      type={field === 'password' ? pwdInputType[field] : 'text'}
+                      type={field === 'password' ? pwdInputType : 'text'}
                       name={field}
                       disabled={field === 'email'}
                       fielddata={LOGIN_FRM.fields[field]}
@@ -93,7 +93,7 @@ class Success extends Component {
           </Form>
           }
           <Divider section hidden />
-          <Button onClick={this.onProceed} disabled={(this.props.isPublic && !SIGNUP_FRM.meta.isValid && !userExists)} size="large" color="green" className="very relaxed">Proceed</Button>
+          <Button loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && !SIGNUP_FRM.meta.isValid && !userExists)} size="large" color="green" className="very relaxed">Proceed</Button>
         </Grid.Column>
       </Grid>
     );

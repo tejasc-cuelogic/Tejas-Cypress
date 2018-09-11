@@ -38,6 +38,7 @@ export default class BusinessApplication extends Component {
       formReset();
       setFieldvalue('isFetchedData', match.params.applicationId);
       fetchApplicationDataById(match.params.applicationId).then(() => {
+        this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
         if (this.checkIncludes(['pre-qualification', 'business-details', 'performance', 'documentation'], pathname)) {
           this.props.history.replace(`${match.url}/${this.props.businessAppStore.stepToRender.path}`);
         }
@@ -128,9 +129,9 @@ export default class BusinessApplication extends Component {
         <Switch>
           <Route exact path={match.url} component={getModule(navItems[0].component)} />
           <Route exact path={`${match.url}/failed/:reason?`} component={Failure} />
-          <Route exact path={`${match.url}/lendio`} render={props1 => <Application applicationId={match.params.applicationId} {...props1} />} />
+          <Route exact path={`${match.url}/lendio`} render={props => <Application applicationId={match.params.applicationId} {...props} />} />
           <Route exact path={`${match.url}/lendio/:condition`} component={LendioSuccess} />
-          <Route exact path={`${match.url}/success`} render={props1 => <Success refLink={match.url} applicationId={match.params.applicationId} {...props1} />} />
+          <Route exact path={`${match.url}/success`} render={props => <Success refLink={match.url} applicationId={match.params.applicationId} {...props} />} />
           {
             navItems.map(item => (
               <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />

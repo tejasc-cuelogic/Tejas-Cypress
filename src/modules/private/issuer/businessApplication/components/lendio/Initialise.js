@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import { Divider, Button } from 'semantic-ui-react';
 import { Logo } from '../../../../../../theme/shared';
 
-const Initialise = props => (
+const Initialise = ({ match, isPublic }) => (
   <Aux>
     <Logo size="small" alt="Lendio.com" dataSrc="LogoLendio" />
     <Divider hidden />
@@ -16,8 +16,8 @@ const Initialise = props => (
     </p>
     <Divider section hidden />
     <Button.Group>
-      <Button as={Link} to={props.isPublic ? `/business-application/${props.applicationId}/lendio` : `/app/business-application/${props.applicationId}/lendio`} color="green" className="relaxed">I’m interested in Lendio</Button>
-      <Button as={Link} to={props.isPublic ? '/' : '/app/dashboard'} inverted color="green" className="relaxed">Return to Home Page</Button>
+      <Button as={Link} to={`/business-application/${match.params.applicationType}/${match.params.id}/lendio`} color="green" className="relaxed">I’m interested in Lendio</Button>
+      <Button as={Link} to={isPublic ? '/' : '/app/dashboard'} inverted color="green" className="relaxed">Return to Home Page</Button>
     </Button.Group>
   </Aux>
 );
