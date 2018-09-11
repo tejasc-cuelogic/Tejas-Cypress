@@ -5,6 +5,7 @@ import moment from 'moment';
 import { startCase, lowerCase, kebabCase } from 'lodash';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
+import { InlineLoader } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -33,8 +34,12 @@ export default class Listing extends Component {
   }
 
   render() {
-    const { offerings, uiStore } = this.props;
+    const { offerings, loading, uiStore } = this.props;
     const { confirmBox } = uiStore;
+
+    if (loading) {
+      return <InlineLoader />;
+    }
     return (
       <Card fluid>
         <div className="table-wrapper">
@@ -51,7 +56,9 @@ export default class Listing extends Component {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {
+              {offerings.length === 0 ? (
+                <Table.Row><Table.Cell>No Offering to display !</Table.Cell></Table.Row>
+                ) :
                 offerings.map(offering => (
                   <Table.Row key={offering.id}>
                     <Table.Cell>
