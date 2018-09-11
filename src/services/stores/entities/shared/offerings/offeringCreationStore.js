@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { LEADERSHIP, OFFERING_DETAILS, CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY } from '../../../../constants/admin/offerings';
+import { GENERAL, LEADERSHIP, OFFERING_DETAILS, CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -16,6 +16,7 @@ export class OfferingCreationStore {
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
   @observable LEADERSHIP_FRM = Validator.prepareFormObject(LEADERSHIP);
+  @observable GENERAL_FRM = Validator.prepareFormObject(GENERAL);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -43,11 +44,20 @@ export class OfferingCreationStore {
   }
 
   @action
-  formChange = (e, result, form) => {
-    this[form] = Validator.onChange(
-      this[form],
-      Validator.pullValues(e, result),
-    );
+  formChange = (e, result, form, subForm = '', index) => {
+    if (subForm) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, result),
+        subForm,
+        index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+      );
+    }
   }
 
   @action
@@ -59,12 +69,19 @@ export class OfferingCreationStore {
   }
 
   @action
-  maskChange = (values, form, field) => {
+  maskChange = (values, form, field, subForm = '', index) => {
     const fieldValue = field === 'terminationDate' ? values.formattedValue : values.floatValue;
-    this[form] = Validator.onChange(
-      this[form],
-      { name: field, value: fieldValue },
-    );
+    if (subForm) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: values.floatValue }, subForm, index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: fieldValue },
+      );
+    }
   }
 
   @action
@@ -76,21 +93,35 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files) => {
+  setFileUploadData = (form, field, files, index = null) => {
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
-    this[form] = Validator.onChange(
-      this[form],
-      { name: field, value: fileData.fileName },
-    );
+    if (index !== null) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: fileData.fileName }, 'data', index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: fileData.fileName },
+      );
+    }
   }
 
   @action
-  removeUploadedData = (form, field) => {
-    this[form] = Validator.onChange(
-      this[form],
-      { name: field, value: '' },
-    );
+  removeUploadedData = (form, field, index = null) => {
+    if (index !== null) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: '' }, 'data', index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: '' },
+      );
+    }
   }
 
   getMetaData = (metaData) => {

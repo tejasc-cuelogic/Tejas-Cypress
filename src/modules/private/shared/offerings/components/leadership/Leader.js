@@ -4,29 +4,54 @@ import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { FormCheckbox, FormInput, MaskedInput, FormTextarea, DropZone, AutoComplete } from '../../../../../../theme/form';
+import Helper from '../../../../../../helper/utility';
+
+const HeaderWithTooltip = ({ header, tooltip }) => (
+  <Header as="h4">
+    {header}
+    <Popup
+      trigger={<Icon className="ns-help-circle" />}
+      content={tooltip}
+      position="top center"
+      className="center-align"
+      wide
+    />
+  </Header>
+);
 
 @inject('offeringCreationStore', 'uiStore')
 @withRouter
 @observer
 export default class Leader extends Component {
-  onFileDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'proFormas', files);
+  onFileDrop = (files, name, index) => {
+    this.props.offeringCreationStore.setFileUploadData('LEADERSHIP_FRM', name, files, index);
   }
-  confirmRemoveDoc = (e, name) => {
+  confirmRemoveDoc = (e, name, index) => {
     e.preventDefault();
-    this.props.uiStore.setConfirmBox(name);
+    this.props.uiStore.setConfirmBox(name, index);
   }
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
-  handleDelDoc = (field) => {
-    this.props.offeringCreationStore.removeUploadedData('KEY_TERMS_FRM', field);
+  handleDelDoc = (field, index) => {
+    this.props.offeringCreationStore.removeUploadedData('LEADERSHIP_FRM', field, index);
     this.props.uiStore.setConfirmBox('');
+  }
+  toggleConfirmModal = (e, index, formName) => {
+    e.preventDefault();
+    this.props.offeringCreationStore.toggleConfirmModal(index, formName);
+  }
+  removeData = (confirmModalName) => {
+    this.props.offeringCreationStore.removeData(confirmModalName);
+    Helper.toast('Leader has been deleted successfully.', 'success');
+    this.props.history.push(`${this.props.refLink}/leader/1`);
   }
   render() {
     const leaderNumber = this.props.index;
     const index = leaderNumber || 0;
     const {
+      confirmModal,
+      confirmModalName,
       LEADERSHIP_FRM,
       formChangeWithIndex,
       maskChangeWithIndex,
@@ -40,7 +65,7 @@ export default class Leader extends Component {
             {`Leader ${index + 1}`}
             <Button.Group className="pull-right">
               <Button secondary className="relaxed" disabled={!LEADERSHIP_FRM.meta.isValid} >Save</Button>
-              <Button inverted color="red" content="Delete Leader" />
+              <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, 'LEADERSHIP_FRM')} />
             </Button.Group>
           </Header>
           <FormCheckbox
@@ -146,16 +171,7 @@ export default class Leader extends Component {
               zipCode
             />
           </Form.Group>
-          <Header as="h4">
-            Bio
-            <Popup
-              trigger={<Icon className="ns-help-circle" />}
-              content="To be used on the public offering page"
-              position="top center"
-              className="center-align"
-              wide
-            />
-          </Header>
+          <HeaderWithTooltip header="Bio" tooltip="To be used on the public offering page" />
           <FormTextarea
             name="bio"
             fielddata={LEADERSHIP_FRM.fields.data[index].bio}
@@ -164,16 +180,7 @@ export default class Leader extends Component {
             hidelabel
           />
           <Divider section />
-          <Header as="h4">
-            Website and Social Profiles
-            <Popup
-              trigger={<Icon className="ns-help-circle" />}
-              content="To be used on the public offering page"
-              position="top center"
-              className="center-align"
-              wide
-            />
-          </Header>
+          <HeaderWithTooltip header="Website and Social Profiles" tooltip="To be used on the public offering page" />
           {
             ['website', 'facebook', 'linkedIn', 'twitter'].map(field => (
               <FormInput
@@ -193,8 +200,8 @@ export default class Leader extends Component {
                 <DropZone
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.data[index][field]}
-                  ondrop={this.onFileDrop}
-                  onremove={this.confirmRemoveDoc}
+                  ondrop={(files, name) => this.onFileDrop(files, name, index)}
+                  onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
                   uploadtitle="Upload a file"
                   tooltip={field !== 'driverLicense' ? 'To be used on the public offering page' : false}
                   containerclassname="field"
@@ -234,7 +241,16 @@ export default class Leader extends Component {
           content="Are you sure you want to remove this file?"
           open={confirmBox.entity === 'headShot' || confirmBox.entity === 'heroImage' || confirmBox.entity === 'driverLicense'}
           onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity)}
+          onConfirm={() => this.handleDelDoc(confirmBox.entity, confirmBox.refId)}
+          size="mini"
+          className="deletion"
+        />
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to remove this leader?"
+          open={confirmModal}
+          onCancel={this.toggleConfirmModal}
+          onConfirm={() => this.removeData(confirmModalName)}
           size="mini"
           className="deletion"
         />

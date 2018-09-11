@@ -10,8 +10,8 @@ import Leader from './leadership/Leader';
 @observer
 export default class Leadership extends Component {
   componentWillMount() {
-    if (this.props.match.isExist) {
-      this.props.history.push('./leader/1');
+    if (this.props.match.isExact) {
+      this.props.history.push(`${this.props.match.url}/leader/1`);
     }
   }
   addMore = (e, formName) => {

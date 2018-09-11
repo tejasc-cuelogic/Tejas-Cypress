@@ -21,7 +21,7 @@ export default class Contingency extends Component {
   }
   removeData = (confirmModalName) => {
     this.props.offeringCreationStore.removeData(confirmModalName);
-    Helper.toast('Contingency deleted successfully.', 'success');
+    Helper.toast('Contingency has been deleted successfully.', 'success');
   }
   render() {
     const { roles } = this.props.userStore.currentUser;
