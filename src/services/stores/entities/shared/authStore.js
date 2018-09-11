@@ -8,7 +8,7 @@ import {
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { uiStore, userStore } from '../../index';
+import { uiStore, userStore, navStore } from '../../index';
 
 export class AuthStore {
   @observable hasSession = false;
@@ -27,31 +27,31 @@ export class AuthStore {
   @observable RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
   @observable NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
   @observable confirmProgress = false;
-  @observable pwdInputType = {
-    password: 'password',
-    oldPasswd: 'password',
-    newPasswd: 'password',
-  }
+  @observable pwdInputType = 'password';
 
 
   @action
-  setPwdVisibilityStatus = (type) => {
-    if (this.pwdInputType[type] === 'password') {
-      this.pwdInputType[type] = 'text';
+  setDefaultPwdType = () => {
+    this.pwdInputType = 'password';
+  }
+  @action
+  setPwdVisibilityStatus = () => {
+    if (this.pwdInputType === 'password') {
+      this.pwdInputType = 'text';
     } else {
-      this.pwdInputType[type] = 'password';
+      this.pwdInputType = 'password';
     }
   }
 
   @action
-  togglePasswordType = (type) => {
+  togglePasswordType = () => {
     let iconData = {
       link: true,
-      onClick: () => this.setPwdVisibilityStatus(type),
+      onClick: () => this.setPwdVisibilityStatus(),
     };
-    if (this.pwdInputType[type] === 'password') {
+    if (this.pwdInputType === 'password') {
       iconData.className = 'ns-view';
-    } else if (this.pwdInputType[type] === 'text') {
+    } else if (this.pwdInputType === 'text') {
       iconData.className = 'ns-view active';
     } else {
       iconData = null;
@@ -115,6 +115,10 @@ export class AuthStore {
   @action
   setUserLoggedIn(status) {
     this.isUserLoggedIn = status;
+    if (status) {
+      cookie.save('EVER_LOGS_IN', status, { maxAge: 31536000 });
+    }
+    navStore.setEverLogsIn();
   }
 
   @action

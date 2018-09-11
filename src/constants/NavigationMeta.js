@@ -182,7 +182,7 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'ns-article',
-    title: { issuer: 'Resources', investor: 'Education Centre' },
+    title: { issuer: 'Resources', investor: 'Education Center' },
     to: 'resources',
     accessibleTo: ['investor', 'issuer'],
     subPanel: 1,

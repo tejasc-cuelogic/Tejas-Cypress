@@ -33,7 +33,7 @@ export default class AccountCreation extends React.Component {
       setIsEnterPressed,
       resetIsEnterPressed,
     } = this.props.uiStore;
-    const { plaidBankDetails, formLinkBankManually, formAddFunds } = this.props.bankAccountStore;
+    const { plaidAccDetails, formLinkBankManually, formAddFunds } = this.props.bankAccountStore;
     const { stepToBeRendered, createAccount } = this.props.individualAccountStore;
     const steps =
     [
@@ -41,7 +41,7 @@ export default class AccountCreation extends React.Component {
         name: 'Link Bank',
         component: <Plaid />,
         isValid: '',
-        isDirty: !isEmpty(plaidBankDetails) ||
+        isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
       },
       {
