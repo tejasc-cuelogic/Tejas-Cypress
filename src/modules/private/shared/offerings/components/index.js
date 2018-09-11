@@ -5,4 +5,5 @@ export { default as Offering } from './Offering';
 export { default as Leadership } from './Leadership';
 export { default as BonusRewards } from './BonusRewards';
 export { default as Media } from './Media';
+export { default as Close } from './Close';
 

@@ -510,6 +510,44 @@ export const CLOSING_CONTITNGENCIES = {
   data: [],
 };
 
+export const OFFER_CLOSE = {
+  disbursementDate: {
+    value: '',
+    label: 'Disbursement Date',
+    error: undefined,
+    rule: 'date|required',
+    placeHolder: 'MM-DD-YYYY',
+  },
+  disbursementAmount: {
+    value: '',
+    label: 'Disbursement Amount',
+    error: undefined,
+    rule: 'numeric|required',
+    placeHolder: 'Enter here',
+  },
+  totalRepayment: {
+    value: '',
+    label: 'Total Repayment',
+    error: undefined,
+    rule: 'numeric|required',
+    placeHolder: 'Enter here',
+  },
+  totalComittedAmount: {
+    value: '',
+    label: 'Total Comitted Amount',
+    error: undefined,
+    rule: 'numeric|required',
+    placeHolder: 'Enter here',
+  },
+  totalInvestorsCount: {
+    value: '',
+    label: 'Total Investors Count',
+    error: undefined,
+    rule: 'numeric|required',
+    placeHolder: 'Enter here',
+  },
+};
+
 export const CONTINGENCIES = {
   data: [{
     isApplied: {

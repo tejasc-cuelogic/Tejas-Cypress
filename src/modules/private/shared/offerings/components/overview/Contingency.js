@@ -30,10 +30,7 @@ export default class Contingency extends Component {
       confirmModalName,
     } = this.props.offeringCreationStore;
     const {
-      form,
-      formName,
-      formChangeWithIndex,
-      match,
+      form, formName, formChangeWithIndex, match, addon,
     } = this.props;
     return (
       <Aux>
@@ -43,6 +40,7 @@ export default class Contingency extends Component {
             <Link onClick={() => this.setContingencyForm()} to={`${match.url}/add-new-contingency`} className="link"><small>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</small></Link>
           :
           null}
+          {addon}
         </Header>
         {
         form.fields.data.length > 0 ?
