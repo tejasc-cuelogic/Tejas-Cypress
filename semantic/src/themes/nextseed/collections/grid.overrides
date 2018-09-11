@@ -109,7 +109,7 @@
             @media only screen and (max-width : @largestSmallMonitor){
                 left: -3%;
                 top: 0;
-                font-size: 170px;
+                font-size: 160px;
                 line-height: 160px;
                 height: 160px;
             }
