@@ -178,6 +178,7 @@ const HowItWorks = () => (
               id={nsvideos.embed}
               placeholder={videoPoster}
               source="vimeo"
+              icon="ns-play"
             />
             <p className="caption-note mt-10">
               The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.
