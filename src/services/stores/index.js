@@ -41,5 +41,5 @@ export { default as updatesStore } from './entities/public/updatesStore';
 export { default as investmentStore } from './entities/public/investmentStore';
 export { default as agreementsStore } from './entities/user/settings/agreementsStore';
 export { default as accreditationStore } from './entities/user/settings/accreditationStore';
-export { default as offeringsStore } from './entities/admin/offerings/offeringsStore';
-export { default as offeringCreationStore } from './entities/admin/offerings/offeringCreationStore';
+export { default as offeringsStore } from './entities/shared/offerings/offeringsStore';
+export { default as offeringCreationStore } from './entities/shared/offerings/offeringCreationStore';

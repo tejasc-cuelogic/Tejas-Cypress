@@ -5,7 +5,7 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 import Summary from '../components/Summary';
 import {
-  Overview, KeyTerms, Legal, Offering, Leadership, BonusRewards,
+  Overview, KeyTerms, Legal, Offering, Leadership, BonusRewards, Media,
 } from '../../../shared/offerings/components';
 
 const navItems = [
@@ -13,6 +13,7 @@ const navItems = [
   { title: 'Key Terms', to: 'key-terms', component: KeyTerms },
   { title: 'Legal', to: 'legal', component: Legal },
   { title: 'Offering', to: 'offering', component: Offering },
+  { title: 'Media', to: 'media', component: Media },
   { title: 'Leadership', to: 'leadership', component: Leadership },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: BonusRewards },
 ];

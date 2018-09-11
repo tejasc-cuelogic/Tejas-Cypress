@@ -6,7 +6,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const getModule = component => Loadable({
-  loader: () => import(`./${component}`),
+  loader: () => import(`./offering/${component}`),
   loading() {
     return <InlineLoader />;
   },
