@@ -26,6 +26,9 @@
 		}
 		&.dimmed {
 			overflow: hidden;
+			&:after {
+				position: fixed !important;
+			}
 		}
 	}
 }
