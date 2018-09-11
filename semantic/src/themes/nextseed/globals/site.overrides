@@ -2,6 +2,13 @@
         Global Overrides
 *******************************/
 /* PUBLIC PAGES UI STYLES ==> START */
+//iOS cursor position on keypad-in fix
+html,body{
+	-webkit-overflow-scrolling : touch !important;
+	overflow: auto !important;
+	height: 100% !important;
+}
+//iOS cursor position on keypad-in fix
 body{
 	color:@neutral-middark;
 }
@@ -1852,7 +1859,14 @@ p.check-extra-info{
 	justify-content: center;
 	box-shadow:0px 0px 5px fade(@fullBlack, 8%);
 	z-index: 3;
-	
+	.icon.hamburger {
+		font-size: 1.42857143rem;
+		color: #676a73;
+		position: absolute;
+		top: 20px;
+		left: 18px;
+		z-index: 1;
+	}
 	.sign-in {
 		font-size: @14px;
 		color: @white;
