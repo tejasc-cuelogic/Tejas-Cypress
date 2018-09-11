@@ -15,7 +15,7 @@ const Mission = () => (
           <Grid.Row>
             <Grid.Column textAlign={isMobile ? 'left' : 'center'}>
               <Header as="h2">
-              Our mission is to connect businesses and<br />
+              Our mission is to connect businesses and <Responsive minWidth={992} as="br" />
               individuals to build vibrant communities.
               </Header>
             </Grid.Column>

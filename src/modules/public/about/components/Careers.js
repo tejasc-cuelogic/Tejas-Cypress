@@ -12,7 +12,7 @@ const Careers = () => (
           <Grid.Column computer={12} tablet={12} mobile={16}>
             <Responsive as={Image} src={collage} maxWidth={767} />
             <Header as="h2" textAlign={isMobile ? 'left' : 'center'}>
-            Democratize finance. Create change.<br /> Join our team.
+            Democratize finance. Create change.<Responsive minWidth={992} as="br" /> Join our team.
             </Header>
             <p className={isMobile ? 'mt-30' : 'center-align mt-30'}>
             We’re just getting started in our journey to shape the future of finance in

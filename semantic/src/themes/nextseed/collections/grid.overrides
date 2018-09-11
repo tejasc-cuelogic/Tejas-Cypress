@@ -108,7 +108,10 @@
             line-height: 200px;
             @media only screen and (max-width : @largestSmallMonitor){
                 left: -3%;
+                top: 0;
                 font-size: 170px;
+                line-height: 160px;
+                height: 160px;
             }
             @media only screen and (max-width : @largestMobileScreen){
                 display: none;
@@ -116,6 +119,9 @@
         }
         >.row>.column {
             padding: 60px;
+            @media only screen and (max-width: @largestTabletScreen) {
+                padding: @20px;
+            }
         }
     }
 }

@@ -765,6 +765,9 @@ p i.icon {
 		img.ui.image {
 			width: auto;
 			max-width: none;
+			@media only screen and (max-width : @largestMobileScreen){
+				width: 100%;
+			}
 		}
 	}
 }
@@ -776,6 +779,9 @@ address {
 }
 .press-list {
 	padding: @20px @50px;
+	@media only screen and (max-width: @largestTabletScreen) {
+		padding: @20px;
+	}
 	.header{
 		color: @black !important;
 		font-weight: @bold;
@@ -809,6 +815,9 @@ address {
 		&.news-title {
 			font-size: @28px;
 			line-height: 30px;
+			@media only screen and (max-width : @largestSmallMonitor){
+				font-size: @20px;
+			}
 		}
 	}
 }
