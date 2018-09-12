@@ -65,7 +65,7 @@ class FormValidator {
     return currentForm;
   }
 
-  validateForm = (form, isMultiForm = false, showErrors = false) => {
+  validateForm = (form, isMultiForm = false, showErrors = false, isBusinessPlanRequired = true) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let validation;
@@ -81,10 +81,16 @@ class FormValidator {
     } else {
       const formData = this.ExtractFormValues(toJS(currentForm.fields));
       let formRules = this.ExtractFormRules(toJS(currentForm.fields));
-      formRules = {
-        ...formRules,
-        businessPlan: 'required',
-      };
+      if (isBusinessPlanRequired) {
+        formRules = {
+          ...formRules,
+          businessPlan: 'required',
+        };
+      } else {
+        formRules = {
+          ...formRules,
+        };
+      }
       validation = new Validator(
         formData,
         formRules,

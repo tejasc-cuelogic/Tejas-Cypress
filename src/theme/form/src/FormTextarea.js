@@ -2,6 +2,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon, TextArea } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
 
 const FormTextarea = observer((props) => {
@@ -14,9 +15,9 @@ const FormTextarea = observer((props) => {
   } = props.fielddata;
   return (
     <Form.Field className={props.containerclassname || ''} error={!!error}>
-      {!props.ishidelabel && label !== '' &&
-        <label>
-          {label}
+      {!props.hidelabel && label !== '' &&
+      <label>
+          {props.label || label}
           {tooltip &&
             <Popup
               trigger={<Icon className="ns-help-circle" />}
@@ -26,7 +27,12 @@ const FormTextarea = observer((props) => {
               wide
             />
           }
-        </label>
+          {props.removed &&
+            <Link to={props.linkto} onClick={e => props.removed(e)}>
+              <Icon className="ns-close-circle" color="grey" />
+            </Link>
+          }
+      </label>
       }
       <TextArea
         {...props}

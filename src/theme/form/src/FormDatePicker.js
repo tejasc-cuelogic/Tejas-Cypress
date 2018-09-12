@@ -8,7 +8,7 @@ import { FieldError } from '../../shared';
 
 const FormDatePicker = observer(props =>
   (
-    <Form.Field>
+    <Form.Field width={props.containerwidth || false}>
       {props.fielddata ? (
         <label>
           {props.fielddata.label}

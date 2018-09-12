@@ -24,6 +24,7 @@ export { default as businessAppStore } from './entities/user/businessAppStore';
 export { default as navStore } from './entities/shared/navStore';
 
 export { default as updateStore } from './entities/shared/offering/updateStore';
+export { default as activityHistoryStore } from './entities/shared/activityHistoryStore';
 
 export { default as messageStore } from './entities/message/messageStore';
 export { default as beneficiaryStore } from './entities/user/settings/beneficiaryStore';
@@ -34,6 +35,7 @@ export { default as investorProfileStore } from './entities/user/investorProfile
 export { default as helloWorldStore } from './entities/helloWorldStore';
 export { default as businesssStore } from './entities/issuer/businessStore';
 export { default as businessAppAdminStore } from './entities/user/admin/businessAppStore';
+export { default as businessAppReviewStore } from './entities/user/admin/businessAppReviewStore';
 export { default as businessAppLendioStore } from './entities/user/businessAppLendioStore';
 export { default as investmentLimitStore } from './entities/user/settings/investmentLimitStore';
 export { default as campaignStore } from './entities/public/campaignStore';
@@ -41,3 +43,5 @@ export { default as updatesStore } from './entities/public/updatesStore';
 export { default as investmentStore } from './entities/public/investmentStore';
 export { default as agreementsStore } from './entities/user/settings/agreementsStore';
 export { default as accreditationStore } from './entities/user/settings/accreditationStore';
+export { default as offeringsStore } from './entities/shared/offerings/offeringsStore';
+export { default as offeringCreationStore } from './entities/shared/offerings/offeringCreationStore';

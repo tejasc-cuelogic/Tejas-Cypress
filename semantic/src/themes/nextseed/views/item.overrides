@@ -9,8 +9,16 @@
     }
 }
 .ui.items{
-    >.item>.content>.description {
-        color: @neutral-middark;
+    >.item {
+        &:first-child {
+            margin-top: 0 !important;
+        }
+        &:last-child {
+            margin-bottom: 0 !important;
+        }
+        >.content>.description {
+            color: @neutral-middark;
+        }
     }
     &.messages{
         .item{
@@ -91,4 +99,24 @@
 			}
 		}
 	}
+}
+.inner-content-spacer .featured-section {
+    .ui.items>.item .content {
+        .header {
+            color: @neutral;
+            font-size: @14px;
+            font-weight: @normal;
+            a {
+                color: @primary-two;
+                font-weight: @bold;
+            }
+            span {
+                margin: 0 @30px;
+                font-size: @13px;
+            }
+        }
+        .description {
+            color: @neutral;
+        }
+    }
 }

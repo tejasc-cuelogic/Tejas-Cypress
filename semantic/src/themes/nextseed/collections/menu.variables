@@ -136,7 +136,7 @@
 @dropdownItemBackground: transparent;
 @dropdownItemColor: @textColor;
 @dropdownItemTextTransform: none;
-@dropdownItemFontWeight: @normal;
+@dropdownItemFontWeight: @fontMedium;
 @dropdownItemBoxShadow: none;
 @dropdownItemTransition: none;
 

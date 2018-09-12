@@ -51,6 +51,12 @@
                     color:darken(@highlight-primary, 10%);
                 }
             }
+            &.blue{
+                color:@blue;
+                &:hover, &:focus, &:active{
+                    color:darken(@blue, 10%);
+                }
+            }
         }
         &.ghost-button{
             background-color:transparent;
@@ -84,6 +90,18 @@
                     color:darken(@violet, 10%);
                     background-color:transparent;
                 }
+            }
+        }
+        &.time-stamp{
+            background-color:transparent;
+            box-shadow:none !important;
+            color:@neutral;
+            cursor:default;
+            &:first-child{
+                padding-left:0;
+            }
+            &:last-child{
+                padding-right:0;
             }
         }
     }

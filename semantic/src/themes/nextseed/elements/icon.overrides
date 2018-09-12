@@ -1746,8 +1746,8 @@ i.icon[class*="ns-"]{
 .ns-article:before{
     content:@ns-article;
 }
-.ns-attachment:before{
-    content:@ns-attachment;
+.ns-attachment:before {
+    content:@ns-attachment; 
 }
 .ns-author:before{
     content:@ns-author;
@@ -2091,7 +2091,7 @@ i.icon[class*="ns-"]{
 .ns-search:before{
     content:@ns-search;
 }
-.ns-send-right:before{
+.ns-send-right:before {
     content:@ns-send-right;
 }
 .ns-setting:before{

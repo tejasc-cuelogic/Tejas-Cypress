@@ -296,6 +296,7 @@
             border-bottom:@borderColor 1px solid;
         }
         .field.secondary textarea{
+            background-color:@white;
             padding:@11px @14px;
             min-height:80px;
             max-height:80px;
@@ -506,8 +507,8 @@
     .title-meta{
         margin-left:1.5rem;
         font-size:@14px;
-        font-weight:@fontMedium;
-        color:@tertiary-text;
+        font-weight:@normal;
+        color:@neutral;
         vertical-align:middle;
         i.icon{
             font-size:1.428571em;

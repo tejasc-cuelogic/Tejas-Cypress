@@ -98,7 +98,7 @@
         color:@neutral;
         text-decoration:none;
         &:hover{
-            color:inherit;
+            color:@neutral;
             text-decoration:underline;
         }
         &.action{
@@ -150,9 +150,25 @@
         .item .extra{
             font-size:@12px;
         }
-        .ui.rating{
-            .icon{
-                font-family:'Nextseed';
+    }
+    &.confirm-transfer-table {
+        tr td {
+            border-top: 0;
+        }
+        td.status{
+            font-weight:500;
+            text-transform:capitalize;
+            &.partial{
+                color:@highlight-secondary;
+            }
+            &.failed{
+                color:@highlight-primary;
+            }
+            &.to-be-reviewed{
+                color:@primary-two;
+            }
+            &.processing{
+                color:@neutral-offdark;
             }
         }
     }
@@ -160,6 +176,69 @@
         tr td {
             border-top: 0;
         }
+    }
+    &.basic.form-table {
+        background: @neutral-offwhite;
+        padding-bottom: @7px;
+        th {
+            border-color: @neutral-midwhite;
+        }
+        tr td{
+            border:none;
+        }
+        .ui.input>input {
+            background: @white;
+            padding: @5px;
+        }
+        .file-uploader {
+            padding:0 @14px;
+            margin: 0;
+            min-height: auto;
+            border: 0;
+            color: @primary-two;
+            text-align: left;
+            span {
+                color: @primary-two;
+            }
+        }
+        .ui.selection.dropdown {
+            border: @neutral-offdark 1px solid;
+            background: @white;
+            padding: @5px;
+            border-radius: @4px;
+            border: @neutral-offdark 1px solid;
+            min-height: auto;
+            line-height: 15px;
+            .icon {
+                padding: @7px @5px;
+            }
+            &.active {
+                border-bottom: 0 !important;
+                .menu {
+                    box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
+                    border: 1px solid rgba(34,36,38,.15);
+                    margin: 0px -1px;
+                    padding: 0 5px;
+                    min-width: calc(100% + 2px);
+                    width: calc(100% + 2px);
+                    .item {
+                        font-size: @13px;
+                    }
+                }
+            }
+        }
+    }
+    &.bg-offwhite {
+        background-color: @neutral-offwhite;
+        thead th {
+            background-color: @neutral-offwhite;
+            &.dark-cell {
+                background-color: @neutral-midwhite;        
+            }
+        }
+    }
+    .dark-cell {
+        background-color: @neutral-midwhite;
     }
 }
 
