@@ -78,6 +78,20 @@
             }
         }
     }
+    &.campaign-updates >.item{
+        img {
+            border-radius: 50%;
+        }
+        .content>.header:not(.ui) {
+            font-size: @13px;
+            line-height: 20px;
+        }
+        .meta {
+            font-size: @13px;
+            line-height: 20px;
+            margin: 0;
+        }
+    }
 }
 .horizontal-items {
 	&.ui.items {

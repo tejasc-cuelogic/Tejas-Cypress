@@ -4,6 +4,9 @@
 //  Public page Starts
 .ui.padded.segment {
     padding: 30px;
+    h4.ui.header {
+        margin-top: 0;
+    }
     @media only screen and (max-width : @largestMobileScreen){
         padding:@30px 0;
     }
@@ -39,5 +42,11 @@
         max-width:100%;
         border:none;
         border-radius:0 0 @4px @4px;
+    }
+}
+.ui.grid .ui.segment {
+    height: 100%;
+    img.ui.image.business-modal {
+        width: 100%;
     }
 }

@@ -22,26 +22,17 @@
 		.ui.statistic {
 			width: 100%;
 			padding: 0;
-			text-align: center;
 			>.label{
 				color:@neutral-middark;
 				font-size: @13px;
-				font-weight: @bold;
 			}
 			>.value {
-				font-size: @28px !important;
-				margin: @20px 0;
-				color:@neutral-middark;
-				font-weight: @fontMedium;
+				font-size: @16px !important;
+				color:@neutral;
+				font-weight: @bold;
 				text-transform: none;
-			}
-			p {
-				font-size: @12px;
-				text-align: center;
-				i.help {
-					color: @green;
-					margin-left: 0;
-				}
+				line-height: 22px;
+    			margin-top: @8px;
 			}
 			.slider {
 				-webkit-appearance: none;
