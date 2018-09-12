@@ -21,6 +21,10 @@ export class OfferingCreationStore {
   @observable confirmModalName = null;
   @observable removeIndex = null;
 
+  @observable requestState = {
+    search: {},
+  };
+
   @action
   setContingencyFormSelected = (formName) => {
     this.contingencyFormSelected = formName;
