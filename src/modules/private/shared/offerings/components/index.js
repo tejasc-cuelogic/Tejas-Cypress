@@ -7,4 +7,4 @@ export { default as BonusRewards } from './BonusRewards';
 export { default as Media } from './Media';
 export { default as Close } from './Close';
 export { default as Investors } from './Investors';
-
+export { default as Transactions } from './Transactions';

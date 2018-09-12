@@ -5,7 +5,16 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 import Summary from '../components/Summary';
 import {
-  Overview, KeyTerms, Legal, Offering, Leadership, BonusRewards, Media, Close, Investors,
+  Overview,
+  KeyTerms,
+  Legal,
+  Offering,
+  Leadership,
+  BonusRewards,
+  Media,
+  Close,
+  Investors,
+  Transactions,
 } from '../../../shared/offerings/components';
 
 const navItems = [
@@ -17,6 +26,7 @@ const navItems = [
   { title: 'Close', to: 'close', component: Close },
   { title: 'Media', to: 'media', component: Media },
   { title: 'Leadership', to: 'leadership', component: Leadership },
+  { title: 'Transactions', to: 'transactions', component: Transactions },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: BonusRewards },
 ];
 
