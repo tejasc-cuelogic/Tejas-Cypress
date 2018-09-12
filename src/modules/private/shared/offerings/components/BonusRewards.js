@@ -20,7 +20,9 @@ const rewards = [
 @inject('offeringCreationStore')
 @observer
 export default class BonusRewards extends Component {
-  setSearchParam = (e, { name, value }) => this.props.crowdpayStore.setInitiateSrch(name, value);
+  setSearchParam = (e, { name, value }) => {
+    this.props.offeringCreationStore.setInitiateSrch(name, value);
+  }
   executeSearch = (e) => {
     if (e.charCode === 13) {
       this.props.offeringCreationStore.setInitiateSrch('keyword', e.target.value);
