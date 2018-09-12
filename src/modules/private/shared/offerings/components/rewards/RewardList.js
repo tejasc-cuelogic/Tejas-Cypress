@@ -32,7 +32,7 @@ const RewardList = (props) => {
                   <Table.Row key={data.id}>
                     <Table.Cell>{data.name}</Table.Cell>
                     <Table.Cell>{Helper.CurrencyFormat(data.amount)}</Table.Cell>
-                    <Table.Cell>{data.redeemDate}</Table.Cell>
+                    <Table.Cell textAlign="right">{data.redeemDate}</Table.Cell>
                   </Table.Row>
                 ))
               }
