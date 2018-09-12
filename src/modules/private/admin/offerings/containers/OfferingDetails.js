@@ -43,9 +43,7 @@ export default class OfferingDetails extends Component {
     return (
       <Modal closeOnRootNodeClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
-          <Header as="h3">
-            America Gardens
-          </Header>
+          <Header as="h3">America Gardens</Header>
           <Summary details={summaryDetails} />
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />

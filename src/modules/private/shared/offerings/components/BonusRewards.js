@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import Aux from 'react-aux';
 import { Header, Form, Grid, Button } from 'semantic-ui-react';
@@ -32,13 +33,12 @@ export default class BonusRewards extends Component {
       <div className="inner-content-spacer">
         <Header as="h4">Bonus rewards</Header>
         <Form>
-          <Grid stackable>
+          <Grid stackable className="bottom-aligned">
             <Grid.Row>
               <ByKeyword
                 executeSearch={this.executeSearch}
                 w={[7]}
                 placeholder="Search by name"
-                fLabel
                 more="no"
                 addon={
                   <Aux>
@@ -54,7 +54,7 @@ export default class BonusRewards extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <p className="note mt-30">For more information about bonus rewards, check out our Resource Article.</p>
+        <p className="note mt-20">For more information about bonus rewards, check out our <Link to="/">Resource Article.</Link></p>
         <RewardList listOf="Early bird reward" data={rewards} />
       </div>
     );

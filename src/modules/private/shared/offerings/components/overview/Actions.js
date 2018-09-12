@@ -10,7 +10,7 @@ const actions = {
 export default class Actions extends Component {
   render() {
     return (
-      <Button.Group textAlign="right" compact size="mini">
+      <Button.Group floated="right" compact size="mini">
         {Object.keys(actions).map(action => (
           <Button className={actions[action].color}>
             {actions[action].label}
