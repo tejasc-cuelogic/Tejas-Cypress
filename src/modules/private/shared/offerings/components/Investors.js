@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Form, Grid } from 'semantic-ui-react';
+import { Form, Grid, Divider } from 'semantic-ui-react';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import Filters from './investors/Filters';
 import Listing from './investors/Listing';
@@ -57,6 +57,7 @@ export default class BonusRewards extends Component {
             </Grid.Row>
           </Grid>
         </Form>
+        <Divider hidden />
         <Listing data={investors} />
       </div>
     );
