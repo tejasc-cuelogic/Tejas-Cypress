@@ -70,8 +70,12 @@ query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $order
           }
         }
       }
-      createdDate
-      updatedDate
+      created {
+        date
+      }
+      updated {
+        date
+      }
       applicationStatus
       applicationSubmittedDate
     }
