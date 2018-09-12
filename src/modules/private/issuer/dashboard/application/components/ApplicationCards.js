@@ -48,13 +48,13 @@ export default class ApplicationCards extends Component {
                     <dt>Application status</dt>
                     <dd>{BUSINESS_APP_USER_STATUS[application.applicationStatus].status}</dd>
                     <dt>Started</dt>
-                    <dd>{moment(application.createdDate).format('MM/DD/YYYY')}</dd>
+                    <dd>{application.created ? moment(application.created.date).format('MM/DD/YYYY') : '--'}</dd>
                     <dt>{application.applicationStatus ===
                       BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ?
                       'Submitted' : 'Last updated'
                     }
                     </dt>
-                    <dd>{application.updatedDate ? moment(application.updatedDate).format('MM/DD/YYYY') : '--'}</dd>
+                    <dd>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '--'}</dd>
                   </dl>
                   {application.applicationStatus ===
                   BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&

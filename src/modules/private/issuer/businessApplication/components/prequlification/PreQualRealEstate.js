@@ -52,9 +52,9 @@ export default class PreQualRealEstate extends Component {
             {getInvestmentTypeTooltip}
           </p>}
         </FormElementWrap>
-        <FormElementWrap header="Select Real Estate Type" subHeader="Please select all that apply.">
-          <FormRadioGroup
-            containerclassname="button-radio"
+        <FormElementWrap header="Select Real Estate Type" subHeader="Select all the Real Estate types that apply.">
+          <FormCheckbox
+            containerclassname="iconic-checkbox"
             disabled={preQualFormDisabled}
             fielddata={fields.realEstateType}
             name="realEstateType"
@@ -88,8 +88,8 @@ export default class PreQualRealEstate extends Component {
         >
           <FormRadioGroup
             disabled={preQualFormDisabled}
-            fielddata={fields.ownProperty}
-            name="ownProperty"
+            fielddata={fields.ownOrOperateProperty}
+            name="ownOrOperateProperty"
             changed={businessAppEleChange}
             containerclassname="button-radio"
           />
@@ -99,7 +99,7 @@ export default class PreQualRealEstate extends Component {
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
               <div className="field-wrap">
                 {
-                  ['targetedInvestorIrr', 'targetedAnnualInvestor'].map(field => (
+                  ['investorIRR', 'annualInvestorRoi'].map(field => (
                     <MaskedInput
                       disabled={preQualFormDisabled}
                       key={field}
@@ -115,10 +115,10 @@ export default class PreQualRealEstate extends Component {
                 <MaskedInput
                   hoverable
                   disabled={preQualFormDisabled}
-                  name="targetedHoldTime"
+                  name="holdTimeInYears"
                   number
-                  value={fields.targetedHoldTime.value}
-                  fielddata={fields.targetedHoldTime}
+                  value={fields.holdTimeInYears.value}
+                  fielddata={fields.holdTimeInYears}
                   changed={businessAppEleMaskChange}
                 />
               </div>

@@ -23,7 +23,7 @@ export default class PreQualification extends Component {
   submit = (e) => {
     e.preventDefault();
     if (this.props.isPublic) {
-      this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic)
+      this.props.businessAppStore.businessPreQualificationFormSumbit()
         .then(() => {
           this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
           const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
@@ -34,7 +34,7 @@ export default class PreQualification extends Component {
       this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
         .then(() => {
           this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
-          this.props.businessAppStore.businessPreQualificationFormSumbit(this.props.isPublic)
+          this.props.businessAppStore.businessPreQualificationFormSumbit()
             .then((isPublicUrl) => {
               const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
               Helper.toast('Business pre-qualification request submitted!', 'success');

@@ -175,6 +175,7 @@ export class BusinessAppStore {
           BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
           this.appStepsStatus[0].status = 'IN_PROGRESS';
         }
+        this.setFieldvalue('currentApplicationType', data.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
         navStore.setAccessParams('appStatus', data.applicationStatus);
         this.setPrequalBasicDetails();
       }
@@ -242,6 +243,16 @@ export class BusinessAppStore {
               data.performanceSnapshot.pastYearSnapshot[ele];
           });
         }
+      } else {
+        data.realEstateType.forEach((ele) => {
+          this.BUSINESS_APP_FRM.fields.realEstateType.value.push(ele);
+        });
+        ['investmentType', 'ownOrOperateProperty'].forEach((ele) => {
+          this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
+        });
+        ['investorIRR', 'annualInvestorRoi', 'holdTimeInYears'].forEach((ele) => {
+          this.BUSINESS_APP_FRM.fields[ele].value = data.target[ele];
+        });
       }
       this.BUSINESS_APP_FRM.meta.isValid = false;
       this.preQualFormDisabled = true;
@@ -600,7 +611,6 @@ export class BusinessAppStore {
       firstName: basicInfo.firstName,
       lastName: basicInfo.lastName,
       email: basicInfo.email,
-      businessModel: data.businessModel.value,
       businessGeneralInfo: {
         businessName: data.businessName.value,
         address: {
@@ -618,7 +628,6 @@ export class BusinessAppStore {
         },
       },
       industryTypes: data.industryTypes.value,
-      businessGoal: data.businessGoal.value,
       businessExperience: {
         industryExperience: data.industryExperience.value,
         estimatedCreditScore: data.estimatedCreditScore.value,
@@ -635,12 +644,8 @@ export class BusinessAppStore {
         },
       },
       businessEntityStructure: data.businessEntityStructure.value,
-      // legalConfirmations: data.legalConfirmation,
+      // legalConfirmations: data.legalConfirmation.value,
       legalConfirmations: [{
-        label: 'HAS_NOT_RAISED_SECURITIES',
-        value: includes(data.legalConfirmation.value, 'HAS_NOT_RAISED_SECURITIES'),
-      },
-      {
         label: 'IS_NOT_CONDUCTING_OFFERING',
         value: includes(data.legalConfirmation.value, 'IS_NOT_CONDUCTING_OFFERING'),
       },
@@ -694,6 +699,30 @@ export class BusinessAppStore {
         },
       };
     }
+    if (this.currentApplicationType === 'business') {
+      preQualData = {
+        ...preQualData,
+        businessGoal: data.businessGoal.value,
+        businessModel: data.businessModel.value,
+        legalConfirmations: [...preQualData.legalConfirmations,
+          {
+            label: 'HAS_NOT_RAISED_SECURITIES',
+            value: includes(data.legalConfirmation.value, 'HAS_NOT_RAISED_SECURITIES'),
+          }],
+      };
+    } else {
+      preQualData = {
+        ...preQualData,
+        investmentType: data.investmentType.value,
+        realEstateTypes: data.realEstateType.value,
+        ownOrOperateProperty: data.ownOrOperateProperty.value,
+        target: {
+          investorIRR: data.investorIRR.value,
+          annualInvestorRoi: data.annualInvestorRoi.value,
+          holdTimeInYears: data.holdTimeInYears.value,
+        },
+      };
+    }
     return preQualData;
   }
 
@@ -714,7 +743,6 @@ export class BusinessAppStore {
         .then((result) => {
           const { id } = result.data.upsertPreQualBasicInfo;
           this.setFieldvalue('applicationId', id);
-          console.log(result);
           resolve(result);
         })
         .catch((error) => {
@@ -729,8 +757,7 @@ export class BusinessAppStore {
   }
 
   @action
-  businessPreQualificationFormSumbit = (isPublic = false) => {
-    console.log(isPublic);
+  businessPreQualificationFormSumbit = () => {
     const data = this.getFormatedPreQualificationData;
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -743,7 +770,6 @@ export class BusinessAppStore {
           // refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
-          console.log(result);
           const {
             data: {
               updatePrequalification: {
@@ -867,6 +893,7 @@ export class BusinessAppStore {
     let mutationQuery = upsertBusinessApplicationInformationBusinessDetails;
     let variableData = {
       applicationId: this.currentApplicationId,
+      applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE',
       isPartialData: isPartialDataFlag,
       businessGoal: this.BUSINESS_APP_FRM.fields.businessGoal.value,
       applicationStep: stepName,

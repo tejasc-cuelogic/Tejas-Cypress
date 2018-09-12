@@ -15,7 +15,7 @@ const GeneralInformation = props => (
                 key={field}
                 type="text"
                 name={field}
-                label={field === 'businessName' && props.currentApplicationType === 'business' ? 'Business Name' : 'Entity Name'}
+                label={field === 'businessName' ? props.currentApplicationType === 'business' ? 'Business Name' : 'Entity Name' : 'Website'}
                 value={props.fields[field].value}
                 fielddata={props.fields[field]}
                 changed={props.businessAppEleChange}

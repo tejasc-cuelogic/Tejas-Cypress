@@ -67,11 +67,11 @@ mutation helpAndQuestion($question: helpAndQuestionInput!) {
 
 export const upsertBusinessApplicationInformationBusinessDetails = gql`
 mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID!,
-  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!,
+  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
   $businessGoal: BusinessGoalEnum!, $businessDetails: BusinessDetailsInput) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
-    applicationStep: $applicationStep,
+    applicationStep: $applicationStep, applicationType: $applicationType,
     businessGoal: $businessGoal, businessDetails: $businessDetails) {
       applicationId
       applicationStatus
@@ -81,11 +81,11 @@ mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID
 
 export const upsertBusinessApplicationInformationPerformance = gql`
 mutation _upsertBusinessApplicationInformationPerformance($applicationId: ID!,
-  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!,
+  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
   $businessGoal: BusinessGoalEnum!, $businessPerformance: businessPerformanceInput) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
-    applicationStep: $applicationStep,
+    applicationStep: $applicationStep, applicationType: $applicationType,
     businessGoal: $businessGoal, businessPerformance: $businessPerformance) {
       applicationId
       applicationStatus
@@ -95,11 +95,11 @@ mutation _upsertBusinessApplicationInformationPerformance($applicationId: ID!,
 
 export const upsertBusinessApplicationInformationDocumentation = gql`
 mutation _upsertBusinessApplicationInformationDocumentation($applicationId: ID!,
-  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!,
+  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
   $businessGoal: BusinessGoalEnum!, $businessDocumentation: BusinessDocumentationInput) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
-    applicationStep: $applicationStep,
+    applicationStep: $applicationStep, applicationType: $applicationType,
     businessGoal: $businessGoal, businessDocumentation: $businessDocumentation) {
       applicationId
       applicationStatus
@@ -112,13 +112,14 @@ query _getBusinessApplications {
   businessApplications {
     userId
     applicationId
+    applicationType
     applicationStatus
-    createdDate
-    updatedDate
-    lendio {
-      status
-      failReasons
-      url
+    applicationSubmittedDate
+    created {
+      date
+    }
+    updated {
+      date
     }
     prequalDetails {
       businessGeneralInfo {
@@ -134,15 +135,17 @@ query _getBusinessApplicationById ($id: String!) {
   businessApplication(
     applicationId: $id
   ){
+    userId
     applicationId
+    applicationType
     applicationStatus
-    lendio {
-      status
-      failReasons
-      url
+    applicationStage
+    created {
+      date
     }
-    createdDate
-    updatedDate
+    updated {
+      date
+    }
     prequalDetails {
       businessModel
       businessGoal
@@ -163,6 +166,14 @@ query _getBusinessApplicationById ($id: String!) {
         }
       }
       industryTypes
+      investmentType
+      realEstateTypes
+      ownOrOperateProperty
+      target { 
+        investorIRR
+        annualInvestorRoi
+        holdTimeInYears
+       }
       existingBusinessInfo {
         ageYears
         ageMonths

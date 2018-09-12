@@ -302,10 +302,10 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
   industryTypes: {
     value: [],
     values: [
-      { label: 'CRE', icon: 'ns-real-estate', value: 'CRE' },
-      { label: 'Restaurant & Bar', icon: 'ns-food-light', value: 'RESTAURANT_BAR' },
+      { label: 'CRE', icon: 'ns-real-estate', value: 'COMMERCIAL_REAL_ESTATE' },
+      { label: 'Restaurant & Bar', icon: 'ns-food-light', value: 'RESTAURANT_AND_BAR' },
       { label: 'Fitness', icon: 'ns-dumbbells', value: 'FITNESS' },
-      { label: 'Health & Wellness', icon: 'ns-beauty-spa', value: 'HEALTH_WELLNESS' },
+      { label: 'Health & Wellness', icon: 'ns-beauty-spa', value: 'HEALTH_AND_WELLNESS' },
       { label: 'Hospitality', icon: 'ns-first-aid', value: 'HOSPITALITY' },
       { label: 'Other', value: 'OTHER' },
     ],
@@ -326,12 +326,11 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
     customErrors: { required: 'required' },
   },
   realEstateType: {
-    value: '',
+    value: [],
     values: [
       { label: 'Residential', value: 'RESIDENTIAL' },
       { label: 'Office', value: 'OFFICE' },
       { label: 'Retail', value: 'RETAIL' },
-      { label: 'Medical', value: 'MEDICAL' },
       { label: 'Industrial', value: 'INDUSTRIAL' },
       { label: 'Hospitality', value: 'HOSPITALITY' },
       { label: 'Land', value: 'LAND' },
@@ -355,7 +354,7 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
     rule: 'required',
     customErrors: { required: 'required' },
   },
-  ownProperty: {
+  ownOrOperateProperty: {
     value: '',
     values: [
       { label: 'Yes', value: true },
@@ -364,13 +363,13 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
     error: undefined,
     rule: 'required',
   },
-  targetedInvestorIrr: {
+  investorIRR: {
     value: '', maxLength: 16, label: 'Targeted Investor IRR (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required|investmentTypeCheck', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
   },
-  targetedAnnualInvestor: {
+  annualInvestorRoi: {
     value: '', maxLength: 16, label: 'Targeted Annual Investor ROI Upon Stabilization (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
   },
-  targetedHoldTime: {
+  holdTimeInYears: {
     value: '', maxLength: 16, label: 'Targeted Hold Time (years)', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
   },
   legalConfirmation: {
