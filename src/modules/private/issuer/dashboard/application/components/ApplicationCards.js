@@ -58,29 +58,11 @@ export default class ApplicationCards extends Component {
                   </dl>
                   {application.applicationStatus ===
                   BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
-                    <Button inverted color="green" as={Link} to={`business-application/business/${application.applicationId}/pre-qualification`}>Continue application</Button>
+                    <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>Continue application</Button>
                   }
                   {application.applicationStatus ===
                   BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED &&
-                    <Button inverted color="green" as={Link} to={`business-application/business/${application.applicationId}/pre-qualification`}>View application</Button>
-                  }
-                  {application.applicationStatus ===
-                  BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
-                  && application.lendio && application.lendio.status ===
-                  BUSINESS_APPLICATION_STATUS.LENDIO_PRE_QUALIFICATION_SUCCESSFUL &&
-                    <Aux>
-                      <Button inverted color="green" as={Link} to={`business-application/business/${application.applicationId}/pre-qualification`}>View application</Button>
-                      <Button inverted color="green" as={Link} to={`business-application/business/${application.applicationId}/lendio`}>View Lendio Application</Button>
-                    </Aux>
-                  }
-                  {application.applicationStatus ===
-                  BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED
-                  && application.lendio && application.lendio.status ===
-                  BUSINESS_APPLICATION_STATUS.LENDIO_SUCCESS &&
-                  <Aux>
-                    <Button inverted color="green" as={Link} to={`business-application/business/${application.applicationId}/pre-qualification`}>View application</Button>
-                    <Button inverted color="green" onClick={() => window.open(`${application.lendio.url}`, '_blank')} target="_blank">View Lendio Application</Button>
-                  </Aux>
+                    <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
                   }
                 </Card.Content>
               </Card>

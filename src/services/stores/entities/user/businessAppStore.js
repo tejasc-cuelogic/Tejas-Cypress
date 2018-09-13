@@ -244,7 +244,7 @@ export class BusinessAppStore {
           });
         }
       } else {
-        data.realEstateType.forEach((ele) => {
+        data.realEstateTypes.forEach((ele) => {
           this.BUSINESS_APP_FRM.fields.realEstateType.value.push(ele);
         });
         ['investmentType', 'ownOrOperateProperty'].forEach((ele) => {
@@ -308,7 +308,7 @@ export class BusinessAppStore {
         data.financialStatements.fiveYearProjection.length) {
         this.setFileObjectToForm(data.financialStatements.fiveYearProjection, 'BUSINESS_PERF_FRM', 'fiveYearProjection');
       }
-      if (this.getBusinessTypeCondtion) {
+      if ((this.currentApplicationType === 'business' && this.getBusinessTypeCondtion) || (this.currentApplicationType !== 'business' && this.getOwnPropertyCondtion)) {
         ['priorToThreeYear', 'ytd'].forEach((field) => {
           if (data.financialStatements[field] && data.financialStatements[field].length) {
             this.setFileObjectToForm(data.financialStatements[field], 'BUSINESS_PERF_FRM', field);
@@ -337,7 +337,7 @@ export class BusinessAppStore {
           });
         }
       }
-    } else {
+    } else if (this.currentApplicationType === 'business') {
       ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
         const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
         this.BUSINESS_PERF_FRM.fields[field[key]].value =
@@ -354,6 +354,10 @@ export class BusinessAppStore {
           this.BUSINESS_PERF_FRM.fields[ele].rule = '';
         });
       }
+    } else {
+      ['priorToThreeYear', 'ytd'].forEach((ele) => {
+        this.BUSINESS_PERF_FRM.fields[ele].rule = '';
+      });
     }
     Validator.validateForm(this.BUSINESS_PERF_FRM);
   }
@@ -384,10 +388,14 @@ export class BusinessAppStore {
           }
         });
         this.checkValidationForTaxReturn();
-      } else if (this.currentApplicationType === 'commercial-real-estate') {
-        console.log('sdf');
+      } else {
+        ['dilligenceDocuments', 'legalDocuments'].forEach((field) => {
+          if (data[field] && data[field].length) {
+            this.setFileObjectToForm(data[field], 'BUSINESS_DOC_FRM', field);
+          }
+        });
       }
-    } else if (!this.getBusinessTypeCondtion) {
+    } else if (this.currentApplicationType === 'business' && !this.getBusinessTypeCondtion) {
       ['bankStatements', 'businessTaxReturn'].forEach((ele) => {
         this.BUSINESS_DOC_FRM.fields[ele].rule = '';
       });
@@ -478,6 +486,10 @@ export class BusinessAppStore {
       && this.BUSINESS_APP_FRM.fields.businessGoal.value !== BUSINESS_GOAL.BRAND_NEW);
   }
 
+  @computed get getOwnPropertyCondtion() {
+    return (this.currentApplicationType !== 'business' && this.BUSINESS_APP_FRM.fields.ownOrOperateProperty.value);
+  }
+
   @computed get getFranchiseCondition() {
     return (this.currentApplicationType === 'business' && this.BUSINESS_APP_FRM.fields.businessGoal.value &&
       this.BUSINESS_APP_FRM.fields.businessGoal.value === BUSINESS_GOAL.FRANCHISE);
@@ -545,7 +557,7 @@ export class BusinessAppStore {
 
   @computed get getFormatedPerformanceData() {
     const data = toJS(this.BUSINESS_PERF_FRM.fields);
-    return {
+    let inputData = {
       financialStatements: {
         priorToThreeYear: this.getFilesArray(
           data.priorToThreeYear.value,
@@ -557,49 +569,70 @@ export class BusinessAppStore {
           this.BUSINESS_PERF_FRM.fields.fiveYearProjection,
         ),
       },
-      performance: {
-        nextYearSnapshot: {
-          grossSales: this.getValidDataForInt(data.nyGrossSales),
-          cogSold: this.getValidDataForInt(data.nyCogs),
-          operatingExpenses: this.getValidDataForInt(data.nyOperatingExpenses),
-          netIncome: this.getValidDataForInt(data.nyNetIncome),
-        },
-        pastYearSnapshot: {
-          grossSales: this.getValidDataForInt(data.pyGrossSales),
-          cogSold: this.getValidDataForInt(data.pyCogs),
-          operatingExpenses: this.getValidDataForInt(data.pyOperatingExpenses),
-          netIncome: this.getValidDataForInt(data.pyNetIncome),
-        },
-      },
     };
+    if (this.currentApplicationType === 'business') {
+      inputData = {
+        ...inputData,
+        performance: {
+          nextYearSnapshot: {
+            grossSales: this.getValidDataForInt(data.nyGrossSales),
+            cogSold: this.getValidDataForInt(data.nyCogs),
+            operatingExpenses: this.getValidDataForInt(data.nyOperatingExpenses),
+            netIncome: this.getValidDataForInt(data.nyNetIncome),
+          },
+          pastYearSnapshot: {
+            grossSales: this.getValidDataForInt(data.pyGrossSales),
+            cogSold: this.getValidDataForInt(data.pyCogs),
+            operatingExpenses: this.getValidDataForInt(data.pyOperatingExpenses),
+            netIncome: this.getValidDataForInt(data.pyNetIncome),
+          },
+        },
+      };
+    }
+    return inputData;
   }
 
   @computed get getFormatedDocumentationData() {
     const data = toJS(this.BUSINESS_DOC_FRM.fields);
-    return {
-      bankStatements: this.getFilesArray(
-        data.bankStatements.value,
-        this.BUSINESS_DOC_FRM.fields.bankStatements,
-      ),
-      leaseAgreementsOrLOIs: this.getFilesArray(
-        data.leaseAgreementsOrLOIs.value,
-        this.BUSINESS_DOC_FRM.fields.leaseAgreementsOrLOIs,
-      ),
-      personalTaxReturns: this.getFilesArray(
-        data.personalTaxReturn.value,
-        this.BUSINESS_DOC_FRM.fields.personalTaxReturn,
-      ),
-      businessTaxReturns: this.getFilesArray(
-        data.businessTaxReturn.value,
-        this.BUSINESS_DOC_FRM.fields.businessTaxReturn,
-      ),
-      personalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true' ? this.getFilesArray(
-        data.personalGuaranteeForm.value,
-        this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
-      ) : [],
-      blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value !== '' ? this.BUSINESS_DOC_FRM.fields.blanketLien.value : false,
-      providePersonalGurantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
-    };
+    let inputData;
+    if (this.currentApplicationType === 'business') {
+      inputData = {
+        bankStatements: this.getFilesArray(
+          data.bankStatements.value,
+          this.BUSINESS_DOC_FRM.fields.bankStatements,
+        ),
+        leaseAgreementsOrLOIs: this.getFilesArray(
+          data.leaseAgreementsOrLOIs.value,
+          this.BUSINESS_DOC_FRM.fields.leaseAgreementsOrLOIs,
+        ),
+        personalTaxReturns: this.getFilesArray(
+          data.personalTaxReturn.value,
+          this.BUSINESS_DOC_FRM.fields.personalTaxReturn,
+        ),
+        businessTaxReturns: this.getFilesArray(
+          data.businessTaxReturn.value,
+          this.BUSINESS_DOC_FRM.fields.businessTaxReturn,
+        ),
+        personalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true' ? this.getFilesArray(
+          data.personalGuaranteeForm.value,
+          this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
+        ) : [],
+        blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value !== '' ? this.BUSINESS_DOC_FRM.fields.blanketLien.value : false,
+        providePersonalGurantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
+      };
+    } else {
+      inputData = {
+        dilligenceDocuments: this.getFilesArray(
+          data.dilligenceDocuments.value,
+          this.BUSINESS_DOC_FRM.fields.dilligenceDocuments,
+        ),
+        legalDocuments: this.getFilesArray(
+          data.legalDocuments.value,
+          this.BUSINESS_DOC_FRM.fields.legalDocuments,
+        ),
+      };
+    }
+    return inputData;
   }
 
   @computed get getFormatedPreQualificationData() {
@@ -895,9 +928,14 @@ export class BusinessAppStore {
       applicationId: this.currentApplicationId,
       applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE',
       isPartialData: isPartialDataFlag,
-      businessGoal: this.BUSINESS_APP_FRM.fields.businessGoal.value,
       applicationStep: stepName,
     };
+    if (this.currentApplicationType === 'business') {
+      variableData = {
+        ...variableData,
+        businessGoal: this.BUSINESS_APP_FRM.fields.businessGoal.value,
+      };
+    }
     if (stepName === 'BUSINESS_DETAILS') {
       variableData = {
         ...variableData,
@@ -1002,7 +1040,7 @@ export class BusinessAppStore {
             this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
             this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
             this.setFormFileArray(formName, fieldName, 'error', undefined, index);
-            if (fieldName === 'personalTaxReturn' || fieldName === 'businessTaxReturn') {
+            if (this.currentApplicationType === 'business' && (fieldName === 'personalTaxReturn' || fieldName === 'businessTaxReturn')) {
               this.checkValidationForTaxReturn();
             }
           }).catch((error) => {

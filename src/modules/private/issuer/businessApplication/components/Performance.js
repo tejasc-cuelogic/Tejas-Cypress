@@ -15,11 +15,11 @@ export default class Performance extends Component {
   render() {
     const {
       BUSINESS_PERF_FRM, formReadOnlyMode, currentApplicationType,
-      businessPerfMaskingChange, getBusinessTypeCondtion,
+      businessPerfMaskingChange, getBusinessTypeCondtion, getOwnPropertyCondtion,
       businessAppUploadFiles, businessAppRemoveFiles,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_PERF_FRM;
-    const statmentConst = getBusinessTypeCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
+    const statmentConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
     return (
       <Grid container>
         <Grid.Column>
