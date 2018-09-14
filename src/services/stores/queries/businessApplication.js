@@ -365,11 +365,12 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
     applicationId
     applicationStatus
     applicationType
+    signupCode
+    applicationStage
+    rating
     primaryPOC {
       firstName
       lastName
-      email
-      phone
       email
     }
     created {
@@ -398,6 +399,14 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
         }
       }
       industryTypes
+      investmentType
+      realEstateTypes
+      ownOrOperateProperty
+      target { 
+        investorIRR
+        annualInvestorRoi
+        holdTimeInYears
+      }
       existingBusinessInfo {
         ageYears
         ageMonths
@@ -435,6 +444,7 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
       planDocs {
         fileId
         fileName
+        fileHandle
       }
       debts {
         amount
@@ -461,14 +471,17 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
         priorToThreeYear {
           fileId
           fileName
+          fileHandle
         }
         ytd {
           fileId
           fileName
+          fileHandle
         }
         fiveYearProjection{
           fileId
           fileName
+          fileHandle
         }
       }
       performance {
@@ -492,24 +505,29 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
       bankStatements {
         fileId
         fileName
+        fileHandle
       }
       leaseAgreementsOrLOIs {
         fileId
         fileName
+        fileHandle
       }
       personalTaxReturns {
         fileId
         fileName
+        fileHandle
       }
       businessTaxReturns {
         fileId
         fileName
+        fileHandle
       }
       blanketLien
       providePersonalGurantee
       personalGuarantee {
         fileId
         fileName
+        fileHandle
       }
       stepStatus
       submittedDate

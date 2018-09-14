@@ -19,6 +19,7 @@ export default class PreQualRealEstate extends Component {
       businessAppEleMaskChange, preQualFormDisabled, getInvestmentTypeTooltip,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_APP_FRM;
+    const { hideFields } = this.props;
     return (
       <Aux>
         <GeneralInformation
@@ -38,7 +39,7 @@ export default class PreQualRealEstate extends Component {
             containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
-        <FormElementWrap header="Select Investment Type" subHeader="Select your Investment Type.">
+        <FormElementWrap header="Select Investment Type" subHeader={!hideFields ? 'Select your Investment Type.' : ''}>
           <FormRadioGroup
             containerclassname="button-radio"
             disabled={preQualFormDisabled}
@@ -52,7 +53,7 @@ export default class PreQualRealEstate extends Component {
             {getInvestmentTypeTooltip}
           </p>}
         </FormElementWrap>
-        <FormElementWrap header="Select Real Estate Type" subHeader="Select all the Real Estate types that apply.">
+        <FormElementWrap header="Select Real Estate Type" subHeader={!hideFields ? 'Select all the Real Estate types that apply.' : ''}>
           <FormCheckbox
             containerclassname="button-checkbox"
             disabled={preQualFormDisabled}
@@ -74,7 +75,7 @@ export default class PreQualRealEstate extends Component {
             </Grid.Column>
           </Grid>
         </FormElementWrap>
-        <FormElementWrap header="What will the funds be used for?" subHeader="Please select all that apply.">
+        <FormElementWrap header="What will the funds be used for?" subHeader={!hideFields ? 'Please select all that apply.' : ''}>
           <FormCheckbox
             containerclassname="button-checkbox"
             disabled={preQualFormDisabled}
@@ -126,6 +127,7 @@ export default class PreQualRealEstate extends Component {
           </Grid>
         </FormElementWrap>
         <EntityAndLegal
+          hideFields
           fields={fields}
           preQualFormDisabled={preQualFormDisabled}
           businessAppEleChange={businessAppEleChange}

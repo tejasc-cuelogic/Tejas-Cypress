@@ -58,7 +58,8 @@ export default class PreQualification extends Component {
       BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC,
       businessAppEleChange, isPrequalQulify, currentApplicationType,
     } = this.props.businessAppStore;
-    const { params } = this.props.match;
+    const { hideFields, match } = this.props;
+    const { params } = match;
     if (params.applicationType !== 'commercial-real-estate' && currentApplicationType !== 'commercial-real-estate' && params.applicationType !== 'business' && currentApplicationType !== 'business') {
       return <NotFound />;
     }
@@ -66,17 +67,21 @@ export default class PreQualification extends Component {
       <Grid container>
         <Grid.Column>
           <Form onSubmit={this.prequalBasicSubmit} className="issuer-signup">
-            <Icon className="ns-paper-plane" size="massive" color="green" />
-            <FormElementWrap
-              as="h1"
-              header="Pre-Qualification Application Process"
-              subHeader={
-                <Aux>
-                  Welcome to NextSeed! Run through this quick form to get pre-qualified.
-                  <Link to={this.props.isPublic ? '/business-application/questions/need-help' : 'need-help'} className="link">Need help or have questions?</Link>
-                </Aux>
-              }
-            />
+            {!hideFields &&
+            <Aux>
+              <Icon className="ns-paper-plane" size="massive" color="green" />
+              <FormElementWrap
+                as="h1"
+                header="Pre-Qualification Application Process"
+                subHeader={
+                  <Aux>
+                    Welcome to NextSeed! Run through this quick form to get pre-qualified.
+                    <Link to={this.props.isPublic ? '/business-application/questions/need-help' : 'need-help'} className="link">Need help or have questions?</Link>
+                  </Aux>
+                }
+              />
+            </Aux>
+            }
             {this.props.isPublic &&
             <FormElementWrap header="First, please tell us a little about yourself!">
               <div className="field-wrap">
@@ -113,19 +118,23 @@ export default class PreQualification extends Component {
           {isPrequalQulify &&
           <Form onSubmit={this.submit} className="issuer-signup">
             {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate' ?
-              <PreQualRealEstate applicationType={params.applicationType} /> :
-              <PreQualBusiness applicationType={params.applicationType} />
+              <PreQualRealEstate hideFields applicationType={params.applicationType} /> :
+              <PreQualBusiness hideFields applicationType={params.applicationType} />
             }
-            <Divider hidden />
-            <Button
-              loading={this.props.uiStore.inProgress}
-              disabled={!BUSINESS_APP_FRM.meta.isValid}
-              size="large"
-              color="green"
-              className="very relaxed"
-            >
-              Submit
-            </Button>
+            {!hideFields &&
+            <Aux>
+              <Divider hidden />
+              <Button
+                loading={this.props.uiStore.inProgress}
+                disabled={!BUSINESS_APP_FRM.meta.isValid}
+                size="large"
+                color="green"
+                className="very relaxed"
+              >
+                Submit
+              </Button>
+            </Aux>
+            }
           </Form>
           }
         </Grid.Column>

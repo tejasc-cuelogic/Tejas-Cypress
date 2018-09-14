@@ -53,7 +53,9 @@ export default class ApplicationDetails extends Component {
     if (!businessApplicationDetailsAdmin) {
       return <EmptyDataSet />;
     }
-    const { applicationStatus, prequalDetails, primaryPOC } = businessApplicationDetailsAdmin;
+    const {
+      applicationStatus, prequalDetails, primaryPOC, signupCode, rating,
+    } = businessApplicationDetailsAdmin;
     const appStepStatus = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
@@ -63,8 +65,10 @@ export default class ApplicationDetails extends Component {
             <span className="title-meta">Status: <b>{appStepStatus}</b></span>
             <Label size="small" color="green">Reviewed</Label>
             <span className="title-meta">Rating</span>
-            <Rating size="huge" disabled defaultRating={3} maxRating={5} />
+            <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
+            {applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
             <Button secondary compact floated="right" content="Promote" />
+            }
           </Header>
           <Grid columns="equal">
             <Grid.Row>
@@ -85,7 +89,7 @@ export default class ApplicationDetails extends Component {
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Sign-up Code</Header.Subheader>
-                          joedoe
+                          {signupCode && signupCode !== '' ? signupCode : '-' }
                         </Header>
                       </Grid.Column>
                     </Grid>
@@ -112,7 +116,7 @@ export default class ApplicationDetails extends Component {
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Phone</Header.Subheader>
-                          {primaryPOC.phone ? primaryPOC.phone : '-'}
+                          {prequalDetails.businessGeneralInfo.contactDetails && prequalDetails.businessGeneralInfo.contactDetails.phone ? prequalDetails.businessGeneralInfo.contactDetails.phone.number : '-'}
                         </Header>
                       </Grid.Column>
                     </Grid>

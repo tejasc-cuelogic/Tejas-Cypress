@@ -157,6 +157,7 @@ export class BusinessAppStore {
       variables: payLoad,
       fetchPolicy: 'network-only',
       onFetch: (data) => {
+        this.setFieldvalue('currentApplicationType', data.businessApplicationsDetailsAdmin.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
         this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
         uiStore.setAppLoader(false);
         resolve();
@@ -190,8 +191,12 @@ export class BusinessAppStore {
   @action
   setBusinessApplicationData = (isPartialApp, outputData = null) => {
     this.formReset();
+    if (outputData) {
+      this.setFieldvalue('formReadOnlyMode', true);
+      this.setFieldvalue('isPrequalQulify', true);
+    }
     this.step = 'performace';
-    const data = outputData || !isPartialApp ? this.fetchBusinessApplicationsDataById :
+    const data = outputData ? outputData : !isPartialApp ? this.fetchBusinessApplicationsDataById :
       this.fetchPrequalBusinessApplicationsDataById;
     if (data) {
       if (!isPartialApp) {
