@@ -68,12 +68,14 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
+            accountId
             linkedBank {
               bankName
               plaidAccountId
               plaidItemId
               accountNumber
               routingNumber
+              plaidAccessToken
             }
           }
         }

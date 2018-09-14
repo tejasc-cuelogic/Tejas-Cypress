@@ -9,7 +9,7 @@ import {
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { uiStore, userStore, bankAccountStore, userDetailsStore } from '../../index';
-import { createAccount, updateAccount } from '../../queries/account';
+import { createIndividual, updateAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -249,12 +249,12 @@ class IraAccountStore {
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
     uiStore.setProgress();
-    let mutation = createAccount;
+    let mutation = createIndividual;
     const variables = {
       userId: userStore.currentUser.sub,
       accountAttributes,
       status: formStatus,
-      accountType: 'ira',
+      accountType: 'IRA',
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {

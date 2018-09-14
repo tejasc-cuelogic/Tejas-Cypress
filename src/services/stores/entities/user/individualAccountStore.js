@@ -26,10 +26,10 @@ class IndividualAccountStore {
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'individual' });
+      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
       if (accountDetails) {
         mutation = updateAccount;
-        variables.accountId = accountDetails.accountId;
+        variables.accountId = accountDetails.details.accountId;
         actionPerformed = 'updated';
       }
     }
