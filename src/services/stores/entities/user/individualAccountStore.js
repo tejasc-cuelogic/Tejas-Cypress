@@ -3,7 +3,7 @@ import { isEmpty, find } from 'lodash';
 import { bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { createAccount, updateAccount } from '../../queries/account';
+import { createIndividual, updateAccount } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
@@ -17,12 +17,12 @@ class IndividualAccountStore {
 
   createAccount = (currentStep, formStatus = 'draft') => {
     uiStore.setProgress();
-    let mutation = createAccount;
+    let mutation = createIndividual;
     const variables = {
       userId: userStore.currentUser.sub,
       accountAttributes: bankAccountStore.accountAttributes,
       status: formStatus,
-      accountType: 'individual',
+      accountType: 'INDIVIDUAL',
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
@@ -71,14 +71,14 @@ class IndividualAccountStore {
   @action
   populateData = (userData) => {
     if (!isEmpty(userData)) {
-      const account = find(userData.accounts, { accountType: 'individual' });
+      const account = find(userData.roles, { name: 'individual' });
       if (account) {
-        if (account.accountDetails.plaidItemId) {
-          const plaidAccDetails = account.accountDetails;
+        if (account.details.linkedBank.plaidItemId) {
+          const plaidAccDetails = account.details.linkedBank;
           bankAccountStore.setPlaidAccDetails(plaidAccDetails);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
-            bankAccountStore.formLinkBankManually.fields[f].value = account.accountDetails[f];
+            bankAccountStore.formLinkBankManually.fields[f].value = account.details.linkedBank[f];
             return bankAccountStore.formLinkBankManually.fields[f];
           });
           bankAccountStore.linkBankFormChange();

@@ -83,17 +83,23 @@ export class BankAccountStore {
         routingNumber,
       } = this.plaidAccDetails;
       if (account_id && public_token) {
-        plaidBankDetails.plaidPublicToken = public_token;
-        plaidBankDetails.plaidAccountId = account_id;
+        plaidBankDetails.linkedBank = {
+          plaidPublicToken: public_token,
+          plaidAccountId: account_id,
+        };
       } else {
-        plaidBankDetails.accountNumber = accountNumber;
-        plaidBankDetails.routingNumber = routingNumber;
+        plaidBankDetails.linkedBank = {
+          accountNumber,
+          routingNumber,
+        };
       }
       accountAttributes = { ...plaidBankDetails };
     } else {
       const { accountNumber, routingNumber } = this.formLinkBankManually.fields;
-      accountAttributes.accountNumber = accountNumber.value;
-      accountAttributes.routingNumber = routingNumber.value;
+      plaidBankDetails.linkedBank = {
+        accountNumber: accountNumber.value,
+        routingNumber: routingNumber.value,
+      };
     }
     return accountAttributes;
   }

@@ -66,6 +66,17 @@ export const userDetailsQuery = gql`
         name
         scope
         status
+        details {
+          ... on Investor {
+            linkedBank {
+              bankName
+              plaidAccountId
+              plaidItemId
+              accountNumber
+              routingNumber
+            }
+          }
+        }
       }
       locked {
         lock

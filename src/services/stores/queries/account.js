@@ -80,3 +80,12 @@ query checkEntityTaxIdCollision($taxId: String!) {
     alreadyExists
   }
 }`;
+
+export const createIndividual = gql`
+  mutation createIndividiaul($userId: String!, $accountAttributes: AccountInputType!, $status: AccountCreationStatusEnum!, $accountType: InvestorAccountTypeEnum!){
+    createInvestorAccount(userId: $userId, accountAttributes: $accountAttributes, status: $status, type: $accountType){
+      userId
+      accountId
+      type
+    }
+  }`;
