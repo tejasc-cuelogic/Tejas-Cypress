@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link, Route, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
-import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared/index';
 import { BUSINESS_APP_USER_STATUS, BUSINESS_APPLICATION_STATUS } from '../../../../../../services/constants/businessApplication';
 import ApplicationTypeModal from './ApplicationTypeModal';
+import DateTimeFormat from '../../../../../../theme/shared/src/DateTimeFormat';
 @inject('businessAppStore')
 @withRouter
 @observer
@@ -48,13 +48,13 @@ export default class ApplicationCards extends Component {
                     <dt>Application status</dt>
                     <dd>{BUSINESS_APP_USER_STATUS[application.applicationStatus].status}</dd>
                     <dt>Started</dt>
-                    <dd>{application.created ? moment(application.created.date).format('MM/DD/YYYY') : '--'}</dd>
+                    <dd>{application.created ? <DateTimeFormat datetime={application.created.date} /> : '--'}</dd>
                     <dt>{application.applicationStatus ===
                       BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ?
                       'Submitted' : 'Last updated'
                     }
                     </dt>
-                    <dd>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '--'}</dd>
+                    <dd>{application.updated ? <DateTimeFormat datetime={application.updated.date} /> : '--'}</dd>
                   </dl>
                   {application.applicationStatus ===
                   BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&

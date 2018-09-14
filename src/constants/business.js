@@ -1635,3 +1635,7 @@ export const LENDING_PARTNER_LENDIO = {
     },
   ],
 };
+
+export const TARGETED_INVESTOR_IRR = {
+  OPPORTUNISTIC: 15, VALUE_ADD: 11, CORE_PLUS: 7, CORE: 5,
+};

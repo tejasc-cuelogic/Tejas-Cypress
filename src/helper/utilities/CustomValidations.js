@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import Validator from 'validatorjs';
 import { sumBy, forEach } from 'lodash';
+import { TARGETED_INVESTOR_IRR } from '../../constants/business';
 
 class CustomValidations extends Component {
   loadCustomValidations = (form) => {
@@ -10,19 +11,10 @@ class CustomValidations extends Component {
     Validator.register('optional', () => true);
 
     /* Investment Type Check for target investor irr field validation register */
-    Validator.register('investmentTypeCheck', (value) => {
-      let valReturn;
-      if (currentForm.fields.investmentType.value === 'CORE') {
-        valReturn = value >= 5;
-      } else if (currentForm.fields.investmentType.value === 'CORE_PLUS') {
-        valReturn = value >= 7;
-      } else if (currentForm.fields.investmentType.value === 'VALUE_ADD') {
-        valReturn = value >= 11;
-      } else if (currentForm.fields.investmentType.value === 'OPPORTUNISTIC') {
-        valReturn = value >= 15;
-      }
-      return valReturn;
-    }, ':attribute percentages must be greater than entered value.');
+    Validator.register(
+      'investmentTypeCheck', value => value >= TARGETED_INVESTOR_IRR[currentForm.fields.investmentType.value]
+      , ':attribute percentages must be greater than entered value.',
+    );
 
     /* Beneficiary share percentage validation register */
     Validator.register('sharePercentage', (value, requirement) => {
