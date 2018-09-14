@@ -409,7 +409,7 @@ footer{
 		}
 		.campaign-about-wrapper {
 			padding: @30px;
-			background-color: @white;
+			// background-color: @white;
 			height: 100%;
 			.carousel {
 				width: 100%;

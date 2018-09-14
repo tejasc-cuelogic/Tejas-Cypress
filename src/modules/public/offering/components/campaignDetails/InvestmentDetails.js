@@ -50,7 +50,8 @@ class InvestmentDetails extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Total Payment Calculator</Header>
-                <Grid columns={4} divided doubling className="investment-grid" padded="horizontally">
+                <Grid columns={4} divided doubling className="investment-grid"
+                padded="horizontally">
                   <Grid.Column>
                     <Statistic className="basic">
                       <Statistic.Label>Interest Rate*</Statistic.Label>
@@ -66,9 +67,11 @@ class InvestmentDetails extends Component {
                   <Grid.Column>
                     <Statistic className="basic">
                       <Statistic.Label>principal</Statistic.Label>
-                      <Statistic.Value className="center-align highlight-text">$100</Statistic.Value>
+                      <Statistic.Value className="center-align highlight-text">
+                      $100</Statistic.Value>
                       <div className="slidecontainer">
-                        <input type="range" min="1" max="100" value="10" className="slider" id="myRange" />
+                        <input type="range" min="1" max="100" value="10" className="slider"
+                        id="myRange" />
                       </div>
                     </Statistic>
                   </Grid.Column>
