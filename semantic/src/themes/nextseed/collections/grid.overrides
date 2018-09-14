@@ -10,6 +10,11 @@
     }
 }
 .ui.grid{
+    &.bottom-aligned{
+        >.column:not(.row), >.row>.column{
+            align-self:flex-end !important;
+        }
+    }
     &.divided:not([class*="vertically divided"])>{
         .column:not(:last-child),
         .row>.column:not(:last-child){

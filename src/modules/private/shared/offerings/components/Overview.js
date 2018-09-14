@@ -24,9 +24,7 @@ export default class Overview extends Component {
       <Form>
         <div className="inner-content-spacer">
           <Route exact path={`${match.url}/add-new-contingency`} render={props => <AddNewContingency refLink={match.url} {...props} />} />
-          <Header as="h4">
-          Offering Details
-          </Header>
+          <Header as="h4">Offering Details</Header>
           <Form.Group widths={2}>
             {
               ['offeringUrl', 'offeringReferralCode'].map(field => (
