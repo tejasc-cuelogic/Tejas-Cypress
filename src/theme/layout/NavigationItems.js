@@ -6,7 +6,7 @@ import Aux from 'react-aux';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
-import { SubmitButton } from '../../modules/private/issuer/businessApplication/components/HeaderButtons';
+import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 @withRouter
 export class NavItems extends Component {
