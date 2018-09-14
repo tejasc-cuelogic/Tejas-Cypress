@@ -58,17 +58,12 @@ query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $order
       businessDocumentation {
         stepStatus
       }
-      userDetails {
+      primaryPOC {
+        userId
         firstName
         lastName
-        contactDetails {
-          phone {
-            number
-          }
-          email {
-            email
-          }
-        }
+        phone
+        email
       }
       created {
         date
