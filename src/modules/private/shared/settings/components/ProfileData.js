@@ -46,6 +46,7 @@ export default class ProfileData extends Component {
     const {
       ID_PROFILE_INFO,
       profileInfoChange,
+      profileInfoMaskedChange,
       setAddressFieldsForProfile,
     } = this.props.identityStore;
     if (isEmpty(this.props.userDetailsStore.userDetails) || !info) {
@@ -114,10 +115,11 @@ export default class ProfileData extends Component {
                   options={US_STATES}
                   changed={profileInfoChange}
                 />
-                <FormInput
+                <MaskedInput
                   name="zipCode"
                   fielddata={ID_PROFILE_INFO.fields.zipCode}
-                  changed={profileInfoChange}
+                  changed={profileInfoMaskedChange}
+                  zipCode
                 />
               </Form.Group>
               <Button inverted color="green" disabled={!ID_PROFILE_INFO.meta.isValid}>Update profile info</Button>

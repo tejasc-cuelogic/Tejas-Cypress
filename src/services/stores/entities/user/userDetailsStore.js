@@ -2,7 +2,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
-import { isEmpty, difference, find, findKey, filter } from 'lodash';
+import { isEmpty, difference, find, findKey, filter, isNull } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import {
   identityStore,
@@ -133,8 +133,8 @@ export class UserDetailsStore {
     const accTypes = [];
     if (this.userDetails) {
       details.idVerification = (this.userDetails.legalDetails &&
-        this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
-      ) ? this.userDetails.legalDetails.cipStatus.status : 'FAIL';
+        this.userDetails.legalDetails.status
+      ) ? this.userDetails.legalDetails.status : 'FAIL';
       details.accounts = mapValues(this.userDetails.accounts, (a) => {
         const data = { accountId: a.accountId, accountType: a.accountType, status: a.status };
         return data;
@@ -146,9 +146,9 @@ export class UserDetailsStore {
       details.inActiveAccounts = difference(validAccTypes, accTypes);
       details.partialAccounts = map(filter(details.accounts, a => a.status === 'PARTIAL'), 'accountType');
       details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
-      details.phoneVerification = (this.userDetails.contactDetails &&
-        this.userDetails.contactDetails.phone &&
-        this.userDetails.contactDetails.phone.verificationDate) ? 'DONE' : 'FAIL';
+      details.phoneVerification = (this.userDetails.phone &&
+        this.userDetails.phone.number &&
+        !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
       details.investorProfileCompleted =
       this.userDetails.investorProfileData === null ?
         false : this.userDetails.investorProfileData ?

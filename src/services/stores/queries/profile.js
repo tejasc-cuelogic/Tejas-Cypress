@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const verifyCIPUser = gql`
-  mutation verifyCIPUsers($userId: String! $user: userCIPInput) { 
-    verifyCIPIdentity(userId: $userId, user: $user) {
+mutation verifyCIPUsers($userId: String!, $user: UserCIPInput){
+    verifyCIPIdentity(userId: $userId, user: $user){
       ... on UserCIPSoftFail{
         softFailId: id
         key
@@ -11,7 +11,7 @@ export const verifyCIPUser = gql`
           key
           message
         }
-        questions {
+        questions{
           prompt
           type
           choices {
@@ -19,25 +19,13 @@ export const verifyCIPUser = gql`
           }
         }
       }
-      
-      ... on UserCIPHardFail{
-        hardFailId: id
-        key
-        message
-        qualifiers {
-          key
-          message
-        }
-      }
-      
-      ... on UserCIPPass {
+      ... on UserCIPPass{
         passId: id
         key
         message
         summary
       }
-
-      ... on UserCIPFail {
+      ... on UserCIPFail{
         key
         message
       }
@@ -104,14 +92,18 @@ export const checkUserPhoneVerificationCode = gql`
  }`;
 
 export const updateUserCIPInfo = gql`
-  mutation updateUserCIPInfo($userId: String! $user: userCIPInput! $phoneDetails: phoneInput! $cipStatus: CipStatusInput!) {
-    updateUserCIPInfo(userId: $userId user: $user phoneDetails: $phoneDetails cipStatus: $cipStatus) {
+mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!) {
+    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails) {
       id
-      email
-      firstName
-      lastName
-      lastLoginDate
-      accreditation
+      email {
+        address
+      } info{
+        firstName
+        lastName
+      } lastLoginDate
+      accreditation {
+        status
+      }
     }
   }`;
 
@@ -148,7 +140,9 @@ export const verifyAndUpdateEmail = gql`
       confirmationCode: $confirmationCode
     ){
       id
-      email
+      email {
+        address
+      }
     }
   }`;
 

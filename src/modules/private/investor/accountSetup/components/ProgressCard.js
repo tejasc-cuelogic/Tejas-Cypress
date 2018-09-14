@@ -27,7 +27,7 @@ const checkStatus = (signupStatus, key) => {
     if (signupStatus.investorProfileCompleted) {
       status = 1;
     } else {
-      status = 0;
+      status = 1;
     }
   }
   return status;
