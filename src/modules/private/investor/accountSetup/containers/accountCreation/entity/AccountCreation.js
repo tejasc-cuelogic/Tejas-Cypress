@@ -47,7 +47,7 @@ export default class AccountCreation extends React.Component {
       stepToBeRendered,
       createAccount,
     } = this.props.entityAccountStore;
-    const { plaidBankDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
     const steps =
     [
       {
@@ -99,7 +99,7 @@ export default class AccountCreation extends React.Component {
         name: 'Link bank',
         component: <Plaid />,
         isValid: '',
-        isDirty: !isEmpty(plaidBankDetails) ||
+        isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
         validate: validationActions.validateLinkBankForm,
         stepToBeRendered: 6,
