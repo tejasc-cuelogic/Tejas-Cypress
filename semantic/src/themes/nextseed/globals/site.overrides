@@ -30,8 +30,6 @@ section{
 	a {
 		color: @fullBlack;
 		font-weight: @bold;
-		margin-top: @40px;
-		display: block;
 	}
 }
 //	Helper Classes
@@ -81,6 +79,9 @@ h6{
 }
 .mb-30 {
 	margin-bottom: @30px !important;
+}
+.mb-40 {
+	margin-bottom: @40px !important;
 }
 .mb-50 {
 	margin-bottom: @50px !important;
