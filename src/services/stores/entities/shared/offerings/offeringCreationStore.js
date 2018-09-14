@@ -35,8 +35,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeData = (formName) => {
-    this[formName].fields.data.splice(this.removeIndex, 1);
+  removeData = (formName, subForm = 'data') => {
+    this[formName].fields[subForm].splice(this.removeIndex, 1);
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
     this.confirmModalName = null;
@@ -44,20 +44,21 @@ export class OfferingCreationStore {
   }
 
   @action
-  formChange = (e, result, form, subForm = '', index) => {
-    if (subForm) {
-      this[form] = Validator.onArrayFieldChange(
-        this[form],
-        Validator.pullValues(e, result),
-        subForm,
-        index,
-      );
-    } else {
-      this[form] = Validator.onChange(
-        this[form],
-        Validator.pullValues(e, result),
-      );
-    }
+  formChange = (e, result, form) => {
+    this[form] = Validator.onChange(
+      this[form],
+      Validator.pullValues(e, result),
+    );
+  }
+
+  @action
+  formArrayChange = (e, result, form, subForm = '', index) => {
+    this[form] = Validator.onArrayFieldChange(
+      this[form],
+      Validator.pullValues(e, result),
+      subForm,
+      index,
+    );
   }
 
   @action
@@ -69,19 +70,21 @@ export class OfferingCreationStore {
   }
 
   @action
-  maskChange = (values, form, field, subForm = '', index) => {
+  maskChange = (values, form, field) => {
     const fieldValue = field === 'terminationDate' ? values.formattedValue : values.floatValue;
-    if (subForm) {
-      this[form] = Validator.onArrayFieldChange(
-        this[form],
-        { name: field, value: values.floatValue }, subForm, index,
-      );
-    } else {
-      this[form] = Validator.onChange(
-        this[form],
-        { name: field, value: fieldValue },
-      );
-    }
+    this[form] = Validator.onChange(
+      this[form],
+      { name: field, value: fieldValue },
+    );
+  }
+
+  @action
+  maskArrayChange = (values, form, field, subForm = '', index) => {
+    const fieldValue = (field === 'offeringDeadline' || field === 'maturityDate') ? values.formattedValue : values.floatValue;
+    this[form] = Validator.onArrayFieldChange(
+      this[form],
+      { name: field, value: fieldValue }, subForm, index,
+    );
   }
 
   @action
@@ -131,26 +134,28 @@ export class OfferingCreationStore {
       LAUNCH_CONTITNGENCIES_FRM: CONTINGENCIES,
       CLOSING_CONTITNGENCIES_FRM: CONTINGENCIES,
       LEADERSHIP_FRM: LEADERSHIP,
+      GENERAL_FRM: GENERAL,
     };
     return metaDataMapping[metaData];
   }
 
   @action
-  addMore = (formName, addFieldValues = false) => {
+  addMore = (formName, arrayName = 'data', addFieldValues = false) => {
     this[formName] = {
       ...this[formName],
       fields: {
         ...this[formName].fields,
-        data: [
-          ...this[formName].fields.data,
-          this.getMetaData(formName).data[0],
-        ],
       },
       meta: {
         ...this[formName].meta,
         isValid: false,
       },
     };
+    const arrayData = [
+      ...this[formName].fields[arrayName],
+      this.getMetaData(formName)[arrayName][0],
+    ];
+    this[formName].fields[arrayName] = arrayData;
     if (addFieldValues) {
       const dataLength = this[formName].fields.data.length;
       this[formName].fields.data[dataLength - 1].name.value =

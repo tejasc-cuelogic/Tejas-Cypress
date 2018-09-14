@@ -13,7 +13,7 @@ export default class AddNewContingency extends React.Component {
   }
   handleSubmitForm = () => {
     const { addMore, contingencyFormSelected } = this.props.offeringCreationStore;
-    addMore(contingencyFormSelected, true);
+    addMore(contingencyFormSelected, undefined, true);
     this.props.history.push(this.props.refLink);
     Helper.toast('Contingency added successfully.', 'success');
   }

@@ -1,4 +1,5 @@
 import Validator from 'validatorjs';
+import React from 'react';
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
@@ -822,8 +823,6 @@ export const BUSINESS = {
   },
 };
 
-const exemptUrl = 'https://www.sec.gov/smallbusiness/exemptofferings';
-
 export const GENERAL = {
   websiteUrl: {
     label: 'Website URL',
@@ -848,7 +847,7 @@ export const GENERAL = {
     placeHolder: 'Month 20XX',
   },
   employmentIdentificationNumber: {
-    label: 'Offering Deadline',
+    label: 'Employment Identification Number',
     value: '',
     error: undefined,
     rule: 'numeric|required',
@@ -912,7 +911,7 @@ export const GENERAL = {
     placeHolder: 'Enter here',
   },
   bankAccountNumber: {
-    label: 'Bank Routing Number',
+    label: 'Bank Account Number',
     value: '',
     error: undefined,
     rule: 'numeric|required',
@@ -923,7 +922,6 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'required',
-    placeHolder: 'Enter here',
   },
   ifMinOfferingAmtReached: {
     label: 'If minimum offering amount is reached:',
@@ -944,7 +942,7 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'required',
-    placeHolder: 'Type your text here...',
+    placeHolder: 'The principal shareholders identified herein are holders of equity interests in the Issuer, distinct from the Securities offered to investors through the Offering. While holders of equity interests may have certain voting rights under the operating agreement of the Issuer, the Securities are debt securities and their terms are governed solely by the NPA and the accompanying notes. Please see Section VII – “Certain Legal Matters and Tax Considerations” – for more information. For the avoidance of doubt, the Member may not limit, dilute or qualify the Securities issued pursuant to this Offering.',
   },
   existingSecurities: [{
     classOfSecurity: {
@@ -998,7 +996,7 @@ export const GENERAL = {
       error: undefined,
       rule: 'string|required',
       placeHolder: 'Type your text here...',
-      tooltip: `See this link ${exemptUrl} for more information from the SEC`,
+      tooltip: (<span>See this link <a href="https://www.sec.gov/smallbusiness/exemptofferings" target="_blank" rel="noopener noreferrer">https://www.sec.gov/smallbusiness/exemptofferings</a> for more information from the SEC</span>),
     },
     securitiesOffered: {
       label: 'Securities Offered',
@@ -1011,7 +1009,7 @@ export const GENERAL = {
       label: 'Amount Sold',
       value: '',
       error: undefined,
-      rule: 'numeric|required',
+      rule: 'string|required',
       placeHolder: 'Type your text here...',
     },
     useOfProceeds: {
@@ -1030,12 +1028,26 @@ export const GENERAL = {
       rule: 'string|required',
       placeHolder: 'Type your text here...',
     },
-    amountOutstanding: {
+    amountOutStanding: {
       label: 'Amount Outstanding',
       value: '',
       error: undefined,
       rule: 'numeric|required',
       placeHolder: '$100,000',
+    },
+    interestRate: {
+      label: 'Interest Rate',
+      value: '',
+      error: undefined,
+      rule: 'numeric|required',
+      placeHolder: '10.0%',
+    },
+    maturityDate: {
+      label: 'Maturity Date',
+      value: '',
+      error: undefined,
+      rule: 'date|required',
+      placeHolder: 'Select date',
     },
     paymentSchedule: {
       label: 'Payment Schedule',
