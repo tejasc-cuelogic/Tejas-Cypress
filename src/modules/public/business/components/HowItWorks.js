@@ -35,7 +35,7 @@ const HowItWorks = () => (
           <Divider section />
         </Responsive>
         <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>
-          Get flexible financing that doesn’t<br />cost you everything.
+          Get flexible financing that doesn’t <Responsive minWidth={768} as="br" />cost you everything.
         </Header>
         <Grid relaxed="very" stackable columns={3} doubling>
           <Grid.Column className="info-grid">
@@ -178,6 +178,7 @@ const HowItWorks = () => (
               id={nsvideos.embed}
               placeholder={videoPoster}
               source="vimeo"
+              icon="ns-play"
             />
             <p className="caption-note mt-10">
               The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.

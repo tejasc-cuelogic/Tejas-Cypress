@@ -5,8 +5,11 @@ import { NavItems } from '../../../theme/layout/NavigationItems';
 
 export default class MobileDropDownNav extends React.Component {
   activeText = () => {
-    const { navItems, location } = this.props;
-    const active = navItems.find(() => matchPath(location.pathname, { path: '/business/funding-options/:to', exact: true }));
+    const { navItems, location, refMatch } = this.props;
+    const active = navItems.find((i) => {
+      const path = `${refMatch.url}/${i.to}`;
+      return matchPath(location.pathname, { path, exact: true });
+    });
     return active ? active.title : this.props.navItems[0].title;
   }
   render() {

@@ -60,20 +60,20 @@ section{
             }
         }
         &.account-type-banner {
-            background:url(../../assets/images/investors/account_types_mobile.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/investors/account_types_mobile.jpg) center center no-repeat / cover;
         }
         &.security-banner {
-            background:url(../../assets/images/investors/security_mobile.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/investors/security_mobile.jpg) center center no-repeat / cover;
         }
         &.track-banner {
-            background:url(../../assets/images/investors/laptop_mobile.png) top center no-repeat / contain;
+            background:url(../../assets/images/investors/laptop_mobile.png) center center no-repeat / contain;
             height: 160px;
         }
         &.process-banner {
-            background:url(../../assets/images/business/process_mobile.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/business/process_mobile.jpg) center center no-repeat / cover;
         }
         &.inclusive-banner {
-            background:url(../../assets/images/business/inclusive_mobile.jpg) top center no-repeat / cover;
+            background:url(../../assets/images/business/inclusive_mobile.jpg) center center no-repeat / cover;
         }
     }
 }

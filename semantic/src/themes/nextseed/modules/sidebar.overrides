@@ -20,12 +20,17 @@
 			height:~"calc(100vh - 34px)";
 		}
 		&.public-pusher {
-			margin-top: 58px;
-			height:~"calc(100vh - 58px)";
+			padding-top: 58px;
+			min-height:100vh;
+			height: auto;
 			background-color: transparent;
 		}
 		&.dimmed {
 			overflow: hidden;
+			height: 100vh;
+			&:after {
+				position: fixed !important;
+			}
 		}
 	}
 }
@@ -200,6 +205,8 @@
 			position:absolute;
 			top:12px;
 			right:10px;
+			font-size:@12px;
+			height:auto;
 		}
 		.user-picture{
 			text-align:left;
@@ -236,6 +243,9 @@
 			&:hover, &:active, &:focus{
 				color:@white;
 			}
+		}
+		&.public-sidebar {
+			padding-bottom: 0;
 		}
 	}
 	.ui.image.logo{
@@ -318,7 +328,7 @@
 		background-color:@thumbInvertedBackground;
 	}
 	.ns-close-light{
-		color:@white;
+		color:@neutral-middark;
 	}
 	.user-picture{
 		color:@white;

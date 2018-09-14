@@ -76,6 +76,7 @@ class Overview extends Component {
                         id={nsvideos.embed}
                         placeholder={videoPoster}
                         source="vimeo"
+                        icon="ns-play"
                       />
                     </Grid.Column>
                   </Grid.Row>
