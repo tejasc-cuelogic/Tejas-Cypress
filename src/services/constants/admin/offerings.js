@@ -1135,3 +1135,355 @@ export const GENERAL = {
   }],
 };
 
+export const RISK_FACTORS = {
+  isBusinessRisk: {
+    label: 'Business Risk',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'BUSINESS_RISK',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  businessRiskDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isFinancingRisks: {
+    label: 'Financing Risks',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'FINANCING_RISKS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  financingRisksDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isDevelopmentRisks: {
+    label: 'Development Risks',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'DEVELOPMENT_RISKS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  developmentRisksDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isReputationalRisk: {
+    label: 'Reputational Risk',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'REPUTATIONAL_RISK',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  reputationalRiskDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isCompetitionRisks: {
+    label: 'Competition Risks',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'COMPETITION_RISKS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  competitionRisksDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isMarketRisks: {
+    label: 'Market Risks',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'MARKET_RISKS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  marketRisksDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isNaturalRisks: {
+    label: 'Risks from Work Stoppages, Terrorism or Natural Disasters',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'NATURAL_RISKS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  naturalRisksDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isManagementRisks: {
+    label: 'Management Risks',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'MANAGEMENT_RISKS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  managementRisksDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isPersonnelRisks: {
+    label: 'Personnel Risks',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'PERSONNEL_RISKS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  personnelRisksDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isLaborSupplyRisks: {
+    label: 'Labor Supply Risks',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'LABOR_SUPPLY_RISKS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  laborSupplyRisksDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isPrivacyRisks: {
+    label: 'Privacy Risks',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'PRIVACY_RISKS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  privacyRisksDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+  isOtherRisks: {
+    label: 'Other Risks',
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'PRIVACY_RISKS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  otherRisksDesc: {
+    label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
+  },
+};
+
+export const ISSUER = {
+  issuerDiligence: {
+    label: 'Issuer Diligence',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  certificateOfFormation: {
+    label: 'Certificate of Formation',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  operatingAgreement: {
+    label: 'Operating Agreement',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  evidenceOfGoodStanding: {
+    label: 'Evidence of good standing',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  whoAreThesePeople: {
+    label: 'Who are executive officers, directors, control persons, promoters, beneficial owners of 20 percent or more of the issuer’s outstanding voting equity securities, calculated on the basis of voting power?',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  hasTheIssuer: {
+    label: '1. Has the issuer, its predecessors or any affiliated issuer been convicted of any felony or misdemeanor in the last 5 years: i) In connection with the purchase or sale of any security; ii) Involving the making of any false filing with the SEC; iii) Arising out of the conduct of the business of an underwriter, broker, dealer, municipal securities dealer, investment adviser, funding portal or paid solicitor of purchasers of securities',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  isTheIssuerSubjectTo: {
+    label: '2. Is the Issuer subject to any order, judgment or decree of any court of competent jurisdiction, within 5 years before the filing that restrains or enjoins such person from engaging or continuing to engage in any conduct or practice: i) In connection with the purchase or sale of any security; ii) Involving the making of any false filing with the SEC; iii) Arising out of the conduct of the business of an underwriter, broker, dealer, municipal securities dealer, investment adviser, funding portal or paid solicitor of purchasers of securities',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  isAnyCoveredPersonSubjectToAnOrderThree: {
+    label: '3. Is any covered person subject to a final order of a state securities commission (or an agency or officer of a state performing like functions); a state authority that supervises or examines banks, savings associations or credit unions, a state insurance commission (or an agency or officer of a state performing like functions); an appropriate federal banking agency; the U.S. Commodity Futures Trading Commission; or the National Credit Union Administration that: i) At the time of filing, bars the person from (A) Association with an entity regulated by such commission, authority, agency or officer (B) Engaging in the business of securities, insurance or banking; or (C) Engaging in savings association or credit union activities; or ii) Constitutes a final order based on a violation of any law or regulation that prohibits fraudulent, manipulative or deceptive conduct entered within ten years before such filing of the offering statement',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  isAnyCoveredPersonSubjectToAnOrderFour: {
+    label: '4. Is any covered person subject to an order of the Commission entered pursuant to section 15(b) or 15B(c) of the Exchange Act or section 203(e) or (f) of the Investment Advisers Act of 1940 that at the time of filing: i) Suspends or revokes such person`s registration as a broker, dealer, municipal securities dealer, investment adviser or funding portal; ii) Places limitations on the activities, functions or operations of such person; iii) Bars such person from being associated with any entity or from participating in the offering of any penny stock',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  isAnyCoveredPersonSubjectToOrderFive: {
+    label: '5. Is any covered person subject to any order of the Commission entered within 5 years before the filing that orders the person to cease and desist from committing or causing a violation or future violation of: i) any scienter-based anti-fraud provision of the federal securities laws or ii) Section 5 of the Securities Act',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  isAnyCoveredPersonSubjectToOrderSix: {
+    label: '6. Is any covered person suspended or expelled from membership in, or suspended or barred from association with a member of, a registered national securities exchange or a registered national or affiliated securities association for any act or omission to act constituting conduct inconsistent with just and equitable principles of trade',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  isAnyCoveredPersonSubjectToOrderSeven: {
+    label: '7. Has any covered person filed (as a registrant or user), or was named as an underwriter in, any registration statement or Reg A offering statement filed with the Commission that, within 5 years before this filing, was the subject of a refusal order, stop order, or order suspending the Reg A exemption, or is, at the time of such filing, the subject of an investigation or proceeding to determine whether a stop order or suspension order should be issued',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  isAnyCoveredPersonSubjectToOrderEight: {
+    label: '8. Is any covered person subject to a U.S.P.S. false representation order entered within 5 years before the filing of the information required by section 4A(b) of the Securities Act, or is, at the time of such filing, subject to a temporary restraining order or preliminary injunction with respect to conduct alleged by the U.S.P.S. to constitute a scheme or device for obtaining money or property through the mail by means of false representations',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  sanctionsListSearch: {
+    label: 'OFAC sanctions list search',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  pendingCivilLawsuits: {
+    label: 'Pending civil lawsuits',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  pendingLiens: {
+    label: 'Pending liens/bankruptcy judgments',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  generalOnlineReputationSearch: {
+    label: 'General online reputation search',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+};
