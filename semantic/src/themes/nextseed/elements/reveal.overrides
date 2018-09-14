@@ -68,7 +68,7 @@
                 white-space: normal;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                width: 90px;
+                width: 100%;
                 line-height: 18px;
             }
         }        

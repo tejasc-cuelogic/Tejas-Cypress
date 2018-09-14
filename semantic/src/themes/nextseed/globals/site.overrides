@@ -155,7 +155,7 @@ h6{
 	color:@tertiary-text !important;
 }
 .intro-text, .note{
-	color:@neutral-middark;
+	color:@neutral-middark !important;
 }
 .caption-note{
 	font-size:@13px;

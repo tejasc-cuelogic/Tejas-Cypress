@@ -138,7 +138,7 @@ class AboutCompany extends Component {
                   <Breadcrumb.Section as={Link} to={`${this.props.match.url}/business`}><b>Business Model</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
-                <Image className="business-modal" src={businessModel} />
+                <Image className="business-modal" src={businessModel} fluid />
               </Segment>
             </Grid.Column>
             <Grid.Column>

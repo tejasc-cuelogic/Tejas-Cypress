@@ -38,7 +38,7 @@ class InvestmentDetails extends Component {
             </Grid.Column>
             <Grid.Column widescreen={9} computer={8}>
               <Segment padded>
-                <Image src={businessModel} />
+                <Image src={businessModel} fluid />
               </Segment>
             </Grid.Column>
           </Grid.Row>
@@ -188,7 +188,9 @@ class InvestmentDetails extends Component {
                   <Grid.Row>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Payments<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Payments
+                          <Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" />
+                        </Statistic.Label>
                         <Statistic.Value>Monthly</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
