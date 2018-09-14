@@ -43,6 +43,11 @@ class IndividualAccountStore {
           if (result.data.createInvestorAccount || formStatus === 'submit') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
+          if (result.data.createInvestorAccount) {
+            bankAccountStore.setPlaidAccDetails(result.data.createInvestorAccount.accountDetails);
+          } else {
+            bankAccountStore.setPlaidAccDetails(result.data.updateInvestorAccount.accountDetails);
+          }
           if (formStatus === 'submit') {
             Helper.toast('Individual account created successfully.', 'success');
           } else if (currentStep) {

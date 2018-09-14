@@ -78,13 +78,6 @@
 		}
 	}
 }
-// .ui.modal{ 
-// 	.ui.statistic>.label {
-// 		color: @neutral-offdark;
-// 		text-transform: capitalize;
-// 		font-weight: @fontMedium;
-// 	}
-// }
 /** About Us **/
 .statistic-section {
 	.statistic {
@@ -181,7 +174,10 @@
         background:@primary-one;
         position:absolute;
         left:0;
-    }
+	}
+	&.pending:before{
+		background-color:@highlight-secondary;
+	}
     i.icon{
         margin:0 0 0 @7px;
     }

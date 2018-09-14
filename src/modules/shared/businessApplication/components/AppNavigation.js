@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
-import Helper from '../../../../../helper/utility';
+import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import Helper from '../../../../helper/utility';
 
 @inject('businessAppStore', 'uiStore')
 @withRouter
@@ -14,7 +14,7 @@ export default class AppNavigation extends Component {
   componentWillMount() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url).subNavigations;
-    const step = navItems.findIndex(i => i.to === (match.url.split('/')[4]));
+    const step = navItems.findIndex(i => i.to === (match.url.split('/')[5]));
     this.setState({ step, navItems });
   }
   actualSubmit = (where) => {

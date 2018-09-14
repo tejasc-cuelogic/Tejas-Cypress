@@ -1,38 +1,44 @@
 import React, { Component } from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
+import { Menu } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import { Logo, InlineLoader } from '../../../../../theme/shared';
-import Failure from '../components/Failure';
-import Success from '../components/Success';
-import Application from '../components/lendio/Application';
-import ConfirmModal from '../components/confirmModal';
-import LendioSuccess from '../components/lendio/LendioSuccess';
-import { HeaderButtons } from '../components/HeaderButtons';
+import Failure from '../../../../shared/businessApplication/components/Failure';
+import Success from '../../../../shared/businessApplication/components/Success';
+import Application from '../../../../shared/businessApplication/components/lendio/Application';
+import ConfirmModal from '../../../../shared/businessApplication/components/confirmModal';
+import NeedHelpModal from '../../../../shared/businessApplication/components/NeedHelpModal';
+import LendioSuccess from '../../../../shared/businessApplication/components/lendio/LendioSuccess';
+import { HeaderButtons } from '../../../../shared/businessApplication/components/HeaderButtons';
 
 const getModule = component => Loadable({
-  loader: () => import(`../components/${component}`),
+  loader: () => import(`../../../../shared/businessApplication/components//${component}`),
   loading() {
     return <InlineLoader />;
   },
 });
 
 @inject('businessAppStore', 'uiStore', 'navStore')
+@withRouter
 @observer
 export default class BusinessApplication extends Component {
   componentWillMount() {
     const { match } = this.props;
     const { pathname } = this.props.location;
     const {
-      isFetchedData, fetchApplicationDataById, setFieldvalue, formReset,
+      isFetchedData, fetchApplicationDataById, setFieldvalue, formReset, setPrequalBasicDetails,
     } = this.props.businessAppStore;
     setFieldvalue('currentApplicationId', match.params.applicationId);
+    setFieldvalue('currentApplicationType', match.params.applicationType);
     if (match.params.applicationId !== 'new' && isFetchedData !== match.params.applicationId) {
+      formReset();
       setFieldvalue('isFetchedData', match.params.applicationId);
       fetchApplicationDataById(match.params.applicationId).then(() => {
+        this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
         if (this.checkIncludes(['pre-qualification', 'business-details', 'performance', 'documentation'], pathname)) {
           this.props.history.replace(`${match.url}/${this.props.businessAppStore.stepToRender.path}`);
         }
@@ -40,8 +46,11 @@ export default class BusinessApplication extends Component {
     } else if (match.params.applicationId === 'new') {
       this.props.navStore.setAccessParams('appStatus', 'NEW');
       formReset();
+      setPrequalBasicDetails();
     }
   }
+
+  getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
   saveContinue = () => this.props.history.push(`${this.props.match.url}/confirm`);
 
@@ -83,21 +92,23 @@ export default class BusinessApplication extends Component {
     const showSubNav = this.calculateShowSubNav(['failed', 'success', 'lendio'], pathname, appStepsStatus[0].status, formReadOnlyMode);
     const preQualPage = pathname.includes('pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
-    const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhite';
+    const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhiteGreen';
     return (
       <PrivateLayout
+        subNavComponent={<Menu.Item position="right"><Link to={`${match.url}/need-help`}>Need Help / Have Questions?</Link></Menu.Item>}
         subNav={!showSubNav}
         appStepsStatus={appStepsStatus}
         {...this.props}
         P0={
-          <Logo
-            className="logo"
-            verticalAlign="middle"
-            dataSrc={logoUrl}
-            as={Link}
-            to="/app/dashboard"
-            size={logoUrl === 'LogoWhite' ? 'small' : 'medium'}
-          />
+          <Link to="/app/dashboard">
+            <Logo
+              size="small"
+              alt="NextSeed.com"
+              dataSrc={logoUrl}
+              style={this.getLogoStyle(this.props.location.pathname)}
+              verticalAlign="middle"
+            />
+          </Link>
         }
         buttonWidth={6}
         P4={
@@ -118,9 +129,9 @@ export default class BusinessApplication extends Component {
         <Switch>
           <Route exact path={match.url} component={getModule(navItems[0].component)} />
           <Route exact path={`${match.url}/failed/:reason?`} component={Failure} />
-          <Route exact path={`${match.url}/lendio`} render={props1 => <Application applicationId={match.params.applicationId} {...props1} />} />
+          <Route exact path={`${match.url}/lendio`} render={props => <Application applicationId={match.params.applicationId} {...props} />} />
           <Route exact path={`${match.url}/lendio/:condition`} component={LendioSuccess} />
-          <Route exact path={`${match.url}/success`} render={props1 => <Success refLink={match.url} applicationId={match.params.applicationId} {...props1} />} />
+          <Route exact path={`${match.url}/success`} render={props => <Success refLink={match.url} applicationId={match.params.applicationId} {...props} />} />
           {
             navItems.map(item => (
               <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
@@ -128,6 +139,7 @@ export default class BusinessApplication extends Component {
           }
         </Switch>
         <Route exact path={`${match.url}/confirm`} render={() => <ConfirmModal partialSave={this.submitSaveContinue} stepLink={pathname} refLink={match.url} />} />
+        <Route exact path={`${match.url}/need-help`} render={() => <NeedHelpModal />} />
       </PrivateLayout>
     );
   }

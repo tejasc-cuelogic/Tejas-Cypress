@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Responsive, Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
+import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav, GetNavItem } from './SidebarNav';
 import { UserAvatar, Logo } from '../shared';
@@ -43,19 +44,28 @@ const MySidebar = observer(props => (
           inverted={(props.UserInfo.roles[0] !== 'investor')}
           className={props.UserInfo.roles[0]}
         >
-          <Logo
-            className="logo"
-            dataSrc={((props.layoutState.leftPanel) ?
-              (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
-              'LogoSmall')}
-          />
-          {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
-          <div className="user-picture">
-            <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : ''} />
-            <h2>{props.UserInfo.fullname}</h2>
-            {GetNavItem('profile-settings', props.UserInfo.roles)}
-          </div>
-          <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />
+          <Scrollbars
+            className="ns-scrollbar"
+            renderTrackVertical={p => <div {...p} className="track-vertical" />}
+            renderThumbVertical={p => <div {...p} className="thumb-vertical" />}
+            renderTrackHorizontal={p => <div {...p} className="track-horizontal" />}
+            renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
+            renderView={p => <div {...p} className="view" />}
+          >
+            <Logo
+              className="logo"
+              dataSrc={((props.layoutState.leftPanel) ?
+                (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
+                'LogoSmall')}
+            />
+            {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
+            <div className="user-picture">
+              <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : ''} />
+              <h2>{props.UserInfo.fullname}</h2>
+              {GetNavItem('profile-settings', props.UserInfo.roles)}
+            </div>
+            <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />
+          </Scrollbars>
         </Sidebar>
         {props.desktop &&
           <Button onClick={props.toggle} className="item collapseIcon">

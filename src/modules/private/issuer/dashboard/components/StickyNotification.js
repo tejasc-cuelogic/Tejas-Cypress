@@ -11,7 +11,7 @@ const StickyNotification = () => (
             <Statistic.Value>You have been pre-qualified for a NextSeed campaign</Statistic.Value>
             <Statistic.Label>
               We are hard at work finalizing your application and will be in touch within
-              three business days.<br />
+              three business days.
               If you have any questions in the meantime, please contact us at <a href="mailto:apply@nextseed.com" className="link"><b>apply@nextseed.com</b></a>
             </Statistic.Label>
           </Statistic>

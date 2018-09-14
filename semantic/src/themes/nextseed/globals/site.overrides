@@ -866,12 +866,17 @@ a.icon-link:hover {
 			}
 			&:nth-child(even):not(.vertical-timeline-element--left) {
 				.vertical-timeline-element-content .vertical-timeline-element-date {
-					right: 74%;
+					left: -155px;
+					right: auto;
 					text-align: center;
 					@media only screen and (max-width : @largestSmallMonitor){
-						right: auto;
+						left: 0;
+						text-align: left;
 					}
 				}
+			}
+			.ui.list .item {
+				border: 1px solid @neutral-darkwhite;
 			}
 		}
 	}
@@ -900,16 +905,18 @@ a.icon-link:hover {
 		}
 		.vertical-timeline-element-date {
 			position: absolute;
-			top: -18%;
+			top: -60px;
 			background: @white;
 			z-index: 9999;
 			opacity: 1;
-			left: 75%;
+			left: auto;
+			right: -155px;
 			text-align: center;
 			font-size: @13px;
 			color: @neutral-middark;
 			text-transform: uppercase;
 			padding: @5px 0;
+			width: 130px;
 		}
 	}
 }
@@ -921,7 +928,8 @@ a.icon-link:hover {
 .ui.segment.vertical{
     &.content{
         padding:50px 0;
-		min-height:~"calc(100vh - 330px)";
+		// min-height:~"calc(100vh - 330px)";
+		border:none;
 		&.banner-img{
 			background:url('@{imagePath}/banner_raise.jpg') center center no-repeat;
 			background-size:cover;
@@ -1104,7 +1112,7 @@ div.login-form {
 .search-filters{
 	padding:@14px @40px;
 	max-height:200px;
-	overflow:hidden;
+	overflow:visible;
 	transition:all 0.5s ease-in-out;
 	@media only screen and (max-width : @largestSmallMonitor){
 		padding:@7px @20px @14px;
@@ -1116,6 +1124,7 @@ div.login-form {
 		max-height:0;
 		padding-top:0;
 		padding-bottom:0;
+		overflow:hidden;
 	}
 	&.more{
 		background-color:@neutral-midwhite;
@@ -1166,6 +1175,7 @@ div.login-form {
 	background-color:@neutral;
 	padding:@14px @40px;
 }
+//	used for dropdown secondary menu on mobile
 .secondary-menu{
 	padding:0 @40px;
 	@media only screen and (max-width : @largestLargeMonitor){

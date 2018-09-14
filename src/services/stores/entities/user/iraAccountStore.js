@@ -84,6 +84,7 @@ class IraAccountStore {
 
   @computed
   get accountAttributes() {
+    /* eslint-disable camelcase */
     let payload = {};
     payload = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
     payload.identityDoc = {};
@@ -91,14 +92,21 @@ class IraAccountStore {
     payload.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
     payload.iraAccountType = this.accountType.rawValue;
     payload.fundingType = this.fundingOption.rawValue;
-    if (this.fundingOption.rawValue === 'check' && !isEmpty(bankAccountStore.plaidBankDetails)) {
+    if (this.fundingOption.rawValue === 'check' && !isEmpty(bankAccountStore.plaidAccDetails)) {
       const plaidBankDetails = {};
-      plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
-      plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
-      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
-      plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
-      plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
-      plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
+      const {
+        account_id,
+        public_token,
+        accountNumber,
+        routingNumber,
+      } = bankAccountStore.plaidAccDetails;
+      if (account_id && public_token) {
+        plaidBankDetails.plaidPublicToken = public_token;
+        plaidBankDetails.plaidAccountId = account_id;
+      } else {
+        plaidBankDetails.accountNumber = accountNumber;
+        plaidBankDetails.routingNumber = routingNumber;
+      }
       payload.iraBankDetails = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -175,14 +183,10 @@ class IraAccountStore {
           bankAccountStore.isValidLinkBank;
         if (isValidCurrentStep) {
           uiStore.setProgress();
-          if (!isEmpty(bankAccountStore.plaidBankDetails)) {
+          if (!isEmpty(bankAccountStore.plaidAccDetails)) {
             const plaidBankDetails = {};
-            plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
-            plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
-            plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
-            plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
-            plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
-            plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
+            plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
+            plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
             accountAttributes.iraBankDetails = plaidBankDetails;
           } else {
             const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
@@ -268,8 +272,13 @@ class IraAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.createInvestorAccount || formStatus === 'submit') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
+          userDetailsStore.getUser(userStore.currentUser.sub);
+          if (result.data.createInvestorAccount) {
+            const { iraBankDetails } = result.data.createInvestorAccount.accountDetails;
+            bankAccountStore.setPlaidAccDetails(iraBankDetails);
+          } else {
+            const { iraBankDetails } = result.data.updateInvestorAccount.accountDetails;
+            bankAccountStore.setPlaidAccDetails(iraBankDetails);
           }
           if (currentStep.name === 'Identity') {
             if (removeUploadedData) {
@@ -293,6 +302,9 @@ class IraAccountStore {
           resolve(result);
         }))
         .catch((err) => {
+          if (currentStep.name === 'Link bank') {
+            bankAccountStore.resetShowAddFunds();
+          }
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         })
@@ -313,7 +325,7 @@ class IraAccountStore {
         this.setFormData('IDENTITY_FRM', account.accountDetails);
         if (account.accountDetails.iraBankDetails &&
           account.accountDetails.iraBankDetails.plaidItemId) {
-          bankAccountStore.setPlaidBankDetails(account.accountDetails.iraBankDetails);
+          bankAccountStore.setPlaidAccDetails(account.accountDetails.iraBankDetails);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { accountDetails } = account;
@@ -339,7 +351,7 @@ class IraAccountStore {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
         } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
           !bankAccountStore.formLinkBankManually.meta.isValid &&
-          isEmpty(bankAccountStore.plaidBankDetails)) {
+          isEmpty(bankAccountStore.plaidAccDetails)) {
           this.setStepToBeRendered(getIraStep.LINK_BANK);
         } else if (!this.IDENTITY_FRM.meta.isValid) {
           if (this.FUNDING_FRM.fields.fundingType.value === 0) {

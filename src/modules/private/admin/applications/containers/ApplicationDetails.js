@@ -30,7 +30,7 @@ export default class ApplicationDetails extends Component {
   componentWillMount() {
     const { match } = this.props;
     const { params } = match;
-    this.props.businessAppStore.fetchApplicationById(params.appId, params.id, params.userId)
+    this.props.businessAppStore.fetchAdminApplicationById(params.appId, params.id, params.userId)
       .then(() => {
         if (match.isExact) {
           this.props.history.push(`${match.url}/activity-history`);

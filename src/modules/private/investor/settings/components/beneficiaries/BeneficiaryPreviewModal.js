@@ -10,7 +10,8 @@ import { ListErrors, DateTimeFormat, InlineLoader } from '../../../../../../them
 @observer
 export default class BeneficiaryPreviewModal extends Component {
   componentWillMount() {
-    if (!this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary.length) {
+    if (this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary.length === 0 ||
+      this.props.beneficiaryStore.BENEFICIARY_META.fields.beneficiary[0].firstName.value === '') {
       this.props.history.push(this.props.refLink);
     }
   }
