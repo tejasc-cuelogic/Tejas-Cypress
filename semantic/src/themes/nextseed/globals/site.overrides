@@ -368,8 +368,6 @@ footer{
 			&.note {
 				color:@neutral-middark;
 				font-size: @12px;
-				line-height: @44px;
-				margin-top: 10px
 			}
 			&.early-bird-desc {
 				line-height: @24px;

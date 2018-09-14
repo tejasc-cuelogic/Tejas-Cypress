@@ -27,12 +27,18 @@
 				font-size: @13px;
 			}
 			>.value {
-				font-size: @16px !important;
-				color:@neutral;
+				font-size: @28px !important;
+				color:@neutral-middark;
 				font-weight: @bold;
 				text-transform: none;
-				line-height: 22px;
-    			margin-top: @8px;
+				line-height: 30px;
+    			margin-top: @20px;
+			}
+			&.mini >.value {
+				font-size: @15px !important;
+				color: @neutral;
+				line-height: 20px;
+				margin-top: @8px;
 			}
 			.slider {
 				-webkit-appearance: none;
