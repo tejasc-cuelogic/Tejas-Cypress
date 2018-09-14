@@ -1,34 +1,11 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Switch, Route } from 'react-router-dom';
 import { Modal, Card, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 import Summary from '../components/Summary';
-import {
-  Overview,
-  KeyTerms,
-  Legal,
-  Offering,
-  Leadership,
-  BonusRewards,
-  Media,
-  Close,
-  Investors,
-  Transactions,
-} from '../../../shared/offerings/components';
-
-const navItems = [
-  { title: 'Overview', to: 'overview', component: Overview },
-  { title: 'Key Terms', to: 'key-terms', component: KeyTerms },
-  { title: 'Investors', to: 'investors', component: Investors },
-  { title: 'Legal', to: 'legal', component: Legal },
-  { title: 'Offering', to: 'offering', component: Offering },
-  { title: 'Close', to: 'close', component: Close },
-  { title: 'Media', to: 'media', component: Media },
-  { title: 'Leadership', to: 'leadership', component: Leadership },
-  { title: 'Transactions', to: 'transactions', component: Transactions },
-  { title: 'Bonus Rewards', to: 'bonus-rewards', component: BonusRewards },
-];
+import OfferingModule from '../../../shared/offerings/components';
 
 const summaryDetails = {
   summary: [
@@ -38,11 +15,14 @@ const summaryDetails = {
   ],
 };
 
+@inject('navStore')
+@observer
 export default class OfferingDetails extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
+    this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
@@ -51,6 +31,7 @@ export default class OfferingDetails extends Component {
   module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match } = this.props;
+    const navItems = this.props.navStore.specificNavs.subNavigations;
     return (
       <Modal closeOnRootNodeClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
@@ -59,10 +40,10 @@ export default class OfferingDetails extends Component {
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
             <Switch>
-              <Route exact path={match.url} component={navItems[0].component} />
+              <Route exact path={match.url} component={OfferingModule('overview')} />
               {
                 navItems.map(item => (
-                  <Route key={item.to} path={`${match.url}/${item.to}`} component={item.component} />
+                  <Route key={item.to} path={`${match.url}/${item.to}`} component={OfferingModule(item.to)} />
                 ))
               }
             </Switch>

@@ -120,7 +120,8 @@
     "webpack-dashboard": "^1.0.0-2",
     "webpack-dev-server": "2.7.1",
     "webpack-manifest-plugin": "1.2.1",
-    "whatwg-fetch": "2.0.3"
+    "whatwg-fetch": "2.0.3",
+    "wysiwyg-editor-node-sdk": "^2.3.4"
   },
   "scripts": {
     "build-assets": "cd ./semantic && gulp build &&  cd ..",

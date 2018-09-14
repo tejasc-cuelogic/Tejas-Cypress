@@ -4,7 +4,7 @@ import Helper from '../../../../../../helper/utility';
 
 const meta = ['Investor Name', 'Residence City', 'Amount Invested', 'Investment Date', 'Referral Code'];
 
-const RewardList = (props) => {
+const Listing = (props) => {
   const listHeader = [...meta];
   return (
     <div className="table-wrapper">
@@ -38,4 +38,4 @@ const RewardList = (props) => {
   );
 };
 
-export default RewardList;
+export default Listing;

@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Loadable from 'react-loadable';
 import { Route, Switch } from 'react-router-dom';
-import { InlineLoader } from '../../../../theme/shared';
 import PrivateLayout from '../../shared/PrivateLayout';
+import OfferingModule from '../../shared/offerings/components';
 import { DataFormatter } from '../../../../helper';
-
-const getModule = component => Loadable({
-  loader: () => import(`./containers/${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
 
 @inject('uiStore', 'navStore')
 @observer
@@ -28,13 +20,13 @@ export default class Offering extends Component {
     return (
       <PrivateLayout {...this.props}>
         <Switch>
-          <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+          <Route exact path={match.url} component={OfferingModule('overview')} />
           {
             navItems.map(item => (
               <Route
                 key={item.to}
                 path={`${match.url}/${item.to}`}
-                component={getModule(this.module(item.title))}
+                component={OfferingModule(item.to)}
               />
             ))
           }

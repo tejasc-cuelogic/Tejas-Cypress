@@ -6,10 +6,13 @@ import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
 import { userStore, userDetailsStore, businesssStore } from '../../index';
 
 export class NavStore {
-  @observable NAV_ITEMS = { ...PRIVATE_NAV };
-  @observable params = { roles: [], currentNav: [], appStatus: null };
+  @observable NAV_ITEMS = [...PRIVATE_NAV];
+  @observable params = {
+    roles: [], currentNav: [], appStatus: null, specificNav: null,
+  };
   @observable navStatus = 'main';
   @observable navMeta = [];
+  @observable specificNavMeta = [];
   @observable everLogsIn = cookie.load('EVER_LOGS_IN') || false;
 
   constructor() {
@@ -61,6 +64,20 @@ export class NavStore {
   @computed get stepInRoute() {
     return this.everLogsIn ? { to: 'login', title: 'Log In' } :
       { to: 'register', title: 'Sign Up' };
+  }
+
+  @computed get specificNavs() {
+    const { roles, specificNav } = this.params;
+    let nav = [];
+    if (roles && specificNav) {
+      nav = toJS(this.NAV_ITEMS.find(i => matchPath(specificNav, { path: `/app/${i.to}` })));
+      if (nav && nav.subNavigations) {
+        nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
+        nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
+          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0);
+      }
+    }
+    return nav;
   }
 
   @action
