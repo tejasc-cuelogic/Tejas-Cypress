@@ -80,7 +80,7 @@
             margin:0 0 0 @5px;
             font-size:@14px;
             color:@neutral-middark;
-            vertical-align: middle;
+            // vertical-align: middle;
         }
     }
     input:not([type]),
