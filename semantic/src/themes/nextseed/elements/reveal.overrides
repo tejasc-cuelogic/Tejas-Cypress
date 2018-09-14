@@ -46,9 +46,15 @@
             margin-bottom: 0;
             line-height: 24px;
             text-transform: uppercase; 
+            @media only screen and (max-width : @largestMobileScreen){
+				font-size: @13px;
+			}
             b {
                 font-size: @18px;
-                text-transform: none; 
+                text-transform: none;
+                @media only screen and (max-width : @largestMobileScreen){
+                    font-size: @16px;
+                } 
             }
         }
     }

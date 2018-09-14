@@ -205,6 +205,8 @@
 			position:absolute;
 			top:12px;
 			right:10px;
+			font-size:@12px;
+			height:auto;
 		}
 		.user-picture{
 			text-align:left;
@@ -326,7 +328,7 @@
 		background-color:@thumbInvertedBackground;
 	}
 	.ns-close-light{
-		color:@white;
+		color:@neutral-middark;
 	}
 	.user-picture{
 		color:@white;
