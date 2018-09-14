@@ -12,7 +12,7 @@ import OfferingDetails from './containers/OfferingDetails';
 export default class Repayments extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/overview`);
+      this.props.history.push(`${this.props.match.url}/overview`);
     }
   }
   representAddon = subTabs => mapValues(subTabs, t => ` (${t})`);

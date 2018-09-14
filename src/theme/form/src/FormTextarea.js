@@ -38,7 +38,7 @@ const FormTextarea = observer((props) => {
         {...props}
         value={value}
         label={label}
-        placeholder={placeHolder}
+        placeholder={props.placeholder || placeHolder}
         onChange={props.changed}
       />
       {error &&

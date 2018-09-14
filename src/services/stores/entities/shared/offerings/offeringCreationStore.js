@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { OFFERING_DETAILS, CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
+import { GENERAL, LEADERSHIP, OFFERING_DETAILS, CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -16,6 +16,8 @@ export class OfferingCreationStore {
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
+  @observable LEADERSHIP_FRM = Validator.prepareFormObject(LEADERSHIP);
+  @observable GENERAL_FRM = Validator.prepareFormObject(GENERAL);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -34,8 +36,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeData = (formName) => {
-    this[formName].fields.data.splice(this.removeIndex, 1);
+  removeData = (formName, subForm = 'data') => {
+    this[formName].fields[subForm].splice(this.removeIndex, 1);
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
     this.confirmModalName = null;
@@ -47,6 +49,16 @@ export class OfferingCreationStore {
     this[form] = Validator.onChange(
       this[form],
       Validator.pullValues(e, result),
+    );
+  }
+
+  @action
+  formArrayChange = (e, result, form, subForm = '', index) => {
+    this[form] = Validator.onArrayFieldChange(
+      this[form],
+      Validator.pullValues(e, result),
+      subForm,
+      index,
     );
   }
 
@@ -68,6 +80,15 @@ export class OfferingCreationStore {
   }
 
   @action
+  maskArrayChange = (values, form, field, subForm = '', index) => {
+    const fieldValue = (field === 'offeringDeadline' || field === 'maturityDate') ? values.formattedValue : values.floatValue;
+    this[form] = Validator.onArrayFieldChange(
+      this[form],
+      { name: field, value: fieldValue }, subForm, index,
+    );
+  }
+
+  @action
   maskChangeWithIndex = (values, form, field, index) => {
     this[form] = Validator.onArrayFieldChange(
       this[form],
@@ -76,21 +97,35 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files) => {
+  setFileUploadData = (form, field, files, index = null) => {
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
-    this[form] = Validator.onChange(
-      this[form],
-      { name: field, value: fileData.fileName },
-    );
+    if (index !== null) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: fileData.fileName }, 'data', index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: fileData.fileName },
+      );
+    }
   }
 
   @action
-  removeUploadedData = (form, field) => {
-    this[form] = Validator.onChange(
-      this[form],
-      { name: field, value: '' },
-    );
+  removeUploadedData = (form, field, index = null) => {
+    if (index !== null) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        { name: field, value: '' }, 'data', index,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        { name: field, value: '' },
+      );
+    }
   }
 
   getMetaData = (metaData) => {
@@ -99,26 +134,29 @@ export class OfferingCreationStore {
       COMPANY_HISTORY_FRM: COMPANY_HISTORY,
       LAUNCH_CONTITNGENCIES_FRM: CONTINGENCIES,
       CLOSING_CONTITNGENCIES_FRM: CONTINGENCIES,
+      LEADERSHIP_FRM: LEADERSHIP,
+      GENERAL_FRM: GENERAL,
     };
     return metaDataMapping[metaData];
   }
 
   @action
-  addMore = (formName, addFieldValues = false) => {
+  addMore = (formName, arrayName = 'data', addFieldValues = false) => {
     this[formName] = {
       ...this[formName],
       fields: {
         ...this[formName].fields,
-        data: [
-          ...this[formName].fields.data,
-          this.getMetaData(formName).data[0],
-        ],
       },
       meta: {
         ...this[formName].meta,
         isValid: false,
       },
     };
+    const arrayData = [
+      ...this[formName].fields[arrayName],
+      this.getMetaData(formName)[arrayName][0],
+    ];
+    this[formName].fields[arrayName] = arrayData;
     if (addFieldValues) {
       const dataLength = this[formName].fields.data.length;
       this[formName].fields.data[dataLength - 1].name.value =
@@ -127,6 +165,11 @@ export class OfferingCreationStore {
       this.ADD_NEW_CONTINGENCY_FRM.fields.acceptanceCriteria.value;
     }
     Validator.resetFormData(this.ADD_NEW_CONTINGENCY_FRM);
+  }
+
+  @action
+  setAddressFields = (place, index) => {
+    Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'data', index);
   }
 }
 

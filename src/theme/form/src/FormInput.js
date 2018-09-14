@@ -23,6 +23,7 @@ const FormInput = observer((props) => {
           {props.label || label}
           {tooltip &&
             <Popup
+              hoverable={props.hoverable}
               trigger={<Icon className="ns-help-circle" />}
               content={tooltip}
               position="top center"
