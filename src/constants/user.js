@@ -53,10 +53,8 @@ export const FILTER_META = {
     { text: 'West Virginia', value: 'west virginia' },
   ],
   businessAppSortField: [
-    { text: 'Created date (ascending)', value: 'createdDate|asc' },
-    { text: 'Created date (descending)', value: 'createdDate|desc' },
-    { text: 'Updated date (ascending)', value: 'updatedDate|asc' },
-    { text: 'Updated date (descending)', value: 'updatedDate|desc' },
+    { text: 'Submitted date (ascending)', value: 'applicationSubmittedDate|asc' },
+    { text: 'Submitted date (descending)', value: 'applicationSubmittedDate|desc' },
   ],
   applicationStatus: {
     value: [],
