@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
 // import Aux from 'react-aux';
 import { inject } from 'mobx-react';
+import { Route, Link } from 'react-router-dom';
 import { Grid, Header, Segment, Image, Breadcrumb, Statistic, Popup, Icon } from 'semantic-ui-react';
 // import businessModel from '../../../../../assets/images/investment-1.jpg';
 import businessModel from '../../../../../assets/images/investment-2.jpg';
 // import TermNote from './investmentDetails/TermNote';
 // import RevenueShare from './investmentDetails/RevenueShare';
+// import KeyTermsModal from './investmentDetails/KeyTermsModal';
+import SummaryModal from './investmentDetails/SummaryModal';
 
 @inject('campaignStore')
 class InvestmentDetails extends Component {
   render() {
     // const { campaign } = this.props.campaignStore;
+
     return (
       // <Aux>
       //   {campaign.investmentType === 'Revenue Sharing' ?
@@ -89,7 +93,7 @@ class InvestmentDetails extends Component {
               </Segment> */}
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section link><b>Expand Summary</b></Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/SummaryModal`}><b>Expand Summary</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Revenue Sharing Summary*</Header>
@@ -160,7 +164,9 @@ class InvestmentDetails extends Component {
               </Segment> */}
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section link><b>View Key Terms</b></Breadcrumb.Section>
+                  <Breadcrumb.Section link>
+                    <b>View Key Terms</b>
+                  </Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Revenue Sharing Notes</Header>
@@ -206,6 +212,7 @@ class InvestmentDetails extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Route path={`${this.props.match.url}/SummaryModal`} component={SummaryModal} />
       </div>
     );
   }
