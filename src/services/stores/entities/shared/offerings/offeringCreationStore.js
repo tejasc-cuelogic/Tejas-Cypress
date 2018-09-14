@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { GENERAL, LEADERSHIP, OFFERING_DETAILS, CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
+import { RISK_FACTORS, GENERAL, LEADERSHIP, OFFERING_DETAILS, CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
@@ -18,6 +18,7 @@ export class OfferingCreationStore {
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
   @observable LEADERSHIP_FRM = Validator.prepareFormObject(LEADERSHIP);
   @observable GENERAL_FRM = Validator.prepareFormObject(GENERAL);
+  @observable RISK_FACTORS_FRM = Validator.prepareFormObject(RISK_FACTORS);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
