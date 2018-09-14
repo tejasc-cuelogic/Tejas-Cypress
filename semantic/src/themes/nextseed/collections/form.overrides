@@ -58,7 +58,9 @@
         }
     }
     .fields{
-        flex-wrap:wrap;
+        &:not(.width){
+            flex-wrap:wrap;
+        }
         &.bottom-aligned{
             .field, .wide.field{
                 align-self:flex-end;
