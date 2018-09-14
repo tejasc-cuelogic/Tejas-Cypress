@@ -424,9 +424,6 @@ footer{
 				line-height: @20px;
 				color:@neutral-middark;
 			}
-			img {
-				width: 100%;
-			}
 			.embed {
 				img {
 					margin-top: 0;

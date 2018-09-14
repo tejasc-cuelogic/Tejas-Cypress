@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Header, Grid, Segment, Label, List, Image } from 'semantic-ui-react';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
+import card1 from '../../../../../assets/images/cards/pour_cards_black.jpg';
+import card2 from '../../../../../assets/images/cards/pour_cards_gold.jpg';
+import card3 from '../../../../../assets/images/cards/pour_cards_plat.jpg';
+import card4 from '../../../../../assets/images/cards/pour_cards_silver.jpg';
 
 class BonusRewards extends Component {
   render() {
@@ -234,6 +238,40 @@ class BonusRewards extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Segment padded>
+          <Grid columns={4} doubling stackable divided>
+            <Grid.Column>
+              <Image src={card1} />
+              <Header as="h5">Black Card</Header>
+              <p>
+                One Premium bottle per year, VIP/Supercar Parking (with advanced notice), 25%
+                discount every visit and Skip the Line for you and up to 16 guests (Fridays and
+                Saturdays + Special Events)
+              </p>
+            </Grid.Column>
+            <Grid.Column>
+              <Image src={card3} />
+              <Header as="h5">Platinum Card</Header>
+              <p>
+                0% discount every visit and Skip the Line for you and up to 9 guests (Fridays
+                and Saturdays + Special Events)
+              </p>
+            </Grid.Column>
+            <Grid.Column>
+              <Image src={card2} />
+              <Header as="h5">Gold Card</Header>
+              <p>
+                15% discount every visit and Skip the Line for you and up to 9 guests (Fridays
+                and Saturdays + Special Events)
+              </p>
+            </Grid.Column>
+            <Grid.Column>
+              <Image src={card4} />
+              <Header as="h5">Silver Card</Header>
+              <p>10% discount every visit</p>
+            </Grid.Column>
+          </Grid>
+        </Segment>
       </div>
       // <Grid>
       //   <Grid.Row>
