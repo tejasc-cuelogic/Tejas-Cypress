@@ -44,7 +44,7 @@ export default class Leadership extends Component {
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu secondary vertical match={match} navItems={navItems} heading="FAQ" faqs={faqsOfModule} />
-            <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
+            <Button size="small" color="blue" className="link-button mt-20" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
             <FaqWidget fullHeading="FAQ" faqs={faqsOfModule} />
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>

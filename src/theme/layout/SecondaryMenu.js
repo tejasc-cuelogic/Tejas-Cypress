@@ -62,7 +62,9 @@ class SecondaryMenu extends Component {
     return (
       <Aux>
         <Responsive minWidth={768} as={Aux}>
-          <Header as="h6">{heading}</Header>
+          { heading &&
+            <Header as="h6">{heading}</Header>
+          }
           <Menu
             className={className || ''}
             celled={!vertical}

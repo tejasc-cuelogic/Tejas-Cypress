@@ -27,9 +27,7 @@ export default class KeyTerms extends Component {
     const formName = 'KEY_TERMS_FRM';
     return (
       <div className="inner-content-spacer">
-        <Header as="h4">
-          Basic
-        </Header>
+        <Header as="h4">Basic</Header>
         <Form>
           <Form.Group widths="equal">
             {
