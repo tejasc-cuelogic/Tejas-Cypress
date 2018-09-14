@@ -7,16 +7,16 @@ import PrivateLayout from '../../../shared/PrivateHOC';
 import Helper from '../../../../../helper/utility';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import { Logo, InlineLoader } from '../../../../../theme/shared';
-import Failure from '../components/Failure';
-import Success from '../components/Success';
-import Application from '../components/lendio/Application';
-import ConfirmModal from '../components/confirmModal';
-import NeedHelpModal from '../components/NeedHelpModal';
-import LendioSuccess from '../components/lendio/LendioSuccess';
-import { HeaderButtons } from '../components/HeaderButtons';
+import Failure from '../../../../shared/businessApplication/components/Failure';
+import Success from '../../../../shared/businessApplication/components/Success';
+import Application from '../../../../shared/businessApplication/components/lendio/Application';
+import ConfirmModal from '../../../../shared/businessApplication/components/confirmModal';
+import NeedHelpModal from '../../../../shared/businessApplication/components/NeedHelpModal';
+import LendioSuccess from '../../../../shared/businessApplication/components/lendio/LendioSuccess';
+import { HeaderButtons } from '../../../../shared/businessApplication/components/HeaderButtons';
 
 const getModule = component => Loadable({
-  loader: () => import(`../components/${component}`),
+  loader: () => import(`../../../../shared/businessApplication/components//${component}`),
   loading() {
     return <InlineLoader />;
   },

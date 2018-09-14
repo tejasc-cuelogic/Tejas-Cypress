@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Divider, Button } from 'semantic-ui-react';
-import { Logo } from '../../../../../../theme/shared';
+import { Logo } from '../../../../../theme/shared';
 
 const Initialise = ({ match, isPublic }) => (
   <Aux>

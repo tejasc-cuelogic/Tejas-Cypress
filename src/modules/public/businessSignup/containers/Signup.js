@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Segment } from 'semantic-ui-react';
-import PreQualification from '../../../private/issuer/businessApplication/components/PreQualification';
-import Success from '../../../private/issuer/businessApplication/components/Success';
-import Failure from '../../../private/issuer/businessApplication/components/Failure';
-import Application from '../../../private/issuer/businessApplication/components/lendio/Application';
-import LendioSuccess from '../../../private/issuer/businessApplication/components/lendio/LendioSuccess';
-import NeedHelpModal from '../../../private/issuer/businessApplication/components/NeedHelpModal';
+import PreQualification from '../../../shared/businessApplication/components/PreQualification';
+import Success from '../../../shared/businessApplication/components/Success';
+import Failure from '../../../shared/businessApplication/components/Failure';
+import Application from '../../../shared/businessApplication/components/lendio/Application';
+import LendioSuccess from '../../../shared/businessApplication/components/lendio/LendioSuccess';
+import NeedHelpModal from '../../../shared/businessApplication/components/NeedHelpModal';
 
 class Signup extends Component {
   render() {

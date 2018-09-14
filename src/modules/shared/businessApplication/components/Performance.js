@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../../theme/form';
+import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 

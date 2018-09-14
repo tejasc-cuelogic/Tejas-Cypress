@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
-import { ListErrors } from '../../../../../theme/shared';
+import { ListErrors } from '../../../../theme/shared';
 
 @inject('uiStore')
 @withRouter

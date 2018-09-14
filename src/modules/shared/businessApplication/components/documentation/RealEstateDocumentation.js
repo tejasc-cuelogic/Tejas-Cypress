@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { DropZoneConfirm as DropZone } from '../../../../../../theme/form';
+import { DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 
 @inject('businessAppStore')

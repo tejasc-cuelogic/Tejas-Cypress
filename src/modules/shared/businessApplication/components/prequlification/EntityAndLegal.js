@@ -1,6 +1,6 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { FormRadioGroup, FormCheckbox } from '../../../../../../theme/form';
+import { FormRadioGroup, FormCheckbox } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 
 const EntityAndLegal = props => (

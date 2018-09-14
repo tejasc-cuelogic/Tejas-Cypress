@@ -1,6 +1,6 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { MaskedInput } from '../../../../../../theme/form';
+import { MaskedInput } from '../../../../../theme/form';
 
 const Experience = props => (
   <Aux>

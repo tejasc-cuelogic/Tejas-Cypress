@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Grid, Icon, Header, Divider, Button, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
-import { FormInput } from '../../../../../theme/form';
-import { authActions } from '../../../../../services/actions';
+import { FormInput } from '../../../../theme/form';
+import { authActions } from '../../../../services/actions';
 
 @inject('businessAppStore', 'authStore', 'userStore', 'uiStore')
 @observer

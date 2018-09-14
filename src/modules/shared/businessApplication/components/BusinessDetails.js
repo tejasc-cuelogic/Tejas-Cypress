@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormInput, DropZoneConfirm as DropZone, MaskedInput, FormDatePicker } from '../../../../../theme/form';
+import { FormInput, DropZoneConfirm as DropZone, MaskedInput, FormDatePicker } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Grid, Form, Popup, Icon } from 'semantic-ui-react';
-import { FormInput, MaskedInput, AutoComplete } from '../../../../../../theme/form';
+import { FormInput, MaskedInput, AutoComplete } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 
 const GeneralInformation = props => (

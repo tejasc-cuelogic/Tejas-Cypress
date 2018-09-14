@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, Grid, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormRadioGroup, FormCheckbox, MaskedInput } from '../../../../../../theme/form';
+import { FormRadioGroup, FormCheckbox, MaskedInput } from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 import GeneralInformation from './GeneralInformation';
 import Experience from './Experience';

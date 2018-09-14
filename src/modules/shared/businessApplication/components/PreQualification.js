@@ -3,12 +3,12 @@ import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { Grid, Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import Helper from '../../../../../helper/utility';
-import { FormInput } from '../../../../../theme/form';
+import Helper from '../../../../helper/utility';
+import { FormInput } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import PreQualBusiness from './prequlification/PreQualBusiness';
 import PreQualRealEstate from './prequlification/PreQualRealEstate';
-import NotFound from '../../../../shared/NotFound';
+import NotFound from '../../../shared/NotFound';
 
 @inject('businessAppStore', 'uiStore')
 @withRouter
@@ -18,6 +18,7 @@ export default class PreQualification extends Component {
     if (this.props.isPublic) {
       const { params } = this.props.match;
       this.props.businessAppStore.formReset(params.applicationType);
+      this.props.businessAppStore.setFieldvalue('currentApplicationType', params.applicationType);
     }
   }
   submit = (e) => {

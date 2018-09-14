@@ -4,7 +4,7 @@ import { Grid, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import {
   FormRadioGroup, FormCheckbox, MaskedInput,
-} from '../../../../../../theme/form';
+} from '../../../../../theme/form';
 import FormElementWrap from '../FormElementWrap';
 import GeneralInformation from './GeneralInformation';
 import Experience from './Experience';

@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
-import Helper from '../../../../../helper/utility';
+import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import Helper from '../../../../helper/utility';
 
 @inject('businessAppStore', 'uiStore')
 @withRouter
