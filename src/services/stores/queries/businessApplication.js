@@ -338,21 +338,20 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
   ){
     applicationId
     applicationStatus
-    lendio {
-      status
-      failReasons
-      url
-    }
-    userDetails {
+    applicationType
+    primaryPOC {
       firstName
       lastName
       email
-      contactDetails {
-        phone { number }
-      }
+      phone
+      email
     }
-    createdDate
-    updatedDate
+    created {
+      date
+    }
+    updated {
+      date
+    }
     prequalDetails {
       businessModel
       businessGoal
