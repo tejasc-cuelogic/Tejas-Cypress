@@ -53,7 +53,7 @@ export default class ApplicationDetails extends Component {
     if (!businessApplicationDetailsAdmin) {
       return <EmptyDataSet />;
     }
-    const { applicationStatus, prequalDetails, userDetails } = businessApplicationDetailsAdmin;
+    const { applicationStatus, prequalDetails, primaryPOC } = businessApplicationDetailsAdmin;
     const appStepStatus = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
@@ -100,19 +100,19 @@ export default class ApplicationDetails extends Component {
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Name</Header.Subheader>
-                          {userDetails.firstName} {userDetails.lastName}
+                          {primaryPOC.firstName} {primaryPOC.lastName}
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Email</Header.Subheader>
-                          {userDetails.email}
+                          {primaryPOC.email}
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Phone</Header.Subheader>
-                          {userDetails.contactDetails.phone ? userDetails.contactDetails.phone.number : '-'}
+                          {primaryPOC.phone ? primaryPOC.phone : '-'}
                         </Header>
                       </Grid.Column>
                     </Grid>
