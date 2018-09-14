@@ -54,7 +54,7 @@ export default class PreQualRealEstate extends Component {
         </FormElementWrap>
         <FormElementWrap header="Select Real Estate Type" subHeader="Select all the Real Estate types that apply.">
           <FormCheckbox
-            containerclassname="iconic-checkbox"
+            containerclassname="button-checkbox"
             disabled={preQualFormDisabled}
             fielddata={fields.realEstateType}
             name="realEstateType"
@@ -76,7 +76,7 @@ export default class PreQualRealEstate extends Component {
         </FormElementWrap>
         <FormElementWrap header="What will the funds be used for?" subHeader="Please select all that apply.">
           <FormCheckbox
-            containerclassname="iconic-checkbox"
+            containerclassname="button-checkbox"
             disabled={preQualFormDisabled}
             fielddata={fields.fundUsage}
             name="fundUsage"
