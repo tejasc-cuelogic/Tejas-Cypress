@@ -10,7 +10,7 @@ import {
   ENTITY_FORMATION_DOCS,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore } from '../../index';
-import { createAccount, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
+import { createIndividual, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
@@ -374,12 +374,12 @@ class EntityAccountStore {
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
     uiStore.setProgress();
-    let mutation = createAccount;
+    let mutation = createIndividual;
     const variables = {
       userId: userStore.currentUser.sub,
       accountAttributes,
       status: formStatus,
-      accountType: 'entity',
+      accountType: 'ENTITY',
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
