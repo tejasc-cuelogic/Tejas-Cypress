@@ -24,7 +24,7 @@ class DataFormatter {
 
   getJsonFormattedError = err => JSON.parse(err.message.substring(err.message.indexOf('{')));
 
-  datesDifferenceInDays = (timeStamp2) => {
+  diffDays = (timeStamp2) => {
     const date = new Date();
     const timeStamp1 = date.getTime();
     const convertedtimeStamp2 = new Date(timeStamp2);

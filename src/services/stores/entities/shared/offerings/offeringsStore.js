@@ -1,8 +1,8 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-underscore-dangle, no-unused-vars */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../../api/gcoolApi';
-import { allOfferings, deleteOffering } from '../../../queries/offerings/creation';
+import { GqlClient as client } from '../../../../../api/gqlApi';
+import { allOfferings, deleteOffering } from '../../../queries/offerings/manage';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingsStore {
@@ -23,20 +23,24 @@ export class OfferingsStore {
 
   @action
   initRequest = (props) => {
-    const { first, skip, page } = props ||
+    const {
+      first, skip, page, stage,
+    } = props ||
     {
       first: this.requestState.perPage,
       skip: this.requestState.skip,
       page: this.requestState.page,
+      stage: this.requestState.stage,
     };
     const params = {};
     this.requestState.page = page || this.requestState.page;
     this.requestState.perPage = first || this.requestState.perPage;
     this.requestState.skip = skip || this.requestState.skip;
+    this.requestState.stage = stage || this.requestState.stage;
     this.data = graphql({
       client,
       query: allOfferings,
-      variables: { filters: params, first: first || this.requestState.perPage, skip },
+      variables: { stage, first: first || this.requestState.perPage, skip },
     });
   }
 
@@ -66,12 +70,12 @@ export class OfferingsStore {
   }
 
   @computed get totalRecords() {
-    return (this.data && this.data.data._allOffering2sMeta &&
-      this.data.data._allOffering2sMeta.count) || 0;
+    return (this.data.data && this.data.data.getOfferings &&
+      this.data.data.getOfferings.count) || 0;
   }
 
   @computed get offerings() {
-    return (this.data.data && toJS(this.data.data.allOffering2s)) || [];
+    return (this.data.data && toJS(this.data.data.getOfferings)) || [];
   }
 
   @computed get loading() {
