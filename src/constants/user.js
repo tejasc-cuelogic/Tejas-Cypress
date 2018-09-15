@@ -72,6 +72,23 @@ export const FILTER_META = {
       { label: 'Deleted', value: 'DELETED', applicable: ['prequal-failed', 'in-progress', 'completed'] },
     ],
   },
+  activityType: [
+    { label: 'Comment', value: 'COMMENT' },
+    { label: 'Activity', value: 'ACTIVITY' },
+    { label: 'Upload', value: 'UPLOAD' },
+    { label: 'Rating', value: 'RATING' },
+    { label: 'Cf limit', value: 'CF_LIMIT' },
+    { label: 'Accreditation', value: 'ACCREDITATION' },
+    { label: 'Access', value: 'ACCESS' },
+    { label: 'Admin Activity', value: 'ADMIN_ACTIVITY' },
+    { label: 'MFA', value: 'MFA' },
+    { label: 'Profile Update', value: 'PROFILE_UPDATE' },
+  ],
+  activityUserType: [
+    { label: 'Admin', value: 'ADMIN' },
+    { label: 'Issuer', value: 'ISSUER' },
+    { label: 'Investor', value: 'INVESTOR' },
+  ],
 };
 
 export const TRANSACTION_TYPES = [

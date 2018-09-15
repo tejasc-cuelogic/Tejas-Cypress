@@ -22,6 +22,7 @@ export { default as educationStore } from './entities/education/educationStore';
 export { default as rewardStore } from './entities/rewardWallet/rewardStore';
 export { default as businessAppStore } from './entities/user/businessAppStore';
 export { default as navStore } from './entities/shared/navStore';
+export { default as activityHistoryStore } from './entities/shared/activityHistoryStore';
 export { default as messageStore } from './entities/message/messageStore';
 export { default as beneficiaryStore } from './entities/user/settings/beneficiaryStore';
 export { default as multiFactorAuthStore } from './entities/user/settings/multiFactorAuthStore';

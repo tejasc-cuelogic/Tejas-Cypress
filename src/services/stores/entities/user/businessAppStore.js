@@ -141,6 +141,7 @@ export class BusinessAppStore {
 
   @action
   fetchAdminApplicationById = (appId, appType, userId) => new Promise((resolve) => {
+    this.setFieldvalue('applicationId', appId);
     const applicationType = appType === 'prequal-failed' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     let payLoad = {
       applicationId: appId,
