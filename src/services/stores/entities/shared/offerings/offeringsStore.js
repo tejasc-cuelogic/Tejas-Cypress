@@ -2,12 +2,14 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { allOfferings, deleteOffering } from '../../../queries/offerings/manage';
+import { allOfferings, deleteOffering, getOfferingDetails } from '../../../queries/offerings/manage';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingsStore {
   @observable data = [];
   @observable filters = false;
+  @observable offerData = {};
+  @observable offerLoading = false;
   @observable subTabs = {
     creation: 35,
     live: 34,
@@ -69,6 +71,19 @@ export class OfferingsStore {
       .catch(() => Helper.toast('Error while deleting offering', 'error'));
   }
 
+  @action
+  getOne = (id) => {
+    this.offerLoading = true;
+    this.offerData = graphql({
+      client,
+      query: getOfferingDetails,
+      variables: { id },
+      onFetch: (res) => {
+        this.offerLoading = false;
+      },
+    });
+  }
+
   @computed get totalRecords() {
     return (this.data.data && this.data.data.getOfferings &&
       this.data.data.getOfferings.count) || 0;
@@ -76,6 +91,10 @@ export class OfferingsStore {
 
   @computed get offerings() {
     return (this.data.data && toJS(this.data.data.getOfferings)) || [];
+  }
+
+  @computed get offer() {
+    return (this.offerData.data && toJS(this.offerData.data.getOfferingById)) || {};
   }
 
   @computed get loading() {

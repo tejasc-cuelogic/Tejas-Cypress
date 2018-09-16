@@ -1,4 +1,5 @@
 import { camelCase, upperFirst } from 'lodash';
+import moment from 'moment';
 
 class DataFormatter {
   unMaskInput = maskedInput => (
@@ -32,6 +33,8 @@ class DataFormatter {
     const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
     return daysDifference;
   }
+
+  formatedDate = date => moment(date).format('MM/DD/YYYY');
 }
 
 export default new DataFormatter();

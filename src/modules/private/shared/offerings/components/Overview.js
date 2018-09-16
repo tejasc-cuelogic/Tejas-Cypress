@@ -11,6 +11,9 @@ import { FormInput } from '../../../../../theme/form';
 @inject('offeringCreationStore')
 @observer
 export default class Overview extends Component {
+  componentWillMount() {
+    this.props.offeringCreationStore.setFormData('OFFERING_DETAILS_FRM', false);
+  }
   render() {
     const {
       LAUNCH_CONTITNGENCIES_FRM,
@@ -27,7 +30,7 @@ export default class Overview extends Component {
           <Header as="h4">Offering Details</Header>
           <Form.Group widths={2}>
             {
-              ['offeringUrl', 'offeringReferralCode'].map(field => (
+              ['offeringUrl', 'referralCode'].map(field => (
                 <FormInput
                   name={field}
                   fielddata={OFFERING_DETAILS_FRM.fields[field]}
