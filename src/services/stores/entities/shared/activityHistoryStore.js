@@ -1,12 +1,12 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gqlApi';
-// import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { allActivities, addActivity } from '../../queries/activity';
 import { businessAppStore } from '../../index';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { LOG_ACTIVITY } from '../../../constants/activity';
+import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../constants/common';
 
 export class ActivityHistoryStore {
   @observable ACTIVITY_FRM = Validator.prepareFormObject(LOG_ACTIVITY);
@@ -38,27 +38,34 @@ export class ActivityHistoryStore {
     const formData = Validator.ExtractValues(this.ACTIVITY_FRM.fields);
     const data = {
       resourceId: businessAppStore.applicationId,
-      activityType: 'ADMIN_ACTIVITY',
-      activityTitle: 'Testing',
+      activityType: ACTIVITY_HISTORY_TYPES.ADMIN_ACTIVITY,
+      activityTitle: 'Posted new comment',
       activity: formData.comment,
-      scope: 'ADMIN',
+      scope: ACTIVITY_HISTORY_SCOPE.ADMIN,
     };
+    this.createActivityHistory(data);
+  }
+
+  @action
+  createActivityHistory = (payload, isInternal = false) => {
     client
       .mutate({
         mutation: addActivity,
         variables: {
-          activityHistoryDetails: data,
+          activityHistoryDetails: payload,
         },
         refetchQueries: [{
           query: allActivities,
-          variables: { resourceId: businessAppStore.applicationId },
+          variables: { resourceId: payload.resourceId },
         }],
       })
       .then(() => {
-        Helper.toast('sent.', 'success');
+        if (isInternal) {
+          Helper.toast('Activity history added successfully.', 'success');
+        }
         this.reset();
       })
-      .catch(e => console.log(e, 'error'));
+      .catch(() => Helper.toast('Something went wrong, please try again later.', 'error'));
   }
 
   @computed get allData() {

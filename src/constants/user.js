@@ -1,4 +1,4 @@
-// import moment from 'moment';
+import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from './common';
 
 export const USER_ROLES = ['admin', 'issuer', 'investor'];
 export const USER_TYPES_META = [
@@ -73,21 +73,21 @@ export const FILTER_META = {
     ],
   },
   activityType: [
-    { text: 'Comment', value: 'COMMENT' },
-    { text: 'Activity', value: 'ACTIVITY' },
-    { text: 'Upload', value: 'UPLOAD' },
-    { text: 'Rating', value: 'RATING' },
-    { text: 'Cf limit', value: 'CF_LIMIT' },
-    { text: 'Accreditation', value: 'ACCREDITATION' },
-    { text: 'Access', value: 'ACCESS' },
-    { text: 'Admin Activity', value: 'ADMIN_ACTIVITY' },
-    { text: 'MFA', value: 'MFA' },
-    { text: 'Profile Update', value: 'PROFILE_UPDATE' },
+    { text: 'Comment', value: ACTIVITY_HISTORY_TYPES.COMMENT },
+    { text: 'Activity', value: ACTIVITY_HISTORY_TYPES.ACTIVITY },
+    { text: 'Upload', value: ACTIVITY_HISTORY_TYPES.UPLOAD },
+    { text: 'Rating', value: ACTIVITY_HISTORY_TYPES.RATING },
+    { text: 'Cf limit', value: ACTIVITY_HISTORY_TYPES.CF_LIMIT },
+    { text: 'Accreditation', value: ACTIVITY_HISTORY_TYPES.ACCREDITATION },
+    { text: 'Access', value: ACTIVITY_HISTORY_TYPES.ACCESS },
+    { text: 'Admin Activity', value: ACTIVITY_HISTORY_TYPES.ADMIN_ACTIVITY },
+    { text: 'MFA', value: ACTIVITY_HISTORY_TYPES.MFA },
+    { text: 'Profile Update', value: ACTIVITY_HISTORY_TYPES.PROFILE_UPDATE },
   ],
   activityUserType: [
-    { text: 'Admin', value: 'ADMIN' },
-    { text: 'Issuer', value: 'ISSUER' },
-    { text: 'Investor', value: 'INVESTOR' },
+    { text: 'Admin', value: ACTIVITY_HISTORY_SCOPE.ADMIN },
+    { text: 'Issuer', value: ACTIVITY_HISTORY_SCOPE.ISSUER },
+    { text: 'Investor', value: ACTIVITY_HISTORY_SCOPE.INVESTOR },
   ],
 };
 
