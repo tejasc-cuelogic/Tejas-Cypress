@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Icon, Header, Divider, Button, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import cookie from 'react-cookies';
+// import cookie from 'react-cookies';
 import { FormInput } from '../../../../theme/form';
 import { authActions } from '../../../../services/actions';
 
@@ -19,14 +19,14 @@ class Success extends Component {
     const { userExists, currentApplicationType, applicationId } = this.props.businessAppStore;
     if (this.props.isPublic) {
       if (!userExists) {
-        authActions.register()
-          .then(() => {
-            const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
-            const userCredentials = { email: email.value, password: btoa(password.value) };
-            cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
-            this.props.history.push('/auth/confirm-email');
-          })
-          .catch(() => {});
+        // authActions.register()
+        //   .then(() => {
+        //     const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+        //     const userCredentials = { email: email.value, password: btoa(password.value) };
+        //     cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+        //     this.props.history.push('/auth/confirm-email');
+        //   })
+        //   .catch(() => {});
       } else {
         authActions.login()
           .then(() => {

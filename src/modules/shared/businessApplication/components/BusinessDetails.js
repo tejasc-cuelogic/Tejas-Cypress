@@ -217,7 +217,7 @@ export default class BusinessDetails extends Component {
                       <Form.Group widths="equal">
                         <FormDatePicker
                           type="text"
-                          name="dob"
+                          name="dateOfService"
                           maxDate={moment()}
                           placeholderText={owner.dateOfService.placeHolder}
                           fielddata={owner.dateOfService}

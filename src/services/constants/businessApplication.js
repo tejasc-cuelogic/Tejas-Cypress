@@ -64,6 +64,8 @@ export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
   leaseAgreementsOrLOIs: 'LEASE',
   bankStatements: 'BANK_STATEMENTS',
   personalGuaranteeForm: 'PERSONAL_GUARANTEE',
+  dueDiligence: 'DUE_DILIGENCE',
+  legalDocs: 'LEGAL',
 };
 
 export const NEED_HELP = {
@@ -546,10 +548,10 @@ export const BUSINESS_DOC = {
 };
 
 export const BUSINESS_DOC_REAL_ESTATE = {
-  dilligenceDocuments: {
+  dueDiligence: {
     value: [], label: '', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
-  legalDocuments: {
+  legalDocs: {
     value: [], label: '', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
 };

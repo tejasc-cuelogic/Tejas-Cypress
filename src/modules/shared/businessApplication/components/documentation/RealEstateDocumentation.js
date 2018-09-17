@@ -30,8 +30,8 @@ export default class RealEstateDocumentation extends Component {
               <DropZone
                 disabled={formReadOnlyMode}
                 multiple
-                name="dilligenceDocuments"
-                fielddata={fields.dilligenceDocuments}
+                name="dueDiligence"
+                fielddata={fields.dueDiligence}
                 ondrop={(files, fieldName) =>
                   businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
                 onremove={(e, fieldName, index) =>
@@ -49,8 +49,8 @@ export default class RealEstateDocumentation extends Component {
               <DropZone
                 disabled={formReadOnlyMode}
                 multiple
-                name="legalDocuments"
-                fielddata={fields.legalDocuments}
+                name="legalDocs"
+                fielddata={fields.legalDocs}
                 ondrop={(files, fieldName) =>
                   businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
                 onremove={(e, fieldName, index) =>
