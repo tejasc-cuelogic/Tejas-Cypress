@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
+import { MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore } from '../../../index';
@@ -17,6 +17,7 @@ export class OfferingCreationStore {
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
+  @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
   @observable LEADERSHIP_FRM = Validator.prepareFormObject(LEADERSHIP);
   @observable GENERAL_FRM = Validator.prepareFormObject(GENERAL);
   @observable ISSUER_FRM = Validator.prepareFormObject(ISSUER);
@@ -29,6 +30,19 @@ export class OfferingCreationStore {
   @observable requestState = {
     search: {},
   };
+
+  @action
+  setProfilePhoto(attr, value, field) {
+    this.MEDIA_FRM.fields[field][attr] = value;
+  }
+
+  @action
+  resetProfilePhoto = (field) => {
+    const attributes = ['src', 'error', 'value', 'base64String'];
+    attributes.forEach((val) => {
+      this.MEDIA_FRM.fields[field][val] = '';
+    });
+  }
 
   @action
   setContingencyFormSelected = (formName) => {
