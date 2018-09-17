@@ -13,7 +13,7 @@ import Listing from '../components/Listing';
 @observer
 export default class Offerings extends Component {
   componentWillMount() {
-    const params = { first: 10, skip: 0, stage: this.props.match.params.stage.toUpperCase() };
+    const params = { first: 10, skip: 0, stage: this.props.match.params.stage };
     this.props.offeringsStore.initRequest(params);
   }
 

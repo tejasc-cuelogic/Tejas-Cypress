@@ -25,6 +25,9 @@ export class OfferingsStore {
 
   @action
   initRequest = (props) => {
+    const stageMap = {
+      completed: ['CLOSE', 'COMPLETE', 'FAILED', 'TERMINATED'],
+    };
     const {
       first, skip, page, stage,
     } = props ||
@@ -42,7 +45,11 @@ export class OfferingsStore {
     this.data = graphql({
       client,
       query: allOfferings,
-      variables: { stage, first: first || this.requestState.perPage, skip },
+      variables: {
+        stage: stageMap[stage] || [stage.toUpperCase()],
+        first: first || this.requestState.perPage,
+        skip,
+      },
     });
   }
 
