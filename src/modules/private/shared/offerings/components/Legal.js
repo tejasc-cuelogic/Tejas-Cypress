@@ -31,7 +31,12 @@ export default class Legal extends Component {
     ];
     const adminLegalInfo = [
       { title: 'Generate Docs', to: 'generate-docs' },
-      { title: 'Bad Actor Check', to: 'bad-actor-check' },
+      { title: 'Bad Actor Check', to: 'bad-actor-check/issuer' },
+    ];
+    const badActorCheckInfo = [
+      { title: 'Issuer', to: 'issuer' },
+      { title: 'Affiliated Issuer', to: 'affiliated-issuer' },
+      { title: 'Leadership', to: 'leadership' },
     ];
     const { match } = this.props;
     return (
@@ -40,6 +45,7 @@ export default class Legal extends Component {
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu heading="User Legal Info" secondary vertical match={match} navItems={userLegalInfo} />
             <SecondaryMenu heading="Admin Legal Info" secondary vertical match={match} navItems={adminLegalInfo} />
+            <SecondaryMenu secondary vertical match={match} navItems={badActorCheckInfo} />
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <Switch>
@@ -55,6 +61,11 @@ export default class Legal extends Component {
               }
               {
                 adminLegalInfo.map(item => (
+                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                ))
+              }
+              {
+                badActorCheckInfo.map(item => (
                   <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
                 ))
               }

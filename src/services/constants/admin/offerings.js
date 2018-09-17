@@ -631,6 +631,27 @@ export const OFFERING_DETAILS = {
   },
 };
 
+export const MEDIA = {
+  heroImage: {
+    value: '',
+    error: undefined,
+    rule: '',
+    label: '',
+    src: '',
+    base64String: '',
+    responseUrl: '',
+  },
+  tombstoneImage: {
+    value: '',
+    error: undefined,
+    rule: '',
+    label: '',
+    src: '',
+    base64String: '',
+    responseUrl: '',
+  },
+};
+
 export const LEADERSHIP = {
   data: [{
     includeInOfferingPage: {
