@@ -100,6 +100,7 @@ export class BankAccountStore {
         accountNumber: accountNumber.value,
         routingNumber: routingNumber.value,
       };
+      accountAttributes = { ...plaidBankDetails };
     }
     return accountAttributes;
   }

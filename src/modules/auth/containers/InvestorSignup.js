@@ -13,7 +13,6 @@ import { ListErrors } from '../../../theme/shared';
 class InvestorSignup extends Component {
   componentWillMount() {
     this.props.authStore.setDefaultPwdType();
-    this.props.authStore.reset('SIGNUP');
   }
   handleSubmitForm = (e) => {
     e.preventDefault();

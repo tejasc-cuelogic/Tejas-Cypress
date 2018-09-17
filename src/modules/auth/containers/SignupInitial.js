@@ -15,6 +15,9 @@ const GetBtn = ({ type }) => {
 @inject('authStore')
 @observer
 class signupInitial extends Component {
+  componentWillMount() {
+    this.props.authStore.reset('SIGNUP');
+  }
   render() {
     const userTypes = USER_TYPES_META.slice();
     const { SIGNUP_FRM, signupChange } = this.props.authStore;

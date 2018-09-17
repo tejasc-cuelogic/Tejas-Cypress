@@ -258,10 +258,10 @@ class IraAccountStore {
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'ira' });
+      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'ira' });
       if (accountDetails) {
         mutation = updateAccount;
-        variables.accountId = accountDetails.accountId;
+        variables.accountId = accountDetails.details.accountId;
         actionPerformed = 'updated';
       }
     }
@@ -274,7 +274,7 @@ class IraAccountStore {
         .then(action((result) => {
           userDetailsStore.getUser(userStore.currentUser.sub);
           if (result.data.createInvestorAccount) {
-            const { iraBankDetails } = result.data.createInvestorAccount.accountDetails;
+            const { iraBankDetails } = { ...result.data.createInvestorAccount };
             bankAccountStore.setPlaidAccDetails(iraBankDetails);
           } else {
             const { iraBankDetails } = result.data.updateInvestorAccount.accountDetails;
