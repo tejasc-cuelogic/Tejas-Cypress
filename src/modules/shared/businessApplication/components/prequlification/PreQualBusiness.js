@@ -23,8 +23,9 @@ export default class PreQualBusiness extends Component {
     return (
       <Aux>
         <FormElementWrap
+          hideFields={hideFields}
           header="What is your Business Model?"
-          subHeader={!hideFields && 'Only Business to Consumer models are accepted at this time.'}
+          subHeader="Only Business to Consumer models are accepted at this time."
         >
           <FormRadioGroup
             disabled={preQualFormDisabled}
@@ -36,6 +37,7 @@ export default class PreQualBusiness extends Component {
           />
         </FormElementWrap>
         <GeneralInformation
+          hideFields={hideFields}
           fields={fields}
           preQualFormDisabled={preQualFormDisabled}
           businessAppEleChange={businessAppEleChange}
@@ -43,7 +45,7 @@ export default class PreQualBusiness extends Component {
           currentApplicationType={this.props.applicationType || currentApplicationType}
           setAddressFields={setAddressFields}
         />
-        <FormElementWrap header="What industry are you in?" subHeader={!hideFields && 'Please select all that apply.'}>
+        <FormElementWrap hideFields={hideFields} header="What industry are you in?" subHeader="Please select all that apply.">
           <FormCheckbox
             disabled={preQualFormDisabled}
             fielddata={fields.industryTypes}
@@ -52,7 +54,7 @@ export default class PreQualBusiness extends Component {
             containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
-        <FormElementWrap header="What can NextSeed help you with?" subHeader={!hideFields && 'Select in which area NextSeed can help your business.'}>
+        <FormElementWrap hideFields={hideFields} header="What can NextSeed help you with?" subHeader="Select in which area NextSeed can help your business.">
           <FormRadioGroup
             disabled={preQualFormDisabled}
             fielddata={fields.businessGoal}
@@ -62,7 +64,7 @@ export default class PreQualBusiness extends Component {
             containerclassname="iconic-radio"
           />
         </FormElementWrap>
-        <FormElementWrap header="Experience">
+        <FormElementWrap hideFields={hideFields} header="Experience">
           <Grid>
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
               <div className="field-wrap">
@@ -109,7 +111,7 @@ export default class PreQualBusiness extends Component {
             </Grid.Column>
           </Grid>
         </FormElementWrap>
-        <FormElementWrap header="What will the funds be used for?" subHeader={!hideFields && 'Please select all that apply.'}>
+        <FormElementWrap hideFields={hideFields} header="What will the funds be used for?" subHeader="Please select all that apply.">
           <FormCheckbox
             disabled={preQualFormDisabled}
             fielddata={fields.fundUsage}
@@ -118,11 +120,11 @@ export default class PreQualBusiness extends Component {
             containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
-        <FormElementWrap>
+        <FormElementWrap hideFields={hideFields}>
           <Grid>
             {getBusinessTypeCondtion &&
               <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
-                <Header as="h3">
+                <Header as={hideFields ? 'h4' : 'h3'}>
                   Previous year
                   <Header.Subheader>
                     For your business, give us a quick snapshot
@@ -148,7 +150,7 @@ export default class PreQualBusiness extends Component {
               </Grid.Column>
             }
             <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
-              <Header as="h3">
+              <Header as={hideFields ? 'h4' : 'h3'}>
                 Next year projections
                 <Header.Subheader>
                   For your business, give us a quick snapshot

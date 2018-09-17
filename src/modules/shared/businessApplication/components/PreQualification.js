@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
-import { Grid, Icon, Form, Button, Divider } from 'semantic-ui-react';
+import { Container, Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../helper/utility';
 import { FormInput } from '../../../../theme/form';
@@ -64,84 +64,82 @@ export default class PreQualification extends Component {
       return <NotFound />;
     }
     return (
-      <Grid container>
-        <Grid.Column>
-          <Form onSubmit={this.prequalBasicSubmit} className="issuer-signup">
-            {!hideFields &&
-            <Aux>
-              <Icon className="ns-paper-plane" size="massive" color="green" />
-              <FormElementWrap
-                as="h1"
-                header="Pre-Qualification Application Process"
-                subHeader={
-                  <Aux>
-                    Welcome to NextSeed! Run through this quick form to get pre-qualified.
-                    <Link to={this.props.isPublic ? '/business-application/questions/need-help' : 'need-help'} className="link">Need help or have questions?</Link>
-                  </Aux>
-                }
-              />
-            </Aux>
-            }
-            {this.props.isPublic &&
-            <FormElementWrap header="First, please tell us a little about yourself!">
-              <div className="field-wrap">
-                <Form.Group widths="equal">
-                  {
-                    ['firstName', 'lastName', 'email'].map(field => (
-                      <FormInput
-                        autoFocus={field === 'firstName'}
-                        disabled={isPrequalQulify}
-                        key={field}
-                        type="text"
-                        name={field}
-                        fielddata={BUSINESS_APP_FRM_BASIC.fields[field]}
-                        changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_FRM_BASIC')}
-                      />
-                    ))
-                  }
-                </Form.Group>
-              </div>
-              {!isPrequalQulify &&
-              <Button
-                loading={this.props.uiStore.inProgress}
-                disabled={!BUSINESS_APP_FRM_BASIC.meta.isValid}
-                size="large"
-                color="green"
-                className="very relaxed"
-              >
-                Continue
-              </Button>
+      <Container className={hideFields ? 'inner-content-spacer' : ''}>
+        <Form onSubmit={this.prequalBasicSubmit} className="issuer-signup">
+          {!hideFields &&
+          <Aux>
+            <Icon className="ns-paper-plane" size="massive" color="green" />
+            <FormElementWrap
+              as="h1"
+              header="Pre-Qualification Application Process"
+              subHeader={
+                <Aux>
+                  Welcome to NextSeed! Run through this quick form to get pre-qualified.
+                  <Link to={this.props.isPublic ? '/business-application/questions/need-help' : 'need-help'} className="link">Need help or have questions?</Link>
+                </Aux>
               }
-            </FormElementWrap>
-            }
-          </Form>
-          {isPrequalQulify &&
-          <Form onSubmit={this.submit} className="issuer-signup">
-            {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate' ?
-              <PreQualRealEstate
-                hideFields={hideFields}
-                applicationType={params.applicationType}
-              /> :
-              <PreQualBusiness hideFields={hideFields} applicationType={params.applicationType} />
-            }
-            {!hideFields &&
-            <Aux>
-              <Divider hidden />
-              <Button
-                loading={this.props.uiStore.inProgress}
-                disabled={!BUSINESS_APP_FRM.meta.isValid}
-                size="large"
-                color="green"
-                className="very relaxed"
-              >
-                Submit
-              </Button>
-            </Aux>
-            }
-          </Form>
+            />
+          </Aux>
           }
-        </Grid.Column>
-      </Grid>
+          {this.props.isPublic &&
+          <FormElementWrap header="First, please tell us a little about yourself!" hideFields={hideFields}>
+            <div className="field-wrap">
+              <Form.Group widths="equal">
+                {
+                  ['firstName', 'lastName', 'email'].map(field => (
+                    <FormInput
+                      autoFocus={field === 'firstName'}
+                      disabled={isPrequalQulify}
+                      key={field}
+                      type="text"
+                      name={field}
+                      fielddata={BUSINESS_APP_FRM_BASIC.fields[field]}
+                      changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_FRM_BASIC')}
+                    />
+                  ))
+                }
+              </Form.Group>
+            </div>
+            {!isPrequalQulify &&
+            <Button
+              loading={this.props.uiStore.inProgress}
+              disabled={!BUSINESS_APP_FRM_BASIC.meta.isValid}
+              size="large"
+              color="green"
+              className="very relaxed"
+            >
+              Continue
+            </Button>
+            }
+          </FormElementWrap>
+          }
+        </Form>
+        {isPrequalQulify &&
+        <Form onSubmit={this.submit} className="issuer-signup">
+          {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate' ?
+            <PreQualRealEstate
+              hideFields={hideFields}
+              applicationType={params.applicationType}
+            /> :
+            <PreQualBusiness hideFields={hideFields} applicationType={params.applicationType} />
+          }
+          {!hideFields &&
+          <Aux>
+            <Divider hidden />
+            <Button
+              loading={this.props.uiStore.inProgress}
+              disabled={!BUSINESS_APP_FRM.meta.isValid}
+              size="large"
+              color="green"
+              className="very relaxed"
+            >
+              Submit
+            </Button>
+          </Aux>
+          }
+        </Form>
+        }
+      </Container>
     );
   }
 }

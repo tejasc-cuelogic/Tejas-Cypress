@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
+import { Container, Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormInput, DropZoneConfirm as DropZone, MaskedInput, FormDatePicker } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
@@ -48,24 +48,27 @@ export default class BusinessDetails extends Component {
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     return (
-      <Grid container>
-        <Grid.Column>
-          <Form className="issuer-signup">
+      <Container className={hideFields ? 'inner-content-spacer' : ''}>
+        <Form className="issuer-signup">
+          {!hideFields &&
             <FormElementWrap
               as="h1"
               header={`${currentApplicationType === 'business' ? 'Business' : 'Real Estate'} Details`}
-              subHeader={!hideFields && 'Quickly, safely and accurately submit your business information.'}
+              subHeader="Quickly, safely and accurately submit your business information."
             />
-            <FormElementWrap
-              header={
-                <Aux>
-                  Business Plan
-                  {!hideFields && currentApplicationType === 'business' &&
-                  <Link to="/" className="link"><small>Learn More</small></Link>
-                  }
-                </Aux>
-              }
-            >
+          }
+          <FormElementWrap
+            hideFields={hideFields}
+            header={
+              <Aux>
+                Business Plan
+                {!hideFields && currentApplicationType === 'business' &&
+                <Link to="/" className="link"><small>Learn More</small></Link>
+                }
+              </Aux>
+            }
+          >
+            {!hideFields ? (
               <DropZone
                 hideFields={hideFields}
                 tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
@@ -78,178 +81,184 @@ export default class BusinessDetails extends Component {
                 onremove={(e, fieldName, index) =>
                   businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
               />
-            </FormElementWrap>
-            <FormElementWrap
-              header="Existing Debt"
-              subHeader={!hideFields && 'What are the outstanding debt obligations for the business?'}
-            >
-              {BUSINESS_DETAILS_FRM.fields.debts.length &&
-              BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
-                <Grid>
-                  <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                    <Header as="h5">
-                      Existing Debt {index + 1}
-                      {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
-                        <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
-                          <Icon color="red" size="small" className="ns-trash" />
-                        </Button>
+              ) : (
+                <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
+              )}
+          </FormElementWrap>
+          <FormElementWrap
+            hideFields={hideFields}
+            header="Existing Debt"
+            subHeader="What are the outstanding debt obligations for the business?"
+          >
+            {BUSINESS_DETAILS_FRM.fields.debts.length &&
+            BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
+              <Grid>
+                <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
+                  <Header as="h5">
+                    Existing Debt {index + 1}
+                    {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
+                      <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
+                        <Icon color="red" size="small" className="ns-trash" />
+                      </Button>
+                    }
+                  </Header>
+                  <div className="field-wrap">
+                    <Form.Group widths="equal">
+                      <MaskedInput
+                        disabled={formReadOnlyMode}
+                        prefix="$ "
+                        currency
+                        type="text"
+                        name="amount"
+                        fielddata={debt.amount}
+                        changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
+                      />
+                      <MaskedInput
+                        disabled={formReadOnlyMode}
+                        percentage
+                        type="text"
+                        name="interestExpenses"
+                        fielddata={debt.interestExpenses}
+                        changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
+                      />
+                    </Form.Group>
+                    <Form.Group widths="equal">
+                      <MaskedInput
+                        disabled={formReadOnlyMode}
+                        prefix="$ "
+                        currency
+                        type="text"
+                        name="remainingPrincipal"
+                        fielddata={debt.remainingPrincipal}
+                        changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
+                      />
+                      <MaskedInput
+                        disabled={formReadOnlyMode}
+                        number
+                        type="text"
+                        name="term"
+                        fielddata={debt.term}
+                        changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
+                      />
+                    </Form.Group>
+                  </div>
+                </Grid.Column>
+              </Grid>
+              ))
+            }
+            <Divider hidden />
+            {!hideFields &&
+            <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
+            }
+          </FormElementWrap>
+          <FormElementWrap
+            hideFields={hideFields}
+            header="Owners"
+            subHeader="Please list all individuals with at least 20% ownership."
+          >
+            {!hideFields &&
+            <Accordion>
+              <Accordion.Title onClick={this.toggleHandel} active={this.state.legalNoteToggle}>
+                <Icon className="ns-chevron-up" />
+                {this.state.legalNoteToggle ? 'Hide' : 'Show'} legal note
+              </Accordion.Title>
+              <Accordion.Content active={this.state.legalNoteToggle}>
+                <p>
+                  You hereby authorize NextSeed Management LLC, its assignee, assigns or
+                  potential assigns to review your personal credit and business profile
+                  provided by national credit bureaus in considering this application and
+                  for the purpose of determining your eligibility to raise funds under an
+                  applicable exemption provided by the U.S. Securities Act of 1933 and related
+                  regulations. You hereby authorize the above listed parties to release all
+                  credit information and bank information and you represent and warrant that all
+                  information submitted to NextSeed Management LLC, including without limitation
+                  information on this application, any attachments, any supplemental, or other
+                  information herein is true, complete and accurate. You agree to immediately
+                  notify NextSeed Management LLC if any of such information changes materially in
+                  the 60 days after the date of this application. A fascimile, electronic or
+                  other copy of this authorization shall be as valid as the original.<br />
+                  NOTE: This will not impact your credit score. All information you provide
+                  to us is strictly confidential and we will never disclose it to anyone
+                  without your express consent unless required by applicable law or regulation
+                </p>
+              </Accordion.Content>
+            </Accordion>
+            }
+            {BUSINESS_DETAILS_FRM.fields.owners.length &&
+            BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => (
+              <Grid>
+                <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
+                  <Header as="h5">Owner {index + 1}
+                    {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
+                      <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
+                        <Icon color="red" size="small" className="ns-trash" />
+                      </Button>
+                    }
+                  </Header>
+                  <div className="field-wrap">
+                    <Form.Group widths="equal">
+                      {
+                        ['fullLegalName', 'title'].map(field => (
+                          <FormInput
+                            disabled={formReadOnlyMode}
+                            key={field}
+                            type="text"
+                            name={field}
+                            fielddata={owner[field]}
+                            changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
+                          />
+                        ))
                       }
-                    </Header>
-                    <div className="field-wrap">
-                      <Form.Group widths="equal">
-                        <MaskedInput
-                          disabled={formReadOnlyMode}
-                          prefix="$ "
-                          currency
-                          type="text"
-                          name="amount"
-                          fielddata={debt.amount}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
-                        />
-                        <MaskedInput
-                          disabled={formReadOnlyMode}
-                          percentage
-                          type="text"
-                          name="interestExpenses"
-                          fielddata={debt.interestExpenses}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
-                        />
-                      </Form.Group>
-                      <Form.Group widths="equal">
-                        <MaskedInput
-                          disabled={formReadOnlyMode}
-                          prefix="$ "
-                          currency
-                          type="text"
-                          name="remainingPrincipal"
-                          fielddata={debt.remainingPrincipal}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
-                        />
-                        <MaskedInput
-                          disabled={formReadOnlyMode}
-                          number
-                          type="text"
-                          name="term"
-                          fielddata={debt.term}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
-                        />
-                      </Form.Group>
-                    </div>
-                  </Grid.Column>
-                </Grid>
-                ))
-              }
-              <Divider hidden />
-              {!hideFields &&
-              <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
-              }
-            </FormElementWrap>
-            <FormElementWrap
-              header="Owners"
-              subHeader={!hideFields && 'Please list all individuals with at least 20% ownership.'}
-            >
-              {!hideFields &&
-              <Accordion>
-                <Accordion.Title onClick={this.toggleHandel} active={this.state.legalNoteToggle}>
-                  <Icon className="ns-chevron-up" />
-                  {this.state.legalNoteToggle ? 'Hide' : 'Show'} legal note
-                </Accordion.Title>
-                <Accordion.Content active={this.state.legalNoteToggle}>
-                  <p>
-                    You hereby authorize NextSeed Management LLC, its assignee, assigns or
-                    potential assigns to review your personal credit and business profile
-                    provided by national credit bureaus in considering this application and
-                    for the purpose of determining your eligibility to raise funds under an
-                    applicable exemption provided by the U.S. Securities Act of 1933 and related
-                    regulations. You hereby authorize the above listed parties to release all
-                    credit information and bank information and you represent and warrant that all
-                    information submitted to NextSeed Management LLC, including without limitation
-                    information on this application, any attachments, any supplemental, or other
-                    information herein is true, complete and accurate. You agree to immediately
-                    notify NextSeed Management LLC if any of such information changes materially in
-                    the 60 days after the date of this application. A fascimile, electronic or
-                    other copy of this authorization shall be as valid as the original.<br />
-                    NOTE: This will not impact your credit score. All information you provide
-                    to us is strictly confidential and we will never disclose it to anyone
-                    without your express consent unless required by applicable law or regulation
-                  </p>
-                </Accordion.Content>
-              </Accordion>
-              }
-              {BUSINESS_DETAILS_FRM.fields.owners.length &&
-              BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => (
-                <Grid>
-                  <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                    <Header as="h5">Owner {index + 1}
-                      {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
-                        <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
-                          <Icon color="red" size="small" className="ns-trash" />
-                        </Button>
-                      }
-                    </Header>
-                    <div className="field-wrap">
-                      <Form.Group widths="equal">
-                        {
-                          ['fullLegalName', 'title'].map(field => (
-                            <FormInput
-                              disabled={formReadOnlyMode}
-                              key={field}
-                              type="text"
-                              name={field}
-                              fielddata={owner[field]}
-                              changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
-                            />
-                          ))
-                        }
-                      </Form.Group>
-                      <Form.Group widths="equal">
-                        <MaskedInput
-                          disabled={formReadOnlyMode}
-                          number
-                          type="text"
-                          name="yearsOfExp"
-                          fielddata={owner.yearsOfExp}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
-                        />
-                        <MaskedInput
-                          disabled={formReadOnlyMode}
-                          percentage
-                          type="text"
-                          name="companyOwnerShip"
-                          fielddata={owner.companyOwnerShip}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
-                        />
-                      </Form.Group>
-                      <Form.Group widths="equal">
-                        <FormDatePicker
-                          disabled={formReadOnlyMode}
-                          type="text"
-                          name="dateOfService"
-                          maxDate={moment()}
-                          placeholderText={owner.dateOfService.placeHolder}
-                          fielddata={owner.dateOfService}
-                          selected={owner.dateOfService.value ?
-                            moment(owner.dateOfService.value) : null}
-                          changed={date => businessDetailsDateChange('dateOfService', date, index)}
-                        />
-                        <MaskedInput
-                          disabled={formReadOnlyMode}
-                          ssn
-                          type="text"
-                          name="ssn"
-                          fielddata={owner.ssn}
-                          changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
-                        />
-                      </Form.Group>
-                      <Form.Group widths="equal">
-                        <FormInput
-                          disabled={formReadOnlyMode}
-                          type="text"
-                          name="linkedInUrl"
-                          fielddata={owner.linkedInUrl}
-                          changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
-                        />
-                        <Form.Field>
+                    </Form.Group>
+                    <Form.Group widths="equal">
+                      <MaskedInput
+                        disabled={formReadOnlyMode}
+                        number
+                        type="text"
+                        name="yearsOfExp"
+                        fielddata={owner.yearsOfExp}
+                        changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
+                      />
+                      <MaskedInput
+                        disabled={formReadOnlyMode}
+                        percentage
+                        type="text"
+                        name="companyOwnerShip"
+                        fielddata={owner.companyOwnerShip}
+                        changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
+                      />
+                    </Form.Group>
+                    <Form.Group widths="equal">
+                      <FormDatePicker
+                        disabled={formReadOnlyMode}
+                        type="text"
+                        name="dateOfService"
+                        maxDate={moment()}
+                        placeholderText={owner.dateOfService.placeHolder}
+                        fielddata={owner.dateOfService}
+                        selected={owner.dateOfService.value ?
+                          moment(owner.dateOfService.value) : null}
+                        changed={date => businessDetailsDateChange('dateOfService', date, index)}
+                      />
+                      <MaskedInput
+                        disabled={formReadOnlyMode}
+                        ssn
+                        type="text"
+                        name="ssn"
+                        fielddata={owner.ssn}
+                        changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
+                      />
+                    </Form.Group>
+                    <Form.Group widths="equal">
+                      <FormInput
+                        disabled={formReadOnlyMode}
+                        type="text"
+                        name="linkedInUrl"
+                        fielddata={owner.linkedInUrl}
+                        changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
+                      />
+                      <Form.Field>
+                        {!hideFields ? (
                           <DropZone
                             hideFields={hideFields}
                             disabled={formReadOnlyMode}
@@ -259,32 +268,39 @@ export default class BusinessDetails extends Component {
                               businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
                             onremove={(e, fieldName) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
                           />
-                        </Form.Field>
-                      </Form.Group>
-                    </div>
-                  </Grid.Column>
-                </Grid>
-                ))
-              }
-              <Divider hidden />
-              {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
-                <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
-              }
-            </FormElementWrap>
-            <AppNavigation />
-          </Form>
-          <Confirm
-            header="Confirm"
-            content={`Are you sure you want to remove this ${this.state.currentForm}?`}
-            open={this.state.showPartialSaveModal}
-            onCancel={this.toggleConfirm}
-            onConfirm={
-              e => this.removeForm(e)}
-            size="mini"
-            className="deletion"
-          />
-        </Grid.Column>
-      </Grid>
+                        ) : (
+                          <Aux>
+                            <label>Resume</label>
+                            <div>
+                              <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
+                            </div>
+                          </Aux>
+                        )}
+                      </Form.Field>
+                    </Form.Group>
+                  </div>
+                </Grid.Column>
+              </Grid>
+              ))
+            }
+            <Divider hidden />
+            {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
+              <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
+            }
+          </FormElementWrap>
+          <AppNavigation />
+        </Form>
+        <Confirm
+          header="Confirm"
+          content={`Are you sure you want to remove this ${this.state.currentForm}?`}
+          open={this.state.showPartialSaveModal}
+          onCancel={this.toggleConfirm}
+          onConfirm={
+            e => this.removeForm(e)}
+          size="mini"
+          className="deletion"
+        />
+      </Container>
     );
   }
 }
