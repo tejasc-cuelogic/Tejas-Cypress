@@ -1,9 +1,9 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { GqlClient as clientPublic } from '../../../../api/publicApi';
+// import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { allActivities, addActivity } from '../../queries/activity';
-import { userStore, businessAppStore } from '../../index';
+import { businessAppStore } from '../../index';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { LOG_ACTIVITY } from '../../../constants/activity';
@@ -17,7 +17,7 @@ export class ActivityHistoryStore {
   @action
   initRequest = () => {
     const { activityType, activityUserType } = this.requestState.filters;
-    let filterParams = { resourceId: businessAppStore.applicationId };
+    let filterParams = { resourceId: businessAppStore.applicationId, orderBy: { field: 'activityDate', sort: 'desc' } };
     filterParams = activityType !== '' ? { ...filterParams, activityType } : { ...filterParams };
     filterParams = activityUserType !== '' ? { ...filterParams, scope: activityUserType } : { ...filterParams };
     this.data = graphql({
@@ -35,24 +35,24 @@ export class ActivityHistoryStore {
 
   @action
   send = () => {
-    // const data = Validator.ExtractValues(this.ACTIVITY_FRM.fields);
-    // data.title = 'Posted new comment';
+    const formData = Validator.ExtractValues(this.ACTIVITY_FRM.fields);
     const data = {
       resourceId: businessAppStore.applicationId,
       activityType: 'ADMIN_ACTIVITY',
       activityTitle: 'Testing',
-      activity: 'Testing content',
-      rating: '1',
+      activity: formData.comment,
       scope: 'ADMIN',
-      uploadId: userStore.currentUser.sub,
     };
-    clientPublic
+    client
       .mutate({
         mutation: addActivity,
         variables: {
           activityHistoryDetails: data,
         },
-        refetchQueries: [{ query: allActivities }],
+        refetchQueries: [{
+          query: allActivities,
+          variables: { resourceId: businessAppStore.applicationId },
+        }],
       })
       .then(() => {
         Helper.toast('sent.', 'success');

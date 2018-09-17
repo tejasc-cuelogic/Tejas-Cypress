@@ -26,6 +26,8 @@ export const allActivities = gql`
 
 export const addActivity = gql`
   mutation createActivityHistory ($activityHistoryDetails: ActivityHistoryInput!){
-    createActivityHistory(activityHistoryDetails: $activityHistoryDetails)
+    createActivityHistory(activityHistoryDetails: $activityHistoryDetails) {
+      resourceId
+    }
   }
 `;
