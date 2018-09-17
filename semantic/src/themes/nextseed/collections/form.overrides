@@ -66,10 +66,11 @@
         color:@negativeTextColor;
     }
     label{
-        i.icon{
+        i.ns-help-circle, a{
             margin:0 0 0 @5px;
             font-size:@14px;
             color:@neutral-middark;
+            vertical-align: middle;
         }
     }
     input:not([type]),
@@ -86,6 +87,26 @@
     input[type=url],
     textarea{
         border-bottom:@border-color 1px solid;
+    }
+    .ui.table{
+        input:not([type]),
+        input[type=date],
+        input[type=datetime-local],
+        input[type=email],
+        input[type=file],
+        input[type=number],
+        input[type=password],
+        input[type=search],
+        input[type=tel],
+        input[type=text],
+        input[type=time],
+        input[type=url],
+        textarea{
+            padding:@5px;
+            background-color:@white;
+            border-radius:@4px;
+            border:@border-color 1px solid;
+        }
     }
     /*  Inverted Form  */
     &.inverted{
@@ -150,6 +171,40 @@
         }
         .ReactCrop.ReactCrop--fixed-aspect ~ .file-uploader{
             display:none;
+        }
+    }
+    &.comment-input {
+        padding: @10px 0 0;
+        .ui.action.input>input {
+            padding: @14px @20px;
+        }
+        .attachment {
+            position: relative;
+            width: 45px;
+            text-align: center;
+            border-bottom: @border-color 1px solid;
+            i.icon {
+                position: absolute;
+                width: 45px;
+                height: 45px;
+                line-height: 45px;
+            }
+            input[type=file] {
+                height: 45px;
+                width: 45px;
+                overflow: hidden;
+                line-height: 45px;
+                opacity: 0;
+            }
+        }
+        .ui.action.input>.button {
+            border-bottom: @border-color 1px solid;
+            box-shadow: none;
+            border-radius: 0;
+            padding: @10px;
+            &:active {
+                background: transparent !important;
+            }
         }
     }
 }

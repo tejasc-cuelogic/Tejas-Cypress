@@ -114,6 +114,7 @@
 @ns-arrow-right: "\e903";
 @ns-arrow-up: "\e904";
 @ns-article: "\e905";
+@ns-attachment: "\e988";
 @ns-author: "\e906";
 @ns-bag: "\e907";
 @ns-bar: "\e951";
@@ -219,6 +220,7 @@
 @ns-rewards: "\e980";
 @ns-rss-feed: "\e94a";
 @ns-search: "\e931";
+@ns-send-right: "\e989";
 @ns-setting: "\e932";
 @ns-shield-check: "\e96c";
 @ns-star: "\e981";

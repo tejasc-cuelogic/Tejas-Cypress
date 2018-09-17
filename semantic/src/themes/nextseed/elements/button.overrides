@@ -51,6 +51,12 @@
                     color:darken(@highlight-primary, 10%);
                 }
             }
+            &.blue{
+                color:@blue;
+                &:hover, &:focus, &:active{
+                    color:darken(@blue, 10%);
+                }
+            }
         }
         &.ghost-button{
             background-color:transparent;
@@ -82,13 +88,6 @@
                 color:@violet;
                 &:hover, &:focus, &:active{
                     color:darken(@violet, 10%);
-                    background-color:transparent;
-                }
-            }
-            &.blue{
-                color:@blue;
-                &:hover, &:focus, &:active{
-                    color:darken(@blue, 10%);
                     background-color:transparent;
                 }
             }
