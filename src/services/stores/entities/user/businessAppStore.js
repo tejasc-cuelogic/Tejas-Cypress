@@ -368,7 +368,7 @@ export class BusinessAppStore {
       this.appStepsStatus[3].status = data.stepStatus;
       if (this.currentApplicationType === 'business') {
         this.BUSINESS_DOC_FRM.fields.blanketLien.value = data.blanketLien !== '' ? data.blanketLien : '';
-        this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGurantee !== '' ? data.providePersonalGurantee ? 'true' : 'false' : '';
+        this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGuarantee !== '' ? data.providePersonalGuarantee ? 'true' : 'false' : '';
         if (data.personalGuarantee && data.personalGuarantee.length) {
           this.setFileObjectToForm(data.personalGuarantee, 'BUSINESS_DOC_FRM', 'personalGuaranteeForm');
         }
@@ -618,7 +618,7 @@ export class BusinessAppStore {
           this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
         ) : [],
         blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value !== '' ? this.BUSINESS_DOC_FRM.fields.blanketLien.value : false,
-        providePersonalGurantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
+        providePersonalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
       };
     } else {
       inputData = {

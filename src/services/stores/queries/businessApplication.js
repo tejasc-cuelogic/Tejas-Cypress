@@ -281,7 +281,7 @@ query _getBusinessApplicationById ($id: String!) {
         fileName
       }
       blanketLien
-      providePersonalGurantee
+      providePersonalGuarantee
       personalGuarantee {
         fileId
         fileName
