@@ -348,6 +348,16 @@ ol.ui.list.step-list{
         padding-right:@14px;
     }
 }
+.ui.form.gallery-img{
+    .ui.horizontal.list{
+        display:flex;
+        flex-wrap:wrap;
+        >.item{
+            margin:0 @20px @20px 0;
+            padding:0;
+        }
+    }
+}
 
 .ui.bulleted.list .list>.item,
 .ui.bulleted.list>.item,
