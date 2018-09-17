@@ -18,16 +18,18 @@ export default class RealEstateDocumentation extends Component {
       businessAppRemoveFiles,
       formReadOnlyMode,
     } = this.props.businessAppStore;
+    const { hideFields } = this.props;
     const { fields } = BUSINESS_DOC_FRM;
     return (
       <Aux>
         <FormElementWrap
           header="Upload Your Due Dilligence Documents"
-          subHeader="Title commitment, survey, environmental reports, previous inspections, previous appraisals, etc"
+          subHeader={!hideFields && 'Title commitment, survey, environmental reports, previous inspections, previous appraisals, etc'}
         >
           <Grid stackable columns="equal">
             <Grid.Column>
               <DropZone
+                hideFields={hideFields}
                 disabled={formReadOnlyMode}
                 multiple
                 name="dilligenceDocuments"
@@ -42,11 +44,12 @@ export default class RealEstateDocumentation extends Component {
         </FormElementWrap>
         <FormElementWrap
           header="Upload Your Legal Documents"
-          subHeader="For all related entities - filing docs, governing docs"
+          subHeader={!hideFields && 'For all related entities - filing docs, governing docs'}
         >
           <Grid stackable columns="equal">
             <Grid.Column>
               <DropZone
+                hideFields={hideFields}
                 disabled={formReadOnlyMode}
                 multiple
                 name="legalDocuments"

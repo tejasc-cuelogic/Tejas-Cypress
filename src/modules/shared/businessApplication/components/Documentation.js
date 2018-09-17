@@ -14,6 +14,7 @@ export default class Documentation extends Component {
   }
   render() {
     const { currentApplicationType } = this.props.businessAppStore;
+    const { hideFields } = this.props;
     return (
       <Grid container>
         <Grid.Column>
@@ -21,11 +22,11 @@ export default class Documentation extends Component {
             <FormElementWrap
               as="h1"
               header="Documentation"
-              subHeader={`Quickly, safely and accurately submit your ${currentApplicationType === 'business' ? 'business' : 'real estate'} information.`}
+              subHeader={!hideFields && `Quickly, safely and accurately submit your ${currentApplicationType === 'business' ? 'business' : 'real estate'} information.`}
             />
             {currentApplicationType === 'business' ?
-              <BusinessDocumentation /> :
-              <RealEstateDocumentation />
+              <BusinessDocumentation hideFields={hideFields} /> :
+              <RealEstateDocumentation hideFields={hideFields} />
             }
             <AppNavigation />
           </Form>

@@ -18,6 +18,7 @@ export default class Performance extends Component {
       businessPerfMaskingChange, getBusinessTypeCondtion, getOwnPropertyCondtion,
       businessAppUploadFiles, businessAppRemoveFiles,
     } = this.props.businessAppStore;
+    const { hideFields } = this.props;
     const { fields } = BUSINESS_PERF_FRM;
     const statmentConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
     return (
@@ -27,17 +28,18 @@ export default class Performance extends Component {
             <FormElementWrap
               as="h1"
               header="Performance"
-              subHeader="Quickly, safely and accurately submit your business information."
+              subHeader={!hideFields && 'Quickly, safely and accurately submit your business information.'}
             />
             <FormElementWrap
               header={`${currentApplicationType === 'business' ? 'Financial Statements' : 'Upload your Financial Model'}`}
-              subHeader={`${currentApplicationType === 'business' ? 'How has the business been performing, and what are your projections? Upload your financial statements in each section.' : 'Working model including all assumptions, project cashflows and distributions (5-10yr projections). Include stress testing'}`}
+              subHeader={!hideFields && `${currentApplicationType === 'business' ? 'How has the business been performing, and what are your projections? Upload your financial statements in each section.' : 'Working model including all assumptions, project cashflows and distributions (5-10yr projections). Include stress testing'}`}
             >
               <Grid stackable columns="equal">
                 {
                   statmentConst.map(field => (
                     <Grid.Column key={field}>
                       <DropZone
+                        hideFields={hideFields}
                         disabled={formReadOnlyMode}
                         multiple
                         key={field}
@@ -56,7 +58,7 @@ export default class Performance extends Component {
             {currentApplicationType === 'business' &&
             <FormElementWrap
               header="Performance"
-              subHeader="This information was captured from the Pre-Qualification form. You can update any numbers below if needed."
+              subHeader={!hideFields && 'This information was captured from the Pre-Qualification form. You can update any numbers below if needed.'}
             >
               <Grid>
                 {getBusinessTypeCondtion &&

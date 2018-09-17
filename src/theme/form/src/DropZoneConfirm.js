@@ -33,6 +33,7 @@ export default class DropZone extends Component {
       error,
       showLoader,
     } = this.props.fielddata;
+    const { hideFields } = this.props;
     return (
       <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
         {label &&
@@ -85,31 +86,32 @@ export default class DropZone extends Component {
               }
               <span title={item}>{item}</span>
             </div>
-          )) : !isArray(toJS(value)) && value &&
-          <div className="file-uploader attached">
-            {!this.props.disabled &&
-              <Aux>
-                <Responsive
-                  as={Button}
-                  minWidth={768}
-                  size="tiny"
-                  compact
-                  className="ghost-button remove pull-right"
-                  onClick={e => this.toggleConfirm(e, this.props.name)}
-                >
-                  Remove
-                </Responsive>
-                <Responsive
-                  as={Icon}
-                  maxWidth={767}
-                  name="remove"
-                  className="pull-right"
-                  onClick={e => this.toggleConfirm(e, this.props.name)}
-                />
-              </Aux>
-            }
-            <span title={value}>{value}</span>
-          </div>
+          )) : !isArray(toJS(value)) && value ?
+            <div className="file-uploader attached">
+              {!this.props.disabled &&
+                <Aux>
+                  <Responsive
+                    as={Button}
+                    minWidth={768}
+                    size="tiny"
+                    compact
+                    className="ghost-button remove pull-right"
+                    onClick={e => this.toggleConfirm(e, this.props.name)}
+                  >
+                    Remove
+                  </Responsive>
+                  <Responsive
+                    as={Icon}
+                    maxWidth={767}
+                    name="remove"
+                    className="pull-right"
+                    onClick={e => this.toggleConfirm(e, this.props.name)}
+                  />
+                </Aux>
+              }
+              <span title={value}>{value}</span>
+            </div> : hideFields &&
+            <p>No files uploaded yet.</p>
         }
         {error &&
           <FieldError error={error} />

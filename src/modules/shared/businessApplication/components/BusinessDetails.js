@@ -46,6 +46,7 @@ export default class BusinessDetails extends Component {
       businessAppRemoveFiles, addMoreForms, businessDetailsMaskingChange,
       formReadOnlyMode, businessDetailsDateChange, currentApplicationType,
     } = this.props.businessAppStore;
+    const { hideFields } = this.props;
     return (
       <Grid container>
         <Grid.Column>
@@ -53,19 +54,20 @@ export default class BusinessDetails extends Component {
             <FormElementWrap
               as="h1"
               header={`${currentApplicationType === 'business' ? 'Business' : 'Real Estate'} Details`}
-              subHeader="Quickly, safely and accurately submit your business information."
+              subHeader={!hideFields && 'Quickly, safely and accurately submit your business information.'}
             />
             <FormElementWrap
               header={
                 <Aux>
                   Business Plan
-                  {currentApplicationType === 'business' &&
+                  {!hideFields && currentApplicationType === 'business' &&
                   <Link to="/" className="link"><small>Learn More</small></Link>
                   }
                 </Aux>
               }
             >
               <DropZone
+                hideFields={hideFields}
                 tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
                 disabled={formReadOnlyMode}
                 multiple
@@ -79,7 +81,7 @@ export default class BusinessDetails extends Component {
             </FormElementWrap>
             <FormElementWrap
               header="Existing Debt"
-              subHeader="What are the outstanding debt obligations for the business?"
+              subHeader={!hideFields && 'What are the outstanding debt obligations for the business?'}
             >
               {BUSINESS_DETAILS_FRM.fields.debts.length &&
               BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
@@ -87,7 +89,7 @@ export default class BusinessDetails extends Component {
                   <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
                     <Header as="h5">
                       Existing Debt {index + 1}
-                      {BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
+                      {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
                         <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
@@ -138,12 +140,15 @@ export default class BusinessDetails extends Component {
                 ))
               }
               <Divider hidden />
+              {!hideFields &&
               <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
+              }
             </FormElementWrap>
             <FormElementWrap
               header="Owners"
-              subHeader="Please list all individuals with at least 20% ownership."
+              subHeader={!hideFields && 'Please list all individuals with at least 20% ownership.'}
             >
+              {!hideFields &&
               <Accordion>
                 <Accordion.Title onClick={this.toggleHandel} active={this.state.legalNoteToggle}>
                   <Icon className="ns-chevron-up" />
@@ -170,12 +175,13 @@ export default class BusinessDetails extends Component {
                   </p>
                 </Accordion.Content>
               </Accordion>
+              }
               {BUSINESS_DETAILS_FRM.fields.owners.length &&
               BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => (
                 <Grid>
                   <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
                     <Header as="h5">Owner {index + 1}
-                      {BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
+                      {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
                         <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
@@ -216,8 +222,9 @@ export default class BusinessDetails extends Component {
                       </Form.Group>
                       <Form.Group widths="equal">
                         <FormDatePicker
+                          disabled={formReadOnlyMode}
                           type="text"
-                          name="dob"
+                          name="dateOfService"
                           maxDate={moment()}
                           placeholderText={owner.dateOfService.placeHolder}
                           fielddata={owner.dateOfService}
@@ -244,6 +251,7 @@ export default class BusinessDetails extends Component {
                         />
                         <Form.Field>
                           <DropZone
+                            hideFields={hideFields}
                             disabled={formReadOnlyMode}
                             name="resume"
                             fielddata={owner.resume}
@@ -259,7 +267,7 @@ export default class BusinessDetails extends Component {
                 ))
               }
               <Divider hidden />
-              {BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
+              {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
                 <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
               }
             </FormElementWrap>

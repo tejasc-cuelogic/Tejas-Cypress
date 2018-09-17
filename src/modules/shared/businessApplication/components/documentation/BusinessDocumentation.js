@@ -22,13 +22,14 @@ export default class BusinessDocumentation extends Component {
       formReadOnlyMode,
     } = this.props.businessAppStore;
     const { fields } = BUSINESS_DOC_FRM;
+    const { hideFields } = this.props;
     const statementFileList = getBusinessTypeCondtion ? ['bankStatements', 'leaseAgreementsOrLOIs'] : ['leaseAgreementsOrLOIs'];
     const taxFileList = getBusinessTypeCondtion ? ['personalTaxReturn', 'businessTaxReturn'] : ['personalTaxReturn'];
     return (
       <Aux>
         <FormElementWrap
           header="Statements & Agreements"
-          subHeader={
+          subHeader={!hideFields &&
             <span>
               Provide the most recent 6 months of bank statements for
               your business accounts. For new entities, provide if
@@ -50,6 +51,7 @@ export default class BusinessDocumentation extends Component {
               statementFileList.map(field => (
                 <Grid.Column key={field}>
                   <DropZone
+                    hideFields={hideFields}
                     disabled={formReadOnlyMode}
                     multiple
                     key={field}
@@ -68,8 +70,9 @@ export default class BusinessDocumentation extends Component {
         </FormElementWrap>
         <FormElementWrap
           header="Tax Returns"
-          subHeader="Tax returns are used as part of NextSeed’s diligence process."
+          subHeader={!hideFields && 'Tax returns are used as part of NextSeed’s diligence process.'}
         >
+          {!hideFields &&
           <List bulleted>
             <List.Item>
               <b>For new entities</b>, please submit your personal tax returns and,
@@ -80,11 +83,13 @@ export default class BusinessDocumentation extends Component {
               <b>For existing entities</b>, please submit tax returns for the entity.
             </List.Item>
           </List>
+          }
           <Divider hidden />
           <div className="or-divider">
             {
               taxFileList.map(field => (
                 <DropZone
+                  hideFields={hideFields}
                   disabled={formReadOnlyMode}
                   multiple
                   key={field}
@@ -101,7 +106,7 @@ export default class BusinessDocumentation extends Component {
         </FormElementWrap>
         <FormElementWrap
           header="Will you accept a blanket lien on the business if your campaign is successfully funded?"
-          subHeader="NextSeed will require it. (Note that if you have existing debt with liens attached, a second lien will be accepted.)"
+          subHeader={!hideFields && 'NextSeed will require it. (Note that if you have existing debt with liens attached, a second lien will be accepted.)'}
         >
           <FormRadioGroup
             disabled={formReadOnlyMode}
@@ -113,7 +118,7 @@ export default class BusinessDocumentation extends Component {
         </FormElementWrap>
         <FormElementWrap
           header="Are you willing to provide a personal guarantee?"
-          subHeader="(This is not a requirement, but a personal guarantee can positively impact the terms provided.)"
+          subHeader={!hideFields && '(This is not a requirement, but a personal guarantee can positively impact the terms provided.)'}
         >
           <FormRadioGroup
             disabled={formReadOnlyMode}
@@ -124,11 +129,14 @@ export default class BusinessDocumentation extends Component {
           />
           {getPersonalGuaranteeCondition &&
             <div>
+              {!hideFields &&
               <p>
                 Please <a href="https://nextseed.box.com/shared/static/cnru75v5lv5akiz5p7fap0d7nqljwuy9.pdf" className="link"><b>download</b></a>, fill out and upload the
                 Personal Guarantee Form along with any supporting documentation
               </p>
+              }
               <DropZone
+                hideFields={hideFields}
                 disabled={formReadOnlyMode}
                 multiple
                 name="personalGuaranteeForm"

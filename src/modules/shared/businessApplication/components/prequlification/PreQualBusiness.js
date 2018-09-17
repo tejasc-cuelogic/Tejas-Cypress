@@ -24,7 +24,7 @@ export default class PreQualBusiness extends Component {
       <Aux>
         <FormElementWrap
           header="What is your Business Model?"
-          subHeader={!hideFields ? 'Only Business to Consumer models are accepted at this time.' : ''}
+          subHeader={!hideFields && 'Only Business to Consumer models are accepted at this time.'}
         >
           <FormRadioGroup
             disabled={preQualFormDisabled}
@@ -43,7 +43,7 @@ export default class PreQualBusiness extends Component {
           currentApplicationType={this.props.applicationType || currentApplicationType}
           setAddressFields={setAddressFields}
         />
-        <FormElementWrap header="What industry are you in?" subHeader={!hideFields ? 'Please select all that apply.' : ''}>
+        <FormElementWrap header="What industry are you in?" subHeader={!hideFields && 'Please select all that apply.'}>
           <FormCheckbox
             disabled={preQualFormDisabled}
             fielddata={fields.industryTypes}
@@ -52,7 +52,7 @@ export default class PreQualBusiness extends Component {
             containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
-        <FormElementWrap header="What can NextSeed help you with?" subHeader={!hideFields ? 'Select in which area NextSeed can help your business.' : ''}>
+        <FormElementWrap header="What can NextSeed help you with?" subHeader={!hideFields && 'Select in which area NextSeed can help your business.'}>
           <FormRadioGroup
             disabled={preQualFormDisabled}
             fielddata={fields.businessGoal}
@@ -109,7 +109,7 @@ export default class PreQualBusiness extends Component {
             </Grid.Column>
           </Grid>
         </FormElementWrap>
-        <FormElementWrap header="What will the funds be used for?" subHeader={!hideFields ? 'Please select all that apply.' : ''}>
+        <FormElementWrap header="What will the funds be used for?" subHeader={!hideFields && 'Please select all that apply.'}>
           <FormCheckbox
             disabled={preQualFormDisabled}
             fielddata={fields.fundUsage}
@@ -175,7 +175,7 @@ export default class PreQualBusiness extends Component {
           </Grid>
         </FormElementWrap>
         <EntityAndLegal
-          hideFields
+          hideFields={hideFields}
           fields={fields}
           preQualFormDisabled={preQualFormDisabled}
           businessAppEleChange={businessAppEleChange}
