@@ -32,7 +32,7 @@ export default class KeyTerms extends Component {
       <div className="inner-content-spacer">
         <Header as="h4">Basic</Header>
         <Form>
-          <Form.Group widths="equal">
+          <Form.Group widths="3">
             {
             ['legalBusinessName', 'shorthandBusinessName'].map(field => (
               <FormInput
@@ -54,8 +54,6 @@ export default class KeyTerms extends Component {
                 onChange={(e, result) => formChange(e, result, formName)}
               />
             </div>
-          </Form.Group>
-          <Form.Group widths="equal">
             {
             ['maturity', 'frequencyOfPayments'].map(field => (
               <MaskedInput
@@ -73,8 +71,6 @@ export default class KeyTerms extends Component {
               changed={(values, field) => maskChange(values, formName, field)}
               dateOfBirth
             />
-          </Form.Group>
-          <Form.Group widths="equal">
             <div className="field">
               <FormDropDown
                 fielddata={KEY_TERMS_FRM.fields.securities}
@@ -96,8 +92,6 @@ export default class KeyTerms extends Component {
                 />
               ))
             }
-          </Form.Group>
-          <Form.Group widths="equal">
             {
               ['investmentMultiple', 'revSharePercentage', 'interestRate'].map(field => (
                 <MaskedInput
@@ -109,8 +103,6 @@ export default class KeyTerms extends Component {
                 />
               ))
             }
-          </Form.Group>
-          <Form.Group widths="equal">
             {
               ['minOfferingAmount', 'maxOfferingAmount'].map(field => (
                 <MaskedInput
@@ -133,8 +125,6 @@ export default class KeyTerms extends Component {
                 onChange={(e, result) => formChange(e, result, formName)}
               />
             </div>
-          </Form.Group>
-          <Form.Group widths="equal">
             {
               ['nsMinFees', 'nsMaxFees', 'gsFees'].map(field => (
                 <MaskedInput
@@ -146,8 +136,6 @@ export default class KeyTerms extends Component {
                 />
               ))
             }
-          </Form.Group>
-          <Form.Group widths="equal">
             {
               ['stateOfFormation', 'city', 'state'].map(field => (
                 <FormInput
@@ -158,8 +146,6 @@ export default class KeyTerms extends Component {
                 />
               ))
             }
-          </Form.Group>
-          <Form.Group widths="equal">
             {
               ['minInvestAmt', 'maxInvestAmt'].map(field => (
                 <MaskedInput
@@ -176,8 +162,6 @@ export default class KeyTerms extends Component {
               fielddata={KEY_TERMS_FRM.fields.stockType}
               changed={(e, result) => formChange(e, result, formName)}
             />
-          </Form.Group>
-          <Form.Group widths={3}>
             {
               ['offeringExpTarget', 'offeringExpMax'].map(field => (
                 <MaskedInput
@@ -201,25 +185,9 @@ export default class KeyTerms extends Component {
               />
             ))
           }
-          <Form.Group widths="equal">
+          <Form.Group widths="2">
             {
-              ['isNewBusiness', 'isHealthcare'].map(field => (
-                <div className="field">
-                  <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
-                  <Form.Group inline>
-                    <FormRadioGroup
-                      fielddata={KEY_TERMS_FRM.fields[field]}
-                      name={field}
-                      changed={(e, result) => formChange(e, result, formName)}
-                    />
-                  </Form.Group>
-                </div>
-              ))
-            }
-          </Form.Group>
-          <Form.Group widths="equal">
-            {
-              ['isFood', 'isAlcohol'].map(field => (
+              ['isNewBusiness', 'isHealthcare', 'isFood', 'isAlcohol'].map(field => (
                 <div className="field">
                   <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
                   <Form.Group inline>
