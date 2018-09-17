@@ -343,7 +343,7 @@ query _getBusinessApplicationById ($id: String!) {
         fileName
       }
       blanketLien
-      providePersonalGurantee
+      providePersonalGuarantee
       personalGuarantee {
         fileId
         fileName
@@ -523,7 +523,7 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
         fileHandle
       }
       blanketLien
-      providePersonalGurantee
+      providePersonalGuarantee
       personalGuarantee {
         fileId
         fileName
