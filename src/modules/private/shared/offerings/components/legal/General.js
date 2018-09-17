@@ -8,6 +8,9 @@ import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/fo
 @inject('offeringCreationStore')
 @observer
 export default class General extends Component {
+  componentWillMount() {
+    this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal', 'general');
+  }
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, arrayName);
@@ -38,7 +41,7 @@ export default class General extends Component {
             </Header>
             <Form.Group widths={3}>
               {
-                ['websiteUrl', 'monthOfOfferingLaunch'].map(field => (
+                ['websiteUrl', 'monthLaunch'].map(field => (
                   <FormInput
                     key={field}
                     name={field}
@@ -54,7 +57,7 @@ export default class General extends Component {
                 dateOfBirth
               />
               {
-                ['employmentIdentificationNumber', 'numberOfEmployees'].map(field => (
+                ['employmentIdNumber', 'numOfEmployees'].map(field => (
                   <MaskedInput
                     key={field}
                     name={field}
@@ -68,7 +71,7 @@ export default class General extends Component {
             <Header as="h4">Contact</Header>
             <Form.Group widths={3}>
               {
-                ['businessStreetAddress', 'businessCity', 'businessState'].map(field => (
+                ['businessStreet', 'businessCity', 'businessState'].map(field => (
                   <FormInput
                     key={field}
                     name={field}
@@ -78,15 +81,15 @@ export default class General extends Component {
                 ))
               }
               {
-                ['businessStreetZip', 'businessPhoneNumber'].map(field => (
+                ['businessZip', 'number'].map(field => (
                   <MaskedInput
                     key={field}
                     name={field}
                     fielddata={GENERAL_FRM.fields[field]}
                     changed={(values, name) => maskArrayChange(values, formName, name)}
-                    zipCode={field === 'businessStreetZip'}
-                    phoneNumber={field === 'businessPhoneNumber'}
-                    format={field === 'businessPhoneNumber' ? '###-###-####' : '#####'}
+                    zipCode={field === 'businessZip'}
+                    phoneNumber={field === 'number'}
+                    format={field === 'number' ? '###-###-####' : '#####'}
                   />
                 ))
               }
@@ -99,13 +102,13 @@ export default class General extends Component {
                 changed={(e, result) => formArrayChange(e, result, formName)}
               />
               {
-                ['bankRoutingNumber', 'bankAccountNumber'].map(field => (
+                ['bankRoutingNumber', 'accountNumber'].map(field => (
                   <MaskedInput
                     key={field}
                     name={field}
                     fielddata={GENERAL_FRM.fields[field]}
                     changed={(values, name) => maskArrayChange(values, formName, name)}
-                    accountNumber={field === 'bankAccountNumber'}
+                    accountNumber={field === 'accountNumber'}
                     routingNumber={field === 'bankRoutingNumber'}
                   />
                 ))
@@ -132,7 +135,7 @@ export default class General extends Component {
                 This section will also be public on the offering page.`}
             </p>
             {
-              ['ifMinOfferingAmtReached', 'ifMaxOfferingAmtReached'].map(field => (
+              ['reachedMinOfferingGoal', 'reachedMaxOfferingGoal'].map(field => (
                 <FormTextarea
                   key={field}
                   name={field}
@@ -145,10 +148,10 @@ export default class General extends Component {
           </div>
           <div className="featured-section">
             <Header as="h4">Describe Rights of Your Equity Shareholders</Header>
-            <p>{GENERAL_FRM.fields.rightsOfYourEquityShareholders.label}</p>
+            <p>{GENERAL_FRM.fields.rightsOfEqShareHolders.label}</p>
             <FormTextarea
-              name="rightsOfYourEquityShareholders"
-              fielddata={GENERAL_FRM.fields.rightsOfYourEquityShareholders}
+              name="rightsOfEqShareHolders"
+              fielddata={GENERAL_FRM.fields.rightsOfEqShareHolders}
               changed={(e, result) => formArrayChange(e, result, formName)}
               containerclassname="secondary"
               hidelabel

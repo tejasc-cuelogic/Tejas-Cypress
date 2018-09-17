@@ -7,6 +7,9 @@ import { FormTextarea, MaskedInput } from '../../../../../../theme/form';
 @inject('offeringCreationStore')
 @observer
 export default class OfferingCompany extends Component {
+  componentWillMount() {
+    this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering', 'about');
+  }
   addNewMileStone = (e) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore('COMPANY_HISTORY_FRM');
@@ -27,8 +30,8 @@ export default class OfferingCompany extends Component {
             About the Company
           </Header>
           <FormTextarea
-            name="aboutCompany"
-            fielddata={OFFERING_COMPANY_FRM.fields.aboutCompany}
+            name="theCompany"
+            fielddata={OFFERING_COMPANY_FRM.fields.theCompany}
             changed={(e, result) => formChange(e, result, formName)}
             containerclassname="secondary"
           />

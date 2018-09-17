@@ -8,6 +8,9 @@ import { MaskedInput } from '../../../../../theme/form';
 @inject('offeringCreationStore')
 @observer
 export default class Close extends Component {
+  componentWillMount() {
+    this.props.offeringCreationStore.setFormData('OFFERING_CLOSE_FRM', 'closureSummary');
+  }
   render() {
     const {
       OFFERING_CLOSE_FRM,
@@ -26,34 +29,16 @@ export default class Close extends Component {
             addon={<Actions />}
           />
           <Header as="h4">Offer Closing Details</Header>
-          <Form.Group widths="equal">
-            <MaskedInput
-              name="disbursementDate"
-              fielddata={OFFERING_CLOSE_FRM.fields.disbursementDate}
-              format="##-##-####"
-              changed={(values, field) => maskChange(values, formName, field)}
-              dateOfBirth
-            />
-            {
-            ['disbursementAmount', 'totalRepayment'].map(field => (
-              <MaskedInput
-                name={field}
-                fielddata={OFFERING_CLOSE_FRM.fields[field]}
-                changed={(values, name) => maskChange(values, formName, name)}
-                currency
-                prefix="$"
-              />
-            ))
-            }
-          </Form.Group>
           <Form.Group widths={3}>
-            {
-            ['totalComittedAmount', 'totalInvestorsCount'].map(field => (
+            {Object.keys(OFFERING_CLOSE_FRM.fields).map(field => (
               <MaskedInput
                 name={field}
                 fielddata={OFFERING_CLOSE_FRM.fields[field]}
                 changed={(values, name) => maskChange(values, formName, name)}
-                number
+                dateOfBirth={field === 'disbursementDate'}
+                number={field === 'totalInvestorCount'}
+                currency={field !== 'totalInvestorCount' && field !== 'disbursementDate'}
+                prefix={field !== 'totalInvestorCount' && field !== 'disbursementDate' ? '$' : false}
               />
             ))
             }

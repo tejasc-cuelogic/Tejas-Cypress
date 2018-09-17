@@ -20,6 +20,8 @@ const FormData = ({
           </Header>
         </label>
       }
+      value={form.fields[descriptionField].value}
+      checked={form.fields[descriptionField].refSelectorValue}
       onChange={(e, result) => formChange(e, result, formName)}
     />
     <div className="checkbox-description">
@@ -38,23 +40,26 @@ const FormData = ({
 @inject('offeringCreationStore')
 @observer
 export default class RiskFactors extends Component {
+  componentWillMount() {
+    this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal', 'riskFactors');
+  }
   render() {
     const { RISK_FACTORS_FRM, formChange } = this.props.offeringCreationStore;
     const formName = 'RISK_FACTORS_FRM';
     return (
       <Form>
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isBusinessRisk" descriptionField="businessRiskDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isFinancingRisks" descriptionField="financingRisksDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isDevelopmentRisks" descriptionField="developmentRisksDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isReputationalRisk" descriptionField="reputationalRiskDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isCompetitionRisks" descriptionField="competitionRisksDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isMarketRisks" descriptionField="marketRisksDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isNaturalRisks" descriptionField="naturalRisksDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isManagementRisks" descriptionField="managementRisksDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isPersonnelRisks" descriptionField="personnelRisksDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isLaborSupplyRisks" descriptionField="laborSupplyRisksDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isPrivacyRisks" descriptionField="privacyRisksDesc" />
-        <FormData formName={formName} form={RISK_FACTORS_FRM} formChange={formChange} checkboxField="isOtherRisks" descriptionField="otherRisksDesc" />
+        {
+          Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector)
+          .map(field => (
+            <FormData
+              formName={formName}
+              form={RISK_FACTORS_FRM}
+              formChange={formChange}
+              checkboxField={RISK_FACTORS_FRM.fields[field].refSelector}
+              descriptionField={field}
+            />
+          ))
+        }
         <div className="clearfix mb-20">
           <Button as="span" className="time-stamp">
             <Icon className="ns-check-circle" color="green" />

@@ -122,6 +122,53 @@ export const getOfferingDetails = gql`
           
         }
       }
+      legal {
+        general {
+          websiteUrl
+          monthLaunch
+          offeringDeadline
+          employmentIdNumber
+          numOfEmployees
+          businessStreet
+          businessCity
+          businessState
+          businessZip
+          businessPhone {
+            countryCode
+            number
+          }
+          bankName
+          bankRoutingNumber
+          accountNumber
+          businessCapitalization
+          useOfProceeds {
+            reachedMinOfferingGoal
+            reachedMaxOfferingGoal
+          }
+          rightsOfEqShareHolders
+        }
+        riskFactors {
+          businessRisk
+          financingRisk
+          developmentRisk
+          reputationalRisk
+          competitionRisk
+          marketRisk
+          terrorismRisk
+          managementRisk
+          personnelRisk
+          laborSupplyRisk
+          privacyRisk
+          otherRisk
+        }
+      }
+      closureSummary {
+        disbursementDate
+        disbursementAmount
+        totalRepayment
+        totalCommittedAmount
+        totalInvestorCount
+      }
       applicationId
       issuerId
       lead {

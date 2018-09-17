@@ -8,6 +8,9 @@ import { FormInput, MaskedInput } from '../../../../../../theme/form';
 @inject('offeringCreationStore')
 @observer
 export default class OfferingLaunch extends Component {
+  componentWillMount() {
+    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering', 'launch');
+  }
   render() {
     const {
       COMPANY_LAUNCH_FRM,
@@ -33,7 +36,7 @@ export default class OfferingLaunch extends Component {
           </Header>
           <Form.Group widths="equal">
             {
-              ['targetLaunchDate', 'terminationDate', 'expectedOperationsDate'].map(field => (
+              ['targetDate', 'terminationDate', 'expectedOpsDate'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={COMPANY_LAUNCH_FRM.fields[field]}

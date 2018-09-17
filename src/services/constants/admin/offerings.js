@@ -374,7 +374,7 @@ export const OFFERING_HIGHLIGHTS = {
 };
 
 export const OFFERING_COMPANY = {
-  aboutCompany: {
+  theCompany: {
     value: '',
     label: '',
     error: undefined,
@@ -424,7 +424,7 @@ export const COMPANY_LAUNCH = {
     rule: 'required',
     placeHolder: 'TeamAG',
   },
-  targetLaunchDate: {
+  targetDate: {
     value: '',
     label: 'Target Launch Date',
     error: undefined,
@@ -438,7 +438,7 @@ export const COMPANY_LAUNCH = {
     rule: 'required',
     placeHolder: '4/3/2018',
   },
-  expectedOperationsDate: {
+  expectedOpsDate: {
     value: '',
     label: 'Expected Operations Date',
     error: undefined,
@@ -544,14 +544,14 @@ export const OFFER_CLOSE = {
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  totalComittedAmount: {
+  totalCommittedAmount: {
     value: '',
     label: 'Total Comitted Amount',
     error: undefined,
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  totalInvestorsCount: {
+  totalInvestorCount: {
     value: '',
     label: 'Total Investors Count',
     error: undefined,
@@ -870,7 +870,7 @@ export const GENERAL = {
     placeHolder: 'e.g. http://simplebits.com',
     tooltip: 'Enter Issuer’s Website',
   },
-  monthOfOfferingLaunch: {
+  monthLaunch: {
     label: 'Month of Offering Launch',
     value: '',
     error: undefined,
@@ -884,14 +884,14 @@ export const GENERAL = {
     rule: 'required',
     placeHolder: 'Month 20XX',
   },
-  employmentIdentificationNumber: {
+  employmentIdNumber: {
     label: 'Employment Identification Number',
     value: '',
     error: undefined,
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  numberOfEmployees: {
+  numOfEmployees: {
     label: 'Number of Employees',
     value: '',
     error: undefined,
@@ -899,7 +899,7 @@ export const GENERAL = {
     placeHolder: 'Enter here',
     tooltip: 'Including owners/officers of the company',
   },
-  businessStreetAddress: {
+  businessStreet: {
     label: 'Business Street Address',
     value: '',
     error: undefined,
@@ -920,19 +920,20 @@ export const GENERAL = {
     rule: 'string|required',
     placeHolder: 'Enter here',
   },
-  businessStreetZip: {
+  businessZip: {
     label: 'Business Street Zip',
     value: '',
     error: undefined,
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  businessPhoneNumber: {
+  number: {
     label: 'Business Phone Number',
     value: '',
     error: undefined,
     rule: 'numeric|required',
     placeHolder: 'Enter here',
+    objRef: 'legal.general.businessPhone',
   },
   bankName: {
     label: 'Bank Name',
@@ -948,7 +949,7 @@ export const GENERAL = {
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  bankAccountNumber: {
+  accountNumber: {
     label: 'Bank Account Number',
     value: '',
     error: undefined,
@@ -961,21 +962,23 @@ export const GENERAL = {
     error: undefined,
     rule: 'required',
   },
-  ifMinOfferingAmtReached: {
+  reachedMinOfferingGoal: {
     label: 'If minimum offering amount is reached:',
     value: '',
     error: undefined,
     rule: 'required',
     placeHolder: 'Type your text here...',
+    objRef: 'legal.general.useOfProceeds',
   },
-  ifMaxOfferingAmtReached: {
+  reachedMaxOfferingGoal: {
     label: 'If maximum offering amount is reached:',
     value: '',
     error: undefined,
     rule: 'required',
     placeHolder: 'Type your text here...',
+    objRef: 'legal.general.useOfProceeds',
   },
-  rightsOfYourEquityShareholders: {
+  rightsOfEqShareHolders: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
     value: '',
     error: undefined,
@@ -1138,228 +1141,156 @@ export const GENERAL = {
 export const RISK_FACTORS = {
   isBusinessRisk: {
     label: 'Business Risk',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'BUSINESS_RISK',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  businessRiskDesc: {
+  businessRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isBusinessRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
-  isFinancingRisks: {
+  isFinancingRisk: {
     label: 'Financing Risks',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'FINANCING_RISKS',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  financingRisksDesc: {
+  financingRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isFinancingRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
-  isDevelopmentRisks: {
+  isDevelopmentRisk: {
     label: 'Development Risks',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'DEVELOPMENT_RISKS',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  developmentRisksDesc: {
+  developmentRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isDevelopmentRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isReputationalRisk: {
     label: 'Reputational Risk',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'REPUTATIONAL_RISK',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  reputationalRiskDesc: {
+  reputationalRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isReputationalRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
-  isCompetitionRisks: {
+  isCompetitionRisk: {
     label: 'Competition Risks',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'COMPETITION_RISKS',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  competitionRisksDesc: {
+  competitionRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isCompetitionRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
-  isMarketRisks: {
+  isMarketRisk: {
     label: 'Market Risks',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'MARKET_RISKS',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  marketRisksDesc: {
+  marketRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isMarketRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
-  isNaturalRisks: {
+  isTerrorismRisk: {
     label: 'Risks from Work Stoppages, Terrorism or Natural Disasters',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'NATURAL_RISKS',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  naturalRisksDesc: {
+  terrorismRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isTerrorismRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
-  isManagementRisks: {
+  isManagementRisk: {
     label: 'Management Risks',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'MANAGEMENT_RISKS',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  managementRisksDesc: {
+  managementRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isManagementRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
-  isPersonnelRisks: {
+  isPersonnelRisk: {
     label: 'Personnel Risks',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'PERSONNEL_RISKS',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  personnelRisksDesc: {
+  personnelRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isPersonnelRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
-  isLaborSupplyRisks: {
+  isLaborSupplyRisk: {
     label: 'Labor Supply Risks',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'LABOR_SUPPLY_RISKS',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  laborSupplyRisksDesc: {
+  laborSupplyRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isLaborSupplyRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
-  isPrivacyRisks: {
+  isPrivacyRisk: {
     label: 'Privacy Risks',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'PRIVACY_RISKS',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  privacyRisksDesc: {
+  privacyRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isPrivacyRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
-  isOtherRisks: {
+  isOtherRisk: {
     label: 'Other Risks',
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'PRIVACY_RISKS',
-      },
-    ],
-    error: undefined,
+    value: '',
     rule: 'alpha',
   },
-  otherRisksDesc: {
+  otherRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
+    refSelector: 'isOtherRisk',
     error: undefined,
     rule: 'required',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',

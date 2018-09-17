@@ -182,10 +182,27 @@ export class OfferingCreationStore {
   *  Set form data
   */
   @action
-  setFormData = (form, ref) => {
+  setFormData = (form, ref, ref2) => {
     const { offer } = offeringsStore;
     Object.keys(this[form].fields).map((key) => {
-      this[form].fields[key].value = ref ? offer[ref][key] : offer[key];
+      try {
+        if (this[form].fields[key].objRef) {
+          let tempRef = false;
+          this[form].fields[key].objRef.split('.').map((k) => {
+            tempRef = !tempRef ? offer[k] : tempRef[k];
+            return tempRef;
+          });
+          this[form].fields[key].value = tempRef[key];
+        } else {
+          this[form].fields[key].value = ref ? (ref2 ? offer[ref][ref2][key] :
+            offer[ref][key]) : offer[key];
+        }
+        if (this[form].fields[key].refSelector) {
+          this[form].fields[key].refSelectorValue = this[form].fields[key].value !== '';
+        }
+      } catch (e) {
+        // do nothing
+      }
       return null;
     });
   }

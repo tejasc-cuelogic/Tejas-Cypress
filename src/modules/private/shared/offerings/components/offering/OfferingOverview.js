@@ -7,6 +7,9 @@ import { FormTextarea, FormInput } from '../../../../../../theme/form';
 @inject('offeringCreationStore')
 @observer
 export default class OfferingOverview extends Component {
+  componentWillMount() {
+    this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering', 'overview');
+  }
   addNewBullet = (e) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore('OFFERING_HIGHLIGHTS_FRM');
