@@ -25,7 +25,7 @@ export const KEY_TERMS = {
     rule: 'string|required',
     placeHolder: 'Enter here',
   },
-  businessIndustry: {
+  industry: {
     value: '',
     label: 'What Industry is the Business in?',
     error: undefined,
@@ -53,7 +53,7 @@ export const KEY_TERMS = {
     rule: 'date|required',
     placeHolder: 'MM-DD-YYYY',
   },
-  security: {
+  securities: {
     value: '',
     label: 'Securities',
     error: undefined,
@@ -74,14 +74,14 @@ export const KEY_TERMS = {
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  investmentMuliple: {
+  investmentMultiple: {
     value: '',
     label: 'Investment Multiple',
     error: undefined,
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  revenueSharing: {
+  revSharePercentage: {
     value: '',
     label: 'Revenue Sharing Percentage',
     error: undefined,
@@ -116,21 +116,21 @@ export const KEY_TERMS = {
     rule: 'string|required',
     placeHolder: 'Choose here',
   },
-  nsFeesForMinAmount: {
+  nsMinFees: {
     value: '',
     label: 'NS Fees if Min Offering Amount is Raised',
     error: undefined,
     rule: 'numeric|required',
     placeHolder: 'Up to $',
   },
-  nsFeesForMaxAmount: {
+  nsMaxFees: {
     value: '',
     label: 'NS Fees if Max Offering Amount is Raised',
     error: undefined,
     rule: 'numeric|required',
     placeHolder: 'Up to $',
   },
-  goldstarFees: {
+  gsFees: {
     value: '',
     label: 'GoldStar Fees',
     error: undefined,
@@ -144,28 +144,28 @@ export const KEY_TERMS = {
     rule: 'string|required',
     placeHolder: 'Enter here',
   },
-  businessCity: {
+  city: {
     value: '',
     label: 'What City is the Business in?',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
   },
-  businessState: {
+  state: {
     value: '',
     label: 'What  State is the Business in?',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
   },
-  minInvestmentAmount: {
+  minInvestAmt: {
     value: '',
     label: 'Min Investment Amount',
     error: undefined,
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  maxInvestmentAmount: {
+  maxInvestAmt: {
     value: '',
     label: 'Max Investment Amount',
     error: undefined,
@@ -179,28 +179,28 @@ export const KEY_TERMS = {
     rule: 'string|required',
     placeHolder: 'Enter here',
   },
-  offeringExpenseTarget: {
+  offeringExpTarget: {
     value: '',
     label: 'Offering Expense Target',
     error: undefined,
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  offeringExpenseMax: {
+  offeringExpMax: {
     value: '',
     label: 'Offering Expense Max',
     error: undefined,
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  revenueSharingSummary: {
+  revShareSummary: {
     value: '',
     label: 'Revenue Sharing Summary',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',
   },
-  nsFeeCalculationDescription: {
+  nsFeeCalcDescription: {
     value: '',
     label: 'Description of NS Fee Calculation',
     error: undefined,
@@ -209,29 +209,29 @@ export const KEY_TERMS = {
   },
   isNewBusiness: {
     value: '',
-    values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
+    values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
     label: 'Is the Business a New Business?',
     error: undefined,
     rule: 'required',
   },
-  isBusinessInHealthCare: {
+  isHealthcare: {
     value: '',
-    values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
+    values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
     label: 'Is the Business in Healthcare Industry?',
     error: undefined,
     rule: 'required',
   },
-  isBusinessInOtherIndustries: {
+  isFood: {
     value: '',
-    values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
+    values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
     label: `Is the Business in Restaurant, Bar and/or Hospitality
     Industries?`,
     error: undefined,
     rule: 'required',
   },
-  doesBusinessServeAlcohol: {
+  isAlcohol: {
     value: '',
-    values: [{ label: 'Yes', value: 'yes' }, { label: 'No', value: 'no' }],
+    values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
     label: 'Does the Business Serve Alcohol?',
     error: undefined,
     rule: 'required',
@@ -622,7 +622,7 @@ export const OFFERING_DETAILS = {
     rule: 'required',
     placeHolder: 'Enter here',
   },
-  offeringReferralCode: {
+  referralCode: {
     value: '',
     label: 'Offering Referral Code',
     error: undefined,

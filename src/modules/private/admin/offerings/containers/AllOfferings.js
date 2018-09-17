@@ -13,7 +13,8 @@ import Listing from '../components/Listing';
 @observer
 export default class Offerings extends Component {
   componentWillMount() {
-    this.props.offeringsStore.initRequest(10, 0);
+    const params = { first: 10, skip: 0, stage: this.props.match.params.stage.toUpperCase() };
+    this.props.offeringsStore.initRequest(params);
   }
 
   executeSearch = (e) => {

@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import moment from 'moment';
-import { startCase, lowerCase, kebabCase } from 'lodash';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
-import { InlineLoader } from '../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -47,7 +45,6 @@ export default class Listing extends Component {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Created Date</Table.HeaderCell>
                 <Table.HeaderCell>Days till launch</Table.HeaderCell>
                 <Table.HeaderCell>Lead</Table.HeaderCell>
@@ -57,24 +54,23 @@ export default class Listing extends Component {
             </Table.Header>
             <Table.Body>
               {offerings.length === 0 ? (
-                <Table.Row><Table.Cell>No Offering to display !</Table.Cell></Table.Row>
+                <Table.Row><Table.Cell colSpan={6} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
                 ) :
                 offerings.map(offering => (
                   <Table.Row key={offering.id}>
                     <Table.Cell>
-                      <b>{offering.campaignName}</b>
+                      <b>{offering.keyTerms.legalBusinessName}</b>
                     </Table.Cell>
-                    <Table.Cell className={`status ${kebabCase(startCase(lowerCase(offering.status)))}`} >{startCase(lowerCase(offering.status))}</Table.Cell>
-                    <Table.Cell>{moment(offering.createdAt).format('M/DD/YYYY')}</Table.Cell>
+                    <Table.Cell><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
                     <Table.Cell>
-                      {DataFormatter.datesDifferenceInDays(offering.launchedDate)} days
+                      {DataFormatter.diffDays(offering.offering.launch.targetDate)} days
                     </Table.Cell>
-                    <Table.Cell>{offering.lead}</Table.Cell>
+                    <Table.Cell>{offering.lead.name}</Table.Cell>
                     <Table.Cell>
                       <p>
-                        <b>{offering.pocName}</b><br />
-                        {offering.pocEmail}<br />
-                        {Helper.maskPhoneNumber(offering.pocPhone)}
+                        <b>pocname11</b><br />
+                        pocemail11@test.com<br />
+                        {Helper.maskPhoneNumber('123-456-7890')}
                       </p>
                     </Table.Cell>
                     <Table.Cell collapsing textAlign="center">

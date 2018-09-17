@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 import { RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
+import { offeringsStore } from '../../../index';
 
 export class OfferingCreationStore {
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
@@ -176,6 +177,18 @@ export class OfferingCreationStore {
   @action
   setAddressFields = (place, index) => {
     Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'data', index);
+  }
+
+  /*
+  *  Set form data
+  */
+  @action
+  setFormData = (form, ref) => {
+    const { offer } = offeringsStore;
+    Object.keys(this[form].fields).map((key) => {
+      this[form].fields[key].value = ref ? offer[ref][key] : offer[key];
+      return null;
+    });
   }
 }
 

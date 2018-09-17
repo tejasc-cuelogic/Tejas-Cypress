@@ -7,6 +7,9 @@ import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, Dro
 @inject('offeringCreationStore', 'uiStore')
 @observer
 export default class KeyTerms extends Component {
+  componentWillMount() {
+    this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
+  }
   onProFormasDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'proFormas', files);
   }
@@ -42,11 +45,11 @@ export default class KeyTerms extends Component {
             }
             <div className="field">
               <FormDropDown
-                fielddata={KEY_TERMS_FRM.fields.businessIndustry}
+                fielddata={KEY_TERMS_FRM.fields.industry}
                 selection
                 containerclassname="dropdown-field"
-                value={KEY_TERMS_FRM.fields.businessIndustry.value}
-                name="businessIndustry"
+                value={KEY_TERMS_FRM.fields.industry.value}
+                name="industry"
                 options={BUSINESS_INDUSTRIES}
                 onChange={(e, result) => formChange(e, result, formName)}
               />
@@ -74,11 +77,11 @@ export default class KeyTerms extends Component {
           <Form.Group widths="equal">
             <div className="field">
               <FormDropDown
-                fielddata={KEY_TERMS_FRM.fields.security}
+                fielddata={KEY_TERMS_FRM.fields.securities}
                 selection
                 containerclassname="dropdown-field"
-                value={KEY_TERMS_FRM.fields.security.value}
-                name="security"
+                value={KEY_TERMS_FRM.fields.securities.value}
+                name="securities"
                 options={SECURITIES_VALUES}
                 onChange={(e, result) => formChange(e, result, formName)}
               />
@@ -96,7 +99,7 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths="equal">
             {
-              ['investmentMuliple', 'revenueSharing', 'interestRate'].map(field => (
+              ['investmentMultiple', 'revSharePercentage', 'interestRate'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
@@ -133,7 +136,7 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths="equal">
             {
-              ['nsFeesForMinAmount', 'nsFeesForMaxAmount', 'goldstarFees'].map(field => (
+              ['nsMinFees', 'nsMaxFees', 'gsFees'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
@@ -146,7 +149,7 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths="equal">
             {
-              ['stateOfFormation', 'businessCity', 'businessState'].map(field => (
+              ['stateOfFormation', 'city', 'state'].map(field => (
                 <FormInput
                   key={field}
                   name={field}
@@ -158,7 +161,7 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths="equal">
             {
-              ['minInvestmentAmount', 'maxInvestmentAmount'].map(field => (
+              ['minInvestAmt', 'maxInvestAmt'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
@@ -176,7 +179,7 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths={3}>
             {
-              ['offeringExpenseTarget', 'offeringExpenseMax'].map(field => (
+              ['offeringExpTarget', 'offeringExpMax'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
@@ -188,7 +191,7 @@ export default class KeyTerms extends Component {
             }
           </Form.Group>
           {
-            ['revenueSharingSummary', 'nsFeeCalculationDescription'].map(field => (
+            ['revShareSummary', 'nsFeeCalcDescription'].map(field => (
               <FormTextarea
                 key={field}
                 name={field}
@@ -200,7 +203,7 @@ export default class KeyTerms extends Component {
           }
           <Form.Group widths="equal">
             {
-              ['isNewBusiness', 'isBusinessInHealthCare'].map(field => (
+              ['isNewBusiness', 'isHealthcare'].map(field => (
                 <div className="field">
                   <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
                   <Form.Group inline>
@@ -216,7 +219,7 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths="equal">
             {
-              ['isBusinessInOtherIndustries', 'doesBusinessServeAlcohol'].map(field => (
+              ['isFood', 'isAlcohol'].map(field => (
                 <div className="field">
                   <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
                   <Form.Group inline>
