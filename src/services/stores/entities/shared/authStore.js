@@ -175,6 +175,17 @@ export class AuthStore {
     !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
   }
 
+  @action
+  setUserDetails = (fields) => {
+    this.SIGNUP_FRM.fields.givenName.value = fields.firstName.value;
+    this.SIGNUP_FRM.fields.familyName.value = fields.lastName.value;
+    this.SIGNUP_FRM.fields.email.value = fields.email.value;
+    this.LOGIN_FRM.fields.email.value = fields.email.value;
+    this.SIGNUP_FRM.fields.role.value = 'issuer';
+    this.SIGNUP_FRM.fields.password.value = '';
+    this.SIGNUP_FRM.fields.verify.value = '';
+  }
+
   verifyAndUpdateEmail = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
