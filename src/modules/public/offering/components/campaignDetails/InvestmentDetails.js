@@ -7,7 +7,7 @@ import { Grid, Header, Segment, Image, Breadcrumb, Statistic, Popup, Icon } from
 import businessModel from '../../../../../assets/images/investment-2.jpg';
 // import TermNote from './investmentDetails/TermNote';
 // import RevenueShare from './investmentDetails/RevenueShare';
-// import KeyTermsModal from './investmentDetails/KeyTermsModal';
+import KeyTermsModal from './investmentDetails/KeyTermsModal';
 // import SummaryModal from './investmentDetails/SummaryModal';
 import PaymentCalculatorModal from './investmentDetails/PaymentCalculatorModal';
 
@@ -125,9 +125,11 @@ class InvestmentDetails extends Component {
               </Segment> */}
             </Grid.Column>
             <Grid.Column widescreen={6} computer={6}>
-              {/* <Segment padded>
+              <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section link><b>Expand Key Terms</b></Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/KeyTermsModal`}>
+                    <b>Expand Key Terms</b>
+                  </Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Key Investment Terms</Header>
@@ -149,31 +151,51 @@ class InvestmentDetails extends Component {
                   <Grid.Row columns={3}>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Min Target<Popup trigger={<Icon name="help circle"
-                        color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Min Target&nbsp;
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="If the minimum goal is not met by the end of the offering
+                            period, any funds you invest will be automatically returned to your
+                            NextSeed account."
+                            position="top center"
+                          />
+                        </Statistic.Label>
                         <Statistic.Value>$200,000</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Max Target<Popup trigger={<Icon name="help circle"
-                        color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Max Target&nbsp;
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="The offering will remain open until the issuer raises the
+                            maximum goal or the offering period ends. As long as the raise
+                            exceeds the minimumgoal, the issuer will receive the funds."
+                            position="top center"
+                          />
+                        </Statistic.Label>
                         <Statistic.Value>$1,000,000</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Payments<Popup trigger={<Icon name="help circle"
-                        color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Payments&nbsp;
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="The Issuer will make monthly payments based on the relevant
+                            revenue sharing percentage."
+                            position="top center"
+                          />
+                        </Statistic.Label>
                         <Statistic.Value>Monthly</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
-              </Segment> */}
-              <Segment padded>
+              </Segment>
+              {/* <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section link>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/KeyTermsModal`}>
                     <b>View Key Terms</b>
                   </Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
@@ -183,19 +205,37 @@ class InvestmentDetails extends Component {
                   <Grid.Row>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Multiple<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Multiple
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="Help!"
+                            position="top center"
+                          />
+                        </Statistic.Label>
                         <Statistic.Value>1.6x</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Revenue Sharing<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Revenue Sharing
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="Help!"
+                            position="top center"
+                          />
+                        </Statistic.Label>
                         <Statistic.Value>4%</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Maturity<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Maturity
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="Help!"
+                            position="top center"
+                          />
+                        </Statistic.Label>
                         <Statistic.Value>48 months</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
@@ -203,25 +243,37 @@ class InvestmentDetails extends Component {
                   <Grid.Row>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Payments
-                          <Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" />
+                        <Statistic.Label>Payments&nbsp;
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="The Issuer will make monthly payments based on the relevant
+                            revenue sharing percentage."
+                            position="top center"
+                          />
                         </Statistic.Label>
                         <Statistic.Value>Monthly</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Ownership<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Ownership
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content="Help!"
+                            position="top center"
+                          />
+                        </Statistic.Label>
                         <Statistic.Value>0%</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
-              </Segment>
+              </Segment> */}
             </Grid.Column>
           </Grid.Row>
         </Grid>
         <Route path={`${this.props.match.url}/PaymentCalculatorModal`} component={PaymentCalculatorModal} />
+        <Route path={`${this.props.match.url}/KeyTermsModal`} component={KeyTermsModal} />
       </div>
     );
   }

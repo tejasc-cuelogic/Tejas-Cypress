@@ -91,6 +91,10 @@
         }
     }
     &.investment-grid {
+        &[class*="horizontally padded"]{
+            width: ~"calc(100% + 14px)";
+            margin-left: -14px!important;
+        }
         >.column:last-child {
             background-color: @primary-one;
             position: relative;
@@ -110,7 +114,6 @@
                 transform: translate(0,-50%);
             }
             .ui.statistic {
-    
                 >.label{
                     color: @white;
                 }
@@ -120,6 +123,7 @@
             }
         }
         .ui.statistic >.label{
+            padding-bottom: 10px;
             text-transform: uppercase;
         }
     }

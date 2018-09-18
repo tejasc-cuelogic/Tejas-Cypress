@@ -383,15 +383,6 @@ footer{
 			padding: @30px;
 			// background-color: @white;
 			height: 100%;
-			.carousel {
-				width: 100%;
-				margin-bottom: 38px;
-				img {
-					width: 100%;
-					height: 100%;
-					margin-top: 0;
-				}
-			}
 			p {
 				line-height: @20px;
 				color:@neutral-middark;
@@ -644,22 +635,23 @@ p i.icon {
 		}
 	}
 	.slick-dots{
-		bottom: 0;
 		li{
-			margin:0 @7px @14px;
+			width: 10px;
+			height: 10px;
 			&.slick-active button:before {
-				background: @white;
+				background: @neutral-darkwhite;
+				opacity: 1;
 			}
 			button{
-				width:15px;
-				height:15px;
-				padding:0;
+				width:10px;
+				height:10px;
 				&:before {
-					width: 15px;
-					height: 15px;
+					width: 10px;
+					height: 10px;
 					content: '';
-					border: 1px solid @white;
+					border: 1px solid @neutral-darkwhite;
 					border-radius: 50%;
+					opacity: 1;
 				}
 			}
 		}
@@ -1873,4 +1865,14 @@ p.check-extra-info{
 	background: @white;
 	cursor: pointer;
 	border-radius: 50px;
+}
+//Range slider
+// About company carousel
+.carousel {
+	width: 100%;
+	img {
+		width: 100%;
+		height: 100%;
+		margin-top: 0;
+	}
 }

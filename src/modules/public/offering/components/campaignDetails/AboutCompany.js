@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
-import { Header, Grid, Image, Breadcrumb, Segment, Reveal } from 'semantic-ui-react';
+import { Header, Grid, Image, Breadcrumb, Segment, Reveal, Container } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
-import { InlineLoader } from '../../../../../theme/shared';
+import { NsCarousel, InlineLoader } from '../../../../../theme/shared';
 import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
 import teamMember2 from '../../../../../assets/images/owner-1.jpg';
 import teamMember3 from '../../../../../assets/images/avatar-3.jpg';
 import teamMember4 from '../../../../../assets/images/avatar-4.jpg';
 import teamMember5 from '../../../../../assets/images/avatar-5.jpg';
 import businessModel from '../../../../../assets/images/business_model.jpg';
+import CompanyDescriptionModal from './CompanyDescriptionModal';
+import AboutPhotoGallery from './AboutPhotoGallery';
+import videoPoster from '../../../../../assets/images/636206632.webp';
 
 const getModule = component => Loadable({
   loader: () => import(`../${component}`),
@@ -16,6 +19,13 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
+const settings = {
+  dots: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false,
+};
+
 
 class AboutCompany extends Component {
   render() {
@@ -31,7 +41,7 @@ class AboutCompany extends Component {
             <Grid.Column widescreen={7} computer={8}>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section link><b>Company Description</b></Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/CompanyDescriptionModal`}><b>Company Description</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h3">Top things to know</Header>
@@ -53,9 +63,18 @@ class AboutCompany extends Component {
             <Grid.Column widescreen={9} computer={8}>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section link><b>Gallery</b></Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/AboutPhotoGallery`}><b>Gallery</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
+                <div className="carousel mt-10 mb-30">
+                  <Container>
+                    <NsCarousel {...settings}>
+                      {[1, 2, 3].map(() => (
+                        <Image src={videoPoster} />
+                      ))}
+                    </NsCarousel>
+                  </Container>
+                </div>
               </Segment>
             </Grid.Column>
           </Grid.Row>
@@ -164,6 +183,8 @@ class AboutCompany extends Component {
             ))
           }
         </Switch>
+        <Route path={`${this.props.match.url}/CompanyDescriptionModal`} component={CompanyDescriptionModal} />
+        <Route path={`${this.props.match.url}/AboutPhotoGallery`} component={AboutPhotoGallery} />
       </div>
     );
   }

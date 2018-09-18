@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
 import { Header, Image, Icon, Embed, Grid, Segment, Breadcrumb, Popup, List, Item, Divider, Statistic } from 'semantic-ui-react';
@@ -120,7 +121,20 @@ class Overview extends Component {
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Type of Raise<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Type of Raise
+                          <Popup
+                            trigger={<Icon name="help circle" color="green" />}
+                            content={(
+                              <Aux>
+                                This campaign is raising capital under Regulation CF and
+                                Regulation D. For more information on what this means, check out
+                                our <a href="/">Education Center.</a>
+                              </Aux>
+                            )}
+                            position="top center"
+                            hoverable
+                          />
+                        </Statistic.Label>
                         <Statistic.Value>Reg CF </Statistic.Value>
                       </Statistic>
                     </Grid.Column>

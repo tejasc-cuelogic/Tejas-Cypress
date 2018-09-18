@@ -30,7 +30,7 @@ class KeyTerms extends Component {
               </Grid.Column>
               <Grid.Column>
                 <p><b>Offering Amount</b></p>
-                <p>Min. $250,000, to max. $1,000,000</p>
+                <p>Min. $250,000 to max. $1,000,000</p>
               </Grid.Column>
             </Grid.Row>
           </Grid>
