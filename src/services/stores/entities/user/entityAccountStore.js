@@ -383,10 +383,10 @@ class EntityAccountStore {
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'entity' });
+      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
       if (accountDetails) {
         mutation = updateAccount;
-        variables.accountId = accountDetails.accountId;
+        variables.accountId = accountDetails.details.accountId;
         actionPerformed = 'updated';
       }
     }
@@ -401,7 +401,7 @@ class EntityAccountStore {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
           if (result.data.createInvestorAccount) {
-            const { bankDetails } = result.data.createInvestorAccount.accountDetails;
+            const { bankDetails } = result.data.createInvestorAccount.details;
             bankAccountStore.setPlaidAccDetails(bankDetails);
           } else {
             const { bankDetails } = result.data.updateInvestorAccount.accountDetails;

@@ -29,6 +29,11 @@ export const updateAccount = gql`
     ) {
       userId
       accountId
+      linkedBank {
+        accountNumber
+        routingNumber
+        bankName
+      }
       type
     }
   }`;
@@ -82,6 +87,11 @@ export const createIndividual = gql`
     createInvestorAccount(userId: $userId, accountAttributes: $accountAttributes, status: $status, type: $accountType){
       userId
       accountId
+      linkedBank {
+        accountNumber
+        routingNumber
+        bankName
+      }
       type
     }
   }`;
