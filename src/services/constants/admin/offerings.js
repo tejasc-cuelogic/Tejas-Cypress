@@ -1438,4 +1438,26 @@ export const ISSUER = {
     rule: 'required',
     placeHolder: 'Type your text here...',
   },
+  allControlPersonDiligence: {
+    value: [],
+    values: [
+      {
+        label: 'Completed All Control Person Diligence',
+        value: 'COMPLETED',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  allAffiliatedIssuerDiligence: {
+    value: [],
+    values: [
+      {
+        label: 'Completed All Affiliated Issuer Diligence',
+        value: 'COMPLETED',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
 };
