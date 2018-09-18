@@ -23,8 +23,9 @@ export default class RealEstateDocumentation extends Component {
     return (
       <Aux>
         <FormElementWrap
+          hideFields={hideFields}
           header="Upload Your Due Dilligence Documents"
-          subHeader={!hideFields && 'Title commitment, survey, environmental reports, previous inspections, previous appraisals, etc'}
+          subHeader="Title commitment, survey, environmental reports, previous inspections, previous appraisals, etc"
         >
           <Grid stackable columns="equal">
             <Grid.Column>
@@ -34,17 +35,17 @@ export default class RealEstateDocumentation extends Component {
                 multiple
                 name="dilligenceDocuments"
                 fielddata={fields.dilligenceDocuments}
-                ondrop={(files, fieldName) =>
-                  businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                onremove={(e, fieldName, index) =>
-                  businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </Grid.Column>
           </Grid>
         </FormElementWrap>
         <FormElementWrap
+          hideFields={hideFields}
+          noDivider
           header="Upload Your Legal Documents"
-          subHeader={!hideFields && 'For all related entities - filing docs, governing docs'}
+          subHeader="For all related entities - filing docs, governing docs"
         >
           <Grid stackable columns="equal">
             <Grid.Column>
@@ -54,10 +55,8 @@ export default class RealEstateDocumentation extends Component {
                 multiple
                 name="legalDocuments"
                 fielddata={fields.legalDocuments}
-                ondrop={(files, fieldName) =>
-                  businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                onremove={(e, fieldName, index) =>
-                  businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </Grid.Column>
           </Grid>

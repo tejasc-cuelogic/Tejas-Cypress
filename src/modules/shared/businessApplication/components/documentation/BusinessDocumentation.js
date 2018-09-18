@@ -28,8 +28,9 @@ export default class BusinessDocumentation extends Component {
     return (
       <Aux>
         <FormElementWrap
+          hideFields={hideFields}
           header="Statements & Agreements"
-          subHeader={!hideFields &&
+          subHeader={
             <span>
               Provide the most recent 6 months of bank statements for
               your business accounts. For new entities, provide if
@@ -57,10 +58,8 @@ export default class BusinessDocumentation extends Component {
                     key={field}
                     name={field}
                     fielddata={fields[field]}
-                    ondrop={(files, fieldName) =>
-                      businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                    onremove={(e, fieldName, index) =>
-                      businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                    ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                    onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
                     tooltip={fields[field].tooltip}
                   />
                 </Grid.Column>
@@ -69,20 +68,20 @@ export default class BusinessDocumentation extends Component {
           </Grid>
         </FormElementWrap>
         <FormElementWrap
+          hideFields={hideFields}
           header="Tax Returns"
-          subHeader={!hideFields && 'Tax returns are used as part of NextSeed’s diligence process.'}
+          subHeader="Tax returns are used as part of NextSeed’s diligence process."
         >
           {!hideFields &&
-          <List bulleted>
-            <List.Item>
-              <b>For new entities</b>, please submit your personal tax returns and,
-              if available,
-              tax returns of a different business entity that you currently own.
-            </List.Item>
-            <List.Item>
-              <b>For existing entities</b>, please submit tax returns for the entity.
-            </List.Item>
-          </List>
+            <List bulleted>
+              <List.Item>
+                <b>For new entities</b>, please submit your personal tax returns and, if
+                available, tax returns of a different business entity that you currently own.
+              </List.Item>
+              <List.Item>
+                <b>For existing entities</b>, please submit tax returns for the entity.
+              </List.Item>
+            </List>
           }
           <Divider hidden />
           <div className="or-divider">
@@ -95,18 +94,17 @@ export default class BusinessDocumentation extends Component {
                   key={field}
                   name={field}
                   fielddata={fields[field]}
-                  ondrop={(files, fieldName) =>
-                    businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                  onremove={(e, fieldName, index) =>
-                    businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                  ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                  onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
                 />
               ))
             }
           </div>
         </FormElementWrap>
         <FormElementWrap
+          hideFields={hideFields}
           header="Will you accept a blanket lien on the business if your campaign is successfully funded?"
-          subHeader={!hideFields && 'NextSeed will require it. (Note that if you have existing debt with liens attached, a second lien will be accepted.)'}
+          subHeader="NextSeed will require it. (Note that if you have existing debt with liens attached, a second lien will be accepted.)"
         >
           <FormRadioGroup
             disabled={formReadOnlyMode}
@@ -117,8 +115,10 @@ export default class BusinessDocumentation extends Component {
           />
         </FormElementWrap>
         <FormElementWrap
+          hideFields={hideFields}
+          noDivider
           header="Are you willing to provide a personal guarantee?"
-          subHeader={!hideFields && '(This is not a requirement, but a personal guarantee can positively impact the terms provided.)'}
+          subHeader="(This is not a requirement, but a personal guarantee can positively impact the terms provided.)"
         >
           <FormRadioGroup
             disabled={formReadOnlyMode}
@@ -141,10 +141,8 @@ export default class BusinessDocumentation extends Component {
                 multiple
                 name="personalGuaranteeForm"
                 fielddata={fields.personalGuaranteeForm}
-                ondrop={(files, fieldName) =>
-                  businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                onremove={(e, fieldName, index) =>
-                  businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </div>
           }

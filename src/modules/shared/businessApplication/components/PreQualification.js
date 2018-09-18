@@ -117,10 +117,7 @@ export default class PreQualification extends Component {
         {isPrequalQulify &&
         <Form onSubmit={this.submit} className="issuer-signup">
           {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate' ?
-            <PreQualRealEstate
-              hideFields={hideFields}
-              applicationType={params.applicationType}
-            /> :
+            <PreQualRealEstate hideFields={hideFields} applicationType={params.applicationType} /> :
             <PreQualBusiness hideFields={hideFields} applicationType={params.applicationType} />
           }
           {!hideFields &&

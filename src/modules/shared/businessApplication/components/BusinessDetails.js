@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
@@ -64,27 +63,21 @@ export default class BusinessDetails extends Component {
               <Aux>
                 Business Plan
                 {!hideFields && currentApplicationType === 'business' &&
-                <Link to="/" className="link"><small>Learn More</small></Link>
+                  <Link to="/" className="link"><small>Learn More</small></Link>
                 }
               </Aux>
             }
           >
-            {!hideFields ? (
-              <DropZone
-                hideFields={hideFields}
-                tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
-                disabled={formReadOnlyMode}
-                multiple
-                name="businessPlan"
-                fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
-                ondrop={(files, fieldName) =>
-                  businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
-                onremove={(e, fieldName, index) =>
-                  businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
-              />
-            ) : (
-              <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
-            )}
+            <DropZone
+              hideFields={hideFields}
+              tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
+              disabled={formReadOnlyMode}
+              multiple
+              name="businessPlan"
+              fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
+              ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
+              onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+            />
           </FormElementWrap>
           <FormElementWrap
             hideFields={hideFields}
@@ -153,6 +146,7 @@ export default class BusinessDetails extends Component {
           </FormElementWrap>
           <FormElementWrap
             hideFields={hideFields}
+            noDivider={hideFields}
             header="Owners"
             subHeader="Please list all individuals with at least 20% ownership."
           >
@@ -258,24 +252,14 @@ export default class BusinessDetails extends Component {
                         changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
                       />
                       <Form.Field>
-                        {!hideFields ? (
-                          <DropZone
-                            hideFields={hideFields}
-                            disabled={formReadOnlyMode}
-                            name="resume"
-                            fielddata={owner.resume}
-                            ondrop={(files, fieldName) =>
-                              businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
-                            onremove={(e, fieldName) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
-                          />
-                        ) : (
-                          <Aux>
-                            <label>Resume</label>
-                            <div>
-                              <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
-                            </div>
-                          </Aux>
-                        )}
+                        <DropZone
+                          hideFields={hideFields}
+                          disabled={formReadOnlyMode}
+                          name="resume"
+                          fielddata={owner.resume}
+                          ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                          onremove={(e, fieldName) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                        />
                       </Form.Field>
                     </Form.Group>
                   </div>
@@ -283,12 +267,14 @@ export default class BusinessDetails extends Component {
               </Grid>
               ))
             }
-            <Divider hidden />
             {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
-              <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
+              <Aux>
+                <Divider hidden />
+                <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
+              </Aux>
             }
           </FormElementWrap>
-          <AppNavigation />
+          <AppNavigation hideFields={hideFields} />
         </Form>
         <Confirm
           header="Confirm"
