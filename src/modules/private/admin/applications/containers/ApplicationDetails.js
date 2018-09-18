@@ -29,6 +29,9 @@ const getModule = component => Loadable({
 @inject('businessAppStore', 'businessAppAdminStore')
 @observer
 export default class ApplicationDetails extends Component {
+  state = {
+    displaOnly: true,
+  }
   componentWillMount() {
     const { match } = this.props;
     const { params } = match;
@@ -44,6 +47,10 @@ export default class ApplicationDetails extends Component {
     e.stopPropagation();
     this.props.history.replace(this.props.refLink);
   };
+  editBusinessDetails = (e) => {
+    e.preventDefault();
+    this.setState({ displaOnly: !this.state.displaOnly });
+  }
   render() {
     const { match, businessAppStore, businessAppAdminStore } = this.props;
     const {
@@ -81,7 +88,7 @@ export default class ApplicationDetails extends Component {
                 <Card fluid className="ba-info-card">
                   <Card.Header>
                     Information
-                    <small className="pull-right"><Link to="/"><Icon className="ns-pencil" />Edit</Link></small>
+                    <small className="pull-right"><Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link></small>
                   </Card.Header>
                   <Card.Content>
                     <Form>
@@ -89,7 +96,7 @@ export default class ApplicationDetails extends Component {
                         {
                           ['businessName', 'signupCode'].map(field => (
                             <FormInput
-                              containerclassname="display-only"
+                              containerclassname={this.state.displaOnly ? 'display-only' : ''}
                               key={field}
                               type="text"
                               name={field}
