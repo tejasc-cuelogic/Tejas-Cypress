@@ -51,13 +51,13 @@ class Overview extends Component {
                   </List.Item>
                 </List>
                 <div className="mt-30">
-                  <Link to="/" className="icon-link">
+                  <Link to="/" className="icon-link mr-10">
                     <Icon color="grey" name="facebook" />
                   </Link>
-                  <Link to="/" className="icon-link">
+                  <Link to="/" className="icon-link mr-10">
                     <Icon color="grey" name="twitter" />
                   </Link>
-                  <Link to="/" className="icon-link">
+                  <Link to="/" className="icon-link mr-10">
                     <Icon color="grey" name="linkedin in" />
                   </Link>
                   <Link to="/" className="icon-link">
