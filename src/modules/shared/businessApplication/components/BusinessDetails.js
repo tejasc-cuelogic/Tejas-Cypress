@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
@@ -81,9 +82,9 @@ export default class BusinessDetails extends Component {
                 onremove={(e, fieldName, index) =>
                   businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
               />
-              ) : (
-                <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
-              )}
+            ) : (
+              <Link to="/"><Icon className="ns-file" /><b>nsbakery_businessplan050518.pdf</b></Link>
+            )}
           </FormElementWrap>
           <FormElementWrap
             hideFields={hideFields}
@@ -94,8 +95,7 @@ export default class BusinessDetails extends Component {
             BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
               <Grid>
                 <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                  <Header as="h5">
-                    Existing Debt {index + 1}
+                  <Header as={hideFields ? 'h6' : 'h5'}>Existing Debt {index + 1}
                     {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
                       <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
                         <Icon color="red" size="small" className="ns-trash" />
@@ -148,7 +148,7 @@ export default class BusinessDetails extends Component {
             }
             <Divider hidden />
             {!hideFields &&
-            <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
+              <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
             }
           </FormElementWrap>
           <FormElementWrap
@@ -157,38 +157,38 @@ export default class BusinessDetails extends Component {
             subHeader="Please list all individuals with at least 20% ownership."
           >
             {!hideFields &&
-            <Accordion>
-              <Accordion.Title onClick={this.toggleHandel} active={this.state.legalNoteToggle}>
-                <Icon className="ns-chevron-up" />
-                {this.state.legalNoteToggle ? 'Hide' : 'Show'} legal note
-              </Accordion.Title>
-              <Accordion.Content active={this.state.legalNoteToggle}>
-                <p>
-                  You hereby authorize NextSeed Management LLC, its assignee, assigns or
-                  potential assigns to review your personal credit and business profile
-                  provided by national credit bureaus in considering this application and
-                  for the purpose of determining your eligibility to raise funds under an
-                  applicable exemption provided by the U.S. Securities Act of 1933 and related
-                  regulations. You hereby authorize the above listed parties to release all
-                  credit information and bank information and you represent and warrant that all
-                  information submitted to NextSeed Management LLC, including without limitation
-                  information on this application, any attachments, any supplemental, or other
-                  information herein is true, complete and accurate. You agree to immediately
-                  notify NextSeed Management LLC if any of such information changes materially in
-                  the 60 days after the date of this application. A fascimile, electronic or
-                  other copy of this authorization shall be as valid as the original.<br />
-                  NOTE: This will not impact your credit score. All information you provide
-                  to us is strictly confidential and we will never disclose it to anyone
-                  without your express consent unless required by applicable law or regulation
-                </p>
-              </Accordion.Content>
-            </Accordion>
+              <Accordion>
+                <Accordion.Title onClick={this.toggleHandel} active={this.state.legalNoteToggle}>
+                  <Icon className="ns-chevron-up" />
+                  {this.state.legalNoteToggle ? 'Hide' : 'Show'} legal note
+                </Accordion.Title>
+                <Accordion.Content active={this.state.legalNoteToggle}>
+                  <p>
+                    You hereby authorize NextSeed Management LLC, its assignee, assigns or
+                    potential assigns to review your personal credit and business profile
+                    provided by national credit bureaus in considering this application and
+                    for the purpose of determining your eligibility to raise funds under an
+                    applicable exemption provided by the U.S. Securities Act of 1933 and related
+                    regulations. You hereby authorize the above listed parties to release all
+                    credit information and bank information and you represent and warrant that all
+                    information submitted to NextSeed Management LLC, including without limitation
+                    information on this application, any attachments, any supplemental, or other
+                    information herein is true, complete and accurate. You agree to immediately
+                    notify NextSeed Management LLC if any of such information changes materially in
+                    the 60 days after the date of this application. A fascimile, electronic or
+                    other copy of this authorization shall be as valid as the original.<br />
+                    NOTE: This will not impact your credit score. All information you provide
+                    to us is strictly confidential and we will never disclose it to anyone
+                    without your express consent unless required by applicable law or regulation
+                  </p>
+                </Accordion.Content>
+              </Accordion>
             }
             {BUSINESS_DETAILS_FRM.fields.owners.length &&
             BUSINESS_DETAILS_FRM.fields.owners.map((owner, index) => (
               <Grid>
                 <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                  <Header as="h5">Owner {index + 1}
+                  <Header as={hideFields ? 'h6' : 'h5'}>Owner {index + 1}
                     {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
                       <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                         <Icon color="red" size="small" className="ns-trash" />
@@ -295,8 +295,7 @@ export default class BusinessDetails extends Component {
           content={`Are you sure you want to remove this ${this.state.currentForm}?`}
           open={this.state.showPartialSaveModal}
           onCancel={this.toggleConfirm}
-          onConfirm={
-            e => this.removeForm(e)}
+          onConfirm={e => this.removeForm(e)}
           size="mini"
           className="deletion"
         />
