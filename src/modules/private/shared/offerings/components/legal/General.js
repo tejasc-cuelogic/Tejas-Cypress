@@ -36,9 +36,7 @@ export default class General extends Component {
       <Aux>
         <Form>
           <div className="featured-section">
-            <Header as="h4">
-              General Information
-            </Header>
+            <Header as="h4">General Information</Header>
             <Form.Group widths={3}>
               {
                 ['websiteUrl', 'monthLaunch'].map(field => (
@@ -162,10 +160,11 @@ export default class General extends Component {
             {
               GENERAL_FRM.fields.security.map((security, index) => (
                 <Aux>
-                  <Header as="h5">{`Security ${index + 1}`}</Header>
-                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'security')} >
-                    <Icon className="ns-close-circle" color="grey" />
-                  </Link>
+                  <Header as="h5">{`Security ${index + 1}`}
+                    <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'security')} >
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
+                  </Header>
                   <Form.Group widths={2}>
                     {
                       ['class', 'votingRights', 'securitiesAuthorized', 'securitiesOutstanding'].map(field => (
@@ -194,10 +193,11 @@ export default class General extends Component {
             {
               GENERAL_FRM.fields.exemptOfferings.map((offering, index) => (
                 <Aux>
-                  <Header as="h5">{`Other Exempt Offering ${index + 1}`}</Header>
-                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')} >
-                    <Icon className="ns-close-circle" color="grey" />
-                  </Link>
+                  <Header as="h5">{`Other Exempt Offering ${index + 1}`}
+                    <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')} >
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
+                  </Header>
                   <Form.Group widths={2}>
                     {
                       ['dateOfOffering', 'securitiesExemption', 'securitiesOffered', 'amountSold'].map(field => (
@@ -227,10 +227,11 @@ export default class General extends Component {
             {
               GENERAL_FRM.fields.materialIndebtedness.map((terms, index) => (
                 <Aux>
-                  <Header as="h5">{`Term ${index + 1}`}</Header>
-                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')} >
-                    <Icon className="ns-close-circle" color="grey" />
-                  </Link>
+                  <Header as="h5">{`Term ${index + 1}`}
+                    <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')} >
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
+                  </Header>
                   <FormInput
                     name="creditorName"
                     fielddata={terms.creditorName}
@@ -277,10 +278,11 @@ export default class General extends Component {
             {
             GENERAL_FRM.fields.affiliatedTransactions.map((transaction, index) => (
               <Aux>
-                <Header as="h5">{`Transaction ${index + 1}`}</Header>
-                <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')} >
-                  <Icon className="ns-close-circle" color="grey" />
-                </Link>
+                <Header as="h5">{`Transaction ${index + 1}`}
+                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')} >
+                    <Icon className="ns-close-circle" color="grey" />
+                  </Link>
+                </Header>
                 <FormInput
                   name="name"
                   fielddata={transaction.name}
