@@ -183,10 +183,9 @@ export const isSsnExistQuery = gql`
   }`;
 
 export const portPrequalDataToApplication = gql`
-  mutation portPrequalDataToApplication($userId: String! $applicationId: String!) {
+  mutation portPrequalDataToApplication($prequalApplicationData: PrequalApplicationInput!) {
     portPrequalDataToApplication(
-      userId: $userId
-      applicationId: $applicationId
+      prequalApplicationData: $prequalApplicationData
     ){
       id
     }

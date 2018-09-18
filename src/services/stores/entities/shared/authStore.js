@@ -255,8 +255,10 @@ export class AuthStore {
         .mutate({
           mutation: portPrequalDataToApplication,
           variables: {
-            userId: this.userId,
-            applicationId,
+            prequalApplicationData: {
+              userId: this.userId,
+              applicationId,
+            },
           },
         })
         .then(() => {
