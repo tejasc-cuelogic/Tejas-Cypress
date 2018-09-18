@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Container, Button, Grid, Image } from 'semantic-ui-react';
+import { Header, Container, Button, Grid, Image, Responsive } from 'semantic-ui-react';
 import UserOne from '../../../../assets/images/owner-1.jpg';
 import UserTwo from '../../../../assets/images/owner-2.jpg';
 
@@ -8,7 +8,7 @@ const HowItWorksSummary = props => (
   <section>
     <Container textAlign={props.isMobile ? 'left' : 'center'}>
       <Header as="h2" className="mb-30">
-      A new way to fundraise and invest.<br />
+      A new way to fundraise and invest. <Responsive minWidth={768} as="br" />
       Powered by technology. Rooted in community.
       </Header>
       <p className="mb-80">

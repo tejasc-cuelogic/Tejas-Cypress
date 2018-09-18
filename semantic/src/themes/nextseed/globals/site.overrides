@@ -30,8 +30,6 @@ section{
 	a {
 		color: @fullBlack;
 		font-weight: @bold;
-		margin-top: @40px;
-		display: block;
 	}
 }
 //	Helper Classes
@@ -81,6 +79,9 @@ h6{
 }
 .mb-30 {
 	margin-bottom: @30px !important;
+}
+.mb-40 {
+	margin-bottom: @40px !important;
 }
 .mb-50 {
 	margin-bottom: @50px !important;
@@ -688,12 +689,18 @@ p i.icon {
 //Team
 .team-column {
 	margin-top: 30vh;
+	@media only screen and (max-width : @largestSmallMonitor){
+		margin-top: 5vh;
+	}
 }
 .team-gallery {
 	&.ui.grid {
 		margin: 0;
 		>.column {
 			padding: 0 !important;
+			&:last-child {
+				padding: @20px !important;
+			}
 		}
 	}
 	.team-overlay {
@@ -718,6 +725,9 @@ p i.icon {
 		img.ui.image {
 			width: auto;
 			max-width: none;
+			@media only screen and (max-width : @largestMobileScreen){
+				width: 100%;
+			}
 		}
 	}
 }
@@ -729,6 +739,9 @@ address {
 }
 .press-list {
 	padding: @20px @50px;
+	@media only screen and (max-width: @largestTabletScreen) {
+		padding: @20px;
+	}
 	.header{
 		color: @black !important;
 		font-weight: @bold;
@@ -762,6 +775,9 @@ address {
 		&.news-title {
 			font-size: @28px;
 			line-height: 30px;
+			@media only screen and (max-width : @largestSmallMonitor){
+				font-size: @20px;
+			}
 		}
 	}
 }
@@ -770,6 +786,9 @@ address {
 	h5.ui.header {
 		color: @white;
 		margin: auto;
+		@media only screen and (max-width : @largestMobileScreen){
+			font-size: @13px !important;
+		}
 	}
 	h2.ui.header {
 		margin-bottom: 0px;

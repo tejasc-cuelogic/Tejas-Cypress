@@ -30,7 +30,7 @@ export default class InsightsDetails extends Component {
               <Breadcrumb.Section active>{ArticlesDetails.title}</Breadcrumb.Section>
             </Breadcrumb>
             <Grid>
-              <Grid.Column width={12}>
+              <Grid.Column computer={12} tablet={16} mobile={16}>
                 <Header as="h2">{ArticlesDetails.title}</Header>
                 <Image src={ArticlesDetails.featureImage} className="mb-30 mt-30" />
                 <div dangerouslySetInnerHTML={{ __html: ArticlesDetails.content }} />

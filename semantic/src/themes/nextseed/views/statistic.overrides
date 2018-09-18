@@ -102,9 +102,18 @@
 	.ui.statistic{
 		>.value {
 			font-size: @60px !important;
+			@media only screen and (max-width : @largestSmallMonitor){
+				font-size: @30px !important;
+			}
 		}
 		&.small >.value {
 			font-size: @40px !important;
+			@media only screen and (max-width : @largestSmallMonitor){
+				font-size: @30px !important;
+			}
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @20px !important;
+			}
 		}
 	}
 	.ui.celled.grid>.row>.column {
