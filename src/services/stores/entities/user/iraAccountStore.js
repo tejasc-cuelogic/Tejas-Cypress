@@ -107,7 +107,7 @@ class IraAccountStore {
         plaidBankDetails.accountNumber = accountNumber;
         plaidBankDetails.routingNumber = routingNumber;
       }
-      payload.iraBankDetails = plaidBankDetails;
+      payload.linkedBank = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
       if (accountNumber && routingNumber) {
@@ -115,7 +115,7 @@ class IraAccountStore {
           accountNumber: accountNumber.value,
           routingNumber: routingNumber.value,
         };
-        payload.iraBankDetails = plaidBankDetails;
+        payload.linkedBank = plaidBankDetails;
       }
     }
     return payload;
@@ -184,10 +184,8 @@ class IraAccountStore {
         if (isValidCurrentStep) {
           uiStore.setProgress();
           if (!isEmpty(bankAccountStore.plaidAccDetails)) {
-            const plaidBankDetails = {};
-            plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
-            plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
-            accountAttributes.iraBankDetails = plaidBankDetails;
+            accountAttributes.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
+            accountAttributes.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
           } else {
             const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
             if (accountNumber && routingNumber) {
@@ -195,7 +193,7 @@ class IraAccountStore {
                 accountNumber: accountNumber.value,
                 routingNumber: routingNumber.value,
               };
-              accountAttributes.iraBankDetails = plaidBankDetails;
+              accountAttributes.linkedBank = plaidBankDetails;
             }
           }
           this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
@@ -274,11 +272,11 @@ class IraAccountStore {
         .then(action((result) => {
           userDetailsStore.getUser(userStore.currentUser.sub);
           if (result.data.createInvestorAccount) {
-            const { iraBankDetails } = { ...result.data.createInvestorAccount };
-            bankAccountStore.setPlaidAccDetails(iraBankDetails);
+            const { linkedBank } = result.data.createInvestorAccount;
+            bankAccountStore.setPlaidAccDetails(linkedBank);
           } else {
-            const { iraBankDetails } = result.data.updateInvestorAccount.accountDetails;
-            bankAccountStore.setPlaidAccDetails(iraBankDetails);
+            const { linkedBank } = result.data.updateInvestorAccount;
+            bankAccountStore.setPlaidAccDetails(linkedBank);
           }
           if (currentStep.name === 'Identity') {
             if (removeUploadedData) {

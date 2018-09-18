@@ -124,7 +124,7 @@ export class BankAccountStore {
   resetLinkBank = () => {
     Validator.resetFormData(this.formLinkBankManually);
     Validator.resetFormData(this.formAddFunds);
-    this.plaidAccDetails = {};
+    // this.plaidAccDetails = {};
     this.depositMoneyNow = true;
     this.showAddFunds = false;
   }
