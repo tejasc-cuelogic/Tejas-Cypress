@@ -93,7 +93,7 @@ class IraAccountStore {
     payload.iraAccountType = this.accountType.rawValue;
     payload.fundingType = this.fundingOption.rawValue;
     if (this.fundingOption.rawValue === 'check' && !isEmpty(bankAccountStore.plaidAccDetails)) {
-      const plaidBankDetails = {};
+      payload.linkedBank = {};
       const {
         account_id,
         public_token,
@@ -101,21 +101,17 @@ class IraAccountStore {
         routingNumber,
       } = bankAccountStore.plaidAccDetails;
       if (account_id && public_token) {
-        plaidBankDetails.plaidPublicToken = public_token;
-        plaidBankDetails.plaidAccountId = account_id;
+        payload.linkedBank.plaidPublicToken = public_token;
+        payload.linkedBank.plaidAccountId = account_id;
       } else {
-        plaidBankDetails.accountNumber = accountNumber;
-        plaidBankDetails.routingNumber = routingNumber;
+        payload.linkedBank.accountNumber = accountNumber;
+        payload.linkedBank.routingNumber = routingNumber;
       }
-      payload.linkedBank = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
       if (accountNumber && routingNumber) {
-        const plaidBankDetails = {
-          accountNumber: accountNumber.value,
-          routingNumber: routingNumber.value,
-        };
-        payload.linkedBank = plaidBankDetails;
+        payload.linkedBank.accountNumber = accountNumber.value;
+        payload.linkedBank.routingNumber = routingNumber.value;
       }
     }
     return payload;
