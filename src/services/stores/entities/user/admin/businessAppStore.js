@@ -1,8 +1,10 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { includes, isArray, filter, forEach } from 'lodash';
 import graphql from 'mobx-apollo';
+import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FILTER_META } from '../../../../../constants/user';
+import { BUSINESS_DETAILS_EDIT_META } from '../../../../constants/businessApplication';
 import { getBusinessApplicationAdmin, getBusinessApplicationSummary } from '../../../queries/businessApplication';
 import Helper from '../../../../../helper/utility';
 
@@ -23,6 +25,7 @@ export class BusinessAppStore {
   };
 
   @observable filterApplicationStatus = FILTER_META.applicationStatus;
+  @observable BUSINESS_DETAILS_EDIT_FRM = Validator.prepareFormObject(BUSINESS_DETAILS_EDIT_META);
 
   @action
   setFieldvalue = (field, value) => {
@@ -192,6 +195,12 @@ export class BusinessAppStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
+  }
+
+  @action
+  setBusinessDetails = (businessName, signupCode) => {
+    this.BUSINESS_DETAILS_EDIT_FRM.fields.businessName.value = businessName;
+    this.BUSINESS_DETAILS_EDIT_FRM.fields.signupCode.value = signupCode;
   }
 }
 

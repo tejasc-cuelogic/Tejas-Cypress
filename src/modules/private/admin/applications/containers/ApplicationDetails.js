@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
-import { Modal, Card, Header, Label, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
+import { Modal, Card, Header, Form, Label, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader, EmptyDataSet } from '../../../../../theme/shared';
+import { FormInput } from '../../../../../theme/form';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
 const navItems = [
@@ -25,7 +26,7 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('businessAppStore')
+@inject('businessAppStore', 'businessAppAdminStore')
 @observer
 export default class ApplicationDetails extends Component {
   componentWillMount() {
@@ -44,10 +45,12 @@ export default class ApplicationDetails extends Component {
     this.props.history.replace(this.props.refLink);
   };
   render() {
-    const { match, businessAppStore } = this.props;
+    const { match, businessAppStore, businessAppAdminStore } = this.props;
     const {
       businessApplicationDetailsAdmin, businessApplicationsDataById,
     } = businessAppStore;
+    const { BUSINESS_DETAILS_EDIT_FRM, setBusinessDetails } = businessAppAdminStore;
+    const { fields } = BUSINESS_DETAILS_EDIT_FRM;
     if (businessApplicationsDataById && businessApplicationsDataById.loading) {
       return <InlineLoader />;
     }
@@ -57,6 +60,7 @@ export default class ApplicationDetails extends Component {
     const {
       applicationStatus, prequalDetails, primaryPOC, signupCode, rating,
     } = businessApplicationDetailsAdmin;
+    setBusinessDetails(prequalDetails.businessGeneralInfo.businessName, signupCode);
     const appStepStatus = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
@@ -80,7 +84,24 @@ export default class ApplicationDetails extends Component {
                     <small className="pull-right"><Link to="/"><Icon className="ns-pencil" />Edit</Link></small>
                   </Card.Header>
                   <Card.Content>
-                    <Grid columns={2}>
+                    <Form>
+                      <Form.Group widths="equal">
+                        {
+                          ['businessName', 'signupCode'].map(field => (
+                            <FormInput
+                              containerclassname="display-only"
+                              key={field}
+                              type="text"
+                              name={field}
+                              fielddata={fields[field]}
+                              // changed={(e, res) =>
+                              // businessDetailsChange(e, res, 'owners', index)}
+                            />
+                          ))
+                        }
+                      </Form.Group>
+                    </Form>
+                    {/* <Grid columns={2}>
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Business Name</Header.Subheader>
@@ -93,7 +114,7 @@ export default class ApplicationDetails extends Component {
                           {signupCode && signupCode !== '' ? signupCode : '-' }
                         </Header>
                       </Grid.Column>
-                    </Grid>
+                    </Grid> */}
                   </Card.Content>
                 </Card>
               </Grid.Column>
