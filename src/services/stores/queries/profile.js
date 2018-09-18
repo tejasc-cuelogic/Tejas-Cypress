@@ -181,3 +181,13 @@ export const isSsnExistQuery = gql`
       alreadyExists
     }
   }`;
+
+export const portPrequalDataToApplication = gql`
+  mutation portPrequalDataToApplication($userId: String! $applicationId: String!) {
+    verifyAndUpdateEmail(
+      userId: $userId
+      applicationId: $applicationId
+    ){
+      id
+    }
+  }`;
