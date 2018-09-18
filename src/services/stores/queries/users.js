@@ -69,6 +69,30 @@ export const userDetailsQuery = gql`
         details {
           ... on Investor {
             accountId
+            iraAccountType
+            fundingType
+            identityDoc {
+              fileId
+              fileName
+              fileHandle
+            }
+            legalDocs {
+              formationDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+              operatingAgreementDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+              einVerificationDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+            }
             annualIncome
             netWorth
             netAssets
@@ -84,6 +108,7 @@ export const userDetailsQuery = gql`
               routingNumber
               plaidAccessToken
             }
+            status
           }
         }
       }

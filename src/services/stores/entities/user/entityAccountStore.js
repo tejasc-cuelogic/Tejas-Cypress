@@ -401,10 +401,10 @@ class EntityAccountStore {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
           if (result.data.createInvestorAccount) {
-            const { linkedBank } = result.data.createInvestorAccount.details;
+            const { linkedBank } = result.data.createInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           } else {
-            const { linkedBank } = result.data.updateInvestorAccount.accountDetails;
+            const { linkedBank } = result.data.updateInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }
           if (formStatus !== 'submit') {

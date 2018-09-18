@@ -108,6 +108,7 @@ class IraAccountStore {
         payload.linkedBank.routingNumber = routingNumber;
       }
     } else {
+      payload.linkedBank = {};
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
       if (accountNumber && routingNumber) {
         payload.linkedBank.accountNumber = accountNumber.value;
@@ -180,8 +181,10 @@ class IraAccountStore {
         if (isValidCurrentStep) {
           uiStore.setProgress();
           if (!isEmpty(bankAccountStore.plaidAccDetails)) {
-            accountAttributes.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
-            accountAttributes.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
+            const { public_token, account_id } = bankAccountStore.plaidAccDetails;
+            accountAttributes.linkedBank = {};
+            accountAttributes.linkedBank.plaidPublicToken = public_token;
+            accountAttributes.linkedBank.plaidAccountId = account_id;
           } else {
             const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
             if (accountNumber && routingNumber) {

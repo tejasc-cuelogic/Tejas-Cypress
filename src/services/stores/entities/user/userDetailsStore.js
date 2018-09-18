@@ -127,7 +127,7 @@ export class UserDetailsStore {
   }
 
   @computed get signupStatus() {
-    const details = { idVerification: 'FAIL', accounts: [], phoneVerification: 'FAIL' };
+    const details = { idVerification: 'FAIL', roles: [], phoneVerification: 'FAIL' };
     const validAccTypes = ['individual', 'ira', 'entity'];
     details.inActiveAccounts = [];
     const accTypes = [];
@@ -135,17 +135,17 @@ export class UserDetailsStore {
       details.idVerification = (this.userDetails.legalDetails &&
         this.userDetails.legalDetails.status
       ) ? this.userDetails.legalDetails.status : 'FAIL';
-      details.accounts = mapValues(this.userDetails.accounts, (a) => {
-        const data = { accountId: a.accountId, accountType: a.accountType, status: a.status };
+      details.roles = mapValues(this.userDetails.roles, (a) => {
+        const data = { accountId: a.accountId, name: a.name, status: a.details.status };
         return data;
       });
-      Object.keys(details.accounts).map((key) => {
-        accTypes.push(details.accounts[key].accountType);
+      Object.keys(details.roles).map((key) => {
+        accTypes.push(details.roles[key].name);
         return true;
       });
       details.inActiveAccounts = difference(validAccTypes, accTypes);
-      details.partialAccounts = map(filter(details.accounts, a => a.status === 'PARTIAL'), 'accountType');
-      details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
+      details.partialAccounts = map(filter(details.roles, a => a.status === 'PARTIAL'), 'name');
+      details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
       details.phoneVerification = (this.userDetails.phone &&
         this.userDetails.phone.number &&
         !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
