@@ -255,6 +255,7 @@ class IraAccountStore {
       accountType: 'IRA',
     };
     let actionPerformed = 'submitted';
+    console.log(userDetailsStore.currentUser.data);
     if (userDetailsStore.currentUser.data) {
       const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'ira' });
       if (accountDetails) {
@@ -315,27 +316,27 @@ class IraAccountStore {
   @action
   populateData = (userData) => {
     if (!isEmpty(userData)) {
-      const account = find(userData.roles, { accountType: 'ira' });
+      const account = find(userData.roles, { name: 'ira' });
       if (account) {
         this.setFormData('FIN_INFO_FRM', account.details);
         this.setFormData('FUNDING_FRM', account.details);
         this.setFormData('ACC_TYPES_FRM', account.details);
         this.setFormData('IDENTITY_FRM', account.details);
-        if (account.details.iraBankDetails &&
-          account.details.iraBankDetails.plaidItemId) {
-          bankAccountStore.setPlaidAccDetails(account.details.iraBankDetails);
+        if (account.details.linkedBank &&
+          account.details.linkedBank.plaidItemId) {
+          bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { details } = account;
-            if (details.iraBankDetails && details.iraBankDetails[f] !== '') {
+            if (details.linkedBank && details.linkedBank[f] !== '') {
               bankAccountStore.formLinkBankManually.fields[f].value =
-              details.iraBankDetails[f];
+              details.linkedBank[f];
               return bankAccountStore.formLinkBankManually.fields[f];
             }
             return null;
           });
-          if (account.details.iraBankDetails && account.details.iraBankDetails.routingNumber !== '' &&
-          account.details.iraBankDetails.accountNumber !== '') {
+          if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
+          account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
         }

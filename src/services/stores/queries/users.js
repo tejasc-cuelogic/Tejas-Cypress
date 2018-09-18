@@ -69,6 +69,13 @@ export const userDetailsQuery = gql`
         details {
           ... on Investor {
             accountId
+            annualIncome
+            netWorth
+            netAssets
+            cfInvestment {
+              dateOfInvestment
+              amount
+            }
             linkedBank {
               bankName
               plaidAccountId
