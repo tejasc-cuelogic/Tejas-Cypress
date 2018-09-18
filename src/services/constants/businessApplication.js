@@ -66,6 +66,15 @@ export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
   personalGuaranteeForm: 'PERSONAL_GUARANTEE',
 };
 
+export const BUSINESS_DETAILS_EDIT_META = {
+  businessName: {
+    value: '', label: 'Business Name', error: undefined, rule: 'required', placeHolder: 'e.g.  NextBrewery', customErrors: { required: 'required' },
+  },
+  signupCode: {
+    value: '', label: 'Sign-Up Code', error: undefined, rule: 'optional', placeHolder: 'e.g.  JB-123',
+  },
+};
+
 export const NEED_HELP = {
   name: {
     value: '', label: 'Name', error: undefined, rule: 'required', placeHolder: 'e.g.  Jhon', customErrors: { required: 'required' },
