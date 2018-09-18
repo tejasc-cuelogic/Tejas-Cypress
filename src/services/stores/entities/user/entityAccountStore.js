@@ -383,7 +383,7 @@ class EntityAccountStore {
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'entity' });
+      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
       if (accountDetails) {
         mutation = updateAccount;
         variables.accountId = accountDetails.accountId;
