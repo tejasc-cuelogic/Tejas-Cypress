@@ -30,7 +30,7 @@ export default class AddNewContingency extends React.Component {
           <Modal.Content>
             <Form onSubmit={this.handleSubmitForm}>
               {
-                ['name', 'acceptanceCriteria'].map(field => (
+                ['contingency', 'acceptance'].map(field => (
                   <FormInput
                     name={field}
                     fielddata={ADD_NEW_CONTINGENCY_FRM.fields[field]}

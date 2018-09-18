@@ -514,14 +514,6 @@ export const SIGNED_LEGAL_DOCS = {
   ],
 };
 
-export const LAUNCH_CONTITNGENCIES = {
-  data: [],
-};
-
-export const CLOSING_CONTITNGENCIES = {
-  data: [],
-};
-
 export const OFFER_CLOSE = {
   disbursementDate: {
     value: '',
@@ -560,58 +552,48 @@ export const OFFER_CLOSE = {
   },
 };
 
-export const CONTINGENCIES = {
-  data: [{
-    isApplied: {
-      value: [],
-      values: [
-        {
-          label: '',
-          value: 'IS_APPLIED',
-        },
-      ],
-      error: undefined,
-      rule: 'alpha',
-    },
-    name: {
-      value: '',
-      label: 'Contingency Name',
-      error: undefined,
-      rule: 'string|required',
-      placeHolder: 'Enter here',
-    },
-    acceptanceCriteria: {
-      value: '',
-      label: 'Acceptance Criteria',
-      error: undefined,
-      rule: 'required',
-      placeHolder: 'Enter here',
-    },
-    comment: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'required_if:data.*.isApplied,isApplied',
-      placeHolder: 'Enter comment here...',
-    },
-  }],
-};
-
-export const ADD_NEW_CONTINGENCY = {
-  name: {
+export const CONTINGENCY_META = {
+  contingency: {
     value: '',
     label: 'Contingency Name',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
   },
-  acceptanceCriteria: {
+  acceptance: {
     value: '',
     label: 'Acceptance Criteria',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',
   },
+  comment: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'required_if:data.*.isApplied,isApplied',
+    placeHolder: 'Enter comment here...',
+  },
+  isApplied: {
+    value: [],
+    values: [
+      {
+        label: '',
+        value: 'IS_APPLIED',
+      },
+    ],
+    error: undefined,
+    rule: 'optional',
+  },
+};
+
+export const ADD_NEW_CONTINGENCY = {
+  contingency: { ...CONTINGENCY_META.contingency },
+  acceptance: { ...CONTINGENCY_META.acceptance },
+};
+
+export const CONTINGENCIES = {
+  data: [{ ...CONTINGENCY_META }],
 };
 
 export const OFFERING_DETAILS = {
@@ -1006,8 +988,8 @@ export const GENERAL = {
     rule: 'required',
     placeHolder: 'The principal shareholders identified herein are holders of equity interests in the Issuer, distinct from the Securities offered to investors through the Offering. While holders of equity interests may have certain voting rights under the operating agreement of the Issuer, the Securities are debt securities and their terms are governed solely by the NPA and the accompanying notes. Please see Section VII – “Certain Legal Matters and Tax Considerations” – for more information. For the avoidance of doubt, the Member may not limit, dilute or qualify the Securities issued pursuant to this Offering.',
   },
-  existingSecurities: [{
-    classOfSecurity: {
+  security: [{
+    class: {
       label: 'Class of Security',
       value: '',
       error: undefined,
@@ -1035,7 +1017,7 @@ export const GENERAL = {
       rule: 'string|required',
       placeHolder: 'Type your text here...',
     },
-    securityLimit: {
+    limitDiluteQualify: {
       label: 'How this security may limit, dilute or qualify the Securities issued pursuant to this Offering',
       value: '',
       error: undefined,
@@ -1043,7 +1025,7 @@ export const GENERAL = {
       placeHolder: 'Type your text here...',
     },
   }],
-  otherExemptOfferings: [{
+  exemptOfferings: [{
     dateOfOffering: {
       label: 'Date of Offering',
       value: '',
@@ -1052,7 +1034,7 @@ export const GENERAL = {
       placeHolder: 'Type your text here...',
       tooltip: 'Provide a date range (e.g., July - Sept. 2016)',
     },
-    securitiesExemptionReliedUpon: {
+    securitiesExemption: {
       label: 'Securities Exemption Relied Upon',
       value: '',
       error: undefined,
@@ -1082,7 +1064,7 @@ export const GENERAL = {
       placeHolder: 'Type your text here...',
     },
   }],
-  materialTerms: [{
+  materialIndebtedness: [{
     creditorName: {
       label: 'Creditor Name',
       value: '',
@@ -1090,7 +1072,7 @@ export const GENERAL = {
       rule: 'string|required',
       placeHolder: 'Type your text here...',
     },
-    amountOutStanding: {
+    amountOutstanding: {
       label: 'Amount Outstanding',
       value: '',
       error: undefined,
@@ -1119,7 +1101,7 @@ export const GENERAL = {
       placeHolder: 'Type your text here...',
       tooltip: 'e.g. Weekly/monthly and how much per payment',
     },
-    otherMaterialTerms: {
+    otherTerms: {
       label: 'Other Material Terms',
       value: '',
       error: undefined,
@@ -1127,7 +1109,7 @@ export const GENERAL = {
       placeHolder: 'Type your text here...',
     },
   }],
-  affiliatedPartyTransactions: [{
+  affiliatedTransactions: [{
     name: {
       label: 'Name',
       value: '',
@@ -1135,14 +1117,14 @@ export const GENERAL = {
       rule: 'string|required',
       placeHolder: 'John Doe',
     },
-    relationshipToIssuer: {
+    relationship: {
       label: 'Relationship to Issuer',
       value: '',
       error: undefined,
       rule: 'string|required',
       placeHolder: 'Brother',
     },
-    amountOfTransaction: {
+    amountTransaction: {
       label: 'Amount of Transaction',
       value: '',
       error: undefined,

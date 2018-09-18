@@ -160,53 +160,53 @@ export default class General extends Component {
           <div className="featured-section">
             <Header as="h4">Existing Securities</Header>
             {
-              GENERAL_FRM.fields.existingSecurities.map((security, index) => (
+              GENERAL_FRM.fields.security.map((security, index) => (
                 <Aux>
                   <Header as="h5">{`Security ${index + 1}`}</Header>
-                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'existingSecurities')} >
+                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'security')} >
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
                   <Form.Group widths={2}>
                     {
-                      ['classOfSecurity', 'votingRights', 'securitiesAuthorized', 'securitiesOutstanding'].map(field => (
+                      ['class', 'votingRights', 'securitiesAuthorized', 'securitiesOutstanding'].map(field => (
                         <FormInput
                           key={field}
                           name={field}
                           fielddata={security[field]}
-                          changed={(e, result) => formArrayChange(e, result, formName, 'existingSecurities', index)}
+                          changed={(e, result) => formArrayChange(e, result, formName, 'security', index)}
                         />
                       ))
                     }
                   </Form.Group >
                   <FormInput
-                    name="securityLimit"
-                    fielddata={security.securityLimit}
-                    changed={(e, result) => formArrayChange(e, result, formName, 'existingSecurities', index)}
+                    name="limitDiluteQualify"
+                    fielddata={security.limitDiluteQualify}
+                    changed={(e, result) => formArrayChange(e, result, formName, 'security', index)}
                   />
                 </Aux>
               ))
             }
-            <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, formName, 'existingSecurities')}>+ Add New Security</Button>
+            <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, formName, 'security')}>+ Add New Security</Button>
           </div>
           <div className="featured-section">
             <Header as="h4">Other Exempt Offerings</Header>
             <p>Describe any past fund raises in the last 3 years.</p>
             {
-              GENERAL_FRM.fields.otherExemptOfferings.map((offering, index) => (
+              GENERAL_FRM.fields.exemptOfferings.map((offering, index) => (
                 <Aux>
                   <Header as="h5">{`Other Exempt Offering ${index + 1}`}</Header>
-                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'otherExemptOfferings')} >
+                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')} >
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
                   <Form.Group widths={2}>
                     {
-                      ['dateOfOffering', 'securitiesExemptionReliedUpon', 'securitiesOffered', 'amountSold'].map(field => (
+                      ['dateOfOffering', 'securitiesExemption', 'securitiesOffered', 'amountSold'].map(field => (
                         <FormInput
                           hoverable={field === 'securitiesExemptionReliedUpon'}
                           key={field}
                           name={field}
                           fielddata={offering[field]}
-                          changed={(e, result) => formArrayChange(e, result, formName, 'otherExemptOfferings', index)}
+                          changed={(e, result) => formArrayChange(e, result, formName, 'exemptOfferings', index)}
                         />
                       ))
                     }
@@ -214,36 +214,36 @@ export default class General extends Component {
                   <FormTextarea
                     name="useOfProceeds"
                     fielddata={offering.useOfProceeds}
-                    changed={(e, result) => formArrayChange(e, result, formName, 'otherExemptOfferings', index)}
+                    changed={(e, result) => formArrayChange(e, result, formName, 'exemptOfferings', index)}
                     containerclassname="secondary"
                   />
                 </Aux>
               ))
             }
-            <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, formName, 'otherExemptOfferings')}>+ Add New Other Exempt Offering</Button>
+            <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, formName, 'exemptOfferings')}>+ Add New Other Exempt Offering</Button>
           </div>
           <div className="featured-section">
             <Header as="h4">Material Terms of any Indebteness</Header>
             {
-              GENERAL_FRM.fields.materialTerms.map((terms, index) => (
+              GENERAL_FRM.fields.materialIndebtedness.map((terms, index) => (
                 <Aux>
                   <Header as="h5">{`Term ${index + 1}`}</Header>
-                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'materialTerms')} >
+                  <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')} >
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
                   <FormInput
                     name="creditorName"
                     fielddata={terms.creditorName}
-                    changed={(e, result) => formArrayChange(e, result, formName, 'materialTerms', index)}
+                    changed={(e, result) => formArrayChange(e, result, formName, 'materialIndebtedness', index)}
                   />
                   <Form.Group widths={2}>
                     {
-                      ['amountOutStanding', 'interestRate', 'maturityDate'].map(field => (
+                      ['amountOutstanding', 'interestRate', 'maturityDate'].map(field => (
                         <MaskedInput
                           key={field}
                           name={field}
                           fielddata={terms[field]}
-                          changed={(e, result) => formArrayChange(e, result, formName, 'materialTerms', index)}
+                          changed={(e, result) => formArrayChange(e, result, formName, 'materialIndebtedness', index)}
                           percentage={field === 'interestRate'}
                           currency={field === 'amountOutStanding'}
                           prefix={field === 'amountOutStanding' ? '$' : ''}
@@ -254,19 +254,19 @@ export default class General extends Component {
                     <FormInput
                       name="paymentSchedule"
                       fielddata={terms.paymentSchedule}
-                      changed={(e, result) => formArrayChange(e, result, formName, 'materialTerms', index)}
+                      changed={(e, result) => formArrayChange(e, result, formName, 'materialIndebtedness', index)}
                     />
                   </Form.Group >
                   <FormTextarea
-                    name="otherMaterialTerms"
-                    fielddata={terms.otherMaterialTerms}
-                    changed={(e, result) => formArrayChange(e, result, formName, 'materialTerms', index)}
+                    name="otherTerms"
+                    fielddata={terms.otherTerms}
+                    changed={(e, result) => formArrayChange(e, result, formName, 'materialIndebtedness', index)}
                     containerclassname="secondary"
                   />
                 </Aux>
               ))
             }
-            <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, formName, 'materialTerms')}>+ Add New Term</Button>
+            <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, formName, 'materialIndebtedness')}>+ Add New Term</Button>
           </div>
           <div className="featured-section">
             <Header as="h4">Affiliated Party Transactions</Header>
@@ -275,41 +275,41 @@ export default class General extends Component {
               (i.e., affiliated entities, directors or relatives)?
             </p>
             {
-            GENERAL_FRM.fields.affiliatedPartyTransactions.map((transaction, index) => (
+            GENERAL_FRM.fields.affiliatedTransactions.map((transaction, index) => (
               <Aux>
                 <Header as="h5">{`Transaction ${index + 1}`}</Header>
-                <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedPartyTransactions')} >
+                <Link to={this.props.match.url} className="icon-link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
                 <FormInput
                   name="name"
                   fielddata={transaction.name}
-                  changed={(e, result) => formArrayChange(e, result, formName, 'affiliatedPartyTransactions', index)}
+                  changed={(e, result) => formArrayChange(e, result, formName, 'affiliatedTransactions', index)}
                 />
                 <Form.Group widths={2}>
                   <FormInput
-                    name="relationshipToIssuer"
-                    fielddata={transaction.relationshipToIssuer}
-                    changed={(e, result) => formArrayChange(e, result, formName, 'affiliatedPartyTransactions', index)}
+                    name="relationship"
+                    fielddata={transaction.relationship}
+                    changed={(e, result) => formArrayChange(e, result, formName, 'affiliatedTransactions', index)}
                   />
                   <MaskedInput
                     currency
                     prefix="$"
-                    name="amountOfTransaction"
-                    fielddata={transaction.amountOfTransaction}
-                    changed={(e, result) => formArrayChange(e, result, formName, 'affiliatedPartyTransactions', index)}
+                    name="amountTransaction"
+                    fielddata={transaction.amountTransaction}
+                    changed={(e, result) => formArrayChange(e, result, formName, 'affiliatedTransactions', index)}
                   />
                 </Form.Group >
                 <FormTextarea
                   name="description"
                   fielddata={transaction.description}
-                  changed={(e, result) => formArrayChange(e, result, formName, 'affiliatedPartyTransactions', index)}
+                  changed={(e, result) => formArrayChange(e, result, formName, 'affiliatedTransactions', index)}
                   containerclassname="secondary"
                 />
               </Aux>
             ))
             }
-            <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, formName, 'affiliatedPartyTransactions')}>+ Add New Affiliated Party</Button>
+            <Button size="small" color="blue" className="link-button" onClick={e => this.addMore(e, formName, 'affiliatedTransactions')}>+ Add New Affiliated Party</Button>
           </div>
           <div className="clearfix mb-20">
             <Button as="span" className="time-stamp">
@@ -333,8 +333,8 @@ export default class General extends Component {
         </Form>
         <Confirm
           header="Confirm"
-          content={`Are you sure you want to remove this ${confirmModalName === 'existingSecurities' ? 'security' :
-          confirmModalName === 'otherExemptOfferings' ? 'other exempt offering' : ''} `}
+          content={`Are you sure you want to remove this ${confirmModalName === 'security' ? 'security' :
+          confirmModalName === 'exemptOfferings' ? 'other exempt offering' : ''} `}
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
           onConfirm={() => removeData('GENERAL_FRM', confirmModalName)}

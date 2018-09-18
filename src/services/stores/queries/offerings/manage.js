@@ -82,11 +82,23 @@ export const getOfferingDetails = gql`
           index
           contingency
           acceptance
+          accepted {
+            id
+            date
+            by
+            comment
+          }
         }
         close {
           index
           contingency
           acceptance
+          accepted {
+            id
+            date
+            by
+            comment
+          }
         }
       }
       offering {
@@ -146,6 +158,34 @@ export const getOfferingDetails = gql`
             reachedMaxOfferingGoal
           }
           rightsOfEqShareHolders
+          security {
+            class
+            votingRights
+            securitiesAuthorized
+            securitiesOutstanding
+            limitDiluteQualify
+          }
+          exemptOfferings {
+            dateOfOffering
+            securitiesExemption
+            securitiesOffered
+            amountSold
+            useOfProceeds
+          }
+          materialIndebtedness {
+            creditorName
+            amountOutstanding
+            interestRate
+            maturityDate
+            paymentSchedule
+            otherTerms
+          }
+          affiliatedTransactions {
+            name
+            relationship
+            amountTransaction
+            description
+          }
         }
         riskFactors {
           businessRisk

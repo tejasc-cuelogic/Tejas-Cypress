@@ -11,6 +11,10 @@ import Helper from '../../../../../../helper/utility';
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class Contingency extends Component {
+  componentWillMount() {
+    this.props.offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', 'launch');
+    this.props.offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', 'close');
+  }
   setContingencyForm = () => {
     const { formName, offeringCreationStore } = this.props;
     offeringCreationStore.setContingencyFormSelected(formName);
@@ -50,9 +54,9 @@ export default class Contingency extends Component {
               label={
                 <label>
                   <Header as="h4">
-                    {contingency.name.value}
+                    {contingency.contingency.value}
                     <Header.Subheader>
-                      {contingency.acceptanceCriteria.value}
+                      {contingency.acceptance.value}
                     </Header.Subheader>
                   </Header>
                 </label>
