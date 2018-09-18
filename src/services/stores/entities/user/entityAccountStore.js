@@ -504,40 +504,40 @@ class EntityAccountStore {
   @action
   populateData = (userData) => {
     if (!isEmpty(userData)) {
-      const account = find(userData.accounts, { accountType: 'entity' });
+      const account = find(userData.roles, { name: 'entity' });
       if (account) {
-        this.setFormData('FIN_INFO_FRM', account.accountDetails);
-        this.setFormData('GEN_INFO_FRM', account.accountDetails);
-        if (account.accountDetails.entity && account.accountDetails.entity.address) {
+        this.setFormData('FIN_INFO_FRM', account.details);
+        this.setFormData('GEN_INFO_FRM', account.details);
+        if (account.details.entity && account.details.entity.address) {
           this.setEntityAttributes('General');
         }
-        this.setFormData('TRUST_INFO_FRM', account.accountDetails);
-        if (account.accountDetails.entity && account.accountDetails.entity.isTrust) {
+        this.setFormData('TRUST_INFO_FRM', account.details);
+        if (account.details.entity && account.details.entity.isTrust) {
           this.setEntityAttributes('Entity info');
         }
-        this.setFormData('PERSONAL_INFO_FRM', account.accountDetails);
-        if (account.accountDetails.entity && account.accountDetails.entity.legalInfo) {
+        this.setFormData('PERSONAL_INFO_FRM', account.details);
+        if (account.details.entity && account.details.entity.legalInfo) {
           this.setEntityAttributes('Personal info');
         }
-        this.setFormData('FORM_DOCS_FRM', account.accountDetails);
+        this.setFormData('FORM_DOCS_FRM', account.details);
 
-        if (account.accountDetails.entity && account.accountDetails.entity.legalDocs) {
+        if (account.details.entity && account.details.entity.legalDocs) {
           this.setEntityAttributes('Formation doc');
         }
-        if (account.accountDetails.bankDetails &&
-          account.accountDetails.bankDetails.plaidItemId) {
-          bankAccountStore.setPlaidAccDetails(account.accountDetails.bankDetails);
+        if (account.details.bankDetails &&
+          account.details.bankDetails.plaidItemId) {
+          bankAccountStore.setPlaidAccDetails(account.details.bankDetails);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
-            const { accountDetails } = account;
-            if (accountDetails.bankDetails && accountDetails.bankDetails[f] !== '') {
-              bankAccountStore.formLinkBankManually.fields[f].value = accountDetails.bankDetails[f];
+            const { details } = account;
+            if (details.bankDetails && details.bankDetails[f] !== '') {
+              bankAccountStore.formLinkBankManually.fields[f].value = details.bankDetails[f];
               return bankAccountStore.formLinkBankManually.fields[f];
             }
             return null;
           });
-          if (account.accountDetails.bankDetails && account.accountDetails.bankDetails.routingNumber !== '' &&
-          account.accountDetails.bankDetails.accountNumber !== '') {
+          if (account.details.bankDetails && account.details.bankDetails.routingNumber !== '' &&
+          account.details.bankDetails.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
         }

@@ -315,27 +315,27 @@ class IraAccountStore {
   @action
   populateData = (userData) => {
     if (!isEmpty(userData)) {
-      const account = find(userData.accounts, { accountType: 'ira' });
+      const account = find(userData.roles, { accountType: 'ira' });
       if (account) {
-        this.setFormData('FIN_INFO_FRM', account.accountDetails);
-        this.setFormData('FUNDING_FRM', account.accountDetails);
-        this.setFormData('ACC_TYPES_FRM', account.accountDetails);
-        this.setFormData('IDENTITY_FRM', account.accountDetails);
-        if (account.accountDetails.iraBankDetails &&
-          account.accountDetails.iraBankDetails.plaidItemId) {
-          bankAccountStore.setPlaidAccDetails(account.accountDetails.iraBankDetails);
+        this.setFormData('FIN_INFO_FRM', account.details);
+        this.setFormData('FUNDING_FRM', account.details);
+        this.setFormData('ACC_TYPES_FRM', account.details);
+        this.setFormData('IDENTITY_FRM', account.details);
+        if (account.details.iraBankDetails &&
+          account.details.iraBankDetails.plaidItemId) {
+          bankAccountStore.setPlaidAccDetails(account.details.iraBankDetails);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
-            const { accountDetails } = account;
-            if (accountDetails.iraBankDetails && accountDetails.iraBankDetails[f] !== '') {
+            const { details } = account;
+            if (details.iraBankDetails && details.iraBankDetails[f] !== '') {
               bankAccountStore.formLinkBankManually.fields[f].value =
-              accountDetails.iraBankDetails[f];
+              details.iraBankDetails[f];
               return bankAccountStore.formLinkBankManually.fields[f];
             }
             return null;
           });
-          if (account.accountDetails.iraBankDetails && account.accountDetails.iraBankDetails.routingNumber !== '' &&
-          account.accountDetails.iraBankDetails.accountNumber !== '') {
+          if (account.details.iraBankDetails && account.details.iraBankDetails.routingNumber !== '' &&
+          account.details.iraBankDetails.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
         }
