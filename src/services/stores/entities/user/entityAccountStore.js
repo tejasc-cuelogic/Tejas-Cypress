@@ -289,7 +289,7 @@ class EntityAccountStore {
   validateAndSubmitStep =
   (currentStep, formStatus, removeUploadedData, field) => new Promise((res, rej) => {
     let isValidCurrentStep = true;
-    const accountAttributes = {};
+    let accountAttributes = {};
     const array1 = ['Financial info', 'General', 'Entity info'];
     const array2 = ['Personal info', 'Formation doc'];
     if (array1.includes(currentStep.name)) {
@@ -303,7 +303,7 @@ class EntityAccountStore {
             amount: this.FIN_INFO_FRM.fields.cfInvestment.value,
           };
         } else if (currentStep.name === 'General' || currentStep.name === 'Entity info') {
-          accountAttributes.entity = this.setEntityAttributes(currentStep.name);
+          accountAttributes = this.setEntityAttributes(currentStep.name);
         }
         if (currentStep.name === 'General') {
           this.checkTaxIdCollision().then((alreadyExists) => {
