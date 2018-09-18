@@ -189,7 +189,7 @@ export class AuthStore {
     this.SIGNUP_FRM.fields.familyName.value = fields.lastName.value;
     this.SIGNUP_FRM.fields.email.value = fields.email.value;
     this.LOGIN_FRM.fields.email.value = fields.email.value;
-    this.SIGNUP_FRM.fields.role.value = ['issuer'];
+    this.SIGNUP_FRM.fields.role.value = 'issuer';
     this.SIGNUP_FRM.fields.password.value = '';
     this.SIGNUP_FRM.fields.verify.value = '';
   }
