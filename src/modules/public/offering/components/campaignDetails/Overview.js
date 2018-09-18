@@ -89,19 +89,19 @@ class Overview extends Component {
                   <Grid.Row>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Multiple<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Multiple <Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
                         <Statistic.Value>1.6x</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Revenue Sharing<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Revenue Sharing <Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
                         <Statistic.Value>4%</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Maturity<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Maturity <Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
                         <Statistic.Value>48 months</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
@@ -109,19 +109,19 @@ class Overview extends Component {
                   <Grid.Row>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Payments<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Payments <Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
                         <Statistic.Value>Monthly</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Ownership<Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
+                        <Statistic.Label>Ownership <Popup trigger={<Icon name="help circle" color="green" />} content="Help!" position="top center" /></Statistic.Label>
                         <Statistic.Value>0%</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
-                        <Statistic.Label>Type of Raise
+                        <Statistic.Label>Type of Raise&nbsp;
                           <Popup
                             trigger={<Icon name="help circle" color="green" />}
                             content={(

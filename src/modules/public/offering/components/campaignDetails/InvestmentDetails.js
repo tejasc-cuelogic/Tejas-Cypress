@@ -133,8 +133,8 @@ class InvestmentDetails extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Key Investment Terms</Header>
-                <Grid doubling divided className="mt-30">
-                  <Grid.Row columns={2}>
+                <Grid doubling className="mt-30">
+                  <Grid.Row columns={2} divided>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
                         <Statistic.Label>Issuer Name</Statistic.Label>
@@ -148,7 +148,7 @@ class InvestmentDetails extends Component {
                       </Statistic>
                     </Grid.Column>
                   </Grid.Row>
-                  <Grid.Row columns={3}>
+                  <Grid.Row columns={3} divided>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
                         <Statistic.Label>Min Target&nbsp;
@@ -201,8 +201,8 @@ class InvestmentDetails extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Revenue Sharing Notes</Header>
-                <Grid columns={3} doubling divided className="mt-30">
-                  <Grid.Row>
+                <Grid columns={3} doubling className="mt-30">
+                  <Grid.Row divided>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
                         <Statistic.Label>Multiple
@@ -240,7 +240,7 @@ class InvestmentDetails extends Component {
                       </Statistic>
                     </Grid.Column>
                   </Grid.Row>
-                  <Grid.Row>
+                  <Grid.Row divided>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
                         <Statistic.Label>Payments&nbsp;
