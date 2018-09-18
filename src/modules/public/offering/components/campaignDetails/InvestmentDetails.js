@@ -208,7 +208,7 @@ class InvestmentDetails extends Component {
                         <Statistic.Label>Multiple
                           <Popup
                             trigger={<Icon name="help circle" color="green" />}
-                            content="Help!"
+                            content="Lorem Ipsum"
                             position="top center"
                           />
                         </Statistic.Label>
@@ -220,7 +220,7 @@ class InvestmentDetails extends Component {
                         <Statistic.Label>Revenue Sharing
                           <Popup
                             trigger={<Icon name="help circle" color="green" />}
-                            content="Help!"
+                            content="Lorem Ipsum"
                             position="top center"
                           />
                         </Statistic.Label>
@@ -232,7 +232,7 @@ class InvestmentDetails extends Component {
                         <Statistic.Label>Maturity
                           <Popup
                             trigger={<Icon name="help circle" color="green" />}
-                            content="Help!"
+                            content="Lorem Ipsum"
                             position="top center"
                           />
                         </Statistic.Label>
@@ -259,7 +259,7 @@ class InvestmentDetails extends Component {
                         <Statistic.Label>Ownership
                           <Popup
                             trigger={<Icon name="help circle" color="green" />}
-                            content="Help!"
+                            content="Lorem Ipsum"
                             position="top center"
                           />
                         </Statistic.Label>

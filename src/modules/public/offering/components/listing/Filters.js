@@ -49,19 +49,19 @@ export default class Filters extends Component {
                               <Checkbox
                                 label="Revenue Sharing"
                               />
-                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Lorem Ipsum" position="top center" />
                             </Form.Field>
                             <Form.Field>
                               <Checkbox
                                 label="Term Note"
                               />
-                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Lorem Ipsum" position="top center" />
                             </Form.Field>
                             <Form.Field>
                               <Checkbox
                                 label="Equity"
                               />
-                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Lorem Ipsum" position="top center" />
                             </Form.Field>
                             <Form.Field>
                               <Checkbox
@@ -79,19 +79,19 @@ export default class Filters extends Component {
                               <Checkbox
                                 label="Regulation Crowdfunding"
                               />
-                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Lorem Ipsum" position="top center" />
                             </Form.Field>
                             <Form.Field>
                               <Checkbox
                                 label="Regulation A+"
                               />
-                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Lorem Ipsum" position="top center" />
                             </Form.Field>
                             <Form.Field>
                               <Checkbox
                                 label="Regulation D"
                               />
-                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Help!" position="top center" />
+                              <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Lorem Ipsum" position="top center" />
                             </Form.Field>
                           </Form>
                         </div>
