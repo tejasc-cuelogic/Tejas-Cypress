@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
-import { Divider, Sidebar, Menu, Icon } from 'semantic-ui-react';
+import { Divider, Sidebar, Menu, Icon, Header } from 'semantic-ui-react';
 import { Logo, SocialLinks } from '../shared';
 import { NavItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
@@ -22,8 +22,12 @@ export default class NavBarMobile extends Component {
     return (
       <Aux>
         <div className="public-header-section">
-          <Icon name="sidebar" onClick={onToggle} className="hamburger" />
-          <Logo as={Link} to="/" dataSrc="LogoSmallWhite" className="logo" size="mini" />
+          {/* <Logo onClick={onToggle} dataSrc="LogoSmallWhite"
+        className="logo hamburger" size="mini" /> */}
+          <Icon onClick={onToggle} className="ns-nextseed-icon hamburger" />
+          <Link to="/" as="h5">
+            <Header as="h5">homepage</Header>
+          </Link>
           <Link to="/auth/login" className="sign-in">
             Sign In
           </Link>

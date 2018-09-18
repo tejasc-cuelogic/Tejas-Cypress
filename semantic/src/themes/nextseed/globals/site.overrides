@@ -1834,8 +1834,8 @@ p.check-extra-info{
 	box-shadow:0px 0px 5px fade(@fullBlack, 8%);
 	z-index: 3;
 	.icon.hamburger {
-		font-size: 1.42857143rem;
-		color: #676a73;
+		font-size: @30px;
+		color: @white;
 		position: absolute;
 		top: 20px;
 		left: 18px;
@@ -1847,6 +1847,14 @@ p.check-extra-info{
 		position: absolute;
 		top: 20px;
 		right: 18px;
+	}
+	a {
+		&:hover {
+			text-decoration: none;	
+		}
+		.ui.header {
+			color: @white;
+		}
 	}
 }
 .proven-result-section {
