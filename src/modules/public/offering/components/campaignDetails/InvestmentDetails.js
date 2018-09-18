@@ -8,7 +8,8 @@ import businessModel from '../../../../../assets/images/investment-2.jpg';
 // import TermNote from './investmentDetails/TermNote';
 // import RevenueShare from './investmentDetails/RevenueShare';
 // import KeyTermsModal from './investmentDetails/KeyTermsModal';
-import SummaryModal from './investmentDetails/SummaryModal';
+// import SummaryModal from './investmentDetails/SummaryModal';
+import PaymentCalculatorModal from './investmentDetails/PaymentCalculatorModal';
 
 @inject('campaignStore')
 class InvestmentDetails extends Component {
@@ -48,14 +49,15 @@ class InvestmentDetails extends Component {
           </Grid.Row>
           <Grid.Row stackable doubling>
             <Grid.Column widescreen={10} computer={10}>
-              {/* <Segment padded>
+              <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section link><b>Expand Payment Calculator</b></Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/PaymentCalculatorModal`}>
+                    <b>Expand Payment Calculator</b>
+                  </Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Total Payment Calculator</Header>
-                <Grid columns={4} divided doubling className="investment-grid"
-                padded="horizontally">
+                <Grid columns={4} divided doubling className="investment-grid mt-30" padded="horizontally">
                   <Grid.Column>
                     <Statistic className="basic">
                       <Statistic.Label>Interest Rate*</Statistic.Label>
@@ -70,12 +72,19 @@ class InvestmentDetails extends Component {
                   </Grid.Column>
                   <Grid.Column>
                     <Statistic className="basic">
-                      <Statistic.Label>principal</Statistic.Label>
+                      <Statistic.Label>Principal</Statistic.Label>
                       <Statistic.Value className="center-align highlight-text">
-                      $100</Statistic.Value>
+                      $100
+                      </Statistic.Value>
                       <div className="slidecontainer">
-                        <input type="range" min="1" max="100" value="10" className="slider"
-                        id="myRange" />
+                        <input
+                          type="range"
+                          min="1"
+                          max="100"
+                          value="10"
+                          className="slider mt-10 mb-10"
+                          id="myRange"
+                        />
                       </div>
                     </Statistic>
                   </Grid.Column>
@@ -90,10 +99,10 @@ class InvestmentDetails extends Component {
                   * For illustration only. See expanded Payment Calculator view to
                   read more regarding actual performance variables.
                 </p>
-              </Segment> */}
-              <Segment padded>
+              </Segment>
+              {/* <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/SummaryModal`}><b>Expand Summary</b></Breadcrumb.Section>
+                  <Breadcrumb.Section link><b>Expand Summary</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Revenue Sharing Summary*</Header>
@@ -113,7 +122,7 @@ class InvestmentDetails extends Component {
                   * For illustration only. See expanded Payment Calculator view to
                   read more regarding actual performance variables.
                 </p>
-              </Segment>
+              </Segment> */}
             </Grid.Column>
             <Grid.Column widescreen={6} computer={6}>
               {/* <Segment padded>
@@ -212,7 +221,7 @@ class InvestmentDetails extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Route path={`${this.props.match.url}/SummaryModal`} component={SummaryModal} />
+        <Route path={`${this.props.match.url}/PaymentCalculatorModal`} component={PaymentCalculatorModal} />
       </div>
     );
   }

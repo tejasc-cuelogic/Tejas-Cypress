@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Modal, Grid, List, Accordion, Icon } from 'semantic-ui-react';
+import { Modal, Grid, List, Accordion, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
 @inject('updatesStore')
