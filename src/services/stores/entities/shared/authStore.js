@@ -16,6 +16,7 @@ export class AuthStore {
   @observable isUserLoggedIn = false;
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
+  @observable userId = null;
   @observable devAuth = {
     required: !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
@@ -35,6 +36,12 @@ export class AuthStore {
   setDefaultPwdType = () => {
     this.pwdInputType = 'password';
   }
+
+  @action
+  setUserId = (userId) => {
+    this.userId = userId;
+  }
+
   @action
   setPwdVisibilityStatus = () => {
     if (this.pwdInputType === 'password') {
@@ -248,7 +255,7 @@ export class AuthStore {
         .mutate({
           mutation: portPrequalDataToApplication,
           variables: {
-            userId: userStore.currentUser.sub,
+            userId: this.userId,
             applicationId,
           },
         })

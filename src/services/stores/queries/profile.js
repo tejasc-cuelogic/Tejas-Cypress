@@ -184,7 +184,7 @@ export const isSsnExistQuery = gql`
 
 export const portPrequalDataToApplication = gql`
   mutation portPrequalDataToApplication($userId: String! $applicationId: String!) {
-    verifyAndUpdateEmail(
+    portPrequalDataToApplication(
       userId: $userId
       applicationId: $applicationId
     ){

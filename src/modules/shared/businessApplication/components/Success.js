@@ -26,9 +26,10 @@ class Success extends Component {
             const userCredentials = { email: email.value, password: btoa(password.value) };
             cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
             this.props.authStore.setUserLoginDetails(email, password);
-            this.props.authStore.portPrequalDataToApplication(applicationId).then(() => {
-              this.proceedLoginIn(currentApplicationType, applicationId);
-            })
+            this.props.authStore.portPrequalDataToApplication(applicationId)
+              .then(() => {
+                this.proceedLoginIn(currentApplicationType, applicationId);
+              })
               .catch(er => Helper.toast(er.message, 'error'));
           })
           .catch(er => Helper.toast(er.message, 'error'));
