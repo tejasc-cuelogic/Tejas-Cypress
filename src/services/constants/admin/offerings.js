@@ -327,33 +327,41 @@ export const OFFERING_OVERVIEW = {
     objRef: 'offering.overview.social',
     find: 'type',
   },
-  facebookSharelink: {
+  facebook_shareLink: {
     value: '',
     label: 'Sharelink',
     error: undefined,
     rule: 'required',
     placeHolder: 'e.g. http://facebook.com/nextbrewery',
+    objRef: 'offering.overview.social',
+    find: 'type',
   },
-  facebookBlurb: {
+  facebook_blurb: {
     value: '',
     label: 'Blurb',
     error: undefined,
     rule: 'required',
     placeHolder: 'e.g. Company was formed...',
+    objRef: 'offering.overview.social',
+    find: 'type',
   },
-  twitterSharelink: {
+  twitter_shareLink: {
     value: '',
     label: 'Sharelink',
     error: undefined,
     rule: 'required',
     placeHolder: 'e.g. http://twitter.com/nextbrewery',
+    objRef: 'offering.overview.social',
+    find: 'type',
   },
-  twitterBlurb: {
+  twitter_blurb: {
     value: '',
     label: 'Blurb',
     error: undefined,
     rule: 'required',
     placeHolder: 'e.g. Company was formed...',
+    objRef: 'offering.overview.social',
+    find: 'type',
   },
   googleMeta: {
     value: '',

@@ -86,13 +86,13 @@ export default class OfferingOverview extends Component {
             Facebook
           </Header>
           <FormInput
-            name="facebookSharelink"
-            fielddata={OFFERING_OVERVIEW_FRM.fields.facebookSharelink}
+            name="facebook_shareLink"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
             changed={(e, result) => formChange(e, result, formName)}
           />
           <FormTextarea
-            name="facebookBlurb"
-            fielddata={OFFERING_OVERVIEW_FRM.fields.facebookBlurb}
+            name="facebook_blurb"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_blurb}
             changed={(e, result) => formChange(e, result, formName)}
             containerclassname="secondary"
           />
@@ -100,13 +100,13 @@ export default class OfferingOverview extends Component {
             Twitter
           </Header>
           <FormInput
-            name="twitterSharelink"
-            fielddata={OFFERING_OVERVIEW_FRM.fields.twitterSharelink}
+            name="twitter_shareLink"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}
             changed={(e, result) => formChange(e, result, formName)}
           />
           <FormTextarea
-            name="twitterBlurb"
-            fielddata={OFFERING_OVERVIEW_FRM.fields.twitterBlurb}
+            name="twitter_blurb"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_blurb}
             changed={(e, result) => formChange(e, result, formName)}
             containerclassname="secondary"
           />
