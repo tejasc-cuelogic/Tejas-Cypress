@@ -24,7 +24,7 @@ section{
 		display: block;
 	}
 }
-//	Helper Classes
+//	Helper Classes Starts
 iframe{
 	border:none;
 }
@@ -145,6 +145,7 @@ h6{
 		margin-bottom:0px;
 	}
 }
+//	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;
 	&:hover{
@@ -178,6 +179,7 @@ a:not(.item), a:not(.ui.button){
 .primary-block {
 	background-color: @primary-two;
 }
+//	Helper Classes Ends
 
 // Footer Styles
 footer{
