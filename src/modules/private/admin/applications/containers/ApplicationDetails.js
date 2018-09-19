@@ -10,11 +10,6 @@ import { InlineLoader, EmptyDataSet } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
-let navItems = [
-  { title: 'Activity History', to: 'activity-history', component: ActivityHistory },
-  { title: 'Pre-qualification', to: 'pre-qualification' },
-];
-
 const getModule = component => Loadable({
   loader: () => import(`../components/details/${component}`),
   loading() {
@@ -74,6 +69,10 @@ export default class ApplicationDetails extends Component {
     const {
       applicationId, userId, applicationStatus, prequalDetails, primaryPOC, signupCode, rating,
     } = businessApplicationDetailsAdmin;
+    let navItems = [
+      { title: 'Activity History', to: 'activity-history', component: ActivityHistory },
+      { title: 'Pre-qualification', to: 'pre-qualification' },
+    ];
     if (applicationStatus !== BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
       navItems = [
         ...navItems,
